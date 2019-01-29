@@ -9,21 +9,21 @@
 \usage{
 model_predictors(x, ...)
 
-\method{model_predictors}{default}(x, parms = c("fixed", "random",
+\method{model_predictors}{default}(x, effects = c("fixed", "random",
   "all"), ...)
 
-\method{model_predictors}{glmmTMB}(x, parms = c("fixed", "random",
+\method{model_predictors}{glmmTMB}(x, effects = c("fixed", "random",
   "all"), zi = FALSE, disp = FALSE, ...)
 
-\method{model_predictors}{MixMod}(x, parms = c("fixed", "random", "all"),
-  zi = FALSE, ...)
+\method{model_predictors}{MixMod}(x, effects = c("fixed", "random",
+  "all"), zi = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
 
-\item{parms}{Should predictor variables for fixed effects, random effects
+\item{effects}{Should predictor variables for fixed effects, random effects
 or both be returned? Only applies to mixed models.}
 
 \item{zi}{Logical, if \code{TRUE} and model has a zero-inflation-formula,

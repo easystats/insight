@@ -4,7 +4,7 @@
 #' @description to do...
 #'
 #' @param x A fitted model.
-#' @param parms Should predictor variables for fixed effects, random effects
+#' @param effects Should predictor variables for fixed effects, random effects
 #'    or both be returned? Only applies to mixed models.
 #' @param zi Logical, if \code{TRUE} and model has a zero-inflation-formula,
 #'    the variable(s) used in this formula are also returned.
@@ -29,10 +29,10 @@ model_predictors <- function(x, ...) {
 #' @rdname model_predictors
 #' @importFrom stats formula terms
 #' @export
-model_predictors.default <- function(x, parms = c("fixed", "random", "all"), ...) {
-  parms <- match.arg(parms)
+model_predictors.default <- function(x, effects = c("fixed", "random", "all"), ...) {
+  effects <- match.arg(effects)
 
-  if (parms == "random")
+  if (effects == "random")
     return(re_terms(x))
 
   fm <- stats::formula(x)
@@ -42,7 +42,7 @@ model_predictors.default <- function(x, parms = c("fixed", "random", "all"), ...
     modpred <- all.vars(stats::terms(x)[[3L]])
 
   # remove random effects from formula
-  if (parms == "fixed")
+  if (effects == "fixed")
     modpred <- remove_re_from_terms(x, modpred)
 
   unique(modpred)
@@ -65,10 +65,10 @@ model_predictors.clm2 <- function(x, ...) {
 #' @rdname model_predictors
 #' @importFrom stats formula terms
 #' @export
-model_predictors.glmmTMB <- function(x, parms = c("fixed", "random", "all"), zi = FALSE, disp = FALSE, ...) {
-  parms <- match.arg(parms)
+model_predictors.glmmTMB <- function(x, effects = c("fixed", "random", "all"), zi = FALSE, disp = FALSE, ...) {
+  effects <- match.arg(effects)
 
-  if (parms == "random")
+  if (effects == "random")
     return(re_terms(x))
 
   fm <- stats::formula(x)
@@ -78,7 +78,7 @@ model_predictors.glmmTMB <- function(x, parms = c("fixed", "random", "all"), zi 
     modpred <- all.vars(stats::terms(x)[[3L]])
 
   # remove random effects from formula
-  if (parms == "fixed")
+  if (effects == "fixed")
     modpred <- remove_re_from_terms(x, modpred)
 
   # add variables from zero-inflation
@@ -107,10 +107,10 @@ model_predictors.glmmTMB <- function(x, parms = c("fixed", "random", "all"), zi 
 
 #' @importFrom stats formula terms
 #' @export
-model_predictors.brmsfit <- function(x, parms = c("fixed", "random", "all"), ...) {
-  parms <- match.arg(parms)
+model_predictors.brmsfit <- function(x, effects = c("fixed", "random", "all"), ...) {
+  effects <- match.arg(effects)
 
-  if (parms == "random")
+  if (effects == "random")
     return(re_terms(x))
 
   fm <- stats::formula(x)
@@ -125,7 +125,7 @@ model_predictors.brmsfit <- function(x, parms = c("fixed", "random", "all"), ...
     modpred <- all.vars(stats::terms(x)[[3L]])
 
   # remove random effects from formula
-  if (parms == "fixed")
+  if (effects == "fixed")
     modpred <- remove_re_from_terms(x, modpred)
 
   unique(modpred)
@@ -133,8 +133,8 @@ model_predictors.brmsfit <- function(x, parms = c("fixed", "random", "all"), ...
 
 
 #' @export
-model_predictors.MCMCglmm <- function(x, parms = c("fixed", "random", "all"), ...) {
-  parms <- match.arg(parms)
+model_predictors.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), ...) {
+  effects <- match.arg(effects)
 
   fm <- x$Fixed
   fixed.modpred <- all.vars(fm$formula[[3L]])
@@ -143,7 +143,7 @@ model_predictors.MCMCglmm <- function(x, parms = c("fixed", "random", "all"), ..
   random.modpred <- all.vars(fmr$formula[[2L]])
 
   modpred <- switch(
-    parms,
+    effects,
     fixed = fixed.modpred,
     random = random.modpred,
     c(fixed.modpred, random.modpred)
@@ -156,8 +156,8 @@ model_predictors.MCMCglmm <- function(x, parms = c("fixed", "random", "all"), ..
 #' @rdname model_predictors
 #' @importFrom stats formula terms
 #' @export
-model_predictors.MixMod <- function(x, parms = c("fixed", "random", "all"), zi = FALSE, ...) {
-  parms <- match.arg(parms)
+model_predictors.MixMod <- function(x, effects = c("fixed", "random", "all"), zi = FALSE, ...) {
+  effects <- match.arg(effects)
 
   fm <- stats::formula(x)
   fixed.modpred <- all.vars(fm[[3L]])
@@ -172,7 +172,7 @@ model_predictors.MixMod <- function(x, parms = c("fixed", "random", "all"), zi =
   }
 
   modpred <- switch(
-    parms,
+    effects,
     fixed = fixed.modpred,
     random = random.modpred,
     c(fixed.modpred, random.modpred)
@@ -201,10 +201,10 @@ model_predictors.gam <- function(x, ...) {
 
 #' @importFrom stats formula terms
 #' @export
-model_predictors.stanmvreg <- function(x, parms = c("fixed", "random", "all"), ...) {
-  parms <- match.arg(parms)
+model_predictors.stanmvreg <- function(x, effects = c("fixed", "random", "all"), ...) {
+  effects <- match.arg(effects)
 
-  if (parms == "random")
+  if (effects == "random")
     return(re_terms(x))
 
   fm <- stats::formula(x)
@@ -214,7 +214,7 @@ model_predictors.stanmvreg <- function(x, parms = c("fixed", "random", "all"), .
     modpred <- all.vars(stats::terms(x)[[3L]])
 
   # remove random effects from formula
-  if (parms == "fixed")
+  if (effects == "fixed")
     modpred <- remove_re_from_terms(x, modpred)
 
   unique(modpred)

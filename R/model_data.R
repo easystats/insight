@@ -3,7 +3,7 @@
 #'
 #' @description Returns the name(s) of the response variable(s) from a model object.
 #'
-#' @param parms Should model data for fixed effects, random effects
+#' @param effects Should model data for fixed effects, random effects
 #'    or both be returned? Only applies to mixed models.
 #' @inheritParams model_predictors
 #'
@@ -96,13 +96,13 @@ model_data.glmmTMB <- function(x, ...) {
 #' @rdname model_data
 #' @importFrom stats model.frame
 #' @export
-model_data.merMod <- function(x, parms = c("fixed", "random", "all"), ...) {
-  parms <- match.arg(parms)
+model_data.merMod <- function(x, effects = c("fixed", "random", "all"), ...) {
+  effects <- match.arg(effects)
 
   mf <- tryCatch(
     {
       switch(
-        parms,
+        effects,
         fixed = stats::model.frame(x, fixed.only = TRUE),
         all = stats::model.frame(x, fixed.only = FALSE),
         random = stats::model.frame(x, fixed.only = FALSE)[, re_terms(x), drop = FALSE]
@@ -240,7 +240,7 @@ model_data.MCMCglmm <- function(x, ...) {
   mf <- tryCatch(
     {
       env_dataframes <- names(which(unlist(eapply(.GlobalEnv, is.data.frame))))
-      pv <- model_predictors(x, parms = "all")
+      pv <- model_predictors(x, effects = "all")
       matchframe <- unlist(lapply(env_dataframes, function(.x) {
         dat <- get(.x)
         all(pv %in% colnames(dat))

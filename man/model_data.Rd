@@ -7,14 +7,15 @@
 \usage{
 model_data(x, ...)
 
-\method{model_data}{merMod}(x, parms = c("fixed", "random", "all"), ...)
+\method{model_data}{merMod}(x, effects = c("fixed", "random", "all"),
+  ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
 
-\item{parms}{Should model data for fixed effects, random effects
+\item{effects}{Should model data for fixed effects, random effects
 or both be returned? Only applies to mixed models.}
 }
 \value{
