@@ -253,7 +253,7 @@ link_inverse.multinom <- function(x, ...) {
 
 
 #' @rdname link_inverse
-#' @importFrom stats make.link
+#' @importFrom stats family
 #' @export
 link_inverse.stanmvreg <- function(x, multi.resp = FALSE, ...) {
   fam <- stats::family(x)
