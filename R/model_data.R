@@ -111,7 +111,7 @@ model_data.merMod <- function(x, effects = c("fixed", "random", "all"), ...) {
     error = function(x) { NULL }
   )
 
-  prepare_model_data(x, mf)
+  prepare_model_data(x, mf, effects)
 }
 
 
@@ -254,7 +254,7 @@ model_data.MCMCglmm <- function(x, ...) {
     error = function(x) { NULL }
   )
 
-  prepare_model_data(x, mf)
+  prepare_model_data(x, mf, effects = "all")
 }
 
 
@@ -267,7 +267,7 @@ get_zelig_relogit_frame <- function(x) {
 
 
 #' @importFrom stats getCall formula na.omit
-prepare_model_data <- function(x, mf) {
+prepare_model_data <- function(x, mf, effects = "fixed") {
   if (is.null(mf)) {
     warning("Could not get model data.", call. = F)
     return(NULL)
@@ -372,10 +372,7 @@ prepare_model_data <- function(x, mf) {
 
     # check if we really have all formula terms in our model frame now
     pv <- tryCatch(
-      {
-        ## TODO fix argument
-        model_predictors(x, fe.only = fe.only)
-      },
+      {model_predictors(x, effects = effects)},
       error = function(x) { NULL }
     )
 
