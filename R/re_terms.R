@@ -37,7 +37,11 @@ re_terms.MixMod <- function(x) {
 #' @importFrom stats formula
 #' @export
 re_terms.default <- function(x) {
-  get_re_terms(stats::formula(x))
+  f <- tryCatch(
+    {stats::formula(x)},
+    error = function(x) { NULL }
+  )
+  get_re_terms(f)
 }
 
 
