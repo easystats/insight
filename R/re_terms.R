@@ -19,7 +19,7 @@ re_terms <- function(x, ...) {
 
 #' @importFrom stats formula
 #' @export
-re_terms.brmsfit <- function(x) {
+re_terms.brmsfit <- function(x, ...) {
   f <- tryCatch(
     {stats::formula(x)[[1]]},
     error = function(x) { NULL }
@@ -29,14 +29,14 @@ re_terms.brmsfit <- function(x) {
 
 
 #' @export
-re_terms.MixMod <- function(x) {
+re_terms.MixMod <- function(x, ...) {
   x$id_name
 }
 
 
 #' @importFrom stats formula
 #' @export
-re_terms.default <- function(x) {
+re_terms.default <- function(x, ...) {
   f <- tryCatch(
     {stats::formula(x)},
     error = function(x) { NULL }
