@@ -10,6 +10,9 @@ Date: 2019-01-29
 Authors@R: person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206"))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 License: GPL-3
+Depends:
+    R (>= 3.2),
+    stats
 Encoding: UTF-8
 LazyData: true
 Suggests: 
