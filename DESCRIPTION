@@ -1,0 +1,17 @@
+Package: insight
+Type: Package
+Title: Easily Access Model Information for Various Model Objects
+Description: Although there are generic functions to get information about or 
+  data from models, many modelling-functions from different packages do not
+  provide methods to access these information. 'insight' aims to close this 
+  gap by providing functions that work for (almost) any model object.
+Version: 0.1.0.0001
+Date: 2019-01-29
+Authors@R: person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206"))
+Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat
+RoxygenNote: 6.1.1
