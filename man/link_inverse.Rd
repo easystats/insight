@@ -16,6 +16,10 @@ link_inverse(x, ...)
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
+
+\item{multi.resp}{Logical, if \code{TRUE} and model is a multivariate response
+model from a \code{brmsfit} object or of class \code{stanmvreg}, then a
+list of values (one for each regression) is returned.}
 }
 \value{
 A function, describing the inverse-link function from a model-object.

@@ -4,6 +4,9 @@
 #' @description Returns the link-inverse function from a model object.
 #'
 #' @param x A fitted model.
+#' @param multi.resp Logical, if \code{TRUE} and model is a multivariate response
+#'    model from a \code{brmsfit} object or of class \code{stanmvreg}, then a
+#'    list of values (one for each regression) is returned.
 #' @param ... Currently not used.
 #'
 #' @return A function, describing the inverse-link function from a model-object.

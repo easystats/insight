@@ -25,9 +25,8 @@ Returns the name(s) of the response variable(s) from a model object.
 }
 \examples{
 data(cbpp, package = "lme4")
+cbpp$trials <- cbpp$size - cbpp$incidence
 m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
-
-model_response(m, combine = TRUE)
-model_response(m, combine = FALSE)
+head(model_data(m))
 
 }
