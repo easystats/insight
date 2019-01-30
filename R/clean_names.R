@@ -1,17 +1,40 @@
+#' @title Get clean names of model terms
+#' @name clean_names
+#'
+#' @description This function "cleans" names of model terms (or a character
+#'   vector with such names) by removing patterns like \code{log()} or
+#'   \code{as.factor()} etc.
+#'
+#' @param x A fitted mixed model, or a character vector.
+#'
+#' @return The "cleaned" variable names, i.e. things like \code{s()} for
+#'   splines or \code{log()} are removed from the model terms.
+#'
+#' @note For a regression model, this function is equal to calling
+#'   \code{model_terms()}.
+#'
+#' @examples
+#' # example from ?stats::glm
+#' counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
+#' outcome <- c(3, 1, 9)
+#' treatment <- gl(3, 3)
+#' m <- glm(counts ~ log(outcome) + as.factor(treatment), family = poisson())
+#' clean_names(m)
+#'
 #' @export
-var_names <- function(x) {
-  UseMethod("var_names")
+clean_names <- function(x) {
+  UseMethod("clean_names")
 }
 
 
 #' @export
-var_names.default <- function(x) {
-  colnames(model_data(x))
+clean_names.default <- function(x) {
+  model_terms(x)
 }
 
 
 #' @export
-var_names.character <- function(x) {
+clean_names.character <- function(x) {
   get_vn_helper(x)
 }
 

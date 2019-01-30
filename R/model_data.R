@@ -276,7 +276,7 @@ prepare_model_data <- function(x, mf, effects = "fixed") {
   # do we have an offset, not specified in the formula?
   if ("(offset)" %in% colnames(mf) && obj_has_name(x, "call") && obj_has_name(x$call, "offset")) {
     offcol <- which(colnames(mf) == "(offset)")
-    colnames(mf)[offcol] <- var_names(deparse(x$call$offset, width.cutoff = 500L))
+    colnames(mf)[offcol] <- clean_names(deparse(x$call$offset, width.cutoff = 500L))
   }
 
   # clean 1-dimensional matrices
@@ -335,8 +335,8 @@ prepare_model_data <- function(x, mf, effects = "fixed") {
       # get "matrix" terms and "normal" predictors, but exclude
       # response variable(s)
       mf_matrix <- mf[, -which(mc), drop = FALSE]
-      spline.term <- var_names(names(which(mc)))
-      other.terms <- var_names(colnames(mf_matrix))[-1]
+      spline.term <- clean_names(names(which(mc)))
+      other.terms <- clean_names(colnames(mf_matrix))[-1]
 
       # now we have all variable names that we need from the original
       # data set
@@ -388,7 +388,7 @@ prepare_model_data <- function(x, mf, effects = "fixed") {
   if (any(mos_eisly)) mf <- mf[!mos_eisly]
 
   # clean variable names
-  cvn <- var_names(colnames(mf))
+  cvn <- clean_names(colnames(mf))
 
   # do we have duplicated names?
   dupes <- which(duplicated(cvn))

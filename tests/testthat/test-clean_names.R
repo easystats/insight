@@ -1,0 +1,26 @@
+if (require("testthat") && require("insight")) {
+  context("insight, clean_names")
+
+  test_that("clean_names", {
+    expect_equal(clean_names("as.factor(test)"), "test")
+    expect_equal(clean_names("log(test)"), "test")
+    expect_equal(clean_names("log(log(test))"), "test")
+    expect_equal(clean_names("I(test^2)"), "test")
+    expect_equal(clean_names("I(test ^ 2)"), "test")
+    expect_equal(clean_names("I(test / 10)"), "test")
+    expect_equal(clean_names("poly(test, 2)"), "test")
+    expect_equal(clean_names("poly(test, degrees = 2)"), "test")
+    expect_equal(clean_names("poly(test, degrees = 2, raw = TRUE)"), "test")
+    expect_equal(clean_names("ns(test)"), "test")
+    expect_equal(clean_names("ns(test, df = 2)"), "test")
+    expect_equal(clean_names("bs(test)"), "test")
+    expect_equal(clean_names("bs(test, df = 2)"), "test")
+    expect_equal(clean_names("offset(test)"), "test")
+    expect_equal(clean_names("offset(log(test))"), "test")
+    expect_equal(clean_names("factor(test)"), "test")
+    expect_equal(clean_names("as.factor(test)"), "test")
+    expect_equal(clean_names("~ 1 | test"), "test")
+    expect_equal(clean_names("~1|test"), "test")
+    expect_equal(clean_names("1 | test"), "test")
+  })
+}
