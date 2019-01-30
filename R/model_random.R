@@ -9,6 +9,8 @@
 #'   with colon. See 'Examples'.
 #' @param ... Currently not used.
 #'
+#' @inheritParams model_predictors
+#'
 #' @return The name(s) of the random effects as character vector.
 #'
 #' @examples
@@ -38,6 +40,17 @@ model_random <- function(x, split_nested = FALSE, ...) {
 
 #' @importFrom stats formula
 #' @export
+model_random.default <- function(x, split_nested = FALSE, ...) {
+  f <- tryCatch(
+    {stats::formula(x)},
+    error = function(x) { NULL }
+  )
+  get_model_random(f, split_nested)
+}
+
+
+#' @importFrom stats formula
+#' @export
 model_random.brmsfit <- function(x, split_nested = FALSE, ...) {
   f <- tryCatch(
     {stats::formula(x)[[1]]},
@@ -56,12 +69,23 @@ model_random.MixMod <- function(x, split_nested = FALSE, ...) {
 
 #' @importFrom stats formula
 #' @export
-model_random.default <- function(x, split_nested = FALSE, ...) {
+model_random.glmmTMB <- function(x, split_nested = FALSE, zi = FALSE, ...) {
   f <- tryCatch(
-    {stats::formula(x)},
+    {
+      cond_formula <- stats::formula(x)
+      if (zi)
+        zi_formula <- stats::formula(x, component = "zi")
+      else
+        zi_formula <- NULL
+      list(cond_formula, zi_formula)
+    },
     error = function(x) { NULL }
   )
-  get_model_random(f, split_nested)
+
+  unique(c(
+    get_model_random(f[[1]], split_nested),
+    get_model_random(f[[2]], split_nested)
+  ))
 }
 
 
