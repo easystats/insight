@@ -1,5 +1,5 @@
 #' @title Get names of random effect terms
-#' @name re_terms
+#' @name model_random
 #'
 #' @description to do...
 #'
@@ -12,45 +12,43 @@
 #' ## TODO
 #'
 #' @export
-re_terms <- function(x, ...) {
-  UseMethod("re_terms")
+model_random <- function(x, ...) {
+  UseMethod("model_random")
 }
 
 
 #' @importFrom stats formula
 #' @export
-re_terms.brmsfit <- function(x, ...) {
+model_random.brmsfit <- function(x, ...) {
   f <- tryCatch(
     {stats::formula(x)[[1]]},
     error = function(x) { NULL }
   )
-  get_re_terms(f)
+  get_model_random(f)
 }
 
 
 #' @export
-re_terms.MixMod <- function(x, ...) {
+model_random.MixMod <- function(x, ...) {
   x$id_name
 }
 
 
 #' @importFrom stats formula
 #' @export
-re_terms.default <- function(x, ...) {
+model_random.default <- function(x, ...) {
   f <- tryCatch(
     {stats::formula(x)},
     error = function(x) { NULL }
   )
-  get_re_terms(f)
+  get_model_random(f)
 }
 
 
-get_re_terms <- function(f) {
+get_model_random <- function(f) {
   if (!requireNamespace("lme4"))
     stop("To use this function, please install package 'lme4'.")
 
   re <- sapply(lme4::findbars(f), deparse)
   trim(substring(re, regexpr(pattern = "\\|", re) + 1))
 }
-
-

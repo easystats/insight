@@ -154,7 +154,7 @@ make_family <- function(x, fitfam, zero.inf, logit.link, multi.var, link.fun) {
     tryCatch(
       {
         rv <- deparse(stats::formula(x)$formula[[2L]], width.cutoff = 500L)
-        is.trial <- sjmisc::trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
+        is.trial <- trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
       },
       error = function(x) { NULL }
     )

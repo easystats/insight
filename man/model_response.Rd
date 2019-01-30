@@ -26,7 +26,8 @@ The name(s) of the response variable(s) from \code{x} as character vector.
 Returns the name(s) of the response variable(s) from a model object.
 }
 \examples{
-data(cbpp, package = "lme4")
+library(lme4)
+data(cbpp)
 cbpp$trials <- cbpp$size - cbpp$incidence
 m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 

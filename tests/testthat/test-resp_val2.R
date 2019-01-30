@@ -3,7 +3,7 @@ if (suppressWarnings(
   require("insight") &&
   require("lme4")
 )) {
-  context("insight, resp_var")
+  context("insight, model_response")
 
   data(cbpp)
   cbpp$trials <- cbpp$size - cbpp$incidence
@@ -13,15 +13,15 @@ if (suppressWarnings(
   m3 <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
   m4 <- glm(cbind(incidence, size - incidence) ~ period, data = cbpp, family = binomial)
 
-  test_that("resp_var", {
-    expect_equal(resp_var(m1, combine = TRUE), "cbind(incidence, trials)")
-    expect_equal(resp_var(m2, combine = TRUE), "cbind(incidence, size - incidence)")
-    expect_equal(resp_var(m3, combine = TRUE), "cbind(incidence, trials)")
-    expect_equal(resp_var(m4, combine = TRUE), "cbind(incidence, size - incidence)")
-    expect_equal(resp_var(m1, combine = FALSE), c("incidence", "trials"))
-    expect_equal(resp_var(m2, combine = FALSE), c("incidence", "size"))
-    expect_equal(resp_var(m3, combine = FALSE), c("incidence", "trials"))
-    expect_equal(resp_var(m4, combine = FALSE), c("incidence", "size"))
+  test_that("model_response", {
+    expect_equal(model_response(m1, combine = TRUE), "cbind(incidence, trials)")
+    expect_equal(model_response(m2, combine = TRUE), "cbind(incidence, size - incidence)")
+    expect_equal(model_response(m3, combine = TRUE), "cbind(incidence, trials)")
+    expect_equal(model_response(m4, combine = TRUE), "cbind(incidence, size - incidence)")
+    expect_equal(model_response(m1, combine = FALSE), c("incidence", "trials"))
+    expect_equal(model_response(m2, combine = FALSE), c("incidence", "size"))
+    expect_equal(model_response(m3, combine = FALSE), c("incidence", "trials"))
+    expect_equal(model_response(m4, combine = FALSE), c("incidence", "size"))
   })
 
   test_that("resp_val", {
@@ -48,7 +48,7 @@ if (suppressWarnings(
 
   test_that("mod-info", {
     model_frame(m5)
-    resp_var(m5)
+    model_response(m5)
     resp_val(m5)
   })
 

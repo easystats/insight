@@ -105,7 +105,7 @@ model_data.merMod <- function(x, effects = c("fixed", "random", "all"), ...) {
         effects,
         fixed = stats::model.frame(x, fixed.only = TRUE),
         all = stats::model.frame(x, fixed.only = FALSE),
-        random = stats::model.frame(x, fixed.only = FALSE)[, re_terms(x), drop = FALSE]
+        random = stats::model.frame(x, fixed.only = FALSE)[, model_random(x), drop = FALSE]
       )
     },
     error = function(x) { NULL }

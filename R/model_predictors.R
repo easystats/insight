@@ -33,7 +33,7 @@ model_predictors.default <- function(x, effects = c("fixed", "random", "all"), .
   effects <- match.arg(effects)
 
   if (effects == "random")
-    return(re_terms(x))
+    return(model_random(x))
 
   fm <- stats::formula(x)
   modpred <- all.vars(fm[[3L]])
@@ -69,7 +69,7 @@ model_predictors.glmmTMB <- function(x, effects = c("fixed", "random", "all"), z
   effects <- match.arg(effects)
 
   if (effects == "random")
-    return(re_terms(x))
+    return(model_random(x))
 
   fm <- stats::formula(x)
   modpred <- all.vars(fm[[3L]])
@@ -111,7 +111,7 @@ model_predictors.brmsfit <- function(x, effects = c("fixed", "random", "all"), .
   effects <- match.arg(effects)
 
   if (effects == "random")
-    return(re_terms(x))
+    return(model_random(x))
 
   fm <- stats::formula(x)
 
@@ -205,7 +205,7 @@ model_predictors.stanmvreg <- function(x, effects = c("fixed", "random", "all"),
   effects <- match.arg(effects)
 
   if (effects == "random")
-    return(re_terms(x))
+    return(model_random(x))
 
   fm <- stats::formula(x)
   modpred <- unique(unlist(lapply(fm, function(.x) { all.vars(.x[[3L]]) })))
@@ -236,7 +236,7 @@ model_predictors.felm <- function(x, ...) {
 
 
 remove_re_from_terms <- function(x, modpred) {
-  re <- re_terms(x)
+  re <- model_random(x)
   if (!is_empty_string(re)) {
     re <- unique(trim(unlist(strsplit(re, ":", fixed = TRUE))))
     pos <- match(re, modpred)

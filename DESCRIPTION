@@ -13,8 +13,12 @@ License: GPL-3
 Depends:
     R (>= 3.2),
     stats
+Suggests:
+  brms,
+  lme4,
+  glmmTMB,
+  splines,
+  testthat
 Encoding: UTF-8
 LazyData: true
-Suggests: 
-    testthat
 RoxygenNote: 6.1.1

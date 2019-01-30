@@ -1,0 +1,32 @@
+if (require("testthat") && require("insight") && require("lme4")) {
+  context("insight, model_predictors")
+
+  data(sleepstudy)
+
+  sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+  sleepstudy$mysubgrp <- NA
+  for (i in 1:5) {
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+  }
+
+  m1 <- lme4::lmer(
+    Reaction ~ Days + (1 + Days | Subject),
+    data = sleepstudy
+  )
+
+  m2 <- lme4::lmer(
+    Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+    data = sleepstudy
+  )
+
+  test_that("model_predictors", {
+    expect_equal(model_predictors(m1, effects = "all"), c("Days", "Subject"))
+    expect_equal(model_predictors(m1, effects = "fixed"), "Days")
+    expect_equal(model_predictors(m1, effects = "random"), "Subject")
+    expect_equal(model_predictors(m2, effects = "all"), c("Days", "mygrp", "mysubgrp", "Subject"))
+    expect_equal(model_predictors(m2, effects = "fixed"), "Days")
+    expect_equal(model_predictors(m2, effects = "random"), c("mysubgrp:mygrp", "mygrp", "Subject"))
+  })
+}
+
