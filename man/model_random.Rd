@@ -2,9 +2,13 @@
 % Please edit documentation in R/model_random.R
 \name{model_random}
 \alias{model_random}
+\alias{model_random.glmmTMB}
 \title{Get names of random effect terms}
 \usage{
 model_random(x, split_nested = FALSE, ...)
+
+\method{model_random}{glmmTMB}(x, split_nested = FALSE, zi = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{A fitted mixed model.}
@@ -14,6 +18,9 @@ effects will be returned as separeted elements, not as single string
 with colon. See 'Examples'.}
 
 \item{...}{Currently not used.}
+
+\item{zi}{Logical, if \code{TRUE} and model has a zero-inflation-formula,
+the variable(s) used in this formula are also returned.}
 }
 \value{
 The name(s) of the random effects as character vector.

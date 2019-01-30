@@ -67,6 +67,7 @@ model_random.MixMod <- function(x, split_nested = FALSE, ...) {
 }
 
 
+#' @rdname model_random
 #' @importFrom stats formula
 #' @export
 model_random.glmmTMB <- function(x, split_nested = FALSE, zi = FALSE, ...) {
