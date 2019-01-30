@@ -83,12 +83,17 @@ model_predictors.glmmTMB <- function(x, effects = c("fixed", "random", "all"), z
 
   # add variables from zero-inflation
   if (isTRUE(zi)) {
-    dp <- tryCatch(
+    ziform <- tryCatch(
       {all.vars(x$modelInfo$allForm$ziformula[[2L]])},
       error = function(x) { NULL}
     )
 
-    if (!is.null(dp)) modpred <- c(modpred, dp)
+    if (!is.null(ziform)) {
+      # remove random effects from formula
+      if (effects == "fixed")
+        ziform <- remove_re_from_terms(x, ziform)
+      modpred <- c(modpred, ziform)
+    }
   }
 
   # for glmmtmb, check dispersion formula

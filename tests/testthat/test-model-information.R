@@ -19,7 +19,6 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
 
   m3 <- lm(neg_c_7 ~ e42dep + c161sex, data = efc)
 
-
   test_that("model_info", {
     expect_true(model_info(m1)$is_zeroinf)
     expect_false(model_info(m2)$is_zeroinf)
