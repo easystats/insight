@@ -91,7 +91,7 @@ model_predictors.glmmTMB <- function(x, effects = c("fixed", "random", "all"), z
     if (!is.null(ziform)) {
       # remove random effects from formula
       if (effects == "fixed")
-        ziform <- remove_re_from_terms(x, ziform)
+        ziform <- remove_re_from_terms(x, ziform, zi = TRUE)
       modpred <- c(modpred, ziform)
     }
   }
@@ -240,8 +240,8 @@ model_predictors.felm <- function(x, ...) {
 
 
 
-remove_re_from_terms <- function(x, modpred) {
-  re <- model_random(x, split_nested = TRUE)
+remove_re_from_terms <- function(x, modpred, zi = FALSE) {
+  re <- model_random(x, split_nested = TRUE, zi = zi)
   if (!is_empty_string(re)) {
     pos <- match(re, modpred)
     modpred <- modpred[-pos]
