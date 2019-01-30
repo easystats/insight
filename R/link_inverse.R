@@ -3,11 +3,10 @@
 #'
 #' @description Returns the link-inverse function from a model object.
 #'
-#' @param x A fitted model.
-#' @param multi.resp Logical, if \code{TRUE} and model is a multivariate response
+#' @param mv_response Logical, if \code{TRUE} and model is a multivariate response
 #'    model from a \code{brmsfit} object or of class \code{stanmvreg}, then a
 #'    list of values (one for each regression) is returned.
-#' @param ... Currently not used.
+#' @inheritParams model_predictors
 #'
 #' @return A function, describing the inverse-link function from a model-object.
 #'
@@ -255,9 +254,9 @@ link_inverse.multinom <- function(x, ...) {
 #' @rdname link_inverse
 #' @importFrom stats family
 #' @export
-link_inverse.stanmvreg <- function(x, multi.resp = FALSE, ...) {
+link_inverse.stanmvreg <- function(x, mv_response = FALSE, ...) {
   fam <- stats::family(x)
-  if (multi.resp) {
+  if (mv_response) {
     il <- lapply(fam, function(.x) { .x$linkinv })
   } else {
     fam <- fam[[1]]
@@ -271,10 +270,10 @@ link_inverse.stanmvreg <- function(x, multi.resp = FALSE, ...) {
 #' @rdname link_inverse
 #' @importFrom stats family formula
 #' @export
-link_inverse.brmsfit <- function(x, multi.resp = FALSE, ...) {
+link_inverse.brmsfit <- function(x, mv_response = FALSE, ...) {
   fam <- stats::family(x)
   if (!is.null(stats::formula(x)$response)) {
-    if (multi.resp) {
+    if (mv_response) {
       il <- lapply(fam, brms_link_inverse)
     } else {
       fam <- fam[[1]]

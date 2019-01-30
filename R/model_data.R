@@ -111,7 +111,7 @@ model_data.merMod <- function(x, effects = c("fixed", "random", "all"), ...) {
         effects,
         fixed = stats::model.frame(x, fixed.only = TRUE),
         all = stats::model.frame(x, fixed.only = FALSE),
-        random = stats::model.frame(x, fixed.only = FALSE)[, model_random(x), drop = FALSE]
+        random = stats::model.frame(x, fixed.only = FALSE)[, model_random(x, split_nested = TRUE), drop = FALSE]
       )
     },
     error = function(x) { NULL }
@@ -264,10 +264,9 @@ model_data.MCMCglmm <- function(x, ...) {
 }
 
 
-#' @importFrom dplyr select
 get_zelig_relogit_frame <- function(x) {
-  vars <- c(model_response(x), model_predictors(x))
-  dplyr::select(x$data, !! vars)
+  vars <- model_terms(x)
+  x$data[, vars, drop = FALSE]
 }
 
 
@@ -278,6 +277,9 @@ prepare_model_data <- function(x, mf, effects = "fixed") {
     warning("Could not get model data.", call. = F)
     return(NULL)
   }
+
+  # we may store model weights here later
+  mw <- NULL
 
   # do we have an offset, not specified in the formula?
   if ("(offset)" %in% colnames(mf) && obj_has_name(x, "call") && obj_has_name(x$call, "offset")) {

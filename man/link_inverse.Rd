@@ -8,16 +8,16 @@
 \usage{
 link_inverse(x, ...)
 
-\method{link_inverse}{stanmvreg}(x, multi.resp = FALSE, ...)
+\method{link_inverse}{stanmvreg}(x, mv_response = FALSE, ...)
 
-\method{link_inverse}{brmsfit}(x, multi.resp = FALSE, ...)
+\method{link_inverse}{brmsfit}(x, mv_response = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
 
-\item{multi.resp}{Logical, if \code{TRUE} and model is a multivariate response
+\item{mv_response}{Logical, if \code{TRUE} and model is a multivariate response
 model from a \code{brmsfit} object or of class \code{stanmvreg}, then a
 list of values (one for each regression) is returned.}
 }

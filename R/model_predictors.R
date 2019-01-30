@@ -236,9 +236,8 @@ model_predictors.felm <- function(x, ...) {
 
 
 remove_re_from_terms <- function(x, modpred) {
-  re <- model_random(x)
+  re <- model_random(x, split_nested = TRUE)
   if (!is_empty_string(re)) {
-    re <- unique(trim(unlist(strsplit(re, ":", fixed = TRUE))))
     pos <- match(re, modpred)
     modpred <- modpred[-pos]
   }

@@ -7,7 +7,7 @@
 clean_names(x)
 }
 \arguments{
-\item{x}{A fitted mixed model, or a character vector.}
+\item{x}{A fitted model, or a character vector.}
 }
 \value{
 The "cleaned" variable names, i.e. things like \code{s()} for
@@ -25,7 +25,7 @@ For a regression model, this function is equal to calling
 \examples{
 # example from ?stats::glm
 counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
-outcome <- c(3, 1, 9)
+outcome <- c(gl(3, 1, 9))
 treatment <- gl(3, 3)
 m <- glm(counts ~ log(outcome) + as.factor(treatment), family = poisson())
 clean_names(m)

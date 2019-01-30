@@ -5,7 +5,7 @@
 #'   vector with such names) by removing patterns like \code{log()} or
 #'   \code{as.factor()} etc.
 #'
-#' @param x A fitted mixed model, or a character vector.
+#' @param x A fitted model, or a character vector.
 #'
 #' @return The "cleaned" variable names, i.e. things like \code{s()} for
 #'   splines or \code{log()} are removed from the model terms.
@@ -16,7 +16,7 @@
 #' @examples
 #' # example from ?stats::glm
 #' counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
-#' outcome <- c(3, 1, 9)
+#' outcome <- c(gl(3, 1, 9))
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ log(outcome) + as.factor(treatment), family = poisson())
 #' clean_names(m)
@@ -39,8 +39,6 @@ clean_names.character <- function(x) {
 }
 
 
-#' @importFrom sjmisc is_empty trim
-#' @importFrom purrr map_chr
 get_vn_helper <- function(x) {
   # return if x is empty
   if (is_empty_string(x)) return("")
