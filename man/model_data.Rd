@@ -3,7 +3,7 @@
 \name{model_data}
 \alias{model_data}
 \alias{model_data.merMod}
-\title{Get name of a model's response variable}
+\title{Get the data that was used to fit the model}
 \usage{
 model_data(x, ...)
 
@@ -19,10 +19,17 @@ model_data(x, ...)
 or both be returned? Only applies to mixed models.}
 }
 \value{
-## TODO docs
+The data that was used to fit the model.
 }
 \description{
-Returns the name(s) of the response variable(s) from a model object.
+This functions tries to get the data that was used to fit the
+  model and returns it as data frame.
+}
+\note{
+Unlike \code{model.frame()}, which may contain transformed variables
+  (e.g. if \code{poly()} or \code{scale()} was used inside the formula to
+  specify the model), \code{model_data()} aims at returning the "original",
+  untransformed data.
 }
 \examples{
 data(cbpp, package = "lme4")

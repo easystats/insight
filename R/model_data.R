@@ -1,13 +1,19 @@
-#' @title Get name of a model's response variable
+#' @title Get the data that was used to fit the model
 #' @name model_data
 #'
-#' @description Returns the name(s) of the response variable(s) from a model object.
+#' @description This functions tries to get the data that was used to fit the
+#'   model and returns it as data frame.
 #'
 #' @param effects Should model data for fixed effects, random effects
 #'    or both be returned? Only applies to mixed models.
 #' @inheritParams model_predictors
 #'
-#' @return ## TODO docs
+#' @return The data that was used to fit the model.
+#'
+#' @note Unlike \code{model.frame()}, which may contain transformed variables
+#'   (e.g. if \code{poly()} or \code{scale()} was used inside the formula to
+#'   specify the model), \code{model_data()} aims at returning the "original",
+#'   untransformed data.
 #'
 #' @examples
 #' data(cbpp, package = "lme4")
