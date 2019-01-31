@@ -28,5 +28,23 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_equal(find_predictors(m2, effects = "fixed"), "Days")
     expect_equal(find_predictors(m2, effects = "random"), c("mysubgrp:mygrp", "mygrp", "Subject"))
   })
+
+  test_that("find_random", {
+    expect_equal(find_random(m1), "Subject")
+    expect_equal(find_random(m2), c("mysubgrp:mygrp", "mygrp", "Subject"))
+    expect_equal(find_random(m2, split_nested = TRUE), c("mysubgrp", "mygrp", "Subject"))
+    expect_equal(find_random(m1, component = "cond"), "Subject")
+    expect_equal(find_random(m1, component = "all"), "Subject")
+    expect_null(find_random(m1, component = "zi"))
+    expect_null(find_random(m1, component = "disp"))
+    expect_equal(find_random(m2, component = "cond"), c("mysubgrp:mygrp", "mygrp", "Subject"))
+    expect_equal(find_random(m2, component = "cond", split_nested = TRUE), c("mysubgrp", "mygrp", "Subject"))
+    expect_equal(find_random(m2, component = "all"), c("mysubgrp:mygrp", "mygrp", "Subject"))
+    expect_equal(find_random(m2, component = "all", split_nested = TRUE), c("mysubgrp", "mygrp", "Subject"))
+    expect_null(find_random(m2, component = "zi"))
+    expect_null(find_random(m2, component = "zi", split_nested = TRUE))
+    expect_null(find_random(m2, component = "disp"))
+    expect_null(find_random(m2, component = "disp", split_nested = TRUE))
+  })
 }
 
