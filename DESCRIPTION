@@ -7,7 +7,8 @@ Description: Although there are generic functions to get information about or
   gap by providing functions that work for (almost) any model object.
 Version: 0.1.0.0001
 Date: 2019-01-29
-Authors@R: person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206"))
+Authors@R: c(person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206")),
+             person("Dominique", "Makowski", role = c("ctb"), email = "dom.makowski@gmail.com", comment = c(ORCID = "0000-0001-5375-9967")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 License: GPL-3
 Depends:
