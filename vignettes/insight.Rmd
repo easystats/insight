@@ -1,0 +1,56 @@
+---
+output: 
+  github_document:
+    toc: false
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, models, utils, insight]
+vignette: >
+  %\VignetteIndexEntry{README}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.path = "README-"
+)
+```
+
+
+## Installation
+
+
+```r
+library(devtools)
+devtools::install_github("easystats/insight")
+```
+```{r message=FALSE, warning=FALSE}
+library(insight)
+```
+
+## Examples
+
+```{r message=FALSE, warning=FALSE}
+model <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
+```
+
+
+### Retrieve the model's variables:
+
+```{r message=FALSE, warning=FALSE}
+model_terms(model)
+```
+
+### Retrieve the model's data:
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+model_data(model)
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(head(model_data(model)))
+```

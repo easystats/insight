@@ -1,10 +1,11 @@
 Package: insight
 Type: Package
-Title: Easily Access Model Information for Various Model Objects
-Description: Although there are generic functions to get information about or 
-  data from models, many modelling-functions from different packages do not
-  provide methods to access these information. 'insight' aims to close this 
-  gap by providing functions that work for (almost) any model object.
+Title: Easy Access to Model Information for Various Model Objects
+Description: Although there are generic functions to get information
+    and data from models, many modelling-functions from different
+    packages do not provide methods to access these information.
+    The **insight** package aims at closing this gap by providing 
+    functions that work for (almost) any models.
 Version: 0.1.0.0001
 Date: 2019-01-29
 Authors@R: c(person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206")),
@@ -24,3 +25,4 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+VignetteBuilder: knitr

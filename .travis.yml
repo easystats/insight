@@ -1,0 +1,25 @@
+language: r
+sudo: false
+
+# Using the package cache to store R package dependencies can significantly
+# speed up build times and is recommended for most builds.
+cache: packages
+
+os:
+  #- windows
+  - linux
+  - osx
+  
+r:
+  - release
+  # - devel
+
+
+warnings_are_errors: true
+
+r_packages:
+  - covr
+  
+  
+after_success:
+  - Rscript -e 'library(covr); codecov()'
