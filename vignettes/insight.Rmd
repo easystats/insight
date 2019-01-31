@@ -49,8 +49,8 @@ find_terms(model)
 ### Retrieve the model's data:
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
-find_data(model)
+get_data(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(head(find_data(model)))
+knitr::kable(head(get_data(model)))
 ```
