@@ -115,7 +115,7 @@ find_predictors.glmmTMB <- function(x, effects = c("fixed", "random", "all"), co
   component <- match.arg(component)
 
   if (effects == "random")
-    return(find_random(x, split_nested = FALSE, component = component))
+    return(unname(find_random(x, split_nested = FALSE, component = component)))
 
   modpred.zi <- NULL
   modpred.disp <- NULL
