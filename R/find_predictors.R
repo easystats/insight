@@ -129,7 +129,7 @@ find_predictors.glmmTMB <- function(x, effects = c("fixed", "random", "all"), co
     modpred.cond <- all.vars(stats::terms(x)[[3L]])
 
   # remove random effects from formula
-  if (effects == "fixed")
+  if (effects == "fixed" && component != "disp")
     modpred.cond <- remove_re_from_terms(x, modpred.cond, component)
 
   # get terms from zero-inflation
@@ -140,7 +140,7 @@ find_predictors.glmmTMB <- function(x, effects = c("fixed", "random", "all"), co
 
   if (!is_empty_object(modpred.zi)) {
     # remove random effects from formula
-    if (effects == "fixed")
+    if (effects == "fixed" && component != "disp")
       modpred.zi <- remove_re_from_terms(x, modpred.zi, component)
   } else {
     modpred.zi <- NULL

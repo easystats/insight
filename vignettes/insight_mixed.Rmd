@@ -33,6 +33,8 @@ find_formula(m)
 find_formula(m, component = "cond")
 
 find_formula(m, component = "zi")
+
+find_formula(m, component = "disp")
 ```
 
 ## find_predictors()
@@ -83,18 +85,6 @@ find_random(m, component = "zi", flatten = TRUE)
 
 ```{r}
 find_response(m)
-```
-
-## find_formula()
-
-```{r}
-find_formula(m)
-
-find_formula(m, component = "cond")
-
-find_formula(m, component = "zi")
-
-find_formula(m, component = "disp")
 ```
 
 ## find_terms()
