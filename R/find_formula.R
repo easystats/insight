@@ -132,6 +132,7 @@ find_formula.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 find_formula.MixMod <- function(x, effects = c("all", "fixed", "random"), component = c("all", "cond", "zi", "disp"), ...) {
   effects <- match.arg(effects)
+  component <- match.arg(component)
 
   f.cond <- stats::formula(x)
   f.zi <- stats::formula(x, type = "zi_fixed")

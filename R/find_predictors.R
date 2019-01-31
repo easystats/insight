@@ -230,6 +230,7 @@ find_predictors.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), .
 #' @export
 find_predictors.MixMod <- function(x, effects = c("fixed", "random", "all"), component = c("all", "cond", "zi", "disp"), ...) {
   effects <- match.arg(effects)
+  component <- match.arg(component)
 
   ## TODO needs unit tests!
 
@@ -246,7 +247,7 @@ find_predictors.MixMod <- function(x, effects = c("fixed", "random", "all"), com
   if (length(modpred.cond) == 1 && modpred.cond == ".")
     modpred.cond <- all.vars(stats::terms(x)[[3L]])
 
-  if (effects == "fixed") {
+  if (effects == "fixed" && component != "disp") {
     modpred.ranef <- NULL
     modpred.ziranef <- NULL
   }
@@ -255,7 +256,8 @@ find_predictors.MixMod <- function(x, effects = c("fixed", "random", "all"), com
     component,
     all = unique(c(modpred.cond, modpred.zi, modpred.ranef, modpred.ziranef)),
     cond = unique(c(modpred.cond, modpred.ranef)),
-    zi = unique(c(modpred.zi, modpred.ziranef))
+    zi = unique(c(modpred.zi, modpred.ziranef)),
+    NULL
   )
 }
 

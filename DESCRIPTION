@@ -17,6 +17,7 @@ Depends:
     stats
 Suggests:
   brms,
+  GLMMadaptive,
   glmmTMB,
   knitr,
   lme4,

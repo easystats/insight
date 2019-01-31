@@ -95,6 +95,15 @@ find_random.brmsfit <- function(x, split_nested = FALSE, ...) {
 
 #' @export
 find_random.MixMod <- function(x, split_nested = FALSE, ...) {
+
+  dots <- list(...)
+  if (obj_has_name(dots, "component")) {
+    if (dots$component == "disp") {
+      warning("Dispersion-parameters can not be returned for random effects.")
+      return(NULL)
+    }
+  }
+
   ## TODO fix this once nested random effects are possible in MixMod
   x$id_name
 }
