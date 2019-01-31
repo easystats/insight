@@ -65,15 +65,17 @@ find_terms.default <- function(x, flatten = FALSE, ...) {
     t.zi <- NULL
   }
 
-  t.disp <- find_predictors(x, effects = "fixed", component = "disp")
+  t.disp <- suppressWarnings(
+    find_predictors(x, effects = "fixed", component = "disp")
+  )
 
   allterms <- compact_list(list(
-    response = t.y,
-    predictors = t.cond,
-    random = t.re,
-    zi = t.zi,
-    zi_random = t.zi.re,
-    disp = t.disp
+    response = unname(t.y),
+    predictors = unname(t.cond),
+    random = unname(t.re),
+    zi = unname(t.zi),
+    zi_random = unname(t.zi.re),
+    disp = unname(t.disp)
   ))
 
   if (flatten)

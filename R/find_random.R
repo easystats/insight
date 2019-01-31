@@ -103,8 +103,13 @@ find_random.MixMod <- function(x, split_nested = FALSE, ...) {
 #' @rdname find_random
 #' @importFrom stats formula
 #' @export
-find_random.glmmTMB <- function(x, split_nested = FALSE, component = c("all", "cond", "zi"), flatten = FALSE, ...) {
+find_random.glmmTMB <- function(x, split_nested = FALSE, component = c("all", "cond", "zi", "disp"), flatten = FALSE, ...) {
   component = match.arg(component)
+
+  if (component == "disp") {
+    warning("Dispersion-parameters can not be returned for random effects.")
+    return(NULL)
+  }
 
   f <- tryCatch(
     {

@@ -8,7 +8,7 @@
 find_random(x, split_nested = FALSE, ...)
 
 \method{find_random}{glmmTMB}(x, split_nested = FALSE,
-  component = c("all", "cond", "zi"), flatten = FALSE, ...)
+  component = c("all", "cond", "zi", "disp"), flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted mixed model.}
