@@ -111,11 +111,9 @@ model_response.aovlist <- function(x, combine = TRUE, ...) {
 # should not be called for brms-models!
 check_cbind <- function(resp, combine) {
   if (!combine && grepl("cbind\\((.*)\\)", resp)) {
-    resp <- sub("cbind\\(([^,].*)([\\)].*)" ,"\\1", resp) %>%
-      strsplit(split  = ",", fixed = TRUE) %>%
-      unlist() %>%
-      trim()
-
+    resp <- sub("cbind\\(([^,].*)([\\)].*)" ,"\\1", resp)
+    resp <- strsplit(resp, split  = ",", fixed = TRUE)
+    resp <- trim(unlist(resp))
     if (any(string_contains("-", resp[2])))
       resp[2] <- trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
   }

@@ -15,8 +15,9 @@ Depends:
     stats
 Suggests:
   brms,
-  lme4,
   glmmTMB,
+  lme4,
+  nlme,
   splines,
   testthat
 Encoding: UTF-8

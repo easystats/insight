@@ -2,14 +2,25 @@
 % Please edit documentation in R/model_random.R
 \name{model_random}
 \alias{model_random}
+\alias{model_random.glmmTMB}
 \title{Get names of random effect terms}
 \usage{
-model_random(x, ...)
+model_random(x, split_nested = FALSE, ...)
+
+\method{model_random}{glmmTMB}(x, split_nested = FALSE, zi = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{A fitted mixed model.}
 
+\item{split_nested}{Logical, if \code{TRUE}, terms from nested random
+effects will be returned as separeted elements, not as single string
+with colon. See 'Examples'.}
+
 \item{...}{Currently not used.}
+
+\item{zi}{Logical, if \code{TRUE} and model has a zero-inflation-formula,
+the variable(s) used in this formula are also returned.}
 }
 \value{
 The name(s) of the random effects as character vector.
@@ -18,6 +29,22 @@ The name(s) of the random effects as character vector.
 to do...
 }
 \examples{
-## TODO
+library(lme4)
+data(sleepstudy)
+sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mysubgrp <- NA
+for (i in 1:5) {
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+  sample(1:30, size = sum(filter_group), replace = TRUE)
+}
+
+m <- lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = sleepstudy
+)
+
+model_random(m)
+model_random(m, split_nested = TRUE)
 
 }

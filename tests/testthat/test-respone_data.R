@@ -53,10 +53,12 @@ if (.runThisTest) {
       expect_equal(model_response(m3, combine = FALSE), c("r", "n"))
     })
 
-    test_that("resp_val", {
-      resp_val(m1)
-      resp_val(m2)
-      resp_val(m3)
+    test_that("response_data", {
+      expect_length(response_data(m1), 236)
+      expect_equal(ncol(response_data(m2)), 2)
+      expect_equal(colnames(response_data(m2)), c("neg_c_7", "c12hour"))
+      expect_equal(ncol(response_data(m3)), 2)
+      expect_equal(colnames(response_data(m3)), c("r", "n"))
     })
   }
 }

@@ -24,18 +24,18 @@ if (suppressWarnings(
     expect_equal(model_response(m4, combine = FALSE), c("incidence", "size"))
   })
 
-  test_that("resp_val", {
-    expect_equal(colnames(resp_val(m1)), c("incidence", "trials"))
-    expect_equal(colnames(resp_val(m2)), c("incidence", "size"))
-    expect_equal(colnames(resp_val(m3)), c("incidence", "trials"))
-    expect_equal(colnames(resp_val(m4)), c("incidence", "size"))
+  test_that("response_data", {
+    expect_equal(colnames(response_data(m1)), c("incidence", "trials"))
+    expect_equal(colnames(response_data(m2)), c("incidence", "size"))
+    expect_equal(colnames(response_data(m3)), c("incidence", "trials"))
+    expect_equal(colnames(response_data(m4)), c("incidence", "size"))
   })
 
-  test_that("model_frame", {
-    model_frame(m1)
-    model_frame(m2)
-    model_frame(m3)
-    model_frame(m4)
+  test_that("model_data", {
+    model_data(m1)
+    model_data(m2)
+    model_data(m3)
+    model_data(m4)
   })
 
   set.seed(123)
@@ -47,9 +47,9 @@ if (suppressWarnings(
     )
 
   test_that("mod-info", {
-    model_frame(m5)
+    model_data(m5)
     model_response(m5)
-    resp_val(m5)
+    response_data(m5)
   })
 
 }
