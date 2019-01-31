@@ -34,5 +34,5 @@ get_random <- function(x, ...) {
   }
 
 
-  find_data(x, effects = "random")
+  get_data(x, effects = "random")
 }

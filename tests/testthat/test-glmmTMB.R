@@ -51,14 +51,14 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_identical(link_inverse(m2)(.2), exp(.2))
   })
 
-  test_that("find_data", {
-    expect_equal(colnames(find_data(m1)), c("count", "child", "camper", "persons"))
-    expect_equal(colnames(find_data(m1, effects = "all")), c("count", "child", "camper", "persons"))
-    expect_equal(colnames(find_data(m1, effects = "random")), c("count", "child", "camper", "persons"))
-    expect_equal(colnames(find_data(m2)), c("count", "child", "camper", "persons"))
-    expect_equal(colnames(find_data(m2, effects = "all")), c("count", "child", "camper", "persons"))
-    expect_equal(colnames(find_data(m2, effects = "random")), c("count", "child", "camper", "persons"))
-    find_data(m3)
+  test_that("get_data", {
+    expect_equal(colnames(get_data(m1)), c("count", "child", "camper", "persons"))
+    expect_equal(colnames(get_data(m1, effects = "all")), c("count", "child", "camper", "persons"))
+    expect_equal(colnames(get_data(m1, effects = "random")), c("count", "child", "camper", "persons"))
+    expect_equal(colnames(get_data(m2)), c("count", "child", "camper", "persons"))
+    expect_equal(colnames(get_data(m2, effects = "all")), c("count", "child", "camper", "persons"))
+    expect_equal(colnames(get_data(m2, effects = "random")), c("count", "child", "camper", "persons"))
+    get_data(m3)
   })
 
   test_that("find_predictors", {

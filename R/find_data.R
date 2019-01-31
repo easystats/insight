@@ -1,5 +1,5 @@
 #' @title Get the data that was used to fit the model
-#' @name find_data
+#' @name get_data
 #'
 #' @description This functions tries to get the data that was used to fit the
 #'   model and returns it as data frame.
@@ -12,24 +12,24 @@
 #'
 #' @note Unlike \code{model.frame()}, which may contain transformed variables
 #'   (e.g. if \code{poly()} or \code{scale()} was used inside the formula to
-#'   specify the model), \code{find_data()} aims at returning the "original",
+#'   specify the model), \code{get_data()} aims at returning the "original",
 #'   untransformed data.
 #'
 #' @examples
 #' data(cbpp, package = "lme4")
 #' cbpp$trials <- cbpp$size - cbpp$incidence
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
-#' head(find_data(m))
+#' head(get_data(m))
 #'
 #' @export
-find_data <- function(x, ...) {
-  UseMethod("find_data")
+get_data <- function(x, ...) {
+  UseMethod("get_data")
 }
 
 
 #' @importFrom stats model.frame
 #' @export
-find_data.default <- function(x, ...) {
+get_data.default <- function(x, ...) {
   mf <- tryCatch(
     {
       if (inherits(x, "Zelig-relogit"))
@@ -40,30 +40,30 @@ find_data.default <- function(x, ...) {
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf)
+  prepare_get_data(x, mf)
 }
 
 
 #' @export
-find_data.clm2 <- function(x, ...) {
+get_data.clm2 <- function(x, ...) {
   mf <- tryCatch(
     {x$location},
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf)
+  prepare_get_data(x, mf)
 }
 
 
 #' @importFrom stats model.frame
 #' @export
-find_data.glmmTMB <- function(x, ...) {
+get_data.glmmTMB <- function(x, ...) {
   mf <- tryCatch(
     {stats::model.frame(x)},
     error = function(x) { NULL }
   )
 
-  mf <- prepare_find_data(x, mf)
+  mf <- prepare_get_data(x, mf)
 
   disp <- tryCatch(
     {all.vars(x$modelInfo$allForm$dispformula[[2L]])},
@@ -99,10 +99,10 @@ find_data.glmmTMB <- function(x, ...) {
 }
 
 
-#' @rdname find_data
+#' @rdname get_data
 #' @importFrom stats model.frame
 #' @export
-find_data.merMod <- function(x, effects = c("fixed", "random", "all"), ...) {
+get_data.merMod <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
 
   mf <- tryCatch(
@@ -117,67 +117,67 @@ find_data.merMod <- function(x, effects = c("fixed", "random", "all"), ...) {
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf, effects)
+  prepare_get_data(x, mf, effects)
 }
 
 
 #' @export
-find_data.lme <- function(x, ...) {
+get_data.lme <- function(x, ...) {
   mf <- tryCatch(
     {x$data},
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf)
+  prepare_get_data(x, mf)
 }
 
 
 #' @export
-find_data.vgam <- function(x, ...) {
+get_data.vgam <- function(x, ...) {
   mf <- tryCatch(
     {get(x@misc$dataname, envir = parent.frame())},
     error = function(x) { NULL}
   )
 
-  prepare_find_data(x, mf)
+  prepare_get_data(x, mf)
 }
 
 
 #' @export
-find_data.gee <- function(x, ...) {
+get_data.gee <- function(x, ...) {
   mf <- tryCatch(
     {eval(x$call$data, envir = parent.frame())},
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf)
+  prepare_get_data(x, mf)
 }
 
 
 #' @export
-find_data.gls <- function(x, ...) {
+get_data.gls <- function(x, ...) {
   mf <- tryCatch(
     {eval(x$call$data, envir = parent.frame())},
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf)
+  prepare_get_data(x, mf)
 }
 
 
 #' @export
-find_data.gmnl <- function(x, ...) {
+get_data.gmnl <- function(x, ...) {
   mf <- tryCatch(
     {x$mf},
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf)
+  prepare_get_data(x, mf)
 }
 
 
 #' @export
-find_data.MixMod <- function(x, ...) {
+get_data.MixMod <- function(x, ...) {
   mf <- tryCatch(
     {
       fitfram <- x$model_frames$mfX
@@ -195,12 +195,12 @@ find_data.MixMod <- function(x, ...) {
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf)
+  prepare_get_data(x, mf)
 }
 
 
 #' @export
-find_data.vglm <- function(x, ...) {
+get_data.vglm <- function(x, ...) {
   mf <- tryCatch(
     {
       if (!length(x@model)) {
@@ -217,13 +217,13 @@ find_data.vglm <- function(x, ...) {
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf)
+  prepare_get_data(x, mf)
 }
 
 
 #' @importFrom stats model.frame
 #' @export
-find_data.stanmvreg <- function(x, ...) {
+get_data.stanmvreg <- function(x, ...) {
   mf <- tryCatch(
     {
       out <- data.frame()
@@ -237,12 +237,12 @@ find_data.stanmvreg <- function(x, ...) {
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf)
+  prepare_get_data(x, mf)
 }
 
 
 #' @export
-find_data.MCMCglmm <- function(x, ...) {
+get_data.MCMCglmm <- function(x, ...) {
   mf <- tryCatch(
     {
       env_dataframes <- names(which(unlist(eapply(.GlobalEnv, is.data.frame))))
@@ -260,7 +260,7 @@ find_data.MCMCglmm <- function(x, ...) {
     error = function(x) { NULL }
   )
 
-  prepare_find_data(x, mf, effects = "all")
+  prepare_get_data(x, mf, effects = "all")
 }
 
 
@@ -272,7 +272,7 @@ get_zelig_relogit_frame <- function(x) {
 
 
 #' @importFrom stats getCall formula na.omit
-prepare_find_data <- function(x, mf, effects = "fixed") {
+prepare_get_data <- function(x, mf, effects = "fixed") {
   if (is.null(mf)) {
     warning("Could not get model data.", call. = F)
     return(NULL)

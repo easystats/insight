@@ -22,7 +22,7 @@ if (require("testthat") && require("insight")) {
     expect_identical(link_inverse(m1)(.2), .2)
   })
 
-  test_that("find_data", {
-    find_data(m1)
+  test_that("get_data", {
+    get_data(m1)
   })
 }

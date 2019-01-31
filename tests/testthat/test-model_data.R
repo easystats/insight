@@ -1,5 +1,5 @@
 if (require("testthat") && require("insight") && require("splines") && require("glmmTMB")) {
-  context("insight, find_data")
+  context("insight, get_data")
 
   data(efc)
 
@@ -11,11 +11,11 @@ if (require("testthat") && require("insight") && require("splines") && require("
   m5 <- lm(neg_c_7 ~ e42dep + c160age, data = efc)
 
 
-  test_that("find_data", {
-    mf1 <- find_data(m1)
-    mf2 <- find_data(m2)
-    mf3 <- find_data(m3)
-    mf4 <- find_data(m4)
+  test_that("get_data", {
+    mf1 <- get_data(m1)
+    mf2 <- get_data(m2)
+    mf3 <- get_data(m3)
+    mf4 <- get_data(m4)
     mf5 <- model.frame(m5)
 
     expect_equal(as.vector(mf1$c160age), as.vector(mf5$c160age))
@@ -33,8 +33,8 @@ if (require("testthat") && require("insight") && require("splines") && require("
     family = nbinom2
   )
 
-  test_that("find_data", {
-    mf <- find_data(m)
+  test_that("get_data", {
+    mf <- get_data(m)
     expect_equal(ncol(mf), 7)
     expect_equal(colnames(mf), c("count", "spp", "cover", "mined", "site", "DOY", "DOP"))
   })

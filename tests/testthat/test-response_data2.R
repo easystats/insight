@@ -31,11 +31,11 @@ if (suppressWarnings(
     expect_equal(colnames(get_response(m4)), c("incidence", "size"))
   })
 
-  test_that("find_data", {
-    find_data(m1)
-    find_data(m2)
-    find_data(m3)
-    find_data(m4)
+  test_that("get_data", {
+    get_data(m1)
+    get_data(m2)
+    get_data(m3)
+    get_data(m4)
   })
 
   set.seed(123)
@@ -47,7 +47,7 @@ if (suppressWarnings(
     )
 
   test_that("mod-info", {
-    find_data(m5)
+    get_data(m5)
     find_response(m5)
     get_response(m5)
   })

@@ -36,14 +36,14 @@ get_response.default <- function(x, resp = NULL, ...) {
   rn <- find_response(x, combine = FALSE)
 
   if (length(rn) > 1) {
-    rv <- find_data(x)[, clean_names(rn), drop = FALSE]
+    rv <- get_data(x)[, clean_names(rn), drop = FALSE]
     colnames(rv) <- rn
     # if user only wants specific response value, return this only
     if (!is.null(resp) && all(resp %in% colnames(rv)))
       rv <- rv[, resp, drop = TRUE]
     rv
   } else {
-    as.vector(find_data(x)[[clean_names(find_response(x, combine = TRUE))]])
+    as.vector(get_data(x)[[clean_names(find_response(x, combine = TRUE))]])
   }
 }
 
@@ -68,7 +68,7 @@ get_response.gls <- function(x, ...) {
 
 #' @export
 get_response.stanmvreg <- function(x, resp = NULL, ...) {
-  rv <- find_data(x)[, clean_names(find_response(x, combine = TRUE)), drop = FALSE]
+  rv <- get_data(x)[, clean_names(find_response(x, combine = TRUE)), drop = FALSE]
 
   # if user only wants specific response value, return this only
   if (!is.null(resp) && all(resp %in% colnames(rv)))
@@ -86,7 +86,7 @@ get_response.brmsfit <- function(x, resp = NULL, ...) {
 
   ## TODO maybe replace with brms::get_y()?
 
-  rv <- find_data(x)[, clean_names(find_response(x, combine = TRUE)), drop = FALSE]
+  rv <- get_data(x)[, clean_names(find_response(x, combine = TRUE)), drop = FALSE]
 
   # if user only wants specific response value, return this only
   if (!is.null(resp) && all(resp %in% colnames(rv)))
