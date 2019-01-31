@@ -3,7 +3,7 @@
 #'
 #' @description Retrieve information from model objects.
 #'
-#' @inheritParams model_predictors
+#' @inheritParams find_predictors
 #' @inheritParams link_inverse
 #'
 #' @return A list with information about the model, like family, link-function

@@ -1,17 +1,17 @@
 #' @title Get the data from a model's predictor variables
-#' @name predictors_data
+#' @name get_predictors
 #'
 #' @description Returns the data of all predictor variables (fixed effects).
 #'
-#' @inheritParams model_predictors
+#' @inheritParams find_predictors
 #'
 #' @return The data of all predictor variables, as data frame.
 #'
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
-#' predictors_data(m)
+#' get_predictors(m)
 #'
 #' @export
-predictors_data <- function(x, ...) {
-  model_data(x)[, model_predictors(x, effects = "fixed", zi = TRUE), drop = FALSE]
+get_predictors <- function(x, ...) {
+  find_data(x)[, find_predictors(x, effects = "fixed", component = "all"), drop = FALSE]
 }

@@ -6,5 +6,6 @@
 ^paper.*$
 ^LICENSE
 ^_pkgdown\.yml$
-^README.Rmd
+^README.*$
 ^_pkgdown.yml
+^pkgdown$

@@ -7,7 +7,7 @@ if (.runThisTest) {
     require("insight") &&
     require("brms")
   )) {
-    context("insight, brms-model_response")
+    context("insight, brms-find_response")
 
     data("epilepsy")
     data(efc)
@@ -44,21 +44,21 @@ if (.runThisTest) {
 
     m3 <- brm(r | trials(n) ~ treat * c2, data = dat, family = binomial(link = logit))
 
-    test_that("model_response", {
-      expect_equal(model_response(m1, combine = TRUE), "count")
-      expect_equal(model_response(m2, combine = TRUE), c(negc7 = "neg_c_7", c12hour = "c12hour"))
-      expect_equal(model_response(m3, combine = TRUE), c("r", "n"))
-      expect_equal(model_response(m1, combine = FALSE), "count")
-      expect_equal(model_response(m2, combine = FALSE), c(negc7 = "neg_c_7", c12hour = "c12hour"))
-      expect_equal(model_response(m3, combine = FALSE), c("r", "n"))
+    test_that("find_response", {
+      expect_equal(find_response(m1, combine = TRUE), "count")
+      expect_equal(find_response(m2, combine = TRUE), c(negc7 = "neg_c_7", c12hour = "c12hour"))
+      expect_equal(find_response(m3, combine = TRUE), c("r", "n"))
+      expect_equal(find_response(m1, combine = FALSE), "count")
+      expect_equal(find_response(m2, combine = FALSE), c(negc7 = "neg_c_7", c12hour = "c12hour"))
+      expect_equal(find_response(m3, combine = FALSE), c("r", "n"))
     })
 
-    test_that("response_data", {
-      expect_length(response_data(m1), 236)
-      expect_equal(ncol(response_data(m2)), 2)
-      expect_equal(colnames(response_data(m2)), c("neg_c_7", "c12hour"))
-      expect_equal(ncol(response_data(m3)), 2)
-      expect_equal(colnames(response_data(m3)), c("r", "n"))
+    test_that("get_response", {
+      expect_length(get_response(m1), 236)
+      expect_equal(ncol(get_response(m2)), 2)
+      expect_equal(colnames(get_response(m2)), c("neg_c_7", "c12hour"))
+      expect_equal(ncol(get_response(m3)), 2)
+      expect_equal(colnames(get_response(m3)), c("r", "n"))
     })
   }
 }

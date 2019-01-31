@@ -11,7 +11,7 @@
 #'   splines or \code{log()} are removed from the model terms.
 #'
 #' @note For a regression model, this function is equal to calling
-#'   \code{model_terms()}.
+#'   \code{find_terms()}.
 #'
 #' @examples
 #' # example from ?stats::glm
@@ -29,7 +29,7 @@ clean_names <- function(x) {
 
 #' @export
 clean_names.default <- function(x) {
-  model_terms(x)
+  find_terms(x, flatten = TRUE)
 }
 
 

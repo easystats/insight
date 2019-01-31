@@ -4,7 +4,7 @@
 #' @description This method returns the number of observation that were used
 #'   to fit the model, as numeric value.
 #'
-#' @inheritParams model_predictors
+#' @inheritParams find_predictors
 #'
 #' @return The number of observations used to fit the model, or \code{NULL} if
 #'   this information is not available.

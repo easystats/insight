@@ -1,9 +1,9 @@
 #' @title Get the data from a model's random effects terms
-#' @name random_data
+#' @name get_random
 #'
 #' @description Returns the data of all random effect terms.
 #'
-#' @inheritParams model_random
+#' @inheritParams find_random
 #'
 #' @return The data of all random effects terms, as data frame.
 #'
@@ -24,9 +24,15 @@
 #'   data = sleepstudy
 #' )
 #'
-#' random_data(m)
+#' get_random(m)
 #'
 #' @export
-random_data <- function(x, ...) {
-  model_data(x, effects = "random")
+get_random <- function(x, ...) {
+  if (is_empty_object(find_random(x))) {
+    warning("No random effects found in model.")
+    return(NULL)
+  }
+
+
+  find_data(x, effects = "random")
 }

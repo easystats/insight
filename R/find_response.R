@@ -1,5 +1,5 @@
 #' @title Get name of a model's response variable
-#' @name model_response
+#' @name find_response
 #'
 #' @description Returns the name(s) of the response variable(s) from a model object.
 #'
@@ -18,39 +18,39 @@
 #' cbpp$trials <- cbpp$size - cbpp$incidence
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #'
-#' model_response(m, combine = TRUE)
-#' model_response(m, combine = FALSE)
+#' find_response(m, combine = TRUE)
+#' find_response(m, combine = FALSE)
 #'
 #' @export
-model_response <- function(x, ...) {
-  UseMethod("model_response")
+find_response <- function(x, ...) {
+  UseMethod("find_response")
 }
 
-#' @rdname model_response
+#' @rdname find_response
 #' @importFrom stats formula
 #' @export
-model_response.default <- function(x, combine = TRUE, ...) {
+find_response.default <- function(x, combine = TRUE, ...) {
   resp <- deparse(stats::formula(x)[[2L]], width.cutoff = 500L)
   check_cbind(resp, combine)
 }
 
 
 #' @export
-model_response.MCMCglmm <- function(x, combine = TRUE, ...) {
+find_response.MCMCglmm <- function(x, combine = TRUE, ...) {
   resp <- all.vars(x$Fixed$formula[[2L]])
   check_cbind(resp, combine)
 }
 
 
 #' @export
-model_response.felm <- function(x, combine = TRUE, ...) {
+find_response.felm <- function(x, combine = TRUE, ...) {
   resp <- x$lhs
   check_cbind(resp, combine)
 }
 
 
 #' @export
-model_response.clm2 <- function(x, combine = TRUE, ...) {
+find_response.clm2 <- function(x, combine = TRUE, ...) {
   resp <- all.vars(attr(x$location, "terms", exact = TRUE)[[2L]])
   check_cbind(resp, combine)
 }
@@ -58,7 +58,7 @@ model_response.clm2 <- function(x, combine = TRUE, ...) {
 
 #' @importFrom stats formula
 #' @export
-model_response.gam <- function(x, combine = TRUE, ...) {
+find_response.gam <- function(x, combine = TRUE, ...) {
   f <- stats::formula(x)
 
   if (is.list(f))
@@ -72,7 +72,7 @@ model_response.gam <- function(x, combine = TRUE, ...) {
 
 #' @importFrom stats formula
 #' @export
-model_response.brmsfit <- function(x, combine = TRUE, ...) {
+find_response.brmsfit <- function(x, combine = TRUE, ...) {
   f <- stats::formula(x)
 
   if (is.null(f$responses)) {
@@ -95,14 +95,14 @@ model_response.brmsfit <- function(x, combine = TRUE, ...) {
 
 #' @importFrom stats formula
 #' @export
-model_response.stanmvreg <- function(x, combine = TRUE, ...) {
+find_response.stanmvreg <- function(x, combine = TRUE, ...) {
   unlist(lapply(stats::formula(x), function(.x) deparse(.x[[2L]], width.cutoff = 500L)))
 }
 
 
 #' @importFrom stats formula
 #' @export
-model_response.aovlist <- function(x, combine = TRUE, ...) {
+find_response.aovlist <- function(x, combine = TRUE, ...) {
   resp <- all.vars(attr(x, "terms")[[2L]])
   check_cbind(resp, combine)
 }

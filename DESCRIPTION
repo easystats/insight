@@ -18,6 +18,7 @@ Depends:
 Suggests:
   brms,
   glmmTMB,
+  knitr,
   lme4,
   nlme,
   splines,

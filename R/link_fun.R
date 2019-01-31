@@ -3,7 +3,7 @@
 #'
 #' @description Returns the link-function from a model object.
 #'
-#' @inheritParams model_predictors
+#' @inheritParams find_predictors
 #'
 #' @return A function, describing the link-function from a model-object.
 #'
