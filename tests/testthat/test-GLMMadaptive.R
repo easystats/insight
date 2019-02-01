@@ -34,50 +34,88 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
     expect_warning(find_predictors(m, effects = "random", component = "disp"))
   })
 
-  # test_that("find_response", {
-  #   expect_identical(find_response(m), "count")
-  # })
-  #
-  # test_that("link_inverse", {
-  #   expect_identical(link_inverse(m)(.2), exp(.2))
-  # })
-  #
-  # test_that("get_data", {
-  #   expect_equal(colnames(get_data(m)), c("count", "child", "camper", "persons"))
-  #   expect_equal(colnames(get_data(m, effects = "all")), c("count", "child", "camper", "livebait", "persons"))
-  #   expect_equal(colnames(get_data(m, effects = "random")), c("count", "child", "camper", "livebait", "persons"))
-  # })
-  #
-  # test_that("find_formula", {
-  #   expect_length(find_formula(m), 3)
-  #   expect_identical(find_formula(m, component = "cond"), )
-  #   expect_identical(find_formula(m4, component = "zi"), stats::formula(m4, component = "zi"))
-  #   expect_identical(find_formula(m4, component = "disp"), stats::formula(m4, component = "disp"))
-  # })
-  #
-  # test_that("find_random", {
-  #   expect_identical(find_random(m4), list(cond = "person", zi = "ID"))
-  #   expect_identical(find_random(m4, component = "cond"), c(cond = "person"))
-  #   expect_identical(find_random(m4, component = "zi"), c(zi = "ID"))
-  #   expect_identical(find_random(m4, flatten = TRUE), c(cond = "person", zi = "ID"))
-  #   expect_identical(find_random(m4, component = "cond", flatten = TRUE), c(cond = "person"))
-  #   expect_identical(find_random(m4, component = "zi", flatten = TRUE), c(zi = "ID"))
-  # })
-  #
-  # test_that("find_respone", {
-  #   expect_identical(find_response(m4), "count")
-  # })
-  #
-  # test_that("find_terms", {
-  #   expect_identical(find_terms(m4), list(
-  #     response = "count",
-  #     predictors = c("child", "camper"),
-  #     random = "persons",
-  #     zi = c("child", "livebait"),
-  #     zi_random = "ID",
-  #     disp = "xb"
-  #   ))
-  #   expect_identical(find_terms(m, flatten = TRUE), c("count", "child", "camper", "persons", "livebait", "ID", "xb"))
-  # })
+  test_that("find_response", {
+    expect_identical(find_response(m), "count")
+  })
+
+  test_that("link_inverse", {
+    expect_identical(link_inverse(m)(.2), exp(.2))
+  })
+
+  test_that("find_formula", {
+    expect_length(find_formula(m), 4)
+    expect_identical(names(find_formula(m)), c("conditional", "zero_inflated", "random", "zero_inflated_random"))
+    expect_length(find_formula(m, component = "cond"), 2)
+    expect_identical(names(find_formula(m, component = "cond")), c("conditional", "random"))
+    expect_length(find_formula(m, component = "zi"), 2)
+    expect_identical(names(find_formula(m, component = "zi")), c("zero_inflated", "zero_inflated_random"))
+    expect_null(find_formula(m, component = "disp"))
+
+    expect_length(find_formula(m, effects = "fixed"), 2)
+    expect_identical(names(find_formula(m, effects = "fixed")), c("conditional", "zero_inflated"))
+    expect_length(find_formula(m, effects = "fixed", component = "cond"), 1)
+    expect_identical(names(find_formula(m, effects = "fixed", component = "cond")), "conditional")
+    expect_length(find_formula(m, effects = "fixed", component = "zi"), 1)
+    expect_identical(names(find_formula(m, effects = "fixed", component = "zi")), "zero_inflated")
+    expect_null(find_formula(m, effects = "fixed", component = "disp"))
+
+    expect_length(find_formula(m, effects = "random"), 2)
+    expect_identical(names(find_formula(m, effects = "random")), c("random", "zero_inflated_random"))
+    expect_length(find_formula(m, effects = "random", component = "cond"), 1)
+    expect_identical(names(find_formula(m, effects = "random", component = "cond")), "random")
+    expect_length(find_formula(m, effects = "random", component = "zi"), 1)
+    expect_identical(names(find_formula(m, effects = "random", component = "zi")), "zero_inflated_random")
+    expect_null(find_formula(m, effects = "random", component = "disp"))
+  })
+
+  test_that("find_random", {
+    expect_identical(find_random(m), "persons")
+    expect_identical(find_random(m, component = "cond"), "persons")
+    expect_identical(find_random(m, component = "zi"), "persons")
+    expect_identical(find_random(m, flatten = TRUE), "persons")
+    expect_identical(find_random(m, component = "cond", flatten = TRUE), "persons")
+    expect_identical(find_random(m, component = "zi", flatten = TRUE), "persons")
+  })
+
+  test_that("find_respone", {
+    expect_identical(find_response(m), "count")
+  })
+
+  test_that("find_terms", {
+    expect_identical(find_terms(m), list(
+      response = "count",
+      conditional = c("child", "camper"),
+      random = "persons",
+      zero_inflated = c("child", "livebait"),
+      zero_inflated_random = "persons"
+    ))
+    expect_identical(find_terms(m, flatten = TRUE), c("count", "child", "camper", "persons", "livebait"))
+  })
+
+  test_that("get_response", {
+    expect_identical(get_response(m), fish$count)
+  })
+
+  test_that("get_predictors", {
+    expect_identical(colnames(get_predictors(m)), c("child", "camper", "livebait"))
+  })
+
+  test_that("get_random", {
+    expect_identical(colnames(get_random(m)), "persons")
+  })
+
+  test_that("get_data", {
+    expect_identical(colnames(get_data(m)), c("count", "child", "camper", "livebait", "persons"))
+    expect_identical(colnames(get_data(m, effects = "fixed")), c("count", "child", "camper", "livebait"))
+    expect_identical(colnames(get_data(m, effects = "random")), "persons")
+    expect_identical(colnames(get_data(m, component = "zi")), c("count", "child", "livebait", "persons"))
+    expect_identical(colnames(get_data(m, component = "zi", effects = "fixed")), c("count", "child", "livebait"))
+    expect_identical(colnames(get_data(m, component = "zi", effects = "random")), "personsD")
+    expect_identical(colnames(get_data(m, component = "cond")), c("count", "child", "camper", "persons"))
+    expect_identical(colnames(get_data(m, component = "cond", effects = "fixed")), c("count", "child", "camper"))
+    expect_identical(colnames(get_data(m, component = "cond", effects = "random")), "persons")
+    expect_identical(colnames(get_data(m, component = "disp")), "count")
+    expect_warning(colnames(get_data(m, component = "disp", effects = "random")))
+  })
 
 }

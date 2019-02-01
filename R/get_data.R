@@ -21,13 +21,13 @@
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #' head(get_data(m))
 #'
+#' @importFrom stats model.frame
 #' @export
 get_data <- function(x, ...) {
   UseMethod("get_data")
 }
 
 
-#' @importFrom stats model.frame
 #' @export
 get_data.default <- function(x, ...) {
   mf <- tryCatch(
@@ -55,9 +55,34 @@ get_data.clm2 <- function(x, ...) {
 }
 
 
-#' @importFrom stats model.frame
+#' @rdname get_data
 #' @export
-get_data.glmmTMB <- function(x, ...) {
+get_data.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+  component <- match.arg(component)
+  reurn_zeroinf_data(x, component)
+}
+
+#' @export
+get_data.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+  component <- match.arg(component)
+  reurn_zeroinf_data(x, component)
+}
+
+#' @export
+get_data.zerotrunc <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+  component <- match.arg(component)
+  reurn_zeroinf_data(x, component)
+}
+
+
+#' @rdname get_data
+#' @export
+get_data.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+
+  model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
+
   mf <- tryCatch(
     {stats::model.frame(x)},
     error = function(x) { NULL }
@@ -65,42 +90,16 @@ get_data.glmmTMB <- function(x, ...) {
 
   mf <- prepare_get_data(x, mf)
 
-  disp <- tryCatch(
-    {all.vars(x$modelInfo$allForm$dispformula[[2L]])},
-    error = function(x) { NULL }
-  )
+  # add variables from other model components
+  mf <- add_zeroinf_data(x, mf, model.terms$dispersion)
+  mf <- add_zeroinf_data(x, mf, model.terms$zero_inflated)
+  mf <- add_zeroinf_data(x, mf, model.terms$zero_inflated_random)
 
-  if (!is.null(disp)) {
-    mf <- tryCatch(
-      {
-        env_data <- eval(x$call$data, envir = parent.frame())[, disp, drop = FALSE]
-        merge_dataframes(env_data, mf, replace = TRUE)
-      },
-      error = function(x) { mf }
-    )
-  }
-
-  zi <- tryCatch(
-    {all.vars(x$modelInfo$allForm$ziformula[[2L]])},
-    error = function(x) { NULL }
-  )
-
-  if (!is.null(zi)) {
-    mf <- tryCatch(
-      {
-        env_data <- eval(x$call$data, envir = parent.frame())[, zi, drop = FALSE]
-        merge_dataframes(env_data, mf, replace = TRUE)
-      },
-      error = function(x) { mf }
-    )
-  }
-
-  mf
+  return_data(mf, effects, component, model.terms)
 }
 
 
 #' @rdname get_data
-#' @importFrom stats model.frame
 #' @export
 get_data.merMod <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
@@ -176,8 +175,12 @@ get_data.gmnl <- function(x, ...) {
 }
 
 
+#' @rdname get_data
 #' @export
-get_data.MixMod <- function(x, ...) {
+get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+
   mf <- tryCatch(
     {
       fitfram <- x$model_frames$mfX
@@ -190,7 +193,9 @@ get_data.MixMod <- function(x, ...) {
 
       fitfram$grp__id <- x$id
       colnames(fitfram)[ncol(fitfram)] <- x$id_name[1]
-      fitfram
+
+      model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
+      return_data(mf = fitfram, effects, component, model.terms)
     },
     error = function(x) { NULL }
   )
@@ -221,16 +226,13 @@ get_data.vglm <- function(x, ...) {
 }
 
 
-#' @importFrom stats model.frame
 #' @export
 get_data.stanmvreg <- function(x, ...) {
   mf <- tryCatch(
     {
       out <- data.frame()
-
-      for (i in stats::model.frame(x)) {
+      for (i in stats::model.frame(x))
         out <- merge_dataframes(out, i)
-      }
 
       out
     },
@@ -264,16 +266,9 @@ get_data.MCMCglmm <- function(x, ...) {
 }
 
 
-get_zelig_relogit_frame <- function(x) {
-  vars <- find_terms(x)
-  x$data[, vars, drop = FALSE]
-}
-
-
-
 #' @importFrom stats getCall formula na.omit
 prepare_get_data <- function(x, mf, effects = "fixed") {
-  if (is.null(mf)) {
+  if (is_empty_object(mf)) {
     warning("Could not get model data.", call. = F)
     return(NULL)
   }
@@ -411,4 +406,72 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
   }
 
   mf
+}
+
+
+return_data <- function(mf, effects, component, model.terms) {
+  fixed.component.data <- switch(
+    component,
+    all = c(model.terms$conditional, model.terms$zero_inflated, model.terms$dispersion),
+    conditional = model.terms$conditional,
+    zi = ,
+    zero_inflated = model.terms$zero_inflated,
+    dispersion = model.terms$dispersion
+  )
+
+  random.component.data <- switch(
+    component,
+    all = c(model.terms$random, model.terms$zero_inflated_random),
+    conditional = model.terms$random,
+    zi = ,
+    zero_inflated = model.terms$zero_inflated_random
+  )
+
+  switch(
+    effects,
+    all = mf[, unique(c(model.terms$response, fixed.component.data, random.component.data)), drop = FALSE],
+    fixed = mf[, unique(c(model.terms$response, fixed.component.data)), drop = FALSE],
+    random = mf[, unique(random.component.data), drop = FALSE]
+  )
+}
+
+
+add_zeroinf_data <- function(x, mf, tn) {
+  tryCatch(
+    {
+      env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
+      merge_dataframes(env_data, mf, replace = TRUE)
+    },
+    error = function(x) { mf }
+  )
+}
+
+
+get_zelig_relogit_frame <- function(x) {
+  vars <- find_terms(x, flatten = TRUE)
+  x$data[, vars, drop = FALSE]
+}
+
+
+reurn_zeroinf_data <- function(x, component) {
+  model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
+
+  mf <- tryCatch(
+    {stats::model.frame(x)},
+    error = function(x) { NULL }
+  )
+
+  mf <- prepare_get_data(x, mf)
+  # add variables from other model components
+  mf <- add_zeroinf_data(x, mf, model.terms$zero_inflated)
+
+  fixed.data <- switch(
+    component,
+    all = c(model.terms$conditional, model.terms$zero_inflated),
+    conditional = model.terms$conditional,
+    zi = ,
+    zero_inflated = model.terms$zero_inflated
+  )
+
+  mf[, unique(c(model.terms$response, fixed.data)), drop = FALSE]
 }

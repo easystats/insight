@@ -8,7 +8,8 @@
 find_random(x, split_nested = FALSE, ...)
 
 \method{find_random}{glmmTMB}(x, split_nested = FALSE,
-  component = c("all", "cond", "zi", "disp"), flatten = FALSE, ...)
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted mixed model.}
@@ -20,15 +21,18 @@ with colon. See 'Examples'.}
 \item{...}{Currently not used.}
 
 \item{component}{Should all predictor variables, predictor variables for the
-conditional model, the  zero-inflated part of the model or the dispersion
+conditional model, the zero-inflated part of the model or the dispersion
 model be returned? Only applies to models with zero-inflated and/or
-dispersion formula.}
+dispersion formula. May be abbreviated.}
 
 \item{flatten}{Logical, if \code{TRUE}, the name of model terms are returned
 as a single character, not as list.}
 }
 \value{
-The name(s) of the random effects as character vector.
+The name(s) of the random effects as character vector; for mixed models
+   with zero-inflated component, if \code{component = "all"}, a list with
+   the names of the random effects from the conditional and zero-inflated
+   model parts.
 }
 \description{
 to do...

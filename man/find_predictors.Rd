@@ -3,6 +3,8 @@
 \name{find_predictors}
 \alias{find_predictors}
 \alias{find_predictors.default}
+\alias{find_predictors.merMod}
+\alias{find_predictors.hurdle}
 \alias{find_predictors.lme}
 \alias{find_predictors.glmmTMB}
 \alias{find_predictors.MixMod}
@@ -10,17 +12,24 @@
 \usage{
 find_predictors(x, ...)
 
-\method{find_predictors}{default}(x, effects = c("fixed", "random",
+\method{find_predictors}{default}(x, ...)
+
+\method{find_predictors}{merMod}(x, effects = c("fixed", "random",
   "all"), ...)
+
+\method{find_predictors}{hurdle}(x, component = c("all", "conditional",
+  "zi", "zero_inflated", "dispersion"), ...)
 
 \method{find_predictors}{lme}(x, effects = c("fixed", "random", "all"),
   ...)
 
 \method{find_predictors}{glmmTMB}(x, effects = c("fixed", "random",
-  "all"), component = c("all", "cond", "zi", "disp"), ...)
+  "all"), component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), ...)
 
 \method{find_predictors}{MixMod}(x, effects = c("fixed", "random",
-  "all"), component = c("all", "cond", "zi", "disp"), ...)
+  "all"), component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -28,12 +37,12 @@ find_predictors(x, ...)
 \item{...}{Currently not used.}
 
 \item{effects}{Should predictor variables for fixed effects, random effects
-or both be returned? Only applies to mixed models.}
+or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{component}{Should all predictor variables, predictor variables for the
-conditional model, the  zero-inflated part of the model or the dispersion
+conditional model, the zero-inflated part of the model or the dispersion
 model be returned? Only applies to models with zero-inflated and/or
-dispersion formula.}
+dispersion formula. May be abbreviated.}
 }
 \value{
 The name(s) of the predictor variables from \code{x} as character vector.

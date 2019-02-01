@@ -18,10 +18,15 @@ find_terms(x, ...)
 as a single character, not as list.}
 }
 \value{
-A list with three character vectors: \code{response}, the name of
-   the response value; \code{predictors}, the name(s) of the predictor
-   variables; and \code{random}, the name of the random effects (grouping
-   factors).
+A list with (depending on the model) several character vectors:
+   \itemize{
+     \item \code{response}, the name of the response value
+     \item \code{conditional}, the name(s) of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
+     \item \code{random}, the name of the random effects (grouping factors)
+     \item \code{zero_inflated}, the name(s) of the predictor variables from the \emph{zero-inflated} part of the model
+     \item \code{zero_inflated_random}, the name of the random effects (grouping factors)
+     \item \code{disperion}, the name of the dispersion terms
+   }
 }
 \description{
 Returns a list with the name(s) of all model terms, including
