@@ -29,7 +29,7 @@ conditional model, the zero-inflated part of the model or the dispersion
 model be returned? Only applies to models with zero-inflated and/or
 dispersion formula. May be abbreviated.}
 
-\item{effects}{Should predictor variables for fixed effects, random effects
+\item{effects}{Should variables for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
 }
 \value{

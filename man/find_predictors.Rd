@@ -8,7 +8,7 @@
 \alias{find_predictors.lme}
 \alias{find_predictors.glmmTMB}
 \alias{find_predictors.MixMod}
-\title{Find term names of model predictors}
+\title{Find names of model predictors}
 \usage{
 find_predictors(x, ...)
 
@@ -36,7 +36,7 @@ find_predictors(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{effects}{Should predictor variables for fixed effects, random effects
+\item{effects}{Should variables for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{component}{Should all predictor variables, predictor variables for the

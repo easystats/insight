@@ -1,10 +1,10 @@
-#' @title Find term names of model predictors
+#' @title Find names of model predictors
 #' @name find_predictors
 #'
 #' @description to do...
 #'
 #' @param x A fitted model.
-#' @param effects Should predictor variables for fixed effects, random effects
+#' @param effects Should variables for fixed effects, random effects
 #'    or both be returned? Only applies to mixed models. May be abbreviated.
 #' @param component Should all predictor variables, predictor variables for the
 #'    conditional model, the zero-inflated part of the model or the dispersion

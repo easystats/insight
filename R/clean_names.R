@@ -7,10 +7,11 @@
 #'
 #' @param x A fitted model, or a character vector.
 #'
-#' @return The "cleaned" variable names, i.e. things like \code{s()} for
-#'   splines or \code{log()} are removed from the model terms.
+#' @return The "cleaned" variable names as character vector, i.e. pattern
+#'   like \code{s()} for splines or \code{log()} are removed from
+#'   the model terms.
 #'
-#' @note For a regression model, this function is equal to calling
+#' @note If \code{x} is a regression model, this function is equal to calling
 #'   \code{find_terms()}.
 #'
 #' @examples

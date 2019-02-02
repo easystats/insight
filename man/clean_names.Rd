@@ -10,8 +10,9 @@ clean_names(x)
 \item{x}{A fitted model, or a character vector.}
 }
 \value{
-The "cleaned" variable names, i.e. things like \code{s()} for
-  splines or \code{log()} are removed from the model terms.
+The "cleaned" variable names as character vector, i.e. pattern
+  like \code{s()} for splines or \code{log()} are removed from
+  the model terms.
 }
 \description{
 This function "cleans" names of model terms (or a character
@@ -19,7 +20,7 @@ This function "cleans" names of model terms (or a character
   \code{as.factor()} etc.
 }
 \note{
-For a regression model, this function is equal to calling
+If \code{x} is a regression model, this function is equal to calling
   \code{find_terms()}.
 }
 \examples{
