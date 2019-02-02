@@ -110,5 +110,10 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_identical(colnames(get_random(m2)), c("mysubgrp", "mygrp", "Subject"))
   })
 
+  test_that("clean_names", {
+    expect_identical(clean_names(m1), c("Reaction", "Days", "Subject"))
+    expect_identical(clean_names(m2), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
+  })
+
 }
 
