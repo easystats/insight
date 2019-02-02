@@ -46,6 +46,10 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
     expect_identical(link_inverse(m)(.2), exp(.2))
   })
 
+  test_that("clean_names", {
+    expect_identical(clean_names(m), c("count", "child", "camper", "persons", "livebait"))
+  })
+
   test_that("find_formula", {
     expect_length(find_formula(m), 4)
     expect_identical(names(find_formula(m)), c("conditional", "zero_inflated", "random", "zero_inflated_random"))
@@ -114,7 +118,7 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
     expect_identical(colnames(get_data(m, effects = "random")), "persons")
     expect_identical(colnames(get_data(m, component = "zi")), c("count", "child", "livebait", "persons"))
     expect_identical(colnames(get_data(m, component = "zi", effects = "fixed")), c("count", "child", "livebait"))
-    expect_identical(colnames(get_data(m, component = "zi", effects = "random")), "personsD")
+    expect_identical(colnames(get_data(m, component = "zi", effects = "random")), "persons")
     expect_identical(colnames(get_data(m, component = "cond")), c("count", "child", "camper", "persons"))
     expect_identical(colnames(get_data(m, component = "cond", effects = "fixed")), c("count", "child", "camper"))
     expect_identical(colnames(get_data(m, component = "cond", effects = "random")), "persons")

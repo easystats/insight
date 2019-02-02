@@ -28,6 +28,8 @@
 #'      \item \code{is_bayes}: model is a Bayesian model
 #'      \item \code{link_fun}: the link-function
 #'      \item \code{family}: the family-object
+#'      \item \code{nobs}: number of observations
+#'      \item \code{model_terms}: a list with all model terms, including terms such as random effects or from zero-inflated model parts.
 #'    }
 #'
 #' @examples
@@ -63,7 +65,8 @@ model_info.default <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -80,7 +83,8 @@ model_info.glmmPQL <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -97,7 +101,8 @@ model_info.MixMod <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -107,31 +112,31 @@ model_info.MixMod <- function(x, ...) {
 
 #' @export
 model_info.lme <- function(x, ...) {
-  make_family(x)
+  make_family(x, ...)
 }
 
 
 #' @export
 model_info.plm <- function(x, ...) {
-  make_family(x)
+  make_family(x, ...)
 }
 
 
 #' @export
 model_info.gls <- function(x, ...) {
-  make_family(x)
+  make_family(x, ...)
 }
 
 
 #' @export
 model_info.truncreg <- function(x, ...) {
-  make_family(x)
+  make_family(x, ...)
 }
 
 
 #' @export
 model_info.lmRob <- function(x, ...) {
-  make_family(x)
+  make_family(x, ...)
 }
 
 
@@ -147,7 +152,8 @@ model_info.gam <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -166,7 +172,8 @@ model_info.vgam <- function(x, ...) {
         x = x,
         fitfam = faminfo@vfamily[1],
         logit.link = string_contains(faminfo@blurb, "logit"),
-        link.fun = link.fun
+        link.fun = link.fun,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -185,7 +192,8 @@ model_info.vglm <- function(x, ...) {
         x = x,
         fitfam = faminfo@vfamily[1],
         logit.link = string_contains(faminfo@blurb, "logit"),
-        link.fun = link.fun
+        link.fun = link.fun,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -211,7 +219,8 @@ model_info.zeroinfl <- function(x, ...) {
         x = x,
         fitfam = fitfam,
         zero.inf = TRUE,
-        link.fun = "log"
+        link.fun = "log",
+        ...
       )
     },
     error = function(x) { NULL }
@@ -237,7 +246,8 @@ model_info.hurdle <- function(x, ...) {
         x = x,
         fitfam = fitfam,
         zero.inf = TRUE,
-        link.fun = "log"
+        link.fun = "log",
+        ...
       )
     },
     error = function(x) { NULL }
@@ -263,7 +273,8 @@ model_info.zerotrunc <- function(x, ...) {
         x = x,
         fitfam = fitfam,
         zero.inf = TRUE,
-        link.fun = "log"
+        link.fun = "log",
+        ...
       )
     },
     error = function(x) { NULL }
@@ -284,7 +295,8 @@ model_info.glmmTMB <- function(x, ...) {
         fitfam = faminfo$family,
         zero.inf = !is_empty_object(lme4::fixef(x)$zi),
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -294,13 +306,13 @@ model_info.glmmTMB <- function(x, ...) {
 
 #' @export
 model_info.lm_robust <- function(x, ...) {
-  make_family(x)
+  make_family(x, ...)
 }
 
 
 #' @export
 model_info.felm <- function(x, ...) {
-  make_family(x)
+  make_family(x, ...)
 }
 
 
@@ -312,7 +324,8 @@ model_info.betareg <- function(x, ...) {
         x = x,
         fitfam = "beta",
         logit.link = x$link$mean$name == "logit",
-        link.fun = x$link$mean$linkfun
+        link.fun = x$link$mean$linkfun,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -328,7 +341,8 @@ model_info.coxph <- function(x, ...) {
         x = x,
         fitfam = "survival",
         logit.link = TRUE,
-        link.fun = NULL
+        link.fun = NULL,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -344,7 +358,8 @@ model_info.coxme <- function(x, ...) {
         x = x,
         fitfam = "survival",
         logit.link = TRUE,
-        link.fun = NULL
+        link.fun = NULL,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -360,7 +375,8 @@ model_info.MCMCglmm <- function(x, ...) {
         x = x,
         fitfam = x$Residual$family,
         logit.link = FALSE,
-        link.fun = ""
+        link.fun = "",
+        ...
       )
     },
     error = function(x) { NULL }
@@ -377,7 +393,8 @@ model_info.lrm <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -394,7 +411,8 @@ model_info.polr <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -411,7 +429,8 @@ model_info.multinom <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -428,7 +447,8 @@ model_info.clm2 <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -445,7 +465,8 @@ model_info.clm <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -462,7 +483,8 @@ model_info.clmm <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -479,7 +501,8 @@ model_info.mlogit <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -496,7 +519,8 @@ model_info.logistf <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -513,7 +537,8 @@ model_info.gmnl <- function(x, ...) {
         x = x,
         fitfam = faminfo$family,
         logit.link = faminfo$link == "logit",
-        link.fun = faminfo$link
+        link.fun = faminfo$link,
+        ...
       )
     },
     error = function(x) { NULL }
@@ -540,7 +565,8 @@ model_info.brmsfit <- function(x, mv_response = FALSE, ...) {
             zero.inf = FALSE,
             .x$link == "logit",
             multi.var = TRUE,
-            link.fun = .x$link
+            link.fun = .x$link,
+            ...
           )
         })
       } else {
@@ -549,7 +575,8 @@ model_info.brmsfit <- function(x, mv_response = FALSE, ...) {
           fitfam = faminfo$family,
           logit.link = faminfo$link == "logit",
           multi.var = multi.var,
-          link.fun = faminfo$link
+          link.fun = faminfo$link,
+          ...
         )
       }
 
@@ -575,7 +602,8 @@ model_info.stanmvreg <- function(x, mv_response = FALSE, ...) {
             zero.inf = FALSE,
             .x$link == "logit",
             multi.var = TRUE,
-            link.fun = .x$link
+            link.fun = .x$link,
+            ...
           )
         })
       } else {
@@ -584,7 +612,8 @@ model_info.stanmvreg <- function(x, mv_response = FALSE, ...) {
           fitfam = faminfo$family,
           logit.link = faminfo$link == "logit",
           multi.var = multi.var,
-          link.fun = faminfo$link
+          link.fun = faminfo$link,
+          ...
         )
       }
 
@@ -594,7 +623,7 @@ model_info.stanmvreg <- function(x, mv_response = FALSE, ...) {
 }
 
 
-make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity") {
+make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity", ...) {
   # create logical for family
   binom_fam <-
     fitfam %in% c("bernoulli", "binomial", "quasibinomial", "binomialff") |
@@ -654,6 +683,16 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     )
   }
 
+  dots <- list(...)
+  if (obj_has_name(dots, "no_terms") && isTRUE(dots$no_terms)) {
+    model_terms <- NULL
+  } else {
+    model_terms <- tryCatch(
+      {find_terms(x, effects = "all", component = "all", flatten = FALSE)},
+      error = function(x) { NULL }
+    )
+  }
+
 
   list(
     is_bin = binom_fam & !neg_bin_fam,
@@ -670,6 +709,8 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_trial = is.trial,
     is_bayes = inherits(x, c("brmsfit", "stanfit", "stanreg", "stanmvreg")),
     link_fun = link.fun,
-    family = fitfam
+    family = fitfam,
+    nobs = n_obs(x),
+    model_terms = model_terms
   )
 }

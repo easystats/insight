@@ -56,7 +56,7 @@ find_terms <- function(x, ...) {
 #' @rdname find_terms
 #' @export
 find_terms.default <- function(x, flatten = FALSE, ...) {
-  info <- model_info(x)
+  info <- model_info(x, no_terms = TRUE)
 
   t.y <- find_response(x, combine = FALSE)
   t.cond <- find_predictors(x, effects = "fixed", component = "conditional")

@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 
 **Gain insight into your models!**
 
-The goal of this package is to provide tools to help an **easy**, **intuitive** and **consistent** accesss to information contained in various models. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide methods to access these information. **insight** aims at closing this gap by providing functions that work for (almost) any models.
+The goal of this package is to provide tools to help an **easy**, **intuitive** and **consistent** accesss to information contained in various models. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. **insight** aims at closing this gap by providing functions that work for (almost) any model.
   
 ## Documentation
 

@@ -1,5 +1,5 @@
 #' @title Get link-function from model object
-#' @name link_fun
+#' @name link_function
 #'
 #' @description Returns the link-function from a model object.
 #'
@@ -14,19 +14,19 @@
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ outcome + treatment, family = poisson())
 #'
-#' link_fun(m)(.3)
+#' link_function(m)(.3)
 #' # same as
 #' log(.3)
 #'
 #' @export
 #' @importFrom stats family
-link_fun <- function(x, ...) {
-  UseMethod("link_fun")
+link_function <- function(x, ...) {
+  UseMethod("link_function")
 }
 
 
 #' @export
-link_fun.default <- function(x, ...) {
+link_function.default <- function(x, ...) {
   tryCatch(
     {
       # get model family

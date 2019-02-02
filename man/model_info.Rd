@@ -45,6 +45,8 @@ Retrieve information from model objects.
      \item \code{is_bayes}: model is a Bayesian model
      \item \code{link_fun}: the link-function
      \item \code{family}: the family-object
+     \item \code{nobs}: number of observations
+     \item \code{model_terms}: a list with all model terms, including terms such as random effects or from zero-inflated model parts.
    }
 }
 \examples{

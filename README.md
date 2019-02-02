@@ -16,9 +16,9 @@ various *R* models.
 
 Although there are generic functions to get information
 and data from models, many modelling-functions from different
-packages do not provide methods to access these information.
+packages do not provide such methods to access these information.
 The **insight** package aims at closing this gap by providing 
-functions that work for (almost) any models.
+functions that work for (almost) any model.
 
 ## Documentation
 

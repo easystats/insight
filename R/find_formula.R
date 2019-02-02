@@ -198,6 +198,7 @@ find_formula.stanmvreg <- function(x, effects = c("all", "fixed", "random"), ...
 }
 
 
+#' @importFrom stats as.formula
 zeroinf_formula <- function(x, component) {
   if (component %in% c("disp", "dispersion"))
     return(NULL)
@@ -212,9 +213,9 @@ zeroinf_formula <- function(x, component) {
 
   f <- trim(unlist(strsplit(deparse(f, width.cutoff = 500L), "\\|")))
 
-  c.form <- as.formula(f[1])
+  c.form <- stats::as.formula(f[1])
   if (length(f) == 2)
-    zi.form <- as.formula(paste0("~", f[2]))
+    zi.form <- stats::as.formula(paste0("~", f[2]))
   else
     zi.form <- NULL
 

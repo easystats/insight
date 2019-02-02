@@ -38,6 +38,8 @@ find_predictors.default <- function(x, ...) {
 
   if (!obj_has_name(dots, "effects"))
     effects <- "all"
+  else
+    effects <- dots$effects
 
   if (effects == "random")
     return(find_random(x, split_nested = FALSE))
