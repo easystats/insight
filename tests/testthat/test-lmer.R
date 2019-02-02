@@ -71,11 +71,11 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_equal(colnames(get_data(m1, effects = "random")), "Subject")
     expect_equal(colnames(get_data(m2)), c("Reaction", "Days", "mygrp", "mysubgrp", "Subject"))
     expect_equal(colnames(get_data(m2, effects = "all")), c("Reaction", "Days", "mygrp", "mysubgrp", "Subject"))
-    expect_equal(colnames(get_data(m2, effects = "random")), c("mygrp", "mysubgrp", "Subject"))
+    expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
   })
 
   test_that("find_formula", {
-    expect_length(find_formula(m1), 1)
+    expect_length(find_formula(m1), 3)
     expect_identical(find_formula(m1, component = "conditional"), stats::formula(m1))
     expect_identical(find_formula(m2, component = "cond"), stats::formula(m2))
     expect_null(find_formula(m2, component = "zero_inflated"))

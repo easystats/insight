@@ -73,7 +73,7 @@ find_random.MCMCglmm <- function(x, split_nested = FALSE, ...) {
     {find_formula(x, effects = "random")},
     error = function(x) { NULL }
   )
-  get_model_random_MCMCglmm(f, split_nested)
+  get_model_random(f, split_nested, is_MCMCglmm = TRUE)
 }
 
 
@@ -181,24 +181,7 @@ find_random.glmmTMB <- function(x, split_nested = FALSE, component = c("all", "c
 }
 
 
-get_model_random <- function(f, split_nested = FALSE) {
-  if (!requireNamespace("lme4", quietly = TRUE))
-    stop("To use this function, please install package 'lme4'.")
-
-  if (identical(deparse(f), "~0"))
-    return(NULL)
-
-  re <- sapply(lme4::findbars(f), deparse, width.cutoff = 500)
-  re <- trim(substring(re, regexpr(pattern = "\\|", re) + 1))
-
-  if (split_nested)
-    unique(unlist(strsplit(re, "\\:")))
-  else
-    unique(re)
-}
-
-
-get_model_random_MCMCglmm <- function(f, split_nested = FALSE) {
+get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
   if (!requireNamespace("lme4", quietly = TRUE))
     stop("To use this function, please install package 'lme4'.")
 
@@ -207,7 +190,7 @@ get_model_random_MCMCglmm <- function(f, split_nested = FALSE) {
 
   re <- sapply(lme4::findbars(f), deparse, width.cutoff = 500)
 
-  if (is_empty_object(re))
+  if (is_MCMCglmm && is_empty_object(re))
     re <- deparse(f[[2L]], width.cutoff = 500)
   else
     re <- trim(substring(re, regexpr(pattern = "\\|", re) + 1))
