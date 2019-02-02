@@ -61,3 +61,14 @@ merge_dataframes <- function(data, ..., replace = TRUE) {
 
   x
 }
+
+
+# check if zero-inf random effects are requested
+# although model has no zi-component
+is_invalid_zeroinf <- function(dots) {
+  if (obj_has_name(dots, "component")) {
+    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
+      return(TRUE)
+  }
+  FALSE
+}

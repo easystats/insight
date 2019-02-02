@@ -30,11 +30,9 @@ find_predictors <- function(x, ...) {
 #' @export
 find_predictors.default <- function(x, ...) {
   dots <- list(...)
-
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "dispersion"))
-      return(NULL)
-  }
+  # make sure we have no invalid component request
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   if (!obj_has_name(dots, "effects"))
     effects <- "all"
@@ -63,12 +61,10 @@ find_predictors.default <- function(x, ...) {
 #' @export
 find_predictors.merMod <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
-  dots <- list(...)
 
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "dispersion"))
-      return(NULL)
-  }
+  # make sure we have no invalid component request
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   if (effects == "random")
     return(find_random(x, split_nested = FALSE))
@@ -116,11 +112,8 @@ find_predictors.lme <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
 
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   if (effects == "random")
     return(find_random(x, split_nested = FALSE))
@@ -145,11 +138,8 @@ find_predictors.lme <- function(x, effects = c("fixed", "random", "all"), ...) {
 #' @importFrom stats terms
 find_predictors.clm2 <- function(x, ...) {
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   fm <- find_formula(x)
   modpred <- all.vars(fm[[3L]])
@@ -225,11 +215,8 @@ find_predictors.brmsfit <- function(x, effects = c("fixed", "random", "all"), ..
   effects <- match.arg(effects)
 
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   if (effects == "random")
     return(find_random(x, split_nested = FALSE))
@@ -258,11 +245,8 @@ find_predictors.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), .
   effects <- match.arg(effects)
 
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   fm <- find_formula(x, effects = "all")
 
@@ -322,11 +306,8 @@ find_predictors.MixMod <- function(x, effects = c("fixed", "random", "all"), com
 #' @export
 find_predictors.gam <- function(x, ...) {
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   fm <- find_formula(x)
   if (is.list(fm)) fm <- fm[[1]]
@@ -345,11 +326,8 @@ find_predictors.stanmvreg <- function(x, effects = c("fixed", "random", "all"), 
   effects <- match.arg(effects)
 
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   if (effects == "random")
     return(find_random(x, split_nested = FALSE))
@@ -371,11 +349,8 @@ find_predictors.stanmvreg <- function(x, effects = c("fixed", "random", "all"), 
 #' @export
 find_predictors.felm <- function(x, ...) {
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   modpred <- all.vars(find_formula(x)[[2L]])
 

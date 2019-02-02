@@ -46,14 +46,11 @@ find_random <- function(x, split_nested = FALSE, ...) {
 #' @export
 find_random.default <- function(x, split_nested = FALSE, ...) {
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   f <- tryCatch(
-    {stats::formula(x)},
+    {find_formula(x, effects = "random")},
     error = function(x) { NULL }
   )
   get_model_random(f, split_nested)
@@ -63,11 +60,8 @@ find_random.default <- function(x, split_nested = FALSE, ...) {
 #' @export
 find_random.MCMCglmm <- function(x, split_nested = FALSE, ...) {
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   f <- tryCatch(
     {find_formula(x, effects = "random")},
@@ -92,33 +86,13 @@ find_random.zerotrunc <- function(x, ...) {
   NULL
 }
 
-#' @importFrom stats formula
-#' @export
-find_random.lme <- function(x, split_nested = FALSE, ...) {
-  # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
-      return(NULL)
-  }
-
-  f <- tryCatch(
-    {find_formula(x, effects = "random")},
-    error = function(x) { NULL }
-  )
-  get_model_random(f, split_nested)
-}
-
 
 #' @importFrom stats formula
 #' @export
 find_random.brmsfit <- function(x, split_nested = FALSE, ...) {
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   f <- tryCatch(
     {stats::formula(x)[[1]]},
@@ -130,7 +104,6 @@ find_random.brmsfit <- function(x, split_nested = FALSE, ...) {
 
 #' @export
 find_random.MixMod <- function(x, split_nested = FALSE, ...) {
-
   dots <- list(...)
   if (obj_has_name(dots, "component")) {
     if (dots$component %in% c("disp", "dispersion")) {
@@ -181,6 +154,7 @@ find_random.glmmTMB <- function(x, split_nested = FALSE, component = c("all", "c
 }
 
 
+# extract random effects from formula
 get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
   if (!requireNamespace("lme4", quietly = TRUE))
     stop("To use this function, please install package 'lme4'.")

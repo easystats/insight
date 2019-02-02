@@ -23,11 +23,8 @@ find_formula <- function(x, ...) {
 #' @export
 find_formula.default <- function(x, ...) {
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   tryCatch(
     {stats::formula(x)},
@@ -61,11 +58,8 @@ find_formula.zerotrunc <- function(x, component = c("all", "conditional", "zi", 
 #' @export
 find_formula.clm2 <- function(x, ...) {
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   attr(x$location, "terms", exact = TRUE)
 }
@@ -94,11 +88,8 @@ find_formula.glmmTMB <- function(x, component = c("all", "conditional", "zi", "z
 #' @export
 find_formula.brmsfit <- function(x, ...) {
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   ## TODO check for ZI and multivariate response models
   stats::formula(x)
@@ -110,11 +101,8 @@ find_formula.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...)
   effects <- match.arg(effects)
 
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   fm <- x$Fixed$formula
   fmr <- x$Random$formula
@@ -133,11 +121,8 @@ find_formula.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
 
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   fm <- eval(x$call$fixed)
   fmr <- eval(x$call$random)
@@ -187,11 +172,8 @@ find_formula.MixMod <- function(x, effects = c("all", "fixed", "random"), compon
 #' @export
 find_formula.stanmvreg <- function(x, effects = c("all", "fixed", "random"), ...) {
   # make sure we have no invalid component request
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
-      return(NULL)
-  }
+  if (is_invalid_zeroinf(list(...)))
+    return(NULL)
 
   ## TODO check for ZI and multivariate response models
   stats::formula(x)
