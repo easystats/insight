@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Access information from model objects — model_info • insight</title>
+<title>Get name of all model terms — find_terms • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,10 @@
 
 
 
-<meta property="og:title" content="Access information from model objects — model_info" />
+<meta property="og:title" content="Get name of all model terms — find_terms" />
 
-<meta property="og:description" content="Retrieve information from model objects." />
+<meta property="og:description" content="Returns a list with the name(s) of all model terms, including
+  response value and random effects." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -114,21 +115,22 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Access information from model objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/model_information.R'><code>R/model_information.R</code></a></small>
-    <div class="hidden name"><code>model_info.Rd</code></div>
+    <h1>Get name of all model terms</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_terms.R'><code>R/find_terms.R</code></a></small>
+    <div class="hidden name"><code>find_terms.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Retrieve information from model objects.</p>
+    <p>Returns a list with the name(s) of all model terms, including
+  response value and random effects.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>model_info</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>find_terms</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for brmsfit</span>
-<span class='fu'>model_info</span>(<span class='no'>x</span>, <span class='kw'>mv_response</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+<span class='co'># S3 method for default</span>
+<span class='fu'>find_terms</span>(<span class='no'>x</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,95 +144,60 @@
       <td><p>Currently not used.</p></td>
     </tr>
     <tr>
-      <th>mv_response</th>
-      <td><p>Logical, if <code>TRUE</code> and model is a multivariate response
-model from a <code>brmsfit</code> object or of class <code>stanmvreg</code>, then a
-list of values (one for each regression) is returned.</p></td>
+      <th>flatten</th>
+      <td><p>Logical, if <code>TRUE</code>, the name of model terms are returned
+as a single character, not as list.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with information about the model, like family, link-function
-  etc. (see 'Details').</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>model_info()</code> returns a list with information about the
-  model for many different model objects. Following information
-   is returned, where all values starting with <code>is_</code> are logicals.</p><ul>
-<li><p><code>is_bin</code>: family is binomial (but not negative binomial)</p></li>
-<li><p><code>is_pois</code>: family is poisson</p></li>
-<li><p><code>is_negbin</code>: family is negative binomial</p></li>
-<li><p><code>is_count</code>: model is a count model (i.e. family is either poisson or negative binomial)</p></li>
-<li><p><code>is_beta</code>: family is beta</p></li>
-<li><p><code>is_logit</code>: model has logit link</p></li>
-<li><p><code>is_linear</code>: family is gaussian</p></li>
-<li><p><code>is_ordinal</code>: family is ordinal or cumulative link</p></li>
-<li><p><code>is_categorical</code>: family is categorical link</p></li>
-<li><p><code>is_zeroinf</code>: model has zero-inflation component</p></li>
-<li><p><code>is_multivariate</code>: model is a multivariate response model (currently only works for <em>brmsfit</em> objects)</p></li>
-<li><p><code>is_trial</code>: model response contains additional information about the trials</p></li>
-<li><p><code>link_fun</code>: the link-function</p></li>
-<li><p><code>family</code>: the family-object</p></li>
-</ul>
+    <p>A list with three character vectors: <code>response</code>, the name of
+   the response value; <code>predictors</code>, the name(s) of the predictor
+   variables; and <code>random</code>, the name of the random effects (grouping
+   factors).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>glmmTMB</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package 'glmmTMB' was built under R version 3.5.2</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Package version inconsistency detected.</span>
-#&gt; <span class='warning'>TMB was built with Matrix version 1.2.15</span>
-#&gt; <span class='warning'>Current Matrix version is 1.2.14</span>
-#&gt; <span class='warning'>Please re-install 'TMB' from source using install.packages('TMB', type = 'source') or ask CRAN for a binary version of 'TMB' matching CRAN's 'Matrix' package</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='st'>"Salamanders"</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/glmmTMB/topics/glmmTMB'>glmmTMB</a></span>(
-  <span class='no'>count</span> ~ <span class='no'>spp</span> + <span class='no'>cover</span> + <span class='no'>mined</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>site</span>),
-  <span class='kw'>ziformula</span> <span class='kw'>=</span> ~<span class='no'>spp</span> + <span class='no'>mined</span>,
-  <span class='kw'>dispformula</span> <span class='kw'>=</span> ~<span class='no'>DOY</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>,
-  <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>nbinom2</span>
-)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>cbpp</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>sleepstudy</span>)
+<span class='co'># some data preparation...</span>
+<span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
+<span class='no'>sleepstudy</span>$<span class='no'>mygrp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>180</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>sleepstudy</span>$<span class='no'>mysubgrp</span> <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
+<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fl'>5</span>) {
+  <span class='no'>filter_group</span> <span class='kw'>&lt;-</span> <span class='no'>sleepstudy</span>$<span class='no'>mygrp</span> <span class='kw'>==</span> <span class='no'>i</span>
+  <span class='no'>sleepstudy</span>$<span class='no'>mysubgrp</span>[<span class='no'>filter_group</span>] <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>30</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>filter_group</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+}
 
-<span class='fu'>model_info</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $is_bin
-#&gt; [1] FALSE
+<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>glmer</a></span>(
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>size</span> - <span class='no'>incidence</span>) ~ <span class='no'>period</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>herd</span>),
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>,
+  <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>
+)
+<span class='fu'>find_terms</span>(<span class='no'>m1</span>)</div><div class='output co'>#&gt; $response
+#&gt; [1] "incidence" "size"     
 #&gt; 
-#&gt; $is_count
-#&gt; [1] TRUE
+#&gt; $predictors
+#&gt; [1] "period"
 #&gt; 
-#&gt; $is_pois
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $is_negbin
-#&gt; [1] TRUE
-#&gt; 
-#&gt; $is_beta
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $is_logit
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $is_linear
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $is_zeroinf
-#&gt; [1] TRUE
-#&gt; 
-#&gt; $is_ordinal
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $is_categorical
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $is_multivariate
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $is_trial
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $link_fun
-#&gt; [1] "log"
-#&gt; 
-#&gt; $family
-#&gt; [1] "nbinom2"
+#&gt; $random
+#&gt; [1] "herd"
 #&gt; </div><div class='input'>
+<span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(
+  <span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>mygrp</span> / <span class='no'>mysubgrp</span>) + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>),
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>
+)</div><div class='output co'>#&gt; <span class='message'>singular fit</span></div><div class='input'><span class='fu'>find_terms</span>(<span class='no'>m2</span>)</div><div class='output co'>#&gt; $response
+#&gt; [1] "Reaction"
+#&gt; 
+#&gt; $predictors
+#&gt; [1] "Days"
+#&gt; 
+#&gt; $random
+#&gt; [1] "mysubgrp" "mygrp"    "Subject" 
+#&gt; </div><div class='input'><span class='fu'>find_terms</span>(<span class='no'>m2</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Reaction" "Days"     "mysubgrp" "mygrp"    "Subject" </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -239,8 +206,6 @@ list of values (one for each regression) is returned.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

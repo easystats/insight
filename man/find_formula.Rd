@@ -5,7 +5,7 @@
 \alias{find_formula.hurdle}
 \alias{find_formula.glmmTMB}
 \alias{find_formula.MixMod}
-\title{Get model formula}
+\title{Find model formula}
 \usage{
 find_formula(x, ...)
 

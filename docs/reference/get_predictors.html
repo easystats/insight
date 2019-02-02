@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • insight</title>
+<title>Get the data from a model's predictor variables — get_predictors • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,9 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Get the data from a model's predictor variables — get_predictors" />
+
+<meta property="og:description" content="Returns the data of all predictor variables (fixed effects)." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -57,7 +59,7 @@
   </head>
 
   <body>
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -112,17 +114,84 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Get the data from a model's predictor variables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_predictors.R'><code>R/get_predictors.R</code></a></small>
+    <div class="hidden name"><code>get_predictors.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="insight.html">UNKNOWN TITLE</a></li>
-      </ul>
+    <div class="ref-description">
+    
+    <p>Returns the data of all predictor variables (fixed effects).</p>
+    
     </div>
+
+    <pre class="usage"><span class='fu'>get_predictors</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A fitted model.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The data of all predictor variables, as data frame.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>get_predictors</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt;                        wt cyl vs
+#&gt; Mazda RX4           2.620   6  0
+#&gt; Mazda RX4 Wag       2.875   6  0
+#&gt; Datsun 710          2.320   4  1
+#&gt; Hornet 4 Drive      3.215   6  1
+#&gt; Hornet Sportabout   3.440   8  0
+#&gt; Valiant             3.460   6  1
+#&gt; Duster 360          3.570   8  0
+#&gt; Merc 240D           3.190   4  1
+#&gt; Merc 230            3.150   4  1
+#&gt; Merc 280            3.440   6  1
+#&gt; Merc 280C           3.440   6  1
+#&gt; Merc 450SE          4.070   8  0
+#&gt; Merc 450SL          3.730   8  0
+#&gt; Merc 450SLC         3.780   8  0
+#&gt; Cadillac Fleetwood  5.250   8  0
+#&gt; Lincoln Continental 5.424   8  0
+#&gt; Chrysler Imperial   5.345   8  0
+#&gt; Fiat 128            2.200   4  1
+#&gt; Honda Civic         1.615   4  1
+#&gt; Toyota Corolla      1.835   4  1
+#&gt; Toyota Corona       2.465   4  1
+#&gt; Dodge Challenger    3.520   8  0
+#&gt; AMC Javelin         3.435   8  0
+#&gt; Camaro Z28          3.840   8  0
+#&gt; Pontiac Firebird    3.845   8  0
+#&gt; Fiat X1-9           1.935   4  1
+#&gt; Porsche 914-2       2.140   4  0
+#&gt; Lotus Europa        1.513   4  1
+#&gt; Ford Pantera L      3.170   8  0
+#&gt; Ferrari Dino        2.770   6  0
+#&gt; Maserati Bora       3.570   8  0
+#&gt; Volvo 142E          2.780   4  1</div><div class='input'>
+</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 

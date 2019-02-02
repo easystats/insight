@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • insight</title>
+<title>Get model formula — find_formula • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,9 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Get model formula — find_formula" />
+
+<meta property="og:description" content="Get model formula" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -57,7 +59,7 @@
   </head>
 
   <body>
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -112,17 +114,75 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Get model formula</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_formula.R'><code>R/find_formula.R</code></a></small>
+    <div class="hidden name"><code>find_formula.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="insight.html">UNKNOWN TITLE</a></li>
-      </ul>
+    <div class="ref-description">
+    
+    <p>Get model formula</p>
+    
     </div>
+
+    <pre class="usage"><span class='fu'>find_formula</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for glmmTMB</span>
+<span class='fu'>find_formula</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"cond"</span>, <span class='st'>"zi"</span>,
+  <span class='st'>"disp"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for MixMod</span>
+<span class='fu'>find_formula</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
+  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"cond"</span>, <span class='st'>"zi"</span>, <span class='st'>"disp"</span>), <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A fitted model.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>component</th>
+      <td><p>Should all predictor variables, predictor variables for the
+conditional model, the  zero-inflated part of the model or the dispersion
+model be returned? Only applies to models with zero-inflated and/or
+dispersion formula.</p></td>
+    </tr>
+    <tr>
+      <th>effects</th>
+      <td><p>Should predictor variables for fixed effects, random effects
+or both be returned? Only applies to mixed models.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A formula that describes the model, or a list of formulas (e.g., for
+   multivariate response models, or models with zero-inflation component).</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>find_formula</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; mpg ~ wt + cyl + vs
+#&gt; &lt;environment: 0x000000002bc72630&gt;</div><div class='input'>
+</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
