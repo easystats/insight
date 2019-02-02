@@ -2,17 +2,36 @@
 % Please edit documentation in R/get_data.R
 \name{get_data}
 \alias{get_data}
+\alias{get_data.hurdle}
+\alias{get_data.glmmTMB}
 \alias{get_data.merMod}
+\alias{get_data.MixMod}
 \title{Get the data that was used to fit the model}
 \usage{
 get_data(x, ...)
 
+\method{get_data}{hurdle}(x, component = c("all", "conditional", "zi",
+  "zero_inflated", "dispersion"), ...)
+
+\method{get_data}{glmmTMB}(x, effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), ...)
+
 \method{get_data}{merMod}(x, effects = c("fixed", "random", "all"), ...)
+
+\method{get_data}{MixMod}(x, effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
+
+\item{component}{Should all predictor variables, predictor variables for the
+conditional model, the zero-inflated part of the model or the dispersion
+model be returned? Only applies to models with zero-inflated and/or
+dispersion formula. May be abbreviated.}
 
 \item{effects}{Should model data for fixed effects, random effects
 or both be returned? Only applies to mixed models.}

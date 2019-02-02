@@ -89,14 +89,14 @@ find_response.brmsfit <- function(x, combine = TRUE, ...) {
     )
   }
 
-  resp
+  clean_names(resp)
 }
 
 
 #' @importFrom stats formula
 #' @export
 find_response.stanmvreg <- function(x, combine = TRUE, ...) {
-  unlist(lapply(stats::formula(x), function(.x) deparse(.x[[2L]], width.cutoff = 500L)))
+  clean_names(unlist(lapply(stats::formula(x), function(.x) deparse(.x[[2L]], width.cutoff = 500L))))
 }
 
 
@@ -118,5 +118,5 @@ check_cbind <- function(resp, combine) {
       resp[2] <- trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
   }
 
-  resp
+  clean_names(resp)
 }

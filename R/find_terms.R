@@ -9,10 +9,15 @@
 #'
 #' @inheritParams find_predictors
 #'
-#' @return A list with three character vectors: \code{response}, the name of
-#'    the response value; \code{predictors}, the name(s) of the predictor
-#'    variables; and \code{random}, the name of the random effects (grouping
-#'    factors).
+#' @return A list with (depending on the model) several character vectors:
+#'    \itemize{
+#'      \item \code{response}, the name of the response value
+#'      \item \code{conditional}, the name(s) of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
+#'      \item \code{random}, the name of the random effects (grouping factors)
+#'      \item \code{zero_inflated}, the name(s) of the predictor variables from the \emph{zero-inflated} part of the model
+#'      \item \code{zero_inflated_random}, the name of the random effects (grouping factors)
+#'      \item \code{disperion}, the name of the dispersion terms
+#'    }
 #'
 #' @examples
 #' library(lme4)
@@ -54,8 +59,8 @@ find_terms.default <- function(x, flatten = FALSE, ...) {
   info <- model_info(x)
 
   t.y <- find_response(x, combine = FALSE)
-  t.cond <- find_predictors(x, effects = "fixed", component = "cond")
-  t.re <- find_random(x, split_nested = TRUE, component = "cond")
+  t.cond <- find_predictors(x, effects = "fixed", component = "conditional")
+  t.re <- find_random(x, split_nested = TRUE, component = "conditional")
 
   if (info$is_zeroinf) {
     t.zi <- find_predictors(x, effects = "fixed", component = "zi")
@@ -66,16 +71,16 @@ find_terms.default <- function(x, flatten = FALSE, ...) {
   }
 
   t.disp <- suppressWarnings(
-    find_predictors(x, effects = "fixed", component = "disp")
+    find_predictors(x, effects = "fixed", component = "dispersion")
   )
 
   allterms <- compact_list(list(
     response = unname(t.y),
-    predictors = unname(t.cond),
+    conditional = unname(t.cond),
     random = unname(t.re),
-    zi = unname(t.zi),
-    zi_random = unname(t.zi.re),
-    disp = unname(t.disp)
+    zero_inflated = unname(t.zi),
+    zero_inflated_random = unname(t.zi.re),
+    dispersion = unname(t.disp)
   ))
 
   if (flatten)

@@ -2,17 +2,22 @@
 % Please edit documentation in R/find_formula.R
 \name{find_formula}
 \alias{find_formula}
+\alias{find_formula.hurdle}
 \alias{find_formula.glmmTMB}
 \alias{find_formula.MixMod}
 \title{Find model formula}
 \usage{
 find_formula(x, ...)
 
-\method{find_formula}{glmmTMB}(x, component = c("all", "cond", "zi",
-  "disp"), ...)
+\method{find_formula}{hurdle}(x, component = c("all", "conditional",
+  "zi", "zero_inflated", "dispersion"), ...)
+
+\method{find_formula}{glmmTMB}(x, component = c("all", "conditional",
+  "zi", "zero_inflated", "dispersion"), ...)
 
 \method{find_formula}{MixMod}(x, effects = c("all", "fixed", "random"),
-  component = c("all", "cond", "zi", "disp"), ...)
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -20,12 +25,12 @@ find_formula(x, ...)
 \item{...}{Currently not used.}
 
 \item{component}{Should all predictor variables, predictor variables for the
-conditional model, the  zero-inflated part of the model or the dispersion
+conditional model, the zero-inflated part of the model or the dispersion
 model be returned? Only applies to models with zero-inflated and/or
-dispersion formula.}
+dispersion formula. May be abbreviated.}
 
 \item{effects}{Should predictor variables for fixed effects, random effects
-or both be returned? Only applies to mixed models.}
+or both be returned? Only applies to mixed models. May be abbreviated.}
 }
 \value{
 A formula that describes the model, or a list of formulas (e.g., for

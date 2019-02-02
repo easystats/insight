@@ -12,7 +12,10 @@
 #' @inheritParams find_predictors
 #' @inheritParams find_terms
 #'
-#' @return The name(s) of the random effects as character vector.
+#' @return The name(s) of the random effects as character vector; for mixed models
+#'    with zero-inflated component, if \code{component = "all"}, a list with
+#'    the names of the random effects from the conditional and zero-inflated
+#'    model parts.
 #'
 #' @examples
 #' library(lme4)
@@ -45,7 +48,7 @@ find_random.default <- function(x, split_nested = FALSE, ...) {
   # make sure we have no invalid component request
   dots <- list(...)
   if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zi", "disp"))
+    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
       return(NULL)
   }
 
@@ -57,13 +60,28 @@ find_random.default <- function(x, split_nested = FALSE, ...) {
 }
 
 
+#' @export
+find_random.hurdle <- function(x, ...) {
+  NULL
+}
+
+#' @export
+find_random.zeroinfl <- function(x, ...) {
+  NULL
+}
+
+#' @export
+find_random.zerotrunc <- function(x, ...) {
+  NULL
+}
+
 #' @importFrom stats formula
 #' @export
 find_random.lme <- function(x, split_nested = FALSE, ...) {
   # make sure we have no invalid component request
   dots <- list(...)
   if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zi", "disp"))
+    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
       return(NULL)
   }
 
@@ -81,7 +99,7 @@ find_random.brmsfit <- function(x, split_nested = FALSE, ...) {
   # make sure we have no invalid component request
   dots <- list(...)
   if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zi", "disp"))
+    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
       return(NULL)
   }
 
@@ -98,12 +116,13 @@ find_random.MixMod <- function(x, split_nested = FALSE, ...) {
 
   dots <- list(...)
   if (obj_has_name(dots, "component")) {
-    if (dots$component == "disp") {
+    if (dots$component %in% c("disp", "dispersion")) {
       warning("Dispersion-parameters can not be returned for random effects.")
       return(NULL)
     }
   }
 
+  ## TODO currently, MixMod only supports same random effects structure for both cond. and zi-model
   ## TODO fix this once nested random effects are possible in MixMod
   x$id_name
 }
@@ -112,10 +131,10 @@ find_random.MixMod <- function(x, split_nested = FALSE, ...) {
 #' @rdname find_random
 #' @importFrom stats formula
 #' @export
-find_random.glmmTMB <- function(x, split_nested = FALSE, component = c("all", "cond", "zi", "disp"), flatten = FALSE, ...) {
+find_random.glmmTMB <- function(x, split_nested = FALSE, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE, ...) {
   component = match.arg(component)
 
-  if (component == "disp") {
+  if (component == "dispersion") {
     warning("Dispersion-parameters can not be returned for random effects.")
     return(NULL)
   }
@@ -127,9 +146,10 @@ find_random.glmmTMB <- function(x, split_nested = FALSE, component = c("all", "c
 
       switch(
         component,
-        all = list(cond = f.cond, zi = f.zi),
-        cond = list(cond = f.cond),
-        zi = list(zi = f.zi)
+        all = list(conditional = f.cond, zero_inflated = f.zi),
+        conditional = list(conditional = f.cond),
+        zi = ,
+        zero_inflated = list(zero_inflated = f.zi)
       )
     },
     error = function(x) { NULL }

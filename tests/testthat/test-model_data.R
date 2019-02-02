@@ -35,7 +35,7 @@ if (require("testthat") && require("insight") && require("splines") && require("
   test_that("get_data", {
     mf <- get_data(m)
     expect_equal(ncol(mf), 7)
-    expect_equal(colnames(mf), c("count", "spp", "cover", "mined", "site", "DOY", "DOP"))
+    expect_equal(colnames(mf), c("count", "spp", "cover", "mined", "DOP", "DOY", "site"))
   })
 }
 
