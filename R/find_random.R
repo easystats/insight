@@ -185,6 +185,9 @@ get_model_random <- function(f, split_nested = FALSE) {
   if (!requireNamespace("lme4", quietly = TRUE))
     stop("To use this function, please install package 'lme4'.")
 
+  if (identical(deparse(f), "~0"))
+    return(NULL)
+
   re <- sapply(lme4::findbars(f), deparse, width.cutoff = 500)
 
   if (is_empty_object(re))
