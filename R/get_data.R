@@ -101,7 +101,7 @@ get_data.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component
 
 #' @rdname get_data
 #' @export
-get_data.merMod <- function(x, effects = c("fixed", "random", "all"), ...) {
+get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
 
   mf <- tryCatch(

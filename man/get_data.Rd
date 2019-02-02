@@ -17,7 +17,7 @@ get_data(x, ...)
   component = c("all", "conditional", "zi", "zero_inflated",
   "dispersion"), ...)
 
-\method{get_data}{merMod}(x, effects = c("fixed", "random", "all"), ...)
+\method{get_data}{merMod}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{MixMod}(x, effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",
