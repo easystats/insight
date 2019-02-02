@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get names of random effect terms — find_random • insight</title>
+<title>Find names of random effect terms — find_random • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,7 @@
 
 
 
-<meta property="og:title" content="Get names of random effect terms — find_random" />
+<meta property="og:title" content="Find names of random effect terms — find_random" />
 
 <meta property="og:description" content="to do..." />
 
@@ -114,7 +114,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get names of random effect terms</h1>
+    <h1>Find names of random effect terms</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_random.R'><code>R/find_random.R</code></a></small>
     <div class="hidden name"><code>find_random.Rd</code></div>
     </div>
@@ -129,7 +129,8 @@
 
 <span class='co'># S3 method for glmmTMB</span>
 <span class='fu'>find_random</span>(<span class='no'>x</span>, <span class='kw'>split_nested</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"cond"</span>, <span class='st'>"zi"</span>, <span class='st'>"disp"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>,
+  <span class='st'>"dispersion"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,9 +152,9 @@ with colon. See 'Examples'.</p></td>
     <tr>
       <th>component</th>
       <td><p>Should all predictor variables, predictor variables for the
-conditional model, the  zero-inflated part of the model or the dispersion
+conditional model, the zero-inflated part of the model or the dispersion
 model be returned? Only applies to models with zero-inflated and/or
-dispersion formula.</p></td>
+dispersion formula. May be abbreviated.</p></td>
     </tr>
     <tr>
       <th>flatten</th>
@@ -164,11 +165,14 @@ as a single character, not as list.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The name(s) of the random effects as character vector.</p>
+    <p>The name(s) of the random effects as character vector; for mixed models
+   with zero-inflated component, if <code>component = "all"</code>, a list with
+   the names of the random effects from the conditional and zero-inflated
+   model parts.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package 'lme4' was built under R version 3.5.2</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>sleepstudy</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>sleepstudy</span>)
 <span class='no'>sleepstudy</span>$<span class='no'>mygrp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>180</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>sleepstudy</span>$<span class='no'>mysubgrp</span> <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
 <span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fl'>5</span>) {

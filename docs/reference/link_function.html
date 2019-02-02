@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • insight</title>
+<title>Get link-function from model object — link_function • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,9 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Get link-function from model object — link_function" />
+
+<meta property="og:description" content="Returns the link-function from a model object." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -57,7 +59,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -112,32 +114,59 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/easystats/insight/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Get link-function from model object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/link_function.R'><code>R/link_function.R</code></a></small>
+    <div class="hidden name"><code>link_function.Rd</code></div>
     </div>
 
-    <div id="insight-0-1-0" class="section level1">
-<h1 class="page-header">
-<a href="#insight-0-1-0" class="anchor"></a>insight 0.1.0</h1>
-<div id="general" class="section level2">
-<h2 class="hasAnchor">
-<a href="#general" class="anchor"></a>General</h2>
-<ul>
-<li>Initial release.</li>
-</ul>
-</div>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>Returns the link-function from a model object.</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>link_function</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A fitted model.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A function, describing the link-function from a model-object.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># example from ?stats::glm</span>
+<span class='no'>counts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>18</span>, <span class='fl'>17</span>, <span class='fl'>15</span>, <span class='fl'>20</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>25</span>, <span class='fl'>13</span>, <span class='fl'>12</span>)
+<span class='no'>outcome</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/gl'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>9</span>)
+<span class='no'>treatment</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/gl'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>counts</span> ~ <span class='no'>outcome</span> + <span class='no'>treatment</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/family'>poisson</a></span>())
+
+<span class='fu'>link_function</span>(<span class='no'>m</span>)(<span class='fl'>.3</span>)</div><div class='output co'>#&gt; [1] -1.203973</div><div class='input'><span class='co'># same as</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='fl'>.3</span>)</div><div class='output co'>#&gt; [1] -1.203973</div><div class='input'>
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#insight-0-1-0">0.1.0</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
+  </div>
 </div>
 
       <footer>

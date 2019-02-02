@@ -16,11 +16,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Easy Access to Model Information for Various Model Objects">
-<meta property="og:description" content="Although there are generic functions to get information
-    and data from models, many modelling-functions from different
-    packages do not provide methods to access these information.
-    The **insight** package aims at closing this gap by providing 
-    functions that work for (almost) any models.">
+<meta property="og:description" content="Gain insight into your models! The goal of this package is to 
+   provide an easy, intuitive and consistent access to information contained 
+   in various R models. Although there are generic functions to get information 
+   and data from models, many modelling-functions from different packages do 
+   not provide such methods to access these information. The insight package 
+   aims at closing this gap by providing functions that work for (almost) 
+   any model.">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -93,7 +95,7 @@
 <!-- [![codecov](https://codecov.io/gh/easystats/bayestestR/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/bayestestR) -->
 
 <p><strong>Gain insight into your models!</strong></p>
-<p>The goal of this package is to provide tools to help an <strong>easy</strong>, <strong>intuitive</strong> and <strong>consistent</strong> accesss to information contained in various models. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide methods to access these information. <strong>insight</strong> aims at closing this gap by providing functions that work for (almost) any models.</p>
+<p>The goal of this package is to provide tools to help an <strong>easy</strong>, <strong>intuitive</strong> and <strong>consistent</strong> accesss to information contained in various models. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. <strong>insight</strong> aims at closing this gap by providing functions that work for (almost) any model.</p>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h2>
@@ -111,8 +113,8 @@
 <h3 class="hasAnchor">
 <a href="#latest-development-build" class="anchor"></a>Latest development build</h3>
 <p>To install the latest development snapshot (see latest changes below), type following commands into the R console:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(devtools)</a>
-<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(devtools)
+devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"easystats/insight"</span>)</code></pre></div>
 </div>
 <div id="official-stable-release" class="section level3">
 <h3 class="hasAnchor">

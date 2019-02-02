@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get model formula — find_formula • insight</title>
+<title>Find model formula — find_formula • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,7 @@
 
 
 
-<meta property="og:title" content="Get model formula — find_formula" />
+<meta property="og:title" content="Find model formula — find_formula" />
 
 <meta property="og:description" content="Get model formula" />
 
@@ -114,7 +114,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get model formula</h1>
+    <h1>Find model formula</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_formula.R'><code>R/find_formula.R</code></a></small>
     <div class="hidden name"><code>find_formula.Rd</code></div>
     </div>
@@ -127,13 +127,18 @@
 
     <pre class="usage"><span class='fu'>find_formula</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for hurdle</span>
+<span class='fu'>find_formula</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
+  <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>), <span class='no'>...</span>)
+
 <span class='co'># S3 method for glmmTMB</span>
-<span class='fu'>find_formula</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"cond"</span>, <span class='st'>"zi"</span>,
-  <span class='st'>"disp"</span>), <span class='no'>...</span>)
+<span class='fu'>find_formula</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
+  <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for MixMod</span>
 <span class='fu'>find_formula</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
-  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"cond"</span>, <span class='st'>"zi"</span>, <span class='st'>"disp"</span>), <span class='no'>...</span>)</pre>
+  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>,
+  <span class='st'>"dispersion"</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,14 +154,14 @@
     <tr>
       <th>component</th>
       <td><p>Should all predictor variables, predictor variables for the
-conditional model, the  zero-inflated part of the model or the dispersion
+conditional model, the zero-inflated part of the model or the dispersion
 model be returned? Only applies to models with zero-inflated and/or
-dispersion formula.</p></td>
+dispersion formula. May be abbreviated.</p></td>
     </tr>
     <tr>
       <th>effects</th>
       <td><p>Should predictor variables for fixed effects, random effects
-or both be returned? Only applies to mixed models.</p></td>
+or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
     </tr>
     </table>
     
@@ -170,7 +175,7 @@ or both be returned? Only applies to mixed models.</p></td>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='fu'>find_formula</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x000000002bc72630&gt;</div><div class='input'>
+#&gt; &lt;environment: 0x000000002bf1fdd8&gt;</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
