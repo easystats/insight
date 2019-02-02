@@ -3,7 +3,7 @@
 \name{find_response}
 \alias{find_response}
 \alias{find_response.default}
-\title{Get name of a model's response variable}
+\title{Find name of a model's response variable}
 \usage{
 find_response(x, ...)
 

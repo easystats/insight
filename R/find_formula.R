@@ -1,4 +1,4 @@
-#' @title Get model formula
+#' @title Find model formula
 #' @name find_formula
 #'
 #' @description Get model formula

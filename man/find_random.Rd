@@ -3,7 +3,7 @@
 \name{find_random}
 \alias{find_random}
 \alias{find_random.glmmTMB}
-\title{Get names of random effect terms}
+\title{Find names of random effect terms}
 \usage{
 find_random(x, split_nested = FALSE, ...)
 

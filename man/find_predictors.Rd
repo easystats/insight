@@ -6,7 +6,7 @@
 \alias{find_predictors.lme}
 \alias{find_predictors.glmmTMB}
 \alias{find_predictors.MixMod}
-\title{Get term names of model predictors}
+\title{Find term names of model predictors}
 \usage{
 find_predictors(x, ...)
 

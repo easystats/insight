@@ -1,4 +1,4 @@
-#' @title Get term names of model predictors
+#' @title Find term names of model predictors
 #' @name find_predictors
 #'
 #' @description to do...

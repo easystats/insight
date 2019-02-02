@@ -1,4 +1,4 @@
-#' @title Get name of all model terms
+#' @title Find name of all model terms
 #' @name find_terms
 #'
 #' @description Returns a list with the name(s) of all model terms, including

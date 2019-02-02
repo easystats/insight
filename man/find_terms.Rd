@@ -3,7 +3,7 @@
 \name{find_terms}
 \alias{find_terms}
 \alias{find_terms.default}
-\title{Get name of all model terms}
+\title{Find name of all model terms}
 \usage{
 find_terms(x, ...)
 

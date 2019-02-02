@@ -1,4 +1,4 @@
-#' @title Get names of random effect terms
+#' @title Find names of random effect terms
 #' @name find_random
 #'
 #' @description to do...
