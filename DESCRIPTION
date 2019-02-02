@@ -12,6 +12,7 @@ Authors@R: c(person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.lue
              person("Dominique", "Makowski", role = c("ctb"), email = "dom.makowski@gmail.com", comment = c(ORCID = "0000-0001-5375-9967")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 License: GPL-3
+URL: https://github.com/easystats/insight
 Depends:
     R (>= 3.2),
     stats

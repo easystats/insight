@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • insight</title>
+<title>Get name of a model's response variable — find_response • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Get name of a model's response variable — find_response" />
+
+<meta property="og:description" content="Returns the name(s) of the response variable(s) from a model object." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -57,7 +59,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -105,138 +107,68 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Get name of a model's response variable</h1>
+    
+    <div class="hidden name"><code>find_response.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>Returns the name(s) of the response variable(s) from a model object.</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>find_response</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="clean_names.html">clean_names()</a></code> </p>
-        </td>
-        <td><p>Get clean names of model terms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="efc.html">efc</a></code> </p>
-        </td>
-        <td><p>Sample dataset from the EUROFAMCARE project</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_formula.html">find_formula()</a></code> </p>
-        </td>
-        <td><p>Get model formula</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_predictors.html">find_predictors()</a></code> </p>
-        </td>
-        <td><p>Get term names of model predictors</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_random.html">find_random()</a></code> </p>
-        </td>
-        <td><p>Get names of random effect terms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_response.html">find_response()</a></code> </p>
-        </td>
-        <td><p>Get name of a model's response variable</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_terms.html">find_terms()</a></code> </p>
-        </td>
-        <td><p>Get name of all model terms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fish.html">fish</a></code> </p>
-        </td>
-        <td><p>Sample dataset</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_data.html">get_data()</a></code> </p>
-        </td>
-        <td><p>Get the data that was used to fit the model</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_predictors.html">get_predictors()</a></code> </p>
-        </td>
-        <td><p>Get the data from a model's predictor variables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_random.html">get_random()</a></code> </p>
-        </td>
-        <td><p>Get the data from a model's random effects terms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_response.html">get_response()</a></code> </p>
-        </td>
-        <td><p>Get the values from a model's response variable</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="link_fun.html">link_fun()</a></code> </p>
-        </td>
-        <td><p>Get link-function from model object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="link_inverse.html">link_inverse()</a></code> </p>
-        </td>
-        <td><p>Get link-inverse function from model object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="model_info.html">model_info()</a></code> </p>
-        </td>
-        <td><p>Access information from model objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="nhanes_sample.html">nhanes_sample</a></code> </p>
-        </td>
-        <td><p>Sample dataset from the National Health and Nutrition Examination Survey</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="n_obs.html">n_obs()</a></code> </p>
-        </td>
-        <td><p>Get number of observations from a model</p></td>
-      </tr>
-    </tbody>
+<span class='co'># S3 method for default</span>
+<span class='fu'>find_response</span>(<span class='no'>x</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A fitted model.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>combine</th>
+      <td><p>Logical, if <code>TRUE</code> and the response is a matrix-column,
+the name of the response matches the notation in formula, and would for
+instance also contain patterns like <code>"cbind(...)"</code>. Else, the original
+variable names from the matrix-column are returned. See 'Examples'.</p></td>
+    </tr>
     </table>
-  </div>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>The name(s) of the response variable(s) from <code>x</code> as character vector.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>cbpp</span>)
+<span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>trials</span>) ~ <span class='no'>period</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>)
+
+<span class='fu'>find_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "cbind(incidence, trials)"</div><div class='input'><span class='fu'>find_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "incidence" "trials"   </div><div class='input'>
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 

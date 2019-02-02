@@ -1,14 +1,13 @@
 if (require("testthat") && require("insight") && require("splines") && require("glmmTMB")) {
   context("insight, get_data")
 
-  data(efc)
 
-  m1 <- lm(neg_c_7 ~ e42dep + ns(c160age), data = efc)
-  m2 <- lm(neg_c_7 ~ e42dep + ns(c160age, knots = 2), data = efc)
-  m3 <- lm(neg_c_7 ~ e42dep + bs(c160age, degree = 3), data = efc)
-  m4 <- lm(neg_c_7 ~ e42dep + bs(c160age, degree = 1), data = efc)
+  m1 <- lm(Sepal.Length ~ Species + ns(Petal.Width), data = iris)
+  m2 <- lm(Sepal.Length ~ Species + ns(Petal.Width, knots = 2), data = iris)
+  m3 <- lm(Sepal.Length ~ Species + bs(Petal.Width, degree = 3), data = iris)
+  m4 <- lm(Sepal.Length ~ Species + bs(Petal.Width, degree = 1), data = iris)
 
-  m5 <- lm(neg_c_7 ~ e42dep + c160age, data = efc)
+  m5 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 
   test_that("get_data", {
@@ -18,10 +17,10 @@ if (require("testthat") && require("insight") && require("splines") && require("
     mf4 <- get_data(m4)
     mf5 <- model.frame(m5)
 
-    expect_equal(as.vector(mf1$c160age), as.vector(mf5$c160age))
-    expect_equal(as.vector(mf2$c160age), as.vector(mf5$c160age))
-    expect_equal(as.vector(mf3$c160age), as.vector(mf5$c160age))
-    expect_equal(as.vector(mf4$c160age), as.vector(mf5$c160age))
+    expect_equal(as.vector(mf1$Petal.Width), as.vector(mf5$Petal.Width))
+    expect_equal(as.vector(mf2$Petal.Width), as.vector(mf5$Petal.Width))
+    expect_equal(as.vector(mf3$Petal.Width), as.vector(mf5$Petal.Width))
+    expect_equal(as.vector(mf4$Petal.Width), as.vector(mf5$Petal.Width))
   })
 
   data("Salamanders")

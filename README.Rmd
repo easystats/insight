@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 ```
 
 
-[![Build Status](https://travis-ci.org/easystats/insight.svg?branch=master)](https://travis-ci.org/easystats/insight)
+<!-- [![Build Status](https://travis-ci.org/easystats/insight.svg?branch=master)](https://travis-ci.org/easystats/insight) -->
 <!-- [![codecov](https://codecov.io/gh/easystats/bayestestR/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/bayestestR) -->
 [![HitCount](http://hits.dwyl.io/easystats/insight.svg)](http://hits.dwyl.io/easystats/insight) [![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://github.com/easystats/insight)
 
@@ -34,7 +34,7 @@ The goal of this package is to provide tools to help an **easy**, **intuitive** 
   
 ## Documentation
 
-Please visit **xyz** for documentation and vignettes.
+Documentation and vignettes are available [here](https://easystats.github.io/insight/).
 
 ## Contributions
 
