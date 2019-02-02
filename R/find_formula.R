@@ -116,8 +116,8 @@ find_formula.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...)
       return(NULL)
   }
 
-  fm <- x$Fixed
-  fmr <- x$Random
+  fm <- x$Fixed$formula
+  fmr <- x$Random$formula
 
   switch(
     effects,
