@@ -61,6 +61,23 @@ find_random.default <- function(x, split_nested = FALSE, ...) {
 
 
 #' @export
+find_random.MCMCglmm <- function(x, split_nested = FALSE, ...) {
+  # make sure we have no invalid component request
+  dots <- list(...)
+  if (obj_has_name(dots, "component")) {
+    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
+      return(NULL)
+  }
+
+  f <- tryCatch(
+    {find_formula(x, effects = "random")},
+    error = function(x) { NULL }
+  )
+  get_model_random(f, split_nested)
+}
+
+
+#' @export
 find_random.hurdle <- function(x, ...) {
   NULL
 }
@@ -168,8 +185,12 @@ get_model_random <- function(f, split_nested = FALSE) {
   if (!requireNamespace("lme4", quietly = TRUE))
     stop("To use this function, please install package 'lme4'.")
 
-  re <- sapply(lme4::findbars(f), deparse)
-  re <- trim(substring(re, regexpr(pattern = "\\|", re) + 1))
+  re <- sapply(lme4::findbars(f), deparse, width.cutoff = 500)
+
+  if (is_empty_object(re))
+    re <- deparse(f[[2L]], width.cutoff = 500)
+  else
+    re <- trim(substring(re, regexpr(pattern = "\\|", re) + 1))
 
   if (split_nested)
     unique(unlist(strsplit(re, "\\:")))
