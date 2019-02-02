@@ -1,7 +1,6 @@
 if (require("testthat") && require("insight") && require("GLMMadaptive")) {
   context("insight, model_info")
 
-  # data(fish)
   fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
   fish$nofish <- as.factor(fish$nofish)
   fish$livebait <- as.factor(fish$livebait)
