@@ -12,8 +12,16 @@ find_formula(x, ...)
 \item{...}{Currently not used.}
 }
 \value{
-A formula that describes the model, or a list of formulas (e.g., for
-   multivariate response models, or models with zero-inflation component).
+A list of formulas that describe the model. For simple models,
+   only one list-element, \code{conditional}, is returned. For more complex
+   models, the returned list may have following elements:
+   \itemize{
+     \item \code{conditional}, the "fixed effects" part from the model
+     \item \code{random}, the "random effects" part from the model
+     \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
+     \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
+     \item \code{dispersion}, the dispersion formula
+   }
 }
 \description{
 Get model formula
