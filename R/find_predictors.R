@@ -58,7 +58,8 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
   f <- f[names(f) %in% elements]
 
   # from conditional model, remove response
-  if (obj_has_name(f, "conditional")) f[["conditional"]] <- f[["conditional"]][[3]]
+  if (obj_has_name(f, "conditional"))
+    f[["conditional"]] <- f[["conditional"]][[3]]
 
   # if we have random effects, just return grouping variable, not random slopes
   if (obj_has_name(f, "random"))
@@ -72,6 +73,8 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
   l <- compact_list(lapply(names(f), function(i) {
     if (i %in% c("random", "zero_inflated_random"))
       unique(paste(unlist(f[[i]])))
+    else if (is.numeric(f[[i]]))
+      f[[i]]
     else
       unique(all.vars(f[[i]]))
   }))

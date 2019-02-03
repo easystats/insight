@@ -2,7 +2,7 @@
 trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 
 # remove NULL elements from lists
-compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i))]
+compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i) || i == "NULL")]
 
 # is string empty?
 is_empty_string <- function(x) {
@@ -105,10 +105,14 @@ get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
 
 
 get_group_factor <- function(x, f) {
-  f <- lapply(f, function(.x) {
-    as.symbol(
-      get_model_random(.x, split_nested = TRUE, is_MCMCglmm = inherits(x, "MCMCglmm"))
-    )})
+  if (is.list(f)) {
+    f <- lapply(f, function(.x) {
+      as.symbol(
+        get_model_random(.x, split_nested = TRUE, is_MCMCglmm = inherits(x, "MCMCglmm"))
+      )})
+  } else {
+    f <- as.symbol(get_model_random(f, split_nested = TRUE, is_MCMCglmm = inherits(x, "MCMCglmm")))
+  }
 
   f
 }

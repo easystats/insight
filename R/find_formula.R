@@ -130,7 +130,7 @@ find_formula.merMod <- function(x, ...) {
   })
 
   if (length(f.random) == 1)
-    f.random <- unlist(f.random)
+    f.random <- f.random[[1]]
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
 
@@ -150,7 +150,7 @@ find_formula.MCMCglmm <- function(x, ...) {
   fm <- x$Fixed$formula
   fmr <- x$Random$formula
 
-  compact_list(list(fixed = fm, random = fmr))
+  compact_list(list(conditional = fm, random = fmr))
 }
 
 
@@ -159,7 +159,7 @@ find_formula.lme <- function(x, ...) {
   fm <- eval(x$call$fixed)
   fmr <- eval(x$call$random)
 
-  compact_list(list(fixed = fm, random = fmr))
+  compact_list(list(conditional = fm, random = fmr))
 }
 
 
