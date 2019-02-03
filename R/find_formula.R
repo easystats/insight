@@ -186,7 +186,6 @@ find_formula.stanmvreg <- function(x, ...) {
 }
 
 
-#' @importFrom stats formula as.formula
 zeroinf_formula <- function(x) {
   f <- tryCatch(
     {stats::formula(x)},

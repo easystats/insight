@@ -23,13 +23,13 @@
 #' # same as
 #' exp(.3)
 #'
+#' @importFrom stats family make.link gaussian formula
 #' @export
 link_inverse <- function(x, ...) {
   UseMethod("link_inverse")
 }
 
 
-#' @importFrom stats family make.link
 #' @export
 link_inverse.default <- function(x, ...) {
   if (inherits(x, "Zelig-relogit")) {
@@ -61,28 +61,24 @@ link_inverse.gam <- function(x, ...) {
 }
 
 
-#' @importFrom stats gaussian
 #' @export
 link_inverse.lm <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.zeroinfl <- function(x, ...) {
   stats::make.link("log")$linkinv
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.hurdle <- function(x, ...) {
   stats::make.link("log")$linkinv
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.zerotrunc <- function(x, ...) {
   stats::make.link("log")$linkinv
@@ -113,42 +109,36 @@ link_inverse.vglm <- function(x, ...) {
 }
 
 
-#' @importFrom stats gaussian
 #' @export
 link_inverse.lme <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 
 
-#' @importFrom stats gaussian
 #' @export
 link_inverse.plm <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 
 
-#' @importFrom stats gaussian
 #' @export
 link_inverse.lm_robust <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 
 
-#' @importFrom stats gaussian
 #' @export
 link_inverse.felm <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 
 
-#' @importFrom stats gaussian
 #' @export
 link_inverse.gls <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 
 
-#' @importFrom stats gaussian
 #' @export
 link_inverse.lmRob <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
@@ -161,7 +151,6 @@ link_inverse.betareg <- function(x, ...) {
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.polr <- function(x, ...) {
   link <- x$method
@@ -170,35 +159,30 @@ link_inverse.polr <- function(x, ...) {
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.gmnl <- function(x, ...) {
   stats::make.link("logit")$linkinv
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.mlogit <- function(x, ...) {
   stats::make.link("logit")$linkinv
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.clm <- function(x, ...) {
   stats::make.link(x$link)$linkinv
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.clmm <- function(x, ...) {
   stats::make.link(x$link)$linkinv
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.glmmTMB <- function(x, ...) {
   ff <- stats::family(x)
@@ -218,7 +202,6 @@ link_inverse.MCMCglmm <- function(x, ...) {
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.clm2 <- function(x, ...) {
   switch(
@@ -232,21 +215,18 @@ link_inverse.clm2 <- function(x, ...) {
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.lrm <- function(x, ...) {
   stats::make.link(link = "logit")$linkinv
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.logistf <- function(x, ...) {
   stats::make.link(link = "logit")$linkinv
 }
 
 
-#' @importFrom stats make.link
 #' @export
 link_inverse.multinom <- function(x, ...) {
   stats::make.link(link = "logit")$linkinv
@@ -254,7 +234,6 @@ link_inverse.multinom <- function(x, ...) {
 
 
 #' @rdname link_inverse
-#' @importFrom stats family
 #' @export
 link_inverse.stanmvreg <- function(x, mv_response = FALSE, ...) {
   fam <- stats::family(x)
@@ -270,7 +249,6 @@ link_inverse.stanmvreg <- function(x, mv_response = FALSE, ...) {
 
 
 #' @rdname link_inverse
-#' @importFrom stats family formula
 #' @export
 link_inverse.brmsfit <- function(x, mv_response = FALSE, ...) {
   fam <- stats::family(x)
@@ -288,7 +266,7 @@ link_inverse.brmsfit <- function(x, mv_response = FALSE, ...) {
   il
 }
 
-#' @importFrom stats make.link
+
 brms_link_inverse <- function(fam) {
   # do we have custom families?
   if (!is.null(fam$family) && (is.character(fam$family) && fam$family == "custom")) {
