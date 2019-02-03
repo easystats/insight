@@ -157,7 +157,17 @@ as a single character, not as list.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The name(s) of the predictor variables from <code>x</code> as character vector.</p>
+    <p>A list of character vectors that represent the name(s) of the
+   predictor variables. Depending on the combination of the arguments
+   <code>effects</code> and <code>component</code>, the returned list has following
+   elements:</p><ul>
+<li><p><code>conditional</code>, the "fixed effects" terms from the model</p></li>
+<li><p><code>random</code>, the "random effects" terms from the model</p></li>
+<li><p><code>zero_inflated</code>, the "fixed effects" terms from the zero-inflation component of the model</p></li>
+<li><p><code>zero_inflated_random</code>, the "random effects" terms from the zero-inflation component of the model</p></li>
+<li><p><code>dispersion</code>, the dispersion terms</p></li>
+</ul>
+
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

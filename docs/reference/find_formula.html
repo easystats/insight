@@ -142,8 +142,16 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A formula that describes the model, or a list of formulas (e.g., for
-   multivariate response models, or models with zero-inflation component).</p>
+    <p>A list of formulas that describe the model. For simple models,
+   only one list-element, <code>conditional</code>, is returned. For more complex
+   models, the returned list may have following elements:</p><ul>
+<li><p><code>conditional</code>, the "fixed effects" part from the model</p></li>
+<li><p><code>random</code>, the "random effects" part from the model</p></li>
+<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
+<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
+<li><p><code>dispersion</code>, the dispersion formula</p></li>
+</ul>
+
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -151,7 +159,7 @@
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='fu'>find_formula</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $conditional
 #&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x0000000020b7b440&gt;
+#&gt; &lt;environment: 0x0000000020b8f7f0&gt;
 #&gt; </div><div class='input'>
 </div></pre>
   </div>

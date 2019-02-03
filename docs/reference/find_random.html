@@ -149,10 +149,13 @@ as a single character, not as list.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The name(s) of the random effects as character vector; for mixed models
-   with zero-inflated component, if <code>component = "all"</code>, a list with
-   the names of the random effects from the conditional and zero-inflated
-   model parts.</p>
+    <p>A list of character vectors that represent the name(s) of the
+   random effects (grouping factors). Depending on the model, the
+   returned list has following elements:</p><ul>
+<li><p><code>random</code>, the "random effects" terms from the conditional part of model</p></li>
+<li><p><code>zero_inflated_random</code>, the "random effects" terms from the zero-inflation component of the model</p></li>
+</ul>
+
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
