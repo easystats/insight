@@ -5,6 +5,7 @@
 #'   to fit the model, as numeric value.
 #'
 #' @inheritParams find_predictors
+#' @inheritParams find_formula
 #'
 #' @return The number of observations used to fit the model, or \code{NULL} if
 #'   this information is not available.

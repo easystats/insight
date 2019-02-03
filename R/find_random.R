@@ -7,7 +7,6 @@
 #' @param split_nested Logical, if \code{TRUE}, terms from nested random
 #'   effects will be returned as separeted elements, not as single string
 #'   with colon. See 'Examples'.
-#' @param ... Currently not used.
 #'
 #' @inheritParams find_predictors
 #' @inheritParams find_terms
@@ -37,140 +36,16 @@
 #' find_random(m, split_nested = TRUE)
 #'
 #' @export
-find_random <- function(x, split_nested = FALSE, ...) {
-  UseMethod("find_random")
-}
+find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
+  f <- find_formula(x)
 
+  r1 <- unique(unlist(lapply(f$random, function(.x) get_model_random(.x, split_nested, inherits(x, "MCMCglmm")))))
+  r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) get_model_random(.x, split_nested, inherits(x, "MCMCglmm")))))
 
-#' @importFrom stats formula
-#' @export
-find_random.default <- function(x, split_nested = FALSE, ...) {
-  # make sure we have no invalid component request
-  if (is_invalid_zeroinf(list(...)))
-    return(NULL)
+  l <- compact_list(list(random = r1, zero_inflated_random = r2))
 
-  f <- tryCatch(
-    {find_formula(x, effects = "random")},
-    error = function(x) { NULL }
-  )
-  get_model_random(f, split_nested)
-}
-
-
-#' @export
-find_random.MCMCglmm <- function(x, split_nested = FALSE, ...) {
-  # make sure we have no invalid component request
-  if (is_invalid_zeroinf(list(...)))
-    return(NULL)
-
-  f <- tryCatch(
-    {find_formula(x, effects = "random")},
-    error = function(x) { NULL }
-  )
-  get_model_random(f, split_nested, is_MCMCglmm = TRUE)
-}
-
-
-#' @export
-find_random.hurdle <- function(x, ...) {
-  NULL
-}
-
-#' @export
-find_random.zeroinfl <- function(x, ...) {
-  NULL
-}
-
-#' @export
-find_random.zerotrunc <- function(x, ...) {
-  NULL
-}
-
-
-#' @importFrom stats formula
-#' @export
-find_random.brmsfit <- function(x, split_nested = FALSE, ...) {
-  # make sure we have no invalid component request
-  if (is_invalid_zeroinf(list(...)))
-    return(NULL)
-
-  f <- tryCatch(
-    {stats::formula(x)[[1]]},
-    error = function(x) { NULL }
-  )
-  get_model_random(f, split_nested)
-}
-
-
-#' @export
-find_random.MixMod <- function(x, split_nested = FALSE, ...) {
-  dots <- list(...)
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("disp", "dispersion")) {
-      warning("Dispersion-parameters can not be returned for random effects.")
-      return(NULL)
-    }
-  }
-
-  ## TODO currently, MixMod only supports same random effects structure for both cond. and zi-model
-  ## TODO fix this once nested random effects are possible in MixMod
-  x$id_name
-}
-
-
-#' @rdname find_random
-#' @importFrom stats formula
-#' @export
-find_random.glmmTMB <- function(x, split_nested = FALSE, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE, ...) {
-  component = match.arg(component)
-
-  if (component == "dispersion") {
-    warning("Dispersion-parameters can not be returned for random effects.")
-    return(NULL)
-  }
-
-  f <- tryCatch(
-    {
-      f.cond = stats::formula(x)
-      f.zi = stats::formula(x, component = "zi")
-
-      switch(
-        component,
-        all = list(conditional = f.cond, zero_inflated = f.zi),
-        conditional = list(conditional = f.cond),
-        zi = ,
-        zero_inflated = list(zero_inflated = f.zi)
-      )
-    },
-    error = function(x) { NULL }
-  )
-
-  re <- compact_list(lapply(f, get_model_random, split_nested))
-
-  if (flatten || length(re) == 1)
-    unlist(re)
+  if (flatten)
+    unique(unlist(l))
   else
-    re
-}
-
-
-# extract random effects from formula
-get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
-  if (!requireNamespace("lme4", quietly = TRUE))
-    stop("To use this function, please install package 'lme4'.")
-
-  if (identical(deparse(f), "~0"))
-    return(NULL)
-
-  re <- sapply(lme4::findbars(f), deparse, width.cutoff = 500)
-
-  if (is_MCMCglmm && is_empty_object(re))
-    re <- deparse(f[[2L]], width.cutoff = 500)
-  else
-    re <- trim(substring(re, regexpr(pattern = "\\|", re) + 1))
-
-  if (split_nested)
-    unique(unlist(strsplit(re, "\\:")))
-  else
-    unique(re)
+    l
 }

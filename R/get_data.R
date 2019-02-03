@@ -6,7 +6,9 @@
 #'
 #' @param effects Should model data for fixed effects, random effects
 #'    or both be returned? Only applies to mixed models.
+#'
 #' @inheritParams find_predictors
+#' @inheritParams find_formula
 #'
 #' @return The data that was used to fit the model.
 #'

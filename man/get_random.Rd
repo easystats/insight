@@ -4,12 +4,10 @@
 \alias{get_random}
 \title{Get the data from a model's random effects terms}
 \usage{
-get_random(x, ...)
+get_random(x)
 }
 \arguments{
 \item{x}{A fitted mixed model.}
-
-\item{...}{Currently not used.}
 }
 \value{
 The data of all random effects terms, as data frame.

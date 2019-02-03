@@ -3,6 +3,7 @@
 #'
 #' @description Get model formula
 #'
+#' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
 #' @return A formula that describes the model, or a list of formulas (e.g., for
@@ -13,7 +14,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_formula(m)
 #'
-#' @importFrom stats formula terms
+#' @importFrom stats formula terms as.formula
 #' @export
 find_formula <- function(x, ...) {
   UseMethod("find_formula")
@@ -22,169 +23,163 @@ find_formula <- function(x, ...) {
 
 #' @export
 find_formula.default <- function(x, ...) {
-  # make sure we have no invalid component request
-  if (is_invalid_zeroinf(list(...)))
-    return(NULL)
-
   tryCatch(
-    {stats::formula(x)},
+    {list(conditional = stats::formula(x))},
     error = function(x) { NULL }
   )
 }
 
 
-#' @rdname find_formula
 #' @export
-find_formula.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  component <- match.arg(component)
-  zeroinf_formula(x, component)
+find_formula.hurdle <- function(x, ...) {
+  zeroinf_formula(x)
 }
 
 
 #' @export
-find_formula.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  component <- match.arg(component)
-  zeroinf_formula(x, component)
+find_formula.zeroinfl <- function(x, ...) {
+  zeroinf_formula(x)
 }
 
 
 #' @export
-find_formula.zerotrunc <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  component <- match.arg(component)
-  zeroinf_formula(x, component)
+find_formula.zerotrunc <- function(x, ...) {
+  zeroinf_formula(x)
 }
 
 
 #' @export
 find_formula.clm2 <- function(x, ...) {
-  # make sure we have no invalid component request
-  if (is_invalid_zeroinf(list(...)))
-    return(NULL)
-
-  attr(x$location, "terms", exact = TRUE)
+  list(conditional = attr(x$location, "terms", exact = TRUE))
 }
 
 
-#' @rdname find_formula
 #' @export
-find_formula.glmmTMB <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  component <- match.arg(component)
+find_formula.aovlist <- function(x, ...) {
+  list(conditional = attr(x, "terms", exact = TRUE))
+}
+
+
+#' @export
+find_formula.glmmTMB <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE))
+    stop("To use this function, please install package 'lme4'.")
 
   f.cond <- stats::formula(x)
   f.zi <- stats::formula(x, component = "zi")
   f.disp <- stats::formula(x, component = "disp")
 
-  switch(
-    component,
-    all = compact_list(list(conditional = f.cond, zero_inflated = f.zi, dispersion = f.disp)),
+  if (identical(deparse(f.zi, width.cutoff = 500), "~0") ||
+      identical(deparse(f.zi, width.cutoff = 500), "~1"))
+    f.zi <- NULL
+
+  if (identical(deparse(f.disp, width.cutoff = 500), "~0") ||
+      identical(deparse(f.disp, width.cutoff = 500), "~1"))
+    f.disp <- NULL
+
+
+  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+    f <- deparse(.x, width.cutoff = 500)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1)
+    f.random <- unlist(f.random)
+
+  f.zirandom <- lapply(lme4::findbars(f.zi), function(.x) {
+    f <- deparse(.x, width.cutoff = 500)
+    if (f == "NULL")
+      return(NULL)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.zirandom) == 1)
+    f.zirandom <- unlist(f.zirandom)
+
+
+  f.cond <- stats::as.formula(get_fixed_effects(f.cond))
+  if (!is.null(f.zi)) f.zi <- stats::as.formula(get_fixed_effects(f.zi))
+
+  compact_list(list(
     conditional = f.cond,
-    zi = ,
+    random = f.random,
     zero_inflated = f.zi,
+    zero_inflated_random = f.zirandom,
     dispersion = f.disp
-  )
+  ))
+}
+
+
+#' @export
+find_formula.merMod <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE))
+    stop("To use this function, please install package 'lme4'.")
+
+  f.cond <- stats::formula(x)
+  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+    f <- deparse(.x, width.cutoff = 500)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1)
+    f.random <- unlist(f.random)
+
+  f.cond <- stats::as.formula(get_fixed_effects(f.cond))
+
+  compact_list(list(conditional = f.cond, random = f.random))
 }
 
 
 #' @export
 find_formula.brmsfit <- function(x, ...) {
-  # make sure we have no invalid component request
-  if (is_invalid_zeroinf(list(...)))
-    return(NULL)
-
   ## TODO check for ZI and multivariate response models
-  stats::formula(x)
+  list(conditional = stats::formula(x))
 }
 
 
 #' @export
-find_formula.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
-  effects <- match.arg(effects)
-
-  # make sure we have no invalid component request
-  if (is_invalid_zeroinf(list(...)))
-    return(NULL)
-
+find_formula.MCMCglmm <- function(x, ...) {
   fm <- x$Fixed$formula
   fmr <- x$Random$formula
 
-  switch(
-    effects,
-    fixed = fm,
-    random = fmr,
-    compact_list(list(fixed = fm, random = fmr))
-  )
+  compact_list(list(fixed = fm, random = fmr))
 }
 
 
 #' @export
-find_formula.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
-  effects <- match.arg(effects)
-
-  # make sure we have no invalid component request
-  if (is_invalid_zeroinf(list(...)))
-    return(NULL)
-
+find_formula.lme <- function(x, ...) {
   fm <- eval(x$call$fixed)
   fmr <- eval(x$call$random)
 
-  switch(
-    effects,
-    fixed = fm,
-    random = fmr,
-    compact_list(list(fixed = fm, random = fmr))
-  )
+  compact_list(list(fixed = fm, random = fmr))
 }
 
 
-#' @rdname find_formula
 #' @export
-find_formula.MixMod <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
-
-  ## TODO fix it, once MixMod supports dispersion term
-  if (component == "dispersion")
-    return(NULL)
-
+find_formula.MixMod <- function(x, ...) {
   f.cond <- stats::formula(x)
   f.zi <- stats::formula(x, type = "zi_fixed")
   f.random <- stats::formula(x, type = "random")
   f.zirandom <- stats::formula(x, type = "zi_random")
 
-  if (effects == "fixed") {
-    f.random <- NULL
-    f.zirandom <- NULL
-  } else if (effects == "random") {
-    f.cond <- NULL
-    f.zi <- NULL
-  }
-
-  switch(
-    component,
-    all = compact_list(list(conditional = f.cond, zero_inflated = f.zi, random = f.random, zero_inflated_random = f.zirandom)),
-    conditional = compact_list(list(conditional = f.cond, random = f.random)),
-    zi = ,
-    zero_inflated = compact_list(list(zero_inflated = f.zi, zero_inflated_random = f.zirandom))
-  )
+  compact_list(list(
+    conditional = f.cond,
+    random = f.random,
+    zero_inflated = f.zi,
+    zero_inflated_random = f.zirandom
+  ))
 }
 
 
 #' @export
-find_formula.stanmvreg <- function(x, effects = c("all", "fixed", "random"), ...) {
-  # make sure we have no invalid component request
-  if (is_invalid_zeroinf(list(...)))
-    return(NULL)
-
+find_formula.stanmvreg <- function(x, ...) {
   ## TODO check for ZI and multivariate response models
-  stats::formula(x)
+  list(conditional = stats::formula(x))
 }
 
 
-#' @importFrom stats as.formula
-zeroinf_formula <- function(x, component) {
-  if (component %in% c("disp", "dispersion"))
-    return(NULL)
-
+#' @importFrom stats formula as.formula
+zeroinf_formula <- function(x) {
   f <- tryCatch(
     {stats::formula(x)},
     error = function(x) { NULL }
@@ -201,11 +196,5 @@ zeroinf_formula <- function(x, component) {
   else
     zi.form <- NULL
 
-  switch(
-    component,
-    all = compact_list(list(conditional = c.form, zero_inflated = zi.form)),
-    conditional = c.form,
-    zi = ,
-    zero_inflated = zi.form
-  )
+  compact_list(list(conditional = c.form, zero_inflated = zi.form))
 }

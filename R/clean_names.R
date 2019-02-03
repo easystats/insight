@@ -30,7 +30,7 @@ clean_names <- function(x) {
 
 #' @export
 clean_names.default <- function(x) {
-  find_terms(x, flatten = TRUE)
+  unname(find_terms(x, flatten = TRUE))
 }
 
 

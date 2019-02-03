@@ -2,17 +2,12 @@
 % Please edit documentation in R/find_response.R
 \name{find_response}
 \alias{find_response}
-\alias{find_response.default}
 \title{Find name of a model's response variable}
 \usage{
-find_response(x, ...)
-
-\method{find_response}{default}(x, combine = TRUE, ...)
+find_response(x, combine = TRUE)
 }
 \arguments{
 \item{x}{A fitted model.}
-
-\item{...}{Currently not used.}
 
 \item{combine}{Logical, if \code{TRUE} and the response is a matrix-column,
 the name of the response matches the notation in formula, and would for

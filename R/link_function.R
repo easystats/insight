@@ -4,6 +4,7 @@
 #' @description Returns the link-function from a model object.
 #'
 #' @inheritParams find_predictors
+#' @inheritParams find_formula
 #'
 #' @return A function, describing the link-function from a model-object.
 #'

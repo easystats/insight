@@ -4,9 +4,6 @@
 #' @description Returns a list with the name(s) of all model terms, including
 #'   response value and random effects.
 #'
-#' @param flatten Logical, if \code{TRUE}, the name of model terms are returned
-#'    as a single character, not as list.
-#'
 #' @inheritParams find_predictors
 #'
 #' @return A list with (depending on the model) several character vectors:
@@ -48,43 +45,15 @@
 #' find_terms(m2, flatten = TRUE)
 #'
 #' @export
-find_terms <- function(x, ...) {
-  UseMethod("find_terms")
-}
+find_terms <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE) {
+  effects <- match.arg(effects)
+  component <- match.arg(component)
 
-
-#' @rdname find_terms
-#' @export
-find_terms.default <- function(x, flatten = FALSE, ...) {
-  info <- model_info(x, no_terms = TRUE)
-
-  t.y <- find_response(x, combine = FALSE)
-  t.cond <- find_predictors(x, effects = "fixed", component = "conditional")
-  t.re <- find_random(x, split_nested = TRUE, component = "conditional")
-
-  if (info$is_zeroinf) {
-    t.zi <- find_predictors(x, effects = "fixed", component = "zi")
-    t.zi.re <- find_random(x, split_nested = TRUE, component = "zi")
-  } else {
-    t.zi.re <- NULL
-    t.zi <- NULL
-  }
-
-  t.disp <- suppressWarnings(
-    find_predictors(x, effects = "fixed", component = "dispersion")
-  )
-
-  allterms <- compact_list(list(
-    response = unname(t.y),
-    conditional = unname(t.cond),
-    random = unname(t.re),
-    zero_inflated = unname(t.zi),
-    zero_inflated_random = unname(t.zi.re),
-    dispersion = unname(t.disp)
-  ))
+  resp <- find_response(x, combine = FALSE)
+  pr <- find_predictors(x, effects = effects, component = component, flatten = flatten)
 
   if (flatten)
-    unique(unlist(allterms))
+    unique(c(resp, pr))
   else
-    allterms
+    c(response = resp, pr)
 }

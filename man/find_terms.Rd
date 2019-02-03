@@ -2,17 +2,22 @@
 % Please edit documentation in R/find_terms.R
 \name{find_terms}
 \alias{find_terms}
-\alias{find_terms.default}
 \title{Find name of all model terms}
 \usage{
-find_terms(x, ...)
-
-\method{find_terms}{default}(x, flatten = FALSE, ...)
+find_terms(x, effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), flatten = FALSE)
 }
 \arguments{
 \item{x}{A fitted model.}
 
-\item{...}{Currently not used.}
+\item{effects}{Should variables for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.}
+
+\item{component}{Should all predictor variables, predictor variables for the
+conditional model, the zero-inflated part of the model or the dispersion
+model be returned? Only applies to models with zero-inflated and/or
+dispersion formula. May be abbreviated.}
 
 \item{flatten}{Logical, if \code{TRUE}, the name of model terms are returned
 as a single character, not as list.}

@@ -2,17 +2,12 @@
 % Please edit documentation in R/get_response.R
 \name{get_response}
 \alias{get_response}
-\alias{get_response.default}
 \title{Get the values from a model's response variable}
 \usage{
-get_response(x, ...)
-
-\method{get_response}{default}(x, resp = NULL, ...)
+get_response(x, resp = NULL)
 }
 \arguments{
 \item{x}{A fitted model.}
-
-\item{...}{Currently not used.}
 
 \item{resp}{Optional names of response variables for which to extract values.}
 }

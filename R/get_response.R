@@ -25,14 +25,7 @@
 #' get_response(m)
 #'
 #' @export
-get_response <- function(x, ...) {
-  UseMethod("get_response")
-}
-
-
-#' @rdname get_response
-#' @export
-get_response.default <- function(x, resp = NULL, ...) {
+get_response <- function(x, resp = NULL) {
   rn <- find_response(x, combine = FALSE)
 
   if (length(rn) > 1) {
@@ -45,54 +38,4 @@ get_response.default <- function(x, resp = NULL, ...) {
   } else {
     as.vector(get_data(x)[[find_response(x, combine = TRUE)]])
   }
-}
-
-
-#' @export
-get_response.lme <- function(x, ...) {
-  if (!requireNamespace("nlme", quietly = TRUE))
-    stop("To use this function, please install package 'nlme'.")
-
-  as.vector(nlme::getResponse(x))
-}
-
-
-#' @export
-get_response.gls <- function(x, ...) {
-  if (!requireNamespace("nlme", quietly = TRUE))
-    stop("To use this function, please install package 'nlme'.")
-
-  as.vector(nlme::getResponse(x))
-}
-
-
-#' @export
-get_response.stanmvreg <- function(x, resp = NULL, ...) {
-  rv <- get_data(x)[, find_response(x, combine = TRUE), drop = FALSE]
-
-  # if user only wants specific response value, return this only
-  if (!is.null(resp) && all(resp %in% colnames(rv)))
-    rv <- rv[, resp, drop = TRUE]
-  else if (ncol(rv) == 1)
-    rv <- rv[[1]]
-
-  rv
-}
-
-
-#' @importFrom stats formula
-#' @export
-get_response.brmsfit <- function(x, resp = NULL, ...) {
-
-  ## TODO maybe replace with brms::get_y()?
-
-  rv <- get_data(x)[, find_response(x, combine = TRUE), drop = FALSE]
-
-  # if user only wants specific response value, return this only
-  if (!is.null(resp) && all(resp %in% colnames(rv)))
-    rv <- rv[, resp, drop = TRUE]
-  else if (ncol(rv) == 1)
-    rv <- rv[[1]]
-
-  rv
 }

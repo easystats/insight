@@ -2,39 +2,14 @@
 % Please edit documentation in R/find_predictors.R
 \name{find_predictors}
 \alias{find_predictors}
-\alias{find_predictors.default}
-\alias{find_predictors.merMod}
-\alias{find_predictors.hurdle}
-\alias{find_predictors.lme}
-\alias{find_predictors.glmmTMB}
-\alias{find_predictors.MixMod}
 \title{Find names of model predictors}
 \usage{
-find_predictors(x, ...)
-
-\method{find_predictors}{default}(x, ...)
-
-\method{find_predictors}{merMod}(x, effects = c("fixed", "random",
-  "all"), ...)
-
-\method{find_predictors}{hurdle}(x, component = c("all", "conditional",
-  "zi", "zero_inflated", "dispersion"), ...)
-
-\method{find_predictors}{lme}(x, effects = c("fixed", "random", "all"),
-  ...)
-
-\method{find_predictors}{glmmTMB}(x, effects = c("fixed", "random",
-  "all"), component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion"), ...)
-
-\method{find_predictors}{MixMod}(x, effects = c("fixed", "random",
-  "all"), component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion"), ...)
+find_predictors(x, effects = c("fixed", "random", "all"),
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), flatten = FALSE)
 }
 \arguments{
 \item{x}{A fitted model.}
-
-\item{...}{Currently not used.}
 
 \item{effects}{Should variables for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
@@ -43,6 +18,9 @@ or both be returned? Only applies to mixed models. May be abbreviated.}
 conditional model, the zero-inflated part of the model or the dispersion
 model be returned? Only applies to models with zero-inflated and/or
 dispersion formula. May be abbreviated.}
+
+\item{flatten}{Logical, if \code{TRUE}, the name of model terms are returned
+as a single character, not as list.}
 }
 \value{
 The name(s) of the predictor variables from \code{x} as character vector.

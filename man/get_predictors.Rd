@@ -4,12 +4,10 @@
 \alias{get_predictors}
 \title{Get the data from a model's predictor variables}
 \usage{
-get_predictors(x, ...)
+get_predictors(x)
 }
 \arguments{
 \item{x}{A fitted model.}
-
-\item{...}{Currently not used.}
 }
 \value{
 The data of all predictor variables, as data frame.

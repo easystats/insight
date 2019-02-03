@@ -2,14 +2,9 @@
 % Please edit documentation in R/find_random.R
 \name{find_random}
 \alias{find_random}
-\alias{find_random.glmmTMB}
 \title{Find names of random effect terms}
 \usage{
-find_random(x, split_nested = FALSE, ...)
-
-\method{find_random}{glmmTMB}(x, split_nested = FALSE,
-  component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion"), flatten = FALSE, ...)
+find_random(x, split_nested = FALSE, flatten = FALSE)
 }
 \arguments{
 \item{x}{A fitted mixed model.}
@@ -17,13 +12,6 @@ find_random(x, split_nested = FALSE, ...)
 \item{split_nested}{Logical, if \code{TRUE}, terms from nested random
 effects will be returned as separeted elements, not as single string
 with colon. See 'Examples'.}
-
-\item{...}{Currently not used.}
-
-\item{component}{Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model or the dispersion
-model be returned? Only applies to models with zero-inflated and/or
-dispersion formula. May be abbreviated.}
 
 \item{flatten}{Logical, if \code{TRUE}, the name of model terms are returned
 as a single character, not as list.}
