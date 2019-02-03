@@ -127,10 +127,9 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_terms</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>find_terms</span>(<span class='no'>x</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>find_terms</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
+  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>,
+  <span class='st'>"dispersion"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,8 +139,16 @@
       <td><p>A fitted model.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
+      <th>effects</th>
+      <td><p>Should variables for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
+    </tr>
+    <tr>
+      <th>component</th>
+      <td><p>Should all predictor variables, predictor variables for the
+conditional model, the zero-inflated part of the model or the dispersion
+model be returned? Only applies to models with zero-inflated and/or
+dispersion formula. May be abbreviated.</p></td>
     </tr>
     <tr>
       <th>flatten</th>

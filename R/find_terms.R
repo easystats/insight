@@ -55,5 +55,5 @@ find_terms <- function(x, effects = c("all", "fixed", "random"), component = c("
   if (flatten)
     unique(c(resp, pr))
   else
-    c(response = resp, pr)
+    c(list(response = resp), pr)
 }

@@ -26,7 +26,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
   component <- match.arg(component)
 
   f <- find_formula(x)
-  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "disperion")
+  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion")
 
   elements <- switch(
     effects,

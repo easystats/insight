@@ -13,5 +13,5 @@
 #'
 #' @export
 get_predictors <- function(x) {
-  get_data(x)[, find_predictors(x, effects = "fixed", component = "all"), drop = FALSE]
+  get_data(x)[, find_predictors(x, effects = "fixed", component = "all", flatten = TRUE), drop = FALSE]
 }

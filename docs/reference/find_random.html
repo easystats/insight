@@ -125,12 +125,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_random</span>(<span class='no'>x</span>, <span class='kw'>split_nested</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for glmmTMB</span>
-<span class='fu'>find_random</span>(<span class='no'>x</span>, <span class='kw'>split_nested</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>,
-  <span class='st'>"dispersion"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>find_random</span>(<span class='no'>x</span>, <span class='kw'>split_nested</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,17 +139,6 @@
       <td><p>Logical, if <code>TRUE</code>, terms from nested random
 effects will be returned as separeted elements, not as single string
 with colon. See 'Examples'.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr>
-    <tr>
-      <th>component</th>
-      <td><p>Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model or the dispersion
-model be returned? Only applies to models with zero-inflated and/or
-dispersion formula. May be abbreviated.</p></td>
     </tr>
     <tr>
       <th>flatten</th>
@@ -185,7 +169,11 @@ as a single character, not as list.</p></td>
   <span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>mygrp</span> / <span class='no'>mysubgrp</span>) + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>),
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>
 )</div><div class='output co'>#&gt; <span class='message'>singular fit</span></div><div class='input'>
-<span class='fu'>find_random</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; [1] "mysubgrp:mygrp" "mygrp"          "Subject"       </div><div class='input'><span class='fu'>find_random</span>(<span class='no'>m</span>, <span class='kw'>split_nested</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "mysubgrp" "mygrp"    "Subject" </div><div class='input'>
+<span class='fu'>find_random</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $random
+#&gt; [1] "mysubgrp:mygrp" "mygrp"          "Subject"       
+#&gt; </div><div class='input'><span class='fu'>find_random</span>(<span class='no'>m</span>, <span class='kw'>split_nested</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $random
+#&gt; [1] "mysubgrp" "mygrp"    "Subject" 
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
