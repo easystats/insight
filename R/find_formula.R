@@ -84,7 +84,7 @@ find_formula.glmmTMB <- function(x, ...) {
   })
 
   if (length(f.random) == 1)
-    f.random <- unlist(f.random)
+    f.random <- f.random[[1]]
 
   f.zirandom <- lapply(lme4::findbars(f.zi), function(.x) {
     f <- deparse(.x, width.cutoff = 500)
@@ -94,7 +94,7 @@ find_formula.glmmTMB <- function(x, ...) {
   })
 
   if (length(f.zirandom) == 1)
-    f.zirandom <- unlist(f.zirandom)
+    f.zirandom <- f.zirandom[[1]]
 
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
