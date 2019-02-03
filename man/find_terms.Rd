@@ -23,9 +23,10 @@ dispersion formula. May be abbreviated.}
 as a single character, not as list.}
 }
 \value{
-A list with (depending on the model) several character vectors:
+A list with (depending on the model) following elements (character
+   vectors):
    \itemize{
-     \item \code{response}, the name of the response value
+     \item \code{response}, the name of the response variable
      \item \code{conditional}, the name(s) of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
      \item \code{random}, the name of the random effects (grouping factors)
      \item \code{zero_inflated}, the name(s) of the predictor variables from the \emph{zero-inflated} part of the model

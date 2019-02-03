@@ -17,10 +17,13 @@ with colon. See 'Examples'.}
 as a single character, not as list.}
 }
 \value{
-The name(s) of the random effects as character vector; for mixed models
-   with zero-inflated component, if \code{component = "all"}, a list with
-   the names of the random effects from the conditional and zero-inflated
-   model parts.
+A list of character vectors that represent the name(s) of the
+   random effects (grouping factors). Depending on the model, the
+   returned list has following elements:
+   \itemize{
+     \item \code{random}, the "random effects" terms from the conditional part of model
+     \item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation component of the model
+   }
 }
 \description{
 to do...

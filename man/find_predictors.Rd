@@ -23,7 +23,17 @@ dispersion formula. May be abbreviated.}
 as a single character, not as list.}
 }
 \value{
-The name(s) of the predictor variables from \code{x} as character vector.
+A list of character vectors that represent the name(s) of the
+   predictor variables. Depending on the combination of the arguments
+   \code{effects} and \code{component}, the returned list has following
+   elements:
+   \itemize{
+     \item \code{conditional}, the "fixed effects" terms from the model
+     \item \code{random}, the "random effects" terms from the model
+     \item \code{zero_inflated}, the "fixed effects" terms from the zero-inflation component of the model
+     \item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation component of the model
+     \item \code{dispersion}, the dispersion terms
+   }
 }
 \description{
 to do...
