@@ -21,7 +21,6 @@
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ log(outcome) + as.factor(treatment), family = poisson())
 #' clean_names(m)
-#'
 #' @export
 clean_names <- function(x) {
   UseMethod("clean_names")

@@ -10,7 +10,6 @@
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_predictors(m)
-#'
 #' @export
 get_predictors <- function(x) {
   get_data(x)[, find_predictors(x, effects = "fixed", component = "all", flatten = TRUE), drop = FALSE]

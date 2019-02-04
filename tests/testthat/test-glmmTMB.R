@@ -26,12 +26,12 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     family = truncated_poisson()
   )
 
-  fish$ID = sample(1:4, nrow(fish), replace = TRUE)
+  fish$ID <- sample(1:4, nrow(fish), replace = TRUE)
 
   m4 <- glmmTMB(
     count ~ child + camper + (1 | persons),
     ziformula = ~ child + livebait + (1 | ID),
-    dispformula = ~ xb,
+    dispformula = ~xb,
     data = fish,
     family = truncated_poisson()
   )
@@ -59,7 +59,8 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
         random = "persons",
         zero_inflated = c("child", "camper"),
         zero_inflated_random = "persons"
-    ))
+      )
+    )
     expect_identical(find_predictors(m1, effects = "all", flatten = TRUE), c("child", "camper", "persons"))
     expect_identical(find_predictors(m1, effects = "random"), list(random = "persons", zero_inflated_random = "persons"))
     expect_identical(find_predictors(m1, effects = "random", flatten = TRUE), "persons")

@@ -22,7 +22,6 @@
 #' cbpp$trials <- cbpp$size - cbpp$incidence
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #' head(get_data(m))
-#'
 #' @importFrom stats model.frame
 #' @export
 get_data <- function(x, ...) {
@@ -32,14 +31,16 @@ get_data <- function(x, ...) {
 
 #' @export
 get_data.default <- function(x, ...) {
-  mf <- tryCatch(
-    {
-      if (inherits(x, "Zelig-relogit"))
-        get_zelig_relogit_frame(x)
-      else
-        stats::model.frame(x)
-    },
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    if (inherits(x, "Zelig-relogit")) {
+      get_zelig_relogit_frame(x)
+    } else {
+      stats::model.frame(x)
+    }
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)
@@ -48,9 +49,12 @@ get_data.default <- function(x, ...) {
 
 #' @export
 get_data.clm2 <- function(x, ...) {
-  mf <- tryCatch(
-    {x$location},
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    x$location
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)
@@ -85,9 +89,12 @@ get_data.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component
 
   model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
 
-  mf <- tryCatch(
-    {stats::model.frame(x)},
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    stats::model.frame(x)
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   mf <- prepare_get_data(x, mf)
@@ -106,16 +113,17 @@ get_data.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component
 get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
 
-  mf <- tryCatch(
-    {
-      switch(
-        effects,
-        fixed = stats::model.frame(x, fixed.only = TRUE),
-        all = stats::model.frame(x, fixed.only = FALSE),
-        random = stats::model.frame(x, fixed.only = FALSE)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-      )
-    },
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    switch(
+      effects,
+      fixed = stats::model.frame(x, fixed.only = TRUE),
+      all = stats::model.frame(x, fixed.only = FALSE),
+      random = stats::model.frame(x, fixed.only = FALSE)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
+    )
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf, effects)
@@ -124,9 +132,12 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 #' @export
 get_data.lme <- function(x, ...) {
-  mf <- tryCatch(
-    {x$data},
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    x$data
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)
@@ -135,9 +146,12 @@ get_data.lme <- function(x, ...) {
 
 #' @export
 get_data.vgam <- function(x, ...) {
-  mf <- tryCatch(
-    {get(x@misc$dataname, envir = parent.frame())},
-    error = function(x) { NULL}
+  mf <- tryCatch({
+    get(x@misc$dataname, envir = parent.frame())
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)
@@ -146,9 +160,12 @@ get_data.vgam <- function(x, ...) {
 
 #' @export
 get_data.gee <- function(x, ...) {
-  mf <- tryCatch(
-    {eval(x$call$data, envir = parent.frame())},
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    eval(x$call$data, envir = parent.frame())
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)
@@ -157,9 +174,12 @@ get_data.gee <- function(x, ...) {
 
 #' @export
 get_data.gls <- function(x, ...) {
-  mf <- tryCatch(
-    {eval(x$call$data, envir = parent.frame())},
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    eval(x$call$data, envir = parent.frame())
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)
@@ -168,9 +188,12 @@ get_data.gls <- function(x, ...) {
 
 #' @export
 get_data.gmnl <- function(x, ...) {
-  mf <- tryCatch(
-    {x$mf},
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    x$mf
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)
@@ -183,23 +206,27 @@ get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component 
   effects <- match.arg(effects)
   component <- match.arg(component)
 
-  mf <- tryCatch(
-    {
-      fitfram <- x$model_frames$mfX
-      if (!is_empty_object(x$model_frames$mfZ))
-        fitfram <- merge_dataframes(x$model_frames$mfZ, fitfram, replace = TRUE)
-      if (!is_empty_object(x$model_frames$mfX_zi))
-        fitfram <- merge_dataframes(x$model_frames$mfX_zi, fitfram, replace = TRUE)
-      if (!is_empty_object(x$model_frames$mfZ_zi))
-        fitfram <- merge_dataframes(x$model_frames$mfZ_zi, fitfram, replace = TRUE)
+  mf <- tryCatch({
+    fitfram <- x$model_frames$mfX
+    if (!is_empty_object(x$model_frames$mfZ)) {
+      fitfram <- merge_dataframes(x$model_frames$mfZ, fitfram, replace = TRUE)
+    }
+    if (!is_empty_object(x$model_frames$mfX_zi)) {
+      fitfram <- merge_dataframes(x$model_frames$mfX_zi, fitfram, replace = TRUE)
+    }
+    if (!is_empty_object(x$model_frames$mfZ_zi)) {
+      fitfram <- merge_dataframes(x$model_frames$mfZ_zi, fitfram, replace = TRUE)
+    }
 
-      fitfram$grp__id <- x$id
-      colnames(fitfram)[ncol(fitfram)] <- x$id_name[1]
+    fitfram$grp__id <- x$id
+    colnames(fitfram)[ncol(fitfram)] <- x$id_name[1]
 
-      model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
-      return_data(mf = fitfram, effects, component, model.terms)
-    },
-    error = function(x) { NULL }
+    model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
+    return_data(mf = fitfram, effects, component, model.terms)
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)
@@ -208,20 +235,21 @@ get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component 
 
 #' @export
 get_data.vglm <- function(x, ...) {
-  mf <- tryCatch(
-    {
-      if (!length(x@model)) {
-        env <- environment(x@terms$terms)
-        if (is.null(env)) env <- parent.frame()
-        fcall <- x@call
-        fcall$method <- "model.frame"
-        fcall$smart <- FALSE
-        eval(fcall, env, parent.frame())
-      } else {
-        x@model
-      }
-    },
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    if (!length(x@model)) {
+      env <- environment(x@terms$terms)
+      if (is.null(env)) env <- parent.frame()
+      fcall <- x@call
+      fcall$method <- "model.frame"
+      fcall$smart <- FALSE
+      eval(fcall, env, parent.frame())
+    } else {
+      x@model
+    }
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)
@@ -230,15 +258,16 @@ get_data.vglm <- function(x, ...) {
 
 #' @export
 get_data.stanmvreg <- function(x, ...) {
-  mf <- tryCatch(
-    {
-      out <- data.frame()
-      for (i in stats::model.frame(x))
-        out <- merge_dataframes(out, i)
+  mf <- tryCatch({
+    out <- data.frame()
+    for (i in stats::model.frame(x))
+      out <- merge_dataframes(out, i)
 
-      out
-    },
-    error = function(x) { NULL }
+    out
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)
@@ -247,21 +276,23 @@ get_data.stanmvreg <- function(x, ...) {
 
 #' @export
 get_data.MCMCglmm <- function(x, ...) {
-  mf <- tryCatch(
-    {
-      env_dataframes <- names(which(unlist(eapply(.GlobalEnv, is.data.frame))))
-      pv <- find_predictors(x, effects = "all")
-      matchframe <- unlist(lapply(env_dataframes, function(.x) {
-        dat <- get(.x)
-        all(pv %in% colnames(dat))
-      }))
-      mf <- env_dataframes[matchframe][1]
-      if (!is.na(mf))
-        get(mf)
-      else
-        NULL
-    },
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    env_dataframes <- names(which(unlist(eapply(.GlobalEnv, is.data.frame))))
+    pv <- find_predictors(x, effects = "all")
+    matchframe <- unlist(lapply(env_dataframes, function(.x) {
+      dat <- get(.x)
+      all(pv %in% colnames(dat))
+    }))
+    mf <- env_dataframes[matchframe][1]
+    if (!is.na(mf)) {
+      get(mf)
+    } else {
+      NULL
+    }
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf, effects = "all")
@@ -286,10 +317,11 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
 
   # clean 1-dimensional matrices
   mf[] <- lapply(mf, function(.x) {
-    if (is.matrix(.x) && dim(.x)[2] == 1 && !inherits(.x, c("ns", "bs")))
+    if (is.matrix(.x) && dim(.x)[2] == 1 && !inherits(.x, c("ns", "bs"))) {
       as.vector(.x)
-    else
+    } else {
       .x
+    }
   })
 
   # check if we have any matrix columns, e.g. from splines
@@ -302,12 +334,13 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
 
   if (mc[1] && rn == colnames(mf)[1]) {
     mc[1] <- FALSE
-    tryCatch(
-      {
-        trials.data <- as.data.frame(mf[[1]])
-        colnames(trials.data) <- find_response(x, combine = FALSE)
-      },
-      error = function(x) { NULL }
+    tryCatch({
+      trials.data <- as.data.frame(mf[[1]])
+      colnames(trials.data) <- find_response(x, combine = FALSE)
+    },
+    error = function(x) {
+      NULL
+    }
     )
   }
 
@@ -316,11 +349,12 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
   # proper column names and bind them back to the original model frame
   if (any(mc)) {
     # try to get model data from environment
-    md <- tryCatch(
-      {
-        eval(stats::getCall(x)$data, environment(stats::formula(x)))
-      },
-      error = function(x) { NULL }
+    md <- tryCatch({
+      eval(stats::getCall(x)$data, environment(stats::formula(x)))
+    },
+    error = function(x) {
+      NULL
+    }
     )
 
     # if data not found in environment, reduce matrix variables into regular vectors
@@ -376,15 +410,17 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
     }
 
     # check if we really have all formula terms in our model frame now
-    pv <- tryCatch(
-      {find_predictors(x, effects = effects)},
-      error = function(x) { NULL }
+    pv <- tryCatch({
+      find_predictors(x, effects = effects)
+    },
+    error = function(x) {
+      NULL
+    }
     )
 
     if (!is.null(pv) && !all(pv %in% colnames(mf))) {
       warning("Some model terms could not be found in model data. You probably need to load the data into the environment.", call. = FALSE)
     }
-
   }
 
   # check if we have monotonic variables, included in formula
@@ -439,12 +475,13 @@ return_data <- function(mf, effects, component, model.terms) {
 
 
 add_zeroinf_data <- function(x, mf, tn) {
-  tryCatch(
-    {
-      env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
-      merge_dataframes(env_data, mf, replace = TRUE)
-    },
-    error = function(x) { mf }
+  tryCatch({
+    env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
+    merge_dataframes(env_data, mf, replace = TRUE)
+  },
+  error = function(x) {
+    mf
+  }
   )
 }
 
@@ -458,9 +495,12 @@ get_zelig_relogit_frame <- function(x) {
 reurn_zeroinf_data <- function(x, component) {
   model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
 
-  mf <- tryCatch(
-    {stats::model.frame(x)},
-    error = function(x) { NULL }
+  mf <- tryCatch({
+    stats::model.frame(x)
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   mf <- prepare_get_data(x, mf)

@@ -1,7 +1,7 @@
 if (suppressWarnings(
   require("testthat") &&
-  require("insight") &&
-  require("lme4")
+    require("insight") &&
+    require("lme4")
 )) {
   context("insight, find_response")
 
@@ -51,5 +51,4 @@ if (suppressWarnings(
     find_response(m5)
     get_response(m5)
   })
-
 }
