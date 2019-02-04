@@ -149,6 +149,28 @@ find_formula.merMod <- function(x, ...) {
 
 
 #' @export
+find_formula.stanreg <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  f.cond <- stats::formula(x)
+  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+    f <- deparse(.x, width.cutoff = 500)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1) {
+    f.random <- f.random[[1]]
+  }
+
+  f.cond <- stats::as.formula(get_fixed_effects(f.cond))
+
+  compact_list(list(conditional = f.cond, random = f.random))
+}
+
+
+#' @export
 find_formula.brmsfit <- function(x, ...) {
   ## TODO check for ZI and multivariate response models
   f <- stats::formula(x)
@@ -185,7 +207,30 @@ find_formula.brmsfit <- function(x, ...) {
     }
 
     f.cond <- stats::as.formula(get_fixed_effects(f.cond))
-    l <- compact_list(list(conditional = f.cond, random = f.random))
+
+    f.zi <- f$pforms$zi
+    f.zirandom <- NULL
+
+    if (!is_empty_object(f.zi)) {
+      f.zirandom <- lapply(lme4::findbars(f.zi), function(.x) {
+        f <- deparse(.x, width.cutoff = 500)
+        stats::as.formula(paste0("~", f))
+      })
+
+      if (length(f.zirandom) == 1) {
+        f.zirandom <- f.zirandom[[1]]
+      }
+
+      f.zi <- stats::as.formula(paste0("~", deparse(f.zi[[3L]], width.cutoff = 500)))
+      f.zi <- stats::as.formula(get_fixed_effects(f.zi))
+    }
+
+    l <- compact_list(list(
+      conditional = f.cond,
+      random = f.random,
+      zero_inflated = f.zi,
+      zero_inflated_random = f.zirandom
+    ))
   }
 
   l

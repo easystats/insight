@@ -12,7 +12,7 @@ is_empty_string <- function(x) {
 
 # is string empty?
 is_empty_object <- function(x) {
-  x <- x[!is.na(x)]
+  x <- suppressWarnings(x[!is.na(x)])
   length(x) == 0 || is.null(x)
 }
 
