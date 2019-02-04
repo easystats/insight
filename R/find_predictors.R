@@ -58,13 +58,23 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 
   # from conditional model, remove response
   if (obj_has_name(f, "conditional")) {
-    f[["conditional"]] <- f[["conditional"]][[3]]
+    # this is for multivariate response models, where
+    # we have a list of formulas
+    if (is.list(f[["conditional"]])) {
+      f[["conditional"]] <- lapply(f[["conditional"]], function(i) i[[3]])
+    } else {
+      f[["conditional"]] <- f[["conditional"]][[3]]
+    }
   }
+
+  ## TODO check random effects in multivariate response models
 
   # if we have random effects, just return grouping variable, not random slopes
   if (obj_has_name(f, "random")) {
     f[["random"]] <- get_group_factor(x, f[["random"]])
   }
+
+  ## TODO check zi random effects in multivariate response models
 
   # same for zi-random effects
   if (obj_has_name(f, "zero_inflated_random")) {
@@ -78,7 +88,13 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
     } else if (is.numeric(f[[i]])) {
       f[[i]]
     } else {
-      unique(all.vars(f[[i]]))
+      if (is.list(f[[i]])) {
+        # this is for multivariate response models, where
+        # we have a list of formulas
+        lapply(f[[i]], function(j) unique(all.vars(j)))
+      } else {
+        unique(all.vars(f[[i]]))
+      }
     }
   }))
 

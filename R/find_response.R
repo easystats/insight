@@ -16,35 +16,20 @@
 #' data(cbpp)
 #' cbpp$trials <- cbpp$size - cbpp$incidence
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
-#' 
+#'
 #' find_response(m, combine = TRUE)
 #' find_response(m, combine = FALSE)
 #' @export
 find_response <- function(x, combine = TRUE) {
   f <- find_formula(x)
-  resp <- deparse(f$conditional[[2L]], width.cutoff = 500L)
+  # this is for multivariate response models, where
+  # we have a list of formulas
+  if (is.list(f$conditional))
+    resp <- unlist(lapply(f$conditional, function(i) deparse(i[[2L]], width.cutoff = 500L)))
+  else
+    resp <- deparse(f$conditional[[2L]], width.cutoff = 500L)
   check_cbind(resp, combine)
 }
-
-# find_response.brmsfit <- function(x, combine = TRUE, ...) {
-#   f <- stats::formula(x)
-#
-#   if (is.null(f$responses)) {
-#     resp <- deparse(f$formula[[2L]], width.cutoff = 500L)
-#     # check for brms Additional Response Information
-#     if (any(string_contains("|", resp))) {
-#       r1 <- trim(sub("(.*)\\|(.*)", "\\1", resp))
-#       r2 <- trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
-#       resp <- c(r1, r2)
-#     }
-#   } else {
-#     resp <- unlist(
-#       lapply(x$formula$forms, function(.x) all.vars(stats::formula(.x)[[2L]]))
-#     )
-#   }
-#
-#   clean_names(resp)
-# }
 
 
 # should not be called for brms-models!
@@ -56,6 +41,11 @@ check_cbind <- function(resp, combine) {
     if (any(string_contains("-", resp[2]))) {
       resp[2] <- trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
     }
+  } else if (any(string_contains("|", resp))) {
+    # check for brms Additional Response Information
+    r1 <- trim(sub("(.*)\\|(.*)", "\\1", resp))
+    r2 <- trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
+    resp <- c(r1, r2)
   }
 
   clean_names(resp)
