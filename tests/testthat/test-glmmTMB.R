@@ -147,7 +147,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_identical(find_predictors(m4, effects = "all", component = "zero_inflated", flatten = TRUE), c("child", "livebait", "ID"))
     expect_identical(find_predictors(m4, component = "dispersion"), list(dispersion = "xb"))
     expect_identical(find_predictors(m4, component = "dispersion", flatten = TRUE), "xb")
-    expect_length(find_predictors(m4, effects = "random", component = "dispersion"), 0)
+    expect_null(find_predictors(m4, effects = "random", component = "dispersion"))
     expect_identical(find_predictors(m4, effects = "all", component = "dispersion"), list(dispersion = "xb"))
     expect_identical(find_predictors(m4, effects = "all", component = "dispersion", flatten = TRUE), "xb")
   })

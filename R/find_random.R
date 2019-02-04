@@ -29,12 +29,12 @@
 #'   sleepstudy$mysubgrp[filter_group] <-
 #'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
-#' 
+#'
 #' m <- lmer(
 #'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
 #'   data = sleepstudy
 #' )
-#' 
+#'
 #' find_random(m)
 #' find_random(m, split_nested = TRUE)
 #' @export
@@ -54,6 +54,10 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 
   l <- compact_list(list(random = r1, zero_inflated_random = r2))
+
+  if (is_empty_object(l)) {
+    return(NULL)
+  }
 
   if (flatten) {
     unique(unlist(l))

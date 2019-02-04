@@ -84,6 +84,10 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 
   names(l) <- names(f)
 
+  if (is_empty_object(l)) {
+    return(NULL)
+  }
+
   if (flatten) {
     unique(unlist(l))
   } else {

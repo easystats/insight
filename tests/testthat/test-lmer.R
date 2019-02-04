@@ -34,27 +34,20 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_equal(find_predictors(m1, effects = "random", flatten = TRUE), "Subject")
     expect_equal(find_predictors(m2, effects = "all"), list(conditional = "Days", random = c("mysubgrp", "mygrp", "Subject")))
     expect_equal(find_predictors(m2, effects = "all", flatten = TRUE), c("Days", "mysubgrp", "mygrp", "Subject"))
-    expect_equal(find_predictors(m2, effects = "fixed"), "Days")
-    expect_equal(find_predictors(m2, effects = "random"), c("mysubgrp:mygrp", "mygrp", "Subject"))
+    expect_equal(find_predictors(m2, effects = "fixed"), list(conditional = "Days"))
+    expect_equal(find_predictors(m2, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
     expect_null(find_predictors(m2, effects = "all", component = "zi"))
     expect_null(find_predictors(m2, effects = "fixed", component = "zi"))
     expect_null(find_predictors(m2, effects = "random", component = "zi"))
   })
 
   test_that("find_random", {
-    expect_equal(find_random(m1), "Subject")
-    expect_equal(find_random(m2), c("mysubgrp:mygrp", "mygrp", "Subject"))
-    expect_equal(find_random(m2, split_nested = TRUE), c("mysubgrp", "mygrp", "Subject"))
     expect_equal(find_random(m1), list(random = "Subject"))
     expect_equal(find_random(m1, flatten = TRUE), "Subject")
-    expect_equal(find_random(m2, component = "cond"), c("mysubgrp:mygrp", "mygrp", "Subject"))
-    expect_equal(find_random(m2, component = "cond", split_nested = TRUE), c("mysubgrp", "mygrp", "Subject"))
-    expect_equal(find_random(m2, component = "all"), c("mysubgrp:mygrp", "mygrp", "Subject"))
-    expect_equal(find_random(m2, component = "all", split_nested = TRUE), c("mysubgrp", "mygrp", "Subject"))
-    expect_null(find_random(m2, component = "zi"))
-    expect_null(find_random(m2, component = "zi", split_nested = TRUE))
-    expect_null(find_random(m2, component = "disp"))
-    expect_null(find_random(m2, component = "disp", split_nested = TRUE))
+    expect_equal(find_random(m2), list(random = c("mysubgrp:mygrp", "mygrp", "Subject")))
+    expect_equal(find_random(m2, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
+    expect_equal(find_random(m2, flatten = TRUE), c("mysubgrp:mygrp", "mygrp", "Subject"))
+    expect_equal(find_random(m2, split_nested = TRUE, flatten = TRUE), c("mysubgrp", "mygrp", "Subject"))
   })
 
   test_that("find_response", {
@@ -77,10 +70,23 @@ if (require("testthat") && require("insight") && require("lme4")) {
   })
 
   test_that("find_formula", {
-    expect_length(find_formula(m1), 3)
-    expect_identical(find_formula(m1, component = "conditional"), stats::formula(m1))
-    expect_identical(find_formula(m2, component = "cond"), stats::formula(m2))
-    expect_null(find_formula(m2, component = "zero_inflated"))
+    expect_length(find_formula(m1), 2)
+    expect_length(find_formula(m2), 2)
+    expect_equal(
+      find_formula(m1, component = "conditional"),
+      list(
+        conditional = as.formula("Reaction ~ Days"),
+        random = as.formula("~1 + Days | Subject")
+      ))
+    expect_equal(
+      find_formula(m2, component = "conditional"),
+      list(
+        conditional = as.formula("Reaction ~ Days"),
+        random = list(
+          as.formula("~1 | mysubgrp:mygrp"),
+          as.formula("~1 | mygrp"),
+          as.formula("~1 | Subject")
+      )))
   })
 
   test_that("find_terms", {
