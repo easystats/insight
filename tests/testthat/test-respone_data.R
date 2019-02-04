@@ -1,21 +1,20 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-
   if (suppressWarnings(
     require("testthat") &&
-    require("insight") &&
-    require("brms")
+      require("insight") &&
+      require("brms")
   )) {
     context("insight, brms-find_response")
 
     data("epilepsy")
     data("iris")
 
-    bprior1 <- prior(student_t(5,0,10), class = b) + prior(cauchy(0,2), class = sd)
+    bprior1 <- prior(student_t(5, 0, 10), class = b) + prior(cauchy(0, 2), class = sd)
 
     m1 <- brm(
-      count ~ log_Age_c + log_Base4_c * Trt + (1|patient),
+      count ~ log_Age_c + log_Base4_c * Trt + (1 | patient),
       data = epilepsy,
       family = poisson(),
       prior = bprior1,
@@ -38,8 +37,7 @@ if (.runThisTest) {
       143 0 0 1 1 0.1707 1.128993008 2.128993008
       143 33 0.230769231 0 1 0.0699 1.128993008 1.128993008
       73 62 1.260273973 0 1 0.1351 1.121927228 1.121927228
-      73 17 0.232876712 0 1 0.1206 1.121927228 1.121927228"
-    )
+      73 17 0.232876712 0 1 0.1206 1.121927228 1.121927228")
     dat$treat <- as.factor(dat$treat)
 
     m3 <- brm(r | trials(n) ~ treat * c2, data = dat, family = binomial(link = logit))

@@ -29,7 +29,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_predictors(m)
-#'
 #' @export
 find_predictors <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE) {
   effects <- match.arg(effects)
@@ -58,31 +57,36 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
   f <- f[names(f) %in% elements]
 
   # from conditional model, remove response
-  if (obj_has_name(f, "conditional"))
+  if (obj_has_name(f, "conditional")) {
     f[["conditional"]] <- f[["conditional"]][[3]]
+  }
 
   # if we have random effects, just return grouping variable, not random slopes
-  if (obj_has_name(f, "random"))
+  if (obj_has_name(f, "random")) {
     f[["random"]] <- get_group_factor(x, f[["random"]])
+  }
 
   # same for zi-random effects
-  if (obj_has_name(f, "zero_inflated_random"))
+  if (obj_has_name(f, "zero_inflated_random")) {
     f[["zero_inflated_random"]] <- get_group_factor(x, f[["zero_inflated_random"]])
+  }
 
   # random effects are returned as list, so we need to unlist here
   l <- compact_list(lapply(names(f), function(i) {
-    if (i %in% c("random", "zero_inflated_random"))
+    if (i %in% c("random", "zero_inflated_random")) {
       unique(paste(unlist(f[[i]])))
-    else if (is.numeric(f[[i]]))
+    } else if (is.numeric(f[[i]])) {
       f[[i]]
-    else
+    } else {
       unique(all.vars(f[[i]]))
+    }
   }))
 
   names(l) <- names(f)
 
-  if (flatten)
+  if (flatten) {
     unique(unlist(l))
-  else
+  } else {
     l
+  }
 }

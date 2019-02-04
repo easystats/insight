@@ -28,23 +28,22 @@
 #' for (i in 1:5) {
 #'   filter_group <- sleepstudy$mygrp == i
 #'   sleepstudy$mysubgrp[filter_group] <-
-#'   sample(1:30, size = sum(filter_group), replace = TRUE)
+#'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
-#'
+#' 
 #' m1 <- glmer(
 #'   cbind(incidence, size - incidence) ~ period + (1 | herd),
 #'   data = cbpp,
 #'   family = binomial
 #' )
 #' find_terms(m1)
-#'
+#' 
 #' m2 <- lmer(
 #'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
 #'   data = sleepstudy
 #' )
 #' find_terms(m2)
 #' find_terms(m2, flatten = TRUE)
-#'
 #' @export
 find_terms <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE) {
   effects <- match.arg(effects)
@@ -53,8 +52,9 @@ find_terms <- function(x, effects = c("all", "fixed", "random"), component = c("
   resp <- find_response(x, combine = FALSE)
   pr <- find_predictors(x, effects = effects, component = component, flatten = flatten)
 
-  if (flatten)
+  if (flatten) {
     unique(c(resp, pr))
-  else
+  } else {
     c(list(response = resp), pr)
+  }
 }

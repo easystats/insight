@@ -67,8 +67,9 @@ merge_dataframes <- function(data, ..., replace = TRUE) {
 # although model has no zi-component
 is_invalid_zeroinf <- function(dots) {
   if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion"))
+    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion")) {
       return(TRUE)
+    }
   }
   FALSE
 }
@@ -83,24 +84,28 @@ get_fixed_effects <- function(f) {
 
 # extract random effects from formula
 get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
-  if (!requireNamespace("lme4", quietly = TRUE))
+  if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
+  }
 
   if (identical(deparse(f, width.cutoff = 500), "~0") ||
-      identical(deparse(f, width.cutoff = 500), "~1"))
+    identical(deparse(f, width.cutoff = 500), "~1")) {
     return(NULL)
+  }
 
   re <- sapply(lme4::findbars(f), deparse, width.cutoff = 500)
 
-  if (is_MCMCglmm && is_empty_object(re))
+  if (is_MCMCglmm && is_empty_object(re)) {
     re <- deparse(f[[2L]], width.cutoff = 500)
-  else
+  } else {
     re <- trim(substring(re, regexpr(pattern = "\\|", re) + 1))
+  }
 
-  if (split_nested)
+  if (split_nested) {
     unique(unlist(strsplit(re, "\\:")))
-  else
+  } else {
     unique(re)
+  }
 }
 
 
@@ -109,7 +114,8 @@ get_group_factor <- function(x, f) {
     f <- lapply(f, function(.x) {
       as.symbol(
         get_model_random(.x, split_nested = TRUE, is_MCMCglmm = inherits(x, "MCMCglmm"))
-      )})
+      )
+    })
   } else {
     f <- as.symbol(get_model_random(f, split_nested = TRUE, is_MCMCglmm = inherits(x, "MCMCglmm")))
   }

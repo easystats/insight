@@ -26,7 +26,7 @@ if (require("testthat") && require("insight") && require("splines") && require("
   data("Salamanders")
   m <- glmmTMB(
     count ~ spp + cover + mined + poly(DOP, 3) + (1 | site),
-    ziformula = ~spp + mined,
+    ziformula = ~ spp + mined,
     dispformula = ~DOY,
     data = Salamanders,
     family = nbinom2
@@ -38,4 +38,3 @@ if (require("testthat") && require("insight") && require("splines") && require("
     expect_equal(colnames(mf), c("count", "spp", "cover", "mined", "DOP", "DOY", "site"))
   })
 }
-

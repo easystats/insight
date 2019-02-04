@@ -128,5 +128,4 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
     expect_identical(colnames(get_data(m, component = "disp")), "count")
     expect_warning(colnames(get_data(m, component = "disp", effects = "random")))
   })
-
 }

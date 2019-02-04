@@ -14,7 +14,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' n_obs(m)
-#'
 #' @export
 n_obs <- function(x, ...) {
   UseMethod("n_obs")
@@ -23,26 +22,35 @@ n_obs <- function(x, ...) {
 
 #' @export
 n_obs.default <- function(x, ...) {
-  tryCatch(
-    {stats::nobs(x)},
-    error = function(x) { NULL }
+  tryCatch({
+    stats::nobs(x)
+  },
+  error = function(x) {
+    NULL
+  }
   )
 }
 
 
 #' @export
 n_obs.gmnl <- function(x, ...) {
-  tryCatch(
-    {x$logLik$nobs},
-    error = function(x) { NULL }
+  tryCatch({
+    x$logLik$nobs
+  },
+  error = function(x) {
+    NULL
+  }
   )
 }
 
 
 #' @export
 n_obs.mlogit <- function(x, ...) {
-  tryCatch(
-    {nrow(x$model)},
-    error = function(x) { NULL }
+  tryCatch({
+    nrow(x$model)
+  },
+  error = function(x) {
+    NULL
+  }
   )
 }

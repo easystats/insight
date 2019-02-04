@@ -16,14 +16,13 @@
 #' data(cbpp)
 #' data(mtcars)
 #' cbpp$trials <- cbpp$size - cbpp$incidence
-#'
+#' 
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #' get_response(m)
 #' get_response(m, resp = "incidence")
-#'
+#' 
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_response(m)
-#'
 #' @export
 get_response <- function(x, resp = NULL) {
   rn <- find_response(x, combine = FALSE)
@@ -32,8 +31,9 @@ get_response <- function(x, resp = NULL) {
     rv <- get_data(x)[, rn, drop = FALSE]
     colnames(rv) <- rn
     # if user only wants specific response value, return this only
-    if (!is.null(resp) && all(resp %in% colnames(rv)))
+    if (!is.null(resp) && all(resp %in% colnames(rv))) {
       rv <- rv[, resp, drop = TRUE]
+    }
     rv
   } else {
     as.vector(get_data(x)[[find_response(x, combine = TRUE)]])

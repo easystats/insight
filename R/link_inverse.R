@@ -18,11 +18,10 @@
 #' outcome <- gl(3, 1, 9)
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ outcome + treatment, family = poisson())
-#'
+#' 
 #' link_inverse(m)(.3)
 #' # same as
 #' exp(.3)
-#'
 #' @importFrom stats family make.link gaussian formula
 #' @export
 link_inverse <- function(x, ...) {
@@ -35,9 +34,12 @@ link_inverse.default <- function(x, ...) {
   if (inherits(x, "Zelig-relogit")) {
     stats::make.link(link = "logit")$linkinv
   } else {
-    tryCatch(
-      {stats::family(x)$linkinv},
-      error = function(x) { NULL }
+    tryCatch({
+      stats::family(x)$linkinv
+    },
+    error = function(x) {
+      NULL
+    }
     )
   }
 }
@@ -45,18 +47,24 @@ link_inverse.default <- function(x, ...) {
 
 #' @export
 link_inverse.glm <- function(x, ...) {
-  tryCatch(
-    {stats::family(x)$linkinv},
-    error = function(x) { NULL }
+  tryCatch({
+    stats::family(x)$linkinv
+  },
+  error = function(x) {
+    NULL
+  }
   )
 }
 
 
 #' @export
 link_inverse.gam <- function(x, ...) {
-  tryCatch(
-    {stats::family(x)$linkinv},
-    error = function(x) { NULL }
+  tryCatch({
+    stats::family(x)$linkinv
+  },
+  error = function(x) {
+    NULL
+  }
   )
 }
 
@@ -187,12 +195,13 @@ link_inverse.clmm <- function(x, ...) {
 link_inverse.glmmTMB <- function(x, ...) {
   ff <- stats::family(x)
 
-  if ("linkinv" %in% names(ff))
+  if ("linkinv" %in% names(ff)) {
     ff$linkinv
-  else if ("link" %in% names(ff) && is.character(ff$link))
+  } else if ("link" %in% names(ff) && is.character(ff$link)) {
     stats::make.link(ff$link)$linkinv
-  else
+  } else {
     match.fun("exp")
+  }
 }
 
 
@@ -238,7 +247,9 @@ link_inverse.multinom <- function(x, ...) {
 link_inverse.stanmvreg <- function(x, mv_response = FALSE, ...) {
   fam <- stats::family(x)
   if (mv_response) {
-    il <- lapply(fam, function(.x) { .x$linkinv })
+    il <- lapply(fam, function(.x) {
+      .x$linkinv
+    })
   } else {
     fam <- fam[[1]]
     il <- fam$linkinv

@@ -21,7 +21,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_formula(m)
-#'
 #' @importFrom stats formula terms as.formula
 #' @export
 find_formula <- function(x, ...) {
@@ -31,9 +30,12 @@ find_formula <- function(x, ...) {
 
 #' @export
 find_formula.default <- function(x, ...) {
-  tryCatch(
-    {list(conditional = stats::formula(x))},
-    error = function(x) { NULL }
+  tryCatch({
+    list(conditional = stats::formula(x))
+  },
+  error = function(x) {
+    NULL
+  }
   )
 }
 
@@ -70,20 +72,23 @@ find_formula.aovlist <- function(x, ...) {
 
 #' @export
 find_formula.glmmTMB <- function(x, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE))
+  if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
+  }
 
   f.cond <- stats::formula(x)
   f.zi <- stats::formula(x, component = "zi")
   f.disp <- stats::formula(x, component = "disp")
 
   if (identical(deparse(f.zi, width.cutoff = 500), "~0") ||
-      identical(deparse(f.zi, width.cutoff = 500), "~1"))
+    identical(deparse(f.zi, width.cutoff = 500), "~1")) {
     f.zi <- NULL
+  }
 
   if (identical(deparse(f.disp, width.cutoff = 500), "~0") ||
-      identical(deparse(f.disp, width.cutoff = 500), "~1"))
+    identical(deparse(f.disp, width.cutoff = 500), "~1")) {
     f.disp <- NULL
+  }
 
 
   f.random <- lapply(lme4::findbars(f.cond), function(.x) {
@@ -91,18 +96,21 @@ find_formula.glmmTMB <- function(x, ...) {
     stats::as.formula(paste0("~", f))
   })
 
-  if (length(f.random) == 1)
+  if (length(f.random) == 1) {
     f.random <- f.random[[1]]
+  }
 
   f.zirandom <- lapply(lme4::findbars(f.zi), function(.x) {
     f <- deparse(.x, width.cutoff = 500)
-    if (f == "NULL")
+    if (f == "NULL") {
       return(NULL)
+    }
     stats::as.formula(paste0("~", f))
   })
 
-  if (length(f.zirandom) == 1)
+  if (length(f.zirandom) == 1) {
     f.zirandom <- f.zirandom[[1]]
+  }
 
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
@@ -120,8 +128,9 @@ find_formula.glmmTMB <- function(x, ...) {
 
 #' @export
 find_formula.merMod <- function(x, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE))
+  if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
+  }
 
   f.cond <- stats::formula(x)
   f.random <- lapply(lme4::findbars(f.cond), function(.x) {
@@ -129,8 +138,9 @@ find_formula.merMod <- function(x, ...) {
     stats::as.formula(paste0("~", f))
   })
 
-  if (length(f.random) == 1)
+  if (length(f.random) == 1) {
     f.random <- f.random[[1]]
+  }
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
 
@@ -187,21 +197,26 @@ find_formula.stanmvreg <- function(x, ...) {
 
 
 zeroinf_formula <- function(x) {
-  f <- tryCatch(
-    {stats::formula(x)},
-    error = function(x) { NULL }
+  f <- tryCatch({
+    stats::formula(x)
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
-  if (is.null(f))
+  if (is.null(f)) {
     return(NULL)
+  }
 
   f <- trim(unlist(strsplit(deparse(f, width.cutoff = 500L), "\\|")))
 
   c.form <- stats::as.formula(f[1])
-  if (length(f) == 2)
+  if (length(f) == 2) {
     zi.form <- stats::as.formula(paste0("~", f[2]))
-  else
+  } else {
     zi.form <- NULL
+  }
 
   compact_list(list(conditional = c.form, zero_inflated = zi.form))
 }
