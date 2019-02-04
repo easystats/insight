@@ -278,7 +278,7 @@ get_data.stanmvreg <- function(x, ...) {
 get_data.MCMCglmm <- function(x, ...) {
   mf <- tryCatch({
     env_dataframes <- names(which(unlist(eapply(.GlobalEnv, is.data.frame))))
-    pv <- find_predictors(x, effects = "all")
+    pv <- find_predictors(x, effects = "all", component = "all", flatten = TRUE)
     matchframe <- unlist(lapply(env_dataframes, function(.x) {
       dat <- get(.x)
       all(pv %in% colnames(dat))
@@ -411,7 +411,7 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
 
     # check if we really have all formula terms in our model frame now
     pv <- tryCatch({
-      find_predictors(x, effects = effects)
+      find_predictors(x, effects = effects, flatten = TRUE)
     },
     error = function(x) {
       NULL
