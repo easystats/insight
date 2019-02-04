@@ -40,7 +40,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
   elements <- switch(
     effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "zero_inflated", "disperion")],
+    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
