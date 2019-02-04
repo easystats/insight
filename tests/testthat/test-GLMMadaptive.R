@@ -6,13 +6,13 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
   fish$livebait <- as.factor(fish$livebait)
   fish$camper <- as.factor(fish$camper)
 
-  m <- mixed_model(
+  m <- GLMMadaptive::mixed_model(
     count ~ child + camper,
     random = ~ 1 | persons,
     zi_fixed = ~ child + livebait,
     zi_random = ~ 1 | persons,
     data = fish,
-    family = zi.poisson()
+    family = GLMMadaptive::zi.poisson()
   )
 
   test_that("model_info", {
@@ -23,18 +23,22 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m, effects = "fixed"), c("child", "camper", "livebait"))
-    expect_identical(find_predictors(m, effects = "all"), c("child", "camper", "livebait", "persons"))
-    expect_identical(find_predictors(m, effects = "random"), "persons")
-    expect_identical(find_predictors(m, effects = "fixed", component = "cond"), c("child", "camper"))
-    expect_identical(find_predictors(m, effects = "all", component = "cond"), c("child", "camper", "persons"))
-    expect_identical(find_predictors(m, effects = "random", component = "cond"), "persons")
-    expect_identical(find_predictors(m, effects = "fixed", component = "zi"), c("child", "livebait"))
-    expect_identical(find_predictors(m, effects = "all", component = "zi"), c("child", "livebait", "persons"))
-    expect_identical(find_predictors(m, effects = "random", component = "zi"), "persons")
-    expect_null(find_predictors(m, effects = "fixed", component = "disp"))
-    expect_null(find_predictors(m, effects = "all", component = "disp"))
-    expect_warning(find_predictors(m, effects = "random", component = "disp"))
+    expect_identical(find_predictors(m, effects = "fixed")$conditional, c("child", "camper"))
+    expect_identical(find_predictors(m, effects = "fixed")$zero_inflated, c("child", "livebait"))
+    expect_identical(find_predictors(m, effects = "all", flatten = TRUE), c("child", "camper", "persons", "livebait"))
+    expect_identical(find_predictors(m, effects = "all")$zero_inflated_random, c("persons"))
+    expect_identical(find_predictors(m, effects = "random")$random, "persons")
+    expect_identical(find_predictors(m, effects = "fixed", component = "cond", flatten = TRUE), c("child", "camper"))
+    expect_identical(find_predictors(m, effects = "all", component = "cond", flatten = TRUE), c("child", "camper", "persons"))
+    expect_identical(find_predictors(m, effects = "all", component = "cond")$conditional, c("child", "camper"))
+
+    expect_identical(find_predictors(m, effects = "random", component = "cond", flatten = TRUE), "persons")
+    expect_identical(find_predictors(m, effects = "fixed", component = "zi", flatten = TRUE), c("child", "livebait"))
+    expect_identical(find_predictors(m, effects = "all", component = "zi", flatten = TRUE), c("child", "livebait", "persons"))
+    expect_identical(find_predictors(m, effects = "random", component = "zi", flatten = TRUE), "persons")
+    expect_null(find_predictors(m, effects = "fixed", component = "disp", flatten = TRUE))
+    expect_null(find_predictors(m, effects = "all", component = "disp", flatten = TRUE))
+    expect_null(find_predictors(m, effects = "random", component = "disp", flatten = TRUE))
   })
 
   test_that("find_response", {
