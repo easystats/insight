@@ -30,5 +30,4 @@ Get model formula
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 find_formula(m)
-
 }

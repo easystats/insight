@@ -30,5 +30,4 @@ outcome <- c(gl(3, 1, 9))
 treatment <- gl(3, 3)
 m <- glm(counts ~ log(outcome) + as.factor(treatment), family = poisson())
 clean_names(m)
-
 }

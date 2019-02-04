@@ -55,37 +55,12 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
 
   test_that("find_formula", {
     expect_length(find_formula(m), 4)
-    expect_identical(names(find_formula(m)), c("conditional", "zero_inflated", "random", "zero_inflated_random"))
-    expect_length(find_formula(m, component = "cond"), 2)
-    expect_identical(names(find_formula(m, component = "cond")), c("conditional", "random"))
-    expect_length(find_formula(m, component = "zi"), 2)
-    expect_identical(names(find_formula(m, component = "zi")), c("zero_inflated", "zero_inflated_random"))
-    expect_null(find_formula(m, component = "disp"))
-
-    expect_length(find_formula(m, effects = "fixed"), 2)
-    expect_identical(names(find_formula(m, effects = "fixed")), c("conditional", "zero_inflated"))
-    expect_length(find_formula(m, effects = "fixed", component = "cond"), 1)
-    expect_identical(names(find_formula(m, effects = "fixed", component = "cond")), "conditional")
-    expect_length(find_formula(m, effects = "fixed", component = "zi"), 1)
-    expect_identical(names(find_formula(m, effects = "fixed", component = "zi")), "zero_inflated")
-    expect_null(find_formula(m, effects = "fixed", component = "disp"))
-
-    expect_length(find_formula(m, effects = "random"), 2)
-    expect_identical(names(find_formula(m, effects = "random")), c("random", "zero_inflated_random"))
-    expect_length(find_formula(m, effects = "random", component = "cond"), 1)
-    expect_identical(names(find_formula(m, effects = "random", component = "cond")), "random")
-    expect_length(find_formula(m, effects = "random", component = "zi"), 1)
-    expect_identical(names(find_formula(m, effects = "random", component = "zi")), "zero_inflated_random")
-    expect_null(find_formula(m, effects = "random", component = "disp"))
+    expect_identical(names(find_formula(m)), c("conditional", "random", "zero_inflated", "zero_inflated_random"))
   })
 
   test_that("find_random", {
-    expect_identical(find_random(m), "persons")
-    expect_identical(find_random(m, component = "cond"), "persons")
-    expect_identical(find_random(m, component = "zi"), "persons")
+    expect_identical(find_random(m), list(random = "persons", zero_inflated_random = "persons"))
     expect_identical(find_random(m, flatten = TRUE), "persons")
-    expect_identical(find_random(m, component = "cond", flatten = TRUE), "persons")
-    expect_identical(find_random(m, component = "zi", flatten = TRUE), "persons")
   })
 
   test_that("find_respone", {

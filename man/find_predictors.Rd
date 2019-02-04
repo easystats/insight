@@ -42,5 +42,4 @@ to do...
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 find_predictors(m)
-
 }

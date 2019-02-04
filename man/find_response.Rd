@@ -28,5 +28,4 @@ m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 
 find_response(m, combine = TRUE)
 find_response(m, combine = FALSE)
-
 }

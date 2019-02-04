@@ -32,5 +32,4 @@ get_response(m, resp = "incidence")
 
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 get_response(m)
-
 }

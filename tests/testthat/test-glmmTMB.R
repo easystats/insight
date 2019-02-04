@@ -97,9 +97,12 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m3, effects = "fixed", component = "conditional"), c("child", "camper"))
-    expect_identical(find_predictors(m3, effects = "fixed", component = "zero_inflated"), c("child", "livebait"))
+    expect_identical(find_predictors(m3, effects = "fixed", component = "conditional"), list(conditional = c("child", "camper")))
+    expect_identical(find_predictors(m3, effects = "fixed", component = "conditional", flatten = TRUE), c("child", "camper"))
+    expect_identical(find_predictors(m3, effects = "fixed", component = "zero_inflated"), list(zero_inflated = c("child", "livebait")))
+    expect_identical(find_predictors(m3, effects = "fixed", component = "zero_inflated", flatten = TRUE), c("child", "livebait"))
     expect_identical(find_predictors(m3, effects = "all", component = "conditional"), c("child", "camper", "persons"))
+    expect_identical(find_predictors(m3, effects = "all", component = "conditional", flatten = TRUE), c("child", "camper", "persons"))
     expect_identical(find_predictors(m3, effects = "all", component = "zero_inflated"), c("child", "livebait", "persons"))
     expect_identical(find_predictors(m3, effects = "random", component = "conditional"), c(conditional = "persons"))
     expect_identical(find_predictors(m3, effects = "random", component = "zero_inflated"), c(zero_inflated = "persons"))

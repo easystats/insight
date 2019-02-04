@@ -27,5 +27,4 @@ m <- glm(counts ~ outcome + treatment, family = poisson())
 link_function(m)(.3)
 # same as
 log(.3)
-
 }

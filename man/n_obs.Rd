@@ -23,5 +23,4 @@ This method returns the number of observation that were used
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 n_obs(m)
-
 }

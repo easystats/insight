@@ -36,7 +36,7 @@ sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
   filter_group <- sleepstudy$mygrp == i
   sleepstudy$mysubgrp[filter_group] <-
-  sample(1:30, size = sum(filter_group), replace = TRUE)
+    sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 m <- lmer(
@@ -46,5 +46,4 @@ m <- lmer(
 
 find_random(m)
 find_random(m, split_nested = TRUE)
-
 }

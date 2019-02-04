@@ -37,5 +37,4 @@ m <- glm(counts ~ outcome + treatment, family = poisson())
 link_inverse(m)(.3)
 # same as
 exp(.3)
-
 }

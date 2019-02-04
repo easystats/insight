@@ -54,12 +54,11 @@ library(glmmTMB)
 data("Salamanders")
 m <- glmmTMB(
   count ~ spp + cover + mined + (1 | site),
-  ziformula = ~spp + mined,
+  ziformula = ~ spp + mined,
   dispformula = ~DOY,
   data = Salamanders,
   family = nbinom2
 )
 
 model_info(m)
-
 }
