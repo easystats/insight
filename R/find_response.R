@@ -22,12 +22,15 @@
 #' @export
 find_response <- function(x, combine = TRUE) {
   f <- find_formula(x)
+
   # this is for multivariate response models, where
   # we have a list of formulas
-  if (is.list(f$conditional))
-    resp <- unlist(lapply(f$conditional, function(i) deparse(i[[2L]], width.cutoff = 500L)))
-  else
+  if (is_multivariate(f)) {
+    resp <- unlist(lapply(f, function(i) deparse(i$conditional[[2L]], width.cutoff = 500L)))
+  } else {
     resp <- deparse(f$conditional[[2L]], width.cutoff = 500L)
+  }
+
   check_cbind(resp, combine)
 }
 

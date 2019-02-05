@@ -172,68 +172,15 @@ find_formula.stanreg <- function(x, ...) {
 
 #' @export
 find_formula.brmsfit <- function(x, ...) {
-  ## TODO check for ZI and multivariate response models
   f <- stats::formula(x)
 
   if (obj_has_name(f, "forms")) {
-    f.cond <- f$forms
-    f.random <- lapply(f.cond, function(i) {
-      lapply(lme4::findbars(i), function(.x) {
-        f <- deparse(.x, width.cutoff = 500)
-        stats::as.formula(paste0("~", f))
-      })
-    })
-
-    for (i in 1:length(f.random)) {
-      if (length(f.random[[i]]) == 1) {
-        f.random[[1]] <- f.random[[1]][[1]]
-      }
-    }
-
-    f.cond <- lapply(f.cond, function(i) stats::as.formula(get_fixed_effects(i)))
-    l <- compact_list(list(
-      conditional = compact_list(f.cond),
-      random = compact_list(f.random)
-    ))
+    mv_formula <- lapply(f$forms, get_brms_formula)
+    attr(mv_formula, "is_mv") <- "1"
+    mv_formula
   } else {
-    f.cond <- f$formula
-    f.random <- lapply(lme4::findbars(f.cond), function(.x) {
-      f <- deparse(.x, width.cutoff = 500)
-      stats::as.formula(paste0("~", f))
-    })
-
-    if (length(f.random) == 1) {
-      f.random <- f.random[[1]]
-    }
-
-    f.cond <- stats::as.formula(get_fixed_effects(f.cond))
-
-    f.zi <- f$pforms$zi
-    f.zirandom <- NULL
-
-    if (!is_empty_object(f.zi)) {
-      f.zirandom <- lapply(lme4::findbars(f.zi), function(.x) {
-        f <- deparse(.x, width.cutoff = 500)
-        stats::as.formula(paste0("~", f))
-      })
-
-      if (length(f.zirandom) == 1) {
-        f.zirandom <- f.zirandom[[1]]
-      }
-
-      f.zi <- stats::as.formula(paste0("~", deparse(f.zi[[3L]], width.cutoff = 500)))
-      f.zi <- stats::as.formula(get_fixed_effects(f.zi))
-    }
-
-    l <- compact_list(list(
-      conditional = f.cond,
-      random = f.random,
-      zero_inflated = f.zi,
-      zero_inflated_random = f.zirandom
-    ))
+    get_brms_formula(f)
   }
-
-  l
 }
 
 
@@ -301,4 +248,47 @@ zeroinf_formula <- function(x) {
   }
 
   compact_list(list(conditional = c.form, zero_inflated = zi.form))
+}
+
+
+get_brms_formula <- function(f) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  f.cond <- f$formula
+  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+    f <- deparse(.x, width.cutoff = 500)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1) {
+    f.random <- f.random[[1]]
+  }
+
+  f.cond <- stats::as.formula(get_fixed_effects(f.cond))
+
+  f.zi <- f$pforms$zi
+  f.zirandom <- NULL
+
+  if (!is_empty_object(f.zi)) {
+    f.zirandom <- lapply(lme4::findbars(f.zi), function(.x) {
+      f <- deparse(.x, width.cutoff = 500)
+      stats::as.formula(paste0("~", f))
+    })
+
+    if (length(f.zirandom) == 1) {
+      f.zirandom <- f.zirandom[[1]]
+    }
+
+    f.zi <- stats::as.formula(paste0("~", deparse(f.zi[[3L]], width.cutoff = 500)))
+    f.zi <- stats::as.formula(get_fixed_effects(f.zi))
+  }
+
+  compact_list(list(
+    conditional = f.cond,
+    random = f.random,
+    zero_inflated = f.zi,
+    zero_inflated_random = f.zirandom
+  ))
 }

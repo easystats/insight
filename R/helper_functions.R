@@ -122,3 +122,7 @@ get_group_factor <- function(x, f) {
 
   f
 }
+
+
+# check if formula is from a multivariate model
+is_multivariate <- function(x) !is.null(attr(x, "is_mv", exact = TRUE))

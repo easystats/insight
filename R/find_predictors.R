@@ -54,16 +54,24 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
   )
 
   # filter formulas, depending on requested effects and components
-  f <- f[names(f) %in% elements]
+  if (is_multivariate(f)) {
+    f <- lapply(f, function(i) i[names(i) %in% elements])
+  } else {
+    f <- f[names(f) %in% elements]
+  }
 
   # from conditional model, remove response
   if (obj_has_name(f, "conditional")) {
-    # this is for multivariate response models, where
-    # we have a list of formulas
-    if (is.list(f[["conditional"]])) {
-      f[["conditional"]] <- lapply(f[["conditional"]], function(i) i[[3]])
-    } else {
-      f[["conditional"]] <- f[["conditional"]][[3]]
+    f[["conditional"]] <- f[["conditional"]][[3]]
+  }
+
+  # this is for multivariate response models, where
+  # we have a list of formulas
+  if (is_multivariate(f) && any(unlist(lapply(f, function(i) names(i))) == "conditional")) {
+    for (i in names(f)) {
+      if (obj_has_name(f[[i]], "conditional")) {
+        f[[i]][["conditional"]] <- f[[i]][["conditional"]][[3]]
+      }
     }
   }
 

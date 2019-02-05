@@ -402,6 +402,7 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
       if (inherits(x, "coxph")) {
         mf <- md
       } else {
+        needed.vars <- unique(clean_names(needed.vars))
         mf <- stats::na.omit(md[, needed.vars, drop = FALSE])
       }
 

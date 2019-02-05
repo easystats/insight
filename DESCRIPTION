@@ -16,7 +16,7 @@ Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 License: GPL-3
 URL: https://github.com/easystats/insight
 Depends:
-    R (>= 3.2),
+    R (>= 3.0),
     stats
 Suggests:
   brms,

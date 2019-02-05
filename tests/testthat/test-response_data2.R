@@ -32,8 +32,8 @@ if (suppressWarnings(
   })
 
   test_that("get_data", {
-    get_data(m1)
-    get_data(m2)
+    expect_equal(colnames(get_data(m1)), c("cbind(incidence, trials).incidence", "cbind(incidence, trials).trials", "period", "herd", "incidence", "trials"))
+    expect_equal(colnames(get_data(m2)), c("cbind(incidence, size - incidence).incidence", "cbind(incidence, size - incidence).V2", "period", "herd", "incidence", "trials"))
     get_data(m3)
     get_data(m4)
   })
@@ -50,5 +50,6 @@ if (suppressWarnings(
     get_data(m5)
     find_response(m5)
     get_response(m5)
+    find_formula(m5)
   })
 }

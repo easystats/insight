@@ -44,7 +44,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_false(model_info(m3)$is_negbin)
   })
 
-  test_that("model_info", {
+  test_that("clean_names", {
     expect_identical(clean_names(m1), c("count", "child", "camper", "persons"))
     expect_identical(clean_names(m2), c("count", "child", "camper", "persons"))
     expect_identical(clean_names(m3), c("count", "child", "camper", "persons", "livebait"))
