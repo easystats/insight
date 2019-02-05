@@ -35,6 +35,8 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
   component <- match.arg(component)
 
   f <- find_formula(x)
+  is_mv <- is_multivariate(f)
+
   elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion")
 
   elements <- switch(
@@ -54,7 +56,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
   )
 
   # filter formulas, depending on requested effects and components
-  if (is_multivariate(f)) {
+  if (is_mv) {
     f <- lapply(f, function(i) i[names(i) %in% elements])
   } else {
     f <- f[names(f) %in% elements]
@@ -67,7 +69,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 
   # this is for multivariate response models, where
   # we have a list of formulas
-  if (is_multivariate(f) && any(unlist(lapply(f, function(i) names(i))) == "conditional")) {
+  if (is_mv && any(unlist(lapply(f, function(i) names(i))) == "conditional")) {
     for (i in names(f)) {
       if (obj_has_name(f[[i]], "conditional")) {
         f[[i]][["conditional"]] <- f[[i]][["conditional"]][[3]]
@@ -75,21 +77,56 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
     }
   }
 
-  ## TODO check random effects in multivariate response models
-
   # if we have random effects, just return grouping variable, not random slopes
   if (obj_has_name(f, "random")) {
     f[["random"]] <- get_group_factor(x, f[["random"]])
   }
 
-  ## TODO check zi random effects in multivariate response models
+  # this is for multivariate response models, where
+  # we have a list of formulas
+  if (is_mv && any(unlist(lapply(f, function(i) names(i))) == "random")) {
+    for (i in names(f)) {
+      if (obj_has_name(f[[i]], "random")) {
+        f[[i]][["random"]] <- get_group_factor(x, f[[i]][["random"]])
+      }
+    }
+  }
 
   # same for zi-random effects
   if (obj_has_name(f, "zero_inflated_random")) {
     f[["zero_inflated_random"]] <- get_group_factor(x, f[["zero_inflated_random"]])
   }
 
+  # this is for multivariate response models, where
+  # we have a list of formulas
+  if (is_mv && any(unlist(lapply(f, function(i) names(i))) == "zero_inflated_random")) {
+    for (i in names(f)) {
+      if (obj_has_name(f[[i]], "zero_inflated_random")) {
+        f[[i]][["zero_inflated_random"]] <- get_group_factor(x, f[[i]][["zero_inflated_random"]])
+      }
+    }
+  }
+
   # random effects are returned as list, so we need to unlist here
+  if (is_mv) {
+    l <- lapply(f, return_vars)
+  } else {
+    l <- return_vars(f)
+  }
+
+  if (is_empty_object(l)) {
+    return(NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+return_vars <- function(f) {
   l <- compact_list(lapply(names(f), function(i) {
     if (i %in% c("random", "zero_inflated_random")) {
       unique(paste(unlist(f[[i]])))
@@ -108,13 +145,5 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 
   names(l) <- names(f)
 
-  if (is_empty_object(l)) {
-    return(NULL)
-  }
-
-  if (flatten) {
-    unique(unlist(l))
-  } else {
-    l
-  }
+  l
 }
