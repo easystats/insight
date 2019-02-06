@@ -1,9 +1,4 @@
 language: r
-sudo: false
-
-# Using the package cache to store R package dependencies can significantly
-# speed up build times and is recommended for most builds.
-cache: packages
 
 os:
   #- windows
@@ -14,12 +9,30 @@ r:
   - release
   # - devel
 
+# Copied from broom
+sudo: required
+cache: packages  
+bioc_required: true
+warnings_are_errors: false
 
-warnings_are_errors: true
+env:
+  global:
+    - R_MAX_NUM_DLLS=999
+    - _R_CHECK_FORCE_SUGGESTS_=FALSE
 
+r_build_args: "--no-build-vignettes"
+r_check_args: "--no-build-vignettes --as-cran"
+    
+
+r_binary_packages:
+  - rstanarm
+  - rstan
+  - lme4
+  
 r_packages:
-  - covr
-  
-  
+  - rlang
+  - bindrcpp
+
+
 after_success:
-  - Rscript -e 'library(covr); codecov()'
+  - Rscript -e 'covr::codecov()'
