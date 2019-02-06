@@ -28,6 +28,7 @@ Suggests:
   mlogit,
   lme4,
   nlme,
+  pscl,
   splines,
   testthat
 Encoding: UTF-8
