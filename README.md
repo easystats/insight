@@ -5,7 +5,7 @@
 Status](https://travis-ci.org/easystats/insight.svg?branch=master)](https://travis-ci.org/easystats/insight)
 [![codecov](https://codecov.io/gh/easystats/insight/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/insight)
 [![HitCount](http://hits.dwyl.io/easystats/insight.svg)](http://hits.dwyl.io/easystats/insight)
-[![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://github.com/easystats/insight)
+[![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/)
 
 **Gain insight into your models\!**
 
