@@ -45,4 +45,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_equal(find_terms(m1, flatten = TRUE), c("count", "mined", "cover", "sample"))
   })
 
+  test_that("n_obs", {
+    expect_equal(n_obs(m1), 644)
+  })
 }
