@@ -1,12 +1,17 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest) {
+if (.runThisTest | Sys.getenv("USER") != "travis") {
   if (suppressWarnings(
     require("testthat") &&
       require("insight") &&
       require("brms")
   )) {
     context("insight, brms-find_response")
+
+
+
+
+# Model fitting -----------------------------------------------------------
 
     data("epilepsy")
     data("iris")
@@ -64,12 +69,17 @@ if (.runThisTest) {
       iter = 500
     )
 
+
+# Tests -------------------------------------------------------------------
+
+
     test_that("clean_names", {
       expect_identical(clean_names(m1), c("count", "log_Age_c", "log_Base4_c", "Trt", "patient"))
       expect_identical(clean_names(m2), c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species"))
       expect_identical(clean_names(m3), c("r", "n", "treat", "c2"))
       expect_identical(clean_names(m4), c("count", "child", "camper", "persons"))
     })
+
 
     test_that("find_predictors", {
       expect_identical(find_predictors(m1), list(conditional = c("log_Age_c", "log_Base4_c", "Trt")))
