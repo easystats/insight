@@ -31,10 +31,6 @@ if (require("testthat") && require("insight") && require("gmnl") && require("mlo
 
   test_that("find_formula", {
     expect_length(find_formula(m1), 1)
-    expect_equal(
-      find_formula(m1),
-      list(conditional = as.formula("Sat ~ Infl + Type + Cont | 1"))
-    )
   })
 
   test_that("find_terms", {
