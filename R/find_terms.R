@@ -30,14 +30,14 @@
 #'   sleepstudy$mysubgrp[filter_group] <-
 #'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
-#'
+#' 
 #' m1 <- glmer(
 #'   cbind(incidence, size - incidence) ~ period + (1 | herd),
 #'   data = cbpp,
 #'   family = binomial
 #' )
 #' find_terms(m1)
-#'
+#' 
 #' m2 <- lmer(
 #'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
 #'   data = sleepstudy
@@ -49,10 +49,11 @@ find_terms <- function(x, effects = c("all", "fixed", "random"), component = c("
   effects <- match.arg(effects)
   component <- match.arg(component)
 
-  if (component %in% c("all", "conditional"))
+  if (component %in% c("all", "conditional")) {
     resp <- find_response(x, combine = FALSE)
-  else
+  } else {
     resp <- NULL
+  }
 
   pr <- find_predictors(x, effects = effects, component = component, flatten = flatten)
 

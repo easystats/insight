@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Access information from model objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/model_information.R'><code>R/model_information.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/model_info.R'><code>R/model_info.R</code></a></small>
     <div class="hidden name"><code>model_info.Rd</code></div>
     </div>
 
@@ -180,11 +180,13 @@ list of values (one for each regression) is returned.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>glmmTMB</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='st'>"Salamanders"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>glmmTMB</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package 'glmmTMB' was built under R version 3.5.2</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Package version inconsistency detected.</span>
+#&gt; <span class='warning'>TMB was built with Matrix version 1.2.15</span>
+#&gt; <span class='warning'>Current Matrix version is 1.2.14</span>
+#&gt; <span class='warning'>Please re-install 'TMB' from source using install.packages('TMB', type = 'source') or ask CRAN for a binary version of 'TMB' matching CRAN's 'Matrix' package</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='st'>"Salamanders"</span>)
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/glmmTMB/topics/glmmTMB'>glmmTMB</a></span>(
   <span class='no'>count</span> ~ <span class='no'>spp</span> + <span class='no'>cover</span> + <span class='no'>mined</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>site</span>),
-  <span class='kw'>ziformula</span> <span class='kw'>=</span> ~<span class='no'>spp</span> + <span class='no'>mined</span>,
+  <span class='kw'>ziformula</span> <span class='kw'>=</span> ~ <span class='no'>spp</span> + <span class='no'>mined</span>,
   <span class='kw'>dispformula</span> <span class='kw'>=</span> ~<span class='no'>DOY</span>,
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>,
   <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>nbinom2</span>
@@ -239,9 +241,22 @@ list of values (one for each regression) is returned.</p></td>
 #&gt; [1] 644
 #&gt; 
 #&gt; $model_terms
-#&gt; NULL
-#&gt; </div><div class='input'>
-</div></pre>
+#&gt; $model_terms$response
+#&gt; [1] "count"
+#&gt; 
+#&gt; $model_terms$conditional
+#&gt; [1] "spp"   "cover" "mined"
+#&gt; 
+#&gt; $model_terms$random
+#&gt; [1] "site"
+#&gt; 
+#&gt; $model_terms$zero_inflated
+#&gt; [1] "spp"   "mined"
+#&gt; 
+#&gt; $model_terms$dispersion
+#&gt; [1] "DOY"
+#&gt; 
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

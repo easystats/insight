@@ -58,5 +58,4 @@ if (require("testthat") && require("insight")) {
     expect_equal(find_terms(m1, flatten = TRUE), c("Sepal.Length", "Petal.Width", "Species"))
     expect_equal(find_terms(m2, flatten = TRUE), c("mpg", "hp", "cyl", "wt"))
   })
-
 }
