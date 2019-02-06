@@ -154,8 +154,7 @@ variable names from the matrix-column are returned. See 'Examples'.</p></td>
 <span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>trials</span>) ~ <span class='no'>period</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>)
 
-<span class='fu'>find_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "cbind(incidence, trials)"</div><div class='input'><span class='fu'>find_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "incidence" "trials"   </div><div class='input'>
-</div></pre>
+<span class='fu'>find_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "cbind(incidence, trials)"</div><div class='input'><span class='fu'>find_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "incidence" "trials"   </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

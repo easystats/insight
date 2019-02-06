@@ -150,7 +150,7 @@
 <span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fl'>5</span>) {
   <span class='no'>filter_group</span> <span class='kw'>&lt;-</span> <span class='no'>sleepstudy</span>$<span class='no'>mygrp</span> <span class='kw'>==</span> <span class='no'>i</span>
   <span class='no'>sleepstudy</span>$<span class='no'>mysubgrp</span>[<span class='no'>filter_group</span>] <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>30</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>filter_group</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>30</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>filter_group</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 }
 
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(
@@ -337,8 +337,7 @@
 #&gt; 177       12     5     372
 #&gt; 178       16     4     372
 #&gt; 179       22     4     372
-#&gt; 180        6     2     372</div><div class='input'>
-</div></pre>
+#&gt; 180        6     2     372</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

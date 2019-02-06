@@ -182,7 +182,7 @@ as a single character, not as list.</p></td>
 <span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fl'>5</span>) {
   <span class='no'>filter_group</span> <span class='kw'>&lt;-</span> <span class='no'>sleepstudy</span>$<span class='no'>mygrp</span> <span class='kw'>==</span> <span class='no'>i</span>
   <span class='no'>sleepstudy</span>$<span class='no'>mysubgrp</span>[<span class='no'>filter_group</span>] <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>30</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>filter_group</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>30</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>filter_group</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 }
 
 <span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>glmer</a></span>(
@@ -210,8 +210,7 @@ as a single character, not as list.</p></td>
 #&gt; 
 #&gt; $random
 #&gt; [1] "mysubgrp" "mygrp"    "Subject" 
-#&gt; </div><div class='input'><span class='fu'>find_terms</span>(<span class='no'>m2</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Reaction" "Days"     "mysubgrp" "mygrp"    "Subject" </div><div class='input'>
-</div></pre>
+#&gt; </div><div class='input'><span class='fu'>find_terms</span>(<span class='no'>m2</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Reaction" "Days"     "mysubgrp" "mygrp"    "Subject" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

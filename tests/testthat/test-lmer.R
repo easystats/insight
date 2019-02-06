@@ -77,7 +77,8 @@ if (require("testthat") && require("insight") && require("lme4")) {
       list(
         conditional = as.formula("Reaction ~ Days"),
         random = as.formula("~1 + Days | Subject")
-      ))
+      )
+    )
     expect_equal(
       find_formula(m2, component = "conditional"),
       list(
@@ -86,7 +87,9 @@ if (require("testthat") && require("insight") && require("lme4")) {
           as.formula("~1 | mysubgrp:mygrp"),
           as.formula("~1 | mygrp"),
           as.formula("~1 | Subject")
-      )))
+        )
+      )
+    )
   })
 
   test_that("find_terms", {
