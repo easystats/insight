@@ -159,8 +159,8 @@ list of values (one for each regression) is returned.</p></td>
     <p><code>model_info()</code> returns a list with information about the
   model for many different model objects. Following information
    is returned, where all values starting with <code>is_</code> are logicals.</p><ul>
-<li><p><code>is_bin</code>: family is binomial (but not negative binomial)</p></li>
-<li><p><code>is_pois</code>: family is poisson</p></li>
+<li><p><code>is_binomial</code>: family is binomial (but not negative binomial)</p></li>
+<li><p><code>is_poisson</code>: family is poisson</p></li>
 <li><p><code>is_negbin</code>: family is negative binomial</p></li>
 <li><p><code>is_count</code>: model is a count model (i.e. family is either poisson or negative binomial)</p></li>
 <li><p><code>is_beta</code>: family is beta</p></li>
@@ -180,10 +180,8 @@ list of values (one for each regression) is returned.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>glmmTMB</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package 'glmmTMB' was built under R version 3.5.2</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Package version inconsistency detected.</span>
-#&gt; <span class='warning'>TMB was built with Matrix version 1.2.15</span>
-#&gt; <span class='warning'>Current Matrix version is 1.2.14</span>
-#&gt; <span class='warning'>Please re-install 'TMB' from source using install.packages('TMB', type = 'source') or ask CRAN for a binary version of 'TMB' matching CRAN's 'Matrix' package</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='st'>"Salamanders"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>glmmTMB</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='st'>"Salamanders"</span>)
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/glmmTMB/topics/glmmTMB'>glmmTMB</a></span>(
   <span class='no'>count</span> ~ <span class='no'>spp</span> + <span class='no'>cover</span> + <span class='no'>mined</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>site</span>),
   <span class='kw'>ziformula</span> <span class='kw'>=</span> ~ <span class='no'>spp</span> + <span class='no'>mined</span>,
@@ -192,13 +190,13 @@ list of values (one for each regression) is returned.</p></td>
   <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>nbinom2</span>
 )
 
-<span class='fu'>model_info</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $is_bin
+<span class='fu'>model_info</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $is_binomial
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_count
 #&gt; [1] TRUE
 #&gt; 
-#&gt; $is_pois
+#&gt; $is_poisson
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_negbin
