@@ -14,8 +14,8 @@
 #'   model for many different model objects. Following information
 #'    is returned, where all values starting with \code{is_} are logicals.
 #'    \itemize{
-#'      \item \code{is_bin}: family is binomial (but not negative binomial)
-#'      \item \code{is_pois}: family is poisson
+#'      \item \code{is_binomial}: family is binomial (but not negative binomial)
+#'      \item \code{is_poisson}: family is poisson
 #'      \item \code{is_negbin}: family is negative binomial
 #'      \item \code{is_count}: model is a count model (i.e. family is either poisson or negative binomial)
 #'      \item \code{is_beta}: family is beta
@@ -43,7 +43,7 @@
 #'   data = Salamanders,
 #'   family = nbinom2
 #' )
-#' 
+#'
 #' model_info(m)
 #' @importFrom stats formula terms
 #' @export
@@ -729,9 +729,9 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
 
 
   list(
-    is_bin = binom_fam & !neg_bin_fam,
+    is_binomial = binom_fam & !neg_bin_fam,
     is_count = poisson_fam | neg_bin_fam,
-    is_pois = poisson_fam,
+    is_poisson = poisson_fam,
     is_negbin = neg_bin_fam,
     is_beta = beta_fam,
     is_logit = logit.link,

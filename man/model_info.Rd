@@ -30,8 +30,8 @@ Retrieve information from model objects.
   model for many different model objects. Following information
    is returned, where all values starting with \code{is_} are logicals.
    \itemize{
-     \item \code{is_bin}: family is binomial (but not negative binomial)
-     \item \code{is_pois}: family is poisson
+     \item \code{is_binomial}: family is binomial (but not negative binomial)
+     \item \code{is_poisson}: family is poisson
      \item \code{is_negbin}: family is negative binomial
      \item \code{is_count}: model is a count model (i.e. family is either poisson or negative binomial)
      \item \code{is_beta}: family is beta
