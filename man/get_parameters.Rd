@@ -5,6 +5,7 @@
 \alias{get_parameters.zeroinfl}
 \alias{get_parameters.hurdle}
 \alias{get_parameters.merMod}
+\alias{get_parameters.lme}
 \alias{get_parameters.MixMod}
 \alias{get_parameters.glmmTMB}
 \alias{get_parameters.brmsfit}
@@ -20,6 +21,8 @@ get_parameters(x, ...)
   "zi", "zero_inflated"), ...)
 
 \method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
+
+\method{get_parameters}{lme}(x, effects = c("fixed", "random"), ...)
 
 \method{get_parameters}{MixMod}(x, effects = c("fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",

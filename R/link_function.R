@@ -105,3 +105,9 @@ link_function.truncreg <- function(x, ...) {
 link_function.gls <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
+
+
+#' @export
+link_function.lme <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}

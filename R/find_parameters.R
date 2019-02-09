@@ -71,6 +71,19 @@ find_parameters.merMod <- function(x,  ...) {
 
 
 #' @export
+find_parameters.lme <- function(x,  ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  compact_list(list(
+    conditional = names(lme4::fixef(x)),
+    random = colnames(lme4::ranef(m1))
+  ))
+}
+
+
+#' @export
 find_parameters.glmmTMB <- function(x,  ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
