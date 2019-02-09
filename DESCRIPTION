@@ -28,6 +28,7 @@ Suggests:
   MASS,
   mlogit,
   lme4,
+  mgcv,
   nlme,
   pscl,
   splines,
