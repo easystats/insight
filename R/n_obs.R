@@ -39,6 +39,12 @@ n_obs.gmnl <- function(x, ...) {
 
 
 #' @export
+n_obs.stanmvreg <- function(x, ...) {
+  min(x$n_yobs)
+}
+
+
+#' @export
 n_obs.mlogit <- function(x, ...) {
   nrow(x$model)
 }

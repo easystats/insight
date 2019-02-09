@@ -185,6 +185,15 @@ find_formula.brmsfit <- function(x, ...) {
 
 
 #' @export
+find_formula.stanmvreg <- function(x, ...) {
+  f <- stats::formula(x)
+  mv_formula <- lapply(f, get_stanmv_formula)
+  attr(mv_formula, "is_mv") <- "1"
+  mv_formula
+}
+
+
+#' @export
 find_formula.MCMCglmm <- function(x, ...) {
   fm <- x$Fixed$formula
   fmr <- x$Random$formula
@@ -215,13 +224,6 @@ find_formula.MixMod <- function(x, ...) {
     zero_inflated = f.zi,
     zero_inflated_random = f.zirandom
   ))
-}
-
-
-#' @export
-find_formula.stanmvreg <- function(x, ...) {
-  ## TODO check for ZI and multivariate response models
-  list(conditional = stats::formula(x))
 }
 
 
@@ -258,8 +260,8 @@ get_brms_formula <- function(f) {
 
   f.cond <- f$formula
   f.random <- lapply(lme4::findbars(f.cond), function(.x) {
-    f <- deparse(.x, width.cutoff = 500)
-    stats::as.formula(paste0("~", f))
+    fm <- deparse(.x, width.cutoff = 500)
+    stats::as.formula(paste0("~", fm))
   })
 
   if (length(f.random) == 1) {
@@ -290,5 +292,29 @@ get_brms_formula <- function(f) {
     random = f.random,
     zero_inflated = f.zi,
     zero_inflated_random = f.zirandom
+  ))
+}
+
+
+get_stanmv_formula <- function(f) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  f.cond <- f
+  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+    fm <- deparse(.x, width.cutoff = 500)
+    stats::as.formula(paste0("~", fm))
+  })
+
+  if (length(f.random) == 1) {
+    f.random <- f.random[[1]]
+  }
+
+  f.cond <- stats::as.formula(get_fixed_effects(f.cond))
+
+  compact_list(list(
+    conditional = f.cond,
+    random = f.random
   ))
 }
