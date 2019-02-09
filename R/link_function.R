@@ -99,3 +99,9 @@ link_function.betareg <- function(x, ...) {
 link_function.truncreg <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
+
+
+#' @export
+link_function.gls <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
