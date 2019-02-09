@@ -31,6 +31,8 @@ Suggests:
   nlme,
   pscl,
   splines,
+  survival,
+  truncreg,
   testthat
 Encoding: UTF-8
 LazyData: true

@@ -1,35 +1,30 @@
-if (require("testthat") && require("insight") && require("glmmTMB")) {
+if (require("testthat") && require("insight") && require("truncreg") && require("survival")) {
   context("insight, model_info")
 
-  data(Salamanders)
-  Salamanders$cover <- abs(Salamanders$cover)
-
-  m1 <- glm(count ~ mined + log(cover) + sample, family = poisson, data = Salamanders)
+  data("tobin", package = "survival")
+  m1 <- truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
 
   test_that("model_info", {
-    expect_true(model_info(m1)$is_poisson)
-    expect_true(model_info(m1)$is_count)
-    expect_false(model_info(m1)$is_negbin)
-    expect_false(model_info(m1)$is_binomial)
+    expect_true(model_info(m1)$is_linear)
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(conditional = c("mined", "cover", "sample")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("mined", "cover", "sample"))
+    expect_identical(find_predictors(m1), list(conditional = c("age", "quant")))
+    expect_identical(find_predictors(m1, flatten = TRUE), c("age", "quant"))
     expect_null(find_predictors(m1, effects = "random"))
   })
 
   test_that("find_response", {
-    expect_identical(find_response(m1), "count")
+    expect_identical(find_response(m1), "durable")
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 644)
-    expect_equal(colnames(get_data(m1)), c("count", "mined", "cover", "sample"))
+    expect_equal(nrow(get_data(m1)), 7)
+    expect_equal(colnames(get_data(m1)), c("durable", "age", "quant"))
   })
 
   test_that("find_formula", {

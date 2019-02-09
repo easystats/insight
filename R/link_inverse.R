@@ -18,7 +18,7 @@
 #' outcome <- gl(3, 1, 9)
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ outcome + treatment, family = poisson())
-#' 
+#'
 #' link_inverse(m)(.3)
 #' # same as
 #' exp(.3)
@@ -131,6 +131,12 @@ link_inverse.plm <- function(x, ...) {
 
 #' @export
 link_inverse.lm_robust <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
+link_inverse.truncreg <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 

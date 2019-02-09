@@ -21,7 +21,7 @@ if (require("testthat") && require("insight") && require("pscl")) {
   })
 
   test_that("link_inverse", {
-    expect_identical(link_inverse(m1)(.2), exp(.2))
+    expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {
@@ -52,4 +52,15 @@ if (require("testthat") && require("insight") && require("pscl")) {
   test_that("linkfun", {
     expect_false(is.null(link_function(m1)))
   })
-}
+
+  test_that("find_parameters", {
+    expect_equal(
+      find_parameters(m1),
+      list(
+        conditional = c("count_(Intercept)", "count_femWomen", "count_marMarried", "count_kid5", "count_ment"),
+        zero_inflated = c("zero_(Intercept)", "zero_kid5", "zero_phd")
+      ))
+    expect_equal(nrow(get_parameters(m1)), 8)
+    expect_equal(nrow(get_parameters(m1, component = "zi")), 3)
+    expect_equal(get_parameters(m1)$parameter, c("count_(Intercept)", "count_femWomen", "count_marMarried", "count_kid5", "count_ment", "zero_(Intercept)", "zero_kid5", "zero_phd"))
+  })}
