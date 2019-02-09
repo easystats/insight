@@ -87,3 +87,9 @@ link_function.hurdle <- function(x, ...) {
 link_function.zerotrunc <- function(x, ...) {
   stats::make.link("log")$linkfun
 }
+
+
+#' @export
+link_function.betareg <- function(x, ...) {
+  x$link$mean$linkfun
+}
