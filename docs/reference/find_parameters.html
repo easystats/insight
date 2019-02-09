@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • insight</title>
+<title>Find name of model parameters — find_parameters • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Find name of model parameters — find_parameters" />
+
+<meta property="og:description" content="Get model formula" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -57,7 +59,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -110,132 +112,65 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Find name of model parameters</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_parameters.R'><code>R/find_parameters.R</code></a></small>
+    <div class="hidden name"><code>find_parameters.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>Get model formula</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
-
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="clean_names.html">clean_names()</a></code> </p>
-        </td>
-        <td><p>Get clean names of model terms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_formula.html">find_formula()</a></code> </p>
-        </td>
-        <td><p>Find model formula</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_parameters.html">find_parameters()</a></code> </p>
-        </td>
-        <td><p>Find name of model parameters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_predictors.html">find_predictors()</a></code> </p>
-        </td>
-        <td><p>Find names of model predictors</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_random.html">find_random()</a></code> </p>
-        </td>
-        <td><p>Find names of random effect terms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_response.html">find_response()</a></code> </p>
-        </td>
-        <td><p>Find name of a model's response variable</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_terms.html">find_terms()</a></code> </p>
-        </td>
-        <td><p>Find name of all model terms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_data.html">get_data()</a></code> </p>
-        </td>
-        <td><p>Get the data that was used to fit the model</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_parameters.html">get_parameters()</a></code> </p>
-        </td>
-        <td><p>Get model parameters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_predictors.html">get_predictors()</a></code> </p>
-        </td>
-        <td><p>Get the data from a model's predictor variables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_random.html">get_random()</a></code> </p>
-        </td>
-        <td><p>Get the data from a model's random effects terms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_response.html">get_response()</a></code> </p>
-        </td>
-        <td><p>Get the values from a model's response variable</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="link_function.html">link_function()</a></code> </p>
-        </td>
-        <td><p>Get link-function from model object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="link_inverse.html">link_inverse()</a></code> </p>
-        </td>
-        <td><p>Get link-inverse function from model object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="model_info.html">model_info()</a></code> </p>
-        </td>
-        <td><p>Access information from model objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="n_obs.html">n_obs()</a></code> </p>
-        </td>
-        <td><p>Get number of observations from a model</p></td>
-      </tr>
-    </tbody>
+    <pre class="usage"><span class='fu'>find_parameters</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A fitted model.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
+    </tr>
     </table>
-  </div>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A list of parameter names. For simple models, only one list-element,
+   <code>conditional</code>, is returned. For more complex models, the returned
+   list may have following elements:</p><ul>
+<li><p><code>conditional</code>, the "fixed effects" part from the model</p></li>
+<li><p><code>random</code>, the "random effects" part from the model</p></li>
+<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
+<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
+<li><p><code>dispersion</code>, the dispersion formula</p></li>
+</ul>
+
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>find_parameters</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $conditional
+#&gt; [1] "(Intercept)" "wt"          "cyl"         "vs"         
+#&gt; </div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 
