@@ -5,6 +5,7 @@
 \alias{get_parameters.merMod}
 \alias{get_parameters.glmmTMB}
 \alias{get_parameters.brmsfit}
+\alias{get_parameters.stanreg}
 \title{Get model parameters}
 \usage{
 get_parameters(x, ...)
@@ -18,6 +19,9 @@ get_parameters(x, ...)
 \method{get_parameters}{brmsfit}(x, effects = c("fixed", "random",
   "all"), component = c("all", "conditional", "zi", "zero_inflated",
   "dispersion"), ...)
+
+\method{get_parameters}{stanreg}(x, effects = c("fixed", "random",
+  "all"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}

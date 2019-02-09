@@ -105,3 +105,19 @@ find_parameters.brmsfit <- function(x,  ...) {
 }
 
 
+#' @export
+find_parameters.stanreg <- function(x,  ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  fe <- colnames(as.data.frame(x))
+
+  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
+  rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
+
+  compact_list(list(
+    conditional = cond,
+    random = rand
+  ))
+}

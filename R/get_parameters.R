@@ -122,6 +122,14 @@ get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), com
 }
 
 
+#' @rdname get_parameters
+#' @export
+get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), ...) {
+  effects <- match.arg(effects)
+  as.data.frame(x)[get_parms_data(x, effects, "all")]
+}
+
+
 get_parms_data <- function(x, effects, component) {
   elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion")
 
