@@ -24,12 +24,17 @@ get_parameters <- function(x,...) {
 
 #' @export
 get_parameters.default <- function(x, ...) {
-  cf <- stats::coef(x)
-  data.frame(
-    parameter = names(cf),
-    estimate = unname(cf),
-    stringsAsFactors = FALSE
-  )
+  tryCatch({
+    cf <- stats::coef(x)
+    data.frame(
+      parameter = names(cf),
+      estimate = unname(cf),
+      stringsAsFactors = FALSE
+    )
+  },
+  error = function(x) {
+    NULL
+  })
 }
 
 

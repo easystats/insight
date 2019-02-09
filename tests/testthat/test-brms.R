@@ -157,5 +157,52 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_equal(n_obs(m5), 250)
     })
 
+    test_that("find_paramaters", {
+      expect_equal(
+        find_parameters(m1),
+        list(
+          conditional = c("b_Intercept", "b_log_Age_c", "b_log_Base4_c", "b_Trt1", "b_log_Base4_c.Trt1"),
+          random = sprintf("r_patient.%i.Intercept.", 1:59)
+        )
+      )
+      expect_equal(
+        find_parameters(m2),
+        list(
+          conditional = c("b_SepalLength_Intercept", "b_SepalWidth_Intercept", "b_SepalLength_Petal.Length", "b_SepalLength_Sepal.Width", "b_SepalLength_Speciesversicolor", "b_SepalLength_Speciesvirginica", "b_SepalWidth_Speciesversicolor", "b_SepalWidth_Speciesvirginica")
+        )
+      )
+      expect_equal(
+        find_parameters(m4),
+        list(
+          conditional = c("b_Intercept", "b_child", "b_camper"),
+          random = sprintf("r_persons.%i.Intercept.", 1:4),
+          zero_inflated = c("b_zi_Intercept", "b_zi_child", "b_zi_camper"),
+          zero_inflated_random = sprintf("r_persons__zi.%i.Intercept.", 1:4)
+        )
+      )
+    })
+
+    test_that("find_paramaters", {
+      expect_equal(
+        colnames(get_parameters(m4)),
+        c("b_Intercept", "b_child", "b_camper", "b_zi_Intercept", "b_zi_child", "b_zi_camper")
+      )
+      expect_equal(
+        colnames(get_parameters(m4, component = "zi")),
+        c("b_zi_Intercept", "b_zi_child", "b_zi_camper")
+      )
+      expect_equal(
+        colnames(get_parameters(m4, effects = "all")),
+        c("b_Intercept", "b_child", "b_camper", "r_persons.1.Intercept.", "r_persons.2.Intercept.",
+          "r_persons.3.Intercept.", "r_persons.4.Intercept.", "b_zi_Intercept", "b_zi_child",
+          "b_zi_camper", "r_persons__zi.1.Intercept.", "r_persons__zi.2.Intercept.",
+          "r_persons__zi.3.Intercept.", "r_persons__zi.4.Intercept.")
+      )
+      expect_equal(
+        colnames(get_parameters(m4, effects = "random", component = "cond")),
+        c("r_persons.1.Intercept.", "r_persons.2.Intercept.",
+          "r_persons.3.Intercept.", "r_persons.4.Intercept.")
+      )
+    })
   }
 }
