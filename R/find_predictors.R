@@ -36,12 +36,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 
   f <- find_formula(x)
   is_mv <- is_multivariate(f)
-
-  elements <- get_elements(
-    c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion"),
-    effects,
-    component
-  )
+  elements <- get_elements(effects, component)
 
   # filter formulas, depending on requested effects and components
   if (is_mv) {

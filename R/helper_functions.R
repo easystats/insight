@@ -121,7 +121,7 @@ is_multivariate <- function(x) !is.null(attr(x, "is_mv", exact = TRUE))
 
 # to reduce redundant code, I extract this part which is used several
 # times accross this package
-get_elements <- function(elements, effects, component) {
+get_elements <- function(effects, component) {
   elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion")
 
   elements <- switch(

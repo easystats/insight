@@ -131,10 +131,6 @@ get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), ...
 
 
 get_parms_data <- function(x, effects, component) {
-  elements <- get_elements(
-    c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion"),
-    effects,
-    component
-  )
+  elements <- get_elements(effects, component)
   unlist(find_parameters(x)[elements])
 }
