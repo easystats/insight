@@ -2,6 +2,7 @@ if (require("testthat") && require("insight")) {
   context("insight, clean_names")
 
   test_that("clean_names", {
+    expect_equal(clean_names(""), "")
     expect_equal(clean_names("as.factor(test)"), "test")
     expect_equal(clean_names("log(test)"), "test")
     expect_equal(clean_names("log(log(test))"), "test")

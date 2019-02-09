@@ -22,9 +22,13 @@ Suggests:
   brms,
   GLMMadaptive,
   glmmTMB,
+  gmnl,
   knitr,
+  MASS,
+  mlogit,
   lme4,
   nlme,
+  pscl,
   splines,
   testthat
 Encoding: UTF-8

@@ -85,17 +85,17 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_identical(find_predictors(m1), list(conditional = c("log_Age_c", "log_Base4_c", "Trt")))
       expect_identical(find_predictors(m1, flatten = TRUE), c("log_Age_c", "log_Base4_c", "Trt"))
       expect_identical(find_predictors(m1, effects = "all", component = "all"), list(conditional = c("log_Age_c", "log_Base4_c", "Trt"), random = "patient"))
-      # expect_identical(find_predictors(m2, effects = "all", component = "all", flatten = TRUE), c("log_Age_c", "log_Base4_c", "Trt", "patient"))
+      expect_identical(find_predictors(m1, effects = "all", component = "all", flatten = TRUE), c("log_Age_c", "log_Base4_c", "Trt", "patient"))
 
-      # expect_identical(
-      #   find_predictors(m2),
-      #   list(conditional = list(
-      #     SepalLength = c("Petal.Length", "Sepal.Width", "Species"),
-      #     SepalWidth = c("Species")
-      # )))
+      expect_identical(
+        find_predictors(m2),
+        list(
+          SepalLength = list(conditional = c("Petal.Length", "Sepal.Width", "Species")),
+          SepalWidth = list(conditional = "Species")
+      ))
 
       expect_identical(find_predictors(m2, flatten = TRUE), c("Petal.Length", "Sepal.Width", "Species"))
-      # expect_identical(find_predictors(m3), list(conditional = list(conditional = c("treat", "c2"))))
+      expect_identical(find_predictors(m3), list(conditional = c("treat", "c2")))
       expect_identical(find_predictors(m4), list(conditional = c("child", "camper"), zero_inflated = c("child", "camper")))
       expect_identical(find_predictors(m4, effects = "random"), list(random = "persons", zero_inflated_random = "persons"))
       expect_identical(find_predictors(m4, flatten = TRUE), c("child", "camper"))
@@ -125,14 +125,13 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_identical(find_terms(m1, effects = "fixed"), list(response = "count", conditional = c("log_Age_c", "log_Base4_c", "Trt")))
       expect_null(find_terms(m1, component = "zi"))
 
-      # expect_identical(
-      #   find_terms(m2),
-      #   list(
-      #     response = c(SepalLength = "Sepal.Length", SepalWidth = "Sepal.Width"),
-      #     conditional = list(
-      #       SepalLength = c("Petal.Length", "Sepal.Width", "Species"),
-      #       SepalWidth = c("Species")
-      #   )))
+      expect_identical(
+        find_terms(m2),
+        list(
+          response = c(SepalLength = "Sepal.Length", SepalWidth = "Sepal.Width"),
+          SepalLength = list(conditional = c("Petal.Length", "Sepal.Width", "Species")),
+          SepalWidth = list(conditional = "Species")
+        ))
 
       expect_identical(find_terms(m2, flatten = TRUE), c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species"))
       expect_identical(find_terms(m3), list(response = c("r", "n"), conditional = c("treat", "c2")))
@@ -148,6 +147,14 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         ))
 
       expect_identical(find_terms(m4, flatten = TRUE), c("count", "child", "camper", "persons"))
+    })
+
+    test_that("n_obs", {
+      expect_equal(n_obs(m1), 236)
+      expect_equal(n_obs(m2), 150)
+      expect_equal(n_obs(m3), 10)
+      expect_equal(n_obs(m4), 250)
+      expect_equal(n_obs(m5), 250)
     })
 
   }

@@ -63,21 +63,8 @@ merge_dataframes <- function(data, ..., replace = TRUE) {
 }
 
 
-# check if zero-inf random effects are requested
-# although model has no zi-component
-is_invalid_zeroinf <- function(dots) {
-  if (obj_has_name(dots, "component")) {
-    if (dots$component %in% c("zero_inflated", "zi", "disp", "dispersion")) {
-      return(TRUE)
-    }
-  }
-  FALSE
-}
-
-
+# removes random effects from a formula that which is in lmer-notation
 get_fixed_effects <- function(f) {
-  # removes random effects from a formula, which is in
-  # lmer-notation
   trim(gsub("\\+(\\s)*\\((.*)\\)", "", deparse(f, width.cutoff = 500)))
 }
 
@@ -109,6 +96,9 @@ get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
 }
 
 
+# in case we need the random effects terms as formula (symbol),
+# not as character string, then call this functions instead of
+# get_model_random()
 get_group_factor <- function(x, f) {
   if (is.list(f)) {
     f <- lapply(f, function(.x) {
@@ -124,5 +114,6 @@ get_group_factor <- function(x, f) {
 }
 
 
-# check if formula is from a multivariate model
+# check if formula is from a multivariate model. we add this
+# attribute in "find_formula()".
 is_multivariate <- function(x) !is.null(attr(x, "is_mv", exact = TRUE))

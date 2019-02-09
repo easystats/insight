@@ -54,3 +54,39 @@ n_obs.mlogit <- function(x, ...) {
   }
   )
 }
+
+
+#' @export
+n_obs.hurdle <- function(x, ...) {
+  tryCatch({
+    x$n
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+}
+
+
+#' @export
+n_obs.zerotrunc <- function(x, ...) {
+  tryCatch({
+    x$n
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+}
+
+
+#' @export
+n_obs.zeroinfl <- function(x, ...) {
+  tryCatch({
+    x$n
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+}
