@@ -14,12 +14,12 @@
 #' outcome <- gl(3, 1, 9)
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ outcome + treatment, family = poisson())
-#' 
+#'
 #' link_function(m)(.3)
 #' # same as
 #' log(.3)
 #' @export
-#' @importFrom stats family
+#' @importFrom stats family make.link
 link_function <- function(x, ...) {
   UseMethod("link_function")
 }
@@ -43,4 +43,47 @@ link_function.default <- function(x, ...) {
     NULL
   }
   )
+}
+
+
+#' @export
+link_function.polr <- function(x, ...) {
+  link <- switch(
+    x$method,
+    logistic = "logit",
+    probit = "probit",
+    "log"
+  )
+
+  stats::make.link(link)$linkfun
+}
+
+
+#' @export
+link_function.gmnl <- function(x, ...) {
+  stats::make.link("logit")$linkfun
+}
+
+
+#' @export
+link_function.mlogit <- function(x, ...) {
+  stats::make.link("logit")$linkfun
+}
+
+
+#' @export
+link_function.zeroinfl <- function(x, ...) {
+  stats::make.link("log")$linkfun
+}
+
+
+#' @export
+link_function.hurdle <- function(x, ...) {
+  stats::make.link("log")$linkfun
+}
+
+
+#' @export
+link_function.zerotrunc <- function(x, ...) {
+  stats::make.link("log")$linkfun
 }
