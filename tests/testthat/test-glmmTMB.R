@@ -199,4 +199,20 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_identical(colnames(get_data(m4, component = "disp", effects = "fixed")), c("count", "xb"))
     expect_identical(colnames(get_data(m4, component = "disp", effects = "random")), vector(mode = "character"))
   })
+
+  test_that("find_paramaters", {
+    expect_equal(
+      find_parameters(m4),
+      list(
+        conditional = c("(Intercept)", "child", "camper1"),
+        random = list(persons = "(Intercept)"),
+        zero_inflated = c("(Intercept)", "child", "livebait1"),
+        zero_inflated_random = list(ID = "(Intercept)")
+      )
+    )
+    expect_equal(nrow(get_parameters(m4)), 6)
+    expect_equal(colnames(get_parameters(m4)), c("parameter", "estimate", "group"))
+    expect_equal(get_parameters(m4)$parameter, c("(Intercept)", "child", "camper1", "(Intercept)", "child", "livebait1"))
+    expect_equal(get_parameters(m4)$group, c("conditional", "conditional", "conditional", "zero_inflated", "zero_inflated", "zero_inflated"))
+  })
 }
