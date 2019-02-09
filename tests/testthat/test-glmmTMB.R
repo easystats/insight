@@ -215,4 +215,12 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_equal(get_parameters(m4)$parameter, c("(Intercept)", "child", "camper1", "(Intercept)", "child", "livebait1"))
     expect_equal(get_parameters(m4)$group, c("conditional", "conditional", "conditional", "zero_inflated", "zero_inflated", "zero_inflated"))
   })
+
+  test_that("linkfun", {
+    expect_false(is.null(link_function(m1)))
+    expect_false(is.null(link_function(m2)))
+    expect_false(is.null(link_function(m3)))
+    expect_false(is.null(link_function(m4)))
+  })
+
 }

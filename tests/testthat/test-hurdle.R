@@ -48,4 +48,8 @@ if (require("testthat") && require("insight") && require("pscl")) {
   test_that("n_obs", {
     expect_equal(n_obs(m1), 915)
   })
+
+  test_that("linkfun", {
+    expect_false(is.null(link_function(m1)))
+  })
 }

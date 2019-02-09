@@ -48,4 +48,9 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   test_that("n_obs", {
     expect_equal(n_obs(m1), 644)
   })
+
+  test_that("linkfun", {
+    expect_false(is.null(link_function(m1)))
+  })
+
 }

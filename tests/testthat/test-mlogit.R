@@ -54,4 +54,9 @@ if (require("testthat") && require("insight") && require("mlogit")) {
     expect_equal(n_obs(m1), 4728)
     expect_equal(n_obs(m2), 4728)
   })
+
+  test_that("linkfun", {
+    expect_false(is.null(link_function(m1)))
+    expect_false(is.null(link_function(m2)))
+  })
 }

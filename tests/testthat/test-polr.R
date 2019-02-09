@@ -44,4 +44,9 @@ if (require("testthat") && require("insight") && require("MASS")) {
   test_that("n_obs", {
     expect_equal(n_obs(m1), 1681)
   })
+
+  test_that("linkfun", {
+    expect_false(is.null(link_function(m1)))
+  })
+
 }

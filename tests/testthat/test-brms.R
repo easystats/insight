@@ -204,5 +204,15 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           "r_persons.3.Intercept.", "r_persons.4.Intercept.")
       )
     })
+
+    test_that("linkfun", {
+      expect_false(is.null(link_function(m1)))
+      expect_false(is.null(link_function(m2)))
+      expect_false(is.null(link_function(m3)))
+      expect_false(is.null(link_function(m4)))
+      expect_false(is.null(link_function(m5)))
+    })
+
+
   }
 }

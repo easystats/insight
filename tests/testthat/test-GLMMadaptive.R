@@ -144,4 +144,9 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
       tolerance = 1e-5
     )
   })
+
+  test_that("linkfun", {
+    expect_false(is.null(link_function(m)))
+    expect_false(is.null(link_function(m2)))
+  })
 }

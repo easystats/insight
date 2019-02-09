@@ -41,4 +41,8 @@ if (require("testthat") && require("insight") && require("gmnl") && require("mlo
   test_that("n_obs", {
     expect_equal(n_obs(m1), 72)
   })
+
+  test_that("linkfun", {
+    expect_false(is.null(link_function(m1)))
+  })
 }
