@@ -220,35 +220,30 @@ get_parms_data <- function(x, effects, component) {
 
 
 return_zeroinf_parms <- function(x, component) {
-  tryCatch({
-    cf <- stats::coef(x)
+  cf <- stats::coef(x)
 
-    conditional <- grepl("^count_", names(cf), perl = TRUE)
-    zero_inflated <- grepl("^zero_", names(cf), perl = TRUE)
+  conditional <- grepl("^count_", names(cf), perl = TRUE)
+  zero_inflated <- grepl("^zero_", names(cf), perl = TRUE)
 
-    cond <- data.frame(
-      parameter = names(cf)[conditional],
-      estimate = unname(cf)[conditional],
-      group = "conditional",
-      stringsAsFactors = FALSE
-    )
+  cond <- data.frame(
+    parameter = names(cf)[conditional],
+    estimate = unname(cf)[conditional],
+    group = "conditional",
+    stringsAsFactors = FALSE
+  )
 
-    zi <- data.frame(
-      parameter = names(cf)[zero_inflated],
-      estimate = unname(cf)[zero_inflated],
-      group = "zero_inflated",
-      stringsAsFactors = FALSE
-    )
+  zi <- data.frame(
+    parameter = names(cf)[zero_inflated],
+    estimate = unname(cf)[zero_inflated],
+    group = "zero_inflated",
+    stringsAsFactors = FALSE
+  )
 
-    switch(
-      component,
-      all = rbind(cond, zi),
-      conditional = cond,
-      zi = ,
-      zero_inflated = zi
-    )
-  },
-  error = function(x) {
-    NULL
-  })
+  switch(
+    component,
+    all = rbind(cond, zi),
+    conditional = cond,
+    zi = ,
+    zero_inflated = zi
+  )
 }
