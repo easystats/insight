@@ -81,3 +81,27 @@ find_parameters.glmmTMB <- function(x,  ...) {
     dispersion = names(lme4::fixef(x)$disp)
   ))
 }
+
+
+#' @export
+find_parameters.brmsfit <- function(x,  ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  fe <- colnames(as.data.frame(x))
+
+  cond <- fe[grepl(pattern = "b_(?!zi_)(.*)", fe, perl = TRUE)]
+  zi <- fe[grepl(pattern = "b_zi_", fe, perl = TRUE)]
+  rand <- fe[grepl(pattern = "(?!.*__zi)(?=.*r_)", fe, perl = TRUE)]
+  randzi <- fe[grepl(pattern = "r_(.*__zi)", fe, perl = TRUE)]
+
+  compact_list(list(
+    conditional = cond,
+    random = rand,
+    zero_inflated = zi,
+    zero_inflated_random = randzi
+  ))
+}
+
+

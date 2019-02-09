@@ -2,13 +2,46 @@
 % Please edit documentation in R/get_parameters.R
 \name{get_parameters}
 \alias{get_parameters}
+\alias{get_parameters.merMod}
+\alias{get_parameters.glmmTMB}
+\alias{get_parameters.brmsfit}
 \title{Get model parameters}
 \usage{
 get_parameters(x, ...)
+
+\method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
+
+\method{get_parameters}{glmmTMB}(x, effects = c("fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), ...)
+
+\method{get_parameters}{brmsfit}(x, effects = c("fixed", "random",
+  "all"), component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), ...)
 }
 \arguments{
-\item{x}{x.}
+\item{x}{A fitted model.}
+
+\item{...}{Currently not used.}
+
+\item{effects}{Should variables for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.}
+
+\item{component}{Should all predictor variables, predictor variables for the
+conditional model, the zero-inflated part of the model or the dispersion
+model be returned? Only applies to models with zero-inflated and/or
+dispersion formula. May be abbreviated.}
+}
+\value{
+For non-Bayesian models, a data frame with two columns: the parameters
+   names and the related point estimates; for Bayesian models, the posterior
+   samples from the requested parameters as data frame.
 }
 \description{
 Get model parameters
+}
+\examples{
+data(mtcars)
+m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+get_parameters(m)
 }
