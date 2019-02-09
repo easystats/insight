@@ -34,59 +34,29 @@ n_obs.default <- function(x, ...) {
 
 #' @export
 n_obs.gmnl <- function(x, ...) {
-  tryCatch({
-    x$logLik$nobs
-  },
-  error = function(x) {
-    NULL
-  }
-  )
+  x$logLik$nobs
 }
 
 
 #' @export
 n_obs.mlogit <- function(x, ...) {
-  tryCatch({
-    nrow(x$model)
-  },
-  error = function(x) {
-    NULL
-  }
-  )
+  nrow(x$model)
 }
 
 
 #' @export
 n_obs.hurdle <- function(x, ...) {
-  tryCatch({
-    x$n
-  },
-  error = function(x) {
-    NULL
-  }
-  )
+  x$n
 }
 
 
 #' @export
 n_obs.zerotrunc <- function(x, ...) {
-  tryCatch({
-    x$n
-  },
-  error = function(x) {
-    NULL
-  }
-  )
+  x$n
 }
 
 
 #' @export
 n_obs.zeroinfl <- function(x, ...) {
-  tryCatch({
-    x$n
-  },
-  error = function(x) {
-    NULL
-  }
-  )
+  x$n
 }
