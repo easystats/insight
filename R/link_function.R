@@ -111,3 +111,9 @@ link_function.gls <- function(x, ...) {
 link_function.lme <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
+
+
+#' @export
+link_function.coxph <- function(x, ...) {
+  stats::make.link("logit")$linkfun
+}

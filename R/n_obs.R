@@ -39,6 +39,12 @@ n_obs.gmnl <- function(x, ...) {
 
 
 #' @export
+n_obs.coxph <- function(x, ...) {
+  x$n
+}
+
+
+#' @export
 n_obs.stanmvreg <- function(x, ...) {
   min(x$n_yobs)
 }
