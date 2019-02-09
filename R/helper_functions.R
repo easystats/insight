@@ -117,3 +117,26 @@ get_group_factor <- function(x, f) {
 # check if formula is from a multivariate model. we add this
 # attribute in "find_formula()".
 is_multivariate <- function(x) !is.null(attr(x, "is_mv", exact = TRUE))
+
+
+# to reduce redundant code, I extract this part which is used several
+# times accross this package
+get_elements <- function(elements, effects, component) {
+  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion")
+
+  elements <- switch(
+    effects,
+    all = elements,
+    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion")],
+    random = elements[elements %in% c("random", "zero_inflated_random")]
+  )
+
+  elements <- switch(
+    component,
+    all = elements,
+    conditional = elements[elements %in% c("conditional", "random")],
+    zi = ,
+    zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random")],
+    dispersion = elements[elements == "dispersion"]
+  )
+}
