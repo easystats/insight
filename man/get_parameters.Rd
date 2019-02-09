@@ -33,9 +33,11 @@ model be returned? Only applies to models with zero-inflated and/or
 dispersion formula. May be abbreviated.}
 }
 \value{
-For non-Bayesian models, a data frame with two columns: the parameters
-   names and the related point estimates; for Bayesian models, the posterior
-   samples from the requested parameters as data frame.
+For non-Bayesian models and if \code{effects = "fixed"}, a data frame
+   with two columns: the parameters names and the related point estimates; if
+   \code{effects = "random"}, a list with the random effects (as returned by
+   \code{ranef()}. For Bayesian models, the posterior samples from the
+   requested parameters as data frame.
 }
 \description{
 Get model parameters
