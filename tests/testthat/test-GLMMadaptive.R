@@ -15,6 +15,14 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
     family = GLMMadaptive::zi.poisson()
   )
 
+  m2 <- GLMMadaptive::mixed_model(
+    count ~ child + camper,
+    random = ~ 1 | persons,
+    zi_fixed = ~ child + livebait,
+    data = fish,
+    family = GLMMadaptive::zi.poisson()
+  )
+
   test_that("model_info", {
     expect_true(model_info(m)$is_zeroinf)
     expect_true(model_info(m)$is_count)
@@ -102,5 +110,38 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
     expect_identical(colnames(get_data(m, component = "cond", effects = "random")), "persons")
     expect_identical(colnames(get_data(m, component = "disp")), "count")
     expect_warning(colnames(get_data(m, component = "disp", effects = "random")))
+  })
+
+  test_that("find_parameter", {
+    expect_equal(
+      find_parameters(m),
+      list(
+        conditional = c("(Intercept)", "child", "camper1"),
+        random = "(Intercept)",
+        zero_inflated = c("(Intercept)", "child", "livebait1"),
+        zero_inflated_random = "zi_(Intercept)"
+      ))
+    expect_equal(
+      find_parameters(m2),
+      list(
+        conditional = c("(Intercept)", "child", "camper1"),
+        random = "(Intercept)",
+        zero_inflated = c("(Intercept)", "child", "livebait1")
+      ))
+    expect_equal(nrow(get_parameters(m)), 6)
+    expect_equal(
+      get_parameters(m, effects = "random"),
+      list(
+        random = c(-1.0715496, 1.4083630, 1.9129880, 0.2007521),
+        zero_inflated_random = c(-0.1676294, 0.5502481, 1.2592406, 0.9336591)
+      ),
+      tolerance = 1e-5
+    )
+    expect_equal(nrow(get_parameters(m2)), 6)
+    expect_equal(
+      get_parameters(m2, effects = "random"),
+      list(random = c(-1.3262364, -0.2048055, 1.3852572, 0.5282277)),
+      tolerance = 1e-5
+    )
   })
 }

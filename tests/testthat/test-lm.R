@@ -58,4 +58,10 @@ if (require("testthat") && require("insight")) {
     expect_equal(find_terms(m1, flatten = TRUE), c("Sepal.Length", "Petal.Width", "Species"))
     expect_equal(find_terms(m2, flatten = TRUE), c("mpg", "hp", "cyl", "wt"))
   })
+
+  test_that("find_parameters", {
+    expect_equal(find_parameters(m1), list(conditional = c("(Intercept)", "Petal.Width", "Speciesversicolor", "Speciesvirginica")))
+    expect_equal(nrow(get_parameters(m1)), 4)
+    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "Petal.Width", "Speciesversicolor", "Speciesvirginica"))
+  })
 }

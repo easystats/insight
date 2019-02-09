@@ -76,12 +76,15 @@ get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component =
   effects <- match.arg(effects)
   component <- match.arg(component)
 
+  re.names <- dimnames(lme4::ranef(x))[[2]]
+  re <- lme4::ranef(x)
+
   l <- compact_list(list(
     conditional = lme4::fixef(x, sub_model = "main"),
-    random = lme4::ranef(x),
-    zero_inflated = lme4::fixef(x, sub_model = "zero_part")
+    random = re[grepl("^(?!zi_)", re.names, perl = TRUE)],
+    zero_inflated = lme4::fixef(x, sub_model = "zero_part"),
+    zero_inflated_random = re[grepl("^zi_", re.names, perl = TRUE)]
   ))
-
 
   fixed <- data.frame(
     parameter = names(l$conditional),
@@ -106,7 +109,13 @@ get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component =
       zero_inflated = fixedzi
     )
   } else if (effects == "random") {
-    l$random
+    switch(
+      component,
+      all = compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
+      conditional = list(random = l$random),
+      zi = ,
+      zero_inflated = list(zero_inflated_random = l$zero_inflated_random)
+    )
   }
 }
 
@@ -154,7 +163,7 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
   } else if (effects == "random") {
     switch(
       component,
-      all = list(l$random, l$zero_inflated_random),
+      all = compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
       conditional = l$random,
       zi = ,
       zero_inflated = l$zero_inflated_random

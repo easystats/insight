@@ -46,10 +46,13 @@ find_parameters.MixMod <- function(x,  ...) {
     stop("To use this function, please install package 'lme4'.")
   }
 
+  re.names <- dimnames(lme4::ranef(x))[[2]]
+
   compact_list(list(
     conditional = names(lme4::fixef(x, sub_model = "main")),
-    random = dimnames(lme4::ranef(x))[[2]],
-    zero_inflated = names(lme4::fixef(x, sub_model = "zero_part"))
+    random = re.names[grepl("^(?!zi_)", re.names, perl = TRUE)],
+    zero_inflated = names(lme4::fixef(x, sub_model = "zero_part")),
+    zero_inflated_random = re.names[grepl("^zi_", re.names, perl = TRUE)]
   ))
 }
 
