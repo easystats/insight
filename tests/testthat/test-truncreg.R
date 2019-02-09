@@ -31,17 +31,17 @@ if (require("testthat") && require("insight") && require("truncreg") && require(
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("count ~ mined + log(cover) + sample"))
+      list(conditional = as.formula("durable ~ age + quant"))
     )
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "count", conditional = c("mined", "cover", "sample")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("count", "mined", "cover", "sample"))
+    expect_equal(find_terms(m1), list(response = "durable", conditional = c("age", "quant")))
+    expect_equal(find_terms(m1, flatten = TRUE), c("durable", "age", "quant"))
   })
 
   test_that("n_obs", {
-    expect_equal(n_obs(m1), 644)
+    expect_equal(n_obs(m1), 7)
   })
 
   test_that("linkfun", {
@@ -52,10 +52,10 @@ if (require("testthat") && require("insight") && require("truncreg") && require(
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("(Intercept)", "minedno", "log(cover)", "sample")
+        conditional = c("(Intercept)", "age", "quant", "sigma")
       ))
     expect_equal(nrow(get_parameters(m1)), 4)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "minedno", "log(cover)", "sample"))
+    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "age", "quant", "sigma"))
   })
 
 }
