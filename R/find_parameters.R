@@ -78,7 +78,7 @@ find_parameters.lme <- function(x,  ...) {
 
   compact_list(list(
     conditional = names(lme4::fixef(x)),
-    random = colnames(lme4::ranef(m1))
+    random = colnames(lme4::ranef(x))
   ))
 }
 
