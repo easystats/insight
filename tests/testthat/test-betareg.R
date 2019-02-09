@@ -48,4 +48,14 @@ if (require("testthat") && require("insight") && require("betareg")) {
     expect_false(is.null(link_function(m1)))
   })
 
+  test_that("find_parameters", {
+    expect_equal(
+      find_parameters(m1),
+      list(
+        conditional = c("(Intercept)", "batch1", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "temp", "(phi)")
+      ))
+    expect_equal(nrow(get_parameters(m1)), 12)
+    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "batch1", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "temp", "(phi)"))
+  })
+
 }

@@ -2,6 +2,8 @@
 % Please edit documentation in R/get_parameters.R
 \name{get_parameters}
 \alias{get_parameters}
+\alias{get_parameters.zeroinfl}
+\alias{get_parameters.hurdle}
 \alias{get_parameters.merMod}
 \alias{get_parameters.MixMod}
 \alias{get_parameters.glmmTMB}
@@ -10,6 +12,12 @@
 \title{Get model parameters}
 \usage{
 get_parameters(x, ...)
+
+\method{get_parameters}{zeroinfl}(x, component = c("all", "conditional",
+  "zi", "zero_inflated"), ...)
+
+\method{get_parameters}{hurdle}(x, component = c("all", "conditional",
+  "zi", "zero_inflated"), ...)
 
 \method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
 
@@ -33,13 +41,13 @@ get_parameters(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{effects}{Should variables for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.}
-
 \item{component}{Should all predictor variables, predictor variables for the
 conditional model, the zero-inflated part of the model or the dispersion
 model be returned? Only applies to models with zero-inflated and/or
 dispersion formula. May be abbreviated.}
+
+\item{effects}{Should variables for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.}
 }
 \value{
 For non-Bayesian models and if \code{effects = "fixed"}, a data frame

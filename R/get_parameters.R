@@ -16,6 +16,7 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
+#' @importFrom stats coef
 #' @export
 get_parameters <- function(x,...) {
   UseMethod("get_parameters")
@@ -35,6 +36,29 @@ get_parameters.default <- function(x, ...) {
   error = function(x) {
     NULL
   })
+}
+
+
+#' @rdname get_parameters
+#' @export
+get_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+  return_zeroinf_parms(x, component)
+}
+
+
+#' @export
+get_parameters.zerotrunc <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+  return_zeroinf_parms(x, component)
+}
+
+
+#' @rdname get_parameters
+#' @export
+get_parameters.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+  return_zeroinf_parms(x, component)
 }
 
 
@@ -192,4 +216,39 @@ get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), ...
 get_parms_data <- function(x, effects, component) {
   elements <- get_elements(effects, component)
   unlist(find_parameters(x)[elements])
+}
+
+
+return_zeroinf_parms <- function(x, component) {
+  tryCatch({
+    cf <- stats::coef(x)
+
+    conditional <- grepl("^count_", names(cf), perl = TRUE)
+    zero_inflated <- grepl("^zero_", names(cf), perl = TRUE)
+
+    cond <- data.frame(
+      parameter = names(cf)[conditional],
+      estimate = unname(cf)[conditional],
+      group = "conditional",
+      stringsAsFactors = FALSE
+    )
+
+    zi <- data.frame(
+      parameter = names(cf)[zero_inflated],
+      estimate = unname(cf)[zero_inflated],
+      group = "zero_inflated",
+      stringsAsFactors = FALSE
+    )
+
+    switch(
+      component,
+      all = rbind(cond, zi),
+      conditional = cond,
+      zi = ,
+      zero_inflated = zi
+    )
+  },
+  error = function(x) {
+    NULL
+  })
 }

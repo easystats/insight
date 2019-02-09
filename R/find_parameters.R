@@ -87,6 +87,36 @@ find_parameters.glmmTMB <- function(x,  ...) {
 
 
 #' @export
+find_parameters.zeroinfl <- function(x,  ...) {
+  cf <- names(stats::coef(x))
+  compact_list(list(
+    conditional = cf[grepl("^count_", cf, perl = TRUE)],
+    zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
+  ))
+}
+
+
+#' @export
+find_parameters.hurdle <- function(x,  ...) {
+  cf <- names(stats::coef(x))
+  compact_list(list(
+    conditional = cf[grepl("^count_", cf, perl = TRUE)],
+    zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
+  ))
+}
+
+
+#' @export
+find_parameters.zerotrunc <- function(x,  ...) {
+  cf <- names(stats::coef(x))
+  compact_list(list(
+    conditional = cf[grepl("^count_", cf, perl = TRUE)],
+    zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
+  ))
+}
+
+
+#' @export
 find_parameters.brmsfit <- function(x,  ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
