@@ -63,6 +63,51 @@ get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
 
 #' @rdname get_parameters
 #' @export
+get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+
+  l <- compact_list(list(
+    conditional = lme4::fixef(x, sub_model = "main"),
+    random = lme4::ranef(x),
+    zero_inflated = lme4::fixef(x, sub_model = "zero_part")
+  ))
+
+
+  fixed <- data.frame(
+    parameter = names(l$conditional),
+    estimate = unname(l$conditional),
+    group = "conditional",
+    stringsAsFactors = FALSE
+  )
+
+  fixedzi <- data.frame(
+    parameter = names(l$zero_inflated),
+    estimate = unname(l$zero_inflated),
+    group = "zero_inflated",
+    stringsAsFactors = FALSE
+  )
+
+  if (effects == "fixed") {
+    switch(
+      component,
+      all = rbind(fixed, fixedzi),
+      conditional = fixed,
+      zi = ,
+      zero_inflated = fixedzi
+    )
+  } else if (effects == "random") {
+    l$random
+  }
+}
+
+
+#' @rdname get_parameters
+#' @export
 get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")

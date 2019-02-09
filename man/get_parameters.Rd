@@ -3,6 +3,7 @@
 \name{get_parameters}
 \alias{get_parameters}
 \alias{get_parameters.merMod}
+\alias{get_parameters.MixMod}
 \alias{get_parameters.glmmTMB}
 \alias{get_parameters.brmsfit}
 \alias{get_parameters.stanreg}
@@ -11,6 +12,10 @@
 get_parameters(x, ...)
 
 \method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
+
+\method{get_parameters}{MixMod}(x, effects = c("fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), ...)
 
 \method{get_parameters}{glmmTMB}(x, effects = c("fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",
