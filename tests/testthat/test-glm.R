@@ -63,4 +63,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "minedno", "log(cover)", "sample"))
   })
 
+  test_that("is_multivariate", {
+    expect_false(is_multivariate(m1))
+  })
 }

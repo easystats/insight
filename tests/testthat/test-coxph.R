@@ -51,6 +51,10 @@ if (require("testthat") && require("insight") && require("survival")) {
     expect_false(is.null(link_function(m1)))
   })
 
+  test_that("is_multivariate", {
+    expect_false(is_multivariate(m1))
+  })
+
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),

@@ -39,6 +39,12 @@ n_obs.gmnl <- function(x, ...) {
 
 
 #' @export
+n_obs.multinom <- function(x, ...) {
+  nrow(x$fitted.values)
+}
+
+
+#' @export
 n_obs.coxph <- function(x, ...) {
   x$n
 }

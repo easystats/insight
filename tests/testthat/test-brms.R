@@ -213,6 +213,13 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_false(is.null(link_function(m5)))
     })
 
+    test_that("is_multivariate", {
+      expect_false(is_multivariate(m1))
+      expect_true(is_multivariate(m2))
+      expect_false(is_multivariate(m3))
+      expect_false(is_multivariate(m4))
+      expect_true(is_multivariate(m5))
+    })
 
   }
 }

@@ -44,6 +44,10 @@ if (require("testthat") && require("insight") && require("betareg")) {
     expect_equal(n_obs(m1), 32)
   })
 
+  test_that("is_multivariate", {
+    expect_false(is_multivariate(m1))
+  })
+
   test_that("linkfun", {
     expect_false(is.null(link_function(m1)))
   })

@@ -48,6 +48,12 @@ link_function.default <- function(x, ...) {
 
 
 #' @export
+link_function.multinom <- function(x, ...) {
+  stats::make.link(link = "logit")$linkfun
+}
+
+
+#' @export
 link_function.polr <- function(x, ...) {
   link <- switch(
     x$method,

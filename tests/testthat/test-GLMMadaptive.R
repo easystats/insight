@@ -149,4 +149,9 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
     expect_false(is.null(link_function(m)))
     expect_false(is.null(link_function(m2)))
   })
+
+  test_that("is_multivariate", {
+    expect_false(is_multivariate(m1))
+    expect_false(is_multivariate(m2))
+  })
 }

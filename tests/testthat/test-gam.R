@@ -70,4 +70,7 @@ if (require("testthat") && require("insight") && require("mgcv")) {
     ))
   })
 
+  test_that("is_multivariate", {
+    expect_false(is_multivariate(m1))
+  })
 }

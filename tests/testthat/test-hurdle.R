@@ -63,4 +63,9 @@ if (require("testthat") && require("insight") && require("pscl")) {
     expect_equal(nrow(get_parameters(m1)), 8)
     expect_equal(nrow(get_parameters(m1, component = "zi")), 3)
     expect_equal(get_parameters(m1)$parameter, c("count_(Intercept)", "count_femWomen", "count_marMarried", "count_kid5", "count_ment", "zero_(Intercept)", "zero_kid5", "zero_phd"))
-  })}
+  })
+
+  test_that("is_multivariate", {
+    expect_false(is_multivariate(m1))
+  })
+}

@@ -45,4 +45,8 @@ if (require("testthat") && require("insight") && require("gmnl") && require("mlo
   test_that("linkfun", {
     expect_false(is.null(link_function(m1)))
   })
+
+  test_that("is_multivariate", {
+    expect_false(is_multivariate(m1))
+  })
 }

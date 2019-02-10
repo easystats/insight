@@ -114,11 +114,6 @@ get_group_factor <- function(x, f) {
 }
 
 
-# check if formula is from a multivariate model. we add this
-# attribute in "find_formula()".
-is_multivariate <- function(x) !is.null(attr(x, "is_mv", exact = TRUE))
-
-
 # to reduce redundant code, I extract this part which is used several
 # times accross this package
 get_elements <- function(effects, component) {

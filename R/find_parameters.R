@@ -131,6 +131,10 @@ find_parameters.zerotrunc <- function(x,  ...) {
 
 #' @export
 find_parameters.brmsfit <- function(x,  ...) {
+
+  ## TODO add support for multivariate response models
+  # and then set attr(mv_formula, "is_mv") <- "1"
+
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -153,6 +157,10 @@ find_parameters.brmsfit <- function(x,  ...) {
 
 #' @export
 find_parameters.stanreg <- function(x,  ...) {
+
+  ## TODO add support for multivariate response models
+  # and then set attr(mv_formula, "is_mv") <- "1"
+
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
