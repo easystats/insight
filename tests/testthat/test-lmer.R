@@ -125,4 +125,41 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_identical(clean_names(m1), c("Reaction", "Days", "Subject"))
     expect_identical(clean_names(m2), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
   })
+
+  test_that("linkfun", {
+    expect_false(is.null(link_function(m1)))
+    expect_false(is.null(link_function(m2)))
+  })
+
+  test_that("find_parameters", {
+    expect_equal(
+      find_parameters(m1),
+      list(
+        conditional = c("(Intercept)", "Days"),
+        random = list(Subject = c("(Intercept)", "Days"))
+      ))
+    expect_equal(nrow(get_parameters(m1)), 2)
+    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "Days"))
+
+    expect_equal(
+      find_parameters(m2),
+      list(
+        conditional = c("(Intercept)", "Days"),
+        random = list(
+          `mysubgrp:mygrp` = "(Intercept)",
+          Subject = "(Intercept)",
+          mygrp = "(Intercept)"
+        )
+      ))
+
+    expect_equal(nrow(get_parameters(m2)), 2)
+    expect_equal(get_parameters(m2)$parameter, c("(Intercept)", "Days"))
+    expect_equal(names(get_parameters(m2, effects = "random")), c("mysubgrp:mygrp", "Subject", "mygrp"))
+  })
+
+  test_that("is_multivariate", {
+    expect_false(is_multivariate(m1))
+    expect_false(is_multivariate(m2))
+  })
+
 }
