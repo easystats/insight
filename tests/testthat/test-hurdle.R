@@ -20,6 +20,10 @@ if (require("testthat") && require("insight") && require("pscl")) {
     expect_identical(find_response(m1), "art")
   })
 
+  test_that("get_response", {
+    expect_equal(get_response(m1), bioChemists$art)
+  })
+
   test_that("link_inverse", {
     expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
   })

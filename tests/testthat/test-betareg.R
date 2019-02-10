@@ -18,6 +18,10 @@ if (require("testthat") && require("insight") && require("betareg")) {
     expect_identical(find_response(m1), "yield")
   })
 
+  test_that("get_response", {
+    expect_equal(get_response(m1), GasolineYield$yield)
+  })
+
   test_that("link_inverse", {
     expect_identical(link_inverse(m1)(.2), plogis(.2))
   })

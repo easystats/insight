@@ -22,6 +22,10 @@ if (require("testthat") && require("insight") && require("mgcv")) {
     expect_identical(find_response(m1), "y")
   })
 
+  test_that("get_response", {
+    expect_equal(get_response(m1), dat$y)
+  })
+
   test_that("link_inverse", {
     expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
   })

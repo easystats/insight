@@ -23,6 +23,10 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
     expect_identical(find_response(m1), "Reaction")
   })
 
+  test_that("get_response", {
+    expect_equal(get_response(m1), sleepstudy$Reaction)
+  })
+
   test_that("link_inverse", {
     expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
   })

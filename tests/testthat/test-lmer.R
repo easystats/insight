@@ -55,6 +55,10 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_identical(find_response(m2), "Reaction")
   })
 
+  test_that("get_response", {
+    expect_equal(get_response(m1), sleepstudy$Reaction)
+  })
+
   test_that("link_inverse", {
     expect_identical(link_inverse(m1)(.2), .2)
     expect_identical(link_inverse(m2)(.2), .2)
