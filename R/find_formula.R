@@ -43,7 +43,12 @@ find_formula.default <- function(x, ...) {
 #' @export
 find_formula.gee <- function(x, ...) {
   tryCatch({
-    id <- sub(".*id ?= ?(.*?),.*", "\\1", deparse(x$call, width.cutoff = 500), perl = TRUE)
+    id <- parse(text = deparse(x$call, width.cutoff = 500))[[1]]$id
+
+    # alternative regex-patterns that also work:
+    # sub(".*id ?= ?(.*?),.*", "\\1", deparse(x$call, width.cutoff = 500), perl = TRUE)
+    # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", deparse(x$call, width.cutoff = 500), perl = TRUE)
+
     list(
       conditional = stats::formula(x),
       random = stats::as.formula(paste0("~", id))
