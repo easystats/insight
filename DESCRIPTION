@@ -29,6 +29,7 @@ Suggests:
   mlogit,
   lme4,
   mgcv,
+  nnet,
   nlme,
   pscl,
   splines,
