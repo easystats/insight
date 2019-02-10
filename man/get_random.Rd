@@ -32,5 +32,5 @@ m <- lmer(
   data = sleepstudy
 )
 
-get_random(m)
+head(get_random(m))
 }

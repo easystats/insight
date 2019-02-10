@@ -18,7 +18,7 @@
 #' cbpp$trials <- cbpp$size - cbpp$incidence
 #'
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
-#' get_response(m)
+#' head(get_response(m))
 #' get_response(m, resp = "incidence")
 #'
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)

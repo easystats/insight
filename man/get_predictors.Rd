@@ -17,5 +17,5 @@ Returns the data of all predictor variables (fixed effects).
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
-get_predictors(m)
+head(get_predictors(m))
 }
