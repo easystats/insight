@@ -21,6 +21,7 @@ Depends:
 Suggests:
   betareg,
   brms,
+  coxme,
   gam,
   GLMMadaptive,
   glmmTMB,

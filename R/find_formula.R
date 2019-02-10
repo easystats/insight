@@ -41,6 +41,32 @@ find_formula.default <- function(x, ...) {
 
 
 #' @export
+find_formula.coxme <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  f.cond <- stats::formula(x)
+
+  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+    f <- deparse(.x, width.cutoff = 500)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1) {
+    f.random <- f.random[[1]]
+  }
+
+  f.cond <- stats::as.formula(get_fixed_effects(f.cond))
+
+  compact_list(list(
+    conditional = f.cond,
+    random = f.random
+  ))
+}
+
+
+#' @export
 find_formula.hurdle <- function(x, ...) {
   zeroinf_formula(x)
 }

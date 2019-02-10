@@ -64,6 +64,34 @@ get_parameters.hurdle <- function(x, component = c("all", "conditional", "zi", "
 
 #' @rdname get_parameters
 #' @export
+get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  effects <- match.arg(effects)
+
+  l <- compact_list(list(
+    conditional = lme4::fixef(x),
+    random = lme4::ranef(x)
+  ))
+
+  fixed <- data.frame(
+    parameter = names(l$conditional),
+    estimate = unname(l$conditional),
+    stringsAsFactors = FALSE
+  )
+
+  if (effects == "fixed") {
+    fixed
+  } else {
+    l$random
+  }
+}
+
+
+#' @rdname get_parameters
+#' @export
 get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")

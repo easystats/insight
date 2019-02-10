@@ -4,6 +4,7 @@
 \alias{get_parameters}
 \alias{get_parameters.zeroinfl}
 \alias{get_parameters.hurdle}
+\alias{get_parameters.coxme}
 \alias{get_parameters.merMod}
 \alias{get_parameters.lme}
 \alias{get_parameters.MixMod}
@@ -19,6 +20,8 @@ get_parameters(x, ...)
 
 \method{get_parameters}{hurdle}(x, component = c("all", "conditional",
   "zi", "zero_inflated"), ...)
+
+\method{get_parameters}{coxme}(x, effects = c("fixed", "random"), ...)
 
 \method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
 

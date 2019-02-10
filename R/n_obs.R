@@ -46,7 +46,13 @@ n_obs.multinom <- function(x, ...) {
 
 #' @export
 n_obs.coxph <- function(x, ...) {
-  x$n
+  max(x$n)
+}
+
+
+#' @export
+n_obs.coxme <- function(x, ...) {
+  max(x$n)
 }
 
 

@@ -41,7 +41,7 @@ find_parameters.default <- function(x, ...) {
 
 
 #' @export
-find_parameters.MixMod <- function(x,  ...) {
+find_parameters.MixMod <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -58,7 +58,7 @@ find_parameters.MixMod <- function(x,  ...) {
 
 
 #' @export
-find_parameters.merMod <- function(x,  ...) {
+find_parameters.merMod <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -71,7 +71,20 @@ find_parameters.merMod <- function(x,  ...) {
 
 
 #' @export
-find_parameters.lme <- function(x,  ...) {
+find_parameters.coxme <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  compact_list(list(
+    conditional = names(lme4::fixef(x)),
+    random = names(lme4::ranef(x))
+  ))
+}
+
+
+#' @export
+find_parameters.lme <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -84,7 +97,7 @@ find_parameters.lme <- function(x,  ...) {
 
 
 #' @export
-find_parameters.glmmTMB <- function(x,  ...) {
+find_parameters.glmmTMB <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -100,7 +113,7 @@ find_parameters.glmmTMB <- function(x,  ...) {
 
 
 #' @export
-find_parameters.zeroinfl <- function(x,  ...) {
+find_parameters.zeroinfl <- function(x, ...) {
   cf <- names(stats::coef(x))
   compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
@@ -110,7 +123,7 @@ find_parameters.zeroinfl <- function(x,  ...) {
 
 
 #' @export
-find_parameters.hurdle <- function(x,  ...) {
+find_parameters.hurdle <- function(x, ...) {
   cf <- names(stats::coef(x))
   compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
@@ -120,7 +133,7 @@ find_parameters.hurdle <- function(x,  ...) {
 
 
 #' @export
-find_parameters.zerotrunc <- function(x,  ...) {
+find_parameters.zerotrunc <- function(x, ...) {
   cf <- names(stats::coef(x))
   compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
@@ -130,7 +143,7 @@ find_parameters.zerotrunc <- function(x,  ...) {
 
 
 #' @export
-find_parameters.brmsfit <- function(x,  ...) {
+find_parameters.brmsfit <- function(x, ...) {
 
   ## TODO add support for multivariate response models
   # and then set attr(mv_formula, "is_mv") <- "1"
@@ -156,7 +169,7 @@ find_parameters.brmsfit <- function(x,  ...) {
 
 
 #' @export
-find_parameters.stanreg <- function(x,  ...) {
+find_parameters.stanreg <- function(x, ...) {
 
   ## TODO add support for multivariate response models
   # and then set attr(mv_formula, "is_mv") <- "1"
