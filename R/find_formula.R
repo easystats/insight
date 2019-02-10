@@ -11,7 +11,7 @@
 #'    models, the returned list may have following elements:
 #'    \itemize{
 #'      \item \code{conditional}, the "fixed effects" part from the model
-#'      \item \code{random}, the "random effects" part from the model
+#'      \item \code{random}, the "random effects" part from the model (or the \code{id} for gee-models)
 #'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
 #'      \item \code{dispersion}, the dispersion formula
