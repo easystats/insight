@@ -27,7 +27,7 @@ if (require("testthat") && require("insight") && require("survey")) {
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), api$api00)
+    expect_equal(get_response(m1), apistrat$api00)
   })
 
   test_that("link_inverse", {
