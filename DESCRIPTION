@@ -34,6 +34,7 @@ Suggests:
   mgcv,
   nnet,
   nlme,
+  ordinal,
   pscl,
   splines,
   survey,
