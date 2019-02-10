@@ -29,12 +29,12 @@
 #'   sleepstudy$mysubgrp[filter_group] <-
 #'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
-#' 
+#'
 #' m <- lmer(
 #'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
 #'   data = sleepstudy
 #' )
-#' 
+#'
 #' find_random(m)
 #' find_random(m, split_nested = TRUE)
 #' @export
@@ -42,15 +42,15 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   f <- find_formula(x)
 
   if (is.list(f$random)) {
-    r1 <- unique(unlist(lapply(f$random, function(.x) get_model_random(.x, split_nested, inherits(x, "MCMCglmm")))))
+    r1 <- unique(unlist(lapply(f$random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee"))))))
   } else {
-    r1 <- unique(get_model_random(f$random, split_nested, inherits(x, "MCMCglmm")))
+    r1 <- unique(get_model_random(f$random, split_nested, inherits(x, c("MCMCglmm", "gee"))))
   }
 
   if (is.list(f$zero_inflated_random)) {
-    r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) get_model_random(.x, split_nested, inherits(x, "MCMCglmm")))))
+    r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee"))))))
   } else {
-    r2 <- unique(get_model_random(f$zero_inflated_random, split_nested, inherits(x, "MCMCglmm")))
+    r2 <- unique(get_model_random(f$zero_inflated_random, split_nested, inherits(x, c("MCMCglmm", "gee"))))
   }
 
   l <- compact_list(list(random = r1, zero_inflated_random = r2))

@@ -41,6 +41,22 @@ find_formula.default <- function(x, ...) {
 
 
 #' @export
+find_formula.gee <- function(x, ...) {
+  tryCatch({
+    id <- sub(".*id ?= ?(.*?),.*", "\\1", deparse(x$call, width.cutoff = 500), perl = TRUE)
+    list(
+      conditional = stats::formula(x),
+      random = stats::as.formula(paste0("~", id))
+    )
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+}
+
+
+#' @export
 find_formula.coxme <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")

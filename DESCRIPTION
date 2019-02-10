@@ -23,6 +23,7 @@ Suggests:
   brms,
   coxme,
   gam,
+  gee,
   GLMMadaptive,
   glmmTMB,
   gmnl,
