@@ -42,7 +42,7 @@ Retrieve information from model objects.
      \item \code{is_zeroinf}: model has zero-inflation component
      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
      \item \code{is_trial}: model response contains additional information about the trials
-     \item \code{is_bayes}: model is a Bayesian model
+     \item \code{is_bayesian}: model is a Bayesian model
      \item \code{link_fun}: the link-function
      \item \code{family}: the family-object
      \item \code{nobs}: number of observations
