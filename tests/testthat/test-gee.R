@@ -23,6 +23,18 @@ if (require("testthat") && require("insight") && require("gee")) {
     expect_equal(get_response(m1), warpbreaks$breaks)
   })
 
+  test_that("find_random", {
+    expect_equal(find_random(m1), list(random = "wool"))
+  })
+
+  test_that("get_random", {
+    expect_equal(get_random(m1), warpbreaks[, "wool", drop = FALSE])
+  })
+
+  test_that("get_predictors", {
+    expect_equal(get_predictors(m1), warpbreaks[, "tension", drop = FALSE])
+  })
+
   test_that("link_inverse", {
     expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
   })

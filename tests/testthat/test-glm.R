@@ -19,8 +19,24 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_null(find_predictors(m1, effects = "random"))
   })
 
+  test_that("find_random", {
+    expect_null(find_random(m1))
+  })
+
+  test_that("get_random", {
+    expect_warning(get_random(m1))
+  })
+
   test_that("find_response", {
     expect_identical(find_response(m1), "count")
+  })
+
+  test_that("get_response", {
+    expect_equal(get_response(m1), Salamanders$count)
+  })
+
+  test_that("get_predictors", {
+    expect_equal(colnames(get_predictors(m1)), c("mined", "cover", "sample"))
   })
 
   test_that("link_inverse", {

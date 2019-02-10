@@ -158,10 +158,18 @@ get_data.vgam <- function(x, ...) {
 }
 
 
+#' @rdname get_data
 #' @export
-get_data.gee <- function(x, ...) {
+get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
   mf <- tryCatch({
-    eval(x$call$data, envir = parent.frame())
+    dat <- eval(x$call$data, envir = parent.frame())
+    switch(
+      effects,
+      all = dat,
+      fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
+      random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
+    )
   },
   error = function(x) {
     NULL

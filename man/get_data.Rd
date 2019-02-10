@@ -5,6 +5,7 @@
 \alias{get_data.hurdle}
 \alias{get_data.glmmTMB}
 \alias{get_data.merMod}
+\alias{get_data.gee}
 \alias{get_data.MixMod}
 \title{Get the data that was used to fit the model}
 \usage{
@@ -18,6 +19,8 @@ get_data(x, ...)
   "dispersion"), ...)
 
 \method{get_data}{merMod}(x, effects = c("all", "fixed", "random"), ...)
+
+\method{get_data}{gee}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{MixMod}(x, effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",
