@@ -338,18 +338,24 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
   # don't change response value, if it's a matrix
   # bound with cbind()
   rn <- find_response(x, combine = TRUE)
+
   trials.data <- NULL
 
   if (mc[1] && rn == colnames(mf)[1]) {
     mc[1] <- FALSE
-    tryCatch({
-      trials.data <- as.data.frame(mf[[1]])
-      colnames(trials.data) <- find_response(x, combine = FALSE)
-    },
-    error = function(x) {
-      NULL
+    if (inherits(x, c("coxph", "coxme"))) {
+      mf <- cbind(mf[[1]][, 1], mf[[1]][, 2], mf)
+      colnames(mf)[1:2] <- find_response(x, combine = FALSE)
+    } else {
+      tryCatch({
+        trials.data <- as.data.frame(mf[[1]])
+        colnames(trials.data) <- find_response(x, combine = FALSE)
+      },
+      error = function(x) {
+        NULL
+      }
+      )
     }
-    )
   }
 
   # if we have any matrix columns, we remove them from original
@@ -406,8 +412,7 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
         mw <- mf[["(weights)"]]
       }
 
-
-      if (inherits(x, "coxph")) {
+      if (inherits(x, c("coxph", "coxme"))) {
         mf <- md
       } else {
         needed.vars <- unique(clean_names(needed.vars))

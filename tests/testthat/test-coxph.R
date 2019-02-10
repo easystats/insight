@@ -19,6 +19,7 @@ if (require("testthat") && require("insight") && require("survival")) {
 
   test_that("find_response", {
     expect_identical(find_response(m1), "Surv(time, status)")
+    expect_identical(find_response(m1, combine = FALSE), c("time", "status"))
   })
 
   test_that("link_inverse", {
@@ -27,7 +28,7 @@ if (require("testthat") && require("insight") && require("survival")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 226)
-    expect_equal(colnames(get_data(m1)), c("Surv(time, status)", "sex", "age", "ph.ecog"))
+    expect_equal(colnames(get_data(m1)), c("time", "status", "Surv(time, status)", "sex", "age", "ph.ecog"))
   })
 
   test_that("find_formula", {
@@ -39,8 +40,8 @@ if (require("testthat") && require("insight") && require("survival")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "Surv(time, status)", conditional = c("sex", "age", "ph.ecog")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("Surv(time, status)", "sex", "age", "ph.ecog"))
+    expect_equal(find_terms(m1), list(response = c("time", "status"), conditional = c("sex", "age", "ph.ecog")))
+    expect_equal(find_terms(m1, flatten = TRUE), c("time", "status", "sex", "age", "ph.ecog"))
   })
 
   test_that("n_obs", {

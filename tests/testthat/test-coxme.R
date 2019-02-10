@@ -1,7 +1,7 @@
 if (require("testthat") && require("insight") && require("survival") && require("coxme")) {
   context("insight, model_info")
 
-  data("lung")
+  data(lung)
   set.seed(1234)
   lung$inst2 <- sample(1:10, size = nrow(lung), replace = T)
   lung <- subset(lung, subset = ph.ecog %in% 0:2)
@@ -23,6 +23,7 @@ if (require("testthat") && require("insight") && require("survival") && require(
 
   test_that("find_response", {
     expect_identical(find_response(m1), "Surv(time, status)")
+    expect_identical(find_response(m1, combine = FALSE), c("time", "status"))
   })
 
   test_that("link_inverse", {
@@ -32,8 +33,8 @@ if (require("testthat") && require("insight") && require("survival") && require(
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 226)
-    expect_equal(colnames(get_data(m1)), c("Surv(time, status)", "ph.ecog", "age", "inst"))
-    expect_equal(colnames(get_data(m2)), c("Surv(time, status)", "ph.ecog", "age", "inst", "inst2"))
+    expect_equal(colnames(get_data(m1)), c("time", "status", "Surv(time, status)", "ph.ecog", "age", "inst"))
+    expect_equal(colnames(get_data(m2)), c("time", "status", "Surv(time, status)", "ph.ecog", "age", "inst", "inst2"))
   })
 
   test_that("find_formula", {
@@ -57,16 +58,16 @@ if (require("testthat") && require("insight") && require("survival") && require(
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "Surv(time, status)", conditional = c("ph.ecog", "age"), random = "inst"))
-    expect_equal(find_terms(m1, flatten = TRUE), c("Surv(time, status)", "ph.ecog", "age", "inst"))
+    expect_equal(find_terms(m1), list(response = c("time", "status"), conditional = c("ph.ecog", "age"), random = "inst"))
+    expect_equal(find_terms(m1, flatten = TRUE), c("time", "status", "ph.ecog", "age", "inst"))
     expect_equal(
       find_terms(m2),
       list(
-        response = "Surv(time, status)",
+        response = c("time", "status"),
         conditional = c("ph.ecog", "age"),
         random = c("inst", "inst2")
     ))
-    expect_equal(find_terms(m2, flatten = TRUE), c("Surv(time, status)", "ph.ecog", "age", "inst", "inst2"))
+    expect_equal(find_terms(m2, flatten = TRUE), c("time", "status", "ph.ecog", "age", "inst", "inst2"))
   })
 
   test_that("n_obs", {
@@ -75,8 +76,10 @@ if (require("testthat") && require("insight") && require("survival") && require(
   })
 
   test_that("get_response", {
-    expect_length(get_response(m1), 452)
-    expect_length(get_response(m2), 452)
+    expect_equal(colnames(get_response(m1)), c("time", "status"))
+    expect_equal(nrow(get_response(m1)), 226)
+    expect_equal(colnames(get_response(m1)), c("time", "status"))
+    expect_equal(nrow(get_response(m2)), 226)
   })
 
   test_that("linkfun", {
