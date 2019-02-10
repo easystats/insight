@@ -5,6 +5,7 @@
 #'
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
+#' @inheritParams link_inverse
 #'
 #' @return A function, describing the link-function from a model-object.
 #'
@@ -116,4 +117,59 @@ link_function.lme <- function(x, ...) {
 #' @export
 link_function.coxph <- function(x, ...) {
   stats::make.link("logit")$linkfun
+}
+
+
+#' @rdname link_function
+#' @export
+link_function.stanmvreg <- function(x, mv_response = FALSE, ...) {
+  fam <- stats::family(x)
+  if (mv_response) {
+    il <- lapply(fam, function(.x) {
+      .x$linkfun
+    })
+  } else {
+    fam <- fam[[1]]
+    il <- fam$linkfun
+  }
+
+  il
+}
+
+
+#' @rdname link_function
+#' @export
+link_function.brmsfit <- function(x, mv_response = FALSE, ...) {
+  fam <- stats::family(x)
+  if (!is.null(stats::formula(x)$response)) {
+    if (mv_response) {
+      il <- lapply(fam, brms_link_fun)
+    } else {
+      fam <- fam[[1]]
+      il <- brms_link_fun(fam)
+    }
+  } else {
+    il <- brms_link_fun(fam)
+  }
+
+  il
+}
+
+
+brms_link_fun <- function(fam) {
+  # do we have custom families?
+  if (!is.null(fam$family) && (is.character(fam$family) && fam$family == "custom")) {
+    il <- stats::make.link(fam$link)$linkfun
+  } else {
+    if ("linkfun" %in% names(fam)) {
+      il <- fam$linkfun
+    } else if ("link" %in% names(fam) && is.character(fam$link)) {
+      il <- stats::make.link(fam$link)$linkfun
+    } else {
+      ff <- get(fam$family, asNamespace("stats"))
+      il <- ff(fam$link)$linkfun
+    }
+  }
+
+  il
 }

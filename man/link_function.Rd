@@ -2,14 +2,24 @@
 % Please edit documentation in R/link_function.R
 \name{link_function}
 \alias{link_function}
+\alias{link_function.stanmvreg}
+\alias{link_function.brmsfit}
 \title{Get link-function from model object}
 \usage{
 link_function(x, ...)
+
+\method{link_function}{stanmvreg}(x, mv_response = FALSE, ...)
+
+\method{link_function}{brmsfit}(x, mv_response = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
+
+\item{mv_response}{Logical, if \code{TRUE} and model is a multivariate response
+model from a \code{brmsfit} object or of class \code{stanmvreg}, then a
+list of values (one for each regression) is returned.}
 }
 \value{
 A function, describing the link-function from a model-object.

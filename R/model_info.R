@@ -578,77 +578,67 @@ model_info.gmnl <- function(x, ...) {
 #' @rdname model_info
 #' @export
 model_info.brmsfit <- function(x, mv_response = FALSE, ...) {
-  tryCatch({
-    faminfo <- stats::family(x)
-    if (!is.null(stats::formula(x)$response)) {
-      multi.var <- TRUE
-      if (!mv_response) faminfo <- faminfo[[1]]
-    }
+  faminfo <- stats::family(x)
+  multi.var <- FALSE
 
-    if (mv_response && multi.var) {
-      lapply(faminfo, function(.x) {
-        make_family(
-          x = x,
-          fitfam = .x$family,
-          zero.inf = FALSE,
-          .x$link == "logit",
-          multi.var = TRUE,
-          link.fun = .x$link,
-          ...
-        )
-      })
-    } else {
+  if (!is.null(stats::formula(x)$response)) {
+    multi.var <- TRUE
+    if (!mv_response) faminfo <- faminfo[[1]]
+  }
+
+  if (mv_response && multi.var) {
+    lapply(faminfo, function(.x) {
       make_family(
         x = x,
-        fitfam = faminfo$family,
-        logit.link = faminfo$link == "logit",
-        multi.var = multi.var,
-        link.fun = faminfo$link,
+        fitfam = .x$family,
+        zero.inf = FALSE,
+        .x$link == "logit",
+        multi.var = TRUE,
+        link.fun = .x$link,
         ...
       )
-    }
-  },
-  error = function(x) {
-    NULL
+    })
+  } else {
+    make_family(
+      x = x,
+      fitfam = faminfo$family,
+      logit.link = faminfo$link == "logit",
+      multi.var = multi.var,
+      link.fun = faminfo$link,
+      ...
+    )
   }
-  )
 }
 
 
 #' @export
 model_info.stanmvreg <- function(x, mv_response = FALSE, ...) {
-  tryCatch({
-    faminfo <- stats::family(x)
-    multi.var <- TRUE
-    if (!mv_response) faminfo <- faminfo[[1]]
+  faminfo <- stats::family(x)
+  multi.var <- TRUE
+  if (!mv_response) faminfo <- faminfo[[1]]
 
-    if (mv_response && multi.var) {
-      lapply(faminfo, function(.x) {
-        make_family(
-          x = x,
-          fitfam = .x$family,
-          zero.inf = FALSE,
-          .x$link == "logit",
-          multi.var = TRUE,
-          link.fun = .x$link,
-          ...
-        )
-      })
-    } else {
+  if (mv_response && multi.var) {
+    lapply(faminfo, function(.x) {
       make_family(
         x = x,
-        fitfam = faminfo$family,
-        logit.link = faminfo$link == "logit",
-        multi.var = multi.var,
-        link.fun = faminfo$link,
+        fitfam = .x$family,
+        zero.inf = FALSE,
+        .x$link == "logit",
+        multi.var = TRUE,
+        link.fun = .x$link,
         ...
       )
-    }
-  },
-  error = function(x) {
-    NULL
+    })
+  } else {
+    make_family(
+      x = x,
+      fitfam = faminfo$family,
+      logit.link = faminfo$link == "logit",
+      multi.var = multi.var,
+      link.fun = faminfo$link,
+      ...
+    )
   }
-  )
 }
 
 
@@ -677,8 +667,8 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
   zero.inf <- zero.inf | fitfam == "ziplss" |
     grepl("\\Qzero_inflated\\E", fitfam, ignore.case = TRUE) |
     grepl("\\Qzero-inflated\\E", fitfam, ignore.case = TRUE) |
-    grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE)
-  grepl("\\Qhurdle\\E", fitfam, ignore.case = TRUE) |
+    grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE) |
+    grepl("\\Qhurdle\\E", fitfam, ignore.case = TRUE) |
     grepl("^(zt|zi|za|hu)", fitfam, perl = TRUE)
 
   is.ordinal <-
@@ -693,23 +683,23 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
   is.trial <- FALSE
 
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {
-    tryCatch({
+    is.trial <- tryCatch({
       rv <- deparse(stats::formula(x)$formula[[2L]], width.cutoff = 500L)
-      is.trial <- trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
+      trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
     },
     error = function(x) {
-      NULL
+      FALSE
     }
     )
   }
 
   if (binom_fam && !inherits(x, "brmsfit")) {
-    tryCatch({
+    is.trial <- tryCatch({
       rv <- deparse(stats::formula(x)[[2L]], width.cutoff = 500L)
-      is.trial <- grepl("cbind\\((.*)\\)", rv)
+       grepl("cbind\\((.*)\\)", rv)
     },
     error = function(x) {
-      NULL
+      FALSE
     }
     )
   }
