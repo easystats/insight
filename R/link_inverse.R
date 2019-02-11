@@ -260,39 +260,21 @@ link_inverse.multinom <- function(x, ...) {
 }
 
 
-#' @rdname link_inverse
 #' @export
-link_inverse.stanmvreg <- function(x, mv_response = FALSE, ...) {
+link_inverse.stanmvreg <- function(x, ...) {
   fam <- stats::family(x)
-  if (mv_response) {
-    il <- lapply(fam, function(.x) {
-      .x$linkinv
-    })
-  } else {
-    fam <- fam[[1]]
-    il <- fam$linkinv
-  }
-
-  il
+  lapply(fam, function(.x) .x$linkinv)
 }
 
 
 #' @rdname link_inverse
 #' @export
-link_inverse.brmsfit <- function(x, mv_response = FALSE, ...) {
+link_inverse.brmsfit <- function(x, ...) {
   fam <- stats::family(x)
-  if (!is.null(stats::formula(x)$response)) {
-    if (mv_response) {
-      il <- lapply(fam, brms_link_inverse)
-    } else {
-      fam <- fam[[1]]
-      il <- brms_link_inverse(fam)
-    }
-  } else {
-    il <- brms_link_inverse(fam)
-  }
-
-  il
+  if (is_multivariate(x))
+    lapply(fam, brms_link_inverse)
+  else
+    brms_link_inverse(fam)
 }
 
 

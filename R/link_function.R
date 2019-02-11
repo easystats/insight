@@ -140,18 +140,9 @@ link_function.coxme <- function(x, ...) {
 
 #' @rdname link_function
 #' @export
-link_function.stanmvreg <- function(x, mv_response = FALSE, ...) {
+link_function.stanmvreg <- function(x, ...) {
   fam <- stats::family(x)
-  if (mv_response) {
-    il <- lapply(fam, function(.x) {
-      .x$linkfun
-    })
-  } else {
-    fam <- fam[[1]]
-    il <- fam$linkfun
-  }
-
-  il
+  lapply(fam, function(.x) .x$linkfun)
 }
 
 
@@ -159,18 +150,10 @@ link_function.stanmvreg <- function(x, mv_response = FALSE, ...) {
 #' @export
 link_function.brmsfit <- function(x, mv_response = FALSE, ...) {
   fam <- stats::family(x)
-  if (!is.null(stats::formula(x)$response)) {
-    if (mv_response) {
-      il <- lapply(fam, brms_link_fun)
-    } else {
-      fam <- fam[[1]]
-      il <- brms_link_fun(fam)
-    }
-  } else {
-    il <- brms_link_fun(fam)
-  }
-
-  il
+  if (is_multivariate(x))
+    lapply(fam, brms_link_fun)
+  else
+    brms_link_fun(fam)
 }
 
 

@@ -78,6 +78,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_identical(clean_names(m2), c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species"))
       expect_identical(clean_names(m3), c("r", "n", "treat", "c2"))
       expect_identical(clean_names(m4), c("count", "child", "camper", "persons"))
+      expect_identical(clean_names(m5), c("count", "count2", "child", "camper", "persons", "livebait"))
     })
 
 
@@ -99,6 +100,13 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_identical(find_predictors(m4), list(conditional = c("child", "camper"), zero_inflated = c("child", "camper")))
       expect_identical(find_predictors(m4, effects = "random"), list(random = "persons", zero_inflated_random = "persons"))
       expect_identical(find_predictors(m4, flatten = TRUE), c("child", "camper"))
+
+      expect_identical(
+        find_predictors(m5),
+        list(
+          count = list(conditional = c("child", "camper"), zero_inflated = "camper"),
+          count2 = list(conditional = c("child", "livebait"), zero_inflated = "child")
+        ))
     })
 
     test_that("find_response", {
@@ -109,6 +117,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_equal(find_response(m2, combine = FALSE), c(SepalLength = "Sepal.Length", SepalWidth = "Sepal.Width"))
       expect_equal(find_response(m3, combine = FALSE), c("r", "n"))
       expect_equal(find_response(m4, combine = FALSE), "count")
+      expect_equal(find_response(m5, combine = TRUE), c(count = "count", count2 = "count2"))
     })
 
     test_that("get_response", {
@@ -118,6 +127,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_equal(ncol(get_response(m3)), 2)
       expect_equal(colnames(get_response(m3)), c("r", "n"))
       expect_length(get_response(m4), 250)
+      expect_equal(colnames(get_response(m5)), c("count", "count2"))
     })
 
     test_that("find_terms", {
@@ -165,12 +175,18 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           random = sprintf("r_patient.%i.Intercept.", 1:59)
         )
       )
+
       expect_equal(
         find_parameters(m2),
-        list(
-          conditional = c("b_SepalLength_Intercept", "b_SepalWidth_Intercept", "b_SepalLength_Petal.Length", "b_SepalLength_Sepal.Width", "b_SepalLength_Speciesversicolor", "b_SepalLength_Speciesvirginica", "b_SepalWidth_Speciesversicolor", "b_SepalWidth_Speciesvirginica")
+        structure(
+          list(
+            SepalLength = list(conditional = c("b_SepalLength_Intercept", "b_SepalLength_Petal.Length", "b_SepalLength_Sepal.Width", "b_SepalLength_Speciesversicolor", "b_SepalLength_Speciesvirginica")),
+            SepalWidth = list(conditional = c("b_SepalWidth_Intercept", "b_SepalWidth_Speciesversicolor", "b_SepalWidth_Speciesvirginica"))
+          ),
+          "is_mv" = "1"
         )
       )
+
       expect_equal(
         find_parameters(m4),
         list(
@@ -180,6 +196,28 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           zero_inflated_random = sprintf("r_persons__zi.%i.Intercept.", 1:4)
         )
       )
+
+      expect_equal(
+        find_parameters(m5),
+        structure(
+          list(
+            count = list(
+              conditional = c("b_count_Intercept", "b_count_child", "b_count_camper"),
+              random = sprintf("r_persons__count.%i.Intercept.", 1:4),
+              zero_inflated = c("b_zi_count_Intercept", "b_zi_count_camper"),
+              zero_inflated_random = sprintf("r_persons__zi_count.%i.Intercept.", 1:4)
+            ),
+            count2 = list(
+              conditional = c("b_count2_Intercept", "b_count2_child", "b_count2_livebait"),
+              random = sprintf("r_persons__count2.%i.Intercept.", 1:4),
+              zero_inflated = c("b_zi_count2_Intercept", "b_zi_count2_child"),
+              zero_inflated_random = sprintf("r_persons__zi_count2.%i.Intercept.", 1:4)
+            )
+          ),
+          "is_mv" = "1"
+        )
+      )
+
     })
 
     test_that("find_paramaters", {
@@ -203,14 +241,46 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         c("r_persons.1.Intercept.", "r_persons.2.Intercept.",
           "r_persons.3.Intercept.", "r_persons.4.Intercept.")
       )
+
+      expect_equal(
+        colnames(get_parameters(m5, effects = "random", component = "cond")),
+        c("r_persons__count.1.Intercept.", "r_persons__count.2.Intercept.",
+          "r_persons__count.3.Intercept.", "r_persons__count.4.Intercept.",
+          "r_persons__count2.1.Intercept.", "r_persons__count2.2.Intercept.",
+          "r_persons__count2.3.Intercept.", "r_persons__count2.4.Intercept.")
+      )
+
+      expect_equal(
+        colnames(get_parameters(m5, effects = "all", component = "all")),
+        c("b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count.1.Intercept.",
+          "r_persons__count.2.Intercept.", "r_persons__count.3.Intercept.",
+          "r_persons__count.4.Intercept.", "b_zi_count_Intercept", "b_zi_count_camper",
+          "r_persons__zi_count.1.Intercept.", "r_persons__zi_count.2.Intercept.",
+          "r_persons__zi_count.3.Intercept.", "r_persons__zi_count.4.Intercept.",
+          "b_count2_Intercept", "b_count2_child", "b_count2_livebait",
+          "r_persons__count2.1.Intercept.", "r_persons__count2.2.Intercept.",
+          "r_persons__count2.3.Intercept.", "r_persons__count2.4.Intercept.",
+          "b_zi_count2_Intercept", "b_zi_count2_child", "r_persons__zi_count2.1.Intercept.",
+          "r_persons__zi_count2.2.Intercept.", "r_persons__zi_count2.3.Intercept.",
+          "r_persons__zi_count2.4.Intercept.")
+      )
+
     })
 
     test_that("linkfun", {
       expect_false(is.null(link_function(m1)))
-      expect_false(is.null(link_function(m2)))
+      expect_length(link_function(m2), 2)
       expect_false(is.null(link_function(m3)))
       expect_false(is.null(link_function(m4)))
-      expect_false(is.null(link_function(m5)))
+      expect_length(link_function(m5), 2)
+    })
+
+    test_that("linkinv", {
+      expect_false(is.null(link_inverse(m1)))
+      expect_length(link_inverse(m2), 2)
+      expect_false(is.null(link_inverse(m3)))
+      expect_false(is.null(link_inverse(m4)))
+      expect_length(link_inverse(m2), 2)
     })
 
     test_that("is_multivariate", {

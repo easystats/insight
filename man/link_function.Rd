@@ -8,7 +8,7 @@
 \usage{
 link_function(x, ...)
 
-\method{link_function}{stanmvreg}(x, mv_response = FALSE, ...)
+\method{link_function}{stanmvreg}(x, ...)
 
 \method{link_function}{brmsfit}(x, mv_response = FALSE, ...)
 }
