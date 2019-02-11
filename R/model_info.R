@@ -27,9 +27,9 @@
 #'      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
 #'      \item \code{is_trial}: model response contains additional information about the trials
 #'      \item \code{is_bayesian}: model is a Bayesian model
-#'      \item \code{link_fun}: the link-function
+#'      \item \code{link_function}: the link-function
 #'      \item \code{family}: the family-object
-#'      \item \code{nobs}: number of observations
+#'      \item \code{n_obs}: number of observations
 #'      \item \code{model_terms}: a list with all model terms, including terms such as random effects or from zero-inflated model parts.
 #'    }
 #'
@@ -732,9 +732,9 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_multivariate = multi.var,
     is_trial = is.trial,
     is_bayesian = inherits(x, c("brmsfit", "stanfit", "stanreg", "stanmvreg")),
-    link_fun = link.fun,
+    link_function = link.fun,
     family = fitfam,
-    nobs = n_obs(x),
+    n_obs = n_obs(x),
     model_terms = model_terms
   )
 }
