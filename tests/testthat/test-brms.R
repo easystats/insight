@@ -73,6 +73,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 # Tests -------------------------------------------------------------------
 
 
+    test_that("model_info", {
+      expect_true(m5[[1]]$is_zeroinf)
+    })
+
     test_that("clean_names", {
       expect_identical(clean_names(m1), c("count", "log_Age_c", "log_Base4_c", "Trt", "patient"))
       expect_identical(clean_names(m2), c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species"))

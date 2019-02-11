@@ -7,16 +7,12 @@
 \usage{
 model_info(x, ...)
 
-\method{model_info}{brmsfit}(x, mv_response = FALSE, ...)
+\method{model_info}{brmsfit}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
-
-\item{mv_response}{Logical, if \code{TRUE} and model is a multivariate response
-model from a \code{brmsfit} object or of class \code{stanmvreg}, then a
-list of values (one for each regression) is returned.}
 }
 \value{
 A list with information about the model, like family, link-function

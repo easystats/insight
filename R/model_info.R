@@ -446,16 +446,9 @@ model_info.gmnl <- function(x, ...) {
 
 #' @rdname model_info
 #' @export
-model_info.brmsfit <- function(x, mv_response = FALSE, ...) {
+model_info.brmsfit <- function(x, ...) {
   faminfo <- stats::family(x)
-  multi.var <- FALSE
-
-  if (!is.null(stats::formula(x)$response)) {
-    multi.var <- TRUE
-    if (!mv_response) faminfo <- faminfo[[1]]
-  }
-
-  if (mv_response && multi.var) {
+  if (is_multivariate(x)) {
     lapply(faminfo, function(.x) {
       make_family(
         x = x,
@@ -472,7 +465,7 @@ model_info.brmsfit <- function(x, mv_response = FALSE, ...) {
       x = x,
       fitfam = faminfo$family,
       logit.link = faminfo$link == "logit",
-      multi.var = multi.var,
+      multi.var = FALSE,
       link.fun = faminfo$link,
       ...
     )
@@ -481,33 +474,19 @@ model_info.brmsfit <- function(x, mv_response = FALSE, ...) {
 
 
 #' @export
-model_info.stanmvreg <- function(x, mv_response = FALSE, ...) {
+model_info.stanmvreg <- function(x, ...) {
   faminfo <- stats::family(x)
-  multi.var <- TRUE
-  if (!mv_response) faminfo <- faminfo[[1]]
-
-  if (mv_response && multi.var) {
-    lapply(faminfo, function(.x) {
-      make_family(
-        x = x,
-        fitfam = .x$family,
-        zero.inf = FALSE,
-        logit.link = .x$link == "logit",
-        multi.var = TRUE,
-        link.fun = .x$link,
-        ...
-      )
-    })
-  } else {
+  lapply(faminfo, function(.x) {
     make_family(
       x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      multi.var = multi.var,
-      link.fun = faminfo$link,
+      fitfam = .x$family,
+      zero.inf = FALSE,
+      logit.link = .x$link == "logit",
+      multi.var = TRUE,
+      link.fun = .x$link,
       ...
     )
-  }
+  })
 }
 
 

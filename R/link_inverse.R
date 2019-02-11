@@ -3,14 +3,11 @@
 #'
 #' @description Returns the link-inverse function from a model object.
 #'
-#' @param mv_response Logical, if \code{TRUE} and model is a multivariate response
-#'    model from a \code{brmsfit} object or of class \code{stanmvreg}, then a
-#'    list of values (one for each regression) is returned.
-#'
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
 #'
 #' @return A function, describing the inverse-link function from a model-object.
+#'    For multivariate-response models, a list of functions is returned.
 #'
 #' @examples
 #' # example from ?stats::glm

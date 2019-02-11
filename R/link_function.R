@@ -8,6 +8,7 @@
 #' @inheritParams link_inverse
 #'
 #' @return A function, describing the link-function from a model-object.
+#'    For multivariate-response models, a list of functions is returned.
 #'
 #' @examples
 #' # example from ?stats::glm
@@ -154,7 +155,7 @@ link_function.stanmvreg <- function(x, ...) {
 
 #' @rdname link_function
 #' @export
-link_function.brmsfit <- function(x, mv_response = FALSE, ...) {
+link_function.brmsfit <- function(x, ...) {
   fam <- stats::family(x)
   if (is_multivariate(x))
     lapply(fam, brms_link_fun)
