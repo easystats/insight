@@ -7,16 +7,12 @@
 \usage{
 model_info(x, ...)
 
-\method{model_info}{brmsfit}(x, mv_response = FALSE, ...)
+\method{model_info}{brmsfit}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
-
-\item{mv_response}{Logical, if \code{TRUE} and model is a multivariate response
-model from a \code{brmsfit} object or of class \code{stanmvreg}, then a
-list of values (one for each regression) is returned.}
 }
 \value{
 A list with information about the model, like family, link-function
@@ -40,12 +36,13 @@ Retrieve information from model objects.
      \item \code{is_ordinal}: family is ordinal or cumulative link
      \item \code{is_categorical}: family is categorical link
      \item \code{is_zeroinf}: model has zero-inflation component
+     \item \code{is_mixed}: model is a mixed effects model (with random effects)
      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
      \item \code{is_trial}: model response contains additional information about the trials
      \item \code{is_bayesian}: model is a Bayesian model
-     \item \code{link_fun}: the link-function
+     \item \code{link_function}: the link-function
      \item \code{family}: the family-object
-     \item \code{nobs}: number of observations
+     \item \code{n_obs}: number of observations
      \item \code{model_terms}: a list with all model terms, including terms such as random effects or from zero-inflated model parts.
    }
 }

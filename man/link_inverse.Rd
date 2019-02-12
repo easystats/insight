@@ -2,27 +2,21 @@
 % Please edit documentation in R/link_inverse.R
 \name{link_inverse}
 \alias{link_inverse}
-\alias{link_inverse.stanmvreg}
 \alias{link_inverse.brmsfit}
 \title{Get link-inverse function from model object}
 \usage{
 link_inverse(x, ...)
 
-\method{link_inverse}{stanmvreg}(x, mv_response = FALSE, ...)
-
-\method{link_inverse}{brmsfit}(x, mv_response = FALSE, ...)
+\method{link_inverse}{brmsfit}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
-
-\item{mv_response}{Logical, if \code{TRUE} and model is a multivariate response
-model from a \code{brmsfit} object or of class \code{stanmvreg}, then a
-list of values (one for each regression) is returned.}
 }
 \value{
 A function, describing the inverse-link function from a model-object.
+   For multivariate-response models, a list of functions is returned.
 }
 \description{
 Returns the link-inverse function from a model object.

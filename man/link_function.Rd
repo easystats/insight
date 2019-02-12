@@ -8,21 +8,18 @@
 \usage{
 link_function(x, ...)
 
-\method{link_function}{stanmvreg}(x, mv_response = FALSE, ...)
+\method{link_function}{stanmvreg}(x, ...)
 
-\method{link_function}{brmsfit}(x, mv_response = FALSE, ...)
+\method{link_function}{brmsfit}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
-
-\item{mv_response}{Logical, if \code{TRUE} and model is a multivariate response
-model from a \code{brmsfit} object or of class \code{stanmvreg}, then a
-list of values (one for each regression) is returned.}
 }
 \value{
 A function, describing the link-function from a model-object.
+   For multivariate-response models, a list of functions is returned.
 }
 \description{
 Returns the link-function from a model object.

@@ -144,14 +144,6 @@ find_parameters.zerotrunc <- function(x, ...) {
 
 #' @export
 find_parameters.brmsfit <- function(x, ...) {
-
-  ## TODO add support for multivariate response models
-  # and then set attr(mv_formula, "is_mv") <- "1"
-
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
-
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "b_(?!zi_)(.*)", fe, perl = TRUE)]
@@ -159,25 +151,55 @@ find_parameters.brmsfit <- function(x, ...) {
   rand <- fe[grepl(pattern = "(?!.*__zi)(?=.*r_)", fe, perl = TRUE)]
   randzi <- fe[grepl(pattern = "r_(.*__zi)", fe, perl = TRUE)]
 
-  compact_list(list(
+  l <- compact_list(list(
     conditional = cond,
     random = rand,
     zero_inflated = zi,
     zero_inflated_random = randzi
   ))
+
+  if (is_multivariate(x)) {
+    rn <- names(find_response(x))
+    l <- lapply(rn, function(i) {
+
+      if (obj_has_name(l, "conditional"))
+        conditional <- l$conditional[grepl(sprintf("^b_\\Q%s\\E_", i), l$conditional)]
+      else
+        conditional <- NULL
+
+      if (obj_has_name(l, "random"))
+        random <- l$random[grepl(sprintf("__\\Q%s\\E\\.", i), l$random)]
+      else
+        random <- NULL
+
+      if (obj_has_name(l, "zero_inflated"))
+        zero_inflated <- l$zero_inflated[grepl(sprintf("^b_zi_\\Q%s\\E_", i), l$zero_inflated)]
+      else
+        zero_inflated <- NULL
+
+      if (obj_has_name(l, "zero_inflated_random"))
+        zero_inflated_random <- l$zero_inflated_random[grepl(sprintf("__zi_\\Q%s\\E\\.", i), l$zero_inflated_random)]
+      else
+        zero_inflated_random <- NULL
+
+      compact_list(list(
+        conditional = conditional,
+        random = random,
+        zero_inflated = zero_inflated,
+        zero_inflated_random = zero_inflated_random
+      ))
+    })
+
+    names(l) <- rn
+    attr(l, "is_mv") <- "1"
+  }
+
+  l
 }
 
 
 #' @export
 find_parameters.stanreg <- function(x, ...) {
-
-  ## TODO add support for multivariate response models
-  # and then set attr(mv_formula, "is_mv") <- "1"
-
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
-
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
@@ -187,4 +209,40 @@ find_parameters.stanreg <- function(x, ...) {
     conditional = cond,
     random = rand
   ))
+}
+
+
+#' @export
+find_parameters.stanmvreg <- function(x, ...) {
+  fe <- colnames(as.data.frame(x))
+  rn <- names(find_response(x))
+
+  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
+  rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
+
+  l <- compact_list(list(
+    conditional = cond,
+    random = rand
+  ))
+
+  x1 <- sub(pattern = "(.*)(\\|)(.*)", "\\1",  l$conditional)
+  x2 <- sub(pattern = "(.*)(\\|)(.*)", "\\3",  l$conditional)
+
+  l.cond <- lapply(rn, function(i) {
+    list(conditional = x2[which(x1 == i)])
+  })
+  names(l.cond) <- rn
+
+  x1 <- sub(pattern = "b\\[(.*)(\\|)(.*)", "\\1",  l$random)
+  x2 <- sub(pattern = "(b\\[).*(.*)(\\|)(.*)", "\\1\\4",  l$random)
+
+  l.random <- lapply(rn, function(i) {
+    list(random = x2[which(x1 == i)])
+  })
+  names(l.random) <- rn
+
+  l <- mapply(c, l.cond, l.random, SIMPLIFY = FALSE)
+  attr(l, "is_mv") <- "1"
+
+  l
 }

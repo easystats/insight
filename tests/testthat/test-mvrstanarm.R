@@ -21,7 +21,6 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_identical(clean_names(m1), c("logBili", "albumin", "year", "id", "sex"))
     })
 
-
     test_that("find_predictors", {
       expect_identical(
         find_predictors(m1),
@@ -81,8 +80,14 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_equal(
         find_parameters(m1),
         list(
-          conditional = c("y1|(Intercept)", "y2|(Intercept)", "y1|year", "y2|sexf", "y2|year", "y1|sigma", "y2|sigma"),
-          random = sprintf(c("b[y1|(Intercept) id:%i]", "b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"), rep(1:40, each = 3))
+          y1 = list(
+            conditional = c("(Intercept)", "year", "sigma"),
+            random = sprintf("b[(Intercept) id:%i]", 1:40)
+          ),
+          y2 = list(
+            conditional = c("(Intercept)", "sexf", "year", "sigma"),
+            random = sprintf(c("b[(Intercept) id:%i]", "b[year id:%i]"), rep(1:40, each = 2))
+          )
         )
       )
     })
@@ -90,18 +95,26 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     test_that("find_paramaters", {
       expect_equal(
         colnames(get_parameters(m1)),
-        c("y1|(Intercept)", "y2|(Intercept)", "y1|year", "y2|sexf", "y2|year", "y1|sigma", "y2|sigma")
+        c("y1|(Intercept)", "y1|year", "y1|sigma", "y2|(Intercept)", "y2|sexf", "y2|year", "y2|sigma")
       )
       expect_equal(
         colnames(get_parameters(m1, effects = "all")),
-        c("y1|(Intercept)", "y2|(Intercept)", "y1|year", "y2|sexf", "y2|year", "y1|sigma", "y2|sigma",
-          sprintf(c("b[y1|(Intercept) id:%i]", "b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"), rep(1:40, each = 3)))
+        c("y1|(Intercept)", "y1|year", "y1|sigma", sprintf("b[y1|(Intercept) id:%i]", 1:40),
+          "y2|(Intercept)", "y2|sexf", "y2|year", "y2|sigma",
+          sprintf(c("b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"), rep(1:40, each = 2)))
       )
     })
 
     test_that("linkfun", {
       expect_false(is.null(link_function(m1)))
+      expect_length(link_function(m1), 2)
     })
+
+    test_that("linkinv", {
+      expect_false(is.null(link_inverse(m1)))
+      expect_length(link_inverse(m1), 2)
+    })
+
 
     test_that("is_multivariate", {
       expect_true(is_multivariate(m1))

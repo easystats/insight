@@ -257,7 +257,14 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
 get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
-  as.data.frame(x)[get_parms_data(x, effects, component)]
+
+  if (is_multivariate(x)) {
+    parms <- find_parameters(x)
+    elements <- get_elements(effects, component)
+    as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
+  } else {
+    as.data.frame(x)[get_parms_data(x, effects, component)]
+  }
 }
 
 
@@ -266,6 +273,27 @@ get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), com
 get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
   as.data.frame(x)[get_parms_data(x, effects, "all")]
+}
+
+
+#' @rdname get_parameters
+#' @export
+get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), ...) {
+  effects <- match.arg(effects)
+  elements <- get_elements(effects, "all")
+  parms <- find_parameters(x)
+
+  for (i in names(parms)) {
+    parms[[i]]$conditional <- sprintf("%s|%s", i, parms[[i]]$conditional)
+    find_bracket <- regexpr(pattern = "\\[", parms[[i]]$random)
+    parms[[i]]$random <- paste0(
+      substr(parms[[i]]$random, start = 1, stop = find_bracket),
+      i, "|",
+      substr(parms[[i]]$random, start = find_bracket + 1, stop = 1000000L)
+    )
+  }
+
+  as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
 }
 
 

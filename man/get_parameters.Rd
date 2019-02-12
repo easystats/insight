@@ -11,6 +11,7 @@
 \alias{get_parameters.glmmTMB}
 \alias{get_parameters.brmsfit}
 \alias{get_parameters.stanreg}
+\alias{get_parameters.stanmvreg}
 \title{Get model parameters}
 \usage{
 get_parameters(x, ...)
@@ -40,6 +41,9 @@ get_parameters(x, ...)
   "dispersion"), ...)
 
 \method{get_parameters}{stanreg}(x, effects = c("fixed", "random",
+  "all"), ...)
+
+\method{get_parameters}{stanmvreg}(x, effects = c("fixed", "random",
   "all"), ...)
 }
 \arguments{

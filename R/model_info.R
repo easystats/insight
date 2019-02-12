@@ -24,6 +24,7 @@
 #'      \item \code{is_ordinal}: family is ordinal or cumulative link
 #'      \item \code{is_categorical}: family is categorical link
 #'      \item \code{is_zeroinf}: model has zero-inflation component
+#'      \item \code{is_mixed}: model is a mixed effects model (with random effects)
 #'      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
 #'      \item \code{is_trial}: model response contains additional information about the trials
 #'      \item \code{is_bayesian}: model is a Bayesian model
@@ -78,38 +79,26 @@ model_info.default <- function(x, ...) {
 
 #' @export
 model_info.glmmPQL <- function(x, ...) {
-  tryCatch({
-    faminfo <- x$family
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- x$family
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @export
 model_info.MixMod <- function(x, ...) {
-  tryCatch({
-    faminfo <- x$family
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- x$family
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
@@ -146,152 +135,116 @@ model_info.lmRob <- function(x, ...) {
 
 #' @export
 model_info.gam <- function(x, ...) {
-  tryCatch({
-    if (!inherits(x, c("glm", "lm"))) {
-      class(x) <- c(class(x), "glm", "lm")
-    }
-
-    faminfo <- stats::family(x)
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
+  if (!inherits(x, c("glm", "lm"))) {
+    class(x) <- c(class(x), "glm", "lm")
   }
+
+  faminfo <- stats::family(x)
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @export
 model_info.vgam <- function(x, ...) {
-  tryCatch({
-    faminfo <- x@family
-    link.fun <- faminfo@blurb[3]
-    if (grepl("^\\Qlogit(\\E", link.fun, perl = TRUE)) link.fun <- "logit"
-    make_family(
-      x = x,
-      fitfam = faminfo@vfamily[1],
-      logit.link = string_contains(faminfo@blurb, "logit"),
-      link.fun = link.fun,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- x@family
+  link.fun <- faminfo@blurb[3]
+  if (grepl("^\\Qlogit(\\E", link.fun, perl = TRUE)) link.fun <- "logit"
+  make_family(
+    x = x,
+    fitfam = faminfo@vfamily[1],
+    logit.link = string_contains(faminfo@blurb, "logit"),
+    link.fun = link.fun,
+    ...
   )
 }
 
 
 #' @export
 model_info.vglm <- function(x, ...) {
-  tryCatch({
-    faminfo <- x@family
-    link.fun <- faminfo@blurb[3]
-    if (grepl("^\\Qlogit(\\E", link.fun, perl = TRUE)) link.fun <- "logit"
-    make_family(
-      x = x,
-      fitfam = faminfo@vfamily[1],
-      logit.link = string_contains(faminfo@blurb, "logit"),
-      link.fun = link.fun,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- x@family
+  link.fun <- faminfo@blurb[3]
+  if (grepl("^\\Qlogit(\\E", link.fun, perl = TRUE)) link.fun <- "logit"
+  make_family(
+    x = x,
+    fitfam = faminfo@vfamily[1],
+    logit.link = string_contains(faminfo@blurb, "logit"),
+    link.fun = link.fun,
+    ...
   )
 }
 
 
 #' @export
 model_info.zeroinfl <- function(x, ...) {
-  tryCatch({
-    if (is.list(x$dist)) {
-      dist <- x$dist[[1]]
-    } else {
-      dist <- x$dist
-    }
-    fitfam <- switch(
-      dist,
-      poisson = "poisson",
-      negbin = "negative binomial",
-      "poisson"
-    )
-    make_family(
-      x = x,
-      fitfam = fitfam,
-      zero.inf = TRUE,
-      link.fun = "log",
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
+  if (is.list(x$dist)) {
+    dist <- x$dist[[1]]
+  } else {
+    dist <- x$dist
   }
+  fitfam <- switch(
+    dist,
+    poisson = "poisson",
+    negbin = "negative binomial",
+    "poisson"
+  )
+  make_family(
+    x = x,
+    fitfam = fitfam,
+    zero.inf = TRUE,
+    link.fun = "log",
+    ...
   )
 }
 
 
 #' @export
 model_info.hurdle <- function(x, ...) {
-  tryCatch({
-    if (is.list(x$dist)) {
-      dist <- x$dist[[1]]
-    } else {
-      dist <- x$dist
-    }
-    fitfam <- switch(
-      dist,
-      poisson = "poisson",
-      negbin = "negative binomial",
-      "poisson"
-    )
-    make_family(
-      x = x,
-      fitfam = fitfam,
-      zero.inf = TRUE,
-      link.fun = "log",
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
+  if (is.list(x$dist)) {
+    dist <- x$dist[[1]]
+  } else {
+    dist <- x$dist
   }
+  fitfam <- switch(
+    dist,
+    poisson = "poisson",
+    negbin = "negative binomial",
+    "poisson"
+  )
+  make_family(
+    x = x,
+    fitfam = fitfam,
+    zero.inf = TRUE,
+    link.fun = "log",
+    ...
   )
 }
 
 
 #' @export
 model_info.zerotrunc <- function(x, ...) {
-  tryCatch({
-    if (is.list(x$dist)) {
-      dist <- x$dist[[1]]
-    } else {
-      dist <- x$dist
-    }
-    fitfam <- switch(
-      dist,
-      poisson = "poisson",
-      negbin = "negative binomial",
-      "poisson"
-    )
-    make_family(
-      x = x,
-      fitfam = fitfam,
-      zero.inf = TRUE,
-      link.fun = "log",
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
+  if (is.list(x$dist)) {
+    dist <- x$dist[[1]]
+  } else {
+    dist <- x$dist
   }
+  fitfam <- switch(
+    dist,
+    poisson = "poisson",
+    negbin = "negative binomial",
+    "poisson"
+  )
+  make_family(
+    x = x,
+    fitfam = fitfam,
+    zero.inf = TRUE,
+    link.fun = "log",
+    ...
   )
 }
 
@@ -302,20 +255,14 @@ model_info.glmmTMB <- function(x, ...) {
     stop("To use this function, please install package 'lme4'.")
   }
 
-  tryCatch({
-    faminfo <- stats::family(x)
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      zero.inf = !is_empty_object(lme4::fixef(x)$zi),
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- stats::family(x)
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    zero.inf = !is_empty_object(lme4::fixef(x)$zi),
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
@@ -334,265 +281,180 @@ model_info.felm <- function(x, ...) {
 
 #' @export
 model_info.betareg <- function(x, ...) {
-  tryCatch({
-    make_family(
-      x = x,
-      fitfam = "beta",
-      logit.link = x$link$mean$name == "logit",
-      link.fun = x$link$mean$linkfun,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  make_family(
+    x = x,
+    fitfam = "beta",
+    logit.link = x$link$mean$name == "logit",
+    link.fun = x$link$mean$name,
+    ...
   )
 }
 
 
 #' @export
 model_info.coxph <- function(x, ...) {
-  tryCatch({
-    make_family(
-      x = x,
-      fitfam = "survival",
-      logit.link = TRUE,
-      link.fun = NULL,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  make_family(
+    x = x,
+    fitfam = "survival",
+    logit.link = TRUE,
+    link.fun = NULL,
+    ...
   )
 }
 
 
 #' @export
 model_info.coxme <- function(x, ...) {
-  tryCatch({
-    make_family(
-      x = x,
-      fitfam = "survival",
-      logit.link = TRUE,
-      link.fun = NULL,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  make_family(
+    x = x,
+    fitfam = "survival",
+    logit.link = TRUE,
+    link.fun = NULL,
+    ...
   )
 }
 
 
 #' @export
 model_info.MCMCglmm <- function(x, ...) {
-  tryCatch({
-    make_family(
-      x = x,
-      fitfam = x$Residual$family,
-      logit.link = FALSE,
-      link.fun = "",
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  make_family(
+    x = x,
+    fitfam = x$Residual$family,
+    logit.link = FALSE,
+    link.fun = "",
+    ...
   )
 }
 
 
 #' @export
 model_info.lrm <- function(x, ...) {
-  tryCatch({
-    faminfo <- stats::binomial(link = "logit")
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- stats::binomial(link = "logit")
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @export
 model_info.polr <- function(x, ...) {
-  tryCatch({
-    faminfo <- stats::binomial(link = "logit")
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- stats::binomial(link = "logit")
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @export
 model_info.multinom <- function(x, ...) {
-  tryCatch({
-    faminfo <- stats::binomial(link = "logit")
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- stats::binomial(link = "logit")
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @export
 model_info.clm2 <- function(x, ...) {
-  tryCatch({
-    faminfo <- stats::binomial(link = "logit")
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- stats::binomial(link = "logit")
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @export
 model_info.clm <- function(x, ...) {
-  tryCatch({
-    faminfo <- stats::binomial(link = "logit")
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- stats::binomial(link = "logit")
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @export
 model_info.clmm <- function(x, ...) {
-  tryCatch({
-    faminfo <- stats::binomial(link = "logit")
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- stats::binomial(link = "logit")
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @export
 model_info.mlogit <- function(x, ...) {
-  tryCatch({
-    faminfo <- stats::binomial(link = "logit")
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- stats::binomial(link = "logit")
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @export
 model_info.logistf <- function(x, ...) {
-  tryCatch({
-    faminfo <- stats::binomial(link = "logit")
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- stats::binomial(link = "logit")
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @export
 model_info.gmnl <- function(x, ...) {
-  tryCatch({
-    faminfo <- stats::binomial(link = "logit")
-    make_family(
-      x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      link.fun = faminfo$link,
-      ...
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- stats::binomial(link = "logit")
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
   )
 }
 
 
 #' @rdname model_info
 #' @export
-model_info.brmsfit <- function(x, mv_response = FALSE, ...) {
+model_info.brmsfit <- function(x, ...) {
   faminfo <- stats::family(x)
-  multi.var <- FALSE
-
-  if (!is.null(stats::formula(x)$response)) {
-    multi.var <- TRUE
-    if (!mv_response) faminfo <- faminfo[[1]]
-  }
-
-  if (mv_response && multi.var) {
+  if (is_multivariate(x)) {
     lapply(faminfo, function(.x) {
       make_family(
         x = x,
         fitfam = .x$family,
         zero.inf = FALSE,
-        .x$link == "logit",
+        logit.link = .x$link == "logit",
         multi.var = TRUE,
         link.fun = .x$link,
         ...
@@ -603,7 +465,7 @@ model_info.brmsfit <- function(x, mv_response = FALSE, ...) {
       x = x,
       fitfam = faminfo$family,
       logit.link = faminfo$link == "logit",
-      multi.var = multi.var,
+      multi.var = FALSE,
       link.fun = faminfo$link,
       ...
     )
@@ -612,33 +474,19 @@ model_info.brmsfit <- function(x, mv_response = FALSE, ...) {
 
 
 #' @export
-model_info.stanmvreg <- function(x, mv_response = FALSE, ...) {
+model_info.stanmvreg <- function(x, ...) {
   faminfo <- stats::family(x)
-  multi.var <- TRUE
-  if (!mv_response) faminfo <- faminfo[[1]]
-
-  if (mv_response && multi.var) {
-    lapply(faminfo, function(.x) {
-      make_family(
-        x = x,
-        fitfam = .x$family,
-        zero.inf = FALSE,
-        .x$link == "logit",
-        multi.var = TRUE,
-        link.fun = .x$link,
-        ...
-      )
-    })
-  } else {
+  lapply(faminfo, function(.x) {
     make_family(
       x = x,
-      fitfam = faminfo$family,
-      logit.link = faminfo$link == "logit",
-      multi.var = multi.var,
-      link.fun = faminfo$link,
+      fitfam = .x$family,
+      zero.inf = FALSE,
+      logit.link = .x$link == "logit",
+      multi.var = TRUE,
+      link.fun = .x$link,
       ...
     )
-  }
+  })
 }
 
 
@@ -725,10 +573,12 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_negbin = neg_bin_fam,
     is_beta = beta_fam,
     is_logit = logit.link,
+    is_probit = link.fun == "probit",
     is_linear = linear_model,
     is_zeroinf = zero.inf,
     is_ordinal = is.ordinal,
     is_categorical = is.categorical,
+    is_mixed = !is.null(find_random(x)),
     is_multivariate = multi.var,
     is_trial = is.trial,
     is_bayesian = inherits(x, c("brmsfit", "stanfit", "stanreg", "stanmvreg")),
