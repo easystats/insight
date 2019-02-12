@@ -56,12 +56,18 @@ model_info <- function(x, ...) {
 #' @importFrom stats family
 #' @export
 model_info.default <- function(x, ...) {
-  tryCatch({
+  faminfo <- tryCatch({
     if (inherits(x, c("Zelig-relogit"))) {
-      faminfo <- stats::binomial(link = "logit")
+      stats::binomial(link = "logit")
     } else {
-      faminfo <- stats::family(x)
+      stats::family(x)
     }
+  },
+  error = function(x) {
+    NULL
+  })
+
+  if (!is.null(faminfo)) {
     make_family(
       x = x,
       fitfam = faminfo$family,
@@ -69,11 +75,12 @@ model_info.default <- function(x, ...) {
       link.fun = faminfo$link,
       ...
     )
-  },
-  error = function(x) {
-    NULL
+  } else {
+    warning("Could not access model information.", call. = FALSE)
+    if (inherits(faminfo, c("error", "simpleError"))) {
+      cat(sprintf("* Reason: %s\n", deparse(faminfo[[1]], width.cutoff = 500)))
+    }
   }
-  )
 }
 
 
