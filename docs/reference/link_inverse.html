@@ -96,12 +96,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/easystats/insight">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -115,7 +110,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get link-inverse function from model object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/link_inverse.R'><code>R/link_inverse.R</code></a></small>
+    
     <div class="hidden name"><code>link_inverse.Rd</code></div>
     </div>
 
@@ -127,11 +122,8 @@
 
     <pre class="usage"><span class='fu'>link_inverse</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for stanmvreg</span>
-<span class='fu'>link_inverse</span>(<span class='no'>x</span>, <span class='kw'>mv_response</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
 <span class='co'># S3 method for brmsfit</span>
-<span class='fu'>link_inverse</span>(<span class='no'>x</span>, <span class='kw'>mv_response</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>link_inverse</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,17 +136,12 @@
       <th>...</th>
       <td><p>Currently not used.</p></td>
     </tr>
-    <tr>
-      <th>mv_response</th>
-      <td><p>Logical, if <code>TRUE</code> and model is a multivariate response
-model from a <code>brmsfit</code> object or of class <code>stanmvreg</code>, then a
-list of values (one for each regression) is returned.</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A function, describing the inverse-link function from a model-object.</p>
+    <p>A function, describing the inverse-link function from a model-object.
+   For multivariate-response models, a list of functions is returned.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

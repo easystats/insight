@@ -96,12 +96,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/easystats/insight">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -115,7 +110,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get model parameters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_parameters.R'><code>R/get_parameters.R</code></a></small>
+    
     <div class="hidden name"><code>get_parameters.Rd</code></div>
     </div>
 
@@ -127,7 +122,21 @@
 
     <pre class="usage"><span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for zeroinfl</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
+  <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for hurdle</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
+  <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for coxme</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
+
 <span class='co'># S3 method for merMod</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for lme</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for MixMod</span>
@@ -147,6 +156,10 @@
 
 <span class='co'># S3 method for stanreg</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
+  <span class='st'>"all"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for stanmvreg</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
   <span class='st'>"all"</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -161,16 +174,16 @@
       <td><p>Currently not used.</p></td>
     </tr>
     <tr>
-      <th>effects</th>
-      <td><p>Should variables for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
-    </tr>
-    <tr>
       <th>component</th>
       <td><p>Should all predictor variables, predictor variables for the
 conditional model, the zero-inflated part of the model or the dispersion
 model be returned? Only applies to models with zero-inflated and/or
 dispersion formula. May be abbreviated.</p></td>
+    </tr>
+    <tr>
+      <th>effects</th>
+      <td><p>Should variables for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
     </tr>
     </table>
     

@@ -98,12 +98,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/easystats/insight">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -117,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get the values from a model's response variable</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_response.R'><code>R/get_response.R</code></a></small>
+    
     <div class="hidden name"><code>get_response.Rd</code></div>
     </div>
 
@@ -157,63 +152,13 @@
 <span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
 
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>trials</span>) ~ <span class='no'>period</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>)
-<span class='fu'>get_response</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt;    incidence trials
-#&gt; 1          2     12
-#&gt; 2          3      9
-#&gt; 3          4      5
-#&gt; 4          0      5
-#&gt; 5          3     19
-#&gt; 6          1     17
-#&gt; 7          1     20
-#&gt; 8          8     14
-#&gt; 9          2     14
-#&gt; 10         0     16
-#&gt; 11         2     18
-#&gt; 12         2      8
-#&gt; 13         0     10
-#&gt; 14         2      7
-#&gt; 15         0      6
-#&gt; 16         5     13
-#&gt; 17         0     25
-#&gt; 18         0     24
-#&gt; 19         1      3
-#&gt; 20         3     14
-#&gt; 21         0     17
-#&gt; 22         0     18
-#&gt; 23         1     19
-#&gt; 24         8      8
-#&gt; 25         1      9
-#&gt; 26         3      6
-#&gt; 27         0      5
-#&gt; 28        12     22
-#&gt; 29         2      7
-#&gt; 30         0      6
-#&gt; 31         0      8
-#&gt; 32         0      6
-#&gt; 33         1     21
-#&gt; 34         1     21
-#&gt; 35         0     18
-#&gt; 36         2     20
-#&gt; 37         0     25
-#&gt; 38         5     22
-#&gt; 39         3     19
-#&gt; 40         1     21
-#&gt; 41         2      8
-#&gt; 42         1      7
-#&gt; 43         0      6
-#&gt; 44         0      5
-#&gt; 45         1     20
-#&gt; 46         2     22
-#&gt; 47         0     19
-#&gt; 48         0     23
-#&gt; 49        11      8
-#&gt; 50         0      2
-#&gt; 51         0      3
-#&gt; 52         0      2
-#&gt; 53         1     18
-#&gt; 54         1     14
-#&gt; 55         1     14
-#&gt; 56         0     15</div><div class='input'><span class='fu'>get_response</span>(<span class='no'>m</span>, <span class='kw'>resp</span> <span class='kw'>=</span> <span class='st'>"incidence"</span>)</div><div class='output co'>#&gt;  [1]  2  3  4  0  3  1  1  8  2  0  2  2  0  2  0  5  0  0  1  3  0  0  1  8  1
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>get_response</span>(<span class='no'>m</span>))</div><div class='output co'>#&gt;   incidence trials
+#&gt; 1         2     12
+#&gt; 2         3      9
+#&gt; 3         4      5
+#&gt; 4         0      5
+#&gt; 5         3     19
+#&gt; 6         1     17</div><div class='input'><span class='fu'>get_response</span>(<span class='no'>m</span>, <span class='kw'>resp</span> <span class='kw'>=</span> <span class='st'>"incidence"</span>)</div><div class='output co'>#&gt;  [1]  2  3  4  0  3  1  1  8  2  0  2  2  0  2  0  5  0  0  1  3  0  0  1  8  1
 #&gt; [26]  3  0 12  2  0  0  0  1  1  0  2  0  5  3  1  2  1  0  0  1  2  0  0 11  0
 #&gt; [51]  0  0  1  1  1  0</div><div class='input'>
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)

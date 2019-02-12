@@ -96,12 +96,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/easystats/insight">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -115,7 +110,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Access information from model objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/model_info.R'><code>R/model_info.R</code></a></small>
+    
     <div class="hidden name"><code>model_info.Rd</code></div>
     </div>
 
@@ -128,7 +123,7 @@
     <pre class="usage"><span class='fu'>model_info</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for brmsfit</span>
-<span class='fu'>model_info</span>(<span class='no'>x</span>, <span class='kw'>mv_response</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>model_info</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,12 +135,6 @@
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
-    </tr>
-    <tr>
-      <th>mv_response</th>
-      <td><p>Logical, if <code>TRUE</code> and model is a multivariate response
-model from a <code>brmsfit</code> object or of class <code>stanmvreg</code>, then a
-list of values (one for each regression) is returned.</p></td>
     </tr>
     </table>
     
@@ -169,12 +158,13 @@ list of values (one for each regression) is returned.</p></td>
 <li><p><code>is_ordinal</code>: family is ordinal or cumulative link</p></li>
 <li><p><code>is_categorical</code>: family is categorical link</p></li>
 <li><p><code>is_zeroinf</code>: model has zero-inflation component</p></li>
+<li><p><code>is_mixed</code>: model is a mixed effects model (with random effects)</p></li>
 <li><p><code>is_multivariate</code>: model is a multivariate response model (currently only works for <em>brmsfit</em> objects)</p></li>
 <li><p><code>is_trial</code>: model response contains additional information about the trials</p></li>
-<li><p><code>is_bayes</code>: model is a Bayesian model</p></li>
-<li><p><code>link_fun</code>: the link-function</p></li>
+<li><p><code>is_bayesian</code>: model is a Bayesian model</p></li>
+<li><p><code>link_function</code>: the link-function</p></li>
 <li><p><code>family</code>: the family-object</p></li>
-<li><p><code>nobs</code>: number of observations</p></li>
+<li><p><code>n_obs</code>: number of observations</p></li>
 <li><p><code>model_terms</code>: a list with all model terms, including terms such as random effects or from zero-inflated model parts.</p></li>
 </ul>
     
@@ -208,6 +198,9 @@ list of values (one for each regression) is returned.</p></td>
 #&gt; $is_logit
 #&gt; [1] FALSE
 #&gt; 
+#&gt; $is_probit
+#&gt; [1] FALSE
+#&gt; 
 #&gt; $is_linear
 #&gt; [1] FALSE
 #&gt; 
@@ -220,22 +213,25 @@ list of values (one for each regression) is returned.</p></td>
 #&gt; $is_categorical
 #&gt; [1] FALSE
 #&gt; 
+#&gt; $is_mixed
+#&gt; [1] TRUE
+#&gt; 
 #&gt; $is_multivariate
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_trial
 #&gt; [1] FALSE
 #&gt; 
-#&gt; $is_bayes
+#&gt; $is_bayesian
 #&gt; [1] FALSE
 #&gt; 
-#&gt; $link_fun
+#&gt; $link_function
 #&gt; [1] "log"
 #&gt; 
 #&gt; $family
 #&gt; [1] "nbinom2"
 #&gt; 
-#&gt; $nobs
+#&gt; $n_obs
 #&gt; [1] 644
 #&gt; 
 #&gt; $model_terms

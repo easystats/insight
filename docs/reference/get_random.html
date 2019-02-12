@@ -96,12 +96,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/easystats/insight">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -115,7 +110,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get the data from a model's random effects terms</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_random.R'><code>R/get_random.R</code></a></small>
+    
     <div class="hidden name"><code>get_random.Rd</code></div>
     </div>
 
@@ -157,187 +152,13 @@
   <span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>mygrp</span> / <span class='no'>mysubgrp</span>) + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>),
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>
 )</div><div class='output co'>#&gt; <span class='message'>singular fit</span></div><div class='input'>
-<span class='fu'>get_random</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt;     mysubgrp mygrp Subject
-#&gt; 1          7     2     308
-#&gt; 2         21     2     308
-#&gt; 3         12     5     308
-#&gt; 4         29     1     308
-#&gt; 5         18     4     308
-#&gt; 6          6     2     308
-#&gt; 7          8     5     308
-#&gt; 8          4     1     308
-#&gt; 9          1     3     308
-#&gt; 10        19     3     308
-#&gt; 11        30     5     309
-#&gt; 12        20     1     309
-#&gt; 13        30     1     309
-#&gt; 14        23     4     309
-#&gt; 15        24     2     309
-#&gt; 16         6     1     309
-#&gt; 17        16     5     309
-#&gt; 18         5     1     309
-#&gt; 19        16     3     309
-#&gt; 20        22     5     309
-#&gt; 21        20     3     310
-#&gt; 22        17     4     310
-#&gt; 23         1     2     310
-#&gt; 24        23     4     310
-#&gt; 25         2     1     310
-#&gt; 26        12     3     310
-#&gt; 27        17     1     310
-#&gt; 28        14     1     310
-#&gt; 29        29     2     310
-#&gt; 30         1     5     310
-#&gt; 31         9     5     330
-#&gt; 32         3     2     330
-#&gt; 33         7     4     330
-#&gt; 34        27     1     330
-#&gt; 35         2     2     330
-#&gt; 36        26     4     330
-#&gt; 37         6     3     330
-#&gt; 38        13     4     330
-#&gt; 39         6     5     330
-#&gt; 40         1     1     330
-#&gt; 41        27     4     331
-#&gt; 42        13     5     331
-#&gt; 43        10     2     331
-#&gt; 44        27     4     331
-#&gt; 45        10     3     331
-#&gt; 46        26     1     331
-#&gt; 47        19     3     331
-#&gt; 48        16     1     331
-#&gt; 49         4     4     331
-#&gt; 50         5     1     331
-#&gt; 51         3     3     332
-#&gt; 52        11     1     332
-#&gt; 53        16     3     332
-#&gt; 54        20     1     332
-#&gt; 55         7     5     332
-#&gt; 56        24     2     332
-#&gt; 57         9     2     332
-#&gt; 58         5     2     332
-#&gt; 59        18     4     332
-#&gt; 60         3     5     332
-#&gt; 61        14     2     333
-#&gt; 62        30     4     333
-#&gt; 63         8     5     333
-#&gt; 64        27     1     333
-#&gt; 65        20     5     333
-#&gt; 66        22     1     333
-#&gt; 67        25     2     333
-#&gt; 68        26     4     333
-#&gt; 69        10     3     333
-#&gt; 70        21     2     333
-#&gt; 71        23     5     334
-#&gt; 72        14     4     334
-#&gt; 73        13     1     334
-#&gt; 74        10     4     334
-#&gt; 75        25     5     334
-#&gt; 76        10     5     334
-#&gt; 77        21     3     334
-#&gt; 78        12     3     334
-#&gt; 79        24     2     334
-#&gt; 80         3     2     334
-#&gt; 81        27     5     335
-#&gt; 82        23     2     335
-#&gt; 83         5     1     335
-#&gt; 84        11     4     335
-#&gt; 85        26     1     335
-#&gt; 86        12     2     335
-#&gt; 87        19     5     335
-#&gt; 88         9     2     335
-#&gt; 89        27     1     335
-#&gt; 90        12     1     335
-#&gt; 91         2     1     337
-#&gt; 92        29     1     337
-#&gt; 93         8     4     337
-#&gt; 94        27     5     337
-#&gt; 95        21     5     337
-#&gt; 96        23     3     337
-#&gt; 97        23     2     337
-#&gt; 98         5     3     337
-#&gt; 99        24     1     337
-#&gt; 100        7     1     337
-#&gt; 101       12     3     349
-#&gt; 102       14     2     349
-#&gt; 103       24     2     349
-#&gt; 104       20     3     349
-#&gt; 105        1     2     349
-#&gt; 106       13     4     349
-#&gt; 107       25     2     349
-#&gt; 108        5     5     349
-#&gt; 109       23     5     349
-#&gt; 110       10     1     349
-#&gt; 111       16     4     350
-#&gt; 112       30     3     350
-#&gt; 113        6     4     350
-#&gt; 114       10     4     350
-#&gt; 115        6     1     350
-#&gt; 116       12     3     350
-#&gt; 117       19     5     350
-#&gt; 118       11     3     350
-#&gt; 119       28     3     350
-#&gt; 120       22     5     350
-#&gt; 121       25     4     351
-#&gt; 122       13     5     351
-#&gt; 123       28     3     351
-#&gt; 124       10     2     351
-#&gt; 125       23     4     351
-#&gt; 126       16     4     351
-#&gt; 127       11     1     351
-#&gt; 128        8     3     351
-#&gt; 129       12     1     351
-#&gt; 130       13     3     351
-#&gt; 131       29     4     352
-#&gt; 132        4     4     352
-#&gt; 133       28     2     352
-#&gt; 134       23     4     352
-#&gt; 135       28     1     352
-#&gt; 136       23     3     352
-#&gt; 137       22     3     352
-#&gt; 138       19     3     352
-#&gt; 139        9     5     352
-#&gt; 140       24     5     352
-#&gt; 141       26     4     369
-#&gt; 142        9     1     369
-#&gt; 143        5     1     369
-#&gt; 144       15     3     369
-#&gt; 145       20     4     369
-#&gt; 146       18     3     369
-#&gt; 147       18     5     369
-#&gt; 148       17     2     369
-#&gt; 149        8     2     369
-#&gt; 150        7     4     369
-#&gt; 151       15     2     370
-#&gt; 152        8     3     370
-#&gt; 153       14     1     370
-#&gt; 154       28     4     370
-#&gt; 155       22     2     370
-#&gt; 156       27     5     370
-#&gt; 157        4     3     370
-#&gt; 158       27     5     370
-#&gt; 159        4     1     370
-#&gt; 160       13     4     370
-#&gt; 161       27     1     371
-#&gt; 162        9     3     371
-#&gt; 163        6     4     371
-#&gt; 164        1     2     371
-#&gt; 165       17     1     371
-#&gt; 166       23     1     371
-#&gt; 167       24     2     371
-#&gt; 168       15     3     371
-#&gt; 169       22     4     371
-#&gt; 170       30     4     371
-#&gt; 171        8     2     372
-#&gt; 172       22     1     372
-#&gt; 173        8     1     372
-#&gt; 174       22     4     372
-#&gt; 175       21     1     372
-#&gt; 176       30     2     372
-#&gt; 177       12     5     372
-#&gt; 178       16     4     372
-#&gt; 179       22     4     372
-#&gt; 180        6     2     372</div></pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>get_random</span>(<span class='no'>m</span>))</div><div class='output co'>#&gt;   mysubgrp mygrp Subject
+#&gt; 1        7     2     308
+#&gt; 2       21     2     308
+#&gt; 3       12     5     308
+#&gt; 4       29     1     308
+#&gt; 5       18     4     308
+#&gt; 6        6     2     308</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

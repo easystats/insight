@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find model formula — find_formula • insight</title>
+<title>Checks if an object stems from a multivariate response model — is_multivariate • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,9 @@
 
 
 
-<meta property="og:title" content="Find model formula — find_formula" />
+<meta property="og:title" content="Checks if an object stems from a multivariate response model — is_multivariate" />
 
-<meta property="og:description" content="Get model formula" />
+<meta property="og:description" content="to do..." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -109,53 +109,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find model formula</h1>
+    <h1>Checks if an object stems from a multivariate response model</h1>
     
-    <div class="hidden name"><code>find_formula.Rd</code></div>
+    <div class="hidden name"><code>is_multivariate.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get model formula</p>
+    <p>to do...</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_formula</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>is_multivariate</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
+      <td><p>A model object, or an object returned by a function from this package.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of formulas that describe the model. For simple models,
-   only one list-element, <code>conditional</code>, is returned. For more complex
-   models, the returned list may have following elements:</p><ul>
-<li><p><code>conditional</code>, the "fixed effects" part from the model</p></li>
-<li><p><code>random</code>, the "random effects" part from the model (or the <code>id</code> for gee-models)</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>dispersion</code>, the dispersion formula</p></li>
-</ul>
-
+    <p>A logical, <code>TRUE</code> if either <code>x</code> is a model object and is
+   a multivariate response model, or <code>TRUE</code> if a return value from a
+   function of <span class="pkg">insight</span> is from a multivariate response model.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>find_formula</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $conditional
-#&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x000000001feef080&gt;
-#&gt; </div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='st'>"pbcLong"</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_mvmer'>stan_mvmer</a></span>(
+  <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(
+    <span class='no'>logBili</span> ~ <span class='no'>year</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>id</span>),
+    <span class='no'>albumin</span> ~ <span class='no'>sex</span> + <span class='no'>year</span> + (<span class='no'>year</span> <span class='kw'>|</span> <span class='no'>id</span>)
+  ),
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>pbcLong</span>,
+  <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cores</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>12345</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>
+)
+
+<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='find_formula.html'>find_formula</a></span>(<span class='no'>model</span>)
+<span class='fu'>is_multivariate</span>(<span class='no'>model</span>)
+<span class='fu'>is_multivariate</span>(<span class='no'>f</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
