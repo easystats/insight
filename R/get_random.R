@@ -1,7 +1,7 @@
 #' @title Get the data from a model's random effects terms
 #' @name get_random
 #'
-#' @description Returns the data of all random effect terms.
+#' @description Returns the data of all random effects terms.
 #'
 #' @inheritParams find_random
 #'

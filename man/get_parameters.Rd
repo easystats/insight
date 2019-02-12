@@ -61,13 +61,14 @@ or both be returned? Only applies to mixed models. May be abbreviated.}
 }
 \value{
 For non-Bayesian models and if \code{effects = "fixed"}, a data frame
-   with two columns: the parameters names and the related point estimates; if
+   with two columns: the parameter names and the related point estimates; if
    \code{effects = "random"}, a list with the random effects (as returned by
    \code{ranef()}. For Bayesian models, the posterior samples from the
    requested parameters as data frame.
 }
 \description{
-Get model parameters
+Returns the point estimates (or posterior samples for Bayesian
+   models) from a model.
 }
 \examples{
 data(mtcars)

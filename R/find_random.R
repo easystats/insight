@@ -1,7 +1,7 @@
 #' @title Find names of random effect terms
 #' @name find_random
 #'
-#' @description to do...
+#' @description Return the name of the grouping factors from mixed effects models.
 #'
 #' @param x A fitted mixed model.
 #' @param split_nested Logical, if \code{TRUE}, terms from nested random

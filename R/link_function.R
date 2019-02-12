@@ -163,7 +163,6 @@ link_function.coxme <- function(x, ...) {
 }
 
 
-#' @rdname link_function
 #' @export
 link_function.stanmvreg <- function(x, ...) {
   fam <- stats::family(x)
@@ -171,7 +170,6 @@ link_function.stanmvreg <- function(x, ...) {
 }
 
 
-#' @rdname link_function
 #' @export
 link_function.brmsfit <- function(x, ...) {
   fam <- stats::family(x)

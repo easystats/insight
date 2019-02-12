@@ -39,7 +39,8 @@
 
 <meta property="og:title" content="Get model parameters — get_parameters" />
 
-<meta property="og:description" content="Get model parameters" />
+<meta property="og:description" content="Returns the point estimates (or posterior samples for Bayesian
+   models) from a model." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -116,7 +117,8 @@
 
     <div class="ref-description">
     
-    <p>Get model parameters</p>
+    <p>Returns the point estimates (or posterior samples for Bayesian
+   models) from a model.</p>
     
     </div>
 
@@ -190,7 +192,7 @@ or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>For non-Bayesian models and if <code>effects = "fixed"</code>, a data frame
-   with two columns: the parameters names and the related point estimates; if
+   with two columns: the parameter names and the related point estimates; if
    <code>effects = "random"</code>, a list with the random effects (as returned by
    <code>ranef()</code>. For Bayesian models, the posterior samples from the
    requested parameters as data frame.</p>

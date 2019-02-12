@@ -31,7 +31,7 @@ A list with (depending on the model) following elements (character
      \item \code{random}, the name of the random effects (grouping factors)
      \item \code{zero_inflated}, the name(s) of the predictor variables from the \emph{zero-inflated} part of the model
      \item \code{zero_inflated_random}, the name of the random effects (grouping factors)
-     \item \code{disperion}, the name of the dispersion terms
+     \item \code{dispersion}, the name of the dispersion terms
    }
 }
 \description{

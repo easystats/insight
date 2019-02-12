@@ -13,7 +13,7 @@ get_random(x)
 The data of all random effects terms, as data frame.
 }
 \description{
-Returns the data of all random effect terms.
+Returns the data of all random effects terms.
 }
 \examples{
 library(lme4)
