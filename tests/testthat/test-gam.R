@@ -1,8 +1,10 @@
+unloadNamespace("mgcv")
+
 if (require("testthat") && require("insight") && require("mgcv")) {
   context("insight, model_info")
 
   dat <- gamSim(1, n = 400, dist = "normal", scale = 2)
-  m1 <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
+  m1 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)

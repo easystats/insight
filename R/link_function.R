@@ -67,6 +67,18 @@ link_function.clm2 <- function(x, ...) {
 
 
 #' @export
+link_function.vgam <- function(x, ...) {
+  x@family@linkfun
+}
+
+
+#' @export
+link_function.vglm <- function(x, ...) {
+  x@family@linkfun
+}
+
+
+#' @export
 link_function.polr <- function(x, ...) {
   link <- switch(
     x$method,

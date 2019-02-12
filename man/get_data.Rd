@@ -8,6 +8,7 @@
 \alias{get_data.felm}
 \alias{get_data.gee}
 \alias{get_data.MixMod}
+\alias{get_data.MCMCglmm}
 \title{Get the data that was used to fit the model}
 \usage{
 get_data(x, ...)
@@ -28,6 +29,9 @@ get_data(x, ...)
 \method{get_data}{MixMod}(x, effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",
   "dispersion"), ...)
+
+\method{get_data}{MCMCglmm}(x, effects = c("all", "fixed", "random"),
+  ...)
 }
 \arguments{
 \item{x}{A fitted model.}

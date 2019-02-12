@@ -62,6 +62,39 @@ get_parameters.hurdle <- function(x, component = c("all", "conditional", "zi", "
 }
 
 
+#' @export
+get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  sc <- summary(x)
+
+  l <- compact_list(list(
+    conditional = sc$solutions[, 1],
+    random = sc$Gcovariances[, 1]
+  ))
+
+  names(l$conditional) <- rownames(sc$solutions)
+  names(l$random) <- rownames(sc$Gcovariances)
+
+  fixed <- data.frame(
+    parameter = names(l$conditional),
+    estimate = unname(l$conditional),
+    stringsAsFactors = FALSE
+  )
+
+  random <- data.frame(
+    parameter = names(l$random),
+    estimate = unname(l$random),
+    stringsAsFactors = FALSE
+  )
+
+  if (effects == "fixed") {
+    fixed
+  } else {
+    random
+  }
+}
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {

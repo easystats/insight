@@ -1,8 +1,10 @@
+unloadNamespace("mgcv")
+
 if (require("testthat") && require("insight") && require("gam")) {
   context("insight, model_info")
 
   data(kyphosis)
-  m1 <- gam(
+  m1 <- gam::gam(
     Kyphosis ~ s(Age, 4) + Number,
     family = binomial,
     data = kyphosis,

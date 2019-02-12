@@ -164,11 +164,9 @@ get_data.lme <- function(x, ...) {
 #' @export
 get_data.vgam <- function(x, ...) {
   mf <- tryCatch({
-    get(x@misc$dataname, envir = parent.frame())
+    get(x@misc$dataname, envir = parent.frame())[, find_terms(x, flatten = TRUE), drop = FALSE]
   },
-  error = function(x) {
-    NULL
-  }
+  error = function(x) { NULL }
   )
 
   prepare_get_data(x, mf)
@@ -299,18 +297,26 @@ get_data.stanmvreg <- function(x, ...) {
 }
 
 
+#' @rdname get_data
 #' @export
-get_data.MCMCglmm <- function(x, ...) {
+get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
   mf <- tryCatch({
     env_dataframes <- names(which(unlist(eapply(.GlobalEnv, is.data.frame))))
-    pv <- find_predictors(x, effects = "all", component = "all", flatten = TRUE)
+    pv <- find_predictors(x, effects = effects, component = "all", flatten = TRUE)
     matchframe <- unlist(lapply(env_dataframes, function(.x) {
       dat <- get(.x)
       all(pv %in% colnames(dat))
     }))
     mf <- env_dataframes[matchframe][1]
     if (!is.na(mf)) {
-      get(mf)
+      dat <- get(mf)
+      switch(
+        effects,
+        fixed = dat[, setdiff(colnames(dat), find_random(x, flatten = T)), drop = FALSE],
+        all = dat,
+        random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
+      )
     } else {
       NULL
     }
@@ -320,7 +326,7 @@ get_data.MCMCglmm <- function(x, ...) {
   }
   )
 
-  prepare_get_data(x, mf, effects = "all")
+  prepare_get_data(x, mf, effects = effects)
 }
 
 

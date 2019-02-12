@@ -97,6 +97,16 @@ find_parameters.lme <- function(x, ...) {
 
 
 #' @export
+find_parameters.MCMCglmm <- function(x, ...) {
+  sc <- summary(x)
+  compact_list(list(
+    conditional = rownames(sc$solutions),
+    random = rownames(sc$Gcovariances)
+  ))
+}
+
+
+#' @export
 find_parameters.glmmTMB <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
