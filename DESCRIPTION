@@ -28,6 +28,7 @@ Suggests:
   glmmTMB,
   gmnl,
   knitr,
+  lfe,
   MASS,
   mlogit,
   lme4,

@@ -83,7 +83,11 @@ get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
   re <- sapply(lme4::findbars(f), deparse, width.cutoff = 500)
 
   if (is_MCMCglmm && is_empty_object(re)) {
-    re <- deparse(f[[2L]], width.cutoff = 500)
+    re <- all.vars(f[[2L]])
+    if (length(re) > 1) {
+      re <- as.list(re)
+      split_nested <- FALSE
+    }
   } else {
     re <- trim(substring(re, regexpr(pattern = "\\|", re) + 1))
   }
@@ -102,12 +106,16 @@ get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
 get_group_factor <- function(x, f) {
   if (is.list(f)) {
     f <- lapply(f, function(.x) {
-      as.symbol(
-        get_model_random(.x, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee")))
-      )
+      get_model_random(.x, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "felm")))
     })
   } else {
-    f <- as.symbol(get_model_random(f, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee"))))
+    f <- get_model_random(f, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "felm")))
+  }
+
+  if (is.list(f)) {
+    f <- lapply(f, as.symbol)
+  } else {
+    f <- as.symbol(f)
   }
 
   f

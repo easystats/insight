@@ -57,6 +57,12 @@ n_obs.coxme <- function(x, ...) {
 
 
 #' @export
+n_obs.felm <- function(x, ...) {
+  x$N
+}
+
+
+#' @export
 n_obs.stanmvreg <- function(x, ...) {
   min(x$n_yobs)
 }
