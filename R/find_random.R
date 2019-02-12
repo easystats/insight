@@ -42,15 +42,15 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   f <- find_formula(x)
 
   if (is.list(f$random)) {
-    r1 <- unique(unlist(lapply(f$random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee"))))))
+    r1 <- unique(unlist(lapply(f$random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee", "felm"))))))
   } else {
-    r1 <- unique(get_model_random(f$random, split_nested, inherits(x, c("MCMCglmm", "gee"))))
+    r1 <- unique(unlist(get_model_random(f$random, split_nested, inherits(x, c("MCMCglmm", "gee", "felm")))))
   }
 
   if (is.list(f$zero_inflated_random)) {
-    r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee"))))))
+    r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee", "felm"))))))
   } else {
-    r2 <- unique(get_model_random(f$zero_inflated_random, split_nested, inherits(x, c("MCMCglmm", "gee"))))
+    r2 <- unique(get_model_random(f$zero_inflated_random, split_nested, inherits(x, c("MCMCglmm", "gee", "felm"))))
   }
 
   l <- compact_list(list(random = r1, zero_inflated_random = r2))

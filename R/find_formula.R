@@ -88,6 +88,18 @@ find_formula.coxme <- function(x, ...) {
 
 
 #' @export
+find_formula.felm <- function(x, ...) {
+  f.cond <- stats::as.formula(paste0(x$lhs, deparse(stats::formula(x), width.cutoff = 500L)))
+  f.rand <- paste0("~", paste0(names(x$fe), collapse = " + "))
+  if (f.rand == "~")
+    f.rand <- NULL
+  else
+    f.rand <- stats::as.formula(f.rand)
+  compact_list(list(conditional = f.cond, random = f.rand))
+}
+
+
+#' @export
 find_formula.hurdle <- function(x, ...) {
   zeroinf_formula(x)
 }
