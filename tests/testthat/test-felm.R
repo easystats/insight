@@ -55,7 +55,7 @@ if (require("testthat") && require("insight") && require("lfe")) {
   })
 
   test_that("find_formula", {
-    expect_length(find_formula(m1), 1)
+    expect_length(find_formula(m1), 2)
     expect_equal(
       find_formula(m1),
       list(
@@ -82,7 +82,7 @@ if (require("testthat") && require("insight") && require("lfe")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("x", "x1")
+        conditional = c("x", "x2")
       ))
     expect_equal(nrow(get_parameters(m1)), 2)
     expect_equal(get_parameters(m1)$parameter, c("x", "x2"))
