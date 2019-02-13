@@ -1,7 +1,10 @@
 #' @title Find name of model parameters
 #' @name find_parameters
 #'
-#' @description Get model formula
+#' @description Returns the names of model parameters, like they typically
+#'     appear in the \code{summary()} output. For Bayesian models, the parameter
+#'     names equal the column names of the posterior samples after coercion
+#'     from \code{as.data.frame()}.
 #'
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
@@ -92,6 +95,16 @@ find_parameters.lme <- function(x, ...) {
   compact_list(list(
     conditional = names(lme4::fixef(x)),
     random = colnames(lme4::ranef(x))
+  ))
+}
+
+
+#' @export
+find_parameters.MCMCglmm <- function(x, ...) {
+  sc <- summary(x)
+  compact_list(list(
+    conditional = rownames(sc$solutions),
+    random = rownames(sc$Gcovariances)
   ))
 }
 

@@ -17,14 +17,15 @@ A list of formulas that describe the model. For simple models,
    models, the returned list may have following elements:
    \itemize{
      \item \code{conditional}, the "fixed effects" part from the model
-     \item \code{random}, the "random effects" part from the model (or the \code{id} for gee-models)
+     \item \code{random}, the "random effects" part from the model (or the \code{id} for gee-models and similar)
      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
      \item \code{dispersion}, the dispersion formula
    }
 }
 \description{
-Get model formula
+Returns the formula(s) for the different parts of a model
+   (like fixed or random effects, zero-inflated component, ...).
 }
 \examples{
 data(mtcars)

@@ -1,13 +1,14 @@
 #' @title Get model parameters
 #' @name get_parameters
 #'
-#' @description Get model parameters
+#' @description Returns the point estimates (or posterior samples for Bayesian
+#'    models) from a model.
 #'
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
 #' @return For non-Bayesian models and if \code{effects = "fixed"}, a data frame
-#'    with two columns: the parameters names and the related point estimates; if
+#'    with two columns: the parameter names and the related point estimates; if
 #'    \code{effects = "random"}, a list with the random effects (as returned by
 #'    \code{ranef()}. For Bayesian models, the posterior samples from the
 #'    requested parameters as data frame.
@@ -59,6 +60,39 @@ get_parameters.zerotrunc <- function(x, component = c("all", "conditional", "zi"
 get_parameters.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
   component <- match.arg(component)
   return_zeroinf_parms(x, component)
+}
+
+
+#' @export
+get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  sc <- summary(x)
+
+  l <- compact_list(list(
+    conditional = sc$solutions[, 1],
+    random = sc$Gcovariances[, 1]
+  ))
+
+  names(l$conditional) <- rownames(sc$solutions)
+  names(l$random) <- rownames(sc$Gcovariances)
+
+  fixed <- data.frame(
+    parameter = names(l$conditional),
+    estimate = unname(l$conditional),
+    stringsAsFactors = FALSE
+  )
+
+  random <- data.frame(
+    parameter = names(l$random),
+    estimate = unname(l$random),
+    stringsAsFactors = FALSE
+  )
+
+  if (effects == "fixed") {
+    fixed
+  } else {
+    random
+  }
 }
 
 

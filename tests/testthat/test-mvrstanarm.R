@@ -79,15 +79,18 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     test_that("find_paramaters", {
       expect_equal(
         find_parameters(m1),
-        list(
-          y1 = list(
-            conditional = c("(Intercept)", "year", "sigma"),
-            random = sprintf("b[(Intercept) id:%i]", 1:40)
+        structure(
+          list(
+            y1 = list(
+              conditional = c("(Intercept)", "year", "sigma"),
+              random = sprintf("b[(Intercept) id:%i]", 1:40)
+            ),
+            y2 = list(
+              conditional = c("(Intercept)", "sexf", "year", "sigma"),
+              random = sprintf(c("b[(Intercept) id:%i]", "b[year id:%i]"), rep(1:40, each = 2))
+            )
           ),
-          y2 = list(
-            conditional = c("(Intercept)", "sexf", "year", "sigma"),
-            random = sprintf(c("b[(Intercept) id:%i]", "b[year id:%i]"), rep(1:40, each = 2))
-          )
+          is_mv = "1"
         )
       )
     })

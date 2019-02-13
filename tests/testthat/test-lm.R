@@ -9,6 +9,7 @@ if (require("testthat") && require("insight")) {
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
+    expect_false(model_info(m1)$is_bayesian)
   })
 
   test_that("find_predictors", {

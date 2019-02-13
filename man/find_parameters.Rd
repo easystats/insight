@@ -24,7 +24,10 @@ A list of parameter names. For simple models, only one list-element,
    }
 }
 \description{
-Get model formula
+Returns the names of model parameters, like they typically
+    appear in the \code{summary()} output. For Bayesian models, the parameter
+    names equal the column names of the posterior samples after coercion
+    from \code{as.data.frame()}.
 }
 \examples{
 data(mtcars)

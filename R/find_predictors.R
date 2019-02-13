@@ -1,7 +1,11 @@
 #' @title Find names of model predictors
 #' @name find_predictors
 #'
-#' @description to do...
+#' @description Returns the names of the predictor variables for the
+#'    different parts of a model (like fixed or random effects, zero-inflated
+#'    component, ...). Unlike \code{\link{find_paramaters}}, the names from
+#'    \code{find_predictors()} match the original variable names from the data
+#'    that was used to fit the model.
 #'
 #' @param x A fitted model.
 #' @param effects Should variables for fixed effects, random effects

@@ -67,6 +67,18 @@ link_function.clm2 <- function(x, ...) {
 
 
 #' @export
+link_function.vgam <- function(x, ...) {
+  x@family@linkfun
+}
+
+
+#' @export
+link_function.vglm <- function(x, ...) {
+  x@family@linkfun
+}
+
+
+#' @export
 link_function.polr <- function(x, ...) {
   link <- switch(
     x$method,
@@ -151,7 +163,6 @@ link_function.coxme <- function(x, ...) {
 }
 
 
-#' @rdname link_function
 #' @export
 link_function.stanmvreg <- function(x, ...) {
   fam <- stats::family(x)
@@ -159,7 +170,6 @@ link_function.stanmvreg <- function(x, ...) {
 }
 
 
-#' @rdname link_function
 #' @export
 link_function.brmsfit <- function(x, ...) {
   fam <- stats::family(x)

@@ -26,7 +26,7 @@ A list of character vectors that represent the name(s) of the
    }
 }
 \description{
-to do...
+Return the name of the grouping factors from mixed effects models.
 }
 \examples{
 library(lme4)

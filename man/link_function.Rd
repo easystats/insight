@@ -2,15 +2,9 @@
 % Please edit documentation in R/link_function.R
 \name{link_function}
 \alias{link_function}
-\alias{link_function.stanmvreg}
-\alias{link_function.brmsfit}
 \title{Get link-function from model object}
 \usage{
 link_function(x, ...)
-
-\method{link_function}{stanmvreg}(x, ...)
-
-\method{link_function}{brmsfit}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}

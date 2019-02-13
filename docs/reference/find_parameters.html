@@ -39,7 +39,10 @@
 
 <meta property="og:title" content="Find name of model parameters — find_parameters" />
 
-<meta property="og:description" content="Get model formula" />
+<meta property="og:description" content="Returns the names of model parameters, like they typically
+    appear in the summary() output. For Bayesian models, the parameter
+    names equal the column names of the posterior samples after coercion
+    from as.data.frame()." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -96,12 +99,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/easystats/insight">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -115,13 +113,16 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find name of model parameters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_parameters.R'><code>R/find_parameters.R</code></a></small>
+    
     <div class="hidden name"><code>find_parameters.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get model formula</p>
+    <p>Returns the names of model parameters, like they typically
+    appear in the <code><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary()</a></code> output. For Bayesian models, the parameter
+    names equal the column names of the posterior samples after coercion
+    from <code><a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>as.data.frame()</a></code>.</p>
     
     </div>
 

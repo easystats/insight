@@ -74,7 +74,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
 
     test_that("model_info", {
-      expect_true(m5[[1]]$is_zeroinf)
+      expect_true(model_info(m5)[[1]]$is_zeroinf)
+      expect_true(model_info(m5)[[1]]$is_bayesian)
     })
 
     test_that("clean_names", {

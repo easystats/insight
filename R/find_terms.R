@@ -14,7 +14,7 @@
 #'      \item \code{random}, the name of the random effects (grouping factors)
 #'      \item \code{zero_inflated}, the name(s) of the predictor variables from the \emph{zero-inflated} part of the model
 #'      \item \code{zero_inflated_random}, the name of the random effects (grouping factors)
-#'      \item \code{disperion}, the name of the dispersion terms
+#'      \item \code{dispersion}, the name of the dispersion terms
 #'    }
 #'
 #' @examples
@@ -30,14 +30,14 @@
 #'   sleepstudy$mysubgrp[filter_group] <-
 #'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
-#' 
+#'
 #' m1 <- glmer(
 #'   cbind(incidence, size - incidence) ~ period + (1 | herd),
 #'   data = cbpp,
 #'   family = binomial
 #' )
 #' find_terms(m1)
-#' 
+#'
 #' m2 <- lmer(
 #'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
 #'   data = sleepstudy
