@@ -41,6 +41,10 @@
 find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   f <- find_formula(x)
 
+  if (!obj_has_name(f, "random") && !!obj_has_name(f, "zero_inflated_random")) {
+    return(NULL)
+  }
+
   if (is.list(f$random)) {
     r1 <- unique(unlist(lapply(f$random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee", "felm"))))))
   } else {
