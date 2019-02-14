@@ -158,6 +158,12 @@ link_function.ivreg <- function(x, ...) {
 
 
 #' @export
+link_function.plm <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
 link_function.coxph <- function(x, ...) {
   stats::make.link("logit")$linkfun
 }

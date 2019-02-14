@@ -48,6 +48,16 @@ get_data.default <- function(x, ...) {
 
 
 #' @export
+get_data.plm <- function(x, ...) {
+  mf <- stats::model.frame(x)
+  cn <- colnames(mf)
+  mf <- as.data.frame(lapply(mf, as.vector))
+  colnames(mf) <- cn
+  prepare_get_data(x, mf)
+}
+
+
+#' @export
 get_data.ivreg <- function(x, ...) {
   mf <- stats::model.frame(x)
   cn <- clean_names(colnames(mf))

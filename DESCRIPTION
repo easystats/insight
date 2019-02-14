@@ -39,6 +39,7 @@ Suggests:
   nnet,
   nlme,
   ordinal,
+  plm,
   pscl,
   splines,
   survey,
