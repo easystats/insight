@@ -48,6 +48,31 @@ get_data.default <- function(x, ...) {
 
 
 #' @export
+get_data.ivreg <- function(x, ...) {
+  mf <- stats::model.frame(x)
+  cn <- clean_names(colnames(mf))
+  ft <- find_terms(x, flatten = TRUE)
+
+  remain <- setdiff(ft, cn)
+
+  if (is_empty_object(remain)) {
+    final_mf <- mf
+  } else {
+    final_mf <- tryCatch({
+      dat <- get_data_from_env(x)
+      cbind(mf, dat[, remain, drop = FALSE])
+    },
+    error = function(x) {
+      NULL
+    }
+    )
+  }
+
+  prepare_get_data(x, final_mf)
+}
+
+
+#' @export
 get_data.clm2 <- function(x, ...) {
   mf <- tryCatch({
     x$location
@@ -178,7 +203,7 @@ get_data.vgam <- function(x, ...) {
 get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   mf <- tryCatch({
-    dat <- eval(x$call$data, envir = parent.frame())
+    dat <- get_data_from_env(x)
     switch(
       effects,
       all = dat,
@@ -198,7 +223,7 @@ get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 get_data.gls <- function(x, ...) {
   mf <- tryCatch({
-    eval(x$call$data, envir = parent.frame())
+    get_data_from_env(x)
   },
   error = function(x) {
     NULL
@@ -514,6 +539,10 @@ return_data <- function(mf, effects, component, model.terms) {
 add_zeroinf_data <- function(x, mf, tn) {
   tryCatch({
     env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
+    if (obj_has_name(x$call, "subset")) {
+      env_data <- subset(env_data, subset = eval(x$call$subset))
+    }
+
     merge_dataframes(env_data, mf, replace = TRUE)
   },
   error = function(x) {
