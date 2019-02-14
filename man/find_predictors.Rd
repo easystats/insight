@@ -38,7 +38,7 @@ A list of character vectors that represent the name(s) of the
 \description{
 Returns the names of the predictor variables for the
    different parts of a model (like fixed or random effects, zero-inflated
-   component, ...). Unlike \code{\link{find_paramaters}}, the names from
+   component, ...). Unlike \code{\link{find_parameters}}, the names from
    \code{find_predictors()} match the original variable names from the data
    that was used to fit the model.
 }

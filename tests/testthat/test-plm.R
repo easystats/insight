@@ -31,7 +31,7 @@ if (require("testthat") && require("insight") && require("plm")) {
   })
 
   test_that("get_predictors", {
-    expect_equal(colnames(get_predictors(m1)), c("lprbarr", "year", "mix"))
+    expect_equal(colnames(get_predictors(m1)), c("lprbarr", "year", "lmix"))
   })
 
   test_that("link_inverse", {
