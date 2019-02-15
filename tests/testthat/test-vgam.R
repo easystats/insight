@@ -1,5 +1,3 @@
-unloadNamespace("gam")
-
 if (require("testthat") && require("insight") && require("VGAM")) {
   context("insight, model_info")
 

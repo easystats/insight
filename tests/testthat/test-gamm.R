@@ -41,7 +41,7 @@ if (require("testthat") && require("insight") && require("mgcv")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 400)
-    expect_equal(colnames(get_data(m1)), c("y", "x0", "x1", "x2"))
+    expect_equal(colnames(get_data(m1)), c("y", "x1", "x0", "x2", "fac", "y.0", "Xr", "Xr.0", "X.(Intercept)", "X.x1", "X.s(x0)Fx1", "X.s(x2)Fx1"))
   })
 
   test_that("find_formula", {

@@ -30,7 +30,7 @@ if (require("testthat") && require("insight") && require("gamm4")) {
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), dat$y)
+    expect_equal(get_response(m1), unname(dat$y[, 1]))
   })
 
   test_that("link_inverse", {
@@ -46,7 +46,7 @@ if (require("testthat") && require("insight") && require("gamm4")) {
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("y ~ s(x0) + s(x1) + s(x2)"))
+      list(conditional = as.formula("y ~ s(x0) + x1 + s(x2)"))
     )
   })
 
