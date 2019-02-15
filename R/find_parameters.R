@@ -174,26 +174,29 @@ find_parameters.brmsfit <- function(x, ...) {
   if (is_multivariate(x)) {
     rn <- names(find_response(x))
     l <- lapply(rn, function(i) {
-
-      if (obj_has_name(l, "conditional"))
+      if (obj_has_name(l, "conditional")) {
         conditional <- l$conditional[grepl(sprintf("^b_\\Q%s\\E_", i), l$conditional)]
-      else
+      } else {
         conditional <- NULL
+      }
 
-      if (obj_has_name(l, "random"))
+      if (obj_has_name(l, "random")) {
         random <- l$random[grepl(sprintf("__\\Q%s\\E\\.", i), l$random)]
-      else
+      } else {
         random <- NULL
+      }
 
-      if (obj_has_name(l, "zero_inflated"))
+      if (obj_has_name(l, "zero_inflated")) {
         zero_inflated <- l$zero_inflated[grepl(sprintf("^b_zi_\\Q%s\\E_", i), l$zero_inflated)]
-      else
+      } else {
         zero_inflated <- NULL
+      }
 
-      if (obj_has_name(l, "zero_inflated_random"))
+      if (obj_has_name(l, "zero_inflated_random")) {
         zero_inflated_random <- l$zero_inflated_random[grepl(sprintf("__zi_\\Q%s\\E\\.", i), l$zero_inflated_random)]
-      else
+      } else {
         zero_inflated_random <- NULL
+      }
 
       compact_list(list(
         conditional = conditional,
@@ -251,16 +254,16 @@ find_parameters.stanmvreg <- function(x, ...) {
     random = rand
   ))
 
-  x1 <- sub(pattern = "(.*)(\\|)(.*)", "\\1",  l$conditional)
-  x2 <- sub(pattern = "(.*)(\\|)(.*)", "\\3",  l$conditional)
+  x1 <- sub(pattern = "(.*)(\\|)(.*)", "\\1", l$conditional)
+  x2 <- sub(pattern = "(.*)(\\|)(.*)", "\\3", l$conditional)
 
   l.cond <- lapply(rn, function(i) {
     list(conditional = x2[which(x1 == i)])
   })
   names(l.cond) <- rn
 
-  x1 <- sub(pattern = "b\\[(.*)(\\|)(.*)", "\\1",  l$random)
-  x2 <- sub(pattern = "(b\\[).*(.*)(\\|)(.*)", "\\1\\4",  l$random)
+  x1 <- sub(pattern = "b\\[(.*)(\\|)(.*)", "\\1", l$random)
+  x2 <- sub(pattern = "(b\\[).*(.*)(\\|)(.*)", "\\1\\4", l$random)
 
   l.random <- lapply(rn, function(i) {
     list(random = x2[which(x1 == i)])

@@ -11,7 +11,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
 
 
-# Model fitting -----------------------------------------------------------
+    # Model fitting -----------------------------------------------------------
 
     data("epilepsy")
     data("iris")
@@ -49,8 +49,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     m3 <- brm(r | trials(n) ~ treat * c2, data = dat, family = binomial(link = logit), chains = 1, iter = 500)
 
     m4 <- brm(
-      bf(count ~ child + camper + (1 | persons),
-         zi ~ child + camper + (1 | persons)),
+      bf(
+        count ~ child + camper + (1 | persons),
+        zi ~ child + camper + (1 | persons)
+      ),
       data = zinb,
       family = zero_inflated_poisson(),
       chains = 1,
@@ -63,14 +65,15 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     bf1 <- bf(count ~ child + camper + (1 | persons), zi ~ camper + (1 | persons))
     bf2 <- bf(count2 ~ child + livebait + (1 | persons), zi ~ child + (1 | persons))
 
-    m5 <- brm(bf1 + bf2, data = zinb,
+    m5 <- brm(bf1 + bf2,
+      data = zinb,
       family = zero_inflated_poisson(),
       chains = 1,
       iter = 500
     )
 
 
-# Tests -------------------------------------------------------------------
+    # Tests -------------------------------------------------------------------
 
 
     test_that("model_info", {
@@ -98,7 +101,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         list(
           SepalLength = list(conditional = c("Petal.Length", "Sepal.Width", "Species")),
           SepalWidth = list(conditional = "Species")
-      ))
+        )
+      )
 
       expect_identical(find_predictors(m2, flatten = TRUE), c("Petal.Length", "Sepal.Width", "Species"))
       expect_identical(find_predictors(m3), list(conditional = c("treat", "c2")))
@@ -111,7 +115,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         list(
           count = list(conditional = c("child", "camper"), zero_inflated = "camper"),
           count2 = list(conditional = c("child", "livebait"), zero_inflated = "child")
-        ))
+        )
+      )
     })
 
     test_that("find_response", {
@@ -146,7 +151,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           response = c(SepalLength = "Sepal.Length", SepalWidth = "Sepal.Width"),
           SepalLength = list(conditional = c("Petal.Length", "Sepal.Width", "Species")),
           SepalWidth = list(conditional = "Species")
-        ))
+        )
+      )
 
       expect_identical(find_terms(m2, flatten = TRUE), c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species"))
       expect_identical(find_terms(m3), list(response = c("r", "n"), conditional = c("treat", "c2")))
@@ -159,7 +165,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           random = "persons",
           zero_inflated = c("child", "camper"),
           zero_inflated_random = "persons"
-        ))
+        )
+      )
 
       expect_identical(find_terms(m4, flatten = TRUE), c("count", "child", "camper", "persons"))
     })
@@ -222,7 +229,6 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           "is_mv" = "1"
         )
       )
-
     })
 
     test_that("find_paramaters", {
@@ -236,28 +242,35 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       )
       expect_equal(
         colnames(get_parameters(m4, effects = "all")),
-        c("b_Intercept", "b_child", "b_camper", "r_persons.1.Intercept.", "r_persons.2.Intercept.",
+        c(
+          "b_Intercept", "b_child", "b_camper", "r_persons.1.Intercept.", "r_persons.2.Intercept.",
           "r_persons.3.Intercept.", "r_persons.4.Intercept.", "b_zi_Intercept", "b_zi_child",
           "b_zi_camper", "r_persons__zi.1.Intercept.", "r_persons__zi.2.Intercept.",
-          "r_persons__zi.3.Intercept.", "r_persons__zi.4.Intercept.")
+          "r_persons__zi.3.Intercept.", "r_persons__zi.4.Intercept."
+        )
       )
       expect_equal(
         colnames(get_parameters(m4, effects = "random", component = "cond")),
-        c("r_persons.1.Intercept.", "r_persons.2.Intercept.",
-          "r_persons.3.Intercept.", "r_persons.4.Intercept.")
+        c(
+          "r_persons.1.Intercept.", "r_persons.2.Intercept.",
+          "r_persons.3.Intercept.", "r_persons.4.Intercept."
+        )
       )
 
       expect_equal(
         colnames(get_parameters(m5, effects = "random", component = "cond")),
-        c("r_persons__count.1.Intercept.", "r_persons__count.2.Intercept.",
+        c(
+          "r_persons__count.1.Intercept.", "r_persons__count.2.Intercept.",
           "r_persons__count.3.Intercept.", "r_persons__count.4.Intercept.",
           "r_persons__count2.1.Intercept.", "r_persons__count2.2.Intercept.",
-          "r_persons__count2.3.Intercept.", "r_persons__count2.4.Intercept.")
+          "r_persons__count2.3.Intercept.", "r_persons__count2.4.Intercept."
+        )
       )
 
       expect_equal(
         colnames(get_parameters(m5, effects = "all", component = "all")),
-        c("b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count.1.Intercept.",
+        c(
+          "b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count.1.Intercept.",
           "r_persons__count.2.Intercept.", "r_persons__count.3.Intercept.",
           "r_persons__count.4.Intercept.", "b_zi_count_Intercept", "b_zi_count_camper",
           "r_persons__zi_count.1.Intercept.", "r_persons__zi_count.2.Intercept.",
@@ -267,9 +280,9 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           "r_persons__count2.3.Intercept.", "r_persons__count2.4.Intercept.",
           "b_zi_count2_Intercept", "b_zi_count2_child", "r_persons__zi_count2.1.Intercept.",
           "r_persons__zi_count2.2.Intercept.", "r_persons__zi_count2.3.Intercept.",
-          "r_persons__zi_count2.4.Intercept.")
+          "r_persons__zi_count2.4.Intercept."
+        )
       )
-
     })
 
     test_that("linkfun", {
@@ -295,6 +308,5 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_false(is_multivariate(m4))
       expect_true(is_multivariate(m5))
     })
-
   }
 }

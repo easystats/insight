@@ -61,9 +61,9 @@ if (require("testthat") && require("insight") && require("survival")) {
       find_parameters(m1),
       list(
         conditional = c("sexfemale", "age", "ph.ecogok", "ph.ecoglimited")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 4)
     expect_equal(get_parameters(m1)$parameter, c("sexfemale", "age", "ph.ecogok", "ph.ecoglimited"))
   })
-
 }

@@ -4,7 +4,7 @@ if (require("testthat") && require("insight") && require("MCMCglmm")) {
   data(PlodiaPO)
   m1 <- MCMCglmm(
     PO ~ plate,
-    random =  ~ FSfamily,
+    random = ~FSfamily,
     data = PlodiaPO,
     verbose = FALSE,
     nitt = 1300,
@@ -81,7 +81,8 @@ if (require("testthat") && require("insight") && require("MCMCglmm")) {
       list(
         conditional = c("(Intercept)", "plate"),
         random = "FSfamily"
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 2)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "plate"))
     expect_equal(get_parameters(m1, effects = "random")$parameter, "FSfamily")

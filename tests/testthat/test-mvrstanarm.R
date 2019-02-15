@@ -12,7 +12,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     m1 <- stan_mvmer(
       formula = list(
         logBili ~ year + (1 | id),
-        albumin ~ sex + year + (year | id)),
+        albumin ~ sex + year + (year | id)
+      ),
       data = pbcLong,
       chains = 1, cores = 1, seed = 12345, iter = 1000
     )
@@ -27,14 +28,16 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         list(
           y1 = list(conditional = "year"),
           y2 = list(conditional = c("sex", "year"))
-      ))
+        )
+      )
       expect_identical(find_predictors(m1, flatten = TRUE), c("year", "sex"))
       expect_identical(
         find_predictors(m1, effects = "all", component = "all"),
         list(
           y1 = list(conditional = "year", random = "id"),
           y2 = list(conditional = c("sex", "year"), random = "id")
-        ))
+        )
+      )
       expect_identical(
         find_predictors(m1, effects = "all", component = "all", flatten = TRUE),
         c("year", "id", "sex")
@@ -58,7 +61,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           response = c(y1 = "logBili", y2 = "albumin"),
           y1 = list(conditional = "year", random = "id"),
           y2 = list(conditional = c("sex", "year"), random = "id")
-      ))
+        )
+      )
       expect_identical(
         find_terms(m1, flatten = TRUE),
         c("logBili", "albumin", "year", "id", "sex")
@@ -69,7 +73,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           response = c(y1 = "logBili", y2 = "albumin"),
           y1 = list(random = "id"),
           y2 = list(random = "id")
-        ))
+        )
+      )
     })
 
     test_that("n_obs", {
@@ -102,9 +107,11 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       )
       expect_equal(
         colnames(get_parameters(m1, effects = "all")),
-        c("y1|(Intercept)", "y1|year", "y1|sigma", sprintf("b[y1|(Intercept) id:%i]", 1:40),
+        c(
+          "y1|(Intercept)", "y1|year", "y1|sigma", sprintf("b[y1|(Intercept) id:%i]", 1:40),
           "y2|(Intercept)", "y2|sexf", "y2|year", "y2|sigma",
-          sprintf(c("b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"), rep(1:40, each = 2)))
+          sprintf(c("b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"), rep(1:40, each = 2))
+        )
       )
     })
 
@@ -122,6 +129,5 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     test_that("is_multivariate", {
       expect_true(is_multivariate(m1))
     })
-
   }
 }

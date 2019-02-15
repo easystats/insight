@@ -201,7 +201,9 @@ get_data.vgam <- function(x, ...) {
   mf <- tryCatch({
     get(x@misc$dataname, envir = parent.frame())[, find_terms(x, flatten = TRUE), drop = FALSE]
   },
-  error = function(x) { NULL }
+  error = function(x) {
+    NULL
+  }
   )
 
   prepare_get_data(x, mf)

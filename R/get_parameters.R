@@ -19,7 +19,7 @@
 #' get_parameters(m)
 #' @importFrom stats coef
 #' @export
-get_parameters <- function(x,...) {
+get_parameters <- function(x, ...) {
   UseMethod("get_parameters")
 }
 
@@ -36,7 +36,8 @@ get_parameters.default <- function(x, ...) {
   },
   error = function(x) {
     NULL
-  })
+  }
+  )
 }
 
 

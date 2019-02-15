@@ -44,7 +44,7 @@
 #'   data = Salamanders,
 #'   family = nbinom2
 #' )
-#'
+#' 
 #' model_info(m)
 #' @importFrom stats formula terms
 #' @export
@@ -65,7 +65,8 @@ model_info.default <- function(x, ...) {
   },
   error = function(x) {
     NULL
-  })
+  }
+  )
 
   if (!is.null(faminfo)) {
     make_family(
@@ -563,7 +564,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
   if (binom_fam && !inherits(x, "brmsfit")) {
     is.trial <- tryCatch({
       rv <- deparse(stats::formula(x)[[2L]], width.cutoff = 500L)
-       grepl("cbind\\((.*)\\)", rv)
+      grepl("cbind\\((.*)\\)", rv)
     },
     error = function(x) {
       FALSE
@@ -584,15 +585,15 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     )
   }
 
-  if(inherits(x, "htest")){
-    if (grepl("t-test", x$method)){
+  if (inherits(x, "htest")) {
+    if (grepl("t-test", x$method)) {
       is_ttest <- TRUE
       is_correlation <- FALSE
-    } else{
+    } else {
       is_ttest <- FALSE
       is_correlation <- TRUE
     }
-  } else{
+  } else {
     is_ttest <- FALSE
     is_correlation <- FALSE
   }

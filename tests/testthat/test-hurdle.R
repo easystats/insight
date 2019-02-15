@@ -63,7 +63,8 @@ if (require("testthat") && require("insight") && require("pscl")) {
       list(
         conditional = c("count_(Intercept)", "count_femWomen", "count_marMarried", "count_kid5", "count_ment"),
         zero_inflated = c("zero_(Intercept)", "zero_kid5", "zero_phd")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 8)
     expect_equal(nrow(get_parameters(m1, component = "zi")), 3)
     expect_equal(get_parameters(m1)$parameter, c("count_(Intercept)", "count_femWomen", "count_marMarried", "count_kid5", "count_ment", "zero_(Intercept)", "zero_kid5", "zero_phd"))

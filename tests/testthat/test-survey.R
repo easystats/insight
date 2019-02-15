@@ -4,11 +4,11 @@ if (require("testthat") && require("insight") && require("survey")) {
   data(api)
   dstrat <-
     svydesign(
-      id =  ~ 1,
-      strata =  ~ stype,
-      weights =  ~ pw,
+      id = ~1,
+      strata = ~stype,
+      weights = ~pw,
       data = apistrat,
-      fpc =  ~ fpc
+      fpc = ~fpc
     )
 
   m1 <- svyglm(api00 ~ ell + meals + mobility, design = dstrat)
@@ -65,9 +65,9 @@ if (require("testthat") && require("insight") && require("survey")) {
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "ell", "meals", "mobility")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 4)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "ell", "meals", "mobility"))
   })
-
 }

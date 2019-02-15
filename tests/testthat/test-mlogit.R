@@ -5,7 +5,7 @@ if (require("testthat") && require("insight") && require("mlogit")) {
   Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
 
   m1 <- mlogit(mode ~ price + catch, data = Fish)
-  m2 <- mlogit(mode ~ price+ catch | income, data = Fish)
+  m2 <- mlogit(mode ~ price + catch | income, data = Fish)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_ordinal)

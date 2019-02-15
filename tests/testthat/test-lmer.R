@@ -141,7 +141,8 @@ if (require("testthat") && require("insight") && require("lme4")) {
       list(
         conditional = c("(Intercept)", "Days"),
         random = list(Subject = c("(Intercept)", "Days"))
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 2)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "Days"))
 
@@ -154,7 +155,8 @@ if (require("testthat") && require("insight") && require("lme4")) {
           Subject = "(Intercept)",
           mygrp = "(Intercept)"
         )
-      ))
+      )
+    )
 
     expect_equal(nrow(get_parameters(m2)), 2)
     expect_equal(get_parameters(m2)$parameter, c("(Intercept)", "Days"))
@@ -165,5 +167,4 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_false(is_multivariate(m1))
     expect_false(is_multivariate(m2))
   })
-
 }

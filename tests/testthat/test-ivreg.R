@@ -2,11 +2,11 @@ if (require("testthat") && require("insight") && require("AER")) {
   context("insight, model_info")
 
   data(CigarettesSW)
-  CigarettesSW$rprice <- with(CigarettesSW, price/cpi)
-  CigarettesSW$rincome <- with(CigarettesSW, income/population/cpi)
-  CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax)/cpi)
+  CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
+  CigarettesSW$rincome <- with(CigarettesSW, income / population / cpi)
+  CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax) / cpi)
 
-  m1 <- ivreg(log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax/cpi), data = CigarettesSW, subset = year == "1995")
+  m1 <- ivreg(log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi), data = CigarettesSW, subset = year == "1995")
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -35,7 +35,7 @@ if (require("testthat") && require("insight") && require("AER")) {
   })
 
   test_that("get_predictors", {
-    expect_equal(colnames(get_predictors(m1)),  c("rprice", "rincome", "tdiff", "tax", "cpi"))
+    expect_equal(colnames(get_predictors(m1)), c("rprice", "rincome", "tdiff", "tax", "cpi"))
   })
 
   test_that("link_inverse", {
@@ -44,7 +44,7 @@ if (require("testthat") && require("insight") && require("AER")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 48)
-    expect_equal(colnames(get_data(m1)),  c("packs", "rprice", "rincome", "tdiff", "tax", "cpi"))
+    expect_equal(colnames(get_data(m1)), c("packs", "rprice", "rincome", "tdiff", "tax", "cpi"))
   })
 
   test_that("find_formula", {
@@ -54,7 +54,8 @@ if (require("testthat") && require("insight") && require("AER")) {
       list(
         conditional = as.formula("log(packs) ~ log(rprice) + log(rincome)"),
         instruments = as.formula("~log(rincome) + tdiff + I(tax/cpi)")
-      ))
+      )
+    )
   })
 
   test_that("find_terms", {
@@ -75,7 +76,8 @@ if (require("testthat") && require("insight") && require("AER")) {
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "log(rprice)", "log(rincome)")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 3)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "log(rprice)", "log(rincome)"))
   })

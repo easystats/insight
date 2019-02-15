@@ -120,14 +120,16 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
         random = "(Intercept)",
         zero_inflated = c("(Intercept)", "child", "livebait1"),
         zero_inflated_random = "zi_(Intercept)"
-      ))
+      )
+    )
     expect_equal(
       find_parameters(m2),
       list(
         conditional = c("(Intercept)", "child", "camper1"),
         random = "(Intercept)",
         zero_inflated = c("(Intercept)", "child", "livebait1")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m)), 6)
     expect_equal(
       get_parameters(m, effects = "random"),

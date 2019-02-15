@@ -16,7 +16,7 @@
 #' outcome <- gl(3, 1, 9)
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ outcome + treatment, family = poisson())
-#'
+#' 
 #' link_function(m)(.3)
 #' # same as
 #' log(.3)
@@ -185,10 +185,11 @@ link_function.stanmvreg <- function(x, ...) {
 #' @export
 link_function.brmsfit <- function(x, ...) {
   fam <- stats::family(x)
-  if (is_multivariate(x))
+  if (is_multivariate(x)) {
     lapply(fam, brms_link_fun)
-  else
+  } else {
     brms_link_fun(fam)
+  }
 }
 
 
