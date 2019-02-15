@@ -41,7 +41,7 @@
 
 <meta property="og:description" content="Returns the names of the predictor variables for the
    different parts of a model (like fixed or random effects, zero-inflated
-   component, ...). Unlike find_paramaters, the names from
+   component, ...). Unlike find_parameters, the names from
    find_predictors() match the original variable names from the data
    that was used to fit the model." />
 
@@ -122,7 +122,7 @@
     
     <p>Returns the names of the predictor variables for the
    different parts of a model (like fixed or random effects, zero-inflated
-   component, ...). Unlike <code>find_paramaters</code>, the names from
+   component, ...). Unlike <code><a href='find_parameters.html'>find_parameters</a></code>, the names from
    <code>find_predictors()</code> match the original variable names from the data
    that was used to fit the model.</p>
     
@@ -130,7 +130,7 @@
 
     <pre class="usage"><span class='fu'>find_predictors</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>),
   <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>,
-  <span class='st'>"dispersion"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='st'>"dispersion"</span>, <span class='st'>"instruments"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
