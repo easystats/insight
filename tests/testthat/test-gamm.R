@@ -3,6 +3,7 @@ unloadNamespace("gam")
 if (require("testthat") && require("insight") && require("mgcv")) {
   context("insight, model_info")
 
+  set.seed(0)
   dat <- gamSim(6, n = 200, scale = .2, dist = "poisson")
   m1 <-
     gamm(
@@ -39,8 +40,8 @@ if (require("testthat") && require("insight") && require("mgcv")) {
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 400)
-    expect_equal(colnames(get_data(m1)), c("y", "x1", "x0", "x2", "fac", "y.0", "Xr", "Xr.0", "X.(Intercept)", "X.x1", "X.s(x0)Fx1", "X.s(x2)Fx1"))
+    expect_equal(nrow(get_data(m1)), 200)
+    expect_equal(colnames(get_data(m1)), c("y", "x0", "x1", "x2", "fac", "g", "g.0", "g.1", "y.0", "Xr.V1", "Xr.V2", "Xr.V3", "Xr.V4", "Xr.V5", "Xr.V6", "Xr.V7", "Xr.V8", "Xr.0.V1", "Xr.0.V2", "Xr.0.V3", "Xr.0.V4", "Xr.0.V5", "Xr.0.V6", "Xr.0.V7", "Xr.0.V8", "Xr.1.V1", "Xr.1.V2", "Xr.1.V3", "Xr.1.V4", "Xr.1.V5", "Xr.1.V6", "Xr.1.V7", "Xr.1.V8", "X.(Intercept)", "X.s(x0)Fx1", "X.s(x1)Fx1", "X.s(x2)Fx1"))
   })
 
   test_that("find_formula", {
