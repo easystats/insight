@@ -56,6 +56,11 @@ model_info <- function(x, ...) {
 #' @importFrom stats family
 #' @export
 model_info.default <- function(x, ...) {
+  if (inherits(x, "list") && obj_has_name(x, "gam")) {
+    x <- x$gam
+    class(x) <- c(class(x), c("glm", "lm"))
+  }
+
   faminfo <- tryCatch({
     if (inherits(x, c("Zelig-relogit"))) {
       stats::binomial(link = "logit")
@@ -94,6 +99,14 @@ model_info.glmmPQL <- function(x, ...) {
     link.fun = faminfo$link,
     ...
   )
+}
+
+
+#' @export
+model_info.gamm <- function(x, ...) {
+  x <- x$gam
+  class(x) <- c(class(x), c("glm", "lm"))
+  NextMethod()
 }
 
 

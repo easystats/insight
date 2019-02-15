@@ -28,6 +28,11 @@ link_inverse <- function(x, ...) {
 
 #' @export
 link_inverse.default <- function(x, ...) {
+  if (inherits(x, "list") && obj_has_name(x, "gam")) {
+    x <- x$gam
+    class(x) <- c(class(x), c("glm", "lm"))
+  }
+
   if (inherits(x, "Zelig-relogit")) {
     stats::make.link(link = "logit")$linkinv
   } else {
@@ -242,6 +247,13 @@ link_inverse.clm2 <- function(x, ...) {
     loglog = stats::make.link("log")$linkinv,
     stats::make.link("logit")$linkinv
   )
+}
+
+#' @export
+link_inverse.gamm <- function(x, ...) {
+  x <- x$gam
+  class(x) <- c(class(x), c("glm", "lm"))
+  NextMethod()
 }
 
 

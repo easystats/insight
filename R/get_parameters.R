@@ -26,6 +26,11 @@ get_parameters <- function(x,...) {
 
 #' @export
 get_parameters.default <- function(x, ...) {
+  if (inherits(x, "list") && obj_has_name(x, "gam")) {
+    x <- x$gam
+    class(x) <- c(class(x), c("glm", "lm"))
+  }
+
   tryCatch({
     cf <- stats::coef(x)
     data.frame(
@@ -52,6 +57,14 @@ get_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi",
 get_parameters.zerotrunc <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
   component <- match.arg(component)
   return_zeroinf_parms(x, component)
+}
+
+
+#' @export
+get_parameters.gamm <- function(x, ...) {
+  x <- x$gam
+  class(x) <- c(class(x), c("glm", "lm"))
+  NextMethod()
 }
 
 

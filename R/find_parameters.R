@@ -33,6 +33,11 @@ find_parameters <- function(x, ...) {
 
 #' @export
 find_parameters.default <- function(x, ...) {
+  if (inherits(x, "list") && obj_has_name(x, "gam")) {
+    x <- x$gam
+    class(x) <- c(class(x), c("glm", "lm"))
+  }
+
   tryCatch({
     list(conditional = names(stats::coef(x)))
   },
@@ -40,6 +45,14 @@ find_parameters.default <- function(x, ...) {
     NULL
   }
   )
+}
+
+
+#' @export
+find_parameters.gamm <- function(x, ...) {
+  x <- x$gam
+  class(x) <- c(class(x), c("glm", "lm"))
+  NextMethod()
 }
 
 

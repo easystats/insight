@@ -22,6 +22,11 @@ n_obs <- function(x, ...) {
 
 #' @export
 n_obs.default <- function(x, ...) {
+  if (inherits(x, "list") && obj_has_name(x, "gam")) {
+    x <- x$gam
+    class(x) <- c(class(x), c("glm", "lm"))
+  }
+
   tryCatch({
     stats::nobs(x)
   },
@@ -29,6 +34,14 @@ n_obs.default <- function(x, ...) {
     NULL
   }
   )
+}
+
+
+#' @export
+n_obs.gamm <- function(x, ...) {
+  x <- x$gam
+  class(x) <- c(class(x), c("glm", "lm"))
+  NextMethod()
 }
 
 
