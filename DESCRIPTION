@@ -42,6 +42,7 @@ Suggests:
   ordinal,
   plm,
   pscl,
+  rstanarm,
   splines,
   survey,
   survival,

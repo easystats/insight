@@ -2,7 +2,7 @@
 trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 
 # remove NULL elements from lists
-compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i) || i == "NULL")]
+compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i) || i[[1]] == "NULL")]
 
 # is string empty?
 is_empty_string <- function(x) {
