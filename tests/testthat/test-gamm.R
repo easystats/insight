@@ -1,4 +1,3 @@
-unloadNamespace("mgcv")
 unloadNamespace("gam")
 
 if (require("testthat") && require("insight") && require("mgcv")) {
