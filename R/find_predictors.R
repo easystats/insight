@@ -3,7 +3,7 @@
 #'
 #' @description Returns the names of the predictor variables for the
 #'    different parts of a model (like fixed or random effects, zero-inflated
-#'    component, ...). Unlike \code{\link{find_paramaters}}, the names from
+#'    component, ...). Unlike \code{\link{find_parameters}}, the names from
 #'    \code{find_predictors()} match the original variable names from the data
 #'    that was used to fit the model.
 #'
@@ -34,7 +34,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_predictors(m)
 #' @export
-find_predictors <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE) {
+find_predictors <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"), flatten = FALSE) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 

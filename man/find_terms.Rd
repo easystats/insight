@@ -6,7 +6,7 @@
 \usage{
 find_terms(x, effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion"), flatten = FALSE)
+  "dispersion", "instruments"), flatten = FALSE)
 }
 \arguments{
 \item{x}{A fitted model.}

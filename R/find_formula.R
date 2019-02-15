@@ -63,6 +63,44 @@ find_formula.gee <- function(x, ...) {
 
 
 #' @export
+find_formula.ivreg <- function(x, ...) {
+  tryCatch({
+    f <- deparse(stats::formula(x), width.cutoff = 500)
+    cond <- trim(substr(f, start = 0, stop = regexpr(pattern = "\\|", f) - 1))
+    instr <- trim(substr(f, regexpr(pattern = "\\|", f) + 1, stop = 10000L))
+
+    list(
+      conditional = stats::as.formula(cond),
+      instruments = stats::as.formula(paste0("~", instr))
+    )
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+}
+
+
+#' @export
+find_formula.plm <- function(x, ...) {
+  tryCatch({
+    f <- deparse(stats::formula(x), width.cutoff = 500)
+    cond <- trim(substr(f, start = 0, stop = regexpr(pattern = "\\|", f) - 1))
+    instr <- trim(substr(f, regexpr(pattern = "\\|", f) + 1, stop = 10000L))
+
+    list(
+      conditional = stats::as.formula(cond),
+      instruments = stats::as.formula(paste0("~", instr))
+    )
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+}
+
+
+#' @export
 find_formula.coxme <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")

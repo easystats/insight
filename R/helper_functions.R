@@ -125,12 +125,12 @@ get_group_factor <- function(x, f) {
 # to reduce redundant code, I extract this part which is used several
 # times accross this package
 get_elements <- function(effects, component) {
-  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion")
+  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments")
 
   elements <- switch(
     effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion")],
+    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
@@ -140,6 +140,19 @@ get_elements <- function(effects, component) {
     conditional = elements[elements %in% c("conditional", "random")],
     zi = ,
     zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random")],
-    dispersion = elements[elements == "dispersion"]
+    dispersion = elements[elements == "dispersion"],
+    instruments = elements[elements == "instruments"]
   )
+}
+
+
+# return data from a data frame that is in the environment,
+# and subset the data, if necessary
+get_data_from_env <- function(x) {
+  dat <- eval(x$call$data, envir = parent.frame())
+  if (obj_has_name(x$call, "subset")) {
+    dat <- subset(dat, subset = eval(x$call$subset))
+  }
+
+  dat
 }

@@ -45,7 +45,7 @@
 #' find_terms(m2)
 #' find_terms(m2, flatten = TRUE)
 #' @export
-find_terms <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE) {
+find_terms <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"), flatten = FALSE) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
