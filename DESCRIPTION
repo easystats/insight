@@ -25,6 +25,7 @@ Suggests:
   brms,
   coxme,
   gam,
+  gamm4,
   gee,
   GLMMadaptive,
   glmmTMB,
