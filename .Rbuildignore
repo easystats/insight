@@ -9,3 +9,5 @@
 ^README.*$
 ^_pkgdown.yml
 ^pkgdown$
+^man\.figures\.logo.ai$
+^man\.figures\.monster*.*$
