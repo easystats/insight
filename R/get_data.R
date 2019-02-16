@@ -67,8 +67,7 @@ get_data.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
   mf <- stats::model.frame(x)
-  dat <- prepare_get_data(x, mf)
-  dat[, -which(colnames(dat) == "mf_matrix"), drop = FALSE]
+  prepare_get_data(x, mf)
 }
 
 
