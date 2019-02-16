@@ -1,34 +1,26 @@
 ---
-output: 
-  github_document:
-    toc: false
-    fig_width: 10.08
-    fig_height: 6
-tags: [r, models, utils, insight]
+title: "Add insight Support for New Models"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{README}
-  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Add insight Support for New Models}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
+  %\VignetteEncoding{UTF-8}
 ---
 
-
-```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  fig.path = "README-"
-)
+```{r set-options, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", dev = "png", fig.width = 7, fig.height = 3.5, message = FALSE, warning = FALSE)
+options(width = 800)
 ```
-
-
-# Add `insight` Support for New Models
 
 The package has been written with the unknown future in mind, in a flexible way so that implementation of new kinds of models is simple and straightforward.
 
 ***Simply follow the steps:***
 
-## 1. Add a `find_formula()` method
+1. Add a `find_formula()` method
+2. Add a `get_data()` method
+
+# Add a find_formula() method
 
 If your model is compatible with `stats::formula()` and has only a fixed-effects part, you actually need to do nothing more here.
 
@@ -44,6 +36,8 @@ Else, add a `find_formula()` method for your model-class, that returns a `list` 
 The formula-parts for the _random effects_ should _not_ contain random slopes, but only the group factors, and should have following pattern: `~1 | g` or `~1 | g2:g1`.
 
 If your models follows the **lme4**-formula style, you can use helper-functions that extract the relevant parts of your formula. Here is an example of how the formula from `merMod`-objects is extracted:
+
+## Step-by-step
 
 First, get the formula:
 
@@ -80,7 +74,7 @@ Make sure you return no empty or `NULL`-elements. You can do this with `compact_
 compact_list(list(conditional = f.cond, random = f.random))
 ```
 
-### Examples
+## Examples
 
 Here is an example for a mixed-model with zero-inflation component:
 
