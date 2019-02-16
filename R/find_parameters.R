@@ -240,18 +240,18 @@ find_parameters.stanreg <- function(x, ...) {
   ))
 }
 
-#' @export
-find_parameters.htest <- function(x, ...) {
-  fe <- colnames(as.data.frame(x))
-
-  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
-  rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
-
-  compact_list(list(
-    conditional = cond,
-    random = rand
-  ))
-}
+# #' @export
+# find_parameters.htest <- function(x, ...) {
+#   fe <- colnames(as.data.frame(x))
+#
+#   cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
+#   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
+#
+#   compact_list(list(
+#     conditional = cond,
+#     random = rand
+#   ))
+# }
 
 
 #' @export

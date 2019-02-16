@@ -64,7 +64,7 @@ On top of that, the [`model_info()`](https://easystats.github.io/insight/referen
 
 ## List of Supported Models
 
-- base (*lm, glm, htest*)
+- base (*lm, glm*)
 - lme4 (*lmer, glmer*)
 - rstanarm (*stanreg, stanmvreg*)
 - brms (*brmsfit*)
