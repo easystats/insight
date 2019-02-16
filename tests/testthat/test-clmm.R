@@ -70,7 +70,7 @@ if (require("testthat") && require("insight") && require("ordinal")) {
         random = as.formula("~1 | judge")
       )
     )
-    expect_length(find_formula(m2), 3)
+    expect_length(find_formula(m2), 2)
     expect_equal(
       find_formula(m2),
       list(
