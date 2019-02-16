@@ -44,7 +44,7 @@
 #'   data = Salamanders,
 #'   family = nbinom2
 #' )
-#' 
+#'
 #' model_info(m)
 #' @importFrom stats formula terms
 #' @export
@@ -401,7 +401,7 @@ model_info.multinom <- function(x, ...) {
 
 #' @export
 model_info.clm2 <- function(x, ...) {
-  faminfo <- stats::binomial(link = "logit")
+  faminfo <- stats::binomial(link = x$link)
   make_family(
     x = x,
     fitfam = faminfo$family,
@@ -414,7 +414,7 @@ model_info.clm2 <- function(x, ...) {
 
 #' @export
 model_info.clm <- function(x, ...) {
-  faminfo <- stats::binomial(link = "logit")
+  faminfo <- stats::binomial(link = x$link)
   make_family(
     x = x,
     fitfam = faminfo$family,
@@ -427,7 +427,7 @@ model_info.clm <- function(x, ...) {
 
 #' @export
 model_info.clmm <- function(x, ...) {
-  faminfo <- stats::binomial(link = "logit")
+  faminfo <- stats::binomial(link = x$link)
   make_family(
     x = x,
     fitfam = faminfo$family,

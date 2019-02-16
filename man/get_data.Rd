@@ -5,6 +5,7 @@
 \alias{get_data.hurdle}
 \alias{get_data.glmmTMB}
 \alias{get_data.merMod}
+\alias{get_data.clmm}
 \alias{get_data.gee}
 \alias{get_data.MixMod}
 \alias{get_data.MCMCglmm}
@@ -20,6 +21,8 @@ get_data(x, ...)
   "dispersion"), ...)
 
 \method{get_data}{merMod}(x, effects = c("all", "fixed", "random"), ...)
+
+\method{get_data}{clmm}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{gee}(x, effects = c("all", "fixed", "random"), ...)
 

@@ -16,7 +16,7 @@
 #' outcome <- gl(3, 1, 9)
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ outcome + treatment, family = poisson())
-#' 
+#'
 #' link_function(m)(.3)
 #' # same as
 #' log(.3)
@@ -69,13 +69,19 @@ link_function.gamm <- function(x, ...) {
 
 #' @export
 link_function.clm <- function(x, ...) {
-  stats::make.link(link = "logit")$linkfun
+  stats::make.link(link = x$link)$linkfun
 }
 
 
 #' @export
 link_function.clm2 <- function(x, ...) {
-  stats::make.link(link = "logit")$linkfun
+  stats::make.link(link = x$link)$linkfun
+}
+
+
+#' @export
+link_function.clmm <- function(x, ...) {
+  stats::make.link(link = x$link)$linkfun
 }
 
 
