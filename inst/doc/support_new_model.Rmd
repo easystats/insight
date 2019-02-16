@@ -1,0 +1,33 @@
+---
+output: 
+  github_document:
+    toc: false
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, models, utils, insight]
+vignette: >
+  %\VignetteIndexEntry{README}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.path = "README-"
+)
+```
+
+
+# Add `insight` Support for New Models
+
+The package has been written with the unknown future in mind, in a flexible way so that implementation of new kinds of models is simple and straightforward.
+
+***Simply follow the steps:***
+
+### 1. Add a `find_formula()` method
+
+WIP.
