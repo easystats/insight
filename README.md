@@ -37,13 +37,13 @@ One is to find the names of the *things* (`find_*`), and the second is
 to actually get the *things* (`get_`). The *things* can be the
 following:
 
-- [find_formula()](https://easystats.github.io/insight/reference/find_formula.html)
-- [find_terms()](https://easystats.github.io/insight/reference/find_terms.html)
-- [get_data()](https://easystats.github.io/insight/reference/get_data.html)
-- [find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html) / [get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html)
-- [find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html) / [get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html)
-- [find_random()](https://easystats.github.io/insight/reference/find_random.html) / [get_random()](https://easystats.github.io/insight/reference/get_random.html)
-- [find_response()](https://easystats.github.io/insight/reference/find_response.html) /  [get_response()](https://easystats.github.io/insight/reference/get_response.html)
+  - [find_formula()](https://easystats.github.io/insight/reference/find_formula.html)
+  - [find_terms()](https://easystats.github.io/insight/reference/find_terms.html)
+  - [get_data()](https://easystats.github.io/insight/reference/get_data.html)
+  - [find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html) / [get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html)
+  - [find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html) / [get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html)
+  - [find_random()](https://easystats.github.io/insight/reference/find_random.html) / [get_random()](https://easystats.github.io/insight/reference/get_random.html)
+  - [find_response()](https://easystats.github.io/insight/reference/find_response.html) /  [get_response()](https://easystats.github.io/insight/reference/get_response.html)
 
 
 On top of that, the
@@ -63,6 +63,6 @@ AER (*ivreg*), base (*lm, glm*), betareg (*betareg*), brms (*brmsfit*), countreg
 
 If this package helped you, please consider citing as follows:
 
-  - Lüdecke, D. (2019). *insight: Easy Access to Model Information for
+  - Lüdecke D, Makowski D (2019). *insight: Easy Access to Model Information for
     Various Model Objects*. R package.
     <https://easystats.github.io/insight/>.

@@ -73,5 +73,5 @@ AER (*ivreg*), base (*lm, glm*), betareg (*betareg*), brms (*brmsfit*), countreg
 
 If this package helped you, please consider citing as follows:
 
-- Lüdecke, D. (2019). *insight: Easy Access to Model Information for Various Model Objects*. R package. https://easystats.github.io/insight/.
+- Lüdecke D, Makowski D (2019). *insight: Easy Access to Model Information for Various Model Objects*. R package. https://easystats.github.io/insight/.
 
