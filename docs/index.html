@@ -31,7 +31,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -58,18 +58,6 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/support_new_models.html">Add insight Support for New Models</a>
-    </li>
-  </ul>
-</li>
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
@@ -84,17 +72,13 @@
 
       
       </header><div class="row">
-  <div class="col-md-9 contents">
-    
-
-    
-    
+  <div class="contents col-md-9">
 <div id="insight" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#insight" class="anchor"></a>insight <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 
-<p><strong><em>Gain insight into your models!</em></strong></p>
+<p><strong>Gain insight into your models!</strong></p>
 <p>The goal of <em>insight</em> is to provide tools to help an <strong>easy</strong>, <strong>intuitive</strong> and <strong>consistent</strong> accesss to information contained in various models. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. The <em>insight</em> package aims at closing this gap by providing functions that work for (almost) any model.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -133,7 +117,7 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 <p>AER (<em>ivreg</em>), base (<em>lm, glm</em>), betareg (<em>betareg</em>), brms (<em>brmsfit</em>), countreg (<em>zerontrunc</em>), coxme, estimatr (<em>lm_robust, glm_robust</em>), gam (<em>Gam</em>), gamm4 , gee, GLMMadaptive (<em>MixMod</em>), glmmTMB (<em>glmmTMB</em>), gmnl, lfe (<em>felm</em>), lme4 (<em>lmer, glmer, nlmer, glmer.nb</em>), MASS (<em>glmmPQL, polr</em>), mgcv (<em>gam, gamm</em>), nnet (<em>multinom</em>), nlme (<em>lme, gls</em>), ordinal (<em>clm, clm2, clmm</em>), plm, pscl (<em>zeroinf, hurdle</em>), rstanarm (<em>stanreg, stanmvreg</em>), survey, survival (<em>coxph</em>), truncreg (<em>truncreg</em>), VGAM (<em>vgam, vglm</em>)</p>
 <ul>
 <li>
-<strong>Didn’t find a model?</strong> <a href="https://easystats.github.io/insight/articles/support_new_models.html">Check this vignette</a> to easily add support for a new model!</li>
+<strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues">File an issue</a> and request additional model-support in <em>insight</em>!</li>
 </ul>
 </div>
 <div id="credits" class="section level2">
@@ -171,7 +155,7 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/easystats/insight"><img src="https://travis-ci.org/easystats/insight.svg?branch=master" alt="Build Status"></a></li>
@@ -181,9 +165,7 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 </ul>
 </div>
 </div>
-
 </div>
-
 
       <footer><div class="copyright">
   <p>Developed by <a href="https://github.com/strengejacke">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>.</p>
