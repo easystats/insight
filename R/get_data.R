@@ -31,6 +31,11 @@ get_data <- function(x, ...) {
 
 #' @export
 get_data.default <- function(x, ...) {
+  if (inherits(x, "list") && obj_has_name(x, "gam")) {
+    x <- x$gam
+    class(x) <- c(class(x), c("glm", "lm"))
+  }
+
   mf <- tryCatch({
     if (inherits(x, "Zelig-relogit")) {
       get_zelig_relogit_frame(x)
@@ -54,6 +59,16 @@ get_data.plm <- function(x, ...) {
   mf <- as.data.frame(lapply(mf, as.vector))
   colnames(mf) <- cn
   prepare_get_data(x, mf)
+}
+
+
+#' @export
+get_data.gamm <- function(x, ...) {
+  x <- x$gam
+  class(x) <- c(class(x), c("glm", "lm"))
+  mf <- stats::model.frame(x)
+  dat <- prepare_get_data(x, mf)
+  dat[, -which(colnames(dat) == "mf_matrix"), drop = FALSE]
 }
 
 
@@ -393,7 +408,7 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
   })
 
   # check if we have any matrix columns, e.g. from splines
-  mc <- unlist(lapply(mf, is.matrix))
+  mc <- sapply(mf, is.matrix)
 
   # don't change response value, if it's a matrix
   # bound with cbind()
@@ -433,12 +448,12 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
 
     # if data not found in environment, reduce matrix variables into regular vectors
     if (is.null(md)) {
-      # first, we select the non-matrix variables. calling "as_tibble" would
-      # remove their column name, so we us as_tibble to convert matrix
-      # to vectors only for the matrix-columns
+      # we select the non-matrix variables and convert matrix-variables into
+      # regular data frames, then binding them together
       mf_matrix <- mf[, which(mc), drop = FALSE]
       mf_nonmatrix <- mf[, -which(mc), drop = FALSE]
-      mf_matrix <- cbind(lapply(mf_matrix, as.data.frame, stringsAsFactors = FALSE))
+      mf_list <- lapply(mf_matrix, as.data.frame, stringsAsFactors = FALSE)
+      mf_matrix <- do.call(cbind, mf_list)
       mf <- cbind(mf_nonmatrix, mf_matrix)
     } else {
 

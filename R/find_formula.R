@@ -31,6 +31,11 @@ find_formula <- function(x, ...) {
 
 #' @export
 find_formula.default <- function(x, ...) {
+  if (inherits(x, "list") && obj_has_name(x, "gam")) {
+    x <- x$gam
+    class(x) <- c(class(x), c("glm", "lm"))
+  }
+
   tryCatch({
     list(conditional = stats::formula(x))
   },
@@ -38,6 +43,14 @@ find_formula.default <- function(x, ...) {
     NULL
   }
   )
+}
+
+
+#' @export
+find_formula.gamm <- function(x, ...) {
+  x <- x$gam
+  class(x) <- c(class(x), c("glm", "lm"))
+  NextMethod()
 }
 
 
