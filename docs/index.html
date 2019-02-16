@@ -100,9 +100,9 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Run the following:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"insight"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>)
+devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"easystats/insight"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"insight"</span>)</code></pre></div>
 </div>
 <div id="functions" class="section level2">
 <h2 class="hasAnchor">
@@ -113,46 +113,25 @@
 <li><a href="https://easystats.github.io/insight/reference/find_terms.html">find_terms()</a></li>
 <li><a href="https://easystats.github.io/insight/reference/get_data.html">get_data()</a></li>
 <li>
-<a href="https://easystats.github.io/insight/reference/find_parameters.html">find_/</a> <a href="https://easystats.github.io/insight/reference/get_parameters.html">get_parameters()</a>
+<a href="https://easystats.github.io/insight/reference/find_parameters.html">find_parameters()</a> / <a href="https://easystats.github.io/insight/reference/get_parameters.html">get_parameters()</a>
 </li>
 <li>
-<a href="https://easystats.github.io/insight/reference/find_predictors.html">find_/</a> <a href="https://easystats.github.io/insight/reference/get_predictors.html">get_predictors()</a>
+<a href="https://easystats.github.io/insight/reference/find_predictors.html">find_predictors()</a> / <a href="https://easystats.github.io/insight/reference/get_predictors.html">get_predictors()</a>
 </li>
 <li>
-<a href="https://easystats.github.io/insight/reference/find_random.html">find_/</a> <a href="https://easystats.github.io/insight/reference/get_random.html">get_random()</a>
+<a href="https://easystats.github.io/insight/reference/find_random.html">find_random()</a> / <a href="https://easystats.github.io/insight/reference/get_random.html">get_random()</a>
 </li>
 <li>
-<a href="https://easystats.github.io/insight/reference/find_response.html">find_/</a> <a href="https://easystats.github.io/insight/reference/get_response.html">get_response()</a>
+<a href="https://easystats.github.io/insight/reference/find_response.html">find_response()</a> / <a href="https://easystats.github.io/insight/reference/get_response.html">get_response()</a>
 </li>
 </ul>
 <p>On top of that, the <a href="https://easystats.github.io/insight/reference/model_info.html"><code><a href="reference/model_info.html">model_info()</a></code></a> function runs many checks to help you classify and understand the nature of your model.</p>
 </div>
-<div id="list-of-supported-models" class="section level2">
+<div id="list-of-supported-packages-and-models" class="section level2">
 <h2 class="hasAnchor">
-<a href="#list-of-supported-models" class="anchor"></a>List of Supported Models</h2>
+<a href="#list-of-supported-packages-and-models" class="anchor"></a>List of Supported Packages and Models</h2>
+<p>AER (<em>ivreg</em>), base (<em>lm, glm</em>), betareg (<em>betareg</em>), brms (<em>brmsfit</em>), countreg (<em>zerontrunc</em>), coxme, estimatr (<em>lm_robust, glm_robust</em>), gam (<em>Gam</em>), gamm4 , gee, GLMMadaptive (<em>MixMod</em>), glmmTMB (<em>glmmTMB</em>), gmnl, lfe (<em>felm</em>), lme4 (<em>lmer, glmer, nlmer, glmer.nb</em>), MASS (<em>glmmPQL, polr</em>), mgcv (<em>gam, gamm</em>), nnet (<em>multinom</em>), nlme (<em>lme, gls</em>), ordinal (<em>clm, clm2, clmm</em>), plm, pscl (<em>zeroinf, hurdle</em>), rstanarm (<em>stanreg, stanmvreg</em>), survey, survival (<em>coxph</em>), truncreg (<em>truncreg</em>), VGAM (<em>vgam, vglm</em>)</p>
 <ul>
-<li>base (<em>lm, glm, htest</em>)</li>
-<li>lme4 (<em>lmer, glmer</em>)</li>
-<li>rstanarm (<em>stanreg, stanmvreg</em>)</li>
-<li>brms (<em>brmsfit</em>)</li>
-<li>glmmTMB (<em>glmmTMB</em>)</li>
-<li>MASS (<em>glmmPQL</em>)</li>
-<li>GLMMadaptive (<em>MixMod</em>)</li>
-<li>betareg (<em>betareg</em>)</li>
-<li>truncreg (<em>truncreg</em>)</li>
-<li>gam (<em>gam</em>)</li>
-<li>AER</li>
-<li>coxme</li>
-<li>gee</li>
-<li>gmnl</li>
-<li>mgcv</li>
-<li>nnet</li>
-<li>nlme</li>
-<li>ordinal</li>
-<li>plm</li>
-<li>pscl</li>
-<li>survey</li>
-<li>survival</li>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://easystats.github.io/insight/articles/support_new_models.html">Check this vignette</a> to easily add support for a new model!</li>
 </ul>
@@ -162,7 +141,7 @@
 <a href="#credits" class="anchor"></a>Credits</h2>
 <p>If this package helped you, please consider citing as follows:</p>
 <ul>
-<li>Lüdecke, D. (2019). <em>insight: Easy Access to Model Information for Various Model Objects</em>. R package. <a href="https://easystats.github.io/insight/" class="uri">https://easystats.github.io/insight/</a>.</li>
+<li>Lüdecke D, Makowski D (2019). <em>insight: Easy Access to Model Information for Various Model Objects</em>. R package. <a href="https://easystats.github.io/insight/" class="uri">https://easystats.github.io/insight/</a>.</li>
 </ul>
 </div>
 </div>
@@ -187,7 +166,8 @@
 <ul class="list-unstyled">
 <li>
 <a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li>
+<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 </ul>
 </div>
 
@@ -206,7 +186,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://github.com/strengejacke">Daniel Lüdecke</a>.</p>
+  <p>Developed by <a href="https://github.com/strengejacke">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>.</p>
 </div>
 
 <div class="pkgdown">

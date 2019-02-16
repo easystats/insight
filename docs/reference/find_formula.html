@@ -156,6 +156,7 @@
 <li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
 <li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
 <li><p><code>dispersion</code>, the dispersion formula</p></li>
+<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
 </ul>
 
     
@@ -165,7 +166,7 @@
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='fu'>find_formula</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $conditional
 #&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x000000001ff79510&gt;
+#&gt; &lt;environment: 0x000000001fe93260&gt;
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -183,7 +184,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>.</p>
 </div>
 
 <div class="pkgdown">
