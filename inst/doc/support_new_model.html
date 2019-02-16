@@ -28,8 +28,91 @@ body {
 <h1 id="add-insight-support-for-new-models">Add <code>insight</code> Support for New Models</h1>
 <p>The package has been written with the unknown future in mind, in a flexible way so that implementation of new kinds of models is simple and straightforward.</p>
 <p><strong><em>Simply follow the steps:</em></strong></p>
-<h3 id="add-a-find_formula-method">1. Add a <code>find_formula()</code> method</h3>
-<p>WIP.</p>
+<h2 id="add-a-find_formula-method">1. Add a <code>find_formula()</code> method</h2>
+<p>If your model is compatible with <code>stats::formula()</code> and has only a fixed-effects part, you actually need to do nothing more here.</p>
+<p>Else, add a <code>find_formula()</code> method for your model-class, that returns a <code>list</code> with one or more of the following elements:</p>
+<ul>
+<li><code>conditional</code>, the &quot;fixed effects&quot; part from the model</li>
+<li><code>random</code>, the &quot;random effects&quot; part from the model (or the <code>id</code> for gee-models and similar)</li>
+<li><code>zero_inflated</code>, the &quot;fixed effects&quot; part from the zero-inflation component of the model <code>zero_inflated_random</code>, the &quot;random effects&quot; part from the zero-inflation component of the model</li>
+<li><code>dispersion</code>, the dispersion formula</li>
+<li><code>instruments</code>, for fixed-effects regressions like ivreg, felm or plm, the instrumental variables.</li>
+</ul>
+<p>The formula-parts for the <em>random effects</em> should <em>not</em> contain random slopes, but only the group factors, and should have following pattern: <code>~1 | g</code> or <code>~1 | g2:g1</code>.</p>
+<p>If your models follows the <strong>lme4</strong>-formula style, you can use helper-functions that extract the relevant parts of your formula. Here is an example of how the formula from <code>merMod</code>-objects is extracted:</p>
+<p>First, get the formula:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">form &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw">formula</span>(x)</code></pre></div>
+<p>Then get the random parts of the formula:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f.random &lt;-<span class="st"> </span><span class="kw">lapply</span>(lme4<span class="op">::</span><span class="kw">findbars</span>(form), <span class="cf">function</span>(.x) {
+  f &lt;-<span class="st"> </span><span class="kw">deparse</span>(.x, <span class="dt">width.cutoff =</span> <span class="dv">500</span>)
+  stats<span class="op">::</span><span class="kw">as.formula</span>(<span class="kw">paste0</span>(<span class="st">&quot;~&quot;</span>, f))
+})</code></pre></div>
+<p>You may reduce the list with the random effects formula.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="kw">length</span>(f.random) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {
+  f.random &lt;-<span class="st"> </span>f.random[[<span class="dv">1</span>]]
+}</code></pre></div>
+<p>Finally, remove the random effects from the fixed effects part.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f.cond &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw">as.formula</span>(<span class="kw">get_fixed_effects</span>(form))</code></pre></div>
+<p>Make sure you return no empty or <code>NULL</code>-elements. You can do this with <code>compact_list()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">compact_list</span>(<span class="kw">list</span>(<span class="dt">conditional =</span> f.cond, <span class="dt">random =</span> f.random))</code></pre></div>
+<h3 id="examples">Examples</h3>
+<p>Here is an example for a mixed-model with zero-inflation component:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(insight)
+<span class="kw">library</span>(glmmTMB)
+<span class="kw">data</span>(Salamanders)
+
+m &lt;-<span class="st"> </span><span class="kw">glmmTMB</span>(
+  count <span class="op">~</span><span class="st"> </span>spp <span class="op">+</span><span class="st"> </span>mined <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>site), 
+  <span class="dt">zi =</span> <span class="op">~</span>spp <span class="op">+</span><span class="st"> </span>mined,
+  <span class="dt">family =</span> nbinom2,
+  <span class="dt">data =</span> Salamanders
+)
+
+<span class="kw">find_formula</span>(m)
+## $conditional
+## count ~ spp + mined
+## &lt;environment: 0x000000002ae0b110&gt;
+## 
+## $random
+## ~1 | site
+## &lt;environment: 0x0000000021978230&gt;
+## 
+## $zero_inflated
+## ~spp + mined
+## &lt;environment: 0x000000002ae0b110&gt;</code></pre></div>
+<p>Another example for models with nested random effects:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lme4)
+<span class="kw">data</span>(sleepstudy)
+
+sleepstudy<span class="op">$</span>mygrp &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">size =</span> <span class="dv">180</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)
+sleepstudy<span class="op">$</span>mysubgrp &lt;-<span class="st"> </span><span class="ot">NA</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {
+  filter_group &lt;-<span class="st"> </span>sleepstudy<span class="op">$</span>mygrp <span class="op">==</span><span class="st"> </span>i
+  sleepstudy<span class="op">$</span>mysubgrp[filter_group] &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">size =</span> <span class="kw">sum</span>(filter_group), <span class="dt">replace =</span> <span class="ot">TRUE</span>)
+}
+
+m &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(
+  Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>mygrp <span class="op">/</span><span class="st"> </span>mysubgrp) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Subject),
+  <span class="dt">data =</span> sleepstudy
+)
+
+<span class="kw">find_formula</span>(m)
+## $conditional
+## Reaction ~ Days
+## &lt;environment: 0x000000000286ab40&gt;
+## 
+## $random
+## $random[[1]]
+## ~1 | mysubgrp:mygrp
+## &lt;environment: 0x00000000028243f8&gt;
+## 
+## $random[[2]]
+## ~1 | mygrp
+## &lt;environment: 0x000000000281cf90&gt;
+## 
+## $random[[3]]
+## ~1 | Subject
+## &lt;environment: 0x0000000002815968&gt;</code></pre></div>
 
 </body>
 </html>
