@@ -1,34 +1,11 @@
----
-output: 
-  github_document:
-    toc: false
-    fig_width: 10.08
-    fig_height: 6
-tags: [r, models, utils, insight]
-vignette: >
-  %\VignetteIndexEntry{README}
-  \usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
----
-
 # insight <img src='man/figures/logo.png' align="right" height="139" />
-
-```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  fig.path = "README-"
-)
-```
-
 
 [![Build Status](https://travis-ci.org/easystats/insight.svg?branch=master)](https://travis-ci.org/easystats/insight)
 [![codecov](https://codecov.io/gh/easystats/insight/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/insight)
 [![HitCount](http://hits.dwyl.io/easystats/insight.svg)](http://hits.dwyl.io/easystats/insight) [![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/)
 
 
-***Gain insight into your models!***
+**Gain insight into your models!**
 
 The goal of *insight* is to provide tools to help an **easy**, **intuitive** and **consistent** accesss to information contained in various models. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. The *insight* package aims at closing this gap by providing functions that work for (almost) any model.
   
@@ -37,17 +14,17 @@ The goal of *insight* is to provide tools to help an **easy**, **intuitive** and
 
 Run the following:
 
-```{r eval=FALSE, message=FALSE, warning=FALSE}
+```r
 install.packages("devtools")
 devtools::install_github("easystats/insight")
 ```
-```{r message=FALSE, warning=FALSE}
+
+```r
 library("insight")
 ```
 
 
 ## Functions
-
 
 The syntax of `insight` mainly revolves around two types of functions. One is to find the names of the *things* (`find_*`), and the second is to actually get the *things* (`get_`). The *things* can be the following:
 
