@@ -66,7 +66,7 @@ On top of that, the [`model_info()`](https://easystats.github.io/insight/referen
 
 AER (*ivreg*), base (*lm, glm*), betareg (*betareg*), brms (*brmsfit*), countreg (*zerontrunc*), coxme, estimatr (*lm_robust, glm_robust*), gam (*Gam*), gamm4 , gee, GLMMadaptive (*MixMod*), glmmTMB (*glmmTMB*), gmnl, lfe (*felm*), lme4 (*lmer, glmer, nlmer, glmer.nb*), MASS (*glmmPQL, polr*), mgcv (*gam, gamm*), nnet (*multinom*), nlme (*lme, gls*), ordinal (*clm, clm2, clmm*), plm, pscl (*zeroinf, hurdle*), rstanarm (*stanreg, stanmvreg*), survey, survival (*coxph*), truncreg (*truncreg*), VGAM (*vgam, vglm*)
 
-- **Didn't find a model?** [Check this vignette](https://easystats.github.io/insight/articles/support_new_models.html) to easily add support for a new model!
+- **Didn't find a model?** [Check this vignette](https://easystats.github.io/insight/docs/articles/support_new_models.html) to easily add support for a new model!
 
 
 ## Credits
