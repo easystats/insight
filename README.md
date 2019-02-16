@@ -37,17 +37,14 @@ One is to find the names of the *things* (`find_*`), and the second is
 to actually get the *things* (`get_`). The *things* can be the
 following:
 
-  - [find\_formula()](https://easystats.github.io/insight/reference/find_formula.html)
-  - [find\_terms()](https://easystats.github.io/insight/reference/find_terms.html)
-  - [get\_data()](https://easystats.github.io/insight/reference/get_data.html)
-  - [find\_/](https://easystats.github.io/insight/reference/find_parameters.html)
-    [get\_parameters()](https://easystats.github.io/insight/reference/get_parameters.html)
-  - [find\_/](https://easystats.github.io/insight/reference/find_predictors.html)
-    [get\_predictors()](https://easystats.github.io/insight/reference/get_predictors.html)
-  - [find\_/](https://easystats.github.io/insight/reference/find_random.html)
-    [get\_random()](https://easystats.github.io/insight/reference/get_random.html)
-  - [find\_/](https://easystats.github.io/insight/reference/find_response.html)
-    [get\_response()](https://easystats.github.io/insight/reference/get_response.html)
+- [find_formula()](https://easystats.github.io/insight/reference/find_formula.html)
+- [find_terms()](https://easystats.github.io/insight/reference/find_terms.html)
+- [get_data()](https://easystats.github.io/insight/reference/get_data.html)
+- [find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html) / [get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html)
+- [find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html) / [get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html)
+- [find_random()](https://easystats.github.io/insight/reference/find_random.html) / [get_random()](https://easystats.github.io/insight/reference/get_random.html)
+- [find_response()](https://easystats.github.io/insight/reference/find_response.html) /  [get_response()](https://easystats.github.io/insight/reference/get_response.html)
+
 
 On top of that, the
 [`model_info()`](https://easystats.github.io/insight/reference/model_info.html)
@@ -56,49 +53,7 @@ of your model.
 
 ## List of Supported Models
 
-  - base (*lm, glm, htest*)
-
-  - lme4 (*lmer, glmer*)
-
-  - rstanarm (*stanreg, stanmvreg*)
-
-  - brms (*brmsfit*)
-
-  - glmmTMB (*glmmTMB*)
-
-  - MASS (*glmmPQL*)
-
-  - GLMMadaptive (*MixMod*)
-
-  - betareg (*betareg*)
-
-  - truncreg (*truncreg*)
-
-  - gam (*gam*)
-
-  - AER
-
-  - coxme
-
-  - gee
-
-  - gmnl
-
-  - mgcv
-
-  - nnet
-
-  - nlme
-
-  - ordinal
-
-  - plm
-
-  - pscl
-
-  - survey
-
-  - survival
+AER (*ivreg*), base (*lm, glm*), betareg (*betareg*), brms (*brmsfit*), countreg (*zerontrunc*), coxme, estimatr (*lm_robust, glm_robust*), gam (*Gam*), gamm4 , gee, GLMMadaptive (*MixMod*), glmmTMB (*glmmTMB*), gmnl, lfe (*felm*), lme4 (*lmer, glmer, nlmer, glmer.nb*), MASS (*glmmPQL, polr*), mgcv (*gam, gamm*), nnet (*multinom*), nlme (*lme, gls*), ordinal (*clm, clm2, clmm*), plm, pscl (*zeroinf, hurdle*), rstanarm (*stanreg, stanmvreg*), survey, survival (*coxph*), truncreg (*truncreg*), VGAM (*vgam, vglm*)
 
   - **Didn’t find a model?** [Check this vignette
     out](https://easystats.github.io/insight/articles/support_new_models.html)
