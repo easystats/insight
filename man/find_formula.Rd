@@ -21,6 +21,7 @@ A list of formulas that describe the model. For simple models,
      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
      \item \code{dispersion}, the dispersion formula
+     \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
    }
 }
 \description{

@@ -16,6 +16,7 @@
 #'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
 #'      \item \code{dispersion}, the dispersion formula
+#'      \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
 #'    }
 #'
 #' @examples
@@ -148,7 +149,7 @@ find_formula.felm <- function(x, ...) {
   } else {
     f.rand <- stats::as.formula(f.rand)
   }
-  compact_list(list(conditional = f.cond, random = f.rand))
+  compact_list(list(conditional = f.cond, instruments = f.rand))
 }
 
 

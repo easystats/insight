@@ -18,17 +18,16 @@ if (require("testthat") && require("insight") && require("lfe")) {
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(conditional = c("x", "x2")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("x", "x2"))
-    expect_identical(find_predictors(m1, effects = "random"), list(random = c("id", "firm")))
+    expect_identical(find_predictors(m1), list(conditional = c("x", "x2"), instruments = c("id", "firm")))
+    expect_identical(find_predictors(m1, flatten = TRUE), c("x", "x2", "id", "firm"))
   })
 
   test_that("find_random", {
-    expect_equal(find_random(m1), list(random = c("id", "firm")))
+    expect_null(find_random(m1))
   })
 
   test_that("get_random", {
-    expect_equal(colnames(get_random(m1)), c("id", "firm"))
+    expect_warning(colnames(get_random(m1)))
   })
 
   test_that("find_response", {
@@ -40,7 +39,7 @@ if (require("testthat") && require("insight") && require("lfe")) {
   })
 
   test_that("get_predictors", {
-    expect_equal(colnames(get_predictors(m1)), c("x", "x2"))
+    expect_equal(colnames(get_predictors(m1)), c("x", "x2", "id", "firm"))
   })
 
   test_that("link_inverse", {
@@ -50,8 +49,6 @@ if (require("testthat") && require("insight") && require("lfe")) {
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 1000)
     expect_equal(colnames(get_data(m1)), c("y", "x", "x2", "id", "firm"))
-    expect_equal(colnames(get_data(m1, effects = "fixed")), c("y", "x", "x2"))
-    expect_equal(colnames(get_data(m1, effects = "random")), c("id", "firm"))
   })
 
   test_that("find_formula", {
@@ -60,13 +57,13 @@ if (require("testthat") && require("insight") && require("lfe")) {
       find_formula(m1),
       list(
         conditional = as.formula("y ~ x + x2"),
-        random = as.formula("~id + firm")
+        instruments = as.formula("~id + firm")
       )
     )
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "y", conditional = c("x", "x2"), random = c("id", "firm")))
+    expect_equal(find_terms(m1), list(response = "y", conditional = c("x", "x2"), instruments = c("id", "firm")))
     expect_equal(find_terms(m1, flatten = TRUE), c("y", "x", "x2", "id", "firm"))
   })
 
