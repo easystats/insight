@@ -50,9 +50,6 @@
   </a>
 </li>
 <li>
-  <a href="../articles/insight.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -87,41 +84,22 @@
             
       
       
-      <div class="hidden name"><code>insight.Rmd</code></div>
+      <div class="hidden name"><code>support_new_model.Rmd</code></div>
 
     </div>
 
     
     
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(devtools)</a>
-<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(insight)</a></code></pre></div>
-</div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">*</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</a></code></pre></div>
-<div id="retrieve-the-models-variables" class="section level3">
+<div id="add-insight-support-for-new-models" class="section level1">
+<h1 class="hasAnchor">
+<a href="#add-insight-support-for-new-models" class="anchor"></a>Add <code>insight</code> Support for New Models</h1>
+<p>The package has been written with the unknown future in mind, in a flexible way so that implementation of new kinds of models is simple and straightforward.</p>
+<p><strong><em>Simply follow the steps:</em></strong></p>
+<div id="add-a-find_formula-method" class="section level3">
 <h3 class="hasAnchor">
-<a href="#retrieve-the-models-variables" class="anchor"></a>Retrieve the model’s variables:</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># find_terms(model)</span></a></code></pre></div>
+<a href="#add-a-find_formula-method" class="anchor"></a>1. Add a <code><a href="../reference/find_formula.html">find_formula()</a></code> method</h3>
+<p>WIP.</p>
 </div>
-<div id="retrieve-the-models-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#retrieve-the-models-data" class="anchor"></a>Retrieve the model’s data:</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># get_data(model)</span></a></code></pre></div>
-</div>
-</div>
-<div id="list-of-supported-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#list-of-supported-models" class="anchor"></a>List of Supported Models</h2>
-<ul>
-<li>…</li>
-<li>Yours is missing? You can help us adding it by <strong>contributing</strong> [add link to some page, maybe hosted on easystats/easystats?]</li>
-</ul>
 </div>
   </div>
 
@@ -130,9 +108,7 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#installation">Installation</a></li>
-      <li><a href="#examples">Examples</a></li>
-      <li><a href="#list-of-supported-models">List of Supported Models</a></li>
+<li><a href="#add-insight-support-for-new-models">Add <code>insight</code> Support for New Models</a></li>
       </ul>
 </div>
       </div>

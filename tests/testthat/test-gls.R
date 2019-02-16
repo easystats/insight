@@ -2,8 +2,9 @@ if (require("testthat") && require("insight") && require("nlme")) {
   context("insight, model_info")
 
   data(Ovary)
-  m1 <- gls(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary,
-             correlation = corAR1(form = ~ 1 | Mare))
+  m1 <- gls(follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time), Ovary,
+    correlation = corAR1(form = ~ 1 | Mare)
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -53,10 +54,11 @@ if (require("testthat") && require("insight") && require("nlme")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("(Intercept)", "sin(2 * pi * Time)",  "cos(2 * pi * Time)")
-      ))
+        conditional = c("(Intercept)", "sin(2 * pi * Time)", "cos(2 * pi * Time)")
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 3)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "sin(2 * pi * Time)",  "cos(2 * pi * Time)"))
+    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "sin(2 * pi * Time)", "cos(2 * pi * Time)"))
   })
 
   test_that("is_multivariate", {

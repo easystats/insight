@@ -48,5 +48,4 @@ if (require("testthat") && require("insight") && require("MASS")) {
   test_that("linkfun", {
     expect_false(is.null(link_function(m1)))
   })
-
 }

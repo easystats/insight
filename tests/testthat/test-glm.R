@@ -74,7 +74,8 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "minedno", "log(cover)", "sample")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 4)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "minedno", "log(cover)", "sample"))
   })

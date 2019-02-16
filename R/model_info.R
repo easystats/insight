@@ -44,7 +44,7 @@
 #'   data = Salamanders,
 #'   family = nbinom2
 #' )
-#'
+#' 
 #' model_info(m)
 #' @importFrom stats formula terms
 #' @export
@@ -70,7 +70,8 @@ model_info.default <- function(x, ...) {
   },
   error = function(x) {
     NULL
-  })
+  }
+  )
 
   if (!is.null(faminfo)) {
     make_family(
@@ -120,6 +121,12 @@ model_info.MixMod <- function(x, ...) {
     link.fun = faminfo$link,
     ...
   )
+}
+
+
+#' @export
+model_info.htest <- function(x, ...) {
+  make_family(x, ...)
 }
 
 
@@ -570,7 +577,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
   if (binom_fam && !inherits(x, "brmsfit")) {
     is.trial <- tryCatch({
       rv <- deparse(stats::formula(x)[[2L]], width.cutoff = 500L)
-       grepl("cbind\\((.*)\\)", rv)
+      grepl("cbind\\((.*)\\)", rv)
     },
     error = function(x) {
       FALSE
@@ -591,6 +598,19 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     )
   }
 
+  if (inherits(x, "htest")) {
+    if (grepl("t-test", x$method)) {
+      is_ttest <- TRUE
+      is_correlation <- FALSE
+    } else {
+      is_ttest <- FALSE
+      is_correlation <- TRUE
+    }
+  } else {
+    is_ttest <- FALSE
+    is_correlation <- FALSE
+  }
+
 
   list(
     is_binomial = binom_fam & !neg_bin_fam,
@@ -608,6 +628,8 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_multivariate = multi.var,
     is_trial = is.trial,
     is_bayesian = inherits(x, c("brmsfit", "stanfit", "stanreg", "stanmvreg")),
+    is_ttest = is_ttest,
+    is_correlation = is_correlation,
     link_function = link.fun,
     family = fitfam,
     n_obs = n_obs(x),

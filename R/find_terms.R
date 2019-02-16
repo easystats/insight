@@ -30,14 +30,14 @@
 #'   sleepstudy$mysubgrp[filter_group] <-
 #'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
-#'
+#' 
 #' m1 <- glmer(
 #'   cbind(incidence, size - incidence) ~ period + (1 | herd),
 #'   data = cbpp,
 #'   family = binomial
 #' )
 #' find_terms(m1)
-#'
+#' 
 #' m2 <- lmer(
 #'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
 #'   data = sleepstudy

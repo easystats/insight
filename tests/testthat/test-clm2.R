@@ -73,7 +73,8 @@ if (require("testthat") && require("insight") && require("ordinal") && require("
       find_parameters(m1),
       list(
         conditional = c("Low|Medium", "Medium|High", "InflMedium", "InflHigh", "TypeApartment", "TypeAtrium", "TypeTerrace", "ContHigh")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 8)
     expect_equal(get_parameters(m1)$parameter, c("Low|Medium", "Medium|High", "InflMedium", "InflHigh", "TypeApartment", "TypeAtrium", "TypeTerrace", "ContHigh"))
   })

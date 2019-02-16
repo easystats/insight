@@ -16,11 +16,11 @@
 #' data(cbpp)
 #' data(mtcars)
 #' cbpp$trials <- cbpp$size - cbpp$incidence
-#'
+#' 
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #' head(get_response(m))
 #' get_response(m, resp = "incidence")
-#'
+#' 
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_response(m)
 #' @export
@@ -38,10 +38,11 @@ get_response <- function(x, resp = NULL) {
   } else {
     rv <- get_data(x)[[find_response(x, combine = TRUE)]]
     if (!is.factor(rv) &&
-        !is.numeric(rv) &&
-        !is.character(rv) && !is.logical(rv) && !is.integer(rv))
+      !is.numeric(rv) &&
+      !is.character(rv) && !is.logical(rv) && !is.integer(rv)) {
       as.vector(rv)
-    else
+    } else {
       rv
+    }
   }
 }

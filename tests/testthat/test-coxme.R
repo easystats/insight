@@ -7,8 +7,8 @@ if (require("testthat") && require("insight") && require("survival") && require(
   lung <- subset(lung, subset = ph.ecog %in% 0:2)
   lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
 
-  m1 <- coxme(Surv(time, status) ~ ph.ecog + age + (1|inst), lung)
-  m2 <- coxme(Surv(time, status) ~ ph.ecog + age + (1|inst) + (1|inst2), lung)
+  m1 <- coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), lung)
+  m2 <- coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst) + (1 | inst2), lung)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_logit)
@@ -66,7 +66,8 @@ if (require("testthat") && require("insight") && require("survival") && require(
         response = c("time", "status"),
         conditional = c("ph.ecog", "age"),
         random = c("inst", "inst2")
-    ))
+      )
+    )
     expect_equal(find_terms(m2, flatten = TRUE), c("time", "status", "ph.ecog", "age", "inst", "inst2"))
   })
 
@@ -97,13 +98,15 @@ if (require("testthat") && require("insight") && require("survival") && require(
       list(
         conditional = c("ph.ecogok", "ph.ecoglimited", "age"),
         random = "inst"
-      ))
+      )
+    )
     expect_equal(
       find_parameters(m2),
       list(
         conditional = c("ph.ecogok", "ph.ecoglimited", "age"),
         random = c("inst", "inst2")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 3)
     expect_equal(get_parameters(m1)$parameter, c("ph.ecogok", "ph.ecoglimited", "age"))
 
@@ -112,5 +115,4 @@ if (require("testthat") && require("insight") && require("survival") && require(
 
     expect_length(get_parameters(m2, effects = "random"), 2)
   })
-
 }

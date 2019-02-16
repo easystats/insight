@@ -9,7 +9,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     context("insight, rstanarm")
 
     m1 <- stan_glmer(
-      cbind(incidence, size - incidence) ~ size + period + (1|herd),
+      cbind(incidence, size - incidence) ~ size + period + (1 | herd),
       data = lme4::cbpp, family = binomial, QR = TRUE,
       chains = 2, cores = 1, seed = 12345, iter = 500, refresh = 0
     )
@@ -43,13 +43,15 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           response = c("incidence", "size"),
           conditional = c("size", "period"),
           random = "herd"
-      ))
+        )
+      )
       expect_identical(
         find_terms(m1, effects = "fixed"),
         list(
           response = c("incidence", "size"),
           conditional = c("size", "period")
-        ))
+        )
+      )
       expect_null(find_terms(m1, component = "zi"))
     })
 
@@ -104,6 +106,5 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         )
       )
     })
-
   }
 }

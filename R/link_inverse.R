@@ -15,7 +15,7 @@
 #' outcome <- gl(3, 1, 9)
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ outcome + treatment, family = poisson())
-#'
+#' 
 #' link_inverse(m)(.3)
 #' # same as
 #' exp(.3)
@@ -286,10 +286,11 @@ link_inverse.stanmvreg <- function(x, ...) {
 #' @export
 link_inverse.brmsfit <- function(x, ...) {
   fam <- stats::family(x)
-  if (is_multivariate(x))
+  if (is_multivariate(x)) {
     lapply(fam, brms_link_inverse)
-  else
+  } else {
     brms_link_inverse(fam)
+  }
 }
 
 

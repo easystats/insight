@@ -69,7 +69,8 @@ if (require("testthat") && require("insight") && require("ordinal")) {
       find_parameters(m1),
       list(
         conditional = c("1|2", "2|3", "3|4", "4|5", "tempwarm", "contactyes", "tempwarm:contactyes")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 7)
     expect_equal(get_parameters(m1)$parameter, c("1|2", "2|3", "3|4", "4|5", "tempwarm", "contactyes", "tempwarm:contactyes"))
   })

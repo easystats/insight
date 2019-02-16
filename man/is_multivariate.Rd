@@ -32,5 +32,6 @@ model <- stan_mvmer(
 
 f <- find_formula(model)
 is_multivariate(model)
-is_multivariate(f)}
+is_multivariate(f)
+}
 }

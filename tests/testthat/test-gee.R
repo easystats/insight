@@ -73,7 +73,8 @@ if (require("testthat") && require("insight") && require("gee")) {
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "tensionM", "tensionH")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 3)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "tensionM", "tensionH"))
   })

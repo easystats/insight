@@ -4,7 +4,7 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
   data("sleepstudy")
   m1 <- lme(
     Reaction ~ Days,
-    random = ~1 + Days | Subject,
+    random = ~ 1 + Days | Subject,
     data = sleepstudy
   )
 
@@ -66,9 +66,9 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
       list(
         conditional = c("(Intercept)", "Days"),
         random = c("(Intercept)", "Days")
-    ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 2)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "Days"))
   })
-
 }

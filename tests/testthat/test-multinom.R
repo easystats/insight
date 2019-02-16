@@ -53,9 +53,9 @@ if (require("testthat") && require("insight") && require("nnet") && require("MAS
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "age", "lwt", "race", "smoke")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 5)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "age", "lwt", "race", "smoke"))
   })
-
 }

@@ -66,14 +66,16 @@ if (require("testthat") && require("insight") && require("mgcv")) {
           "(Intercept)", sprintf("s(x0).%i", 1:9), sprintf("s(x1).%i", 1:9),
           sprintf("s(x2).%i", 1:9), sprintf("s(x3).%i", 1:9)
         )
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 37)
     expect_equal(
       get_parameters(m1)$parameter,
       c(
         "(Intercept)", sprintf("s(x0).%i", 1:9), sprintf("s(x1).%i", 1:9),
         sprintf("s(x2).%i", 1:9), sprintf("s(x3).%i", 1:9)
-    ))
+      )
+    )
   })
 
   test_that("is_multivariate", {

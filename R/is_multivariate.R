@@ -21,10 +21,11 @@
 #'   data = pbcLong,
 #'   chains = 1, cores = 1, seed = 12345, iter = 1000
 #' )
-#'
+#' 
 #' f <- find_formula(model)
 #' is_multivariate(model)
-#' is_multivariate(f)}
+#' is_multivariate(f)
+#' }
 #' @export
 is_multivariate <- function(x) {
   (inherits(x, "brmsfit") && !is.null(stats::formula(x)$response)) |

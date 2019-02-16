@@ -34,7 +34,7 @@ if (require("testthat") && require("insight") && require("VGAM")) {
   test_that("find_response", {
     expect_identical(find_response(m1), "agaaus")
     expect_identical(find_response(m2), "cbind(agaaus, kniexc)")
-    expect_identical(find_response(m2, combine = FALSE), c("agaaus","kniexc"))
+    expect_identical(find_response(m2, combine = FALSE), c("agaaus", "kniexc"))
   })
 
   test_that("get_response", {
@@ -94,7 +94,8 @@ if (require("testthat") && require("insight") && require("VGAM")) {
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "vitluc", "s(altitude, df = 2)")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 3)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "vitluc", "s(altitude, df = 2)"))
 
@@ -102,7 +103,8 @@ if (require("testthat") && require("insight") && require("VGAM")) {
       find_parameters(m2),
       list(
         conditional = c("(Intercept):1", "(Intercept):2", "vitluc:1", "vitluc:2", "s(altitude, df = c(2, 3)):1", "s(altitude, df = c(2, 3)):2")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m2)), 6)
     expect_equal(get_parameters(m2)$parameter, c("(Intercept):1", "(Intercept):2", "vitluc:1", "vitluc:2", "s(altitude, df = c(2, 3)):1", "s(altitude, df = c(2, 3)):2"))
   })

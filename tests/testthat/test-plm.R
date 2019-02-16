@@ -72,7 +72,8 @@ if (require("testthat") && require("insight") && require("plm")) {
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "lprbarr", "factor(year)82", "factor(year)83", "factor(year)84", "factor(year)85", "factor(year)86", "factor(year)87")
-      ))
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 8)
   })
 
