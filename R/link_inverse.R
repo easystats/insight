@@ -275,7 +275,6 @@ link_inverse.stanmvreg <- function(x, ...) {
 }
 
 
-#' @rdname link_inverse
 #' @export
 link_inverse.brmsfit <- function(x, ...) {
   fam <- stats::family(x)

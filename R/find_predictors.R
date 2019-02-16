@@ -11,11 +11,12 @@
 #' @param effects Should variables for fixed effects, random effects
 #'    or both be returned? Only applies to mixed models. May be abbreviated.
 #' @param component Should all predictor variables, predictor variables for the
-#'    conditional model, the zero-inflated part of the model or the dispersion
-#'    model be returned? Only applies to models with zero-inflated and/or
-#'    dispersion formula. May be abbreviated.
-#' @param flatten Logical, if \code{TRUE}, the name of model terms are returned
-#'    as a single character, not as list.
+#'    conditional model, the zero-inflated part of the model, the dispersion
+#'    term or the instrumental variables be returned? Applies to models
+#'    with zero-inflated and/or dispersion formula, or to models with instrumental
+#'    variable (so called fixed-effects regressioms). May be abbreviated.
+#' @param flatten Logical, if \code{TRUE}, the values are returned
+#'    as character vector, not as list.
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #'    predictor variables. Depending on the combination of the arguments

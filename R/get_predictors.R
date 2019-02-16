@@ -1,11 +1,11 @@
 #' @title Get the data from predictor variables
 #' @name get_predictors
 #'
-#' @description Returns the data of all predictor variables (fixed effects).
+#' @description Returns the data from all predictor variables (fixed effects).
 #'
 #' @inheritParams find_predictors
 #'
-#' @return The data of all predictor variables, as data frame.
+#' @return The data from all predictor variables, as data frame.
 #'
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)

@@ -15,22 +15,23 @@ find_terms(x, effects = c("all", "fixed", "random"),
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{component}{Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model or the dispersion
-model be returned? Only applies to models with zero-inflated and/or
-dispersion formula. May be abbreviated.}
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressioms). May be abbreviated.}
 
-\item{flatten}{Logical, if \code{TRUE}, the name of model terms are returned
-as a single character, not as list.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned
+as character vector, not as list.}
 }
 \value{
 A list with (depending on the model) following elements (character
    vectors):
    \itemize{
      \item \code{response}, the name of the response variable
-     \item \code{conditional}, the name(s) of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
-     \item \code{random}, the name of the random effects (grouping factors)
-     \item \code{zero_inflated}, the name(s) of the predictor variables from the \emph{zero-inflated} part of the model
-     \item \code{zero_inflated_random}, the name of the random effects (grouping factors)
+     \item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
+     \item \code{random}, the names of the random effects (grouping factors)
+     \item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
+     \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
      \item \code{dispersion}, the name of the dispersion terms
      \item \code{instruments}, the names of instrumental variables
    }

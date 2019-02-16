@@ -10,10 +10,10 @@
 #'    vectors):
 #'    \itemize{
 #'      \item \code{response}, the name of the response variable
-#'      \item \code{conditional}, the name(s) of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
-#'      \item \code{random}, the name of the random effects (grouping factors)
-#'      \item \code{zero_inflated}, the name(s) of the predictor variables from the \emph{zero-inflated} part of the model
-#'      \item \code{zero_inflated_random}, the name of the random effects (grouping factors)
+#'      \item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
+#'      \item \code{random}, the names of the random effects (grouping factors)
+#'      \item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
+#'      \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
 #'      \item \code{dispersion}, the name of the dispersion terms
 #'      \item \code{instruments}, the names of instrumental variables
 #'    }

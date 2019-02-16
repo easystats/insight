@@ -15,12 +15,13 @@ find_predictors(x, effects = c("fixed", "random", "all"),
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{component}{Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model or the dispersion
-model be returned? Only applies to models with zero-inflated and/or
-dispersion formula. May be abbreviated.}
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressioms). May be abbreviated.}
 
-\item{flatten}{Logical, if \code{TRUE}, the name of model terms are returned
-as a single character, not as list.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned
+as character vector, not as list.}
 }
 \value{
 A list of character vectors that represent the name(s) of the

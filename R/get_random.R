@@ -1,11 +1,12 @@
 #' @title Get the data from random effects terms
 #' @name get_random
 #'
-#' @description Returns the data of all random effects terms.
+#' @description Returns the data from all random effects terms.
 #'
 #' @inheritParams find_random
 #'
-#' @return The data of all random effects terms, as data frame.
+#' @return The data from all random effects terms, as data frame. Or \code{NULL}
+#'    if model has no random effects.
 #'
 #' @examples
 #' library(lme4)

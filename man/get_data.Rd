@@ -39,9 +39,10 @@ get_data(x, ...)
 \item{...}{Currently not used.}
 
 \item{component}{Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model or the dispersion
-model be returned? Only applies to models with zero-inflated and/or
-dispersion formula. May be abbreviated.}
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressioms). May be abbreviated.}
 
 \item{effects}{Should model data for fixed effects, random effects
 or both be returned? Only applies to mixed models.}

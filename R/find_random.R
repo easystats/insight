@@ -5,7 +5,7 @@
 #'
 #' @param x A fitted mixed model.
 #' @param split_nested Logical, if \code{TRUE}, terms from nested random
-#'   effects will be returned as separeted elements, not as single string
+#'   effects will be returned as separated elements, not as single string
 #'   with colon. See 'Examples'.
 #'
 #' @inheritParams find_predictors

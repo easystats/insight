@@ -10,10 +10,10 @@ get_predictors(x)
 \item{x}{A fitted model.}
 }
 \value{
-The data of all predictor variables, as data frame.
+The data from all predictor variables, as data frame.
 }
 \description{
-Returns the data of all predictor variables (fixed effects).
+Returns the data from all predictor variables (fixed effects).
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)

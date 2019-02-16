@@ -10,11 +10,11 @@ find_random(x, split_nested = FALSE, flatten = FALSE)
 \item{x}{A fitted mixed model.}
 
 \item{split_nested}{Logical, if \code{TRUE}, terms from nested random
-effects will be returned as separeted elements, not as single string
+effects will be returned as separated elements, not as single string
 with colon. See 'Examples'.}
 
-\item{flatten}{Logical, if \code{TRUE}, the name of model terms are returned
-as a single character, not as list.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned
+as character vector, not as list.}
 }
 \value{
 A list of character vectors that represent the name(s) of the

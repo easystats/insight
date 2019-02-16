@@ -10,10 +10,11 @@ get_random(x)
 \item{x}{A fitted mixed model.}
 }
 \value{
-The data of all random effects terms, as data frame.
+The data from all random effects terms, as data frame. Or \code{NULL}
+   if model has no random effects.
 }
 \description{
-Returns the data of all random effects terms.
+Returns the data from all random effects terms.
 }
 \examples{
 library(lme4)

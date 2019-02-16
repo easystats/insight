@@ -144,14 +144,15 @@ or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
     <tr>
       <th>component</th>
       <td><p>Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model or the dispersion
-model be returned? Only applies to models with zero-inflated and/or
-dispersion formula. May be abbreviated.</p></td>
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressioms). May be abbreviated.</p></td>
     </tr>
     <tr>
       <th>flatten</th>
-      <td><p>Logical, if <code>TRUE</code>, the name of model terms are returned
-as a single character, not as list.</p></td>
+      <td><p>Logical, if <code>TRUE</code>, the values are returned
+as character vector, not as list.</p></td>
     </tr>
     </table>
     
@@ -166,6 +167,7 @@ as a single character, not as list.</p></td>
 <li><p><code>zero_inflated</code>, the "fixed effects" terms from the zero-inflation component of the model</p></li>
 <li><p><code>zero_inflated_random</code>, the "random effects" terms from the zero-inflation component of the model</p></li>
 <li><p><code>dispersion</code>, the dispersion terms</p></li>
+<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
 </ul>
 
     

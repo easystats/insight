@@ -2,12 +2,9 @@
 % Please edit documentation in R/link_inverse.R
 \name{link_inverse}
 \alias{link_inverse}
-\alias{link_inverse.brmsfit}
 \title{Get link-inverse function from model object}
 \usage{
 link_inverse(x, ...)
-
-\method{link_inverse}{brmsfit}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
