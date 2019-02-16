@@ -401,7 +401,7 @@ model_info.multinom <- function(x, ...) {
 
 #' @export
 model_info.clm2 <- function(x, ...) {
-  faminfo <- stats::binomial(link = x$link)
+  faminfo <- stats::binomial(link = get_ordinal_link(x))
   make_family(
     x = x,
     fitfam = faminfo$family,
@@ -414,7 +414,7 @@ model_info.clm2 <- function(x, ...) {
 
 #' @export
 model_info.clm <- function(x, ...) {
-  faminfo <- stats::binomial(link = x$link)
+  faminfo <- stats::binomial(link = get_ordinal_link(x))
   make_family(
     x = x,
     fitfam = faminfo$family,
@@ -427,7 +427,7 @@ model_info.clm <- function(x, ...) {
 
 #' @export
 model_info.clmm <- function(x, ...) {
-  faminfo <- stats::binomial(link = x$link)
+  faminfo <- stats::binomial(link = get_ordinal_link(x))
   make_family(
     x = x,
     fitfam = faminfo$family,
@@ -634,5 +634,14 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     family = fitfam,
     n_obs = n_obs(x),
     model_terms = model_terms
+  )
+}
+
+get_ordinal_link <- function(x) {
+  switch(
+    x$link,
+    logistic = "logit",
+    clogog = "log",
+    x$link
   )
 }

@@ -15,7 +15,7 @@
 #' outcome <- gl(3, 1, 9)
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ outcome + treatment, family = poisson())
-#' 
+#'
 #' link_inverse(m)(.3)
 #' # same as
 #' exp(.3)
@@ -207,13 +207,13 @@ link_inverse.mlogit <- function(x, ...) {
 
 #' @export
 link_inverse.clm <- function(x, ...) {
-  stats::make.link(x$link)$linkinv
+  stats::make.link(get_ordinal_link(x))$linkinv
 }
 
 
 #' @export
 link_inverse.clmm <- function(x, ...) {
-  stats::make.link(x$link)$linkinv
+  stats::make.link(get_ordinal_link(x))$linkinv
 }
 
 
@@ -239,14 +239,7 @@ link_inverse.MCMCglmm <- function(x, ...) {
 
 #' @export
 link_inverse.clm2 <- function(x, ...) {
-  switch(
-    x$link,
-    logistic = ,
-    probit = stats::make.link("logit")$linkinv,
-    cloglog = ,
-    loglog = stats::make.link("log")$linkinv,
-    stats::make.link("logit")$linkinv
-  )
+  stats::make.link(get_ordinal_link(x))$linkinv
 }
 
 #' @export
