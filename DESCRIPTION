@@ -30,7 +30,6 @@ Suggests:
   GLMMadaptive,
   glmmTMB,
   gmnl,
-  knitr,
   lfe,
   MASS,
   MCMCglmm,
@@ -52,4 +51,3 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-VignetteBuilder: knitr
