@@ -641,7 +641,7 @@ get_ordinal_link <- function(x) {
   switch(
     x$link,
     logistic = "logit",
-    clogog = "log",
+    cloglog = "log",
     x$link
   )
 }
