@@ -1,4 +1,4 @@
-#' @title Get the data from a model's random effects terms
+#' @title Get the data from random effects terms
 #' @name get_random
 #'
 #' @description Returns the data of all random effects terms.
@@ -18,12 +18,12 @@
 #'   sleepstudy$mysubgrp[filter_group] <-
 #'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
-#' 
+#'
 #' m <- lmer(
 #'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
 #'   data = sleepstudy
 #' )
-#' 
+#'
 #' head(get_random(m))
 #' @export
 get_random <- function(x) {

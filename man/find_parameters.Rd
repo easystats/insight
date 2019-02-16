@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_parameters.R
 \name{find_parameters}
 \alias{find_parameters}
-\title{Find name of model parameters}
+\title{Find names of model parameters}
 \usage{
 find_parameters(x, ...)
 }

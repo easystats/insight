@@ -1,4 +1,4 @@
-#' @title Find name of a model's response variable
+#' @title Find name of the response variable
 #' @name find_response
 #'
 #' @description Returns the name(s) of the response variable(s) from a model object.

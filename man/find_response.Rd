@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_response.R
 \name{find_response}
 \alias{find_response}
-\title{Find name of a model's response variable}
+\title{Find name of the response variable}
 \usage{
 find_response(x, combine = TRUE)
 }

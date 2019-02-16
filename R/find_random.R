@@ -1,4 +1,4 @@
-#' @title Find names of random effect terms
+#' @title Find names of random effects
 #' @name find_random
 #'
 #' @description Return the name of the grouping factors from mixed effects models.
@@ -29,12 +29,12 @@
 #'   sleepstudy$mysubgrp[filter_group] <-
 #'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
-#' 
+#'
 #' m <- lmer(
 #'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
 #'   data = sleepstudy
 #' )
-#' 
+#'
 #' find_random(m)
 #' find_random(m, split_nested = TRUE)
 #' @export

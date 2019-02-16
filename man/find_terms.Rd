@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_terms.R
 \name{find_terms}
 \alias{find_terms}
-\title{Find name of all model terms}
+\title{Find names of all model terms}
 \usage{
 find_terms(x, effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",
@@ -32,10 +32,11 @@ A list with (depending on the model) following elements (character
      \item \code{zero_inflated}, the name(s) of the predictor variables from the \emph{zero-inflated} part of the model
      \item \code{zero_inflated_random}, the name of the random effects (grouping factors)
      \item \code{dispersion}, the name of the dispersion terms
+     \item \code{instruments}, the names of instrumental variables
    }
 }
 \description{
-Returns a list with the name(s) of all model terms, including
+Returns a list with the names of all model terms, including
   response value and random effects.
 }
 \examples{

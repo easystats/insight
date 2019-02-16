@@ -1,4 +1,4 @@
-#' @title Get the values from a model's response variable
+#' @title Get the values from the response variable
 #' @name get_response
 #'
 #' @description Returns the values the response variable(s) from a model object.
@@ -16,11 +16,11 @@
 #' data(cbpp)
 #' data(mtcars)
 #' cbpp$trials <- cbpp$size - cbpp$incidence
-#' 
+#'
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #' head(get_response(m))
 #' get_response(m, resp = "incidence")
-#' 
+#'
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_response(m)
 #' @export

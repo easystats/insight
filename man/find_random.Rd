@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_random.R
 \name{find_random}
 \alias{find_random}
-\title{Find names of random effect terms}
+\title{Find names of random effects}
 \usage{
 find_random(x, split_nested = FALSE, flatten = FALSE)
 }

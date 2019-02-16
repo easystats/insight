@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_response.R
 \name{get_response}
 \alias{get_response}
-\title{Get the values from a model's response variable}
+\title{Get the values from the response variable}
 \usage{
 get_response(x, resp = NULL)
 }

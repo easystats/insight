@@ -1,4 +1,4 @@
-#' @title Find name of model parameters
+#' @title Find names of model parameters
 #' @name find_parameters
 #'
 #' @description Returns the names of model parameters, like they typically
