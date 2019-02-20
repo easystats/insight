@@ -29,6 +29,7 @@ library("insight")
 The syntax of `insight` mainly revolves around two types of functions. One is to find the names of the *things* (`find_*`), and the second is to actually get the *things* (`get_`). The *things* can be the following:
 
 - [find_formula()](https://easystats.github.io/insight/reference/find_formula.html)
+- [find_variables()](https://easystats.github.io/insight/reference/find_variables.html)
 - [find_terms()](https://easystats.github.io/insight/reference/find_terms.html)
 - [get_data()](https://easystats.github.io/insight/reference/get_data.html)
 - [find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html) / [get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html)
