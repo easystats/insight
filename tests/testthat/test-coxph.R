@@ -69,10 +69,10 @@ if (require("testthat") && require("insight") && require("survival")) {
 
   test_that("find_variables", {
     expect_equal(
-      find_parameters(m1),
+      find_variables(m1),
       list(
         response = "Surv(time, status)",
-        conditional = c("sexfemale", "age", "ph.ecog")
+        conditional = c("sex", "age", "ph.ecog")
       )
     )
   })

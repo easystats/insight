@@ -99,7 +99,7 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
     expect_equal(
       find_parameters(m2),
       list(
-        conditional = c("(Intercept)", "age", "Sex"),
+        conditional = c("(Intercept)", "age", "SexFemale"),
         random = c("(Intercept)")
       )
     )
