@@ -2,12 +2,9 @@
 % Please edit documentation in R/model_info.R
 \name{model_info}
 \alias{model_info}
-\alias{model_info.brmsfit}
 \title{Access information from model objects}
 \usage{
 model_info(x, ...)
-
-\method{model_info}{brmsfit}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}

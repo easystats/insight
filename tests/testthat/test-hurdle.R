@@ -73,4 +73,15 @@ if (require("testthat") && require("insight") && require("pscl")) {
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
   })
+
+  test_that("find_variables", {
+    expect_equal(
+      find_variables(m1),
+      list(
+        response = "art",
+        conditional = c("fem", "mar", "kid5", "ment"),
+        zero_inflated = c("kid5", "phd")
+      )
+    )
+  })
 }

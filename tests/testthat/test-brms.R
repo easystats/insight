@@ -308,5 +308,22 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_false(is_multivariate(m4))
       expect_true(is_multivariate(m5))
     })
+
+    test_that("find_variables", {
+      expect_equal(
+        find_variables(
+          m2,
+          list(
+            SepalLength = list(
+              response = "Sepal.Length",
+              conditional = c("Petal.Length", "Sepal.Width", "Species")
+            ),
+            SepalWidth = list(
+              response = "Sepal.Width",
+              conditional = "Species"
+            )
+          ))
+      )
+    })
   }
 }

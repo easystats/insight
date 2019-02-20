@@ -477,7 +477,6 @@ model_info.gmnl <- function(x, ...) {
 }
 
 
-#' @rdname model_info
 #' @export
 model_info.brmsfit <- function(x, ...) {
   faminfo <- stats::family(x)

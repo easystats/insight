@@ -112,6 +112,8 @@ get_group_factor <- function(x, f) {
     f <- get_model_random(f, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "felm")))
   }
 
+  if (is.null(f)) return(NULL)
+
   if (is.list(f)) {
     f <- lapply(f, as.symbol)
   } else {

@@ -66,4 +66,14 @@ if (require("testthat") && require("insight") && require("survival")) {
     expect_equal(nrow(get_parameters(m1)), 4)
     expect_equal(get_parameters(m1)$parameter, c("sexfemale", "age", "ph.ecogok", "ph.ecoglimited"))
   })
+
+  test_that("find_variables", {
+    expect_equal(
+      find_parameters(m1),
+      list(
+        response = "Surv(time, status)",
+        conditional = c("sexfemale", "age", "ph.ecog")
+      )
+    )
+  })
 }

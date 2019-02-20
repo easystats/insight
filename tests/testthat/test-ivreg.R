@@ -85,4 +85,18 @@ if (require("testthat") && require("insight") && require("AER")) {
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
   })
+
+  test_that("find_variables", {
+    expect_equal(
+      find_variables(m1),
+      list(
+        response = "log(packs)",
+        conditional = c("log(rprice)", "log(rincome)"),
+        instruments = c("log(rincome)", "tdiff", "I(tax/cpi)")
+      )
+    )
+    expect_equal(nrow(get_parameters(m1)), 3)
+    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "log(rprice)", "log(rincome)"))
+  })
+
 }

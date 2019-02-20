@@ -201,10 +201,25 @@ get_data.clmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 }
 
 
+#' @rdname get_data
 #' @export
-get_data.lme <- function(x, ...) {
-  mf <- tryCatch({
+get_data.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  dat <- tryCatch({
     x$data
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  mf <- tryCatch({
+    switch(
+      effects,
+      fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
+      all = dat,
+      random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
+    )
   },
   error = function(x) {
     NULL
