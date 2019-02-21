@@ -46,54 +46,9 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 
   # filter formulas, depending on requested effects and components
   if (is_mv) {
-    f <- lapply(f, function(i) i[names(i) %in% elements])
+    f <- lapply(f, function(.x) prepare_predictors(x, .x, elements))
   } else {
-    f <- f[names(f) %in% elements]
-  }
-
-  # from conditional model, remove response
-  if (obj_has_name(f, "conditional")) {
-    f[["conditional"]] <- f[["conditional"]][[3]]
-  }
-
-  # this is for multivariate response models, where
-  # we have a list of formulas
-  if (is_mv && any(unlist(lapply(f, function(i) names(i))) == "conditional")) {
-    for (i in names(f)) {
-      if (obj_has_name(f[[i]], "conditional")) {
-        f[[i]][["conditional"]] <- f[[i]][["conditional"]][[3]]
-      }
-    }
-  }
-
-  # if we have random effects, just return grouping variable, not random slopes
-  if (obj_has_name(f, "random")) {
-    f[["random"]] <- get_group_factor(x, f[["random"]])
-  }
-
-  # this is for multivariate response models, where
-  # we have a list of formulas
-  if (is_mv && any(unlist(lapply(f, function(i) names(i))) == "random")) {
-    for (i in names(f)) {
-      if (obj_has_name(f[[i]], "random")) {
-        f[[i]][["random"]] <- get_group_factor(x, f[[i]][["random"]])
-      }
-    }
-  }
-
-  # same for zi-random effects
-  if (obj_has_name(f, "zero_inflated_random")) {
-    f[["zero_inflated_random"]] <- get_group_factor(x, f[["zero_inflated_random"]])
-  }
-
-  # this is for multivariate response models, where
-  # we have a list of formulas
-  if (is_mv && any(unlist(lapply(f, function(i) names(i))) == "zero_inflated_random")) {
-    for (i in names(f)) {
-      if (obj_has_name(f[[i]], "zero_inflated_random")) {
-        f[[i]][["zero_inflated_random"]] <- get_group_factor(x, f[[i]][["zero_inflated_random"]])
-      }
-    }
+    f <- prepare_predictors(x, f, elements)
   }
 
   # random effects are returned as list, so we need to unlist here
@@ -135,4 +90,26 @@ return_vars <- function(f) {
   names(l) <- names(f)
 
   l
+}
+
+
+prepare_predictors <- function(x, f, elements) {
+  f <- f[names(f) %in% elements]
+
+  # from conditional model, remove response
+  if (obj_has_name(f, "conditional")) {
+    f[["conditional"]] <- f[["conditional"]][[3]]
+  }
+
+  # if we have random effects, just return grouping variable, not random slopes
+  if (obj_has_name(f, "random")) {
+    f[["random"]] <- get_group_factor(x, f[["random"]])
+  }
+
+  # same for zi-random effects
+  if (obj_has_name(f, "zero_inflated_random")) {
+    f[["zero_inflated_random"]] <- get_group_factor(x, f[["zero_inflated_random"]])
+  }
+
+  f
 }
