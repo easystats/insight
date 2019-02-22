@@ -46,14 +46,14 @@ get_vn_helper <- function(x) {
   # for gam-smoothers/loess, remove s()- and lo()-function in column name
   # for survival, remove strata(), and so on...
   pattern <- c(
-    "as.factor", "factor", "offset", "log-log", "log", "lag", "diff", "lo", "bs", "ns",
-    "t2", "te", "ti", "tt", "mi", "mo", "gp", "pspline", "poly", "strata", "scale",
-    "interaction", "s", "I"
+    "as.factor", "factor", "offset", "log-log", "log", "lag", "diff",
+    "pspline", "poly", "strata", "scale", "interaction", "sqrt",
+    "lo", "bs", "ns", "t2", "te", "ti", "tt", "mi", "mo", "gp", "s", "I"
   )
 
   # do we have a "log()" pattern here? if yes, get capture region
   # which matches the "cleaned" variable name
-  unlist(lapply(1:length(x), function(i) {
+  sapply(1:length(x), function(i) {
     for (j in 1:length(pattern)) {
       if (pattern[j] == "offset") {
         x[i] <- trim(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
@@ -68,5 +68,5 @@ get_vn_helper <- function(x) {
     }
     # for coxme-models, remove random-effect things...
     trim(sub("^(.*)\\|(.*)", "\\2", x[i]))
-  }))
+  })
 }

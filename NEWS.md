@@ -7,6 +7,7 @@
 ## Changes to functions
 
 * `get_random()` now returns only the data of the random effects terms from **lme**-objects.
+* `clean_names()` now also removes the `sqrt()`-pattern.
 
 ## Bug fixes
 
