@@ -179,7 +179,9 @@ find_formula.clm2 <- function(x, ...) {
 
 #' @export
 find_formula.aovlist <- function(x, ...) {
-  list(conditional = attr(x, "terms", exact = TRUE))
+  f <- attr(x, "terms", exact = TRUE)
+  attributes(f) <- NULL
+  list(conditional = f)
 }
 
 

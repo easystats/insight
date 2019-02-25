@@ -57,6 +57,14 @@ find_parameters.gamm <- function(x, ...) {
 
 
 #' @export
+find_parameters.aovlist <- function(x, ...) {
+  l <- lapply(stats::coef(x), names)
+  names(l) <- c("conditional", "between", "within")
+  l
+}
+
+
+#' @export
 find_parameters.MixMod <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")

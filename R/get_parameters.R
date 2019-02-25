@@ -69,6 +69,20 @@ get_parameters.gamm <- function(x, ...) {
 }
 
 
+#' @export
+get_parameters.aovlist <- function(x, ...) {
+  l <- lapply(stats::coef(x), function(i) {
+    data.frame(
+      parameter = names(i),
+      estimate = unname(i),
+      stringsAsFactors = FALSE
+    )
+  })
+  names(l) <- c("conditional", "between", "within")
+  l
+}
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
