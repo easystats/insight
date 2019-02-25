@@ -50,7 +50,7 @@ if (require("testthat") && require("insight") && require("stats")) {
     expect_equal(nrow(get_data(m1)), 24)
     expect_equal(nrow(get_data(m2)), 24)
     expect_equal(colnames(get_data(m1)), c("yield", "N", "P", "K", "block"))
-    expect_equal(colnames(get_data(m1)), c("yield", "N", "P", "K"))
+    expect_equal(colnames(get_data(m2)), c("yield", "N", "P", "K"))
   })
 
   test_that("find_formula", {
