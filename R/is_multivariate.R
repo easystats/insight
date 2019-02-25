@@ -21,7 +21,7 @@
 #'   data = pbcLong,
 #'   chains = 1, cores = 1, seed = 12345, iter = 1000
 #' )
-#' 
+#'
 #' f <- find_formula(model)
 #' is_multivariate(model)
 #' is_multivariate(f)
