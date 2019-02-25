@@ -12,6 +12,7 @@
 
 * `get_random()` now returns only the data of the random effects terms from **lme**-objects.
 * `clean_names()` now also removes the `sqrt()`-pattern.
+* `model_info()` now returns `is_anova = TRUE` for objects of class `aov` and `aovlist`.
 
 ## Bug fixes
 
