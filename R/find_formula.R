@@ -48,6 +48,12 @@ find_formula.default <- function(x, ...) {
 
 
 #' @export
+find_formula.data.frame <- function(x, ...) {
+  stop("A data frame is no valid object for this function")
+}
+
+
+#' @export
 find_formula.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))

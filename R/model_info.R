@@ -53,6 +53,12 @@ model_info <- function(x, ...) {
 }
 
 
+#' @export
+model_info.data.frame <- function(x, ...) {
+  stop("A data frame is no valid object for this function")
+}
+
+
 #' @importFrom stats family
 #' @export
 model_info.default <- function(x, ...) {

@@ -53,6 +53,12 @@ get_data.default <- function(x, ...) {
 
 
 #' @export
+get_data.data.frame <- function(x, ...) {
+  x
+}
+
+
+#' @export
 get_data.plm <- function(x, ...) {
   mf <- stats::model.frame(x)
   cn <- colnames(mf)

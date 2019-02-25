@@ -47,6 +47,11 @@ find_parameters.default <- function(x, ...) {
   )
 }
 
+#' @export
+find_parameters.data.frame <- function(x, ...) {
+  stop("A data frame is no valid object for this function")
+}
+
 
 #' @export
 find_parameters.gamm <- function(x, ...) {

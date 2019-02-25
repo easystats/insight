@@ -46,6 +46,12 @@ get_parameters.default <- function(x, ...) {
 }
 
 
+#' @export
+get_parameters.data.frame <- function(x, ...) {
+  stop("A data frame is no valid object for this function")
+}
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
