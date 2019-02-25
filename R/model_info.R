@@ -28,6 +28,7 @@
 #'      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
 #'      \item \code{is_trial}: model response contains additional information about the trials
 #'      \item \code{is_bayesian}: model is a Bayesian model
+#'      \item \code{is_anova}: model is an Anova object
 #'      \item \code{link_function}: the link-function
 #'      \item \code{family}: the family-object
 #'      \item \code{n_obs}: number of observations
@@ -528,6 +529,12 @@ model_info.stanmvreg <- function(x, ...) {
 }
 
 
+#' @export
+model_info.aovlist <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
 make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity", ...) {
   # create logical for family
   binom_fam <-
@@ -633,6 +640,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_multivariate = multi.var,
     is_trial = is.trial,
     is_bayesian = inherits(x, c("brmsfit", "stanfit", "stanreg", "stanmvreg")),
+    is_anova = inherits(x, c("aov", "aovlist")),
     is_ttest = is_ttest,
     is_correlation = is_correlation,
     link_function = link.fun,

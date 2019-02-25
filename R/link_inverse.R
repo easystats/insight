@@ -78,6 +78,12 @@ link_inverse.lm <- function(x, ...) {
 
 
 #' @export
+link_inverse.aovlist <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
 link_inverse.ivreg <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }

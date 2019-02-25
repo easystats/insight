@@ -165,6 +165,12 @@ link_function.lme <- function(x, ...) {
 
 
 #' @export
+link_function.aovlist <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
 link_function.felm <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }

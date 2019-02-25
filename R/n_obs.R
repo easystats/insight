@@ -14,6 +14,8 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' n_obs(m)
+#'
+#' @importFrom stats model.frame
 #' @export
 n_obs <- function(x, ...) {
   UseMethod("n_obs")
@@ -72,6 +74,12 @@ n_obs.coxme <- function(x, ...) {
 #' @export
 n_obs.felm <- function(x, ...) {
   x$N
+}
+
+
+#' @export
+n_obs.aovlist <- function(x, ...) {
+  nrow(stats::model.frame(x))
 }
 
 
