@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
       </span>
     </div>
 
@@ -193,7 +193,9 @@ or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
    with two columns: the parameter names and the related point estimates; if
    <code>effects = "random"</code>, a list with the random effects (as returned by
    <code>ranef()</code>. For Bayesian models, the posterior samples from the
-   requested parameters as data frame.</p>
+   requested parameters as data frame. For Anova (<code><a href='https://www.rdocumentation.org/packages/stats/topics/aov'>aov()</a></code>) with error
+   term, a list of parameters for the conditional, the within-subject and
+   the between-subjects parameters.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
