@@ -1,15 +1,16 @@
 Package: insight
 Type: Package
 Title: Easy Access to Model Information for Various Model Objects
-Description: Gain insight into your models! The goal of this package is to 
-   provide an easy, intuitive and consistent access to information contained 
-   in various R models. Although there are generic functions to get information 
-   and data from models, many modelling-functions from different packages do 
-   not provide such methods to access these information. The insight package 
-   aims at closing this gap by providing functions that work for (almost) 
-   any model.
-Version: 0.1.1.0001
-Date: 2019-02-20
+Description: A tool to provide an easy, intuitive and consistent access to 
+   information contained in various R models, like model formulas, model terms, 
+   information about random effects, data that was used to fit the model or 
+   data from response variables. 'insight' mainly revolves around two types 
+   of functions: Functions that find (the names of) information, starting with 
+   'find_', and functions that get the underlying data, starting with 'get_'. 
+   The package has a consistent syntax and works with many different model 
+   objects, where otherwise functions to access these information are missing.
+Version: 0.1.2.9000
+Date: 2019-02-27
 Authors@R: c(person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206")),
              person("Dominique", "Makowski", role = c("aut", "ctb"), email = "dom.makowski@gmail.com", comment = c(ORCID = "0000-0001-5375-9967")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>

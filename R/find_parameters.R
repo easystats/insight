@@ -18,6 +18,8 @@
 #'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
 #'      \item \code{dispersion}, the dispersion formula
+#'      \item \code{within}, the within-subject effects of Anovas (\code{aov()}) with error term
+#'      \item \code{between}, the between-subjects effects of Anovas (\code{aov()}) with error term
 #'    }
 #'
 #' @examples

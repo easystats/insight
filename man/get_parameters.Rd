@@ -65,7 +65,9 @@ For non-Bayesian models and if \code{effects = "fixed"}, a data frame
    with two columns: the parameter names and the related point estimates; if
    \code{effects = "random"}, a list with the random effects (as returned by
    \code{ranef()}. For Bayesian models, the posterior samples from the
-   requested parameters as data frame.
+   requested parameters as data frame. For Anova (\code{aov()}) with error
+   term, a list of parameters for the conditional, the within-subject and
+   the between-subjects parameters.
 }
 \description{
 Returns the point estimates (or posterior samples for Bayesian
