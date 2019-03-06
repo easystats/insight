@@ -1,8 +1,8 @@
 # insight <img src='man/figures/logo.png' align="right" height="139" />
 
-[![Build Status](https://travis-ci.org/easystats/insight.svg?branch=master)](https://travis-ci.org/easystats/insight)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight) [![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/) [![Build Status](https://travis-ci.org/easystats/insight.svg?branch=master)](https://travis-ci.org/easystats/insight)
 [![codecov](https://codecov.io/gh/easystats/insight/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/insight)
-[![HitCount](http://hits.dwyl.io/easystats/insight.svg)](http://hits.dwyl.io/easystats/insight) [![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight) [![downloads](http://cranlogs.r-pkg.org/badges/insight)](http://cranlogs.r-pkg.org/) [![total](http://cranlogs.r-pkg.org/badges/grand-total/insight)](http://cranlogs.r-pkg.org/)
+[![downloads](http://cranlogs.r-pkg.org/badges/insight)](http://cranlogs.r-pkg.org/) [![total](http://cranlogs.r-pkg.org/badges/grand-total/insight)](http://cranlogs.r-pkg.org/)
 
 **Gain insight into your models!**
 
