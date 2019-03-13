@@ -190,21 +190,29 @@ get_group_factor <- function(x, f) {
 #' @keywords internal
 .filter_pars <- function(l, pars = NULL) {
   if (!is.null(pars)) {
-
-    ## TODO fix me for multivariate response models
-
     is_mv <- attr(l, "is_mv", exact = TRUE)
-    l <- lapply(l, function(component) {
-      unlist(unname(sapply(
-        pars,
-        function(pattern) {
-          component[grepl(pattern = pattern, x = component, perl = TRUE)]
-        },
-        simplify = FALSE
-      )))
-    })
+    if (is_multivariate(l)) {
+      for (i in names(l)) {
+        l[[i]] <- .filter_pars_univariate(l[[i]], pars)
+      }
+    } else {
+      l <- .filter_pars_univariate(l, pars)
+    }
     attr(l, "is_mv") <- is_mv
   }
 
   l
+}
+
+
+.filter_pars_univariate <- function(l, pars) {
+  lapply(l, function(component) {
+    unlist(unname(sapply(
+      pars,
+      function(pattern) {
+        component[grepl(pattern = pattern, x = component, perl = TRUE)]
+      },
+      simplify = FALSE
+    )))
+  })
 }

@@ -192,8 +192,8 @@ find_parameters.zerotrunc <- function(x, ...) {
 find_parameters.brmsfit <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
   fe <- colnames(as.data.frame(x))
 
-  cond <- fe[grepl(pattern = "b_(?!zi_)(.*)", fe, perl = TRUE)]
-  zi <- fe[grepl(pattern = "b_zi_", fe, perl = TRUE)]
+  cond <- fe[grepl(pattern = "(b_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
+  zi <- fe[grepl(pattern = "(b_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
   rand <- fe[grepl(pattern = "(?!.*__zi)(?=.*r_)", fe, perl = TRUE)]
   randzi <- fe[grepl(pattern = "r_(.*__zi)", fe, perl = TRUE)]
 
@@ -208,7 +208,7 @@ find_parameters.brmsfit <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_
     rn <- names(find_response(x))
     l <- lapply(rn, function(i) {
       if (obj_has_name(l, "conditional")) {
-        conditional <- l$conditional[grepl(sprintf("^b_\\Q%s\\E_", i), l$conditional)]
+        conditional <- l$conditional[grepl(sprintf("^(b_|bsp_|bcs_)\\Q%s\\E_", i), l$conditional)]
       } else {
         conditional <- NULL
       }
@@ -220,7 +220,7 @@ find_parameters.brmsfit <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_
       }
 
       if (obj_has_name(l, "zero_inflated")) {
-        zero_inflated <- l$zero_inflated[grepl(sprintf("^b_zi_\\Q%s\\E_", i), l$zero_inflated)]
+        zero_inflated <- l$zero_inflated[grepl(sprintf("^(b_zi_|bsp_zi_|bcs_zi_)\\Q%s\\E_", i), l$zero_inflated)]
       } else {
         zero_inflated <- NULL
       }
