@@ -156,4 +156,10 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
     expect_false(is_multivariate(m))
     expect_false(is_multivariate(m2))
   })
+
+  test_that("find_algorithm", {
+    expect_equal(find_algorithm(m), list(
+      algorithm = "quasi-Newton", optimizer = "optim"
+    ))
+  })
 }

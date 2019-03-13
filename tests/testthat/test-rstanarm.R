@@ -118,5 +118,14 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       ),
       tolerance = 1e-5)
     })
+
+    test_that("find_algorithm", {
+      expect_equal(find_algorithm(m1), list(
+        algorithm = "sampling",
+        chains = 2,
+        iterations = 500,
+        warmup = 250
+      ))
+    })
   }
 }

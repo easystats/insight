@@ -104,4 +104,10 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
       )
     )
   })
+
+  test_that("find_algorithm", {
+    expect_equal(find_algorithm(m1), list(
+      algorithm = "REML", optimizer = "nlminb"
+    ))
+  })
 }

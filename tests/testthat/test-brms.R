@@ -325,5 +325,14 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           ))
       )
     })
+
+    test_that("find_algorithm", {
+      expect_equal(find_algorithm(m1), list(
+        algorithm = "sampling",
+        chains = 1,
+        iterations = 500,
+        warmup = 250
+      ))
+    })
   }
 }

@@ -3,6 +3,7 @@
 S3method(clean_names,character)
 S3method(clean_names,default)
 S3method(find_algorithm,MixMod)
+S3method(find_algorithm,brmsfit)
 S3method(find_algorithm,glmmTMB)
 S3method(find_algorithm,lme)
 S3method(find_algorithm,merMod)

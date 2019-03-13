@@ -180,4 +180,10 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_warning(get_variances(m2))
     expect_equal(get_variances(m2), NA)
   })
+
+  test_that("find_algorithm", {
+    expect_equal(find_algorithm(m1), list(
+      algorithm = "REML", optimizer = "nloptwrap"
+    ))
+  })
 }
