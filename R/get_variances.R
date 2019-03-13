@@ -4,7 +4,8 @@
 #' @description This function extracts the different variance components of a
 #'   mixed model and returns the result as list.
 #'
-#' @param x A mixed effects model of class \code{merMod} or \code{glmmTMB}.
+#' @param x A mixed effects model of class \code{merMod}, \code{glmmTMB} or
+#'   \code{stanreg}.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:
@@ -47,7 +48,7 @@ get_variances <- function(x, ...) {
 
 #' @export
 get_variances.default <- function(x, ...) {
-  warning(sprintf("Objects of class `%s` are not supported.", class(x)))
+  warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
   NULL
 }
 
@@ -60,5 +61,11 @@ get_variances.merMod <- function(x, ...) {
 
 #' @export
 get_variances.glmmTMB <- function(x, ...) {
+  .compute_variances(x, name_fun = "get_variances", name_full = "random effect variances")
+}
+
+
+#' @export
+get_variances.stanreg <- function(x, ...) {
   .compute_variances(x, name_fun = "get_variances", name_full = "random effect variances")
 }

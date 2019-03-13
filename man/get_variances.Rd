@@ -7,7 +7,8 @@
 get_variances(x, ...)
 }
 \arguments{
-\item{x}{A mixed effects model of class \code{merMod} or \code{glmmTMB}.}
+\item{x}{A mixed effects model of class \code{merMod}, \code{glmmTMB} or
+\code{stanreg}.}
 
 \item{...}{Currently not used.}
 }

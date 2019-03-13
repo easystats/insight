@@ -1,10 +1,12 @@
 #' @importFrom stats nobs
 #' @keywords internal
-.compute_variances <- function(model, name_fun = NULL, name_full = NULL) {
-  x <- model
-
+.compute_variances <- function(x, name_fun = NULL, name_full = NULL) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  }
+
+  if (inherits(x, "rstanarm") && !requireNamespace("rstanarm", quietly = TRUE)) {
+    stop("Package `rstanarm` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
 
@@ -14,14 +16,24 @@
 
   faminfo <- model_info(x)
 
+  if (!faminfo$is_mixed) {
+    stop("Model is not a mixed model.", call. = FALSE)
+  }
+
   if (faminfo$family %in% c("truncated_nbinom1", "truncated_nbinom2", "tweedie")) {
     warning(sprintf("Truncated negative binomial and tweedie families are currently not supported by `%s`.", name_fun), call. = F)
     return(NA)
   }
 
+  if (inherits(x, "stanreg")) {
+    xcomp <- rstanarm::get_x(x)
+  } else {
+    xcomp <- lme4::getME(x, "X")
+  }
+
   vals <- list(
     beta = lme4::fixef(x),
-    X = lme4::getME(x, "X"),
+    X = xcomp,
     vc = lme4::VarCorr(x),
     re = lme4::ranef(x)
   )
@@ -51,7 +63,7 @@
 
   # Test for non-zero random effects ((near) singularity)
 
-  if (lme4::isSingular(x)) {
+  if (!inherits(x, "stanreg") && lme4::isSingular(x)) {
     warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
     return(NA)
   }
