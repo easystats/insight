@@ -89,7 +89,7 @@ get_data.ivreg <- function(x, ...) {
     final_mf <- mf
   } else {
     final_mf <- tryCatch({
-      dat <- get_data_from_env(x)
+      dat <- .get_data_from_env(x)
       cbind(mf, dat[, remain, drop = FALSE])
     },
     error = function(x) {
@@ -255,7 +255,7 @@ get_data.vgam <- function(x, ...) {
 get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   mf <- tryCatch({
-    dat <- get_data_from_env(x)
+    dat <- .get_data_from_env(x)
     switch(
       effects,
       all = dat,
@@ -275,7 +275,7 @@ get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 get_data.gls <- function(x, ...) {
   mf <- tryCatch({
-    get_data_from_env(x)
+    .get_data_from_env(x)
   },
   error = function(x) {
     NULL

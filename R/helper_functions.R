@@ -103,6 +103,7 @@ get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
 # in case we need the random effects terms as formula (symbol),
 # not as character string, then call this functions instead of
 # get_model_random()
+#' @keywords internal
 get_group_factor <- function(x, f) {
   if (is.list(f)) {
     f <- lapply(f, function(.x) {
@@ -126,7 +127,8 @@ get_group_factor <- function(x, f) {
 
 # to reduce redundant code, I extract this part which is used several
 # times accross this package
-get_elements <- function(effects, component) {
+#' @keywords internal
+.get_elements <- function(effects, component) {
   elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments")
 
   elements <- switch(
@@ -150,7 +152,8 @@ get_elements <- function(effects, component) {
 
 # return data from a data frame that is in the environment,
 # and subset the data, if necessary
-get_data_from_env <- function(x) {
+#' @keywords internal
+.get_data_from_env <- function(x) {
   dat <- eval(x$call$data, envir = parent.frame())
   if (obj_has_name(x$call, "subset")) {
     dat <- subset(dat, subset = eval(x$call$subset))

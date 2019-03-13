@@ -330,7 +330,7 @@ get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), com
 
   if (is_multivariate(x)) {
     parms <- find_parameters(x)
-    elements <- get_elements(effects, component)
+    elements <- .get_elements(effects, component)
     as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
   } else {
     as.data.frame(x)[get_parms_data(x, effects, component)]
@@ -350,7 +350,7 @@ get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), ...
 #' @export
 get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
-  elements <- get_elements(effects, "all")
+  elements <- .get_elements(effects, "all")
   parms <- find_parameters(x)
 
   for (i in names(parms)) {
@@ -368,7 +368,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), .
 
 
 get_parms_data <- function(x, effects, component) {
-  elements <- get_elements(effects, component)
+  elements <- .get_elements(effects, component)
   unlist(find_parameters(x)[elements])
 }
 
