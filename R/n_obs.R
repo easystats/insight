@@ -15,7 +15,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' n_obs(m)
 #'
-#' @importFrom stats model.frame
+#' @importFrom stats model.frame nobs
 #' @export
 n_obs <- function(x, ...) {
   UseMethod("n_obs")
