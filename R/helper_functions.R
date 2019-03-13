@@ -161,3 +161,24 @@ get_group_factor <- function(x, f) {
 
   dat
 }
+
+
+#' @keywords internal
+.is_singular <- function(x, tolerance = 1e-5) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  }
+
+  if (inherits(x, "stanreg")) {
+    singular <- FALSE
+  } else if (inherits(x, "glmmTMB")) {
+    vc <- .collapse_cond(lme4::VarCorr(x))
+    singular <- any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
+  } else if (inherits(x, "merMod")) {
+    theta <- lme4::getME(x, "theta")
+    diag.element <- lme4::getME(x, "lower") == 0
+    singular <- any(abs(theta[diag.element]) < tolerance)
+  }
+
+  singular
+}

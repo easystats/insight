@@ -63,7 +63,7 @@
 
   # Test for non-zero random effects ((near) singularity)
 
-  if (!inherits(x, "stanreg") && lme4::isSingular(x)) {
+  if (.is_singular(x)) {
     warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
     return(NA)
   }
