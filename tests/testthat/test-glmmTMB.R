@@ -36,6 +36,14 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     family = truncated_poisson()
   )
 
+  data(Salamanders)
+  m5 <- glmmTMB(
+    count ~ mined + (1 | site),
+    ziformula = ~mined,
+    family = poisson,
+    data = Salamanders
+  )
+
   test_that("model_info", {
     expect_true(model_info(m1)$is_zeroinf)
     expect_false(model_info(m2)$is_zeroinf)
@@ -231,15 +239,15 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("get_variances", {
-    expect_warning(expect_equal(get_variances(m1), list(
-      var.fixef = 1.097124,
-      var.ranef = 0.8671274,
-      var.resid = 0.02634501,
-      var.dist = 0.02634501,
+    expect_warning(expect_equal(get_variances(m5), list(
+      var.fixef = 0.3258869,
+      var.ranef = 0.07842738,
+      var.resid = 0.41218,
+      var.dist = 0.41218,
       var.disp = 0
     ),
     tolerance = 1e-5))
-    expect_warning(get_variances(m1))
+    expect_warning(get_variances(m5))
   })
 
   test_that("find_algorithm", {
