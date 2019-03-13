@@ -8,6 +8,8 @@ find_algorithm(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{...}{Currently not used.}
 }
 \value{
 A list with following elements:

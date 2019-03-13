@@ -5,7 +5,7 @@
 #'   as well as optimization functions, or for Bayesian model information on
 #'   chains, iterations and warmup-samples.
 #'
-#' @inheritParams find_predictors
+#' @inheritParams find_parameters
 #'
 #' @return A list with following elements:
 #'   \cr For frequentist models:
