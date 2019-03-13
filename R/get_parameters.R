@@ -325,7 +325,7 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), pars = NULL, ...) {
+get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -341,7 +341,7 @@ get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), com
 
 #' @rdname get_parameters
 #' @export
-get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), pars = NULL, ...) {
+get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
   effects <- match.arg(effects)
   as.data.frame(x)[get_parms_data(x, effects, "all", pars)]
 }
@@ -349,7 +349,7 @@ get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), par
 
 #' @rdname get_parameters
 #' @export
-get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), pars = NULL, ...) {
+get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
   effects <- match.arg(effects)
   elements <- .get_elements(effects, "all")
   parms <- find_parameters(x, pars)

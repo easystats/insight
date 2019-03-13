@@ -7,7 +7,9 @@
 #'     from \code{as.data.frame()}.
 #'
 #' @param pars Regular expression pattern that describes the parameters that
-#'   should be returned. By default, all parameters are returned.
+#'   should be returned. By default, the \code{pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))"}
+#'   and hence filters out prior samples as well as parameters with information
+#'   about correlation or sd.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -187,7 +189,7 @@ find_parameters.zerotrunc <- function(x, ...) {
 
 #' @rdname find_parameters
 #' @export
-find_parameters.brmsfit <- function(x, pars = NULL, ...) {
+find_parameters.brmsfit <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "b_(?!zi_)(.*)", fe, perl = TRUE)]
@@ -247,7 +249,7 @@ find_parameters.brmsfit <- function(x, pars = NULL, ...) {
 
 #' @rdname find_parameters
 #' @export
-find_parameters.stanreg <- function(x, pars = NULL, ...) {
+find_parameters.stanreg <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
@@ -277,7 +279,7 @@ find_parameters.stanreg <- function(x, pars = NULL, ...) {
 
 #' @rdname find_parameters
 #' @export
-find_parameters.stanmvreg <- function(x, pars = NULL, ...) {
+find_parameters.stanmvreg <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
   fe <- colnames(as.data.frame(x))
   rn <- names(find_response(x))
 

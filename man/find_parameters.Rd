@@ -9,11 +9,14 @@
 \usage{
 find_parameters(x, ...)
 
-\method{find_parameters}{brmsfit}(x, pars = NULL, ...)
+\method{find_parameters}{brmsfit}(x,
+  pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...)
 
-\method{find_parameters}{stanreg}(x, pars = NULL, ...)
+\method{find_parameters}{stanreg}(x,
+  pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...)
 
-\method{find_parameters}{stanmvreg}(x, pars = NULL, ...)
+\method{find_parameters}{stanmvreg}(x,
+  pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -21,7 +24,9 @@ find_parameters(x, ...)
 \item{...}{Currently not used.}
 
 \item{pars}{Regular expression pattern that describes the parameters that
-should be returned. By default, all parameters are returned.}
+should be returned. By default, the \code{pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))"}
+and hence filters out prior samples as well as parameters with information
+about correlation or sd.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,

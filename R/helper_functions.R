@@ -198,7 +198,7 @@ get_group_factor <- function(x, f) {
       unlist(unname(sapply(
         pars,
         function(pattern) {
-          component[grepl(pattern, component)]
+          component[grepl(pattern = pattern, x = component, perl = TRUE)]
         },
         simplify = FALSE
       )))
