@@ -70,4 +70,8 @@ if (require("testthat") && require("insight")) {
     expect_false(is.null(link_function(m1)))
     expect_false(is.null(link_function(m2)))
   })
+
+  test_that("find_algorithm", {
+    expect_equal(find_algorithm(m1), list(algorithm = "OLS"))
+  })
 }

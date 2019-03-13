@@ -52,17 +52,13 @@ find_algorithm.default <- function(x, ...) {
 
 #' @export
 find_algorithm.lm <- function(x, ...) {
-  list(
-    "algorithm" = "OLS",
-  )
+  list("algorithm" = "OLS")
 }
 
 
 #' @export
 find_algorithm.glm <- function(x, ...) {
-  list(
-    "algorithm" = "ML",
-  )
+  list("algorithm" = "ML")
 }
 
 
