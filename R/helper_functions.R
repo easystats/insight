@@ -195,9 +195,13 @@ get_group_factor <- function(x, f) {
 
     is_mv <- attr(l, "is_mv", exact = TRUE)
     l <- lapply(l, function(component) {
-      sapply(pars, function(pattern) {
-        component[grepl(pattern, component)]
-      })
+      unlist(unname(sapply(
+        pars,
+        function(pattern) {
+          component[grepl(pattern, component)]
+        },
+        simplify = FALSE
+      )))
     })
     attr(l, "is_mv") <- is_mv
   }
