@@ -13,6 +13,10 @@ find_algorithm(x, ...)
 A list with following elements:
   \cr For frequentist models:
    \itemize{
+     \item \code{algorithm}, either \code{"OLS"} or \code{"ML"}
+   }
+  \cr For frequentist mixed models:
+   \itemize{
      \item \code{algorithm}, either \code{"REML"} or \code{"ML"}
      \item \code{optimizer}, name of optimizing function
    }

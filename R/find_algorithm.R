@@ -10,6 +10,10 @@
 #' @return A list with following elements:
 #'   \cr For frequentist models:
 #'    \itemize{
+#'      \item \code{algorithm}, either \code{"OLS"} or \code{"ML"}
+#'    }
+#'   \cr For frequentist mixed models:
+#'    \itemize{
 #'      \item \code{algorithm}, either \code{"REML"} or \code{"ML"}
 #'      \item \code{optimizer}, name of optimizing function
 #'    }
@@ -36,6 +40,29 @@
 #' @export
 find_algorithm <- function(x, ...) {
   UseMethod("find_algorithm")
+}
+
+
+#' @export
+find_algorithm.default <- function(x, ...) {
+  warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
+  NULL
+}
+
+
+#' @export
+find_algorithm.lm <- function(x, ...) {
+  list(
+    "algorithm" = "OLS",
+  )
+}
+
+
+#' @export
+find_algorithm.glm <- function(x, ...) {
+  list(
+    "algorithm" = "ML",
+  )
 }
 
 
