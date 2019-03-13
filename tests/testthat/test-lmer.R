@@ -167,4 +167,17 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_false(is_multivariate(m1))
     expect_false(is_multivariate(m2))
   })
+
+  test_that("get_variances", {
+    expect_equal(get_variances(m1), list(
+      var.fixef = 908.9534,
+      var.ranef = 1698.233,
+      var.resid = 654.9408,
+      var.dist = 654.9408,
+      var.disp = 0
+    ),
+    tolerance = 1e-5)
+    expect_warning(get_variances(m2))
+    expect_equal(get_variances(m2), NA)
+  })
 }

@@ -229,4 +229,17 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_false(is_multivariate(m3))
     expect_false(is_multivariate(m4))
   })
+
+  test_that("get_variances", {
+    expect_equal(get_variances(m1), list(
+      var.fixef = 1.097124,
+      var.ranef = 0.8671274,
+      var.resid = 0.02634501,
+      var.dist = 0.02634501,
+      var.disp = 0
+    ),
+    tolerance = 1e-5)
+    expect_warning(get_variances(m1))
+  })
+
 }

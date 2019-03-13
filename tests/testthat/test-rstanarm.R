@@ -8,6 +8,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
   )) {
     context("insight, rstanarm")
 
+    set.seed(123)
     m1 <- stan_glmer(
       cbind(incidence, size - incidence) ~ size + period + (1 | herd),
       data = lme4::cbpp, family = binomial, QR = TRUE,
@@ -105,6 +106,17 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           random = as.formula("~1 | herd")
         )
       )
+    })
+
+    test_that("get_variances", {
+      expect_equal(get_variances(m1), list(
+        var.fixef = 0.3710157,
+        var.ranef = 0.6113405,
+        var.resid = 3.289868,
+        var.dist = 3.289868,
+        var.disp = 0
+      ),
+      tolerance = 1e-5)
     })
   }
 }
