@@ -1,4 +1,4 @@
-# insight 0.1.2
+# insight 0.2.0
 
 ## New functions
 
@@ -8,6 +8,10 @@
 ## Changes to functions
 
 * `find_parameters()` and `get_parameters()` gets a `pars`-argument for `brmsfit` and `stanreg` models, to allow selection of specific parameters that should be returned (#55).
+
+## Bug fixes
+
+* `find_parameters()` and `get_parameters()` did not preserve coefficients of monotonic category-specific effects from **brmsfit**-objects.
 
 # insight 0.1.2
 
