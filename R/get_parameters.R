@@ -6,6 +6,7 @@
 #'
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
+#' @inheritParams find_parameters
 #'
 #' @return For non-Bayesian models and if \code{effects = "fixed"}, a data frame
 #'    with two columns: the parameter names and the related point estimates; if
@@ -324,34 +325,34 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), pars = NULL, ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
   if (is_multivariate(x)) {
-    parms <- find_parameters(x)
+    parms <- find_parameters(x, pars)
     elements <- .get_elements(effects, component)
     as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
   } else {
-    as.data.frame(x)[get_parms_data(x, effects, component)]
+    as.data.frame(x)[get_parms_data(x, effects, component, pars)]
   }
 }
 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), ...) {
+get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), pars = NULL, ...) {
   effects <- match.arg(effects)
-  as.data.frame(x)[get_parms_data(x, effects, "all")]
+  as.data.frame(x)[get_parms_data(x, effects, "all", pars)]
 }
 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), ...) {
+get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), pars = NULL, ...) {
   effects <- match.arg(effects)
   elements <- .get_elements(effects, "all")
-  parms <- find_parameters(x)
+  parms <- find_parameters(x, pars)
 
   for (i in names(parms)) {
     parms[[i]]$conditional <- sprintf("%s|%s", i, parms[[i]]$conditional)
@@ -367,9 +368,9 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), .
 }
 
 
-get_parms_data <- function(x, effects, component) {
+get_parms_data <- function(x, effects, component, pars = NULL) {
   elements <- .get_elements(effects, component)
-  unlist(find_parameters(x)[elements])
+  unlist(find_parameters(x, pars)[elements])
 }
 
 

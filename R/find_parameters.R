@@ -6,6 +6,8 @@
 #'     names equal the column names of the posterior samples after coercion
 #'     from \code{as.data.frame()}.
 #'
+#' @param pars Regular expression pattern that describes the parameters that
+#'   should be returned. By default, all parameters are returned.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -183,8 +185,9 @@ find_parameters.zerotrunc <- function(x, ...) {
 }
 
 
+#' @rdname find_parameters
 #' @export
-find_parameters.brmsfit <- function(x, ...) {
+find_parameters.brmsfit <- function(x, pars = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "b_(?!zi_)(.*)", fe, perl = TRUE)]
@@ -238,21 +241,24 @@ find_parameters.brmsfit <- function(x, ...) {
     attr(l, "is_mv") <- "1"
   }
 
-  l
+  .filter_pars(l, pars)
 }
 
 
+#' @rdname find_parameters
 #' @export
-find_parameters.stanreg <- function(x, ...) {
+find_parameters.stanreg <- function(x, pars = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
 
-  compact_list(list(
+  l <- compact_list(list(
     conditional = cond,
     random = rand
   ))
+
+  .filter_pars(l, pars)
 }
 
 # #' @export
@@ -269,8 +275,9 @@ find_parameters.stanreg <- function(x, ...) {
 # }
 
 
+#' @rdname find_parameters
 #' @export
-find_parameters.stanmvreg <- function(x, ...) {
+find_parameters.stanmvreg <- function(x, pars = NULL, ...) {
   fe <- colnames(as.data.frame(x))
   rn <- names(find_response(x))
 
@@ -301,5 +308,5 @@ find_parameters.stanmvreg <- function(x, ...) {
   l <- mapply(c, l.cond, l.random, SIMPLIFY = FALSE)
   attr(l, "is_mv") <- "1"
 
-  l
+  .filter_pars(l, pars)
 }

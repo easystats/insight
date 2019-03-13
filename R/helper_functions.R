@@ -163,6 +163,8 @@ get_group_factor <- function(x, f) {
 }
 
 
+# checks if a mixed model fit is singular or not. Need own function,
+# because lme4::isSingular() does not work with glmmTMB
 #' @keywords internal
 .is_singular <- function(x, tolerance = 1e-5) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -181,4 +183,24 @@ get_group_factor <- function(x, f) {
   }
 
   singular
+}
+
+
+# Filter parameters from Stan-model fits
+#' @keywords internal
+.filter_pars <- function(l, pars = NULL) {
+  if (!is.null(pars)) {
+
+    ## TODO fix me for multivariate response models
+
+    is_mv <- attr(l, "is_mv", exact = TRUE)
+    l <- lapply(l, function(component) {
+      sapply(pars, function(pattern) {
+        component[grepl(pattern, component)]
+      })
+    })
+    attr(l, "is_mv") <- is_mv
+  }
+
+  l
 }

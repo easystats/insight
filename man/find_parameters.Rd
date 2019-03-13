@@ -2,14 +2,26 @@
 % Please edit documentation in R/find_parameters.R
 \name{find_parameters}
 \alias{find_parameters}
+\alias{find_parameters.brmsfit}
+\alias{find_parameters.stanreg}
+\alias{find_parameters.stanmvreg}
 \title{Find names of model parameters}
 \usage{
 find_parameters(x, ...)
+
+\method{find_parameters}{brmsfit}(x, pars = NULL, ...)
+
+\method{find_parameters}{stanreg}(x, pars = NULL, ...)
+
+\method{find_parameters}{stanmvreg}(x, pars = NULL, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
+
+\item{pars}{Regular expression pattern that describes the parameters that
+should be returned. By default, all parameters are returned.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,
