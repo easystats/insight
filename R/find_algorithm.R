@@ -51,6 +51,21 @@ find_algorithm.default <- function(x, ...) {
 
 
 #' @export
+find_algorithm.Gam <- function(x, ...) {
+  list("algorithm" = "IWLS")
+}
+
+
+#' @export
+find_algorithm.gam <- function(x, ...) {
+  list(
+    "algorithm" = x$method,
+    "optimizer" = x$optimizer
+  )
+}
+
+
+#' @export
 find_algorithm.lm <- function(x, ...) {
   list("algorithm" = "OLS")
 }

@@ -91,4 +91,10 @@ if (require("testthat") && require("insight") && require("mgcv")) {
       )
     )
   })
+
+  test_that("find_algorithm", {
+    expect_equal(find_algorithm(m1), list(
+      algorithm = "GCV", optimizer = "magic"
+    ))
+  })
 }

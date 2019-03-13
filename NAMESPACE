@@ -2,9 +2,11 @@
 
 S3method(clean_names,character)
 S3method(clean_names,default)
+S3method(find_algorithm,Gam)
 S3method(find_algorithm,MixMod)
 S3method(find_algorithm,brmsfit)
 S3method(find_algorithm,default)
+S3method(find_algorithm,gam)
 S3method(find_algorithm,glm)
 S3method(find_algorithm,glmmTMB)
 S3method(find_algorithm,lm)

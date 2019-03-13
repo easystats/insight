@@ -242,4 +242,10 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_warning(get_variances(m1))
   })
 
+  test_that("find_algorithm", {
+    expect_equal(find_algorithm(m1), list(
+      algorithm = "REML", optimizer = "nlminb"
+    ))
+  })
+
 }
