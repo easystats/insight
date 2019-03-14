@@ -147,6 +147,8 @@ get_group_factor <- function(x, f) {
     dispersion = elements[elements == "dispersion"],
     instruments = elements[elements == "instruments"]
   )
+
+  elements
 }
 
 
