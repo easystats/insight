@@ -8,19 +8,19 @@
 #' @inheritParams find_parameters
 #'
 #' @return A list with following elements:
-#'   \cr For frequentist models:
+#'   For frequentist models:
 #'    \itemize{
 #'      \item \code{algorithm}, for instance \code{"OLS"} or \code{"ML"}
 #'      \item \code{optimizer}, name of optimizing function, only applies to specific models (like \code{gam})
 #'    }
-#'   \cr For frequentist mixed models:
+#'   For frequentist mixed models:
 #'    \itemize{
 #'      \item \code{algorithm}, for instance \code{"REML"} or \code{"ML"}
 #'      \item \code{optimizer}, name of optimizing function
 #'    }
-#'   \cr For Bayesian models:
+#'   For Bayesian models:
 #'    \itemize{
-#'      \item \code{algorithm}, the algirithm
+#'      \item \code{algorithm}, the algorithm
 #'      \item \code{chains}, number of chains
 #'      \item \code{iterations}, number of iterations per chain
 #'      \item \code{warmup}, number of warmups per chain

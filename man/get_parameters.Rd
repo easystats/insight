@@ -38,13 +38,13 @@ get_parameters(x, ...)
 
 \method{get_parameters}{brmsfit}(x, effects = c("fixed", "random",
   "all"), component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion"), pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...)
+  "dispersion"), parameters = NULL, ...)
 
 \method{get_parameters}{stanreg}(x, effects = c("fixed", "random",
-  "all"), pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...)
+  "all"), parameters = NULL, ...)
 
 \method{get_parameters}{stanmvreg}(x, effects = c("fixed", "random",
-  "all"), pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...)
+  "all"), parameters = NULL, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -60,10 +60,8 @@ variable (so called fixed-effects regressioms). May be abbreviated.}
 \item{effects}{Should variables for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
-\item{pars}{Regular expression pattern that describes the parameters that
-should be returned. By default, the \code{pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))"}
-and hence filters out prior samples as well as parameters with information
-about correlation or sd.}
+\item{parameters}{Regular expression pattern that describes the parameters that
+should be returned.}
 }
 \value{
 For non-Bayesian models and if \code{effects = "fixed"}, a data frame

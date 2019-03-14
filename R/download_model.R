@@ -1,5 +1,4 @@
-#' Download circus models
-#'
+#' @title Download circus models
 #' @name download_model
 #'
 #' @description Downloads pre-compiled models from the \emph{circus}-repository.

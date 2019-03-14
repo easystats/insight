@@ -44,6 +44,7 @@ Suggests:
   plm,
   pscl,
   rstanarm,
+  rstudioapi,
   splines,
   survey,
   survival,

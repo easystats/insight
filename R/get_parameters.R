@@ -325,34 +325,34 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
+get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), parameters = NULL, ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
   if (is_multivariate(x)) {
-    parms <- find_parameters(x, pars)
+    parms <- find_parameters(x, parameters)
     elements <- .get_elements(effects, component)
     as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
   } else {
-    as.data.frame(x)[get_parms_data(x, effects, component, pars)]
+    as.data.frame(x)[get_parms_data(x, effects, component, parameters)]
   }
 }
 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
+get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, ...) {
   effects <- match.arg(effects)
-  as.data.frame(x)[get_parms_data(x, effects, "all", pars)]
+  as.data.frame(x)[get_parms_data(x, effects, "all", parameters)]
 }
 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
+get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, ...) {
   effects <- match.arg(effects)
   elements <- .get_elements(effects, "all")
-  parms <- find_parameters(x, pars)
+  parms <- find_parameters(x, parameters)
 
   for (i in names(parms)) {
     parms[[i]]$conditional <- sprintf("%s|%s", i, parms[[i]]$conditional)
@@ -368,9 +368,9 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
 }
 
 
-get_parms_data <- function(x, effects, component, pars = NULL) {
+get_parms_data <- function(x, effects, component, parameters = NULL) {
   elements <- .get_elements(effects, component)
-  unlist(find_parameters(x, pars)[elements])
+  unlist(find_parameters(x, parameters)[elements])
 }
 
 

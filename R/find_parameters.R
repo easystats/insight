@@ -6,10 +6,8 @@
 #'     names equal the column names of the posterior samples after coercion
 #'     from \code{as.data.frame()}.
 #'
-#' @param pars Regular expression pattern that describes the parameters that
-#'   should be returned. By default, the \code{pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))"}
-#'   and hence filters out prior samples as well as parameters with information
-#'   about correlation or sd.
+#' @param parameters Regular expression pattern that describes the parameters that
+#'   should be returned.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -189,7 +187,7 @@ find_parameters.zerotrunc <- function(x, ...) {
 
 #' @rdname find_parameters
 #' @export
-find_parameters.brmsfit <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
+find_parameters.brmsfit <- function(x, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "(b_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
@@ -243,13 +241,13 @@ find_parameters.brmsfit <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_
     attr(l, "is_mv") <- "1"
   }
 
-  .filter_pars(l, pars)
+  .filter_pars(l, parameters)
 }
 
 
 #' @rdname find_parameters
 #' @export
-find_parameters.stanreg <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
+find_parameters.stanreg <- function(x, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
@@ -260,7 +258,7 @@ find_parameters.stanreg <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_
     random = rand
   ))
 
-  .filter_pars(l, pars)
+  .filter_pars(l, parameters)
 }
 
 # #' @export
@@ -279,7 +277,7 @@ find_parameters.stanreg <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_
 
 #' @rdname find_parameters
 #' @export
-find_parameters.stanmvreg <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smooth_sd))", ...) {
+find_parameters.stanmvreg <- function(x, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
   rn <- names(find_response(x))
 
@@ -310,5 +308,5 @@ find_parameters.stanmvreg <- function(x, pars = "^(?!(prior_|sd_|cor_|lp__|smoot
   l <- mapply(c, l.cond, l.random, SIMPLIFY = FALSE)
   attr(l, "is_mv") <- "1"
 
-  .filter_pars(l, pars)
+  .filter_pars(l, parameters)
 }

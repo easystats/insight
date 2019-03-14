@@ -188,15 +188,15 @@ get_group_factor <- function(x, f) {
 
 # Filter parameters from Stan-model fits
 #' @keywords internal
-.filter_pars <- function(l, pars = NULL) {
-  if (!is.null(pars)) {
+.filter_pars <- function(l, parameters = NULL) {
+  if (!is.null(parameters)) {
     is_mv <- attr(l, "is_mv", exact = TRUE)
     if (is_multivariate(l)) {
       for (i in names(l)) {
-        l[[i]] <- .filter_pars_univariate(l[[i]], pars)
+        l[[i]] <- .filter_pars_univariate(l[[i]], parameters)
       }
     } else {
-      l <- .filter_pars_univariate(l, pars)
+      l <- .filter_pars_univariate(l, parameters)
     }
     attr(l, "is_mv") <- is_mv
   }
@@ -205,10 +205,10 @@ get_group_factor <- function(x, f) {
 }
 
 
-.filter_pars_univariate <- function(l, pars) {
+.filter_pars_univariate <- function(l, parameters) {
   lapply(l, function(component) {
     unlist(unname(sapply(
-      pars,
+      parameters,
       function(pattern) {
         component[grepl(pattern = pattern, x = component, perl = TRUE)]
       },

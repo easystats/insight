@@ -13,14 +13,14 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
     # Model fitting -----------------------------------------------------------
 
-    data("epilepsy")
+    data("epilepsy", package = "brms")
     data("iris")
     zinb <- read.csv("http://stats.idre.ucla.edu/stat/data/fish.csv")
 
     bprior1 <- prior(student_t(5, 0, 10), class = b) + prior(cauchy(0, 2), class = sd)
 
     m1 <- brm(
-      count ~ log_Age_c + log_Base4_c * Trt + (1 | patient),
+      count ~ Age + Base * Trt + (1 | patient),
       data = epilepsy,
       family = poisson(),
       prior = bprior1,
@@ -82,7 +82,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
     test_that("clean_names", {
-      expect_identical(clean_names(m1), c("count", "log_Age_c", "log_Base4_c", "Trt", "patient"))
+      expect_identical(clean_names(m1), c("count", "Age", "Base", "Trt", "patient"))
       expect_identical(clean_names(m2), c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species"))
       expect_identical(clean_names(m3), c("r", "n", "treat", "c2"))
       expect_identical(clean_names(m4), c("count", "child", "camper", "persons"))
@@ -91,10 +91,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
 
     test_that("find_predictors", {
-      expect_identical(find_predictors(m1), list(conditional = c("log_Age_c", "log_Base4_c", "Trt")))
-      expect_identical(find_predictors(m1, flatten = TRUE), c("log_Age_c", "log_Base4_c", "Trt"))
-      expect_identical(find_predictors(m1, effects = "all", component = "all"), list(conditional = c("log_Age_c", "log_Base4_c", "Trt"), random = "patient"))
-      expect_identical(find_predictors(m1, effects = "all", component = "all", flatten = TRUE), c("log_Age_c", "log_Base4_c", "Trt", "patient"))
+      expect_identical(find_predictors(m1), list(conditional = c("Age", "Base", "Trt")))
+      expect_identical(find_predictors(m1, flatten = TRUE), c("Age", "Base", "Trt"))
+      expect_identical(find_predictors(m1, effects = "all", component = "all"), list(conditional = c("Age", "Base", "Trt"), random = "patient"))
+      expect_identical(find_predictors(m1, effects = "all", component = "all", flatten = TRUE), c("Age", "Base", "Trt", "patient"))
 
       expect_identical(
         find_predictors(m2),
@@ -141,8 +141,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
     test_that("find_terms", {
-      expect_identical(find_terms(m1), list(response = "count", conditional = c("log_Age_c", "log_Base4_c", "Trt"), random = "patient"))
-      expect_identical(find_terms(m1, effects = "fixed"), list(response = "count", conditional = c("log_Age_c", "log_Base4_c", "Trt")))
+      expect_identical(find_terms(m1), list(response = "count", conditional = c("Age", "Base", "Trt"), random = "patient"))
+      expect_identical(find_terms(m1, effects = "fixed"), list(response = "count", conditional = c("Age", "Base", "Trt")))
       expect_null(find_terms(m1, component = "zi"))
 
       expect_identical(
@@ -183,7 +183,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_equal(
         find_parameters(m1),
         list(
-          conditional = c("b_Intercept", "b_log_Age_c", "b_log_Base4_c", "b_Trt1", "b_log_Base4_c.Trt1"),
+          conditional = c("b_Intercept", "b_Age", "b_Base", "b_Trt1", "b_Base.Trt1"),
           random = sprintf("r_patient.%i.Intercept.", 1:59)
         )
       )
