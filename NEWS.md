@@ -13,6 +13,7 @@
 ## Bug fixes
 
 * `find_parameters()` and `get_parameters()` did not preserve coefficients of monotonic category-specific effects from **brmsfit**-objects.
+* Fixed bug that sometimes returned more elements for `find_predictors()` or `get_parameters()` than requested.
 
 # insight 0.1.2
 
