@@ -37,8 +37,8 @@ get_parameters(x, ...)
   "dispersion"), ...)
 
 \method{get_parameters}{brmsfit}(x, effects = c("fixed", "random",
-  "all"), component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion"), parameters = NULL, ...)
+  "simplex", "smooth_terms", "all"), component = c("all", "conditional",
+  "zi", "zero_inflated", "dispersion"), parameters = NULL, ...)
 
 \method{get_parameters}{stanreg}(x, effects = c("fixed", "random",
   "all"), parameters = NULL, ...)

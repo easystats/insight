@@ -129,21 +129,23 @@ get_group_factor <- function(x, f) {
 # times accross this package
 #' @keywords internal
 .get_elements <- function(effects, component) {
-  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments")
+  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "simplex", "smooth_terms")
 
   elements <- switch(
     effects,
     all = elements,
     fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments")],
-    random = elements[elements %in% c("random", "zero_inflated_random")]
+    random = elements[elements %in% c("random", "zero_inflated_random")],
+    simplex = elements[elements == "simplex"],
+    smooth_terms = elements[elements == "smooth_terms"]
   )
 
   elements <- switch(
     component,
     all = elements,
-    conditional = elements[elements %in% c("conditional", "random")],
+    conditional = elements[elements %in% c("conditional", "random", "simplex", "smooth_terms")],
     zi = ,
-    zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random")],
+    zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random", "simplex", "smooth_terms")],
     dispersion = elements[elements == "dispersion"],
     instruments = elements[elements == "instruments"]
   )

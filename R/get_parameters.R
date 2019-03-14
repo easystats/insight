@@ -325,7 +325,7 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), parameters = NULL, ...) {
+get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "simplex", "smooth_terms", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), parameters = NULL, ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 

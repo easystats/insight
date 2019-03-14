@@ -32,7 +32,9 @@ A list of parameter names. For simple models, only one list-element,
      \item \code{random}, the "random effects" part from the model
      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
-     \item \code{dispersion}, the dispersion formula
+     \item \code{dispersion}, the dispersion parameters
+     \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
+     \item \code{smooth_terms}, smooth parameters of spline effects (\pkg{brms} only)
      \item \code{within}, the within-subject effects of Anovas (\code{aov()}) with error term
      \item \code{between}, the between-subjects effects of Anovas (\code{aov()}) with error term
    }

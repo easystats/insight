@@ -19,7 +19,9 @@
 #'      \item \code{random}, the "random effects" part from the model
 #'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
-#'      \item \code{dispersion}, the dispersion formula
+#'      \item \code{dispersion}, the dispersion parameters
+#'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
+#'      \item \code{smooth_terms}, smooth parameters of spline effects (\pkg{brms} only)
 #'      \item \code{within}, the within-subject effects of Anovas (\code{aov()}) with error term
 #'      \item \code{between}, the between-subjects effects of Anovas (\code{aov()}) with error term
 #'    }
@@ -190,23 +192,27 @@ find_parameters.zerotrunc <- function(x, ...) {
 find_parameters.brmsfit <- function(x, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
-  cond <- fe[grepl(pattern = "(b_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
-  zi <- fe[grepl(pattern = "(b_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
+  cond <- fe[grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
+  zi <- fe[grepl(pattern = "(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
   rand <- fe[grepl(pattern = "(?!.*__zi)(?=.*r_)", fe, perl = TRUE)]
   randzi <- fe[grepl(pattern = "r_(.*__zi)", fe, perl = TRUE)]
+  simo <- fe[grepl(pattern = "^simo_", fe, perl = TRUE)]
+  smooth_terms <- fe[grepl(pattern = "^sds_", fe, perl = TRUE)]
 
   l <- compact_list(list(
     conditional = cond,
     random = rand,
     zero_inflated = zi,
-    zero_inflated_random = randzi
+    zero_inflated_random = randzi,
+    simplex = simo,
+    smooth_terms = smooth_terms
   ))
 
   if (is_multivariate(x)) {
     rn <- names(find_response(x))
     l <- lapply(rn, function(i) {
       if (obj_has_name(l, "conditional")) {
-        conditional <- l$conditional[grepl(sprintf("^(b_|bsp_|bcs_)\\Q%s\\E_", i), l$conditional)]
+        conditional <- l$conditional[grepl(sprintf("^(b_|bs_|bsp_|bcs_)\\Q%s\\E_", i), l$conditional)]
       } else {
         conditional <- NULL
       }
@@ -218,7 +224,7 @@ find_parameters.brmsfit <- function(x, parameters = NULL, ...) {
       }
 
       if (obj_has_name(l, "zero_inflated")) {
-        zero_inflated <- l$zero_inflated[grepl(sprintf("^(b_zi_|bsp_zi_|bcs_zi_)\\Q%s\\E_", i), l$zero_inflated)]
+        zero_inflated <- l$zero_inflated[grepl(sprintf("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)\\Q%s\\E_", i), l$zero_inflated)]
       } else {
         zero_inflated <- NULL
       }
@@ -229,11 +235,25 @@ find_parameters.brmsfit <- function(x, parameters = NULL, ...) {
         zero_inflated_random <- NULL
       }
 
+      if (obj_has_name(l, "simplex")) {
+        simplex <- l$simplex
+      } else {
+        simplex <- NULL
+      }
+
+      if (obj_has_name(l, "smooth_terms")) {
+        smooth_terms <- l$smooth_terms
+      } else {
+        smooth_terms <- NULL
+      }
+
       compact_list(list(
         conditional = conditional,
         random = random,
         zero_inflated = zero_inflated,
-        zero_inflated_random = zero_inflated_random
+        zero_inflated_random = zero_inflated_random,
+        simplex = simplex,
+        smooth_terms = smooth_terms
       ))
     })
 
