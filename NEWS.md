@@ -15,6 +15,7 @@
 
 * `find_parameters()` and `get_parameters()` did not preserve coefficients of monotonic category-specific effects from **brmsfit**-objects.
 * Fixed bug that sometimes returned more elements for `find_predictors()` or `get_parameters()` than requested.
+* Fixed bug in `get_data()` for **MixMod**-objects when response variable was defined via `cbind()`.
 
 # insight 0.1.2
 

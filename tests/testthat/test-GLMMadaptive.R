@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("GLMMadaptive")) {
+if (require("testthat") && require("insight") && require("GLMMadaptive") && require("lme4")) {
   context("insight, model_info")
 
   fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
@@ -21,6 +21,14 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
     zi_fixed = ~ child + livebait,
     data = fish,
     family = GLMMadaptive::zi.poisson()
+  )
+
+  data(cbpp)
+  m3 <- GLMMadaptive::mixed_model(
+    cbind(incidence, size - incidence) ~ period,
+    random = ~ 1 | herd,
+    data = cbpp,
+    family = binomial
   )
 
   test_that("model_info", {
@@ -110,6 +118,7 @@ if (require("testthat") && require("insight") && require("GLMMadaptive")) {
     expect_identical(colnames(get_data(m, component = "cond", effects = "random")), "persons")
     expect_identical(colnames(get_data(m, component = "disp")), "count")
     expect_warning(colnames(get_data(m, component = "disp", effects = "random")))
+    expect_identical(colnames(get_data(m3)), c("incidence", "size", "period", "herd"))
   })
 
   test_that("find_parameter", {

@@ -321,6 +321,9 @@ get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component 
     fitfram$grp__id <- x$id
     colnames(fitfram)[ncol(fitfram)] <- x$id_name[1]
 
+    # test...
+    fitfram <- prepare_get_data(x, fitfram)
+
     model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
     return_data(mf = fitfram, effects, component, model.terms)
   },
