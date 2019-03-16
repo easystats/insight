@@ -246,7 +246,14 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       var.dist = 0.41218,
       var.disp = 0
     ),
-    tolerance = 1e-5))
+    tolerance = 1e-4))
+
+    expect_equal(get_fixef_variance(m1), c(var.fixef = 0.3258869), tolerance = 1e-4)
+    expect_equal(get_ranef_variance(m1), c(var.ranef = 0.07842738), tolerance = 1e-4)
+    expect_equal(get_resid_variance(m1), c(var.resid = 0.41218), tolerance = 1e-4)
+    expect_equal(get_dist_variance(m1), c(var.dist = 0.41218), tolerance = 1e-4)
+    expect_equal(get_disp_variance(m1), c(var.disp = 0), tolerance = 1e-4)
+
     expect_warning(get_variances(m5))
   })
 

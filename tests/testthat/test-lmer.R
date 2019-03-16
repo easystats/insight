@@ -176,7 +176,13 @@ if (require("testthat") && require("insight") && require("lme4")) {
       var.dist = 654.9408,
       var.disp = 0
     ),
-    tolerance = 1e-5)
+    tolerance = 1e-4)
+    expect_equal(get_fixef_variance(m1), c(var.fixef = 908.9534), tolerance = 1e-4)
+    expect_equal(get_ranef_variance(m1), c(var.ranef = 1698.233), tolerance = 1e-4)
+    expect_equal(get_resid_variance(m1), c(var.resid = 654.9408), tolerance = 1e-4)
+    expect_equal(get_dist_variance(m1), c(var.dist = 654.9408), tolerance = 1e-4)
+    expect_equal(get_disp_variance(m1), c(var.disp = 0), tolerance = 1e-4)
+
     expect_warning(get_variances(m2))
     expect_equal(get_variances(m2), NA)
   })

@@ -2,13 +2,36 @@
 % Please edit documentation in R/get_variances.R
 \name{get_variances}
 \alias{get_variances}
+\alias{get_resid_variance}
+\alias{get_fixef_variance}
+\alias{get_ranef_variance}
+\alias{get_dist_variance}
+\alias{get_disp_variance}
 \title{Get variance components from random effects models}
 \usage{
-get_variances(x, ...)
+get_variances(x, component = c("all", "fixef", "ranef", "resid", "dist",
+  "disp"), ...)
+
+get_resid_variance(x, ...)
+
+get_fixef_variance(x, ...)
+
+get_ranef_variance(x, ...)
+
+get_dist_variance(x, ...)
+
+get_disp_variance(x, ...)
 }
 \arguments{
 \item{x}{A mixed effects model of class \code{merMod}, \code{glmmTMB} or
 \code{stanreg}.}
+
+\item{component}{Character value, indicating the variance component that should
+be returned. May be one of \code{"all"}, \code{"fixef"}, \code{"ranef"},
+\code{"resid"}, \code{"dist"} or \code{"disp"}. By default, all variance
+components are returned. The distribution-specific (\code{"dist"}) and
+residual (\code{"resid"} variance are the most computational intensive
+components, and hence may take a few seconds to calculate.}
 
 \item{...}{Currently not used.}
 }
@@ -24,7 +47,9 @@ A list with following elements:
 }
 \description{
 This function extracts the different variance components of a
-  mixed model and returns the result as list.
+  mixed model and returns the result as list. Functions like
+  \code{get_resid_variance(x)} or \code{get_fixef_variance(x)} are shortcuts
+  for \code{get_variances(x, component = "resid")} etc.
 }
 \details{
 This function returns different variance components from mixed models,
@@ -43,7 +68,10 @@ This function returns different variance components from mixed models,
 library(lme4)
 data(sleepstudy)
 m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-get_variances(m)}
+
+get_variances(m)
+get_fixef_variance(m)
+get_resid_variance(m)}
 
 }
 \references{

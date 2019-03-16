@@ -2,10 +2,18 @@
 #' @name get_variances
 #'
 #' @description This function extracts the different variance components of a
-#'   mixed model and returns the result as list.
+#'   mixed model and returns the result as list. Functions like
+#'   \code{get_resid_variance(x)} or \code{get_fixef_variance(x)} are shortcuts
+#'   for \code{get_variances(x, component = "resid")} etc.
 #'
 #' @param x A mixed effects model of class \code{merMod}, \code{glmmTMB} or
 #'   \code{stanreg}.
+#' @param component Character value, indicating the variance component that should
+#'   be returned. May be one of \code{"all"}, \code{"fixef"}, \code{"ranef"},
+#'   \code{"resid"}, \code{"dist"} or \code{"disp"}. By default, all variance
+#'   components are returned. The distribution-specific (\code{"dist"}) and
+#'   residual (\code{"resid"} variance are the most computational intensive
+#'   components, and hence may take a few seconds to calculate.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:
@@ -38,34 +46,71 @@
 #' library(lme4)
 #' data(sleepstudy)
 #' m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-#' get_variances(m)}
+#'
+#' get_variances(m)
+#' get_fixef_variance(m)
+#' get_resid_variance(m)}
 #'
 #' @export
-get_variances <- function(x, ...) {
+get_variances <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp"), ...) {
   UseMethod("get_variances")
 }
 
 
 #' @export
-get_variances.default <- function(x, ...) {
+get_variances.default <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp"), ...) {
   warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
   NULL
 }
 
 
 #' @export
-get_variances.merMod <- function(x, ...) {
-  .compute_variances(x, name_fun = "get_variances", name_full = "random effect variances")
+get_variances.merMod <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp"), ...) {
+  component <- match.arg(component)
+  .compute_variances(x, component = component, name_fun = "get_variances", name_full = "random effect variances")
 }
 
 
 #' @export
-get_variances.glmmTMB <- function(x, ...) {
-  .compute_variances(x, name_fun = "get_variances", name_full = "random effect variances")
+get_variances.glmmTMB <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp"), ...) {
+  component <- match.arg(component)
+  .compute_variances(x, component = component, name_fun = "get_variances", name_full = "random effect variances")
 }
 
 
 #' @export
-get_variances.stanreg <- function(x, ...) {
-  .compute_variances(x, name_fun = "get_variances", name_full = "random effect variances")
+get_variances.stanreg <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp"), ...) {
+  component <- match.arg(component)
+  .compute_variances(x, component = component, name_fun = "get_variances", name_full = "random effect variances")
+}
+
+
+#' @rdname get_variances
+#' @export
+get_resid_variance <- function(x, ...) {
+  unlist(get_variances(x, component = "resid", ...))
+}
+
+#' @rdname get_variances
+#' @export
+get_fixef_variance <- function(x, ...) {
+  unlist(get_variances(x, component = "fixef", ...))
+}
+
+#' @rdname get_variances
+#' @export
+get_ranef_variance <- function(x, ...) {
+  unlist(get_variances(x, component = "ranef", ...))
+}
+
+#' @rdname get_variances
+#' @export
+get_dist_variance <- function(x, ...) {
+  unlist(get_variances(x, component = "dist", ...))
+}
+
+#' @rdname get_variances
+#' @export
+get_disp_variance <- function(x, ...) {
+  unlist(get_variances(x, component = "disp", ...))
 }

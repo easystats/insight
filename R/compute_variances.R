@@ -1,14 +1,6 @@
 #' @importFrom stats nobs
 #' @keywords internal
-.compute_variances <- function(x, name_fun = NULL, name_full = NULL) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
-
-  if (inherits(x, "rstanarm") && !requireNamespace("rstanarm", quietly = TRUE)) {
-    stop("Package `rstanarm` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
-
+.compute_variances <- function(x, component, name_fun = NULL, name_full = NULL) {
 
   ## Code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an
@@ -23,6 +15,88 @@
   if (faminfo$family %in% c("truncated_nbinom1", "truncated_nbinom2", "tweedie")) {
     warning(sprintf("Truncated negative binomial and tweedie families are currently not supported by `%s`.", name_fun), call. = F)
     return(NA)
+  }
+
+  # Test for non-zero random effects ((near) singularity)
+  if (.is_singular(x)) {
+    warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
+    return(NA)
+  }
+
+  # get necessary model information, like fixed and random effects,
+  # variance-covariance matrix etc.
+  vals <- .get_variance_information(x, name_fun)
+
+  # initialize return values, if not all components are requested
+  var.fixef <- NULL
+  var.ranef <- NULL
+  var.resid <- NULL
+  var.dist <- NULL
+  var.disp <- NULL
+
+  # Get variance of fixed effects: multiply coefs by design matrix
+  if (component %in% c("fixef", "all")) {
+    var.fixef <- .get_variance_fixed(vals)
+  }
+
+  # Are random slopes present as fixed effects? Warn.
+  random.slopes <- .random_slopes(random.effects = vals$re)
+
+  if (!all(random.slopes %in% names(vals$beta))) {
+    warning(sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.\n  Solution: Respecify fixed structure!", name_full), call. = FALSE)
+  }
+
+  # Separate observation variance from variance of random effects
+  nr <- sapply(vals$re, nrow)
+  not.obs.terms <- names(nr[nr != stats::nobs(x)])
+  obs.terms <- names(nr[nr == stats::nobs(x)])
+
+  # Variance of random effects
+  if (component %in% c("ranef", "all")) {
+    var.ranef <- .get_variance_random(not.obs.terms, x = x, vals = vals)
+  }
+
+  # Residual variance, which is defined as the variance due to
+  # additive dispersion and the distribution-specific variance (Johnson et al. 2014)
+
+  if (component %in% c("resid", "dist", "all")) {
+    var.dist <- .get_variance_residual(x, var.cor = vals$vc, faminfo, name = name_full)
+  }
+
+  if (component %in% c("resid", "disp", "all")) {
+    var.disp <- .get_variance_dispersion(x = x, vals = vals, faminfo = faminfo, obs.terms = obs.terms)
+  }
+
+  if (component %in% c("resid", "all")) {
+    var.resid <- var.dist + var.disp
+  }
+
+  # if we only need residual variance, we can delete those
+  # values again...
+  if (component == "resid") {
+    var.dist <- NULL
+    var.disp <- NULL
+  }
+
+
+  compact_list(list(
+    "var.fixef" = var.fixef,
+    "var.ranef" = var.ranef,
+    "var.resid" = var.resid,
+    "var.dist" = var.dist,
+    "var.disp" = var.disp
+  ))
+}
+
+
+#' @keywords internal
+.get_variance_information <- function(x, name_fun = "get_variances") {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  }
+
+  if (inherits(x, "rstanarm") && !requireNamespace("rstanarm", quietly = TRUE)) {
+    stop("Package `rstanarm` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
   if (inherits(x, "stanreg")) {
@@ -60,54 +134,7 @@
     }
   }
 
-
-  # Test for non-zero random effects ((near) singularity)
-
-  if (.is_singular(x)) {
-    warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
-    return(NA)
-  }
-
-
-  # Get variance of fixed effects: multiply coefs by design matrix
-
-  var.fixef <- .get_variance_fixed(vals)
-
-
-  # Are random slopes present as fixed effects? Warn.
-
-  random.slopes <- .random_slopes(random.effects = vals$re)
-
-  if (!all(random.slopes %in% names(vals$beta))) {
-    warning(sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.\n  Solution: Respecify fixed structure!", name_full), call. = FALSE)
-  }
-
-
-  # Separate observation variance from variance of random effects
-
-  nr <- sapply(vals$re, nrow)
-  not.obs.terms <- names(nr[nr != stats::nobs(x)])
-  obs.terms <- names(nr[nr == stats::nobs(x)])
-
-
-  # Variance of random effects
-  var.ranef <- .get_variance_random(not.obs.terms, x = x, vals = vals)
-
-  # Residual variance, which is defined as the variance due to
-  # additive dispersion and the distribution-specific variance (Johnson et al. 2014)
-
-  var.dist <- .get_variance_residual(x, var.cor = vals$vc, faminfo, name = name_full)
-  var.disp <- .get_variance_dispersion(x = x, vals = vals, faminfo = faminfo, obs.terms = obs.terms)
-
-  var.resid <- var.dist + var.disp
-
-  list(
-    "var.fixef" = var.fixef,
-    "var.ranef" = var.ranef,
-    "var.resid" = var.resid,
-    "var.dist" = var.dist,
-    "var.disp" = var.disp
-  )
+  vals
 }
 
 

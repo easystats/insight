@@ -86,7 +86,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
     test_that("link_inverse", {
-      expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
+      expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-4)
     })
 
     test_that("get_data", {
@@ -116,7 +116,13 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         var.dist = 3.289868,
         var.disp = 0
       ),
-      tolerance = 1e-5)
+      tolerance = 1e-4)
+
+      expect_equal(get_fixef_variance(m1), c(var.fixef = 0.3710157), tolerance = 1e-4)
+      expect_equal(get_ranef_variance(m1), c(var.ranef = 0.6113405), tolerance = 1e-4)
+      expect_equal(get_resid_variance(m1), c(var.resid = 3.289868), tolerance = 1e-4)
+      expect_equal(get_dist_variance(m1), c(var.dist = 3.289868), tolerance = 1e-4)
+      expect_equal(get_disp_variance(m1), c(var.disp = 0), tolerance = 1e-4)
     })
 
     test_that("find_algorithm", {
