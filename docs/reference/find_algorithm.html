@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find model formula — find_formula • insight</title>
+<title>Find sampling algorithm and optimizers — find_algorithm • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,10 +37,11 @@
 
 
 
-<meta property="og:title" content="Find model formula — find_formula" />
+<meta property="og:title" content="Find sampling algorithm and optimizers — find_algorithm" />
 
-<meta property="og:description" content="Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...)." />
+<meta property="og:description" content="Returns information on the sampling or estimation algorithm
+  as well as optimization functions, or for Bayesian model information on
+  chains, iterations and warmup-samples." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -107,19 +108,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find model formula</h1>
+    <h1>Find sampling algorithm and optimizers</h1>
     
-    <div class="hidden name"><code>find_formula.Rd</code></div>
+    <div class="hidden name"><code>find_algorithm.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...).</p>
+    <p>Returns information on the sampling or estimation algorithm
+  as well as optimization functions, or for Bayesian model information on
+  chains, iterations and warmup-samples.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_formula</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>find_algorithm</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,26 +138,37 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of formulas that describe the model. For simple models,
-   only one list-element, <code>conditional</code>, is returned. For more complex
-   models, the returned list may have following elements:</p><ul>
-<li><p><code>conditional</code>, the "fixed effects" part from the model</p></li>
-<li><p><code>random</code>, the "random effects" part from the model (or the <code>id</code> for gee-models and similar)</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>dispersion</code>, the dispersion formula</p></li>
-<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
+    <p>A list with following elements:
+  For frequentist models:</p><ul>
+<li><p><code>algorithm</code>, for instance <code>"OLS"</code> or <code>"ML"</code></p></li>
+<li><p><code>optimizer</code>, name of optimizing function, only applies to specific models (like <code>gam</code>)</p></li>
+</ul><p>For frequentist mixed models:</p><ul>
+<li><p><code>algorithm</code>, for instance <code>"REML"</code> or <code>"ML"</code></p></li>
+<li><p><code>optimizer</code>, name of optimizing function</p></li>
+</ul><p>For Bayesian models:</p><ul>
+<li><p><code>algorithm</code>, the algorithm</p></li>
+<li><p><code>chains</code>, number of chains</p></li>
+<li><p><code>iterations</code>, number of iterations per chain</p></li>
+<li><p><code>warmup</code>, number of warmups per chain</p></li>
 </ul>
 
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>find_formula</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $conditional
-#&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x000000002bea7b10&gt;
-#&gt; </div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>sleepstudy</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>)
+<span class='fu'>find_algorithm</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $algorithm
+#&gt; [1] "REML"
+#&gt; 
+#&gt; $optimizer
+#&gt; [1] "nloptwrap"
+#&gt; </div><div class='input'>
+</div><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glmer'>stan_lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>)
+<span class='fu'>find_algorithm</span>(<span class='no'>m</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

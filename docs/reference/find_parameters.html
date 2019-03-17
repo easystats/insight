@@ -123,7 +123,16 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_parameters</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>find_parameters</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for brmsfit</span>
+<span class='fu'>find_parameters</span>(<span class='no'>x</span>, <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for stanreg</span>
+<span class='fu'>find_parameters</span>(<span class='no'>x</span>, <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for stanmvreg</span>
+<span class='fu'>find_parameters</span>(<span class='no'>x</span>, <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,6 +145,11 @@
       <th>...</th>
       <td><p>Currently not used.</p></td>
     </tr>
+    <tr>
+      <th>parameters</th>
+      <td><p>Regular expression pattern that describes the parameters that
+should be returned.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -147,7 +161,9 @@
 <li><p><code>random</code>, the "random effects" part from the model</p></li>
 <li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
 <li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>dispersion</code>, the dispersion formula</p></li>
+<li><p><code>dispersion</code>, the dispersion parameters</p></li>
+<li><p><code>simplex</code>, simplex parameters of monotonic effects (<span class="pkg">brms</span> only)</p></li>
+<li><p><code>smooth_terms</code>, smooth parameters of spline effects (<span class="pkg">brms</span> only)</p></li>
 <li><p><code>within</code>, the within-subject effects of Anovas (<code><a href='https://www.rdocumentation.org/packages/stats/topics/aov'>aov()</a></code>) with error term</p></li>
 <li><p><code>between</code>, the between-subjects effects of Anovas (<code><a href='https://www.rdocumentation.org/packages/stats/topics/aov'>aov()</a></code>) with error term</p></li>
 </ul>
