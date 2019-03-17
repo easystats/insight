@@ -239,6 +239,9 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("get_variances", {
+
+    skip_on_travis()
+
     expect_warning(expect_equal(get_variances(m5), list(
       var.fixef = 0.3258869,
       var.ranef = 0.07842738,
@@ -247,8 +250,6 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       var.disp = 0
     ),
     tolerance = 1e-3))
-
-    skip_on_travis()
 
     expect_warning(expect_equal(get_fixef_variance(m1), c(var.fixef = 1.097124), tolerance = 1e-3))
     expect_warning(expect_equal(get_ranef_variance(m1), c(var.ranef = 0.8671274), tolerance = 1e-3))

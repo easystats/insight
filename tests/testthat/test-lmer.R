@@ -169,6 +169,9 @@ if (require("testthat") && require("insight") && require("lme4")) {
   })
 
   test_that("get_variances", {
+
+    skip_on_travis()
+
     expect_equal(get_variances(m1), list(
       var.fixef = 908.9534,
       var.ranef = 1698.233,
@@ -177,6 +180,7 @@ if (require("testthat") && require("insight") && require("lme4")) {
       var.disp = 0
     ),
     tolerance = 1e-4)
+
     expect_equal(get_fixef_variance(m1), c(var.fixef = 908.9534), tolerance = 1e-4)
     expect_equal(get_ranef_variance(m1), c(var.ranef = 1698.233), tolerance = 1e-4)
     expect_equal(get_resid_variance(m1), c(var.resid = 654.9408), tolerance = 1e-4)
