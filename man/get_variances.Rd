@@ -7,10 +7,13 @@
 \alias{get_ranef_variance}
 \alias{get_dist_variance}
 \alias{get_disp_variance}
+\alias{get_intercept_variance}
+\alias{get_slope_variance}
+\alias{get_slope_intercept_correlation}
 \title{Get variance components from random effects models}
 \usage{
 get_variances(x, component = c("all", "fixef", "ranef", "resid", "dist",
-  "disp"), ...)
+  "disp", "intercept", "slope", "rho01"), ...)
 
 get_resid_variance(x, ...)
 
@@ -21,17 +24,22 @@ get_ranef_variance(x, ...)
 get_dist_variance(x, ...)
 
 get_disp_variance(x, ...)
+
+get_intercept_variance(x, ...)
+
+get_slope_variance(x, ...)
+
+get_slope_intercept_correlation(x, ...)
 }
 \arguments{
 \item{x}{A mixed effects model of class \code{merMod}, \code{glmmTMB} or
 \code{stanreg}.}
 
 \item{component}{Character value, indicating the variance component that should
-be returned. May be one of \code{"all"}, \code{"fixef"}, \code{"ranef"},
-\code{"resid"}, \code{"dist"} or \code{"disp"}. By default, all variance
-components are returned. The distribution-specific (\code{"dist"}) and
-residual (\code{"resid"} variance are the most computational intensive
-components, and hence may take a few seconds to calculate.}
+be returned. By default, all variance components are returned. The
+distribution-specific (\code{"dist"}) and residual (\code{"resid"}
+variance are the most computational intensive components, and hence may
+take a few seconds to calculate.}
 
 \item{...}{Currently not used.}
 }
@@ -43,6 +51,9 @@ A list with following elements:
      \item \code{var.resid}, residual variance (sum of dispersion and distribution)
      \item \code{var.dist}, distribution-specific variance
      \item \code{var.disp}, variance due to additive dispersion
+     \item \code{var.intercept}, the random-intercept-variance, or between-subject-variance (tau 00)
+     \item \code{var.slope}, the random-slope-variance (tau 11)
+     \item \code{cor.slope_intercept}, the random-slope-intercept-correlation (rho 01)
    }
 }
 \description{

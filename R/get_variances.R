@@ -9,11 +9,10 @@
 #' @param x A mixed effects model of class \code{merMod}, \code{glmmTMB} or
 #'   \code{stanreg}.
 #' @param component Character value, indicating the variance component that should
-#'   be returned. May be one of \code{"all"}, \code{"fixef"}, \code{"ranef"},
-#'   \code{"resid"}, \code{"dist"} or \code{"disp"}. By default, all variance
-#'   components are returned. The distribution-specific (\code{"dist"}) and
-#'   residual (\code{"resid"} variance are the most computational intensive
-#'   components, and hence may take a few seconds to calculate.
+#'   be returned. By default, all variance components are returned. The
+#'   distribution-specific (\code{"dist"}) and residual (\code{"resid"}
+#'   variance are the most computational intensive components, and hence may
+#'   take a few seconds to calculate.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:
@@ -23,6 +22,9 @@
 #'      \item \code{var.resid}, residual variance (sum of dispersion and distribution)
 #'      \item \code{var.dist}, distribution-specific variance
 #'      \item \code{var.disp}, variance due to additive dispersion
+#'      \item \code{var.intercept}, the random-intercept-variance, or between-subject-variance (tau 00)
+#'      \item \code{var.slope}, the random-slope-variance (tau 11)
+#'      \item \code{cor.slope_intercept}, the random-slope-intercept-correlation (rho 01)
 #'    }
 #'
 #' @details This function returns different variance components from mixed models,
@@ -52,34 +54,34 @@
 #' get_resid_variance(m)}
 #'
 #' @export
-get_variances <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp"), ...) {
+get_variances <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp", "intercept", "slope", "rho01"), ...) {
   UseMethod("get_variances")
 }
 
 
 #' @export
-get_variances.default <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp"), ...) {
+get_variances.default <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp", "intercept", "slope", "rho01"), ...) {
   warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
   NULL
 }
 
 
 #' @export
-get_variances.merMod <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp"), ...) {
+get_variances.merMod <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp", "intercept", "slope", "rho01"), ...) {
   component <- match.arg(component)
   .compute_variances(x, component = component, name_fun = "get_variances", name_full = "random effect variances")
 }
 
 
 #' @export
-get_variances.glmmTMB <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp"), ...) {
+get_variances.glmmTMB <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp", "intercept", "slope", "rho01"), ...) {
   component <- match.arg(component)
   .compute_variances(x, component = component, name_fun = "get_variances", name_full = "random effect variances")
 }
 
 
 #' @export
-get_variances.stanreg <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp"), ...) {
+get_variances.stanreg <- function(x, component = c("all", "fixef", "ranef", "resid", "dist", "disp", "intercept", "slope", "rho01"), ...) {
   component <- match.arg(component)
   .compute_variances(x, component = component, name_fun = "get_variances", name_full = "random effect variances")
 }
@@ -113,4 +115,22 @@ get_dist_variance <- function(x, ...) {
 #' @export
 get_disp_variance <- function(x, ...) {
   unlist(get_variances(x, component = "disp", ...))
+}
+
+#' @rdname get_variances
+#' @export
+get_intercept_variance <- function(x, ...) {
+  unlist(get_variances(x, component = "intercept", ...))
+}
+
+#' @rdname get_variances
+#' @export
+get_slope_variance <- function(x, ...) {
+  unlist(get_variances(x, component = "slope", ...))
+}
+
+#' @rdname get_variances
+#' @export
+get_slope_intercept_correlation <- function(x, ...) {
+  unlist(get_variances(x, component = "rho01", ...))
 }

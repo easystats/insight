@@ -4,6 +4,7 @@
 
 * `get_variances()`, to calculate the variance components from mixed models of class `merMod`, `glmmTMB` and `stanreg` (#52). Furthermore, convenient shortcuts to return the related components directly, like `get_ranef_variance()` or `get_resid_variance()`.
 * `find_algorithm()`, to get information about sampling algorithms and optimizers, and for Bayesian models also about chains and iterations (#38).
+* `find_random_slopes()`, which returns the names of the random slopes of mixed models.
 * `print_color()` (resp. `print_colour()`) to print coloured output to the console. Mainly implemented to reduce package dependencies.
 
 ## Changes to functions

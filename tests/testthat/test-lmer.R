@@ -183,6 +183,10 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_equal(get_dist_variance(m1), c(var.dist = 654.9408), tolerance = 1e-4)
     expect_equal(get_disp_variance(m1), c(var.disp = 0), tolerance = 1e-4)
 
+    expect_equal(get_intercept_variance(m1), c(var.intercept.Subject = 611.8976), toleance = 1e-4)
+    expect_equal(get_slope_variance(m1), c(var.slope.Subject.Days = 35.08107), toleance = 1e-4)
+    expect_equal(get_slope_intercept_correlation(m1), c(cor.slope_intercept.Subject = 0.06561803), toleance = 1e-4)
+
     expect_warning(get_variances(m2))
     expect_equal(get_variances(m2), NA)
   })
@@ -191,5 +195,10 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_equal(find_algorithm(m1), list(
       algorithm = "REML", optimizer = "nloptwrap"
     ))
+  })
+
+  test_that("find_random_slopes", {
+    expect_equal(find_random_slopes(m1), list(random = "Days"))
+    expect_null(find_random_slopes(m2))
   })
 }

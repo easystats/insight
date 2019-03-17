@@ -18,7 +18,7 @@
   }
 
   # Test for non-zero random effects ((near) singularity)
-  if (.is_singular(x)) {
+  if (.is_singular(x) && !(component %in% c("slope", "intercept"))) {
     warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
     return(NA)
   }
@@ -33,6 +33,9 @@
   var.resid <- NULL
   var.dist <- NULL
   var.disp <- NULL
+  var.intercept <- NULL
+  var.slope <- NULL
+  cor.slope_intercept <- NULL
 
   # Get variance of fixed effects: multiply coefs by design matrix
   if (component %in% c("fixef", "all")) {
@@ -71,6 +74,18 @@
     var.resid <- var.dist + var.disp
   }
 
+  if (component %in% c("intercept", "all")) {
+    var.intercept <- .between_subject_variance(vals)
+  }
+
+  if (component %in% c("slope", "all")) {
+    var.slope <- .random_slope_variance(vals)
+  }
+
+  if (component %in% c("rho01", "all")) {
+    cor.slope_intercept <- .random_slope_intercept_corr(vals)
+  }
+
   # if we only need residual variance, we can delete those
   # values again...
   if (component == "resid") {
@@ -84,7 +99,10 @@
     "var.ranef" = var.ranef,
     "var.resid" = var.resid,
     "var.dist" = var.dist,
-    "var.disp" = var.disp
+    "var.disp" = var.disp,
+    "var.intercept" = var.intercept,
+    "var.slope" = var.slope,
+    "cor.slope_intercept" = cor.slope_intercept
   ))
 }
 
@@ -350,4 +368,33 @@ null_model <- function(model) {
     NULL
   else
     random.slopes
+}
+
+
+.between_subject_variance <- function(vals) {
+  # retrieve only intercepts
+  vars <- lapply(vals$vc, function(x) x[1])
+
+  # random intercept-variances, i.e.
+  # between-subject-variance (tau 00)
+  sapply(vars, function(x) x)
+}
+
+
+.random_slope_variance <- function(vals) {
+  # random slope-variances (tau 11)
+  unlist(lapply(vals$vc, function(x) diag(x)[-1]))
+}
+
+
+.random_slope_intercept_corr <- function(vals) {
+  # get slope-intercept-correlations (rho 01)
+  corrs <- lapply(vals$vc, attr, "correlation")
+  rho01 <- sapply(corrs, function(i) {
+    if (!is.null(i))
+      i[-1, 1]
+    else
+      NULL
+  })
+  unlist(rho01)
 }
