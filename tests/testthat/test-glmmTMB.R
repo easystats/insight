@@ -248,6 +248,8 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     ),
     tolerance = 1e-3))
 
+    skip_on_travis()
+
     expect_warning(expect_equal(get_fixef_variance(m1), c(var.fixef = 1.097124), tolerance = 1e-3))
     expect_warning(expect_equal(get_ranef_variance(m1), c(var.ranef = 0.8671274), tolerance = 1e-3))
     expect_warning(get_ranef_variance(m1))
