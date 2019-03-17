@@ -87,6 +87,8 @@ return_vars <- function(f) {
     }
   }))
 
+  # remove constants
+  l <- lapply(l, setdiff, "pi")
   names(l) <- names(f)
 
   l

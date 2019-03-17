@@ -10,6 +10,7 @@
 
 * `find_parameters()` and `get_parameters()` get a `parameters`-argument for `brmsfit` and `stanreg` models, to allow selection of specific parameters that should be returned (#55).
 * `find_parameters()` and `get_parameters()` now also return simplex parameters of monotic effects and smooth terms for splines (**brms** only).
+* `find_terms()` and `find_predictors()` no longer return constants, in particula `pi` (#26).
 
 ## Bug fixes
 

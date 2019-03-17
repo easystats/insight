@@ -11,8 +11,8 @@ if (require("testthat") && require("insight") && require("nlme")) {
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(conditional = c("pi", "Time")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("pi", "Time"))
+    expect_identical(find_predictors(m1), list(conditional = "Time"))
+    expect_identical(find_predictors(m1, flatten = TRUE), "Time")
     expect_null(find_predictors(m1, effects = "random"))
   })
 
@@ -38,8 +38,8 @@ if (require("testthat") && require("insight") && require("nlme")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "follicles", conditional = c("pi", "Time")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("follicles", "pi", "Time"))
+    expect_equal(find_terms(m1), list(response = "follicles", conditional = "Time"))
+    expect_equal(find_terms(m1, flatten = TRUE), c("follicles", "Time"))
   })
 
   test_that("n_obs", {
