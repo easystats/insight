@@ -169,6 +169,9 @@ if (require("testthat") && require("insight") && require("lme4")) {
   })
 
   test_that("get_variances", {
+
+    skip_on_travis()
+
     expect_equal(get_variances(m1), list(
       var.fixef = 908.9534,
       var.ranef = 1698.233,

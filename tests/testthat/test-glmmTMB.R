@@ -239,6 +239,9 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("get_variances", {
+
+    skip_on_travis()
+
     expect_warning(expect_equal(get_variances(m5), list(
       var.fixef = 0.3258869,
       var.ranef = 0.07842738,
