@@ -114,7 +114,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         var.ranef = 0.6113405,
         var.resid = 3.289868,
         var.dist = 3.289868,
-        var.disp = 0
+        var.disp = 0,
+        var.intercept = c(herd = 0.6113405)
       ),
       tolerance = 1e-4)
 

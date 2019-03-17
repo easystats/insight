@@ -239,26 +239,21 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("get_variances", {
-
-    skip_on_travis()
-
     expect_warning(expect_equal(get_variances(m5), list(
       var.fixef = 0.3258869,
       var.ranef = 0.07842738,
       var.resid = 0.41218,
       var.dist = 0.41218,
-      var.disp = 0
+      var.disp = 0,
+      var.intercept = c(site = 0.07842738)
     ),
     tolerance = 1e-3))
 
     expect_warning(expect_equal(get_fixef_variance(m1), c(var.fixef = 1.097124), tolerance = 1e-3))
     expect_warning(expect_equal(get_ranef_variance(m1), c(var.ranef = 0.8671274), tolerance = 1e-3))
-    expect_warning(get_ranef_variance(m1))
     expect_warning(expect_equal(get_resid_variance(m1), c(var.resid = 0.02634501 ), tolerance = 1e-3))
     expect_warning(expect_equal(get_dist_variance(m1), c(var.dist = 0.02634501 ), tolerance = 1e-3))
     expect_warning(expect_equal(get_disp_variance(m1), c(var.disp = 0), tolerance = 1e-3))
-
-    expect_warning(get_variances(m5))
   })
 
   test_that("find_algorithm", {

@@ -169,15 +169,15 @@ if (require("testthat") && require("insight") && require("lme4")) {
   })
 
   test_that("get_variances", {
-
-    skip_on_travis()
-
     expect_equal(get_variances(m1), list(
       var.fixef = 908.9534,
       var.ranef = 1698.233,
       var.resid = 654.9408,
       var.dist = 654.9408,
-      var.disp = 0
+      var.disp = 0,
+      var.intercept = c(Subject = 611.8976),
+      var.slope = c(Subject.Days = 35.08107),
+      cor.slope_intercept = c(Subject = 0.06561803)
     ),
     tolerance = 1e-4)
 
@@ -191,8 +191,7 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_equal(get_slope_variance(m1), c(var.slope.Subject.Days = 35.08107), toleance = 1e-4)
     expect_equal(get_slope_intercept_correlation(m1), c(cor.slope_intercept.Subject = 0.06561803), toleance = 1e-4)
 
-    expect_warning(get_variances(m2))
-    expect_equal(get_variances(m2), NA)
+    expect_equal(expect_warning(get_variances(m2), NA))
   })
 
   test_that("find_algorithm", {
