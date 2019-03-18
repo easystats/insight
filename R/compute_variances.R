@@ -43,7 +43,7 @@
   }
 
   # Are random slopes present as fixed effects? Warn.
-  random.slopes <- .random_slopes(random.effects = vals$re)
+  random.slopes <- .random_slopes(random.effects = vals$re, model = x)
 
   if (!all(random.slopes %in% names(vals$beta))) {
     warning(sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.\n  Solution: Respecify fixed structure!", name_full), call. = FALSE)
@@ -371,17 +371,17 @@
 #' @importFrom stats formula reformulate update
 #' @keywords internal
 .null_model <- function(model, null_model = NULL) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  }
+
   if (!is.null(null_model)) {
-    return(null_model)
+    return(unname(lme4::fixef(null_model)))
   }
 
   if (inherits(model, "MixMod")) {
     warning("Please fit an additional null-model and pass it to the `null_model`-argument.", call. = FALSE)
     return(NA)
-  }
-
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
   ## TODO compute null-model for MixMod?
@@ -404,6 +404,10 @@
 
 #' @keywords internal
 .random_slopes <- function(random.effects = NULL, model = NULL) {
+  if (inherits(model, "MixMod")) {
+    return(unlist(find_random_slopes(model)))
+  }
+
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to return random slopes for mixed models.", call. = FALSE)
   }
