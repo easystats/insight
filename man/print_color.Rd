@@ -5,17 +5,17 @@
 \alias{print_colour}
 \title{Coloured console output}
 \usage{
-print_color(color, text)
+print_color(text, color)
 
-print_colour(colour, text)
+print_colour(text, colour)
 }
 \arguments{
+\item{text}{The text to print.}
+
 \item{color, colour}{Character vector, indicating the colour for printing.
 May be one of \code{"red"}, \code{"yellow"}, \code{"green"}, \code{"blue"},
 \code{"violet"}, \code{"cyan"} or \code{"grey"}. Formatting is also possible
 with \code{"bold"} or \code{"italic"}.}
-
-\item{text}{The text to print.}
 }
 \value{
 Nothing.
@@ -29,6 +29,6 @@ This function prints \code{text} directly to the console using
   \code{cat()}, so no string is returned.
 }
 \examples{
-print_color("blue", "I'm blue dabedi dabedei")
+print_color("I'm blue dabedi dabedei", "blue")
 
 }

@@ -168,11 +168,11 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_false(is_multivariate(m2))
   })
 
-  test_that("get_variances", {
+  test_that("get_variance", {
 
     skip_on_travis()
 
-    expect_equal(get_variances(m1), list(
+    expect_equal(get_variance(m1), list(
       var.fixef = 908.9534,
       var.ranef = 1698.233,
       var.resid = 654.9408,
@@ -184,17 +184,17 @@ if (require("testthat") && require("insight") && require("lme4")) {
     ),
     tolerance = 1e-4)
 
-    expect_equal(get_fixef_variance(m1), c(var.fixef = 908.9534), tolerance = 1e-4)
-    expect_equal(get_ranef_variance(m1), c(var.ranef = 1698.233), tolerance = 1e-4)
-    expect_equal(get_resid_variance(m1), c(var.resid = 654.9408), tolerance = 1e-4)
-    expect_equal(get_dist_variance(m1), c(var.dist = 654.9408), tolerance = 1e-4)
-    expect_equal(get_disp_variance(m1), c(var.disp = 0), tolerance = 1e-4)
+    expect_equal(get_variance_fixef(m1), c(var.fixef = 908.9534), tolerance = 1e-4)
+    expect_equal(get_variance_ranef(m1), c(var.ranef = 1698.233), tolerance = 1e-4)
+    expect_equal(get_variance_resid(m1), c(var.resid = 654.9408), tolerance = 1e-4)
+    expect_equal(get_variance_dist(m1), c(var.dist = 654.9408), tolerance = 1e-4)
+    expect_equal(get_variance_disp(m1), c(var.disp = 0), tolerance = 1e-4)
 
-    expect_equal(get_intercept_variance(m1), c(var.intercept.Subject = 611.8976), toleance = 1e-4)
-    expect_equal(get_slope_variance(m1), c(var.slope.Subject.Days = 35.08107), toleance = 1e-4)
-    expect_equal(get_slope_intercept_correlation(m1), c(cor.slope_intercept.Subject = 0.06561803), toleance = 1e-4)
+    expect_equal(get_variance_intercept(m1), c(var.intercept.Subject = 611.8976), toleance = 1e-4)
+    expect_equal(get_variance_slope(m1), c(var.slope.Subject.Days = 35.08107), toleance = 1e-4)
+    expect_equal(get_correlation_slope_intercept(m1), c(cor.slope_intercept.Subject = 0.06561803), toleance = 1e-4)
 
-    expect_equal(expect_warning(get_variances(m2), NA))
+    expect_equal(expect_warning(get_variance(m2), NA))
   })
 
   test_that("find_algorithm", {

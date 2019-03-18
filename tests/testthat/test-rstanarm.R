@@ -108,8 +108,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       )
     })
 
-    test_that("get_variances", {
-      expect_equal(get_variances(m1), list(
+    test_that("get_variance", {
+      expect_equal(get_variance(m1), list(
         var.fixef = 0.3710157,
         var.ranef = 0.6113405,
         var.resid = 3.289868,
@@ -119,11 +119,11 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       ),
       tolerance = 1e-4)
 
-      expect_equal(get_fixef_variance(m1), c(var.fixef = 0.3710157), tolerance = 1e-4)
-      expect_equal(get_ranef_variance(m1), c(var.ranef = 0.6113405), tolerance = 1e-4)
-      expect_equal(get_resid_variance(m1), c(var.resid = 3.289868), tolerance = 1e-4)
-      expect_equal(get_dist_variance(m1), c(var.dist = 3.289868), tolerance = 1e-4)
-      expect_equal(get_disp_variance(m1), c(var.disp = 0), tolerance = 1e-4)
+      expect_equal(get_variance_fixef(m1), c(var.fixef = 0.3710157), tolerance = 1e-4)
+      expect_equal(get_variance_ranef(m1), c(var.ranef = 0.6113405), tolerance = 1e-4)
+      expect_equal(get_variance_resid(m1), c(var.resid = 3.289868), tolerance = 1e-4)
+      expect_equal(get_variance_dist(m1), c(var.dist = 3.289868), tolerance = 1e-4)
+      expect_equal(get_variance_disp(m1), c(var.disp = 0), tolerance = 1e-4)
     })
 
     test_that("find_algorithm", {
