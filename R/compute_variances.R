@@ -374,6 +374,8 @@
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
+  ## TODO compute null-model for MixMod?
+
   # yet another brms fix
   f <- stats::formula(model)
 
