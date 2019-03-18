@@ -25,7 +25,7 @@
         g_cor <- NULL
       row.names(x) <- as.vector(y)
       vl <- rownames(x) %in% re_pars
-      x <- apply(x[vl, vl, drop = FALSE], MARGIN = c(1, 2), FUN = as.numeric)
+      x <- suppressWarnings(apply(x[vl, vl, drop = FALSE], MARGIN = c(1, 2), FUN = as.numeric))
       m1 <- matrix( , nrow = nrow(x), ncol = ncol(x))
       m1[1:nrow(m1), 1:ncol(m1)] <- as.vector(x[, 1])
       rownames(m1) <- rownames(x)
