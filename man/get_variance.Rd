@@ -42,6 +42,11 @@ variance are the most computational intensive components, and hence may
 take a few seconds to calculate.}
 
 \item{...}{Currently not used.}
+
+\item{null_model}{The null-model for \code{x}. For \code{MixMod}-objects,
+the null-model can't be calculated in a stable way using \code{update()},
+so in certain cases, it might be better to manually fit the null-model
+and pass it as argument.}
 }
 \value{
 A list with following elements:

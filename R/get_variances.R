@@ -13,6 +13,10 @@
 #'   distribution-specific (\code{"distribution"}) and residual (\code{"residual"}
 #'   variance are the most computational intensive components, and hence may
 #'   take a few seconds to calculate.
+#' @param null_model The null-model for \code{x}. For \code{MixMod}-objects,
+#'   the null-model can't be calculated in a stable way using \code{update()},
+#'   so in certain cases, it might be better to manually fit the null-model
+#'   and pass it as argument.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:
@@ -92,9 +96,9 @@ get_variance.stanreg <- function(x, component = c("all", "fixed", "random", "res
 
 
 #' @export
-get_variance.MixMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), ...) {
+get_variance.MixMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), null_model = NULL, ...) {
   component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances")
+  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", null_model = null_model)
 }
 
 

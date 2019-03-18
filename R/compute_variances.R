@@ -1,6 +1,6 @@
 #' @importFrom stats nobs
 #' @keywords internal
-.compute_variances <- function(x, component, name_fun = NULL, name_full = NULL) {
+.compute_variances <- function(x, component, name_fun = NULL, name_full = NULL, null_model = NULL) {
 
   ## Code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an
@@ -63,7 +63,7 @@
   # additive dispersion and the distribution-specific variance (Johnson et al. 2014)
 
   if (component %in% c("residual", "distribution", "all")) {
-    var.distribution <- .get_variance_residual(x, var.cor = vals$vc, faminfo, name = name_full)
+    var.distribution <- .get_variance_residual(x, var.cor = vals$vc, faminfo, name = name_full, null_model = null_model)
   }
 
   if (component %in% c("residual", "dispersion", "all")) {
@@ -254,7 +254,7 @@
 
 #' Get residual (distribution specific) variance from random effects
 #' @keywords internal
-.get_variance_residual <- function(x, var.cor, faminfo, name) {
+.get_variance_residual <- function(x, var.cor, faminfo, name, null_model) {
   if (inherits(x, "lme"))
     sig <- x$sigma
   else
@@ -275,14 +275,14 @@
     } else if (faminfo$is_count) {
       residual.variance <- switch(
         faminfo$link_function,
-        log = .get_variance_distributional(x, null_model(x), faminfo, sig, name = name),
+        log = .get_variance_distributional(x, .null_model(x, null_model), faminfo, sig, name = name),
         sqrt = 0.25,
         .badlink(faminfo$link_function, faminfo$family)
       )
     } else if (faminfo$family == "beta") {
       residual.variance <- switch(
         faminfo$link_function,
-        logit = .get_variance_distributional(x, null_model(x), faminfo, sig, name = name),
+        logit = .get_variance_distributional(x, .null_model(x, null_model), faminfo, sig, name = name),
         .badlink(faminfo$link_function, faminfo$family)
       )
     }
@@ -365,7 +365,11 @@
 
 #' @importFrom stats formula reformulate update
 #' @keywords internal
-null_model <- function(model) {
+.null_model <- function(model, null_model = NULL) {
+  if (!is.null(null_model)) {
+    return(null_model)
+  }
+
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
