@@ -4,7 +4,7 @@
 \alias{.badlink}
 \title{helper-function, telling user if model is supported or not}
 \usage{
-.badlink(link, family)
+.badlink(link, family, verbose = TRUE)
 }
 \description{
 helper-function, telling user if model is supported or not

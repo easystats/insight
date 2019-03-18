@@ -1,6 +1,6 @@
 #' @importFrom stats nobs
 #' @keywords internal
-.compute_variances <- function(x, component, name_fun = NULL, name_full = NULL, null_model = NULL) {
+.compute_variances <- function(x, component, name_fun = NULL, name_full = NULL, verbose = TRUE, null_model = NULL) {
 
   ## Code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an
@@ -13,17 +13,21 @@
   }
 
   if (faminfo$family %in% c("truncated_nbinom1", "truncated_nbinom2", "tweedie")) {
-    warning(sprintf("Truncated negative binomial and tweedie families are currently not supported by `%s`.", name_fun), call. = F)
+    if (verbose) {
+      warning(sprintf("Truncated negative binomial and tweedie families are currently not supported by `%s`.", name_fun), call. = F)
+    }
     return(NA)
   }
 
   # get necessary model information, like fixed and random effects,
   # variance-covariance matrix etc.
-  vals <- .get_variance_information(x, name_fun)
+  vals <- .get_variance_information(x, name_fun = name_fun, verbose = verbose)
 
   # Test for non-zero random effects ((near) singularity)
   if (.is_singular(x, vals) && !(component %in% c("slope", "intercept"))) {
-    warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
+    if (verbose) {
+      warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
+    }
     return(NA)
   }
 
@@ -46,7 +50,9 @@
   random.slopes <- .random_slopes(random.effects = vals$re, model = x)
 
   if (!all(random.slopes %in% names(vals$beta))) {
-    warning(sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.\n  Solution: Respecify fixed structure!", name_full), call. = FALSE)
+    if (verbose) {
+      warning(sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.\n  Solution: Respecify fixed structure!", name_full), call. = FALSE)
+    }
   }
 
   # Separate observation variance from variance of random effects
@@ -63,7 +69,7 @@
   # additive dispersion and the distribution-specific variance (Johnson et al. 2014)
 
   if (component %in% c("residual", "distribution", "all")) {
-    var.distribution <- .get_variance_residual(x, var.cor = vals$vc, faminfo, name = name_full, null_model = null_model)
+    var.distribution <- .get_variance_residual(x, var.cor = vals$vc, faminfo, name = name_full, null_model = null_model, verbose = verbose)
   }
 
   if (component %in% c("residual", "dispersion", "all")) {
@@ -109,7 +115,7 @@
 
 #' @importFrom stats model.matrix
 #' @keywords internal
-.get_variance_information <- function(x, name_fun = "get_variances") {
+.get_variance_information <- function(x, name_fun = "get_variances", verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -180,13 +186,13 @@
       return(x)
     }
 
-    if (!identical(nullEnv(x$modelInfo$allForm$ziformula), nullEnv(~0))) {
+    if (!identical(nullEnv(x$modelInfo$allForm$ziformula), nullEnv(~0)) && verbose) {
       warning(sprintf("%s ignores effects of zero-inflation.", name_fun), call. = FALSE)
     }
 
     dform <- nullEnv(x$modelInfo$allForm$dispformula)
 
-    if (!identical(dform, nullEnv(~1)) && (!identical(dform, nullEnv(~0)))) {
+    if (!identical(dform, nullEnv(~1)) && (!identical(dform, nullEnv(~0))) && verbose) {
       warning(sprintf("%s ignores effects of dispersion model.", name_fun), call. = FALSE)
     }
   }
@@ -197,8 +203,10 @@
 
 #' helper-function, telling user if model is supported or not
 #' @keywords internal
-.badlink <- function(link, family) {
-  warning(sprintf("Model link '%s' is not yet supported for the %s distribution.", link, family), call. = FALSE)
+.badlink <- function(link, family, verbose = TRUE) {
+  if (verbose) {
+    warning(sprintf("Model link '%s' is not yet supported for the %s distribution.", link, family), call. = FALSE)
+  }
   return(NA)
 }
 
@@ -254,7 +262,7 @@
 
 #' Get residual (distribution specific) variance from random effects
 #' @keywords internal
-.get_variance_residual <- function(x, var.cor, faminfo, name, null_model) {
+.get_variance_residual <- function(x, var.cor, faminfo, name, null_model, verbose = TRUE) {
   if (inherits(x, "lme"))
     sig <- x$sigma
   else
@@ -270,20 +278,20 @@
         faminfo$link_function,
         logit = pi^2 / 3,
         probit = 1,
-        .badlink(faminfo$link_function, faminfo$family)
+        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_count) {
       residual.variance <- switch(
         faminfo$link_function,
-        log = .get_variance_distributional(x, .null_model(x, null_model), faminfo, sig, name = name),
+        log = .get_variance_distributional(x, .null_model(x, null_model, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
         sqrt = 0.25,
-        .badlink(faminfo$link_function, faminfo$family)
+        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family == "beta") {
       residual.variance <- switch(
         faminfo$link_function,
-        logit = .get_variance_distributional(x, .null_model(x, null_model), faminfo, sig, name = name),
-        .badlink(faminfo$link_function, faminfo$family)
+        logit = .get_variance_distributional(x, .null_model(x, null_model, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
+        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     }
   }
@@ -317,7 +325,7 @@
 # distributional variance for different models
 #' @importFrom stats family
 #' @keywords internal
-.get_variance_distributional <- function(x, null.fixef, faminfo, sig, name) {
+.get_variance_distributional <- function(x, null.fixef, faminfo, sig, name, verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -330,11 +338,15 @@
   mu <- exp(null.fixef)
 
   if (is.na(mu)) {
-    warning("Can't calculate model's distributional variance. Results are not reliable.", call. = F)
+    if (verbose) {
+      warning("Can't calculate model's distributional variance. Results are not reliable.", call. = F)
+    }
     return(0)
   }
   else if (mu < 6) {
-    warning(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.\n", mu, name), call. = FALSE)
+    if (verbose) {
+      warning(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.\n", mu, name), call. = FALSE)
+    }
   }
 
   cvsquared <- tryCatch({
@@ -359,7 +371,9 @@
     vv / mu^2
   },
   error = function(x) {
-    warning("Can't calculate model's distributional variance. Results are not reliable.", call. = F)
+    if (verbose) {
+      warning("Can't calculate model's distributional variance. Results are not reliable.", call. = F)
+    }
     0
   }
   )
@@ -370,7 +384,7 @@
 
 #' @importFrom stats formula reformulate update
 #' @keywords internal
-.null_model <- function(model, null_model = NULL) {
+.null_model <- function(model, null_model = NULL, verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -380,7 +394,9 @@
   }
 
   if (inherits(model, "MixMod")) {
-    warning("Please fit an additional null-model and pass it to the `null_model`-argument.", call. = FALSE)
+    if (verbose) {
+      warning("Please fit an additional null-model and pass it to the `null_model`-argument.", call. = FALSE)
+    }
     return(NA)
   }
 

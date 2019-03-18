@@ -14,11 +14,12 @@
 \title{Get variance components from random effects models}
 \usage{
 get_variance(x, component = c("all", "fixed", "random", "residual",
-  "distribution", "dispersion", "intercept", "slope", "rho01"), ...)
+  "distribution", "dispersion", "intercept", "slope", "rho01"),
+  verbose = TRUE, ...)
 
 \method{get_variance}{MixMod}(x, component = c("all", "fixed", "random",
   "residual", "distribution", "dispersion", "intercept", "slope", "rho01"),
-  null_model = NULL, ...)
+  verbose = TRUE, null_model = NULL, ...)
 
 get_variance_residual(x, ...)
 

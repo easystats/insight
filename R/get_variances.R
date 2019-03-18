@@ -62,51 +62,51 @@
 #' get_variance_residual(m)}
 #'
 #' @export
-get_variance <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), ...) {
+get_variance <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   UseMethod("get_variance")
 }
 
 
 #' @export
-get_variance.default <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), ...) {
+get_variance.default <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
   NULL
 }
 
 
 #' @export
-get_variance.merMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), ...) {
+get_variance.merMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances")
+  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
 }
 
 
 #' @export
-get_variance.glmmTMB <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), ...) {
+get_variance.glmmTMB <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances")
+  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
 }
 
 
 #' @export
-get_variance.stanreg <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), ...) {
+get_variance.stanreg <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances")
+  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
 }
 
 
 #' @rdname get_variance
 #' @export
-get_variance.MixMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), null_model = NULL, ...) {
+get_variance.MixMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, null_model = NULL, ...) {
   component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", null_model = null_model)
+  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose, null_model = null_model)
 }
 
 
 #' @export
-get_variance.lme <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), ...) {
+get_variance.lme <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances")
+  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances, verbose = verbose")
 }
 
 
