@@ -17,6 +17,7 @@
 #'   the null-model can't be calculated in a stable way using \code{update()},
 #'   so in certain cases, it might be better to manually fit the null-model
 #'   and pass it as argument.
+#' @param verbose Toggle off warnings.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:

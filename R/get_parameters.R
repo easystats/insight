@@ -53,6 +53,18 @@ get_parameters.default <- function(x, ...) {
 
 
 #' @export
+get_parameters.aov <- function(x, ...) {
+  cf <- stats::coef(x)
+  data.frame(
+    parameter = names(cf),
+    estimate = unname(cf),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+#' @export
 get_parameters.lm <- function(x, ...) {
   cf <- summary(x)$coefficients
   data.frame(

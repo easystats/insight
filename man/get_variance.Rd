@@ -47,6 +47,8 @@ distribution-specific (\code{"distribution"}) and residual (\code{"residual"}
 variance are the most computational intensive components, and hence may
 take a few seconds to calculate.}
 
+\item{verbose}{Toggle off warnings.}
+
 \item{...}{Currently not used.}
 
 \item{null_model}{The null-model for \code{x}. For \code{MixMod}-objects,

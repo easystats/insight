@@ -5,6 +5,7 @@
 #'   for the parameters in a given model.
 #'
 #' @param x A Bayesian model.
+#' @param ... Currently not used.
 #'
 #' @return A data frame with a summary of the prior distributions used
 #'   for the parameters in a given model.

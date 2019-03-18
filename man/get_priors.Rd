@@ -8,6 +8,8 @@ get_priors(x, ...)
 }
 \arguments{
 \item{x}{A Bayesian model.}
+
+\item{...}{Currently not used.}
 }
 \value{
 A data frame with a summary of the prior distributions used
