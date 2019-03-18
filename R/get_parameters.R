@@ -36,11 +36,10 @@ get_parameters.default <- function(x, ...) {
   }
 
   tryCatch({
-    cf <- summary(x)$coefficients
+    cf <- stats::coef(x)
     data.frame(
-      parameter = row.names(cf),
-      estimate = unname(cf[, 1]),
-      # std.error = unname(cf[, 2]),
+      parameter = names(cf),
+      estimate = unname(cf),
       stringsAsFactors = FALSE,
       row.names = NULL
     )
