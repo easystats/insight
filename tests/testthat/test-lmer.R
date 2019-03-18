@@ -173,22 +173,22 @@ if (require("testthat") && require("insight") && require("lme4")) {
     skip_on_travis()
 
     expect_equal(get_variance(m1), list(
-      var.fixef = 908.9534,
-      var.ranef = 1698.233,
-      var.resid = 654.9408,
-      var.dist = 654.9408,
-      var.disp = 0,
+      var.fixed = 908.9534,
+      var.random = 1698.233,
+      var.residual = 654.9408,
+      var.distribution = 654.9408,
+      var.dispersion = 0,
       var.intercept = c(Subject = 611.8976),
       var.slope = c(Subject.Days = 35.08107),
       cor.slope_intercept = c(Subject = 0.06561803)
     ),
     tolerance = 1e-4)
 
-    expect_equal(get_variance_fixef(m1), c(var.fixef = 908.9534), tolerance = 1e-4)
-    expect_equal(get_variance_ranef(m1), c(var.ranef = 1698.233), tolerance = 1e-4)
-    expect_equal(get_variance_resid(m1), c(var.resid = 654.9408), tolerance = 1e-4)
-    expect_equal(get_variance_dist(m1), c(var.dist = 654.9408), tolerance = 1e-4)
-    expect_equal(get_variance_disp(m1), c(var.disp = 0), tolerance = 1e-4)
+    expect_equal(get_variance_fixed(m1), c(var.fixed = 908.9534), tolerance = 1e-4)
+    expect_equal(get_variance_random(m1), c(var.random = 1698.233), tolerance = 1e-4)
+    expect_equal(get_variance_residual(m1), c(var.residual = 654.9408), tolerance = 1e-4)
+    expect_equal(get_variance_distribution(m1), c(var.distribution = 654.9408), tolerance = 1e-4)
+    expect_equal(get_variance_dispersion(m1), c(var.dispersion = 0), tolerance = 1e-4)
 
     expect_equal(get_variance_intercept(m1), c(var.intercept.Subject = 611.8976), toleance = 1e-4)
     expect_equal(get_variance_slope(m1), c(var.slope.Subject.Days = 35.08107), toleance = 1e-4)

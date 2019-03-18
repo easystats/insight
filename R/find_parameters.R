@@ -21,7 +21,7 @@
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
 #'      \item \code{dispersion}, the dispersion parameters
 #'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
-#'      \item \code{smooth_terms}, smooth parameters of spline effects
+#'      \item \code{smooth_terms}, the smooth parameters
 #'      \item \code{within}, the within-subject effects of Anovas (\code{aov()}) with error term
 #'      \item \code{between}, the between-subjects effects of Anovas (\code{aov()}) with error term
 #'    }
@@ -66,7 +66,7 @@ find_parameters.gam <- function(x, ...) {
   pars <- list(conditional = names(stats::coef(x)))
   st <- summary(x)$s.table
 
-  pars$conditional <- pars$conditional[grepl("^(?!(s\\())", pars$conditional, perl = TRUE)]
+  pars$conditional <- pars$conditional[.grep_non_smoothers(pars$conditional)]
   pars$smooth_terms <- row.names(st)
 
   compact_list(pars)
@@ -77,13 +77,21 @@ find_parameters.gam <- function(x, ...) {
 find_parameters.Gam <- function(x, ...) {
   pars <- names(stats::coef(x))
 
-  conditional <- pars[grepl("^(?!(s\\())", pars, perl = TRUE) &
-                        grepl("^(?!(gam::s\\())", pars, perl = TRUE)]
+  compact_list(list(
+    conditional = pars[.grep_non_smoothers(pars)],
+    smooth_terms = pars[.grep_smoothers(pars)]
+  ))
+}
 
-  smooth_terms <- pars[grepl("^(s\\()", pars, perl = TRUE) |
-                         grepl("^(gam::s\\()", pars, perl = TRUE)]
 
-  compact_list(list(conditional = conditional, smooth_terms = smooth_terms))
+#' @export
+find_parameters.vgam <- function(x, ...) {
+  pars <- names(stats::coef(x))
+
+  compact_list(list(
+    conditional = pars[.grep_non_smoothers(pars)],
+    smooth_terms = pars[.grep_smoothers(pars)]
+  ))
 }
 
 
@@ -152,9 +160,15 @@ find_parameters.lme <- function(x, ...) {
     stop("To use this function, please install package 'lme4'.")
   }
 
+  re <- lme4::ranef(x)
+  if (is.data.frame(re))
+    rn <- colnames(re)
+  else
+    rn <- lapply(re, colnames)
+
   compact_list(list(
     conditional = names(lme4::fixef(x)),
-    random = colnames(lme4::ranef(x))
+    random = rn
   ))
 }
 
@@ -298,29 +312,18 @@ find_parameters.brmsfit <- function(x, parameters = NULL, ...) {
 find_parameters.stanreg <- function(x, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
-  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
+  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
+  smooth_terms <- fe[grepl(pattern = "^smooth_sd", fe, perl = TRUE)]
 
   l <- compact_list(list(
     conditional = cond,
-    random = rand
+    random = rand,
+    smooth_terms = smooth_terms
   ))
 
   .filter_pars(l, parameters)
 }
-
-# #' @export
-# find_parameters.htest <- function(x, ...) {
-#   fe <- colnames(as.data.frame(x))
-#
-#   cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
-#   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
-#
-#   compact_list(list(
-#     conditional = cond,
-#     random = rand
-#   ))
-# }
 
 
 #' @rdname find_parameters
@@ -329,7 +332,7 @@ find_parameters.stanmvreg <- function(x, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
   rn <- names(find_response(x))
 
-  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE)]
+  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
 
   l <- compact_list(list(

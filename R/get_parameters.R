@@ -8,13 +8,13 @@
 #' @inheritParams find_predictors
 #' @inheritParams find_parameters
 #'
-#' @return For non-Bayesian models and if \code{effects = "fixed"}, a data frame
-#'    with two columns: the parameter names and the related point estimates; if
-#'    \code{effects = "random"}, a list with the random effects (as returned by
-#'    \code{ranef()}. For Bayesian models, the posterior samples from the
-#'    requested parameters as data frame. For Anova (\code{aov()}) with error
-#'    term, a list of parameters for the conditional, the within-subject and
-#'    the between-subjects parameters.
+#' @return \itemize{
+#'   \item for non-Bayesian models and if \code{effects = "fixed"}, a data frame with two columns: the parameter names and the related point estimates
+#'   \item if \code{effects = "random"}, a list of data frames with the random effects (as returned by \code{ranef()}
+#'   \item for Bayesian models, the posterior samples from the requested parameters as data frame.
+#'   \item for Anova (\code{aov()}) with error term, a list of parameters for the conditional, the within-subject and the between-subjects parameters
+#'   \item for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component
+#' }
 #'
 #' @examples
 #' data(mtcars)
@@ -32,15 +32,17 @@ get_parameters.default <- function(x, ...) {
   if (inherits(x, "list") && obj_has_name(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
-    return(get_parameters.gam(x))
+    return(get_parameters.gam(x, ...))
   }
 
   tryCatch({
-    cf <- stats::coef(x)
+    cf <- summary(x)$coefficients
     data.frame(
-      parameter = names(cf),
-      estimate = unname(cf),
-      stringsAsFactors = FALSE
+      parameter = row.names(cf),
+      estimate = unname(cf[, 1]),
+      # std.error = unname(cf[, 2]),
+      stringsAsFactors = FALSE,
+      row.names = NULL
     )
   },
   error = function(x) {
@@ -51,63 +53,79 @@ get_parameters.default <- function(x, ...) {
 
 
 #' @export
-get_parameters.data.frame <- function(x, ...) {
-  stop("A data frame is no valid object for this function")
-}
-
-
-#' @export
-get_parameters.gam <- function(x, ...) {
-  pars <- list(conditional = stats::coef(x))
-  st <- summary(x)$s.table
-
-  pars$conditional <- pars$conditional[grepl("^(?!(s\\())", names(stats::coef(x)), perl = TRUE)]
-  pars$smooth_terms <- st[, 1]
-
-  compact_list(
-    list(
-      conditional = data.frame(
-        parameter = names(pars$conditional),
-        estimate = pars$conditional,
-        stringsAsFactors = FALSE,
-        row.names = NULL
-      ),
-      smooth_terms = data.frame(
-        parameter = row.names(st),
-        estimate = pars$smooth_terms,
-        stringsAsFactors = FALSE,
-        row.names = NULL
-      )
-    )
+get_parameters.lm <- function(x, ...) {
+  cf <- summary(x)$coefficients
+  data.frame(
+    parameter = row.names(cf),
+    estimate = unname(cf[, 1]),
+    # std.error = unname(cf[, 2]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
   )
 }
 
 
 #' @export
-get_parameters.Gam <- function(x, ...) {
+get_parameters.glm <- function(x, ...) {
+  cf <- summary(x)$coefficients
+  data.frame(
+    parameter = row.names(cf),
+    estimate = unname(cf[, 1]),
+    # std.error = unname(cf[, 2]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+#' @export
+get_parameters.data.frame <- function(x, ...) {
+  stop("A data frame is no valid object for this function")
+}
+
+
+#' @rdname get_parameters
+#' @export
+get_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+  component <- match.arg(component)
   pars <- stats::coef(x)
 
-  conditional <- pars[grepl("^(?!(s\\())", names(pars), perl = TRUE) &
-                        grepl("^(?!(gam::s\\())", names(pars), perl = TRUE)]
+  st <- summary(x)$s.table
+  smooth_terms <- st[, 1]
+  names(smooth_terms) <- row.names(st)
 
-  smooth_terms <- pars[grepl("^(s\\()", names(pars), perl = TRUE) |
-                         grepl("^(gam::s\\()", names(pars), perl = TRUE)]
+  return_smooth_parms(
+    conditional = pars[.grep_non_smoothers(names(pars))],
+    smooth_terms = smooth_terms,
+    component = component
+  )
+}
 
-  compact_list(
-    list(
-      conditional = data.frame(
-        parameter = names(conditional),
-        estimate = conditional,
-        stringsAsFactors = FALSE,
-        row.names = NULL
-      ),
-      smooth_terms = data.frame(
-        parameter = names(smooth_terms),
-        estimate = smooth_terms,
-        stringsAsFactors = FALSE,
-        row.names = NULL
-      )
-    )
+
+#' @rdname get_parameters
+#' @export
+get_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+  component <- match.arg(component)
+  pars <- stats::coef(x)
+
+  return_smooth_parms(
+    conditional = pars[.grep_non_smoothers(names(pars))],
+    smooth_terms = pars[.grep_smoothers(names(pars))],
+    component = component
+  )
+}
+
+
+#' @rdname get_parameters
+#' @export
+get_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+  component <- match.arg(component)
+  pars <- stats::coef(x)
+
+  return_smooth_parms(
+    conditional = pars[.grep_non_smoothers(names(pars))],
+    smooth_terms = pars[.grep_smoothers(names(pars))],
+    component = component
   )
 }
 
@@ -127,11 +145,12 @@ get_parameters.zerotrunc <- function(x, component = c("all", "conditional", "zi"
 }
 
 
+#' @rdname get_parameters
 #' @export
-get_parameters.gamm <- function(x, ...) {
+get_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
-  get_parameters.gam(x)
+  get_parameters.gam(x, component, ...)
 }
 
 
@@ -297,14 +316,14 @@ get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component =
   fixed <- data.frame(
     parameter = names(l$conditional),
     estimate = unname(l$conditional),
-    group = "conditional",
+    component = "conditional",
     stringsAsFactors = FALSE
   )
 
   fixedzi <- data.frame(
     parameter = names(l$zero_inflated),
     estimate = unname(l$zero_inflated),
-    group = "zero_inflated",
+    component = "zero_inflated",
     stringsAsFactors = FALSE
   )
 
@@ -349,14 +368,14 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
   fixed <- data.frame(
     parameter = names(l$conditional),
     estimate = unname(l$conditional),
-    group = "conditional",
+    component = "conditional",
     stringsAsFactors = FALSE
   )
 
   fixedzi <- data.frame(
     parameter = names(l$zero_inflated),
     estimate = unname(l$zero_inflated),
-    group = "zero_inflated",
+    component = "zero_inflated",
     stringsAsFactors = FALSE
   )
 
@@ -382,7 +401,7 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "simplex", "smooth_terms", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), parameters = NULL, ...) {
+get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "smooth_terms"), parameters = NULL, ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -440,22 +459,62 @@ return_zeroinf_parms <- function(x, component) {
   cond <- data.frame(
     parameter = names(cf)[conditional],
     estimate = unname(cf)[conditional],
-    group = "conditional",
-    stringsAsFactors = FALSE
+    component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
   )
 
   zi <- data.frame(
     parameter = names(cf)[zero_inflated],
     estimate = unname(cf)[zero_inflated],
-    group = "zero_inflated",
-    stringsAsFactors = FALSE
+    component = "zero_inflated",
+    stringsAsFactors = FALSE,
+    row.names = NULL
   )
 
-  switch(
+  pars <- switch(
     component,
     all = rbind(cond, zi),
     conditional = cond,
     zi = ,
     zero_inflated = zi
   )
+
+  if (component != "all") {
+    pars <- .remove_column(pars, "component")
+  }
+
+  pars
+}
+
+
+return_smooth_parms <- function(conditional, smooth_terms, component) {
+  cond <- data.frame(
+    parameter = names(conditional),
+    estimate = conditional,
+    component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  smooth <-  data.frame(
+    parameter = names(smooth_terms),
+    estimate = smooth_terms,
+    component = "smooth_terms",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  pars <- switch(
+    component,
+    all = rbind(cond, smooth),
+    conditional = cond,
+    smooth_terms = smooth
+  )
+
+  if (component != "all") {
+    pars <- .remove_column(pars, "component")
+  }
+
+  pars
 }

@@ -171,4 +171,5 @@ if (require("testthat") && require("insight") && require("GLMMadaptive") && requ
       algorithm = "quasi-Newton", optimizer = "optim"
     ))
   })
+
 }

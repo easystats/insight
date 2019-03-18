@@ -2,28 +2,28 @@
 % Please edit documentation in R/get_variances.R
 \name{get_variance}
 \alias{get_variance}
-\alias{get_variance_resid}
-\alias{get_variance_fixef}
-\alias{get_variance_ranef}
-\alias{get_variance_dist}
-\alias{get_variance_disp}
+\alias{get_variance_residual}
+\alias{get_variance_fixed}
+\alias{get_variance_random}
+\alias{get_variance_distribution}
+\alias{get_variance_dispersion}
 \alias{get_variance_intercept}
 \alias{get_variance_slope}
 \alias{get_correlation_slope_intercept}
 \title{Get variance components from random effects models}
 \usage{
-get_variance(x, component = c("all", "fixef", "ranef", "resid", "dist",
-  "disp", "intercept", "slope", "rho01"), ...)
+get_variance(x, component = c("all", "fixed", "random", "residual",
+  "distribution", "dispersion", "intercept", "slope", "rho01"), ...)
 
-get_variance_resid(x, ...)
+get_variance_residual(x, ...)
 
-get_variance_fixef(x, ...)
+get_variance_fixed(x, ...)
 
-get_variance_ranef(x, ...)
+get_variance_random(x, ...)
 
-get_variance_dist(x, ...)
+get_variance_distribution(x, ...)
 
-get_variance_disp(x, ...)
+get_variance_dispersion(x, ...)
 
 get_variance_intercept(x, ...)
 
@@ -32,12 +32,12 @@ get_variance_slope(x, ...)
 get_correlation_slope_intercept(x, ...)
 }
 \arguments{
-\item{x}{A mixed effects model of class \code{merMod}, \code{glmmTMB} or
-\code{stanreg}.}
+\item{x}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
+\code{MixMod}, \code{lme}, or \code{stanreg}.}
 
 \item{component}{Character value, indicating the variance component that should
 be returned. By default, all variance components are returned. The
-distribution-specific (\code{"dist"}) and residual (\code{"resid"}
+distribution-specific (\code{"distribution"}) and residual (\code{"residual"}
 variance are the most computational intensive components, and hence may
 take a few seconds to calculate.}
 
@@ -46,11 +46,11 @@ take a few seconds to calculate.}
 \value{
 A list with following elements:
    \itemize{
-     \item \code{var.fixef}, variance attributable to the fixed effects
-     \item \code{var.ranef}, (mean) variance of random effects
-     \item \code{var.resid}, residual variance (sum of dispersion and distribution)
-     \item \code{var.dist}, distribution-specific variance
-     \item \code{var.disp}, variance due to additive dispersion
+     \item \code{var.fixed}, variance attributable to the fixed effects
+     \item \code{var.random}, (mean) variance of random effects
+     \item \code{var.residual}, residual variance (sum of dispersion and distribution)
+     \item \code{var.distribution}, distribution-specific variance
+     \item \code{var.dispersion}, variance due to additive dispersion
      \item \code{var.intercept}, the random-intercept-variance, or between-subject-variance (tau 00)
      \item \code{var.slope}, the random-slope-variance (tau 11)
      \item \code{cor.slope_intercept}, the random-slope-intercept-correlation (rho 01)
@@ -59,8 +59,8 @@ A list with following elements:
 \description{
 This function extracts the different variance components of a
   mixed model and returns the result as list. Functions like
-  \code{get_variance_resid(x)} or \code{get_variance_fixef(x)} are shortcuts
-  for \code{get_variance(x, component = "resid")} etc.
+  \code{get_variance_residual(x)} or \code{get_variance_fixed(x)} are shortcuts
+  for \code{get_variance(x, component = "residual")} etc.
 }
 \details{
 This function returns different variance components from mixed models,
@@ -74,6 +74,11 @@ This function returns different variance components from mixed models,
   about the calculation of the different variance components can be found
   in \cite{Johnson et al. 2014} and \cite{Nakagawa et al. 2017}.
 }
+\note{
+Support for objects of class \code{MixMod} (\pkg{GLMMadaptiv}) or
+  \code{lme} (\pkg{nlme}) is experimental and may not work for every
+  model.
+}
 \examples{
 \dontrun{
 library(lme4)
@@ -81,8 +86,8 @@ data(sleepstudy)
 m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
 get_variance(m)
-get_fixef_variance(m)
-get_resid_variance(m)}
+get_variance_fixed(m)
+get_variance_residual(m)}
 
 }
 \references{

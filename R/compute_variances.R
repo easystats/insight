@@ -17,29 +17,29 @@
     return(NA)
   }
 
-  # Test for non-zero random effects ((near) singularity)
-  if (.is_singular(x) && !(component %in% c("slope", "intercept"))) {
-    warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
-    return(NA)
-  }
-
   # get necessary model information, like fixed and random effects,
   # variance-covariance matrix etc.
   vals <- .get_variance_information(x, name_fun)
 
+  # Test for non-zero random effects ((near) singularity)
+  if (.is_singular(x, vals) && !(component %in% c("slope", "intercept"))) {
+    warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
+    return(NA)
+  }
+
   # initialize return values, if not all components are requested
-  var.fixef <- NULL
-  var.ranef <- NULL
-  var.resid <- NULL
-  var.dist <- NULL
-  var.disp <- NULL
+  var.fixed <- NULL
+  var.random <- NULL
+  var.residual <- NULL
+  var.distribution <- NULL
+  var.dispersion <- NULL
   var.intercept <- NULL
   var.slope <- NULL
   cor.slope_intercept <- NULL
 
   # Get variance of fixed effects: multiply coefs by design matrix
-  if (component %in% c("fixef", "all")) {
-    var.fixef <- .get_variance_fixed(vals)
+  if (component %in% c("fixed", "all")) {
+    var.fixed <- .get_variance_fixed(vals)
   }
 
   # Are random slopes present as fixed effects? Warn.
@@ -55,51 +55,51 @@
   obs.terms <- names(nr[nr == stats::nobs(x)])
 
   # Variance of random effects
-  if (component %in% c("ranef", "all")) {
-    var.ranef <- .get_variance_random(not.obs.terms, x = x, vals = vals)
+  if (component %in% c("random", "all")) {
+    var.random <- .get_variance_random(not.obs.terms, x = x, vals = vals)
   }
 
   # Residual variance, which is defined as the variance due to
   # additive dispersion and the distribution-specific variance (Johnson et al. 2014)
 
-  if (component %in% c("resid", "dist", "all")) {
-    var.dist <- .get_variance_residual(x, var.cor = vals$vc, faminfo, name = name_full)
+  if (component %in% c("residual", "distribution", "all")) {
+    var.distribution <- .get_variance_residual(x, var.cor = vals$vc, faminfo, name = name_full)
   }
 
-  if (component %in% c("resid", "disp", "all")) {
-    var.disp <- .get_variance_dispersion(x = x, vals = vals, faminfo = faminfo, obs.terms = obs.terms)
+  if (component %in% c("residual", "dispersion", "all")) {
+    var.dispersion <- .get_variance_dispersion(x = x, vals = vals, faminfo = faminfo, obs.terms = obs.terms)
   }
 
-  if (component %in% c("resid", "all")) {
-    var.resid <- var.dist + var.disp
+  if (component %in% c("residual", "all")) {
+    var.residual <- var.distribution + var.dispersion
   }
 
   if (component %in% c("intercept", "all")) {
-    var.intercept <- .between_subject_variance(vals)
+    var.intercept <- .between_subject_variance(vals, x)
   }
 
   if (component %in% c("slope", "all")) {
-    var.slope <- .random_slope_variance(vals)
+    var.slope <- .random_slope_variance(vals, x)
   }
 
   if (component %in% c("rho01", "all")) {
-    cor.slope_intercept <- .random_slope_intercept_corr(vals)
+    cor.slope_intercept <- .random_slope_intercept_corr(vals, x)
   }
 
   # if we only need residual variance, we can delete those
   # values again...
-  if (component == "resid") {
-    var.dist <- NULL
-    var.disp <- NULL
+  if (component == "residual") {
+    var.distribution <- NULL
+    var.dispersion <- NULL
   }
 
 
   compact_list(list(
-    "var.fixef" = var.fixef,
-    "var.ranef" = var.ranef,
-    "var.resid" = var.resid,
-    "var.dist" = var.dist,
-    "var.disp" = var.disp,
+    "var.fixed" = var.fixed,
+    "var.random" = var.random,
+    "var.residual" = var.residual,
+    "var.distribution" = var.distribution,
+    "var.dispersion" = var.dispersion,
     "var.intercept" = var.intercept,
     "var.slope" = var.slope,
     "cor.slope_intercept" = cor.slope_intercept
@@ -107,10 +107,15 @@
 }
 
 
+#' @importFrom stats model.matrix
 #' @keywords internal
 .get_variance_information <- function(x, name_fun = "get_variances") {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  }
+
+  if (inherits(x, "lme") && !requireNamespace("nlme", quietly = TRUE)) {
+    stop("Package `nlme` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
   if (inherits(x, "rstanarm") && !requireNamespace("rstanarm", quietly = TRUE)) {
@@ -118,17 +123,51 @@
   }
 
   if (inherits(x, "stanreg")) {
-    xcomp <- rstanarm::get_x(x)
-  } else {
-    xcomp <- lme4::getME(x, "X")
-  }
+    vals <- list(
+      beta = lme4::fixef(x),
+      X = rstanarm::get_x(x),
+      vc = lme4::VarCorr(x),
+      re = lme4::ranef(x)
+    )
+  } else if (inherits(x, "MixMod")) {
+    vals <- list(
+      beta = lme4::fixef(x),
+      X = stats::model.matrix(x),
+      vc = x$D,
+      re = list(lme4::ranef(x))
+    )
+    names(vals$re) <- x$id_name
+  } else if (inherits(x, "lme")) {
+    re_names <- find_random(x, split_nested = TRUE, flatten = TRUE)
+    comp_x <- as.matrix(cbind(`(Intercept)` = 1, get_predictors(x)))
+    rownames(comp_x) <- 1:nrow(comp_x)
 
-  vals <- list(
-    beta = lme4::fixef(x),
-    X = xcomp,
-    vc = lme4::VarCorr(x),
-    re = lme4::ranef(x)
-  )
+    if (.is_nested_lme(x)) {
+      vals_vc <- .get_nested_lme_varcorr(x)
+      vals_re <- lme4::ranef(x)
+    } else {
+      vals_vc <- list(nlme::getVarCov(x))
+      vals_re <- list(lme4::ranef(x))
+    }
+
+    vals <- list(
+      beta = lme4::fixef(x),
+      X = comp_x,
+      vc = vals_vc,
+      re = vals_re
+    )
+
+    names(vals$re) <- re_names
+    names(vals$vc) <- re_names
+
+  } else {
+    vals <- list(
+      beta = lme4::fixef(x),
+      X = lme4::getME(x, "X"),
+      vc = lme4::VarCorr(x),
+      re = lme4::ranef(x)
+    )
+  }
 
   # for glmmTMB, use conditional component of model only,
   # and tell user that zero-inflation is ignored
@@ -187,32 +226,40 @@
 #' @importFrom stats nobs
 #' @keywords internal
 .get_variance_random <- function(terms, x, vals) {
-  sum(sapply(
-    vals$vc[terms],
-    function(Sigma) {
-      rn <- rownames(Sigma)
 
-      if (!is.null(rn)) {
-        valid <- rownames(Sigma) %in% colnames(vals$X)
-        if (!all(valid)) {
-          rn <- rn[valid]
-          Sigma <- Sigma[valid, valid]
-        }
+  sigma_sum <- function(Sigma) {
+    rn <- rownames(Sigma)
+
+    if (!is.null(rn)) {
+      valid <- rownames(Sigma) %in% colnames(vals$X)
+      if (!all(valid)) {
+        rn <- rn[valid]
+        Sigma <- Sigma[valid, valid]
       }
-
-      Z <- vals$X[, rn, drop = FALSE]
-      # Z <- vals$X[, rownames(Sigma), drop = FALSE]
-      Z.m <- Z %*% Sigma
-      sum(diag(crossprod(Z.m, Z))) / stats::nobs(x)
     }
-  ))
+
+    Z <- vals$X[, rn, drop = FALSE]
+    # Z <- vals$X[, rownames(Sigma), drop = FALSE]
+    Z.m <- Z %*% Sigma
+    sum(diag(crossprod(Z.m, Z))) / stats::nobs(x)
+  }
+
+  if (inherits(x, "MixMod")) {
+    sigma_sum(vals$vc)
+  } else {
+    sum(sapply(vals$vc[terms], sigma_sum))
+  }
 }
 
 
 #' Get residual (distribution specific) variance from random effects
 #' @keywords internal
 .get_variance_residual <- function(x, var.cor, faminfo, name) {
-  sig <- attr(var.cor, "sc")
+  if (inherits(x, "lme"))
+    sig <- x$sigma
+  else
+    sig <- attr(var.cor, "sc")
+
   if (is.null(sig)) sig <- 1
 
   if (faminfo$is_linear) {
@@ -297,6 +344,8 @@
 
       if (inherits(x, "merMod")) {
         mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
+      } else if (inherits(x, "MixMod")) {
+        stats::family(x)$variance(mu)
       } else {
         mu * (1 + mu / x$theta)
       }
@@ -328,6 +377,7 @@ null_model <- function(model) {
 
   ## https://stat.ethz.ch/pipermail/r-sig-mixed-models/2014q4/023013.html
   rterms <- paste0("(", sapply(lme4::findbars(f), deparse, width.cutoff = 500), ")")
+  # nullform <- paste(".", deparse(find_formula(m3)$random, width.cutoff = 500))
   nullform <- stats::reformulate(rterms, response = ".")
   null.model <- stats::update(model, nullform)
 
@@ -371,30 +421,51 @@ null_model <- function(model) {
 }
 
 
-.between_subject_variance <- function(vals) {
+.between_subject_variance <- function(vals, x) {
   # retrieve only intercepts
-  vars <- lapply(vals$vc, function(x) x[1])
+  if (inherits(x, "MixMod")) {
+    vars <- lapply(vals$vc, function(i) i)[1]
+  } else {
+    vars <- lapply(vals$vc, function(i) i[1])
+  }
 
   # random intercept-variances, i.e.
   # between-subject-variance (tau 00)
-  sapply(vars, function(x) x)
+  sapply(vars, function(i) i)
 }
 
 
-.random_slope_variance <- function(vals) {
+.random_slope_variance <- function(vals, x) {
   # random slope-variances (tau 11)
-  unlist(lapply(vals$vc, function(x) diag(x)[-1]))
+  if (inherits(x, "MixMod")) {
+    diag(vals$vc)[-1]
+  } else if (inherits(x, "lme")) {
+    unlist(lapply(vals$vc, function(x) diag(x)[-1]))
+  } else {
+    unlist(lapply(vals$vc, function(x) diag(x)[-1]))
+  }
 }
 
 
-.random_slope_intercept_corr <- function(vals) {
+.random_slope_intercept_corr <- function(vals, x) {
   # get slope-intercept-correlations (rho 01)
-  corrs <- lapply(vals$vc, attr, "correlation")
-  rho01 <- sapply(corrs, function(i) {
-    if (!is.null(i))
-      i[-1, 1]
-    else
-      NULL
-  })
-  unlist(rho01)
+  if (inherits(x, "lme")) {
+    rho01 <- unlist(sapply(vals$vc, function(i) attr(i, "cor_slope_intercept")))
+    if (is.null(rho01)) {
+      vc <- lme4::VarCorr(x)
+      if ("Corr" %in% colnames(vc)) {
+        rho01 <- as.vector(suppressWarnings(na.omit(as.numeric(vc[, "Corr"]))))
+      }
+    }
+    rho01
+  } else {
+    corrs <- lapply(vals$vc, attr, "correlation")
+    rho01 <- sapply(corrs, function(i) {
+      if (!is.null(i))
+        i[-1, 1]
+      else
+        NULL
+    })
+    unlist(rho01)
+  }
 }

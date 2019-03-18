@@ -134,20 +134,20 @@ get_group_factor <- function(x, f) {
   elements <- switch(
     effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments")],
-    random = elements[elements %in% c("random", "zero_inflated_random")],
-    simplex = elements[elements == "simplex"],
-    smooth_terms = elements[elements == "smooth_terms"]
+    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments", "simplex", "smooth_terms")],
+    random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
   elements <- switch(
     component,
     all = elements,
-    conditional = elements[elements %in% c("conditional", "random", "simplex", "smooth_terms")],
+    conditional = elements[elements %in% c("conditional", "random")],
     zi = ,
-    zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random", "simplex", "smooth_terms")],
+    zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random")],
     dispersion = elements[elements == "dispersion"],
-    instruments = elements[elements == "instruments"]
+    instruments = elements[elements == "instruments"],
+    simplex = elements[elements == "simplex"],
+    smooth_terms = elements[elements == "smooth_terms"]
   )
 
   elements
@@ -169,24 +169,34 @@ get_group_factor <- function(x, f) {
 
 # checks if a mixed model fit is singular or not. Need own function,
 # because lme4::isSingular() does not work with glmmTMB
+#' @importFrom stats na.omit
 #' @keywords internal
-.is_singular <- function(x, tolerance = 1e-5) {
+.is_singular <- function(x, vals, tolerance = 1e-5) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
-  if (inherits(x, "stanreg")) {
-    singular <- FALSE
-  } else if (inherits(x, "glmmTMB")) {
-    vc <- .collapse_cond(lme4::VarCorr(x))
-    singular <- any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
-  } else if (inherits(x, "merMod")) {
-    theta <- lme4::getME(x, "theta")
-    diag.element <- lme4::getME(x, "lower") == 0
-    singular <- any(abs(theta[diag.element]) < tolerance)
-  }
+  tryCatch(
+    {
+      if (inherits(x, "glmmTMB")) {
+        is_si <- any(sapply(vals$vc, function(.x) any(abs(diag(.x)) < tolerance)))
+      } else if (inherits(x, "merMod")) {
+        theta <- lme4::getME(x, "theta")
+        diag.element <- lme4::getME(x, "lower") == 0
+        is_si <- any(abs(theta[diag.element]) < tolerance)
+      } else if (inherits(x, "MixMod")) {
+        vc <- diag(x$D)
+        is_si <- any(sapply(vc, function(.x) any(abs(.x) < tolerance)))
+      } else if (inherits(x, "lme")) {
+        is_si <- any(abs(stats::na.omit(as.numeric(diag(vals$vc))) < tolerance))
+      } else {
+        is_si <- FALSE
+      }
 
-  singular
+      is_si
+    },
+    error = function(x) { FALSE }
+  )
 }
 
 
@@ -219,4 +229,31 @@ get_group_factor <- function(x, f) {
       simplify = FALSE
     )))
   })
+}
+
+
+# remove column
+#' @keywords internal
+.remove_column <- function(data, variables) {
+  data[, -which(colnames(data) %in% variables), drop = FALSE]
+}
+
+
+.grep_smoothers <- function(x) {
+  grepl("^(s\\()", x, perl = TRUE) |
+    grepl("^(gam::s\\()", x, perl = TRUE) |
+    grepl("^(VGAM::s\\()", x, perl = TRUE) |
+    grepl("^(mgcv::s\\()", x, perl = TRUE) |
+    grepl("^(brms::s\\()", x, perl = TRUE) |
+    grepl("^(smooth_sd\\[)", x, perl = TRUE)
+}
+
+
+.grep_non_smoothers <- function(x) {
+  grepl("^(?!(s\\())", x, perl = TRUE) &
+    grepl("^(?!(gam::s\\())", x, perl = TRUE) &
+    grepl("^(?!(VGAM::s\\())", x, perl = TRUE) &
+    grepl("^(?!(mgcv::s\\())", x, perl = TRUE) &
+    grepl("^(?!(brms::s\\())", x, perl = TRUE) &
+    grepl("^(?!(smooth_sd\\[))", x, perl = TRUE)
 }

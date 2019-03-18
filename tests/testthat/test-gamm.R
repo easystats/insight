@@ -69,18 +69,12 @@ if (require("testthat") && require("insight") && require("mgcv")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c(
-          "(Intercept)", sprintf("s(x0).%i", 1:9), sprintf("s(x1).%i", 1:9),
-          sprintf("s(x2).%i", 1:9)
-        )
-      ))
-    expect_equal(nrow(get_parameters(m1)), 28)
-    expect_equal(
-      get_parameters(m1)$parameter,
-      c(
-        "(Intercept)", sprintf("s(x0).%i", 1:9), sprintf("s(x1).%i", 1:9),
-        sprintf("s(x2).%i", 1:9)
-    ))
+        conditional = "(Intercept)",
+        smooth_terms = c("s(x0)", "s(x1)", "s(x2)")
+      )
+    )
+    expect_equal(nrow(get_parameters(m1)), 4)
+    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "s(x0)", "s(x1)", "s(x2)"))
   })
 
   test_that("is_multivariate", {

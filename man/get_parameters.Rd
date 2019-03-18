@@ -2,7 +2,11 @@
 % Please edit documentation in R/get_parameters.R
 \name{get_parameters}
 \alias{get_parameters}
+\alias{get_parameters.gam}
+\alias{get_parameters.vgam}
+\alias{get_parameters.Gam}
 \alias{get_parameters.zeroinfl}
+\alias{get_parameters.gamm}
 \alias{get_parameters.hurdle}
 \alias{get_parameters.coxme}
 \alias{get_parameters.merMod}
@@ -16,8 +20,20 @@
 \usage{
 get_parameters(x, ...)
 
+\method{get_parameters}{gam}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
+
+\method{get_parameters}{vgam}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
+
+\method{get_parameters}{Gam}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
+
 \method{get_parameters}{zeroinfl}(x, component = c("all", "conditional",
   "zi", "zero_inflated"), ...)
+
+\method{get_parameters}{gamm}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
 
 \method{get_parameters}{hurdle}(x, component = c("all", "conditional",
   "zi", "zero_inflated"), ...)
@@ -37,8 +53,8 @@ get_parameters(x, ...)
   "dispersion"), ...)
 
 \method{get_parameters}{brmsfit}(x, effects = c("fixed", "random",
-  "simplex", "smooth_terms", "all"), component = c("all", "conditional",
-  "zi", "zero_inflated", "dispersion"), parameters = NULL, ...)
+  "all"), component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion", "simplex", "smooth_terms"), parameters = NULL, ...)
 
 \method{get_parameters}{stanreg}(x, effects = c("fixed", "random",
   "all"), parameters = NULL, ...)
@@ -64,13 +80,13 @@ or both be returned? Only applies to mixed models. May be abbreviated.}
 should be returned.}
 }
 \value{
-For non-Bayesian models and if \code{effects = "fixed"}, a data frame
-   with two columns: the parameter names and the related point estimates; if
-   \code{effects = "random"}, a list with the random effects (as returned by
-   \code{ranef()}. For Bayesian models, the posterior samples from the
-   requested parameters as data frame. For Anova (\code{aov()}) with error
-   term, a list of parameters for the conditional, the within-subject and
-   the between-subjects parameters.
+\itemize{
+  \item for non-Bayesian models and if \code{effects = "fixed"}, a data frame with two columns: the parameter names and the related point estimates
+  \item if \code{effects = "random"}, a list of data frames with the random effects (as returned by \code{ranef()}
+  \item for Bayesian models, the posterior samples from the requested parameters as data frame.
+  \item for Anova (\code{aov()}) with error term, a list of parameters for the conditional, the within-subject and the between-subjects parameters
+  \item for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component
+}
 }
 \description{
 Returns the point estimates (or posterior samples for Bayesian

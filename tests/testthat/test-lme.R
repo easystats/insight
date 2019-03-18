@@ -110,4 +110,22 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
       algorithm = "REML", optimizer = "nlminb"
     ))
   })
+
+  test_that("get_variance", {
+
+    skip_on_travis()
+
+    expect_equal(get_variance(m1), list(
+      var.fixed = 908.9534,
+      var.random = 1698.066,
+      var.residual = 654.9424,
+      var.distribution = 654.9424,
+      var.dispersion = 0,
+      var.intercept = c(Subject = 612.0795),
+      var.slope = c(Subject.Days = 35.0713),
+      cor.slope_intercept = c(Subject = 0.066)
+    ),
+    tolerance = 1e-4)
+  })
+
 }
