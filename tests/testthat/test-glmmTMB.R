@@ -219,9 +219,9 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       )
     )
     expect_equal(nrow(get_parameters(m4)), 6)
-    expect_equal(colnames(get_parameters(m4)), c("parameter", "estimate", "group"))
+    expect_equal(colnames(get_parameters(m4)), c("parameter", "estimate", "component"))
     expect_equal(get_parameters(m4)$parameter, c("(Intercept)", "child", "camper1", "(Intercept)", "child", "livebait1"))
-    expect_equal(get_parameters(m4)$group, c("conditional", "conditional", "conditional", "zero_inflated", "zero_inflated", "zero_inflated"))
+    expect_equal(get_parameters(m4)$component, c("conditional", "conditional", "conditional", "zero_inflated", "zero_inflated", "zero_inflated"))
   })
 
   test_that("linkfun", {
