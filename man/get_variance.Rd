@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_variances.R
 \name{get_variance}
 \alias{get_variance}
+\alias{get_variance.MixMod}
 \alias{get_variance_residual}
 \alias{get_variance_fixed}
 \alias{get_variance_random}
@@ -14,6 +15,10 @@
 \usage{
 get_variance(x, component = c("all", "fixed", "random", "residual",
   "distribution", "dispersion", "intercept", "slope", "rho01"), ...)
+
+\method{get_variance}{MixMod}(x, component = c("all", "fixed", "random",
+  "residual", "distribution", "dispersion", "intercept", "slope", "rho01"),
+  null_model = NULL, ...)
 
 get_variance_residual(x, ...)
 
