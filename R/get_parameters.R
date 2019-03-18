@@ -32,6 +32,7 @@ get_parameters.default <- function(x, ...) {
   if (inherits(x, "list") && obj_has_name(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
+    return(get_parameters.gam(x))
   }
 
   tryCatch({
@@ -55,6 +56,62 @@ get_parameters.data.frame <- function(x, ...) {
 }
 
 
+#' @export
+get_parameters.gam <- function(x, ...) {
+  pars <- list(conditional = stats::coef(x))
+  st <- summary(x)$s.table
+
+  pars$conditional <- pars$conditional[grepl("^(?!(s\\())", names(stats::coef(x)), perl = TRUE)]
+  pars$smooth_terms <- st[, 1]
+
+  compact_list(
+    list(
+      conditional = data.frame(
+        parameter = names(pars$conditional),
+        estimate = pars$conditional,
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      ),
+      smooth_terms = data.frame(
+        parameter = row.names(st),
+        estimate = pars$smooth_terms,
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    )
+  )
+}
+
+
+#' @export
+get_parameters.Gam <- function(x, ...) {
+  pars <- stats::coef(x)
+
+  conditional <- pars[grepl("^(?!(s\\())", names(pars), perl = TRUE) &
+                        grepl("^(?!(gam::s\\())", names(pars), perl = TRUE)]
+
+  smooth_terms <- pars[grepl("^(s\\()", names(pars), perl = TRUE) |
+                         grepl("^(gam::s\\()", names(pars), perl = TRUE)]
+
+  compact_list(
+    list(
+      conditional = data.frame(
+        parameter = names(conditional),
+        estimate = conditional,
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      ),
+      smooth_terms = data.frame(
+        parameter = names(smooth_terms),
+        estimate = smooth_terms,
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    )
+  )
+}
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
@@ -74,7 +131,7 @@ get_parameters.zerotrunc <- function(x, component = c("all", "conditional", "zi"
 get_parameters.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
-  NextMethod()
+  get_parameters.gam(x)
 }
 
 

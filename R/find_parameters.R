@@ -21,7 +21,7 @@
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
 #'      \item \code{dispersion}, the dispersion parameters
 #'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
-#'      \item \code{smooth_terms}, smooth parameters of spline effects (\pkg{brms} only)
+#'      \item \code{smooth_terms}, smooth parameters of spline effects
 #'      \item \code{within}, the within-subject effects of Anovas (\code{aov()}) with error term
 #'      \item \code{between}, the between-subjects effects of Anovas (\code{aov()}) with error term
 #'    }
@@ -42,6 +42,7 @@ find_parameters.default <- function(x, ...) {
   if (inherits(x, "list") && obj_has_name(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
+    return(find_parameters.gam(x))
   }
 
   tryCatch({
@@ -53,6 +54,7 @@ find_parameters.default <- function(x, ...) {
   )
 }
 
+
 #' @export
 find_parameters.data.frame <- function(x, ...) {
   stop("A data frame is no valid object for this function")
@@ -60,10 +62,36 @@ find_parameters.data.frame <- function(x, ...) {
 
 
 #' @export
+find_parameters.gam <- function(x, ...) {
+  pars <- list(conditional = names(stats::coef(x)))
+  st <- summary(x)$s.table
+
+  pars$conditional <- pars$conditional[grepl("^(?!(s\\())", pars$conditional, perl = TRUE)]
+  pars$smooth_terms <- row.names(st)
+
+  compact_list(pars)
+}
+
+
+#' @export
+find_parameters.Gam <- function(x, ...) {
+  pars <- names(stats::coef(x))
+
+  conditional <- pars[grepl("^(?!(s\\())", pars, perl = TRUE) &
+                        grepl("^(?!(gam::s\\())", pars, perl = TRUE)]
+
+  smooth_terms <- pars[grepl("^(s\\()", pars, perl = TRUE) |
+                         grepl("^(gam::s\\()", pars, perl = TRUE)]
+
+  compact_list(list(conditional = conditional, smooth_terms = smooth_terms))
+}
+
+
+#' @export
 find_parameters.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
-  NextMethod()
+  find_parameters.gam(x)
 }
 
 
