@@ -328,7 +328,12 @@
   # in general want log(1+var(x)/mu^2)
 
   mu <- exp(null.fixef)
-  if (mu < 6) {
+
+  if (is.na(mu)) {
+    warning("Can't calculate model's distributional variance. Results are not reliable.", call. = F)
+    return(0)
+  }
+  else if (mu < 6) {
     warning(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.\n", mu, name), call. = FALSE)
   }
 
@@ -368,6 +373,11 @@
 .null_model <- function(model, null_model = NULL) {
   if (!is.null(null_model)) {
     return(null_model)
+  }
+
+  if (inherits(model, "MixMod")) {
+    warning("Please fit an additional null-model and pass it to the `null_model`-argument.", call. = FALSE)
+    return(NA)
   }
 
   if (!requireNamespace("lme4", quietly = TRUE)) {
