@@ -43,7 +43,7 @@
 
   # Get variance of fixed effects: multiply coefs by design matrix
   if (component %in% c("fixed", "all")) {
-    var.fixed <- .get_variance_fixed(vals)
+    var.fixed <- .compute_variance_fixed(vals)
   }
 
   # Are random slopes present as fixed effects? Warn.
@@ -62,18 +62,18 @@
 
   # Variance of random effects
   if (component %in% c("random", "all")) {
-    var.random <- .get_variance_random(not.obs.terms, x = x, vals = vals)
+    var.random <- .compute_variance_random(not.obs.terms, x = x, vals = vals)
   }
 
   # Residual variance, which is defined as the variance due to
   # additive dispersion and the distribution-specific variance (Johnson et al. 2014)
 
   if (component %in% c("residual", "distribution", "all")) {
-    var.distribution <- .get_variance_residual(x, var.cor = vals$vc, faminfo, name = name_full, null_model = null_model, verbose = verbose)
+    var.distribution <- .compute_variance_distribution(x, var.cor = vals$vc, faminfo, name = name_full, null_model = null_model, verbose = verbose)
   }
 
   if (component %in% c("residual", "dispersion", "all")) {
-    var.dispersion <- .get_variance_dispersion(x = x, vals = vals, faminfo = faminfo, obs.terms = obs.terms)
+    var.dispersion <- .compute_variance_dispersion(x = x, vals = vals, faminfo = faminfo, obs.terms = obs.terms)
   }
 
   if (component %in% c("residual", "all")) {
@@ -225,7 +225,7 @@
 #' Get fixed effects variance
 #' @importFrom stats var
 #' @keywords internal
-.get_variance_fixed <- function(vals) {
+.compute_variance_fixed <- function(vals) {
   with(vals, stats::var(as.vector(beta %*% t(X))))
 }
 
@@ -233,7 +233,7 @@
 #' Compute variance associated with a random-effects term (Johnson 2014)
 #' @importFrom stats nobs
 #' @keywords internal
-.get_variance_random <- function(terms, x, vals) {
+.compute_variance_random <- function(terms, x, vals) {
 
   sigma_sum <- function(Sigma) {
     rn <- rownames(Sigma)
@@ -247,7 +247,6 @@
     }
 
     Z <- vals$X[, rn, drop = FALSE]
-    # Z <- vals$X[, rownames(Sigma), drop = FALSE]
     Z.m <- Z %*% Sigma
     sum(diag(crossprod(Z.m, Z))) / stats::nobs(x)
   }
@@ -260,9 +259,8 @@
 }
 
 
-#' Get residual (distribution specific) variance from random effects
 #' @keywords internal
-.get_variance_residual <- function(x, var.cor, faminfo, name, null_model, verbose = TRUE) {
+.compute_variance_distribution <- function(x, var.cor, faminfo, name, null_model, verbose = TRUE) {
   if (inherits(x, "lme"))
     sig <- x$sigma
   else
@@ -271,45 +269,59 @@
   if (is.null(sig)) sig <- 1
 
   if (faminfo$is_linear) {
-    residual.variance <- sig^2
+    dist.variance <- sig^2
   } else {
     if (faminfo$is_binomial) {
-      residual.variance <- switch(
+      dist.variance <- switch(
         faminfo$link_function,
         logit = pi^2 / 3,
         probit = 1,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_count) {
-      residual.variance <- switch(
+      dist.variance <- switch(
         faminfo$link_function,
-        log = .get_variance_distributional(x, .null_model(x, null_model, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
+        log = .get_variance_dist(
+          x,
+          .null_model(x, null_model, verbose = verbose),
+          faminfo,
+          sig,
+          name = name,
+          verbose = verbose
+        ),
         sqrt = 0.25,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family == "beta") {
-      residual.variance <- switch(
+      dist.variance <- switch(
         faminfo$link_function,
-        logit = .get_variance_distributional(x, .null_model(x, null_model, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
+        logit = .get_variance_dist(
+          x,
+          .null_model(x, null_model, verbose = verbose),
+          faminfo,
+          sig,
+          name = name,
+          verbose = verbose
+        ),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     }
   }
 
-  residual.variance
+  dist.variance
 }
 
 
 #' Get dispersion-specific variance
 #' @keywords internal
-.get_variance_dispersion <- function(x, vals, faminfo, obs.terms) {
+.compute_variance_dispersion <- function(x, vals, faminfo, obs.terms) {
   if (faminfo$is_linear) {
     0
   } else {
     if (length(obs.terms) == 0) {
       0
     } else {
-      .get_variance_random(obs.terms, x = x, vals = vals)
+      .compute_variance_random(obs.terms, x = x, vals = vals)
     }
   }
 }
@@ -322,10 +334,9 @@
 }
 
 
-# distributional variance for different models
 #' @importFrom stats family
 #' @keywords internal
-.get_variance_distributional <- function(x, null.fixef, faminfo, sig, name, verbose = TRUE) {
+.get_variance_dist <- function(x, null.fixef, faminfo, sig, name, verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -339,7 +350,7 @@
 
   if (is.na(mu)) {
     if (verbose) {
-      warning("Can't calculate model's distributional variance. Results are not reliable.", call. = F)
+      warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = F)
     }
     return(0)
   }
@@ -372,7 +383,7 @@
   },
   error = function(x) {
     if (verbose) {
-      warning("Can't calculate model's distributional variance. Results are not reliable.", call. = F)
+      warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = F)
     }
     0
   }

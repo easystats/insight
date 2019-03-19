@@ -1,7 +1,8 @@
 #' @title Checks if an object stems from a multivariate response model
 #' @name is_multivariate
 #'
-#' @description to do...
+#' @description Small helper that checks if a model is a multivariate response
+#'   model, i.e. a model with multiple outcomes.
 #'
 #' @param x A model object, or an object returned by a function from this package.
 #'

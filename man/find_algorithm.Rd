@@ -12,7 +12,8 @@ find_algorithm(x, ...)
 \item{...}{Currently not used.}
 }
 \value{
-A list with following elements:
+A list with elements depending on the model.
+  \cr
   For frequentist models:
    \itemize{
      \item \code{algorithm}, for instance \code{"OLS"} or \code{"ML"}

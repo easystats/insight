@@ -27,10 +27,15 @@ library("insight")
 
 The syntax of `insight` mainly revolves around two types of functions. One is to find the names of the *things* (`find_*`), and the second is to actually get the *things* (`get_`). The *things* can be the following:
 
+- [find_algorithm()](https://easystats.github.io/insight/reference/find_algorithm.html)
 - [find_formula()](https://easystats.github.io/insight/reference/find_formula.html)
 - [find_variables()](https://easystats.github.io/insight/reference/find_variables.html)
 - [find_terms()](https://easystats.github.io/insight/reference/find_terms.html)
+
 - [get_data()](https://easystats.github.io/insight/reference/get_data.html)
+- [get_priors()](https://easystats.github.io/insight/reference/get_priors.html)
+- [get_variance()](https://easystats.github.io/insight/reference/get_variance.html)
+
 - [find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html) / [get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html)
 - [find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html) / [get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html)
 - [find_random()](https://easystats.github.io/insight/reference/find_random.html) / [get_random()](https://easystats.github.io/insight/reference/get_random.html)

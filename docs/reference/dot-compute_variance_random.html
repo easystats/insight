@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get name of a model's response variable — model_response • insight</title>
+<title>Compute variance associated with a random-effects term (Johnson 2014) — .compute_variance_random • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -18,8 +18,8 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -37,9 +37,9 @@
 
 
 
-<meta property="og:title" content="Get name of a model's response variable — model_response" />
+<meta property="og:title" content="Compute variance associated with a random-effects term (Johnson 2014) — .compute_variance_random" />
 
-<meta property="og:description" content="Returns the name(s) of the response variable(s) from a model object." />
+<meta property="og:description" content="Compute variance associated with a random-effects term (Johnson 2014)" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
       </span>
     </div>
 
@@ -83,9 +83,6 @@
     <span class="fa fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/insight.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -109,72 +106,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get name of a model's response variable</h1>
+    <h1>Compute variance associated with a random-effects term (Johnson 2014)</h1>
     
-    <div class="hidden name"><code>model_response.Rd</code></div>
+    <div class="hidden name"><code>dot-compute_variance_random.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns the name(s) of the response variable(s) from a model object.</p>
+    <p>Compute variance associated with a random-effects term (Johnson 2014)</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>model_response</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>.compute_variance_random</span>(<span class='no'>terms</span>, <span class='no'>x</span>, <span class='no'>vals</span>)</pre>
+        
 
-<span class='co'># S3 method for default</span>
-<span class='fu'>model_response</span>(<span class='no'>x</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr>
-    <tr>
-      <th>combine</th>
-      <td><p>Logical, if <code>TRUE</code> and the response is a matrix-column,
-the name of the response matches the notation in formula, and would for
-instance also contain patterns like <code>"cbind(...)"</code>. Else, the original
-variable names from the matrix-column are returned. See 'Examples'.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>The name(s) of the response variable(s) from <code>x</code> as character vector.</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>cbpp</span>)
-<span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>trials</span>) ~ <span class='no'>period</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>)
-
-<span class='fu'>model_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "cbind(incidence, trials)"</div><div class='input'><span class='fu'>model_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "incidence" "trials"   </div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>.</p>
 </div>
 
 <div class="pkgdown">

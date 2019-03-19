@@ -10,7 +10,7 @@
 #'   \code{MixMod}, \code{lme}, or \code{stanreg}.
 #' @param component Character value, indicating the variance component that should
 #'   be returned. By default, all variance components are returned. The
-#'   distribution-specific (\code{"distribution"}) and residual (\code{"residual"}
+#'   distribution-specific (\code{"distribution"}) and residual (\code{"residual"})
 #'   variance are the most computational intensive components, and hence may
 #'   take a few seconds to calculate.
 #' @param null_model The null-model for \code{x}. For \code{MixMod}-objects,
@@ -34,14 +34,62 @@
 #'
 #' @details This function returns different variance components from mixed models,
 #'   which are needed, for instance, to calculate r-squared measures or the
-#'   intraclass-correlation coefficient (ICC). The distributional variance (or
-#'   observation-level variance) is based on lognormal approximation,
-#'   \code{log(1+var(x)/mu^2)} (see \cite{Nakagawa et al. 2017}. The random effect
-#'   variances are actually \emph{mean} random effect variances, thus they
-#'   reflect the "average" random effects variance for mixed models with random
-#'   slopes or nested random effects (see \cite{Johnson et al. 2014}). Details
-#'   about the calculation of the different variance components can be found
-#'   in \cite{Johnson et al. 2014} and \cite{Nakagawa et al. 2017}.
+#'   intraclass-correlation coefficient (ICC).
+#'   \describe{
+#'     \item{\strong{Fixed effects variance}}{
+#'      The fixed effects variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>f</sub>}}{\eqn{\sigma^2_f}},
+#'      is the variance of the matrix-multiplication \code{B*X} (coefficients by
+#'      model matrix).
+#'     }
+#'     \item{\strong{Random effects variance}}{
+#'      The random effect variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>i</sub>}}{\eqn{\sigma^2_i}},
+#'      represents the \emph{mean} random effect variance of the model. Since
+#'      this variance reflect the "average" random effects variance for mixed
+#'      models, it is also appropriate for models with more complex random
+#'      effects structures, like random slopes or nested random effects.
+#'      Details can be found in \cite{Johnson 2014}, in particular equation 10.
+#'     }
+#'     \item{\strong{Distribution-specific variance}}{
+#'      The Distribution-specific variance,
+#'      \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub>}}{\eqn{\sigma^2_d}},
+#'      depends on the model family. For Gaussian models, it is
+#'      \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}. For models
+#'      with binary outome, it is \eqn{\pi^2 / 3} for logit-link and \code{1}
+#'      for probit-link. For all other models, the distribution-specific variance
+#'      is based on lognormal approximation, \eqn{log(1 + var(x) / \mu^2)}
+#'      (see \cite{Nakagawa et al. 2017}).
+#'     }
+#'     \item{\strong{Variance for the additive overdispersion term}}{
+#'      \ifelse{html}{\out{&sigma;<sup>2</sup><sub><em>e</em></sub>}}{\eqn{\sigma^2_e}}
+#'      is the variance for the additive overdispersion term, which represents
+#'      \dQuote{the excess variation relative to what is expected from a certain
+#'      distribution} (Nakagawa et al. 2017). In (most? many?) cases, this will
+#'      be \code{0}.
+#'     }
+#'     \item{\strong{Residual variance}}{
+#'       The residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}},
+#'       is simply \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub> + &sigma;<sup>2</sup><sub><em>e</em></sub>}}{\eqn{\sigma^2_d + \sigma^2_e}}.
+#'     }
+#'     \item{\strong{Random intercept variance}}{
+#'       The random intercept variance, or \emph{between-subject} variance
+#'       (\ifelse{html}{\out{&tau;<sub>00</sub>}}{\eqn{\tau_{00}}}),
+#'       is obtained from \code{VarCorr()}. It indicates how much groups
+#'       or subjects differ from each other, while the residual variance
+#'       \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}
+#'       indicates the \emph{within-subject variance}.
+#'     }
+#'     \item{\strong{Random slope variance}}{
+#'       The random slope variance (\ifelse{html}{\out{&tau;<sub>11</sub>}}{\eqn{\tau_{11}}})
+#'       is obtained from \code{VarCorr()}. This measure is only available
+#'       for mixed models with random slopes.
+#'     }
+#'     \item{\strong{Random slope-intercept correlation}}{
+#'       The random slope-intercept correlation
+#'       (\ifelse{html}{\out{&rho;<sub>01</sub>}}{\eqn{\rho_{01}}})
+#'       is obtained from \code{VarCorr()}. This measure is only available
+#'       for mixed models with random intercepts and slopes.
+#'     }
+#'   }
 #'
 #' @note Support for objects of class \code{MixMod} (\pkg{GLMMadaptiv}) or
 #'   \code{lme} (\pkg{nlme}) is experimental and may not work for every
