@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • insight</title>
+<title>Get summary of priors used for a model — get_priors • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,10 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Get summary of priors used for a model — get_priors" />
+
+<meta property="og:description" content="Provides a summary of the prior distributions used
+  for the parameters in a given model." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -57,7 +60,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -104,77 +107,58 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      
+    <h1>Get summary of priors used for a model</h1>
+    
+    <div class="hidden name"><code>get_priors.Rd</code></div>
     </div>
 
-    <div id="insight-020" class="section level1">
-<h1 class="page-header">
-<a href="#insight-020" class="anchor"></a>insight 0.2.0<small> Unreleased </small>
-</h1>
-<div id="new-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-functions" class="anchor"></a>New functions</h2>
-<ul>
-<li>
-<code><a href="../reference/get_variance.html">get_variance()</a></code>, to calculate the variance components from mixed models of class <code>merMod</code>, <code>glmmTMB</code>, <code>MixMod</code>, <code>lme</code> and <code>stanreg</code> (#52). Furthermore, convenient shortcuts to return the related components directly, like <code><a href="../reference/get_variance.html">get_variance_random()</a></code> or <code><a href="../reference/get_variance.html">get_variance_residual()</a></code>.</li>
-<li>
-<code><a href="../reference/find_algorithm.html">find_algorithm()</a></code>, to get information about sampling algorithms and optimizers, and for Bayesian models also about chains and iterations (#38).</li>
-<li>
-<code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code>, which returns the names of the random slopes of mixed models.</li>
-<li>
-<code><a href="../reference/get_priors.html">get_priors()</a></code>, to get a summary of priors used for a model (#39).</li>
-<li>
-<code><a href="../reference/print_color.html">print_color()</a></code> (resp. <code><a href="../reference/print_color.html">print_colour()</a></code>) to print coloured output to the console. Mainly implemented to reduce package dependencies.</li>
-</ul>
-</div>
-<div id="changes-to-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
-<ul>
-<li>
-<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> get a <code>parameters</code>-argument for <code>brmsfit</code> and <code>stanreg</code> models, to allow selection of specific parameters that should be returned (#55).</li>
-<li>
-<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also return simplex parameters of monotic effects (<strong>brms</strong> only) and smooth terms (e.g. for gam-models).</li>
-<li>
-<code><a href="../reference/find_terms.html">find_terms()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> no longer return constants, in particular <code>pi</code> (#26).</li>
-</ul>
-</div>
-<div id="bug-fixes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
-<ul>
-<li>
-<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not preserve coefficients of monotonic category-specific effects from <strong>brmsfit</strong>-objects.</li>
-<li>Fixed bug that sometimes returned more elements for <code><a href="../reference/find_predictors.html">find_predictors()</a></code> or <code><a href="../reference/get_parameters.html">get_parameters()</a></code> than requested.</li>
-<li>Fixed bug in <code><a href="../reference/get_data.html">get_data()</a></code> for <strong>MixMod</strong>-objects when response variable was defined via <code><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind()</a></code>.</li>
-</ul>
-</div>
-</div>
-    <div id="insight-012" class="section level1">
-<h1 class="page-header">
-<a href="#insight-012" class="anchor"></a>insight 0.1.2<small> 2019-03-05 </small>
-</h1>
-<div id="general" class="section level2">
-<h2 class="hasAnchor">
-<a href="#general" class="anchor"></a>General</h2>
-<ul>
-<li>Initial release.</li>
-</ul>
-</div>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>Provides a summary of the prior distributions used
+  for the parameters in a given model.</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>get_priors</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A Bayesian model.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A data frame with a summary of the prior distributions used
+  for the parameters in a given model.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Length</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>iris</span>)
+<span class='fu'>get_priors</span>(<span class='no'>model</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#insight-020">0.2.0</a></li>
-        <li><a href="#insight-012">0.1.2</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
+  </div>
 </div>
 
       <footer>

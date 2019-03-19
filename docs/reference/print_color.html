@@ -119,23 +119,23 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>print_color</span>(<span class='no'>color</span>, <span class='no'>text</span>)
+    <pre class="usage"><span class='fu'>print_color</span>(<span class='no'>text</span>, <span class='no'>color</span>)
 
-<span class='fu'>print_colour</span>(<span class='no'>colour</span>, <span class='no'>text</span>)</pre>
+<span class='fu'>print_colour</span>(<span class='no'>text</span>, <span class='no'>colour</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>text</th>
+      <td><p>The text to print.</p></td>
+    </tr>
     <tr>
       <th>color, colour</th>
       <td><p>Character vector, indicating the colour for printing.
 May be one of <code>"red"</code>, <code>"yellow"</code>, <code>"green"</code>, <code>"blue"</code>,
 <code>"violet"</code>, <code>"cyan"</code> or <code>"grey"</code>. Formatting is also possible
 with <code>"bold"</code> or <code>"italic"</code>.</p></td>
-    </tr>
-    <tr>
-      <th>text</th>
-      <td><p>The text to print.</p></td>
     </tr>
     </table>
     
@@ -150,7 +150,7 @@ with <code>"bold"</code> or <code>"italic"</code>.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>print_color</span>(<span class='st'>"blue"</span>, <span class='st'>"I'm blue dabedi dabedei"</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'>I'm blue dabedi dabedei</span><span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>print_color</span>(<span class='st'>"I'm blue dabedi dabedei"</span>, <span class='st'>"blue"</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'>I'm blue dabedi dabedei</span><span></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

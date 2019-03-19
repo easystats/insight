@@ -2,7 +2,7 @@
 
 ## New functions
 
-* `get_variances()`, to calculate the variance components from mixed models of class `merMod`, `glmmTMB`, `MixMod`, `lme` and `stanreg` (#52). Furthermore, convenient shortcuts to return the related components directly, like `get_variance_random()` or `get_variance_residual()`.
+* `get_variance()`, to calculate the variance components from mixed models of class `merMod`, `glmmTMB`, `MixMod`, `lme` and `stanreg` (#52). Furthermore, convenient shortcuts to return the related components directly, like `get_variance_random()` or `get_variance_residual()`.
 * `find_algorithm()`, to get information about sampling algorithms and optimizers, and for Bayesian models also about chains and iterations (#38).
 * `find_random_slopes()`, which returns the names of the random slopes of mixed models.
 * `get_priors()`, to get a summary of priors used for a model (#39).

@@ -121,9 +121,25 @@
 
     <pre class="usage"><span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for gam</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
+  <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for vgam</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
+  <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for Gam</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
+  <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
+
 <span class='co'># S3 method for zeroinfl</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
   <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for gamm</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
+  <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for hurdle</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
@@ -150,8 +166,8 @@
 
 <span class='co'># S3 method for brmsfit</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
-  <span class='st'>"simplex"</span>, <span class='st'>"smooth_terms"</span>, <span class='st'>"all"</span>), <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
-  <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>), <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+  <span class='st'>"all"</span>), <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>,
+  <span class='st'>"dispersion"</span>, <span class='st'>"simplex"</span>, <span class='st'>"smooth_terms"</span>), <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for stanreg</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
@@ -194,13 +210,15 @@ should be returned.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>For non-Bayesian models and if <code>effects = "fixed"</code>, a data frame
-   with two columns: the parameter names and the related point estimates; if
-   <code>effects = "random"</code>, a list with the random effects (as returned by
-   <code>ranef()</code>. For Bayesian models, the posterior samples from the
-   requested parameters as data frame. For Anova (<code><a href='https://www.rdocumentation.org/packages/stats/topics/aov'>aov()</a></code>) with error
-   term, a list of parameters for the conditional, the within-subject and
-   the between-subjects parameters.</p>
+    
+<ul>
+<li><p>for non-Bayesian models and if <code>effects = "fixed"</code>, a data frame with two columns: the parameter names and the related point estimates</p></li>
+<li><p>if <code>effects = "random"</code>, a list of data frames with the random effects (as returned by <code>ranef()</code></p></li>
+<li><p>for Bayesian models, the posterior samples from the requested parameters as data frame.</p></li>
+<li><p>for Anova (<code><a href='https://www.rdocumentation.org/packages/stats/topics/aov'>aov()</a></code>) with error term, a list of parameters for the conditional, the within-subject and the between-subjects parameters</p></li>
+<li><p>for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component</p></li>
+</ul>
+
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
