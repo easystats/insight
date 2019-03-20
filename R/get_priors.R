@@ -53,7 +53,7 @@ get_priors.stanreg <- function(x, ...) {
 
 #' @export
 get_priors.brmsfit <- function(x, ...) {
-  ## TODO needs testing for edge cases - check if "coef"-row is
+  ## TODO needs testing for edge cases - check if "coef"-column is
   # always empty for intercept-class
   x$prior$coef[x$prior$class == "Intercept"] <- "(Intercept)"
 

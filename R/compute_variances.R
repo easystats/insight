@@ -1,6 +1,6 @@
 #' @importFrom stats nobs
 #' @keywords internal
-.compute_variances <- function(x, component, name_fun = NULL, name_full = NULL, verbose = TRUE, null_model = NULL) {
+.compute_variances <- function(x, component, name_fun = NULL, name_full = NULL, verbose = TRUE) {
 
   ## Code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an
@@ -69,7 +69,7 @@
   # additive dispersion and the distribution-specific variance (Johnson et al. 2014)
 
   if (component %in% c("residual", "distribution", "all")) {
-    var.distribution <- .compute_variance_distribution(x, var.cor = vals$vc, faminfo, name = name_full, null_model = null_model, verbose = verbose)
+    var.distribution <- .compute_variance_distribution(x, var.cor = vals$vc, faminfo, name = name_full, verbose = verbose)
   }
 
   if (component %in% c("residual", "dispersion", "all")) {
@@ -253,7 +253,7 @@
 
 
 #' @keywords internal
-.compute_variance_distribution <- function(x, var.cor, faminfo, name, null_model, verbose = TRUE) {
+.compute_variance_distribution <- function(x, var.cor, faminfo, name, verbose = TRUE) {
   if (inherits(x, "lme"))
     sig <- x$sigma
   else
@@ -276,7 +276,7 @@
         faminfo$link_function,
         log = .get_variance_dist(
           x,
-          .null_model(x, null_model, verbose = verbose),
+          .null_model(x, verbose = verbose),
           faminfo,
           sig,
           name = name,
@@ -290,7 +290,7 @@
         faminfo$link_function,
         logit = .get_variance_dist(
           x,
-          .null_model(x, null_model, verbose = verbose),
+          .null_model(x, verbose = verbose),
           faminfo,
           sig,
           name = name,
@@ -322,11 +322,20 @@
 
 #' Get distributional variance for beta-family
 #' @keywords internal
-.get_variance_beta <- function(x, mu, phi) {
+.get_variance_beta_family <- function(x, mu, phi) {
   if (inherits(x, "MixMod"))
     stats::family(x)$variance(mu)
   else
     mu * (1 - mu) / (1 + phi)
+}
+
+
+#' Get distributional variance for nbinom-family
+#' @keywords internal
+.get_variance_nbinom_family <- function(mu, alpha) {
+  if (missing(alpha))
+    return(rep(1e-16, length(mu)))
+  mu * (1 + alpha)
 }
 
 
@@ -359,18 +368,28 @@
   cvsquared <- tryCatch({
     vv <- switch(
       faminfo$family,
-      poisson = stats::family(x)$variance(mu),
-      `hurdle poisson` = ,
-      truncated_poisson = stats::family(x)$variance(sig),
-      beta = .get_variance_beta(x, mu, sig),
+      poisson             = stats::family(x)$variance(mu),
+      `hurdle poisson`    = ,
+      truncated_poisson   = stats::family(x)$variance(sig),
+      beta                = .get_variance_beta_family(x, mu, sig),
       `negative binomial` = ,
-      genpois = ,
-      nbinom1 = ,
-      nbinom2 = stats::family(x)$variance(mu, sig),
+      genpois             = ,
+      nbinom1             = ,
+      nbinom2             = stats::family(x)$variance(mu, sig),
+
+      # this one is a *bit* wobbly, because actually the variance-function
+      # for zi-models is not straightforward to get. However, the original
+      # code snippet from Ben Bolker uses these variance-functions for
+      # glmmTMB zi-models, so I assume that we can use the same for
+      # GLMMadaptive zi-models, as long as there's no better alternative...
+
+      `zero-inflated negative binomial` = .get_variance_nbinom_family(mu, sig),
+      `zero-inflated poisson`           = mu,
 
       if (inherits(x, "merMod")) {
         mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
       } else if (inherits(x, "MixMod")) {
+
         stats::family(x)$variance(mu)
       } else {
         mu * (1 + mu / x$theta)
@@ -391,36 +410,23 @@
 }
 
 
-#' @importFrom stats formula reformulate update
+#' @importFrom stats as.formula update reformulate
 #' @keywords internal
-.null_model <- function(model, null_model = NULL, verbose = TRUE) {
+.null_model <- function(model, verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
-  if (!is.null(null_model)) {
-    return(unname(lme4::fixef(null_model)))
-  }
-
   if (inherits(model, "MixMod")) {
-    if (verbose) {
-      warning("Please fit an additional null-model and pass it to the `null_model`-argument.", call. = FALSE)
-    }
-    return(NA)
+    nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
+    null.model <- stats::update(model, fixed = nullform)
+  } else {
+    f <- stats::formula(model)
+    resp <- find_response(model)
+    re.terms <- paste0("(", sapply(lme4::findbars(f), deparse, width.cutoff = 500), ")")
+    nullform <- stats::reformulate(re.terms, response = resp)
+    null.model <- stats::update(model, nullform)
   }
-
-  ## TODO compute null-model for MixMod?
-
-  # yet another brms fix
-  f <- stats::formula(model)
-
-  if (is.list(f) && obj_has_name(f, "formula")) f <- f$formula
-
-  ## https://stat.ethz.ch/pipermail/r-sig-mixed-models/2014q4/023013.html
-  rterms <- paste0("(", sapply(lme4::findbars(f), deparse, width.cutoff = 500), ")")
-  # nullform <- paste(".", deparse(find_formula(m3)$random, width.cutoff = 500))
-  nullform <- stats::reformulate(rterms, response = ".")
-  null.model <- stats::update(model, nullform)
 
   ## Get the fixed effects of the null model
   unname(.collapse_cond(lme4::fixef(null.model)))

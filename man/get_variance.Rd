@@ -19,7 +19,7 @@ get_variance(x, component = c("all", "fixed", "random", "residual",
 
 \method{get_variance}{MixMod}(x, component = c("all", "fixed", "random",
   "residual", "distribution", "dispersion", "intercept", "slope", "rho01"),
-  verbose = TRUE, null_model = NULL, ...)
+  verbose = TRUE, ...)
 
 get_variance_residual(x, ...)
 
@@ -50,11 +50,6 @@ take a few seconds to calculate.}
 \item{verbose}{Toggle off warnings.}
 
 \item{...}{Currently not used.}
-
-\item{null_model}{The null-model for \code{x}. For \code{MixMod}-objects,
-the null-model can't be calculated in a stable way using \code{update()},
-so in certain cases, it might be better to manually fit the null-model
-and pass it as argument.}
 }
 \value{
 A list with following elements:
