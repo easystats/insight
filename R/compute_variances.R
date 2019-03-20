@@ -21,7 +21,7 @@
 
   # get necessary model information, like fixed and random effects,
   # variance-covariance matrix etc.
-  vals <- .get_variance_information(x, name_fun = name_fun, verbose = verbose)
+  vals <- .get_variance_information(x, faminfo = faminfo, name_fun = name_fun, verbose = verbose)
 
   # Test for non-zero random effects ((near) singularity)
   if (.is_singular(x, vals) && !(component %in% c("slope", "intercept"))) {
@@ -115,7 +115,7 @@
 
 #' @importFrom stats model.matrix
 #' @keywords internal
-.get_variance_information <- function(x, name_fun = "get_variances", verbose = TRUE) {
+.get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -180,21 +180,14 @@
 
   if (inherits(x, "glmmTMB")) {
     vals <- lapply(vals, .collapse_cond)
+  }
 
-    nullEnv <- function(x) {
-      environment(x) <- NULL
-      return(x)
-    }
+  if (faminfo$is_zeroinf && verbose) {
+    warning(sprintf("%s ignores effects of zero-inflation.", name_fun), call. = FALSE)
+  }
 
-    if (!identical(nullEnv(x$modelInfo$allForm$ziformula), nullEnv(~0)) && verbose) {
-      warning(sprintf("%s ignores effects of zero-inflation.", name_fun), call. = FALSE)
-    }
-
-    dform <- nullEnv(x$modelInfo$allForm$dispformula)
-
-    if (!identical(dform, nullEnv(~1)) && (!identical(dform, nullEnv(~0))) && verbose) {
-      warning(sprintf("%s ignores effects of dispersion model.", name_fun), call. = FALSE)
-    }
+  if (!is.null(find_formula(x)[["dispersion"]]) && verbose) {
+    warning(sprintf("%s ignores effects of dispersion model.", name_fun), call. = FALSE)
   }
 
   vals
@@ -329,8 +322,11 @@
 
 #' Get distributional variance for beta-family
 #' @keywords internal
-.get_variance_beta <- function(mu, phi) {
-  mu * (1 - mu) / (1 + phi)
+.get_variance_beta <- function(x, mu, phi) {
+  if (inherits(x, "MixMod"))
+    stats::family(x)$variance(mu)
+  else
+    mu * (1 - mu) / (1 + phi)
 }
 
 
@@ -364,8 +360,10 @@
     vv <- switch(
       faminfo$family,
       poisson = stats::family(x)$variance(mu),
+      `hurdle poisson` = ,
       truncated_poisson = stats::family(x)$variance(sig),
-      beta = .get_variance_beta(mu, sig),
+      beta = .get_variance_beta(x, mu, sig),
+      `negative binomial` = ,
       genpois = ,
       nbinom1 = ,
       nbinom2 = stats::family(x)$variance(mu, sig),

@@ -33,6 +33,7 @@ Retrieve information from model objects.
      \item \code{is_ordinal}: family is ordinal or cumulative link
      \item \code{is_categorical}: family is categorical link
      \item \code{is_zeroinf}: model has zero-inflation component
+     \item \code{is_zero_inflated}: alias for \code{is_zeroinf}
      \item \code{is_mixed}: model is a mixed effects model (with random effects)
      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
      \item \code{is_trial}: model response contains additional information about the trials

@@ -4,7 +4,7 @@
 \alias{.get_variance_beta}
 \title{Get distributional variance for beta-family}
 \usage{
-.get_variance_beta(mu, phi)
+.get_variance_beta(x, mu, phi)
 }
 \description{
 Get distributional variance for beta-family

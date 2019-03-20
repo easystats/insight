@@ -24,6 +24,7 @@
 #'      \item \code{is_ordinal}: family is ordinal or cumulative link
 #'      \item \code{is_categorical}: family is categorical link
 #'      \item \code{is_zeroinf}: model has zero-inflation component
+#'      \item \code{is_zero_inflated}: alias for \code{is_zeroinf}
 #'      \item \code{is_mixed}: model is a mixed effects model (with random effects)
 #'      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
 #'      \item \code{is_trial}: model response contains additional information about the trials
@@ -561,14 +562,15 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
 
   beta_fam <- inherits(x, "betareg") | fitfam %in% c("beta")
 
-  linear_model <- !binom_fam & !poisson_fam & !neg_bin_fam & !logit.link
+  linear_model <- (!binom_fam & !poisson_fam & !neg_bin_fam & !logit.link) || fitfam == "Student's-t"
 
   zero.inf <- zero.inf | fitfam == "ziplss" |
     grepl("\\Qzero_inflated\\E", fitfam, ignore.case = TRUE) |
     grepl("\\Qzero-inflated\\E", fitfam, ignore.case = TRUE) |
     grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE) |
     grepl("\\Qhurdle\\E", fitfam, ignore.case = TRUE) |
-    grepl("^(zt|zi|za|hu)", fitfam, perl = TRUE)
+    grepl("^(zt|zi|za|hu)", fitfam, perl = TRUE) |
+    grepl("^truncated", fitfam, perl = TRUE)
 
   is.ordinal <-
     inherits(x, c("polr", "clm", "clm2", "clmm", "gmnl", "mlogit", "multinom")) |
@@ -640,6 +642,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_probit = link.fun == "probit",
     is_linear = linear_model,
     is_zeroinf = zero.inf,
+    is_zero_inflated = zero.inf,
     is_ordinal = is.ordinal,
     is_categorical = is.categorical,
     is_mixed = !is.null(find_random(x)),
