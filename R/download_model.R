@@ -6,7 +6,16 @@
 #'   the systematic testing of other packages
 #'
 #' @param name Model name.
+#' @param url String with the URL from where to download the model data.
+#'   Optional, and should only be used in case the repository-URL is
+#'   changing. By default, models are downloaded from
+#'   \code{https://raw.github.com/easystats/circus/master/data/}.
+#'
 #' @return A model from the \emph{circus}-repository.
+#'
+#' @details The code that generated the model is available at the
+#'   \url{https://easystats.github.io/circus/reference/index.html}.
+#'
 #' @references \url{https://easystats.github.io/circus/}
 #'
 #' @export
@@ -17,12 +26,15 @@ download_model <- function(name) {
 
 #' Download rda files from github
 #' @keywords internal
-.download_data_github <- function(name) {
+.download_data_github <- function(name, url = NULL) {
   if (!requireNamespace("httr", quietly = TRUE)) {
     stop("Package `httr` required to download models from the circus-repo.", call. = FALSE)
   }
 
-  url <- paste0("https://raw.github.com/easystats/circus/master/data/", name, ".rda")
+  if (is.null(url))
+    url <- "https://raw.github.com/easystats/circus/master/data/"
+
+  url <- paste0(url, name, ".rda")
 
   temp_file <- tempfile()
   on.exit(unlink(temp_file))
