@@ -152,6 +152,7 @@
 <li><p><code>is_ordinal</code>: family is ordinal or cumulative link</p></li>
 <li><p><code>is_categorical</code>: family is categorical link</p></li>
 <li><p><code>is_zeroinf</code>: model has zero-inflation component</p></li>
+<li><p><code>is_zero_inflated</code>: alias for <code>is_zeroinf</code></p></li>
 <li><p><code>is_mixed</code>: model is a mixed effects model (with random effects)</p></li>
 <li><p><code>is_multivariate</code>: model is a multivariate response model (currently only works for <em>brmsfit</em> objects)</p></li>
 <li><p><code>is_trial</code>: model response contains additional information about the trials</p></li>
@@ -200,6 +201,9 @@
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_zeroinf
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $is_zero_inflated
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $is_ordinal

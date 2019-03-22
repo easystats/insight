@@ -130,7 +130,7 @@
 <span class='co'># S3 method for MixMod</span>
 <span class='fu'>get_variance</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
   <span class='st'>"residual"</span>, <span class='st'>"distribution"</span>, <span class='st'>"dispersion"</span>, <span class='st'>"intercept"</span>, <span class='st'>"slope"</span>, <span class='st'>"rho01"</span>),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>null_model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
 <span class='fu'>get_variance_residual</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
@@ -154,7 +154,7 @@
     <tr>
       <th>x</th>
       <td><p>A mixed effects model of class <code>merMod</code>, <code>glmmTMB</code>,
-<code>MixMod</code>, <code>lme</code>, or <code>stanreg</code>.</p></td>
+<code>MixMod</code>, <code>lme</code>, <code>mixed</code>, or <code>stanreg</code>.</p></td>
     </tr>
     <tr>
       <th>component</th>
@@ -172,13 +172,6 @@ take a few seconds to calculate.</p></td>
       <th>...</th>
       <td><p>Currently not used.</p></td>
     </tr>
-    <tr>
-      <th>null_model</th>
-      <td><p>The null-model for <code>x</code>. For <code>MixMod</code>-objects,
-the null-model can't be calculated in a stable way using <code><a href='https://www.rdocumentation.org/packages/stats/topics/update'>update()</a></code>,
-so in certain cases, it might be better to manually fit the null-model
-and pass it as argument.</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -189,9 +182,9 @@ and pass it as argument.</p></td>
 <li><p><code>var.residual</code>, residual variance (sum of dispersion and distribution)</p></li>
 <li><p><code>var.distribution</code>, distribution-specific variance</p></li>
 <li><p><code>var.dispersion</code>, variance due to additive dispersion</p></li>
-<li><p><code>var.intercept</code>, the random-intercept-variance, or between-subject-variance (tau 00)</p></li>
-<li><p><code>var.slope</code>, the random-slope-variance (tau 11)</p></li>
-<li><p><code>cor.slope_intercept</code>, the random-slope-intercept-correlation (rho 01)</p></li>
+<li><p><code>var.intercept</code>, the random-intercept-variance, or between-subject-variance (&tau;<sub>00</sub>)</p></li>
+<li><p><code>var.slope</code>, the random-slope-variance (&tau;<sub>11</sub>)</p></li>
+<li><p><code>cor.slope_intercept</code>, the random-slope-intercept-correlation (&rho;<sub>01</sub>)</p></li>
 </ul>
 
     
@@ -201,15 +194,15 @@ and pass it as argument.</p></td>
   which are needed, for instance, to calculate r-squared measures or the
   intraclass-correlation coefficient (ICC).</p><dl class='dl-horizontal'>
     <dt><strong>Fixed effects variance</strong></dt><dd><p>The fixed effects variance, &sigma;<sup>2</sup><sub>f</sub>,
-     is the variance of the matrix-multiplication <code>B*X</code> (coefficients by
-     model matrix).</p></dd>
+     is the variance of the matrix-multiplication &beta;&lowast;X
+     (parameter vector by model matrix).</p></dd>
     <dt><strong>Random effects variance</strong></dt><dd><p>The random effect variance, &sigma;<sup>2</sup><sub>i</sub>,
      represents the <em>mean</em> random effect variance of the model. Since
      this variance reflect the "average" random effects variance for mixed
      models, it is also appropriate for models with more complex random
      effects structures, like random slopes or nested random effects.
      Details can be found in <cite>Johnson 2014</cite>, in particular equation 10.</p></dd>
-    <dt><strong>Distribution-specific variance</strong></dt><dd><p>The Distribution-specific variance,
+    <dt><strong>Distribution-specific variance</strong></dt><dd><p>The distribution-specific variance,
      &sigma;<sup>2</sup><sub>d</sub>,
      depends on the model family. For Gaussian models, it is
      &sigma;<sup>2</sup>. For models
@@ -217,11 +210,11 @@ and pass it as argument.</p></td>
      for probit-link. For all other models, the distribution-specific variance
      is based on lognormal approximation, \(log(1 + var(x) / \mu^2)\)
      (see <cite>Nakagawa et al. 2017</cite>).</p></dd>
-    <dt><strong>Variance for the additive overdispersion term</strong></dt><dd><p>&sigma;<sup>2</sup><sub><em>e</em></sub>
-     is the variance for the additive overdispersion term, which represents
-     &#8220;the excess variation relative to what is expected from a certain
-     distribution&#8221; (Nakagawa et al. 2017). In (most? many?) cases, this will
-     be <code>0</code>.</p></dd>
+    <dt><strong>Variance for the additive overdispersion term</strong></dt><dd><p>The variance for the additive overdispersion term,
+     &sigma;<sup>2</sup><sub><em>e</em></sub>,
+     represents &#8220;the excess variation relative to what is expected
+     from a certain distribution&#8221; (Nakagawa et al. 2017). In (most? many?)
+     cases, this will be <code>0</code>.</p></dd>
     <dt><strong>Residual variance</strong></dt><dd><p>The residual variance, &sigma;<sup>2</sup><sub>&epsilon;</sub>,
       is simply &sigma;<sup>2</sup><sub>d</sub> + &sigma;<sup>2</sup><sub><em>e</em></sub>.</p></dd>
     <dt><strong>Random intercept variance</strong></dt><dd><p>The random intercept variance, or <em>between-subject</em> variance

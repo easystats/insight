@@ -164,7 +164,7 @@ as character vector, not as list.</p></td>
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(
   <span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>mygrp</span> / <span class='no'>mysubgrp</span>) + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>),
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>
-)</div><div class='output co'>#&gt; <span class='message'>singular fit</span></div><div class='input'>
+)</div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='input'>
 <span class='fu'>find_random</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $random
 #&gt; [1] "mysubgrp:mygrp" "mygrp"          "Subject"       
 #&gt; </div><div class='input'><span class='fu'>find_random</span>(<span class='no'>m</span>, <span class='kw'>split_nested</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $random

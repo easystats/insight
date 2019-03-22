@@ -121,7 +121,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>download_model</span>(<span class='no'>name</span>)</pre>
+    <pre class="usage"><span class='fu'>download_model</span>(<span class='no'>name</span>, <span class='kw'>url</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,11 +130,23 @@
       <th>name</th>
       <td><p>Model name.</p></td>
     </tr>
+    <tr>
+      <th>url</th>
+      <td><p>String with the URL from where to download the model data.
+Optional, and should only be used in case the repository-URL is
+changing. By default, models are downloaded from
+<code>https://raw.github.com/easystats/circus/master/data/</code>.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A model from the <em>circus</em>-repository.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The code that generated the model is available at the
+  <a href='https://easystats.github.io/circus/reference/index.html'>https://easystats.github.io/circus/reference/index.html</a>.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -148,6 +160,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
 
       <li><a href="#references">References</a></li>
           </ul>
