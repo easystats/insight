@@ -121,7 +121,7 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
       var.dispersion = 0,
       var.intercept = c(Subject = 612.07951112963326067984),
       var.slope = c(Subject.Days = 35.07130179308116169068),
-      cor.slope_intercept = c(Subject = 0.06600000000000000311)
+      cor.slope_intercept = 0.06600000000000000311
     ),
     tolerance = 1e-4)
   })

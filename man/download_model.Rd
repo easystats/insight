@@ -4,7 +4,7 @@
 \alias{download_model}
 \title{Download circus models}
 \usage{
-download_model(name)
+download_model(name, url = NULL)
 }
 \arguments{
 \item{name}{Model name.}

@@ -19,14 +19,14 @@
 #' @references \url{https://easystats.github.io/circus/}
 #'
 #' @export
-download_model <- function(name) {
-  .download_data_github(name)
+download_model <- function(name, url = NULL) {
+  .download_data_github(name, url)
 }
 
 
 #' Download rda files from github
 #' @keywords internal
-.download_data_github <- function(name, url = NULL) {
+.download_data_github <- function(name, url) {
   if (!requireNamespace("httr", quietly = TRUE)) {
     stop("Package `httr` required to download models from the circus-repo.", call. = FALSE)
   }

@@ -38,7 +38,7 @@ if (require("testthat") && require("insight") && require("gamlss")) {
   })
 
   test_that("get_predictors", {
-    expect_equal(colnames(get_predictors(m1)), c("gear", "cyl", "carb", "wt"))
+    expect_equal(colnames(get_predictors(m1)), "x")
   })
 
   test_that("get_data", {
@@ -108,6 +108,6 @@ if (require("testthat") && require("insight") && require("gamlss")) {
   })
 
   test_that("find_algorithm", {
-    expect_equal(find_algorithm(m1), "mixed")
+    expect_equal(find_algorithm(m1), list(algorithm = "mixed"))
   })
 }

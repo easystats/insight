@@ -4,7 +4,7 @@
 \alias{.download_data_github}
 \title{Download rda files from github}
 \usage{
-.download_data_github(name, url = NULL)
+.download_data_github(name, url)
 }
 \description{
 Download rda files from github
