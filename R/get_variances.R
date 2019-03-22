@@ -140,7 +140,6 @@ get_variance.stanreg <- function(x, component = c("all", "fixed", "random", "res
 }
 
 
-#' @rdname get_variance
 #' @export
 get_variance.MixMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   component <- match.arg(component)
