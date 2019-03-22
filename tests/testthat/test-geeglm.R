@@ -1,11 +1,12 @@
-if (require("testthat") && require("insight") && require("gee")) {
+if (require("testthat") && require("insight") && require("geepack")) {
   context("insight, model_info")
 
   data(warpbreaks)
-  m1 <- gee(breaks ~ tension, id = wool, data = warpbreaks)
+  m1 <- geeglm(breaks ~ tension, id = wool, data = warpbreaks, family = poisson, corstr = "ar1")
 
   test_that("model_info", {
-    expect_true(model_info(m1)$is_linear)
+    expect_true(model_info(m1)$is_count)
+    expect_false(model_info(m1)$is_linear)
   })
 
   test_that("find_predictors", {
@@ -36,7 +37,7 @@ if (require("testthat") && require("insight") && require("gee")) {
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {

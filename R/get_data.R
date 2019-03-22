@@ -305,7 +305,7 @@ get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
     dat <- .get_data_from_env(x)
     switch(
       effects,
-      all = dat,
+      all = dat[, find_terms(x, flatten = TRUE), drop = FALSE],
       fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
       random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
     )

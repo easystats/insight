@@ -2,7 +2,7 @@
 
 ## New suppored model classes
 
-* `iv_robust` (*estimatr*), `gamlss` (*gamlss*), `mixed` (*afex*)
+* `iv_robust` (*estimatr*), `gamlss` (*gamlss*) and `mixed` (*afex*).
 
 ## New functions
 

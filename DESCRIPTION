@@ -31,6 +31,7 @@ Suggests:
   gamm4,
   gamlss,
   gee,
+  geepack,
   GLMMadaptive,
   glmmTMB,
   gmnl,
