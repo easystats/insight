@@ -54,6 +54,23 @@ find_formula.data.frame <- function(x, ...) {
 
 
 #' @export
+find_formula.gamlss <- function(x, ...) {
+  tryCatch({
+    list(
+      conditional = x$mu.formula,
+      sigma = x$sigma.formula,
+      nu = x$nu.formula,
+      tau = x$tau.formula
+    )
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+}
+
+
+#' @export
 find_formula.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
@@ -88,6 +105,25 @@ find_formula.ivreg <- function(x, ...) {
     f <- deparse(stats::formula(x), width.cutoff = 500)
     cond <- trim(substr(f, start = 0, stop = regexpr(pattern = "\\|", f) - 1))
     instr <- trim(substr(f, regexpr(pattern = "\\|", f) + 1, stop = 10000L))
+
+    list(
+      conditional = stats::as.formula(cond),
+      instruments = stats::as.formula(paste0("~", instr))
+    )
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+}
+
+
+#' @export
+find_formula.iv_robust <- function(x, ...) {
+  tryCatch({
+    f <- deparse(stats::formula(x), width.cutoff = 500)
+    cond <- trim(gsub("(.*)\\+(\\s)*\\((.*)\\)", "\\1", f))
+    instr <- trim(gsub("(.*)\\((.*)\\)", "\\2", f))
 
     list(
       conditional = stats::as.formula(cond),
@@ -249,6 +285,28 @@ find_formula.glmmTMB <- function(x, ...) {
 
 #' @export
 find_formula.merMod <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  f.cond <- stats::formula(x)
+  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+    f <- deparse(.x, width.cutoff = 500)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1) {
+    f.random <- f.random[[1]]
+  }
+
+  f.cond <- stats::as.formula(get_fixed_effects(f.cond))
+
+  compact_list(list(conditional = f.cond, random = f.random))
+}
+
+
+#' @export
+find_formula.mixed <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }

@@ -35,6 +35,62 @@ get_parameters.default <- function(x, ...) {
     return(get_parameters.gam(x, ...))
   }
 
+  ## TODO We may think about returning standard errors as well in a
+  ## later update... However, we need to check models classes. "rms::lrm()"
+  ## e.g. is of class "lrm", "glm" and "lm", and would go into this default
+  ## method, which works with "stats::coef()", but not with "summary()$coefficients"
+
+  # cf <- summary(x)$coefficients
+  # data.frame(
+  #   parameter = row.names(cf),
+  #   estimate = unname(cf[, 1]),
+  #   # std.error = unname(cf[, 2]),
+  #   stringsAsFactors = FALSE,
+  #   row.names = NULL
+  # )
+
+  tryCatch({
+    cf <- stats::coef(x)
+    data.frame(
+      parameter = names(cf),
+      estimate = unname(cf),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+}
+
+
+#' @export
+get_parameters.gamlss <- function(x, ...) {
+  pars <- list(
+    conditional = stats::coef(x),
+    sigma = stats::coef(x, what = "sigma"),
+    nu = stats::coef(x, what = "nu"),
+    tau = stats::coef(x, what = "tau")
+  )
+
+  data.frame(
+    parameter = c(names(pars$conditional), names(pars$sigma), names(pars$nu), names(pars$tau)),
+    estimate = c(unname(pars$conditional), unname(pars$sigma), unname(pars$nu), unname(pars$tau)),
+    component = c(
+      rep("conditional", length(pars$conditional)),
+      rep("sigma", length(pars$sigma)),
+      rep("nu", length(pars$nu)),
+      rep("tau", length(pars$tau))
+    ),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+#' @export
+get_parameters.lrm <- function(x, ...) {
   tryCatch({
     cf <- stats::coef(x)
     data.frame(
@@ -57,32 +113,6 @@ get_parameters.aov <- function(x, ...) {
   data.frame(
     parameter = names(cf),
     estimate = unname(cf),
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
-}
-
-
-#' @export
-get_parameters.lm <- function(x, ...) {
-  cf <- summary(x)$coefficients
-  data.frame(
-    parameter = row.names(cf),
-    estimate = unname(cf[, 1]),
-    # std.error = unname(cf[, 2]),
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
-}
-
-
-#' @export
-get_parameters.glm <- function(x, ...) {
-  cf <- summary(x)$coefficients
-  data.frame(
-    parameter = row.names(cf),
-    estimate = unname(cf[, 1]),
-    # std.error = unname(cf[, 2]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -260,6 +290,34 @@ get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
   l <- compact_list(list(
     conditional = lme4::fixef(x),
     random = lme4::ranef(x)
+  ))
+
+  fixed <- data.frame(
+    parameter = names(l$conditional),
+    estimate = unname(l$conditional),
+    stringsAsFactors = FALSE
+  )
+
+  if (effects == "fixed") {
+    fixed
+  } else {
+    l$random
+  }
+}
+
+
+#' @rdname get_parameters
+#' @export
+get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  effects <- match.arg(effects)
+
+  l <- compact_list(list(
+    conditional = lme4::fixef(x$full_model),
+    random = lme4::ranef(x$full_model)
   ))
 
   fixed <- data.frame(

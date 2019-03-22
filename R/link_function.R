@@ -60,6 +60,13 @@ link_function.multinom <- function(x, ...) {
 
 
 #' @export
+link_function.gamlss <- function(x, ...) {
+  faminfo <- get(x$family[1], asNamespace("gamlss"))()
+  faminfo$mu.linkfun
+}
+
+
+#' @export
 link_function.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
@@ -117,6 +124,18 @@ link_function.gmnl <- function(x, ...) {
 
 
 #' @export
+link_function.logistf <- function(x, ...) {
+  stats::make.link("logit")$linkfun
+}
+
+
+#' @export
+link_function.lrm <- function(x, ...) {
+  stats::make.link("logit")$linkfun
+}
+
+
+#' @export
 link_function.mlogit <- function(x, ...) {
   stats::make.link("logit")$linkfun
 }
@@ -147,6 +166,12 @@ link_function.betareg <- function(x, ...) {
 
 
 #' @export
+link_function.mixed <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
 link_function.truncreg <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
@@ -160,6 +185,24 @@ link_function.gls <- function(x, ...) {
 
 #' @export
 link_function.lme <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
+link_function.lmRob <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
+link_function.lm_robust <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
+link_function.iv_robust <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
 

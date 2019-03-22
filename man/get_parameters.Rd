@@ -10,6 +10,7 @@
 \alias{get_parameters.hurdle}
 \alias{get_parameters.coxme}
 \alias{get_parameters.merMod}
+\alias{get_parameters.mixed}
 \alias{get_parameters.lme}
 \alias{get_parameters.MixMod}
 \alias{get_parameters.glmmTMB}
@@ -41,6 +42,8 @@ get_parameters(x, ...)
 \method{get_parameters}{coxme}(x, effects = c("fixed", "random"), ...)
 
 \method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
+
+\method{get_parameters}{mixed}(x, effects = c("fixed", "random"), ...)
 
 \method{get_parameters}{lme}(x, effects = c("fixed", "random"), ...)
 

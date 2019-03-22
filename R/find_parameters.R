@@ -62,6 +62,18 @@ find_parameters.data.frame <- function(x, ...) {
 
 
 #' @export
+find_parameters.gamlss <- function(x, ...) {
+  pars <- list(
+    conditional = names(stats::coef(x)),
+    sigma = names(stats::coef(x, what = "sigma")),
+    nu = names(stats::coef(x, what = "nu")),
+    tau = names(stats::coef(x, what = "tau"))
+  )
+  compact_list(pars)
+}
+
+
+#' @export
 find_parameters.gam <- function(x, ...) {
   pars <- list(conditional = names(stats::coef(x)))
   st <- summary(x)$s.table
@@ -92,6 +104,12 @@ find_parameters.vgam <- function(x, ...) {
     conditional = pars[.grep_non_smoothers(pars)],
     smooth_terms = pars[.grep_smoothers(pars)]
   ))
+}
+
+
+#' @export
+find_parameters.lrm <- function(x, ...) {
+  list(conditional = names(stats::coef(x)))
 }
 
 
@@ -137,6 +155,19 @@ find_parameters.merMod <- function(x, ...) {
   compact_list(list(
     conditional = names(lme4::fixef(x)),
     random = lapply(lme4::ranef(x), colnames)
+  ))
+}
+
+
+#' @export
+find_parameters.mixed <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  compact_list(list(
+    conditional = names(lme4::fixef(x$full_model)),
+    random = lapply(lme4::ranef(x$full_model), colnames)
   ))
 }
 

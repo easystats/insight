@@ -7,7 +7,7 @@
 #'   for \code{get_variance(x, component = "residual")} etc.
 #'
 #' @param x A mixed effects model of class \code{merMod}, \code{glmmTMB},
-#'   \code{MixMod}, \code{lme}, or \code{stanreg}.
+#'   \code{MixMod}, \code{lme}, \code{mixed}, or \code{stanreg}.
 #' @param component Character value, indicating the variance component that should
 #'   be returned. By default, all variance components are returned. The
 #'   distribution-specific (\code{"distribution"}) and residual (\code{"residual"})
@@ -23,9 +23,9 @@
 #'      \item \code{var.residual}, residual variance (sum of dispersion and distribution)
 #'      \item \code{var.distribution}, distribution-specific variance
 #'      \item \code{var.dispersion}, variance due to additive dispersion
-#'      \item \code{var.intercept}, the random-intercept-variance, or between-subject-variance (tau 00)
-#'      \item \code{var.slope}, the random-slope-variance (tau 11)
-#'      \item \code{cor.slope_intercept}, the random-slope-intercept-correlation (rho 01)
+#'      \item \code{var.intercept}, the random-intercept-variance, or between-subject-variance (\ifelse{html}{\out{&tau;<sub>00</sub>}}{\eqn{\tau_{00}}})
+#'      \item \code{var.slope}, the random-slope-variance (\ifelse{html}{\out{&tau;<sub>11</sub>}}{\eqn{\tau_{11}}})
+#'      \item \code{cor.slope_intercept}, the random-slope-intercept-correlation (\ifelse{html}{\out{&rho;<sub>01</sub>}}{\eqn{\rho_{01}}})
 #'    }
 #'
 #' @details This function returns different variance components from mixed models,
@@ -34,8 +34,8 @@
 #'   \describe{
 #'     \item{\strong{Fixed effects variance}}{
 #'      The fixed effects variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>f</sub>}}{\eqn{\sigma^2_f}},
-#'      is the variance of the matrix-multiplication \code{B*X} (coefficients by
-#'      model matrix).
+#'      is the variance of the matrix-multiplication \ifelse{html}{\out{&beta;&lowast;X}}{\eqn{\beta*X}}
+#'      (parameter vector by model matrix).
 #'     }
 #'     \item{\strong{Random effects variance}}{
 #'      The random effect variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>i</sub>}}{\eqn{\sigma^2_i}},
@@ -46,7 +46,7 @@
 #'      Details can be found in \cite{Johnson 2014}, in particular equation 10.
 #'     }
 #'     \item{\strong{Distribution-specific variance}}{
-#'      The Distribution-specific variance,
+#'      The distribution-specific variance,
 #'      \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub>}}{\eqn{\sigma^2_d}},
 #'      depends on the model family. For Gaussian models, it is
 #'      \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}. For models
@@ -56,11 +56,11 @@
 #'      (see \cite{Nakagawa et al. 2017}).
 #'     }
 #'     \item{\strong{Variance for the additive overdispersion term}}{
-#'      \ifelse{html}{\out{&sigma;<sup>2</sup><sub><em>e</em></sub>}}{\eqn{\sigma^2_e}}
-#'      is the variance for the additive overdispersion term, which represents
-#'      \dQuote{the excess variation relative to what is expected from a certain
-#'      distribution} (Nakagawa et al. 2017). In (most? many?) cases, this will
-#'      be \code{0}.
+#'      The variance for the additive overdispersion term,
+#'      \ifelse{html}{\out{&sigma;<sup>2</sup><sub><em>e</em></sub>}}{\eqn{\sigma^2_e}},
+#'      represents \dQuote{the excess variation relative to what is expected
+#'      from a certain distribution} (Nakagawa et al. 2017). In (most? many?)
+#'      cases, this will be \code{0}.
 #'     }
 #'     \item{\strong{Residual variance}}{
 #'       The residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}},
@@ -152,6 +152,13 @@ get_variance.MixMod <- function(x, component = c("all", "fixed", "random", "resi
 get_variance.lme <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   component <- match.arg(component)
   .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances, verbose = verbose")
+}
+
+
+#' @export
+get_variance.mixed <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
+  component <- match.arg(component)
+  .compute_variances(x$full_model, component = component, name_fun = "get_variance", name_full = "random effect variances, verbose = verbose")
 }
 
 

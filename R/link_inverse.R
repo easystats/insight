@@ -60,6 +60,13 @@ link_inverse.glm <- function(x, ...) {
 
 
 #' @export
+link_inverse.gamlss <- function(x, ...) {
+  faminfo <- get(x$family[1], asNamespace("gamlss"))()
+  faminfo$mu.linkinv
+}
+
+
+#' @export
 link_inverse.gam <- function(x, ...) {
   tryCatch({
     stats::family(x)$linkinv
@@ -85,6 +92,12 @@ link_inverse.aovlist <- function(x, ...) {
 
 #' @export
 link_inverse.ivreg <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
+link_inverse.iv_robust <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 
@@ -145,6 +158,12 @@ link_inverse.vglm <- function(x, ...) {
 
 #' @export
 link_inverse.lme <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
+link_inverse.mixed <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 

@@ -71,7 +71,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 
 
 return_vars <- function(f) {
-  l <- compact_list(lapply(names(f), function(i) {
+  l <- lapply(names(f), function(i) {
     if (i %in% c("random", "zero_inflated_random")) {
       unique(paste(unlist(f[[i]])))
     } else if (is.numeric(f[[i]])) {
@@ -85,11 +85,14 @@ return_vars <- function(f) {
         unique(all.vars(f[[i]]))
       }
     }
-  }))
+  })
+
+  empty_elements <- sapply(l, is_empty_object)
+  l <- compact_list(l)
 
   # remove constants
   l <- lapply(l, setdiff, "pi")
-  names(l) <- names(f)
+  names(l) <- names(f)[!empty_elements]
 
   l
 }

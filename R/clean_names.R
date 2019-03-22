@@ -48,7 +48,7 @@ get_vn_helper <- function(x) {
   pattern <- c(
     "as.factor", "factor", "offset", "log-log", "log", "lag", "diff",
     "pspline", "poly", "strata", "scale", "interaction", "sqrt",
-    "lo", "bs", "ns", "t2", "te", "ti", "tt", "mi", "mo", "gp", "s", "I"
+    "pb", "lo", "bs", "ns", "t2", "te", "ti", "tt", "mi", "mo", "gp", "s", "I"
   )
 
   # do we have a "log()" pattern here? if yes, get capture region

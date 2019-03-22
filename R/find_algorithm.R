@@ -59,6 +59,24 @@ find_algorithm.Gam <- function(x, ...) {
 
 
 #' @export
+find_algorithm.lmRob <- function(x, ...) {
+  list("algorithm" = x$robust.control$final.alg)
+}
+
+
+#' @export
+find_algorithm.logistf <- function(x, ...) {
+  list("algorithm" = x$method)
+}
+
+
+#' @export
+find_algorithm.gamlss <- function(x, ...) {
+  list("algorithm" = as.character(x$method)[1])
+}
+
+
+#' @export
 find_algorithm.gam <- function(x, ...) {
   list(
     "algorithm" = x$method,
@@ -81,6 +99,18 @@ find_algorithm.glm <- function(x, ...) {
 
 #' @export
 find_algorithm.merMod <- function(x, ...) {
+  algorithm <- ifelse(as.logical(x@devcomp$dims[["REML"]]), "REML", "ML")
+
+  list(
+    "algorithm" = algorithm,
+    "optimizer" = as.character(x@optinfo$optimizer)
+  )
+}
+
+
+#' @export
+find_algorithm.mixed <- function(x, ...) {
+  x <- x$full_model
   algorithm <- ifelse(as.logical(x@devcomp$dims[["REML"]]), "REML", "ML")
 
   list(

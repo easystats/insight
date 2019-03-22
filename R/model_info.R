@@ -69,16 +69,15 @@ model_info.default <- function(x, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
-  faminfo <- tryCatch({
-    if (inherits(x, c("Zelig-relogit"))) {
-      stats::binomial(link = "logit")
-    } else {
-      stats::family(x)
-    }
-  },
-  error = function(x) {
-    NULL
-  }
+  faminfo <- tryCatch(
+    {
+      if (inherits(x, c("Zelig-relogit"))) {
+        stats::binomial(link = "logit")
+      } else {
+        stats::family(x)
+      }
+    },
+    error = function(x) { NULL }
   )
 
   if (!is.null(faminfo)) {
@@ -91,9 +90,6 @@ model_info.default <- function(x, ...) {
     )
   } else {
     warning("Could not access model information.", call. = FALSE)
-    if (inherits(faminfo, c("error", "simpleError"))) {
-      cat(sprintf("* Reason: %s\n", deparse(faminfo[[1]], width.cutoff = 500)))
-    }
   }
 }
 
@@ -140,6 +136,12 @@ model_info.htest <- function(x, ...) {
 
 #' @export
 model_info.lme <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
+model_info.mixed <- function(x, ...) {
   make_family(x, ...)
 }
 
@@ -309,6 +311,12 @@ model_info.lm_robust <- function(x, ...) {
 
 
 #' @export
+model_info.iv_robust <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
 model_info.felm <- function(x, ...) {
   make_family(x, ...)
 }
@@ -402,6 +410,19 @@ model_info.multinom <- function(x, ...) {
     fitfam = faminfo$family,
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @export
+model_info.gamlss <- function(x, ...) {
+  faminfo <- get(x$family[1], asNamespace("gamlss"))()
+  make_family(
+    x = x,
+    fitfam = faminfo$family[2],
+    logit.link = faminfo$mu.link == "logit",
+    link.fun = faminfo$mu.link,
     ...
   )
 }
@@ -562,7 +583,8 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
 
   beta_fam <- inherits(x, "betareg") | fitfam %in% c("beta")
 
-  linear_model <- (!binom_fam & !poisson_fam & !neg_bin_fam & !logit.link) || fitfam == "Student's-t"
+  linear_model <- (!binom_fam & !poisson_fam & !neg_bin_fam & !logit.link) ||
+    fitfam %in% c("Student's-t", "t Family") || grepl("(\\st)$", fitfam)
 
   zero.inf <- zero.inf | fitfam == "ziplss" |
     grepl("\\Qzero_inflated\\E", fitfam, ignore.case = TRUE) |

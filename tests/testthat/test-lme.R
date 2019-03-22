@@ -113,17 +113,15 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
 
   test_that("get_variance", {
 
-    skip_on_travis()
-
     expect_equal(get_variance(m1), list(
-      var.fixed = 908.9534,
-      var.random = 1698.066,
-      var.residual = 654.9424,
-      var.distribution = 654.9424,
+      var.fixed = 908.95336262308865116211,
+      var.random = 1698.06593646939654718153,
+      var.residual = 654.94240352794997761521,
+      var.distribution = 654.94240352794997761521,
       var.dispersion = 0,
-      var.intercept = c(Subject = 612.0795),
-      var.slope = c(Subject.Days = 35.0713),
-      cor.slope_intercept = c(Subject = 0.066)
+      var.intercept = c(Subject = 612.07951112963326067984),
+      var.slope = c(Subject.Days = 35.07130179308116169068),
+      cor.slope_intercept = c(Subject = 0.06600000000000000311)
     ),
     tolerance = 1e-4)
   })

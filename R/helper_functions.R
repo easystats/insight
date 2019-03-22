@@ -129,7 +129,7 @@ get_group_factor <- function(x, f) {
 # times accross this package
 #' @keywords internal
 .get_elements <- function(effects, component) {
-  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "simplex", "smooth_terms")
+  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "simplex", "smooth_terms", "sigma", "nu", "tau")
 
   elements <- switch(
     effects,

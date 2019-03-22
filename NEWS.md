@@ -1,5 +1,9 @@
 # insight 0.2.0
 
+## New suppored model classes
+
+* `iv_robust` (*estimatr*), `gamlss` (*gamlss*), `mixed` (*afex*)
+
 ## New functions
 
 * `get_variance()`, to calculate the variance components from mixed models of class `merMod`, `glmmTMB`, `MixMod`, `lme` and `stanreg` (#52). Furthermore, convenient shortcuts to return the related components directly, like `get_variance_random()` or `get_variance_residual()`.

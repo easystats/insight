@@ -103,6 +103,31 @@ get_data.ivreg <- function(x, ...) {
 
 
 #' @export
+get_data.iv_robust <- function(x, ...) {
+  mf <- stats::model.frame(x)
+  cn <- clean_names(colnames(mf))
+  ft <- find_terms(x, flatten = TRUE)
+
+  remain <- setdiff(ft, cn)
+
+  if (is_empty_object(remain)) {
+    final_mf <- mf
+  } else {
+    final_mf <- tryCatch({
+      dat <- .get_data_from_env(x)
+      cbind(mf, dat[, remain, drop = FALSE])
+    },
+    error = function(x) {
+      NULL
+    }
+    )
+  }
+
+  prepare_get_data(x, final_mf)
+}
+
+
+#' @export
 get_data.clm2 <- function(x, ...) {
   mf <- tryCatch({
     x$location
@@ -174,6 +199,28 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
       fixed = stats::model.frame(x, fixed.only = TRUE),
       all = stats::model.frame(x, fixed.only = FALSE),
       random = stats::model.frame(x, fixed.only = FALSE)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
+    )
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  prepare_get_data(x, mf, effects)
+}
+
+
+#' @rdname get_data
+#' @export
+get_data.mixed <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+
+  mf <- tryCatch({
+    switch(
+      effects,
+      fixed = x$data[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
+      all = x$data[, find_terms(x, flatten = TRUE), drop = FALSE],
+      random = x$data[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
     )
   },
   error = function(x) {

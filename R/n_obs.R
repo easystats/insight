@@ -48,6 +48,18 @@ n_obs.gamm <- function(x, ...) {
 
 
 #' @export
+n_obs.lmRob <- function(x, ...) {
+  length(x$fitted.values)
+}
+
+
+#' @export
+n_obs.glmRob <- function(x, ...) {
+  length(x$fitted.values)
+}
+
+
+#' @export
 n_obs.gmnl <- function(x, ...) {
   x$logLik$nobs
 }

@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("lme4")) {
+if (require("testthat") && require("insight") && require("lme4") && require("afex")) {
   context("insight, find_predictors")
 
   data(sleepstudy)
@@ -11,12 +11,12 @@ if (require("testthat") && require("insight") && require("lme4")) {
     sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
   }
 
-  m1 <- lme4::lmer(
+  m1 <- mixed(
     Reaction ~ Days + (1 + Days | Subject),
     data = sleepstudy
   )
 
-  m2 <- lme4::lmer(
+  m2 <- mixed(
     Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
     data = sleepstudy
   )
@@ -69,8 +69,8 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_equal(colnames(get_data(m1)), c("Reaction", "Days", "Subject"))
     expect_equal(colnames(get_data(m1, effects = "all")), c("Reaction", "Days", "Subject"))
     expect_equal(colnames(get_data(m1, effects = "random")), "Subject")
-    expect_equal(colnames(get_data(m2)), c("Reaction", "Days", "mygrp", "mysubgrp", "Subject"))
-    expect_equal(colnames(get_data(m2, effects = "all")), c("Reaction", "Days", "mygrp", "mysubgrp", "Subject"))
+    expect_equal(colnames(get_data(m2)), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
+    expect_equal(colnames(get_data(m2, effects = "all")), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
     expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
   })
 
