@@ -238,24 +238,24 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_false(is_multivariate(m4))
   })
 
-  test_that("get_variance", {
-
-    expect_warning(expect_equal(get_variance(m5), list(
-      var.fixed = 0.32588694431268194762,
-      var.random = 0.07842738279575413307,
-      var.residual = 0.41218000030914692111,
-      var.distribution = 0.41218000030914692111,
-      var.dispersion = 0,
-      var.intercept = c(site = 0.07842738279575474369)
-    ),
-    tolerance = 1e-3))
-
-    expect_warning(expect_equal(get_variance_fixed(m1), c(var.fixed = 1.09712435712435052437), tolerance = 1e-3))
-    expect_warning(expect_equal(get_variance_random(m1), c(var.random = 0.86712737445492238386), tolerance = 1e-3))
-    expect_warning(expect_equal(get_variance_residual(m1), c(var.residual = 0.02634500773355940087 ), tolerance = 1e-3))
-    expect_warning(expect_equal(get_variance_distribution(m1), c(var.distribution = 0.02634500773355940087 ), tolerance = 1e-3))
-    expect_warning(expect_equal(get_variance_dispersion(m1), c(var.dispersion = 0), tolerance = 1e-3))
-  })
+  # test_that("get_variance", {
+  #
+  #   expect_warning(expect_equal(get_variance(m5), list(
+  #     var.fixed = 0.32588694431268194762,
+  #     var.random = 0.07842738279575413307,
+  #     var.residual = 0.41218000030914692111,
+  #     var.distribution = 0.41218000030914692111,
+  #     var.dispersion = 0,
+  #     var.intercept = c(site = 0.07842738279575474369)
+  #   ),
+  #   tolerance = 1e-3))
+  #
+  #   expect_warning(expect_equal(get_variance_fixed(m1), c(var.fixed = 1.09712435712435052437), tolerance = 1e-3))
+  #   expect_warning(expect_equal(get_variance_random(m1), c(var.random = 0.86712737445492238386), tolerance = 1e-3))
+  #   expect_warning(expect_equal(get_variance_residual(m1), c(var.residual = 0.02634500773355940087 ), tolerance = 1e-3))
+  #   expect_warning(expect_equal(get_variance_distribution(m1), c(var.distribution = 0.02634500773355940087 ), tolerance = 1e-3))
+  #   expect_warning(expect_equal(get_variance_dispersion(m1), c(var.dispersion = 0), tolerance = 1e-3))
+  # })
 
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(

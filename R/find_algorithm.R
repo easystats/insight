@@ -65,6 +65,18 @@ find_algorithm.lmRob <- function(x, ...) {
 
 
 #' @export
+find_algorithm.lmrob <- function(x, ...) {
+  list("algorithm" = x$control$method)
+}
+
+
+#' @export
+find_algorithm.glmrob <- function(x, ...) {
+  list("algorithm" = x$method)
+}
+
+
+#' @export
 find_algorithm.logistf <- function(x, ...) {
   list("algorithm" = x$method)
 }

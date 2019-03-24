@@ -205,6 +205,12 @@ link_inverse.lmRob <- function(x, ...) {
 
 
 #' @export
+link_inverse.lmrob <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
 link_inverse.betareg <- function(x, ...) {
   x$link$mean$linkinv
 }

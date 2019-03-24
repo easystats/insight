@@ -171,6 +171,12 @@ model_info.lmRob <- function(x, ...) {
 
 
 #' @export
+model_info.lmrob <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
 model_info.gam <- function(x, ...) {
   if (!inherits(x, c("glm", "lm"))) {
     class(x) <- c(class(x), "glm", "lm")

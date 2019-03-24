@@ -196,6 +196,12 @@ link_function.lmRob <- function(x, ...) {
 
 
 #' @export
+link_function.lmrob <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
 link_function.lm_robust <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
