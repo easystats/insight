@@ -50,6 +50,8 @@ Suggests:
   pscl,
   rms,
   robust,
+  robustbase,
+  robustlmm,
   rstanarm,
   rstudioapi,
   splines,
