@@ -357,20 +357,6 @@ get_data.gls <- function(x, ...) {
 
 
 #' @export
-get_data.nls <- function(x, ...) {
-  mf <- tryCatch({
-    .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
-  },
-  error = function(x) {
-    NULL
-  }
-  )
-
-  prepare_get_data(x, mf)
-}
-
-
-#' @export
 get_data.gmnl <- function(x, ...) {
   mf <- tryCatch({
     x$mf
