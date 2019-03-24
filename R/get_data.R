@@ -345,7 +345,21 @@ get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 get_data.gls <- function(x, ...) {
   mf <- tryCatch({
-    .get_data_from_env(x)
+    .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  prepare_get_data(x, mf)
+}
+
+
+#' @export
+get_data.nls <- function(x, ...) {
+  mf <- tryCatch({
+    .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
   },
   error = function(x) {
     NULL

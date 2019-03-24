@@ -36,7 +36,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_predictors(m)
 #' @export
-find_predictors <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"), flatten = FALSE) {
+find_predictors <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation"), flatten = FALSE) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 

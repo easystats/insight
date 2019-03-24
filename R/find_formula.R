@@ -46,6 +46,25 @@ find_formula.default <- function(x, ...) {
   )
 }
 
+#' @export
+find_formula.gls <- function(x, ...) {
+  ## TODO this is an intermediate fix to return the correlation variables from gls-objects
+  f_corr <- parse(text = deparse(x$call$correlation, width.cutoff = 500))[[1]]$form
+
+  l <- tryCatch({
+    list(
+      conditional = stats::formula(x),
+      correlation = stats::as.formula(f_corr)
+    )
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  compact_list(l)
+}
+
 
 #' @export
 find_formula.data.frame <- function(x, ...) {

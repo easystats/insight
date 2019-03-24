@@ -11,8 +11,8 @@ if (require("testthat") && require("insight") && require("nlme")) {
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(conditional = "Time"))
-    expect_identical(find_predictors(m1, flatten = TRUE), "Time")
+    expect_identical(find_predictors(m1), list(conditional = "Time", correlation = "Mare"))
+    expect_identical(find_predictors(m1, flatten = TRUE), c("Time", "Mare"))
     expect_null(find_predictors(m1, effects = "random"))
   })
 
@@ -26,20 +26,27 @@ if (require("testthat") && require("insight") && require("nlme")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 308)
-    expect_equal(colnames(get_data(m1)), c("Mare", "Time", "follicles"))
+    expect_equal(colnames(get_data(m1)), c("follicles", "Time", "Mare"))
   })
 
   test_that("find_formula", {
-    expect_length(find_formula(m1), 1)
+    expect_length(find_formula(m1), 2)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time)"))
+      list(
+        conditional = as.formula("follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time)"),
+        correlation = as.formula("~1 | Mare")
+      )
     )
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "follicles", conditional = "Time"))
-    expect_equal(find_terms(m1, flatten = TRUE), c("follicles", "Time"))
+    expect_equal(find_terms(m1), list(
+      response = "follicles",
+      conditional = "Time",
+      correlation = "Mare"
+    ))
+    expect_equal(find_terms(m1, flatten = TRUE), c("follicles", "Time", "Mare"))
   })
 
   test_that("n_obs", {

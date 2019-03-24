@@ -17,6 +17,7 @@
 * `find_parameters()` and `get_parameters()` get a `parameters`-argument for `brmsfit` and `stanreg` models, to allow selection of specific parameters that should be returned (#55).
 * `find_parameters()` and `get_parameters()` now also return simplex parameters of monotic effects (**brms** only) and smooth terms (e.g. for gam-models).
 * `find_terms()` and `find_predictors()` no longer return constants, in particular `pi` (#26).
+* For `gls`-objects, functions like `find_formula()` etc. also return the correlation component (#19).
 
 ## Bug fixes
 
