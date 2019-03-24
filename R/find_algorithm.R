@@ -121,6 +121,17 @@ find_algorithm.merMod <- function(x, ...) {
 
 
 #' @export
+find_algorithm.rlmerMod <- function(x, ...) {
+  algorithm <- ifelse(as.logical(x@devcomp$dims[["REML"]]), "REML", "ML")
+
+  list(
+    "algorithm" = algorithm,
+    "optimizer" = as.character(x@optinfo$optimizer)
+  )
+}
+
+
+#' @export
 find_algorithm.mixed <- function(x, ...) {
   x <- x$full_model
   algorithm <- ifelse(as.logical(x@devcomp$dims[["REML"]]), "REML", "ML")

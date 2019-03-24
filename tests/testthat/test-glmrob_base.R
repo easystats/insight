@@ -91,6 +91,6 @@ if (require("testthat") && require("insight") && require("robustbase")) {
   })
 
   test_that("find_algorithm", {
-    expect_equal(find_algorithm(m1), list(algorithm = "ML"))
+    expect_equal(find_algorithm(m1), list(algorithm = "Mqle"))
   })
 }

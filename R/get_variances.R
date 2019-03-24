@@ -127,6 +127,13 @@ get_variance.merMod <- function(x, component = c("all", "fixed", "random", "resi
 
 
 #' @export
+get_variance.rlmerMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
+  component <- match.arg(component)
+  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
+}
+
+
+#' @export
 get_variance.glmmTMB <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   component <- match.arg(component)
   .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
