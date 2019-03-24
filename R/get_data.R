@@ -522,7 +522,17 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
     } else {
       tryCatch({
         trials.data <- as.data.frame(mf[[1]])
-        colnames(trials.data) <- find_response(x, combine = FALSE)
+        rn_sep <- find_response(x, combine = FALSE)
+        colnames(trials.data) <- rn_sep
+
+        # if columns were bound via substraction, e.g.
+        # "cbind(succes, total - success)", we need to sum up success and
+        # total for the original total-column.
+
+        pattern <- sprintf("%s(\\s*)-(\\s*)%s", rn_sep[2], rn_sep[1])
+        if (grepl(pattern = pattern, x = rn)) {
+          trials.data[[2]] <- trials.data[[1]] + trials.data[[2]]
+        }
       },
       error = function(x) {
         NULL

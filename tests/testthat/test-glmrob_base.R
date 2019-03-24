@@ -35,7 +35,7 @@ if (require("testthat") && require("insight") && require("robustbase")) {
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), carrots[, c("succes", "total")])
+    expect_equal(get_response(m1), carrots[, c("success", "total")])
   })
 
   test_that("get_predictors", {

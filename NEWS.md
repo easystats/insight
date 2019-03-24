@@ -23,6 +23,7 @@
 * `find_parameters()` and `get_parameters()` did not preserve coefficients of monotonic category-specific effects from **brmsfit**-objects.
 * Fixed bug that sometimes returned more elements for `find_predictors()` or `get_parameters()` than requested.
 * Fixed bug in `get_data()` for **MixMod**-objects when response variable was defined via `cbind()`.
+* Fixed bug in `get_response()` for models that used `cbind()` with a substraction (e.g. `cbind(success, total - success)`). In such cases, values for second column (in this example: `total`) were the substracted values `total - success`, not the original values from `total`.
 
 # insight 0.1.2
 
