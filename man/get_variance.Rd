@@ -33,8 +33,7 @@ get_variance_slope(x, ...)
 get_correlation_slope_intercept(x, ...)
 }
 \arguments{
-\item{x}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
-\code{MixMod}, \code{lme}, \code{mixed}, or \code{stanreg}.}
+\item{x}{A mixed effects model.}
 
 \item{component}{Character value, indicating the variance component that should
 be returned. By default, all variance components are returned. The
@@ -126,7 +125,9 @@ This function returns different variance components from mixed models,
   }
 }
 \note{
-Support for objects of class \code{MixMod} (\pkg{GLMMadaptiv}) or
+This function supports models of class \code{merMod}, \code{glmmTMB},
+  \code{MixMod}, \code{lme}, \code{mixed}, \code{rlmerMod} or \code{stanreg}.
+  Support for objects of class \code{MixMod} (\pkg{GLMMadaptiv}) or
   \code{lme} (\pkg{nlme}) is experimental and may not work for every
   model.
 }

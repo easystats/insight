@@ -6,8 +6,7 @@
 #'   \code{get_variance_residual(x)} or \code{get_variance_fixed(x)} are shortcuts
 #'   for \code{get_variance(x, component = "residual")} etc.
 #'
-#' @param x A mixed effects model of class \code{merMod}, \code{glmmTMB},
-#'   \code{MixMod}, \code{lme}, \code{mixed}, or \code{stanreg}.
+#' @param x A mixed effects model.
 #' @param component Character value, indicating the variance component that should
 #'   be returned. By default, all variance components are returned. The
 #'   distribution-specific (\code{"distribution"}) and residual (\code{"residual"})
@@ -87,7 +86,9 @@
 #'     }
 #'   }
 #'
-#' @note Support for objects of class \code{MixMod} (\pkg{GLMMadaptiv}) or
+#' @note This function supports models of class \code{merMod}, \code{glmmTMB},
+#'   \code{MixMod}, \code{lme}, \code{mixed}, \code{rlmerMod} or \code{stanreg}.
+#'   Support for objects of class \code{MixMod} (\pkg{GLMMadaptiv}) or
 #'   \code{lme} (\pkg{nlme}) is experimental and may not work for every
 #'   model.
 #'
