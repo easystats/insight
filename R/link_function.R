@@ -190,6 +190,18 @@ link_function.lme <- function(x, ...) {
 
 
 #' @export
+link_function.rq <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
+link_function.crq <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
 link_function.lmRob <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }

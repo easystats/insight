@@ -163,6 +163,18 @@ link_inverse.lme <- function(x, ...) {
 
 
 #' @export
+link_inverse.rq <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
+link_inverse.crq <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
 link_inverse.mixed <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }

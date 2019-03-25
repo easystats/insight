@@ -141,6 +141,24 @@ model_info.lme <- function(x, ...) {
 
 
 #' @export
+model_info.rq <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
+model_info.crq <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
+model_info.rqss <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
 model_info.mixed <- function(x, ...) {
   make_family(x, ...)
 }

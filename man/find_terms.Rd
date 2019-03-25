@@ -18,7 +18,7 @@ or both be returned? Only applies to mixed models. May be abbreviated.}
 conditional model, the zero-inflated part of the model, the dispersion
 term or the instrumental variables be returned? Applies to models
 with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressioms). May be abbreviated.}
+variable (so called fixed-effects regressions). May be abbreviated.}
 
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list.}

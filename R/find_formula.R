@@ -17,7 +17,12 @@
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
 #'      \item \code{dispersion}, the dispersion formula
 #'      \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
+#'      \item \code{correlation}, for models with correlation-component like \code{gls}, the formula that describes the correlation structure
 #'    }
+#'
+#' @note For models of class \code{lme} or \code{gls} the correlation-component
+#'   is only returned, when it is explicitely defined as named argument
+#'   (\code{form}), e.g. \code{corAR1(form = ~1 | Mare)}
 #'
 #' @examples
 #' data(mtcars)
@@ -448,8 +453,14 @@ find_formula.MCMCglmm <- function(x, ...) {
 find_formula.lme <- function(x, ...) {
   fm <- eval(x$call$fixed)
   fmr <- eval(x$call$random)
+  ## TODO this is an intermediate fix to return the correlation variables from lme-objects
+  fc <- parse(text = deparse(x$call$correlation, width.cutoff = 500))[[1]]$form
 
-  compact_list(list(conditional = fm, random = fmr))
+  compact_list(list(
+    conditional = fm,
+    random = fmr,
+    correlation = stats::as.formula(fc)
+  ))
 }
 
 

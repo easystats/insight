@@ -14,7 +14,7 @@
 #'    conditional model, the zero-inflated part of the model, the dispersion
 #'    term or the instrumental variables be returned? Applies to models
 #'    with zero-inflated and/or dispersion formula, or to models with instrumental
-#'    variable (so called fixed-effects regressioms). May be abbreviated.
+#'    variable (so called fixed-effects regressions). May be abbreviated.
 #' @param flatten Logical, if \code{TRUE}, the values are returned
 #'    as character vector, not as list.
 #'
@@ -29,6 +29,7 @@
 #'      \item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation component of the model
 #'      \item \code{dispersion}, the dispersion terms
 #'      \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
+#'      \item \code{correlation}, for models with correlation-component like \code{gls}, the variables used to describe the correlation structure
 #'    }
 #'
 #' @examples

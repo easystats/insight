@@ -35,11 +35,11 @@ clean_names.default <- function(x) {
 
 #' @export
 clean_names.character <- function(x) {
-  get_vn_helper(x)
+  .remove_pattern_from_names(x)
 }
 
 
-get_vn_helper <- function(x) {
+.remove_pattern_from_names <- function(x, ignore_asis = FALSE) {
   # return if x is empty
   if (is_empty_string(x)) return("")
 
@@ -58,7 +58,7 @@ get_vn_helper <- function(x) {
       if (pattern[j] == "offset") {
         x[i] <- trim(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
       } else if (pattern[j] == "I") {
-        x[i] <- trim(unique(sub("I\\((\\w*).*", "\\1", x[i])))
+        if (!ignore_asis) x[i] <- trim(unique(sub("I\\((\\w*).*", "\\1", x[i])))
       } else if (pattern[j] == "log-log") {
         x[i] <- trim(unique(sub("^log\\(log\\(([^,)]*)).*", "\\1", x[i])))
       } else {

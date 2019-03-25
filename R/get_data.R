@@ -342,6 +342,21 @@ get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
 }
 
 
+#' @rdname get_data
+#' @export
+get_data.rqss <- function(x, effects = c("all", "fixed", "random"), ...) {
+  mf <- tryCatch({
+    .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  prepare_get_data(x, mf)
+}
+
+
 #' @export
 get_data.gls <- function(x, ...) {
   mf <- tryCatch({
@@ -511,25 +526,25 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
   # don't change response value, if it's a matrix
   # bound with cbind()
   rn <- find_response(x, combine = TRUE)
+  rn_not_combined <- find_response(x, combine = FALSE)
 
   trials.data <- NULL
 
   if (mc[1] && rn == colnames(mf)[1]) {
     mc[1] <- FALSE
-    if (inherits(x, c("coxph", "coxme"))) {
+    if (inherits(x, c("coxph", "coxme", "crq"))) {
       mf <- cbind(mf[[1]][, 1], mf[[1]][, 2], mf)
-      colnames(mf)[1:2] <- find_response(x, combine = FALSE)
+      colnames(mf)[1:2] <- rn_not_combined
     } else {
       tryCatch({
         trials.data <- as.data.frame(mf[[1]])
-        rn_sep <- find_response(x, combine = FALSE)
-        colnames(trials.data) <- rn_sep
+        colnames(trials.data) <- rn_not_combined
 
         # if columns were bound via substraction, e.g.
         # "cbind(succes, total - success)", we need to sum up success and
         # total for the original total-column.
 
-        pattern <- sprintf("%s(\\s*)-(\\s*)%s", rn_sep[2], rn_sep[1])
+        pattern <- sprintf("%s(\\s*)-(\\s*)%s", rn_not_combined[2], rn_not_combined[1])
         if (grepl(pattern = pattern, x = rn)) {
           trials.data[[2]] <- trials.data[[1]] + trials.data[[2]]
         }
@@ -627,6 +642,23 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
 
   # clean variable names
   cvn <- clean_names(colnames(mf))
+
+  # keep "as is" variable for response variables in data frame
+  if (colnames(mf)[1] == rn[1] && grepl("^I\\(", rn[1])) {
+    md <- tryCatch({
+      .get_data_from_env(x)[, rn_not_combined, drop = FALSE]
+    },
+    error = function(x) {
+      NULL
+    }
+    )
+
+    if (!is.null(md)) {
+      mf <- cbind(mf, md)
+      cvn <- clean_names(colnames(mf))
+      cvn[1] <- rn[1]
+    }
+  }
 
   # do we have duplicated names?
   dupes <- which(duplicated(cvn))

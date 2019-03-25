@@ -48,6 +48,7 @@ Suggests:
   ordinal,
   plm,
   pscl,
+  quantreg,
   rms,
   robust,
   robustbase,

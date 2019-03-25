@@ -228,6 +228,20 @@ find_parameters.MCMCglmm <- function(x, ...) {
 
 
 #' @export
+find_parameters.crq <- function(x, ...) {
+  sc <- summary(x)
+  list(conditional = rownames(sc$coefficients))
+}
+
+
+#' @export
+find_parameters.rqss <- function(x, ...) {
+  sc <- summary(x)
+  list(conditional = rownames(sc$coef))
+}
+
+
+#' @export
 find_parameters.glmmTMB <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")

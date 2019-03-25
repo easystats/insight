@@ -34,10 +34,6 @@ if (require("testthat") && require("insight") && require("robustbase")) {
     expect_equal(colnames(get_predictors(m1)), c("gear", "wt", "cyl" ))
   })
 
-  test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
-  })
-
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 32)
     expect_equal(colnames(get_data(m1)), c("mpg", "gear", "wt", "cyl" ))

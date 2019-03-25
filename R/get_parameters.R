@@ -157,6 +157,32 @@ get_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_t
 }
 
 
+#' @export
+get_parameters.crq <- function(x, ...) {
+  sc <- summary(x)
+  data.frame(
+    parameter = names(sc$coefficients[ ,1]),
+    estimate = unname(sc$coefficients[ ,1])
+  )
+}
+
+
+#' @export
+get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+  component <- match.arg(component)
+  sc <- summary(x)
+
+  smooth_terms <- sc$qsstab[, 3]
+  names(smooth_terms) <- rownames(sc$qsstab)
+
+  return_smooth_parms(
+    conditional = sc$coef[ ,1],
+    smooth_terms = smooth_terms,
+    component = component
+  )
+}
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
