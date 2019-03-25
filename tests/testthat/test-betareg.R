@@ -82,7 +82,7 @@ if (require("testthat") && require("insight") && require("betareg")) {
 
   test_that("find_variables", {
     expect_equal(
-      find_variables(m1),
+      find_variables(m2),
       list(
         response = "I(food/income)",
         conditional = c("income", "persons")
