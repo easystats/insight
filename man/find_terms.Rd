@@ -40,6 +40,11 @@ A list with (depending on the model) following elements (character
 Returns a list with the names of all model terms, including
   response value and random effects.
 }
+\note{
+The difference to \code{\link{find_variables}} is that \code{find_terms()}
+  returns each term only once, while \code{find_variables()} may return a
+  variable multiple times in case of multiple transformations.
+}
 \examples{
 library(lme4)
 data(cbpp)

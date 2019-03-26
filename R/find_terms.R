@@ -6,6 +6,10 @@
 #'
 #' @inheritParams find_predictors
 #'
+#' @note The difference to \code{\link{find_variables}} is that \code{find_terms()}
+#'   returns each term only once, while \code{find_variables()} may return a
+#'   variable multiple times in case of multiple transformations.
+#'
 #' @return A list with (depending on the model) following elements (character
 #'    vectors):
 #'    \itemize{

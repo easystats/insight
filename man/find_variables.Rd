@@ -30,6 +30,12 @@ Returns a list with the names of all variables, including
   tranformations like \code{log()}, \code{I()}, \code{as.factor()} etc.
   are preserved.
 }
+\note{
+The difference to \code{\link{find_terms}} is that \code{find_variables()}
+  may return a variable multiple times in case of multiple transformations
+  (see examples below), while \code{find_terms()} returns each term only
+  once.
+}
 \examples{
 library(lme4)
 data(sleepstudy)
