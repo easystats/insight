@@ -113,6 +113,11 @@
 }
 
 
+
+#' store essential information on coefficients, model matrix and so on
+#' as list, since we need these information throughout the functions to
+#' calculate the variance components...
+#'
 #' @importFrom stats model.matrix
 #' @keywords internal
 .get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE) {
@@ -194,7 +199,9 @@
 }
 
 
+
 #' helper-function, telling user if model is supported or not
+#'
 #' @keywords internal
 .badlink <- function(link, family, verbose = TRUE) {
   if (verbose) {
@@ -204,7 +211,10 @@
 }
 
 
-#' glmmTMB returns a list of model information, one for conditional and one for zero-inflated part, so here we "unlist" it
+
+#' glmmTMB returns a list of model information, one for conditional
+#' and one for zero-inflated part, so here we "unlist" it
+#'
 #' @keywords internal
 .collapse_cond <- function(x) {
   if (is.list(x) && "cond" %in% names(x)) {
@@ -215,7 +225,9 @@
 }
 
 
+
 #' Get fixed effects variance
+#'
 #' @importFrom stats var
 #' @keywords internal
 .compute_variance_fixed <- function(vals) {
@@ -223,7 +235,9 @@
 }
 
 
+
 #' Compute variance associated with a random-effects term (Johnson 2014)
+#'
 #' @importFrom stats nobs
 #' @keywords internal
 .compute_variance_random <- function(terms, x, vals) {
@@ -252,6 +266,8 @@
 }
 
 
+#' Calculate Distribution-specific variance (Nakagawa et al. 2017)
+#'
 #' @keywords internal
 .compute_variance_distribution <- function(x, var.cor, faminfo, name, verbose = TRUE) {
   if (inherits(x, "lme"))
@@ -260,6 +276,9 @@
     sig <- attr(var.cor, "sc")
 
   if (is.null(sig)) sig <- 1
+
+  # Distribution-specific variance depends on the model-family
+  # and the related link-function
 
   if (faminfo$is_linear) {
     dist.variance <- sig^2
@@ -274,28 +293,14 @@
     } else if (faminfo$is_count) {
       dist.variance <- switch(
         faminfo$link_function,
-        log = .get_variance_dist(
-          x,
-          .null_model(x, verbose = verbose),
-          faminfo,
-          sig,
-          name = name,
-          verbose = verbose
-        ),
+        log = .get_variance_dist(x, .null_model(x, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
         sqrt = 0.25,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family == "beta") {
       dist.variance <- switch(
         faminfo$link_function,
-        logit = .get_variance_dist(
-          x,
-          .null_model(x, verbose = verbose),
-          faminfo,
-          sig,
-          name = name,
-          verbose = verbose
-        ),
+        logit = .get_variance_dist(x, .null_model(x, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     }
@@ -305,7 +310,9 @@
 }
 
 
+
 #' Get dispersion-specific variance
+#'
 #' @keywords internal
 .compute_variance_dispersion <- function(x, vals, faminfo, obs.terms) {
   if (faminfo$is_linear) {
@@ -320,7 +327,9 @@
 }
 
 
+
 #' Get distributional variance for beta-family
+#'
 #' @keywords internal
 .get_variance_beta_family <- function(x, mu, phi) {
   if (inherits(x, "MixMod"))
@@ -330,7 +339,9 @@
 }
 
 
+
 #' Get distributional variance for nbinom-family
+#'
 #' @keywords internal
 .get_variance_nbinom_family <- function(mu, alpha) {
   if (missing(alpha))
@@ -339,6 +350,11 @@
 }
 
 
+
+#' This is the core-function to calculate the distribution-specific variance
+#' Nakagawa et al. 2017 propose three different methods, here we only rely
+#' on the lognormal-approximation.
+#'
 #' @importFrom stats family
 #' @keywords internal
 .get_variance_dist <- function(x, null.fixef, faminfo, sig, name, verbose = TRUE) {
@@ -346,7 +362,7 @@
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
-  # lognormal-approcimation of distributional variance,
+  # lognormal-approximation of distributional variance,
   # see Nakagawa et al. 2017
 
   # in general want log(1+var(x)/mu^2)
@@ -409,6 +425,11 @@
 }
 
 
+
+#' Null model is needed to calculate the mean for the model's response,
+#' which we need to compute the distribution-specific variance
+#' (see .get_variance_dist())
+#'
 #' @importFrom stats as.formula update reformulate
 #' @keywords internal
 .null_model <- function(model, verbose = TRUE) {
@@ -432,6 +453,8 @@
 }
 
 
+#' return names of random slopes
+#'
 #' @keywords internal
 .random_slopes <- function(random.effects = NULL, model = NULL) {
   if (inherits(model, "MixMod")) {
