@@ -30,6 +30,7 @@ Retrieve information from model objects.
      \item \code{is_beta}: family is beta
      \item \code{is_logit}: model has logit link
      \item \code{is_linear}: family is gaussian
+     \item \code{is_tweedie}: family is tweedie
      \item \code{is_ordinal}: family is ordinal or cumulative link
      \item \code{is_categorical}: family is categorical link
      \item \code{is_zeroinf}: model has zero-inflation component

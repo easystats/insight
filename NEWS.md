@@ -22,6 +22,7 @@
 * `find_parameters()` and `get_parameters()` now also return simplex parameters of monotic effects (**brms** only) and smooth terms (e.g. for gam-models).
 * `find_terms()` and `find_predictors()` no longer return constants, in particular `pi` (#26).
 * For `gls` and `lme` objects, functions like `find_formula()` etc. also return the correlation component (#19).
+* `model_info` now returns `$is_tweedie` for models from tweedie-families.
 
 ## Bug fixes
 
