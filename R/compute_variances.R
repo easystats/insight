@@ -389,7 +389,6 @@
       if (inherits(x, "merMod")) {
         mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
       } else if (inherits(x, "MixMod")) {
-
         stats::family(x)$variance(mu)
       } else {
         mu * (1 + mu / x$theta)
