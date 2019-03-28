@@ -198,15 +198,15 @@ if (require("testthat") && require("insight") && require("blme")) {
     expect_equal(get_correlation_slope_intercept(m1), c(cor.slope_intercept.Subject = 0.06561803), toleance = 1e-4)
 
     expect_equal(get_variance(m2), list(
-      var.fixed = 899.71188516552831515583,
-      var.random = 1412.32769480994716104760,
-      var.residual = 928.81331970697453925823,
+      var.fixed = 916.31835151897371360974,
+      var.random = 1761.89976845294540908071,
+      var.residual = 796.47876823232149945397,
       var.distribution = 928.81331970697453925823,
       var.dispersion = 0,
       var.intercept = c(
-        `mysubgrp:mygrp` = 12.61789198780912713005,
-        Subject = 1376.88290392979729404033,
-        mygrp = 22.82689889233859048545
+        `mysubgrp:mygrp` = 144.07310251292250313782,
+        Subject = 1541.63370460306691711594,
+        mygrp = 76.19296133695654305029
       )
     ),
     tolerance = 1e-4)
