@@ -199,11 +199,11 @@ take a few seconds to calculate.</p></td>
     <dt><strong>Distribution-specific variance</strong></dt><dd><p>The distribution-specific variance,
      &sigma;<sup>2</sup><sub>d</sub>,
      depends on the model family. For Gaussian models, it is
-     &sigma;<sup>2</sup>. For models
-     with binary outome, it is \(\pi^2 / 3\) for logit-link and <code>1</code>
-     for probit-link. For all other models, the distribution-specific variance
-     is based on lognormal approximation, \(log(1 + var(x) / \mu^2)\)
-     (see <cite>Nakagawa et al. 2017</cite>).</p></dd>
+     &sigma;<sup>2</sup> (i.e.
+     <code>sigma(model)^2</code>. For models with binary outome, it is
+     \(\pi^2 / 3\) for logit-link and <code>1</code> for probit-link. For all
+     other models, the distribution-specific variance is based on lognormal
+     approximation, \(log(1 + var(x) / \mu^2)\) (see <cite>Nakagawa et al. 2017</cite>).</p></dd>
     <dt><strong>Variance for the additive overdispersion term</strong></dt><dd><p>The variance for the additive overdispersion term,
      &sigma;<sup>2</sup><sub><em>e</em></sub>,
      represents &#8220;the excess variation relative to what is expected

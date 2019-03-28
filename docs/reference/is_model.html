@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find names of model predictors — find_predictors • insight</title>
+<title>Checks if an object is a (supported) regression model object — is_model • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,13 +37,10 @@
 
 
 
-<meta property="og:title" content="Find names of model predictors — find_predictors" />
+<meta property="og:title" content="Checks if an object is a (supported) regression model object — is_model" />
 
-<meta property="og:description" content="Returns the names of the predictor variables for the
-   different parts of a model (like fixed or random effects, zero-inflated
-   component, ...). Unlike find_parameters, the names from
-   find_predictors() match the original variable names from the data
-   that was used to fit the model." />
+<meta property="og:description" content="Small helper that checks if a model is a supported
+ (regression) model object." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -110,75 +107,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find names of model predictors</h1>
+    <h1>Checks if an object is a (supported) regression model object</h1>
     
-    <div class="hidden name"><code>find_predictors.Rd</code></div>
+    <div class="hidden name"><code>is_model.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns the names of the predictor variables for the
-   different parts of a model (like fixed or random effects, zero-inflated
-   component, ...). Unlike <code><a href='find_parameters.html'>find_parameters</a></code>, the names from
-   <code>find_predictors()</code> match the original variable names from the data
-   that was used to fit the model.</p>
+    <p>Small helper that checks if a model is a <em>supported</em>
+ (regression) model object.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_predictors</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>),
-  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>,
-  <span class='st'>"dispersion"</span>, <span class='st'>"instruments"</span>, <span class='st'>"correlation"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>is_model</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr>
-    <tr>
-      <th>effects</th>
-      <td><p>Should variables for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
-    </tr>
-    <tr>
-      <th>component</th>
-      <td><p>Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated.</p></td>
-    </tr>
-    <tr>
-      <th>flatten</th>
-      <td><p>Logical, if <code>TRUE</code>, the values are returned
-as character vector, not as list.</p></td>
+      <td><p>An object.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of character vectors that represent the name(s) of the
-   predictor variables. Depending on the combination of the arguments
-   <code>effects</code> and <code>component</code>, the returned list has following
-   elements:</p><ul>
-<li><p><code>conditional</code>, the "fixed effects" terms from the model</p></li>
-<li><p><code>random</code>, the "random effects" terms from the model</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" terms from the zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" terms from the zero-inflation component of the model</p></li>
-<li><p><code>dispersion</code>, the dispersion terms</p></li>
-<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
-<li><p><code>correlation</code>, for models with correlation-component like <code>gls</code>, the variables used to describe the correlation structure</p></li>
-</ul>
+    <p>A logical, <code>TRUE</code> if <code>x</code> is a (supported) model object.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>This function returns <code>TRUE</code> is <code>x</code> is a model object
+  that works with the package's functions. A list of supported models can
+  also be found here: <a href='https://github.com/easystats/insight'>https://github.com/easystats/insight</a>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>find_predictors</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $conditional
-#&gt; [1] "wt"  "cyl" "vs" 
-#&gt; </div></pre>
+
+<span class='fu'>is_model</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>is_model</span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -186,6 +154,8 @@ as character vector, not as list.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

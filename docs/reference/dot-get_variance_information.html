@@ -6,7 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find sampling algorithm and optimizers — find_algorithm • insight</title>
+<title>store essential information on coefficients, model matrix and so on
+as list, since we need these information throughout the functions to
+calculate the variance components... — .get_variance_information • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,11 +39,13 @@
 
 
 
-<meta property="og:title" content="Find sampling algorithm and optimizers — find_algorithm" />
+<meta property="og:title" content="store essential information on coefficients, model matrix and so on
+as list, since we need these information throughout the functions to
+calculate the variance components... — .get_variance_information" />
 
-<meta property="og:description" content="Returns information on the sampling or estimation algorithm
-  as well as optimization functions, or for Bayesian model information on
-  chains, iterations and warmup-samples." />
+<meta property="og:description" content="store essential information on coefficients, model matrix and so on
+as list, since we need these information throughout the functions to
+calculate the variance components..." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -108,79 +112,30 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find sampling algorithm and optimizers</h1>
+    <h1>store essential information on coefficients, model matrix and so on
+as list, since we need these information throughout the functions to
+calculate the variance components...</h1>
     
-    <div class="hidden name"><code>find_algorithm.Rd</code></div>
+    <div class="hidden name"><code>dot-get_variance_information.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns information on the sampling or estimation algorithm
-  as well as optimization functions, or for Bayesian model information on
-  chains, iterations and warmup-samples.</p>
+    <p>store essential information on coefficients, model matrix and so on
+as list, since we need these information throughout the functions to
+calculate the variance components...</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_algorithm</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='fu'>.get_variance_information</span>(<span class='no'>x</span>, <span class='no'>faminfo</span>, <span class='kw'>name_fun</span> <span class='kw'>=</span> <span class='st'>"get_variances"</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+        
 
-    <p>A list with elements depending on the model.
-  <br />
-  For frequentist models:</p><ul>
-<li><p><code>algorithm</code>, for instance <code>"OLS"</code> or <code>"ML"</code></p></li>
-<li><p><code>optimizer</code>, name of optimizing function, only applies to specific models (like <code>gam</code>)</p></li>
-</ul><p>For frequentist mixed models:</p><ul>
-<li><p><code>algorithm</code>, for instance <code>"REML"</code> or <code>"ML"</code></p></li>
-<li><p><code>optimizer</code>, name of optimizing function</p></li>
-</ul><p>For Bayesian models:</p><ul>
-<li><p><code>algorithm</code>, the algorithm</p></li>
-<li><p><code>chains</code>, number of chains</p></li>
-<li><p><code>iterations</code>, number of iterations per chain</p></li>
-<li><p><code>warmup</code>, number of warmups per chain</p></li>
-</ul>
-
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>sleepstudy</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>)
-<span class='fu'>find_algorithm</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $algorithm
-#&gt; [1] "REML"
-#&gt; 
-#&gt; $optimizer
-#&gt; [1] "nloptwrap"
-#&gt; </div><div class='input'>
-</div><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glmer'>stan_lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>)
-<span class='fu'>find_algorithm</span>(<span class='no'>m</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>
