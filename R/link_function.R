@@ -208,6 +208,12 @@ link_function.tobit <- function(x, ...) {
 
 
 #' @export
+link_function.crch <- function(x, ...) {
+  .make_tobit_family(x)$linkfun
+}
+
+
+#' @export
 link_function.survreg <- function(x, ...) {
   .make_tobit_family(x)$linkfun
 }

@@ -181,6 +181,12 @@ link_inverse.tobit <- function(x, ...) {
 
 
 #' @export
+link_inverse.crch <- function(x, ...) {
+  .make_tobit_family(x)$linkinv
+}
+
+
+#' @export
 link_inverse.survreg <- function(x, ...) {
   .make_tobit_family(x)$linkinv
 }

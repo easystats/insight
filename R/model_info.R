@@ -26,7 +26,7 @@
 #'      \item \code{is_tweedie}: family is tweedie
 #'      \item \code{is_ordinal}: family is ordinal or cumulative link
 #'      \item \code{is_categorical}: family is categorical link
-#'      \item \code{is_tobit}: model is a tobit-model
+#'      \item \code{is_censored}: model is a censored model
 #'      \item \code{is_zeroinf}: model has zero-inflation component
 #'      \item \code{is_zero_inflated}: alias for \code{is_zeroinf}
 #'      \item \code{is_mixed}: model is a mixed effects model (with random effects)
@@ -132,7 +132,6 @@ model_info.MixMod <- function(x, ...) {
 }
 
 
-#' @importFrom stats gaussian binomial Gamma
 #' @export
 model_info.tobit <- function(x, ...) {
   faminfo <- .make_tobit_family(x)
@@ -147,7 +146,20 @@ model_info.tobit <- function(x, ...) {
 }
 
 
-#' @importFrom stats gaussian binomial Gamma
+#' @export
+model_info.crch <- function(x, ...) {
+  faminfo <- .make_tobit_family(x)
+
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
 #' @export
 model_info.survreg <- function(x, ...) {
   faminfo <- .make_tobit_family(x)
@@ -725,7 +737,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_exponential = exponential_fam,
     is_logit = logit.link,
     is_probit = link.fun == "probit",
-    is_tobit = inherits(x, "tobit"),
+    is_censored = inherits(x, c("tobit", "crch")),
     is_linear = linear_model,
     is_tweedie = tweedie_model,
     is_zeroinf = zero.inf,
@@ -756,6 +768,7 @@ get_ordinal_link <- function(x) {
 }
 
 
+#' @importFrom stats gaussian binomial Gamma
 .make_tobit_family <- function(x) {
   f <- switch(
     x$dist,

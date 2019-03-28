@@ -6,7 +6,7 @@ if (require("testthat") && require("insight") && require("AER")) {
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
-    expect_true(model_info(m1)$is_tobit)
+    expect_true(model_info(m1)$is_censored)
   })
 
   test_that("find_predictors", {
