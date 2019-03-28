@@ -64,5 +64,5 @@ all_models_equal <- function(..., verbose = FALSE) {
     message(paste(m1, m2, collapse = " "))
   }
 
-  isTRUE(all(all_supported && all_equal))
+  all(all_supported) && all(all_equal)
 }
