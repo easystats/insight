@@ -125,11 +125,11 @@ This function returns different variance components from mixed models,
   }
 }
 \note{
-This function supports models of class \code{merMod}, \code{glmmTMB},
-  \code{MixMod}, \code{lme}, \code{mixed}, \code{rlmerMod} or \code{stanreg}.
-  Support for objects of class \code{MixMod} (\pkg{GLMMadaptiv}) or
-  \code{lme} (\pkg{nlme}) is experimental and may not work for every
-  model.
+This function supports models of class \code{merMod} (including models
+  from \pkg{blme}), \code{glmmTMB}, \code{MixMod}, \code{lme}, \code{mixed},
+  \code{rlmerMod} or \code{stanreg}. Support for objects of class
+  \code{MixMod} (\pkg{GLMMadaptiv}) or \code{lme} (\pkg{nlme}) is experimental
+  and may not work for all models.
 }
 \examples{
 \dontrun{

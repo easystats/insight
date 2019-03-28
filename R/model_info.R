@@ -698,7 +698,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_mixed = !is.null(find_random(x)),
     is_multivariate = multi.var,
     is_trial = is.trial,
-    is_bayesian = inherits(x, c("brmsfit", "stanfit", "stanreg", "stanmvreg")),
+    is_bayesian = inherits(x, c("brmsfit", "stanfit", "stanreg", "stanmvreg", "bmerMod")),
     is_anova = inherits(x, c("aov", "aovlist")),
     is_ttest = is_ttest,
     is_correlation = is_correlation,

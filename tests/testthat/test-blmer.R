@@ -26,6 +26,7 @@ if (require("testthat") && require("insight") && require("blme")) {
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
     expect_true(model_info(m2)$is_linear)
+    expect_true(model_info(m1)$is_bayesian)
   })
 
   test_that("find_predictors", {
@@ -196,20 +197,6 @@ if (require("testthat") && require("insight") && require("blme")) {
     expect_equal(get_variance_intercept(m1), c(var.intercept.Subject = 611.89760710463770010392), toleance = 1e-4)
     expect_equal(get_variance_slope(m1), c(var.slope.Subject.Days = 35.08106944030500073950), toleance = 1e-4)
     expect_equal(get_correlation_slope_intercept(m1), c(cor.slope_intercept.Subject = 0.06561803), toleance = 1e-4)
-
-    expect_equal(get_variance(m2), list(
-      var.fixed = 916.31835151897371360974,
-      var.random = 1761.89976845294540908071,
-      var.residual = 796.47876823232149945397,
-      var.distribution = 928.81331970697453925823,
-      var.dispersion = 0,
-      var.intercept = c(
-        `mysubgrp:mygrp` = 144.07310251292250313782,
-        Subject = 1541.63370460306691711594,
-        mygrp = 76.19296133695654305029
-      )
-    ),
-    tolerance = 1e-4)
   })
 
   test_that("find_algorithm", {

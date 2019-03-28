@@ -86,11 +86,11 @@
 #'     }
 #'   }
 #'
-#' @note This function supports models of class \code{merMod}, \code{glmmTMB},
-#'   \code{MixMod}, \code{lme}, \code{mixed}, \code{rlmerMod} or \code{stanreg}.
-#'   Support for objects of class \code{MixMod} (\pkg{GLMMadaptiv}) or
-#'   \code{lme} (\pkg{nlme}) is experimental and may not work for every
-#'   model.
+#' @note This function supports models of class \code{merMod} (including models
+#'   from \pkg{blme}), \code{glmmTMB}, \code{MixMod}, \code{lme}, \code{mixed},
+#'   \code{rlmerMod} or \code{stanreg}. Support for objects of class
+#'   \code{MixMod} (\pkg{GLMMadaptiv}) or \code{lme} (\pkg{nlme}) is experimental
+#'   and may not work for all models.
 #'
 #' @references \itemize{
 #'  \item Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. \doi{10.1111/2041-210X.12225}
