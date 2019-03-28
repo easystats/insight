@@ -24,6 +24,7 @@ Suggests:
   AER,
   afex,
   betareg,
+  blme,
   brms,
   coxme,
   estimatr,
