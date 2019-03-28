@@ -23,6 +23,7 @@ Depends:
 Suggests:
   AER,
   afex,
+  BayesFactor,
   betareg,
   brms,
   coxme,

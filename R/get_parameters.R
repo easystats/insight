@@ -492,6 +492,23 @@ get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), par
 }
 
 
+
+
+
+
+#' #' @rdname get_parameters
+#' #' @export
+#' get_parameters.BFBayesFactor <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, ...) {
+#'   effects <- match.arg(effects)
+#'   as.data.frame(x)[get_parms_data(x, effects, "all", parameters)]
+#' }
+
+
+
+
+
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, ...) {

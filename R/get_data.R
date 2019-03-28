@@ -685,3 +685,15 @@ reurn_zeroinf_data <- function(x, component) {
 
   mf[, unique(c(model.terms$response, fixed.data)), drop = FALSE]
 }
+
+
+
+
+
+
+
+
+#' @export
+get_data.BFBayesFactor <- function(x, ...) {
+  x@data
+}

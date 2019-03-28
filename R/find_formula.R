@@ -519,3 +519,10 @@ get_stanmv_formula <- function(f) {
     random = f.random
   ))
 }
+
+
+
+#' @export
+find_formula.BFBayesFactor <- function(x, ...) {
+  x@numerator@identifier$formula
+}
