@@ -3,6 +3,7 @@
 ## General
 
 * Better handling of `AsIs`-variables with division-operation as dependent variables, e.g. if outcome was defined as `I(income/frequency)`, especially for `find_response()` and `get_data()`.
+* Revised package-functions form `felm`-models due to breaking changes in the *lfe*-package.
 
 ## New suppored model classes
 

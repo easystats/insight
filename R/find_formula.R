@@ -17,6 +17,7 @@
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
 #'      \item \code{dispersion}, the dispersion formula
 #'      \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
+#'      \item \code{cluster}, for fixed-effects regressions like \code{felm}, the cluster specification
 #'      \item \code{correlation}, for models with correlation-component like \code{gls}, the formula that describes the correlation structure
 #'    }
 #'
@@ -208,14 +209,35 @@ find_formula.coxme <- function(x, ...) {
 
 #' @export
 find_formula.felm <- function(x, ...) {
-  f.cond <- stats::as.formula(paste0(x$lhs, deparse(stats::formula(x), width.cutoff = 500L)))
-  f.rand <- paste0("~", paste0(names(x$fe), collapse = " + "))
-  if (f.rand == "~") {
-    f.rand <- NULL
+  f <- deparse(stats::formula(x), width.cutoff = 500L)
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+
+  f.cond <- trim(f_parts[1])
+
+  if (length(f_parts) > 1) {
+    f.rand <- paste0("~", trim(f_parts[2]))
   } else {
-    f.rand <- stats::as.formula(f.rand)
+    f.rand <- NULL
   }
-  compact_list(list(conditional = f.cond, instruments = f.rand))
+
+  if (length(f_parts) > 2) {
+    f.instr <- trim(f_parts[3])
+  } else {
+    f.instr <- NULL
+  }
+
+  if (length(f_parts) > 3) {
+    f.clus <- paste0("~", trim(f_parts[4]))
+  } else {
+    f.clus <- NULL
+  }
+
+  compact_list(list(
+    conditional = as.formula(f.cond),
+    random = as.formula(f.rand),
+    instruments = as.formula(f.instr),
+    cluster = as.formula(f.clus)
+  ))
 }
 
 

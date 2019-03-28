@@ -9,25 +9,35 @@ if (require("testthat") && require("insight") && require("lfe")) {
   firm.eff <- rnorm(nlevels(firm))
   u <- rnorm(length(x))
   y <- x + 0.5 * x2 + id.eff[id] + firm.eff[firm] + u
-  dat <- data.frame(y, x, x2, id, firm)
 
-  m1 <- felm(y ~ x + x2 | id + firm, data = dat)
+  x3 <- rnorm(length(x))
+  x4 <- sample(12, length(x), replace = TRUE)
+
+  Q <- 0.3 * x3 + x + 0.2 * x2 + id.eff[id] + 0.3 * log(x4) - 0.3 * y + rnorm(length(x), sd = 0.3)
+  W <- 0.7 * x3 - 2 * x + 0.1 * x2 - 0.7 * id.eff[id] + 0.8 * cos(x4) - 0.2 * y + rnorm(length(x), sd = 0.6)
+
+  # add them to the outcome
+  y <- y + Q + W
+  dat <- data.frame(y, x, x2, x3, x4, id, firm, Q, W)
+
+  m1 <- felm(y ~ x + x2 | id + firm | (Q | W ~ x3 + factor(x4)), data = dat)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(conditional = c("x", "x2"), instruments = c("id", "firm")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("x", "x2", "id", "firm"))
+    expect_identical(find_predictors(m1), list(conditional = c("x", "x2"), instruments = c("Q", "W", "x3", "x4")))
+    expect_identical(find_predictors(m1, effects = "random"), list(random = c("id", "firm")))
+    expect_identical(find_predictors(m1, effects = "all", flatten = TRUE), c("x", "x2", "id", "firm", "Q", "W", "x3", "x4"))
   })
 
   test_that("find_random", {
-    expect_null(find_random(m1))
+    expect_identical(find_random(m1), list(random = c("id", "firm")))
   })
 
   test_that("get_random", {
-    expect_warning(colnames(get_random(m1)))
+    expect_identical(colnames(get_random(m1)), c("id", "firm"))
   })
 
   test_that("find_response", {
@@ -39,7 +49,7 @@ if (require("testthat") && require("insight") && require("lfe")) {
   })
 
   test_that("get_predictors", {
-    expect_equal(colnames(get_predictors(m1)), c("x", "x2", "id", "firm"))
+    expect_equal(colnames(get_predictors(m1)), c("x", "x2", "Q", "W", "x3", "x4"))
   })
 
   test_that("link_inverse", {
@@ -48,23 +58,29 @@ if (require("testthat") && require("insight") && require("lfe")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 1000)
-    expect_equal(colnames(get_data(m1)), c("y", "x", "x2", "id", "firm"))
+    expect_equal(colnames(get_data(m1)), c("y", "x", "x2", "id", "firm", "Q", "W", "x3", "x4"))
   })
 
   test_that("find_formula", {
-    expect_length(find_formula(m1), 2)
+    expect_length(find_formula(m1), 3)
     expect_equal(
       find_formula(m1),
       list(
         conditional = as.formula("y ~ x + x2"),
-        instruments = as.formula("~id + firm")
+        random = as.formula("~id + firm"),
+        instruments = as.formula("Q | W ~ x3 + factor(x4)")
       )
     )
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "y", conditional = c("x", "x2"), instruments = c("id", "firm")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("y", "x", "x2", "id", "firm"))
+    expect_equal(find_terms(m1), list(
+      response = "y",
+      conditional = c("x", "x2"),
+      random = c("id", "firm"),
+      instruments = c("Q", "W", "x3", "x4")
+    ))
+    expect_equal(find_terms(m1, flatten = TRUE), c("y", "x", "x2", "id", "firm", "Q", "W", "x3", "x4"))
   })
 
   test_that("n_obs", {
@@ -79,11 +95,11 @@ if (require("testthat") && require("insight") && require("lfe")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("x", "x2")
+        conditional = c("x", "x2", "`Q(fit)`", "`W(fit)`")
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 2)
-    expect_equal(get_parameters(m1)$parameter, c("x", "x2"))
+    expect_equal(nrow(get_parameters(m1)), 4)
+    expect_equal(get_parameters(m1)$parameter, c("x", "x2", "`Q(fit)`", "`W(fit)`"))
   })
 
   test_that("is_multivariate", {

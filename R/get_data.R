@@ -53,6 +53,13 @@ get_data.default <- function(x, ...) {
 
 
 #' @export
+get_data.felm <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  .get_data_from_modelframe(x, stats::model.frame(x), effects)
+}
+
+
+#' @export
 get_data.data.frame <- function(x, ...) {
   x
 }
@@ -214,22 +221,7 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 get_data.rlmerMod <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
-  dat <- stats::model.frame(x)
-
-  mf <- tryCatch({
-    switch(
-      effects,
-      fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
-      all = dat[, find_terms(x, flatten = TRUE), drop = FALSE],
-      random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-    )
-  },
-  error = function(x) {
-    NULL
-  }
-  )
-
-  prepare_get_data(x, mf, effects)
+  .get_data_from_modelframe(x, stats::model.frame(x), effects)
 }
 
 
@@ -237,21 +229,7 @@ get_data.rlmerMod <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 get_data.mixed <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
-
-  mf <- tryCatch({
-    switch(
-      effects,
-      fixed = x$data[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
-      all = x$data[, find_terms(x, flatten = TRUE), drop = FALSE],
-      random = x$data[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-    )
-  },
-  error = function(x) {
-    NULL
-  }
-  )
-
-  prepare_get_data(x, mf, effects)
+  .get_data_from_modelframe(x, x$data, effects)
 }
 
 
@@ -259,21 +237,7 @@ get_data.mixed <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 get_data.clmm <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
-  dat <- model.frame(x)
-  mf <- tryCatch({
-    switch(
-      effects,
-      fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
-      all = dat,
-      random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-    )
-  },
-  error = function(x) {
-    NULL
-  }
-  )
-
-  prepare_get_data(x, mf, effects)
+  .get_data_from_modelframe(x, stats::model.frame(x), effects)
 }
 
 
@@ -282,27 +246,14 @@ get_data.clmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 get_data.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   dat <- tryCatch({
-    x$data
-  },
-  error = function(x) {
-    NULL
-  }
+      x$data
+    },
+    error = function(x) {
+      NULL
+    }
   )
 
-  mf <- tryCatch({
-    switch(
-      effects,
-      fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
-      all = dat,
-      random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-    )
-  },
-  error = function(x) {
-    NULL
-  }
-  )
-
-  prepare_get_data(x, mf)
+  .get_data_from_modelframe(x, dat, effects)
 }
 
 
@@ -749,4 +700,30 @@ reurn_zeroinf_data <- function(x, component) {
   )
 
   mf[, unique(c(model.terms$response, fixed.data)), drop = FALSE]
+}
+
+
+
+#' @keywords internal
+.get_data_from_modelframe <- function(x, dat, effects) {
+  cn <- clean_names(colnames(dat))
+
+  ft <- switch(
+    effects,
+    fixed = find_terms(x, effects = "fixed", flatten = TRUE),
+    all = find_terms(x, flatten = TRUE),
+    random = find_random(x, split_nested = TRUE, flatten = TRUE)
+  )
+
+  remain <- intersect(ft, cn)
+
+  mf <- tryCatch({
+    dat[, remain, drop = FALSE]
+  },
+  error = function(x) {
+    dat
+  }
+  )
+
+  prepare_get_data(x, mf, effects)
 }
