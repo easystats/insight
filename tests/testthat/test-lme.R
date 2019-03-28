@@ -113,6 +113,8 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
 
   test_that("get_variance", {
 
+    skip_on_cran()
+
     expect_equal(get_variance(m1), list(
       var.fixed = 908.95336262308865116211,
       var.random = 1698.06593646939654718153,

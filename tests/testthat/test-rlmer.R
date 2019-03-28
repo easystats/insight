@@ -180,6 +180,8 @@ if (.runThisTest) {
 
     test_that("get_variance", {
 
+      skip_on_cran()
+
       expect_equal(get_variance(m1), list(
         var.fixed = 972.98333873885542288917,
         var.random = 1909.82627106414997797401,

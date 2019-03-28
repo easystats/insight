@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("lme4")) {
+if (require("testthat") && require("insight") && require("blme")) {
   context("insight, find_predictors")
 
   data(sleepstudy)
@@ -11,14 +11,16 @@ if (require("testthat") && require("insight") && require("lme4")) {
     sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
   }
 
-  m1 <- lme4::lmer(
+  m1 <- blmer(
     Reaction ~ Days + (1 + Days | Subject),
-    data = sleepstudy
+    data = sleepstudy,
+    cov.prior = NULL
   )
 
-  m2 <- lme4::lmer(
+  m2 <- blmer(
     Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-    data = sleepstudy
+    data = sleepstudy,
+    cov.prior = wishart
   )
 
   test_that("model_info", {
