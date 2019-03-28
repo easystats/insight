@@ -19,11 +19,14 @@
 #'      \item \code{is_negbin}: family is negative binomial
 #'      \item \code{is_count}: model is a count model (i.e. family is either poisson or negative binomial)
 #'      \item \code{is_beta}: family is beta
+#'      \item \code{is_exponential}: family is exponential (e.g. Gamma or Weibull)
 #'      \item \code{is_logit}: model has logit link
+#'      \item \code{is_progit}: model has probit link
 #'      \item \code{is_linear}: family is gaussian
 #'      \item \code{is_tweedie}: family is tweedie
 #'      \item \code{is_ordinal}: family is ordinal or cumulative link
 #'      \item \code{is_categorical}: family is categorical link
+#'      \item \code{is_tobit}: model is a tobit-model
 #'      \item \code{is_zeroinf}: model has zero-inflation component
 #'      \item \code{is_zero_inflated}: alias for \code{is_zeroinf}
 #'      \item \code{is_mixed}: model is a mixed effects model (with random effects)
@@ -119,6 +122,36 @@ model_info.gamm <- function(x, ...) {
 #' @export
 model_info.MixMod <- function(x, ...) {
   faminfo <- x$family
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @importFrom stats gaussian binomial Gamma
+#' @export
+model_info.tobit <- function(x, ...) {
+  faminfo <- .make_tobit_family(x)
+
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @importFrom stats gaussian binomial Gamma
+#' @export
+model_info.survreg <- function(x, ...) {
+  faminfo <- .make_tobit_family(x)
+
   make_family(
     x = x,
     fitfam = faminfo$family,
@@ -608,7 +641,9 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
 
   beta_fam <- inherits(x, "betareg") | fitfam %in% c("beta")
 
-  linear_model <- (!binom_fam & !poisson_fam & !neg_bin_fam & !logit.link) ||
+  exponential_fam <- fitfam %in% c("Gamma", "weibull")
+
+  linear_model <- (!binom_fam & !exponential_fam & !poisson_fam & !neg_bin_fam & !logit.link) ||
     fitfam %in% c("Student's-t", "t Family") || grepl("(\\st)$", fitfam)
 
   tweedie_model <- linear_model && grepl("tweedie", fitfam, fixed = TRUE)
@@ -687,8 +722,10 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_poisson = poisson_fam,
     is_negbin = neg_bin_fam,
     is_beta = beta_fam,
+    is_exponential = exponential_fam,
     is_logit = logit.link,
     is_probit = link.fun == "probit",
+    is_tobit = inherits(x, "tobit"),
     is_linear = linear_model,
     is_tweedie = tweedie_model,
     is_zeroinf = zero.inf,
@@ -716,4 +753,21 @@ get_ordinal_link <- function(x) {
     cloglog = "log",
     x$link
   )
+}
+
+
+.make_tobit_family <- function(x) {
+  f <- switch(
+    x$dist,
+    gaussian = stats::gaussian("identity"),
+    logistic = stats::binomial("logit"),
+    loglogistic = stats::binomial("log"),
+    lognormal = stats::gaussian("log"),
+    exponential = ,
+    weibull = stats::Gamma("log"),
+    stats::gaussian("identity")
+  )
+
+  if (x$dist == "weibull") f$family <- "weibull"
+  f
 }

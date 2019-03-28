@@ -242,6 +242,18 @@ find_formula.felm <- function(x, ...) {
 
 
 #' @export
+find_formula.tobit <- function(x, ...) {
+  tryCatch({
+    list(conditional = parse(text = deparse(x$call, width.cutoff = 500))[[1]]$formula)
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+}
+
+
+#' @export
 find_formula.hurdle <- function(x, ...) {
   zeroinf_formula(x)
 }

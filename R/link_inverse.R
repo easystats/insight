@@ -175,6 +175,18 @@ link_inverse.crq <- function(x, ...) {
 
 
 #' @export
+link_inverse.tobit <- function(x, ...) {
+  .make_tobit_family(x)$linkinv
+}
+
+
+#' @export
+link_inverse.survreg <- function(x, ...) {
+  .make_tobit_family(x)$linkinv
+}
+
+
+#' @export
 link_inverse.mixed <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }

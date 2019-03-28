@@ -28,11 +28,14 @@ Retrieve information from model objects.
      \item \code{is_negbin}: family is negative binomial
      \item \code{is_count}: model is a count model (i.e. family is either poisson or negative binomial)
      \item \code{is_beta}: family is beta
+     \item \code{is_exponential}: family is exponential (e.g. Gamma or Weibull)
      \item \code{is_logit}: model has logit link
+     \item \code{is_progit}: model has probit link
      \item \code{is_linear}: family is gaussian
      \item \code{is_tweedie}: family is tweedie
      \item \code{is_ordinal}: family is ordinal or cumulative link
      \item \code{is_categorical}: family is categorical link
+     \item \code{is_tobit}: model is a tobit-model
      \item \code{is_zeroinf}: model has zero-inflation component
      \item \code{is_zero_inflated}: alias for \code{is_zeroinf}
      \item \code{is_mixed}: model is a mixed effects model (with random effects)

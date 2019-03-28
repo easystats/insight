@@ -7,7 +7,7 @@
 
 ## New suppored model classes
 
-* `iv_robust` (*estimatr*), `gamlss` (*gamlss*), `lmrob` and `glmrob` (*robustbase*, #64), `rq`, `rqss` and `crq` (*quantreg*), `rlmer` (*robustlmm*) and `mixed` (*afex*).
+* `iv_robust` (*estimatr*), `gamlss` (*gamlss*), `lmrob` and `glmrob` (*robustbase*, #64), `rq`, `rqss` and `crq` (*quantreg*), `rlmer` (*robustlmm*), `mixed` (*afex*), `tobit` (*AER*) and `survreg` (*survival*).
 
 ## New functions
 

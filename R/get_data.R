@@ -60,6 +60,16 @@ get_data.felm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.tobit <- function(x, ...) {
+  dat <- .get_data_from_env(x)
+  ft <- find_terms(x, flatten = TRUE)
+  remain <- intersect(ft, colnames(dat))
+
+  prepare_get_data(x, dat[, remain, drop = FALSE])
+}
+
+
+#' @export
 get_data.data.frame <- function(x, ...) {
   x
 }
@@ -483,7 +493,7 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
 
   if (mc[1] && rn == colnames(mf)[1]) {
     mc[1] <- FALSE
-    if (inherits(x, c("coxph", "coxme", "crq"))) {
+    if (inherits(x, c("coxph", "coxme", "survreg", "crq"))) {
       mf <- cbind(mf[[1]][, 1], mf[[1]][, 2], mf)
       colnames(mf)[1:2] <- rn_not_combined
     } else {
