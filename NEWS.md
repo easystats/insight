@@ -14,6 +14,8 @@
 * `find_algorithm()`, to get information about sampling algorithms and optimizers, and for Bayesian models also about chains and iterations (#38).
 * `find_random_slopes()`, which returns the names of the random slopes of mixed models.
 * `get_priors()`, to get a summary of priors used for a model (#39).
+* `is_model()` to check whether an object is a supported regression model (#69).
+* `all_models_equal()` to check whether a objects are all supported regression models and of same class.
 * `print_color()` (resp. `print_colour()`) to print coloured output to the console. Mainly implemented to reduce package dependencies.
 
 ## Changes to functions
