@@ -32,5 +32,6 @@ m4 <- glm(formula = vs ~ wt, family = binomial(), data = mtcars)
 all_models_equal(m1, m2)
 all_models_equal(m1, m2, m3)
 all_models_equal(m1, m4, m2, m3, verbose = TRUE)
+all_models_equal(m1, m4, mtcars, m2, m3, verbose = TRUE)
 
 }

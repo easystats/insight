@@ -43,7 +43,7 @@ all_models_equal <- function(..., verbose = FALSE) {
     message(paste(m1, m2, collapse = " "))
   }
 
-  if (!all_equal && verbose) {
+  if (!all(all_equal) && verbose) {
     differ <- which(!duplicated(all_classes))
 
     m1 <- sprintf(
@@ -64,5 +64,5 @@ all_models_equal <- function(..., verbose = FALSE) {
     message(paste(m1, m2, collapse = " "))
   }
 
-  all_supported && all_equal
+  isTRUE(all(all_supported && all_equal))
 }
