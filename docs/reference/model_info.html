@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -147,11 +147,14 @@
 <li><p><code>is_negbin</code>: family is negative binomial</p></li>
 <li><p><code>is_count</code>: model is a count model (i.e. family is either poisson or negative binomial)</p></li>
 <li><p><code>is_beta</code>: family is beta</p></li>
+<li><p><code>is_exponential</code>: family is exponential (e.g. Gamma or Weibull)</p></li>
 <li><p><code>is_logit</code>: model has logit link</p></li>
+<li><p><code>is_progit</code>: model has probit link</p></li>
 <li><p><code>is_linear</code>: family is gaussian</p></li>
 <li><p><code>is_tweedie</code>: family is tweedie</p></li>
 <li><p><code>is_ordinal</code>: family is ordinal or cumulative link</p></li>
 <li><p><code>is_categorical</code>: family is categorical link</p></li>
+<li><p><code>is_censored</code>: model is a censored model</p></li>
 <li><p><code>is_zeroinf</code>: model has zero-inflation component</p></li>
 <li><p><code>is_zero_inflated</code>: alias for <code>is_zeroinf</code></p></li>
 <li><p><code>is_mixed</code>: model is a mixed effects model (with random effects)</p></li>
@@ -194,10 +197,16 @@
 #&gt; $is_beta
 #&gt; [1] FALSE
 #&gt; 
+#&gt; $is_exponential
+#&gt; [1] FALSE
+#&gt; 
 #&gt; $is_logit
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_probit
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $is_censored
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_linear
