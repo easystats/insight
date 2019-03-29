@@ -608,7 +608,7 @@ get_stanmv_formula <- function(f) {
 
 
 
-#' @export
-find_formula.BFBayesFactor <- function(x, ...) {
-  x@numerator@identifier$formula
-}
+#' #' @export
+#' find_formula.BFBayesFactor <- function(x, ...) {
+#'   x@denominator@identifier$formula
+#' }
