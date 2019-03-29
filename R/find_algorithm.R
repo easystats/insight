@@ -65,6 +65,18 @@ find_algorithm.lmRob <- function(x, ...) {
 
 
 #' @export
+find_algorithm.lmrob <- function(x, ...) {
+  list("algorithm" = x$control$method)
+}
+
+
+#' @export
+find_algorithm.glmrob <- function(x, ...) {
+  list("algorithm" = x$method)
+}
+
+
+#' @export
 find_algorithm.logistf <- function(x, ...) {
   list("algorithm" = x$method)
 }
@@ -92,6 +104,24 @@ find_algorithm.lm <- function(x, ...) {
 
 
 #' @export
+find_algorithm.rq <- function(x, ...) {
+  list("algorithm" = x$method)
+}
+
+
+#' @export
+find_algorithm.crq <- function(x, ...) {
+  list("algorithm" = x$method)
+}
+
+
+#' @export
+find_algorithm.rqss <- function(x, ...) {
+  list("algorithm" = x$method)
+}
+
+
+#' @export
 find_algorithm.glm <- function(x, ...) {
   list("algorithm" = "ML")
 }
@@ -99,6 +129,17 @@ find_algorithm.glm <- function(x, ...) {
 
 #' @export
 find_algorithm.merMod <- function(x, ...) {
+  algorithm <- ifelse(as.logical(x@devcomp$dims[["REML"]]), "REML", "ML")
+
+  list(
+    "algorithm" = algorithm,
+    "optimizer" = as.character(x@optinfo$optimizer)
+  )
+}
+
+
+#' @export
+find_algorithm.rlmerMod <- function(x, ...) {
   algorithm <- ifelse(as.logical(x@devcomp$dims[["REML"]]), "REML", "ML")
 
   list(

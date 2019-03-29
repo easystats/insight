@@ -10,6 +10,7 @@
 \alias{get_parameters.hurdle}
 \alias{get_parameters.coxme}
 \alias{get_parameters.merMod}
+\alias{get_parameters.rlmerMod}
 \alias{get_parameters.mixed}
 \alias{get_parameters.lme}
 \alias{get_parameters.MixMod}
@@ -43,6 +44,8 @@ get_parameters(x, ...)
 
 \method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
 
+\method{get_parameters}{rlmerMod}(x, effects = c("fixed", "random"), ...)
+
 \method{get_parameters}{mixed}(x, effects = c("fixed", "random"), ...)
 
 \method{get_parameters}{lme}(x, effects = c("fixed", "random"), ...)
@@ -74,7 +77,7 @@ get_parameters(x, ...)
 conditional model, the zero-inflated part of the model, the dispersion
 term or the instrumental variables be returned? Applies to models
 with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressioms). May be abbreviated.}
+variable (so called fixed-effects regressions). May be abbreviated.}
 
 \item{effects}{Should variables for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}

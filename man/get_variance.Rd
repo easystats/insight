@@ -33,8 +33,7 @@ get_variance_slope(x, ...)
 get_correlation_slope_intercept(x, ...)
 }
 \arguments{
-\item{x}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
-\code{MixMod}, \code{lme}, \code{mixed}, or \code{stanreg}.}
+\item{x}{A mixed effects model.}
 
 \item{component}{Character value, indicating the variance component that should
 be returned. By default, all variance components are returned. The
@@ -87,11 +86,11 @@ This function returns different variance components from mixed models,
      The distribution-specific variance,
      \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub>}}{\eqn{\sigma^2_d}},
      depends on the model family. For Gaussian models, it is
-     \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}. For models
-     with binary outome, it is \eqn{\pi^2 / 3} for logit-link and \code{1}
-     for probit-link. For all other models, the distribution-specific variance
-     is based on lognormal approximation, \eqn{log(1 + var(x) / \mu^2)}
-     (see \cite{Nakagawa et al. 2017}).
+     \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}} (i.e.
+     \code{sigma(model)^2}. For models with binary outome, it is
+     \eqn{\pi^2 / 3} for logit-link and \code{1} for probit-link. For all
+     other models, the distribution-specific variance is based on lognormal
+     approximation, \eqn{log(1 + var(x) / \mu^2)} (see \cite{Nakagawa et al. 2017}).
     }
     \item{\strong{Variance for the additive overdispersion term}}{
      The variance for the additive overdispersion term,
@@ -126,9 +125,11 @@ This function returns different variance components from mixed models,
   }
 }
 \note{
-Support for objects of class \code{MixMod} (\pkg{GLMMadaptiv}) or
-  \code{lme} (\pkg{nlme}) is experimental and may not work for every
-  model.
+This function supports models of class \code{merMod} (including models
+  from \pkg{blme}), \code{glmmTMB}, \code{MixMod}, \code{lme}, \code{mixed},
+  \code{rlmerMod} or \code{stanreg}. Support for objects of class
+  \code{MixMod} (\pkg{GLMMadaptiv}) or \code{lme} (\pkg{nlme}) is experimental
+  and may not work for all models.
 }
 \examples{
 \dontrun{

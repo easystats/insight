@@ -127,7 +127,7 @@
 
     <pre class="usage"><span class='fu'>find_predictors</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>),
   <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>,
-  <span class='st'>"dispersion"</span>, <span class='st'>"instruments"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='st'>"dispersion"</span>, <span class='st'>"instruments"</span>, <span class='st'>"correlation"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,7 +147,7 @@ or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
 conditional model, the zero-inflated part of the model, the dispersion
 term or the instrumental variables be returned? Applies to models
 with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressioms). May be abbreviated.</p></td>
+variable (so called fixed-effects regressions). May be abbreviated.</p></td>
     </tr>
     <tr>
       <th>flatten</th>
@@ -168,6 +168,7 @@ as character vector, not as list.</p></td>
 <li><p><code>zero_inflated_random</code>, the "random effects" terms from the zero-inflation component of the model</p></li>
 <li><p><code>dispersion</code>, the dispersion terms</p></li>
 <li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
+<li><p><code>correlation</code>, for models with correlation-component like <code>gls</code>, the variables used to describe the correlation structure</p></li>
 </ul>
 
     

@@ -110,20 +110,20 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
     test_that("get_variance", {
       expect_equal(get_variance(m1), list(
-        var.fixef = 0.3710157,
-        var.ranef = 0.6113405,
-        var.resid = 3.289868,
-        var.dist = 3.289868,
-        var.disp = 0,
+        var.fixed = 0.3710157,
+        var.random = 0.6113405,
+        var.residual = 3.289868,
+        var.distribution = 3.289868,
+        var.dispersion = 0,
         var.intercept = c(herd = 0.6113405)
       ),
       tolerance = 1e-4)
 
-      expect_equal(get_variance_fixef(m1), c(var.fixef = 0.3710157), tolerance = 1e-4)
-      expect_equal(get_variance_ranef(m1), c(var.ranef = 0.6113405), tolerance = 1e-4)
-      expect_equal(get_variance_resid(m1), c(var.resid = 3.289868), tolerance = 1e-4)
-      expect_equal(get_variance_dist(m1), c(var.dist = 3.289868), tolerance = 1e-4)
-      expect_equal(get_variance_disp(m1), c(var.disp = 0), tolerance = 1e-4)
+      expect_equal(get_variance_fixed(m1), c(var.fixed = 0.3710157), tolerance = 1e-4)
+      expect_equal(get_variance_random(m1), c(var.random = 0.6113405), tolerance = 1e-4)
+      expect_equal(get_variance_residual(m1), c(var.residual = 3.289868), tolerance = 1e-4)
+      expect_equal(get_variance_distribution(m1), c(var.distribution = 3.289868), tolerance = 1e-4)
+      expect_equal(get_variance_dispersion(m1), c(var.dispersion = 0), tolerance = 1e-4)
     })
 
     test_that("find_algorithm", {

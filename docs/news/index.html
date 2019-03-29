@@ -112,12 +112,19 @@
 <h1 class="page-header">
 <a href="#insight-020" class="anchor"></a>insight 0.2.0<small> Unreleased </small>
 </h1>
+<div id="general" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general" class="anchor"></a>General</h2>
+<ul>
+<li>Better handling of <code>AsIs</code>-variables with division-operation as dependent variables, e.g. if outcome was defined as <code><a href="https://www.rdocumentation.org/packages/base/topics/AsIs">I(income/frequency)</a></code>, especially for <code><a href="../reference/find_response.html">find_response()</a></code> and <code><a href="../reference/get_data.html">get_data()</a></code>.</li>
+</ul>
+</div>
 <div id="new-suppored-model-classes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-suppored-model-classes" class="anchor"></a>New suppored model classes</h2>
 <ul>
 <li>
-<code>iv_robust</code> (<em>estimatr</em>), <code>gamlss</code> (<em>gamlss</em>) and <code>mixed</code> (<em>afex</em>).</li>
+<code>iv_robust</code> (<em>estimatr</em>), <code>gamlss</code> (<em>gamlss</em>), <code>lmrob</code> and <code>glmrob</code> (<em>robustbase</em>, #64), <code>rq</code>, <code>rqss</code> and <code>crq</code> (<em>quantreg</em>), <code>rlmer</code> (<em>robustlmm</em>) and <code>mixed</code> (<em>afex</em>).</li>
 </ul>
 </div>
 <div id="new-functions" class="section level2">
@@ -125,13 +132,17 @@
 <a href="#new-functions" class="anchor"></a>New functions</h2>
 <ul>
 <li>
-<code><a href="../reference/get_variance.html">get_variance()</a></code>, to calculate the variance components from mixed models of class <code>merMod</code>, <code>glmmTMB</code>, <code>MixMod</code>, <code>lme</code> and <code>stanreg</code> (#52). Furthermore, convenient shortcuts to return the related components directly, like <code><a href="../reference/get_variance.html">get_variance_random()</a></code> or <code><a href="../reference/get_variance.html">get_variance_residual()</a></code>.</li>
+<code><a href="../reference/get_variance.html">get_variance()</a></code>, to calculate the variance components from mixed models of class <code>merMod</code>, <code>glmmTMB</code>, <code>MixMod</code>, <code>rlmer</code>, <code>mixed</code>, <code>lme</code> and <code>stanreg</code> (#52). Furthermore, convenient shortcuts to return the related components directly, like <code><a href="../reference/get_variance.html">get_variance_random()</a></code> or <code><a href="../reference/get_variance.html">get_variance_residual()</a></code>.</li>
 <li>
 <code><a href="../reference/find_algorithm.html">find_algorithm()</a></code>, to get information about sampling algorithms and optimizers, and for Bayesian models also about chains and iterations (#38).</li>
 <li>
 <code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code>, which returns the names of the random slopes of mixed models.</li>
 <li>
 <code><a href="../reference/get_priors.html">get_priors()</a></code>, to get a summary of priors used for a model (#39).</li>
+<li>
+<code><a href="../reference/is_model.html">is_model()</a></code> to check whether an object is a (supported) regression model (#69).</li>
+<li>
+<code><a href="../reference/all_models_equal.html">all_models_equal()</a></code> to check whether objects are all (supported) regression models and of same class.</li>
 <li>
 <code><a href="../reference/print_color.html">print_color()</a></code> (resp. <code><a href="../reference/print_color.html">print_colour()</a></code>) to print coloured output to the console. Mainly implemented to reduce package dependencies.</li>
 </ul>
@@ -146,6 +157,9 @@
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also return simplex parameters of monotic effects (<strong>brms</strong> only) and smooth terms (e.g. for gam-models).</li>
 <li>
 <code><a href="../reference/find_terms.html">find_terms()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> no longer return constants, in particular <code>pi</code> (#26).</li>
+<li>For <code>gls</code> and <code>lme</code> objects, functions like <code><a href="../reference/find_formula.html">find_formula()</a></code> etc. also return the correlation component (#19).</li>
+<li>
+<code>model_info</code> now returns <code>$is_tweedie</code> for models from tweedie-families.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
@@ -156,6 +170,7 @@
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not preserve coefficients of monotonic category-specific effects from <strong>brmsfit</strong>-objects.</li>
 <li>Fixed bug that sometimes returned more elements for <code><a href="../reference/find_predictors.html">find_predictors()</a></code> or <code><a href="../reference/get_parameters.html">get_parameters()</a></code> than requested.</li>
 <li>Fixed bug in <code><a href="../reference/get_data.html">get_data()</a></code> for <strong>MixMod</strong>-objects when response variable was defined via <code><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind()</a></code>.</li>
+<li>Fixed bug in <code><a href="../reference/get_response.html">get_response()</a></code> for models that used <code><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind()</a></code> with a substraction (e.g. <code><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind(success, total - success)</a></code>). In such cases, values for second column (in this example: <code>total</code>) were the substracted values <code>total - success</code>, not the original values from <code>total</code>.</li>
 </ul>
 </div>
 </div>
@@ -163,9 +178,9 @@
 <h1 class="page-header">
 <a href="#insight-012" class="anchor"></a>insight 0.1.2<small> 2019-03-05 </small>
 </h1>
-<div id="general" class="section level2">
+<div id="general-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general" class="anchor"></a>General</h2>
+<a href="#general-1" class="anchor"></a>General</h2>
 <ul>
 <li>Initial release.</li>
 </ul>

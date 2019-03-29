@@ -17,7 +17,13 @@
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
 #'      \item \code{dispersion}, the dispersion formula
 #'      \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
+#'      \item \code{cluster}, for fixed-effects regressions like \code{felm}, the cluster specification
+#'      \item \code{correlation}, for models with correlation-component like \code{gls}, the formula that describes the correlation structure
 #'    }
+#'
+#' @note For models of class \code{lme} or \code{gls} the correlation-component
+#'   is only returned, when it is explicitely defined as named argument
+#'   (\code{form}), e.g. \code{corAR1(form = ~1 | Mare)}
 #'
 #' @examples
 #' data(mtcars)
@@ -44,6 +50,25 @@ find_formula.default <- function(x, ...) {
     NULL
   }
   )
+}
+
+#' @export
+find_formula.gls <- function(x, ...) {
+  ## TODO this is an intermediate fix to return the correlation variables from gls-objects
+  f_corr <- parse(text = deparse(x$call$correlation, width.cutoff = 500))[[1]]$form
+
+  l <- tryCatch({
+    list(
+      conditional = stats::formula(x),
+      correlation = stats::as.formula(f_corr)
+    )
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  compact_list(l)
 }
 
 
@@ -184,14 +209,47 @@ find_formula.coxme <- function(x, ...) {
 
 #' @export
 find_formula.felm <- function(x, ...) {
-  f.cond <- stats::as.formula(paste0(x$lhs, deparse(stats::formula(x), width.cutoff = 500L)))
-  f.rand <- paste0("~", paste0(names(x$fe), collapse = " + "))
-  if (f.rand == "~") {
-    f.rand <- NULL
+  f <- deparse(stats::formula(x), width.cutoff = 500L)
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+
+  f.cond <- trim(f_parts[1])
+
+  if (length(f_parts) > 1) {
+    f.rand <- paste0("~", trim(f_parts[2]))
   } else {
-    f.rand <- stats::as.formula(f.rand)
+    f.rand <- NULL
   }
-  compact_list(list(conditional = f.cond, instruments = f.rand))
+
+  if (length(f_parts) > 2) {
+    f.instr <- trim(f_parts[3])
+  } else {
+    f.instr <- NULL
+  }
+
+  if (length(f_parts) > 3) {
+    f.clus <- paste0("~", trim(f_parts[4]))
+  } else {
+    f.clus <- NULL
+  }
+
+  compact_list(list(
+    conditional = as.formula(f.cond),
+    random = as.formula(f.rand),
+    instruments = as.formula(f.instr),
+    cluster = as.formula(f.clus)
+  ))
+}
+
+
+#' @export
+find_formula.tobit <- function(x, ...) {
+  tryCatch({
+    list(conditional = parse(text = deparse(x$call, width.cutoff = 500))[[1]]$formula)
+  },
+  error = function(x) {
+    NULL
+  }
+  )
 }
 
 
@@ -285,6 +343,28 @@ find_formula.glmmTMB <- function(x, ...) {
 
 #' @export
 find_formula.merMod <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  f.cond <- stats::formula(x)
+  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+    f <- deparse(.x, width.cutoff = 500)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1) {
+    f.random <- f.random[[1]]
+  }
+
+  f.cond <- stats::as.formula(get_fixed_effects(f.cond))
+
+  compact_list(list(conditional = f.cond, random = f.random))
+}
+
+
+#' @export
+find_formula.rlmerMod <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -407,8 +487,14 @@ find_formula.MCMCglmm <- function(x, ...) {
 find_formula.lme <- function(x, ...) {
   fm <- eval(x$call$fixed)
   fmr <- eval(x$call$random)
+  ## TODO this is an intermediate fix to return the correlation variables from lme-objects
+  fc <- parse(text = deparse(x$call$correlation, width.cutoff = 500))[[1]]$form
 
-  compact_list(list(conditional = fm, random = fmr))
+  compact_list(list(
+    conditional = fm,
+    random = fmr,
+    correlation = stats::as.formula(fc)
+  ))
 }
 
 

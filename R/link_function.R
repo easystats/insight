@@ -190,7 +190,43 @@ link_function.lme <- function(x, ...) {
 
 
 #' @export
+link_function.rq <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
+link_function.crq <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
+link_function.tobit <- function(x, ...) {
+  .make_tobit_family(x)$linkfun
+}
+
+
+#' @export
+link_function.crch <- function(x, ...) {
+  .make_tobit_family(x)$linkfun
+}
+
+
+#' @export
+link_function.survreg <- function(x, ...) {
+  .make_tobit_family(x)$linkfun
+}
+
+
+#' @export
 link_function.lmRob <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
+link_function.lmrob <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
 

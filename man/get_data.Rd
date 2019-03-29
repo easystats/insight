@@ -5,10 +5,12 @@
 \alias{get_data.hurdle}
 \alias{get_data.glmmTMB}
 \alias{get_data.merMod}
+\alias{get_data.rlmerMod}
 \alias{get_data.mixed}
 \alias{get_data.clmm}
 \alias{get_data.lme}
 \alias{get_data.gee}
+\alias{get_data.rqss}
 \alias{get_data.MixMod}
 \alias{get_data.MCMCglmm}
 \title{Get the data that was used to fit the model}
@@ -24,6 +26,9 @@ get_data(x, ...)
 
 \method{get_data}{merMod}(x, effects = c("all", "fixed", "random"), ...)
 
+\method{get_data}{rlmerMod}(x, effects = c("all", "fixed", "random"),
+  ...)
+
 \method{get_data}{mixed}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{clmm}(x, effects = c("all", "fixed", "random"), ...)
@@ -31,6 +36,8 @@ get_data(x, ...)
 \method{get_data}{lme}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{gee}(x, effects = c("all", "fixed", "random"), ...)
+
+\method{get_data}{rqss}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{MixMod}(x, effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",
@@ -48,7 +55,7 @@ get_data(x, ...)
 conditional model, the zero-inflated part of the model, the dispersion
 term or the instrumental variables be returned? Applies to models
 with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressioms). May be abbreviated.}
+variable (so called fixed-effects regressions). May be abbreviated.}
 
 \item{effects}{Should model data for fixed effects, random effects
 or both be returned? Only applies to mixed models.}

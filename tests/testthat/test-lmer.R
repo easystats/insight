@@ -171,6 +171,8 @@ if (require("testthat") && require("insight") && require("lme4")) {
 
   test_that("get_variance", {
 
+    skip_on_cran()
+
     expect_equal(get_variance(m1), list(
       var.fixed = 908.95336262316459396970,
       var.random = 1698.23306388298283309268,

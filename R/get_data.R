@@ -53,6 +53,23 @@ get_data.default <- function(x, ...) {
 
 
 #' @export
+get_data.felm <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  .get_data_from_modelframe(x, stats::model.frame(x), effects)
+}
+
+
+#' @export
+get_data.tobit <- function(x, ...) {
+  dat <- .get_data_from_env(x)
+  ft <- find_terms(x, flatten = TRUE)
+  remain <- intersect(ft, colnames(dat))
+
+  prepare_get_data(x, dat[, remain, drop = FALSE])
+}
+
+
+#' @export
 get_data.data.frame <- function(x, ...) {
   x
 }
@@ -212,23 +229,17 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 #' @rdname get_data
 #' @export
+get_data.rlmerMod <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  .get_data_from_modelframe(x, stats::model.frame(x), effects)
+}
+
+
+#' @rdname get_data
+#' @export
 get_data.mixed <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
-
-  mf <- tryCatch({
-    switch(
-      effects,
-      fixed = x$data[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
-      all = x$data[, find_terms(x, flatten = TRUE), drop = FALSE],
-      random = x$data[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-    )
-  },
-  error = function(x) {
-    NULL
-  }
-  )
-
-  prepare_get_data(x, mf, effects)
+  .get_data_from_modelframe(x, x$data, effects)
 }
 
 
@@ -236,21 +247,7 @@ get_data.mixed <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 get_data.clmm <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
-  dat <- model.frame(x)
-  mf <- tryCatch({
-    switch(
-      effects,
-      fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
-      all = dat,
-      random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-    )
-  },
-  error = function(x) {
-    NULL
-  }
-  )
-
-  prepare_get_data(x, mf, effects)
+  .get_data_from_modelframe(x, stats::model.frame(x), effects)
 }
 
 
@@ -259,27 +256,14 @@ get_data.clmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 get_data.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   dat <- tryCatch({
-    x$data
-  },
-  error = function(x) {
-    NULL
-  }
+      x$data
+    },
+    error = function(x) {
+      NULL
+    }
   )
 
-  mf <- tryCatch({
-    switch(
-      effects,
-      fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
-      all = dat,
-      random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-    )
-  },
-  error = function(x) {
-    NULL
-  }
-  )
-
-  prepare_get_data(x, mf)
+  .get_data_from_modelframe(x, dat, effects)
 }
 
 
@@ -319,10 +303,25 @@ get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
 }
 
 
+#' @rdname get_data
+#' @export
+get_data.rqss <- function(x, effects = c("all", "fixed", "random"), ...) {
+  mf <- tryCatch({
+    .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  prepare_get_data(x, mf)
+}
+
+
 #' @export
 get_data.gls <- function(x, ...) {
   mf <- tryCatch({
-    .get_data_from_env(x)
+    .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
   },
   error = function(x) {
     NULL
@@ -424,6 +423,19 @@ get_data.stanmvreg <- function(x, ...) {
 }
 
 
+
+
+#' @export
+get_data.BFBayesFactor <- function(x, ...) {
+  x@data
+}
+
+
+
+
+
+
+
 #' @rdname get_data
 #' @export
 get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
@@ -488,18 +500,28 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
   # don't change response value, if it's a matrix
   # bound with cbind()
   rn <- find_response(x, combine = TRUE)
+  rn_not_combined <- find_response(x, combine = FALSE)
 
   trials.data <- NULL
 
   if (mc[1] && rn == colnames(mf)[1]) {
     mc[1] <- FALSE
-    if (inherits(x, c("coxph", "coxme"))) {
+    if (inherits(x, c("coxph", "coxme", "survreg", "crq"))) {
       mf <- cbind(mf[[1]][, 1], mf[[1]][, 2], mf)
-      colnames(mf)[1:2] <- find_response(x, combine = FALSE)
+      colnames(mf)[1:2] <- rn_not_combined
     } else {
       tryCatch({
         trials.data <- as.data.frame(mf[[1]])
-        colnames(trials.data) <- find_response(x, combine = FALSE)
+        colnames(trials.data) <- rn_not_combined
+
+        # if columns were bound via substraction, e.g.
+        # "cbind(succes, total - success)", we need to sum up success and
+        # total for the original total-column.
+
+        pattern <- sprintf("%s(\\s*)-(\\s*)%s", rn_not_combined[2], rn_not_combined[1])
+        if (grepl(pattern = pattern, x = rn)) {
+          trials.data[[2]] <- trials.data[[1]] + trials.data[[2]]
+        }
       },
       error = function(x) {
         NULL
@@ -595,6 +617,23 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
   # clean variable names
   cvn <- clean_names(colnames(mf))
 
+  # keep "as is" variable for response variables in data frame
+  if (colnames(mf)[1] == rn[1] && grepl("^I\\(", rn[1])) {
+    md <- tryCatch({
+      .get_data_from_env(x)[, rn_not_combined, drop = FALSE]
+    },
+    error = function(x) {
+      NULL
+    }
+    )
+
+    if (!is.null(md)) {
+      mf <- cbind(mf, md)
+      cvn <- clean_names(colnames(mf))
+      cvn[1] <- rn[1]
+    }
+  }
+
   # do we have duplicated names?
   dupes <- which(duplicated(cvn))
   if (!is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], 1:length(dupes))
@@ -689,11 +728,32 @@ reurn_zeroinf_data <- function(x, component) {
 
 
 
+#' @keywords internal
+.get_data_from_modelframe <- function(x, dat, effects) {
+  cn <- clean_names(colnames(dat))
 
+  ft <- switch(
+    effects,
+    fixed = find_terms(x, effects = "fixed", flatten = TRUE),
+    all = find_terms(x, flatten = TRUE),
+    random = find_random(x, split_nested = TRUE, flatten = TRUE)
+  )
 
+  remain <- intersect(ft, cn)
 
+  mf <- tryCatch({
+    dat[, remain, drop = FALSE]
+  },
+  error = function(x) {
+    dat
+  }
+  )
 
-#' @export
-get_data.BFBayesFactor <- function(x, ...) {
-  x@data
+  prepare_get_data(x, mf, effects)
 }
+
+
+
+
+
+

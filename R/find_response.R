@@ -38,19 +38,14 @@ find_response <- function(x, combine = TRUE) {
 # should not be called for brms-models!
 check_cbind <- function(resp, combine) {
   if (!combine && any(grepl("cbind\\((.*)\\)", resp))) {
-    resp <- sub("cbind\\(([^,].*)([\\)].*)", "\\1", resp)
-    resp <- strsplit(resp, split = ",", fixed = TRUE)
-    resp <- trim(unlist(resp))
-    if (any(string_contains("-", resp[2]))) {
-      resp[2] <- trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
-    }
+    resp <- .extract_combined_response(resp, "cbind")
   } else if (!combine && any(grepl("Surv\\((.*)\\)", resp))) {
-    resp <- sub("Surv\\(([^,].*)([\\)].*)", "\\1", resp)
-    resp <- strsplit(resp, split = ",", fixed = TRUE)
-    resp <- trim(unlist(resp))
-    if (any(string_contains("-", resp[2]))) {
-      resp[2] <- trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
-    }
+    resp <- .extract_combined_response(resp, "Surv")
+  } else if (!combine && any(grepl("Curv\\((.*)\\)", resp))) {
+    resp <- .extract_combined_response(resp, "Curv")
+  } else if (!combine && any(grepl("/", resp, fixed = TRUE))) {
+    resp <- strsplit(resp, split = "/", fixed = TRUE)
+    resp <- gsub("(I|\\(|\\))", "", trim(unlist(resp)))
   } else if (any(string_contains("|", resp))) {
     # check for brms Additional Response Information
     r1 <- trim(sub("(.*)\\|(.*)", "\\1", resp))
@@ -58,5 +53,18 @@ check_cbind <- function(resp, combine) {
     resp <- c(r1, r2)
   }
 
-  clean_names(resp)
+  .remove_pattern_from_names(resp, ignore_asis = TRUE)
+}
+
+
+.extract_combined_response <- function(resp, pattern) {
+  resp <- sub(sprintf("%s\\(([^,].*)([\\)].*)", pattern), "\\1", resp)
+  resp <- strsplit(resp, split = ",", fixed = TRUE)
+  resp <- trim(unlist(resp))
+
+  if (any(string_contains("-", resp[2]))) {
+    resp[2] <- trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
+  }
+
+  resp
 }

@@ -22,11 +22,18 @@ A list of formulas that describe the model. For simple models,
      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
      \item \code{dispersion}, the dispersion formula
      \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
+     \item \code{cluster}, for fixed-effects regressions like \code{felm}, the cluster specification
+     \item \code{correlation}, for models with correlation-component like \code{gls}, the formula that describes the correlation structure
    }
 }
 \description{
 Returns the formula(s) for the different parts of a model
    (like fixed or random effects, zero-inflated component, ...).
+}
+\note{
+For models of class \code{lme} or \code{gls} the correlation-component
+  is only returned, when it is explicitely defined as named argument
+  (\code{form}), e.g. \code{corAR1(form = ~1 | Mare)}
 }
 \examples{
 data(mtcars)

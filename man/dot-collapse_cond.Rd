@@ -2,11 +2,13 @@
 % Please edit documentation in R/compute_variances.R
 \name{.collapse_cond}
 \alias{.collapse_cond}
-\title{glmmTMB returns a list of model information, one for conditional and one for zero-inflated part, so here we "unlist" it}
+\title{glmmTMB returns a list of model information, one for conditional
+and one for zero-inflated part, so here we "unlist" it}
 \usage{
 .collapse_cond(x)
 }
 \description{
-glmmTMB returns a list of model information, one for conditional and one for zero-inflated part, so here we "unlist" it
+glmmTMB returns a list of model information, one for conditional
+and one for zero-inflated part, so here we "unlist" it
 }
 \keyword{internal}

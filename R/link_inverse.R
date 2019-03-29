@@ -163,6 +163,36 @@ link_inverse.lme <- function(x, ...) {
 
 
 #' @export
+link_inverse.rq <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
+link_inverse.crq <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
+link_inverse.tobit <- function(x, ...) {
+  .make_tobit_family(x)$linkinv
+}
+
+
+#' @export
+link_inverse.crch <- function(x, ...) {
+  .make_tobit_family(x)$linkinv
+}
+
+
+#' @export
+link_inverse.survreg <- function(x, ...) {
+  .make_tobit_family(x)$linkinv
+}
+
+
+#' @export
 link_inverse.mixed <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
@@ -200,6 +230,12 @@ link_inverse.gls <- function(x, ...) {
 
 #' @export
 link_inverse.lmRob <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
+link_inverse.lmrob <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 

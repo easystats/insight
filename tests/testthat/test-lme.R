@@ -50,7 +50,7 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 180)
     expect_equal(colnames(get_data(m1)), c("Reaction", "Days", "Subject"))
-    expect_equal(colnames(get_data(m2)), c("distance", "age", "Subject", "Sex"))
+    expect_equal(colnames(get_data(m2)), c("distance", "age", "Sex"))
   })
 
   test_that("find_formula", {
@@ -112,6 +112,8 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
   })
 
   test_that("get_variance", {
+
+    skip_on_cran()
 
     expect_equal(get_variance(m1), list(
       var.fixed = 908.95336262308865116211,

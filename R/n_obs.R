@@ -72,6 +72,18 @@ n_obs.multinom <- function(x, ...) {
 
 
 #' @export
+n_obs.rq <- function(x, ...) {
+  length(x$fitted.values)
+}
+
+
+#' @export
+n_obs.crq <- function(x, ...) {
+  nrow(x$residuals)
+}
+
+
+#' @export
 n_obs.coxph <- function(x, ...) {
   max(x$n)
 }

@@ -160,6 +160,19 @@ find_parameters.merMod <- function(x, ...) {
 
 
 #' @export
+find_parameters.rlmerMod <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  compact_list(list(
+    conditional = names(lme4::fixef(x)),
+    random = lapply(lme4::ranef(x), colnames)
+  ))
+}
+
+
+#' @export
 find_parameters.mixed <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
@@ -211,6 +224,20 @@ find_parameters.MCMCglmm <- function(x, ...) {
     conditional = rownames(sc$solutions),
     random = rownames(sc$Gcovariances)
   ))
+}
+
+
+#' @export
+find_parameters.crq <- function(x, ...) {
+  sc <- summary(x)
+  list(conditional = rownames(sc$coefficients))
+}
+
+
+#' @export
+find_parameters.rqss <- function(x, ...) {
+  sc <- summary(x)
+  list(conditional = rownames(sc$coef))
 }
 
 

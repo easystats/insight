@@ -20,6 +20,11 @@
 #'      \item \code{instruments}, the names of instrumental variables
 #'    }
 #'
+#' @note The difference to \code{\link{find_terms}} is that \code{find_variables()}
+#'   may return a variable multiple times in case of multiple transformations
+#'   (see examples below), while \code{find_terms()} returns each term only
+#'   once.
+#'
 #' @examples
 #' library(lme4)
 #' data(sleepstudy)

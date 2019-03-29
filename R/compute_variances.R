@@ -12,9 +12,9 @@
     stop("Model is not a mixed model.", call. = FALSE)
   }
 
-  if (faminfo$family %in% c("truncated_nbinom1", "truncated_nbinom2", "tweedie")) {
+  if (faminfo$family %in% c("truncated_nbinom1", "truncated_nbinom2")) {
     if (verbose) {
-      warning(sprintf("Truncated negative binomial and tweedie families are currently not supported by `%s`.", name_fun), call. = F)
+      warning(sprintf("Truncated negative binomial families are currently not supported by `%s`.", name_fun), call. = F)
     }
     return(NA)
   }
@@ -113,6 +113,11 @@
 }
 
 
+
+#' store essential information on coefficients, model matrix and so on
+#' as list, since we need these information throughout the functions to
+#' calculate the variance components...
+#'
 #' @importFrom stats model.matrix
 #' @keywords internal
 .get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE) {
@@ -194,7 +199,9 @@
 }
 
 
+
 #' helper-function, telling user if model is supported or not
+#'
 #' @keywords internal
 .badlink <- function(link, family, verbose = TRUE) {
   if (verbose) {
@@ -204,7 +211,10 @@
 }
 
 
-#' glmmTMB returns a list of model information, one for conditional and one for zero-inflated part, so here we "unlist" it
+
+#' glmmTMB returns a list of model information, one for conditional
+#' and one for zero-inflated part, so here we "unlist" it
+#'
 #' @keywords internal
 .collapse_cond <- function(x) {
   if (is.list(x) && "cond" %in% names(x)) {
@@ -215,7 +225,9 @@
 }
 
 
+
 #' Get fixed effects variance
+#'
 #' @importFrom stats var
 #' @keywords internal
 .compute_variance_fixed <- function(vals) {
@@ -223,7 +235,9 @@
 }
 
 
+
 #' Compute variance associated with a random-effects term (Johnson 2014)
+#'
 #' @importFrom stats nobs
 #' @keywords internal
 .compute_variance_random <- function(terms, x, vals) {
@@ -252,6 +266,8 @@
 }
 
 
+#' Calculate Distribution-specific variance (Nakagawa et al. 2017)
+#'
 #' @keywords internal
 .compute_variance_distribution <- function(x, var.cor, faminfo, name, verbose = TRUE) {
   if (inherits(x, "lme"))
@@ -261,7 +277,10 @@
 
   if (is.null(sig)) sig <- 1
 
-  if (faminfo$is_linear) {
+  # Distribution-specific variance depends on the model-family
+  # and the related link-function
+
+  if (faminfo$is_linear && !faminfo$is_tweedie) {
     dist.variance <- sig^2
   } else {
     if (faminfo$is_binomial) {
@@ -274,28 +293,20 @@
     } else if (faminfo$is_count) {
       dist.variance <- switch(
         faminfo$link_function,
-        log = .get_variance_dist(
-          x,
-          .null_model(x, verbose = verbose),
-          faminfo,
-          sig,
-          name = name,
-          verbose = verbose
-        ),
+        log = .get_variance_dist(x, .null_model(x, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
         sqrt = 0.25,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family == "beta") {
       dist.variance <- switch(
         faminfo$link_function,
-        logit = .get_variance_dist(
-          x,
-          .null_model(x, verbose = verbose),
-          faminfo,
-          sig,
-          name = name,
-          verbose = verbose
-        ),
+        logit = .get_variance_dist(x, .null_model(x, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
+        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+      )
+    } else if (faminfo$is_tweedie) {
+      dist.variance <- switch(
+        faminfo$link_function,
+        log = .get_variance_dist(x, .null_model(x, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     }
@@ -305,7 +316,9 @@
 }
 
 
+
 #' Get dispersion-specific variance
+#'
 #' @keywords internal
 .compute_variance_dispersion <- function(x, vals, faminfo, obs.terms) {
   if (faminfo$is_linear) {
@@ -320,25 +333,11 @@
 }
 
 
-#' Get distributional variance for beta-family
-#' @keywords internal
-.get_variance_beta_family <- function(x, mu, phi) {
-  if (inherits(x, "MixMod"))
-    stats::family(x)$variance(mu)
-  else
-    mu * (1 - mu) / (1 + phi)
-}
 
-
-#' Get distributional variance for nbinom-family
-#' @keywords internal
-.get_variance_nbinom_family <- function(mu, alpha) {
-  if (missing(alpha))
-    return(rep(1e-16, length(mu)))
-  mu * (1 + alpha)
-}
-
-
+#' This is the core-function to calculate the distribution-specific variance
+#' Nakagawa et al. 2017 propose three different methods, here we only rely
+#' on the lognormal-approximation.
+#'
 #' @importFrom stats family
 #' @keywords internal
 .get_variance_dist <- function(x, null.fixef, faminfo, sig, name, verbose = TRUE) {
@@ -346,7 +345,7 @@
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
-  # lognormal-approcimation of distributional variance,
+  # lognormal-approximation of distributional variance,
   # see Nakagawa et al. 2017
 
   # in general want log(1+var(x)/mu^2)
@@ -371,6 +370,7 @@
       poisson             = stats::family(x)$variance(mu),
       `hurdle poisson`    = ,
       truncated_poisson   = stats::family(x)$variance(sig),
+      tweedie             = .get_variance_tweedie_family(x, mu, sig),
       beta                = .get_variance_beta_family(x, mu, sig),
       `negative binomial` = ,
       genpois             = ,
@@ -385,15 +385,7 @@
 
       `zero-inflated negative binomial` = .get_variance_nbinom_family(mu, sig),
       `zero-inflated poisson`           = mu,
-
-      if (inherits(x, "merMod")) {
-        mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
-      } else if (inherits(x, "MixMod")) {
-
-        stats::family(x)$variance(mu)
-      } else {
-        mu * (1 + mu / x$theta)
-      }
+      .get_variance_default(x, mu, verbose)
     )
 
     vv / mu^2
@@ -410,6 +402,73 @@
 }
 
 
+
+#' Get distributional variance for beta-family
+#'
+#' @keywords internal
+.get_variance_beta_family <- function(x, mu, phi) {
+  if (inherits(x, "MixMod"))
+    stats::family(x)$variance(mu)
+  else
+    mu * (1 - mu) / (1 + phi)
+}
+
+
+
+#' Get distributional variance for tweedie-family
+#'
+#' @importFrom stats plogis
+#' @keywords internal
+.get_variance_tweedie_family <- function(x, mu, phi) {
+  p <- unname(stats::plogis(x$fit$par["thetaf"]) + 1)
+  phi * mu^p
+}
+
+
+
+#' Get distributional variance for nbinom-family
+#'
+#' @keywords internal
+.get_variance_nbinom_family <- function(mu, alpha) {
+  if (missing(alpha))
+    return(rep(1e-16, length(mu)))
+  mu * (1 + alpha)
+}
+
+
+
+#' Get distribution-specific variance for general and
+#' undefined families / link-functions
+#'
+#' @keywords internal
+.get_variance_default <- function(x, mu, verbose) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  }
+
+  tryCatch({
+    if (inherits(x, "merMod")) {
+      mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
+    } else if (inherits(x, "MixMod")) {
+      stats::family(x)$variance(mu)
+    } else {
+      mu * (1 + mu / x$theta)
+    }
+  },
+  error = function(x) {
+    if (verbose) {
+      warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = F)
+    }
+    0
+  })
+}
+
+
+
+#' Null model is needed to calculate the mean for the model's response,
+#' which we need to compute the distribution-specific variance
+#' (see .get_variance_dist())
+#'
 #' @importFrom stats as.formula update reformulate
 #' @keywords internal
 .null_model <- function(model, verbose = TRUE) {
@@ -433,6 +492,8 @@
 }
 
 
+#' return names of random slopes
+#'
 #' @keywords internal
 .random_slopes <- function(random.effects = NULL, model = NULL) {
   if (inherits(model, "MixMod")) {
