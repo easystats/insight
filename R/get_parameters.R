@@ -549,13 +549,24 @@ get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), par
 
 
 
-
-#' #' @rdname get_parameters
-#' #' @export
-#' get_parameters.BFBayesFactor <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, ...) {
-#'   effects <- match.arg(effects)
-#'   as.data.frame(x)[get_parms_data(x, effects, "all", parameters)]
-#' }
+#' @param iterations Number of posterior draws.
+#' @param progress Display progress.
+#' @rdname get_parameters
+#' @export
+get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE, ...) {
+  if(.classify_BFBayesFactor(x) == "correlation"){
+    posteriors <- as.data.frame(suppressMessages(BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)))
+    return(data.frame("rho" = posteriors$rho))
+  } else if(.classify_BFBayesFactor(x) == "ttest"){
+    posteriors <- as.data.frame(suppressMessages(BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)))
+    return(data.frame("Difference" = posteriors$mu))
+  } else if(.classify_BFBayesFactor(x) == "meta"){
+    posteriors <- as.data.frame(suppressMessages(BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)))
+    return(data.frame("Effect" = posteriors$delta))
+  } else{
+    return(NULL)
+  }
+}
 
 
 

@@ -422,14 +422,3 @@ find_parameters.stanmvreg <- function(x, parameters = NULL, ...) {
 
 
 
-
-
-
-
-#' #' @rdname find_parameters
-#' #' @export
-#' find_parameters.BFBayesFactor <- function(x, ...) {
-#'   x@denominator
-#' }
-
-

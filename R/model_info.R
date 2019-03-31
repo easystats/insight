@@ -785,3 +785,35 @@ get_ordinal_link <- function(x) {
   if (x$dist == "weibull") f$family <- "weibull"
   f
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' @keywords internal
+.classify_BFBayesFactor <- function(x){
+  if (!requireNamespace("BayesFactor")) {
+    stop("This function needs `BayesFactor` to be installed.")
+  }
+
+  if (any(class(x@denominator) %in% c("BFcorrelation"))) {
+    return("correlation")
+  } else if (any(class(x@denominator) %in% c("BFoneSample", "BFindepSample"))) {
+    return("ttest")
+  } else if (any(class(x@denominator) %in% c("BFmetat"))) {
+    return("meta")
+  } else if (any(class(x@denominator) %in% c("BFlinearModel"))) {
+    return("linear")
+  } else{
+    return(class(x@denominator))
+  }
+
+}

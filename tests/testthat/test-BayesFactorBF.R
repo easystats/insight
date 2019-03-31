@@ -5,9 +5,12 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   test_that("get_data", {
       expect_true(is.data.frame(get_data(x)))
   })
-  # test_that("find_formula", {
-  #   expect_true(is.character(find_formula(x)))
-  # })
+  test_that("find_formula", {
+    expect_null(find_formula(x))
+  })
+  test_that("get_parameters", {
+    expect_equal(row(get_parameters(x)), 4000)
+  })
 
 
   # ---------------------------
@@ -18,9 +21,12 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
   })
-  # test_that("find_formula", {
-  #   expect_true(is.character(find_formula(x)))
-  # })
+  test_that("find_formula", {
+    expect_null(find_formula(x))
+  })
+  test_that("get_parameters", {
+    expect_equal(row(get_parameters(x)), 4000)
+  })
 
 
 
@@ -33,9 +39,12 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
   })
-  # test_that("find_formula", {
-  #   expect_true(is.character(find_formula(x)))
-  # })
+  test_that("find_formula", {
+    expect_null(find_formula(x))
+  })
+  test_that("get_parameters", {
+    expect_equal(row(get_parameters(x)), 4000)
+  })
 
 
   # ---------------------------
@@ -46,10 +55,12 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
   })
-  # test_that("find_formula", {
-  #   expect_true(is.character(find_formula(x)))
-  # })
-
+  test_that("find_formula", {
+    expect_null(find_formula(x))
+  })
+  test_that("get_parameters", {
+    expect_equal(row(get_parameters(x)), 4000)
+  })
 
   # ---------------------------
   context("BF ANOVA")
@@ -60,9 +71,12 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
   })
-  # test_that("find_formula", {
-  #   expect_true(is.character(find_formula(x)))
-  # })
+  test_that("find_formula", {
+    expect_equal(find_formula(x), "len ~ supp + dose + supp:dose")
+  })
+  test_that("get_parameters", {
+    expect_null(get_parameters(x))
+  })
 
 
   # ---------------------------
@@ -72,9 +86,12 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
   })
-  # test_that("find_formula", {
-  #   expect_true(is.character(find_formula(x)))
-  # })
+  test_that("find_formula", {
+    expect_equal(find_formula(x), "RT ~ shape + color + shape:color + ID")
+  })
+  test_that("get_parameters", {
+    expect_null(get_parameters(x))
+  })
 
 
   # ---------------------------
@@ -83,9 +100,12 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
   })
-  # test_that("find_formula", {
-  #   expect_true(is.character(find_formula(x)))
-  # })
+  test_that("find_formula", {
+    expect_equal(find_formula(x), "len ~ supp + dose")
+  })
+  test_that("get_parameters", {
+    expect_null(get_parameters(x))
+  })
 
 
 
@@ -94,10 +114,12 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
   })
-  # test_that("find_formula", {
-  #   expect_true(is.character(find_formula(x)))
-  # })
+  test_that("find_formula", {
+    expect_equal(find_formula(x), "len ~ supp + dose")
 
-
+  })
+  test_that("get_parameters", {
+    expect_null(get_parameters(x))
+  })
 
 }
