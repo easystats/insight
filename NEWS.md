@@ -1,3 +1,9 @@
+# insight 0.2.1
+
+## Bug fixes
+
+* `get_priors()` failed for *stanreg*-models, when one or more priors had no adjusted scales (#74).
+
 # insight 0.2.0
 
 ## General
