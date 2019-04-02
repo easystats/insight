@@ -41,6 +41,29 @@
 find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   f <- find_formula(x)
 
+  if (is_multivariate(x)) {
+    rn <- names(find_response(x))
+    l <- lapply(rn, function(i) .find_random_effects(x, f[[i]], split_nested))
+    names(l) <- rn
+    l <- compact_list(l)
+  } else {
+    l <- .find_random_effects(x, f, split_nested)
+  }
+
+
+  if (is_empty_object(l)) {
+    return(NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+.find_random_effects <- function(x, f, split_nested) {
   if (!obj_has_name(f, "random") && !obj_has_name(f, "zero_inflated_random")) {
     return(NULL)
   }
@@ -67,15 +90,5 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 
 
-  l <- compact_list(list(random = r1, zero_inflated_random = r2))
-
-  if (is_empty_object(l)) {
-    return(NULL)
-  }
-
-  if (flatten) {
-    unique(unlist(l))
-  } else {
-    l
-  }
+  compact_list(list(random = r1, zero_inflated_random = r2))
 }

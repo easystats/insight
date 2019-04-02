@@ -3,6 +3,7 @@
 ## Bug fixes
 
 * `get_priors()` failed for *stanreg*-models, when one or more priors had no adjusted scales (#74).
+* `find_random()` failed for mixed models with multiple responses.
 
 # insight 0.2.0
 

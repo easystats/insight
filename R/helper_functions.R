@@ -89,7 +89,7 @@ get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
       split_nested <- FALSE
     }
   } else {
-    re <- trim(substring(re, regexpr(pattern = "\\|", re) + 1))
+    re <- trim(substring(re, max(gregexpr(pattern = "\\|", re)[[1]]) + 1))
   }
 
   if (split_nested) {
