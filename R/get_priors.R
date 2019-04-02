@@ -34,20 +34,20 @@ get_priors.stanreg <- function(x, ...) {
     do.call(cbind, x)
   })
 
-  prior_info <- as.data.frame(do.call(rbind, l), stringsAsFactors = FALSE)
+  prior_info <- Reduce(function(x, y) merge(x, y, all = TRUE), l)
   prior_info$parameter <- find_parameters(x)$conditional
 
-  prior_info <- prior_info[, c("parameter", "dist", "location", "scale", "adjusted_scale")]
+  prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))]
 
-  names(prior_info) <- gsub("dist", "distribution", names(prior_info))
-  names(prior_info) <- gsub("df", "DoF", names(prior_info))
+  colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
+  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info))
 
   as.data.frame(lapply(prior_info, function(x) {
     if (.is_numeric_character(x))
-      as.numeric(x)
+      as.numeric(as.character(x))
     else
-      x
-  }))
+      as.character(x)
+  }), stringsAsFactors = FALSE)
 }
 
 
@@ -68,13 +68,15 @@ get_priors.brmsfit <- function(x, ...) {
 
   as.data.frame(lapply(prior_info, function(x) {
     if (.is_numeric_character(x))
-      as.numeric(x)
+      as.numeric(as.character(x))
     else
-      x
-  }))
+      as.character(x)
+  }), stringsAsFactors = FALSE)
 }
 
 
+#' @importFrom stats na.omit
 .is_numeric_character <- function(x) {
-  is.character(x) && !anyNA(suppressWarnings(as.numeric(na.omit(x))))
+  (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x))))) ||
+    (is.factor(x) && !anyNA(suppressWarnings(as.numeric(levels(x)))))
 }

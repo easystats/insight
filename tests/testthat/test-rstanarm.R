@@ -15,6 +15,20 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       chains = 2, cores = 1, seed = 12345, iter = 500, refresh = 0
     )
 
+    set.seed(123)
+    m2 <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
+
+    m3 <- insight::download_model("stanreg_glm_1")
+
+    test_that("get_priors", {
+      expect_equal(colnames(get_priors(m1)), c("parameter", "distribution", "location", "scale"))
+      expect_equal(colnames(get_priors(m2)), c("parameter", "distribution", "location", "scale", "adjusted_scale"))
+      expect_equal(get_priors(m1)$scale, c(10.0, 2.5, 2.5, 2.5, 2.5), tolerance = 1e-3)
+      expect_equal(get_priors(m2)$adjusted_scale, c(4.3586628, 0.4119705, 0.5360283, 0.6172700, 1.0896657, 1.0896657), tolerance = 1e-3)
+      expect_equal(get_priors(m3)$adjusted_scale, c(NA, 2.555042), tolerance = 1e-3)
+    })
+
+
     test_that("clean_names", {
       expect_identical(clean_names(m1), c("incidence", "size", "period", "herd"))
     })
