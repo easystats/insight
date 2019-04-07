@@ -137,11 +137,21 @@ find_parameters.MixMod <- function(x, ...) {
 
   re.names <- dimnames(lme4::ranef(x))[[2]]
 
+  has_zeroinf <- !is.null(find_formula(x)[["zero_inflated"]])
+
+  if (has_zeroinf) {
+    z_inflated <- names(lme4::fixef(x, sub_model = "zero_part"))
+    z_inflated_random <- re.names[grepl("^zi_", re.names, perl = TRUE)]
+  } else {
+    z_inflated <- NULL
+    z_inflated_random <- NULL
+  }
+
   compact_list(list(
     conditional = names(lme4::fixef(x, sub_model = "main")),
     random = re.names[grepl("^(?!zi_)", re.names, perl = TRUE)],
-    zero_inflated = names(lme4::fixef(x, sub_model = "zero_part")),
-    zero_inflated_random = re.names[grepl("^zi_", re.names, perl = TRUE)]
+    zero_inflated = z_inflated,
+    zero_inflated_random = z_inflated_random
   ))
 }
 
