@@ -107,10 +107,10 @@ get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
 get_group_factor <- function(x, f) {
   if (is.list(f)) {
     f <- lapply(f, function(.x) {
-      get_model_random(.x, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "felm")))
+      get_model_random(.x, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "felm", "feis")))
     })
   } else {
-    f <- get_model_random(f, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "felm")))
+    f <- get_model_random(f, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "felm", "feis")))
   }
 
   if (is.null(f)) return(NULL)
@@ -129,26 +129,27 @@ get_group_factor <- function(x, f) {
 # times accross this package
 #' @keywords internal
 .get_elements <- function(effects, component) {
-  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation")
+  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes")
 
   elements <- switch(
     effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments", "simplex", "smooth_terms", "correlation")],
+    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments", "simplex", "smooth_terms", "correlation", "slopes")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
   elements <- switch(
     component,
     all = elements,
-    conditional = elements[elements %in% c("conditional", "random")],
+    conditional = elements[elements %in% c("conditional", "random", "slopes")],
     zi = ,
     zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random")],
     dispersion = elements[elements == "dispersion"],
     instruments = elements[elements == "instruments"],
     simplex = elements[elements == "simplex"],
     smooth_terms = elements[elements == "smooth_terms"],
-    correlation = elements[elements == "correlation"]
+    correlation = elements[elements == "correlation"],
+    slopes = elements[elements == "slopes"]
   )
 
   elements

@@ -29,6 +29,7 @@ Suggests:
   crch,
   coxme,
   estimatr,
+  feisr,
   gam,
   gamm4,
   gamlss,

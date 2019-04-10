@@ -256,6 +256,12 @@ link_function.felm <- function(x, ...) {
 
 
 #' @export
+link_function.feis <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
 link_function.ivreg <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }

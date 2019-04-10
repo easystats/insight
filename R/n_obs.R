@@ -102,6 +102,12 @@ n_obs.felm <- function(x, ...) {
 
 
 #' @export
+n_obs.feis <- function(x, ...) {
+  length(x$fitted.values)
+}
+
+
+#' @export
 n_obs.aovlist <- function(x, ...) {
   nrow(stats::model.frame(x))
 }

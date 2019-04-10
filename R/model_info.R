@@ -393,6 +393,12 @@ model_info.felm <- function(x, ...) {
 
 
 #' @export
+model_info.feis <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
 model_info.ivreg <- function(x, ...) {
   make_family(x, ...)
 }

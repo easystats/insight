@@ -223,6 +223,12 @@ link_inverse.felm <- function(x, ...) {
 
 
 #' @export
+link_inverse.feis <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
 link_inverse.gls <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }

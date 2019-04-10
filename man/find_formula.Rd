@@ -24,6 +24,7 @@ A list of formulas that describe the model. For simple models,
      \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
      \item \code{cluster}, for fixed-effects regressions like \code{felm}, the cluster specification
      \item \code{correlation}, for models with correlation-component like \code{gls}, the formula that describes the correlation structure
+     \item \code{slopes}, for fixed-effects individual-slope models like \code{feis}, the formula for the slope parameters
    }
 }
 \description{
