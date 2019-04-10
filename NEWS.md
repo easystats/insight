@@ -1,6 +1,6 @@
 # insight 0.2.1
 
-## New suppored model classes
+## New supported model classes
 
 * `feis` (*feisr*).
 
@@ -17,7 +17,7 @@
 * Better handling of `AsIs`-variables with division-operation as dependent variables, e.g. if outcome was defined as `I(income/frequency)`, especially for `find_response()` and `get_data()`.
 * Revised package-functions related to `felm`-models due to breaking changes in the *lfe*-package.
 
-## New suppored model classes
+## New supported model classes
 
 * `iv_robust` (*estimatr*), `crch` (*crch*), `gamlss` (*gamlss*), `lmrob` and `glmrob` (*robustbase*, #64), `rq`, `rqss` and `crq` (*quantreg*), `rlmer` (*robustlmm*), `mixed` (*afex*), `tobit` (*AER*) and `survreg` (*survival*).
 
