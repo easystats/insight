@@ -74,6 +74,19 @@ get_data.feis <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.gbm <- function(x, ...) {
+  mf <- tryCatch({
+    get(deparse(x$call$data, width.cutoff = 500), envir = parent.frame())[, find_terms(x, flatten = TRUE), drop = FALSE]
+  },
+  error = function(x) {
+    stats::model.frame(x)
+  })
+
+  .get_data_from_modelframe(x, mf, effects)
+}
+
+
+#' @export
 get_data.tobit <- function(x, ...) {
   dat <- .get_data_from_env(x)
   ft <- find_terms(x, flatten = TRUE)

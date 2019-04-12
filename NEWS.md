@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `feis` (*feisr*).
+* `feis` (*feisr*), `gbm` (*gbm*).
 
 ## Bug fixes
 
