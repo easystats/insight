@@ -82,7 +82,7 @@ get_data.gbm <- function(x, ...) {
     stats::model.frame(x)
   })
 
-  .get_data_from_modelframe(x, mf, effects)
+  .get_data_from_modelframe(x, mf, effects = "all")
 }
 
 

@@ -33,6 +33,7 @@ Suggests:
   gam,
   gamm4,
   gamlss,
+  gbm,
   gee,
   geepack,
   GLMMadaptive,

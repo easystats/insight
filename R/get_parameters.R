@@ -66,6 +66,18 @@ get_parameters.default <- function(x, ...) {
 
 
 #' @export
+get_parameters.gbm <- function(x, ...) {
+  s <- summary(x, plotit = FALSE)
+  data.frame(
+    parameter = as.character(s$var),
+    estimate = s$rel.inf,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+#' @export
 get_parameters.gamlss <- function(x, ...) {
   pars <- list(
     conditional = stats::coef(x),
