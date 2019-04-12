@@ -343,6 +343,22 @@ link_inverse.stanmvreg <- function(x, ...) {
 
 
 #' @export
+link_inverse.gbm <- function(x, ...) {
+  switch(
+    x$distribution$name,
+    laplace = ,
+    tdist = ,
+    gaussian = stats::gaussian(link = "identity")$linkinv,
+    poisson = stats::poisson(link = "log")$linkinv,
+    huberized = ,
+    adaboost = ,
+    coxph = ,
+    bernoulli = stats::make.link("logit")$linkinv
+  )
+}
+
+
+#' @export
 link_inverse.brmsfit <- function(x, ...) {
   fam <- stats::family(x)
   if (is_multivariate(x)) {
