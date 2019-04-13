@@ -830,7 +830,7 @@ get_ordinal_link <- function(x) {
 
 #' @keywords internal
 .classify_BFBayesFactor <- function(x){
-  if (!requireNamespace("BayesFactor")) {
+  if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("This function needs `BayesFactor` to be installed.")
   }
 
