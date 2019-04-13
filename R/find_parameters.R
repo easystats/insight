@@ -436,6 +436,3 @@ find_parameters.stanmvreg <- function(x, parameters = NULL, ...) {
 
   .filter_pars(l, parameters)
 }
-
-
-

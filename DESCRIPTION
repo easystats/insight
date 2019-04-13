@@ -19,7 +19,8 @@ URL: https://easystats.github.io/insight/
 BugReports: https://github.com/easystats/insight/issues
 Depends:
     R (>= 3.0),
-    stats
+    stats,
+    utils
 Suggests:
   AER,
   afex,

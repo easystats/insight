@@ -452,17 +452,10 @@ get_data.stanmvreg <- function(x, ...) {
 }
 
 
-
-
 #' @export
 get_data.BFBayesFactor <- function(x, ...) {
   x@data
 }
-
-
-
-
-
 
 
 #' @rdname get_data
@@ -780,9 +773,3 @@ reurn_zeroinf_data <- function(x, component) {
 
   prepare_get_data(x, mf, effects)
 }
-
-
-
-
-
-
