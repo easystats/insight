@@ -9,7 +9,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_null(find_formula(x))
   })
   test_that("get_parameters", {
-    expect_equal(row(get_parameters(x)), 4000)
+    expect_equal(nrow(get_parameters(x)), 4000)
   })
 
 
@@ -25,7 +25,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_null(find_formula(x))
   })
   test_that("get_parameters", {
-    expect_equal(row(get_parameters(x)), 4000)
+    expect_equal(nrow(get_parameters(x)), 4000)
   })
 
 
@@ -43,7 +43,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_null(find_formula(x))
   })
   test_that("get_parameters", {
-    expect_equal(row(get_parameters(x)), 4000)
+    expect_equal(nrow(get_parameters(x)), 4000)
   })
 
 
@@ -59,7 +59,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_null(find_formula(x))
   })
   test_that("get_parameters", {
-    expect_equal(row(get_parameters(x)), 4000)
+    expect_equal(nrow(get_parameters(x)), 4000)
   })
 
   # ---------------------------
