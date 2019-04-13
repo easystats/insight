@@ -256,6 +256,12 @@ link_function.felm <- function(x, ...) {
 
 
 #' @export
+link_function.feis <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
 link_function.ivreg <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
@@ -276,6 +282,23 @@ link_function.coxph <- function(x, ...) {
 #' @export
 link_function.coxme <- function(x, ...) {
   stats::make.link("logit")$linkfun
+}
+
+
+#' @importFrom stats poisson
+#' @export
+link_function.gbm <- function(x, ...) {
+  switch(
+    x$distribution$name,
+    laplace = ,
+    tdist = ,
+    gaussian = stats::gaussian(link = "identity")$linkfun,
+    poisson = stats::poisson(link = "log")$linkfun,
+    huberized = ,
+    adaboost = ,
+    coxph = ,
+    bernoulli = stats::make.link("logit")$linkfun
+  )
 }
 
 

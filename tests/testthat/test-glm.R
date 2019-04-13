@@ -84,6 +84,16 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_false(is_multivariate(m1))
   })
 
+  test_that("find_variables", {
+    expect_equal(
+      find_variables(m1),
+      list(
+        response = "count",
+        conditional = c("mined", "log(cover)", "sample")
+      )
+    )
+  })
+
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "ML"))
   })

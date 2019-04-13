@@ -179,6 +179,22 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_equal(n_obs(m5), 250)
     })
 
+
+    test_that("find_random", {
+      expect_equal(find_random(m5), list(
+        count = list(
+          random = "persons",
+          zero_inflated_random = "persons"
+        ),
+        count2 = list(
+          random = "persons",
+          zero_inflated_random = "persons"
+        )
+      ))
+      expect_equal(find_random(m5, flatten = TRUE), "persons")
+    })
+
+
     test_that("find_paramaters", {
       expect_equal(
         find_parameters(m1),

@@ -1,8 +1,14 @@
 # insight 0.2.1
 
+## New supported model classes
+
+* `feis` (*feisr*), `gbm` (*gbm*).
+
 ## Bug fixes
 
 * `get_priors()` failed for *stanreg*-models, when one or more priors had no adjusted scales (#74).
+* `find_random()` failed for mixed models with multiple responses.
+* `get_parameters()` and `find_parameters()` did not work for `MixMod`-objects _without_ zero-inflation component, when `component = "all"` (the default).
 
 # insight 0.2.0
 
@@ -11,7 +17,7 @@
 * Better handling of `AsIs`-variables with division-operation as dependent variables, e.g. if outcome was defined as `I(income/frequency)`, especially for `find_response()` and `get_data()`.
 * Revised package-functions related to `felm`-models due to breaking changes in the *lfe*-package.
 
-## New suppored model classes
+## New supported model classes
 
 * `iv_robust` (*estimatr*), `crch` (*crch*), `gamlss` (*gamlss*), `lmrob` and `glmrob` (*robustbase*, #64), `rq`, `rqss` and `crq` (*quantreg*), `rlmer` (*robustlmm*), `mixed` (*afex*), `tobit` (*AER*) and `survreg` (*survival*).
 

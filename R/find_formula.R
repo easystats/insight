@@ -19,6 +19,7 @@
 #'      \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
 #'      \item \code{cluster}, for fixed-effects regressions like \code{felm}, the cluster specification
 #'      \item \code{correlation}, for models with correlation-component like \code{gls}, the formula that describes the correlation structure
+#'      \item \code{slopes}, for fixed-effects individual-slope models like \code{feis}, the formula for the slope parameters
 #'    }
 #'
 #' @note For models of class \code{lme} or \code{gls} the correlation-component
@@ -233,10 +234,36 @@ find_formula.felm <- function(x, ...) {
   }
 
   compact_list(list(
-    conditional = as.formula(f.cond),
-    random = as.formula(f.rand),
-    instruments = as.formula(f.instr),
-    cluster = as.formula(f.clus)
+    conditional = stats::as.formula(f.cond),
+    random = stats::as.formula(f.rand),
+    instruments = stats::as.formula(f.instr),
+    cluster = stats::as.formula(f.clus)
+  ))
+}
+
+
+#' @export
+find_formula.feis <- function(x, ...) {
+  f <- deparse(stats::formula(x), width.cutoff = 500L)
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+
+  f.cond <- trim(f_parts[1])
+  id <- parse(text = deparse(x$call, width.cutoff = 500))[[1]]$id
+
+  # alternative regex-patterns that also work:
+  # sub(".*id ?= ?(.*?),.*", "\\1", deparse(x$call, width.cutoff = 500), perl = TRUE)
+  # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", deparse(x$call, width.cutoff = 500), perl = TRUE)
+
+  if (length(f_parts) > 1) {
+    f.slopes <- paste0("~", trim(f_parts[2]))
+  } else {
+    f.slopes <- NULL
+  }
+
+  compact_list(list(
+    conditional = stats::as.formula(f.cond),
+    slopes = stats::as.formula(f.slopes),
+    random = stats::as.formula(paste0("~", id))
   ))
 }
 

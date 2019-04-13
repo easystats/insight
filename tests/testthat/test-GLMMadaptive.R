@@ -139,6 +139,14 @@ if (require("testthat") && require("insight") && require("GLMMadaptive") && requ
         zero_inflated = c("(Intercept)", "child", "livebait1")
       )
     )
+    expect_equal(
+      find_parameters(m3),
+      list(
+        conditional = c("(Intercept)", "period2", "period3", "period4"),
+        random = "(Intercept)"
+      )
+    )
+
     expect_equal(nrow(get_parameters(m)), 6)
     expect_equal(
       get_parameters(m, effects = "random"),
@@ -154,6 +162,8 @@ if (require("testthat") && require("insight") && require("GLMMadaptive") && requ
       list(random = c(-1.3262364, -0.2048055, 1.3852572, 0.5282277)),
       tolerance = 1e-5
     )
+    expect_equal(get_parameters(m3)$component, c("conditional", "conditional", "conditional", "conditional"))
+    expect_error(get_parameters(m3, "zi"))
   })
 
   test_that("linkfun", {

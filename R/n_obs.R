@@ -54,6 +54,12 @@ n_obs.lmRob <- function(x, ...) {
 
 
 #' @export
+n_obs.gbm <- function(x, ...) {
+  length(x$fit)
+}
+
+
+#' @export
 n_obs.glmRob <- function(x, ...) {
   length(x$fitted.values)
 }
@@ -98,6 +104,12 @@ n_obs.coxme <- function(x, ...) {
 #' @export
 n_obs.felm <- function(x, ...) {
   x$N
+}
+
+
+#' @export
+n_obs.feis <- function(x, ...) {
+  length(x$fitted.values)
 }
 
 

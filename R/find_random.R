@@ -41,33 +41,15 @@
 find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   f <- find_formula(x)
 
-  if (!obj_has_name(f, "random") && !obj_has_name(f, "zero_inflated_random")) {
-    return(NULL)
-  }
-
-  if (obj_has_name(f, "random")) {
-    if (is.list(f$random)) {
-      r1 <- unique(unlist(lapply(f$random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee", "felm"))))))
-    } else {
-      r1 <- unique(unlist(get_model_random(f$random, split_nested, inherits(x, c("MCMCglmm", "gee", "felm")))))
-    }
+  if (is_multivariate(x)) {
+    rn <- names(find_response(x))
+    l <- lapply(rn, function(i) .find_random_effects(x, f[[i]], split_nested))
+    names(l) <- rn
+    l <- compact_list(l)
   } else {
-    r1 <- NULL
+    l <- .find_random_effects(x, f, split_nested)
   }
 
-
-  if (obj_has_name(f, "zero_inflated_random")) {
-    if (is.list(f$zero_inflated_random)) {
-      r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee", "felm"))))))
-    } else {
-      r2 <- unique(get_model_random(f$zero_inflated_random, split_nested, inherits(x, c("MCMCglmm", "gee", "felm"))))
-    }
-  } else {
-    r2 <- NULL
-  }
-
-
-  l <- compact_list(list(random = r1, zero_inflated_random = r2))
 
   if (is_empty_object(l)) {
     return(NULL)
@@ -78,4 +60,35 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   } else {
     l
   }
+}
+
+
+.find_random_effects <- function(x, f, split_nested) {
+  if (!obj_has_name(f, "random") && !obj_has_name(f, "zero_inflated_random")) {
+    return(NULL)
+  }
+
+  if (obj_has_name(f, "random")) {
+    if (is.list(f$random)) {
+      r1 <- unique(unlist(lapply(f$random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee", "felm", "feis"))))))
+    } else {
+      r1 <- unique(unlist(get_model_random(f$random, split_nested, inherits(x, c("MCMCglmm", "gee", "felm", "feis")))))
+    }
+  } else {
+    r1 <- NULL
+  }
+
+
+  if (obj_has_name(f, "zero_inflated_random")) {
+    if (is.list(f$zero_inflated_random)) {
+      r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) get_model_random(.x, split_nested, inherits(x, c("MCMCglmm", "gee", "felm", "feis"))))))
+    } else {
+      r2 <- unique(get_model_random(f$zero_inflated_random, split_nested, inherits(x, c("MCMCglmm", "gee", "felm", "feis"))))
+    }
+  } else {
+    r2 <- NULL
+  }
+
+
+  compact_list(list(random = r1, zero_inflated_random = r2))
 }

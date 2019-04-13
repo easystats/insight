@@ -393,6 +393,12 @@ model_info.felm <- function(x, ...) {
 
 
 #' @export
+model_info.feis <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
 model_info.ivreg <- function(x, ...) {
   make_family(x, ...)
 }
@@ -417,6 +423,30 @@ model_info.coxph <- function(x, ...) {
     fitfam = "survival",
     logit.link = TRUE,
     link.fun = NULL,
+    ...
+  )
+}
+
+
+#' @export
+model_info.gbm <- function(x, ...) {
+  faminfo <- switch(
+    x$distribution$name,
+    laplace = ,
+    tdist = ,
+    gaussian = list(name = "gaussian", logit = FALSE, link = NULL),
+    coxph = list(name = "survival", logit = TRUE, link = NULL),
+    poisson = list(name = "poisson", logit = FALSE, link = "log"),
+    huberized = ,
+    adaboost = ,
+    bernoulli = list(name = "binomial", logit = TRUE, link = "logit"),
+  )
+
+  make_family(
+    x = x,
+    fitfam = faminfo$name,
+    logit.link = faminfo$logit,
+    link.fun = faminfo$link,
     ...
   )
 }

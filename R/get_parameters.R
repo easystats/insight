@@ -66,6 +66,18 @@ get_parameters.default <- function(x, ...) {
 
 
 #' @export
+get_parameters.gbm <- function(x, ...) {
+  s <- summary(x, plotit = FALSE)
+  data.frame(
+    parameter = as.character(s$var),
+    estimate = s$rel.inf,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+#' @export
 get_parameters.gamlss <- function(x, ...) {
   pars <- list(
     conditional = stats::coef(x),
@@ -426,14 +438,32 @@ get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component =
   effects <- match.arg(effects)
   component <- match.arg(component)
 
+  has_zeroinf <- !is.null(find_formula(x)[["zero_inflated"]])
+
+  if (component %in% c("zi", "zero_inflated") && !has_zeroinf) {
+    stop("Model has no zero-inflation component.", call. = FALSE)
+  }
+
+
   re.names <- dimnames(lme4::ranef(x))[[2]]
   re <- lme4::ranef(x)
+
+
+  if (has_zeroinf) {
+    z_inflated <- lme4::fixef(x, sub_model = "zero_part")
+    z_inflated_random <- re[grepl("^zi_", re.names, perl = TRUE)]
+  } else {
+    z_inflated <- NULL
+    z_inflated_random <- NULL
+    component <- "conditional"
+  }
+
 
   l <- compact_list(list(
     conditional = lme4::fixef(x, sub_model = "main"),
     random = re[grepl("^(?!zi_)", re.names, perl = TRUE)],
-    zero_inflated = lme4::fixef(x, sub_model = "zero_part"),
-    zero_inflated_random = re[grepl("^zi_", re.names, perl = TRUE)]
+    zero_inflated = z_inflated,
+    zero_inflated_random = z_inflated_random
   ))
 
   fixed <- data.frame(
@@ -443,12 +473,16 @@ get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component =
     stringsAsFactors = FALSE
   )
 
-  fixedzi <- data.frame(
-    parameter = names(l$zero_inflated),
-    estimate = unname(l$zero_inflated),
-    component = "zero_inflated",
-    stringsAsFactors = FALSE
-  )
+  if (has_zeroinf) {
+    fixedzi <- data.frame(
+      parameter = names(l$zero_inflated),
+      estimate = unname(l$zero_inflated),
+      component = "zero_inflated",
+      stringsAsFactors = FALSE
+    )
+  } else {
+    fixedzi <- NULL
+  }
 
   if (effects == "fixed") {
     switch(

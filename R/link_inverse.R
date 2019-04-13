@@ -223,6 +223,12 @@ link_inverse.felm <- function(x, ...) {
 
 
 #' @export
+link_inverse.feis <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
 link_inverse.gls <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
@@ -333,6 +339,22 @@ link_inverse.multinom <- function(x, ...) {
 link_inverse.stanmvreg <- function(x, ...) {
   fam <- stats::family(x)
   lapply(fam, function(.x) .x$linkinv)
+}
+
+
+#' @export
+link_inverse.gbm <- function(x, ...) {
+  switch(
+    x$distribution$name,
+    laplace = ,
+    tdist = ,
+    gaussian = stats::gaussian(link = "identity")$linkinv,
+    poisson = stats::poisson(link = "log")$linkinv,
+    huberized = ,
+    adaboost = ,
+    coxph = ,
+    bernoulli = stats::make.link("logit")$linkinv
+  )
 }
 
 
