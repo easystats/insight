@@ -7,6 +7,7 @@
 ^LICENSE
 ^_pkgdown\.yml$
 ^README.*$
+^README.Rmd
 ^_pkgdown.yml
 ^pkgdown$
-
+^READLE.md

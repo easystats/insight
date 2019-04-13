@@ -17,6 +17,7 @@
 \alias{get_parameters.glmmTMB}
 \alias{get_parameters.brmsfit}
 \alias{get_parameters.stanreg}
+\alias{get_parameters.BFBayesFactor}
 \alias{get_parameters.stanmvreg}
 \title{Get model parameters}
 \usage{
@@ -65,6 +66,9 @@ get_parameters(x, ...)
 \method{get_parameters}{stanreg}(x, effects = c("fixed", "random",
   "all"), parameters = NULL, ...)
 
+\method{get_parameters}{BFBayesFactor}(x, iterations = 4000,
+  progress = FALSE, ...)
+
 \method{get_parameters}{stanmvreg}(x, effects = c("fixed", "random",
   "all"), parameters = NULL, ...)
 }
@@ -84,6 +88,10 @@ or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{parameters}{Regular expression pattern that describes the parameters that
 should be returned.}
+
+\item{iterations}{Number of posterior draws.}
+
+\item{progress}{Display progress.}
 }
 \value{
 \itemize{

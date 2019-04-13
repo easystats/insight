@@ -632,3 +632,14 @@ get_stanmv_formula <- function(f) {
     random = f.random
   ))
 }
+
+
+#' @importFrom utils tail
+#' @export
+find_formula.BFBayesFactor <- function(x, ...) {
+  if(.classify_BFBayesFactor(x) == "linear"){
+    return(tail(x@numerator, 1)[[1]]@identifier$formula)
+  } else{
+    return(NULL)
+  }
+}

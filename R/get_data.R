@@ -452,6 +452,19 @@ get_data.stanmvreg <- function(x, ...) {
 }
 
 
+
+
+#' @export
+get_data.BFBayesFactor <- function(x, ...) {
+  x@data
+}
+
+
+
+
+
+
+
 #' @rdname get_data
 #' @export
 get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
@@ -743,6 +756,7 @@ reurn_zeroinf_data <- function(x, component) {
 
 
 
+
 #' @keywords internal
 .get_data_from_modelframe <- function(x, dat, effects) {
   cn <- clean_names(colnames(dat))
@@ -766,3 +780,9 @@ reurn_zeroinf_data <- function(x, component) {
 
   prepare_get_data(x, mf, effects)
 }
+
+
+
+
+
+
