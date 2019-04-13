@@ -181,6 +181,12 @@ model_info.htest <- function(x, ...) {
 
 
 #' @export
+model_info.BFBayesFactor <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
 model_info.lme <- function(x, ...) {
   make_family(x, ...)
 }
@@ -759,6 +765,23 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
   }
 
 
+  is_meta <- FALSE
+
+  if (inherits(x, "BFBayesFactor")) {
+    is_ttest <- FALSE
+    is_correlation <- FALSE
+
+    obj_type <- .classify_BFBayesFactor(x)
+
+    if (obj_type == "correlation")
+      is_correlation <- TRUE
+    else if (obj_type == "ttest")
+      is_ttest <- TRUE
+    else if (obj_type == "meta")
+      is_meta <- TRUE
+  }
+
+
   list(
     is_binomial = binom_fam & !neg_bin_fam,
     is_count = poisson_fam | neg_bin_fam,
@@ -778,10 +801,11 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_mixed = !is.null(find_random(x)),
     is_multivariate = multi.var,
     is_trial = is.trial,
-    is_bayesian = inherits(x, c("brmsfit", "stanfit", "stanreg", "stanmvreg", "bmerMod")),
+    is_bayesian = inherits(x, c("brmsfit", "stanfit", "stanreg", "stanmvreg", "bmerMod", "BFBayesFactor")),
     is_anova = inherits(x, c("aov", "aovlist")),
     is_ttest = is_ttest,
     is_correlation = is_correlation,
+    is_meta = is_meta,
     link_function = link.fun,
     family = fitfam,
     n_obs = n_obs(x),
@@ -817,33 +841,21 @@ get_ordinal_link <- function(x) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
 #' @keywords internal
-.classify_BFBayesFactor <- function(x){
+.classify_BFBayesFactor <- function(x) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("This function needs `BayesFactor` to be installed.")
   }
 
   if (any(class(x@denominator) %in% c("BFcorrelation"))) {
-    return("correlation")
+    "correlation"
   } else if (any(class(x@denominator) %in% c("BFoneSample", "BFindepSample"))) {
-    return("ttest")
+    "ttest"
   } else if (any(class(x@denominator) %in% c("BFmetat"))) {
-    return("meta")
+    "meta"
   } else if (any(class(x@denominator) %in% c("BFlinearModel"))) {
-    return("linear")
+    "linear"
   } else{
-    return(class(x@denominator))
+    class(x@denominator)
   }
-
 }
