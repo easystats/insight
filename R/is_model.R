@@ -28,6 +28,6 @@ is_model <- function(x) {
       "iv_robust", "lme", "merMod", "mixed", "plm", "rlmerMod", "stanreg", "geeglm",
       "stanmvreg", "zeroinfl", "zerotrunc", "lrm", "rqss", "rq", "vgam", "vglm",
       "betareg", "logistf", "mlogit", "multinom", "polr", "truncreg", "glmmPQL",
-      "gmnl", "lm_robust", "tobit", "survreg", "crch", "feis", "gbm"
+      "gmnl", "lm_robust", "tobit", "survreg", "crch", "feis", "gbm", "BFBayesFactor"
   ))
 }
