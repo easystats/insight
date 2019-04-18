@@ -263,13 +263,13 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     ))
   })
 
-  m <- glmmTMB(
+  m <- suppressWarnings(glmmTMB(
     count ~ child + camper + (1 + xb| persons),
     ziformula = ~ child + livebait + (1 + zg + nofish| ID),
     dispformula = ~xb,
     data = fish,
     family = truncated_poisson()
-  )
+  ))
 
   test_that("find_random_slopes", {
 
