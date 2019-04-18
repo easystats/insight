@@ -167,13 +167,24 @@ find_formula.iv_robust <- function(x, ...) {
 find_formula.plm <- function(x, ...) {
   tryCatch({
     f <- deparse(stats::formula(x), width.cutoff = 500)
-    cond <- trim(substr(f, start = 0, stop = regexpr(pattern = "\\|", f) - 1))
-    instr <- trim(substr(f, regexpr(pattern = "\\|", f) + 1, stop = 10000L))
+    bar_pos <- regexpr(pattern = "\\|", f)
 
-    list(
-      conditional = stats::as.formula(cond),
-      instruments = stats::as.formula(paste0("~", instr))
-    )
+    if (bar_pos == -1)
+      stop_pos <- nchar(f) + 1
+    else
+      stop_pos <- bar_pos
+
+    cond <- trim(substr(f, start = 0, stop =  stop_pos - 1))
+    instr <- trim(substr(f, stop_pos + 1, stop = 10000L))
+
+    if (is_empty_string(instr)) {
+      list(conditional = stats::as.formula(cond))
+    } else {
+      list(
+        conditional = stats::as.formula(cond),
+        instruments = stats::as.formula(paste0("~", instr))
+      )
+    }
   },
   error = function(x) {
     NULL
