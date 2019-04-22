@@ -11,11 +11,16 @@ authors:
   - name: Dominique Makowski
     orcid: 0000-0001-5375-9967
     affiliation: 2
+  - name: Philip D. Waggoner
+    orcid: 0000-0002-7825-7573
+    affiliation: 3
 affiliations:
   - name: University Medical Center Hamburg-Eppendorf
     index: 1
   - name: Nanyang Technological University
     index: 2
+  - name: College of William & Mary
+    index: 3
 date: 22 April 2019
 bibliography: paper.bib
 ---
