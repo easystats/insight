@@ -3,14 +3,11 @@
 ^\.travis\.yml$
 ^revdep$
 ^docs$
-^paper.*$
 ^LICENSE
 ^_pkgdown\.yml$
-^README.*$
-^README.Rmd
 ^_pkgdown.yml
 ^pkgdown$
-^READLE.md
+^README.*$
 ^paper*.*$
 ^CONTRIBUTING.*$
 ^CODE_OF_CONDUCT.*$
