@@ -72,6 +72,9 @@ if (require("testthat") && require("insight") && require("gbm")) {
   })
 
   test_that("find_parameters", {
+
+    skip_on_travis()
+
     expect_equal(
       find_parameters(m1),
       list(
