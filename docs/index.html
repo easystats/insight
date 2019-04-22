@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -80,14 +80,20 @@
 </h1></div>
 
 <p><strong>Gain insight into your models!</strong></p>
-<p>The goal of <em>insight</em> is to provide tools to help an <strong>easy</strong>, <strong>intuitive</strong> and <strong>consistent</strong> accesss to information contained in various models. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. The <em>insight</em> package aims at closing this gap by providing functions that work for (almost) any model.</p>
+<p>The goal of <em>insight</em> is to provide tools to help an <strong>easy</strong>, <strong>intuitive</strong> and <strong>consistent</strong> accesss to information contained in various models, like model formulas, model terms, information about random effects, data that was used to fit the model or data from response variables. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. The <em>insight</em> package aims at closing this gap by providing functions that work for (almost) any model.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>Run the following:</p>
+<p>Run the following to install the latest GitHub-version of <em>insight</em>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
 <a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"insight"</span>)</a></code></pre></div>
+<p>Or install the latest stable release from CRAN:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"insight"</span>)</a></code></pre></div>
+</div>
+<div id="documentation-and-support" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation-and-support" class="anchor"></a>Documentation and Support</h2>
+<p>Please visit <a href="https://easystats.github.io/insight/">https://easystats.github.io/insight/</a> for documentation. In case you want to file an issue or contribute in another way to the package, please follow <a href="CONTRIBUTING.html">this guide</a>. For questions about the functionality, you may either contact me via email or also file an issue.</p>
 </div>
 <div id="functions" class="section level2">
 <h2 class="hasAnchor">
@@ -111,7 +117,7 @@
 <div id="list-of-supported-packages-and-models" class="section level2">
 <h2 class="hasAnchor">
 <a href="#list-of-supported-packages-and-models" class="anchor"></a>List of Supported Packages and Models</h2>
-<p><strong>AER</strong> (<em>ivreg, tobit</em>), <strong>afex</strong> (<em>mixed</em>), <strong>base</strong> (<em>aov, aovlist, lm, glm</em>), <strong>betareg</strong> (<em>betareg</em>), <strong>blme</strong> (<em>blmer, bglmer</em>), <strong>brms</strong> (<em>brmsfit</em>), <strong>crch</strong>, <strong>countreg</strong> (<em>zerontrunc</em>), <strong>coxme</strong>, <strong>estimatr</strong> (<em>lm_robust, iv_robust</em>), <strong>gam</strong> (<em>Gam</em>), <strong>gamm4</strong> , <strong>gamlss</strong>, <strong>gee</strong>, <strong>geepack</strong> (<em>geeglm</em>), <strong>GLMMadaptive</strong> (<em>MixMod</em>), <strong>glmmTMB</strong> (<em>glmmTMB</em>), <strong>gmnl</strong>, <strong>lfe</strong> (<em>felm</em>), <strong>lme4</strong> (<em>lmer, glmer, nlmer, glmer.nb</em>), <strong>MASS</strong> (<em>glmmPQL, polr</em>), <strong>mgcv</strong> (<em>gam, gamm</em>), <strong>nnet</strong> (<em>multinom</em>), <strong>nlme</strong> (<em>lme, gls</em>), <strong>ordinal</strong> (<em>clm, clm2, clmm</em>), <strong>plm</strong>, <strong>pscl</strong> (<em>zeroinf, hurdle</em>), <strong>quantreg</strong> (<em>rq, crq, rqss</em>), <strong>robust</strong> (<em>glmRob, lmRob</em>), <strong>robustbase</strong> (<em>glmrob, lmrob</em>), <strong>robustlmm</strong> (<em>rlmer</em>), <strong>rstanarm</strong> (<em>stanreg, stanmvreg</em>), <strong>survey</strong>, <strong>survival</strong> (<em>coxph, survreg</em>), <strong>truncreg</strong> (<em>truncreg</em>), <strong>VGAM</strong> (<em>vgam, vglm</em>)</p>
+<p><strong>AER</strong> (<em>ivreg, tobit</em>), <strong>afex</strong> (<em>mixed</em>), <strong>base</strong> (<em>aov, aovlist, lm, glm</em>), <strong>betareg</strong> (<em>betareg</em>), <strong>blme</strong> (<em>blmer, bglmer</em>), <strong>brms</strong> (<em>brmsfit</em>), <strong>crch</strong>, <strong>countreg</strong> (<em>zerontrunc</em>), <strong>coxme</strong>, <strong>estimatr</strong> (<em>lm_robust, iv_robust</em>), <strong>feisr</strong> (<em>feis</em>), <strong>gam</strong> (<em>Gam</em>), <strong>gamm4</strong> , <strong>gamlss</strong>, <strong>gbm</strong>, <strong>gee</strong>, <strong>geepack</strong> (<em>geeglm</em>), <strong>GLMMadaptive</strong> (<em>MixMod</em>), <strong>glmmTMB</strong> (<em>glmmTMB</em>), <strong>gmnl</strong>, <strong>lfe</strong> (<em>felm</em>), <strong>lme4</strong> (<em>lmer, glmer, nlmer, glmer.nb</em>), <strong>MASS</strong> (<em>glmmPQL, polr</em>), <strong>mgcv</strong> (<em>gam, gamm</em>), <strong>nnet</strong> (<em>multinom</em>), <strong>nlme</strong> (<em>lme, gls</em>), <strong>ordinal</strong> (<em>clm, clm2, clmm</em>), <strong>plm</strong>, <strong>pscl</strong> (<em>zeroinf, hurdle</em>), <strong>quantreg</strong> (<em>rq, crq, rqss</em>), <strong>robust</strong> (<em>glmRob, lmRob</em>), <strong>robustbase</strong> (<em>glmrob, lmrob</em>), <strong>robustlmm</strong> (<em>rlmer</em>), <strong>rstanarm</strong> (<em>stanreg, stanmvreg</em>), <strong>survey</strong>, <strong>survival</strong> (<em>coxph, survreg</em>), <strong>truncreg</strong> (<em>truncreg</em>), <strong>VGAM</strong> (<em>vgam, vglm</em>)</p>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues">File an issue</a> and request additional model-support in <em>insight</em>!</li>

@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -179,6 +179,10 @@
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
   <span class='st'>"all"</span>), <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for BFBayesFactor</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>iterations</span> <span class='kw'>=</span> <span class='fl'>4000</span>,
+  <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+
 <span class='co'># S3 method for stanmvreg</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
   <span class='st'>"all"</span>), <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
@@ -211,6 +215,14 @@ or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
       <th>parameters</th>
       <td><p>Regular expression pattern that describes the parameters that
 should be returned.</p></td>
+    </tr>
+    <tr>
+      <th>iterations</th>
+      <td><p>Number of posterior draws.</p></td>
+    </tr>
+    <tr>
+      <th>progress</th>
+      <td><p>Display progress.</p></td>
     </tr>
     </table>
     
