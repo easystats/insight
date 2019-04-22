@@ -10,6 +10,7 @@
 * `find_random()` failed for mixed models with multiple responses.
 * `get_parameters()` and `find_parameters()` did not work for `MixMod`-objects _without_ zero-inflation component, when `component = "all"` (the default).
 * `find_formula()` did not work for `plm`-models without instrumental variables.
+* Fix issue with invalid notation of instrumental-variables formula in `felm`-models for R-devel on Linux.
 
 # insight 0.2.0
 

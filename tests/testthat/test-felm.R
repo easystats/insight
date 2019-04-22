@@ -68,7 +68,7 @@ if (require("testthat") && require("insight") && require("lfe")) {
       list(
         conditional = as.formula("y ~ x + x2"),
         random = as.formula("~id + firm"),
-        instruments = as.formula("Q | W ~ x3 + factor(x4)")
+        instruments = as.formula("~(Q | W ~ x3 + factor(x4))")
       )
     )
   })

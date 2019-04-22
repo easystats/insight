@@ -233,7 +233,7 @@ find_formula.felm <- function(x, ...) {
   }
 
   if (length(f_parts) > 2) {
-    f.instr <- trim(f_parts[3])
+    f.instr <- paste0("~", trim(f_parts[3]))
   } else {
     f.instr <- NULL
   }
