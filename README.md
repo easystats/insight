@@ -6,22 +6,26 @@
 
 **Gain insight into your models!**
 
-The goal of *insight* is to provide tools to help an **easy**, **intuitive** and **consistent** accesss to information contained in various models. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. The *insight* package aims at closing this gap by providing functions that work for (almost) any model.
-  
+The goal of *insight* is to provide tools to help an **easy**, **intuitive** and **consistent** accesss to information contained in various models, like model formulas, model terms, information about random effects, data that was used to fit the model or data from response variables. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. The *insight* package aims at closing this gap by providing functions that work for (almost) any model.
 
 ## Installation
 
-Run the following:
+Run the following to install the latest GitHub-version of *insight*:
 
 ```r
 install.packages("devtools")
 devtools::install_github("easystats/insight")
 ```
 
+Or install the latest stable release from CRAN:
+
 ```r
-library("insight")
+install.packages("insight")
 ```
 
+## Documentation and Support
+
+Please visit [https://easystats.github.io/insight/](https://easystats.github.io/insight/) for documentation. In case you want to file an issue or contribute in another way to the package, please follow [this guide](CONTRIBUTING.md). For questions about the functionality, you may either contact me via email or also file an issue.
 
 ## Functions
 
