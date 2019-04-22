@@ -77,6 +77,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
 
     test_that("model_info", {
+      expect_true(model_info(m3)$is_trial)
       expect_true(model_info(m5)[[1]]$is_zeroinf)
       expect_true(model_info(m5)[[1]]$is_bayesian)
     })
