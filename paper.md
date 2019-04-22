@@ -21,8 +21,7 @@ affiliations:
     index: 2
   - name: College of William & Mary
     index: 3
-date: 22 April 2019
-bibliography: paper.bib
+date: 23 April 2019
 ---
 
 # Summary
