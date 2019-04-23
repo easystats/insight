@@ -528,7 +528,7 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
 
   if (mc[1] && rn == colnames(mf)[1]) {
     mc[1] <- FALSE
-    if (inherits(x, c("coxph", "coxme", "survreg", "crq"))) {
+    if (inherits(x, c("coxph", "coxme", "survreg", "crq", "psm"))) {
       mf <- cbind(mf[[1]][, 1], mf[[1]][, 2], mf)
       colnames(mf)[1:2] <- rn_not_combined
     } else {

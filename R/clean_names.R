@@ -47,8 +47,9 @@ clean_names.character <- function(x) {
   # for survival, remove strata(), and so on...
   pattern <- c(
     "as.factor", "factor", "offset", "log-log", "log", "lag", "diff",
-    "pspline", "poly", "strata", "scale", "interaction", "sqrt",
-    "pb", "lo", "bs", "ns", "t2", "te", "ti", "tt", "mi", "mo", "gp", "s", "I"
+    "pspline", "poly", "catg", "asis", "matrx", "pol", "strata", "strat",
+    "scale", "scored", "interaction", "sqrt", "lsp", "rcs", "pb", "lo", "bs",
+    "ns", "t2", "te", "ti", "tt", "mi", "mo", "gp", "s", "I"
   )
 
   # do we have a "log()" pattern here? if yes, get capture region
@@ -59,6 +60,8 @@ clean_names.character <- function(x) {
         x[i] <- trim(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
       } else if (pattern[j] == "I") {
         if (!ignore_asis) x[i] <- trim(unique(sub("I\\((\\w*).*", "\\1", x[i])))
+      } else if (pattern[j] == "asis") {
+        if (!ignore_asis) x[i] <- trim(unique(sub("asis\\((\\w*).*", "\\1", x[i])))
       } else if (pattern[j] == "log-log") {
         x[i] <- trim(unique(sub("^log\\(log\\(([^,)]*)).*", "\\1", x[i])))
       } else {

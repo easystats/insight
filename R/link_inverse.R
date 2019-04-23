@@ -193,6 +193,12 @@ link_inverse.survreg <- function(x, ...) {
 
 
 #' @export
+link_inverse.psm <- function(x, ...) {
+  .make_tobit_family(x)$linkinv
+}
+
+
+#' @export
 link_inverse.mixed <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }

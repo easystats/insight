@@ -220,6 +220,12 @@ link_function.survreg <- function(x, ...) {
 
 
 #' @export
+link_function.psm <- function(x, ...) {
+  .make_tobit_family(x)$linkfun
+}
+
+
+#' @export
 link_function.lmRob <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
