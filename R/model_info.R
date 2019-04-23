@@ -147,6 +147,12 @@ model_info.tobit <- function(x, ...) {
 
 
 #' @export
+model_info.censReg <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
 model_info.crch <- function(x, ...) {
   faminfo <- .make_tobit_family(x)
 
@@ -817,7 +823,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_exponential = exponential_fam,
     is_logit = logit.link,
     is_probit = link.fun == "probit",
-    is_censored = inherits(x, c("tobit", "crch")),
+    is_censored = inherits(x, c("tobit", "crch", "censReg")),
     is_linear = linear_model,
     is_tweedie = tweedie_model,
     is_zeroinf = zero.inf,

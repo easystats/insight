@@ -28,6 +28,7 @@ Suggests:
   betareg,
   blme,
   brms,
+  censReg,
   crch,
   coxme,
   estimatr,

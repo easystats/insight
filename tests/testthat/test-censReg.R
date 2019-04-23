@@ -1,8 +1,8 @@
-if (require("testthat") && require("insight") && require("AER")) {
-  context("insight, AER")
+if (require("testthat") && require("insight") && require("censReg") && require("AER")) {
+  context("insight, censReg")
 
   data("Affairs", package = "AER")
-  m1 <- AER::tobit(affairs ~ age + yearsmarried + religiousness + occupation + rating, data = Affairs)
+  m1 <- censReg(affairs ~ age + yearsmarried + religiousness + occupation + rating, data = Affairs)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -69,11 +69,21 @@ if (require("testthat") && require("insight") && require("AER")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("(Intercept)", "age", "yearsmarried", "religiousness", "occupation", "rating")
+        conditional = c("(Intercept)", "age", "yearsmarried", "religiousness", "occupation", "rating", "logSigma")
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 6)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "age", "yearsmarried", "religiousness", "occupation", "rating"))
+    expect_equal(nrow(get_parameters(m1)), 7)
+    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "age", "yearsmarried", "religiousness", "occupation", "rating", "logSigma"))
+  })
+
+  test_that("find_variables", {
+    expect_equal(
+      find_variables(m1),
+      list(
+        response = "affairs",
+        conditional = c("age", "yearsmarried", "religiousness", "occupation", "rating")
+      )
+    )
   })
 
   test_that("is_multivariate", {

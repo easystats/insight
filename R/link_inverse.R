@@ -205,6 +205,12 @@ link_inverse.mixed <- function(x, ...) {
 
 
 #' @export
+link_inverse.censReg <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
 link_inverse.plm <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }

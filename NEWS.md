@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `feis` (*feisr*), `gbm` (*gbm*), `BFBayesFactor` (*BayesFactor*), `psm` (*rms*), `LORgee` (*multgee*)
+* `feis` (*feisr*), `gbm` (*gbm*), `BFBayesFactor` (*BayesFactor*), `psm` (*rms*), `LORgee` (*multgee*), `censReg`(*censReg*)
 
 ## Bug fixes
 

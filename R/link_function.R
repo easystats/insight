@@ -196,6 +196,12 @@ link_function.truncreg <- function(x, ...) {
 
 
 #' @export
+link_function.censReg <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
 link_function.gls <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
