@@ -70,7 +70,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@
 <a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
-<code>feis</code> (<em>feisr</em>), <code>gbm</code> (<em>gbm</em>), <code>BFBayesFactor</code> (<em>BayesFactor</em>)</li>
+<code>feis</code> (<em>feisr</em>), <code>gbm</code> (<em>gbm</em>), <code>BFBayesFactor</code> (<em>BayesFactor</em>), <code>psm</code> (<em>rms</em>), <code>LORgee</code> (<em>multgee</em>), <code>censReg</code>(<em>censReg</em>)</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
@@ -132,7 +132,8 @@
 <code><a href="../reference/get_parameters.html">get_parameters()</a></code> and <code><a href="../reference/find_parameters.html">find_parameters()</a></code> did not work for <code>MixMod</code>-objects <em>without</em> zero-inflation component, when <code>component = "all"</code> (the default).</li>
 <li>
 <code><a href="../reference/find_formula.html">find_formula()</a></code> did not work for <code>plm</code>-models without instrumental variables.</li>
-<li>Fix issue with invalid notation of instrumental-variables formula in <code>felm</code>-models for R-devel on Linux.</li>
+<li>Fixed issue with invalid notation of instrumental-variables formula in <code>felm</code>-models for R-devel on Linux.</li>
+<li>Fixed issue with <code><a href="../reference/get_data.html">get_data()</a></code> for <em>gee</em> models, where incomplete cases were not removed from the data.</li>
 </ul>
 </div>
 </div>
