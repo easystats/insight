@@ -1,7 +1,7 @@
 if (require("testthat") && require("insight") && require("AER")) {
   context("insight, model_info")
 
-  data("Affairs")
+  data("Affairs", package = "AER")
   m1 <- tobit(affairs ~ age + yearsmarried + religiousness + occupation + rating, data = Affairs)
 
   test_that("model_info", {

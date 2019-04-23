@@ -1,5 +1,5 @@
 if (require("testthat") && require("insight") && require("glmmTMB")) {
-  context("insight, model_info")
+  context("insight, glmmTMB")
 
   fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
   fish$nofish <- as.factor(fish$nofish)
