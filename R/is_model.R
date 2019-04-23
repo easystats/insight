@@ -29,6 +29,6 @@ is_model <- function(x) {
       "stanmvreg", "zeroinfl", "zerotrunc", "lrm", "rqss", "rq", "vgam", "vglm",
       "betareg", "logistf", "mlogit", "multinom", "polr", "truncreg", "glmmPQL",
       "gmnl", "lm_robust", "tobit", "survreg", "crch", "feis", "gbm", "BFBayesFactor",
-      "psm", "LORgee"
+      "psm", "LORgee", "gamm", "htest", "mlm"
   ))
 }
