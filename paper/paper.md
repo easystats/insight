@@ -8,31 +8,35 @@ authors:
   - name: Daniel Lüdecke
     orcid: 0000-0002-8895-3206
     affiliation: 1
-  - name: Dominique Makowski
-    orcid: 0000-0001-5375-9967
-    affiliation: 2
   - name: Philip D. Waggoner
     orcid: 0000-0002-7825-7573
+    affiliation: 2
+  - name: Dominique Makowski
+    orcid: 0000-0001-5375-9967
     affiliation: 3
 affiliations:
-  - name: University Medical Center Hamburg-Eppendorf
+  - name: University Medical Center Hamburg-Eppendorf, Germany
     index: 1
-  - name: Nanyang Technological University
+  - name: College of William & Mary, Virginia
     index: 2
-  - name: College of William & Mary
+  - name: Nanyang Technological University, Singapore
     index: 3
 date: 23 April 2019
 ---
 
 # Summary
 
-When fitting any statistical model, there are many useful pieces of information that are simultaneously calculated and stored beyond coefficient estimates and general model fit staistics. Although there exist some generic functions to obtain model information and data, many package-specific modeling functions do not provide such methods to allow users to access such valuable information. 
+When fitting any statistical model, there are many useful pieces of information that are simultaneously calculated and stored beyond coefficient estimates and general model fit statistics. Although there exist some generic functions to obtain model information and data, many package-specific modeling functions do not provide such methods to allow users to access such valuable information. 
 
-The *insight* package fills this important gap by providing a suite of functions to support almost any model (see a list of the many models supported below in the **Models Supported by *insight*** section). The goal of *insight*, then, is to provide tools to provide *easy*, *intuitive*, and *consistent* access to information contained in model objects. Ultimately, the development of *insight* is in line with the overall philosophy of the [easystats project](https://github.com/easystats), which is to facilitate and streamline the process of doing statistical analysis and reporting the results in the R programming language. 
+![The logo of insight represents a statistical model, in the metaphorical form of a monster, which internals are being exposed, summarizing the aim and philosophy underlying the package.](figure1.png)
+
+The *insight* package fills this important gap by providing a suite of functions to support almost any model (see a list of the many models supported below in the **Supported Models** section). The goal of *insight*, then, is to provide tools to provide *easy*, *intuitive*, and *consistent* access to information contained in model objects. Ultimately, the development of *insight* is in line with the overall philosophy of the [easystats project](https://github.com/easystats), which is to facilitate and streamline the process of doing statistical analysis and reporting the results in the R programming language. 
 
 Built with non-programmers in mind, *insight* offers a broad toolbox for making model and data information easily accessible, revolving around two key prefixes: `get_*` and `find_*`. Generally, the `get_*` prefix extracts values associated with model-specific objects (e.g., parameters or algorithms), while the `find_*` prefix lists model-specific objects (e.g., priors and predictors). In total, the *insight* package includes 16 core functions: `get_data()`, `get_priors()`, `get_variance()`, `get_parameters()`, `get_predictors()`, `get_random()`, `get_response()`, `find_algorithm()`, `find_formula()`, `find_variables()`, `find_terms()`, `find_parameters()`, `find_predictors()`, `find_random()`, `find_response()`, and `model_info()`. In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_terms()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
 
 For a more intuitive introduction, consider the following examples for three major types of models: ordinary least squares (OLS) regression, linear mixed effects models, and Bayesian models. Importantly, though only a few functions are included below for the sake of space, users are encouraged to inspect the package documentation for an exhaustive list of package functionality with accompanying examples.
+
+![The functions in insight allow to access different aspects of models, such as the data used for fitting, the parameters of the fitted model or various information about the model.](figure2.png)
 
 ## Examples
 
@@ -119,9 +123,9 @@ find_formula(sample3)
 #> Sepal.Width ~ Species * Petal.Length
 ```
 
-## Models Supported by *insight*
+## Supported Models
 
-*insight* works with many different model-objects: **AER** (*ivreg, tobit*), **afex** (*mixed*), **base** (*aov, aovlist, lm, glm*), **betareg** (*betareg*), **blme** (*blmer, bglmer*), **brms** (*brmsfit*), **crch**, **countreg** (*zerontrunc*), **coxme**, **estimatr** (*lm_robust, iv_robust*), **feisr** (*feis*), **gam** (*Gam*), **gamm4** , **gamlss**, **gbm**, **gee**, **geepack** (*geeglm*), **GLMMadaptive** (*MixMod*), **glmmTMB** (*glmmTMB*), **gmnl**, **lfe** (*felm*), **lme4** (*lmer, glmer, nlmer, glmer.nb*), **MASS** (*glmmPQL, polr*), **mgcv** (*gam, gamm*), **nnet** (*multinom*), **nlme** (*lme, gls*), **ordinal** (*clm, clm2, clmm*), **plm**, **pscl** (*zeroinf, hurdle*), **quantreg** (*rq, crq, rqss*), **robust** (*glmRob, lmRob*), **robustbase** (*glmrob, lmrob*), **robustlmm** (*rlmer*), **rstanarm** (*stanreg, stanmvreg*), **survey**, **survival** (*coxph, survreg*), **truncreg** (*truncreg*), **VGAM** (*vgam, vglm*).
+*insight* works with many different model-objects, such as **AER** (*ivreg, tobit*), **afex** (*mixed*), **base** (*aov, aovlist, lm, glm*), **betareg** (*betareg*), **blme** (*blmer, bglmer*), **brms** (*brmsfit*), **crch**, **countreg** (*zerontrunc*), **coxme**, **estimatr** (*lm_robust, iv_robust*), **feisr** (*feis*), **gam** (*Gam*), **gamm4** , **gamlss**, **gbm**, **gee**, **geepack** (*geeglm*), **GLMMadaptive** (*MixMod*), **glmmTMB** (*glmmTMB*), **gmnl**, **lfe** (*felm*), **lme4** (*lmer, glmer, nlmer, glmer.nb*), **MASS** (*glmmPQL, polr*), **mgcv** (*gam, gamm*), **multgee** (*LORgee*), **nnet** (*multinom*), **nlme** (*lme, gls*), **ordinal** (*clm, clm2, clmm*), **plm**, **pscl** (*zeroinf, hurdle*), **quantreg** (*rq, crq, rqss*), **rms** (*lsr, psm*), **robust** (*glmRob, lmRob*), **robustbase** (*glmrob, lmrob*), **robustlmm** (*rlmer*), **rstanarm** (*stanreg, stanmvreg*), **survey**, **survival** (*coxph, survreg*), **truncreg** (*truncreg*), **VGAM** (*vgam, vglm*), and more.
 
 ## Licensing and Package Access
 

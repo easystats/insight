@@ -8,6 +8,6 @@
 ^_pkgdown.yml
 ^pkgdown$
 ^README.*$
-^paper*.*$
+^paper$
 ^CONTRIBUTING.*$
 ^CODE_OF_CONDUCT.*$
