@@ -175,6 +175,32 @@ model_info.survreg <- function(x, ...) {
 
 
 #' @export
+model_info.LORgee <- function(x, ...) {
+  if (grepl(pattern = "logit", x = x$link, fixed = TRUE)) {
+    link <- "logit"
+  } else if (grepl(pattern = "probit", x = x$link, fixed = TRUE)) {
+    link <- "probit"
+  } else if (grepl(pattern = "cauchit", x = x$link, fixed = TRUE)) {
+    link <- "cauchit"
+  } else if (grepl(pattern = "cloglog", x = x$link, fixed = TRUE)) {
+    link <- "cloglog"
+  } else {
+    link <- "logit"
+  }
+
+  faminfo <- stats::binomial(link = link)
+
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.htest <- function(x, ...) {
   make_family(x, ...)
 }
@@ -706,7 +732,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     grepl("^truncated", fitfam, perl = TRUE)
 
   is.ordinal <-
-    inherits(x, c("polr", "clm", "clm2", "clmm", "gmnl", "mlogit", "multinom")) |
+    inherits(x, c("polr", "clm", "clm2", "clmm", "gmnl", "mlogit", "multinom", "LORgee")) |
       fitfam %in% c("cumulative", "cratio", "sratio", "acat", "ordinal", "multinomial")
 
   is.categorical <- fitfam == "categorical"

@@ -1,5 +1,5 @@
 if (require("testthat") && require("insight") && require("lfe")) {
-  context("insight, model_info")
+  context("insight, lfe")
 
   x <- rnorm(1000)
   x2 <- rnorm(length(x))

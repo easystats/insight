@@ -267,6 +267,24 @@ link_inverse.polr <- function(x, ...) {
 
 
 #' @export
+link_inverse.LORgee <- function(x, ...) {
+  if (grepl(pattern = "logit", x = x$link, fixed = TRUE)) {
+    link <- "logit"
+  } else if (grepl(pattern = "probit", x = x$link, fixed = TRUE)) {
+    link <- "probit"
+  } else if (grepl(pattern = "cauchit", x = x$link, fixed = TRUE)) {
+    link <- "cauchit"
+  } else if (grepl(pattern = "cloglog", x = x$link, fixed = TRUE)) {
+    link <- "cloglog"
+  } else {
+    link <- "logit"
+  }
+
+  stats::make.link(link)$linkinv
+}
+
+
+#' @export
 link_inverse.gmnl <- function(x, ...) {
   stats::make.link("logit")$linkinv
 }

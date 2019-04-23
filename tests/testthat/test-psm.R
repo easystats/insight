@@ -67,6 +67,17 @@ if (require("testthat") && require("insight") && require("rms")) {
     )
   })
 
+  test_that("find_variables", {
+    expect_length(find_variables(m1), 2)
+    expect_equal(
+      find_variables(m1),
+      list(
+        response = "Surv(d.time, death)",
+        conditional = c("sex", "pol(age, 2)")
+      )
+    )
+  })
+
   test_that("find_terms", {
     expect_equal(find_terms(m1), list(response = c("d.time", "death"), conditional = c("sex", "age")))
     expect_equal(find_terms(m1, flatten = TRUE), c("d.time", "death", "sex", "age"))

@@ -107,10 +107,10 @@ get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
 get_group_factor <- function(x, f) {
   if (is.list(f)) {
     f <- lapply(f, function(.x) {
-      get_model_random(.x, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "felm", "feis")))
+      get_model_random(.x, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "LORgee", "felm", "feis")))
     })
   } else {
-    f <- get_model_random(f, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "felm", "feis")))
+    f <- get_model_random(f, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "LORgee", "felm", "feis")))
   }
 
   if (is.null(f)) return(NULL)

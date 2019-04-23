@@ -22,7 +22,8 @@
 #' cbpp$trials <- cbpp$size - cbpp$incidence
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #' head(get_data(m))
-#' @importFrom stats model.frame
+#'
+#' @importFrom stats model.frame na.omit
 #' @export
 get_data <- function(x, ...) {
   UseMethod("get_data")
@@ -74,6 +75,26 @@ get_data.feis <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.LORgee <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  mf <- tryCatch({
+    dat <- .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
+    switch(
+      effects,
+      all = dat[, find_terms(x, flatten = TRUE), drop = FALSE],
+      fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
+      random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
+    )
+  },
+  error = function(x) {
+    stats::model.frame(x)
+  })
+
+  prepare_get_data(x, stats::na.omit(mf))
+}
+
+
+#' @export
 get_data.gbm <- function(x, ...) {
   mf <- tryCatch({
     get(deparse(x$call$data, width.cutoff = 500), envir = parent.frame())[, find_terms(x, flatten = TRUE), drop = FALSE]
@@ -92,7 +113,7 @@ get_data.tobit <- function(x, ...) {
   ft <- find_terms(x, flatten = TRUE)
   remain <- intersect(ft, colnames(dat))
 
-  prepare_get_data(x, dat[, remain, drop = FALSE])
+  prepare_get_data(x, stats::na.omit(dat[, remain, drop = FALSE]))
 }
 
 
@@ -142,7 +163,7 @@ get_data.ivreg <- function(x, ...) {
     )
   }
 
-  prepare_get_data(x, final_mf)
+  prepare_get_data(x, stats::na.omit(final_mf))
 }
 
 
@@ -167,7 +188,7 @@ get_data.iv_robust <- function(x, ...) {
     )
   }
 
-  prepare_get_data(x, final_mf)
+  prepare_get_data(x, stats::na.omit(final_mf))
 }
 
 
@@ -328,7 +349,7 @@ get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
   }
   )
 
-  prepare_get_data(x, mf)
+  prepare_get_data(x, stats::na.omit(mf))
 }
 
 
@@ -343,7 +364,7 @@ get_data.rqss <- function(x, effects = c("all", "fixed", "random"), ...) {
   }
   )
 
-  prepare_get_data(x, mf)
+  prepare_get_data(x, stats::na.omit(mf))
 }
 
 
@@ -357,7 +378,7 @@ get_data.gls <- function(x, ...) {
   }
   )
 
-  prepare_get_data(x, mf)
+  prepare_get_data(x, stats::na.omit(mf))
 }
 
 

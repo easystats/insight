@@ -128,6 +128,12 @@ find_algorithm.glm <- function(x, ...) {
 
 
 #' @export
+find_algorithm.LORgee <- function(x, ...) {
+  list("algorithm" = "Fisher's scoring ML")
+}
+
+
+#' @export
 find_algorithm.merMod <- function(x, ...) {
   algorithm <- ifelse(as.logical(x@devcomp$dims[["REML"]]), "REML", "ML")
 
