@@ -1,7 +1,7 @@
 if (require("testthat") && require("insight") && require("MASS")) {
   context("insight, polr")
 
-  data(housing)
+  data(housing, package = "MASS")
 
   m1 <- polr(Sat ~ Infl + Type + Cont, data = housing, weights = Freq)
 

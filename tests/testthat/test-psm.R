@@ -5,8 +5,6 @@ if (require("testthat") && require("insight") && require("rms")) {
   set.seed(1)
   age <- rnorm(n, 50, 12)
   sex <- factor(sample(c('Female', 'Male'), n, TRUE))
-  dd <- datadist(age, sex)
-  options(datadist = 'dd')
   # Population hazard function:
   h <- .02 * exp(.06 * (age - 50) + .8 * (sex == 'Female'))
   d.time <- -log(runif(n)) / h
