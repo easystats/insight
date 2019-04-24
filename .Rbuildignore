@@ -7,7 +7,7 @@
 ^_pkgdown\.yml$
 ^_pkgdown.yml
 ^pkgdown$
-^README.*$
+^README.Rmd
 ^paper$
 ^CONTRIBUTING.*$
 ^CODE_OF_CONDUCT.*$
