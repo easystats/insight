@@ -615,6 +615,8 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
       # regular data frames, then binding them together
       mf_matrix <- mf[, which(mc), drop = FALSE]
       mf_nonmatrix <- mf[, -which(mc), drop = FALSE]
+      # fix for rms::rcs() functions
+      if (class(mf_matrix[[1]]) == "rms") class(mf_matrix[[1]]) <- "matrix"
       mf_list <- lapply(mf_matrix, as.data.frame, stringsAsFactors = FALSE)
       mf_matrix <- do.call(cbind, mf_list)
       mf <- cbind(mf_nonmatrix, mf_matrix)
