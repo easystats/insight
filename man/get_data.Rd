@@ -12,6 +12,8 @@
 \alias{get_data.gee}
 \alias{get_data.rqss}
 \alias{get_data.MixMod}
+\alias{get_data.brmsfit}
+\alias{get_data.stanreg}
 \alias{get_data.MCMCglmm}
 \title{Get the data that was used to fit the model}
 \usage{
@@ -42,6 +44,11 @@ get_data(x, ...)
 \method{get_data}{MixMod}(x, effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",
   "dispersion"), ...)
+
+\method{get_data}{brmsfit}(x, effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated"), ...)
+
+\method{get_data}{stanreg}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{MCMCglmm}(x, effects = c("all", "fixed", "random"),
   ...)

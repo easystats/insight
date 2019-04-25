@@ -51,6 +51,14 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_equal(colnames(get_response(m1)), c("incidence", "size"))
     })
 
+    test_that("find_random", {
+      expect_equal(find_random(m1), list(random = "herd"))
+    })
+
+    test_that("get_random", {
+      expect_equal(get_random(m1), lme4::cbpp[, "herd", drop = FALSE])
+    })
+
     test_that("find_terms", {
       expect_identical(
         find_terms(m1),

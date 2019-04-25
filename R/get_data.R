@@ -402,7 +402,7 @@ get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component 
   effects <- match.arg(effects)
   component <- match.arg(component)
 
-  mf <- tryCatch({
+  tryCatch({
     fitfram <- x$model_frames$mfX
     if (!is_empty_object(x$model_frames$mfZ)) {
       fitfram <- merge_dataframes(x$model_frames$mfZ, fitfram, replace = TRUE)
@@ -427,8 +427,31 @@ get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component 
     NULL
   }
   )
+}
 
-  prepare_get_data(x, mf)
+
+#' @rdname get_data
+#' @export
+get_data.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+
+  model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
+  mf <- stats::model.frame(x)
+
+  return_data(prepare_get_data(x, mf, effects = effects), effects, component, model.terms)
+}
+
+
+#' @rdname get_data
+#' @export
+get_data.stanreg <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+
+  model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
+  mf <- stats::model.frame(x)
+
+  return_data(prepare_get_data(x, mf, effects = effects), effects, component = "all", model.terms)
 }
 
 

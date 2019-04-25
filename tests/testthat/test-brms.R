@@ -196,6 +196,11 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
 
+    test_that("get_random", {
+      expect_equal(get_random(m4), zinb[, "persons", drop = FALSE])
+    })
+
+
     test_that("find_paramaters", {
       expect_equal(
         find_parameters(m1),

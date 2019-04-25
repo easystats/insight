@@ -8,6 +8,7 @@
 
 * `get_priors()` failed for *stanreg*-models, when one or more priors had no adjusted scales (#74).
 * `find_random()` failed for mixed models with multiple responses.
+* `get_random()` failed for *brmsfit* and *stanreg* models.
 * `get_parameters()` and `find_parameters()` did not work for `MixMod`-objects _without_ zero-inflation component, when `component = "all"` (the default).
 * `find_formula()` did not work for `plm`-models without instrumental variables.
 * Fixed issue with invalid notation of instrumental-variables formula in `felm`-models for R-devel on Linux.
