@@ -21,14 +21,15 @@
 #'
 #' @export
 is_model <- function(x) {
-  inherits(x,
-    c("lm", "glm", "aov", "aovlist", "brmsfit", "Gam", "MixMod", "crq", "gam",
-      "gamlss", "glmmTMB", "glmRob", "glmrob", "lmRob", "lmrob", "coxph", "coxme",
-      "MCMCglmm", "clm2", "clm", "clmm", "felm", "gee", "gls", "hurdle", "ivreg",
-      "iv_robust", "lme", "merMod", "mixed", "plm", "rlmerMod", "stanreg", "geeglm",
-      "stanmvreg", "zeroinfl", "zerotrunc", "lrm", "rqss", "rq", "vgam", "vglm",
-      "betareg", "logistf", "mlogit", "multinom", "polr", "truncreg", "glmmPQL",
-      "gmnl", "lm_robust", "tobit", "survreg", "crch", "feis", "gbm", "BFBayesFactor",
-      "psm", "LORgee", "gamm", "htest", "mlm", "censReg"
+  inherits(x, c(
+    "aov", "aovlist", "betareg", "BFBayesFactor", "brmsfit", "censReg",
+    "clm", "clm2", "clmm", "coxme", "coxph", "crch", "crq", "feis",
+    "felm", "gam", "Gam", "gamlss", "gamm", "gbm", "gee", "geeglm",
+    "glm", "glmmPQL", "glmmTMB", "glmrob", "glmRob", "gls", "gmnl",
+    "htest", "hurdle", "iv_robust", "ivreg", "lm", "lm_robust", "lme",
+    "lmrob", "lmRob", "logistf", "LORgee", "lrm", "ols", "MCMCglmm", "merMod",
+    "mixed", "MixMod", "mlm", "mlogit", "multinom", "plm", "polr",
+    "psm", "rlmerMod", "rq", "rqss", "stanmvreg", "stanreg", "survreg",
+    "tobit", "truncreg", "vgam", "vglm", "zeroinfl", "zerotrunc"
   ))
 }
