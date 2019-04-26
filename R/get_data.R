@@ -439,7 +439,13 @@ get_data.brmsfit <- function(x, effects = c("all", "fixed", "random"), component
   model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
   mf <- stats::model.frame(x)
 
-  return_data(prepare_get_data(x, mf, effects = effects), effects, component, model.terms)
+  return_data(
+    prepare_get_data(x, mf, effects = effects),
+    effects,
+    component,
+    model.terms,
+    is_mv = is_multivariate(x)
+  )
 }
 
 
@@ -451,7 +457,13 @@ get_data.stanreg <- function(x, effects = c("all", "fixed", "random"), ...) {
   model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
   mf <- stats::model.frame(x)
 
-  return_data(prepare_get_data(x, mf, effects = effects), effects, component = "all", model.terms)
+  return_data(
+    prepare_get_data(x, mf, effects = effects),
+    effects,
+    component = "all",
+    model.terms,
+    is_mv = is_multivariate(x)
+  )
 }
 
 
@@ -718,28 +730,60 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
 }
 
 
-return_data <- function(mf, effects, component, model.terms) {
-  fixed.component.data <- switch(
-    component,
-    all = c(model.terms$conditional, model.terms$zero_inflated, model.terms$dispersion),
-    conditional = model.terms$conditional,
-    zi = ,
-    zero_inflated = model.terms$zero_inflated,
-    dispersion = model.terms$dispersion
-  )
+return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
+  response <- unlist(model.terms$response)
+  if (is_mv) {
+    fixed.component.data <- switch(
+      component,
+      all = c(
+        sapply(model.terms[-1], function(i) i$conditional),
+        sapply(model.terms[-1], function(i) i$zero_inflated),
+        sapply(model.terms[-1], function(i) i$dispersion)
+      ),
+      conditional = sapply(model.terms[-1], function(i) i$conditional),
+      zi = ,
+      zero_inflated = sapply(model.terms[-1], function(i) i$zero_inflated),
+      dispersion = sapply(model.terms[-1], function(i) i$dispersion)
+    )
 
-  random.component.data <- switch(
-    component,
-    all = c(model.terms$random, model.terms$zero_inflated_random),
-    conditional = model.terms$random,
-    zi = ,
-    zero_inflated = model.terms$zero_inflated_random
-  )
+    random.component.data <- switch(
+      component,
+      all = c(
+        sapply(model.terms[-1], function(i) i$random),
+        sapply(model.terms[-1], function(i) i$zero_inflated_random)
+      ),
+      conditional = sapply(model.terms[-1], function(i) i$random),
+      zi = ,
+      zero_inflated = sapply(model.terms[-1], function(i) i$zero_inflated_random)
+    )
+
+    fixed.component.data <- unlist(fixed.component.data)
+    random.component.data <- unlist(random.component.data)
+
+  } else {
+    fixed.component.data <- switch(
+      component,
+      all = c(model.terms$conditional, model.terms$zero_inflated, model.terms$dispersion),
+      conditional = model.terms$conditional,
+      zi = ,
+      zero_inflated = model.terms$zero_inflated,
+      dispersion = model.terms$dispersion
+    )
+
+    random.component.data <- switch(
+      component,
+      all = c(model.terms$random, model.terms$zero_inflated_random),
+      conditional = model.terms$random,
+      zi = ,
+      zero_inflated = model.terms$zero_inflated_random
+    )
+  }
+
 
   dat <- switch(
     effects,
-    all = mf[, unique(c(model.terms$response, fixed.component.data, random.component.data)), drop = FALSE],
-    fixed = mf[, unique(c(model.terms$response, fixed.component.data)), drop = FALSE],
+    all = mf[, unique(c(response, fixed.component.data, random.component.data)), drop = FALSE],
+    fixed = mf[, unique(c(response, fixed.component.data)), drop = FALSE],
     random = mf[, unique(random.component.data), drop = FALSE]
   )
 
