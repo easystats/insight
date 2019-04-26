@@ -736,12 +736,19 @@ return_data <- function(mf, effects, component, model.terms) {
     zero_inflated = model.terms$zero_inflated_random
   )
 
-  switch(
+  dat <- switch(
     effects,
     all = mf[, unique(c(model.terms$response, fixed.component.data, random.component.data)), drop = FALSE],
     fixed = mf[, unique(c(model.terms$response, fixed.component.data)), drop = FALSE],
     random = mf[, unique(random.component.data), drop = FALSE]
   )
+
+  if (is_empty_object(dat)) {
+    print_color(sprintf("Warning: Data frame is empty, probably component '%s' does not exist in the %s-part of the model?\n", component, effects), "red")
+    return(NULL)
+  }
+
+  dat
 }
 
 

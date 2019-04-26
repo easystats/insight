@@ -117,7 +117,7 @@ if (require("testthat") && require("insight") && require("GLMMadaptive") && requ
     expect_identical(colnames(get_data(m, component = "cond", effects = "fixed")), c("count", "child", "camper"))
     expect_identical(colnames(get_data(m, component = "cond", effects = "random")), "persons")
     expect_identical(colnames(get_data(m, component = "disp")), "count")
-    expect_warning(colnames(get_data(m, component = "disp", effects = "random")))
+    expect_null(get_data(m, component = "disp", effects = "random"))
     expect_identical(colnames(get_data(m3)), c("incidence", "size", "period", "herd"))
   })
 
