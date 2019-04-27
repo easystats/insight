@@ -205,7 +205,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_identical(colnames(get_data(m4, component = "cond", effects = "random")), "persons")
     expect_identical(colnames(get_data(m4, component = "disp")), c("count", "xb"))
     expect_identical(colnames(get_data(m4, component = "disp", effects = "fixed")), c("count", "xb"))
-    expect_identical(colnames(get_data(m4, component = "disp", effects = "random")), vector(mode = "character"))
+    expect_null(get_data(m4, component = "disp", effects = "random"))
   })
 
   test_that("find_paramaters", {

@@ -1,5 +1,5 @@
 if (require("testthat") && require("insight") && require("betareg")) {
-  context("insight, model_info")
+  context("insight, betareg")
 
   data("GasolineYield")
   data("FoodExpenditure")

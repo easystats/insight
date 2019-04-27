@@ -1,5 +1,5 @@
 if (require("testthat") && require("insight") && require("blme")) {
-  context("insight, find_predictors")
+  context("insight, blme")
 
   data(sleepstudy)
 
