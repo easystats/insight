@@ -70,7 +70,10 @@ get_fixed_effects <- function(f) {
 
 
 # extract random effects from formula
-get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
+get_model_random <- function(f, split_nested = FALSE, model) {
+
+  is_special <- inherits(model, c("MCMCglmm", "gee", "LORgee", "felm", "feis", "BFBayesFactor"))
+
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -82,7 +85,7 @@ get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
 
   re <- sapply(lme4::findbars(f), deparse, width.cutoff = 500)
 
-  if (is_MCMCglmm && is_empty_object(re)) {
+  if (is_special && is_empty_object(re)) {
     re <- all.vars(f[[2L]])
     if (length(re) > 1) {
       re <- as.list(re)
@@ -107,10 +110,10 @@ get_model_random <- function(f, split_nested = FALSE, is_MCMCglmm = FALSE) {
 get_group_factor <- function(x, f) {
   if (is.list(f)) {
     f <- lapply(f, function(.x) {
-      get_model_random(.x, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "LORgee", "felm", "feis")))
+      get_model_random(.x, split_nested = TRUE, x)
     })
   } else {
-    f <- get_model_random(f, split_nested = TRUE, is_MCMCglmm = inherits(x, c("MCMCglmm", "gee", "LORgee", "felm", "feis")))
+    f <- get_model_random(f, split_nested = TRUE, x)
   }
 
   if (is.null(f)) return(NULL)

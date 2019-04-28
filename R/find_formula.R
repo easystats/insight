@@ -670,8 +670,27 @@ get_stanmv_formula <- function(f) {
 #' @export
 find_formula.BFBayesFactor <- function(x, ...) {
   if (.classify_BFBayesFactor(x) == "linear") {
-    utils::tail(x@numerator, 1)[[1]]@identifier$formula
+
+    fcond <- utils::tail(x@numerator, 1)[[1]]@identifier$formula
+    dt <- utils::tail(x@numerator, 1)[[1]]@dataTypes
+    frand <- names(dt)[which(dt == "random")]
+
+    if (!is_empty_object(frand)) {
+      f.random <- stats::as.formula(paste0("~", frand))
+      fcond <- sub(frand, "", fcond, fixed = TRUE)
+      fcond <- gsub("(.*)\\+$", "\\1", trim(fcond))
+      f.cond <- stats::as.formula(trim(fcond))
+    } else {
+      f.random <- NULL
+      f.cond <- stats::as.formula(fcond)
+    }
+
   } else{
-    NULL
+    return(NULL)
   }
+
+  compact_list(list(
+    conditional = f.cond,
+    random = f.random
+  ))
 }

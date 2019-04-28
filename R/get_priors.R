@@ -75,6 +75,22 @@ get_priors.brmsfit <- function(x, ...) {
 }
 
 
+#' @importFrom utils tail
+#' @export
+get_priors.BFBayesFactor <- function(x, ...) {
+  prior <- compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
+
+  data.frame(
+    parameters = names(prior),
+    distribution = "Cauchy",
+    location = 0,
+    scale = unlist(prior),
+    stringsAsFactors = FALSE
+  )
+}
+
+
+
 #' @importFrom stats na.omit
 .is_numeric_character <- function(x) {
   (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x))))) ||

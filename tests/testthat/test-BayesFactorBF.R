@@ -51,7 +51,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   context("BF t.test meta-analytic")
   t <- c(-.15, 2.39, 2.42, 2.43)
   N <- c(100, 150, 97, 99)
-  x <- meta.ttestBF(t=t, n1=N, rscale=1)
+  x <- meta.ttestBF(t = t, n1 = N, rscale = 1)
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
   })
@@ -67,15 +67,62 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   data(ToothGrowth)
   ToothGrowth$dose <- factor(ToothGrowth$dose)
   levels(ToothGrowth$dose) <- c("Low", "Medium", "High")
-  x <- anovaBF(len ~ supp*dose, data=ToothGrowth)
+  x <- anovaBF(len ~ supp * dose, data = ToothGrowth)
+
+  data(puzzles)
+  m2 <- anovaBF(RT ~ shape*color + ID, data = puzzles, whichRandom = "ID")
+
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
   })
+
   test_that("find_formula", {
-    expect_equal(find_formula(x), "len ~ supp + dose + supp:dose")
+    expect_equal(find_formula(x), list(conditional = "len ~ supp + dose + supp:dose"))
+    expect_equal(
+      find_formula(m2),
+      list(
+        conditional = "RT ~ shape + color + shape:color",
+        random = "~ID"
+      )
+    )
   })
+
   test_that("get_parameters", {
     expect_null(get_parameters(x))
+  })
+
+  test_that("find_response", {
+    expect_equal(find_response(m2), "RT")
+  })
+
+  test_that("find_random", {
+    expect_equal(find_random(m2), "ID")
+  })
+
+  test_that("find_terms", {
+    expect_equal(
+      find_terms(m2),
+      list(
+        response = "RT",
+        conditional = c("shape", "color"),
+        random = "ID"
+      )
+    )
+  })
+
+  test_that("get_priors", {
+    expect_equal(
+      get_priors(m2),
+      structure(list(
+        parameters = c("fixed", "random", "continuous"),
+        distribution = c("Cauchy", "Cauchy", "Cauchy"),
+        location = c(0, 0, 0),
+        scale = c(0.5, 1, 0.353553390593274)),
+        class = "data.frame",
+        row.names = c("fixed", "random", "continuous")
+      ),
+      tolerance = 1e-5
+    )
   })
 
 
