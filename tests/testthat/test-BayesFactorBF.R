@@ -69,20 +69,34 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   levels(ToothGrowth$dose) <- c("Low", "Medium", "High")
   x <- anovaBF(len ~ supp * dose, data = ToothGrowth)
 
+  test_that("get_data", {
+    expect_true(is.data.frame(get_data(x)))
+  })
+
+  test_that("find_formula", {
+    expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose + supp:dose")))
+  })
+
+  test_that("get_parameters", {
+    expect_null(get_parameters(x))
+  })
+
+
+  # ---------------------------
+  context("BF ANOVA Random")
   data(puzzles)
-  m2 <- anovaBF(RT ~ shape*color + ID, data = puzzles, whichRandom = "ID")
+  x <- anovaBF(RT ~ shape * color + ID, data = puzzles, whichRandom = "ID")
 
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
   })
 
   test_that("find_formula", {
-    expect_equal(find_formula(x), list(conditional = "len ~ supp + dose + supp:dose"))
     expect_equal(
-      find_formula(m2),
+      find_formula(x),
       list(
-        conditional = "RT ~ shape + color + shape:color",
-        random = "~ID"
+        conditional = as.formula("RT ~ shape + color + shape:color"),
+        random = as.formula("~ID")
       )
     )
   })
@@ -92,16 +106,16 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   })
 
   test_that("find_response", {
-    expect_equal(find_response(m2), "RT")
+    expect_equal(find_response(x), "RT")
   })
 
   test_that("find_random", {
-    expect_equal(find_random(m2), "ID")
+    expect_equal(find_random(x), list(random = "ID"))
   })
 
   test_that("find_terms", {
     expect_equal(
-      find_terms(m2),
+      find_terms(x),
       list(
         response = "RT",
         conditional = c("shape", "color"),
@@ -112,7 +126,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
 
   test_that("get_priors", {
     expect_equal(
-      get_priors(m2),
+      get_priors(x),
       structure(list(
         parameters = c("fixed", "random", "continuous"),
         distribution = c("Cauchy", "Cauchy", "Cauchy"),
@@ -126,19 +140,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   })
 
 
-  # ---------------------------
-  context("BF ANOVA Random")
-  data(puzzles)
-  x <- anovaBF(RT ~ shape*color + ID, data = puzzles, whichRandom="ID")
-  test_that("get_data", {
-    expect_true(is.data.frame(get_data(x)))
-  })
-  test_that("find_formula", {
-    expect_equal(find_formula(x), "RT ~ shape + color + shape:color + ID")
-  })
-  test_that("get_parameters", {
-    expect_null(get_parameters(x))
-  })
+
 
 
   # ---------------------------
@@ -148,7 +150,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_true(is.data.frame(get_data(x)))
   })
   test_that("find_formula", {
-    expect_equal(find_formula(x), "len ~ supp + dose")
+    expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")))
   })
   test_that("get_parameters", {
     expect_null(get_parameters(x))
@@ -162,7 +164,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_true(is.data.frame(get_data(x)))
   })
   test_that("find_formula", {
-    expect_equal(find_formula(x), "len ~ supp + dose")
+    expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")))
 
   })
   test_that("get_parameters", {
