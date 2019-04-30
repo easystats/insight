@@ -78,11 +78,11 @@ if (require("testthat") && require("insight") && require("gbm")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("wt", "cyl", "gear")
+        conditional = c("wt", "gear", "cyl")
       )
     )
     expect_equal(nrow(get_parameters(m1)), 3)
-    expect_equal(get_parameters(m1)$parameter, c("wt", "cyl", "gear"))
+    expect_equal(get_parameters(m1)$parameter, c("wt", "gear", "cyl"))
   })
 
   test_that("find_variables", {

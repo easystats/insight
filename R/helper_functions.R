@@ -63,19 +63,24 @@ merge_dataframes <- function(data, ..., replace = TRUE) {
 }
 
 
-# removes random effects from a formula that which is in lmer-notation
+# removes random effects from a formula that is in lmer-notation
 #' @importFrom stats terms drop.terms update
 get_fixed_effects <- function(f) {
   f_string <- deparse(f, width.cutoff = 500)
-  # intercept only model, w/o "1" in formula notation?
-  # e.g. "Reaction ~ (1 + Days | Subject)"
-  if (grepl("^\\(", deparse(f[[3]], width.cutoff = 500))) {
-    trim(paste0(as.character(f[[2]]), " ~ 1"))
-  } else if (!grepl("\\+(\\s)*\\((.*)\\)", f_string)) {
-    f_terms <- stats::terms(f)
-    l <- grep("|", labels(f), fixed = TRUE)
-    no_bars <- stats::drop.terms(f_terms, l, keep.response = TRUE)
-    stats::update(f_terms, no_bars)
+
+  if (grepl("|", f_string, fixed = TRUE)) {
+    # intercept only model, w/o "1" in formula notation?
+    # e.g. "Reaction ~ (1 + Days | Subject)"
+    if (length(f) > 2 && grepl("^\\(", deparse(f[[3]], width.cutoff = 500))) {
+      trim(paste0(as.character(f[[2]]), " ~ 1"))
+    } else if (!grepl("\\+(\\s)*\\((.*)\\)", f_string)) {
+      f_terms <- stats::terms(f)
+      pos_bar <- grep("|", labels(f_terms), fixed = TRUE)
+      no_bars <- stats::drop.terms(f_terms, pos_bar, keep.response = TRUE)
+      stats::update(f_terms, no_bars)
+    } else {
+      trim(gsub("\\+(\\s)*\\((.*)\\)", "", f_string))
+    }
   } else {
     trim(gsub("\\+(\\s)*\\((.*)\\)", "", f_string))
   }
