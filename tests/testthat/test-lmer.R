@@ -221,4 +221,65 @@ if (require("testthat") && require("insight") && require("lme4")) {
     expect_equal(find_random_slopes(m1), list(random = "Days"))
     expect_null(find_random_slopes(m2))
   })
+
+
+  m3 <- lme4::lmer(
+    Reaction ~ (1 + Days | Subject),
+    data = sleepstudy
+  )
+
+  m4 <- lme4::lmer(
+    Reaction ~ (1 | mygrp / mysubgrp) + (1 | Subject),
+    data = sleepstudy
+  )
+
+  m5 <- lme4::lmer(
+    Reaction ~ 1 + (1 + Days | Subject),
+    data = sleepstudy
+  )
+
+  m6 <- lme4::lmer(
+    Reaction ~ 1 + (1 | mygrp / mysubgrp) + (1 | Subject),
+    data = sleepstudy
+  )
+
+  test_that("find_formula", {
+    expect_equal(
+      find_formula(m3),
+      list(
+        conditional = as.formula("Reaction ~ 1"),
+        random = as.formula("~1 + Days | Subject")
+      )
+    )
+
+    expect_equal(
+      find_formula(m5),
+      list(
+        conditional = as.formula("Reaction ~ 1"),
+        random = as.formula("~1 + Days | Subject")
+      )
+    )
+
+    expect_equal(
+      find_formula(m4),
+      list(
+        conditional = as.formula("Reaction ~ 1"),
+        random = list(
+          as.formula("~1 | mysubgrp:mygrp"),
+          as.formula("~1 | mygrp"),
+          as.formula("~1 | Subject")
+        )
+    ))
+
+    expect_equal(
+      find_formula(m6),
+      list(
+        conditional = as.formula("Reaction ~ 1"),
+        random = list(
+          as.formula("~1 | mysubgrp:mygrp"),
+          as.formula("~1 | mygrp"),
+          as.formula("~1 | Subject")
+        )
+      ))
+  })
 }
