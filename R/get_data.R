@@ -700,7 +700,8 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
   # keep "as is" variable for response variables in data frame
   if (colnames(mf)[1] == rn[1] && grepl("^I\\(", rn[1])) {
     md <- tryCatch({
-      .get_data_from_env(x)[, rn_not_combined, drop = FALSE]
+      tmp <- .get_data_from_env(x)[, unique(c(rn_not_combined, cvn)), drop = FALSE]
+      tmp[, rn_not_combined, drop = FALSE]
     },
     error = function(x) {
       NULL
