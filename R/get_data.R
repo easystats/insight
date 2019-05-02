@@ -54,6 +54,20 @@ get_data.default <- function(x, ...) {
 
 
 #' @export
+get_data.biglm <- function(x, ...) {
+  mf <- stats::model.frame(x)
+  prepare_get_data(x, mf)
+}
+
+
+#' @export
+get_data.bigglm <- function(x, ...) {
+  mf <- stats::model.frame(x)
+  prepare_get_data(x, mf)
+}
+
+
+#' @export
 get_data.felm <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   .get_data_from_modelframe(x, stats::model.frame(x), effects)

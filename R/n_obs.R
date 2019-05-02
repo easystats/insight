@@ -60,6 +60,18 @@ n_obs.LORgee <- function(x, ...) {
 
 
 #' @export
+n_obs.biglm <- function(x, ...) {
+  x$n
+}
+
+
+#' @export
+n_obs.bigglm <- function(x, ...) {
+  x$n
+}
+
+
+#' @export
 n_obs.gbm <- function(x, ...) {
   length(x$fit)
 }

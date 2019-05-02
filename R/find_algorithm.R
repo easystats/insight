@@ -83,6 +83,18 @@ find_algorithm.logistf <- function(x, ...) {
 
 
 #' @export
+find_algorithm.bigglm <- function(x, ...) {
+  list("algorithm" = "ML")
+}
+
+
+#' @export
+find_algorithm.biglm <- function(x, ...) {
+  list("algorithm" = "OLS")
+}
+
+
+#' @export
 find_algorithm.gamlss <- function(x, ...) {
   list("algorithm" = as.character(x$method)[1])
 }
