@@ -4,6 +4,7 @@
 #' @description This method returns the number of observation that were used
 #'   to fit the model, as numeric value.
 #'
+#' @param weighted For survey designs, returns the weighted sample size.
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
 #'
@@ -39,9 +40,13 @@ n_obs.default <- function(x, ...) {
 }
 
 
+#' @rdname n_obs
 #' @export
-n_obs.svyolr <- function(x, ...) {
-  nrow(stats::model.frame(x))
+n_obs.svyolr <- function(x, weighted = FALSE, ...) {
+  if (weighted)
+    stats::nobs(x)
+  else
+    nrow(stats::model.frame(x))
 }
 
 

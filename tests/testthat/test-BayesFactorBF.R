@@ -14,19 +14,22 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
 
 
   # ---------------------------
-  context("BF t.test one sample")
-  data(sleep)
-  diffScores <- sleep$extra[1:10] - sleep$extra[11:20]
-  x <- ttestBF(x = diffScores)
-  test_that("get_data", {
-    expect_true(is.data.frame(get_data(x)))
-  })
-  test_that("find_formula", {
-    expect_null(find_formula(x))
-  })
-  test_that("get_parameters", {
-    expect_equal(nrow(get_parameters(x)), 4000)
-  })
+  # context("BF t.test one sample")
+  # data(sleep)
+  #
+  # x <- ttestBF(x = sleep$extra[sleep$group == 1],
+  #              y = sleep$extra[sleep$group == 2],
+  #              paired = TRUE)
+  #
+  # test_that("get_data", {
+  #   expect_true(is.data.frame(get_data(x)))
+  # })
+  # test_that("find_formula", {
+  #   expect_null(find_formula(x))
+  # })
+  # test_that("get_parameters", {
+  #   expect_equal(nrow(get_parameters(x)), 4000)
+  # })
 
 
 

@@ -1,7 +1,7 @@
 if (require("testthat") && require("insight") && require("ordinal")) {
   context("insight, model_info")
 
-  data(wine)
+  data(wine, package = "ordinal")
   m1 <- clm(rating ~ temp * contact, data = wine)
 
   test_that("model_info", {

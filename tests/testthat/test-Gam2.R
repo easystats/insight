@@ -1,7 +1,5 @@
-unloadNamespace("mgcv")
-
 if (require("testthat") && require("insight") && require("gam")) {
-  context("insight, model_info")
+  context("insight, gam")
 
   data(kyphosis)
   m1 <- gam::gam(

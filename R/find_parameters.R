@@ -88,7 +88,7 @@ find_parameters.gam <- function(x, ...) {
 #' @export
 find_parameters.gbm <- function(x, ...) {
   s <- summary(x, plotit = FALSE)
-  list(conditional = rownames(s))
+  list(conditional = as.character(s$var))
 }
 
 

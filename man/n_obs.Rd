@@ -2,14 +2,19 @@
 % Please edit documentation in R/n_obs.R
 \name{n_obs}
 \alias{n_obs}
+\alias{n_obs.svyolr}
 \title{Get number of observations from a model}
 \usage{
 n_obs(x, ...)
+
+\method{n_obs}{svyolr}(x, weighted = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
+
+\item{weighted}{For survey designs, returns the weighted sample size.}
 }
 \value{
 The number of observations used to fit the model, or \code{NULL} if
