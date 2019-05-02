@@ -29,7 +29,7 @@ is_model <- function(x) {
     "htest", "hurdle", "iv_robust", "ivreg", "lm", "lm_robust", "lme",
     "lmrob", "lmRob", "logistf", "LORgee", "lrm", "ols", "MCMCglmm", "merMod",
     "mixed", "MixMod", "mlm", "mlogit", "multinom", "plm", "polr",
-    "psm", "rlmerMod", "rq", "rqss", "stanmvreg", "stanreg", "survreg",
+    "psm", "rlmerMod", "rq", "rqss", "speedlm", "speedglm", "stanmvreg", "stanreg", "survreg",
     "tobit", "truncreg", "vgam", "vglm", "zeroinfl", "zerotrunc"
   ))
 }

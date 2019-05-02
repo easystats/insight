@@ -54,6 +54,12 @@ link_function.default <- function(x, ...) {
 
 
 #' @export
+link_function.speedglm <- function(x, ...) {
+  stats::family(x)$linkfun
+}
+
+
+#' @export
 link_function.multinom <- function(x, ...) {
   stats::make.link(link = "logit")$linkfun
 }
@@ -251,6 +257,12 @@ link_function.psm <- function(x, ...) {
 
 #' @export
 link_function.lmRob <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
+link_function.speedlm <- function(x, ...) {
   stats::gaussian(link = "identity")$linkfun
 }
 

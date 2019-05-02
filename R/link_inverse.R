@@ -60,6 +60,12 @@ link_inverse.glm <- function(x, ...) {
 
 
 #' @export
+link_inverse.speedglm <- function(x, ...) {
+  stats::family(x)$linkinv
+}
+
+
+#' @export
 link_inverse.gamlss <- function(x, ...) {
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
   faminfo$mu.linkinv
@@ -254,6 +260,12 @@ link_inverse.lmRob <- function(x, ...) {
 
 #' @export
 link_inverse.lmrob <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
+link_inverse.speedlm <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 

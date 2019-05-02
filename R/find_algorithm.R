@@ -104,6 +104,18 @@ find_algorithm.lm <- function(x, ...) {
 
 
 #' @export
+find_algorithm.speedlm <- function(x, ...) {
+  list("algorithm" = x$method)
+}
+
+
+#' @export
+find_algorithm.speedglm <- function(x, ...) {
+  list("algorithm" = x$method)
+}
+
+
+#' @export
 find_algorithm.rq <- function(x, ...) {
   list("algorithm" = x$method)
 }

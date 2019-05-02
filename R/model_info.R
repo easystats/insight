@@ -98,6 +98,20 @@ model_info.default <- function(x, ...) {
 }
 
 
+#' @importFrom stats family
+#' @export
+model_info.speedglm <- function(x, ...) {
+  faminfo <- stats::family(x)
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
 #' @export
 model_info.glmmPQL <- function(x, ...) {
   faminfo <- x$family
@@ -268,6 +282,12 @@ model_info.truncreg <- function(x, ...) {
 
 #' @export
 model_info.lmRob <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
+model_info.speedlm <- function(x, ...) {
   make_family(x, ...)
 }
 
