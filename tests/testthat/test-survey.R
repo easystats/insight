@@ -1,5 +1,5 @@
 if (require("testthat") && require("insight") && require("survey")) {
-  context("insight, model_info")
+  context("insight, svyglm")
 
   data(api)
   dstrat <-

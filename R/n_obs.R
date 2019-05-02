@@ -40,6 +40,12 @@ n_obs.default <- function(x, ...) {
 
 
 #' @export
+n_obs.svyolr <- function(x, ...) {
+  nrow(stats::model.frame(x))
+}
+
+
+#' @export
 n_obs.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))

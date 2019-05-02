@@ -297,6 +297,14 @@ link_inverse.polr <- function(x, ...) {
 
 
 #' @export
+link_inverse.svyolr <- function(x, ...) {
+  link <- x$method
+  if (link == "logistic") link <- "logit"
+  stats::make.link(link)$linkinv
+}
+
+
+#' @export
 link_inverse.LORgee <- function(x, ...) {
   if (grepl(pattern = "logit", x = x$link, fixed = TRUE)) {
     link <- "logit"

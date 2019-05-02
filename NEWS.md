@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `biglm` and `bigglm` (*biglm*), `feis` (*feisr*), `gbm` (*gbm*), `BFBayesFactor` (*BayesFactor*), `psm` (*rms*), `LORgee` (*multgee*), `censReg` (*censReg*), `ols` (*rms*), `speedlm` and `speedglm` (*speedglm*)
+* `biglm` and `bigglm` (*biglm*), `feis` (*feisr*), `gbm` (*gbm*), `BFBayesFactor` (*BayesFactor*), `psm` (*rms*), `LORgee` (*multgee*), `censReg` (*censReg*), `ols` (*rms*), `speedlm` and `speedglm` (*speedglm*), `svyolr` (*survey*)
 
 ## Bug fixes
 

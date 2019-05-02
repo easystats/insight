@@ -148,6 +148,19 @@ link_function.polr <- function(x, ...) {
 
 
 #' @export
+link_function.svyolr <- function(x, ...) {
+  link <- switch(
+    x$method,
+    logistic = "logit",
+    probit = "probit",
+    "log"
+  )
+
+  stats::make.link(link)$linkfun
+}
+
+
+#' @export
 link_function.gmnl <- function(x, ...) {
   stats::make.link("logit")$linkfun
 }

@@ -549,7 +549,23 @@ model_info.lrm <- function(x, ...) {
 
 #' @export
 model_info.polr <- function(x, ...) {
-  faminfo <- stats::binomial(link = "logit")
+  link <- x$method
+  if (link == "logistic") link <- "logit"
+  faminfo <- stats::binomial(link = link)
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @export
+model_info.svyolr <- function(x, ...) {
+  l <- switch(x$method, logistic = "logit", x$method)
+  faminfo <- stats::binomial(link = l)
   make_family(
     x = x,
     fitfam = faminfo$family,
@@ -758,7 +774,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     grepl("^truncated", fitfam, perl = TRUE)
 
   is.ordinal <-
-    inherits(x, c("polr", "clm", "clm2", "clmm", "gmnl", "mlogit", "multinom", "LORgee")) |
+    inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "gmnl", "mlogit", "multinom", "LORgee")) |
       fitfam %in% c("cumulative", "cratio", "sratio", "acat", "ordinal", "multinomial")
 
   is.categorical <- fitfam == "categorical"
