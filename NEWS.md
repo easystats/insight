@@ -14,6 +14,7 @@
 * `find_formula()` returned random effects as conditional part of the formula for null-models (only intercept in fixed parts) (#87)
 * Fixed issue with invalid notation of instrumental-variables formula in `felm`-models for R-devel on Linux.
 * Fixed issue with `get_data()` for *gee* models, where incomplete cases were not removed from the data.
+* Fixed potential issue with `get_data()` for intercept-only-models from models of class `glmmTMB`, `brmsfit`, `MixMod` and `rstanarm` (#91).
 
 # insight 0.2.0
 
