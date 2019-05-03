@@ -79,7 +79,14 @@ merge_dataframes <- function(data, ..., replace = TRUE) {
 get_fixed_effects <- function(f) {
   f_string <- deparse(f, width.cutoff = 500)
 
-  if (grepl("|", f_string, fixed = TRUE)) {
+  # for some wird brms-models, we also have a "|" in the response.
+  # in order to check for "|" only in the random effects, we have
+  # to remove the response here...
+
+  f_response <- deparse(f[[2]], width.cutoff = 500)
+  f_predictors <- sub(f_response, "", f_string, fixed = TRUE)
+
+  if (grepl("|", f_predictors, fixed = TRUE)) {
     # intercept only model, w/o "1" in formula notation?
     # e.g. "Reaction ~ (1 + Days | Subject)"
     if (length(f) > 2 && grepl("^\\(", deparse(f[[3]], width.cutoff = 500))) {

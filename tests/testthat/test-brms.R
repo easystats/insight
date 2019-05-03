@@ -1,6 +1,7 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+# .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+# if (.runThisTest && Sys.getenv("USER") != "travis") {
 
-if (.runThisTest && Sys.getenv("USER") != "travis") {
+if (Sys.getenv("USER") != "travis") {
   if (suppressWarnings(
     require("testthat") &&
       require("insight") &&
@@ -8,70 +9,13 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
   )) {
     context("insight, brms-find_response")
 
-
-
-
     # Model fitting -----------------------------------------------------------
 
-    data("epilepsy", package = "brms")
-    data("iris")
-    zinb <- read.csv("http://stats.idre.ucla.edu/stat/data/fish.csv")
-
-    bprior1 <- prior(student_t(5, 0, 10), class = b) + prior(cauchy(0, 2), class = sd)
-
-    m1 <- brm(
-      count ~ Age + Base * Trt + (1 | patient),
-      data = epilepsy,
-      family = poisson(),
-      prior = bprior1,
-      chains = 1,
-      iter = 500
-    )
-
-    f1 <- bf(Sepal.Length ~ Petal.Length + Sepal.Width + Species)
-    f2 <- bf(Sepal.Width ~ Species)
-    m2 <- brm(f1 + f2 + set_rescor(FALSE), data = iris, chains = 1, iter = 500)
-
-    dat <- read.table(header = TRUE, text = "
-      n r r/n group treat c2 c1 w
-      62 3 0.048387097 1 0 0.1438 1.941115288 1.941115288
-      96 1 0.010416667 1 0 0.237 1.186583128 1.186583128
-      17 0 0 0 0 0.2774 1.159882668 3.159882668
-      41 2 0.048780488 1 0 0.2774 1.159882668 3.159882668
-      212 170 0.801886792 0 0 0.2093 1.133397521 1.133397521
-      143 21 0.146853147 1 1 0.1206 1.128993008 1.128993008
-      143 0 0 1 1 0.1707 1.128993008 2.128993008
-      143 33 0.230769231 0 1 0.0699 1.128993008 1.128993008
-      73 62 1.260273973 0 1 0.1351 1.121927228 1.121927228
-      73 17 0.232876712 0 1 0.1206 1.121927228 1.121927228")
-    dat$treat <- as.factor(dat$treat)
-
-    m3 <- brm(r | trials(n) ~ treat * c2, data = dat, family = binomial(link = logit), chains = 1, iter = 500)
-
-    m4 <- brm(
-      bf(
-        count ~ child + camper + (1 | persons),
-        zi ~ child + camper + (1 | persons)
-      ),
-      data = zinb,
-      family = zero_inflated_poisson(),
-      chains = 1,
-      iter = 500
-    )
-
-    zinb$count2 <- rpois(250, 5)
-    zinb$count2[sample(1:250, 100, replace = FALSE)] <- 0
-
-    bf1 <- bf(count ~ child + camper + (1 | persons), zi ~ camper + (1 | persons))
-    bf2 <- bf(count2 ~ child + livebait + (1 | persons), zi ~ child + (1 | persons))
-
-    m5 <- brm(bf1 + bf2,
-      data = zinb,
-      family = zero_inflated_poisson(),
-      chains = 1,
-      iter = 500
-    )
-
+    m1 <- insight::download_model("brms_mixed_6")
+    m2 <- insight::download_model("brms_mv_4")
+    m3 <- insight::download_model("brms_2")
+    m4 <- insight::download_model("brms_zi_3")
+    m5 <- insight::download_model("brms_mv_5")
 
     # Tests -------------------------------------------------------------------
 
@@ -197,6 +141,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
 
     test_that("get_random", {
+      zinb <- get_data(m4)
       expect_equal(get_random(m4), zinb[, "persons", drop = FALSE])
     })
 
