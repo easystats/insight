@@ -23,5 +23,13 @@
 #'
 #' @export
 has_intercept <- function(x) {
-  !("0" %in% find_variables(x)$conditional)
+  if (is_multivariate(x)) {
+    unlist(lapply(find_variables(x), .check_for_intercept))
+  } else {
+    .check_for_intercept(find_variables(x))
+  }
+}
+
+.check_for_intercept <- function(vars) {
+  !("0" %in% vars[["conditional"]])
 }

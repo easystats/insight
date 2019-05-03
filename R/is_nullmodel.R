@@ -24,5 +24,13 @@
 #'
 #' @export
 is_nullmodel <- function(x) {
-  is.null(find_predictors(x, effects = "fixed", component = "conditional", flatten = TRUE))
+  if (is_multivariate(x)) {
+    unlist(lapply(find_predictors(x, effects = "fixed", component = "conditional"), .check_for_nullmodel))
+  } else {
+    .check_for_nullmodel(find_predictors(x, effects = "fixed", component = "conditional"))
+  }
+}
+
+.check_for_nullmodel <- function(preds) {
+  is.null(preds[["conditional"]])
 }
