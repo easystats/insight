@@ -117,7 +117,24 @@
 <a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
-<code>feis</code> (<em>feisr</em>), <code>gbm</code> (<em>gbm</em>), <code>BFBayesFactor</code> (<em>BayesFactor</em>), <code>psm</code> (<em>rms</em>), <code>LORgee</code> (<em>multgee</em>), <code>censReg</code>(<em>censReg</em>)</li>
+<code>biglm</code> and <code>bigglm</code> (<em>biglm</em>), <code>feis</code> (<em>feisr</em>), <code>gbm</code> (<em>gbm</em>), <code>BFBayesFactor</code> (<em>BayesFactor</em>), <code>psm</code> (<em>rms</em>), <code>LORgee</code> (<em>multgee</em>), <code>censReg</code> (<em>censReg</em>), <code>ols</code> (<em>rms</em>), <code>speedlm</code> and <code>speedglm</code> (<em>speedglm</em>), <code>svyolr</code> (<em>survey</em>)</li>
+</ul>
+</div>
+<div id="new-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-functions" class="anchor"></a>New functions</h2>
+<ul>
+<li>
+<code><a href="../reference/is_nullmodel.html">is_nullmodel()</a></code> to check if model is a null-model (intercept-only), i.e. if the conditional part of the model has no predictors.</li>
+<li>
+<code><a href="../reference/has_intercept.html">has_intercept()</a></code> to check if model has an intercept.</li>
+</ul>
+</div>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking Changes</h2>
+<ul>
+<li>Functions like <code><a href="../reference/find_predictors.html">find_predictors()</a></code> or <code><a href="../reference/find_terms.html">find_terms()</a></code> return <code>NULL</code> for null-models (intercept-only models). Use <code><a href="../reference/find_parameters.html">find_parameters()</a></code> to check if your model only has an intercept-parameter (but no predictors).</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
@@ -129,11 +146,16 @@
 <li>
 <code><a href="../reference/find_random.html">find_random()</a></code> failed for mixed models with multiple responses.</li>
 <li>
+<code><a href="../reference/get_random.html">get_random()</a></code> failed for <em>brmsfit</em> and <em>stanreg</em> models.</li>
+<li>
 <code><a href="../reference/get_parameters.html">get_parameters()</a></code> and <code><a href="../reference/find_parameters.html">find_parameters()</a></code> did not work for <code>MixMod</code>-objects <em>without</em> zero-inflation component, when <code>component = "all"</code> (the default).</li>
 <li>
 <code><a href="../reference/find_formula.html">find_formula()</a></code> did not work for <code>plm</code>-models without instrumental variables.</li>
+<li>
+<code><a href="../reference/find_formula.html">find_formula()</a></code> returned random effects as conditional part of the formula for null-models (only intercept in fixed parts) (#87)</li>
 <li>Fixed issue with invalid notation of instrumental-variables formula in <code>felm</code>-models for R-devel on Linux.</li>
 <li>Fixed issue with <code><a href="../reference/get_data.html">get_data()</a></code> for <em>gee</em> models, where incomplete cases were not removed from the data.</li>
+<li>Fixed potential issue with <code><a href="../reference/get_data.html">get_data()</a></code> for null-models (only intercept in fixed parts) from models of class <code>glmmTMB</code>, <code>brmsfit</code>, <code>MixMod</code> and <code>rstanarm</code> (#91).</li>
 </ul>
 </div>
 </div>
@@ -157,9 +179,9 @@
 <code>iv_robust</code> (<em>estimatr</em>), <code>crch</code> (<em>crch</em>), <code>gamlss</code> (<em>gamlss</em>), <code>lmrob</code> and <code>glmrob</code> (<em>robustbase</em>, #64), <code>rq</code>, <code>rqss</code> and <code>crq</code> (<em>quantreg</em>), <code>rlmer</code> (<em>robustlmm</em>), <code>mixed</code> (<em>afex</em>), <code>tobit</code> (<em>AER</em>) and <code>survreg</code> (<em>survival</em>).</li>
 </ul>
 </div>
-<div id="new-functions" class="section level2">
+<div id="new-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions" class="anchor"></a>New functions</h2>
+<a href="#new-functions-1" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code>, to calculate the variance components from mixed models of class <code>merMod</code>, <code>glmmTMB</code>, <code>MixMod</code>, <code>rlmer</code>, <code>mixed</code>, <code>lme</code> and <code>stanreg</code> (#52). Furthermore, convenient shortcuts to return the related components directly, like <code><a href="../reference/get_variance.html">get_variance_random()</a></code> or <code><a href="../reference/get_variance.html">get_variance_residual()</a></code>.</li>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get number of observations from a model — n_obs • insight</title>
+<title>Checks if model is a null-model (intercept-only) — is_nullmodel • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,10 +37,10 @@
 
 
 
-<meta property="og:title" content="Get number of observations from a model — n_obs" />
+<meta property="og:title" content="Checks if model is a null-model (intercept-only) — is_nullmodel" />
 
-<meta property="og:description" content="This method returns the number of observation that were used
-  to fit the model, as numeric value." />
+<meta property="og:description" content="Checks if model is a null-model (intercept-only), i.e. if
+  the conditional part of the model has no predictors." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -107,50 +107,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get number of observations from a model</h1>
+    <h1>Checks if model is a null-model (intercept-only)</h1>
     
-    <div class="hidden name"><code>n_obs.Rd</code></div>
+    <div class="hidden name"><code>is_nullmodel.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This method returns the number of observation that were used
-  to fit the model, as numeric value.</p>
+    <p>Checks if model is a null-model (intercept-only), i.e. if
+  the conditional part of the model has no predictors.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>n_obs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for svyolr</span>
-<span class='fu'>n_obs</span>(<span class='no'>x</span>, <span class='kw'>weighted</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>is_nullmodel</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr>
-    <tr>
-      <th>weighted</th>
-      <td><p>For survey designs, returns the weighted sample size.</p></td>
+      <td><p>A model object.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The number of observations used to fit the model, or <code>NULL</code> if
-  this information is not available.</p>
+    <p><code>TRUE</code> if <code>x</code> is a null-model, <code>FALSE</code> othwerwise.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>n_obs</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; [1] 32</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>is_nullmodel</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>gear</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>is_nullmodel</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='fl'>1</span> + (<span class='no'>Days</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>)
+<span class='fu'>is_nullmodel</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='no'>Days</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>)
+<span class='fu'>is_nullmodel</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
