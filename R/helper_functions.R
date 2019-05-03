@@ -4,6 +4,17 @@ trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 # remove NULL elements from lists
 compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i) || any(i == "NULL"))]
 
+
+# remove values from vector
+.remove_values <- function(x, values) {
+  remove <- x %in% values
+  if (any(remove)) {
+    x <- x[-remove]
+  }
+  x
+}
+
+
 # is string empty?
 is_empty_string <- function(x) {
   x <- x[!is.na(x)]
@@ -56,7 +67,7 @@ merge_dataframes <- function(data, ..., replace = TRUE) {
       reihenfolge <- c(reihenfolge, xl)
     }
     # sort data frame
-    x <- x[, order(reihenfolge)]
+    x <- x[, order(reihenfolge), drop = FALSE]
   }
 
   x

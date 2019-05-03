@@ -30,7 +30,7 @@ clean_names <- function(x) {
 #' @export
 clean_names.default <- function(x) {
   cleaned <- unname(find_terms(x, flatten = TRUE))
-  setdiff(cleaned, "1")
+  .remove_values(cleaned, c("1", "0"))
 }
 
 
@@ -75,5 +75,5 @@ clean_names.character <- function(x) {
   })
 
   # remove for random intercept only models
-  setdiff(cleaned, "1")
+  .remove_values(cleaned, c("1", "0"))
 }

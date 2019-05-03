@@ -59,7 +59,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
     l <- return_vars(f)
   }
 
-  if (is_empty_object(l)) {
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
     return(NULL)
   }
 
@@ -92,7 +92,8 @@ return_vars <- function(f) {
   l <- compact_list(l)
 
   # remove constants
-  l <- lapply(l, setdiff, "pi")
+  l <- lapply(l, .remove_values, c("pi", "1", "0"))
+  l <- lapply(l, .remove_values, c(0, 1))
   names(l) <- names(f)[!empty_elements]
 
   l

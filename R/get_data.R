@@ -798,10 +798,12 @@ return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
   # this is to remove the "1" from intercept-ony-models
 
   if (!is_empty_object(fixed.component.data)) {
-    fixed.component.data <- setdiff(fixed.component.data, c(1, "1"))
+    fixed.component.data <- .remove_values(fixed.component.data, c("1", "0"))
+    fixed.component.data <- .remove_values(fixed.component.data, c(1, 0))
   }
   if (!is_empty_object(random.component.data)) {
-    random.component.data <- setdiff(random.component.data, c(1, "1"))
+    random.component.data <- .remove_values(random.component.data, c("1", "0"))
+    random.component.data <- .remove_values(random.component.data, c(1, 0))
   }
 
 

@@ -4,6 +4,10 @@
 
 * `biglm` and `bigglm` (*biglm*), `feis` (*feisr*), `gbm` (*gbm*), `BFBayesFactor` (*BayesFactor*), `psm` (*rms*), `LORgee` (*multgee*), `censReg` (*censReg*), `ols` (*rms*), `speedlm` and `speedglm` (*speedglm*), `svyolr` (*survey*)
 
+## Breaking Changes
+
+* Functions like `find_predictors()` or `find_terms()` return `NULL` for null-models (intercept-only models). Use `find_parameters()` to check if your model only has an intercept-parameter (but no predictors).
+
 ## Bug fixes
 
 * `get_priors()` failed for *stanreg*-models, when one or more priors had no adjusted scales (#74).
