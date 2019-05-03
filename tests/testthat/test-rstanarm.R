@@ -1,6 +1,7 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+# .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+# if (.runThisTest && Sys.getenv("USER") != "travis") {
 
-if (.runThisTest && Sys.getenv("USER") != "travis") {
+if (Sys.getenv("USER") != "travis") {
   if (suppressWarnings(
     require("testthat") &&
       require("insight") &&
@@ -8,16 +9,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
   )) {
     context("insight, rstanarm")
 
-    set.seed(123)
-    m1 <- stan_glmer(
-      cbind(incidence, size - incidence) ~ size + period + (1 | herd),
-      data = lme4::cbpp, family = binomial, QR = TRUE,
-      chains = 2, cores = 1, seed = 12345, iter = 500, refresh = 0
-    )
-
-    set.seed(123)
-    m2 <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-
+    m1 <- insight::download_model("stanreg_merMod_5")
+    m2 <- insight::download_model("stanreg_glm_6")
     m3 <- insight::download_model("stanreg_glm_1")
 
     test_that("get_priors", {
