@@ -11,7 +11,7 @@
 
 ## Breaking Changes
 
-* Functions like `find_predictors()` or `find_terms()` return `NULL` for null-models (intercept-only models). Use `find_parameters()` to check if your model only has an intercept-parameter (but no predictors).
+* Functions like `find_predictors()` or `find_terms()` return `NULL` for null-models (intercept-only models). Use `is_nullmodel()` to check if your model only has an intercept-parameter (but no predictors).
 
 ## Bug fixes
 
