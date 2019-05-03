@@ -44,12 +44,15 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     data = Salamanders
   )
 
+  m6 <- glmmTMB(count ~ 1, ziformula = ~1, family = poisson(), data = Salamanders)
+
   test_that("model_info", {
     expect_true(model_info(m1)$is_zeroinf)
     expect_false(model_info(m2)$is_zeroinf)
     expect_true(model_info(m3)$is_count)
     expect_true(model_info(m3)$is_pois)
     expect_false(model_info(m3)$is_negbin)
+    expect_true(model_info(m6)$is_count)
   })
 
   test_that("clean_names", {
@@ -57,6 +60,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     expect_identical(clean_names(m2), c("count", "child", "camper", "persons"))
     expect_identical(clean_names(m3), c("count", "child", "camper", "persons", "livebait"))
     expect_identical(clean_names(m4), c("count", "child", "camper", "persons", "livebait", "ID", "xb"))
+    expect_identical(clean_names(m6), c("count", "child", "camper", "persons", "livebait", "ID", "xb"))
   })
 
   test_that("find_predictors", {

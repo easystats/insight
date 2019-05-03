@@ -29,7 +29,8 @@ clean_names <- function(x) {
 
 #' @export
 clean_names.default <- function(x) {
-  unname(find_terms(x, flatten = TRUE))
+  cleaned <- unname(find_terms(x, flatten = TRUE))
+  setdiff(cleaned, "1")
 }
 
 
@@ -54,7 +55,7 @@ clean_names.character <- function(x) {
 
   # do we have a "log()" pattern here? if yes, get capture region
   # which matches the "cleaned" variable name
-  sapply(1:length(x), function(i) {
+  cleaned <- sapply(1:length(x), function(i) {
     for (j in 1:length(pattern)) {
       if (pattern[j] == "offset") {
         x[i] <- trim(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
@@ -72,4 +73,7 @@ clean_names.character <- function(x) {
     # for coxme-models, remove random-effect things...
     trim(sub("^(.*)\\|(.*)", "\\2", x[i]))
   })
+
+  # remove for random intercept only models
+  setdiff(cleaned, "1")
 }
