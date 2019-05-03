@@ -115,7 +115,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_equal(nrow(get_data(m1)), 56)
       expect_equal(
         colnames(get_data(m1)),
-        c("cbind(incidence, size - incidence)", "size", "period", "herd", "incidence")
+        c("incidence", "size", "period", "herd")
       )
     })
 

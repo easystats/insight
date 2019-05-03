@@ -241,7 +241,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       find_parameters(m6),
       list(
         conditional = "(Intercept)",
-        zero_inflated = "(Intercept)",
+        zero_inflated = "(Intercept)"
       )
     )
     expect_equal(nrow(get_parameters(m4)), 6)
