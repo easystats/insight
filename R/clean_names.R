@@ -57,6 +57,8 @@ clean_names.character <- function(x) {
   # which matches the "cleaned" variable name
   cleaned <- sapply(1:length(x), function(i) {
     for (j in 1:length(pattern)) {
+      # remove possible  namespace
+      x[i] <- sub("(.*)::(.*)", "\\2", x[i])
       if (pattern[j] == "offset") {
         x[i] <- trim(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
       } else if (pattern[j] == "I") {

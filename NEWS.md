@@ -15,12 +15,13 @@
 
 ## Bug fixes
 
+* `get_data()` did not work when model formula contained a function with namespace-prefix (like `lm(Sepal.Length ~ splines::bs(Petal.Width, df=4)`) (#93).
 * `get_priors()` failed for *stanreg*-models, when one or more priors had no adjusted scales (#74).
 * `find_random()` failed for mixed models with multiple responses.
 * `get_random()` failed for *brmsfit* and *stanreg* models.
 * `get_parameters()` and `find_parameters()` did not work for `MixMod`-objects _without_ zero-inflation component, when `component = "all"` (the default).
 * `find_formula()` did not work for `plm`-models without instrumental variables.
-* `find_formula()` returned random effects as conditional part of the formula for null-models (only intercept in fixed parts) (#87)
+* `find_formula()` returned random effects as conditional part of the formula for null-models (only intercept in fixed parts) (#87)-
 * Fixed issue with invalid notation of instrumental-variables formula in `felm`-models for R-devel on Linux.
 * Fixed issue with `get_data()` for *gee* models, where incomplete cases were not removed from the data.
 * Fixed potential issue with `get_data()` for null-models (only intercept in fixed parts) from models of class `glmmTMB`, `brmsfit`, `MixMod` and `rstanarm` (#91).

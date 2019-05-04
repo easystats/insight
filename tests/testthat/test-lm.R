@@ -1,5 +1,5 @@
 if (require("testthat") && require("insight")) {
-  context("insight, model_info")
+  context("insight, lm")
 
   data(iris)
   data(mtcars)

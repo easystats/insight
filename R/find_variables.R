@@ -55,7 +55,13 @@ get_variables_list <- function(f) {
   })
 
   f <- lapply(f, function(.x) {
-    gsub("~", "", trim(unlist(strsplit(split = "[\\*\\+\\:\\-\\|](?![^(]*\\))", x = .x, perl = TRUE))))
+    f_parts <- gsub("~", "", trim(unlist(strsplit(split = "[\\*\\+\\:\\-\\|](?![^(]*\\))", x = .x, perl = TRUE))))
+    # if user has used namespace in formula-functions, these are returned
+    # as empty elements. rempove those here
+    if (any(nchar(f_parts) == 0)) {
+      f_parts <- f_parts[-which(nchar(f_parts) == 0)]
+    }
+    f_parts
   })
 
   # reorder, so response is first
