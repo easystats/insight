@@ -11,6 +11,40 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
 
   m2 <- lme(distance ~ age + Sex, data = Orthodont, random = ~ 1)
 
+  set.seed(123)
+  sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+  sleepstudy$mysubgrp <- NA
+  for (i in 1:5) {
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+  }
+
+  m3 <- lme(
+    Reaction ~ Days,
+    random = ~ 1 | mygrp / mysubgrp,
+    data = sleepstudy
+  )
+
+  test_that("nested_varCorr", {
+    expect_equal(
+      insight:::.get_nested_lme_varcorr(m3),
+      list(
+        mysubgrp = structure(
+          7.508310765,
+          .Dim = c(1L, 1L),
+          .Dimnames = list(
+            "(Intercept)", "(Intercept)")
+          ),
+        mygrp = structure(
+          0.004897827,
+          .Dim = c(1L, 1L),
+          .Dimnames = list("(Intercept)", "(Intercept)"))
+      ),
+      tolerance = 1e-4
+    )
+  })
+
+
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
   })
