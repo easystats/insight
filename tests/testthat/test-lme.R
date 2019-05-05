@@ -26,6 +26,10 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
   )
 
   test_that("nested_varCorr", {
+
+    skip_on_travis()
+    skip_on_cran()
+
     expect_equal(
       insight:::.get_nested_lme_varcorr(m3),
       list(
