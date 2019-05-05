@@ -300,6 +300,32 @@
         warmup = 250
       ))
     })
+
+
+    test_that("get_priors", {
+      expect_equal(
+        get_priors(m1),
+        data.frame(
+          parameter = c("Age", "Base", "Base:Trt1", "Trt1"),
+          distribution = c("student_t", "student_t", "student_t", "student_t"),
+          location = c(10, 10, 10, 10),
+          scale = c("5, 0", "5, 0", "5, 0", "5, 0"),
+          stringsAsFactors = FALSE
+        )
+      )
+
+      expect_equal(
+        get_priors(m3),
+        data.frame(
+          parameter = c("c2", "treat1", "treat1:c2"),
+          distribution = c("", "", ""),
+          location = c("", "", ""),
+          scale = c("", "", ""),
+          stringsAsFactors = FALSE
+        )
+      )
+    })
+
   }
 
 # }

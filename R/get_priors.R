@@ -57,6 +57,29 @@ get_priors.brmsfit <- function(x, ...) {
   # always empty for intercept-class
   x$prior$coef[x$prior$class == "Intercept"] <- "(Intercept)"
 
+
+  # get default prior for all parameters, if defined
+  def_prior_b <- which(x$prior$prior != "" & x$prior$class == "b" & x$prior$coef == "")
+
+  # check which parameters have a default prior
+  need_def_prior <- which(x$prior$prior == "" & x$prior$class == "b" & x$prior$coef != "")
+
+  if (!is_empty_object(def_prior_b) && !is_empty_object(need_def_prior)) {
+    x$prior$prior[need_def_prior] <- x$prior$prior[def_prior_b]
+  }
+
+
+  # get default prior for all parameters, if defined
+  def_prior_intercept <- which(x$prior$prior != "" & x$prior$class == "Intercept" & x$prior$coef == "")
+
+  # check which parameters have a default prior
+  need_def_prior <- which(x$prior$prior == "" & x$prior$class == "Intercept" & x$prior$coef != "")
+
+  if (!is_empty_object(def_prior_intercept) && !is_empty_object(need_def_prior)) {
+    x$prior$prior[need_def_prior] <- x$prior$prior[def_prior_intercept]
+  }
+
+
   prior_info <- x$prior[x$prior$coef != "" & x$prior$class %in% c("b", "(Intercept)"), ]
 
   prior_info$distribution <- gsub("(.*)\\(.*", "\\1", prior_info$prior)
@@ -66,12 +89,18 @@ get_priors.brmsfit <- function(x, ...) {
 
   prior_info <- prior_info[, c("parameter", "distribution", "location", "scale")]
 
-  as.data.frame(lapply(prior_info, function(x) {
+  pinfo <- as.data.frame(lapply(prior_info, function(x) {
     if (.is_numeric_character(x))
       as.numeric(as.character(x))
     else
       as.character(x)
   }), stringsAsFactors = FALSE)
+
+  if (is_empty_string(pinfo$distribution)) {
+    print_color("Model was fitted with uninformative (flat) priors!\n", "red")
+  }
+
+  pinfo
 }
 
 

@@ -13,6 +13,10 @@
 
 * Functions like `find_predictors()` or `find_terms()` return `NULL` for null-models (intercept-only models). Use `is_nullmodel()` to check if your model only has an intercept-parameter (but no predictors).
 
+## Changes to functions
+
+* `get_priors()` now returns the default-prior that was defined for all parameters of a class, if certain parameters have no specific prior.
+
 ## Bug fixes
 
 * `get_data()` did not work when model formula contained a function with namespace-prefix (like `lm(Sepal.Length ~ splines::bs(Petal.Width, df=4)`) (#93).
