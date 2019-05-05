@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight")) {
+if (require("testthat") && require("insight") && require("stats")) {
   context("insight, lm")
 
   data(iris)
@@ -73,5 +73,42 @@ if (require("testthat") && require("insight")) {
 
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "OLS"))
+  })
+
+  test_that("get_variance", {
+    expect_warning(expect_null(get_variance(m1)))
+    expect_warning(expect_null(get_variance_dispersion(m1)))
+    expect_warning(expect_null(get_variance_distribution(m1)))
+    expect_warning(expect_null(get_variance_fixed(m1)))
+    expect_warning(expect_null(get_variance_intercept(m1)))
+    expect_warning(expect_null(get_variance_random(m1)))
+    expect_warning(expect_null(get_variance_residual(m1)))
+  })
+
+  test_that("is_model", {
+    expect_true(is_model(m1))
+  })
+
+  test_that("all_models_equal", {
+    expect_true(all_models_equal(m1, m2))
+  })
+
+  data("DNase")
+  DNase1 <- subset(DNase, Run == 1)
+  m3 <- stats::nls(density ~ stats::SSlogis(log(conc), Asym, xmid, scal), DNase1)
+
+  ## Dobson (1990) Page 93: Randomized Controlled Trial :
+  counts <- c(18,17,15,20,10,20,25,13,12)
+  outcome <- gl(3,1,9)
+  treatment <- gl(3,3)
+  m4 <- glm(counts ~ outcome + treatment, family = poisson())
+
+  test_that("is_model", {
+    expect_false(is_model(m3))
+  })
+
+  test_that("all_models_equal", {
+    expect_false(all_models_equal(m1, m2, m3))
+    expect_false(all_models_equal(m1, m2, m4))
   })
 }
