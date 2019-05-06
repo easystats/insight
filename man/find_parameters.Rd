@@ -7,16 +7,22 @@
 \alias{find_parameters.stanmvreg}
 \title{Find names of model parameters}
 \usage{
-find_parameters(x, ...)
+find_parameters(x, flatten = FALSE, ...)
 
-\method{find_parameters}{brmsfit}(x, parameters = NULL, ...)
+\method{find_parameters}{brmsfit}(x, flatten = FALSE,
+  parameters = NULL, ...)
 
-\method{find_parameters}{stanreg}(x, parameters = NULL, ...)
+\method{find_parameters}{stanreg}(x, flatten = FALSE,
+  parameters = NULL, ...)
 
-\method{find_parameters}{stanmvreg}(x, parameters = NULL, ...)
+\method{find_parameters}{stanmvreg}(x, flatten = FALSE,
+  parameters = NULL, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{flatten}{Logical, if \code{TRUE}, the values are returned
+as character vector, not as list.}
 
 \item{...}{Currently not used.}
 

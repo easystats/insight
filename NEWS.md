@@ -16,6 +16,7 @@
 ## Changes to functions
 
 * `get_priors()` now returns the default-prior that was defined for all parameters of a class, if certain parameters have no specific prior.
+* `find_parameters()` gets a `flatten`-argument, to either return results as list or as simple vector.
 
 ## Bug fixes
 
