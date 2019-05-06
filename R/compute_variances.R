@@ -187,10 +187,6 @@
     vals <- lapply(vals, .collapse_cond)
   }
 
-  if (faminfo$is_zeroinf && verbose) {
-    warning(sprintf("%s ignores effects of zero-inflation.", name_fun), call. = FALSE)
-  }
-
   if (!is.null(find_formula(x)[["dispersion"]]) && verbose) {
     warning(sprintf("%s ignores effects of dispersion model.", name_fun), call. = FALSE)
   }
@@ -400,11 +396,11 @@
 #'
 #' @keywords internal
 .get_variance_poisson_family <- function(x, mu, faminfo) {
-  if (inherits(x, "MixMod")) {
-    return(mu)
+  if (faminfo$is_zeroinf) {
+    .get_variance_zeroinflated(x, mu, family_var = mu)
   } else {
-    if (faminfo$is_zeroinf) {
-      .get_variance_zeroinflated(x, mu)
+    if (inherits(x, "MixMod")) {
+      return(mu)
     } else {
       stats::family(x)$variance(mu)
     }
@@ -440,13 +436,14 @@
 #'
 #' @keywords internal
 .get_variance_nbinom_family <- function(x, mu, sig, faminfo) {
-  if (inherits(x, "MixMod")) {
-    if (missing(sig))
-      return(rep(1e-16, length(mu)))
-    mu * (1 + sig)
+  if (faminfo$is_zeroinf) {
+    if (missing(sig)) sig <- 0
+    .get_variance_zeroinflated(x, mu * (1 + sig))
   } else {
-    if (faminfo$is_zeroinf) {
-      .get_variance_zeroinflated(x, mu)
+    if (inherits(x, "MixMod")) {
+      if (missing(sig))
+        return(rep(1e-16, length(mu)))
+      mu * (1 + sig)
     } else {
       stats::family(x)$variance(mu, sig)
     }
@@ -455,8 +452,9 @@
 
 
 
+#' @importFrom stats plogis family predict
 #' @keywords internal
-.get_variance_zeroinflated <- function(model, mu) {
+.get_variance_zeroinflated <- function(model, mu, family_var) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -468,6 +466,14 @@
     # mu <- stats::predict(model, type = "conditional")
     k <- lme4::sigma(model)
     pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
+  } else if (inherits(model, "MixMod")) {
+    v <- family_var
+    ## z-i probability
+    p <- stats::plogis(stats::predict(model, type_pred = "link", type_pred = "zero_part"))
+    k <- lme4::sigma(model)
+    pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
+  } else {
+    pvar <- family_var
   }
 
   pvar
