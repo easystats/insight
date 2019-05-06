@@ -404,7 +404,7 @@
     return(mu)
   } else {
     if (faminfo$is_zeroinf) {
-
+      .get_variance_zeroinflated(x)
     } else {
       stats::family(x)$variance(mu)
     }
@@ -446,11 +446,30 @@
     mu * (1 + sig)
   } else {
     if (faminfo$is_zeroinf) {
-
+      .get_variance_zeroinflated(x)
     } else {
       stats::family(x)$variance(mu, sig)
     }
   }
+}
+
+
+
+#' @keywords internal
+.get_variance_zeroinflated <- function(model) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  }
+
+  if (inherits(model, "glmmTMB")) {
+    v <- stats::family(model)$variance
+    p <- stats::predict(model, type = "zprob")  ## z-i probability
+    mu <- stats::predict(model, type = "conditional")  ## mean of conditional distribution
+    k <- lme4::sigma(model)
+    pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
+  }
+
+  pvar
 }
 
 
