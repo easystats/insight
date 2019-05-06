@@ -373,11 +373,11 @@
       truncated_poisson   = stats::family(x)$variance(sig),
       tweedie             = .get_variance_tweedie_family(x, mu, sig),
       beta                = .get_variance_beta_family(x, mu, sig),
+      `zero-inflated negative binomial` = ,
       `negative binomial` = ,
       genpois             = ,
       nbinom1             = ,
-      nbinom2             = ,
-      `zero-inflated negative binomial` = .get_variance_nbinom_family(x, mu, sig, faminfo),
+      nbinom2             = .get_variance_nbinom_family(x, mu, sig, faminfo),
       .get_variance_default(x, mu, verbose)
     )
 
@@ -404,7 +404,7 @@
     return(mu)
   } else {
     if (faminfo$is_zeroinf) {
-      .get_variance_zeroinflated(x)
+      .get_variance_zeroinflated(x, mu)
     } else {
       stats::family(x)$variance(mu)
     }
@@ -446,7 +446,7 @@
     mu * (1 + sig)
   } else {
     if (faminfo$is_zeroinf) {
-      .get_variance_zeroinflated(x)
+      .get_variance_zeroinflated(x, mu)
     } else {
       stats::family(x)$variance(mu, sig)
     }
@@ -456,7 +456,7 @@
 
 
 #' @keywords internal
-.get_variance_zeroinflated <- function(model) {
+.get_variance_zeroinflated <- function(model, mu) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -464,7 +464,8 @@
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance
     p <- stats::predict(model, type = "zprob")  ## z-i probability
-    mu <- stats::predict(model, type = "conditional")  ## mean of conditional distribution
+    ## mean of conditional distribution
+    # mu <- stats::predict(model, type = "conditional")
     k <- lme4::sigma(model)
     pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
   }
