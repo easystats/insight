@@ -237,6 +237,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
         zero_inflated_random = list(ID = "(Intercept)")
       )
     )
+    expect_equal(find_parameters(m4, flatten = TRUE), c("(Intercept)", "child", "camper1", "livebait1"))
     expect_equal(
       find_parameters(m6),
       list(

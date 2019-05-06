@@ -82,6 +82,7 @@
           random = sprintf("b[(Intercept) herd:%i]", 1:15)
         )
       )
+      expect_equal(find_parameters(m1, flatten = TRUE), c("(Intercept)", "size", "period2", "period3", "period4", sprintf("b[(Intercept) herd:%i]", 1:15)))
     })
 
     test_that("find_paramaters", {
