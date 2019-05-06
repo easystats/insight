@@ -367,7 +367,8 @@
   cvsquared <- tryCatch({
     vv <- switch(
       faminfo$family,
-      poisson             = stats::family(x)$variance(mu),
+      `zero-inflated poisson` = ,
+      poisson                 = .get_variance_poisson_family(x, mu, faminfo),
       `hurdle poisson`    = ,
       truncated_poisson   = stats::family(x)$variance(sig),
       tweedie             = .get_variance_tweedie_family(x, mu, sig),
@@ -375,16 +376,8 @@
       `negative binomial` = ,
       genpois             = ,
       nbinom1             = ,
-      nbinom2             = stats::family(x)$variance(mu, sig),
-
-      # this one is a *bit* wobbly, because actually the variance-function
-      # for zi-models is not straightforward to get. However, the original
-      # code snippet from Ben Bolker uses these variance-functions for
-      # glmmTMB zi-models, so I assume that we can use the same for
-      # GLMMadaptive zi-models, as long as there's no better alternative...
-
-      `zero-inflated negative binomial` = .get_variance_nbinom_family(mu, sig),
-      `zero-inflated poisson`           = mu,
+      nbinom2             = ,
+      `zero-inflated negative binomial` = .get_variance_nbinom_family(x, mu, sig, faminfo),
       .get_variance_default(x, mu, verbose)
     )
 
@@ -399,6 +392,23 @@
   )
 
   log1p(cvsquared)
+}
+
+
+
+#' Get distributional variance for poisson-family
+#'
+#' @keywords internal
+.get_variance_poisson_family <- function(x, mu, faminfo) {
+  if (inherits(x, "MixMod")) {
+    return(mu)
+  } else {
+    if (faminfo$is_zeroinf) {
+
+    } else {
+      stats::family(x)$variance(mu)
+    }
+  }
 }
 
 
@@ -429,10 +439,18 @@
 #' Get distributional variance for nbinom-family
 #'
 #' @keywords internal
-.get_variance_nbinom_family <- function(mu, alpha) {
-  if (missing(alpha))
-    return(rep(1e-16, length(mu)))
-  mu * (1 + alpha)
+.get_variance_nbinom_family <- function(x, mu, sig, faminfo) {
+  if (inherits(x, "MixMod")) {
+    if (missing(sig))
+      return(rep(1e-16, length(mu)))
+    mu * (1 + sig)
+  } else {
+    if (faminfo$is_zeroinf) {
+
+    } else {
+      stats::family(x)$variance(mu, sig)
+    }
+  }
 }
 
 
