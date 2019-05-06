@@ -565,7 +565,7 @@ get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), com
   component <- match.arg(component)
 
   if (is_multivariate(x)) {
-    parms <- find_parameters(x, parameters)
+    parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
     elements <- .get_elements(effects, component)
     as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
   } else {
@@ -618,7 +618,7 @@ get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE,
 get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, ...) {
   effects <- match.arg(effects)
   elements <- .get_elements(effects, "all")
-  parms <- find_parameters(x, parameters)
+  parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
 
   for (i in names(parms)) {
     parms[[i]]$conditional <- sprintf("%s|%s", i, parms[[i]]$conditional)
@@ -636,7 +636,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
 
 get_parms_data <- function(x, effects, component, parameters = NULL) {
   elements <- .get_elements(effects, component)
-  unlist(find_parameters(x, parameters)[elements])
+  unlist(find_parameters(x, flatten = FALSE, parameters = parameters)[elements])
 }
 
 
