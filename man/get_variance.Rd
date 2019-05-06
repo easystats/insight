@@ -91,6 +91,9 @@ This function returns different variance components from mixed models,
      \eqn{\pi^2 / 3} for logit-link and \code{1} for probit-link. For all
      other models, the distribution-specific variance is based on lognormal
      approximation, \eqn{log(1 + var(x) / \mu^2)} (see \cite{Nakagawa et al. 2017}).
+     The expected variance of a zero-inflated model is computed according
+     to \cite{Zuur et al. 2012}), which is
+     \ifelse{html}{\out{(1-&pi;)*(&mu;+&pi;*&mu;<sup>2</sup>)}}{\eqn{(1-\pi)*(\mu+\pi*\mu^2)}}.
     }
     \item{\strong{Variance for the additive overdispersion term}}{
      The variance for the additive overdispersion term,
@@ -146,5 +149,6 @@ get_variance_residual(m)}
 \itemize{
  \item Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. \doi{10.1111/2041-210X.12225}
  \item Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
+ \item Zuur, A. F., Savelʹev, A. A., & Ieno, E. N. (2012). Zero inflated models and generalized linear mixed models with R. Newburgh, United Kingdom: Highland Statistics.
  }
 }

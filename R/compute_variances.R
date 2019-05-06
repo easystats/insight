@@ -397,7 +397,7 @@
 #' @keywords internal
 .get_variance_poisson_family <- function(x, mu, faminfo) {
   if (faminfo$is_zeroinf) {
-    .get_variance_zeroinflated(x, mu, family_var = mu)
+    .get_variance_zeroinflated(x, mu, faminfo, family_var = mu)
   } else {
     if (inherits(x, "MixMod")) {
       return(mu)
@@ -438,7 +438,7 @@
 .get_variance_nbinom_family <- function(x, mu, sig, faminfo) {
   if (faminfo$is_zeroinf) {
     if (missing(sig)) sig <- 0
-    .get_variance_zeroinflated(x, mu * (1 + sig))
+    .get_variance_zeroinflated(x, mu, faminfo, family_var = mu * (1 + sig))
   } else {
     if (inherits(x, "MixMod")) {
       if (missing(sig))
@@ -454,29 +454,34 @@
 
 #' @importFrom stats plogis family predict
 #' @keywords internal
-.get_variance_zeroinflated <- function(model, mu, family_var) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
-
+.get_variance_zeroinflated <- function(model, mu, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance
     p <- stats::predict(model, type = "zprob")  ## z-i probability
     ## mean of conditional distribution
     # mu <- stats::predict(model, type = "conditional")
-    k <- lme4::sigma(model)
+    betad <- model$fit$par["betad"]
+    k <- switch(
+      faminfo$family,
+      gaussian = exp(0.5 * betad),
+      Gamma = exp(-0.5 * betad),
+      exp(betad)
+    )
     pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
   } else if (inherits(model, "MixMod")) {
     v <- family_var
     ## z-i probability
     p <- stats::plogis(stats::predict(model, type_pred = "link", type_pred = "zero_part"))
-    k <- lme4::sigma(model)
+    k <- sig
     pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
   } else {
     pvar <- family_var
   }
 
-  pvar
+  mean(pvar)
+
+  # pearson residuals
+  # (insight::get_response(model) - pred) / sqrt(pvar)
 }
 
 
