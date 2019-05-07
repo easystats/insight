@@ -6,7 +6,7 @@
 Nakagawa et al. 2017 propose three different methods, here we only rely
 on the lognormal-approximation.}
 \usage{
-.get_variance_dist(x, null.fixef, faminfo, sig, name, verbose = TRUE)
+.get_variance_dist(x, null_model, faminfo, sig, name, verbose = TRUE)
 }
 \description{
 This is the core-function to calculate the distribution-specific variance

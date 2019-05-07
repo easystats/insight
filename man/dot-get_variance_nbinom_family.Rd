@@ -4,7 +4,7 @@
 \alias{.get_variance_nbinom_family}
 \title{Get distributional variance for nbinom-family}
 \usage{
-.get_variance_nbinom_family(x, mu, sig, faminfo)
+.get_variance_nbinom_family(x, null_model, mu, sig, faminfo)
 }
 \description{
 Get distributional variance for nbinom-family

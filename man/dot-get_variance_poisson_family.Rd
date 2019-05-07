@@ -4,7 +4,7 @@
 \alias{.get_variance_poisson_family}
 \title{Get distributional variance for poisson-family}
 \usage{
-.get_variance_poisson_family(x, mu, faminfo)
+.get_variance_poisson_family(x, null_model, mu, faminfo)
 }
 \description{
 Get distributional variance for poisson-family
