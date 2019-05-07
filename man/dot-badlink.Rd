@@ -2,11 +2,11 @@
 % Please edit documentation in R/compute_variances.R
 \name{.badlink}
 \alias{.badlink}
-\title{helper-function, telling user if model is supported or not}
+\title{helper-function, telling user if family / distribution is supported or not}
 \usage{
 .badlink(link, family, verbose = TRUE)
 }
 \description{
-helper-function, telling user if model is supported or not
+helper-function, telling user if family / distribution is supported or not
 }
 \keyword{internal}

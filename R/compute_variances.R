@@ -2,9 +2,12 @@
 #' @keywords internal
 .compute_variances <- function(x, component, name_fun = NULL, name_full = NULL, verbose = TRUE) {
 
-  ## Code taken from GitGub-Repo of package glmmTMB
-  ## Author: Ben Bolker, who used an
-  ## cleaned-up/adapted version of Jon Lefcheck's code from SEMfit
+  ## Original code taken from GitGub-Repo of package glmmTMB
+  ## Author: Ben Bolker, who used an cleaned-up/adapted
+  ## version of Jon Lefcheck's code from SEMfit
+
+  ## Major revisions and adaption to more complex models and other packages
+  ## by Daniel Lüdecke
 
   faminfo <- model_info(x)
 
@@ -114,6 +117,7 @@
 
 
 
+
 #' store essential information on coefficients, model matrix and so on
 #' as list, since we need these information throughout the functions to
 #' calculate the variance components...
@@ -196,7 +200,8 @@
 
 
 
-#' helper-function, telling user if model is supported or not
+
+#' helper-function, telling user if family / distribution is supported or not
 #'
 #' @keywords internal
 .badlink <- function(link, family, verbose = TRUE) {
@@ -208,8 +213,10 @@
 
 
 
+
 #' glmmTMB returns a list of model information, one for conditional
-#' and one for zero-inflated part, so here we "unlist" it
+#' and one for zero-inflated part, so here we "unlist" it, returning
+#' only the conditional part.
 #'
 #' @keywords internal
 .collapse_cond <- function(x) {
@@ -222,6 +229,7 @@
 
 
 
+
 #' Get fixed effects variance
 #'
 #' @importFrom stats var
@@ -229,6 +237,8 @@
 .compute_variance_fixed <- function(vals) {
   with(vals, stats::var(as.vector(beta %*% t(X))))
 }
+
+
 
 
 
@@ -262,6 +272,8 @@
 }
 
 
+
+
 #' Calculate Distribution-specific variance (Nakagawa et al. 2017)
 #'
 #' @keywords internal
@@ -289,20 +301,20 @@
     } else if (faminfo$is_count) {
       dist.variance <- switch(
         faminfo$link_function,
-        log = .get_variance_dist(x, faminfo, sig, name = name, verbose = verbose),
+        log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         sqrt = 0.25,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family == "beta") {
       dist.variance <- switch(
         faminfo$link_function,
-        logit = .get_variance_dist(x, faminfo, sig, name = name, verbose = verbose),
+        logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_tweedie) {
       dist.variance <- switch(
         faminfo$link_function,
-        log = .get_variance_dist(x, faminfo, sig, name = name, verbose = verbose),
+        log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     }
@@ -310,6 +322,7 @@
 
   dist.variance
 }
+
 
 
 
@@ -330,13 +343,14 @@
 
 
 
+
 #' This is the core-function to calculate the distribution-specific variance
 #' Nakagawa et al. 2017 propose three different methods, here we only rely
 #' on the lognormal-approximation.
 #'
 #' @importFrom stats family
 #' @keywords internal
-.get_variance_dist <- function(x, faminfo, sig, name, verbose = TRUE) {
+.variance_distributional <- function(x, faminfo, sig, name, verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -368,7 +382,7 @@
 
       # (zero-inflated) poisson
       `zero-inflated poisson` = ,
-      poisson                 = .get_variance_poisson_family(x, mu, faminfo),
+      poisson                 = .variance_family_poisson(x, mu, faminfo),
 
       # hurdle-poisson
       `hurdle poisson`    = ,
@@ -379,14 +393,14 @@
       `negative binomial` = ,
       genpois             = ,
       nbinom1             = ,
-      nbinom2             = .get_variance_nbinom_family(x, mu, sig, faminfo),
+      nbinom2             = .variance_family_nbinom(x, mu, sig, faminfo),
 
       # other distributions
-      tweedie             = .get_variance_tweedie_family(x, mu, sig),
-      beta                = .get_variance_beta_family(x, mu, sig),
+      tweedie             = .variance_family_tweedie(x, mu, sig),
+      beta                = .variance_family_beta(x, mu, sig),
 
       # default variance for non-captured distributions
-      .get_variance_default(x, mu, verbose)
+      .variance_family_default(x, mu, verbose)
     )
 
     vv / mu^2
@@ -404,12 +418,13 @@
 
 
 
+
 #' Get distributional variance for poisson-family
 #'
 #' @keywords internal
-.get_variance_poisson_family <- function(x, mu, faminfo) {
+.variance_family_poisson <- function(x, mu, faminfo) {
   if (faminfo$is_zeroinf) {
-    .get_variance_zip(x, faminfo, family_var = mu)
+    .variance_zip(x, faminfo, family_var = mu)
   } else {
     if (inherits(x, "MixMod")) {
       return(mu)
@@ -421,10 +436,11 @@
 
 
 
+
 #' Get distributional variance for beta-family
 #'
 #' @keywords internal
-.get_variance_beta_family <- function(x, mu, phi) {
+.variance_family_beta <- function(x, mu, phi) {
   if (inherits(x, "MixMod"))
     stats::family(x)$variance(mu)
   else
@@ -433,24 +449,26 @@
 
 
 
+
 #' Get distributional variance for tweedie-family
 #'
 #' @importFrom stats plogis
 #' @keywords internal
-.get_variance_tweedie_family <- function(x, mu, phi) {
+.variance_family_tweedie <- function(x, mu, phi) {
   p <- unname(stats::plogis(x$fit$par["thetaf"]) + 1)
   phi * mu^p
 }
 
 
 
+
 #' Get distributional variance for nbinom-family
 #'
 #' @keywords internal
-.get_variance_nbinom_family <- function(x, mu, sig, faminfo) {
+.variance_family_nbinom <- function(x, mu, sig, faminfo) {
   if (faminfo$is_zeroinf) {
     if (missing(sig)) sig <- 0
-    .get_variance_zinb(x, sig, faminfo, family_var = mu * (1 + sig))
+    .variance_zinb(x, sig, faminfo, family_var = mu * (1 + sig))
   } else {
     if (inherits(x, "MixMod")) {
       if (missing(sig))
@@ -464,9 +482,13 @@
 
 
 
+
+#' For zero-inflated negative-binomial models, the distributional variance
+#' is based on Zuur et al. 2012
+#'
 #' @importFrom stats plogis family predict
 #' @keywords internal
-.get_variance_zinb <- function(model, sig, faminfo, family_var) {
+.variance_zinb <- function(model, sig, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance
     # zi probability
@@ -500,9 +522,13 @@
 
 
 
+
+#' For zero-inflated poisson models, the distributional variance
+#' is based on Zuur et al. 2012
+#'
 #' @importFrom stats plogis family predict
 #' @keywords internal
-.get_variance_zip <- function(model, faminfo, family_var) {
+.variance_zip <- function(model, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     p <- stats::predict(model, type = "zprob")
     mu <- stats::predict(model, type = "conditional")
@@ -520,11 +546,12 @@
 
 
 
+
 #' Get distribution-specific variance for general and
 #' undefined families / link-functions
 #'
 #' @keywords internal
-.get_variance_default <- function(x, mu, verbose) {
+.variance_family_default <- function(x, mu, verbose) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -548,9 +575,10 @@
 
 
 
+
 #' Null model is needed to calculate the mean for the model's response,
 #' which we need to compute the distribution-specific variance
-#' (see .get_variance_dist())
+#' (see .variance_distributional())
 #'
 #' @importFrom stats as.formula update reformulate
 #' @keywords internal
@@ -572,6 +600,8 @@
 
   null.model
 }
+
+
 
 
 #' return names of random slopes
@@ -615,6 +645,12 @@
 }
 
 
+
+
+#' random intercept-variances, i.e.
+#' between-subject-variance (tau 00)
+#'
+#' @keywords internal
 .between_subject_variance <- function(vals, x) {
   # retrieve only intercepts
   if (inherits(x, "MixMod")) {
@@ -623,14 +659,16 @@
     vars <- lapply(vals$vc, function(i) i[1])
   }
 
-  # random intercept-variances, i.e.
-  # between-subject-variance (tau 00)
   sapply(vars, function(i) i)
 }
 
 
+
+
+#' random slope-variances (tau 11)
+#'
+#' @keywords internal
 .random_slope_variance <- function(vals, x) {
-  # random slope-variances (tau 11)
   if (inherits(x, "MixMod")) {
     diag(vals$vc)[-1]
   } else if (inherits(x, "lme")) {
@@ -641,8 +679,12 @@
 }
 
 
+
+
+#' slope-intercept-correlations (rho 01)
+#'
+#' @keywords internal
 .random_slope_intercept_corr <- function(vals, x) {
-  # get slope-intercept-correlations (rho 01)
   if (inherits(x, "lme")) {
     rho01 <- unlist(sapply(vals$vc, function(i) attr(i, "cor_slope_intercept")))
     if (is.null(rho01)) {

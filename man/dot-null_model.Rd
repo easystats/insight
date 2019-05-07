@@ -4,13 +4,13 @@
 \alias{.null_model}
 \title{Null model is needed to calculate the mean for the model's response,
 which we need to compute the distribution-specific variance
-(see .get_variance_dist())}
+(see .variance_distributional())}
 \usage{
 .null_model(model, verbose = TRUE)
 }
 \description{
 Null model is needed to calculate the mean for the model's response,
 which we need to compute the distribution-specific variance
-(see .get_variance_dist())
+(see .variance_distributional())
 }
 \keyword{internal}
