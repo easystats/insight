@@ -289,20 +289,20 @@
     } else if (faminfo$is_count) {
       dist.variance <- switch(
         faminfo$link_function,
-        log = .get_variance_dist(x, .null_model(x, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
+        log = .get_variance_dist(x, faminfo, sig, name = name, verbose = verbose),
         sqrt = 0.25,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family == "beta") {
       dist.variance <- switch(
         faminfo$link_function,
-        logit = .get_variance_dist(x, .null_model(x, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
+        logit = .get_variance_dist(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_tweedie) {
       dist.variance <- switch(
         faminfo$link_function,
-        log = .get_variance_dist(x, .null_model(x, verbose = verbose), faminfo, sig, name = name, verbose = verbose),
+        log = .get_variance_dist(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     }
@@ -336,7 +336,7 @@
 #'
 #' @importFrom stats family
 #' @keywords internal
-.get_variance_dist <- function(x, null_model, faminfo, sig, name, verbose = TRUE) {
+.get_variance_dist <- function(x, faminfo, sig, name, verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -345,9 +345,10 @@
   # see Nakagawa et al. 2017
 
   # in general want log(1+var(x)/mu^2)
+  null_model <- .null_model(x, verbose = verbose)
+  null_fixef <- unname(.collapse_cond(lme4::fixef(null_model)))
 
-  null.fixef <- unname(.collapse_cond(lme4::fixef(null_model)))
-  mu <- exp(null.fixef)
+  mu <- exp(null_fixef)
 
   if (is.na(mu)) {
     if (verbose) {
@@ -364,17 +365,27 @@
   cvsquared <- tryCatch({
     vv <- switch(
       faminfo$family,
+
+      # (zero-inflated) poisson
       `zero-inflated poisson` = ,
       poisson                 = .get_variance_poisson_family(x, mu, faminfo),
+
+      # hurdle-poisson
       `hurdle poisson`    = ,
       truncated_poisson   = stats::family(x)$variance(sig),
-      tweedie             = .get_variance_tweedie_family(x, mu, sig),
-      beta                = .get_variance_beta_family(x, mu, sig),
+
+      # (zero-inflated) negative binomial
       `zero-inflated negative binomial` = ,
       `negative binomial` = ,
       genpois             = ,
       nbinom1             = ,
       nbinom2             = .get_variance_nbinom_family(x, mu, sig, faminfo),
+
+      # other distributions
+      tweedie             = .get_variance_tweedie_family(x, mu, sig),
+      beta                = .get_variance_beta_family(x, mu, sig),
+
+      # default variance for non-captured distributions
       .get_variance_default(x, mu, verbose)
     )
 
@@ -458,9 +469,11 @@
 .get_variance_zinb <- function(model, sig, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance
-    p <- stats::predict(model, type = "zprob")  ## z-i probability
-    ## mean of conditional distribution
+    # zi probability
+    p <- stats::predict(model, type = "zprob")
+    # mean of conditional distribution
     mu <- stats::predict(model, type = "conditional")
+    # sigma
     betad <- model$fit$par["betad"]
     k <- switch(
       faminfo$family,
@@ -471,7 +484,6 @@
     pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
   } else if (inherits(model, "MixMod")) {
     v <- family_var
-    ## z-i probability
     p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
     mu <- stats::predict(model, type_pred = "link", type = "mean_subject")
     k <- sig
@@ -492,7 +504,7 @@
 #' @keywords internal
 .get_variance_zip <- function(model, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
-    p <- stats::predict(model, type = "zprob")  ## z-i probability
+    p <- stats::predict(model, type = "zprob")
     mu <- stats::predict(model, type = "conditional")
     pvar <- (1 - p) * (mu + p * mu^2)
   } else if (inherits(model, "MixMod")) {
