@@ -54,8 +54,7 @@
 #'      other models, the distribution-specific variance is based on lognormal
 #'      approximation, \eqn{log(1 + var(x) / \mu^2)} (see \cite{Nakagawa et al. 2017}).
 #'      The expected variance of a zero-inflated model is computed according
-#'      to \cite{Zuur et al. 2012}), which is
-#'      \ifelse{html}{\out{(1-&pi;)*(&mu;+&pi;*&mu;<sup>2</sup>)}}{\eqn{(1-\pi)*(\mu+\pi*\mu^2)}}.
+#'      to \cite{Zuur et al. 2012, p277}.
 #'     }
 #'     \item{\strong{Variance for the additive overdispersion term}}{
 #'      The variance for the additive overdispersion term,

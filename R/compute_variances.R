@@ -397,7 +397,7 @@
 #' @keywords internal
 .get_variance_poisson_family <- function(x, mu, faminfo) {
   if (faminfo$is_zeroinf) {
-    .get_variance_zeroinflated(x, mu, faminfo, family_var = mu)
+    .get_variance_zip(x, mu, faminfo, family_var = mu)
   } else {
     if (inherits(x, "MixMod")) {
       return(mu)
@@ -438,7 +438,7 @@
 .get_variance_nbinom_family <- function(x, mu, sig, faminfo) {
   if (faminfo$is_zeroinf) {
     if (missing(sig)) sig <- 0
-    .get_variance_zeroinflated(x, mu, faminfo, family_var = mu * (1 + sig))
+    .get_variance_zinb(x, mu, sig, faminfo, family_var = mu * (1 + sig))
   } else {
     if (inherits(x, "MixMod")) {
       if (missing(sig))
@@ -454,7 +454,7 @@
 
 #' @importFrom stats plogis family predict
 #' @keywords internal
-.get_variance_zeroinflated <- function(model, mu, faminfo, family_var) {
+.get_variance_zinb <- function(model, mu, sig, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance
     p <- stats::predict(model, type = "zprob")  ## z-i probability
@@ -482,6 +482,24 @@
 
   # pearson residuals
   # (insight::get_response(model) - pred) / sqrt(pvar)
+}
+
+
+
+#' @importFrom stats plogis family predict
+#' @keywords internal
+.get_variance_zip <- function(model, mu, faminfo, family_var) {
+  if (inherits(model, "glmmTMB")) {
+    p <- stats::predict(model, type = "zprob")  ## z-i probability
+    pvar <- (1 - p) * (mu + p * mu^2)
+  } else if (inherits(model, "MixMod")) {
+    p <- stats::plogis(stats::predict(model, type_pred = "link", type_pred = "zero_part"))
+    pvar <- (1 - p) * (mu + p * mu^2)
+  } else {
+    pvar <- family_var
+  }
+
+  mean(pvar)
 }
 
 
