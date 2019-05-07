@@ -365,7 +365,7 @@
     vv <- switch(
       faminfo$family,
       `zero-inflated poisson` = ,
-      poisson                 = .get_variance_poisson_family(x, null_model, mu, faminfo),
+      poisson                 = .get_variance_poisson_family(x, mu, faminfo),
       `hurdle poisson`    = ,
       truncated_poisson   = stats::family(x)$variance(sig),
       tweedie             = .get_variance_tweedie_family(x, mu, sig),
@@ -374,7 +374,7 @@
       `negative binomial` = ,
       genpois             = ,
       nbinom1             = ,
-      nbinom2             = .get_variance_nbinom_family(x, null_model, mu, sig, faminfo),
+      nbinom2             = .get_variance_nbinom_family(x, mu, sig, faminfo),
       .get_variance_default(x, mu, verbose)
     )
 
@@ -396,9 +396,9 @@
 #' Get distributional variance for poisson-family
 #'
 #' @keywords internal
-.get_variance_poisson_family <- function(x, null_model, mu, faminfo) {
+.get_variance_poisson_family <- function(x, mu, faminfo) {
   if (faminfo$is_zeroinf) {
-    .get_variance_zip(x, null_model, faminfo, family_var = mu)
+    .get_variance_zip(x, faminfo, family_var = mu)
   } else {
     if (inherits(x, "MixMod")) {
       return(mu)
@@ -436,10 +436,10 @@
 #' Get distributional variance for nbinom-family
 #'
 #' @keywords internal
-.get_variance_nbinom_family <- function(x, null_model, mu, sig, faminfo) {
+.get_variance_nbinom_family <- function(x, mu, sig, faminfo) {
   if (faminfo$is_zeroinf) {
     if (missing(sig)) sig <- 0
-    .get_variance_zinb(x, null_model, sig, faminfo, family_var = mu * (1 + sig))
+    .get_variance_zinb(x, sig, faminfo, family_var = mu * (1 + sig))
   } else {
     if (inherits(x, "MixMod")) {
       if (missing(sig))
@@ -455,12 +455,12 @@
 
 #' @importFrom stats plogis family predict
 #' @keywords internal
-.get_variance_zinb <- function(model, null_model, sig, faminfo, family_var) {
+.get_variance_zinb <- function(model, sig, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance
     p <- stats::predict(model, type = "zprob")  ## z-i probability
     ## mean of conditional distribution
-    mu <- stats::predict(null_model, type = "conditional")
+    mu <- stats::predict(model, type = "conditional")
     betad <- model$fit$par["betad"]
     k <- switch(
       faminfo$family,
@@ -473,7 +473,7 @@
     v <- family_var
     ## z-i probability
     p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
-    mu <- stats::predict(null_model, type_pred = "link", type = "mean_subject")
+    mu <- stats::predict(model, type_pred = "link", type = "mean_subject")
     k <- sig
     pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
   } else {
@@ -490,14 +490,14 @@
 
 #' @importFrom stats plogis family predict
 #' @keywords internal
-.get_variance_zip <- function(model, null_model, faminfo, family_var) {
+.get_variance_zip <- function(model, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     p <- stats::predict(model, type = "zprob")  ## z-i probability
-    mu <- stats::predict(null_model, type = "conditional")
+    mu <- stats::predict(model, type = "conditional")
     pvar <- (1 - p) * (mu + p * mu^2)
   } else if (inherits(model, "MixMod")) {
     p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
-    mu <- stats::predict(null_model, type = "mean_subject")
+    mu <- stats::predict(model, type = "mean_subject")
     pvar <- (1 - p) * (mu + p * mu^2)
   } else {
     pvar <- family_var
