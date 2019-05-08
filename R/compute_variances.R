@@ -27,11 +27,12 @@
   vals <- .get_variance_information(x, faminfo = faminfo, name_fun = name_fun, verbose = verbose)
 
   # Test for non-zero random effects ((near) singularity)
+  no_random_variance <- FALSE
   if (.is_singular(x, vals) && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
       warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
     }
-    return(NA)
+    no_random_variance <- TRUE
   }
 
   # initialize return values, if not all components are requested
@@ -64,7 +65,7 @@
   obs.terms <- names(nr[nr == stats::nobs(x)])
 
   # Variance of random effects
-  if (component %in% c("random", "all")) {
+  if (component %in% c("random", "all") && isTRUE(no_random_variance)) {
     var.random <- .compute_variance_random(not.obs.terms, x = x, vals = vals)
   }
 

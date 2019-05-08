@@ -12,6 +12,7 @@
 ## Breaking Changes
 
 * Functions like `find_predictors()` or `find_terms()` return `NULL` for null-models (intercept-only models). Use `is_nullmodel()` to check if your model only has an intercept-parameter (but no predictors).
+* `get_variance()` no longer stops if random effects variance cannot be calculated. Rather, the return-value for `$var.random` will be `NULL`.
 
 ## Changes to functions
 
