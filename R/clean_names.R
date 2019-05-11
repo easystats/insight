@@ -47,10 +47,10 @@ clean_names.character <- function(x) {
   # for gam-smoothers/loess, remove s()- and lo()-function in column name
   # for survival, remove strata(), and so on...
   pattern <- c(
-    "as.factor", "factor", "offset", "log-log", "log", "lag", "diff",
-    "pspline", "poly", "catg", "asis", "matrx", "pol", "strata", "strat",
-    "scale", "scored", "interaction", "sqrt", "lsp", "rcs", "pb", "lo", "bs",
-    "ns", "t2", "te", "ti", "tt", "mi", "mo", "gp", "s", "I"
+    "as.factor", "factor", "offset", "log1p", "log10", "log2", "log-log",
+    "log", "lag", "diff", "pspline", "poly", "catg", "asis", "matrx", "pol",
+    "strata", "strat", "scale", "scored", "interaction", "sqrt", "lsp", "rcs",
+    "pb", "lo", "bs", "ns", "t2", "te", "ti", "tt", "mi", "mo", "gp", "s", "I"
   )
 
   # do we have a "log()" pattern here? if yes, get capture region

@@ -50,7 +50,11 @@ get_variables_list <- function(f) {
   f$conditional <- deparse(f$conditional[[3L]], width.cutoff = 500L)
 
   f <- lapply(f, function(.x) {
-    if (!is.character(.x)) .x <- deparse(.x, width.cutoff = 500L)
+    if (is.list(.x)) {
+      .x <- sapply(.x, .formula_to_string)
+    } else {
+      if (!is.character(.x)) .x <- deparse(.x, width.cutoff = 500L)
+    }
     .x
   })
 
@@ -64,6 +68,18 @@ get_variables_list <- function(f) {
     f_parts
   })
 
+  # remove "1" nad "0" from variables in random effects
+  if (obj_has_name(f, "random")) {
+    pos <- which(f$random %in% c("1", "0"))
+    if (length(pos)) f$random <- f$random[-pos]
+  }
+
   # reorder, so response is first
   compact_list(f[c(length(f), 1:(length(f) - 1))])
+}
+
+
+.formula_to_string <- function(f) {
+  if (!is.character(f)) f <- deparse(f, width.cutoff = 500L)
+  f
 }
