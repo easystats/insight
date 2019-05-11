@@ -7,6 +7,7 @@
 #'   are preserved.
 #'
 #' @inheritParams find_formula
+#' @inheritParams find_predictors
 #'
 #' @return A list with (depending on the model) following elements (character
 #'    vectors):
@@ -36,12 +37,18 @@
 #' find_variables(m)
 #'
 #' @export
-find_variables <- function(x, ...) {
+find_variables <- function(x, flatten = FALSE, ...) {
   f <- find_formula(x)
   if (is_multivariate(f)) {
-    lapply(f, get_variables_list)
+    l <- lapply(f, get_variables_list)
   } else {
-    get_variables_list(f)
+    l <- get_variables_list(f)
+  }
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
   }
 }
 

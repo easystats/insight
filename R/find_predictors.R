@@ -16,7 +16,7 @@
 #'    with zero-inflated and/or dispersion formula, or to models with instrumental
 #'    variable (so called fixed-effects regressions). May be abbreviated.
 #' @param flatten Logical, if \code{TRUE}, the values are returned
-#'    as character vector, not as list.
+#'    as character vector, not as list. Duplicated values are removed.
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #'    predictor variables. Depending on the combination of the arguments
