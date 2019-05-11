@@ -38,6 +38,8 @@ The functions from *insight* address different components of a model, however, d
 * **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are (only) in the _random effects_ part of the model are not returned as predictors by default, however, these can be returned using additional arguments to the function call. Predictors are "unqiue", hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable).
 * **random slopes**: variables that are used as random slope in a mixed effects model.
 * **random or grouping factors**: variables that are used as grouping variables in a mixed effects model.
+* **parameters**: values estimated or learned from data that encapsulate the relationship between variables. In regressions, these are usually referred to as *coefficients*.
+
 
 ```{r out.width="100%", echo=FALSE}
 knitr::include_graphics("insight_design_2.png", dpi = 72)
@@ -65,6 +67,7 @@ data(sleepstudy)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 sleepstudy$Weeks <- sleepstudy$Days / 7
+sleepstudy$cat <- as.factor(sample(letters[1:4], nrow(sleepstudy), replace = TRUE))
 
 for (i in 1:5) {
   filter_group <- sleepstudy$mygrp == i
@@ -101,6 +104,13 @@ find_predictors(model, effects = "all", component = "all")
 # this is essentially the same as the previous example plus response
 find_terms(model)
 
-# find all variables, i.e. 
+# find all variables, i.e. also quadratic or log-transformed predictors
 find_variables(model)
+```
+
+Finally, there is `find_parameters()`. Parameters are also known as *coefficients*, and `find_parameters()` does exactly that: returning the model coefficients.
+
+```{r echo=TRUE,message=FALSE,warning=FALSE}
+# find model parameters, i.e. coefficients
+find_parameters(model)
 ```
