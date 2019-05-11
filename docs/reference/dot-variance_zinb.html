@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get clean names of model terms — clean_names • insight</title>
+<title>For zero-inflated negative-binomial models, the distributional variance
+is based on Zuur et al. 2012 — .variance_zinb • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,11 +38,11 @@
 
 
 
-<meta property="og:title" content="Get clean names of model terms — clean_names" />
+<meta property="og:title" content="For zero-inflated negative-binomial models, the distributional variance
+is based on Zuur et al. 2012 — .variance_zinb" />
 
-<meta property="og:description" content="This function &quot;cleans&quot; names of model terms (or a character
-  vector with such names) by removing patterns like log() or
-  as.factor() etc." />
+<meta property="og:description" content="For zero-inflated negative-binomial models, the distributional variance
+is based on Zuur et al. 2012" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -120,61 +121,27 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get clean names of model terms</h1>
+    <h1>For zero-inflated negative-binomial models, the distributional variance
+is based on Zuur et al. 2012</h1>
     
-    <div class="hidden name"><code>clean_names.Rd</code></div>
+    <div class="hidden name"><code>dot-variance_zinb.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function "cleans" names of model terms (or a character
-  vector with such names) by removing patterns like <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log()</a></code> or
-  <code><a href='https://www.rdocumentation.org/packages/base/topics/factor'>as.factor()</a></code> etc.</p>
+    <p>For zero-inflated negative-binomial models, the distributional variance
+is based on Zuur et al. 2012</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>clean_names</span>(<span class='no'>x</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>A fitted model, or a character vector.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='fu'>.variance_zinb</span>(<span class='no'>model</span>, <span class='no'>sig</span>, <span class='no'>faminfo</span>, <span class='no'>family_var</span>)</pre>
+        
 
-    <p>The "cleaned" variable names as character vector, i.e. pattern
-  like <code>s()</code> for splines or <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log()</a></code> are removed from
-  the model terms.</p>
-    
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>If <code>x</code> is a regression model, this function is equal to calling
-  <code><a href='find_terms.html'>find_terms()</a></code>.</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># example from ?stats::glm</span>
-<span class='no'>counts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>18</span>, <span class='fl'>17</span>, <span class='fl'>15</span>, <span class='fl'>20</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>25</span>, <span class='fl'>13</span>, <span class='fl'>12</span>)
-<span class='no'>outcome</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/gl'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>9</span>))
-<span class='no'>treatment</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/gl'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>counts</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>outcome</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>as.factor</a></span>(<span class='no'>treatment</span>), <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/family'>poisson</a></span>())
-<span class='fu'>clean_names</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; [1] "counts"    "outcome"   "treatment"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#note">Note</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>
