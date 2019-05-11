@@ -196,7 +196,17 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
     expect_equal(get_variance_slope(m1), c(var.slope.Subject.Days = 35.08106944030500073950), toleance = 1e-4)
     expect_equal(get_correlation_slope_intercept(m1), c(cor.slope_intercept.Subject = 0.06561803), toleance = 1e-4)
 
-    expect_warning(expect_equal(get_variance(m2), NA))
+    expect_warning(expect_equal(
+      get_variance(m2),
+      list(
+        var.fixed = 889.329700216337,
+        var.residual = 941.817768377025,
+        var.distribution = 941.817768377025,
+        var.dispersion = 0,
+        var.intercept = c(`mysubgrp:mygrp` = 0, Subject = 1357.35782386825, mygrp = 24.4073139080596)
+      ),
+      tolerance = 1e-4,
+    ))
   })
 
   test_that("find_algorithm", {
