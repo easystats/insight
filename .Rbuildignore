@@ -11,3 +11,5 @@
 ^paper$
 ^CONTRIBUTING.*$
 ^CODE_OF_CONDUCT.*$
+^doc$
+^Meta$
