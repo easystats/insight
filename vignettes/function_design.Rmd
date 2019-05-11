@@ -22,6 +22,8 @@ Built with non-programmers in mind, *insight* offers a broad toolbox for making 
 
 ## Overview of Core Functions
 
+A statistical model is an object describing the relationship between variables. Although there are a lot of *different types* of models, each with their specificities, most of them also share some *common components*. The goal of `insight` is to help you retrieve these components.
+
 Generally, the `get_*` prefix extracts values associated with model-specific objects (e.g., parameters or algorithms), while the `find_*` prefix lists model-specific objects (e.g., priors and predictors). We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
 
 ```{r out.width="100%", echo=FALSE}
@@ -41,14 +43,18 @@ The functions from *insight* address different components of a model, however, d
 knitr::include_graphics("insight_design_2.png", dpi = 72)
 ```
 
-* **term**: terms are any (unique) variables that appears in a regression model, like response variable, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, in the expression `x + I(x^2)`, there is only the term `x`.
-* **variables**: A variable is considered as an object that stores unique data information. For instance, the expression `x + I(x^2)` has two objects with two different data values, and thus are treated as two variables.
+* **term**: terms are any (unique) variables that appear in a regression model, like response variable, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, in the expression `x + I(x^2)`, there is only the term `x`.
+* **variables**: A variable is considered as an object that stores unique data information. For instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables.
 
 ```{r out.width="100%", echo=FALSE}
 knitr::include_graphics("insight_design_3.png", dpi = 72)
 ```
 
 ## Examples
+
+*Isn't the predictors, the terms and the parameters the same thing?*
+
+In some cases, yes. But not in all cases, and sometimes it is useful to have the "bare" variable names (terms), but sometimes it is also useful to have the information about a possible transformation of variables. That is the main reason for having functions that cover similar aspects of a model object (like `find_variables()` and `find_predictors()` or `find_terms()`).
 
 Here are some examples that demonstrate the differences of each function:
 
@@ -98,5 +104,3 @@ find_terms(model)
 # find all variables, i.e. 
 find_variables(model)
 ```
-
-The reason for having functions that cover similar aspects of a model object (like `find_variables()` and `find_predictors()` or `find_terms()`)
