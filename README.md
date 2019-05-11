@@ -6,7 +6,27 @@
 
 **Gain insight into your models!**
 
-The goal of *insight* is to provide tools to help an **easy**, **intuitive** and **consistent** accesss to information contained in various models, like model formulas, model terms, information about random effects, data that was used to fit the model or data from response variables. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. The *insight* package aims at closing this gap by providing functions that work for (almost) any model.
+The goal of *insight* is to provide tools to help an **easy**, **intuitive** and **consistent** access to information contained in various models, like model formulas, model terms, information about random effects, data that was used to fit the model or data from response variables. Although there are generic functions to get information and data from models, many modeling-functions from different packages do not provide such methods to access these information. The *insight* package aims at closing this gap by providing functions that work for (almost) any model.
+
+## What is a model?
+
+A statistical model is an object describing the relationship between variables. Although there are a lot of **different types** of models, each with their specificities, most of them also share some **common components**. The goal of `insight` is to help you retrieve these components.
+
+![](https://raw.githubusercontent.com/easystats/insight/master/paper/figure2.png)
+
+Most of the models have:
+
+  - Data: the dataset used to fit the model.
+  - Variables: the variables that make the dataset used in the model.
+  - Response: the outcome variable. The variable that the model aims at predicting or modeling. The left-hand side(LHS) of the formula.
+  - Predictors: The variables used to predict the response. The right-hand side(RHS) of the formula.
+  - Terms: ...
+  - Parameters: Values estimated or learned from data that encapsulate the relationship between variables. In regressions, these are usually referred to as *coefficients*.
+  - ...
+  
+*Isn't the predictors, the terms and the parameters the same thing?*
+
+In some cases, yes. For instance, in the formula `y ~ x`, TODO
 
 ## Installation
 
