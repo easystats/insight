@@ -1,3 +1,9 @@
+# insight 0.3.1
+
+## Bug fixes
+
+* `find_parameters()` returned priors for `brmsfit`-objects as `$random`-element. Now, `find_parameters()` returns a `$priors`-element (#98).
+
 # insight 0.3.0
 
 ## New supported model classes

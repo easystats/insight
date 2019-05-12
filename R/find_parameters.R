@@ -440,10 +440,11 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
 
   cond <- fe[grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
   zi <- fe[grepl(pattern = "(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
-  rand <- fe[grepl(pattern = "(?!.*__zi)(?=.*r_)", fe, perl = TRUE)]
+  rand <- fe[grepl(pattern = "(?!.*__zi)(?=.*r_)", fe, perl = TRUE) & !grepl(pattern = "^prior_", fe, perl = TRUE)]
   randzi <- fe[grepl(pattern = "r_(.*__zi)", fe, perl = TRUE)]
   simo <- fe[grepl(pattern = "^simo_", fe, perl = TRUE)]
   smooth_terms <- fe[grepl(pattern = "^sds_", fe, perl = TRUE)]
+  priors <- fe[grepl(pattern = "^prior_", fe, perl = TRUE)]
 
   l <- compact_list(list(
     conditional = cond,
@@ -451,7 +452,8 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
     zero_inflated = zi,
     zero_inflated_random = randzi,
     simplex = simo,
-    smooth_terms = smooth_terms
+    smooth_terms = smooth_terms,
+    priors = priors
   ))
 
   if (is_multivariate(x)) {
@@ -493,13 +495,20 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
         smooth_terms <- NULL
       }
 
+      if (obj_has_name(l, "priors")) {
+        priors <- l$priors
+      } else {
+        priors <- NULL
+      }
+
       compact_list(list(
         conditional = conditional,
         random = random,
         zero_inflated = zero_inflated,
         zero_inflated_random = zero_inflated_random,
         simplex = simplex,
-        smooth_terms = smooth_terms
+        smooth_terms = smooth_terms,
+        priors = priors
       ))
     })
 
