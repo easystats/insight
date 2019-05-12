@@ -70,7 +70,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -83,19 +83,10 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/insight.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/function_design.html">Function Design</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -120,9 +111,23 @@
       
     </div>
 
+    <div id="insight-031" class="section level1">
+<h1 class="page-header">
+<a href="#insight-031" class="anchor"></a>insight 0.3.1<small> Unreleased </small>
+</h1>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>
+<code><a href="../reference/find_parameters.html">find_parameters()</a></code> returned priors for <code>brmsfit</code>-objects as <code>$random</code>-element. Now, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> returns a <code>$priors</code>-element (#98).</li>
+<li>Fixed various issues with non-linear <em>brms</em>-models.</li>
+</ul>
+</div>
+</div>
     <div id="insight-030" class="section level1">
 <h1 class="page-header">
-<a href="#insight-030" class="anchor"></a>insight 0.3.0<small> Unreleased </small>
+<a href="#insight-030" class="anchor"></a>insight 0.3.0<small> 2019-05-11 </small>
 </h1>
 <div id="new-supported-model-classes" class="section level2">
 <h2 class="hasAnchor">
@@ -165,9 +170,9 @@
 <code><a href="../reference/find_variables.html">find_variables()</a></code> gets a <code>flatten</code>-argument, to either return results as list or as simple vector.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/get_data.html">get_data()</a></code> did not work when model formula contained a function with namespace-prefix (like <code>lm(Sepal.Length ~ splines::bs(Petal.Width, df=4)</code>) (#93).</li>
@@ -246,9 +251,9 @@
 <code>model_info</code> now returns <code>$is_tweedie</code> for models from tweedie-families.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not preserve coefficients of monotonic category-specific effects from <strong>brmsfit</strong>-objects.</li>
@@ -276,6 +281,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#insight-031">0.3.1</a></li>
         <li><a href="#insight-030">0.3.0</a></li>
         <li><a href="#insight-020">0.2.0</a></li>
         <li><a href="#insight-012">0.1.2</a></li>

@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -57,19 +57,10 @@
   </a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="articles/insight.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/function_design.html">Function Design</a>
-    </li>
-  </ul>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
@@ -92,7 +83,34 @@
 </h1></div>
 
 <p><strong>Gain insight into your models!</strong></p>
-<p>The goal of <em>insight</em> is to provide tools to help an <strong>easy</strong>, <strong>intuitive</strong> and <strong>consistent</strong> accesss to information contained in various models, like model formulas, model terms, information about random effects, data that was used to fit the model or data from response variables. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. The <em>insight</em> package aims at closing this gap by providing functions that work for (almost) any model.</p>
+<p>The goal of <em>insight</em> is to provide tools to help an <strong>easy</strong>, <strong>intuitive</strong> and <strong>consistent</strong> access to information contained in various models, like model formulas, model terms, information about random effects, data that was used to fit the model or data from response variables. Although there are generic functions to get information and data from models, many modeling-functions from different packages do not provide such methods to access these information. The <em>insight</em> package aims at closing this gap by providing functions that work for (almost) any model.</p>
+<div id="what-is-a-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#what-is-a-model" class="anchor"></a>What is a model?</h2>
+<p>A statistical model is an object describing the relationship between variables. Although there are a lot of <em>different types</em> of models, each with their specificities, most of them also share some <em>common components</em>. The goal of <code>insight</code> is to help you retrieve these components.</p>
+<p>Such components are:</p>
+<ul>
+<li>
+<strong>data</strong>: the dataset used to fit the model.</li>
+<li>
+<strong>response</strong>: the outcome or response variable (dependent variable) of a regression model.</li>
+<li>
+<strong>predictor</strong>: independent variables of (the <em>fixed</em> part of) a regression model. For mixed models, variables that are (only) in the <em>random effects</em> part of the model are not returned as predictors by default, however, these can be returned using additional arguments to the function call. Predictors are “unqiue”, hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable).</li>
+<li>
+<strong>parameters</strong>: values estimated or learned from data that encapsulate the relationship between variables. In regressions, these are usually referred to as <em>coefficients</em>.</li>
+<li>
+<strong>term</strong>: terms are any (unique) variables that appear in a regression model, like response variable, predictors or random effects. A “term” only relates to the unique occurence of a variable. For instance, in the expression <code>x + I(x^2)</code>, there is only the term <code>x</code>.</li>
+<li>
+<strong>variables</strong>: A variable is considered as an object that stores unique data information. For instance, the expression <code>x + I(x^2)</code> has two objects with two different sets of data values, and thus are treated as two variables.</li>
+<li>
+<strong>random slopes</strong>: variables that are used as random slope in a mixed effects model.</li>
+<li>
+<strong>random or grouping factors</strong>: variables that are used as grouping variables in a mixed effects model.</li>
+</ul>
+<p><em>Isn’t the predictors, the terms and the parameters the same thing?</em></p>
+<p>In some cases, yes. But not in all cases. Find out more by <a href="https://easystats.github.io/insight/articles/function_design.html"><strong>clicking here to access the documentation</strong></a>.</p>
+<p><img src="https://raw.githubusercontent.com/easystats/insight/master/paper/figure2.png"></p>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
