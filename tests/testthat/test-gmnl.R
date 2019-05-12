@@ -1,7 +1,7 @@
 if (require("testthat") && require("insight") && require("gmnl") && require("mlogit") && require("MASS")) {
   context("insight, polr")
 
-  data(housing)
+  data(housing, package = "MASS")
 
   dat <- mlogit.data(housing, choice = "Sat", shape = "wide")
   m1 <- gmnl(Sat ~ Infl + Type + Cont | 1, data = dat, model = "smnl", R = 100)

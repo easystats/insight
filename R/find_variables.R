@@ -7,6 +7,7 @@
 #'   are preserved.
 #'
 #' @inheritParams find_formula
+#' @inheritParams find_predictors
 #'
 #' @return A list with (depending on the model) following elements (character
 #'    vectors):
@@ -36,12 +37,18 @@
 #' find_variables(m)
 #'
 #' @export
-find_variables <- function(x, ...) {
+find_variables <- function(x, flatten = FALSE, ...) {
   f <- find_formula(x)
   if (is_multivariate(f)) {
-    lapply(f, get_variables_list)
+    l <- lapply(f, get_variables_list)
   } else {
-    get_variables_list(f)
+    l <- get_variables_list(f)
+  }
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
   }
 }
 
@@ -68,11 +75,19 @@ get_variables_list <- function(f) {
     f_parts
   })
 
-  # remove "1" nad "0" from variables in random effects
+
+  # remove "1" and "0" from variables in random effects
+
   if (obj_has_name(f, "random")) {
     pos <- which(f$random %in% c("1", "0"))
     if (length(pos)) f$random <- f$random[-pos]
   }
+
+  if (obj_has_name(f, "zero_inflated_random")) {
+    pos <- which(f$zero_inflated_random %in% c("1", "0"))
+    if (length(pos)) f$zero_inflated_random <- f$zero_inflated_random[-pos]
+  }
+
 
   # reorder, so response is first
   compact_list(f[c(length(f), 1:(length(f) - 1))])

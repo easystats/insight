@@ -41,6 +41,16 @@
 #'    }
 #'
 #' @examples
+#' ldose <- rep(0:5, 2)
+#' numdead <- c(1, 4, 9, 13, 18, 20, 0, 2, 6, 10, 12, 16)
+#' sex <- factor(rep(c("M", "F"), c(6, 6)))
+#' SF <- cbind(numdead, numalive = 20 - numdead)
+#' dat <- data.frame(ldose, sex, SF, stringsAsFactors = FALSE)
+#' m <- glm(SF ~ sex * ldose, family = binomial)
+#'
+#' model_info(m)
+#'
+#' \dontrun{
 #' library(glmmTMB)
 #' data("Salamanders")
 #' m <- glmmTMB(
@@ -49,7 +59,7 @@
 #'   dispformula = ~DOY,
 #'   data = Salamanders,
 #'   family = nbinom2
-#' )
+#' )}
 #'
 #' model_info(m)
 #' @importFrom stats formula terms

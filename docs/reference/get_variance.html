@@ -75,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -89,6 +89,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/function_design.html">Function Design</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -203,7 +215,9 @@ take a few seconds to calculate.</p></td>
      <code>sigma(model)^2</code>). For models with binary outome, it is
      \(\pi^2 / 3\) for logit-link and <code>1</code> for probit-link. For all
      other models, the distribution-specific variance is based on lognormal
-     approximation, \(log(1 + var(x) / \mu^2)\) (see <cite>Nakagawa et al. 2017</cite>).</p></dd>
+     approximation, \(log(1 + var(x) / \mu^2)\) (see <cite>Nakagawa et al. 2017</cite>).
+     The expected variance of a zero-inflated model is computed according
+     to <cite>Zuur et al. 2012, p277</cite>.</p></dd>
     <dt><strong>Variance for the additive overdispersion term</strong></dt><dd><p>The variance for the additive overdispersion term,
      &sigma;<sup>2</sup><sub><em>e</em></sub>,
      represents &#8220;the excess variation relative to what is expected
@@ -239,6 +253,7 @@ take a few seconds to calculate.</p></td>
     <ul>
 <li><p>Johnson, P. C. D. (2014). Extension of Nakagawa &amp; Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. doi: <a href='https://doi.org/10.1111/2041-210X.12225'>10.1111/2041-210X.12225</a></p></li>
 <li><p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. doi: <a href='https://doi.org/10.1098/rsif.2017.0213'>10.1098/rsif.2017.0213</a></p></li>
+<li><p>Zuur, A. F., Savel'ev, A. A., &amp; Ieno, E. N. (2012). Zero inflated models and generalized linear mixed models with R. Newburgh, United Kingdom: Highland Statistics.</p></li>
 </ul>
     
 

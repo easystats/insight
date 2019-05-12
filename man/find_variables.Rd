@@ -4,10 +4,13 @@
 \alias{find_variables}
 \title{Find names of all variables}
 \usage{
-find_variables(x, ...)
+find_variables(x, flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{flatten}{Logical, if \code{TRUE}, the values are returned
+as character vector, not as list. Duplicated values are removed.}
 
 \item{...}{Currently not used.}
 }

@@ -1,4 +1,4 @@
-# insight 0.2.1
+# insight 0.3.0
 
 ## New supported model classes
 
@@ -19,6 +19,7 @@
 * `get_variance()` now computes the full variance for mixed models with zero-inflation component.
 * `get_priors()` now returns the default-prior that was defined for all parameters of a class, if certain parameters have no specific prior.
 * `find_parameters()` gets a `flatten`-argument, to either return results as list or as simple vector.
+* `find_variables()` gets a `flatten`-argument, to either return results as list or as simple vector.
 
 ## Bug fixes
 
@@ -32,6 +33,7 @@
 * Fixed issue with invalid notation of instrumental-variables formula in `felm`-models for R-devel on Linux.
 * Fixed issue with `get_data()` for *gee* models, where incomplete cases were not removed from the data.
 * Fixed potential issue with `get_data()` for null-models (only intercept in fixed parts) from models of class `glmmTMB`, `brmsfit`, `MixMod` and `rstanarm` (#91).
+* `find_variables()` no longer returns (multiple) `"1"` for random effects.
 
 # insight 0.2.0
 

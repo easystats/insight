@@ -21,7 +21,7 @@ with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated.}
 
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list.}
+as character vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list of character vectors that represent the name(s) of the
