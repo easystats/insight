@@ -54,9 +54,9 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 
   # random effects are returned as list, so we need to unlist here
   if (is_mv) {
-    l <- lapply(f, return_vars)
+    l <- lapply(f, function(.i) return_vars(.i, x))
   } else {
-    l <- return_vars(f)
+    l <- return_vars(f, x)
   }
 
   if (is_empty_object(l) || is_empty_object(compact_list(l))) {
@@ -71,7 +71,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 }
 
 
-return_vars <- function(f) {
+return_vars <- function(f, x) {
   l <- lapply(names(f), function(i) {
     if (i %in% c("random", "zero_inflated_random")) {
       unique(paste(unlist(f[[i]])))
@@ -90,6 +90,15 @@ return_vars <- function(f) {
 
   empty_elements <- sapply(l, is_empty_object)
   l <- compact_list(l)
+
+  # here we handle special cases for non-linear model in brms
+  if (inherits(x, "brmsfit")) {
+    nf <- stats::formula(x)
+    if (!is.null(attr(nf$formula, "nl", exact = TRUE)) && obj_has_name(nf, "pforms")) {
+      nl_parms <- names(nf$pforms)
+      l <- lapply(l, .remove_values, nl_parms)
+    }
+  }
 
   # remove constants
   l <- lapply(l, .remove_values, c("pi", "1", "0"))

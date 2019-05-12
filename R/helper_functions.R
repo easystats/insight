@@ -9,7 +9,7 @@ compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i
 .remove_values <- function(x, values) {
   remove <- x %in% values
   if (any(remove)) {
-    x <- x[-remove]
+    x <- x[!remove]
   }
   x
 }
