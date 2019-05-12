@@ -1,8 +1,8 @@
 ---
-title: "Function Design"
+title: "Getting Started with Accessing Model Information"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{function_design}
+  %\VignetteIndexEntry{insight}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
