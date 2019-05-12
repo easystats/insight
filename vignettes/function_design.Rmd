@@ -34,7 +34,8 @@ knitr::include_graphics("insight_design_1.png", dpi = 72)
 
 The functions from *insight* address different components of a model, however, due to some conceptional overlap, there might be confusion about the specific "targets" of each function. Here is a short explanation how *insight* defines components of regression models:
 
-* **response**: the outcome or response variable (dependent variable) of a regression model
+* **data**: the dataset used to fit the model.
+* **response**: the outcome or response variable (dependent variable) of a regression model.
 * **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are (only) in the _random effects_ part of the model are not returned as predictors by default, however, these can be returned using additional arguments to the function call. Predictors are "unqiue", hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable).
 * **random slopes**: variables that are used as random slope in a mixed effects model.
 * **random or grouping factors**: variables that are used as grouping variables in a mixed effects model.
