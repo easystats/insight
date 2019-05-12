@@ -6,7 +6,29 @@
 
 **Gain insight into your models!**
 
-The goal of *insight* is to provide tools to help an **easy**, **intuitive** and **consistent** accesss to information contained in various models, like model formulas, model terms, information about random effects, data that was used to fit the model or data from response variables. Although there are generic functions to get information and data from models, many modelling-functions from different packages do not provide such methods to access these information. The *insight* package aims at closing this gap by providing functions that work for (almost) any model.
+The goal of *insight* is to provide tools to help an **easy**, **intuitive** and **consistent** access to information contained in various models, like model formulas, model terms, information about random effects, data that was used to fit the model or data from response variables. Although there are generic functions to get information and data from models, many modeling-functions from different packages do not provide such methods to access these information. The *insight* package aims at closing this gap by providing functions that work for (almost) any model.
+
+## What is a model?
+
+A statistical model is an object describing the relationship between variables. Although there are a lot of *different types* of models, each with their specificities, most of them also share some *common components*. The goal of `insight` is to help you retrieve these components.
+
+
+Such components are:
+
+* **data**: the dataset used to fit the model.
+* **response**: the outcome or response variable (dependent variable) of a regression model.
+* **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are (only) in the _random effects_ part of the model are not returned as predictors by default, however, these can be returned using additional arguments to the function call. Predictors are "unqiue", hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable).
+* **parameters**: values estimated or learned from data that encapsulate the relationship between variables. In regressions, these are usually referred to as *coefficients*.
+* **term**: terms are any (unique) variables that appear in a regression model, like response variable, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, in the expression `x + I(x^2)`, there is only the term `x`.
+* **variables**: A variable is considered as an object that stores unique data information. For instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables.
+* **random slopes**: variables that are used as random slope in a mixed effects model.
+* **random or grouping factors**: variables that are used as grouping variables in a mixed effects model.
+
+*Isn't the predictors, the terms and the parameters the same thing?*
+
+In some cases, yes. But not in all cases. Find out more by [**clicking here to access the documentation**](https://easystats.github.io/insight/articles/function_design.html).
+
+![](https://raw.githubusercontent.com/easystats/insight/master/paper/figure2.png)
 
 ## Installation
 
