@@ -139,7 +139,7 @@
 <a class="sourceLine" id="cb1-13" title="13">}</a>
 <a class="sourceLine" id="cb1-14" title="14"></a>
 <a class="sourceLine" id="cb1-15" title="15">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(</a>
-<a class="sourceLine" id="cb1-16" title="16">  Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/AsIs">I</a></span>(Days<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log1p</a></span>(Weeks) <span class="op">+</span></a>
+<a class="sourceLine" id="cb1-16" title="16">  Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/AsIs">I</a></span>(Days<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log1p</a></span>(Weeks) <span class="op">+</span><span class="st"> </span>cat <span class="op">+</span></a>
 <a class="sourceLine" id="cb1-17" title="17"><span class="st">    </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>mygrp <span class="op">/</span><span class="st"> </span>mysubgrp) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb1-18" title="18"><span class="st">    </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject),</a>
 <a class="sourceLine" id="cb1-19" title="19">  <span class="dt">data =</span> sleepstudy</a>
@@ -151,7 +151,7 @@
 <a class="sourceLine" id="cb2-5" title="5"><span class="co"># find all predictors, fixed part by default</span></a>
 <a class="sourceLine" id="cb2-6" title="6"><span class="kw"><a href="../reference/find_predictors.html">find_predictors</a></span>(model)</a>
 <a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; $conditional</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; [1] "Days"  "Weeks"</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; [1] "Days"  "Weeks" "cat"</span></a>
 <a class="sourceLine" id="cb2-9" title="9"></a>
 <a class="sourceLine" id="cb2-10" title="10"><span class="co"># find random effects, grouping factors only</span></a>
 <a class="sourceLine" id="cb2-11" title="11"><span class="kw"><a href="../reference/find_random.html">find_random</a></span>(model)</a>
@@ -166,7 +166,7 @@
 <a class="sourceLine" id="cb2-20" title="20"><span class="co"># find all predictors, including random effects</span></a>
 <a class="sourceLine" id="cb2-21" title="21"><span class="kw"><a href="../reference/find_predictors.html">find_predictors</a></span>(model, <span class="dt">effects =</span> <span class="st">"all"</span>, <span class="dt">component =</span> <span class="st">"all"</span>)</a>
 <a class="sourceLine" id="cb2-22" title="22"><span class="co">#&gt; $conditional</span></a>
-<a class="sourceLine" id="cb2-23" title="23"><span class="co">#&gt; [1] "Days"  "Weeks"</span></a>
+<a class="sourceLine" id="cb2-23" title="23"><span class="co">#&gt; [1] "Days"  "Weeks" "cat"  </span></a>
 <a class="sourceLine" id="cb2-24" title="24"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-25" title="25"><span class="co">#&gt; $random</span></a>
 <a class="sourceLine" id="cb2-26" title="26"><span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Subject"</span></a>
@@ -178,7 +178,7 @@
 <a class="sourceLine" id="cb2-32" title="32"><span class="co">#&gt; [1] "Reaction"</span></a>
 <a class="sourceLine" id="cb2-33" title="33"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-34" title="34"><span class="co">#&gt; $conditional</span></a>
-<a class="sourceLine" id="cb2-35" title="35"><span class="co">#&gt; [1] "Days"  "Weeks"</span></a>
+<a class="sourceLine" id="cb2-35" title="35"><span class="co">#&gt; [1] "Days"  "Weeks" "cat"  </span></a>
 <a class="sourceLine" id="cb2-36" title="36"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-37" title="37"><span class="co">#&gt; $random</span></a>
 <a class="sourceLine" id="cb2-38" title="38"><span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Subject"</span></a>
@@ -189,7 +189,7 @@
 <a class="sourceLine" id="cb2-43" title="43"><span class="co">#&gt; [1] "Reaction"</span></a>
 <a class="sourceLine" id="cb2-44" title="44"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-45" title="45"><span class="co">#&gt; $conditional</span></a>
-<a class="sourceLine" id="cb2-46" title="46"><span class="co">#&gt; [1] "Days"         "I(Days^2)"    "log1p(Weeks)"</span></a>
+<a class="sourceLine" id="cb2-46" title="46"><span class="co">#&gt; [1] "Days"         "I(Days^2)"    "log1p(Weeks)" "cat"         </span></a>
 <a class="sourceLine" id="cb2-47" title="47"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-48" title="48"><span class="co">#&gt; $random</span></a>
 <a class="sourceLine" id="cb2-49" title="49"><span class="co">#&gt; [1] "mysubgrp" "mygrp"    "mygrp"    "Days"     "Subject"</span></a></code></pre></div>
@@ -198,16 +198,17 @@
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="../reference/find_parameters.html">find_parameters</a></span>(model)</a>
 <a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; $conditional</span></a>
 <a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; [1] "(Intercept)"  "Days"         "I(Days^2)"    "log1p(Weeks)"</span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; $random</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; $random$`mysubgrp:mygrp`</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; [1] "(Intercept)"</span></a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; $random$Subject</span></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt; [1] "(Intercept)" "Days"       </span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; $random$mygrp</span></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt; [1] "(Intercept)"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt; [5] "catb"         "catc"         "catd"        </span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; $random</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; $random$`mysubgrp:mygrp`</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; [1] "(Intercept)"</span></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt; $random$Subject</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt; [1] "(Intercept)" "Days"       </span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt; $random$mygrp</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; [1] "(Intercept)"</span></a></code></pre></div>
 </div>
   </div>
 
