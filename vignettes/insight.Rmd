@@ -55,7 +55,7 @@ knitr::include_graphics("insight_design_3.png", dpi = 72)
 
 ## Examples
 
-*Isn't the predictors, the terms and the parameters the same thing?*
+*Aren't the predictors, terms, and parameters the same thing?*
 
 In some cases, yes. But not in all cases, and sometimes it is useful to have the "bare" variable names (terms), but sometimes it is also useful to have the information about a possible transformation of variables. That is the main reason for having functions that cover similar aspects of a model object (like `find_variables()` and `find_predictors()` or `find_terms()`).
 
@@ -109,7 +109,7 @@ find_terms(model)
 find_variables(model)
 ```
 
-Finally, there is `find_parameters()`. Parameters are also known as *coefficients*, and `find_parameters()` does exactly that: returning the model coefficients.
+Finally, there is `find_parameters()`. Parameters are also known as *coefficients*, and `find_parameters()` does exactly that: returns the model coefficients.
 
 ```{r echo=TRUE,message=FALSE,warning=FALSE}
 # find model parameters, i.e. coefficients
