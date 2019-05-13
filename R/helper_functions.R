@@ -90,7 +90,7 @@ get_fixed_effects <- function(f) {
     # intercept only model, w/o "1" in formula notation?
     # e.g. "Reaction ~ (1 + Days | Subject)"
     if (length(f) > 2 && grepl("^\\(", deparse(f[[3]], width.cutoff = 500))) {
-      trim(paste0(as.character(f[[2]]), " ~ 1"))
+      trim(paste0(deparse(f[[2]], width.cutoff = 500), " ~ 1"))
     } else if (!grepl("\\+(\\s)*\\((.*)\\)", f_string)) {
       f_terms <- stats::terms(f)
       pos_bar <- grep("|", labels(f_terms), fixed = TRUE)

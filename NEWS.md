@@ -4,6 +4,7 @@
 
 * `find_parameters()` returned priors for `brmsfit`-objects as `$random`-element. Now, `find_parameters()` returns a `$priors`-element (#98).
 * Fixed various issues with non-linear *brms*-models.
+* `find_formula()` (and hence, `find_response()` or `get_data()`) did not work for multi-column responses in null-models (#100).
 
 # insight 0.3.0
 
