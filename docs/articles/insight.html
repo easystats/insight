@@ -121,7 +121,7 @@
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<p><em>Isn’t the predictors, the terms and the parameters the same thing?</em></p>
+<p><em>Aren’t the predictors, terms, and parameters the same thing?</em></p>
 <p>In some cases, yes. But not in all cases, and sometimes it is useful to have the “bare” variable names (terms), but sometimes it is also useful to have the information about a possible transformation of variables. That is the main reason for having functions that cover similar aspects of a model object (like <code><a href="../reference/find_variables.html">find_variables()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> or <code><a href="../reference/find_terms.html">find_terms()</a></code>).</p>
 <p>Here are some examples that demonstrate the differences of each function:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(insight)</a>
@@ -193,7 +193,7 @@
 <a class="sourceLine" id="cb2-47" title="47"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-48" title="48"><span class="co">#&gt; $random</span></a>
 <a class="sourceLine" id="cb2-49" title="49"><span class="co">#&gt; [1] "mysubgrp" "mygrp"    "mygrp"    "Days"     "Subject"</span></a></code></pre></div>
-<p>Finally, there is <code><a href="../reference/find_parameters.html">find_parameters()</a></code>. Parameters are also known as <em>coefficients</em>, and <code><a href="../reference/find_parameters.html">find_parameters()</a></code> does exactly that: returning the model coefficients.</p>
+<p>Finally, there is <code><a href="../reference/find_parameters.html">find_parameters()</a></code>. Parameters are also known as <em>coefficients</em>, and <code><a href="../reference/find_parameters.html">find_parameters()</a></code> does exactly that: returns the model coefficients.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># find model parameters, i.e. coefficients</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="../reference/find_parameters.html">find_parameters</a></span>(model)</a>
 <a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; $conditional</span></a>
