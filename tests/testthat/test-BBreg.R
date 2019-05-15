@@ -42,7 +42,7 @@ if (require("testthat") && require("insight") && require("HRQoL")) {
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), d$y)
+    expect_equal(get_response(m1), dat$y)
   })
 
   test_that("get_predictors", {

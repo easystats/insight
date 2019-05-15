@@ -109,6 +109,26 @@ get_data.LORgee <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.BBmm <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  mf <- tryCatch({
+    dat <- .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
+    switch(
+      effects,
+      all = dat[, find_terms(x, flatten = TRUE), drop = FALSE],
+      fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
+      random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
+    )
+  },
+  error = function(x) {
+    x$X
+  })
+
+  prepare_get_data(x, stats::na.omit(mf))
+}
+
+
+#' @export
 get_data.gbm <- function(x, ...) {
   mf <- tryCatch({
     get(deparse(x$call$data, width.cutoff = 500), envir = parent.frame())[, find_terms(x, flatten = TRUE), drop = FALSE]

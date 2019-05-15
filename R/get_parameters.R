@@ -91,6 +91,31 @@ get_parameters.BBreg <- function(x, ...) {
 }
 
 
+#' @rdname get_parameters
+#' @export
+get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
+  effects <- match.arg(effects)
+
+  l <- compact_list(list(
+    conditional = x$fixed.coef,
+    random = x$random.coef
+  ))
+
+  fixed <- data.frame(
+    parameter = rownames(l$conditional),
+    estimate = l$conditional,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (effects == "fixed") {
+    fixed
+  } else {
+    l$random
+  }
+}
+
+
 #' @export
 get_parameters.gamlss <- function(x, ...) {
   pars <- list(

@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `BBreg` (*HRQoL*)
+* `BBreg` and `BBmm` (*HRQoL*)
 
 ## Bug fixes
 

@@ -78,6 +78,12 @@ link_function.BBreg <- function(x, ...) {
 
 
 #' @export
+link_function.BBmm <- function(x, ...) {
+  stats::make.link(link = "logit")$linkfun
+}
+
+
+#' @export
 link_function.gamlss <- function(x, ...) {
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
   faminfo$mu.linkfun

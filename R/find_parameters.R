@@ -164,6 +164,21 @@ find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.BBmm <- function(x, flatten = FALSE, ...) {
+  l <- compact_list(list(
+    conditional = rownames(x$fixed.coef),
+    random = x$namesRand
+  ))
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+#' @export
 find_parameters.lrm <- function(x, flatten = FALSE, ...) {
   l <- list(conditional = names(stats::coef(x)))
   if (flatten) {

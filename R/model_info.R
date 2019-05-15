@@ -270,6 +270,20 @@ model_info.BBreg <- function(x, ...) {
 
 
 #' @export
+model_info.BBmm <- function(x, ...) {
+  make_family(
+    x = x,
+    fitfam = "betabinomial",
+    logit.link = TRUE,
+    multi.var = FALSE,
+    zero.inf = FALSE,
+    link.fun = "logit",
+    ...
+  )
+}
+
+
+#' @export
 model_info.crq <- function(x, ...) {
   make_family(x, ...)
 }

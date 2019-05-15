@@ -301,6 +301,18 @@ find_formula.feis <- function(x, ...) {
 
 
 #' @export
+find_formula.BBmm <- function(x, ...) {
+  f.cond <- parse(text = deparse(x$call, width.cutoff = 500))[[1]]$fixed.formula
+  f.rand <- parse(text = deparse(x$call, width.cutoff = 500))[[1]]$random.formula
+
+  compact_list(list(
+    conditional = stats::as.formula(f.cond),
+    random = stats::as.formula(f.rand)
+  ))
+}
+
+
+#' @export
 find_formula.tobit <- function(x, ...) {
   tryCatch({
     list(conditional = parse(text = deparse(x$call, width.cutoff = 500))[[1]]$formula)
