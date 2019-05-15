@@ -25,7 +25,7 @@ is_model <- function(x) {
     "aov", "aovlist", "BBmm", "BBreg", "betareg", "BFBayesFactor", "biglm", "bigglm",
     "brmsfit", "censReg", "clm", "clm2", "clmm", "coxme", "coxph",
     "crch", "crq", "feis", "felm", "gam", "Gam", "gamlss", "gamm", "gbm",
-    "gee", "geeglm", "glm", "glmmPQL", "glmmTMB", "glmrob", "glmRob",
+    "gee", "geeglm", "glimML", "glm", "glmmPQL", "glmmTMB", "glmrob", "glmRob",
     "gls", "gmnl", "htest", "hurdle", "iv_robust", "ivreg", "lm",
     "lm_robust", "lme", "lmrob", "lmRob", "logistf", "LORgee", "lrm",
     "ols", "MCMCglmm", "merMod", "mixed", "MixMod", "mlm", "mlogit",

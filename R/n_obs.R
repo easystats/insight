@@ -89,6 +89,12 @@ n_obs.gbm <- function(x, ...) {
 
 
 #' @export
+n_obs.glimML <- function(x, ...) {
+  nrow(x@data)
+}
+
+
+#' @export
 n_obs.glmRob <- function(x, ...) {
   length(x$fitted.values)
 }

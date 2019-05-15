@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `BBreg` and `BBmm` (*HRQoL*)
+* `betabin` and `negbin` (*aod*), `BBreg` and `BBmm` (*HRQoL*)
 
 ## Bug fixes
 

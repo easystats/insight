@@ -129,6 +129,21 @@ get_data.BBmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.glimML <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  dat <- x@data
+  mf <- switch(
+    effects,
+    all = dat[, find_terms(x, flatten = TRUE), drop = FALSE],
+    fixed = dat[, find_terms(x, effects = "fixed", flatten = TRUE), drop = FALSE],
+    random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
+  )
+
+  prepare_get_data(x, stats::na.omit(mf))
+}
+
+
+#' @export
 get_data.gbm <- function(x, ...) {
   mf <- tryCatch({
     get(deparse(x$call$data, width.cutoff = 500), envir = parent.frame())[, find_terms(x, flatten = TRUE), drop = FALSE]

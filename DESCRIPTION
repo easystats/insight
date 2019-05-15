@@ -24,6 +24,7 @@ Depends:
 Suggests:
     AER,
     afex,
+    aod,
     BayesFactor,
     betareg,
     biglm,

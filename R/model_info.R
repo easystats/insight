@@ -284,6 +284,21 @@ model_info.BBmm <- function(x, ...) {
 
 
 #' @export
+model_info.glimML <- function(x, ...) {
+  fitfam <- switch(x@method, BB = "betabinomial", NB = "negative binomial")
+  make_family(
+    x = x,
+    fitfam = fitfam,
+    logit.link = x@link == "logit",
+    multi.var = FALSE,
+    zero.inf = FALSE,
+    link.fun = x@link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.crq <- function(x, ...) {
   make_family(x, ...)
 }

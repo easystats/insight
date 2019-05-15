@@ -313,6 +313,15 @@ find_formula.BBmm <- function(x, ...) {
 
 
 #' @export
+find_formula.glimML <- function(x, ...) {
+  compact_list(list(
+    conditional = x@formula,
+    random = x@random
+  ))
+}
+
+
+#' @export
 find_formula.tobit <- function(x, ...) {
   tryCatch({
     list(conditional = parse(text = deparse(x$call, width.cutoff = 500))[[1]]$formula)

@@ -3,6 +3,7 @@
 \name{get_parameters}
 \alias{get_parameters}
 \alias{get_parameters.BBmm}
+\alias{get_parameters.glimML}
 \alias{get_parameters.gam}
 \alias{get_parameters.vgam}
 \alias{get_parameters.Gam}
@@ -25,6 +26,8 @@
 get_parameters(x, ...)
 
 \method{get_parameters}{BBmm}(x, effects = c("fixed", "random"), ...)
+
+\method{get_parameters}{glimML}(x, effects = c("fixed", "random"), ...)
 
 \method{get_parameters}{gam}(x, component = c("all", "conditional",
   "smooth_terms"), ...)

@@ -347,6 +347,12 @@ link_inverse.BBmm <- function(x, ...) {
 
 
 #' @export
+link_inverse.glimML <- function(x, ...) {
+  stats::make.link(x@link)$linkinv
+}
+
+
+#' @export
 link_inverse.clm <- function(x, ...) {
   stats::make.link(get_ordinal_link(x))$linkinv
 }

@@ -84,6 +84,12 @@ link_function.BBmm <- function(x, ...) {
 
 
 #' @export
+link_function.glimML <- function(x, ...) {
+  stats::make.link(link = x@link)$linkfun
+}
+
+
+#' @export
 link_function.gamlss <- function(x, ...) {
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
   faminfo$mu.linkfun

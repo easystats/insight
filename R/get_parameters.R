@@ -116,6 +116,38 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
 }
 
 
+#' @rdname get_parameters
+#' @export
+get_parameters.glimML <- function(x, effects = c("fixed", "random"), ...) {
+  effects <- match.arg(effects)
+
+  l <- compact_list(list(
+    conditional = x@fixed.param,
+    random = x@random.param
+  ))
+
+  fixed <- data.frame(
+    parameter = names(l$conditional),
+    estimate = l$conditional,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  random <- data.frame(
+    parameter = names(l$random),
+    estimate = l$random,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (effects == "fixed") {
+    fixed
+  } else {
+    random
+  }
+}
+
+
 #' @export
 get_parameters.gamlss <- function(x, ...) {
   pars <- list(
