@@ -80,6 +80,18 @@ get_parameters.gbm <- function(x, ...) {
 
 
 #' @export
+get_parameters.BBreg <- function(x, ...) {
+  pars <- summary(x)$coefficients
+  data.frame(
+    parameter = rownames(pars),
+    estimate = pars[, "Estimate"],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+#' @export
 get_parameters.gamlss <- function(x, ...) {
   pars <- list(
     conditional = stats::coef(x),

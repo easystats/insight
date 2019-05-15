@@ -113,6 +113,12 @@ n_obs.rq <- function(x, ...) {
 
 
 #' @export
+n_obs.BBreg <- function(x, ...) {
+  x$nObs
+}
+
+
+#' @export
 n_obs.crq <- function(x, ...) {
   nrow(x$residuals)
 }

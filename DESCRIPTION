@@ -44,6 +44,7 @@ Suggests:
     GLMMadaptive,
     glmmTMB,
     gmnl,
+    HRQoL,
     httr,
     lfe,
     logistf,

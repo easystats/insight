@@ -335,6 +335,12 @@ link_inverse.mlogit <- function(x, ...) {
 
 
 #' @export
+link_inverse.BBreg <- function(x, ...) {
+  stats::make.link("logit")$linkinv
+}
+
+
+#' @export
 link_inverse.clm <- function(x, ...) {
   stats::make.link(get_ordinal_link(x))$linkinv
 }

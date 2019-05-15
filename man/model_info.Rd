@@ -28,6 +28,7 @@ Retrieve information from model objects.
      \item \code{is_negbin}: family is negative binomial
      \item \code{is_count}: model is a count model (i.e. family is either poisson or negative binomial)
      \item \code{is_beta}: family is beta
+     \item \code{is_betabinomial}: family is beta-binomial
      \item \code{is_exponential}: family is exponential (e.g. Gamma or Weibull)
      \item \code{is_logit}: model has logit link
      \item \code{is_progit}: model has probit link

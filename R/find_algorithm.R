@@ -89,6 +89,12 @@ find_algorithm.bigglm <- function(x, ...) {
 
 
 #' @export
+find_algorithm.BBreg <- function(x, ...) {
+  list("algorithm" = "ML")
+}
+
+
+#' @export
 find_algorithm.biglm <- function(x, ...) {
   list("algorithm" = "OLS")
 }

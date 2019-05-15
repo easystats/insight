@@ -22,7 +22,7 @@
 #' @export
 is_model <- function(x) {
   inherits(x, c(
-    "aov", "aovlist", "betareg", "BFBayesFactor", "biglm", "bigglm",
+    "aov", "aovlist", "BBreg", "betareg", "BFBayesFactor", "biglm", "bigglm",
     "brmsfit", "censReg", "clm", "clm2", "clmm", "coxme", "coxph",
     "crch", "crq", "feis", "felm", "gam", "Gam", "gamlss", "gamm", "gbm",
     "gee", "geeglm", "glm", "glmmPQL", "glmmTMB", "glmrob", "glmRob",

@@ -19,6 +19,7 @@
 #'      \item \code{is_negbin}: family is negative binomial
 #'      \item \code{is_count}: model is a count model (i.e. family is either poisson or negative binomial)
 #'      \item \code{is_beta}: family is beta
+#'      \item \code{is_betabinomial}: family is beta-binomial
 #'      \item \code{is_exponential}: family is exponential (e.g. Gamma or Weibull)
 #'      \item \code{is_logit}: model has logit link
 #'      \item \code{is_progit}: model has probit link
@@ -251,6 +252,20 @@ model_info.lme <- function(x, ...) {
 #' @export
 model_info.rq <- function(x, ...) {
   make_family(x, ...)
+}
+
+
+#' @export
+model_info.BBreg <- function(x, ...) {
+  make_family(
+    x = x,
+    fitfam = "betabinomial",
+    logit.link = TRUE,
+    multi.var = FALSE,
+    zero.inf = FALSE,
+    link.fun = "logit",
+    ...
+  )
 }
 
 
@@ -766,7 +781,11 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
       grepl("\\Qnegbinomial\\E", fitfam, ignore.case = TRUE) |
       grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE)
 
-  beta_fam <- inherits(x, "betareg") | fitfam %in% c("beta")
+  beta_fam <- inherits(x, "betareg") | fitfam %in% c("beta", "betabinomial")
+  betabin_fam <- inherits(x, "BBreg") | fitfam %in% "betabinomial"
+
+  ## TODO beta-binomial = binomial?
+  if (betabin_fam) binom_fam <- TRUE
 
   exponential_fam <- fitfam %in% c("Gamma", "weibull")
 
@@ -866,6 +885,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_poisson = poisson_fam,
     is_negbin = neg_bin_fam,
     is_beta = beta_fam,
+    is_betabinomial = betabin_fam,
     is_exponential = exponential_fam,
     is_logit = logit.link,
     is_probit = link.fun == "probit",

@@ -152,6 +152,18 @@ find_parameters.vgam <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
+  pars <- list(conditional = rownames(stats::coef(x)))
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+#' @export
 find_parameters.lrm <- function(x, flatten = FALSE, ...) {
   l <- list(conditional = names(stats::coef(x)))
   if (flatten) {
