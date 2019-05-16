@@ -9,6 +9,8 @@
 * `find_parameters()` returned priors for `brmsfit`-objects as `$random`-element. Now, `find_parameters()` returns a `$priors`-element (#98).
 * Fixed various issues with non-linear *brms*-models.
 * `find_formula()` (and hence, `find_response()` or `get_data()`) did not work for multi-column responses in null-models (#100).
+* Fix bugs with models from package *plm* that occured during the latest plm-update.
+* `find_predictors()` did not split nested random effects when these were written as `g1:g2` instead `g2/g2` in the random part of the model formula.
 
 # insight 0.3.0
 
