@@ -19,7 +19,7 @@ if (require("testthat") && require("insight") && require("ordinal")) {
     expect_identical(find_predictors(m1, effects = "all"), list(conditional = c("temp", "contact"), random = "judge"))
     expect_identical(find_predictors(m1, effects = "all", flatten = TRUE), c("temp", "contact", "judge"))
     expect_identical(find_predictors(m2), list(conditional = "PROD"))
-    expect_identical(find_predictors(m2, effects = "all"), list(conditional = "PROD", random = "RESP"))
+    expect_identical(find_predictors(m2, effects = "all"), list(conditional = "PROD", random = c("RESP", "PROD")))
     expect_identical(find_predictors(m2, effects = "all", flatten = TRUE), c("PROD", "RESP"))
   })
 
@@ -83,7 +83,7 @@ if (require("testthat") && require("insight") && require("ordinal")) {
   test_that("find_terms", {
     expect_equal(find_terms(m1), list(response = "rating", conditional = c("temp", "contact"), random = "judge"))
     expect_equal(find_terms(m1, flatten = TRUE), c("rating", "temp", "contact", "judge"))
-    expect_equal(find_terms(m2), list(response = "SURENESS", conditional = "PROD", random = "RESP"))
+    expect_equal(find_terms(m2), list(response = "SURENESS", conditional = "PROD", random = c("RESP", "PROD")))
     expect_equal(find_terms(m2, flatten = TRUE), c("SURENESS", "PROD", "RESP"))
   })
 
