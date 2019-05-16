@@ -155,9 +155,9 @@ get_group_factor <- function(x, f) {
   if (is.null(f)) return(NULL)
 
   if (is.list(f)) {
-    f <- lapply(f, as.symbol)
+    f <- lapply(f, function(i) sapply(i, as.symbol))
   } else {
-    f <- as.symbol(f)
+    f <- sapply(f, as.symbol)
   }
 
   f

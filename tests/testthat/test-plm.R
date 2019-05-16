@@ -13,7 +13,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("find_predictors", {
-      expect_identical(find_predictors(m1), list(conditional = c("lprbarr", "year"), instruments = c("year", "lmix")))
+      expect_identical(find_predictors(m1), list(conditional = c("lprbarr", "year"), instruments = c("lprbarr", "lmix")))
       expect_identical(find_predictors(m1, flatten = TRUE), c("lprbarr", "year", "lmix"))
       expect_null(find_predictors(m1, effects = "random"))
     })
@@ -53,13 +53,13 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         find_formula(m1),
         list(
           conditional = as.formula("lcrmrte ~ lprbarr + factor(year)"),
-          instruments = as.formula("~factor(year) + lmix")
+          instruments = as.formula("~-lprbarr + lmix")
         )
       )
     })
 
     test_that("find_terms", {
-      expect_equal(find_terms(m1), list(response = "lcrmrte", conditional = c("lprbarr", "year"), instruments = c("year", "lmix")))
+      expect_equal(find_terms(m1), list(response = "lcrmrte", conditional = c("lprbarr", "year"), instruments = c("lprbarr", "lmix")))
       expect_equal(find_terms(m1, flatten = TRUE), c("lcrmrte", "lprbarr", "year", "lmix"))
     })
 

@@ -15,7 +15,7 @@ if (require("testthat") && require("insight") && require("HRQoL")) {
   y <- rBB(k, m, p, phi)
   z <- as.factor(rBI(k,4,0.5,2))
 
-  dat <- data.frame(y, x, x2, j, fac, z)
+  dat <- data.frame(y, x, j, fac, z)
 
   m1 <- BBmm(
     fixed.formula = y ~ x,

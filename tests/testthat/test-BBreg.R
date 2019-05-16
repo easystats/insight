@@ -83,11 +83,11 @@ if (require("testthat") && require("insight") && require("HRQoL")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("(Intercept)", "x", "x2", "j", "facb", "facc", "facd")
+        conditional = c("Intercept", "x", "x2", "j", "facb", "facc", "facd")
       )
     )
     expect_equal(nrow(get_parameters(m1)), 7)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "x", "x2", "j", "facb", "facc", "facd"))
+    expect_equal(get_parameters(m1)$parameter, c("Intercept", "x", "x2", "j", "facb", "facc", "facd"))
   })
 
   test_that("is_multivariate", {

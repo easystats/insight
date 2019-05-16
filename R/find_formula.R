@@ -201,6 +201,8 @@ find_formula.plm <- function(x, ...) {
     if (is_empty_string(instr)) {
       list(conditional = stats::as.formula(cond))
     } else {
+      # check if formula starts with dot, and remove it
+      instr <- gsub("(^\\.\\s*)(.*)", "\\2", instr)
       list(
         conditional = stats::as.formula(cond),
         instruments = stats::as.formula(paste0("~", instr))
