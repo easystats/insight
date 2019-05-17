@@ -24,9 +24,9 @@ Such components are:
 * **random slopes**: variables that are used as random slope in a mixed effects model.
 * **random or grouping factors**: variables that are used as grouping variables in a mixed effects model.
 
-*Isn't the predictors, the terms and the parameters the same thing?*
+*Aren't the predictors, terms and parameters the same thing?*
 
-In some cases, yes. But not in all cases. Find out more by [**clicking here to access the documentation**](https://easystats.github.io/insight/articles/function_design.html).
+In some cases, yes. But not in all cases. Find out more by [**clicking here to access the documentation**](https://easystats.github.io/insight/articles/insight.html).
 
 ![](https://raw.githubusercontent.com/easystats/insight/master/paper/figure2.png)
 
