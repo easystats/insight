@@ -113,6 +113,12 @@ should be returned.}
 Returns the point estimates (or posterior samples for Bayesian
    models) from a model.
 }
+\details{
+In most cases when models either return different "effects" (fixed,
+random) or "components" (conditional, zero-inflated, ...), the arguments
+\code{effects} and \code{component} can be used. Not all model classes that
+support these arguments are listed here in the 'Usage' section.
+}
 \examples{
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)

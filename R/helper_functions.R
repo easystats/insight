@@ -173,7 +173,7 @@ get_group_factor <- function(x, f) {
   elements <- switch(
     effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments", "simplex", "smooth_terms", "correlation", "slopes")],
+    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments", "simplex", "smooth_terms", "correlation", "slopes", "sigma")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 

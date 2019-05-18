@@ -7,6 +7,7 @@
 ## Changes to functions
 
 * `find_parameters()` and `get_parameters()` now allow to return a `sigma`-element for multivariate-response models (*brmsfit*, *stanmvreg*).
+* `find_parameters()` gets an `effects` and a `component`-argument, similar to many other functions in _insight_.
 
 ## Bug fixes
 

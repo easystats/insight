@@ -18,6 +18,11 @@
 #'   \item for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component
 #' }
 #'
+#' @details In most cases when models either return different "effects" (fixed,
+#' random) or "components" (conditional, zero-inflated, ...), the arguments
+#' \code{effects} and \code{component} can be used. Not all model classes that
+#' support these arguments are listed here in the 'Usage' section.
+#'
 #' @examples
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)

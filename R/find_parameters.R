@@ -26,6 +26,11 @@
 #'      \item \code{between}, the between-subjects effects of Anovas (\code{aov()}) with error term
 #'    }
 #'
+#' @details In most cases when models either return different "effects" (fixed,
+#' random) or "components" (conditional, zero-inflated, ...), the arguments
+#' \code{effects} and \code{component} can be used. Not all model classes that
+#' support these arguments are listed here in the 'Usage' section.
+#'
 #' @examples
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
@@ -86,8 +91,9 @@ find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
 }
 
 
+#' @rdname find_parameters
 #' @export
-find_parameters.gam <- function(x, flatten = FALSE, ...) {
+find_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
   st <- summary(x)$s.table
 
@@ -95,6 +101,10 @@ find_parameters.gam <- function(x, flatten = FALSE, ...) {
   pars$smooth_terms <- row.names(st)
 
   pars <- compact_list(pars)
+
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component = component)
+  compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))
@@ -118,13 +128,17 @@ find_parameters.gbm <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.Gam <- function(x, flatten = FALSE, ...) {
+find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   pars <- names(stats::coef(x))
 
   l <- compact_list(list(
     conditional = pars[.grep_non_smoothers(pars)],
     smooth_terms = pars[.grep_smoothers(pars)]
   ))
+
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component = component)
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -135,13 +149,17 @@ find_parameters.Gam <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.vgam <- function(x, flatten = FALSE, ...) {
+find_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   pars <- names(stats::coef(x))
 
   l <- compact_list(list(
     conditional = pars[.grep_non_smoothers(pars)],
     smooth_terms = pars[.grep_smoothers(pars)]
   ))
+
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component = component)
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -163,12 +181,17 @@ find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
 }
 
 
+#' @rdname find_parameters
 #' @export
-find_parameters.BBmm <- function(x, flatten = FALSE, ...) {
+find_parameters.BBmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   l <- compact_list(list(
     conditional = rownames(x$fixed.coef),
     random = x$namesRand
   ))
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -179,11 +202,15 @@ find_parameters.BBmm <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.glimML <- function(x, flatten = FALSE, ...) {
+find_parameters.glimML <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   l <- compact_list(list(
     conditional = names(x@fixed.param),
     random = names(x@random.param)
   ))
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -205,10 +232,11 @@ find_parameters.lrm <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.gamm <- function(x, flatten = FALSE, ...) {
+find_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
-  l <- find_parameters.gam(x)
+  component <- match.arg(component)
+  l <- find_parameters.gam(x, component = component)
   if (flatten) {
     unique(unlist(l))
   } else {
@@ -427,13 +455,39 @@ find_parameters.glmmTMB <- function(x, flatten = FALSE, ...) {
 }
 
 
+#' @rdname find_parameters
 #' @export
-find_parameters.zeroinfl <- function(x, flatten = FALSE, ...) {
+find_parameters.zeroinfl <- function(x,  component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
   l <- compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
     zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
   ))
+
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component = component)
+  compact_list(l[elements])
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+#' @rdname find_parameters
+#' @export
+find_parameters.hurdle <- function(x,  component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
+  cf <- names(stats::coef(x))
+  l <- compact_list(list(
+    conditional = cf[grepl("^count_", cf, perl = TRUE)],
+    zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
+  ))
+
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component = component)
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -444,28 +498,16 @@ find_parameters.zeroinfl <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.hurdle <- function(x, flatten = FALSE, ...) {
+find_parameters.zerotrunc <- function(x,  component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
   l <- compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
     zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
   ))
 
-  if (flatten) {
-    unique(unlist(l))
-  } else {
-    l
-  }
-}
-
-
-#' @export
-find_parameters.zerotrunc <- function(x, flatten = FALSE, ...) {
-  cf <- names(stats::coef(x))
-  l <- compact_list(list(
-    conditional = cf[grepl("^count_", cf, perl = TRUE)],
-    zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
-  ))
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component = component)
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
