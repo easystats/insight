@@ -159,8 +159,8 @@
         find_parameters(m2),
         structure(
           list(
-            SepalLength = list(conditional = c("b_SepalLength_Intercept", "b_SepalLength_Petal.Length", "b_SepalLength_Sepal.Width", "b_SepalLength_Speciesversicolor", "b_SepalLength_Speciesvirginica")),
-            SepalWidth = list(conditional = c("b_SepalWidth_Intercept", "b_SepalWidth_Speciesversicolor", "b_SepalWidth_Speciesvirginica"))
+            SepalLength = list(conditional = c("b_SepalLength_Intercept", "b_SepalLength_Petal.Length", "b_SepalLength_Sepal.Width", "b_SepalLength_Speciesversicolor", "b_SepalLength_Speciesvirginica"), sigma = "sigma_SepalLength"),
+            SepalWidth = list(conditional = c("b_SepalWidth_Intercept", "b_SepalWidth_Speciesversicolor", "b_SepalWidth_Speciesvirginica"), sigma = "sigma_SepalWidth")
           ),
           "is_mv" = "1"
         )
