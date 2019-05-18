@@ -88,11 +88,13 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           list(
             y1 = list(
               conditional = c("(Intercept)", "year", "sigma"),
-              random = sprintf("b[(Intercept) id:%i]", 1:40)
+              random = sprintf("b[(Intercept) id:%i]", 1:40),
+              sigma = "sigma"
             ),
             y2 = list(
               conditional = c("(Intercept)", "sexf", "year", "sigma"),
-              random = sprintf(c("b[(Intercept) id:%i]", "b[year id:%i]"), rep(1:40, each = 2))
+              random = sprintf(c("b[(Intercept) id:%i]", "b[year id:%i]"), rep(1:40, each = 2)),
+              sigma = "sigma"
             )
           ),
           is_mv = "1"
@@ -100,7 +102,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       )
     })
 
-    test_that("find_paramaters", {
+    test_that("get_paramaters", {
       expect_equal(
         colnames(get_parameters(m1)),
         c("y1|(Intercept)", "y1|year", "y1|sigma", "y2|(Intercept)", "y2|sexf", "y2|year", "y2|sigma")

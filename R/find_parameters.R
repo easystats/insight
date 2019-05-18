@@ -487,6 +487,7 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
   simo <- fe[grepl(pattern = "^simo_", fe, perl = TRUE)]
   smooth_terms <- fe[grepl(pattern = "^sds_", fe, perl = TRUE)]
   priors <- fe[grepl(pattern = "^prior_", fe, perl = TRUE)]
+  sigma <- fe[grepl(pattern = "^sigma_", fe, perl = TRUE)]
 
   l <- compact_list(list(
     conditional = cond,
@@ -495,6 +496,7 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
     zero_inflated_random = randzi,
     simplex = simo,
     smooth_terms = smooth_terms,
+    sigma = sigma,
     priors = priors
   ))
 
@@ -531,6 +533,12 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
         simplex <- NULL
       }
 
+      if (obj_has_name(l, "sigma")) {
+        sigma <- l$sigma[grepl(sprintf("^sigma_\\Q%s\\E", i), l$sigma)]
+      } else {
+        sigma <- NULL
+      }
+
       if (obj_has_name(l, "smooth_terms")) {
         smooth_terms <- l$smooth_terms
       } else {
@@ -550,6 +558,7 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
         zero_inflated_random = zero_inflated_random,
         simplex = simplex,
         smooth_terms = smooth_terms,
+        sigma = sigma,
         priors = priors
       ))
     })
@@ -601,29 +610,52 @@ find_parameters.stanmvreg <- function(x, flatten = FALSE, parameters = NULL, ...
 
   cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
+  sigma <- fe[grepl(pattern = "\\|sigma$", fe, perl = TRUE) & .grep_non_smoothers(fe)]
 
   l <- compact_list(list(
     conditional = cond,
-    random = rand
+    random = rand,
+    sigma = sigma
   ))
 
-  x1 <- sub(pattern = "(.*)(\\|)(.*)", "\\1", l$conditional)
-  x2 <- sub(pattern = "(.*)(\\|)(.*)", "\\3", l$conditional)
 
-  l.cond <- lapply(rn, function(i) {
-    list(conditional = x2[which(x1 == i)])
-  })
-  names(l.cond) <- rn
+  if (obj_has_name(l, "conditional")) {
+    x1 <- sub(pattern = "(.*)(\\|)(.*)", "\\1", l$conditional)
+    x2 <- sub(pattern = "(.*)(\\|)(.*)", "\\3", l$conditional)
 
-  x1 <- sub(pattern = "b\\[(.*)(\\|)(.*)", "\\1", l$random)
-  x2 <- sub(pattern = "(b\\[).*(.*)(\\|)(.*)", "\\1\\4", l$random)
+    l.cond <- lapply(rn, function(i) {
+      list(conditional = x2[which(x1 == i)])
+    })
+    names(l.cond) <- rn
+  } else {
+    l.cond <- NULL
+  }
 
-  l.random <- lapply(rn, function(i) {
-    list(random = x2[which(x1 == i)])
-  })
-  names(l.random) <- rn
 
-  l <- mapply(c, l.cond, l.random, SIMPLIFY = FALSE)
+  if (obj_has_name(l, "random")) {
+    x1 <- sub(pattern = "b\\[(.*)(\\|)(.*)", "\\1", l$random)
+    x2 <- sub(pattern = "(b\\[).*(.*)(\\|)(.*)", "\\1\\4", l$random)
+
+    l.random <- lapply(rn, function(i) {
+      list(random = x2[which(x1 == i)])
+    })
+    names(l.random) <- rn
+  } else {
+    l.random <- NULL
+  }
+
+
+  if (obj_has_name(l, "sigma")) {
+    l.sigma <- lapply(rn, function(i) {
+      list(sigma = "sigma")
+    })
+    names(l.sigma) <- rn
+  } else {
+    l.sigma <- NULL
+  }
+
+
+  l <- mapply(c, l.cond, l.random, l.sigma, SIMPLIFY = FALSE)
   attr(l, "is_mv") <- "1"
 
   l <- .filter_pars(l, parameters)

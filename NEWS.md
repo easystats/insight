@@ -4,6 +4,10 @@
 
 * `betabin` and `negbin` (*aod*), `BBreg` and `BBmm` (*HRQoL*)
 
+## Changes to functions
+
+* `find_parameters()` and `get_parameters()` now allow to return a `sigma`-element for multivariate-response models (*brmsfit*, *stanmvreg*).
+
 ## Bug fixes
 
 * `find_parameters()` returned priors for `brmsfit`-objects as `$random`-element. Now, `find_parameters()` returns a `$priors`-element (#98).

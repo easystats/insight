@@ -67,7 +67,8 @@ get_parameters(x, ...)
 
 \method{get_parameters}{brmsfit}(x, effects = c("fixed", "random",
   "all"), component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion", "simplex", "smooth_terms"), parameters = NULL, ...)
+  "dispersion", "simplex", "sigma", "smooth_terms"), parameters = NULL,
+  ...)
 
 \method{get_parameters}{stanreg}(x, effects = c("fixed", "random",
   "all"), parameters = NULL, ...)

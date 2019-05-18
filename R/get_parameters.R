@@ -629,7 +629,7 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "smooth_terms"), parameters = NULL, ...) {
+get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), parameters = NULL, ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -697,9 +697,10 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
       i, "|",
       substr(parms[[i]]$random, start = find_bracket + 1, stop = 1000000L)
     )
+    parms[[i]]$sigma <- NULL
   }
 
-  as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
+  as.data.frame(x)[unlist(lapply(compact_list(parms), function(i) i[elements]))]
 }
 
 

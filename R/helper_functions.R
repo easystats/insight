@@ -186,6 +186,7 @@ get_group_factor <- function(x, f) {
     dispersion = elements[elements == "dispersion"],
     instruments = elements[elements == "instruments"],
     simplex = elements[elements == "simplex"],
+    sigma = elements[elements == "sigma"],
     smooth_terms = elements[elements == "smooth_terms"],
     correlation = elements[elements == "correlation"],
     slopes = elements[elements == "slopes"]
