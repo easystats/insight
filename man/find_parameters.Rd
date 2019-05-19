@@ -3,22 +3,17 @@
 \name{find_parameters}
 \alias{find_parameters}
 \alias{find_parameters.gam}
-\alias{find_parameters.BBmm}
 \alias{find_parameters.merMod}
 \alias{find_parameters.zeroinfl}
 \alias{find_parameters.hurdle}
 \alias{find_parameters.brmsfit}
 \alias{find_parameters.stanreg}
-\alias{find_parameters.stanmvreg}
 \title{Find names of model parameters}
 \usage{
 find_parameters(x, flatten = FALSE, ...)
 
 \method{find_parameters}{gam}(x, component = c("all", "conditional",
   "smooth_terms"), flatten = FALSE, ...)
-
-\method{find_parameters}{BBmm}(x, effects = c("all", "fixed", "random"),
-  flatten = FALSE, ...)
 
 \method{find_parameters}{merMod}(x, effects = c("all", "fixed",
   "random"), flatten = FALSE, ...)
@@ -34,9 +29,6 @@ find_parameters(x, flatten = FALSE, ...)
 
 \method{find_parameters}{stanreg}(x, flatten = FALSE,
   parameters = NULL, ...)
-
-\method{find_parameters}{stanmvreg}(x, flatten = FALSE,
-  parameters = NULL, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -46,13 +38,13 @@ as character vector, not as list. Duplicated values are removed.}
 
 \item{...}{Currently not used.}
 
-\item{component}{Should all predictor variables, predictor variables for the
+\item{component}{Should all parameters, parameters for the
 conditional model, the zero-inflated part of the model, the dispersion
 term or the instrumental variables be returned? Applies to models
 with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated.}
 
-\item{effects}{Should variables for fixed effects, random effects
+\item{effects}{Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{parameters}{Regular expression pattern that describes the parameters that

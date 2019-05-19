@@ -7,8 +7,9 @@
 #' @param iterations Number of posterior draws.
 #' @param progress Display progress.
 #' @param ... Currently not used.
-#' @inheritParams find_predictors
+#'
 #' @inheritParams find_parameters
+#' @inheritParams find_predictors
 #'
 #' @return \itemize{
 #'   \item for non-Bayesian models and if \code{effects = "fixed"}, a data frame with two columns: the parameter names and the related point estimates

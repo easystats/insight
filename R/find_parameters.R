@@ -8,6 +8,13 @@
 #'
 #' @param parameters Regular expression pattern that describes the parameters that
 #'   should be returned.
+#' @param effects Should parameters for fixed effects, random effects
+#'    or both be returned? Only applies to mixed models. May be abbreviated.
+#' @param component Should all parameters, parameters for the
+#'    conditional model, the zero-inflated part of the model, the dispersion
+#'    term or the instrumental variables be returned? Applies to models
+#'    with zero-inflated and/or dispersion formula, or to models with instrumental
+#'    variable (so called fixed-effects regressions). May be abbreviated.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -181,7 +188,6 @@ find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
 }
 
 
-#' @rdname find_parameters
 #' @export
 find_parameters.BBmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   l <- compact_list(list(
@@ -670,7 +676,6 @@ find_parameters.stanreg <- function(x, flatten = FALSE, parameters = NULL, ...) 
 }
 
 
-#' @rdname find_parameters
 #' @export
 find_parameters.stanmvreg <- function(x, flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
