@@ -348,7 +348,7 @@ find_parameters.mixed <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.coxme <- function(x, flatten = FALSE, ...) {
+find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -357,6 +357,10 @@ find_parameters.coxme <- function(x, flatten = FALSE, ...) {
     conditional = names(lme4::fixef(x)),
     random = names(lme4::ranef(x))
   ))
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -392,12 +396,16 @@ find_parameters.lme <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.MCMCglmm <- function(x, flatten = FALSE, ...) {
+find_parameters.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   sc <- summary(x)
   l <- compact_list(list(
     conditional = rownames(sc$solutions),
     random = rownames(sc$Gcovariances)
   ))
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
