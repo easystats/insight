@@ -16,7 +16,7 @@ if (require("testthat") && require("insight") && require("gamlss")) {
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(conditional = "x"))
+    expect_identical(find_predictors(m1), list(conditional = "x", sigma = "x"))
     expect_identical(find_predictors(m1, flatten = TRUE), "x")
     expect_null(find_predictors(m1, effects = "random"))
   })

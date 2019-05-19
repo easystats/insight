@@ -46,13 +46,6 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
   elements <- .get_elements(effects, component)
 
 
-  # we need some special treatment for certain models here...
-  if (inherits(x, "gamlss")) {
-    sigma <- which(elements == "sigma")
-    if (!is_empty_object(sigma)) elements <- elements[-sigma]
-  }
-
-
   # filter formulas, depending on requested effects and components
   if (is_mv) {
     f <- lapply(f, function(.x) prepare_predictors(x, .x, elements))
