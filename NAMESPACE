@@ -3,7 +3,7 @@
 S3method(clean_names,character)
 S3method(clean_names,default)
 S3method(clean_parameters,brmsfit)
-S3method(clean_parameters,glmmTMB)
+S3method(clean_parameters,default)
 S3method(find_algorithm,BBmm)
 S3method(find_algorithm,BBreg)
 S3method(find_algorithm,Gam)

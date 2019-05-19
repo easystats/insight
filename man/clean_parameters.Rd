@@ -11,13 +11,22 @@ clean_parameters(x, ...)
 }
 \value{
 A data frame with "cleaned" parameter names and information on
-  group or component where parameters belong to.
+  effects, component and group where parameters belong to. To be consistent
+  across different models, the returned data frame always has the four
+  columns \code{parameter}, \code{effect}, \code{component} and \code{group},
+  even for models where some of these columns are not applicable.
 }
 \description{
 This function "cleans" names of model parameters by removing
 patterns like \code{"r_"} or \code{"b[]"} (mostly applicable to Stan models)
 and adding columns with information to which group or component parameters
 belong (i.e. fixed or random, count or zero-inflated...)
+}
+\details{
+The \code{effects} column indicate if a parameter is a \emph{fixed}
+or \emph{random} effect. The \code{component} can either be \emph{conditional}
+or \emph{zero_inflated}. For models with random effects, the \code{group}
+column indicates the grouping factor of the random effects.
 }
 \examples{
 model <- download_model("brms_zi_2")
