@@ -290,8 +290,9 @@ find_parameters.MixMod <- function(x, flatten = FALSE, ...) {
 }
 
 
+#' @rdname find_parameters
 #' @export
-find_parameters.merMod <- function(x, flatten = FALSE, ...) {
+find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -300,6 +301,10 @@ find_parameters.merMod <- function(x, flatten = FALSE, ...) {
     conditional = names(lme4::fixef(x)),
     random = lapply(lme4::ranef(x), colnames)
   ))
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -310,7 +315,7 @@ find_parameters.merMod <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.rlmerMod <- function(x, flatten = FALSE, ...) {
+find_parameters.rlmerMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -319,6 +324,10 @@ find_parameters.rlmerMod <- function(x, flatten = FALSE, ...) {
     conditional = names(lme4::fixef(x)),
     random = lapply(lme4::ranef(x), colnames)
   ))
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -329,7 +338,7 @@ find_parameters.rlmerMod <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.mixed <- function(x, flatten = FALSE, ...) {
+find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -338,6 +347,11 @@ find_parameters.mixed <- function(x, flatten = FALSE, ...) {
     conditional = names(lme4::fixef(x$full_model)),
     random = lapply(lme4::ranef(x$full_model), colnames)
   ))
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  compact_list(l[elements])
+
 
   if (flatten) {
     unique(unlist(l))
@@ -371,7 +385,7 @@ find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flat
 
 
 #' @export
-find_parameters.lme <- function(x, flatten = FALSE, ...) {
+find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -386,6 +400,10 @@ find_parameters.lme <- function(x, flatten = FALSE, ...) {
     conditional = names(lme4::fixef(x)),
     random = rn
   ))
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))

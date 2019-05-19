@@ -4,6 +4,7 @@
 \alias{find_parameters}
 \alias{find_parameters.gam}
 \alias{find_parameters.BBmm}
+\alias{find_parameters.merMod}
 \alias{find_parameters.zeroinfl}
 \alias{find_parameters.hurdle}
 \alias{find_parameters.brmsfit}
@@ -18,6 +19,9 @@ find_parameters(x, flatten = FALSE, ...)
 
 \method{find_parameters}{BBmm}(x, effects = c("all", "fixed", "random"),
   flatten = FALSE, ...)
+
+\method{find_parameters}{merMod}(x, effects = c("all", "fixed",
+  "random"), flatten = FALSE, ...)
 
 \method{find_parameters}{zeroinfl}(x, component = c("all", "conditional",
   "zi", "zero_inflated"), flatten = FALSE, ...)
