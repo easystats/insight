@@ -24,11 +24,14 @@ find_parameters(x, flatten = FALSE, ...)
 \method{find_parameters}{hurdle}(x, component = c("all", "conditional",
   "zi", "zero_inflated"), flatten = FALSE, ...)
 
-\method{find_parameters}{brmsfit}(x, flatten = FALSE,
+\method{find_parameters}{brmsfit}(x, effects = c("all", "fixed",
+  "random"), component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE,
   parameters = NULL, ...)
 
-\method{find_parameters}{stanreg}(x, flatten = FALSE,
-  parameters = NULL, ...)
+\method{find_parameters}{stanreg}(x, effects = c("all", "fixed",
+  "random"), component = c("all", "conditional", "smooth_terms"),
+  flatten = FALSE, parameters = NULL, ...)
 }
 \arguments{
 \item{x}{A fitted model.}

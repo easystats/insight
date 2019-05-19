@@ -75,7 +75,7 @@ find_parameters.default <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
-  stop("A data frame is no valid object for this function")
+  stop("A data frame is no valid object for this function.")
 }
 
 
@@ -264,9 +264,9 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.MixMod <- function(x, effects = c("fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE, ...) {
+find_parameters.MixMod <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
+    stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
   re.names <- dimnames(lme4::ranef(x))[[2]]
@@ -290,7 +290,6 @@ find_parameters.MixMod <- function(x, effects = c("fixed", "random"), component 
 
   effects <- match.arg(effects)
   component <- match.arg(component)
-
   elements <- .get_elements(effects = effects, component = component)
   l <- compact_list(l[elements])
 
@@ -306,7 +305,7 @@ find_parameters.MixMod <- function(x, effects = c("fixed", "random"), component 
 #' @export
 find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
+    stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
   l <- compact_list(list(
@@ -329,7 +328,7 @@ find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), fla
 #' @export
 find_parameters.rlmerMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
+    stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
   l <- compact_list(list(
@@ -352,7 +351,7 @@ find_parameters.rlmerMod <- function(x, effects = c("all", "fixed", "random"), f
 #' @export
 find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
+    stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
   l <- compact_list(list(
@@ -376,7 +375,7 @@ find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flat
 #' @export
 find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
+    stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
   l <- compact_list(list(
@@ -399,7 +398,7 @@ find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flat
 #' @export
 find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
+    stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
   re <- lme4::ranef(x)
@@ -472,9 +471,9 @@ find_parameters.rqss <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.glmmTMB <- function(x, flatten = FALSE, ...) {
+find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
+    stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
   l <- compact_list(list(
@@ -484,6 +483,11 @@ find_parameters.glmmTMB <- function(x, flatten = FALSE, ...) {
     zero_inflated_random = lapply(lme4::ranef(x)$zi, colnames),
     dispersion = names(lme4::fixef(x)$disp)
   ))
+
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+  elements <- .get_elements(effects = effects, component = component)
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -557,7 +561,7 @@ find_parameters.zerotrunc <- function(x,  component = c("all", "conditional", "z
 
 #' @rdname find_parameters
 #' @export
-find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) {
+find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
@@ -579,6 +583,11 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
     sigma = sigma,
     priors = priors
   ))
+
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+  elements <- .get_elements(effects = effects, component = component)
+  elements <- c(elements, "priors")
 
   if (is_multivariate(x)) {
     rn <- names(find_response(x))
@@ -631,7 +640,7 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
         priors <- NULL
       }
 
-      compact_list(list(
+      pars <- compact_list(list(
         conditional = conditional,
         random = random,
         zero_inflated = zero_inflated,
@@ -641,10 +650,14 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
         sigma = sigma,
         priors = priors
       ))
+
+      compact_list(pars[elements])
     })
 
     names(l) <- rn
     attr(l, "is_mv") <- "1"
+  } else {
+    l <- compact_list(l[elements])
   }
 
   l <- .filter_pars(l, parameters)
@@ -659,7 +672,7 @@ find_parameters.brmsfit <- function(x, flatten = FALSE, parameters = NULL, ...) 
 
 #' @rdname find_parameters
 #' @export
-find_parameters.stanreg <- function(x, flatten = FALSE, parameters = NULL, ...) {
+find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
@@ -674,6 +687,11 @@ find_parameters.stanreg <- function(x, flatten = FALSE, parameters = NULL, ...) 
 
   l <- .filter_pars(l, parameters)
 
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+  elements <- .get_elements(effects, component)
+  l <- compact_list(l[elements])
+
   if (flatten) {
     unique(unlist(l))
   } else {
@@ -683,7 +701,7 @@ find_parameters.stanreg <- function(x, flatten = FALSE, parameters = NULL, ...) 
 
 
 #' @export
-find_parameters.stanmvreg <- function(x, flatten = FALSE, parameters = NULL, ...) {
+find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "sigma"), flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
   rn <- names(find_response(x))
 
@@ -738,6 +756,11 @@ find_parameters.stanmvreg <- function(x, flatten = FALSE, parameters = NULL, ...
   attr(l, "is_mv") <- "1"
 
   l <- .filter_pars(l, parameters)
+
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+  elements <- .get_elements(effects, component)
+  l <- lapply(l, function(i) compact_list(i[elements]))
 
   if (flatten) {
     unique(unlist(l))

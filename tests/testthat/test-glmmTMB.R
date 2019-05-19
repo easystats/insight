@@ -237,6 +237,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
         zero_inflated_random = list(ID = "(Intercept)")
       )
     )
+
     expect_equal(find_parameters(m4, flatten = TRUE), c("(Intercept)", "child", "camper1", "livebait1"))
     expect_equal(
       find_parameters(m6),
@@ -245,6 +246,51 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
         zero_inflated = "(Intercept)"
       )
     )
+
+    expect_equal(
+      find_parameters(m3),
+      list(
+        conditional = c("(Intercept)", "child", "camper1"),
+        random = list(persons = "(Intercept)"),
+        zero_inflated = c("(Intercept)", "child", "livebait1"),
+        zero_inflated_random = list(persons = "(Intercept)")
+      )
+    )
+
+    expect_equal(
+      find_parameters(m3),
+      list(
+        conditional = c("(Intercept)", "child", "camper1"),
+        random = list(persons = "(Intercept)"),
+        zero_inflated = c("(Intercept)", "child", "livebait1"),
+        zero_inflated_random = list(persons = "(Intercept)")
+      )
+    )
+
+    expect_equal(
+      find_parameters(m3, effects = "fixed"),
+      list(
+        conditional = c("(Intercept)", "child", "camper1"),
+        zero_inflated = c("(Intercept)", "child", "livebait1"),
+      )
+    )
+
+    expect_equal(
+      find_parameters(m3, effects = "random", component = "zi"),
+      list(
+        zero_inflated_random = list(persons = "(Intercept)")
+      )
+    )
+
+    expect_equal(
+      find_parameters(m3, effects = "fixed", component = "zi", flatten = TRUE),
+      c("(Intercept)", "child", "livebait1")
+    )
+
+  })
+
+
+  test_that("get_paramaters", {
     expect_equal(nrow(get_parameters(m4)), 6)
     expect_equal(colnames(get_parameters(m4)), c("parameter", "estimate", "component"))
     expect_equal(get_parameters(m4)$parameter, c("(Intercept)", "child", "camper1", "(Intercept)", "child", "livebait1"))
