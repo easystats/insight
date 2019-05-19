@@ -318,9 +318,9 @@
         get_priors(m3),
         data.frame(
           parameter = c("c2", "treat1", "treat1:c2"),
-          distribution = c("", "", ""),
-          location = c("", "", ""),
-          scale = c("", "", ""),
+          distribution = c("uniform", "uniform", "uniform"),
+          location = c(0, 0, 0),
+          scale = c(NA, NA, NA),
           stringsAsFactors = FALSE
         )
       )
