@@ -111,7 +111,7 @@ find_parameters.gam <- function(x, component = c("all", "conditional", "smooth_t
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  compact_list(pars[elements])
+  pars <- compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))
@@ -145,7 +145,7 @@ find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_t
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -166,7 +166,7 @@ find_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -197,7 +197,7 @@ find_parameters.BBmm <- function(x, effects = c("all", "fixed", "random"), flatt
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -216,7 +216,7 @@ find_parameters.glimML <- function(x, effects = c("all", "fixed", "random"), fla
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -264,7 +264,7 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.MixMod <- function(x, flatten = FALSE, ...) {
+find_parameters.MixMod <- function(x, effects = c("fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -288,6 +288,12 @@ find_parameters.MixMod <- function(x, flatten = FALSE, ...) {
     zero_inflated_random = z_inflated_random
   ))
 
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+
+  elements <- .get_elements(effects = effects, component = component)
+  l <- compact_list(l[elements])
+
   if (flatten) {
     unique(unlist(l))
   } else {
@@ -310,7 +316,7 @@ find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), fla
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -333,7 +339,7 @@ find_parameters.rlmerMod <- function(x, effects = c("all", "fixed", "random"), f
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -356,7 +362,7 @@ find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flat
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
 
   if (flatten) {
@@ -380,7 +386,7 @@ find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flat
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -409,7 +415,7 @@ find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatte
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -429,7 +435,7 @@ find_parameters.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), f
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -498,7 +504,7 @@ find_parameters.zeroinfl <- function(x,  component = c("all", "conditional", "zi
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -519,7 +525,7 @@ find_parameters.hurdle <- function(x,  component = c("all", "conditional", "zi",
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -539,7 +545,7 @@ find_parameters.zerotrunc <- function(x,  component = c("all", "conditional", "z
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
