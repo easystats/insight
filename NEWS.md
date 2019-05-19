@@ -8,6 +8,7 @@
 
 * `find_parameters()` and `get_parameters()` now allow to return a `sigma`-element for multivariate-response models (*brmsfit*, *stanmvreg*).
 * `find_parameters()` gets an `effects` and a `component`-argument, similar to many other functions in _insight_.
+* `get_priors()` now returns `distribuion = "uniform"` when model was fitted with flat priors.
 
 ## Bug fixes
 
