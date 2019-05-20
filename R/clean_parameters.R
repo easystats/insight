@@ -185,6 +185,11 @@ clean_parameters.stanmvreg <- function(x, ...) {
       out$cleaned_parameter <- gsub(pattern = i, "\\1", out$cleaned_parameter, perl = TRUE)
     }
 
+    resp_pattern <- sprintf("__zi_%s(.*)", resp, resp)
+    for (i in resp_pattern) {
+      out$cleaned_parameter <- gsub(pattern = i, "\\1", out$cleaned_parameter, perl = TRUE)
+    }
+
     resp_pattern <- sprintf("(sigma)(_%s)", resp, resp)
     for (i in resp_pattern) {
       out$cleaned_parameter <- gsub(pattern = i, "\\1", out$cleaned_parameter, perl = TRUE)
