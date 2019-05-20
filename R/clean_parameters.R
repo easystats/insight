@@ -5,6 +5,12 @@
 #' patterns like \code{"r_"} or \code{"b[]"} (mostly applicable to Stan models)
 #' and adding columns with information to which group or component parameters
 #' belong (i.e. fixed or random, count or zero-inflated...)
+#' \cr \cr
+#' The main purpose of this function is to easily filter and select model parameters,
+#' especially of posterior samples from Stan models, depending on certain
+#' characteristics. This might be useful when only selective results should
+#' be reported or results from all parameters should be filtered to return only
+#' certain results.
 #'
 #' @param x A fitted model.
 #'
@@ -86,10 +92,10 @@ clean_parameters.brmsfit <- function(x, ...) {
   if (is_mv) {
     l <- do.call(
       rbind,
-      lapply(names(pars), function(i) .get_brms_params(pars[[i]], response = i))
+      lapply(names(pars), function(i) .get_stan_params(pars[[i]], response = i))
     )
   } else {
-    l <- .get_brms_params(pars)
+    l <- .get_stan_params(pars)
   }
 
   out <- do.call(rbind, l)
@@ -98,7 +104,38 @@ clean_parameters.brmsfit <- function(x, ...) {
 
 
 
-.get_brms_params <- function(pars, response = NA) {
+
+#' @export
+clean_parameters.stanreg <- function(x, ...) {
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  l <- .get_stan_params(pars)
+
+  out <- do.call(rbind, l)
+  .remove_empty_columns_from_pars(.clean_stanreg_params(out))
+}
+
+
+
+#' @export
+clean_parameters.stanmvreg <- function(x, ...) {
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+
+  l <- do.call(
+    rbind,
+    lapply(names(pars), function(i) .get_stan_params(pars[[i]], response = i))
+  )
+
+  out <- do.call(rbind, l)
+  .remove_empty_columns_from_pars(.clean_stanreg_params(out))
+}
+
+
+
+
+
+
+#' @keywords internal
+.get_stan_params <- function(pars, response = NA) {
   lapply(names(pars), function(i) {
     eff <- if (grepl("random", i, fixed = TRUE))
       "random"
@@ -127,6 +164,8 @@ clean_parameters.brmsfit <- function(x, ...) {
 }
 
 
+
+#' @keywords internal
 .clean_brms_params <- function(out, is_mv) {
 
   out$cleaned_parameter <- out$parameter
@@ -194,6 +233,52 @@ clean_parameters.brmsfit <- function(x, ...) {
 
   out
 }
+
+
+
+#' @keywords internal
+.clean_stanreg_params <- function(out) {
+
+  out$cleaned_parameter <- out$parameter
+
+  # extract group-names from random effects and clean random effects
+
+  rand_intercepts <- grepl("^b\\[\\(Intercept\\)", out$cleaned_parameter)
+
+  if (any(rand_intercepts)) {
+    out$group[rand_intercepts] <- gsub(
+      "b\\[\\(Intercept\\) (.*)\\]",
+      "\\1",
+      out$cleaned_parameter[rand_intercepts]
+    )
+    out$cleaned_parameter[rand_intercepts] <- "(Intercept)"
+  }
+
+
+  # extract group-names from random effects and clean random effects
+
+  rand_effects <- grepl("^b\\[", out$cleaned_parameter)
+
+  if (any(rand_effects)) {
+    r_pars <- gsub("b\\[(.*) (.*)\\]", "\\1", out$cleaned_parameter[rand_effects])
+    r_grps <- gsub("b\\[(.*) (.*)\\]", "\\2", out$cleaned_parameter[rand_effects])
+
+    out$cleaned_parameter[rand_effects] <- r_pars
+    out$group[rand_effects] <- r_grps
+  }
+
+  # clean remaining parameters
+
+  smooth <- grepl("^smooth_sd\\[", out$cleaned_parameter)
+  if (length(smooth)) {
+    out$cleaned_parameter <- gsub("^smooth_sd\\[(.*)\\]", "\\1", out$cleaned_parameter)
+    out$component[smooth] <- "smooth_sd"
+  }
+
+  out
+}
+
+
 
 
 .remove_empty_columns_from_pars <- function(x) {

@@ -4,6 +4,10 @@
 
 * `betabin` and `negbin` (*aod*), `BBreg` and `BBmm` (*HRQoL*)
 
+## New functions
+
+* `clean_parameters()`, which returns a data frame with "decomposed" parameters, i.e. a data frame with information about the clean paramter name, whether it is a fixed or random effect, from conditional or zero-inflated component, and if it is a parameter related to specific grouping factors of random effects (#106).
+
 ## Changes to functions
 
 * `find_parameters()` and `get_parameters()` now allow to return a `sigma`-element for multivariate-response models (*brmsfit*, *stanmvreg*).
