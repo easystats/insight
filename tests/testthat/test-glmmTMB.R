@@ -26,6 +26,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     family = truncated_poisson()
   )
 
+  set.seed(123)
   fish$ID <- sample(1:4, nrow(fish), replace = TRUE)
 
   m4 <- glmmTMB(
