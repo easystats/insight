@@ -360,4 +360,17 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     )
   })
 
+  test_that("clean_parameters", {
+    expect_equal(
+      clean_parameters(m1),
+      structure(list(parameter = c("(Intercept)", "child", "camper1",
+      "(Intercept)", "(Intercept)", "child", "camper1", "(Intercept)"),
+      effects = c("fixed", "fixed", "fixed", "random", "fixed",
+      "fixed", "fixed", "random"), component = c("conditional", "conditional",
+      "conditional", "conditional", "zero_inflated", "zero_inflated",
+      "zero_inflated", "zero_inflated"), group = c("", "", "", "persons",
+      "", "", "", "persons")), row.names = c(NA, -8L), class = "data.frame")
+    )
+  })
+
 }

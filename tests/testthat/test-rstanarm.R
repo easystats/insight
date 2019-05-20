@@ -149,6 +149,21 @@
         warmup = 250
       ))
     })
+
+    test_that("clean_parameters", {
+      expect_equal(
+        clean_parameters(m2),
+        structure(list(parameter = c("(Intercept)", "Speciesversicolor",
+          "Speciesvirginica", "Petal.Length", "Speciesversicolor:Petal.Length",
+          "Speciesvirginica:Petal.Length"), effects = c("fixed", "fixed",
+          "fixed", "fixed", "fixed", "fixed"), component = c("conditional",
+          "conditional", "conditional", "conditional", "conditional", "conditional"),
+          cleaned_parameter = c("(Intercept)", "Speciesversicolor",
+          "Speciesvirginica", "Petal.Length", "Speciesversicolor:Petal.Length",
+          "Speciesvirginica:Petal.Length")), class = "data.frame", row.names = c(NA, -6L))
+      )
+    })
+
   }
 
 # }
