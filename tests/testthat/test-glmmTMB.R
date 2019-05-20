@@ -271,7 +271,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       find_parameters(m3, effects = "fixed"),
       list(
         conditional = c("(Intercept)", "child", "camper1"),
-        zero_inflated = c("(Intercept)", "child", "livebait1"),
+        zero_inflated = c("(Intercept)", "child", "livebait1")
       )
     )
 
