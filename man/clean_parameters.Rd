@@ -12,9 +12,8 @@ clean_parameters(x, ...)
 \value{
 A data frame with "cleaned" parameter names and information on
   effects, component and group where parameters belong to. To be consistent
-  across different models, the returned data frame always has the four
-  columns \code{parameter}, \code{effect}, \code{component} and \code{group},
-  even for models where some of these columns are not applicable.
+  across different models, the returned data frame always has at least three
+  columns \code{parameter}, \code{effect} and \code{component}. See 'Details'.
 }
 \description{
 This function "cleans" names of model parameters by removing
@@ -26,7 +25,12 @@ belong (i.e. fixed or random, count or zero-inflated...)
 The \code{effects} column indicate if a parameter is a \emph{fixed}
 or \emph{random} effect. The \code{component} can either be \emph{conditional}
 or \emph{zero_inflated}. For models with random effects, the \code{group}
-column indicates the grouping factor of the random effects.
+column indicates the grouping factor of the random effects. For multivariate
+response models from \pkg{brms} or \pkg{rstanarm}, an additional \emph{response}
+column is included, to indicate which parameters belong to which response
+formula. Furthermore, for models from \pkg{brms} or \pkg{rstanarm} a
+\emph{cleaned_parameter} column is returned that contains "human readable"
+parameter names.
 }
 \examples{
 model <- download_model("brms_zi_2")

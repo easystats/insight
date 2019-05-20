@@ -10,14 +10,18 @@
 #'
 #' @return A data frame with "cleaned" parameter names and information on
 #'   effects, component and group where parameters belong to. To be consistent
-#'   across different models, the returned data frame always has the four
-#'   columns \code{parameter}, \code{effect}, \code{component} and \code{group},
-#'   even for models where some of these columns are not applicable.
+#'   across different models, the returned data frame always has at least three
+#'   columns \code{parameter}, \code{effect} and \code{component}. See 'Details'.
 #'
 #' @details The \code{effects} column indicate if a parameter is a \emph{fixed}
 #' or \emph{random} effect. The \code{component} can either be \emph{conditional}
 #' or \emph{zero_inflated}. For models with random effects, the \code{group}
-#' column indicates the grouping factor of the random effects.
+#' column indicates the grouping factor of the random effects. For multivariate
+#' response models from \pkg{brms} or \pkg{rstanarm}, an additional \emph{response}
+#' column is included, to indicate which parameters belong to which response
+#' formula. Furthermore, for models from \pkg{brms} or \pkg{rstanarm} a
+#' \emph{cleaned_parameter} column is returned that contains "human readable"
+#' parameter names.
 #'
 #' @examples
 #' model <- download_model("brms_zi_2")
@@ -27,12 +31,6 @@ clean_parameters <- function(x, ...) {
   UseMethod("clean_parameters")
 }
 
-
-#' @export
-clean_parameters.brmsfit <- function(x, ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
-
-}
 
 
 #' @export
@@ -74,5 +72,140 @@ clean_parameters.default <- function(x, ...) {
     }
   })
 
-  do.call(rbind, l)
+  out <- do.call(rbind, l)
+  .remove_empty_columns_from_pars(out)
+}
+
+
+
+#' @export
+clean_parameters.brmsfit <- function(x, ...) {
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  is_mv <- is_multivariate(pars)
+
+  if (is_mv) {
+    l <- do.call(
+      rbind,
+      lapply(names(pars), function(i) .get_brms_params(pars[[i]], response = i))
+    )
+  } else {
+    l <- .get_brms_params(pars)
+  }
+
+  out <- do.call(rbind, l)
+  .remove_empty_columns_from_pars(.clean_brms_params(out, is_mv))
+}
+
+
+
+.get_brms_params <- function(pars, response = NA) {
+  lapply(names(pars), function(i) {
+    eff <- if (grepl("random", i, fixed = TRUE))
+      "random"
+    else
+      "fixed"
+
+    com <- if (grepl("zero_inflated", i, fixed = TRUE))
+      "zero_inflated"
+    else if (grepl("sigma", i, fixed = TRUE))
+      "sigma"
+    else if (grepl("priors", i, fixed = TRUE))
+      "priors"
+    else
+      "conditional"
+
+    data.frame(
+      parameter = pars[[i]],
+      effects = eff,
+      component = com,
+      group = "",
+      response = response,
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  })
+}
+
+
+.clean_brms_params <- function(out, is_mv) {
+
+  out$cleaned_parameter <- out$parameter
+
+  # for multivariate response models, remove responses from parameter names
+
+  if (is_mv) {
+    resp <- unique(out$response)
+
+    resp_pattern <- sprintf("_%s_(.*)", resp, resp)
+    for (i in resp_pattern) {
+      out$cleaned_parameter <- gsub(pattern = i, "_\\1", out$cleaned_parameter, perl = TRUE)
+    }
+
+    resp_pattern <- sprintf("__%s(.*)", resp, resp)
+    for (i in resp_pattern) {
+      out$cleaned_parameter <- gsub(pattern = i, "\\1", out$cleaned_parameter, perl = TRUE)
+    }
+
+    resp_pattern <- sprintf("(sigma)(_%s)", resp, resp)
+    for (i in resp_pattern) {
+      out$cleaned_parameter <- gsub(pattern = i, "\\1", out$cleaned_parameter, perl = TRUE)
+    }
+  }
+
+  # clean fixed effects, conditional and zero-inflated
+
+  out$cleaned_parameter <- gsub(pattern = "(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", "\\2", out$cleaned_parameter, perl = TRUE)
+  out$cleaned_parameter <- gsub(pattern = "(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)(.*)", "\\2", out$cleaned_parameter, perl = TRUE)
+
+  # extract group-names from random effects and clean random effects
+
+  rand_eff <- grepl("r_(.*)\\.(.*)\\.", out$cleaned_parameter)
+  if (any(rand_eff)) {
+    r_pars <- gsub("r_(.*)\\.(.*)\\.", "\\2", out$cleaned_parameter[rand_eff])
+    r_grps <- gsub("r_(.*)\\.(.*)\\.", "\\1", out$cleaned_parameter[rand_eff])
+    r_grps <- gsub("__zi", "", r_grps)
+
+    out$cleaned_parameter[rand_eff] <- r_pars
+    out$group[rand_eff] <- r_grps
+  }
+
+  # clean remaining parameters
+
+  out$cleaned_parameter <- gsub("^simo_", "", out$cleaned_parameter)
+  out$cleaned_parameter <- gsub("^sds_", "", out$cleaned_parameter)
+  out$cleaned_parameter <- gsub("^prior_", "", out$cleaned_parameter)
+
+  # fix intercept names
+
+  intercepts <- which(out$cleaned_parameter == "Intercept")
+  if (!is_empty_object(intercepts))
+    out$cleaned_parameter[intercepts] <- "(Intercept)"
+
+  interaction_terms <- which(grepl("\\.", out$cleaned_parameter))
+  if (length(interaction_terms)) {
+    for (i in interaction_terms) {
+      i_terms <- strsplit(out$cleaned_parameter[i], "\\.")
+      find_i_terms <- sapply(i_terms, function(j) j %in% out$cleaned_parameter)
+      if (all(find_i_terms)) {
+        out$cleaned_parameter[i] <- gsub("\\.", ":", out$cleaned_parameter[i])
+      }
+    }
+  }
+
+  out
+}
+
+
+.remove_empty_columns_from_pars <- function(x) {
+  if (obj_has_name(x, "response") && all(is.na(x$response))) {
+    pos <- which(colnames(x) == "response")
+    x <- x[, -pos]
+  }
+
+  if (obj_has_name(x, "group") && is_empty_string(x$group)) {
+    pos <- which(colnames(x) == "group")
+    x <- x[, -pos]
+  }
+
+  x
 }
