@@ -216,8 +216,13 @@ clean_parameters.stanmvreg <- function(x, ...) {
   # clean remaining parameters
 
   out$cleaned_parameter <- gsub("^simo_", "", out$cleaned_parameter)
-  out$cleaned_parameter <- gsub("^sds_", "", out$cleaned_parameter)
   out$cleaned_parameter <- gsub("^prior_", "", out$cleaned_parameter)
+
+  smooth <- grepl("^sds_", out$cleaned_parameter)
+  if (length(smooth)) {
+    out$cleaned_parameter <- gsub("^sds_", "", out$cleaned_parameter)
+    out$component[smooth] <- "smooth_sd"
+  }
 
   # fix intercept names
 
