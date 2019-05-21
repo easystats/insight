@@ -283,19 +283,31 @@ get_group_factor <- function(x, f) {
 
 .grep_smoothers <- function(x) {
   grepl("^(s\\()", x, perl = TRUE) |
+    grepl("^(ti\\()", x, perl = TRUE) |
+    grepl("^(te\\()", x, perl = TRUE) |
+    grepl("^(t2\\()", x, perl = TRUE) |
     grepl("^(gam::s\\()", x, perl = TRUE) |
     grepl("^(VGAM::s\\()", x, perl = TRUE) |
     grepl("^(mgcv::s\\()", x, perl = TRUE) |
+    grepl("^(mgcv::ti\\()", x, perl = TRUE) |
+    grepl("^(mgcv::te\\()", x, perl = TRUE) |
     grepl("^(brms::s\\()", x, perl = TRUE) |
+    grepl("^(brms::t2\\()", x, perl = TRUE) |
     grepl("^(smooth_sd\\[)", x, perl = TRUE)
 }
 
 
 .grep_non_smoothers <- function(x) {
   grepl("^(?!(s\\())", x, perl = TRUE) &
+    grepl("^(?!(ti\\())", x, perl = TRUE) &
+    grepl("^(?!(te\\())", x, perl = TRUE) &
+    grepl("^(?!(t2\\())", x, perl = TRUE) &
     grepl("^(?!(gam::s\\())", x, perl = TRUE) &
     grepl("^(?!(VGAM::s\\())", x, perl = TRUE) &
     grepl("^(?!(mgcv::s\\())", x, perl = TRUE) &
+    grepl("^(?!(mgcv::ti\\())", x, perl = TRUE) &
+    grepl("^(?!(mgcv::te\\())", x, perl = TRUE) &
     grepl("^(?!(brms::s\\())", x, perl = TRUE) &
+    grepl("^(?!(brms::t2\\())", x, perl = TRUE) &
     grepl("^(?!(smooth_sd\\[))", x, perl = TRUE)
 }

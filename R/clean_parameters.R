@@ -54,6 +54,12 @@ clean_parameters.default <- function(x, ...) {
     else
       "conditional"
 
+    fun <- if (grepl("smooth", i, fixed = TRUE))
+      "smooth"
+    else
+      ""
+
+
     if (eff == "random") {
       rand_eff <- lapply(names(pars[[i]]), function(j) {
         data.frame(
@@ -61,6 +67,7 @@ clean_parameters.default <- function(x, ...) {
           effects = eff,
           component = com,
           group = j,
+          fun = fun,
           stringsAsFactors = FALSE,
           row.names = NULL
         )
@@ -72,6 +79,7 @@ clean_parameters.default <- function(x, ...) {
         effects = eff,
         component = com,
         group = "",
+        fun = fun,
         stringsAsFactors = FALSE,
         row.names = NULL
       )
@@ -151,12 +159,19 @@ clean_parameters.stanmvreg <- function(x, ...) {
     else
       "conditional"
 
+    fun <- if (grepl("smooth", i, fixed = TRUE))
+      "smooth"
+    else
+      ""
+
+
     data.frame(
       parameter = pars[[i]],
       effects = eff,
       component = com,
       group = "",
       response = response,
+      fun = fun,
       stringsAsFactors = FALSE,
       row.names = NULL
     )
@@ -196,6 +211,13 @@ clean_parameters.stanmvreg <- function(x, ...) {
     }
   }
 
+
+  smooth_function <- grepl(pattern = "(bs_|bs_zi_)", out$cleaned_parameter)
+  if (any(smooth_function)) {
+    out$fun[smooth_function] <- "smooth"
+  }
+
+
   # clean fixed effects, conditional and zero-inflated
 
   out$cleaned_parameter <- gsub(pattern = "(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", "\\2", out$cleaned_parameter, perl = TRUE)
@@ -222,6 +244,7 @@ clean_parameters.stanmvreg <- function(x, ...) {
   if (length(smooth)) {
     out$cleaned_parameter <- gsub("^sds_", "", out$cleaned_parameter)
     out$component[smooth] <- "smooth_sd"
+    out$fun[smooth] <- "smooth"
   }
 
   # fix intercept names
@@ -283,6 +306,7 @@ clean_parameters.stanmvreg <- function(x, ...) {
   if (length(smooth)) {
     out$cleaned_parameter <- gsub("^smooth_sd\\[(.*)\\]", "\\1", out$cleaned_parameter)
     out$component[smooth] <- "smooth_sd"
+    out$fun[smooth] <- "smooth"
   }
 
   out
@@ -299,6 +323,11 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
   if (obj_has_name(x, "group") && is_empty_string(x$group)) {
     pos <- which(colnames(x) == "group")
+    x <- x[, -pos]
+  }
+
+  if (obj_has_name(x, "fun") && is_empty_string(x$fun)) {
+    pos <- which(colnames(x) == "fun")
     x <- x[, -pos]
   }
 
