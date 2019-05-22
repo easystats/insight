@@ -30,6 +30,7 @@
 #'      \item \code{is_censored}: model is a censored model
 #'      \item \code{is_zeroinf}: model has zero-inflation component
 #'      \item \code{is_zero_inflated}: alias for \code{is_zeroinf}
+#'      \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 #'      \item \code{is_mixed}: model is a mixed effects model (with random effects)
 #'      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
 #'      \item \code{is_trial}: model response contains additional information about the trials
@@ -439,6 +440,7 @@ model_info.hurdle <- function(x, ...) {
     x = x,
     fitfam = fitfam,
     zero.inf = TRUE,
+    hurdle = TRUE,
     link.fun = "log",
     ...
   )
@@ -479,6 +481,7 @@ model_info.glmmTMB <- function(x, ...) {
     x = x,
     fitfam = faminfo$family,
     zero.inf = !is_empty_object(lme4::fixef(x)$zi),
+    hurdle = grepl("truncated", faminfo$family),
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
     ...
@@ -792,7 +795,7 @@ model_info.mlm <- function(x, ...) {
 
 
 #' @keywords internal
-make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity", ...) {
+make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity", ...) {
   # create logical for family
   binom_fam <-
     fitfam %in% c("bernoulli", "binomial", "quasibinomial", "binomialff") |
@@ -829,6 +832,11 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE) |
     grepl("\\Qhurdle\\E", fitfam, ignore.case = TRUE) |
     grepl("^(zt|zi|za|hu)", fitfam, perl = TRUE) |
+    grepl("^truncated", fitfam, perl = TRUE)
+
+  hurdle <- hurdle |
+    grepl("\\Qhurdle\\E", fitfam, ignore.case = TRUE) |
+    grepl("^hu", fitfam, perl = TRUE) |
     grepl("^truncated", fitfam, perl = TRUE)
 
   is.ordinal <-
@@ -923,6 +931,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, logit.link = F
     is_tweedie = tweedie_model,
     is_zeroinf = zero.inf,
     is_zero_inflated = zero.inf,
+    is_hurdle = hurdle,
     is_ordinal = is.ordinal,
     is_categorical = is.categorical,
     is_mixed = !is.null(find_random(x)),
