@@ -32,6 +32,6 @@ is_model <- function(x) {
     "multinom", "plm", "polr", "psm", "rlmerMod", "rq", "rqss",
     "speedlm", "speedglm", "stanmvreg", "stanreg", "survreg",
     "svyglm", "svyolr", "tobit", "truncreg", "vgam", "vglm",
-    "zeroinfl", "zerotrunc"
+    "wbm", "wblm", "zeroinfl", "zerotrunc"
   ))
 }

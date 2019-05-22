@@ -768,3 +768,31 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
     l
   }
 }
+
+
+
+#' @export
+find_parameters.wbm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package 'lme4' required for this function to work. Please install it.")
+  }
+
+  l <- compact_list(list(
+    conditional = names(lme4::fixef(x)),
+    random = lapply(lme4::ranef(x), colnames)
+  ))
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects = effects, component = "all")
+  l <- compact_list(l[elements])
+
+  l <- lapply(l, function(i) gsub("`", "", i, fixed = TRUE))
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+

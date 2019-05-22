@@ -303,6 +303,40 @@ find_formula.feis <- function(x, ...) {
 
 
 #' @export
+find_formula.wbm <- function(x, ...) {
+  f <- deparse(stats::formula(x), width.cutoff = 500L)
+  f_parts <- unlist(strsplit(f, "\\|"))
+
+  f.cond <- trim(f_parts[1])
+
+  if (length(f_parts) > 1) {
+    f.instr <- paste0("~", trim(f_parts[2]))
+  } else {
+    f.instr <- NULL
+  }
+
+  if (length(f_parts) > 2) {
+    if (grepl("^\\(", f_parts[3])) {
+      f_parts[3] <- gsub("(\\(|\\))", "", f_parts[3])
+    } else {
+      ## TODO dangerous fix to convert cross-level interactions
+      # into random effects...
+      f_parts[3] <- gsub("*", "|", f_parts[3], fixed = TRUE)
+    }
+    f.rand <- paste0("~", trim(f_parts[3]))
+  } else {
+    f.rand <- NULL
+  }
+
+  compact_list(list(
+    conditional = stats::as.formula(f.cond),
+    instruments = stats::as.formula(f.instr),
+    random = stats::as.formula(f.rand)
+  ))
+}
+
+
+#' @export
 find_formula.BBmm <- function(x, ...) {
   f.cond <- parse(text = deparse(x$call, width.cutoff = 500))[[1]]$fixed.formula
   f.rand <- parse(text = deparse(x$call, width.cutoff = 500))[[1]]$random.formula

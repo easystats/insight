@@ -184,6 +184,22 @@ get_data.plm <- function(x, ...) {
 
 
 #' @export
+get_data.wbm <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  dat <- as.data.frame(x@orig_data)
+
+  mf <- switch(
+    effects,
+    all = dat[, unique(clean_names(find_terms(x, flatten = TRUE))), drop = FALSE],
+    fixed = dat[, unique(clean_names(find_terms(x, effects = "fixed", flatten = TRUE))), drop = FALSE],
+    random = dat[, unique(clean_names(find_random(x, flatten = TRUE))), drop = FALSE]
+  )
+
+  prepare_get_data(x, stats::na.omit(mf))
+}
+
+
+#' @export
 get_data.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
