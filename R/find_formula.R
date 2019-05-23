@@ -305,7 +305,8 @@ find_formula.feis <- function(x, ...) {
 #' @export
 find_formula.wbm <- function(x, ...) {
   f <- deparse(stats::formula(x), width.cutoff = 500L)
-  f_parts <- unlist(strsplit(f, "\\|"))
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+  # .split_formula(as.formula(f))
 
   f.cond <- trim(f_parts[1])
 
@@ -316,7 +317,8 @@ find_formula.wbm <- function(x, ...) {
   }
 
   if (length(f_parts) > 2) {
-    if (grepl("^\\(", f_parts[3])) {
+    f_parts[3] <- trim(f_parts[3])
+    if (grepl("\\((.+)\\|(.+)\\)", f_parts[3])) {
       f_parts[3] <- gsub("(\\(|\\))", "", f_parts[3])
     } else {
       ## TODO dangerous fix to convert cross-level interactions

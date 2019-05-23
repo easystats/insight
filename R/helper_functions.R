@@ -311,3 +311,28 @@ get_group_factor <- function(x, f) {
     grepl("^(?!(brms::t2\\())", x, perl = TRUE) &
     grepl("^(?!(smooth_sd\\[))", x, perl = TRUE)
 }
+
+
+
+# .split_formula <- function(f) {
+#   rhs <- if (length(f) > 2)
+#     f[[3L]]
+#   else
+#     f[[2L]]
+#
+#   lapply(.extract_formula_parts(rhs), deparse, width.cutoff = 500)
+# }
+#
+#
+# .extract_formula_parts <- function(x, sep = "|") {
+#   if (is.null(x))
+#     return(NULL)
+#   rval <- list()
+#   if (length(x) > 1L && x[[1L]] == sep) {
+#     while (length(x) > 1L && x[[1L]] == sep) {
+#       rval <- c(x[[3L]], rval)
+#       x <- x[[2L]]
+#     }
+#   }
+#   c(x, rval)
+# }

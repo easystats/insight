@@ -786,7 +786,7 @@ find_parameters.wbm <- function(x, effects = c("all", "fixed", "random"), flatte
   elements <- .get_elements(effects = effects, component = "all")
   l <- compact_list(l[elements])
 
-  l <- lapply(l, function(i) gsub("`", "", i, fixed = TRUE))
+  l <- rapply(l, function(i) gsub("`", "", i, fixed = TRUE), how = "list")
 
   if (flatten) {
     unique(unlist(l))
