@@ -10,6 +10,7 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   m2 <- download_model("glmmTMB_1")
   m3 <- download_model("glmmTMB_zi_2")
   m4 <- download_model("glmmTMB_zi_5")
+  m7 <- download_model("glmmTMB_zi_6")
 
   data(Salamanders)
   m5 <- glmmTMB(
@@ -319,18 +320,8 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
 
     expect_null(find_random_slopes(m6))
 
-    expect_warning(
-      m <- glmmTMB(
-        count ~ child + camper + (1 + xb| persons),
-        ziformula = ~ child + livebait + (1 + zg + nofish| ID),
-        dispformula = ~xb,
-        data = fish,
-        family = truncated_poisson()
-      )
-    )
-
     expect_equal(
-      find_random_slopes(m),
+      find_random_slopes(m7),
       list(random = "xb", zero_inflated_random = c("zg", "nofish"))
     )
   })
