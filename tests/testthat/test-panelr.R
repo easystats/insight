@@ -26,8 +26,8 @@ if (require("testthat") && require("insight") && require("panelr")) {
   })
 
   test_that("get_random", {
-    expect_equal(get_random(m1)[[1]], wages$union)
-    expect_equal(get_random(m2)[[1]], wages$union)
+    expect_equal(get_random(m1)[[1]], model.frame(m1)$`lag(union)`)
+    expect_equal(get_random(m2)[[1]], model.frame(m2)$union)
   })
 
   test_that("find_response", {
@@ -35,11 +35,12 @@ if (require("testthat") && require("insight") && require("panelr")) {
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), wages$lwage)
+    expect_equal(get_response(m1), model.frame(m1)$lwage)
   })
 
   test_that("get_predictors", {
     expect_equal(colnames(get_predictors(m1)), c("union", "wks", "blk", "fem"))
+    expect_equal(colnames(get_predictors(m2)), c("union", "wks", "blk", "fem"))
   })
 
   test_that("link_inverse", {
@@ -47,8 +48,16 @@ if (require("testthat") && require("insight") && require("panelr")) {
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 4165)
-    expect_equal(colnames(get_data(m1)), c("lwage", "union", "wks", "blk", "fem"))
+    expect_equal(nrow(get_data(m1)), 3570)
+    expect_equal(
+      colnames(get_data(m1)),
+      c("id", "t", "lwage", "union", "wks", "blk", "fem", "imean(lag(union))",
+        "imean(wks)", "union.1", "imean(lag(union):blk)", "union.2")
+    )
+    expect_equal(
+      colnames(get_data(m2)),
+      c("id", "t", "lwage", "union", "wks", "blk", "fem", "union.1", "imean(lag(union))", "imean(wks)")
+    )
   })
 
   test_that("find_formula", {
@@ -82,6 +91,7 @@ if (require("testthat") && require("insight") && require("panelr")) {
 
   test_that("n_obs", {
     expect_equal(n_obs(m1), 595)
+    expect_equal(n_obs(m2), 595)
   })
 
   test_that("linkfun", {
