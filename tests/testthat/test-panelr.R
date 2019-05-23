@@ -39,8 +39,8 @@ if (require("testthat") && require("insight") && require("panelr")) {
   })
 
   test_that("get_predictors", {
-    expect_equal(colnames(get_predictors(m1)), c("union", "wks", "blk", "fem"))
-    expect_equal(colnames(get_predictors(m2)), c("union", "wks", "blk", "fem"))
+    expect_equal(colnames(get_predictors(m1)), c("lag(union)", "wks", "blk", "fem"))
+    expect_equal(colnames(get_predictors(m2)), c("lag(union)", "wks", "blk", "fem"))
   })
 
   test_that("link_inverse", {
@@ -51,12 +51,12 @@ if (require("testthat") && require("insight") && require("panelr")) {
     expect_equal(nrow(get_data(m1)), 3570)
     expect_equal(
       colnames(get_data(m1)),
-      c("id", "t", "lwage", "union", "wks", "blk", "fem", "imean(lag(union))",
-        "imean(wks)", "union.1", "imean(lag(union):blk)", "union.2")
+      c("lwage", "id", "t", "lag(union)", "wks", "blk", "fem", "imean(lag(union))",
+        "imean(wks)", "lag(union)*blk", "imean(lag(union):blk)", "lag(union):blk")
     )
     expect_equal(
       colnames(get_data(m2)),
-      c("id", "t", "lwage", "union", "wks", "blk", "fem", "union.1", "imean(lag(union))", "imean(wks)")
+      c("lwage", "id", "t", "lag(union)", "wks", "blk", "fem", "union",  "imean(lag(union))", "imean(wks)")
     )
   })
 

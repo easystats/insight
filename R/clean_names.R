@@ -40,7 +40,7 @@ clean_names.character <- function(x) {
 }
 
 
-.remove_pattern_from_names <- function(x, ignore_asis = FALSE) {
+.remove_pattern_from_names <- function(x, ignore_asis = FALSE, ignore_lag = FALSE) {
   # return if x is empty
   if (is_empty_string(x)) return("")
 
@@ -52,6 +52,12 @@ clean_names.character <- function(x) {
     "strata", "strat", "scale", "scored", "interaction", "sqrt", "lsp", "rcs",
     "pb", "lo", "bs", "ns", "t2", "te", "ti", "tt", "mi", "mo", "gp", "s", "I"
   )
+
+  # sometimes needed for panelr models, where we need to preserve "lag()"
+  if (ignore_lag) {
+    lag_pattern <- which(pattern == "lag")
+    if (length(lag_pattern)) pattern <- pattern[-lag_pattern]
+  }
 
   # do we have a "log()" pattern here? if yes, get capture region
   # which matches the "cleaned" variable name

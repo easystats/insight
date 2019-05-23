@@ -190,12 +190,9 @@ get_data.wbm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
   # dat <- as.data.frame(x@orig_data)
 
-  mf <- switch(
-    effects,
-    all = ,
-    fixed = mf,
-    random = mf[, unique(find_random(x, split_nested = TRUE, flatten = TRUE)), drop = FALSE]
-  )
+  if (effects == "random") {
+    return(stats::na.omit(mf[, unique(find_random(x, split_nested = TRUE, flatten = TRUE)), drop = FALSE]))
+  }
 
   resp.col <- which(colnames(mf) == find_response(x))
   mf <- mf[, c(resp.col, (1:ncol(mf))[-resp.col])]
@@ -766,7 +763,7 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
   if (any(mos_eisly)) mf <- mf[!mos_eisly]
 
   # clean variable names
-  cvn <- clean_names(colnames(mf))
+  cvn <- .remove_pattern_from_names(colnames(mf), ignore_lag = TRUE)
 
   # keep "as is" variable for response variables in data frame
   if (colnames(mf)[1] == rn[1] && grepl("^I\\(", rn[1])) {
@@ -781,7 +778,7 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
 
     if (!is.null(md)) {
       mf <- cbind(mf, md)
-      cvn <- clean_names(colnames(mf))
+      cvn <- .remove_pattern_from_names(colnames(mf), ignore_lag = TRUE)
       cvn[1] <- rn[1]
     }
   }
