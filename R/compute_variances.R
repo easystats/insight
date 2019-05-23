@@ -61,8 +61,8 @@
 
   # Separate observation variance from variance of random effects
   nr <- sapply(vals$re, nrow)
-  not.obs.terms <- names(nr[nr != stats::nobs(x)])
-  obs.terms <- names(nr[nr == stats::nobs(x)])
+  not.obs.terms <- names(nr[nr != n_obs(x)])
+  obs.terms <- names(nr[nr == n_obs(x)])
 
   # Variance of random effects
   if (component %in% c("random", "all") && !isTRUE(no_random_variance)) {
@@ -262,7 +262,7 @@
 
     Z <- vals$X[, rn, drop = FALSE]
     Z.m <- Z %*% Sigma
-    sum(diag(crossprod(Z.m, Z))) / stats::nobs(x)
+    sum(diag(crossprod(Z.m, Z))) / n_obs(x)
   }
 
   if (inherits(x, "MixMod")) {

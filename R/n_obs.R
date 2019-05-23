@@ -194,3 +194,9 @@ n_obs.zerotrunc <- function(x, ...) {
 n_obs.zeroinfl <- function(x, ...) {
   x$n
 }
+
+
+#' @export
+n_obs.wbm <- function(x, ...) {
+  nrow(x@frame)
+}
