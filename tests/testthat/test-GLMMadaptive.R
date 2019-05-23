@@ -6,22 +6,8 @@ if (require("testthat") && require("insight") && require("GLMMadaptive") && requ
   fish$livebait <- as.factor(fish$livebait)
   fish$camper <- as.factor(fish$camper)
 
-  m <- GLMMadaptive::mixed_model(
-    count ~ child + camper,
-    random = ~ 1 | persons,
-    zi_fixed = ~ child + livebait,
-    zi_random = ~ 1 | persons,
-    data = fish,
-    family = GLMMadaptive::zi.poisson()
-  )
-
-  m2 <- GLMMadaptive::mixed_model(
-    count ~ child + camper,
-    random = ~ 1 | persons,
-    zi_fixed = ~ child + livebait,
-    data = fish,
-    family = GLMMadaptive::zi.poisson()
-  )
+  m <- download_model("GLMMadaptive_zi_2")
+  m2 <- download_model("GLMMadaptive_zi_1")
 
   data(cbpp)
   m3 <- GLMMadaptive::mixed_model(
@@ -52,9 +38,9 @@ if (require("testthat") && require("insight") && require("GLMMadaptive") && requ
     expect_identical(find_predictors(m, effects = "fixed", component = "zi", flatten = TRUE), c("child", "livebait"))
     expect_identical(find_predictors(m, effects = "all", component = "zi", flatten = TRUE), c("child", "livebait", "persons"))
     expect_identical(find_predictors(m, effects = "random", component = "zi", flatten = TRUE), "persons")
-    expect_null(find_predictors(m, effects = "fixed", component = "disp", flatten = TRUE))
-    expect_null(find_predictors(m, effects = "all", component = "disp", flatten = TRUE))
-    expect_null(find_predictors(m, effects = "random", component = "disp", flatten = TRUE))
+    expect_null(find_predictors(m, effects = "fixed", component = "dispersion", flatten = TRUE))
+    expect_null(find_predictors(m, effects = "all", component = "dispersion", flatten = TRUE))
+    expect_null(find_predictors(m, effects = "random", component = "dispersion", flatten = TRUE))
   })
 
   test_that("find_response", {
@@ -116,8 +102,8 @@ if (require("testthat") && require("insight") && require("GLMMadaptive") && requ
     expect_identical(colnames(get_data(m, component = "cond")), c("count", "child", "camper", "persons"))
     expect_identical(colnames(get_data(m, component = "cond", effects = "fixed")), c("count", "child", "camper"))
     expect_identical(colnames(get_data(m, component = "cond", effects = "random")), "persons")
-    expect_identical(colnames(get_data(m, component = "disp")), "count")
-    expect_null(get_data(m, component = "disp", effects = "random"))
+    expect_identical(colnames(get_data(m, component = "dispersion")), "count")
+    expect_null(get_data(m, component = "dispersion", effects = "random"))
     expect_identical(colnames(get_data(m3)), c("incidence", "size", "period", "herd"))
   })
 
