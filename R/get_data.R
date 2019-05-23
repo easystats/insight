@@ -177,7 +177,7 @@ get_data.plm <- function(x, ...) {
   mf <- stats::model.frame(x)
   cn <- colnames(mf)
   mf <- as.data.frame(lapply(mf, as.vector))
-  colnames(mf) <- cn
+  colnames(mf) <- clean_names(cn)
   model_terms <- find_terms(x, effects = "all", component = "all", flatten = TRUE)
   prepare_get_data(x, mf[, model_terms, drop = FALSE])
 }
