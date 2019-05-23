@@ -198,7 +198,7 @@ get_data.wbm <- function(x, effects = c("all", "fixed", "random"), ...) {
   )
 
   resp.col <- which(colnames(mf) == find_response(x))
-  mf <- mf[, c(resp.col, 1:ncol(mf)[-resp.col])]
+  mf <- mf[, c(resp.col, (1:ncol(mf))[-resp.col])]
 
   prepare_get_data(x, stats::na.omit(mf))
 }
