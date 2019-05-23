@@ -58,6 +58,7 @@ Suggests:
     nnet,
     nlme,
     ordinal,
+    panelr,
     plm,
     pscl,
     quantreg,

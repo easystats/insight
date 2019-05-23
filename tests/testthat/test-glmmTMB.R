@@ -6,36 +6,10 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   fish$livebait <- as.factor(fish$livebait)
   fish$camper <- as.factor(fish$camper)
 
-  m1 <- glmmTMB(
-    count ~ child + camper + (1 | persons),
-    ziformula = ~ child + camper + (1 | persons),
-    data = fish,
-    family = truncated_poisson()
-  )
-
-  m2 <- glmmTMB(
-    count ~ child + camper + (1 | persons),
-    data = fish,
-    family = poisson()
-  )
-
-  m3 <- glmmTMB(
-    count ~ child + camper + (1 | persons),
-    ziformula = ~ child + livebait + (1 | persons),
-    data = fish,
-    family = truncated_poisson()
-  )
-
-  set.seed(123)
-  fish$ID <- sample(1:4, nrow(fish), replace = TRUE)
-
-  m4 <- glmmTMB(
-    count ~ child + camper + (1 | persons),
-    ziformula = ~ child + livebait + (1 | ID),
-    dispformula = ~xb,
-    data = fish,
-    family = truncated_poisson()
-  )
+  m1 <- download_model("glmmTMB_zi_1")
+  m2 <- download_model("glmmTMB_1")
+  m3 <- download_model("glmmTMB_zi_2")
+  m4 <- download_model("glmmTMB_zi_5")
 
   data(Salamanders)
   m5 <- glmmTMB(
