@@ -90,8 +90,8 @@ if (require("testthat") && require("insight") && require("panelr")) {
   })
 
   test_that("n_obs", {
-    expect_equal(n_obs(m1), 595)
-    expect_equal(n_obs(m2), 595)
+    expect_equal(n_obs(m1), 3570)
+    expect_equal(n_obs(m2), 3570)
   })
 
   test_that("linkfun", {
