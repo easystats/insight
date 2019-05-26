@@ -112,12 +112,19 @@ get_priors.brmsfit <- function(x, ...) {
 get_priors.BFBayesFactor <- function(x, ...) {
   prior <- compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
 
+  switch(
+    .classify_BFBayesFactor(x),
+    "correlation" = names(prior) <- "rho",
+    "ttest" = names(prior) <- "mu"
+  )
+
   data.frame(
     parameters = names(prior),
     distribution = "Cauchy",
     location = 0,
     scale = unlist(prior),
-    stringsAsFactors = FALSE
+    stringsAsFactors = FALSE,
+    row.names = NULL
   )
 }
 
