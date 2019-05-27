@@ -120,7 +120,7 @@ get_priors.BFBayesFactor <- function(x, ...) {
 
   data.frame(
     parameters = names(prior),
-    distribution = "Cauchy",
+    distribution = "cauchy",
     location = 0,
     scale = unlist(prior),
     stringsAsFactors = FALSE,
