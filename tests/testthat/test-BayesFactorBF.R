@@ -130,13 +130,13 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   test_that("get_priors", {
     expect_equal(
       get_priors(x),
-      structure(list(
+      data.frame(
         parameters = c("fixed", "random", "continuous"),
         distribution = c("Cauchy", "Cauchy", "Cauchy"),
         location = c(0, 0, 0),
-        scale = c(0.5, 1, 0.353553390593274)),
-        class = "data.frame",
-        row.names = c("fixed", "random", "continuous")
+        scale = c(0.5, 1, 0.353553390593274),
+        stringsAsFactors = FALSE,
+        row.names = NULL
       ),
       tolerance = 1e-5
     )
@@ -177,15 +177,13 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   test_that("get_priors", {
     expect_equal(
       get_priors(x),
-      structure(
-        list(
-          parameters = c("fixed", "random", "continuous"),
-          distribution = c("Cauchy", "Cauchy", "Cauchy"),
-          location = c(0, 0, 0),
-          scale = c(0.5, 1, 0.353553390593274)
-        ),
-        class = "data.frame",
-        row.names = c("fixed", "random", "continuous")
+      data.frame(
+        parameters = c("fixed", "random", "continuous"),
+        distribution = c("Cauchy", "Cauchy", "Cauchy"),
+        location = c(0, 0, 0),
+        scale = c(0.5, 1, 0.353553390593274),
+        stringsAsFactors = FALSE,
+        row.names = NULL
       ),
       tolerance = 1e-5
     )
