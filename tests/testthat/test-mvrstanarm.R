@@ -9,14 +9,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     context("insight, mv-rstanarm")
 
     data("pbcLong")
-    m1 <- stan_mvmer(
-      formula = list(
-        logBili ~ year + (1 | id),
-        albumin ~ sex + year + (year | id)
-      ),
-      data = pbcLong,
-      chains = 1, cores = 1, seed = 12345, iter = 1000
-    )
+    m1 <- download_model("stanmvreg_1")
 
     test_that("clean_names", {
       expect_identical(clean_names(m1), c("logBili", "albumin", "year", "id", "sex"))

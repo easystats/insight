@@ -44,7 +44,7 @@
 #' find_parameters(m)
 #' @importFrom stats coef
 #' @export
-find_parameters <- function(x, flatten = FALSE, ...) {
+find_parameters <- function(x, ...) {
   UseMethod("find_parameters")
 }
 
@@ -563,6 +563,7 @@ find_parameters.zerotrunc <- function(x,  component = c("all", "conditional", "z
 #' @export
 find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
+  is_mv <- NULL
 
   cond <- fe[grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
   zi <- fe[grepl(pattern = "(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
@@ -655,12 +656,13 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
     })
 
     names(l) <- rn
-    attr(l, "is_mv") <- "1"
+    is_mv <- "1"
   } else {
     l <- compact_list(l[elements])
   }
 
   l <- .filter_pars(l, parameters)
+  attr(l, "is_mv") <- is_mv
 
   if (flatten) {
     unique(unlist(l))
@@ -753,14 +755,14 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
 
 
   l <- mapply(c, l.cond, l.random, l.sigma, SIMPLIFY = FALSE)
-  attr(l, "is_mv") <- "1"
-
   l <- .filter_pars(l, parameters)
 
   effects <- match.arg(effects)
   component <- match.arg(component)
   elements <- .get_elements(effects, component)
   l <- lapply(l, function(i) compact_list(i[elements]))
+
+  attr(l, "is_mv") <- "1"
 
   if (flatten) {
     unique(unlist(l))

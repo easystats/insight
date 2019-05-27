@@ -8,6 +8,8 @@ clean_parameters(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{...}{Currently not used.}
 }
 \value{
 A data frame with "cleaned" parameter names and information on

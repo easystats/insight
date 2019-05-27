@@ -10,7 +10,7 @@
 \alias{find_parameters.stanreg}
 \title{Find names of model parameters}
 \usage{
-find_parameters(x, flatten = FALSE, ...)
+find_parameters(x, ...)
 
 \method{find_parameters}{gam}(x, component = c("all", "conditional",
   "smooth_terms"), flatten = FALSE, ...)
@@ -36,9 +36,6 @@ find_parameters(x, flatten = FALSE, ...)
 \arguments{
 \item{x}{A fitted model.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
-
 \item{...}{Currently not used.}
 
 \item{component}{Should all parameters, parameters for the
@@ -46,6 +43,9 @@ conditional model, the zero-inflated part of the model, the dispersion
 term or the instrumental variables be returned? Applies to models
 with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated.}
+
+\item{flatten}{Logical, if \code{TRUE}, the values are returned
+as character vector, not as list. Duplicated values are removed.}
 
 \item{effects}{Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}

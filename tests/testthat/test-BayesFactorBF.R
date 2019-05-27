@@ -131,8 +131,8 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_equal(
       get_priors(x),
       data.frame(
-        parameters = c("fixed", "random", "continuous"),
-        distribution = c("Cauchy", "Cauchy", "Cauchy"),
+        parameter = c("fixed", "random", "continuous"),
+        distribution = c("cauchy", "cauchy", "cauchy"),
         location = c(0, 0, 0),
         scale = c(0.5, 1, 0.353553390593274),
         stringsAsFactors = FALSE,
@@ -178,8 +178,8 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_equal(
       get_priors(x),
       data.frame(
-        parameters = c("fixed", "random", "continuous"),
-        distribution = c("Cauchy", "Cauchy", "Cauchy"),
+        parameter = c("fixed", "random", "continuous"),
+        distribution = c("cauchy", "cauchy", "cauchy"),
         location = c(0, 0, 0),
         scale = c(0.5, 1, 0.353553390593274),
         stringsAsFactors = FALSE,

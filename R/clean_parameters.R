@@ -13,6 +13,7 @@
 #' certain results.
 #'
 #' @param x A fitted model.
+#' @inheritParams find_parameters
 #'
 #' @return A data frame with "cleaned" parameter names and information on
 #'   effects, component and group where parameters belong to. To be consistent
