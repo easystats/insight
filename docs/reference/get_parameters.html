@@ -124,6 +124,12 @@
 
     <pre class="usage"><span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for BBmm</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for glimML</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
+
 <span class='co'># S3 method for gam</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
   <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
@@ -176,7 +182,8 @@
 <span class='co'># S3 method for brmsfit</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
   <span class='st'>"all"</span>), <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>,
-  <span class='st'>"dispersion"</span>, <span class='st'>"simplex"</span>, <span class='st'>"smooth_terms"</span>), <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+  <span class='st'>"dispersion"</span>, <span class='st'>"simplex"</span>, <span class='st'>"sigma"</span>, <span class='st'>"smooth_terms"</span>), <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>)
 
 <span class='co'># S3 method for stanreg</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
@@ -202,17 +209,17 @@
       <td><p>Currently not used.</p></td>
     </tr>
     <tr>
+      <th>effects</th>
+      <td><p>Should parameters for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
+    </tr>
+    <tr>
       <th>component</th>
-      <td><p>Should all predictor variables, predictor variables for the
+      <td><p>Should all parameters, parameters for the
 conditional model, the zero-inflated part of the model, the dispersion
 term or the instrumental variables be returned? Applies to models
 with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated.</p></td>
-    </tr>
-    <tr>
-      <th>effects</th>
-      <td><p>Should variables for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
     </tr>
     <tr>
       <th>parameters</th>
@@ -241,6 +248,13 @@ should be returned.</p></td>
 </ul>
 
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>In most cases when models either return different "effects" (fixed,
+random) or "components" (conditional, zero-inflated, ...), the arguments
+<code>effects</code> and <code>component</code> can be used. Not all model classes that
+support these arguments are listed here in the 'Usage' section.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
@@ -257,6 +271,8 @@ should be returned.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

@@ -115,15 +115,52 @@
 <h1 class="page-header">
 <a href="#insight-031" class="anchor"></a>insight 0.3.1<small> Unreleased </small>
 </h1>
+<div id="new-supported-model-classes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
+<ul>
+<li>
+<code>betabin</code> and <code>negbin</code> (<em>aod</em>), <code>BBreg</code> and <code>BBmm</code> (<em>HRQoL</em>), <code>wbm</code> (<em>panelr</em>)</li>
+</ul>
+</div>
+<div id="new-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-functions" class="anchor"></a>New functions</h2>
+<ul>
+<li>
+<code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>, which returns a data frame with “decomposed” parameters, i.e. a data frame with information about the clean paramter name, whether it is a fixed or random effect, from conditional or zero-inflated component, and if it is a parameter related to specific grouping factors of random effects (#106).</li>
+<li>
+<code><a href="../reference/find_interactions.html">find_interactions()</a></code> to return all low/high order interaction terms in a model.</li>
+</ul>
+</div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>
+<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now allow to return a <code>sigma</code>-element for multivariate-response models (<em>brmsfit</em>, <em>stanmvreg</em>).</li>
+<li>
+<code><a href="../reference/find_parameters.html">find_parameters()</a></code> gets an <code>effects</code> and a <code>component</code>-argument, similar to many other functions in <em>insight</em>.</li>
+<li>
+<code><a href="../reference/get_priors.html">get_priors()</a></code> now returns <code>distribuion = "uniform"</code> when model was fitted with flat priors.</li>
+<li>
+<code><a href="../reference/model_info.html">model_info()</a></code> now returns an element <code>$is_hurdle</code> for hurdle models.</li>
+</ul>
+</div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> returned priors for <code>brmsfit</code>-objects as <code>$random</code>-element. Now, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> returns a <code>$priors</code>-element (#98).</li>
+<li>
+<code><a href="../reference/find_parameters.html">find_parameters()</a></code> did not remove smooth-parameters that used <code>te()</code> or <code>ti()</code>.</li>
 <li>Fixed various issues with non-linear <em>brms</em>-models.</li>
 <li>
 <code><a href="../reference/find_formula.html">find_formula()</a></code> (and hence, <code><a href="../reference/find_response.html">find_response()</a></code> or <code><a href="../reference/get_data.html">get_data()</a></code>) did not work for multi-column responses in null-models (#100).</li>
+<li>Fix bugs with models from package <em>plm</em> that occured during the latest plm-update.</li>
+<li>
+<code><a href="../reference/find_predictors.html">find_predictors()</a></code> did not split nested random effects when these were written as <code>g1:g2</code> instead <code>g2/g2</code> in the random part of the model formula.</li>
 </ul>
 </div>
 </div>
@@ -131,17 +168,17 @@
 <h1 class="page-header">
 <a href="#insight-030" class="anchor"></a>insight 0.3.0<small> 2019-05-11 </small>
 </h1>
-<div id="new-supported-model-classes" class="section level2">
+<div id="new-supported-model-classes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-1" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>biglm</code> and <code>bigglm</code> (<em>biglm</em>), <code>feis</code> (<em>feisr</em>), <code>gbm</code> (<em>gbm</em>), <code>BFBayesFactor</code> (<em>BayesFactor</em>), <code>psm</code> (<em>rms</em>), <code>LORgee</code> (<em>multgee</em>), <code>censReg</code> (<em>censReg</em>), <code>ols</code> (<em>rms</em>), <code>speedlm</code> and <code>speedglm</code> (<em>speedglm</em>), <code>svyolr</code> (<em>survey</em>)</li>
 </ul>
 </div>
-<div id="new-functions" class="section level2">
+<div id="new-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions" class="anchor"></a>New functions</h2>
+<a href="#new-functions-1" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/is_nullmodel.html">is_nullmodel()</a></code> to check if model is a null-model (intercept-only), i.e. if the conditional part of the model has no predictors.</li>
@@ -158,9 +195,9 @@
 <code><a href="../reference/get_variance.html">get_variance()</a></code> no longer stops if random effects variance cannot be calculated. Rather, the return-value for <code>$var.random</code> will be <code>NULL</code>.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now computes the full variance for mixed models with zero-inflation component.</li>
@@ -210,17 +247,17 @@
 <li>Revised package-functions related to <code>felm</code>-models due to breaking changes in the <em>lfe</em>-package.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes-1" class="section level2">
+<div id="new-supported-model-classes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-1" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-2" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>iv_robust</code> (<em>estimatr</em>), <code>crch</code> (<em>crch</em>), <code>gamlss</code> (<em>gamlss</em>), <code>lmrob</code> and <code>glmrob</code> (<em>robustbase</em>, #64), <code>rq</code>, <code>rqss</code> and <code>crq</code> (<em>quantreg</em>), <code>rlmer</code> (<em>robustlmm</em>), <code>mixed</code> (<em>afex</em>), <code>tobit</code> (<em>AER</em>) and <code>survreg</code> (<em>survival</em>).</li>
 </ul>
 </div>
-<div id="new-functions-1" class="section level2">
+<div id="new-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-1" class="anchor"></a>New functions</h2>
+<a href="#new-functions-2" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code>, to calculate the variance components from mixed models of class <code>merMod</code>, <code>glmmTMB</code>, <code>MixMod</code>, <code>rlmer</code>, <code>mixed</code>, <code>lme</code> and <code>stanreg</code> (#52). Furthermore, convenient shortcuts to return the related components directly, like <code><a href="../reference/get_variance.html">get_variance_random()</a></code> or <code><a href="../reference/get_variance.html">get_variance_residual()</a></code>.</li>
@@ -238,9 +275,9 @@
 <code><a href="../reference/print_color.html">print_color()</a></code> (resp. <code><a href="../reference/print_color.html">print_colour()</a></code>) to print coloured output to the console. Mainly implemented to reduce package dependencies.</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> get a <code>parameters</code>-argument for <code>brmsfit</code> and <code>stanreg</code> models, to allow selection of specific parameters that should be returned (#55).</li>
