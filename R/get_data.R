@@ -928,7 +928,6 @@ reurn_zeroinf_data <- function(x, component) {
 
 
 
-#' @keywords internal
 .get_data_from_modelframe <- function(x, dat, effects) {
   cn <- clean_names(colnames(dat))
 

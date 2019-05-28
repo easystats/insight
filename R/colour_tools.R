@@ -30,7 +30,6 @@ print_colour <- function(text, colour) {
 }
 
 
-#' @keywords internal
 .rstudio_with_ansi_support <- function() {
   if (Sys.getenv("RSTUDIO", "") == "") {
     return(FALSE)
@@ -44,7 +43,6 @@ print_colour <- function(text, colour) {
 }
 
 
-#' @keywords internal
 .supports_color <- function() {
   enabled <- getOption("crayon.enabled")
   if (!is.null(enabled)) {
@@ -78,7 +76,6 @@ print_colour <- function(text, colour) {
 
 
 
-#' @keywords internal
 .blue <- function(x) {
   if (.supports_color()) {
     x[!is.na(x)] <- paste0("\033[34m", x[!is.na(x)], "\033[39m")
@@ -86,7 +83,6 @@ print_colour <- function(text, colour) {
   x
 }
 
-#' @keywords internal
 .bold <- function(x) {
   if (.supports_color()) {
     x[!is.na(x)] <- paste0("\033[1m", x[!is.na(x)], "\033[22m")
@@ -94,7 +90,6 @@ print_colour <- function(text, colour) {
   x
 }
 
-#' @keywords internal
 .italic <- function(x) {
   if (.supports_color()) {
     x[!is.na(x)] <- paste0("\033[3m", x[!is.na(x)], "\033[23m")
@@ -102,7 +97,6 @@ print_colour <- function(text, colour) {
   x
 }
 
-#' @keywords internal
 .red <- function(x) {
   if (.supports_color()) {
     x[!is.na(x)] <- paste0("\033[31m", x[!is.na(x)], "\033[39m")
@@ -110,7 +104,6 @@ print_colour <- function(text, colour) {
   x
 }
 
-#' @keywords internal
 .green <- function(x) {
   if (.supports_color()) {
     x[!is.na(x)] <- paste0("\033[32m", x[!is.na(x)], "\033[39m")
@@ -118,7 +111,6 @@ print_colour <- function(text, colour) {
   x
 }
 
-#' @keywords internal
 .yellow <- function(x) {
   if (.supports_color()) {
     x[!is.na(x)] <- paste0("\033[33m", x[!is.na(x)], "\033[39m")
@@ -126,7 +118,6 @@ print_colour <- function(text, colour) {
   x
 }
 
-#' @keywords internal
 .violet <- function(x) {
   if (.supports_color()) {
     x[!is.na(x)] <- paste0("\033[35m", x[!is.na(x)], "\033[39m")
@@ -134,7 +125,6 @@ print_colour <- function(text, colour) {
   x
 }
 
-#' @keywords internal
 .cyan <- function(x) {
   if (.supports_color()) {
     x[!is.na(x)] <- paste0("\033[36m", x[!is.na(x)], "\033[39m")
@@ -142,8 +132,6 @@ print_colour <- function(text, colour) {
   x
 }
 
-
-#' @keywords internal
 .grey <- function(x) {
   if (.supports_color()) {
     x[!is.na(x)] <- paste0("\033[90m", x[!is.na(x)], "\033[39m")
@@ -152,7 +140,6 @@ print_colour <- function(text, colour) {
 }
 
 
-#' @keywords internal
 .colour <- function(colour = "red", x) {
   switch(
     colour,

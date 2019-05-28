@@ -794,7 +794,6 @@ model_info.mlm <- function(x, ...) {
 }
 
 
-#' @keywords internal
 make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity", ...) {
   # create logical for family
   binom_fam <-
@@ -977,7 +976,6 @@ get_ordinal_link <- function(x) {
 }
 
 
-#' @keywords internal
 .classify_BFBayesFactor <- function(x) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("This function needs `BayesFactor` to be installed.")

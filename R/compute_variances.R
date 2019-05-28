@@ -1,5 +1,4 @@
 #' @importFrom stats nobs
-#' @keywords internal
 .compute_variances <- function(x, component, name_fun = NULL, name_full = NULL, verbose = TRUE) {
 
   ## Original code taken from GitGub-Repo of package glmmTMB
@@ -119,12 +118,11 @@
 
 
 
-#' store essential information on coefficients, model matrix and so on
-#' as list, since we need these information throughout the functions to
-#' calculate the variance components...
-#'
+# store essential information on coefficients, model matrix and so on
+# as list, since we need these information throughout the functions to
+# calculate the variance components...
+#
 #' @importFrom stats model.matrix
-#' @keywords internal
 .get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
@@ -202,9 +200,7 @@
 
 
 
-#' helper-function, telling user if family / distribution is supported or not
-#'
-#' @keywords internal
+# helper-function, telling user if family / distribution is supported or not
 .badlink <- function(link, family, verbose = TRUE) {
   if (verbose) {
     warning(sprintf("Model link '%s' is not yet supported for the %s distribution.", link, family), call. = FALSE)
@@ -215,11 +211,9 @@
 
 
 
-#' glmmTMB returns a list of model information, one for conditional
-#' and one for zero-inflated part, so here we "unlist" it, returning
-#' only the conditional part.
-#'
-#' @keywords internal
+# glmmTMB returns a list of model information, one for conditional
+# and one for zero-inflated part, so here we "unlist" it, returning
+# only the conditional part.
 .collapse_cond <- function(x) {
   if (is.list(x) && "cond" %in% names(x)) {
     x[["cond"]]
@@ -231,10 +225,9 @@
 
 
 
-#' Get fixed effects variance
-#'
+# Get fixed effects variance
+#
 #' @importFrom stats var
-#' @keywords internal
 .compute_variance_fixed <- function(vals) {
   with(vals, stats::var(as.vector(beta %*% t(X))))
 }
@@ -243,10 +236,9 @@
 
 
 
-#' Compute variance associated with a random-effects term (Johnson 2014)
-#'
+# Compute variance associated with a random-effects term (Johnson 2014)
+#
 #' @importFrom stats nobs
-#' @keywords internal
 .compute_variance_random <- function(terms, x, vals) {
 
   sigma_sum <- function(Sigma) {
@@ -275,9 +267,7 @@
 
 
 
-#' Calculate Distribution-specific variance (Nakagawa et al. 2017)
-#'
-#' @keywords internal
+# Calculate Distribution-specific variance (Nakagawa et al. 2017)
 .compute_variance_distribution <- function(x, var.cor, faminfo, name, verbose = TRUE) {
   if (inherits(x, "lme"))
     sig <- x$sigma
@@ -327,9 +317,7 @@
 
 
 
-#' Get dispersion-specific variance
-#'
-#' @keywords internal
+# Get dispersion-specific variance
 .compute_variance_dispersion <- function(x, vals, faminfo, obs.terms) {
   if (faminfo$is_linear) {
     0
@@ -345,12 +333,11 @@
 
 
 
-#' This is the core-function to calculate the distribution-specific variance
-#' Nakagawa et al. 2017 propose three different methods, here we only rely
-#' on the lognormal-approximation.
-#'
+# This is the core-function to calculate the distribution-specific variance
+# Nakagawa et al. 2017 propose three different methods, here we only rely
+# on the lognormal-approximation.
+#
 #' @importFrom stats family
-#' @keywords internal
 .variance_distributional <- function(x, faminfo, sig, name, verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
@@ -420,9 +407,7 @@
 
 
 
-#' Get distributional variance for poisson-family
-#'
-#' @keywords internal
+# Get distributional variance for poisson-family
 .variance_family_poisson <- function(x, mu, faminfo) {
   if (faminfo$is_zeroinf) {
     .variance_zip(x, faminfo, family_var = mu)
@@ -438,9 +423,7 @@
 
 
 
-#' Get distributional variance for beta-family
-#'
-#' @keywords internal
+# Get distributional variance for beta-family
 .variance_family_beta <- function(x, mu, phi) {
   if (inherits(x, "MixMod"))
     stats::family(x)$variance(mu)
@@ -451,10 +434,9 @@
 
 
 
-#' Get distributional variance for tweedie-family
-#'
+# Get distributional variance for tweedie-family
+#
 #' @importFrom stats plogis
-#' @keywords internal
 .variance_family_tweedie <- function(x, mu, phi) {
   p <- unname(stats::plogis(x$fit$par["thetaf"]) + 1)
   phi * mu^p
@@ -463,9 +445,7 @@
 
 
 
-#' Get distributional variance for nbinom-family
-#'
-#' @keywords internal
+# Get distributional variance for nbinom-family
 .variance_family_nbinom <- function(x, mu, sig, faminfo) {
   if (faminfo$is_zeroinf) {
     if (missing(sig)) sig <- 0
@@ -484,11 +464,10 @@
 
 
 
-#' For zero-inflated negative-binomial models, the distributional variance
-#' is based on Zuur et al. 2012
-#'
+# For zero-inflated negative-binomial models, the distributional variance
+# is based on Zuur et al. 2012
+#
 #' @importFrom stats plogis family predict
-#' @keywords internal
 .variance_zinb <- function(model, sig, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance
@@ -524,11 +503,10 @@
 
 
 
-#' For zero-inflated poisson models, the distributional variance
-#' is based on Zuur et al. 2012
-#'
+# For zero-inflated poisson models, the distributional variance
+# is based on Zuur et al. 2012
+#
 #' @importFrom stats plogis family predict
-#' @keywords internal
 .variance_zip <- function(model, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     p <- stats::predict(model, type = "zprob")
@@ -548,10 +526,8 @@
 
 
 
-#' Get distribution-specific variance for general and
-#' undefined families / link-functions
-#'
-#' @keywords internal
+# Get distribution-specific variance for general and
+# undefined families / link-functions
 .variance_family_default <- function(x, mu, verbose) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
@@ -577,12 +553,11 @@
 
 
 
-#' Null model is needed to calculate the mean for the model's response,
-#' which we need to compute the distribution-specific variance
-#' (see .variance_distributional())
-#'
+# Null model is needed to calculate the mean for the model's response,
+# which we need to compute the distribution-specific variance
+# (see .variance_distributional())
+#
 #' @importFrom stats as.formula update reformulate
-#' @keywords internal
 .null_model <- function(model, verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
@@ -605,9 +580,7 @@
 
 
 
-#' return names of random slopes
-#'
-#' @keywords internal
+# return names of random slopes
 .random_slopes <- function(random.effects = NULL, model = NULL) {
   if (inherits(model, "MixMod")) {
     return(unlist(find_random_slopes(model)))
@@ -648,10 +621,8 @@
 
 
 
-#' random intercept-variances, i.e.
-#' between-subject-variance (tau 00)
-#'
-#' @keywords internal
+# random intercept-variances, i.e.
+# between-subject-variance (tau 00)
 .between_subject_variance <- function(vals, x) {
   # retrieve only intercepts
   if (inherits(x, "MixMod")) {
@@ -666,9 +637,7 @@
 
 
 
-#' random slope-variances (tau 11)
-#'
-#' @keywords internal
+# random slope-variances (tau 11)
 .random_slope_variance <- function(vals, x) {
   if (inherits(x, "MixMod")) {
     diag(vals$vc)[-1]
@@ -682,9 +651,7 @@
 
 
 
-#' slope-intercept-correlations (rho 01)
-#'
-#' @keywords internal
+# slope-intercept-correlations (rho 01)
 .random_slope_intercept_corr <- function(vals, x) {
   if (inherits(x, "lme")) {
     rho01 <- unlist(sapply(vals$vc, function(i) attr(i, "cor_slope_intercept")))

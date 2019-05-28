@@ -24,8 +24,7 @@ download_model <- function(name, url = NULL) {
 }
 
 
-#' Download rda files from github
-#' @keywords internal
+# Download rda files from github
 .download_data_github <- function(name, url) {
   if (!requireNamespace("httr", quietly = TRUE)) {
     stop("Package `httr` required to download models from the circus-repo.", call. = FALSE)

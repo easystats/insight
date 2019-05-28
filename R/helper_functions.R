@@ -142,7 +142,6 @@ get_model_random <- function(f, split_nested = FALSE, model) {
 # in case we need the random effects terms as formula (symbol),
 # not as character string, then call this functions instead of
 # get_model_random()
-#' @keywords internal
 get_group_factor <- function(x, f) {
   if (is.list(f)) {
     f <- lapply(f, function(.x) {
@@ -166,7 +165,6 @@ get_group_factor <- function(x, f) {
 
 # to reduce redundant code, I extract this part which is used several
 # times accross this package
-#' @keywords internal
 .get_elements <- function(effects, component) {
   elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes")
 
@@ -198,7 +196,6 @@ get_group_factor <- function(x, f) {
 
 # return data from a data frame that is in the environment,
 # and subset the data, if necessary
-#' @keywords internal
 .get_data_from_env <- function(x) {
   dat <- eval(x$call$data, envir = parent.frame())
   if (obj_has_name(x$call, "subset")) {
@@ -212,7 +209,6 @@ get_group_factor <- function(x, f) {
 # checks if a mixed model fit is singular or not. Need own function,
 # because lme4::isSingular() does not work with glmmTMB
 #' @importFrom stats na.omit
-#' @keywords internal
 .is_singular <- function(x, vals, tolerance = 1e-5) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
@@ -243,7 +239,6 @@ get_group_factor <- function(x, f) {
 
 
 # Filter parameters from Stan-model fits
-#' @keywords internal
 .filter_pars <- function(l, parameters = NULL) {
   if (!is.null(parameters)) {
     is_mv <- attr(l, "is_mv", exact = TRUE)
@@ -275,7 +270,6 @@ get_group_factor <- function(x, f) {
 
 
 # remove column
-#' @keywords internal
 .remove_column <- function(data, variables) {
   data[, -which(colnames(data) %in% variables), drop = FALSE]
 }

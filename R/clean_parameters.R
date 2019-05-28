@@ -60,7 +60,6 @@ clean_parameters.default <- function(x, ...) {
     else
       ""
 
-
     if (eff == "random") {
       rand_eff <- lapply(names(pars[[i]]), function(j) {
         data.frame(
@@ -88,7 +87,8 @@ clean_parameters.default <- function(x, ...) {
   })
 
   out <- do.call(rbind, l)
-  .remove_empty_columns_from_pars(out)
+  out <- .remove_empty_columns_from_pars(out)
+  .fix_random_effect_smooth(x, out)
 }
 
 
@@ -108,7 +108,8 @@ clean_parameters.brmsfit <- function(x, ...) {
   }
 
   out <- do.call(rbind, l)
-  .remove_empty_columns_from_pars(.clean_brms_params(out, is_mv))
+  out <- .remove_empty_columns_from_pars(.clean_brms_params(out, is_mv))
+  .fix_random_effect_smooth(x, out)
 }
 
 
@@ -120,7 +121,8 @@ clean_parameters.stanreg <- function(x, ...) {
   l <- .get_stan_params(pars)
 
   out <- do.call(rbind, l)
-  .remove_empty_columns_from_pars(.clean_stanreg_params(out))
+  out <- .remove_empty_columns_from_pars(.clean_stanreg_params(out))
+  .fix_random_effect_smooth(x, out)
 }
 
 
@@ -135,7 +137,8 @@ clean_parameters.stanmvreg <- function(x, ...) {
   )
 
   out <- do.call(rbind, l)
-  .remove_empty_columns_from_pars(.clean_stanreg_params(out))
+  out <- .remove_empty_columns_from_pars(.clean_stanreg_params(out))
+  .fix_random_effect_smooth(x, out)
 }
 
 
@@ -143,7 +146,6 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
 
 
-#' @keywords internal
 .get_stan_params <- function(pars, response = NA) {
   lapply(names(pars), function(i) {
     eff <- if (grepl("random", i, fixed = TRUE))
@@ -181,7 +183,6 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
 
 
-#' @keywords internal
 .clean_brms_params <- function(out, is_mv) {
 
   out$cleaned_parameter <- out$parameter
@@ -270,7 +271,6 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
 
 
-#' @keywords internal
 .clean_stanreg_params <- function(out) {
 
   out$cleaned_parameter <- out$parameter
@@ -333,4 +333,29 @@ clean_parameters.stanmvreg <- function(x, ...) {
   }
 
   x
+}
+
+
+# Fix random effects assignment for smooth terms
+#
+# This function checks whether smooth terms were used as random effects,
+# (i.e. s(term, by="re")) and if so, the value in the "effecs" column will
+# be set to "random".
+#
+.fix_random_effect_smooth <- function(x, out) {
+  if ("fun" %in% colnames(out) && "smooth" %in% out$fun) {
+    vars <- find_variables(x)$conditional
+    vars <- gsub(" ", "", vars, fixed = TRUE)
+    random_smooth_terms <- grepl("^s\\((.*)(bs=\"re\"+)\\)", x = vars)
+    if (any(random_smooth_terms)) {
+      random_term <- paste0(
+        "s(",
+        gsub("^s\\(([^,]*)(.*)(bs=\"re\"+)\\)", "\\1", vars[random_smooth_terms]),
+        ")"
+      )
+      out$effects[which(out$parameter == random_term)] <- "random"
+    }
+  }
+
+  out
 }
