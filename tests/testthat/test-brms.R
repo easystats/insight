@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-# if (.runThisTest) {
+if (.runThisTest || Sys.getenv("USER") == "travis") {
 
   if (suppressWarnings(
     require("testthat") &&
@@ -404,4 +404,4 @@
 
   }
 
-# }
+}
