@@ -26,15 +26,19 @@
 #' @export
 find_interactions <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"), flatten = FALSE) {
   component <- match.arg(component)
+  .find_interactions(x, effects = "fixed", component, flatten, main_effects = FALSE)
+}
 
+
+.find_interactions <- function(x, effects = "fixed", component, flatten, main_effects = FALSE) {
   f <- find_formula(x)
   is_mv <- is_multivariate(f)
-  elements <- .get_elements(effects = "fixed", component = component)
+  elements <- .get_elements(effects = effects, component = component)
 
   if (is_mv) {
-    l <- lapply(f, function(.x) compact_list(lapply(.x[elements], .get_interaction_terms)))
+    l <- lapply(f, function(.x) compact_list(lapply(.x[elements], function(i) .get_interaction_terms(i, main_effects))))
   } else {
-    l <- compact_list(lapply(f[elements], .get_interaction_terms))
+    l <- compact_list(lapply(f[elements], function(i) .get_interaction_terms(i, main_effects)))
   }
 
   if (is_empty_object(l)) {
@@ -49,13 +53,16 @@ find_interactions <- function(x, component = c("all", "conditional", "zi", "zero
 }
 
 
-
-.get_interaction_terms <- function(f) {
+.get_interaction_terms <- function(f, main_effects = FALSE) {
   if (is.null(f)) return(NULL)
   terms <- labels(stats::terms(f))
-  interaction_terms <- grepl(":", terms, fixed = TRUE)
-  if (any(interaction_terms))
-    terms[interaction_terms]
-  else
-    NULL
+  if (main_effects) {
+    terms
+  } else {
+    interaction_terms <- grepl(":", terms, fixed = TRUE)
+    if (any(interaction_terms))
+      terms[interaction_terms]
+    else
+      NULL
+  }
 }
