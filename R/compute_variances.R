@@ -348,9 +348,14 @@
 
   # in general want log(1+var(x)/mu^2)
   null_model <- .null_model(x, verbose = verbose)
-  null_fixef <- unname(.collapse_cond(lme4::fixef(null_model)))
 
-  mu <- exp(null_fixef)
+  # check if null-model could be computed
+  if (!is.null(null_model)) {
+    null_fixef <- unname(.collapse_cond(lme4::fixef(null_model)))
+    mu <- exp(null_fixef)
+  } else {
+    mu <- NA
+  }
 
   if (is.na(mu)) {
     if (verbose) {
@@ -571,7 +576,21 @@
     resp <- find_response(model)
     re.terms <- paste0("(", sapply(lme4::findbars(f), deparse, width.cutoff = 500), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
-    null.model <- stats::update(model, nullform)
+    null.model <- tryCatch({
+        stats::update(model, nullform)
+      },
+      error = function(e) {
+        msg <- e$message
+        if (verbose) {
+          if (grepl("(^object)(.*)(not found$)", msg)) {
+            insight::print_color("Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n", "red")
+          } else if (grepl("^could not find function", msg)) {
+            insight::print_color("Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n", "red")
+          }
+        }
+        return(NULL)
+      }
+    )
   }
 
   null.model
