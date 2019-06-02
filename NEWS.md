@@ -22,8 +22,9 @@
 * `find_parameters()` did not remove smooth-parameters that used `te()` or `ti()`.
 * Fixed various issues with non-linear *brms*-models.
 * `find_formula()` (and hence, `find_response()` or `get_data()`) did not work for multi-column responses in null-models (#100).
-* Fix bugs with models from package *plm* that occured during the latest plm-update.
+* Fixed bugs with models from package *plm* that occured during the latest plm-update.
 * `find_predictors()` did not split nested random effects when these were written as `g1:g2` instead `g2/g2` in the random part of the model formula.
+* Fixed issues with `all_model_equal()`.
 
 # insight 0.3.0
 

@@ -32,7 +32,13 @@ all_models_equal <- function(..., verbose = FALSE) {
 
   all_supported <- sapply(objects, is_model)
   all_classes <- sapply(objects, class)
-  all_equal <- Reduce(identical, all_classes)
+
+  if (is.matrix(all_classes))
+    all_classes <- as.vector(all_classes[1, ])
+  else if (is.list(all_classes))
+    all_classes <- sapply(all_classes, function(i) i[1])
+
+  all_equal <- all(sapply(all_classes[-1], function(i) identical(i, all_classes[1])))
 
   if (!all(all_supported) && verbose) {
     differ <- which(!all_supported)
