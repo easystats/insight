@@ -77,20 +77,20 @@ merge_dataframes <- function(data, ..., replace = TRUE) {
 # removes random effects from a formula that is in lmer-notation
 #' @importFrom stats terms drop.terms update
 get_fixed_effects <- function(f) {
-  f_string <- deparse(f, width.cutoff = 500)
+  f_string <- .safe_deparse(f)
 
   # for some wird brms-models, we also have a "|" in the response.
   # in order to check for "|" only in the random effects, we have
   # to remove the response here...
 
-  f_response <- deparse(f[[2]], width.cutoff = 500)
+  f_response <- .safe_deparse(f[[2]])
   f_predictors <- sub(f_response, "", f_string, fixed = TRUE)
 
   if (grepl("|", f_predictors, fixed = TRUE)) {
     # intercept only model, w/o "1" in formula notation?
     # e.g. "Reaction ~ (1 + Days | Subject)"
-    if (length(f) > 2 && grepl("^\\(", deparse(f[[3]], width.cutoff = 500))) {
-      trim(paste0(deparse(f[[2]], width.cutoff = 500), " ~ 1"))
+    if (length(f) > 2 && grepl("^\\(", .safe_deparse(f[[3]]))) {
+      trim(paste0(.safe_deparse(f[[2]]), " ~ 1"))
     } else if (!grepl("\\+(\\s)*\\((.*)\\)", f_string)) {
       f_terms <- stats::terms(f)
       pos_bar <- grep("|", labels(f_terms), fixed = TRUE)
@@ -114,12 +114,12 @@ get_model_random <- function(f, split_nested = FALSE, model) {
     stop("To use this function, please install package 'lme4'.")
   }
 
-  if (identical(deparse(f, width.cutoff = 500), "~0") ||
-    identical(deparse(f, width.cutoff = 500), "~1")) {
+  if (identical(.safe_deparse(f), "~0") ||
+    identical(.safe_deparse(f), "~1")) {
     return(NULL)
   }
 
-  re <- sapply(lme4::findbars(f), deparse, width.cutoff = 500)
+  re <- sapply(lme4::findbars(f), deparse)
 
   if (is_special && is_empty_object(re)) {
     re <- all.vars(f[[2L]])
@@ -314,7 +314,7 @@ get_group_factor <- function(x, f) {
 #   else
 #     f[[2L]]
 #
-#   lapply(.extract_formula_parts(rhs), deparse, width.cutoff = 500)
+#   lapply(.extract_formula_parts(rhs), deparse)
 # }
 #
 #
@@ -330,3 +330,9 @@ get_group_factor <- function(x, f) {
 #   }
 #   c(x, rval)
 # }
+
+
+
+.safe_deparse <- function(string) {
+  paste0(sapply(deparse(string, width.cutoff = 500), trim, simplify = TRUE), collapse = " ")
+}

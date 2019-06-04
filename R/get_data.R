@@ -78,7 +78,7 @@ get_data.felm <- function(x, effects = c("all", "fixed", "random"), ...) {
 get_data.feis <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   mf <- tryCatch({
-    get(deparse(x$call$data, width.cutoff = 500), envir = parent.frame())[, find_terms(x, flatten = TRUE), drop = FALSE]
+    get(.safe_deparse(x$call$data), envir = parent.frame())[, find_terms(x, flatten = TRUE), drop = FALSE]
   },
   error = function(x) {
     stats::model.frame(x)
@@ -146,7 +146,7 @@ get_data.glimML <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 get_data.gbm <- function(x, ...) {
   mf <- tryCatch({
-    get(deparse(x$call$data, width.cutoff = 500), envir = parent.frame())[, find_terms(x, flatten = TRUE), drop = FALSE]
+    get(.safe_deparse(x$call$data), envir = parent.frame())[, find_terms(x, flatten = TRUE), drop = FALSE]
   },
   error = function(x) {
     stats::model.frame(x)
@@ -628,7 +628,7 @@ prepare_get_data <- function(x, mf, effects = "fixed") {
   # do we have an offset, not specified in the formula?
   if ("(offset)" %in% colnames(mf) && obj_has_name(x, "call") && obj_has_name(x$call, "offset")) {
     offcol <- which(colnames(mf) == "(offset)")
-    colnames(mf)[offcol] <- clean_names(deparse(x$call$offset, width.cutoff = 500L))
+    colnames(mf)[offcol] <- clean_names(.safe_deparse(x$call$offset))
   }
 
   # clean 1-dimensional matrices

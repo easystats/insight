@@ -851,7 +851,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
 
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {
     is.trial <- tryCatch({
-      rv <- deparse(stats::formula(x)$formula[[2L]], width.cutoff = 500L)
+      rv <- .safe_deparse(stats::formula(x)$formula[[2L]])
       trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
     },
     error = function(x) {
@@ -862,7 +862,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
 
   if (binom_fam && !inherits(x, "brmsfit")) {
     is.trial <- tryCatch({
-      rv <- deparse(stats::formula(x)[[2L]], width.cutoff = 500L)
+      rv <- .safe_deparse(stats::formula(x)[[2L]])
       grepl("cbind\\((.*)\\)", rv)
     },
     error = function(x) {

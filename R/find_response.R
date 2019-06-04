@@ -26,9 +26,9 @@ find_response <- function(x, combine = TRUE) {
   # this is for multivariate response models, where
   # we have a list of formulas
   if (is_multivariate(f)) {
-    resp <- unlist(lapply(f, function(i) deparse(i$conditional[[2L]], width.cutoff = 500L)))
+    resp <- unlist(lapply(f, function(i) .safe_deparse(i$conditional[[2L]])))
   } else {
-    resp <- deparse(f$conditional[[2L]], width.cutoff = 500L)
+    resp <- .safe_deparse(f$conditional[[2L]])
   }
 
   check_cbind(resp, combine)

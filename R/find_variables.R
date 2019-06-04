@@ -53,14 +53,14 @@ find_variables <- function(x, flatten = FALSE, ...) {
 }
 
 get_variables_list <- function(f) {
-  f$response <- deparse(f$conditional[[2L]], width.cutoff = 500L)
-  f$conditional <- deparse(f$conditional[[3L]], width.cutoff = 500L)
+  f$response <- .safe_deparse(f$conditional[[2L]])
+  f$conditional <- .safe_deparse(f$conditional[[3L]])
 
   f <- lapply(f, function(.x) {
     if (is.list(.x)) {
       .x <- sapply(.x, .formula_to_string)
     } else {
-      if (!is.character(.x)) .x <- deparse(.x, width.cutoff = 500L)
+      if (!is.character(.x)) .x <- .safe_deparse(.x)
     }
     .x
   })
@@ -95,6 +95,6 @@ get_variables_list <- function(f) {
 
 
 .formula_to_string <- function(f) {
-  if (!is.character(f)) f <- deparse(f, width.cutoff = 500L)
+  if (!is.character(f)) f <- .safe_deparse(f)
   f
 }

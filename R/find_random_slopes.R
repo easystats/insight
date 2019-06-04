@@ -41,7 +41,7 @@ find_random_slopes <- function(x) {
   if (!is.list(fr)) fr <- list(fr)
 
   random_slope <- lapply(fr, function(forms) {
-    pattern <- gsub("(.*)\\|(.*)", "\\1", deparse(forms, width.cutoff = 500L))
+    pattern <- gsub("(.*)\\|(.*)", "\\1", .safe_deparse(forms))
     re <- all.vars(forms)
 
     re[sapply(re, function(x) {

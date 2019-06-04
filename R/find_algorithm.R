@@ -102,7 +102,7 @@ find_algorithm.glimML <- function(x, ...) {
 
 #' @export
 find_algorithm.BBmm <- function(x, ...) {
-  method <- parse(text = deparse(x$call, width.cutoff = 500))[[1]]$method
+  method <- parse(text = .safe_deparse(x$call))[[1]]$method
   if (is.null(method)) method <- "BB-NR"
   list(algorithm = "extended likelihood", optimizer = method)
 }

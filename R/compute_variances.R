@@ -574,7 +574,7 @@
   } else {
     f <- stats::formula(model)
     resp <- find_response(model)
-    re.terms <- paste0("(", sapply(lme4::findbars(f), deparse, width.cutoff = 500), ")")
+    re.terms <- paste0("(", sapply(lme4::findbars(f), .safe_deparse), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
     null.model <- tryCatch({
         stats::update(model, nullform)
