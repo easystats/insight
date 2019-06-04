@@ -6,12 +6,13 @@
 
 **Gain insight into your models!**
 
-The goal of *insight* is to provide tools to help an **easy**, **intuitive** and **consistent** access to information contained in various models, like model formulas, model terms, information about random effects, data that was used to fit the model or data from response variables. Although there are generic functions to get information and data from models, many modeling-functions from different packages do not provide such methods to access these information. The *insight* package aims at closing this gap by providing functions that work for (almost) any model.
+When fitting any statistical model, there are many useful pieces of information that are simultaneously calculated and stored beyond coefficient estimates and general model fit statistics. Although there exist some generic functions to obtain model information and data, many package-specific modeling functions do not provide such methods to allow users to access such valuable information. 
+
+**insight** is an R-package that fills this important gap by providing a suite of functions to support almost any model (see a list of the many models supported below in the **Supported Models** section). The goal of *insight*, then, is to provide tools to provide *easy*, *intuitive*, and *consistent* access to information contained in model objects. These tools aid applied research in virtually any field who fit, diagnose, and present statistical models by streamlining access to every aspect of many model objects via consistent syntax and output.
 
 ## What is a model?
 
-A statistical model is an object describing the relationship between variables. Although there are a lot of *different types* of models, each with their specificities, most of them also share some *common components*. The goal of `insight` is to help you retrieve these components.
-
+A statistical model is an object describing the relationship between variables. Although there are a lot of *different types* of models, each with their specificities, most of them also share some *common components*. The goal of **insight** is to help you retrieve these components.
 
 Such components are:
 
@@ -51,24 +52,7 @@ Please visit [https://easystats.github.io/insight/](https://easystats.github.io/
 
 ## Functions
 
-The syntax of `insight` mainly revolves around two types of functions. One is to find the names of the *things* (`find_*`), and the second is to actually get the *things* (`get_`). The *things* can be the following:
-
-- [find_algorithm()](https://easystats.github.io/insight/reference/find_algorithm.html)
-- [find_formula()](https://easystats.github.io/insight/reference/find_formula.html)
-- [find_variables()](https://easystats.github.io/insight/reference/find_variables.html)
-- [find_terms()](https://easystats.github.io/insight/reference/find_terms.html)
-
-- [get_data()](https://easystats.github.io/insight/reference/get_data.html)
-- [get_priors()](https://easystats.github.io/insight/reference/get_priors.html)
-- [get_variance()](https://easystats.github.io/insight/reference/get_variance.html)
-
-- [find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html) / [get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html)
-- [find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html) / [get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html)
-- [find_random()](https://easystats.github.io/insight/reference/find_random.html) / [get_random()](https://easystats.github.io/insight/reference/get_random.html)
-- [find_response()](https://easystats.github.io/insight/reference/find_response.html) /  [get_response()](https://easystats.github.io/insight/reference/get_response.html)
-
-On top of that, the [`model_info()`](https://easystats.github.io/insight/reference/model_info.html) function runs many checks to help you classify and understand the nature of your model.
-
+In total, the **insight** package includes 16 core functions: [get_data()](https://easystats.github.io/insight/reference/get_data.html), [get_priors()](https://easystats.github.io/insight/reference/get_priors.html), [get_variance()](https://easystats.github.io/insight/reference/get_variance.html), [get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html), [get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html), [get_random()](https://easystats.github.io/insight/reference/get_random.html), [get_response()](https://easystats.github.io/insight/reference/get_response.html), [find_algorithm()](https://easystats.github.io/insight/reference/find_algorithm.html), [find_formula()](https://easystats.github.io/insight/reference/find_formula.html), [find_variables()](https://easystats.github.io/insight/reference/find_variables.html), [find_terms()](https://easystats.github.io/insight/reference/find_terms.html), [find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html), [find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html), [find_random()](https://easystats.github.io/insight/reference/find_random.html), [find_response()](https://easystats.github.io/insight/reference/find_response.html), and [model_info()](https://easystats.github.io/insight/reference/model_info.html). In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_terms()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
 
 ## List of Supported Packages and Models
 

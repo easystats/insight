@@ -24,10 +24,10 @@ and adding columns with information to which group or component parameters
 belong (i.e. fixed or random, count or zero-inflated...)
 \cr \cr
 The main purpose of this function is to easily filter and select model parameters,
-especially of posterior samples from Stan models, depending on certain
-characteristics. This might be useful when only selective results should
-be reported or results from all parameters should be filtered to return only
-certain results.
+in particular of - but not limited to - posterior samples from Stan models,
+depending on certain characteristics. This might be useful when only selective
+results should be reported or results from all parameters should be filtered
+to return only certain results.
 }
 \details{
 The \code{effects} column indicate if a parameter is a \emph{fixed}
