@@ -37,7 +37,7 @@ In total, the **insight** package includes 16 core functions: [get_data()](https
 
 ## Installation
 
-Run the following to install the latest GitHub-version of *insight*:
+Run the following to install the latest GitHub-version of **insight**:
 
 ```r
 install.packages("devtools")
