@@ -18,7 +18,8 @@ When fitting any statistical model, there are many useful pieces of information 
 
 **insight** is an R-package that fills this important gap by providing a suite of functions to support almost any model. The goal of **insight**, then, is to provide tools to provide *easy*, *intuitive*, and *consistent* access to information contained in model objects. These tools aid applied research in virtually any field who fit, diagnose, and present statistical models by streamlining access to every aspect of many model objects via consistent syntax and output.
 
-Built with non-programmers in mind, **insight** offers a broad toolbox for making model and data information easily accessible, revolving around two key prefixes: `get_*` and `find_*`. 
+Built with non-programmers in mind, **insight** offers a broad toolbox for making model and data information easily accessible, revolving around two key prefixes: `get_*` and `find_*`.
+
 ## Overview of Core Functions
 
 A statistical model is an object describing the relationship between variables. Although there are a lot of *different types* of models, each with their specificities, most of them also share some *common components*. The goal of **insight** is to help you retrieve these components.
