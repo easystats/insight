@@ -72,6 +72,7 @@ get_parameters.default <- function(x, ...) {
     )
   },
   error = function(x) {
+    print_color(sprintf("Parameters can't be retrieved for objects of class '%s'.\n", class(x)[1]), "red")
     NULL
   }
   )

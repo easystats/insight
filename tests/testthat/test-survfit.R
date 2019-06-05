@@ -41,7 +41,7 @@ if (require("testthat") && require("insight") && require("survival")) {
   })
 
   test_that("n_obs", {
-    expect_equal(n_obs(m1), 226)
+    expect_equal(n_obs(m1), 227)
   })
 
   test_that("linkfun", {
@@ -50,17 +50,6 @@ if (require("testthat") && require("insight") && require("survival")) {
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
-  })
-
-  test_that("find_parameters", {
-    expect_equal(
-      find_parameters(m1),
-      list(
-        conditional = c("sexfemale", "age", "ph.ecogok", "ph.ecoglimited")
-      )
-    )
-    expect_equal(nrow(get_parameters(m1)), 4)
-    expect_equal(get_parameters(m1)$parameter, c("sexfemale", "age", "ph.ecogok", "ph.ecoglimited"))
   })
 
   test_that("find_variables", {
