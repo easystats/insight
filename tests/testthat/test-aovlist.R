@@ -87,12 +87,19 @@ if (require("testthat") && require("insight") && require("stats")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = "(Intercept)",
-        between = "N1:P1:K1",
-        within = c("N1", "P1", "K1", "N1:P1", "N1:K1", "P1:K1")
+        conditional = c("(Intercept)", "N1:P1:K1"),
+        random = c("N1", "P1", "K1", "N1:P1", "N1:K1", "P1:K1")
       )
     )
-    expect_equal(length(get_parameters(m1)), 3)
+
+    expect_equal(length(get_parameters(m1)), 2)
+    expect_equal(nrow(get_parameters(m1, effects = "all")), 8)
+
+    expect_equal(
+      get_parameters(m1, effects = "all")$effects,
+      c("fixed", "fixed", "random", "random", "random", "random", "random", "random")
+    )
+
     expect_equal(
       find_parameters(m2),
       list(
