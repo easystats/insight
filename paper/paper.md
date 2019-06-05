@@ -62,8 +62,8 @@ The functions from *insight* address different components of a model. In an effo
 
 \pagebreak
 
-* **term**: any unique variables that appear in a regression model, e.g., response variables, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, the expression `x + I(x ^ 2)` has only the term `x`.
-* **variables**: an object that stores unique data information. For instance, the expression `x + I(x ^ 2)` has two objects with two different sets of data values, and thus are treated as two variables.
+* **term**: any unique variables that appear in a regression model, e.g., response variables, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, the expression `x + poly(x, 2)` has only the term `x`.
+* **variables**: an object that stores unique data information. For instance, the expression `x + poly(x, 2)` has two objects with two different sets of data values, and thus are treated as two variables.
 
 ![Definition of Model Components, Part 2](figure2b.png)
 
