@@ -12,11 +12,9 @@ When fitting any statistical model, there are many useful pieces of information 
 
 Built with non-programmers in mind, **insight** offers a broad toolbox for making model and data information easily accessible. While **insight** offers many useful functions for working with and understanding model objects (discussed below), we suggest users start with `model_info()`, as this function provides a clean and consistent overview of model objects (*e.g.*, functional form of the model, the model family, link function, number of observations, variables included in the specification, etc.). With a clear understanding of the model introduced, users are able to adapt other functions for more nuanced exploration of and interaction with virtually any model object. 
 
-## What is a model?
+## Definition of Model Components
 
-A statistical model is an object describing the relationship between variables. Although there are a lot of *different types* of models, each with their specificities, most of them also share some *common components*. The goal of **insight** is to help you retrieve these components.
-
-Such components are:
+The functions from **insight** address different components of a model. In an effort to avoid confusion about specific "targets" of each function, we provide a short explanation of **insight**'s definitions of regression model components. Such components are:
 
 * **data**: the dataset used to fit the model.
 * **response**: the outcome or response variable (dependent variable) of a regression model.
@@ -31,11 +29,11 @@ Such components are:
 
 In some cases, yes. But not in all cases. Find out more by [**clicking here to access the documentation**](https://easystats.github.io/insight/articles/insight.html).
 
+## Functions
+
 The package revolves around two key prefixes: `get_*` and `find_*`. The `get_*` prefix extracts *values* (or *data*) associated with model-specific objects (e.g., parameters or variables), while the `find_*` prefix *lists* model-specific objects (e.g., priors or predictors). These are powerful families of functions allowing for great flexibility in use, whether at a high, descriptive level (`find_*`) or narrower level of statistical inspection and reporting (`get_*`).
 
-![](https://raw.githubusercontent.com/easystats/insight/master/paper/figure2.png)
-
-## Functions
+![](https://raw.githubusercontent.com/easystats/insight/master/paper/figure1.png)
 
 In total, the **insight** package includes 16 core functions: [get_data()](https://easystats.github.io/insight/reference/get_data.html), [get_priors()](https://easystats.github.io/insight/reference/get_priors.html), [get_variance()](https://easystats.github.io/insight/reference/get_variance.html), [get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html), [get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html), [get_random()](https://easystats.github.io/insight/reference/get_random.html), [get_response()](https://easystats.github.io/insight/reference/get_response.html), [find_algorithm()](https://easystats.github.io/insight/reference/find_algorithm.html), [find_formula()](https://easystats.github.io/insight/reference/find_formula.html), [find_variables()](https://easystats.github.io/insight/reference/find_variables.html), [find_terms()](https://easystats.github.io/insight/reference/find_terms.html), [find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html), [find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html), [find_random()](https://easystats.github.io/insight/reference/find_random.html), [find_response()](https://easystats.github.io/insight/reference/find_response.html), and [model_info()](https://easystats.github.io/insight/reference/model_info.html). In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_terms()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
 
