@@ -90,7 +90,7 @@ get_variables_list <- function(f) {
 
 
   # reorder, so response is first
-  compact_list(f[c(length(f), 1:(length(f) - 1))])
+  .compact_list(f[c(length(f), 1:(length(f) - 1))])
 }
 
 

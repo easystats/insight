@@ -110,7 +110,7 @@ get_parameters.BBreg <- function(x, ...) {
 get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
   effects <- match.arg(effects)
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = x$fixed.coef,
     random = x$random.coef
   ))
@@ -136,7 +136,7 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
 get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = x@fixed.param,
     random = x@random.param
   ))
@@ -387,7 +387,7 @@ get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), ..
   effects <- match.arg(effects)
   sc <- summary(x)
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = sc$solutions[, 1],
     random = sc$Gcovariances[, 1]
   ))
@@ -432,7 +432,7 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
 
   effects <- match.arg(effects)
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = lme4::fixef(x),
     random = lme4::ranef(x)
   ))
@@ -461,7 +461,7 @@ get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
 
   effects <- match.arg(effects)
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = lme4::fixef(x),
     random = lme4::ranef(x)
   ))
@@ -490,7 +490,7 @@ get_parameters.rlmerMod <- function(x, effects = c("fixed", "random"), ...) {
 
   effects <- match.arg(effects)
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = lme4::fixef(x),
     random = lme4::ranef(x)
   ))
@@ -519,7 +519,7 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
 
   effects <- match.arg(effects)
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = lme4::fixef(x$full_model),
     random = lme4::ranef(x$full_model)
   ))
@@ -548,7 +548,7 @@ get_parameters.lme <- function(x, effects = c("fixed", "random"), ...) {
 
   effects <- match.arg(effects)
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = lme4::fixef(x),
     random = lme4::ranef(x)
   ))
@@ -599,7 +599,7 @@ get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component =
   }
 
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = lme4::fixef(x, sub_model = "main"),
     random = re[grepl("^(?!zi_)", re.names, perl = TRUE)],
     zero_inflated = z_inflated,
@@ -635,7 +635,7 @@ get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component =
   } else if (effects == "random") {
     switch(
       component,
-      all = compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
+      all = .compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
       conditional = list(random = l$random),
       zi = ,
       zero_inflated = list(zero_inflated_random = l$zero_inflated_random)
@@ -655,7 +655,7 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
   effects <- match.arg(effects)
   component <- match.arg(component)
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = lme4::fixef(x)$cond,
     random = lme4::ranef(x)$cond,
     zero_inflated = lme4::fixef(x)$zi,
@@ -688,7 +688,7 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
   } else if (effects == "random") {
     switch(
       component,
-      all = compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
+      all = .compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
       conditional = l$random,
       zi = ,
       zero_inflated = l$zero_inflated_random
@@ -774,7 +774,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
     parms[[i]]$sigma <- NULL
   }
 
-  as.data.frame(x)[unlist(lapply(compact_list(parms), function(i) i[elements]))]
+  as.data.frame(x)[unlist(lapply(.compact_list(parms), function(i) i[elements]))]
 }
 
 

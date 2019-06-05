@@ -110,7 +110,7 @@ get_priors.brmsfit <- function(x, ...) {
 #' @importFrom utils tail
 #' @export
 get_priors.BFBayesFactor <- function(x, ...) {
-  prior <- compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
+  prior <- .compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
 
   switch(
     .classify_BFBayesFactor(x),

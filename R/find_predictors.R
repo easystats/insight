@@ -60,7 +60,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
     l <- return_vars(f, x)
   }
 
-  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
+  if (is_empty_object(l) || is_empty_object(.compact_list(l))) {
     return(NULL)
   }
 
@@ -90,7 +90,7 @@ return_vars <- function(f, x) {
   })
 
   empty_elements <- sapply(l, is_empty_object)
-  l <- compact_list(l)
+  l <- .compact_list(l)
 
   # here we handle special cases for non-linear model in brms
   if (inherits(x, "brmsfit")) {

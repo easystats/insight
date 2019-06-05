@@ -128,7 +128,7 @@ find_formula.gls <- function(x, ...) {
   }
   )
 
-  compact_list(l)
+  .compact_list(l)
 }
 
 
@@ -247,7 +247,7 @@ find_formula.coxme <- function(x, ...) {
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
 
-  compact_list(list(
+  .compact_list(list(
     conditional = f.cond,
     random = f.random
   ))
@@ -280,7 +280,7 @@ find_formula.felm <- function(x, ...) {
     f.clus <- NULL
   }
 
-  compact_list(list(
+  .compact_list(list(
     conditional = stats::as.formula(f.cond),
     random = stats::as.formula(f.rand),
     instruments = stats::as.formula(f.instr),
@@ -308,7 +308,7 @@ find_formula.feis <- function(x, ...) {
     f.slopes <- NULL
   }
 
-  compact_list(list(
+  .compact_list(list(
     conditional = stats::as.formula(f.cond),
     slopes = stats::as.formula(f.slopes),
     random = stats::as.formula(paste0("~", id))
@@ -345,7 +345,7 @@ find_formula.wbm <- function(x, ...) {
     f.rand <- NULL
   }
 
-  compact_list(list(
+  .compact_list(list(
     conditional = stats::as.formula(f.cond),
     instruments = stats::as.formula(f.instr),
     random = stats::as.formula(f.rand)
@@ -359,7 +359,7 @@ find_formula.BBmm <- function(x, ...) {
   f.cond <- parse(text = .safe_deparse(x$call))[[1]]$fixed.formula
   f.rand <- parse(text = .safe_deparse(x$call))[[1]]$random.formula
 
-  compact_list(list(
+  .compact_list(list(
     conditional = stats::as.formula(f.cond),
     random = stats::as.formula(f.rand)
   ))
@@ -369,7 +369,7 @@ find_formula.BBmm <- function(x, ...) {
 
 #' @export
 find_formula.glimML <- function(x, ...) {
-  compact_list(list(
+  .compact_list(list(
     conditional = x@formula,
     random = x@random
   ))
@@ -473,7 +473,7 @@ find_formula.glmmTMB <- function(x, ...) {
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
   if (!is.null(f.zi)) f.zi <- stats::as.formula(get_fixed_effects(f.zi))
 
-  compact_list(list(
+  .compact_list(list(
     conditional = f.cond,
     random = f.random,
     zero_inflated = f.zi,
@@ -502,7 +502,7 @@ find_formula.merMod <- function(x, ...) {
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
 
-  compact_list(list(conditional = f.cond, random = f.random))
+  .compact_list(list(conditional = f.cond, random = f.random))
 }
 
 
@@ -525,7 +525,7 @@ find_formula.rlmerMod <- function(x, ...) {
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
 
-  compact_list(list(conditional = f.cond, random = f.random))
+  .compact_list(list(conditional = f.cond, random = f.random))
 }
 
 
@@ -548,7 +548,7 @@ find_formula.mixed <- function(x, ...) {
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
 
-  compact_list(list(conditional = f.cond, random = f.random))
+  .compact_list(list(conditional = f.cond, random = f.random))
 }
 
 
@@ -571,7 +571,7 @@ find_formula.clmm <- function(x, ...) {
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
 
-  compact_list(list(conditional = f.cond, random = f.random))
+  .compact_list(list(conditional = f.cond, random = f.random))
 }
 
 
@@ -594,7 +594,7 @@ find_formula.stanreg <- function(x, ...) {
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
 
-  compact_list(list(conditional = f.cond, random = f.random))
+  .compact_list(list(conditional = f.cond, random = f.random))
 }
 
 
@@ -629,7 +629,7 @@ find_formula.MCMCglmm <- function(x, ...) {
   fm <- x$Fixed$formula
   fmr <- x$Random$formula
 
-  compact_list(list(conditional = fm, random = fmr))
+  .compact_list(list(conditional = fm, random = fmr))
 }
 
 
@@ -641,7 +641,7 @@ find_formula.lme <- function(x, ...) {
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fc <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
 
-  compact_list(list(
+  .compact_list(list(
     conditional = fm,
     random = fmr,
     correlation = stats::as.formula(fc)
@@ -657,7 +657,7 @@ find_formula.MixMod <- function(x, ...) {
   f.random <- stats::formula(x, type = "random")
   f.zirandom <- stats::formula(x, type = "zi_random")
 
-  compact_list(list(
+  .compact_list(list(
     conditional = f.cond,
     random = f.random,
     zero_inflated = f.zi,
@@ -690,7 +690,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
     return(NULL)
   }
 
-  compact_list(list(
+  .compact_list(list(
     conditional = f.cond,
     random = f.random
   ))
@@ -732,7 +732,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
     f.zi <- stats::as.formula(get_fixed_effects(f.zi))
   }
 
-  compact_list(list(
+  .compact_list(list(
     conditional = f.cond,
     random = f.random,
     zero_inflated = f.zi,
@@ -759,7 +759,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
   f.cond <- stats::as.formula(get_fixed_effects(f.cond))
 
-  compact_list(list(
+  .compact_list(list(
     conditional = f.cond,
     random = f.random
   ))
@@ -789,5 +789,5 @@ find_formula.BFBayesFactor <- function(x, ...) {
     zi.form <- NULL
   }
 
-  compact_list(list(conditional = c.form, zero_inflated = zi.form))
+  .compact_list(list(conditional = c.form, zero_inflated = zi.form))
 }

@@ -13,7 +13,7 @@
 #' @export
 get_predictors <- function(x) {
   vars <- if (inherits(x, "wbm"))
-    unlist(compact_list(find_variables(x, flatten = FALSE)[c("conditional", "instruments")]))
+    unlist(.compact_list(find_variables(x, flatten = FALSE)[c("conditional", "instruments")]))
   else
     find_predictors(x, effects = "fixed", component = "all", flatten = TRUE)
 

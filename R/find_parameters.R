@@ -86,7 +86,7 @@ find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
     tau = names(stats::coef(x, what = "tau"))
   )
 
-  pars <- compact_list(pars)
+  pars <- .compact_list(pars)
 
   if (flatten) {
     unique(unlist(pars))
@@ -105,11 +105,11 @@ find_parameters.gam <- function(x, component = c("all", "conditional", "smooth_t
   pars$conditional <- pars$conditional[.grep_non_smoothers(pars$conditional)]
   pars$smooth_terms <- row.names(st)
 
-  pars <- compact_list(pars)
+  pars <- .compact_list(pars)
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  pars <- compact_list(pars[elements])
+  pars <- .compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))
@@ -136,14 +136,14 @@ find_parameters.gbm <- function(x, flatten = FALSE, ...) {
 find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   pars <- names(stats::coef(x))
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = pars[.grep_non_smoothers(pars)],
     smooth_terms = pars[.grep_smoothers(pars)]
   ))
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -157,14 +157,14 @@ find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_t
 find_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   pars <- names(stats::coef(x))
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = pars[.grep_non_smoothers(pars)],
     smooth_terms = pars[.grep_smoothers(pars)]
   ))
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -188,14 +188,14 @@ find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.BBmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = rownames(x$fixed.coef),
     random = x$namesRand
   ))
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -207,14 +207,14 @@ find_parameters.BBmm <- function(x, effects = c("all", "fixed", "random"), flatt
 
 #' @export
 find_parameters.glimML <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = names(x@fixed.param),
     random = names(x@random.param)
   ))
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -283,7 +283,7 @@ find_parameters.MixMod <- function(x, effects = c("all", "fixed", "random"), com
     z_inflated_random <- NULL
   }
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = names(lme4::fixef(x, sub_model = "main")),
     random = re.names[grepl("^(?!zi_)", re.names, perl = TRUE)],
     zero_inflated = z_inflated,
@@ -293,7 +293,7 @@ find_parameters.MixMod <- function(x, effects = c("all", "fixed", "random"), com
   effects <- match.arg(effects)
   component <- match.arg(component)
   elements <- .get_elements(effects = effects, component = component)
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -310,14 +310,14 @@ find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), fla
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = names(lme4::fixef(x)),
     random = lapply(lme4::ranef(x), colnames)
   ))
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -333,14 +333,14 @@ find_parameters.rlmerMod <- function(x, effects = c("all", "fixed", "random"), f
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = names(lme4::fixef(x)),
     random = lapply(lme4::ranef(x), colnames)
   ))
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -356,14 +356,14 @@ find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flat
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = names(lme4::fixef(x$full_model)),
     random = lapply(lme4::ranef(x$full_model), colnames)
   ))
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
 
   if (flatten) {
@@ -380,14 +380,14 @@ find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flat
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = names(lme4::fixef(x)),
     random = names(lme4::ranef(x))
   ))
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -409,14 +409,14 @@ find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatte
   else
     rn <- lapply(re, colnames)
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = names(lme4::fixef(x)),
     random = rn
   ))
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -429,14 +429,14 @@ find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatte
 #' @export
 find_parameters.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   sc <- summary(x)
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = rownames(sc$solutions),
     random = rownames(sc$Gcovariances)
   ))
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -478,7 +478,7 @@ find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), co
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = names(lme4::fixef(x)$cond),
     random = lapply(lme4::ranef(x)$cond, colnames),
     zero_inflated = names(lme4::fixef(x)$zi),
@@ -489,7 +489,7 @@ find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), co
   effects <- match.arg(effects)
   component <- match.arg(component)
   elements <- .get_elements(effects = effects, component = component)
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -503,14 +503,14 @@ find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), co
 #' @export
 find_parameters.zeroinfl <- function(x,  component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
     zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
   ))
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -524,14 +524,14 @@ find_parameters.zeroinfl <- function(x,  component = c("all", "conditional", "zi
 #' @export
 find_parameters.hurdle <- function(x,  component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
     zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
   ))
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -544,14 +544,14 @@ find_parameters.hurdle <- function(x,  component = c("all", "conditional", "zi",
 #' @export
 find_parameters.zerotrunc <- function(x,  component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
     zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
   ))
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -576,7 +576,7 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
   priors <- fe[grepl(pattern = "^prior_", fe, perl = TRUE)]
   sigma <- fe[grepl(pattern = "^sigma_", fe, perl = TRUE)]
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = cond,
     random = rand,
     zero_inflated = zi,
@@ -643,7 +643,7 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
         priors <- NULL
       }
 
-      pars <- compact_list(list(
+      pars <- .compact_list(list(
         conditional = conditional,
         random = random,
         zero_inflated = zero_inflated,
@@ -654,13 +654,13 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
         priors = priors
       ))
 
-      compact_list(pars[elements])
+      .compact_list(pars[elements])
     })
 
     names(l) <- rn
     is_mv <- "1"
   } else {
-    l <- compact_list(l[elements])
+    l <- .compact_list(l[elements])
   }
 
   l <- .filter_pars(l, parameters)
@@ -683,7 +683,7 @@ find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), co
   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
   smooth_terms <- fe[grepl(pattern = "^smooth_sd", fe, perl = TRUE)]
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = cond,
     random = rand,
     smooth_terms = smooth_terms
@@ -694,7 +694,7 @@ find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), co
   effects <- match.arg(effects)
   component <- match.arg(component)
   elements <- .get_elements(effects, component)
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -713,7 +713,7 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
   sigma <- fe[grepl(pattern = "\\|sigma$", fe, perl = TRUE) & .grep_non_smoothers(fe)]
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = cond,
     random = rand,
     sigma = sigma
@@ -762,7 +762,7 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
   effects <- match.arg(effects)
   component <- match.arg(component)
   elements <- .get_elements(effects, component)
-  l <- lapply(l, function(i) compact_list(i[elements]))
+  l <- lapply(l, function(i) .compact_list(i[elements]))
 
   attr(l, "is_mv") <- "1"
 
@@ -781,14 +781,14 @@ find_parameters.wbm <- function(x, effects = c("all", "fixed", "random"), flatte
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
-  l <- compact_list(list(
+  l <- .compact_list(list(
     conditional = names(lme4::fixef(x)),
     random = lapply(lme4::ranef(x), colnames)
   ))
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects = effects, component = "all")
-  l <- compact_list(l[elements])
+  l <- .compact_list(l[elements])
 
   l <- rapply(l, function(i) gsub("`", "", i, fixed = TRUE), how = "list")
 

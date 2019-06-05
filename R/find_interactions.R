@@ -36,9 +36,9 @@ find_interactions <- function(x, component = c("all", "conditional", "zi", "zero
   elements <- .get_elements(effects = effects, component = component)
 
   if (is_mv) {
-    l <- lapply(f, function(.x) compact_list(lapply(.x[elements], function(i) .get_interaction_terms(i, main_effects))))
+    l <- lapply(f, function(.x) .compact_list(lapply(.x[elements], function(i) .get_interaction_terms(i, main_effects))))
   } else {
-    l <- compact_list(lapply(f[elements], function(i) .get_interaction_terms(i, main_effects)))
+    l <- .compact_list(lapply(f[elements], function(i) .get_interaction_terms(i, main_effects)))
   }
 
   if (is_empty_object(l)) {

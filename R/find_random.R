@@ -45,7 +45,7 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
     rn <- names(find_response(x))
     l <- lapply(rn, function(i) .find_random_effects(x, f[[i]], split_nested))
     names(l) <- rn
-    l <- compact_list(l)
+    l <- .compact_list(l)
   } else {
     l <- .find_random_effects(x, f, split_nested)
   }
@@ -90,5 +90,5 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 
 
-  compact_list(list(random = r1, zero_inflated_random = r2))
+  .compact_list(list(random = r1, zero_inflated_random = r2))
 }

@@ -103,7 +103,7 @@
   }
 
 
-  compact_list(list(
+  .compact_list(list(
     "var.fixed" = var.fixed,
     "var.random" = var.random,
     "var.residual" = var.residual,

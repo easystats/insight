@@ -27,7 +27,7 @@ find_random_slopes <- function(x) {
   random_slopes$random <- .extract_random_slopes(forms$random)
   random_slopes$zero_inflated_random <- .extract_random_slopes(forms$zero_inflated_random)
 
-  random_slopes <- compact_list(random_slopes)
+  random_slopes <- .compact_list(random_slopes)
 
   if (is_empty_object(random_slopes))
     NULL
@@ -49,5 +49,5 @@ find_random_slopes <- function(x) {
     })]
   })
 
-  unique(unlist(compact_list(random_slope)))
+  unique(unlist(.compact_list(random_slope)))
 }
