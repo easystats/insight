@@ -9,6 +9,10 @@
 * `clean_parameters()`, which returns a data frame with "decomposed" parameters, i.e. a data frame with information about the clean paramter name, whether it is a fixed or random effect, from conditional or zero-inflated component, and if it is a parameter related to specific grouping factors of random effects (#106).
 * `find_interactions()` to return all low/high order interaction terms in a model.
 
+## Breaking changes
+
+* To reduce interface complexity, `find_parameters()` and `get_parameters()` for objects of class `aovlist` now return the elements `$conditional` and `$random`, to be in line with other supported objects.
+
 ## Changes to functions
 
 * `find_parameters()` and `get_parameters()` now allow to return a `sigma`-element for multivariate-response models (*brmsfit*, *stanmvreg*).

@@ -15,7 +15,7 @@
 #'   \item for non-Bayesian models and if \code{effects = "fixed"}, a data frame with two columns: the parameter names and the related point estimates
 #'   \item if \code{effects = "random"}, a list of data frames with the random effects (as returned by \code{ranef()}
 #'   \item for Bayesian models, the posterior samples from the requested parameters as data frame.
-#'   \item for Anova (\code{aov()}) with error term, a list of parameters for the conditional, the within-subject and the between-subjects parameters
+#'   \item for Anova (\code{aov()}) with error term, a list of parameters for the conditional and the random effects parameters
 #'   \item for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component
 #' }
 #'
@@ -124,7 +124,7 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
 
 #' @rdname get_parameters
 #' @export
-get_parameters.glimML <- function(x, effects = c("fixed", "random"), ...) {
+get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
 
   l <- compact_list(list(
@@ -146,10 +146,17 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random"), ...) {
     row.names = NULL
   )
 
+  all <- rbind(
+    cbind(fixed, data.frame(effects = "fixed", stringsAsFactors = FALSE)),
+    cbind(random, data.frame(effects = "random", stringsAsFactors = FALSE))
+  )
+
   if (effects == "fixed") {
     fixed
-  } else {
+  } else if (effects == "random") {
     random
+  } else {
+    all
   }
 }
 
@@ -310,8 +317,11 @@ get_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_t
 }
 
 
+#' @rdname get_parameters
 #' @export
-get_parameters.aovlist <- function(x, ...) {
+get_parameters.aovlist <- function(x, effects = c("fixed", "random", "all"), ...) {
+  effects <- match.arg(effects)
+
   l <- lapply(stats::coef(x), function(i) {
     data.frame(
       parameter = names(i),
@@ -319,8 +329,22 @@ get_parameters.aovlist <- function(x, ...) {
       stringsAsFactors = FALSE
     )
   })
-  names(l) <- c("conditional", "between", "within")
-  l
+
+  l <- list(rbind(l[[1]], l[[2]]), l[[3]])
+  names(l) <- c("conditional", "random")
+
+  all <- rbind(
+    cbind(l$conditional, data.frame(effects = "fixed", stringsAsFactors = FALSE)),
+    cbind(l$random, data.frame(effects = "random", stringsAsFactors = FALSE))
+  )
+
+  if (effects == "fixed") {
+    l$conditional
+  } else if (effects == "random") {
+    l$random
+  } else {
+    all
+  }
 }
 
 
@@ -333,7 +357,7 @@ get_parameters.hurdle <- function(x, component = c("all", "conditional", "zi", "
 
 
 #' @export
-get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random"), ...) {
+get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
   sc <- summary(x)
 
@@ -357,10 +381,17 @@ get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random"), ...) {
     stringsAsFactors = FALSE
   )
 
+  all <- rbind(
+    cbind(fixed, data.frame(effects = "fixed", stringsAsFactors = FALSE)),
+    cbind(random, data.frame(effects = "random", stringsAsFactors = FALSE))
+  )
+
   if (effects == "fixed") {
     fixed
-  } else {
+  } else if (effects == "random") {
     random
+  } else {
+    all
   }
 }
 
@@ -661,7 +692,7 @@ get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), par
 #' @export
 get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE, ...) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
-    stop("This function needs `BayesFactor` to be installed.")
+    stop("This function requires package `BayesFactor` to work. Please install it.")
   }
 
   if (.classify_BFBayesFactor(x) == "correlation") {

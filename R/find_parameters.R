@@ -29,8 +29,6 @@
 #'      \item \code{dispersion}, the dispersion parameters
 #'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
 #'      \item \code{smooth_terms}, the smooth parameters
-#'      \item \code{within}, the within-subject effects of Anovas (\code{aov()}) with error term
-#'      \item \code{between}, the between-subjects effects of Anovas (\code{aov()}) with error term
 #'    }
 #'
 #' @details In most cases when models either return different "effects" (fixed,
@@ -254,7 +252,11 @@ find_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_
 #' @export
 find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
   l <- lapply(stats::coef(x), names)
-  names(l) <- c("conditional", "between", "within")
+  # merge "intercept" and "block" into conditional
+  # while "Within" becomes "random"
+  l <- list(unname(unlist(l[c(1, 2)])), l[[3]])
+  names(l) <- c("conditional", "random")
+
   if (flatten) {
     unique(unlist(l))
   } else {

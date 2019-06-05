@@ -65,8 +65,6 @@ A list of parameter names. For simple models, only one list-element,
      \item \code{dispersion}, the dispersion parameters
      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
      \item \code{smooth_terms}, the smooth parameters
-     \item \code{within}, the within-subject effects of Anovas (\code{aov()}) with error term
-     \item \code{between}, the between-subjects effects of Anovas (\code{aov()}) with error term
    }
 }
 \description{
