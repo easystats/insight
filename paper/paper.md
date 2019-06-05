@@ -49,21 +49,21 @@ In total, the *insight* package includes 16 core functions (see Figure 1): `get_
 
 ## Definition of Model Components
 
-The functions from *insight* address different components of a model, however, due to conceptional overlap, there might be confusion about the specific "targets" of each function. We now provide a short explanation how *insight* defines components of regression models (see Figures 2 and 3). For detailed examples, we point to the [accompanying website](https://easystats.github.io/insight/articles/insight.html).
+The functions from *insight* address different components of a model. In an effort to avoid confusion about specific "targets" of each function, in this section we provide a short explanation of *insight*'s definitions of regression model components (see Figures 2 and 3). For detailed examples, we point users to the [accompanying package website](https://easystats.github.io/insight/articles/insight.html).
 
-* **data**: the dataset used to fit the model
-* **response**: the outcome or response variable (dependent variable) of a regression model
-* **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are (only) in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default, however, these can be included using additional arguments to the function call; predictors are "unqiue", hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable)
-* **random slopes**: variables that are used as random slope in a mixed effects model
-* **random or grouping factors**: variables that are used as grouping variables in a mixed effects model
-* **parameters**: values estimated or learned from data that encapsulate the relationship between variables; in regressions, these are usually referred to as *coefficients*
+* **data**: the dataset used to fit the model.
+* **response**: the outcome or response variable (dependent variable) of a regression model.
+* **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are only in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are "unqiue." As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.
+* **random slopes**: variables that are specified as random slopes in a mixed effects model.
+* **random or grouping factors**: variables that are specified as grouping variables in a mixed effects model.
+* **parameters**: values estimated or learned from data that capture the relationship between variables. In regression models, these are usually referred to as *coefficients*.
 
 ![Definition of Model Components, Part 1](figure2a.png)
 
 \pagebreak
 
-* **term**: terms are any (unique) variables that appear in a regression model, like response variables, predictors or random effects; a "term" only relates to the unique occurence of a variable; for instance, in the expression `x + I(x^2)`, there is only the term `x`
-* **variables**: a variable is considered as an object that stores unique data information; for instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables
+* **term**: any unique variables that appear in a regression model, e.g., response variables, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, the expression `x + I(x^2)` has only the term `x`.
+* **variables**: an object that stores unique data information. For instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables.
 
 ![Definition of Model Components, Part 2](figure2b.png)
 
@@ -158,13 +158,13 @@ find_formula(sample3)
 
 **insight** is already used by different packages to solve problems that typically occur when the users' inputs are different model objects of varying complexity.
 
-For example, **ggeffects** [@ludecke_ggeffects_2018], a package that computes and visualizes marginal effects of regression models, needs to extract the data (`get_data()`) that was used to fit the models and to retrieve all model predictors (`find_predictors()`) to decide, which covariates are held constant when computing marginal effects. All these information is required in order to create a data frame for `predict(newdata=<data frame>)`. Furthermore, the models' link-functions (`link_function()`) resp. link-inverse-functions (`link_inverse()`) are required to get predictons at the model's response scale.
+For example, **ggeffects** [@ludecke_ggeffects_2018], a package that computes and visualizes marginal effects of regression models, requires extraction of the data (`get_data()`) that was used to fit the models, and also the retrieval all model predictors (`find_predictors()`) to decide which covariates are held constant when computing marginal effects. All of this information is required in order to create a data frame for `predict(newdata=<data frame>)`. Furthermore, the models' link-functions (`link_function()`) resp. link-inverse-functions (`link_inverse()`) are required to obtain predictons at the model's response scale.
 
-The **sjPlot**-package [@pkg_sjPlot] creates plots or summary tables from regression models, and uses **insight**-functions to get model-information (`model_info()` or `find_response()`), which is used to build the components of the final plot or table. These information help, for example, to label table columns by providing information on the effect type (odds ratio, incidence rate ratio, ...) or the different model components (which split plots and tables into the "conditional" and "zero-inflated" part of a model, in case of models with zero-inflation).
+The **sjPlot**-package [@pkg_sjPlot] creates plots or summary tables from regression models, and uses **insight**-functions to get model-information (`model_info()` or `find_response()`), which is used to build the components of the final plot or table. This information helps, for example, in labeling table columns by providing information on the effect type (odds ratio, incidence rate ratio, etc.) or the different model components, which split plots and tables into the "conditional" and "zero-inflated" parts of a model, in the cases of models with zero-inflation.
 
-**bayestestR** [@pkg_bayestestR] mainly relies on `get_priors()` and `get_parameters()` to retrieve the necessary information to compute various indices or statistics of Bayesian models (like HDI, Credible Interval, MCSE, effective sample size, Bayes factors...). The advantage of `get_parameters()` in this context is, for instance, that, no matter, how many parameters the posterior distribution has because of the model's complexity, the necessary data can be accessed easily from the model objects. There is no need to write own complicated code (and regular expressions).
+**bayestestR** [@pkg_bayestestR] mainly relies on `get_priors()` and `get_parameters()` to retrieve the necessary information to compute various indices or statistics of Bayesian models (like HDI, Credible Interval, MCSE, effective sample size, Bayes factors, etc.). The advantage of `get_parameters()` in this context is that regardless of the number of parameters the posterior distribution has, the necessary data can be easily accessed from the model objects. There is no need to write original, complicated code or regular expressions.
 
-A last example is the **performance**-package [@pkg_performance], which provides functions for computing measures to assess model quality. Many of these indices (e.g. check for overdispersion or zero-inflation, predictive accuracy, logloss, RMSE, ...) require the number of observations (`n_obs()`) or the data from the response-variable (`get_response()`). Again, in this context, functions from **insight** are helpful, because they offer a unified access to these information.
+A last example is the **performance**-package [@pkg_performance], which provides functions for computing measures to assess model quality. Many of these indices (e.g. check for overdispersion or zero-inflation, predictive accuracy, logloss, RMSE, etc.) require the number of observations (`n_obs()`) or the data from the response-variable (`get_response()`). Again, in this context, functions from **insight** are helpful, because they offer a unified access to this information.
 
 ## Supported Models
 
@@ -173,7 +173,5 @@ A last example is the **performance**-package [@pkg_performance], which provides
 ## Licensing and Package Access
 
 *insight* is licensed under the GNU General Public License (v3.0), with all source code stored at GitHub (https://github.com/easystats/insight), with a corresponding issue tracker for bug-reporting and feature enhancements. In the spirit of open science and research, we encourage interaction with our package through requests/tips for fixes, support for additional model objects, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
-
-\pagebreak
 
 # References
