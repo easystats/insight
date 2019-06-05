@@ -41,7 +41,25 @@ Thus, building on this starting place, the remainder of the package revolves aro
 
 In total, the *insight* package includes 16 core functions: `get_data()`, `get_priors()`, `get_variance()`, `get_parameters()`, `get_predictors()`, `get_random()`, `get_response()`, `find_algorithm()`, `find_formula()`, `find_variables()`, `find_terms()`, `find_parameters()`, `find_predictors()`, `find_random()`, `find_response()`, and `model_info()`. In all cases, users must supply at a minimum, the name of the fitted model object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_terms()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
 
-![The functions in insight allow users to access different aspects of models, such as the data used for fitting, the parameters of the fitted model or various information about the model.](figure2.png)
+![The functions in insight allow users to access different aspects of models, such as the data used for fitting, the parameters of the fitted model or various information about the model.](figure1.png)
+
+## Definition of Model Components
+
+The functions from *insight* address different components of a model, however, due to conceptional overlap, there might be confusion about the specific "targets" of each function. Here is a short explanation how *insight* defines components of regression models (for detailed examples, we point to the [accompanying website](https://easystats.github.io/insight/articles/insight.html)):
+
+* **data**: the dataset used to fit the model
+* **response**: the outcome or response variable (dependent variable) of a regression model
+* **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are (only) in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default, however, these can be included using additional arguments to the function call; predictors are "unqiue", hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable)
+* **random slopes**: variables that are used as random slope in a mixed effects model
+* **random or grouping factors**: variables that are used as grouping variables in a mixed effects model
+* **parameters**: values estimated or learned from data that encapsulate the relationship between variables; in regressions, these are usually referred to as *coefficients*
+
+![Definition of insight-Terminology, Part 1](figure2a.png)
+
+* **term**: terms are any (unique) variables that appear in a regression model, like response variables, predictors or random effects; a "term" only relates to the unique occurence of a variable; for instance, in the expression `x + I(x^2)`, there is only the term `x`
+* **variables**: a variable is considered as an object that stores unique data information; for instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables
+
+![Definition of insight-Terminology, Part 2](figure2b.png)
 
 ## Examples
 

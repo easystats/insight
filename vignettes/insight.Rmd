@@ -34,20 +34,20 @@ knitr::include_graphics("insight_design_1.png", dpi = 72)
 
 The functions from **insight** address different components of a model, however, due to some conceptional overlap, there might be confusion about the specific "targets" of each function. Here is a short explanation how **insight** defines components of regression models:
 
-* **data**: the dataset used to fit the model.
-* **response**: the outcome or response variable (dependent variable) of a regression model.
-* **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are (only) in the _random effects_ part of the model are not returned as predictors by default, however, these can be returned using additional arguments to the function call. Predictors are "unqiue", hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable).
-* **random slopes**: variables that are used as random slope in a mixed effects model.
-* **random or grouping factors**: variables that are used as grouping variables in a mixed effects model.
-* **parameters**: values estimated or learned from data that encapsulate the relationship between variables. In regressions, these are usually referred to as *coefficients*.
+* **data**: the dataset used to fit the model
+* **response**: the outcome or response variable (dependent variable) of a regression model
+* **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are (only) in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default, however, these can be included using additional arguments to the function call; predictors are "unqiue", hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable)
+* **random slopes**: variables that are used as random slope in a mixed effects model
+* **random or grouping factors**: variables that are used as grouping variables in a mixed effects model
+* **parameters**: values estimated or learned from data that encapsulate the relationship between variables; in regressions, these are usually referred to as *coefficients*
 
 
 ```{r out.width="100%", echo=FALSE}
 knitr::include_graphics("insight_design_2.png", dpi = 72)
 ```
 
-* **term**: terms are any (unique) variables that appear in a regression model, like response variable, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, in the expression `x + I(x^2)`, there is only the term `x`.
-* **variables**: A variable is considered as an object that stores unique data information. For instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables.
+* **term**: terms are any (unique) variables that appear in a regression model, like response variables, predictors or random effects; a "term" only relates to the unique occurence of a variable; for instance, in the expression `x + I(x^2)`, there is only the term `x`
+* **variables**: a variable is considered as an object that stores unique data information; for instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables
 
 ```{r out.width="100%", echo=FALSE}
 knitr::include_graphics("insight_design_3.png", dpi = 72)
