@@ -41,7 +41,7 @@ Thus, building on this starting place, the remainder of the package revolves aro
 
 \pagebreak
 
-In total, the *insight* package includes 16 core functions: `get_data()`, `get_priors()`, `get_variance()`, `get_parameters()`, `get_predictors()`, `get_random()`, `get_response()`, `find_algorithm()`, `find_formula()`, `find_variables()`, `find_terms()`, `find_parameters()`, `find_predictors()`, `find_random()`, `find_response()`, and `model_info()`. In all cases, users must supply at a minimum, the name of the fitted model object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_terms()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
+In total, the *insight* package includes 16 core functions (see Figure 1): `get_data()`, `get_priors()`, `get_variance()`, `get_parameters()`, `get_predictors()`, `get_random()`, `get_response()`, `find_algorithm()`, `find_formula()`, `find_variables()`, `find_terms()`, `find_parameters()`, `find_predictors()`, `find_random()`, `find_response()`, and `model_info()`. In all cases, users must supply at a minimum, the name of the fitted model object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_terms()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
 
 ![The functions in insight allow users to access different aspects of models, such as the data used for fitting, the parameters of the fitted model or various information about the model.](figure1.png)
 
@@ -49,7 +49,7 @@ In total, the *insight* package includes 16 core functions: `get_data()`, `get_p
 
 ## Definition of Model Components
 
-The functions from *insight* address different components of a model, however, due to conceptional overlap, there might be confusion about the specific "targets" of each function. Here is a short explanation how *insight* defines components of regression models (for detailed examples, we point to the [accompanying website](https://easystats.github.io/insight/articles/insight.html)):
+The functions from *insight* address different components of a model, however, due to conceptional overlap, there might be confusion about the specific "targets" of each function. We now provide a short explanation how *insight* defines components of regression models (see Figures 2 and 3). For detailed examples, we point to the [accompanying website](https://easystats.github.io/insight/articles/insight.html).
 
 * **data**: the dataset used to fit the model
 * **response**: the outcome or response variable (dependent variable) of a regression model
@@ -58,14 +58,14 @@ The functions from *insight* address different components of a model, however, d
 * **random or grouping factors**: variables that are used as grouping variables in a mixed effects model
 * **parameters**: values estimated or learned from data that encapsulate the relationship between variables; in regressions, these are usually referred to as *coefficients*
 
-![Definition of insight-Terminology, Part 1](figure2a.png)
+![Definition of Model Components, Part 1](figure2a.png)
 
 \pagebreak
 
 * **term**: terms are any (unique) variables that appear in a regression model, like response variables, predictors or random effects; a "term" only relates to the unique occurence of a variable; for instance, in the expression `x + I(x^2)`, there is only the term `x`
 * **variables**: a variable is considered as an object that stores unique data information; for instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables
 
-![Definition of insight-Terminology, Part 2](figure2b.png)
+![Definition of Model Components, Part 2](figure2b.png)
 
 ## Examples
 
