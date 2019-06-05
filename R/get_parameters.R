@@ -13,7 +13,7 @@
 #'
 #' @return \itemize{
 #'   \item for non-Bayesian models and if \code{effects = "fixed"}, a data frame with two columns: the parameter names and the related point estimates
-#'   \item if \code{effects = "random"}, a list of data frames with the random effects (as returned by \code{ranef()})
+#'   \item if \code{effects = "random"}, a list of data frames with the random effects (as returned by \code{ranef()}), unless the random effects have the same simplified structure as fixed effects (e.g. for models from \pkg{MCMCglmm})
 #'   \item for Bayesian models, the posterior samples from the requested parameters as data frame
 #'   \item for Anova (\code{aov()}) with error term, a list of parameters for the conditional and the random effects parameters
 #'   \item for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component
@@ -21,8 +21,7 @@
 #'
 #' @details In most cases when models either return different "effects" (fixed,
 #' random) or "components" (conditional, zero-inflated, ...), the arguments
-#' \code{effects} and \code{component} can be used. Not all model classes that
-#' support these arguments are listed here in the 'Usage' section.
+#' \code{effects} and \code{component} can be used.
 #' \cr \cr
 #' \code{get_parameters()} is comparable to \code{coef()}, however, the coefficients
 #' are returned as data frame (with columns for names and point estimates of
@@ -38,6 +37,7 @@
 get_parameters <- function(x, ...) {
   UseMethod("get_parameters")
 }
+
 
 
 #' @export
@@ -78,6 +78,7 @@ get_parameters.default <- function(x, ...) {
 }
 
 
+
 #' @export
 get_parameters.gbm <- function(x, ...) {
   s <- summary(x, plotit = FALSE)
@@ -90,6 +91,7 @@ get_parameters.gbm <- function(x, ...) {
 }
 
 
+
 #' @export
 get_parameters.BBreg <- function(x, ...) {
   pars <- summary(x)$coefficients
@@ -100,6 +102,7 @@ get_parameters.BBreg <- function(x, ...) {
     row.names = NULL
   )
 }
+
 
 
 #' @rdname get_parameters
@@ -125,6 +128,7 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
     l$random
   }
 }
+
 
 
 #' @rdname get_parameters
@@ -166,6 +170,7 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
 }
 
 
+
 #' @export
 get_parameters.gamlss <- function(x, ...) {
   pars <- list(
@@ -190,6 +195,7 @@ get_parameters.gamlss <- function(x, ...) {
 }
 
 
+
 #' @export
 get_parameters.lrm <- function(x, ...) {
   tryCatch({
@@ -208,6 +214,7 @@ get_parameters.lrm <- function(x, ...) {
 }
 
 
+
 #' @export
 get_parameters.aov <- function(x, ...) {
   cf <- stats::coef(x)
@@ -220,10 +227,12 @@ get_parameters.aov <- function(x, ...) {
 }
 
 
+
 #' @export
 get_parameters.data.frame <- function(x, ...) {
   stop("A data frame is no valid object for this function")
 }
+
 
 
 #' @rdname get_parameters
@@ -236,12 +245,13 @@ get_parameters.gam <- function(x, component = c("all", "conditional", "smooth_te
   smooth_terms <- st[, 1]
   names(smooth_terms) <- row.names(st)
 
-  return_smooth_parms(
+  .return_smooth_parms(
     conditional = pars[.grep_non_smoothers(names(pars))],
     smooth_terms = smooth_terms,
     component = component
   )
 }
+
 
 
 #' @rdname get_parameters
@@ -250,12 +260,13 @@ get_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_t
   component <- match.arg(component)
   pars <- stats::coef(x)
 
-  return_smooth_parms(
+  .return_smooth_parms(
     conditional = pars[.grep_non_smoothers(names(pars))],
     smooth_terms = pars[.grep_smoothers(names(pars))],
     component = component
   )
 }
+
 
 
 #' @export
@@ -268,6 +279,8 @@ get_parameters.crq <- function(x, ...) {
 }
 
 
+
+#' @rdname get_parameters
 #' @export
 get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
   component <- match.arg(component)
@@ -276,12 +289,13 @@ get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_t
   smooth_terms <- sc$qsstab[, 3]
   names(smooth_terms) <- rownames(sc$qsstab)
 
-  return_smooth_parms(
+  .return_smooth_parms(
     conditional = sc$coef[ ,1],
     smooth_terms = smooth_terms,
     component = component
   )
 }
+
 
 
 #' @rdname get_parameters
@@ -290,7 +304,7 @@ get_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_te
   component <- match.arg(component)
   pars <- stats::coef(x)
 
-  return_smooth_parms(
+  .return_smooth_parms(
     conditional = pars[.grep_non_smoothers(names(pars))],
     smooth_terms = pars[.grep_smoothers(names(pars))],
     component = component
@@ -298,19 +312,22 @@ get_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_te
 }
 
 
+
 #' @rdname get_parameters
 #' @export
 get_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
   component <- match.arg(component)
-  return_zeroinf_parms(x, component)
+  .return_zeroinf_parms(x, component)
 }
+
 
 
 #' @export
 get_parameters.zerotrunc <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
   component <- match.arg(component)
-  return_zeroinf_parms(x, component)
+  .return_zeroinf_parms(x, component)
 }
+
 
 
 #' @rdname get_parameters
@@ -320,6 +337,7 @@ get_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_t
   class(x) <- c(class(x), c("glm", "lm"))
   get_parameters.gam(x, component, ...)
 }
+
 
 
 #' @rdname get_parameters
@@ -353,14 +371,17 @@ get_parameters.aovlist <- function(x, effects = c("fixed", "random", "all"), ...
 }
 
 
+
 #' @rdname get_parameters
 #' @export
 get_parameters.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
   component <- match.arg(component)
-  return_zeroinf_parms(x, component)
+  .return_zeroinf_parms(x, component)
 }
 
 
+
+#' @rdname get_parameters
 #' @export
 get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
@@ -401,6 +422,7 @@ get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), ..
 }
 
 
+
 #' @rdname get_parameters
 #' @export
 get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
@@ -427,6 +449,7 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
     l$random
   }
 }
+
 
 
 #' @rdname get_parameters
@@ -457,6 +480,7 @@ get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
 }
 
 
+
 #' @rdname get_parameters
 #' @export
 get_parameters.rlmerMod <- function(x, effects = c("fixed", "random"), ...) {
@@ -483,6 +507,7 @@ get_parameters.rlmerMod <- function(x, effects = c("fixed", "random"), ...) {
     l$random
   }
 }
+
 
 
 #' @rdname get_parameters
@@ -513,6 +538,7 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
 }
 
 
+
 #' @rdname get_parameters
 #' @export
 get_parameters.lme <- function(x, effects = c("fixed", "random"), ...) {
@@ -539,6 +565,7 @@ get_parameters.lme <- function(x, effects = c("fixed", "random"), ...) {
     l$random
   }
 }
+
 
 
 #' @rdname get_parameters
@@ -617,6 +644,7 @@ get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component =
 }
 
 
+
 #' @rdname get_parameters
 #' @export
 get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
@@ -669,6 +697,7 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
 }
 
 
+
 #' @rdname get_parameters
 #' @export
 get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), parameters = NULL, ...) {
@@ -680,17 +709,19 @@ get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), com
     elements <- .get_elements(effects, component)
     as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
   } else {
-    as.data.frame(x)[get_parms_data(x, effects, component, parameters)]
+    as.data.frame(x)[.get_parms_data(x, effects, component, parameters)]
   }
 }
+
 
 
 #' @rdname get_parameters
 #' @export
 get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, ...) {
   effects <- match.arg(effects)
-  as.data.frame(x)[get_parms_data(x, effects, "all", parameters)]
+  as.data.frame(x)[.get_parms_data(x, effects, "all", parameters)]
 }
+
 
 
 #' @rdname get_parameters
@@ -724,6 +755,7 @@ get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE,
 }
 
 
+
 #' @rdname get_parameters
 #' @export
 get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, ...) {
@@ -746,13 +778,17 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
 }
 
 
-get_parms_data <- function(x, effects, component, parameters = NULL) {
+
+
+
+.get_parms_data <- function(x, effects, component, parameters = NULL) {
   elements <- .get_elements(effects, component)
   unlist(find_parameters(x, flatten = FALSE, parameters = parameters)[elements])
 }
 
 
-return_zeroinf_parms <- function(x, component) {
+
+.return_zeroinf_parms <- function(x, component) {
   cf <- stats::coef(x)
 
   conditional <- grepl("^count_", names(cf), perl = TRUE)
@@ -790,7 +826,8 @@ return_zeroinf_parms <- function(x, component) {
 }
 
 
-return_smooth_parms <- function(conditional, smooth_terms, component) {
+
+.return_smooth_parms <- function(conditional, smooth_terms, component) {
   cond <- data.frame(
     parameter = names(conditional),
     estimate = conditional,

@@ -6,11 +6,13 @@
 \alias{get_parameters.glimML}
 \alias{get_parameters.gam}
 \alias{get_parameters.vgam}
+\alias{get_parameters.rqss}
 \alias{get_parameters.Gam}
 \alias{get_parameters.zeroinfl}
 \alias{get_parameters.gamm}
 \alias{get_parameters.aovlist}
 \alias{get_parameters.hurdle}
+\alias{get_parameters.MCMCglmm}
 \alias{get_parameters.coxme}
 \alias{get_parameters.merMod}
 \alias{get_parameters.rlmerMod}
@@ -37,6 +39,9 @@ get_parameters(x, ...)
 \method{get_parameters}{vgam}(x, component = c("all", "conditional",
   "smooth_terms"), ...)
 
+\method{get_parameters}{rqss}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
+
 \method{get_parameters}{Gam}(x, component = c("all", "conditional",
   "smooth_terms"), ...)
 
@@ -51,6 +56,9 @@ get_parameters(x, ...)
 
 \method{get_parameters}{hurdle}(x, component = c("all", "conditional",
   "zi", "zero_inflated"), ...)
+
+\method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random",
+  "all"), ...)
 
 \method{get_parameters}{coxme}(x, effects = c("fixed", "random"), ...)
 
@@ -108,7 +116,7 @@ should be returned.}
 \value{
 \itemize{
   \item for non-Bayesian models and if \code{effects = "fixed"}, a data frame with two columns: the parameter names and the related point estimates
-  \item if \code{effects = "random"}, a list of data frames with the random effects (as returned by \code{ranef()})
+  \item if \code{effects = "random"}, a list of data frames with the random effects (as returned by \code{ranef()}), unless the random effects have the same simplified structure as fixed effects (e.g. for models from \pkg{MCMCglmm})
   \item for Bayesian models, the posterior samples from the requested parameters as data frame
   \item for Anova (\code{aov()}) with error term, a list of parameters for the conditional and the random effects parameters
   \item for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component
@@ -121,8 +129,7 @@ Returns the coefficients (or posterior samples for Bayesian
 \details{
 In most cases when models either return different "effects" (fixed,
 random) or "components" (conditional, zero-inflated, ...), the arguments
-\code{effects} and \code{component} can be used. Not all model classes that
-support these arguments are listed here in the 'Usage' section.
+\code{effects} and \code{component} can be used.
 \cr \cr
 \code{get_parameters()} is comparable to \code{coef()}, however, the coefficients
 are returned as data frame (with columns for names and point estimates of
