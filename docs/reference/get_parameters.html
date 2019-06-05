@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -128,7 +128,8 @@
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for glimML</span>
-<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>),
+  <span class='no'>...</span>)
 
 <span class='co'># S3 method for gam</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
@@ -149,6 +150,10 @@
 <span class='co'># S3 method for gamm</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
   <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for aovlist</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
+  <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for hurdle</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
@@ -243,7 +248,7 @@ should be returned.</p></td>
 <li><p>for non-Bayesian models and if <code>effects = "fixed"</code>, a data frame with two columns: the parameter names and the related point estimates</p></li>
 <li><p>if <code>effects = "random"</code>, a list of data frames with the random effects (as returned by <code>ranef()</code></p></li>
 <li><p>for Bayesian models, the posterior samples from the requested parameters as data frame.</p></li>
-<li><p>for Anova (<code><a href='https://www.rdocumentation.org/packages/stats/topics/aov'>aov()</a></code>) with error term, a list of parameters for the conditional, the within-subject and the between-subjects parameters</p></li>
+<li><p>for Anova (<code><a href='https://www.rdocumentation.org/packages/stats/topics/aov'>aov()</a></code>) with error term, a list of parameters for the conditional and the random effects parameters</p></li>
 <li><p>for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component</p></li>
 </ul>
 

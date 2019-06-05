@@ -70,7 +70,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -133,6 +133,13 @@
 <code><a href="../reference/find_interactions.html">find_interactions()</a></code> to return all low/high order interaction terms in a model.</li>
 </ul>
 </div>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<ul>
+<li>To reduce interface complexity, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for objects of class <code>aovlist</code> now return the elements <code>$conditional</code> and <code>$random</code>, to be in line with other supported objects.</li>
+</ul>
+</div>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
@@ -187,9 +194,9 @@
 <code><a href="../reference/has_intercept.html">has_intercept()</a></code> to check if model has an intercept.</li>
 </ul>
 </div>
-<div id="breaking-changes" class="section level2">
+<div id="breaking-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking Changes</h2>
+<a href="#breaking-changes-1" class="anchor"></a>Breaking Changes</h2>
 <ul>
 <li>Functions like <code><a href="../reference/find_predictors.html">find_predictors()</a></code> or <code><a href="../reference/find_terms.html">find_terms()</a></code> return <code>NULL</code> for null-models (intercept-only models). Use <code><a href="../reference/is_nullmodel.html">is_nullmodel()</a></code> to check if your model only has an intercept-parameter (but no predictors).</li>
 <li>
