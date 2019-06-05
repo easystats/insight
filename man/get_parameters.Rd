@@ -108,14 +108,14 @@ should be returned.}
 \value{
 \itemize{
   \item for non-Bayesian models and if \code{effects = "fixed"}, a data frame with two columns: the parameter names and the related point estimates
-  \item if \code{effects = "random"}, a list of data frames with the random effects (as returned by \code{ranef()}
-  \item for Bayesian models, the posterior samples from the requested parameters as data frame.
+  \item if \code{effects = "random"}, a list of data frames with the random effects (as returned by \code{ranef()})
+  \item for Bayesian models, the posterior samples from the requested parameters as data frame
   \item for Anova (\code{aov()}) with error term, a list of parameters for the conditional and the random effects parameters
   \item for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component
 }
 }
 \description{
-Returns the point estimates (or posterior samples for Bayesian
+Returns the coefficients (or posterior samples for Bayesian
    models) from a model.
 }
 \details{
@@ -123,6 +123,11 @@ In most cases when models either return different "effects" (fixed,
 random) or "components" (conditional, zero-inflated, ...), the arguments
 \code{effects} and \code{component} can be used. Not all model classes that
 support these arguments are listed here in the 'Usage' section.
+\cr \cr
+\code{get_parameters()} is comparable to \code{coef()}, however, the coefficients
+are returned as data frame (with columns for names and point estimates of
+coefficients). For Bayesian models, the posterior samples of parameters are
+returned.
 }
 \examples{
 data(mtcars)
