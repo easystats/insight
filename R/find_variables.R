@@ -66,7 +66,7 @@ get_variables_list <- function(f) {
   })
 
   f <- lapply(f, function(.x) {
-    f_parts <- gsub("~", "", trim(unlist(strsplit(split = "[\\*\\+\\:\\-\\|](?![^(]*\\))", x = .x, perl = TRUE))))
+    f_parts <- gsub("~", "", .trim(unlist(strsplit(split = "[\\*\\+\\:\\-\\|](?![^(]*\\))", x = .x, perl = TRUE))))
     # if user has used namespace in formula-functions, these are returned
     # as empty elements. rempove those here
     if (any(nchar(f_parts) == 0)) {
@@ -78,12 +78,12 @@ get_variables_list <- function(f) {
 
   # remove "1" and "0" from variables in random effects
 
-  if (obj_has_name(f, "random")) {
+  if (.obj_has_name(f, "random")) {
     pos <- which(f$random %in% c("1", "0"))
     if (length(pos)) f$random <- f$random[-pos]
   }
 
-  if (obj_has_name(f, "zero_inflated_random")) {
+  if (.obj_has_name(f, "zero_inflated_random")) {
     pos <- which(f$zero_inflated_random %in% c("1", "0"))
     if (length(pos)) f$zero_inflated_random <- f$zero_inflated_random[-pos]
   }

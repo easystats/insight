@@ -60,7 +60,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
     l <- return_vars(f, x)
   }
 
-  if (is_empty_object(l) || is_empty_object(.compact_list(l))) {
+  if (.is_empty_object(l) || .is_empty_object(.compact_list(l))) {
     return(NULL)
   }
 
@@ -89,13 +89,13 @@ return_vars <- function(f, x) {
     }
   })
 
-  empty_elements <- sapply(l, is_empty_object)
+  empty_elements <- sapply(l, .is_empty_object)
   l <- .compact_list(l)
 
   # here we handle special cases for non-linear model in brms
   if (inherits(x, "brmsfit")) {
     nf <- stats::formula(x)
-    if (!is.null(attr(nf$formula, "nl", exact = TRUE)) && obj_has_name(nf, "pforms")) {
+    if (!is.null(attr(nf$formula, "nl", exact = TRUE)) && .obj_has_name(nf, "pforms")) {
       nl_parms <- names(nf$pforms)
       l <- lapply(l, .remove_values, nl_parms)
     }
@@ -115,17 +115,17 @@ return_vars <- function(f, x) {
   f <- f[names(f) %in% elements]
 
   # from conditional model, remove response
-  if (obj_has_name(f, "conditional")) {
+  if (.obj_has_name(f, "conditional")) {
     f[["conditional"]] <- f[["conditional"]][[3]]
   }
 
   # if we have random effects, just return grouping variable, not random slopes
-  if (obj_has_name(f, "random")) {
+  if (.obj_has_name(f, "random")) {
     f[["random"]] <- .get_group_factor(x, f[["random"]])
   }
 
   # same for zi-random effects
-  if (obj_has_name(f, "zero_inflated_random")) {
+  if (.obj_has_name(f, "zero_inflated_random")) {
     f[["zero_inflated_random"]] <- .get_group_factor(x, f[["zero_inflated_random"]])
   }
 

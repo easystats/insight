@@ -64,7 +64,7 @@ get_priors.brmsfit <- function(x, ...) {
   # check which parameters have a default prior
   need_def_prior <- which(x$prior$prior == "" & x$prior$class == "b" & x$prior$coef != "")
 
-  if (!is_empty_object(def_prior_b) && !is_empty_object(need_def_prior)) {
+  if (!.is_empty_object(def_prior_b) && !.is_empty_object(need_def_prior)) {
     x$prior$prior[need_def_prior] <- x$prior$prior[def_prior_b]
   }
 
@@ -75,7 +75,7 @@ get_priors.brmsfit <- function(x, ...) {
   # check which parameters have a default prior
   need_def_prior <- which(x$prior$prior == "" & x$prior$class == "Intercept" & x$prior$coef != "")
 
-  if (!is_empty_object(def_prior_intercept) && !is_empty_object(need_def_prior)) {
+  if (!.is_empty_object(def_prior_intercept) && !.is_empty_object(need_def_prior)) {
     x$prior$prior[need_def_prior] <- x$prior$prior[def_prior_intercept]
   }
 

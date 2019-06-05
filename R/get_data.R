@@ -32,7 +32,7 @@ get_data <- function(x, ...) {
 
 #' @export
 get_data.default <- function(x, ...) {
-  if (inherits(x, "list") && obj_has_name(x, "gam")) {
+  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
   }
@@ -218,7 +218,7 @@ get_data.ivreg <- function(x, ...) {
 
   remain <- setdiff(ft, cn)
 
-  if (is_empty_object(remain)) {
+  if (.is_empty_object(remain)) {
     final_mf <- mf
   } else {
     final_mf <- tryCatch({
@@ -243,7 +243,7 @@ get_data.iv_robust <- function(x, ...) {
 
   remain <- setdiff(ft, cn)
 
-  if (is_empty_object(remain)) {
+  if (.is_empty_object(remain)) {
     final_mf <- mf
   } else {
     final_mf <- tryCatch({
@@ -472,13 +472,13 @@ get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component 
 
   tryCatch({
     fitfram <- x$model_frames$mfX
-    if (!is_empty_object(x$model_frames$mfZ)) {
+    if (!.is_empty_object(x$model_frames$mfZ)) {
       fitfram <- .merge_dataframes(x$model_frames$mfZ, fitfram, replace = TRUE)
     }
-    if (!is_empty_object(x$model_frames$mfX_zi)) {
+    if (!.is_empty_object(x$model_frames$mfX_zi)) {
       fitfram <- .merge_dataframes(x$model_frames$mfX_zi, fitfram, replace = TRUE)
     }
-    if (!is_empty_object(x$model_frames$mfZ_zi)) {
+    if (!.is_empty_object(x$model_frames$mfZ_zi)) {
       fitfram <- .merge_dataframes(x$model_frames$mfZ_zi, fitfram, replace = TRUE)
     }
 
@@ -617,7 +617,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 #' @importFrom stats getCall formula na.omit
 .prepare_get_data <- function(x, mf, effects = "fixed") {
-  if (is_empty_object(mf)) {
+  if (.is_empty_object(mf)) {
     warning("Could not get model data.", call. = F)
     return(NULL)
   }
@@ -626,7 +626,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
   mw <- NULL
 
   # do we have an offset, not specified in the formula?
-  if ("(offset)" %in% colnames(mf) && obj_has_name(x, "call") && obj_has_name(x$call, "offset")) {
+  if ("(offset)" %in% colnames(mf) && .obj_has_name(x, "call") && .obj_has_name(x$call, "offset")) {
     offcol <- which(colnames(mf) == "(offset)")
     colnames(mf)[offcol] <- clean_names(.safe_deparse(x$call$offset))
   }
@@ -727,7 +727,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
       # check model weights
 
-      if ("(weights)" %in% needed.vars && !obj_has_name(md, "(weights)")) {
+      if ("(weights)" %in% needed.vars && !.obj_has_name(md, "(weights)")) {
         needed.vars <- needed.vars[-which(needed.vars == "(weights)")]
         mw <- mf[["(weights)"]]
       }
@@ -851,11 +851,11 @@ return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
 
   # this is to remove the "1" from intercept-ony-models
 
-  if (!is_empty_object(fixed.component.data)) {
+  if (!.is_empty_object(fixed.component.data)) {
     fixed.component.data <- .remove_values(fixed.component.data, c("1", "0"))
     fixed.component.data <- .remove_values(fixed.component.data, c(1, 0))
   }
-  if (!is_empty_object(random.component.data)) {
+  if (!.is_empty_object(random.component.data)) {
     random.component.data <- .remove_values(random.component.data, c("1", "0"))
     random.component.data <- .remove_values(random.component.data, c(1, 0))
   }
@@ -868,7 +868,7 @@ return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
     random = mf[, unique(random.component.data), drop = FALSE]
   )
 
-  if (is_empty_object(dat)) {
+  if (.is_empty_object(dat)) {
     print_color(sprintf("Warning: Data frame is empty, probably component '%s' does not exist in the %s-part of the model?\n", component, effects), "red")
     return(NULL)
   }
@@ -880,7 +880,7 @@ return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
 .add_zeroinf_data <- function(x, mf, tn) {
   tryCatch({
     env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
-    if (obj_has_name(x$call, "subset")) {
+    if (.obj_has_name(x$call, "subset")) {
       env_data <- subset(env_data, subset = eval(x$call$subset))
     }
 

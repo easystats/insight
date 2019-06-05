@@ -51,7 +51,7 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 
 
-  if (is_empty_object(l)) {
+  if (.is_empty_object(l)) {
     return(NULL)
   }
 
@@ -64,11 +64,11 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
 
 
 .find_random_effects <- function(x, f, split_nested) {
-  if (!obj_has_name(f, "random") && !obj_has_name(f, "zero_inflated_random")) {
+  if (!.obj_has_name(f, "random") && !.obj_has_name(f, "zero_inflated_random")) {
     return(NULL)
   }
 
-  if (obj_has_name(f, "random")) {
+  if (.obj_has_name(f, "random")) {
     if (is.list(f$random)) {
       r1 <- unique(unlist(lapply(f$random, function(.x) .get_model_random(.x, split_nested, x))))
     } else {
@@ -79,7 +79,7 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 
 
-  if (obj_has_name(f, "zero_inflated_random")) {
+  if (.obj_has_name(f, "zero_inflated_random")) {
     if (is.list(f$zero_inflated_random)) {
       r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) .get_model_random(.x, split_nested, x))))
     } else {

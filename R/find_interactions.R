@@ -41,7 +41,7 @@ find_interactions <- function(x, component = c("all", "conditional", "zi", "zero
     l <- .compact_list(lapply(f[elements], function(i) .get_interaction_terms(i, main_effects)))
   }
 
-  if (is_empty_object(l)) {
+  if (.is_empty_object(l)) {
     return(NULL)
   }
 

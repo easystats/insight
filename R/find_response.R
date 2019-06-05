@@ -45,11 +45,11 @@ check_cbind <- function(resp, combine) {
     resp <- .extract_combined_response(resp, "Curv")
   } else if (!combine && any(grepl("/", resp, fixed = TRUE))) {
     resp <- strsplit(resp, split = "/", fixed = TRUE)
-    resp <- gsub("(I|\\(|\\))", "", trim(unlist(resp)))
+    resp <- gsub("(I|\\(|\\))", "", .trim(unlist(resp)))
   } else if (any(.string_contains("|", resp))) {
     # check for brms Additional Response Information
-    r1 <- trim(sub("(.*)\\|(.*)", "\\1", resp))
-    r2 <- trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
+    r1 <- .trim(sub("(.*)\\|(.*)", "\\1", resp))
+    r2 <- .trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
     resp <- c(r1, r2)
   }
 
@@ -60,10 +60,10 @@ check_cbind <- function(resp, combine) {
 .extract_combined_response <- function(resp, pattern) {
   resp <- sub(sprintf("%s\\(([^,].*)([\\)].*)", pattern), "\\1", resp)
   resp <- strsplit(resp, split = ",", fixed = TRUE)
-  resp <- trim(unlist(resp))
+  resp <- .trim(unlist(resp))
 
   if (any(.string_contains("-", resp[2]))) {
-    resp[2] <- trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
+    resp[2] <- .trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
   }
 
   resp

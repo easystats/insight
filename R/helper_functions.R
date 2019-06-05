@@ -1,5 +1,5 @@
 # remove trailing/leading spaces from character vectors
-trim <- function(x) gsub("^\\s+|\\s+$", "", x)
+.trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 
 
 
@@ -27,7 +27,7 @@ trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 
 
 # is string empty?
-is_empty_object <- function(x) {
+.is_empty_object <- function(x) {
   x <- suppressWarnings(x[!is.na(x)])
   length(x) == 0 || is.null(x)
 }
@@ -43,7 +43,7 @@ is_empty_object <- function(x) {
 
 
 # has object an element with given name?
-obj_has_name <- function(x, name) {
+.obj_has_name <- function(x, name) {
   name %in% names(x)
 }
 
@@ -101,17 +101,17 @@ obj_has_name <- function(x, name) {
     # intercept only model, w/o "1" in formula notation?
     # e.g. "Reaction ~ (1 + Days | Subject)"
     if (length(f) > 2 && grepl("^\\(", .safe_deparse(f[[3]]))) {
-      trim(paste0(.safe_deparse(f[[2]]), " ~ 1"))
+      .trim(paste0(.safe_deparse(f[[2]]), " ~ 1"))
     } else if (!grepl("\\+(\\s)*\\((.*)\\)", f_string)) {
       f_terms <- stats::terms(f)
       pos_bar <- grep("|", labels(f_terms), fixed = TRUE)
       no_bars <- stats::drop.terms(f_terms, pos_bar, keep.response = TRUE)
       stats::update(f_terms, no_bars)
     } else {
-      trim(gsub("\\+(\\s)*\\((.*)\\)", "", f_string))
+      .trim(gsub("\\+(\\s)*\\((.*)\\)", "", f_string))
     }
   } else {
-    trim(gsub("\\+(\\s)*\\((.*)\\)", "", f_string))
+    .trim(gsub("\\+(\\s)*\\((.*)\\)", "", f_string))
   }
 }
 
@@ -133,14 +133,14 @@ obj_has_name <- function(x, name) {
 
   re <- sapply(lme4::findbars(f), deparse)
 
-  if (is_special && is_empty_object(re)) {
+  if (is_special && .is_empty_object(re)) {
     re <- all.vars(f[[2L]])
     if (length(re) > 1) {
       re <- as.list(re)
       split_nested <- FALSE
     }
   } else {
-    re <- trim(substring(re, max(gregexpr(pattern = "\\|", re)[[1]]) + 1))
+    re <- .trim(substring(re, max(gregexpr(pattern = "\\|", re)[[1]]) + 1))
   }
 
   if (split_nested) {
@@ -213,7 +213,7 @@ obj_has_name <- function(x, name) {
 # and subset the data, if necessary
 .get_data_from_env <- function(x) {
   dat <- eval(x$call$data, envir = parent.frame())
-  if (obj_has_name(x$call, "subset")) {
+  if (.obj_has_name(x$call, "subset")) {
     dat <- subset(dat, subset = eval(x$call$subset))
   }
 
@@ -355,5 +355,5 @@ obj_has_name <- function(x, name) {
 
 
 .safe_deparse <- function(string) {
-  paste0(sapply(deparse(string, width.cutoff = 500), trim, simplify = TRUE), collapse = " ")
+  paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = " ")
 }

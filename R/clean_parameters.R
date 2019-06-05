@@ -252,7 +252,7 @@ clean_parameters.stanmvreg <- function(x, ...) {
   # fix intercept names
 
   intercepts <- which(out$cleaned_parameter == "Intercept")
-  if (!is_empty_object(intercepts))
+  if (!.is_empty_object(intercepts))
     out$cleaned_parameter[intercepts] <- "(Intercept)"
 
   interaction_terms <- which(grepl("\\.", out$cleaned_parameter))
@@ -317,17 +317,17 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
 
 .remove_empty_columns_from_pars <- function(x) {
-  if (obj_has_name(x, "response") && all(is.na(x$response))) {
+  if (.obj_has_name(x, "response") && all(is.na(x$response))) {
     pos <- which(colnames(x) == "response")
     x <- x[, -pos]
   }
 
-  if (obj_has_name(x, "group") && .is_empty_string(x$group)) {
+  if (.obj_has_name(x, "group") && .is_empty_string(x$group)) {
     pos <- which(colnames(x) == "group")
     x <- x[, -pos]
   }
 
-  if (obj_has_name(x, "fun") && .is_empty_string(x$fun)) {
+  if (.obj_has_name(x, "fun") && .is_empty_string(x$fun)) {
     pos <- which(colnames(x) == "fun")
     x <- x[, -pos]
   }

@@ -49,7 +49,7 @@ find_parameters <- function(x, ...) {
 
 #' @export
 find_parameters.default <- function(x, flatten = FALSE, ...) {
-  if (inherits(x, "list") && obj_has_name(x, "gam")) {
+  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
     pars <- find_parameters.gam(x)
@@ -595,49 +595,49 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
   if (is_multivariate(x)) {
     rn <- names(find_response(x))
     l <- lapply(rn, function(i) {
-      if (obj_has_name(l, "conditional")) {
+      if (.obj_has_name(l, "conditional")) {
         conditional <- l$conditional[grepl(sprintf("^(b_|bs_|bsp_|bcs_)\\Q%s\\E_", i), l$conditional)]
       } else {
         conditional <- NULL
       }
 
-      if (obj_has_name(l, "random")) {
+      if (.obj_has_name(l, "random")) {
         random <- l$random[grepl(sprintf("__\\Q%s\\E\\.", i), l$random)]
       } else {
         random <- NULL
       }
 
-      if (obj_has_name(l, "zero_inflated")) {
+      if (.obj_has_name(l, "zero_inflated")) {
         zero_inflated <- l$zero_inflated[grepl(sprintf("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)\\Q%s\\E_", i), l$zero_inflated)]
       } else {
         zero_inflated <- NULL
       }
 
-      if (obj_has_name(l, "zero_inflated_random")) {
+      if (.obj_has_name(l, "zero_inflated_random")) {
         zero_inflated_random <- l$zero_inflated_random[grepl(sprintf("__zi_\\Q%s\\E\\.", i), l$zero_inflated_random)]
       } else {
         zero_inflated_random <- NULL
       }
 
-      if (obj_has_name(l, "simplex")) {
+      if (.obj_has_name(l, "simplex")) {
         simplex <- l$simplex
       } else {
         simplex <- NULL
       }
 
-      if (obj_has_name(l, "sigma")) {
+      if (.obj_has_name(l, "sigma")) {
         sigma <- l$sigma[grepl(sprintf("^sigma_\\Q%s\\E", i), l$sigma)]
       } else {
         sigma <- NULL
       }
 
-      if (obj_has_name(l, "smooth_terms")) {
+      if (.obj_has_name(l, "smooth_terms")) {
         smooth_terms <- l$smooth_terms
       } else {
         smooth_terms <- NULL
       }
 
-      if (obj_has_name(l, "priors")) {
+      if (.obj_has_name(l, "priors")) {
         priors <- l$priors
       } else {
         priors <- NULL
@@ -720,7 +720,7 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
   ))
 
 
-  if (obj_has_name(l, "conditional")) {
+  if (.obj_has_name(l, "conditional")) {
     x1 <- sub(pattern = "(.*)(\\|)(.*)", "\\1", l$conditional)
     x2 <- sub(pattern = "(.*)(\\|)(.*)", "\\3", l$conditional)
 
@@ -733,7 +733,7 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
   }
 
 
-  if (obj_has_name(l, "random")) {
+  if (.obj_has_name(l, "random")) {
     x1 <- sub(pattern = "b\\[(.*)(\\|)(.*)", "\\1", l$random)
     x2 <- sub(pattern = "(b\\[).*(.*)(\\|)(.*)", "\\1\\4", l$random)
 
@@ -746,7 +746,7 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
   }
 
 
-  if (obj_has_name(l, "sigma")) {
+  if (.obj_has_name(l, "sigma")) {
     l.sigma <- lapply(rn, function(i) {
       list(sigma = "sigma")
     })

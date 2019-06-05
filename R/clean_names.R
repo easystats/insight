@@ -66,20 +66,20 @@ clean_names.character <- function(x) {
       # remove possible  namespace
       x[i] <- sub("(.*)::(.*)", "\\2", x[i])
       if (pattern[j] == "offset") {
-        x[i] <- trim(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
+        x[i] <- .trim(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
       } else if (pattern[j] == "I") {
-        if (!ignore_asis) x[i] <- trim(unique(sub("I\\((\\w*).*", "\\1", x[i])))
+        if (!ignore_asis) x[i] <- .trim(unique(sub("I\\((\\w*).*", "\\1", x[i])))
       } else if (pattern[j] == "asis") {
-        if (!ignore_asis) x[i] <- trim(unique(sub("asis\\((\\w*).*", "\\1", x[i])))
+        if (!ignore_asis) x[i] <- .trim(unique(sub("asis\\((\\w*).*", "\\1", x[i])))
       } else if (pattern[j] == "log-log") {
-        x[i] <- trim(unique(sub("^log\\(log\\(([^,)]*)).*", "\\1", x[i])))
+        x[i] <- .trim(unique(sub("^log\\(log\\(([^,)]*)).*", "\\1", x[i])))
       } else {
         p <- paste0("^", pattern[j], "\\(([^,)]*).*")
         x[i] <- unique(sub(p, "\\1", x[i]))
       }
     }
     # for coxme-models, remove random-effect things...
-    trim(sub("^(.*)\\|(.*)", "\\2", x[i]))
+    .trim(sub("^(.*)\\|(.*)", "\\2", x[i]))
   })
 
   # remove for random intercept only models

@@ -19,7 +19,7 @@ get_predictors <- function(x) {
 
   dat <- get_data(x)[, vars, drop = FALSE]
 
-  if (is_empty_object(dat)) {
+  if (.is_empty_object(dat)) {
     print_color("Warning: Data frame is empty, probably you have an intercept-only model?\n", "red")
     return(NULL)
   }

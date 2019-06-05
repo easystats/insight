@@ -29,7 +29,7 @@ find_random_slopes <- function(x) {
 
   random_slopes <- .compact_list(random_slopes)
 
-  if (is_empty_object(random_slopes))
+  if (.is_empty_object(random_slopes))
     NULL
   else
     random_slopes

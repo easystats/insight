@@ -80,7 +80,7 @@ model_info.data.frame <- function(x, ...) {
 #' @importFrom stats family
 #' @export
 model_info.default <- function(x, ...) {
-  if (inherits(x, "list") && obj_has_name(x, "gam")) {
+  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
   }
@@ -480,7 +480,7 @@ model_info.glmmTMB <- function(x, ...) {
   make_family(
     x = x,
     fitfam = faminfo$family,
-    zero.inf = !is_empty_object(lme4::fixef(x)$zi),
+    zero.inf = !.is_empty_object(lme4::fixef(x)$zi),
     hurdle = grepl("truncated", faminfo$family),
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
@@ -852,7 +852,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {
     is.trial <- tryCatch({
       rv <- .safe_deparse(stats::formula(x)$formula[[2L]])
-      trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
+      .trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
     },
     error = function(x) {
       FALSE
@@ -872,7 +872,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
   }
 
   dots <- list(...)
-  if (obj_has_name(dots, "no_terms") && isTRUE(dots$no_terms)) {
+  if (.obj_has_name(dots, "no_terms") && isTRUE(dots$no_terms)) {
     model_terms <- NULL
   } else {
     model_terms <- tryCatch({
