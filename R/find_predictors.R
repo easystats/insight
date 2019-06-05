@@ -48,9 +48,9 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 
   # filter formulas, depending on requested effects and components
   if (is_mv) {
-    f <- lapply(f, function(.x) prepare_predictors(x, .x, elements))
+    f <- lapply(f, function(.x) .prepare_predictors(x, .x, elements))
   } else {
-    f <- prepare_predictors(x, f, elements)
+    f <- .prepare_predictors(x, f, elements)
   }
 
   # random effects are returned as list, so we need to unlist here
@@ -111,7 +111,7 @@ return_vars <- function(f, x) {
 }
 
 
-prepare_predictors <- function(x, f, elements) {
+.prepare_predictors <- function(x, f, elements) {
   f <- f[names(f) %in% elements]
 
   # from conditional model, remove response
@@ -121,12 +121,12 @@ prepare_predictors <- function(x, f, elements) {
 
   # if we have random effects, just return grouping variable, not random slopes
   if (obj_has_name(f, "random")) {
-    f[["random"]] <- get_group_factor(x, f[["random"]])
+    f[["random"]] <- .get_group_factor(x, f[["random"]])
   }
 
   # same for zi-random effects
   if (obj_has_name(f, "zero_inflated_random")) {
-    f[["zero_inflated_random"]] <- get_group_factor(x, f[["zero_inflated_random"]])
+    f[["zero_inflated_random"]] <- .get_group_factor(x, f[["zero_inflated_random"]])
   }
 
   f

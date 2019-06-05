@@ -46,7 +46,7 @@ check_cbind <- function(resp, combine) {
   } else if (!combine && any(grepl("/", resp, fixed = TRUE))) {
     resp <- strsplit(resp, split = "/", fixed = TRUE)
     resp <- gsub("(I|\\(|\\))", "", trim(unlist(resp)))
-  } else if (any(string_contains("|", resp))) {
+  } else if (any(.string_contains("|", resp))) {
     # check for brms Additional Response Information
     r1 <- trim(sub("(.*)\\|(.*)", "\\1", resp))
     r2 <- trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
@@ -62,7 +62,7 @@ check_cbind <- function(resp, combine) {
   resp <- strsplit(resp, split = ",", fixed = TRUE)
   resp <- trim(unlist(resp))
 
-  if (any(string_contains("-", resp[2]))) {
+  if (any(.string_contains("-", resp[2]))) {
     resp[2] <- trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
   }
 

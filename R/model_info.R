@@ -378,7 +378,7 @@ model_info.vgam <- function(x, ...) {
   make_family(
     x = x,
     fitfam = faminfo@vfamily[1],
-    logit.link = any(string_contains("logit", faminfo@blurb)),
+    logit.link = any(.string_contains("logit", faminfo@blurb)),
     link.fun = link.fun,
     ...
   )
@@ -393,7 +393,7 @@ model_info.vglm <- function(x, ...) {
   make_family(
     x = x,
     fitfam = faminfo@vfamily[1],
-    logit.link = any(string_contains("logit", faminfo@blurb)),
+    logit.link = any(.string_contains("logit", faminfo@blurb)),
     link.fun = link.fun,
     ...
   )

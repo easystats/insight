@@ -16,7 +16,7 @@ compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i
 
 
 # is string empty?
-is_empty_string <- function(x) {
+.is_empty_string <- function(x) {
   x <- x[!is.na(x)]
   length(x) == 0 || all(nchar(x) == 0)
 }
@@ -28,7 +28,7 @@ is_empty_object <- function(x) {
 }
 
 # does string contain pattern?
-string_contains <- function(pattern, x) {
+.string_contains <- function(pattern, x) {
   pattern <- paste0("\\Q", pattern, "\\E")
   grepl(pattern, x, perl = TRUE)
 }
@@ -39,7 +39,7 @@ obj_has_name <- function(x, name) {
 }
 
 # merge data frames, remove double columns
-merge_dataframes <- function(data, ..., replace = TRUE) {
+.merge_dataframes <- function(data, ..., replace = TRUE) {
   # check for identical column names
   tmp <- cbind(...)
 
@@ -142,7 +142,7 @@ get_model_random <- function(f, split_nested = FALSE, model) {
 # in case we need the random effects terms as formula (symbol),
 # not as character string, then call this functions instead of
 # get_model_random()
-get_group_factor <- function(x, f) {
+.get_group_factor <- function(x, f) {
   if (is.list(f)) {
     f <- lapply(f, function(.x) {
       get_model_random(.x, split_nested = TRUE, x)

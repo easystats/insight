@@ -198,7 +198,7 @@ find_formula.plm <- function(x, ...) {
     cond <- trim(substr(f, start = 0, stop =  stop_pos - 1))
     instr <- trim(substr(f, stop_pos + 1, stop = 10000L))
 
-    if (is_empty_string(instr)) {
+    if (.is_empty_string(instr)) {
       list(conditional = stats::as.formula(cond))
     } else {
       # check if formula starts with dot, and remove it

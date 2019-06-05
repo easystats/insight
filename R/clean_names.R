@@ -42,7 +42,7 @@ clean_names.character <- function(x) {
 
 .remove_pattern_from_names <- function(x, ignore_asis = FALSE, ignore_lag = FALSE) {
   # return if x is empty
-  if (is_empty_string(x)) return("")
+  if (.is_empty_string(x)) return("")
 
   # for gam-smoothers/loess, remove s()- and lo()-function in column name
   # for survival, remove strata(), and so on...
