@@ -21,7 +21,7 @@ affiliations:
     index: 2
   - name: Nanyang Technological University, Singapore
     index: 3
-date: 23 April 2019
+date: 05 June 2019
 bibliography: paper.bib
 ---
 
@@ -39,9 +39,13 @@ Built with non-programmers in mind, *insight* offers a broad toolbox for making 
 
 Thus, building on this starting place, the remainder of the package revolves around two key prefixes: `get_*` and `find_*`. The `get_*` prefix extracts *values* (or *data*) associated with model-specific objects (*e.g.*, parameters or variables), while the `find_*` prefix *lists* model-specific objects (*e.g.*, priors or predictors). These are powerful families of functions allowing for great flexibility in use, whether at a high, descriptive level (`find_*`) or narrower level of statistical inspection and reporting (`get_*`).
 
+\pagebreak
+
 In total, the *insight* package includes 16 core functions: `get_data()`, `get_priors()`, `get_variance()`, `get_parameters()`, `get_predictors()`, `get_random()`, `get_response()`, `find_algorithm()`, `find_formula()`, `find_variables()`, `find_terms()`, `find_parameters()`, `find_predictors()`, `find_random()`, `find_response()`, and `model_info()`. In all cases, users must supply at a minimum, the name of the fitted model object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_terms()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
 
 ![The functions in insight allow users to access different aspects of models, such as the data used for fitting, the parameters of the fitted model or various information about the model.](figure1.png)
+
+\pagebreak
 
 ## Definition of Model Components
 
@@ -55,6 +59,8 @@ The functions from *insight* address different components of a model, however, d
 * **parameters**: values estimated or learned from data that encapsulate the relationship between variables; in regressions, these are usually referred to as *coefficients*
 
 ![Definition of insight-Terminology, Part 1](figure2a.png)
+
+\pagebreak
 
 * **term**: terms are any (unique) variables that appear in a regression model, like response variables, predictors or random effects; a "term" only relates to the unique occurence of a variable; for instance, in the expression `x + I(x^2)`, there is only the term `x`
 * **variables**: a variable is considered as an object that stores unique data information; for instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables
