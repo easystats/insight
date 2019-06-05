@@ -40,9 +40,9 @@
 find_variables <- function(x, flatten = FALSE, ...) {
   f <- find_formula(x)
   if (is_multivariate(f)) {
-    l <- lapply(f, get_variables_list)
+    l <- lapply(f, .get_variables_list)
   } else {
-    l <- get_variables_list(f)
+    l <- .get_variables_list(f)
   }
 
   if (flatten) {
@@ -52,7 +52,9 @@ find_variables <- function(x, flatten = FALSE, ...) {
   }
 }
 
-get_variables_list <- function(f) {
+
+
+.get_variables_list <- function(f) {
   f$response <- .safe_deparse(f$conditional[[2L]])
   f$conditional <- .safe_deparse(f$conditional[[3L]])
 
@@ -92,6 +94,7 @@ get_variables_list <- function(f) {
   # reorder, so response is first
   .compact_list(f[c(length(f), 1:(length(f) - 1))])
 }
+
 
 
 .formula_to_string <- function(f) {
