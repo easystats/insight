@@ -53,7 +53,7 @@ The functions from *insight* address different components of a model. In an effo
 
 * **data**: the dataset used to fit the model.
 * **response**: the outcome or response variable (dependent variable) of a regression model.
-* **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are only in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are "unqiue." As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.
+* **predictors**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are only in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are "unqiue." As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.
 * **random slopes**: variables that are specified as random slopes in a mixed effects model.
 * **random or grouping factors**: variables that are specified as grouping variables in a mixed effects model.
 * **parameters**: values estimated or learned from data that capture the relationship between variables. In regression models, these are usually referred to as *coefficients*.
@@ -62,7 +62,7 @@ The functions from *insight* address different components of a model. In an effo
 
 \pagebreak
 
-* **term**: any unique variables that appear in a regression model, e.g., response variables, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, the expression `x + poly(x, 2)` has only the term `x`.
+* **terms**: any unique variables that appear in a regression model, e.g., response variables, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, the expression `x + poly(x, 2)` has only the term `x`.
 * **variables**: an object that stores unique data information. For instance, the expression `x + poly(x, 2)` has two objects with two different sets of data values, and thus are treated as two variables.
 
 ![Definition of Model Components, Part 2](figure2b.png)
