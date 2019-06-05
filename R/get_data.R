@@ -109,6 +109,19 @@ get_data.LORgee <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.survfit <- function(x, ...) {
+  mf <- tryCatch({
+    dat <- .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
+  },
+  error = function(x) {
+    NULL
+  })
+
+  .prepare_get_data(x, stats::na.omit(mf))
+}
+
+
+#' @export
 get_data.BBmm <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   mf <- tryCatch({
@@ -652,7 +665,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
   if (mc[1] && rn == colnames(mf)[1]) {
     mc[1] <- FALSE
-    if (inherits(x, c("coxph", "coxme", "survreg", "crq", "psm"))) {
+    if (inherits(x, c("coxph", "coxme", "survreg", "survfit", "crq", "psm"))) {
       mf <- cbind(mf[[1]][, 1], mf[[1]][, 2], mf)
       colnames(mf)[1:2] <- rn_not_combined
     } else {

@@ -1,12 +1,8 @@
 if (require("testthat") && require("insight") && require("survival")) {
-  context("insight, coxph")
+  context("insight, survfit")
 
   data("lung")
-  lung <- subset(lung, subset = ph.ecog %in% 0:2)
-  lung$sex <- factor(lung$sex, labels = c("male", "female"))
-  lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
-
-  m1 <- coxph(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
+  m1 <- survfit(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_logit)
@@ -27,8 +23,8 @@ if (require("testthat") && require("insight") && require("survival")) {
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 226)
-    expect_equal(colnames(get_data(m1)), c("time", "status", "Surv(time, status)", "sex", "age", "ph.ecog"))
+    expect_equal(nrow(get_data(m1)), 227)
+    expect_equal(colnames(get_data(m1)), c("time", "status", "sex", "age", "ph.ecog"))
   })
 
   test_that("find_formula", {

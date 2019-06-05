@@ -30,7 +30,7 @@ is_model <- function(x) {
     "lm_robust", "lme", "lmrob", "lmRob", "logistf", "LORgee", "lrm",
     "ols", "MCMCglmm", "merMod", "mixed", "MixMod", "mlm", "mlogit",
     "multinom", "plm", "polr", "psm", "rlmerMod", "rq", "rqss",
-    "speedlm", "speedglm", "stanmvreg", "stanreg", "survreg",
+    "speedlm", "speedglm", "stanmvreg", "stanreg", "survfit", "survreg",
     "svyglm", "svyolr", "tobit", "truncreg", "vgam", "vglm",
     "wbm", "wblm", "zeroinfl", "zerotrunc"
   ))
