@@ -1,8 +1,11 @@
 # remove trailing/leading spaces from character vectors
 trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 
+
+
 # remove NULL elements from lists
 .compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i) || any(i == "NULL"))]
+
 
 
 # remove values from vector
@@ -15,11 +18,13 @@ trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 }
 
 
+
 # is string empty?
 .is_empty_string <- function(x) {
   x <- x[!is.na(x)]
   length(x) == 0 || all(nchar(x) == 0)
 }
+
 
 # is string empty?
 is_empty_object <- function(x) {
@@ -27,16 +32,22 @@ is_empty_object <- function(x) {
   length(x) == 0 || is.null(x)
 }
 
+
+
 # does string contain pattern?
 .string_contains <- function(pattern, x) {
   pattern <- paste0("\\Q", pattern, "\\E")
   grepl(pattern, x, perl = TRUE)
 }
 
+
+
 # has object an element with given name?
 obj_has_name <- function(x, name) {
   name %in% names(x)
 }
+
+
 
 # merge data frames, remove double columns
 .merge_dataframes <- function(data, ..., replace = TRUE) {
@@ -76,7 +87,7 @@ obj_has_name <- function(x, name) {
 
 # removes random effects from a formula that is in lmer-notation
 #' @importFrom stats terms drop.terms update
-get_fixed_effects <- function(f) {
+.get_fixed_effects <- function(f) {
   f_string <- .safe_deparse(f)
 
   # for some wird brms-models, we also have a "|" in the response.
@@ -105,8 +116,9 @@ get_fixed_effects <- function(f) {
 }
 
 
+
 # extract random effects from formula
-get_model_random <- function(f, split_nested = FALSE, model) {
+.get_model_random <- function(f, split_nested = FALSE, model) {
 
   is_special <- inherits(model, c("MCMCglmm", "gee", "LORgee", "felm", "feis", "BFBayesFactor", "BBmm", "glimML"))
 
@@ -139,16 +151,17 @@ get_model_random <- function(f, split_nested = FALSE, model) {
 }
 
 
+
 # in case we need the random effects terms as formula (symbol),
 # not as character string, then call this functions instead of
-# get_model_random()
+# .get_model_random()
 .get_group_factor <- function(x, f) {
   if (is.list(f)) {
     f <- lapply(f, function(.x) {
-      get_model_random(.x, split_nested = TRUE, x)
+      .get_model_random(.x, split_nested = TRUE, x)
     })
   } else {
-    f <- get_model_random(f, split_nested = TRUE, x)
+    f <- .get_model_random(f, split_nested = TRUE, x)
   }
 
   if (is.null(f)) return(NULL)
@@ -161,6 +174,7 @@ get_model_random <- function(f, split_nested = FALSE, model) {
 
   f
 }
+
 
 
 # to reduce redundant code, I extract this part which is used several
@@ -194,6 +208,7 @@ get_model_random <- function(f, split_nested = FALSE, model) {
 }
 
 
+
 # return data from a data frame that is in the environment,
 # and subset the data, if necessary
 .get_data_from_env <- function(x) {
@@ -204,6 +219,7 @@ get_model_random <- function(f, split_nested = FALSE, model) {
 
   dat
 }
+
 
 
 # checks if a mixed model fit is singular or not. Need own function,
@@ -238,6 +254,7 @@ get_model_random <- function(f, split_nested = FALSE, model) {
 }
 
 
+
 # Filter parameters from Stan-model fits
 .filter_pars <- function(l, parameters = NULL) {
   if (!is.null(parameters)) {
@@ -256,6 +273,7 @@ get_model_random <- function(f, split_nested = FALSE, model) {
 }
 
 
+
 .filter_pars_univariate <- function(l, parameters) {
   lapply(l, function(component) {
     unlist(unname(sapply(
@@ -269,10 +287,12 @@ get_model_random <- function(f, split_nested = FALSE, model) {
 }
 
 
+
 # remove column
 .remove_column <- function(data, variables) {
   data[, -which(colnames(data) %in% variables), drop = FALSE]
 }
+
 
 
 .grep_smoothers <- function(x) {
@@ -289,6 +309,7 @@ get_model_random <- function(f, split_nested = FALSE, model) {
     grepl("^(brms::t2\\()", x, perl = TRUE) |
     grepl("^(smooth_sd\\[)", x, perl = TRUE)
 }
+
 
 
 .grep_non_smoothers <- function(x) {

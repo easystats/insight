@@ -70,9 +70,9 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
 
   if (obj_has_name(f, "random")) {
     if (is.list(f$random)) {
-      r1 <- unique(unlist(lapply(f$random, function(.x) get_model_random(.x, split_nested, x))))
+      r1 <- unique(unlist(lapply(f$random, function(.x) .get_model_random(.x, split_nested, x))))
     } else {
-      r1 <- unique(unlist(get_model_random(f$random, split_nested, x)))
+      r1 <- unique(unlist(.get_model_random(f$random, split_nested, x)))
     }
   } else {
     r1 <- NULL
@@ -81,9 +81,9 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
 
   if (obj_has_name(f, "zero_inflated_random")) {
     if (is.list(f$zero_inflated_random)) {
-      r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) get_model_random(.x, split_nested, x))))
+      r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) .get_model_random(.x, split_nested, x))))
     } else {
-      r2 <- unique(get_model_random(f$zero_inflated_random, split_nested, x))
+      r2 <- unique(.get_model_random(f$zero_inflated_random, split_nested, x))
     }
   } else {
     r2 <- NULL
