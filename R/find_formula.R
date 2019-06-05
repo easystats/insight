@@ -37,6 +37,7 @@ find_formula <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.default <- function(x, ...) {
   if (inherits(x, "list") && obj_has_name(x, "gam")) {
@@ -53,30 +54,13 @@ find_formula.default <- function(x, ...) {
   )
 }
 
-#' @export
-find_formula.gls <- function(x, ...) {
-  ## TODO this is an intermediate fix to return the correlation variables from gls-objects
-  f_corr <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
-
-  l <- tryCatch({
-    list(
-      conditional = stats::formula(x),
-      correlation = stats::as.formula(f_corr)
-    )
-  },
-  error = function(x) {
-    NULL
-  }
-  )
-
-  compact_list(l)
-}
 
 
 #' @export
 find_formula.data.frame <- function(x, ...) {
   stop("A data frame is no valid object for this function")
 }
+
 
 
 #' @export
@@ -96,12 +80,14 @@ find_formula.gamlss <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
   NextMethod()
 }
+
 
 
 #' @export
@@ -125,6 +111,28 @@ find_formula.gee <- function(x, ...) {
 }
 
 
+
+#' @export
+find_formula.gls <- function(x, ...) {
+  ## TODO this is an intermediate fix to return the correlation variables from gls-objects
+  f_corr <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
+
+  l <- tryCatch({
+    list(
+      conditional = stats::formula(x),
+      correlation = stats::as.formula(f_corr)
+    )
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  compact_list(l)
+}
+
+
+
 #' @export
 find_formula.LORgee <- function(x, ...) {
   tryCatch({
@@ -146,6 +154,7 @@ find_formula.LORgee <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.ivreg <- function(x, ...) {
   tryCatch({
@@ -165,6 +174,7 @@ find_formula.ivreg <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.iv_robust <- function(x, ...) {
   tryCatch({
@@ -182,6 +192,7 @@ find_formula.iv_robust <- function(x, ...) {
   }
   )
 }
+
 
 
 #' @export
@@ -216,6 +227,7 @@ find_formula.plm <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.coxme <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -240,6 +252,7 @@ find_formula.coxme <- function(x, ...) {
     random = f.random
   ))
 }
+
 
 
 #' @export
@@ -276,6 +289,7 @@ find_formula.felm <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.feis <- function(x, ...) {
   f <- .safe_deparse(stats::formula(x))
@@ -300,6 +314,7 @@ find_formula.feis <- function(x, ...) {
     random = stats::as.formula(paste0("~", id))
   ))
 }
+
 
 
 #' @export
@@ -338,6 +353,7 @@ find_formula.wbm <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.BBmm <- function(x, ...) {
   f.cond <- parse(text = .safe_deparse(x$call))[[1]]$fixed.formula
@@ -350,6 +366,7 @@ find_formula.BBmm <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.glimML <- function(x, ...) {
   compact_list(list(
@@ -357,6 +374,7 @@ find_formula.glimML <- function(x, ...) {
     random = x@random
   ))
 }
+
 
 
 #' @export
@@ -371,22 +389,26 @@ find_formula.tobit <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.hurdle <- function(x, ...) {
-  zeroinf_formula(x)
+  .zeroinf_formula(x)
 }
+
 
 
 #' @export
 find_formula.zeroinfl <- function(x, ...) {
-  zeroinf_formula(x)
+  .zeroinf_formula(x)
 }
+
 
 
 #' @export
 find_formula.zerotrunc <- function(x, ...) {
-  zeroinf_formula(x)
+  .zeroinf_formula(x)
 }
+
 
 
 #' @export
@@ -395,12 +417,14 @@ find_formula.clm2 <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.aovlist <- function(x, ...) {
   f <- attr(x, "terms", exact = TRUE)
   attributes(f) <- NULL
   list(conditional = f)
 }
+
 
 
 #' @export
@@ -459,6 +483,7 @@ find_formula.glmmTMB <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.merMod <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -479,6 +504,7 @@ find_formula.merMod <- function(x, ...) {
 
   compact_list(list(conditional = f.cond, random = f.random))
 }
+
 
 
 #' @export
@@ -503,6 +529,7 @@ find_formula.rlmerMod <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.mixed <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -523,6 +550,7 @@ find_formula.mixed <- function(x, ...) {
 
   compact_list(list(conditional = f.cond, random = f.random))
 }
+
 
 
 #' @export
@@ -547,6 +575,7 @@ find_formula.clmm <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.stanreg <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -569,27 +598,30 @@ find_formula.stanreg <- function(x, ...) {
 }
 
 
+
 #' @export
 find_formula.brmsfit <- function(x, ...) {
   f <- stats::formula(x)
 
   if (obj_has_name(f, "forms")) {
-    mv_formula <- lapply(f$forms, get_brms_formula)
+    mv_formula <- lapply(f$forms, .get_brms_formula)
     attr(mv_formula, "is_mv") <- "1"
     mv_formula
   } else {
-    get_brms_formula(f)
+    .get_brms_formula(f)
   }
 }
+
 
 
 #' @export
 find_formula.stanmvreg <- function(x, ...) {
   f <- stats::formula(x)
-  mv_formula <- lapply(f, get_stanmv_formula)
+  mv_formula <- lapply(f, .get_stanmv_formula)
   attr(mv_formula, "is_mv") <- "1"
   mv_formula
 }
+
 
 
 #' @export
@@ -599,6 +631,7 @@ find_formula.MCMCglmm <- function(x, ...) {
 
   compact_list(list(conditional = fm, random = fmr))
 }
+
 
 
 #' @export
@@ -614,6 +647,7 @@ find_formula.lme <- function(x, ...) {
     correlation = stats::as.formula(fc)
   ))
 }
+
 
 
 #' @export
@@ -632,33 +666,39 @@ find_formula.MixMod <- function(x, ...) {
 }
 
 
-zeroinf_formula <- function(x) {
-  f <- tryCatch({
-    stats::formula(x)
-  },
-  error = function(x) {
-    NULL
-  }
-  )
 
-  if (is.null(f)) {
+#' @importFrom utils tail
+#' @export
+find_formula.BFBayesFactor <- function(x, ...) {
+  if (.classify_BFBayesFactor(x) == "linear") {
+
+    fcond <- utils::tail(x@numerator, 1)[[1]]@identifier$formula
+    dt <- utils::tail(x@numerator, 1)[[1]]@dataTypes
+    frand <- names(dt)[which(dt == "random")]
+
+    if (!is_empty_object(frand)) {
+      f.random <- stats::as.formula(paste0("~", frand))
+      fcond <- sub(frand, "", fcond, fixed = TRUE)
+      fcond <- gsub("(.*)\\+$", "\\1", trim(fcond))
+      f.cond <- stats::as.formula(trim(fcond))
+    } else {
+      f.random <- NULL
+      f.cond <- stats::as.formula(fcond)
+    }
+
+  } else{
     return(NULL)
   }
 
-  f <- trim(unlist(strsplit(.safe_deparse(f), "\\|")))
-
-  c.form <- stats::as.formula(f[1])
-  if (length(f) == 2) {
-    zi.form <- stats::as.formula(paste0("~", f[2]))
-  } else {
-    zi.form <- NULL
-  }
-
-  compact_list(list(conditional = c.form, zero_inflated = zi.form))
+  compact_list(list(
+    conditional = f.cond,
+    random = f.random
+  ))
 }
 
 
-get_brms_formula <- function(f) {
+
+.get_brms_formula <- function(f) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -701,7 +741,8 @@ get_brms_formula <- function(f) {
 }
 
 
-get_stanmv_formula <- function(f) {
+
+.get_stanmv_formula <- function(f) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -725,31 +766,28 @@ get_stanmv_formula <- function(f) {
 }
 
 
-#' @importFrom utils tail
-#' @export
-find_formula.BFBayesFactor <- function(x, ...) {
-  if (.classify_BFBayesFactor(x) == "linear") {
 
-    fcond <- utils::tail(x@numerator, 1)[[1]]@identifier$formula
-    dt <- utils::tail(x@numerator, 1)[[1]]@dataTypes
-    frand <- names(dt)[which(dt == "random")]
+.zeroinf_formula <- function(x) {
+  f <- tryCatch({
+    stats::formula(x)
+  },
+  error = function(x) {
+    NULL
+  }
+  )
 
-    if (!is_empty_object(frand)) {
-      f.random <- stats::as.formula(paste0("~", frand))
-      fcond <- sub(frand, "", fcond, fixed = TRUE)
-      fcond <- gsub("(.*)\\+$", "\\1", trim(fcond))
-      f.cond <- stats::as.formula(trim(fcond))
-    } else {
-      f.random <- NULL
-      f.cond <- stats::as.formula(fcond)
-    }
-
-  } else{
+  if (is.null(f)) {
     return(NULL)
   }
 
-  compact_list(list(
-    conditional = f.cond,
-    random = f.random
-  ))
+  f <- trim(unlist(strsplit(.safe_deparse(f), "\\|")))
+
+  c.form <- stats::as.formula(f[1])
+  if (length(f) == 2) {
+    zi.form <- stats::as.formula(paste0("~", f[2]))
+  } else {
+    zi.form <- NULL
+  }
+
+  compact_list(list(conditional = c.form, zero_inflated = zi.form))
 }
