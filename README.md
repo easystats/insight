@@ -52,9 +52,12 @@ Or install the latest stable release from CRAN:
 install.packages("insight")
 ```
 
-## Documentation and Support
+## Documentation
 
-Please visit [https://easystats.github.io/insight/](https://easystats.github.io/insight/) for documentation. In case you want to file an issue or contribute in another way to the package, please follow [this guide](CONTRIBUTING.md). For questions about the functionality, you may either contact me via email or also file an issue.
+Please visit [https://easystats.github.io/insight/](https://easystats.github.io/insight/) for documentation. 
+## Contributing and Support
+
+In case you want to file an issue or contribute in another way to the package, please follow [this guide](CONTRIBUTING.md). For questions about the functionality, you may either contact us via email or also file an issue.
 
 ## List of Supported Packages and Models
 
