@@ -97,24 +97,26 @@
 <p>The functions from <strong>insight</strong> address different components of a model, however, due to some conceptional overlap, there might be confusion about the specific “targets” of each function. Here is a short explanation how <strong>insight</strong> defines components of regression models:</p>
 <ul>
 <li>
-<strong>data</strong>: the dataset used to fit the model.</li>
+<strong>data</strong>: the dataset used to fit the model</li>
 <li>
-<strong>response</strong>: the outcome or response variable (dependent variable) of a regression model.</li>
+<strong>response</strong>: the outcome or response variable (dependent variable) of a regression model</li>
 <li>
-<strong>predictor</strong>: independent variables of (the <em>fixed</em> part of) a regression model. For mixed models, variables that are (only) in the <em>random effects</em> part of the model are not returned as predictors by default, however, these can be returned using additional arguments to the function call. Predictors are “unqiue”, hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable).</li>
+<strong>predictor</strong>: independent variables of (the <em>fixed</em> part of) a regression model. For mixed models, variables that are (only) in the <em>random effects</em> part (i.e. grouping factors) of the model are not returned as predictors by default, however, these can be included using additional arguments to the function call; predictors are “unqiue”, hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable)</li>
 <li>
-<strong>random slopes</strong>: variables that are used as random slope in a mixed effects model.</li>
+<strong>random slopes</strong>: variables that are used as random slope in a mixed effects model</li>
 <li>
-<strong>random or grouping factors</strong>: variables that are used as grouping variables in a mixed effects model.</li>
+<strong>random or grouping factors</strong>: variables that are used as grouping variables in a mixed effects model</li>
 <li>
-<strong>parameters</strong>: values estimated or learned from data that encapsulate the relationship between variables. In regressions, these are usually referred to as <em>coefficients</em>.</li>
+<strong>parameters</strong>: values estimated or learned from data that encapsulate the relationship between variables; in regressions, these are usually referred to as <em>coefficients</em>
+</li>
 </ul>
 <p><img src="insight_design_2.png" width="100%"></p>
 <ul>
 <li>
-<strong>term</strong>: terms are any (unique) variables that appear in a regression model, like response variable, predictors or random effects. A “term” only relates to the unique occurence of a variable. For instance, in the expression <code>x + I(x^2)</code>, there is only the term <code>x</code>.</li>
+<strong>term</strong>: terms are any (unique) variables that appear in a regression model, like response variables, predictors or random effects; a “term” only relates to the unique occurence of a variable; for instance, in the expression <code>x + I(x^2)</code>, there is only the term <code>x</code>
+</li>
 <li>
-<strong>variables</strong>: A variable is considered as an object that stores unique data information. For instance, the expression <code>x + I(x^2)</code> has two objects with two different sets of data values, and thus are treated as two variables.</li>
+<strong>variables</strong>: a variable is considered as an object that stores unique data information; for instance, the expression <code>x + I(x^2)</code> has two objects with two different sets of data values, and thus are treated as two variables</li>
 </ul>
 <p><img src="insight_design_3.png" width="100%"></p>
 </div>
