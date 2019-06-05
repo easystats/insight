@@ -39,7 +39,7 @@
 
 <meta property="og:title" content="Get model parameters — get_parameters" />
 
-<meta property="og:description" content="Returns the point estimates (or posterior samples for Bayesian
+<meta property="og:description" content="Returns the coefficients (or posterior samples for Bayesian
    models) from a model." />
 
 <meta property="og:image" content="/logo.png" />
@@ -117,7 +117,7 @@
 
     <div class="ref-description">
     
-    <p>Returns the point estimates (or posterior samples for Bayesian
+    <p>Returns the coefficients (or posterior samples for Bayesian
    models) from a model.</p>
     
     </div>
@@ -136,6 +136,10 @@
   <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for vgam</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
+  <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for rqss</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
   <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
 
@@ -158,6 +162,10 @@
 <span class='co'># S3 method for hurdle</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>,
   <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for MCMCglmm</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>,
+  <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for coxme</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
@@ -246,8 +254,8 @@ should be returned.</p></td>
     
 <ul>
 <li><p>for non-Bayesian models and if <code>effects = "fixed"</code>, a data frame with two columns: the parameter names and the related point estimates</p></li>
-<li><p>if <code>effects = "random"</code>, a list of data frames with the random effects (as returned by <code>ranef()</code></p></li>
-<li><p>for Bayesian models, the posterior samples from the requested parameters as data frame.</p></li>
+<li><p>if <code>effects = "random"</code>, a list of data frames with the random effects (as returned by <code>ranef()</code>), unless the random effects have the same simplified structure as fixed effects (e.g. for models from <span class="pkg">MCMCglmm</span>)</p></li>
+<li><p>for Bayesian models, the posterior samples from the requested parameters as data frame</p></li>
 <li><p>for Anova (<code><a href='https://www.rdocumentation.org/packages/stats/topics/aov'>aov()</a></code>) with error term, a list of parameters for the conditional and the random effects parameters</p></li>
 <li><p>for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component</p></li>
 </ul>
@@ -257,8 +265,12 @@ should be returned.</p></td>
 
     <p>In most cases when models either return different "effects" (fixed,
 random) or "components" (conditional, zero-inflated, ...), the arguments
-<code>effects</code> and <code>component</code> can be used. Not all model classes that
-support these arguments are listed here in the 'Usage' section.</p>
+<code>effects</code> and <code>component</code> can be used.
+<br /> <br />
+<code>get_parameters()</code> is comparable to <code><a href='https://www.rdocumentation.org/packages/stats/topics/coef'>coef()</a></code>, however, the coefficients
+are returned as data frame (with columns for names and point estimates of
+coefficients). For Bayesian models, the posterior samples of parameters are
+returned.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
