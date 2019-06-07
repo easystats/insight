@@ -365,6 +365,12 @@ link_function.coxph <- function(x, ...) {
 
 
 #' @export
+link_function.survfit <- function(x, ...) {
+  stats::make.link("logit")$linkfun
+}
+
+
+#' @export
 link_function.coxme <- function(x, ...) {
   stats::make.link("logit")$linkfun
 }

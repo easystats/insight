@@ -127,6 +127,12 @@ link_inverse.coxph <- function(x, ...) {
 
 
 #' @export
+link_inverse.survfit <- function(x, ...) {
+  stats::make.link("logit")$linkinv
+}
+
+
+#' @export
 link_inverse.coxme <- function(x, ...) {
   stats::make.link("logit")$linkinv
 }

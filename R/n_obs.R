@@ -137,6 +137,12 @@ n_obs.crq <- function(x, ...) {
 
 
 #' @export
+n_obs.survfit <- function(x, ...) {
+  length(x$n.event)
+}
+
+
+#' @export
 n_obs.coxph <- function(x, ...) {
   max(x$n)
 }

@@ -63,6 +63,13 @@ find_parameters.default <- function(x, flatten = FALSE, ...) {
     )
   }
 
+
+  if (is.null(pars$conditional) || is.null(pars)) {
+    print_color(sprintf("Parameters can't be retrieved for objects of class '%s'.\n", class(x)[1]), "red")
+    return(NULL)
+  }
+
+
   if (flatten) {
     unique(unlist(pars))
   } else {

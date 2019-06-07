@@ -544,6 +544,18 @@ model_info.coxph <- function(x, ...) {
 
 
 #' @export
+model_info.survfit <- function(x, ...) {
+  make_family(
+    x = x,
+    fitfam = "survival",
+    logit.link = TRUE,
+    link.fun = NULL,
+    ...
+  )
+}
+
+
+#' @export
 model_info.gbm <- function(x, ...) {
   faminfo <- switch(
     x$distribution$name,
