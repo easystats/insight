@@ -502,6 +502,8 @@
   mean(pvar)
 
   # pearson residuals
+  # pred <- predict(model, type = "response") ## (1 - p) * mu
+  # pred <- stats::predict(model, type_pred = "response", type = "mean_subject")
   # (insight::get_response(model) - pred) / sqrt(pvar)
 }
 
