@@ -12,7 +12,8 @@ Description: A tool to provide an easy, intuitive and consistent access to
 Version: 0.3.1
 Date: 2019-06-05
 Authors@R: c(person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206")),
-             person("Dominique", "Makowski", role = c("aut", "ctb"), email = "dom.makowski@gmail.com", comment = c(ORCID = "0000-0001-5375-9967")))
+             person("Dominique", "Makowski", role = c("aut", "ctb"), email = "dom.makowski@gmail.com", comment = c(ORCID = "0000-0001-5375-9967")),
+             person("Philip", "Waggoner", role = c("aut", "ctb"), email = "philip.waggoner@gmail.com", comment = c(ORCID = "0000-0002-7825-7573")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 License: GPL-3
 URL: https://easystats.github.io/insight/
