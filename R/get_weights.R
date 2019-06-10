@@ -34,5 +34,16 @@ get_weights <- function(x) {
     )
   }
 
+  if (is.null(w)) {
+    tryCatch(
+      {
+        w <- .get_data_from_env(x)[[find_weights(x)]]
+      },
+      error = function(x) { NULL },
+      warning = function(x) { NULL },
+      finally = function(x) { NULL }
+    )
+  }
+
   w
 }
