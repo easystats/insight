@@ -111,7 +111,7 @@ get_data.LORgee <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 get_data.survfit <- function(x, ...) {
   mf <- tryCatch({
-    dat <- .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
+    .get_data_from_env(x)[, find_terms(x, flatten = TRUE), drop = FALSE]
   },
   error = function(x) {
     NULL
@@ -332,7 +332,7 @@ get_data.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated_random)
 
-  return_data(mf, effects, component, model.terms)
+  .return_data(x, mf, effects, component, model.terms)
 }
 
 
@@ -502,7 +502,7 @@ get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component 
     fitfram <- .prepare_get_data(x, fitfram)
 
     model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
-    return_data(mf = fitfram, effects, component, model.terms)
+    .return_data(x, mf = fitfram, effects, component, model.terms)
   },
   error = function(x) {
     NULL
@@ -520,7 +520,8 @@ get_data.brmsfit <- function(x, effects = c("all", "fixed", "random"), component
   model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
   mf <- stats::model.frame(x)
 
-  return_data(
+  .return_data(
+    x,
     .prepare_get_data(x, mf, effects = effects),
     effects,
     component,
@@ -538,7 +539,8 @@ get_data.stanreg <- function(x, effects = c("all", "fixed", "random"), ...) {
   model.terms <- find_terms(x, effects = "all", component = "all", flatten = FALSE)
   mf <- stats::model.frame(x)
 
-  return_data(
+  .return_data(
+    x,
     .prepare_get_data(x, mf, effects = effects),
     effects,
     component = "all",
@@ -802,6 +804,19 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
   colnames(mf) <- cvn
 
+  # add weighting variable
+  weighting_var <- find_weights(x)
+  if (!is.null(weighting_var) && !weighting_var %in% colnames(mf)) {
+    mf <- tryCatch(
+      {
+        tmp <- cbind(mf, get_weights(x))
+        colnames(tmp)[ncol(tmp)] <- weighting_var
+        tmp
+      },
+      error = function(e) { mf }
+    )
+  }
+
   # add back possible trials-data
   if (!is.null(trials.data)) {
     new.cols <- setdiff(colnames(trials.data), colnames(mf))
@@ -812,7 +827,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 }
 
 
-return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
+.return_data <- function(x, mf, effects, component, model.terms, is_mv = FALSE) {
   response <- unlist(model.terms$response)
 
   if (is_mv) {
@@ -877,8 +892,8 @@ return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
 
   dat <- switch(
     effects,
-    all = mf[, unique(c(response, fixed.component.data, random.component.data)), drop = FALSE],
-    fixed = mf[, unique(c(response, fixed.component.data)), drop = FALSE],
+    all = mf[, unique(c(response, fixed.component.data, random.component.data, find_weights(x))), drop = FALSE],
+    fixed = mf[, unique(c(response, fixed.component.data, find_weights(x))), drop = FALSE],
     random = mf[, unique(random.component.data), drop = FALSE]
   )
 
@@ -889,10 +904,6 @@ return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
 
   if ("(offset)" %in% colnames(mf) && !("(offset)" %in% colnames(dat))) {
     dat <- cbind(dat, mf[["(offset"]])
-  }
-
-  if ("(weights)" %in% colnames(mf) && !("(weights)" %in% colnames(dat))) {
-    dat <- cbind(dat, mf[["(weights)"]])
   }
 
 
@@ -945,7 +956,7 @@ return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
     zero_inflated = model.terms$zero_inflated
   )
 
-  mf[, unique(c(model.terms$response, fixed.data)), drop = FALSE]
+  mf[, unique(c(model.terms$response, fixed.data, find_weights(x))), drop = FALSE]
 }
 
 
@@ -961,7 +972,7 @@ return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
     random = find_random(x, split_nested = TRUE, flatten = TRUE)
   )
 
-  remain <- intersect(ft, cn)
+  remain <- intersect(c(ft, find_weights(x)), cn)
 
   mf <- tryCatch({
     dat[, remain, drop = FALSE]

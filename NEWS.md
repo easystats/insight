@@ -8,6 +8,7 @@
 
 * `clean_parameters()`, which returns a data frame with "decomposed" parameters, i.e. a data frame with information about the clean paramter name, whether it is a fixed or random effect, from conditional or zero-inflated component, and if it is a parameter related to specific grouping factors of random effects (#106).
 * `find_interactions()` to return all low/high order interaction terms in a model.
+* `find_weights()` and `get_weights()` to find / get model weights.
 
 ## Breaking changes
 
