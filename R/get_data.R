@@ -814,6 +814,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
   response <- unlist(model.terms$response)
+
   if (is_mv) {
     fixed.component.data <- switch(
       component,
@@ -885,6 +886,15 @@ return_data <- function(mf, effects, component, model.terms, is_mv = FALSE) {
     print_color(sprintf("Warning: Data frame is empty, probably component '%s' does not exist in the %s-part of the model?\n", component, effects), "red")
     return(NULL)
   }
+
+  if ("(offset)" %in% colnames(mf) && !("(offset)" %in% colnames(dat))) {
+    dat <- cbind(dat, mf[["(offset"]])
+  }
+
+  if ("(weights)" %in% colnames(mf) && !("(weights)" %in% colnames(dat))) {
+    dat <- cbind(dat, mf[["(weights)"]])
+  }
+
 
   dat
 }

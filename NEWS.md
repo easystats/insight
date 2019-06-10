@@ -29,6 +29,7 @@
 * Fixed bugs with models from package *plm* that occured during the latest plm-update.
 * `find_predictors()` did not split nested random effects when these were written as `g1:g2` instead `g2/g2` in the random part of the model formula.
 * Fixed issues with `all_model_equal()`.
+* `get_data()` did not return `(weights)` columns for some model objects.
 
 # insight 0.3.0
 
