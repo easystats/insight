@@ -9,8 +9,10 @@
 #'
 #' @examples
 #' data(mtcars)
-#' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
-#' find_weights(m)
+#' mtcars$weight <- rnorm(nrow(mtcars), 1, .3)
+#' m <- lm(mpg ~ wt + cyl + vs, data = mtcars, weights = weight)
+#' get_weights(m)
+#'
 #' @export
 get_weights <- function(x) {
   w <- NULL

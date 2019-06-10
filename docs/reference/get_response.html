@@ -152,19 +152,9 @@
 <span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
 
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>trials</span>) ~ <span class='no'>period</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>get_response</span>(<span class='no'>m</span>))</div><div class='output co'>#&gt;   incidence trials
-#&gt; 1         2     12
-#&gt; 2         3      9
-#&gt; 3         4      5
-#&gt; 4         0      5
-#&gt; 5         3     19
-#&gt; 6         1     17</div><div class='input'><span class='fu'>get_response</span>(<span class='no'>m</span>, <span class='kw'>resp</span> <span class='kw'>=</span> <span class='st'>"incidence"</span>)</div><div class='output co'>#&gt;  [1]  2  3  4  0  3  1  1  8  2  0  2  2  0  2  0  5  0  0  1  3  0  0  1  8  1
-#&gt; [26]  3  0 12  2  0  0  0  1  1  0  2  0  5  3  1  2  1  0  0  1  2  0  0 11  0
-#&gt; [51]  0  0  1  1  1  0</div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>get_response</span>(<span class='no'>m</span>))</div><div class='output co'>#&gt; <span class='error'>Error in if (!is.null(weighting_var) &amp;&amp; !weighting_var %in% colnames(mf)) {    mf &lt;- tryCatch({        tmp &lt;- cbind(mf, get_weights(x))        colnames(tmp)[ncol(tmp)] &lt;- weighting_var        tmp    }, error = function(e) {        mf    })}: missing value where TRUE/FALSE needed</span></div><div class='input'><span class='fu'>get_response</span>(<span class='no'>m</span>, <span class='kw'>resp</span> <span class='kw'>=</span> <span class='st'>"incidence"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in if (!is.null(weighting_var) &amp;&amp; !weighting_var %in% colnames(mf)) {    mf &lt;- tryCatch({        tmp &lt;- cbind(mf, get_weights(x))        colnames(tmp)[ncol(tmp)] &lt;- weighting_var        tmp    }, error = function(e) {        mf    })}: missing value where TRUE/FALSE needed</span></div><div class='input'>
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>get_response</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt;  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2 10.4
-#&gt; [16] 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4 15.8 19.7
-#&gt; [31] 15.0 21.4</div></pre>
+<span class='fu'>get_response</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; <span class='error'>Error in if (!is.null(weighting_var) &amp;&amp; !weighting_var %in% colnames(mf)) {    mf &lt;- tryCatch({        tmp &lt;- cbind(mf, get_weights(x))        colnames(tmp)[ncol(tmp)] &lt;- weighting_var        tmp    }, error = function(e) {        mf    })}: missing value where TRUE/FALSE needed</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -181,7 +171,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner.</p>
 </div>
 
 <div class="pkgdown">
