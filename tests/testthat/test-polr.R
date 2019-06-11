@@ -25,7 +25,7 @@ if (require("testthat") && require("insight") && require("MASS")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 72)
-    expect_equal(colnames(get_data(m1)), c("Sat", "Infl", "Type", "Cont", "(weights)"))
+    expect_equal(colnames(get_data(m1)), c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq"))
   })
 
   test_that("find_formula", {
