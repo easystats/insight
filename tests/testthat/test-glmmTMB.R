@@ -22,6 +22,14 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
 
   m6 <- glmmTMB(count ~ 1, ziformula = ~1, family = poisson(), data = Salamanders)
 
+  test_that("find_weights", {
+    expect_null(find_weights(m2))
+  })
+
+  test_that("get_weights", {
+    expect_null(get_weights(m2))
+  })
+
   test_that("model_info", {
     expect_true(model_info(m1)$is_zeroinf)
     expect_false(model_info(m2)$is_zeroinf)
