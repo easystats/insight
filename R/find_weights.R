@@ -17,7 +17,7 @@
 find_weights <- function(x) {
   tryCatch(
     {
-      w <- as.character(parse(text = deparse(x$call))[[1]]$weights)
+      w <- as.character(parse(text = .safe_deparse(x$call))[[1]]$weights)
       if (.is_empty_object(w)) w <- NULL
       w
     },
