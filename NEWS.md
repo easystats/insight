@@ -31,6 +31,7 @@
 * `find_predictors()` did not split nested random effects when these were written as `g1:g2` instead `g2/g2` in the random part of the model formula.
 * Fixed issues with `all_model_equal()`.
 * `get_data()` did not return `(weights)` columns for some model objects.
+* `get_priors()` for *stanreg*-models returned the priors in sorted order, so sometimes parameter names and associated prior values did not match (#111).
 
 # insight 0.3.0
 

@@ -34,7 +34,7 @@ get_priors.stanreg <- function(x, ...) {
     do.call(cbind, x)
   })
 
-  prior_info <- Reduce(function(x, y) merge(x, y, all = TRUE), l)
+  prior_info <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), l)
   prior_info$parameter <- find_parameters(x)$conditional
 
   prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))]
