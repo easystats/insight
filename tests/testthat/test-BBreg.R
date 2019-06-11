@@ -13,7 +13,7 @@ if (require("testthat") && require("insight") && require("HRQoL")) {
   p <- 1 / (1 + exp(-(beta[1] + beta[2] * x)))
   phi <- 1.2
 
-  y <- rBB(k, m, p, phi)
+  y <- HRQoL::rBB(k, m, p, phi)
   dat <- data.frame(y, x, x2, j, fac)
 
   m1 <- BBreg(y ~ x + x2 + j + fac, m, data = dat)
