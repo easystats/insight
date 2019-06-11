@@ -131,7 +131,7 @@
     return(NULL)
   }
 
-  re <- sapply(lme4::findbars(f), deparse)
+  re <- sapply(lme4::findbars(f), .safe_deparse)
 
   if (is_special && .is_empty_object(re)) {
     re <- all.vars(f[[2L]])
@@ -335,7 +335,7 @@
 #   else
 #     f[[2L]]
 #
-#   lapply(.extract_formula_parts(rhs), deparse)
+#   lapply(.extract_formula_parts(rhs), .safe_deparse)
 # }
 #
 #
