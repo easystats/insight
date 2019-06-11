@@ -38,6 +38,14 @@ if (require("testthat") && require("insight") && require("ordinal") && require("
     expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
   })
 
+  test_that("find_weights", {
+    expect_equal(find_weights(m1), "Freq")
+  })
+
+  test_that("get_weights", {
+    expect_equal(get_weights(m1), housing$Freq)
+  })
+
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 72)
     expect_equal(colnames(get_data(m1)), c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq"))
