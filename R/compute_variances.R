@@ -50,9 +50,7 @@
   }
 
   # Are random slopes present as fixed effects? Warn.
-  random.slopes <- .random_slopes(random.effects = vals$re, model = x)
-
-  if (!all(random.slopes %in% names(vals$beta))) {
+  if (!.random_slopes_in_fixed(x)) {
     if (verbose) {
       warning(sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.\n  Solution: Respecify fixed structure!", name_full), call. = FALSE)
     }
@@ -602,41 +600,16 @@
 
 
 # return names of random slopes
-.random_slopes <- function(random.effects = NULL, model = NULL) {
-  if (inherits(model, "MixMod")) {
-    return(unlist(find_random_slopes(model)))
-  }
+.random_slopes_in_fixed <- function(model) {
+  rs <- find_random_slopes(model)
+  fe <- find_predictors(model, effects = "fixed", component = "all")
 
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to return random slopes for mixed models.", call. = FALSE)
-  }
+  # make sure we have identical subcomponents between random and
+  # fixed effects
+  fe <- .compact_list(fe[c("conditional", "zero_inflated")])
+  if (length(rs) > length(fe)) fe <- fe[1:length(rs)]
 
-  if (is.null(random.effects)) {
-    if (is.null(model)) {
-      stop("Either `random.effects` or `model` must be supplied to return random slopes for mixed models.", call. = FALSE)
-    }
-    random.effects <- lme4::ranef(model)
-  }
-
-  # for glmmTMB, just get conditional component
-  if (isTRUE(all.equal(names(random.effects), c("cond", "zi")))) {
-    random.effects <- random.effects[["cond"]]
-  }
-
-  if (is.list(random.effects)) {
-    random.slopes <- unique(unlist(lapply(random.effects, function(re) {
-      colnames(re)[-1]
-    })))
-  } else {
-    random.slopes <- colnames(random.effects)
-  }
-
-  random.slopes <- setdiff(random.slopes, "(Intercept)")
-
-  if (!length(random.slopes))
-    NULL
-  else
-    random.slopes
+  all(mapply(function(r, f) all(r %in% f), rs, fe, SIMPLIFY = TRUE))
 }
 
 

@@ -32,6 +32,7 @@
 * Fixed issues with `all_model_equal()`.
 * `get_data()` did not return `(weights)` columns for some model objects.
 * `get_priors()` for *stanreg*-models returned the priors in sorted order, so sometimes parameter names and associated prior values did not match (#111).
+* `get_variance()` did not calculate random effect variances, when interaction terms in random slopes were also present in fixed effects, but the interaction was written in different order (e.g., `a*b` and `b*a`) (#112).
 
 # insight 0.3.0
 
