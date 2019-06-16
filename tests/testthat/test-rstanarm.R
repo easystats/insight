@@ -5,6 +5,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
   if (suppressWarnings(
     require("testthat") &&
       require("insight") &&
+      require("BayesFactor") &&
       require("rstanarm")
   )) {
     context("insight, rstanarm")
@@ -13,6 +14,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     m2 <- insight::download_model("stanreg_glm_6")
     m3 <- insight::download_model("stanreg_glm_1")
 
+    data("puzzles")
     m4 <- stan_glm(RT ~ color * shape, data = puzzles, prior = cauchy(0, c(3, 1, 2)), iter = 500, chains = 2)
     m5 <- stan_glm(RT ~ color * shape, data = puzzles, prior = cauchy(0, c(1, 2, 3)), iter = 500, chains = 2)
 

@@ -599,15 +599,20 @@
 
 
 
-# return names of random slopes
+# return existence of random slopes
 .random_slopes_in_fixed <- function(model) {
   rs <- find_random_slopes(model)
   fe <- find_predictors(model, effects = "fixed", component = "all")
 
+  # if model has no random slopes, there are no random slopes that
+  # are *not* present as fixed effects
+  if (is.null(rs)) return(TRUE)
+
   # make sure we have identical subcomponents between random and
   # fixed effects
   fe <- .compact_list(fe[c("conditional", "zero_inflated")])
-  if (length(rs) > length(fe)) fe <- fe[1:length(rs)]
+  if (length(rs) > length(fe)) rs <- rs[1:length(fe)]
+  if (length(fe) > length(rs)) fe <- fe[1:length(rs)]
 
   all(mapply(function(r, f) all(r %in% f), rs, fe, SIMPLIFY = TRUE))
 }

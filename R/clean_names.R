@@ -11,8 +11,8 @@
 #'   like \code{s()} for splines or \code{log()} are removed from
 #'   the model terms.
 #'
-#' @note If \code{x} is a regression model, this function is equal to calling
-#'   \code{find_terms()}.
+#' @note If \code{x} is a regression model, this function is (almost) equal to
+#'   calling \code{find_terms()}.
 #'
 #' @examples
 #' # example from ?stats::glm
