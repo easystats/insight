@@ -6,7 +6,7 @@ prepare_parameters <- function(x, ...) {
     i
   })
 
-  obj
+  obj <- list(clean_parameters(x), obj)
 
-  Reduce(function(x, y) merge(x, y, all = TRUE, by = "Parameter", sort = FALSE), obj)
+  obj <- Reduce(function(x, y) merge(x, y, all = TRUE, by = "Parameter", sort = FALSE), obj)
 }
