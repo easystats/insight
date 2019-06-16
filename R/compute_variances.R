@@ -50,10 +50,8 @@
   }
 
   # Are random slopes present as fixed effects? Warn.
-  if (!.random_slopes_in_fixed(x)) {
-    if (verbose) {
-      warning(sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.\n  Solution: Respecify fixed structure!", name_full), call. = FALSE)
-    }
+  if (!.random_slopes_in_fixed(x) && verbose) {
+    warning(sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.\n  Solution: Respecify fixed structure!", name_full), call. = FALSE)
   }
 
   # Separate observation variance from variance of random effects
