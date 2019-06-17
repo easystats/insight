@@ -2,7 +2,7 @@
 % Please edit documentation in R/clean_parameters.R
 \name{clean_parameters}
 \alias{clean_parameters}
-\title{Get clean names of model paramters}
+\title{Get clean names of model parameters}
 \usage{
 clean_parameters(x, ...)
 }
@@ -14,8 +14,9 @@ clean_parameters(x, ...)
 \value{
 A data frame with "cleaned" parameter names and information on
   effects, component and group where parameters belong to. To be consistent
-  across different models, the returned data frame always has at least three
-  columns \code{parameter}, \code{effect} and \code{component}. See 'Details'.
+  across different models, the returned data frame always has at least four
+  columns \code{Parameter}, \code{Effects}, \code{Component} and
+  \code{Cleaned_Parameter}. See 'Details'.
 }
 \description{
 This function "cleans" names of model parameters by removing
@@ -30,15 +31,16 @@ results should be reported or results from all parameters should be filtered
 to return only certain results.
 }
 \details{
-The \code{effects} column indicate if a parameter is a \emph{fixed}
-or \emph{random} effect. The \code{component} can either be \emph{conditional}
-or \emph{zero_inflated}. For models with random effects, the \code{group}
+The \code{Effects} column indicate if a parameter is a \emph{fixed}
+or \emph{random} effect. The \code{Component} can either be \emph{conditional}
+or \emph{zero_inflated}. For models with random effects, the \code{Group}
 column indicates the grouping factor of the random effects. For multivariate
-response models from \pkg{brms} or \pkg{rstanarm}, an additional \emph{response}
+response models from \pkg{brms} or \pkg{rstanarm}, an additional \emph{Response}
 column is included, to indicate which parameters belong to which response
-formula. Furthermore, for models from \pkg{brms} or \pkg{rstanarm} a
-\emph{cleaned_parameter} column is returned that contains "human readable"
-parameter names.
+formula. Furthermore, \emph{Cleaned_Parameter} column is returned that
+contains "human readable" parameter names (which are mostly identical to
+\code{Parameter}, except for for models from \pkg{brms} or \pkg{rstanarm},
+or for specific terms like smooth- or spline-terms).
 }
 \examples{
 model <- download_model("brms_zi_2")

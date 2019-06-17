@@ -1,4 +1,4 @@
-#' @title Get clean names of model paramters
+#' @title Get clean names of model parameters
 #' @name clean_parameters
 #'
 #' @description This function "cleans" names of model parameters by removing
@@ -17,18 +17,20 @@
 #'
 #' @return A data frame with "cleaned" parameter names and information on
 #'   effects, component and group where parameters belong to. To be consistent
-#'   across different models, the returned data frame always has at least three
-#'   columns \code{parameter}, \code{effect} and \code{component}. See 'Details'.
+#'   across different models, the returned data frame always has at least four
+#'   columns \code{Parameter}, \code{Effects}, \code{Component} and
+#'   \code{Cleaned_Parameter}. See 'Details'.
 #'
-#' @details The \code{effects} column indicate if a parameter is a \emph{fixed}
-#' or \emph{random} effect. The \code{component} can either be \emph{conditional}
-#' or \emph{zero_inflated}. For models with random effects, the \code{group}
+#' @details The \code{Effects} column indicate if a parameter is a \emph{fixed}
+#' or \emph{random} effect. The \code{Component} can either be \emph{conditional}
+#' or \emph{zero_inflated}. For models with random effects, the \code{Group}
 #' column indicates the grouping factor of the random effects. For multivariate
-#' response models from \pkg{brms} or \pkg{rstanarm}, an additional \emph{response}
+#' response models from \pkg{brms} or \pkg{rstanarm}, an additional \emph{Response}
 #' column is included, to indicate which parameters belong to which response
-#' formula. Furthermore, for models from \pkg{brms} or \pkg{rstanarm} a
-#' \emph{cleaned_parameter} column is returned that contains "human readable"
-#' parameter names.
+#' formula. Furthermore, \emph{Cleaned_Parameter} column is returned that
+#' contains "human readable" parameter names (which are mostly identical to
+#' \code{Parameter}, except for for models from \pkg{brms} or \pkg{rstanarm},
+#' or for specific terms like smooth- or spline-terms).
 #'
 #' @examples
 #' model <- download_model("brms_zi_2")
@@ -63,11 +65,12 @@ clean_parameters.default <- function(x, ...) {
     if (eff == "random") {
       rand_eff <- lapply(names(pars[[i]]), function(j) {
         data.frame(
-          parameter = pars[[i]][[j]],
-          effects = eff,
-          component = com,
-          group = j,
-          fun = fun,
+          Parameter = pars[[i]][[j]],
+          Effects = eff,
+          Component = com,
+          Group = j,
+          Function = fun,
+          Cleaned_Parameter = pars[[i]][[j]],
           stringsAsFactors = FALSE,
           row.names = NULL
         )
@@ -75,11 +78,12 @@ clean_parameters.default <- function(x, ...) {
       do.call(rbind, rand_eff)
     } else {
       data.frame(
-        parameter = pars[[i]],
-        effects = eff,
-        component = com,
-        group = "",
-        fun = fun,
+        Parameter = pars[[i]],
+        Effects = eff,
+        Component = com,
+        Group = "",
+        Function = fun,
+        Cleaned_Parameter = pars[[i]],
         stringsAsFactors = FALSE,
         row.names = NULL
       )
@@ -169,12 +173,12 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
 
     data.frame(
-      parameter = pars[[i]],
-      effects = eff,
-      component = com,
-      group = "",
-      response = response,
-      fun = fun,
+      Parameter = pars[[i]],
+      Effects = eff,
+      Component = com,
+      Group = "",
+      Response = response,
+      Function = fun,
       stringsAsFactors = FALSE,
       row.names = NULL
     )
@@ -185,83 +189,92 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
 .clean_brms_params <- function(out, is_mv) {
 
-  out$cleaned_parameter <- out$parameter
+  out$Cleaned_Parameter <- out$Parameter
 
   # for multivariate response models, remove responses from parameter names
 
   if (is_mv) {
-    resp <- unique(out$response)
+    resp <- unique(out$Response)
 
     resp_pattern <- sprintf("_%s_(.*)", resp, resp)
     for (i in resp_pattern) {
-      out$cleaned_parameter <- gsub(pattern = i, "_\\1", out$cleaned_parameter, perl = TRUE)
+      out$Cleaned_Parameter <- gsub(pattern = i, "_\\1", out$Cleaned_Parameter, perl = TRUE)
     }
 
     resp_pattern <- sprintf("__%s(.*)", resp, resp)
     for (i in resp_pattern) {
-      out$cleaned_parameter <- gsub(pattern = i, "\\1", out$cleaned_parameter, perl = TRUE)
+      out$Cleaned_Parameter <- gsub(pattern = i, "\\1", out$Cleaned_Parameter, perl = TRUE)
     }
 
     resp_pattern <- sprintf("__zi_%s(.*)", resp, resp)
     for (i in resp_pattern) {
-      out$cleaned_parameter <- gsub(pattern = i, "\\1", out$cleaned_parameter, perl = TRUE)
+      out$Cleaned_Parameter <- gsub(pattern = i, "\\1", out$Cleaned_Parameter, perl = TRUE)
     }
 
     resp_pattern <- sprintf("(sigma)(_%s)", resp, resp)
     for (i in resp_pattern) {
-      out$cleaned_parameter <- gsub(pattern = i, "\\1", out$cleaned_parameter, perl = TRUE)
+      out$Cleaned_Parameter <- gsub(pattern = i, "\\1", out$Cleaned_Parameter, perl = TRUE)
     }
   }
 
 
-  smooth_function <- grepl(pattern = "(bs_|bs_zi_)", out$cleaned_parameter)
+  smooth_function <- grepl(pattern = "(bs_|bs_zi_)", out$Cleaned_Parameter)
   if (any(smooth_function)) {
-    out$fun[smooth_function] <- "smooth"
+    out$Function[smooth_function] <- "smooth"
   }
 
 
   # clean fixed effects, conditional and zero-inflated
 
-  out$cleaned_parameter <- gsub(pattern = "(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", "\\2", out$cleaned_parameter, perl = TRUE)
-  out$cleaned_parameter <- gsub(pattern = "(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)(.*)", "\\2", out$cleaned_parameter, perl = TRUE)
+  out$Cleaned_Parameter <- gsub(pattern = "(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", "\\2", out$Cleaned_Parameter, perl = TRUE)
+  out$Cleaned_Parameter <- gsub(pattern = "(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)(.*)", "\\2", out$Cleaned_Parameter, perl = TRUE)
+
+  # correlation and sd
+
+  cor_sd <- grepl("(sd_|cor_)(.*)", out$Cleaned_Parameter)
+  if (any(cor_sd)) {
+    out$Cleaned_Parameter[cor_sd] <- gsub("(sd_|cor_)(.*)__(.*)", "\\2_\\3", out$Cleaned_Parameter[cor_sd])
+    out$Group[cor_sd] <- "SD/Cor"
+  }
 
   # extract group-names from random effects and clean random effects
 
-  rand_eff <- grepl("r_(.*)\\.(.*)\\.", out$cleaned_parameter)
+  rand_eff <- grepl("r_(.*)\\.(.*)\\.", out$Cleaned_Parameter)
   if (any(rand_eff)) {
-    r_pars <- gsub("r_(.*)\\.(.*)\\.", "\\2", out$cleaned_parameter[rand_eff])
-    r_grps <- gsub("r_(.*)\\.(.*)\\.", "\\1", out$cleaned_parameter[rand_eff])
-    r_grps <- gsub("__zi", "", r_grps)
+    r_pars <- gsub("r_(.*)\\.(.*)\\.", "\\1", out$Cleaned_Parameter[rand_eff])
+    r_grps <- gsub("r_(.*)\\.(.*)\\.", "\\2", out$Cleaned_Parameter[rand_eff])
+    r_pars <- gsub("__zi", "", r_pars)
+    r_grps <- sprintf("%s: %s", r_grps, gsub("(.*)\\.(.*)", "\\1", r_pars))
 
-    out$cleaned_parameter[rand_eff] <- r_pars
-    out$group[rand_eff] <- r_grps
+    out$Cleaned_Parameter[rand_eff] <- r_pars
+    out$Group[rand_eff] <- r_grps
   }
 
   # clean remaining parameters
 
-  out$cleaned_parameter <- gsub("^simo_", "", out$cleaned_parameter)
-  out$cleaned_parameter <- gsub("^prior_", "", out$cleaned_parameter)
+  out$Cleaned_Parameter <- gsub("^simo_", "", out$Cleaned_Parameter)
+  out$Cleaned_Parameter <- gsub("^prior_", "", out$Cleaned_Parameter)
 
-  smooth <- grepl("^sds_", out$cleaned_parameter)
+  smooth <- grepl("^sds_", out$Cleaned_Parameter)
   if (length(smooth)) {
-    out$cleaned_parameter <- gsub("^sds_", "", out$cleaned_parameter)
-    out$component[smooth] <- "smooth_sd"
-    out$fun[smooth] <- "smooth"
+    out$Cleaned_Parameter <- gsub("^sds_", "", out$Cleaned_Parameter)
+    out$Component[smooth] <- "smooth_sd"
+    out$Function[smooth] <- "smooth"
   }
 
   # fix intercept names
 
-  intercepts <- which(out$cleaned_parameter == "Intercept")
+  intercepts <- which(out$Cleaned_Parameter == "Intercept")
   if (!.is_empty_object(intercepts))
-    out$cleaned_parameter[intercepts] <- "(Intercept)"
+    out$Cleaned_Parameter[intercepts] <- "(Intercept)"
 
-  interaction_terms <- which(grepl("\\.", out$cleaned_parameter))
+  interaction_terms <- which(grepl("\\.", out$Cleaned_Parameter))
   if (length(interaction_terms)) {
     for (i in interaction_terms) {
-      i_terms <- strsplit(out$cleaned_parameter[i], "\\.")
-      find_i_terms <- sapply(i_terms, function(j) j %in% out$cleaned_parameter)
+      i_terms <- strsplit(out$Cleaned_Parameter[i], "\\.")
+      find_i_terms <- sapply(i_terms, function(j) j %in% out$Cleaned_Parameter)
       if (all(find_i_terms)) {
-        out$cleaned_parameter[i] <- gsub("\\.", ":", out$cleaned_parameter[i])
+        out$Cleaned_Parameter[i] <- gsub("\\.", ":", out$Cleaned_Parameter[i])
       }
     }
   }
@@ -273,41 +286,43 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
 .clean_stanreg_params <- function(out) {
 
-  out$cleaned_parameter <- out$parameter
+  out$Cleaned_Parameter <- out$Parameter
 
   # extract group-names from random effects and clean random effects
 
-  rand_intercepts <- grepl("^b\\[\\(Intercept\\)", out$cleaned_parameter)
+  rand_intercepts <- grepl("^b\\[\\(Intercept\\)", out$Cleaned_Parameter)
 
   if (any(rand_intercepts)) {
-    out$group[rand_intercepts] <- gsub(
+    re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_intercepts])
+    out$Cleaned_Parameter[rand_intercepts] <- gsub(
       "b\\[\\(Intercept\\) (.*)\\]",
       "\\1",
-      out$cleaned_parameter[rand_intercepts]
+      out$Cleaned_Parameter[rand_intercepts]
     )
-    out$cleaned_parameter[rand_intercepts] <- "(Intercept)"
+    out$Group[rand_intercepts] <- sprintf("Intercept: %s", re_grp_level)
   }
 
 
   # extract group-names from random effects and clean random effects
 
-  rand_effects <- grepl("^b\\[", out$cleaned_parameter)
+  rand_effects <- grepl("^b\\[", out$Cleaned_Parameter)
 
   if (any(rand_effects)) {
-    r_pars <- gsub("b\\[(.*) (.*)\\]", "\\1", out$cleaned_parameter[rand_effects])
-    r_grps <- gsub("b\\[(.*) (.*)\\]", "\\2", out$cleaned_parameter[rand_effects])
+    re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
+    r_grps <- gsub("b\\[(.*) (.*)\\]", "\\1", out$Cleaned_Parameter[rand_effects])
+    r_pars <- gsub("b\\[(.*) (.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
 
-    out$cleaned_parameter[rand_effects] <- r_pars
-    out$group[rand_effects] <- r_grps
+    out$Group[rand_effects] <- sprintf("%s: %s", r_grps, re_grp_level)
+    out$Cleaned_Parameter[rand_effects] <- r_pars
   }
 
   # clean remaining parameters
 
-  smooth <- grepl("^smooth_sd\\[", out$cleaned_parameter)
+  smooth <- grepl("^smooth_sd\\[", out$Cleaned_Parameter)
   if (length(smooth)) {
-    out$cleaned_parameter <- gsub("^smooth_sd\\[(.*)\\]", "\\1", out$cleaned_parameter)
-    out$component[smooth] <- "smooth_sd"
-    out$fun[smooth] <- "smooth"
+    out$Cleaned_Parameter <- gsub("^smooth_sd\\[(.*)\\]", "\\1", out$Cleaned_Parameter)
+    out$Component[smooth] <- "smooth_sd"
+    out$Function[smooth] <- "smooth"
   }
 
   out
@@ -317,18 +332,18 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
 
 .remove_empty_columns_from_pars <- function(x) {
-  if (.obj_has_name(x, "response") && all(is.na(x$response))) {
-    pos <- which(colnames(x) == "response")
+  if (.obj_has_name(x, "Response") && all(is.na(x$Response))) {
+    pos <- which(colnames(x) == "Response")
     x <- x[, -pos]
   }
 
-  if (.obj_has_name(x, "group") && .is_empty_string(x$group)) {
-    pos <- which(colnames(x) == "group")
+  if (.obj_has_name(x, "Group") && .is_empty_string(x$Group)) {
+    pos <- which(colnames(x) == "Group")
     x <- x[, -pos]
   }
 
-  if (.obj_has_name(x, "fun") && .is_empty_string(x$fun)) {
-    pos <- which(colnames(x) == "fun")
+  if (.obj_has_name(x, "Function") && .is_empty_string(x$Function)) {
+    pos <- which(colnames(x) == "Function")
     x <- x[, -pos]
   }
 
@@ -343,7 +358,7 @@ clean_parameters.stanmvreg <- function(x, ...) {
 # be set to "random".
 #
 .fix_random_effect_smooth <- function(x, out) {
-  if ("fun" %in% colnames(out) && "smooth" %in% out$fun) {
+  if ("Function" %in% colnames(out) && "smooth" %in% out$Function) {
     vars <- find_variables(x)$conditional
     vars <- gsub(" ", "", vars, fixed = TRUE)
     random_smooth_terms <- grepl("^s\\((.*)(bs=\"re\"+)\\)", x = vars)
@@ -353,7 +368,7 @@ clean_parameters.stanmvreg <- function(x, ...) {
         gsub("^s\\(([^,]*)(.*)(bs=\"re\"+)\\)", "\\1", vars[random_smooth_terms]),
         ")"
       )
-      out$effects[which(out$parameter == random_term)] <- "random"
+      out$Effects[which(out$Parameter == random_term)] <- "random"
     }
   }
 
