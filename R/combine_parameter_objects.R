@@ -42,7 +42,7 @@ combine_parameter_objects <- function(x, ..., split_by = c("Effects", "Component
   })
 
   # merge all objects together
-  obj <- Reduce(function(x, y) merge(x, y, all = TRUE, by = "Parameter", sort = FALSE), c(list(cp), obj))
+  obj <- Reduce(function(x, y) merge(x, y, all.x = FALSE, by = "Parameter", sort = FALSE), c(list(cp), obj))
 
   # return merged data frame if no splitting requested
   if (.is_empty_object(split_by)) return(obj)
