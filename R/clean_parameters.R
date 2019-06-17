@@ -372,5 +372,6 @@ clean_parameters.stanmvreg <- function(x, ...) {
     }
   }
 
+  class(out) <- c("clean_parameters", class(out))
   out
 }

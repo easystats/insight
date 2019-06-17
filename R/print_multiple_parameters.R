@@ -1,5 +1,5 @@
 #' @title Get clean names of model paramters
-#' @name combine_parameter_objects
+#' @name print_multiple_parameters
 #'
 #' @description This function
 #'
@@ -21,14 +21,17 @@
 #' model <- download_model("brms_zi_2")
 #' x <- hdi(model, effects = "all", component = "all")
 #' x
-#' combine_parameter_objects(model, x)
+#' print_multiple_parameters(model, x)
 #'
 #' @importFrom stats na.omit
 #' @export
-combine_parameter_objects <- function(x, ..., split_by = c("Effects", "Component", "Group", "Response")) {
+print_multiple_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group", "Response")) {
   obj <- list(...)
 
-  cp <- clean_parameters(x)
+  cp <- if (!inherits(x, "clean_parameters"))
+    clean_parameters(x)
+  else
+    x
   cn1 <- colnames(cp)
 
   obj <- lapply(obj, function(i) {
