@@ -28,6 +28,8 @@
 
 # is string empty?
 .is_empty_object <- function(x) {
+  # this is an ugly fix because of ugly tibbles
+  if (is.data.frame(x)) x <- as.data.frame(x)
   x <- suppressWarnings(x[!is.na(x)])
   length(x) == 0 || is.null(x)
 }
