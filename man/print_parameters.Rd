@@ -14,19 +14,19 @@ print_parameters(x, ..., split_by = c("Effects", "Component", "Group",
 the model parameters and related statistics (like confidence intervals, HDI,
 ROPE, ...).}
 
-\item{split_by}{If \code{NULL}, the merged data frame is returned. Else, the
-data frame is split into a list, split by the values from those columns defined
-in \code{split_by}. \code{split_by} should be a character vector with one or
+\item{split_by}{\code{split_by} should be a character vector with one or
 more of the following elements: \code{"Effects"}, \code{"Component"},
 \code{"Response"} and \code{"Group"}. These are the column names returned
 by \code{\link{clean_parameters}}, which is used to extract the information
-to which group or component model parameters belong.}
+from which the group or component model parameters belong. If \code{NULL}, the 
+merged data frame is returned. Else, the data frame is split into a list, 
+split by the values from those columns defined in \code{split_by}.}
 }
 \value{
-A data frame or a list of data frame (if \code{split_by} is not \code{NULL}).
+A data frame or a list of data frames (if \code{split_by} is not \code{NULL}).
 If a list is returned, the element names reflect the model components where the
-extracted information in the data frames belong to, e.g. \code{`random.zero_inflated.Intercept: persons`}
-is the data frame that contains the parameters for the random effects from
+extracted information in the data frames belong to, e.g. \code{`random.zero_inflated.Intercept: persons`}.
+This is the data frame that contains the parameters for the random effects from
 group-level "persons" from the zero-inflated model component.
 }
 \description{
@@ -36,7 +36,7 @@ or \code{\link[bayestestR]{equivalence_test}}, as input and splits this informat
 into several parts, depending on the model. See details below.
 }
 \details{
-This function is intended to prepare data frames that contain information
+This function prepares data frames that contain information
 about model parameters for clear printing.
 \cr \cr
 First, \code{x} is required, which should either be a model object or a
@@ -52,12 +52,12 @@ be the result of \code{\link[bayestestR]{hdi}}, where we
 have a) a \code{Parameters} column and b) columns with the HDI values.
 \cr \cr
 Now we have a data frame with model parameters and information about the
-association to the different model components, and a data frame with model
-parameters and some summary statistics. \code{print_parameters()}
-then merges these data frame, so the statistic of interest (in our example:
+association to the different model components, a data frame with model
+parameters, and some summary statistics. \code{print_parameters()}
+then merges these data frames, so the statistic of interest (in our example:
 the HDI) is also associated with the different model components. The data
-frame is split into a list, so for a clearer printing one can loop over this
-list and print each component for a better overview. Furthermore, parameter
+frame is split into a list, so for a clear printing. Users can loop over this
+list and print each component for a better overview. Further, parameter
 names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'.
 }
 \examples{
@@ -65,7 +65,7 @@ library(bayestestR)
 model <- download_model("brms_zi_2")
 x <- hdi(model, effects = "all", component = "all")
 
-# hdi() returns a data frame, here we use only the informaton on
+# hdi() returns a data frame; here we use only the informaton on
 # parameter names and HDI values
 tmp <- as.data.frame(x)[, 1:4]
 tmp
@@ -74,10 +74,10 @@ tmp
 # is split into several parts that reflect the model components.
 print_parameters(model, tmp)
 
-# this is the standard print()-method for "bayestestR::hdi"-objects
+# This is the standard print()-method for "bayestestR::hdi"-objects.
 # For printing methods, it is easy to print complex summary statistics
-# in a clean way to the console, by splitting up the information into
-# the different model components
+# in a clean way to the console by splitting the information into
+# different model components.
 x
 
 }
