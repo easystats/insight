@@ -14,9 +14,9 @@
 #'   more of the following elements: \code{"Effects"}, \code{"Component"},
 #'   \code{"Response"} and \code{"Group"}. These are the column names returned
 #'   by \code{\link{clean_parameters}}, which is used to extract the information
-#'   from which the group or component model parameters belong. If \code{NULL}, the 
-#'   merged data frame is returned. Else, the data frame is split into a list, 
-#'   split by the values from those columns defined in \code{split_by}. 
+#'   from which the group or component model parameters belong. If \code{NULL}, the
+#'   merged data frame is returned. Else, the data frame is split into a list,
+#'   split by the values from those columns defined in \code{split_by}.
 #'
 #' @return A data frame or a list of data frames (if \code{split_by} is not \code{NULL}).
 #' If a list is returned, the element names reflect the model components where the
@@ -151,15 +151,20 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
       }
     }
 
-    # add attributes
-    attr(element, "main_title") <- .trim(title1)
-    attr(element, "sub_title") <- .trim(title2)
-    attr(element, "Effects") <- unique(element$Effects)
-    attr(element, "Component") <- unique(element$Component)
+    .effects <- unique(element$Effects)
+    .component <- unique(element$Component)
 
     # we don't need "Effects" and "Random" column any more
     keep <- setdiff(colnames(element), c("Effects", "Component", "Cleaned_Parameter"))
-    element[, c("Cleaned_Parameter", keep)]
+    element <- element[, c("Cleaned_Parameter", keep)]
+
+    # add attributes
+    attr(element, "main_title") <- .trim(title1)
+    attr(element, "sub_title") <- .trim(title2)
+    attr(element, "Effects") <- .effects
+    attr(element, "Component") <- .component
+
+    element
   })
 
   names(out) <- list_names
