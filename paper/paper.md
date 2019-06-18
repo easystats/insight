@@ -1,5 +1,5 @@
 ---
-title: 'insight: A Unified API for Accessing Information from Model Objects in R'
+title: 'insight: A Unified Interface for Accessing Information from Model Objects in R'
 tags:
   - R
   - model information
