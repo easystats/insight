@@ -1,5 +1,5 @@
 ---
-title: 'insight: A Unified Syntax for Accessing Information from Model Objects in R'
+title: 'insight: Easy Access to Model Information for Various Model Objects'
 tags:
   - R
   - model information
