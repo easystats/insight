@@ -28,7 +28,7 @@ The main purpose of this function is to easily filter and select model parameter
 in particular of - but not limited to - posterior samples from Stan models,
 depending on certain characteristics. This might be useful when only selective
 results should be reported or results from all parameters should be filtered
-to return only certain results.
+to return only certain results (see \code{\link{print_parameters}}).
 }
 \details{
 The \code{Effects} column indicate if a parameter is a \emph{fixed}
