@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -213,7 +213,20 @@ or both be returned? Only applies to mixed models.</p></td>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>cbpp</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"lme4"</span>)
 <span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>trials</span>) ~ <span class='no'>period</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>get_data</span>(<span class='no'>m</span>))</div><div class='output co'>#&gt; <span class='error'>Error in if (!is.null(weighting_var) &amp;&amp; !weighting_var %in% colnames(mf)) {    mf &lt;- tryCatch({        tmp &lt;- cbind(mf, get_weights(x))        colnames(tmp)[ncol(tmp)] &lt;- weighting_var        tmp    }, error = function(e) {        mf    })}: missing value where TRUE/FALSE needed</span></div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>get_data</span>(<span class='no'>m</span>))</div><div class='output co'>#&gt;   cbind(incidence, trials).incidence cbind(incidence, trials).trials period
+#&gt; 1                                  2                              12      1
+#&gt; 2                                  3                               9      2
+#&gt; 3                                  4                               5      3
+#&gt; 4                                  0                               5      4
+#&gt; 5                                  3                              19      1
+#&gt; 6                                  1                              17      2
+#&gt;   incidence trials
+#&gt; 1         2     12
+#&gt; 2         3      9
+#&gt; 3         4      5
+#&gt; 4         0      5
+#&gt; 5         3     19
+#&gt; 6         1     17</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
