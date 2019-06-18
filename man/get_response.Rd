@@ -4,12 +4,13 @@
 \alias{get_response}
 \title{Get the values from the response variable}
 \usage{
-get_response(x, resp = NULL)
+get_response(x, select = NULL)
 }
 \arguments{
 \item{x}{A fitted model.}
 
-\item{resp}{Optional names of response variables for which to extract values.}
+\item{select}{Optional name(s) of response variables for which to extract values.
+Can be used in case of regression models with multiple response variables.}
 }
 \value{
 The values of the reponse variable, as vector, or a data frame if
@@ -28,7 +29,7 @@ cbpp$trials <- cbpp$size - cbpp$incidence
 
 m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 head(get_response(m))
-get_response(m, resp = "incidence")
+get_response(m, select = "incidence")
 
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 get_response(m)

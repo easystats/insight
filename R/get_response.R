@@ -5,7 +5,8 @@
 #'    If the model is a multivariate response model, a data frame with values
 #'    from all response variables is returned.
 #'
-#' @param resp Optional names of response variables for which to extract values.
+#' @param select Optional name(s) of response variables for which to extract values.
+#'   Can be used in case of regression models with multiple response variables.
 #' @inheritParams find_predictors
 #'
 #' @return The values of the reponse variable, as vector, or a data frame if
@@ -19,20 +20,20 @@
 #'
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #' head(get_response(m))
-#' get_response(m, resp = "incidence")
+#' get_response(m, select = "incidence")
 #'
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_response(m)
 #' @export
-get_response <- function(x, resp = NULL) {
+get_response <- function(x, select = NULL) {
   rn <- find_response(x, combine = FALSE)
 
   if (length(rn) > 1) {
     rv <- get_data(x)[, rn, drop = FALSE]
     colnames(rv) <- rn
     # if user only wants specific response value, return this only
-    if (!is.null(resp) && all(resp %in% colnames(rv))) {
-      rv <- rv[, resp, drop = TRUE]
+    if (!is.null(select) && all(select %in% colnames(rv))) {
+      rv <- rv[, select, drop = TRUE]
     }
     rv
   } else {

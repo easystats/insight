@@ -13,6 +13,7 @@
 ## Breaking changes
 
 * To reduce interface complexity, `find_parameters()` and `get_parameters()` for objects of class `aovlist` now return the elements `$conditional` and `$random`, to be in line with other supported objects.
+* The argument `resp` in `get_response()` was renamed to `select`, to have a more clear verb.
 
 ## Changes to functions
 
