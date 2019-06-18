@@ -84,6 +84,20 @@ find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
 }
 
 
+
+#' @export
+find_parameters.polr <- function(x, flatten = FALSE, ...) {
+  pars <- list(conditional = c(sprintf("Intercept: %s", names(x$zeta)), names(stats::coef(x))))
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+
 #' @export
 find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
   pars <- list(

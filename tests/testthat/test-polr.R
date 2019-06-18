@@ -48,4 +48,26 @@ if (require("testthat") && require("insight") && require("MASS")) {
   test_that("linkfun", {
     expect_false(is.null(link_function(m1)))
   })
+
+
+  test_that("find_parameters", {
+    expect_equal(
+      find_parameters(m1),
+      list(conditional =
+             c("Intercept: Low|Medium", "Intercept: Medium|High", "InflMedium",
+               "InflHigh", "TypeApartment", "TypeAtrium", "TypeTerrace", "ContHigh"))
+    )
+  })
+
+  test_that("get_parameters", {
+    expect_equal(
+      get_parameters(m1),
+      data.frame(
+        parameter = c("Intercept: Low|Medium", "Intercept: Medium|High", "InflMedium", "InflHigh", "TypeApartment", "TypeAtrium", "TypeTerrace", "ContHigh"),
+        estimate = c(-0.4961353438375, 0.690708290379271, 0.566393738890106, 1.28881906381232, -0.572350146429611, -0.366186566153346, -1.09101490767244, 0.360284149947385),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    )
+  })
 }

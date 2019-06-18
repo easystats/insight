@@ -81,6 +81,19 @@ get_parameters.default <- function(x, ...) {
 
 
 #' @export
+get_parameters.polr <- function(x, ...) {
+  pars <- c(sprintf("Intercept: %s", names(x$zeta)), names(x$coefficients))
+  data.frame(
+    parameter = pars,
+    estimate = c(unname(x$zeta), unname(x$coefficients)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+
+#' @export
 get_parameters.gbm <- function(x, ...) {
   s <- summary(x, plotit = FALSE)
   data.frame(
