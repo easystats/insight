@@ -252,8 +252,17 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
   # clean remaining parameters
 
-  out$Cleaned_Parameter <- gsub("^simo_", "", out$Cleaned_Parameter)
-  out$Cleaned_Parameter <- gsub("^prior_", "", out$Cleaned_Parameter)
+  priors <- grepl("^prior_", out$Cleaned_Parameter)
+  if (length(priors)) {
+    out$Cleaned_Parameter <- gsub("^prior_", "", out$Cleaned_Parameter)
+    out$Component[priors] <- "priors"
+  }
+
+  simplex <- grepl("^simo_", out$Cleaned_Parameter)
+  if (length(simplex)) {
+    out$Cleaned_Parameter <- gsub("^simo_", "", out$Cleaned_Parameter)
+    out$Component[simplex] <- "simplex"
+  }
 
   smooth <- grepl("^sds_", out$Cleaned_Parameter)
   if (length(smooth)) {
