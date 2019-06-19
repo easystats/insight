@@ -47,9 +47,9 @@ if (require("testthat") && require("insight") && require("splines")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "Sepal.Length", conditional = c("Petal.Width", "Species")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("Sepal.Length", "Petal.Width", "Species"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "Sepal.Length", conditional = c("Petal.Width", "Species")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("Sepal.Length", "Petal.Width", "Species"))
   })
 
   test_that("find_parameters", {
@@ -74,9 +74,9 @@ if (require("testthat") && require("insight") && require("splines")) {
     expect_equal(find_algorithm(m1), list(algorithm = "OLS"))
   })
 
-  test_that("find_variables", {
+  test_that("find_terms", {
     expect_equal(
-      find_variables(m1),
+      find_terms(m1),
       list(
         response = "Sepal.Length",
         conditional = c("splines", "bs(Petal.Width, df = 4)", "Species")

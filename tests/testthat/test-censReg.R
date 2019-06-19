@@ -52,9 +52,9 @@ if (require("testthat") && require("insight") && require("censReg") && require("
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "affairs", conditional = c("age", "yearsmarried", "religiousness", "occupation", "rating")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("affairs", "age", "yearsmarried", "religiousness", "occupation", "rating"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "affairs", conditional = c("age", "yearsmarried", "religiousness", "occupation", "rating")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("affairs", "age", "yearsmarried", "religiousness", "occupation", "rating"))
   })
 
   test_that("n_obs", {
@@ -76,9 +76,9 @@ if (require("testthat") && require("insight") && require("censReg") && require("
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "age", "yearsmarried", "religiousness", "occupation", "rating", "logSigma"))
   })
 
-  test_that("find_variables", {
+  test_that("find_terms", {
     expect_equal(
-      find_variables(m1),
+      find_terms(m1),
       list(
         response = "affairs",
         conditional = c("age", "yearsmarried", "religiousness", "occupation", "rating")

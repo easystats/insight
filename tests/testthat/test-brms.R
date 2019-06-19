@@ -85,13 +85,13 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_equal(colnames(get_response(m5)), c("count", "count2"))
     })
 
-    test_that("find_terms", {
-      expect_identical(find_terms(m1), list(response = "count", conditional = c("Age", "Base", "Trt"), random = "patient"))
-      expect_identical(find_terms(m1, effects = "fixed"), list(response = "count", conditional = c("Age", "Base", "Trt")))
-      expect_null(find_terms(m1, component = "zi"))
+    test_that("find_variables", {
+      expect_identical(find_variables(m1), list(response = "count", conditional = c("Age", "Base", "Trt"), random = "patient"))
+      expect_identical(find_variables(m1, effects = "fixed"), list(response = "count", conditional = c("Age", "Base", "Trt")))
+      expect_null(find_variables(m1, component = "zi"))
 
       expect_identical(
-        find_terms(m2),
+        find_variables(m2),
         list(
           response = c(SepalLength = "Sepal.Length", SepalWidth = "Sepal.Width"),
           SepalLength = list(conditional = c("Petal.Length", "Sepal.Width", "Species")),
@@ -99,11 +99,11 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         )
       )
 
-      expect_identical(find_terms(m2, flatten = TRUE), c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species"))
-      expect_identical(find_terms(m3), list(response = c("r", "n"), conditional = c("treat", "c2")))
+      expect_identical(find_variables(m2, flatten = TRUE), c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species"))
+      expect_identical(find_variables(m3), list(response = c("r", "n"), conditional = c("treat", "c2")))
 
       expect_identical(
-        find_terms(m4),
+        find_variables(m4),
         list(
           response = "count",
           conditional = c("child", "camper"),
@@ -113,7 +113,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         )
       )
 
-      expect_identical(find_terms(m4, flatten = TRUE), c("count", "child", "camper", "persons"))
+      expect_identical(find_variables(m4, flatten = TRUE), c("count", "child", "camper", "persons"))
     })
 
     test_that("n_obs", {
@@ -276,9 +276,9 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_true(is_multivariate(m5))
     })
 
-    test_that("find_variables", {
+    test_that("find_terms", {
       expect_equal(
-        find_variables(m2),
+        find_terms(m2),
         list(
           SepalLength = list(
             response = "Sepal.Length",

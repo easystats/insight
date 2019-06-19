@@ -51,10 +51,10 @@ if (require("testthat") && require("insight") && require("betareg")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "yield", conditional = c("batch", "temp")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("yield", "batch", "temp"))
-    expect_equal(find_terms(m2, flatten = TRUE), c("food", "income", "persons"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "yield", conditional = c("batch", "temp")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("yield", "batch", "temp"))
+    expect_equal(find_variables(m2, flatten = TRUE), c("food", "income", "persons"))
   })
 
   test_that("n_obs", {
@@ -80,9 +80,9 @@ if (require("testthat") && require("insight") && require("betareg")) {
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "batch1", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "temp", "(phi)"))
   })
 
-  test_that("find_variables", {
+  test_that("find_terms", {
     expect_equal(
-      find_variables(m2),
+      find_terms(m2),
       list(
         response = "I(food/income)",
         conditional = c("income", "persons")

@@ -58,9 +58,9 @@ if (require("testthat") && require("insight") && require("AER")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "packs", conditional = c("rprice", "rincome"), instruments = c("rincome", "tdiff", "tax", "cpi")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("packs", "rprice", "rincome", "tdiff", "tax", "cpi"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "packs", conditional = c("rprice", "rincome"), instruments = c("rincome", "tdiff", "tax", "cpi")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("packs", "rprice", "rincome", "tdiff", "tax", "cpi"))
   })
 
   test_that("n_obs", {
@@ -86,9 +86,9 @@ if (require("testthat") && require("insight") && require("AER")) {
     expect_false(is_multivariate(m1))
   })
 
-  test_that("find_variables", {
+  test_that("find_terms", {
     expect_equal(
-      find_variables(m1),
+      find_terms(m1),
       list(
         response = "log(packs)",
         conditional = c("log(rprice)", "log(rincome)"),

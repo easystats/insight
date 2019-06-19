@@ -68,9 +68,9 @@ if (require("testthat") && require("insight") && require("aod")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = c("y", "n"), conditional = c("group", "trisk"), random = "village"))
-    expect_equal(find_terms(m1, flatten = TRUE), c("y", "n", "group", "trisk", "village"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = c("y", "n"), conditional = c("group", "trisk"), random = "village"))
+    expect_equal(find_variables(m1, flatten = TRUE), c("y", "n", "group", "trisk", "village"))
   })
 
   test_that("n_obs", {
@@ -97,9 +97,9 @@ if (require("testthat") && require("insight") && require("aod")) {
     expect_false(is_multivariate(m1))
   })
 
-  test_that("find_variables", {
+  test_that("find_terms", {
     expect_equal(
-      find_variables(m1),
+      find_terms(m1),
       list(
         response = "cbind(y, n - y)",
         conditional = c("group", "trisk"),

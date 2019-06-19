@@ -81,12 +81,12 @@ if (require("testthat") && require("insight") && require("panelr")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "lwage", conditional = c("union", "wks"), instruments = c("blk", "fem"), random = "lag(union)"))
-    expect_equal(find_terms(m1, flatten = TRUE), c("lwage", "union", "wks", "blk", "fem", "lag(union)"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "lwage", conditional = c("union", "wks"), instruments = c("blk", "fem"), random = "lag(union)"))
+    expect_equal(find_variables(m1, flatten = TRUE), c("lwage", "union", "wks", "blk", "fem", "lag(union)"))
 
-    expect_equal(find_terms(m2), list(response = "lwage", conditional = c("union", "wks"), instruments = c("blk", "fem"), random = "union"))
-    expect_equal(find_terms(m2, flatten = TRUE), c("lwage", "union", "wks", "blk", "fem"))
+    expect_equal(find_variables(m2), list(response = "lwage", conditional = c("union", "wks"), instruments = c("blk", "fem"), random = "union"))
+    expect_equal(find_variables(m2, flatten = TRUE), c("lwage", "union", "wks", "blk", "fem"))
   })
 
   test_that("n_obs", {
@@ -118,14 +118,14 @@ if (require("testthat") && require("insight") && require("panelr")) {
 
   })
 
-  test_that("find_variables", {
+  test_that("find_terms", {
     expect_equal(
-      find_variables(m1),
+      find_terms(m1),
       list(response = "lwage", conditional = c("lag(union)", "wks"),
            instruments = c("blk", "fem"), random = c("blk", "lag(union)"))
       )
     expect_equal(
-      find_variables(m2),
+      find_terms(m2),
       list(response = "lwage", conditional = c("lag(union)", "wks"),
            instruments = c("blk", "fem"), random = c("blk", "t", "union"))
     )

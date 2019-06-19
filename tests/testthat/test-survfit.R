@@ -35,9 +35,9 @@ if (require("testthat") && require("insight") && require("survival")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = c("time", "status"), conditional = c("sex", "age", "ph.ecog")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("time", "status", "sex", "age", "ph.ecog"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = c("time", "status"), conditional = c("sex", "age", "ph.ecog")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("time", "status", "sex", "age", "ph.ecog"))
   })
 
   test_that("n_obs", {
@@ -52,9 +52,9 @@ if (require("testthat") && require("insight") && require("survival")) {
     expect_false(is_multivariate(m1))
   })
 
-  test_that("find_variables", {
+  test_that("find_terms", {
     expect_equal(
-      find_variables(m1),
+      find_terms(m1),
       list(
         response = "Surv(time, status)",
         conditional = c("sex", "age", "ph.ecog")

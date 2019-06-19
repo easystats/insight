@@ -59,17 +59,17 @@ if (require("testthat") && require("insight") && require("gamlss")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(
       response = "y",
       conditional = "x",
       sigma = "x"
     ))
-    expect_equal(find_terms(m1, flatten = TRUE), c("y", "x"))
+    expect_equal(find_variables(m1, flatten = TRUE), c("y", "x"))
   })
 
-  test_that("find_variables", {
-    expect_equal(find_variables(m1), list(
+  test_that("find_terms", {
+    expect_equal(find_terms(m1), list(
       response = "y",
       conditional = "pb(x)",
       sigma = "pb(x)",

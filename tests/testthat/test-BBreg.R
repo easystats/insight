@@ -70,9 +70,9 @@ if (require("testthat") && require("insight") && require("HRQoL")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "y", conditional = c("x", "x2", "j", "fac")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("y", "x", "x2", "j", "fac"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "y", conditional = c("x", "x2", "j", "fac")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("y", "x", "x2", "j", "fac"))
   })
 
   test_that("n_obs", {
@@ -94,9 +94,9 @@ if (require("testthat") && require("insight") && require("HRQoL")) {
     expect_false(is_multivariate(m1))
   })
 
-  test_that("find_variables", {
+  test_that("find_terms", {
     expect_equal(
-      find_variables(m1),
+      find_terms(m1),
       list(
         response = "y",
         conditional = c("x", "x2", "j", "fac")

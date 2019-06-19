@@ -71,9 +71,9 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       )
     })
 
-    test_that("find_terms", {
-      expect_equal(find_terms(m1), list(response = "y", conditional = c("group", "trisk"), random = "village"))
-      expect_equal(find_terms(m1, flatten = TRUE), c("y", "group", "trisk", "village"))
+    test_that("find_variables", {
+      expect_equal(find_variables(m1), list(response = "y", conditional = c("group", "trisk"), random = "village"))
+      expect_equal(find_variables(m1, flatten = TRUE), c("y", "group", "trisk", "village"))
     })
 
     test_that("n_obs", {
@@ -101,9 +101,9 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_false(is_multivariate(m1))
     })
 
-    test_that("find_variables", {
+    test_that("find_terms", {
       expect_equal(
-        find_variables(m1),
+        find_terms(m1),
         list(
           response = "y",
           conditional = c("group", "offset(log(trisk))"),

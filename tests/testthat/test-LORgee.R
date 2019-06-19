@@ -62,10 +62,10 @@ if (require("testthat") && require("insight") && require("multgee")) {
     )
   })
 
-  test_that("find_variables", {
-    expect_length(find_variables(m1), 3)
+  test_that("find_terms", {
+    expect_length(find_terms(m1), 3)
     expect_equal(
-      find_variables(m1),
+      find_terms(m1),
       list(
         response = "y",
         conditional = c("factor(time)", "factor(trt)", "factor(baseline)"),
@@ -74,9 +74,9 @@ if (require("testthat") && require("insight") && require("multgee")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "y", conditional = c("time", "trt", "baseline"), random = "id"))
-    expect_equal(find_terms(m1, flatten = TRUE), c("y", "time", "trt", "baseline", "id"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "y", conditional = c("time", "trt", "baseline"), random = "id"))
+    expect_equal(find_variables(m1, flatten = TRUE), c("y", "time", "trt", "baseline", "id"))
   })
 
   test_that("n_obs", {
