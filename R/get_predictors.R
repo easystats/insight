@@ -1,4 +1,4 @@
-#' @title Get the data from predictor variables
+#' @title Get the data from model predictors
 #' @name get_predictors
 #'
 #' @description Returns the data from all predictor variables (fixed effects).

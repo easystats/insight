@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_predictors.R
 \name{get_predictors}
 \alias{get_predictors}
-\title{Get the data from predictor variables}
+\title{Get the data from model predictors}
 \usage{
 get_predictors(x)
 }

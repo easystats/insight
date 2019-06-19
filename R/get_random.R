@@ -1,4 +1,4 @@
-#' @title Get the data from random effects terms
+#' @title Get the data from random effects
 #' @name get_random
 #'
 #' @description Returns the data from all random effects terms.

@@ -121,35 +121,25 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <h2 id="section-comprehensive-information-from-model-objects" class="hasAnchor"><a href="#section-comprehensive-information-from-model-objects" class="anchor"></a>Comprehensive Information from Model Objects</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="all_models_equal.html">all_models_equal()</a></code> </p>
+          <p><code><a href="model_info.html">model_info()</a></code> </p>
         </td>
-        <td><p>Checks if all objects are models of same class</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="clean_names.html">clean_names()</a></code> </p>
-        </td>
-        <td><p>Get clean names of model terms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="clean_parameters.html">clean_parameters()</a></code> </p>
-        </td>
-        <td><p>Get clean names of model parameters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="download_model.html">download_model()</a></code> </p>
-        </td>
-        <td><p>Download circus models</p></td>
-      </tr><tr>
+        <td><p>Access information from model objects</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-find-information-from-model-objects" class="hasAnchor"><a href="#section-find-information-from-model-objects" class="anchor"></a>Find Information from Model Objects</h2>
+          <p class="section-desc"><p>Functions to access names or information from model objects. These functions have no <code>get_*()</code>-counterpart.</p></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
           <p><code><a href="find_algorithm.html">find_algorithm()</a></code> </p>
@@ -170,33 +160,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="find_parameters.html">find_parameters()</a></code> </p>
-        </td>
-        <td><p>Find names of model parameters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_predictors.html">find_predictors()</a></code> </p>
-        </td>
-        <td><p>Find names of model predictors</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_random.html">find_random()</a></code> </p>
-        </td>
-        <td><p>Find names of random effects</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="find_random_slopes.html">find_random_slopes()</a></code> </p>
         </td>
         <td><p>Find names of random slopes</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_response.html">find_response()</a></code> </p>
-        </td>
-        <td><p>Find name of the response variable</p></td>
       </tr><tr>
         
         <td>
@@ -209,30 +175,20 @@
           <p><code><a href="find_variables.html">find_variables()</a></code> </p>
         </td>
         <td><p>Find names of all model terms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_weights.html">find_weights()</a></code> </p>
-        </td>
-        <td><p>Find names of model weights</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-get-data-from-model-objects" class="hasAnchor"><a href="#section-get-data-from-model-objects" class="anchor"></a>Get Data from Model Objects</h2>
+          <p class="section-desc"><p>Functions to get values or data from model objects. These functions have no <code>find_*()</code>-counterpart.</p></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
           <p><code><a href="get_data.html">get_data()</a></code> </p>
         </td>
         <td><p>Get the data that was used to fit the model</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_parameters.html">get_parameters()</a></code> </p>
-        </td>
-        <td><p>Get model parameters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_predictors.html">get_predictors()</a></code> </p>
-        </td>
-        <td><p>Get the data from predictor variables</p></td>
       </tr><tr>
         
         <td>
@@ -242,9 +198,59 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="get_variance.html">get_variance()</a></code> <code><a href="get_variance.html">get_variance_residual()</a></code> <code><a href="get_variance.html">get_variance_fixed()</a></code> <code><a href="get_variance.html">get_variance_random()</a></code> <code><a href="get_variance.html">get_variance_distribution()</a></code> <code><a href="get_variance.html">get_variance_dispersion()</a></code> <code><a href="get_variance.html">get_variance_intercept()</a></code> <code><a href="get_variance.html">get_variance_slope()</a></code> <code><a href="get_variance.html">get_correlation_slope_intercept()</a></code> </p>
+        </td>
+        <td><p>Get variance components from random effects models</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-find-information-or-get-data-from-model-objects" class="hasAnchor"><a href="#section-find-information-or-get-data-from-model-objects" class="anchor"></a>Find Information or Get Data from Model Objects</h2>
+          <p class="section-desc"><p>Functions to list model-specific objects or to extract values (or data) associated with model-specific objects.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="find_parameters.html">find_parameters()</a></code> </p>
+        </td>
+        <td><p>Find names of model parameters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_parameters.html">get_parameters()</a></code> </p>
+        </td>
+        <td><p>Get model parameters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="find_predictors.html">find_predictors()</a></code> </p>
+        </td>
+        <td><p>Find names of model predictors</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_predictors.html">get_predictors()</a></code> </p>
+        </td>
+        <td><p>Get the data from model predictors</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="find_random.html">find_random()</a></code> </p>
+        </td>
+        <td><p>Find names of random effects</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="get_random.html">get_random()</a></code> </p>
         </td>
-        <td><p>Get the data from random effects terms</p></td>
+        <td><p>Get the data from random effects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="find_response.html">find_response()</a></code> </p>
+        </td>
+        <td><p>Find name of the response variable</p></td>
       </tr><tr>
         
         <td>
@@ -254,15 +260,55 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="get_variance.html">get_variance()</a></code> <code><a href="get_variance.html">get_variance_residual()</a></code> <code><a href="get_variance.html">get_variance_fixed()</a></code> <code><a href="get_variance.html">get_variance_random()</a></code> <code><a href="get_variance.html">get_variance_distribution()</a></code> <code><a href="get_variance.html">get_variance_dispersion()</a></code> <code><a href="get_variance.html">get_variance_intercept()</a></code> <code><a href="get_variance.html">get_variance_slope()</a></code> <code><a href="get_variance.html">get_correlation_slope_intercept()</a></code> </p>
+          <p><code><a href="find_weights.html">find_weights()</a></code> </p>
         </td>
-        <td><p>Get variance components from random effects models</p></td>
+        <td><p>Find names of model weights</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_weights.html">get_weights()</a></code> </p>
         </td>
-        <td><p>Get model weights</p></td>
+        <td><p>Get the values from model weights</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-access-further-information-from-model-objects" class="hasAnchor"><a href="#section-access-further-information-from-model-objects" class="anchor"></a>Access Further Information from Model Objects</h2>
+          <p class="section-desc"><p>Functions to access specific information from model objects.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="link_function.html">link_function()</a></code> </p>
+        </td>
+        <td><p>Get link-function from model object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="link_inverse.html">link_inverse()</a></code> </p>
+        </td>
+        <td><p>Get link-inverse function from model object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="n_obs.html">n_obs()</a></code> </p>
+        </td>
+        <td><p>Get number of observations from a model</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-test-model-properties" class="hasAnchor"><a href="#section-test-model-properties" class="anchor"></a>Test Model Properties</h2>
+          <p class="section-desc"><p>Functions to test specific properties of model objects.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="all_models_equal.html">all_models_equal()</a></code> <code><a href="all_models_equal.html">all_models_same_class()</a></code> </p>
+        </td>
+        <td><p>Checks if all objects are models of same class</p></td>
       </tr><tr>
         
         <td>
@@ -287,30 +333,32 @@
           <p><code><a href="is_nullmodel.html">is_nullmodel()</a></code> </p>
         </td>
         <td><p>Checks if model is a null-model (intercept-only)</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-utilities" class="hasAnchor"><a href="#section-utilities" class="anchor"></a>Utilities</h2>
+          <p class="section-desc"><p>Functions that are not specifically related to access model information, but rather small utility functions.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="clean_names.html">clean_names()</a></code> </p>
+        </td>
+        <td><p>Get clean names of model terms</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="link_function.html">link_function()</a></code> </p>
+          <p><code><a href="clean_parameters.html">clean_parameters()</a></code> </p>
         </td>
-        <td><p>Get link-function from model object</p></td>
+        <td><p>Get clean names of model parameters</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="link_inverse.html">link_inverse()</a></code> </p>
+          <p><code><a href="download_model.html">download_model()</a></code> </p>
         </td>
-        <td><p>Get link-inverse function from model object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="model_info.html">model_info()</a></code> </p>
-        </td>
-        <td><p>Access information from model objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="n_obs.html">n_obs()</a></code> </p>
-        </td>
-        <td><p>Get number of observations from a model</p></td>
+        <td><p>Download circus models</p></td>
       </tr><tr>
         
         <td>
@@ -331,7 +379,13 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-comprehensive-information-from-model-objects">Comprehensive Information from Model Objects</a></li>
+      <li><a href="#section-find-information-from-model-objects">Find Information from Model Objects</a></li>
+      <li><a href="#section-get-data-from-model-objects">Get Data from Model Objects</a></li>
+      <li><a href="#section-find-information-or-get-data-from-model-objects">Find Information or Get Data from Model Objects</a></li>
+      <li><a href="#section-access-further-information-from-model-objects">Access Further Information from Model Objects</a></li>
+      <li><a href="#section-test-model-properties">Test Model Properties</a></li>
+      <li><a href="#section-utilities">Utilities</a></li>
     </ul>
   </div>
 </div>

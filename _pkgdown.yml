@@ -8,3 +8,74 @@ authors:
 template:
   params:
     bootswatch: cosmo
+
+reference:
+- title: "Comprehensive Information from Model Objects"
+  contents:
+  - model_info
+
+- title: "Find Information from Model Objects"
+  desc: >
+    Functions to access names or information from model objects. These
+    functions have no `get_*()`-counterpart.
+  contents:
+  - find_algorithm
+  - find_formula
+  - find_interactions
+  - find_random_slopes
+  - find_terms
+  - find_variables
+
+- title: "Get Data from Model Objects"
+  desc: >
+    Functions to get values or data from model objects. These functions
+    have no `find_*()`-counterpart.
+  contents:
+  - get_data
+  - get_priors
+  - get_variance
+
+- title: "Find Information or Get Data from Model Objects"
+  desc: >
+    Functions to list model-specific objects or to extract values (or data)
+    associated with model-specific objects.
+  contents:
+  - find_parameters
+  - get_parameters
+  - find_predictors
+  - get_predictors
+  - find_random
+  - get_random
+  - find_response
+  - get_response
+  - find_weights
+  - get_weights
+
+- title: "Access Further Information from Model Objects"
+  desc: >
+    Functions to access specific information from model objects.
+  contents:
+  - link_function
+  - link_inverse
+  - n_obs
+
+- title: "Test Model Properties"
+  desc: >
+    Functions to test specific properties of model objects.
+  contents:
+  - all_models_same_class
+  - has_intercept
+  - is_model
+  - is_multivariate
+  - is_nullmodel
+
+- title: "Utilities"
+  desc: >
+    Functions that are not specifically related to access model information,
+    but rather small utility functions.
+  contents:
+  - clean_names
+  - clean_parameters
+  - download_model
+  - print_color
+  - print_parameters

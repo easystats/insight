@@ -1,4 +1,4 @@
-#' @title Get model weights
+#' @title Get the values from model weights
 #' @name get_weights
 #'
 #' @description Returns weighting variable of a model.

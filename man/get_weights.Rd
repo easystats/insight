@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_weights.R
 \name{get_weights}
 \alias{get_weights}
-\title{Get model weights}
+\title{Get the values from model weights}
 \usage{
 get_weights(x)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_random.R
 \name{get_random}
 \alias{get_random}
-\title{Get the data from random effects terms}
+\title{Get the data from random effects}
 \usage{
 get_random(x)
 }

@@ -72,3 +72,8 @@ all_models_equal <- function(..., verbose = FALSE) {
 
   all(all_supported) && all(all_equal)
 }
+
+
+#' @rdname all_models_equal
+#' @export
+all_models_same_class <- all_models_equal

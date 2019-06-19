@@ -2,9 +2,12 @@
 % Please edit documentation in R/all_equal_models.R
 \name{all_models_equal}
 \alias{all_models_equal}
+\alias{all_models_same_class}
 \title{Checks if all objects are models of same class}
 \usage{
 all_models_equal(..., verbose = FALSE)
+
+all_models_same_class(..., verbose = FALSE)
 }
 \arguments{
 \item{...}{A list of objects.}
