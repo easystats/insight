@@ -2,17 +2,26 @@
 % Please edit documentation in R/find_variables.R
 \name{find_variables}
 \alias{find_variables}
-\title{Find names of all variables}
+\title{Find names of all model terms}
 \usage{
-find_variables(x, flatten = FALSE, ...)
+find_variables(x, effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion", "instruments"), flatten = FALSE)
 }
 \arguments{
 \item{x}{A fitted model.}
 
+\item{effects}{Should variables for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.}
+
+\item{component}{Should all predictor variables, predictor variables for the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated.}
+
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}
-
-\item{...}{Currently not used.}
 }
 \value{
 A list with (depending on the model) following elements (character
@@ -28,25 +37,39 @@ A list with (depending on the model) following elements (character
    }
 }
 \description{
-Returns a list with the names of all variables, including
-  response value and random effects, "as is". This means, on-the-fly
-  tranformations like \code{log()}, \code{I()}, \code{as.factor()} etc.
-  are preserved.
+Returns a list with the names of all model terms, including
+  response value and random effects.
 }
 \note{
 The difference to \code{\link{find_terms}} is that \code{find_variables()}
-  may return a variable multiple times in case of multiple transformations
-  (see examples below), while \code{find_terms()} returns each term only
-  once.
+  returns each term only once, while \code{find_terms()} may return a
+  variable multiple times in case of multiple transformations.
 }
 \examples{
 library(lme4)
+data(cbpp)
 data(sleepstudy)
-m <- lmer(
-  log(Reaction) ~ Days + I(Days^2) + (1 + Days + exp(Days) | Subject),
+# some data preparation...
+cbpp$trials <- cbpp$size - cbpp$incidence
+sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mysubgrp <- NA
+for (i in 1:5) {
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
+}
+
+m1 <- glmer(
+  cbind(incidence, size - incidence) ~ period + (1 | herd),
+  data = cbpp,
+  family = binomial
+)
+find_variables(m1)
+
+m2 <- lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
   data = sleepstudy
 )
-
-find_variables(m)
-
+find_variables(m2)
+find_variables(m2, flatten = TRUE)
 }

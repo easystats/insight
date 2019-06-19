@@ -12,7 +12,7 @@
 #'   the model terms.
 #'
 #' @note If \code{x} is a regression model, this function is (almost) equal to
-#'   calling \code{find_terms()}.
+#'   calling \code{find_variables()}.
 #'
 #' @examples
 #' # example from ?stats::glm
@@ -29,7 +29,7 @@ clean_names <- function(x) {
 
 #' @export
 clean_names.default <- function(x) {
-  cleaned <- unname(find_terms(x, flatten = TRUE))
+  cleaned <- unname(find_variables(x, flatten = TRUE))
   .remove_values(cleaned, c("1", "0"))
 }
 

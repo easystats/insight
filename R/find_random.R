@@ -9,7 +9,7 @@
 #'   with colon. See 'Examples'.
 #'
 #' @inheritParams find_predictors
-#' @inheritParams find_terms
+#' @inheritParams find_variables
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #'    random effects (grouping factors). Depending on the model, the

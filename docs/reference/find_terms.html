@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find names of all model terms — find_terms • insight</title>
+<title>Find names of all variables — find_terms • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,10 +37,12 @@
 
 
 
-<meta property="og:title" content="Find names of all model terms — find_terms" />
+<meta property="og:title" content="Find names of all variables — find_terms" />
 
-<meta property="og:description" content="Returns a list with the names of all model terms, including
-  response value and random effects." />
+<meta property="og:description" content="Returns a list with the names of all variables, including
+  response value and random effects, &quot;as is&quot;. This means, on-the-fly
+  tranformations like log(), I(), as.factor() etc.
+  are preserved." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -110,21 +112,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find names of all model terms</h1>
+    <h1>Find names of all variables</h1>
     
     <div class="hidden name"><code>find_terms.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns a list with the names of all model terms, including
-  response value and random effects.</p>
+    <p>Returns a list with the names of all variables, including
+  response value and random effects, "as is". This means, on-the-fly
+  tranformations like <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log()</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/AsIs'>I()</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/factor'>as.factor()</a></code> etc.
+  are preserved.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_terms</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
-  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>,
-  <span class='st'>"dispersion"</span>, <span class='st'>"instruments"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>find_terms</span>(<span class='no'>x</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,22 +136,13 @@
       <td><p>A fitted model.</p></td>
     </tr>
     <tr>
-      <th>effects</th>
-      <td><p>Should variables for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
-    </tr>
-    <tr>
-      <th>component</th>
-      <td><p>Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated.</p></td>
-    </tr>
-    <tr>
       <th>flatten</th>
       <td><p>Logical, if <code>TRUE</code>, the values are returned
 as character vector, not as list. Duplicated values are removed.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
     </tr>
     </table>
     
@@ -170,50 +163,30 @@ as character vector, not as list. Duplicated values are removed.</p></td>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The difference to <code><a href='find_variables.html'>find_variables</a></code> is that <code>find_terms()</code>
-  returns each term only once, while <code><a href='find_variables.html'>find_variables()</a></code> may return a
-  variable multiple times in case of multiple transformations.</p>
+  may return a variable multiple times in case of multiple transformations
+  (see examples below), while <code><a href='find_variables.html'>find_variables()</a></code> returns each term only
+  once.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>cbpp</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>sleepstudy</span>)
-<span class='co'># some data preparation...</span>
-<span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
-<span class='no'>sleepstudy</span>$<span class='no'>mygrp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>180</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>sleepstudy</span>$<span class='no'>mysubgrp</span> <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
-<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fl'>5</span>) {
-  <span class='no'>filter_group</span> <span class='kw'>&lt;-</span> <span class='no'>sleepstudy</span>$<span class='no'>mygrp</span> <span class='kw'>==</span> <span class='no'>i</span>
-  <span class='no'>sleepstudy</span>$<span class='no'>mysubgrp</span>[<span class='no'>filter_group</span>] <span class='kw'>&lt;-</span>
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>30</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>filter_group</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-}
-
-<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>glmer</a></span>(
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>size</span> - <span class='no'>incidence</span>) ~ <span class='no'>period</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>herd</span>),
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>,
-  <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>
-)
-<span class='fu'>find_terms</span>(<span class='no'>m1</span>)</div><div class='output co'>#&gt; $response
-#&gt; [1] "incidence" "size"     
-#&gt; 
-#&gt; $conditional
-#&gt; [1] "period"
-#&gt; 
-#&gt; $random
-#&gt; [1] "herd"
-#&gt; </div><div class='input'>
-<span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(
-  <span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>mygrp</span> / <span class='no'>mysubgrp</span>) + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>),
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Reaction</span>) ~ <span class='no'>Days</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/AsIs'>I</a></span>(<span class='no'>Days</span>^<span class='fl'>2</span>) + (<span class='fl'>1</span> + <span class='no'>Days</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>exp</a></span>(<span class='no'>Days</span>) <span class='kw'>|</span> <span class='no'>Subject</span>),
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>
-)</div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='input'><span class='fu'>find_terms</span>(<span class='no'>m2</span>)</div><div class='output co'>#&gt; $response
-#&gt; [1] "Reaction"
+)</div><div class='output co'>#&gt; <span class='warning'>Warning: Model failed to converge with max|grad| = 14.7145 (tol = 0.002, component 1)</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Model is nearly unidentifiable: very large eigenvalue</span>
+#&gt; <span class='warning'> - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio</span>
+#&gt; <span class='warning'> - Rescale variables?</span></div><div class='input'>
+<span class='fu'>find_terms</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $response
+#&gt; [1] "log(Reaction)"
 #&gt; 
 #&gt; $conditional
-#&gt; [1] "Days"
+#&gt; [1] "Days"      "I(Days^2)"
 #&gt; 
 #&gt; $random
-#&gt; [1] "mysubgrp" "mygrp"    "Subject" 
-#&gt; </div><div class='input'><span class='fu'>find_terms</span>(<span class='no'>m2</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Reaction" "Days"     "mysubgrp" "mygrp"    "Subject" </div></pre>
+#&gt; [1] "Days"      "exp(Days)" "Subject"  
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

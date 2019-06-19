@@ -888,7 +888,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
     model_terms <- NULL
   } else {
     model_terms <- tryCatch({
-      find_terms(x, effects = "all", component = "all", flatten = FALSE)
+      find_variables(x, effects = "all", component = "all", flatten = FALSE)
     },
     error = function(x) {
       NULL

@@ -20,8 +20,8 @@ The functions from **insight** address different components of a model. In an ef
 * **response**: the outcome or response variable (dependent variable) of a regression model.
 * **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are (only) in the _random effects_ part of the model are not returned as predictors by default, however, these can be returned using additional arguments to the function call. Predictors are "unqiue", hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable).
 * **parameters**: values estimated or learned from data that encapsulate the relationship between variables. In regressions, these are usually referred to as *coefficients*.
-* **term**: terms are any (unique) variables that appear in a regression model, like response variable, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, in the expression `x + I(x^2)`, there is only the term `x`.
-* **variables**: A variable is considered as an object that stores unique data information. For instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables.
+* **variable**: any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A "variable" only relates to the unique occurence of a term, or the term name. For instance, the expression `x + poly(x, 2)` has only the variable `x`.
+* **term**: terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression `x + poly(x, 2)` has _one_ variable `x`, but _two_ terms `x` and `poly(x, 2)`.
 * **random slopes**: variables that are used as random slope in a mixed effects model.
 * **random or grouping factors**: variables that are used as grouping variables in a mixed effects model.
 

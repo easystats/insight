@@ -24,9 +24,9 @@
 #' @export
 has_intercept <- function(x) {
   if (is_multivariate(x)) {
-    unlist(lapply(find_variables(x), .check_for_intercept))
+    unlist(lapply(find_terms(x), .check_for_intercept))
   } else {
-    .check_for_intercept(find_variables(x))
+    .check_for_intercept(find_terms(x))
   }
 }
 

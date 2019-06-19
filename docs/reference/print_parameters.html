@@ -144,27 +144,27 @@ ROPE, ...).</p></td>
     </tr>
     <tr>
       <th>split_by</th>
-      <td><p>If <code>NULL</code>, the merged data frame is returned. Else, the
-data frame is split into a list, split by the values from those columns defined
-in <code>split_by</code>. <code>split_by</code> should be a character vector with one or
+      <td><p><code>split_by</code> should be a character vector with one or
 more of the following elements: <code>"Effects"</code>, <code>"Component"</code>,
 <code>"Response"</code> and <code>"Group"</code>. These are the column names returned
 by <code><a href='clean_parameters.html'>clean_parameters</a></code>, which is used to extract the information
-to which group or component model parameters belong.</p></td>
+from which the group or component model parameters belong. If <code>NULL</code>, the
+merged data frame is returned. Else, the data frame is split into a list,
+split by the values from those columns defined in <code>split_by</code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame or a list of data frame (if <code>split_by</code> is not <code>NULL</code>).
+    <p>A data frame or a list of data frames (if <code>split_by</code> is not <code>NULL</code>).
 If a list is returned, the element names reflect the model components where the
-extracted information in the data frames belong to, e.g. <code>`random.zero_inflated.Intercept: persons`</code>
-is the data frame that contains the parameters for the random effects from
+extracted information in the data frames belong to, e.g. <code>`random.zero_inflated.Intercept: persons`</code>.
+This is the data frame that contains the parameters for the random effects from
 group-level "persons" from the zero-inflated model component.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is intended to prepare data frames that contain information
+    <p>This function prepares data frames that contain information
 about model parameters for clear printing.
 <br /> <br />
 First, <code>x</code> is required, which should either be a model object or a
@@ -180,12 +180,12 @@ be the result of <code><a href='https://www.rdocumentation.org/packages/bayestes
 have a) a <code>Parameters</code> column and b) columns with the HDI values.
 <br /> <br />
 Now we have a data frame with model parameters and information about the
-association to the different model components, and a data frame with model
-parameters and some summary statistics. <code>print_parameters()</code>
-then merges these data frame, so the statistic of interest (in our example:
+association to the different model components, a data frame with model
+parameters, and some summary statistics. <code>print_parameters()</code>
+then merges these data frames, so the statistic of interest (in our example:
 the HDI) is also associated with the different model components. The data
-frame is split into a list, so for a clearer printing one can loop over this
-list and print each component for a better overview. Furthermore, parameter
+frame is split into a list, so for a clear printing. Users can loop over this
+list and print each component for a better overview. Further, parameter
 names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'.</p>
     
 
@@ -194,7 +194,7 @@ names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='download_model.html'>download_model</a></span>(<span class='st'>"brms_zi_2"</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/bayestestR/topics/hdi'>hdi</a></span>(<span class='no'>model</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='st'>"all"</span>)
 
-<span class='co'># hdi() returns a data frame, here we use only the informaton on</span>
+<span class='co'># hdi() returns a data frame; here we use only the informaton on</span>
 <span class='co'># parameter names and HDI values</span>
 <span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>as.data.frame</a></span>(<span class='no'>x</span>)[, <span class='fl'>1</span>:<span class='fl'>4</span>]
 <span class='no'>tmp</span></div><div class='output co'>#&gt;                     Parameter CI      CI_low      CI_high
@@ -252,10 +252,10 @@ names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'
 #&gt; 14 -1.51441438  1.007744675
 #&gt; 15 -2.62285811 -0.008930842
 #&gt; </div><div class='input'>
-<span class='co'># this is the standard print()-method for "bayestestR::hdi"-objects</span>
+<span class='co'># This is the standard print()-method for "bayestestR::hdi"-objects.</span>
 <span class='co'># For printing methods, it is easy to print complex summary statistics</span>
-<span class='co'># in a clean way to the console, by splitting up the information into</span>
-<span class='co'># the different model components</span>
+<span class='co'># in a clean way to the console by splitting the information into</span>
+<span class='co'># different model components.</span>
 <span class='no'>x</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Highest Density Interval
 #&gt; 
 #&gt; </span><span style='color: #BB0000;'># fixed effects, conditional component</span><span>

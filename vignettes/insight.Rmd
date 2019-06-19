@@ -46,8 +46,8 @@ The functions from **insight** address different components of a model. In an ef
 knitr::include_graphics("insight_design_2.png", dpi = 72)
 ```
 
-* **term**: any unique variables that appear in a regression model, e.g., response variables, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, the expression `x + I(x^2)` has only the term `x`.
-* **variables**: an object that stores unique data information. For instance, the expression `x + I(x^2)` has two objects with two different sets of data values, and thus are treated as two variables.
+* **variable**: any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A "variable" only relates to the unique occurence of a term, or the term name. For instance, the expression `x + poly(x, 2)` has only the variable `x`.
+* **term**: terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression `x + poly(x, 2)` has _one_ variable `x`, but _two_ terms `x` and `poly(x, 2)`.
 
 ```{r out.width="100%", echo=FALSE}
 knitr::include_graphics("insight_design_3.png", dpi = 72)
@@ -57,7 +57,7 @@ knitr::include_graphics("insight_design_3.png", dpi = 72)
 
 *Aren't the predictors, terms, and parameters the same thing?*
 
-In some cases, yes. But not in all cases, and sometimes it is useful to have the "bare" variable names (terms), but sometimes it is also useful to have the information about a possible transformation of variables. That is the main reason for having functions that cover similar aspects of a model object (like `find_variables()` and `find_predictors()` or `find_terms()`).
+In some cases, yes. But not in all cases, and sometimes it is useful to have the "bare" variable names (terms), but sometimes it is also useful to have the information about a possible transformation of variables. That is the main reason for having functions that cover similar aspects of a model object (like `find_terms()` and `find_predictors()` or `find_variables()`).
 
 Here are some examples that demonstrate the differences of each function:
 

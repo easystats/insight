@@ -130,6 +130,8 @@
 <li>
 <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>, which returns a data frame with “decomposed” parameters, i.e. a data frame with information about the clean paramter name, whether it is a fixed or random effect, from conditional or zero-inflated component, and if it is a parameter related to specific grouping factors of random effects (#106).</li>
 <li>
+<code><a href="../reference/print_parameters.html">print_parameters()</a></code>, which can be called on top of <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> to get a list of data frames that represent the different model components (fixed, random, zero-inflated, …) and which is in shape for printing summary statistics of complex models.</li>
+<li>
 <code><a href="../reference/find_interactions.html">find_interactions()</a></code> to return all low/high order interaction terms in a model.</li>
 <li>
 <code><a href="../reference/find_weights.html">find_weights()</a></code> and <code><a href="../reference/get_weights.html">get_weights()</a></code> to find / get model weights.</li>
@@ -141,6 +143,7 @@
 <ul>
 <li>To reduce interface complexity, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for objects of class <code>aovlist</code> now return the elements <code>$conditional</code> and <code>$random</code>, to be in line with other supported objects.</li>
 <li>The argument <code>resp</code> in <code><a href="../reference/get_response.html">get_response()</a></code> was renamed to <code>select</code>, to have a more clear verb (#114).</li>
+<li>The functions <code><a href="../reference/find_variables.html">find_variables()</a></code> and <code><a href="../reference/find_terms.html">find_terms()</a></code> were flipped, because what previously was considered as “term” was actually a “variable”, and vice versa.</li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
@@ -150,9 +153,11 @@
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now allow to return a <code>sigma</code>-element for multivariate-response models (<em>brmsfit</em>, <em>stanmvreg</em>).</li>
 <li>
+<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now return the intercepts for <strong>polr</strong> models.</li>
+<li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> gets an <code>effects</code> and a <code>component</code>-argument, similar to many other functions in <em>insight</em>.</li>
 <li>
-<code><a href="../reference/get_priors.html">get_priors()</a></code> now returns <code>distribuion = "uniform"</code> when model was fitted with flat priors.</li>
+<code><a href="../reference/get_priors.html">get_priors()</a></code> now returns <code>distribution = "uniform"</code> when model was fitted with flat priors.</li>
 <li>
 <code><a href="../reference/model_info.html">model_info()</a></code> now returns an element <code>$is_hurdle</code> for hurdle models.</li>
 </ul>
@@ -179,6 +184,7 @@
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> did not calculate random effect variances, when interaction terms in random slopes were also present in fixed effects, but the interaction was written in different order (e.g., <code>a*b</code> and <code>b*a</code>) (#112).</li>
 <li>Fixed issue with tibbles in <code><a href="../reference/get_data.html">get_data()</a></code>.</li>
+<li>Fixed issue with <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>stanreg</em>-models, when <code>prior_summary()</code> returned <code>NULL</code> for a prior (#116).</li>
 </ul>
 </div>
 </div>

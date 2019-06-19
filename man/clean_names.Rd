@@ -21,7 +21,7 @@ This function "cleans" names of model terms (or a character
 }
 \note{
 If \code{x} is a regression model, this function is (almost) equal to
-  calling \code{find_terms()}.
+  calling \code{find_variables()}.
 }
 \examples{
 # example from ?stats::glm

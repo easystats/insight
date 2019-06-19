@@ -368,7 +368,7 @@ clean_parameters.stanmvreg <- function(x, ...) {
 #
 .fix_random_effect_smooth <- function(x, out) {
   if ("Function" %in% colnames(out) && "smooth" %in% out$Function) {
-    vars <- find_variables(x)$conditional
+    vars <- find_terms(x)$conditional
     vars <- gsub(" ", "", vars, fixed = TRUE)
     random_smooth_terms <- grepl("^s\\((.*)(bs=\"re\"+)\\)", x = vars)
     if (any(random_smooth_terms)) {

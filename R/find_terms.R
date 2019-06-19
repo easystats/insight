@@ -1,14 +1,13 @@
-#' @title Find names of all model terms
+#' @title Find names of all variables
 #' @name find_terms
 #'
-#' @description Returns a list with the names of all model terms, including
-#'   response value and random effects.
+#' @description Returns a list with the names of all variables, including
+#'   response value and random effects, "as is". This means, on-the-fly
+#'   tranformations like \code{log()}, \code{I()}, \code{as.factor()} etc.
+#'   are preserved.
 #'
+#' @inheritParams find_formula
 #' @inheritParams find_predictors
-#'
-#' @note The difference to \code{\link{find_variables}} is that \code{find_terms()}
-#'   returns each term only once, while \code{find_variables()} may return a
-#'   variable multiple times in case of multiple transformations.
 #'
 #' @return A list with (depending on the model) following elements (character
 #'    vectors):
@@ -22,51 +21,83 @@
 #'      \item \code{instruments}, the names of instrumental variables
 #'    }
 #'
+#' @note The difference to \code{\link{find_variables}} is that \code{find_terms()}
+#'   may return a variable multiple times in case of multiple transformations
+#'   (see examples below), while \code{find_variables()} returns each term only
+#'   once.
+#'
 #' @examples
 #' library(lme4)
-#' data(cbpp)
 #' data(sleepstudy)
-#' # some data preparation...
-#' cbpp$trials <- cbpp$size - cbpp$incidence
-#' sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
-#' sleepstudy$mysubgrp <- NA
-#' for (i in 1:5) {
-#'   filter_group <- sleepstudy$mygrp == i
-#'   sleepstudy$mysubgrp[filter_group] <-
-#'     sample(1:30, size = sum(filter_group), replace = TRUE)
-#' }
-#'
-#' m1 <- glmer(
-#'   cbind(incidence, size - incidence) ~ period + (1 | herd),
-#'   data = cbpp,
-#'   family = binomial
-#' )
-#' find_terms(m1)
-#'
-#' m2 <- lmer(
-#'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+#' m <- lmer(
+#'   log(Reaction) ~ Days + I(Days^2) + (1 + Days + exp(Days) | Subject),
 #'   data = sleepstudy
 #' )
-#' find_terms(m2)
-#' find_terms(m2, flatten = TRUE)
+#'
+#' find_terms(m)
+#'
 #' @export
-find_terms <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"), flatten = FALSE) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
-
-  if (component %in% c("all", "conditional")) {
-    resp <- find_response(x, combine = FALSE)
+find_terms <- function(x, flatten = FALSE, ...) {
+  f <- find_formula(x)
+  if (is_multivariate(f)) {
+    l <- lapply(f, .get_variables_list)
   } else {
-    resp <- NULL
+    l <- .get_variables_list(f)
   }
-
-  pr <- find_predictors(x, effects = effects, component = component, flatten = flatten)
 
   if (flatten) {
-    unique(c(resp, pr))
-  } else if (is.null(resp)) {
-    pr
+    unique(unlist(l))
   } else {
-    c(list(response = resp), pr)
+    l
   }
+}
+
+
+
+.get_variables_list <- function(f) {
+  f$response <- .safe_deparse(f$conditional[[2L]])
+  f$conditional <- .safe_deparse(f$conditional[[3L]])
+
+  f <- lapply(f, function(.x) {
+    if (is.list(.x)) {
+      .x <- sapply(.x, .formula_to_string)
+    } else {
+      if (!is.character(.x)) .x <- .safe_deparse(.x)
+    }
+    .x
+  })
+
+  f <- lapply(f, function(.x) {
+    f_parts <- gsub("~", "", .trim(unlist(strsplit(split = "[\\*\\+\\:\\-\\|](?![^(]*\\))", x = .x, perl = TRUE))))
+    # if user has used namespace in formula-functions, these are returned
+    # as empty elements. rempove those here
+    if (any(nchar(f_parts) == 0)) {
+      f_parts <- f_parts[-which(nchar(f_parts) == 0)]
+    }
+    f_parts
+  })
+
+
+  # remove "1" and "0" from variables in random effects
+
+  if (.obj_has_name(f, "random")) {
+    pos <- which(f$random %in% c("1", "0"))
+    if (length(pos)) f$random <- f$random[-pos]
+  }
+
+  if (.obj_has_name(f, "zero_inflated_random")) {
+    pos <- which(f$zero_inflated_random %in% c("1", "0"))
+    if (length(pos)) f$zero_inflated_random <- f$zero_inflated_random[-pos]
+  }
+
+
+  # reorder, so response is first
+  .compact_list(f[c(length(f), 1:(length(f) - 1))])
+}
+
+
+
+.formula_to_string <- function(f) {
+  if (!is.character(f)) f <- .safe_deparse(f)
+  f
 }

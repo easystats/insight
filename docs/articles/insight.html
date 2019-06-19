@@ -112,9 +112,9 @@
 <p><img src="insight_design_2.png" width="100%"></p>
 <ul>
 <li>
-<strong>term</strong>: any unique variables that appear in a regression model, e.g., response variables, predictors or random effects. A “term” only relates to the unique occurence of a variable. For instance, the expression <code>x + I(x^2)</code> has only the term <code>x</code>.</li>
+<strong>variable</strong>: any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A “variable” only relates to the unique occurence of a term, or the term name. For instance, the expression <code>x + poly(x, 2)</code> has only the variable <code>x</code>.</li>
 <li>
-<strong>variables</strong>: an object that stores unique data information. For instance, the expression <code>x + I(x^2)</code> has two objects with two different sets of data values, and thus are treated as two variables.</li>
+<strong>term</strong>: terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/poly">poly(x, 2)</a></code>.</li>
 </ul>
 <p><img src="insight_design_3.png" width="100%"></p>
 </div>
@@ -122,7 +122,7 @@
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
 <p><em>Aren’t the predictors, terms, and parameters the same thing?</em></p>
-<p>In some cases, yes. But not in all cases, and sometimes it is useful to have the “bare” variable names (terms), but sometimes it is also useful to have the information about a possible transformation of variables. That is the main reason for having functions that cover similar aspects of a model object (like <code><a href="../reference/find_variables.html">find_variables()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> or <code><a href="../reference/find_terms.html">find_terms()</a></code>).</p>
+<p>In some cases, yes. But not in all cases, and sometimes it is useful to have the “bare” variable names (terms), but sometimes it is also useful to have the information about a possible transformation of variables. That is the main reason for having functions that cover similar aspects of a model object (like <code><a href="../reference/find_terms.html">find_terms()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> or <code><a href="../reference/find_variables.html">find_variables()</a></code>).</p>
 <p>Here are some examples that demonstrate the differences of each function:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(insight)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lme4)</a>
@@ -178,10 +178,10 @@
 <a class="sourceLine" id="cb2-32" title="32"><span class="co">#&gt; [1] "Reaction"</span></a>
 <a class="sourceLine" id="cb2-33" title="33"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-34" title="34"><span class="co">#&gt; $conditional</span></a>
-<a class="sourceLine" id="cb2-35" title="35"><span class="co">#&gt; [1] "Days"  "Weeks" "cat"  </span></a>
+<a class="sourceLine" id="cb2-35" title="35"><span class="co">#&gt; [1] "Days"         "I(Days^2)"    "log1p(Weeks)" "cat"         </span></a>
 <a class="sourceLine" id="cb2-36" title="36"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-37" title="37"><span class="co">#&gt; $random</span></a>
-<a class="sourceLine" id="cb2-38" title="38"><span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Subject"</span></a>
+<a class="sourceLine" id="cb2-38" title="38"><span class="co">#&gt; [1] "mysubgrp" "mygrp"    "mygrp"    "Days"     "Subject"</span></a>
 <a class="sourceLine" id="cb2-39" title="39"></a>
 <a class="sourceLine" id="cb2-40" title="40"><span class="co"># find all variables, i.e. also quadratic or log-transformed predictors</span></a>
 <a class="sourceLine" id="cb2-41" title="41"><span class="kw"><a href="../reference/find_variables.html">find_variables</a></span>(model)</a>
@@ -189,10 +189,10 @@
 <a class="sourceLine" id="cb2-43" title="43"><span class="co">#&gt; [1] "Reaction"</span></a>
 <a class="sourceLine" id="cb2-44" title="44"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-45" title="45"><span class="co">#&gt; $conditional</span></a>
-<a class="sourceLine" id="cb2-46" title="46"><span class="co">#&gt; [1] "Days"         "I(Days^2)"    "log1p(Weeks)" "cat"         </span></a>
+<a class="sourceLine" id="cb2-46" title="46"><span class="co">#&gt; [1] "Days"  "Weeks" "cat"  </span></a>
 <a class="sourceLine" id="cb2-47" title="47"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-48" title="48"><span class="co">#&gt; $random</span></a>
-<a class="sourceLine" id="cb2-49" title="49"><span class="co">#&gt; [1] "mysubgrp" "mygrp"    "mygrp"    "Days"     "Subject"</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-49" title="49"><span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Subject"</span></a></code></pre></div>
 <p>Finally, there is <code><a href="../reference/find_parameters.html">find_parameters()</a></code>. Parameters are also known as <em>coefficients</em>, and <code><a href="../reference/find_parameters.html">find_parameters()</a></code> does exactly that: returns the model coefficients.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># find model parameters, i.e. coefficients</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="../reference/find_parameters.html">find_parameters</a></span>(model)</a>

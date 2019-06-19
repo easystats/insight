@@ -100,9 +100,9 @@
 <li>
 <strong>parameters</strong>: values estimated or learned from data that encapsulate the relationship between variables. In regressions, these are usually referred to as <em>coefficients</em>.</li>
 <li>
-<strong>term</strong>: terms are any (unique) variables that appear in a regression model, like response variable, predictors or random effects. A “term” only relates to the unique occurence of a variable. For instance, in the expression <code>x + I(x^2)</code>, there is only the term <code>x</code>.</li>
+<strong>variable</strong>: any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A “variable” only relates to the unique occurence of a term, or the term name. For instance, the expression <code>x + poly(x, 2)</code> has only the variable <code>x</code>.</li>
 <li>
-<strong>variables</strong>: A variable is considered as an object that stores unique data information. For instance, the expression <code>x + I(x^2)</code> has two objects with two different sets of data values, and thus are treated as two variables.</li>
+<strong>term</strong>: terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/poly">poly(x, 2)</a></code>.</li>
 <li>
 <strong>random slopes</strong>: variables that are used as random slope in a mixed effects model.</li>
 <li>

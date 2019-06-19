@@ -41,7 +41,7 @@ Thus, building on this starting place, the remainder of the package revolves aro
 
 \pagebreak
 
-In total, the *insight* package includes 16 core functions (see Figure 1): `get_data()`, `get_priors()`, `get_variance()`, `get_parameters()`, `get_predictors()`, `get_random()`, `get_response()`, `find_algorithm()`, `find_formula()`, `find_variables()`, `find_terms()`, `find_parameters()`, `find_predictors()`, `find_random()`, `find_response()`, and `model_info()`. In all cases, users must supply at a minimum, the name of the fitted model object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_terms()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
+In total, the *insight* package includes 16 core functions (see Figure 1): `get_data()`, `get_priors()`, `get_variance()`, `get_parameters()`, `get_predictors()`, `get_random()`, `get_response()`, `find_algorithm()`, `find_formula()`, `find_variables()`, `find_terms()`, `find_parameters()`, `find_predictors()`, `find_random()`, `find_response()`, and `model_info()`. In all cases, users must supply at a minimum, the name of the fitted model object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_variables()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
 
 ![The functions in insight allow users to access different aspects of models, such as the data used for fitting, the parameters of the fitted model or various information about the model.](figure1.png)
 
@@ -62,8 +62,8 @@ The functions from *insight* address different components of a model. In an effo
 
 \pagebreak
 
-* **terms**: any unique variables that appear in a regression model, e.g., response variables, predictors or random effects. A "term" only relates to the unique occurence of a variable. For instance, the expression `x + poly(x, 2)` has only the term `x`.
-* **variables**: an object that stores unique data information. For instance, the expression `x + poly(x, 2)` has two objects with two different sets of data values, and thus are treated as two variables.
+* **variable**: any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A "variable" only relates to the unique occurence of a term, or the term name. For instance, the expression `x + poly(x, 2)` has only the variable `x`.
+* **term**: terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression `x + poly(x, 2)` has _one_ variable `x`, but _two_ terms `x` and `poly(x, 2)`.
 
 ![Definition of Model Components, Part 2](figure2b.png)
 
