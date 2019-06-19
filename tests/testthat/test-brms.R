@@ -332,74 +332,82 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         clean_parameters(m4),
         structure(
           list(
-            parameter = c("b_Intercept", "b_child", "b_camper", "r_persons.1.Intercept.",
-              "r_persons.2.Intercept.", "r_persons.3.Intercept.", "r_persons.4.Intercept.",
-              "b_zi_Intercept", "b_zi_child", "b_zi_camper", "r_persons__zi.1.Intercept.",
-              "r_persons__zi.2.Intercept.", "r_persons__zi.3.Intercept.", "r_persons__zi.4.Intercept."
+            Parameter = c(
+              "b_Intercept", "b_child", "b_camper", "r_persons.1.Intercept.", "r_persons.2.Intercept.",
+              "r_persons.3.Intercept.", "r_persons.4.Intercept.",  "b_zi_Intercept", "b_zi_child",
+              "b_zi_camper", "r_persons__zi.1.Intercept.", "r_persons__zi.2.Intercept.", "r_persons__zi.3.Intercept.",
+              "r_persons__zi.4.Intercept."
             ),
-            effects = c("fixed", "fixed", "fixed", "random", "random", "random",
-              "random", "fixed", "fixed", "fixed", "random", "random", "random", "random"
-            ),
-            component = c("conditional", "conditional", "conditional", "conditional",
-              "conditional", "conditional", "conditional", "zero_inflated", "zero_inflated",
-              "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated"
-            ),
-            group = c("", "", "", "persons.1", "persons.2", "persons.3", "persons.4",
-              "", "", "", "persons.1", "persons.2", "persons.3", "persons.4"
-            ),
-            cleaned_parameter = c("(Intercept)", "child", "camper", "(Intercept)",
-              "(Intercept)", "(Intercept)", "(Intercept)", "(Intercept)", "child",
-              "camper", "(Intercept)", "(Intercept)", "(Intercept)", "(Intercept)"
-            )
+            Effects = c("fixed", "fixed", "fixed", "random", "random", "random", "random",
+                        "fixed", "fixed", "fixed", "random", "random", "random", "random"),
+            Component = c("conditional", "conditional", "conditional", "conditional", "conditional", "conditional",
+                          "conditional", "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
+                          "zero_inflated", "zero_inflated", "zero_inflated"),
+            Group = c("", "", "", "Intercept: persons", "Intercept: persons", "Intercept: persons",
+                      "Intercept: persons", "", "", "", "Intercept: persons", "Intercept: persons",
+                      "Intercept: persons", "Intercept: persons"),
+            Cleaned_Parameter = c("(Intercept)", "child", "camper", "persons.1", "persons.2",
+                                  "persons.3", "persons.4", "(Intercept)", "child", "camper",
+                                  "persons.1", "persons.2", "persons.3", "persons.4")
           ),
-          class = "data.frame",
+          class = c("clean_parameters", "data.frame"),
           row.names = c(NA, -14L)
         )
       )
 
       expect_equal(
         clean_parameters(m5),
-        structure(list(
-          parameter = c("b_count_Intercept", "b_count_child",
-            "b_count_camper", "b_count2_Intercept", "b_count2_child", "b_count2_livebait",
-            "r_persons__count.1.Intercept.", "r_persons__count.2.Intercept.",
-            "r_persons__count.3.Intercept.", "r_persons__count.4.Intercept.",
-            "r_persons__count2.1.Intercept.", "r_persons__count2.2.Intercept.",
-            "r_persons__count2.3.Intercept.", "r_persons__count2.4.Intercept.",
-            "b_zi_count_Intercept", "b_zi_count_camper", "b_zi_count2_Intercept",
-            "b_zi_count2_child", "r_persons__zi_count.1.Intercept.", "r_persons__zi_count.2.Intercept.",
-            "r_persons__zi_count.3.Intercept.", "r_persons__zi_count.4.Intercept.",
-            "r_persons__zi_count2.1.Intercept.", "r_persons__zi_count2.2.Intercept.",
-            "r_persons__zi_count2.3.Intercept.", "r_persons__zi_count2.4.Intercept."
-        ), effects = c("fixed", "fixed", "fixed", "fixed", "fixed", "fixed",
-            "random", "random", "random", "random", "random", "random", "random",
-            "random", "fixed", "fixed", "fixed", "fixed", "random", "random",
-            "random", "random", "random", "random", "random", "random"),
-        component = c("conditional", "conditional", "conditional",
-            "conditional", "conditional", "conditional", "conditional",
-            "conditional", "conditional", "conditional", "conditional",
-            "conditional", "conditional", "conditional", "zero_inflated",
-            "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
-            "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
-            "zero_inflated", "zero_inflated", "zero_inflated"), group = c("",
-            "", "", "", "", "", "persons.1", "persons.2", "persons.3",
-            "persons.4", "persons2.1", "persons2.2", "persons2.3", "persons2.4",
-            "", "", "", "", "persons.1", "persons.2", "persons.3", "persons.4",
-            "persons2.1", "persons2.2", "persons2.3", "persons2.4"),
-        response = c("count", "count", "count", "count2", "count2",
-            "count2", "count", "count", "count", "count", "count2", "count2",
-            "count2", "count2", "count", "count", "count2", "count2",
-            "count", "count", "count", "count", "count2", "count2", "count2",
-            "count2"), cleaned_parameter = c("(Intercept)", "child",
-            "camper", "(Intercept)", "child", "livebait", "(Intercept)",
-            "(Intercept)", "(Intercept)", "(Intercept)", "(Intercept)",
-            "(Intercept)", "(Intercept)", "(Intercept)", "(Intercept)",
-            "camper", "(Intercept)", "child", "(Intercept)", "(Intercept)",
-            "(Intercept)", "(Intercept)", "(Intercept)", "(Intercept)",
-            "(Intercept)", "(Intercept)")),
-        row.names = c(NA, -26L), class = "data.frame")
+        structure(
+          list(
+            Parameter = c(
+              "b_count_Intercept", "b_count_child", "b_count_camper", "b_count2_Intercept", "b_count2_child",
+              "b_count2_livebait", "r_persons__count.1.Intercept.", "r_persons__count.2.Intercept.", "r_persons__count.3.Intercept.",
+              "r_persons__count.4.Intercept.", "r_persons__count2.1.Intercept.", "r_persons__count2.2.Intercept.",
+              "r_persons__count2.3.Intercept.", "r_persons__count2.4.Intercept.", "b_zi_count_Intercept",
+              "b_zi_count_camper", "b_zi_count2_Intercept", "b_zi_count2_child", "r_persons__zi_count.1.Intercept.",
+              "r_persons__zi_count.2.Intercept.", "r_persons__zi_count.3.Intercept.", "r_persons__zi_count.4.Intercept.",
+              "r_persons__zi_count2.1.Intercept.", "r_persons__zi_count2.2.Intercept.", "r_persons__zi_count2.3.Intercept.",
+              "r_persons__zi_count2.4.Intercept."
+            ),
+            Effects = c(
+              "fixed", "fixed", "fixed", "fixed", "fixed", "fixed", "random", "random",
+              "random", "random", "random", "random", "random", "random", "fixed", "fixed",
+              "fixed", "fixed", "random", "random", "random", "random", "random", "random",
+              "random", "random"
+            ),
+            Component = c(
+              "conditional", "conditional", "conditional", "conditional", "conditional",
+              "conditional", "conditional", "conditional", "conditional", "conditional",
+              "conditional", "conditional", "conditional", "conditional", "zero_inflated",
+              "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
+              "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
+              "zero_inflated"
+            ),
+            Group = c(
+              "", "", "", "", "", "", "Intercept: persons", "Intercept: persons", "Intercept: persons",
+              "Intercept: persons", "Intercept: persons2", "Intercept: persons2", "Intercept: persons2",
+              "Intercept: persons2", "", "", "", "", "Intercept: persons", "Intercept: persons",
+              "Intercept: persons", "Intercept: persons", "Intercept: persons2", "Intercept: persons2",
+              "Intercept: persons2", "Intercept: persons2"
+            ),
+            Response = c(
+              "count", "count", "count", "count2", "count2", "count2", "count", "count",
+              "count", "count", "count2", "count2", "count2", "count2", "count", "count",
+              "count2", "count2", "count", "count", "count", "count", "count2", "count2",
+              "count2", "count2"
+            ),
+            Cleaned_Parameter = c(
+              "(Intercept)", "child", "camper", "(Intercept)", "child", "livebait",
+              "persons.1", "persons.2", "persons.3", "persons.4", "persons2.1", "persons2.2",
+              "persons2.3", "persons2.4", "(Intercept)", "camper", "(Intercept)", "child",
+              "persons.1", "persons.2", "persons.3", "persons.4", "persons2.1", "persons2.2",
+              "persons2.3", "persons2.4"
+            )
+          ),
+          class = c("clean_parameters", "data.frame"),
+          row.names = c(NA, -26L)
+        )
       )
-
     })
 
   }
