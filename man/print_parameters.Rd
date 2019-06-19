@@ -18,8 +18,8 @@ ROPE, ...).}
 more of the following elements: \code{"Effects"}, \code{"Component"},
 \code{"Response"} and \code{"Group"}. These are the column names returned
 by \code{\link{clean_parameters}}, which is used to extract the information
-from which the group or component model parameters belong. If \code{NULL}, the 
-merged data frame is returned. Else, the data frame is split into a list, 
+from which the group or component model parameters belong. If \code{NULL}, the
+merged data frame is returned. Else, the data frame is split into a list,
 split by the values from those columns defined in \code{split_by}.}
 }
 \value{

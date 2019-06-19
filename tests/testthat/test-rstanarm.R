@@ -17,6 +17,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     data("puzzles")
     m4 <- stan_glm(RT ~ color * shape, data = puzzles, prior = cauchy(0, c(3, 1, 2)), iter = 500, chains = 2)
     m5 <- stan_glm(RT ~ color * shape, data = puzzles, prior = cauchy(0, c(1, 2, 3)), iter = 500, chains = 2)
+    m6 <- insight::download_model("stanreg_gamm4_1")
 
     test_that("get_priors", {
       expect_equal(colnames(get_priors(m1)), c("parameter", "distribution", "location", "scale"))
@@ -26,6 +27,11 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_equal(get_priors(m3)$adjusted_scale, c(NA, 2.555042), tolerance = 1e-3)
       expect_equal(get_priors(m4)$adjusted_scale, c(25.5992021152256, 7.67976063456768, 2.55992021152256, 5.11984042304512), tolerance = 1e-3)
       expect_equal(get_priors(m5)$adjusted_scale, c(25.5992021152256, 2.55992021152256, 5.11984042304512, 7.67976063456768), tolerance = 1e-3)
+      expect_equal(
+        get_priors(m6),
+        data.frame(parameter = "(Intercept)", distribution = "normal",location = 0, scale = 10, adjusted_scale = 4.35866284936698, stringsAsFactors = FALSE, row.names = NULL),
+        tolerance = 1e-3
+      )
     })
 
 

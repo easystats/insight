@@ -30,13 +30,19 @@ get_priors.stanreg <- function(x, ...) {
 
   ps <- rstanarm::prior_summary(x)
 
-  l <- lapply(ps[c("prior_intercept", "prior")], function(x) {
-    do.call(cbind, x)
-  })
+  l <- .compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) {
+    if (!is.null(.x)) do.call(cbind, .x)
+  }))
 
-  prior_info <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), l)
+  if (length(l) > 1) {
+    prior_info <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), l)
+  } else {
+    cn <- colnames(l[[1]])
+    prior_info <- as.data.frame(l)
+    colnames(prior_info) <- cn
+  }
+
   prior_info$parameter <- find_parameters(x)$conditional
-
   prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))]
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
