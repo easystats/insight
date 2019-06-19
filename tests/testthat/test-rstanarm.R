@@ -167,14 +167,15 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     test_that("clean_parameters", {
       expect_equal(
         clean_parameters(m2),
-        structure(list(parameter = c("(Intercept)", "Speciesversicolor",
+        structure(list(Parameter = c("(Intercept)", "Speciesversicolor",
           "Speciesvirginica", "Petal.Length", "Speciesversicolor:Petal.Length",
-          "Speciesvirginica:Petal.Length"), effects = c("fixed", "fixed",
-          "fixed", "fixed", "fixed", "fixed"), component = c("conditional",
+          "Speciesvirginica:Petal.Length"), Effects = c("fixed", "fixed",
+          "fixed", "fixed", "fixed", "fixed"), Component = c("conditional",
           "conditional", "conditional", "conditional", "conditional", "conditional"),
-          cleaned_parameter = c("(Intercept)", "Speciesversicolor",
+          Cleaned_Parameter = c("(Intercept)", "Speciesversicolor",
           "Speciesvirginica", "Petal.Length", "Speciesversicolor:Petal.Length",
-          "Speciesvirginica:Petal.Length")), class = "data.frame", row.names = c(NA, -6L))
+          "Speciesvirginica:Petal.Length")), class = c("clean_parameters", "data.frame"), row.names = c(NA, -6L)
+        )
       )
     })
 
