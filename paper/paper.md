@@ -25,6 +25,7 @@ date: 05 June 2019
 bibliography: paper.bib
 ---
 
+
 # Summary
 
 When fitting any statistical model, there are many useful pieces of information that are simultaneously calculated and stored beyond coefficient estimates and general model fit statistics. Although there exist some generic functions to obtain model information and data, many package-specific modeling functions do not provide such methods to allow users to access such valuable information. 
@@ -51,21 +52,41 @@ In total, the *insight* package includes 16 core functions (see Figure 1): `get_
 
 The functions from *insight* address different components of a model. In an effort to avoid confusion about specific "targets" of each function, in this section we provide a short explanation of *insight*'s definitions of regression model components (see Figures 2 and 3). For detailed examples, we point users to the [accompanying package website](https://easystats.github.io/insight/articles/insight.html).
 
-* **data**: the dataset used to fit the model.
+### Data
+
+The dataset used to fit the model.
+
+### Parameters
+
+Values estimated or learned from data that capture the relationship between variables. In regression models, these are usually referred to as *coefficients*.
+
+### Response and Predictors
+
 * **response**: the outcome or response variable (dependent variable) of a regression model.
 * **predictors**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are only in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors as "unique." As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.
-* **random slopes**: variables that are specified as random slopes in a mixed effects model.
-* **random or grouping factors**: variables that are specified as grouping variables in a mixed effects model.
-* **parameters**: values estimated or learned from data that capture the relationship between variables. In regression models, these are usually referred to as *coefficients*.
 
-![Definition of Model Components, Part 1](figure2a.png)
+![Definition of Model Components: Response and Predictors](figure3a.png)
+
+### Variables
+
+Any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A "variable" only relates to the unique occurence of a term, or the term name. For instance, the expression `x + poly(x, 2)` has only the variable `x`.
+
+![Definition of Model Components: Variables](figure3b.png)
 
 \pagebreak
 
-* **variable**: any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A "variable" only relates to the unique occurence of a term, or the term name. For instance, the expression `x + poly(x, 2)` has only the variable `x`.
-* **term**: terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression `x + poly(x, 2)` has _one_ variable `x`, but _two_ terms `x` and `poly(x, 2)`.
+### Terms
 
-![Definition of Model Components, Part 2](figure2b.png)
+Terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression `x + poly(x, 2)` has _one_ variable `x`, but _two_ terms `x` and `poly(x, 2)`.
+
+![Definition of Model Components: Terms](figure3c.png)
+
+### Random Effects
+
+* **random slopes**: variables that are specified as random slopes in a mixed effects model.
+* **random or grouping factors**: variables that are specified as grouping variables in a mixed effects model.
+
+![Definition of Model Components: Random Effects](figure3d.png)
 
 ## Examples
 
