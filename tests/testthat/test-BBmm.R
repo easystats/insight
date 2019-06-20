@@ -55,29 +55,12 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_identical(find_response(m1), "y")
     })
 
-    test_that("get_response", {
-      expect_identical(get_response(m1), dat$y)
-    })
-
-    test_that("get_random", {
-      expect_identical(get_random(m1), dat[, "z", drop = FALSE])
-    })
-
-    test_that("get_predictors", {
-      expect_equal(colnames(get_predictors(m1)), "x")
-    })
-
     test_that("link_inverse", {
       expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
     })
 
     test_that("link_function", {
       expect_equal(link_function(m1)(.2), qlogis(.2), tolerance = 1e-5)
-    })
-
-    test_that("get_data", {
-      expect_equal(nrow(get_data(m1)), 100)
-      expect_equal(colnames(get_data(m1)),  c("y", "x", "z"))
     })
 
     test_that("find_formula", {
@@ -108,8 +91,6 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           random = "z"
         )
       )
-      expect_equal(nrow(get_parameters(m1)), 2)
-      expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "x"))
     })
 
     test_that("is_multivariate", {

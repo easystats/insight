@@ -34,13 +34,19 @@ if (require("testthat") && require("insight") && require("gmnl") && require("mlo
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "Sat", conditional = c("Infl", "Type", "Cont")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("Sat", "Infl", "Type", "Cont"))
+    expect_equal(find_terms(m1), list(response = "Sat", conditional = c("Infl", "Type", "Cont", "1")))
+    expect_equal(find_terms(m1, flatten = TRUE), c("Sat", "Infl", "Type", "Cont", "1"))
   })
 
   test_that("n_obs", {
     expect_equal(n_obs(m1), 72)
   })
+
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "Sat", conditional = c("Infl", "Type", "Cont")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("Sat", "Infl", "Type", "Cont"))
+  })
+
 
   test_that("linkfun", {
     expect_false(is.null(link_function(m1)))

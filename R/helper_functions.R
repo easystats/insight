@@ -232,6 +232,7 @@
     )
   }
 
+
   if (!is.null(dat) && .obj_has_name(x$call, "subset")) {
     dat <- subset(dat, subset = eval(x$call$subset))
   }

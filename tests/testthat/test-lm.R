@@ -55,9 +55,16 @@ if (require("testthat") && require("insight") && require("stats")) {
 
   test_that("find_terms", {
     expect_equal(find_terms(m1), list(response = "Sepal.Length", conditional = c("Petal.Width", "Species")))
-    expect_equal(find_terms(m2), list(response = "mpg", conditional = c("hp", "cyl", "wt")))
+    expect_equal(find_terms(m2), list(response = "log(mpg)", conditional = c("log(hp)", "cyl", "I(cyl^2)", "poly(wt, degree = 2, raw = TRUE)")))
     expect_equal(find_terms(m1, flatten = TRUE), c("Sepal.Length", "Petal.Width", "Species"))
-    expect_equal(find_terms(m2, flatten = TRUE), c("mpg", "hp", "cyl", "wt"))
+    expect_equal(find_terms(m2, flatten = TRUE), c("log(mpg)", "log(hp)", "cyl", "I(cyl^2)", "poly(wt, degree = 2, raw = TRUE)"))
+  })
+
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "Sepal.Length", conditional = c("Petal.Width", "Species")))
+    expect_equal(find_variables(m2), list(response = "mpg", conditional = c("hp", "cyl", "wt")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("Sepal.Length", "Petal.Width", "Species"))
+    expect_equal(find_variables(m2, flatten = TRUE), c("mpg", "hp", "cyl", "wt"))
   })
 
   test_that("find_parameters", {
