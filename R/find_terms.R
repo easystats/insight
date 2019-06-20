@@ -1,10 +1,10 @@
-#' @title Find names of all variables
+#' @title Find all model terms
 #' @name find_terms
 #'
-#' @description Returns a list with the names of all variables, including
+#' @description Returns a list with the names of all terms, including
 #'   response value and random effects, "as is". This means, on-the-fly
-#'   tranformations like \code{log()}, \code{I()}, \code{as.factor()} etc.
-#'   are preserved.
+#'   tranformations or arithmetic expressions like \code{log()}, \code{I()},
+#'   \code{as.factor()} etc. are preserved.
 #'
 #' @inheritParams find_formula
 #' @inheritParams find_predictors
@@ -23,8 +23,8 @@
 #'
 #' @note The difference to \code{\link{find_variables}} is that \code{find_terms()}
 #'   may return a variable multiple times in case of multiple transformations
-#'   (see examples below), while \code{find_variables()} returns each term only
-#'   once.
+#'   (see examples below), while \code{find_variables()} returns each variable
+#'   name only once.
 #'
 #' @examples
 #' library(lme4)

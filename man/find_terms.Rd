@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_terms.R
 \name{find_terms}
 \alias{find_terms}
-\title{Find names of all variables}
+\title{Find all model terms}
 \usage{
 find_terms(x, flatten = FALSE, ...)
 }
@@ -28,16 +28,16 @@ A list with (depending on the model) following elements (character
    }
 }
 \description{
-Returns a list with the names of all variables, including
+Returns a list with the names of all terms, including
   response value and random effects, "as is". This means, on-the-fly
-  tranformations like \code{log()}, \code{I()}, \code{as.factor()} etc.
-  are preserved.
+  tranformations or arithmetic expressions like \code{log()}, \code{I()},
+  \code{as.factor()} etc. are preserved.
 }
 \note{
 The difference to \code{\link{find_variables}} is that \code{find_terms()}
   may return a variable multiple times in case of multiple transformations
-  (see examples below), while \code{find_variables()} returns each term only
-  once.
+  (see examples below), while \code{find_variables()} returns each variable
+  name only once.
 }
 \examples{
 library(lme4)

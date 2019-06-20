@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find names of all variables — find_terms • insight</title>
+<title>Find all model terms — find_terms • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,12 +37,12 @@
 
 
 
-<meta property="og:title" content="Find names of all variables — find_terms" />
+<meta property="og:title" content="Find all model terms — find_terms" />
 
-<meta property="og:description" content="Returns a list with the names of all variables, including
+<meta property="og:description" content="Returns a list with the names of all terms, including
   response value and random effects, &quot;as is&quot;. This means, on-the-fly
-  tranformations like log(), I(), as.factor() etc.
-  are preserved." />
+  tranformations or arithmetic expressions like log(), I(),
+  as.factor() etc. are preserved." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -112,17 +112,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find names of all variables</h1>
+    <h1>Find all model terms</h1>
     
     <div class="hidden name"><code>find_terms.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns a list with the names of all variables, including
+    <p>Returns a list with the names of all terms, including
   response value and random effects, "as is". This means, on-the-fly
-  tranformations like <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log()</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/AsIs'>I()</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/factor'>as.factor()</a></code> etc.
-  are preserved.</p>
+  tranformations or arithmetic expressions like <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log()</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/AsIs'>I()</a></code>,
+  <code><a href='https://www.rdocumentation.org/packages/base/topics/factor'>as.factor()</a></code> etc. are preserved.</p>
     
     </div>
 
@@ -164,8 +164,8 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 
     <p>The difference to <code><a href='find_variables.html'>find_variables</a></code> is that <code>find_terms()</code>
   may return a variable multiple times in case of multiple transformations
-  (see examples below), while <code><a href='find_variables.html'>find_variables()</a></code> returns each term only
-  once.</p>
+  (see examples below), while <code><a href='find_variables.html'>find_variables()</a></code> returns each variable
+  name only once.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

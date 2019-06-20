@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_variables.R
 \name{find_variables}
 \alias{find_variables}
-\title{Find names of all model terms}
+\title{Find names of all variables}
 \usage{
 find_variables(x, effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",
@@ -37,13 +37,14 @@ A list with (depending on the model) following elements (character
    }
 }
 \description{
-Returns a list with the names of all model terms, including
+Returns a list with the names of all variables, including
   response value and random effects.
 }
 \note{
 The difference to \code{\link{find_terms}} is that \code{find_variables()}
-  returns each term only once, while \code{find_terms()} may return a
-  variable multiple times in case of multiple transformations.
+  returns each variable name only once, while \code{find_terms()} may return a
+  variable multiple times in case of transformations or when arithmetic expressions
+  were used in the formula.
 }
 \examples{
 library(lme4)

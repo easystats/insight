@@ -1,14 +1,15 @@
-#' @title Find names of all model terms
+#' @title Find names of all variables
 #' @name find_variables
 #'
-#' @description Returns a list with the names of all model terms, including
+#' @description Returns a list with the names of all variables, including
 #'   response value and random effects.
 #'
 #' @inheritParams find_predictors
 #'
 #' @note The difference to \code{\link{find_terms}} is that \code{find_variables()}
-#'   returns each term only once, while \code{find_terms()} may return a
-#'   variable multiple times in case of multiple transformations.
+#'   returns each variable name only once, while \code{find_terms()} may return a
+#'   variable multiple times in case of transformations or when arithmetic expressions
+#'   were used in the formula.
 #'
 #' @return A list with (depending on the model) following elements (character
 #'    vectors):
