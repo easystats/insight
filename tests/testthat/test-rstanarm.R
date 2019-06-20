@@ -74,14 +74,6 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
           random = "herd"
         )
       )
-      expect_identical(
-        find_terms(m1, effects = "fixed"),
-        list(
-          response = "cbind(incidence, size - incidence)",
-          conditional = c("size", "period")
-        )
-      )
-      expect_null(find_terms(m1, component = "zi"))
     })
 
     test_that("find_variables", {

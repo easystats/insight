@@ -47,9 +47,9 @@ if (require("testthat") && require("insight") && require("rms")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "mpg", conditional = c("hp", "cyl", "wt")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("mpg", "hp", "cyl", "wt"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "mpg", conditional = c("hp", "cyl", "wt")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("mpg", "hp", "cyl", "wt"))
   })
 
   test_that("n_obs", {
