@@ -58,11 +58,21 @@ if (require("testthat") && require("insight") && require("feisr")) {
   test_that("find_terms", {
     expect_equal(find_terms(m1), list(
       response = "lnw",
+      conditional = c("marry", "enrol", "as.factor(yeargr)"),
+      slopes = c("exp", "I(exp^2)"),
+      random = "id"
+    ))
+    expect_equal(find_terms(m1, flatten = TRUE), c("lnw", "marry", "enrol", "as.factor(yeargr)", "exp", "I(exp^2)", "id"))
+  })
+
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(
+      response = "lnw",
       conditional = c("marry", "enrol", "yeargr"),
       slopes = "exp",
       random = "id"
     ))
-    expect_equal(find_terms(m1, flatten = TRUE), c("lnw", "marry", "enrol", "yeargr", "exp", "id"))
+    expect_equal(find_variables(m1, flatten = TRUE), c("lnw", "marry", "enrol", "yeargr", "exp", "id"))
   })
 
   test_that("n_obs", {

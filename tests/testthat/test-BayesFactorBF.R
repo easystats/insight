@@ -116,6 +116,17 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_equal(find_random(x), list(random = "ID"))
   })
 
+  test_that("find_variables", {
+    expect_equal(
+      find_variables(x),
+      list(
+        response = "RT",
+        conditional = c("shape", "color"),
+        random = "ID"
+      )
+    )
+  })
+
   test_that("find_terms", {
     expect_equal(
       find_terms(x),

@@ -58,17 +58,31 @@ if (require("testthat") && require("insight") && require("survival") && require(
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = c("time", "status"), conditional = c("ph.ecog", "age"), random = "inst"))
-    expect_equal(find_terms(m1, flatten = TRUE), c("time", "status", "ph.ecog", "age", "inst"))
+    expect_equal(find_terms(m1), list(response = "Surv(time, status)", conditional = c("ph.ecog", "age"), random = "inst"))
+    expect_equal(find_terms(m1, flatten = TRUE), c("Surv(time, status)", "ph.ecog", "age", "inst"))
     expect_equal(
       find_terms(m2),
+      list(
+        response = "Surv(time, status)",
+        conditional = c("ph.ecog", "age"),
+        random = c("inst", "inst2")
+      )
+    )
+    expect_equal(find_terms(m2, flatten = TRUE), c("Surv(time, status)", "ph.ecog", "age", "inst", "inst2"))
+  })
+
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = c("time", "status"), conditional = c("ph.ecog", "age"), random = "inst"))
+    expect_equal(find_variables(m1, flatten = TRUE), c("time", "status", "ph.ecog", "age", "inst"))
+    expect_equal(
+      find_variables(m2),
       list(
         response = c("time", "status"),
         conditional = c("ph.ecog", "age"),
         random = c("inst", "inst2")
       )
     )
-    expect_equal(find_terms(m2, flatten = TRUE), c("time", "status", "ph.ecog", "age", "inst", "inst2"))
+    expect_equal(find_variables(m2, flatten = TRUE), c("time", "status", "ph.ecog", "age", "inst", "inst2"))
   })
 
   test_that("n_obs", {

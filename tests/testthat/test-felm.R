@@ -74,14 +74,29 @@ if (require("testthat") && require("insight") && require("lfe")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(
+    expect_equal(
+      find_terms(m1),
+      list(
+        response = "y",
+        conditional = c("x", "x2"),
+        random = c("id", "firm"),
+        instruments = c("(Q", "W  x3", "factor(x4))")
+      ))
+    expect_equal(find_terms(m1, flatten = TRUE),
+                 c("y", "x", "x2", "id", "firm", "(Q", "W  x3", "factor(x4))"))
+  })
+
+
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(
       response = "y",
       conditional = c("x", "x2"),
       random = c("id", "firm"),
       instruments = c("Q", "W", "x3", "x4")
     ))
-    expect_equal(find_terms(m1, flatten = TRUE), c("y", "x", "x2", "id", "firm", "Q", "W", "x3", "x4"))
+    expect_equal(find_variables(m1, flatten = TRUE), c("y", "x", "x2", "id", "firm", "Q", "W", "x3", "x4"))
   })
+
 
   test_that("n_obs", {
     expect_equal(n_obs(m1), 1000)

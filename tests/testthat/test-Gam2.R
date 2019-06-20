@@ -41,7 +41,12 @@ if (require("testthat") && require("insight") && require("gam")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "Kyphosis", conditional = c("Age", "Number")))
+    expect_equal(find_terms(m1), list(response = "Kyphosis", conditional = c("s(Age, 4)", "Number")))
+    expect_equal(find_terms(m1, flatten = TRUE), c("Kyphosis", "s(Age, 4)", "Number"))
+  })
+
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "Kyphosis", conditional = c("Age", "Number")))
     expect_equal(find_terms(m1, flatten = TRUE), c("Kyphosis", "Age", "Number"))
   })
 

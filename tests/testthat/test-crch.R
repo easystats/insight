@@ -56,8 +56,13 @@ if (require("testthat") && require("insight") && require("crch")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "rain", conditional = c("sqrtensmean")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("rain", "sqrtensmean"))
+    expect_equal(find_terms(m1), list(response = "sqrt(rain)", conditional = c("sqrtensmean")))
+    expect_equal(find_terms(m1, flatten = TRUE), c("sqrt(rain)", "sqrtensmean"))
+  })
+
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "rain", conditional = c("sqrtensmean")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("rain", "sqrtensmean"))
   })
 
   test_that("n_obs", {

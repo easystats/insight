@@ -67,8 +67,8 @@ if (require("testthat") && require("insight") && require("stats")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "yield", conditional = c("N", "P", "K", "block")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("yield", "N", "P", "K", "block"))
+    expect_equal(find_terms(m1), list(response = "yield", conditional = c("N", "P", "K", "Error(block)")))
+    expect_equal(find_terms(m1, flatten = TRUE), c("yield", "N", "P", "K", "Error(block)"))
     expect_equal(find_terms(m2), list(response = "yield", conditional = c("N", "P", "K")))
     expect_equal(find_terms(m2, flatten = TRUE), c("yield", "N", "P", "K"))
   })

@@ -74,7 +74,7 @@ find_terms <- function(x, flatten = FALSE, ...) {
     if (any(nchar(f_parts) == 0)) {
       f_parts <- f_parts[-which(nchar(f_parts) == 0)]
     }
-    f_parts
+    unique(f_parts)
   })
 
 
