@@ -24,6 +24,10 @@ The number of observations used to fit the model, or \code{NULL} if
 This method returns the number of observation that were used
   to fit the model, as numeric value.
 }
+\note{
+For model-objects supported by \pkg{insight} that \emph{do not} have
+a \code{nobs()}-method, \pkg{insight} provides a \code{nobs()}-method as well.
+}
 \examples{
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
