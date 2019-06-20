@@ -59,8 +59,13 @@ if (require("testthat") && require("insight") && require("robustbase")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = c("success", "total"), conditional = c("logdose", "block")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("success", "total", "logdose", "block"))
+    expect_equal(find_terms(m1), list(response = "cbind(success, total - success)", conditional = c("logdose", "block")))
+    expect_equal(find_terms(m1, flatten = TRUE), c("cbind(success, total - success)", "logdose", "block"))
+  })
+
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = c("success", "total"), conditional = c("logdose", "block")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("success", "total", "logdose", "block"))
   })
 
   test_that("n_obs", {

@@ -69,7 +69,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_identical(
         find_terms(m1),
         list(
-          response = c("incidence", "size"),
+          response = "cbind(incidence, size - incidence)",
           conditional = c("size", "period"),
           random = "herd"
         )
@@ -77,11 +77,30 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_identical(
         find_terms(m1, effects = "fixed"),
         list(
-          response = c("incidence", "size"),
+          response = "cbind(incidence, size - incidence)",
           conditional = c("size", "period")
         )
       )
       expect_null(find_terms(m1, component = "zi"))
+    })
+
+    test_that("find_variables", {
+      expect_identical(
+        find_variables(m1),
+        list(
+          response = c("incidence", "size"),
+          conditional = c("size", "period"),
+          random = "herd"
+        )
+      )
+      expect_identical(
+        find_variables(m1, effects = "fixed"),
+        list(
+          response = c("incidence", "size"),
+          conditional = c("size", "period")
+        )
+      )
+      expect_null(find_variables(m1, component = "zi"))
     })
 
     test_that("n_obs", {

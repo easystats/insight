@@ -177,8 +177,22 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       dispersion = "xb"
     ))
     expect_identical(find_terms(m4, flatten = TRUE), c("count", "child", "camper", "persons", "livebait", "ID", "xb"))
-    expect_identical(find_terms(m6), list(response = "count"))
-    expect_identical(find_terms(m6, flatten = TRUE), "count")
+    expect_identical(find_terms(m6), list(response = "count", conditional = "1"))
+    expect_identical(find_terms(m6, flatten = TRUE), c("count", "1"))
+  })
+
+  test_that("find_variables", {
+    expect_identical(find_variables(m4), list(
+      response = "count",
+      conditional = c("child", "camper"),
+      random = "persons",
+      zero_inflated = c("child", "livebait"),
+      zero_inflated_random = "ID",
+      dispersion = "xb"
+    ))
+    expect_identical(find_variables(m4, flatten = TRUE), c("count", "child", "camper", "persons", "livebait", "ID", "xb"))
+    expect_identical(find_variables(m6), list(response = "count"))
+    expect_identical(find_variables(m6, flatten = TRUE), "count")
   })
 
   test_that("get_response", {
