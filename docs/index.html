@@ -89,27 +89,49 @@
 <div id="definition-of-model-components" class="section level2">
 <h2 class="hasAnchor">
 <a href="#definition-of-model-components" class="anchor"></a>Definition of Model Components</h2>
-<p>The functions from <strong>insight</strong> address different components of a model. In an effort to avoid confusion about specific “targets” of each function, we provide a short explanation of <strong>insight</strong>’s definitions of regression model components. Such components are:</p>
+<p>The functions from <strong>insight</strong> address different components of a model. In an effort to avoid confusion about specific “targets” of each function, in this section we provide a short explanation of <em>insight</em>’s definitions of regression model components.</p>
+<div id="data" class="section level4">
+<h4 class="hasAnchor">
+<a href="#data" class="anchor"></a>Data</h4>
+<p>The dataset used to fit the model.</p>
+</div>
+<div id="parameters" class="section level4">
+<h4 class="hasAnchor">
+<a href="#parameters" class="anchor"></a>Parameters</h4>
+<p>Values estimated or learned from data that capture the relationship between variables. In regression models, these are usually referred to as <em>coefficients</em>.</p>
+</div>
+<div id="response-and-predictors" class="section level4">
+<h4 class="hasAnchor">
+<a href="#response-and-predictors" class="anchor"></a>Response and Predictors</h4>
 <ul>
-<li>
-<strong>data</strong>: the dataset used to fit the model.</li>
 <li>
 <strong>response</strong>: the outcome or response variable (dependent variable) of a regression model.</li>
 <li>
-<strong>predictor</strong>: independent variables of (the <em>fixed</em> part of) a regression model. For mixed models, variables that are (only) in the <em>random effects</em> part of the model are not returned as predictors by default, however, these can be returned using additional arguments to the function call. Predictors are “unqiue”, hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable).</li>
+<strong>predictor</strong>: independent variables of (the <em>fixed</em> part of) a regression model. For mixed models, variables that are only in the <em>random effects</em> part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are “unique”. As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.</li>
+</ul>
+</div>
+<div id="variables" class="section level4">
+<h4 class="hasAnchor">
+<a href="#variables" class="anchor"></a>Variables</h4>
+<p>Any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A “variable” only relates to the unique occurence of a term, or the term name. For instance, the expression <code>x + poly(x, 2)</code> has only the variable <code>x</code>.</p>
+</div>
+<div id="terms" class="section level4">
+<h4 class="hasAnchor">
+<a href="#terms" class="anchor"></a>Terms</h4>
+<p>Terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/poly">poly(x, 2)</a></code>.</p>
+</div>
+<div id="random-effects" class="section level4">
+<h4 class="hasAnchor">
+<a href="#random-effects" class="anchor"></a>Random Effects</h4>
+<ul>
 <li>
-<strong>parameters</strong>: values estimated or learned from data that encapsulate the relationship between variables. In regressions, these are usually referred to as <em>coefficients</em>.</li>
+<strong>random slopes</strong>: variables that are specified as random slopes in a mixed effects model.</li>
 <li>
-<strong>variable</strong>: any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A “variable” only relates to the unique occurence of a term, or the term name. For instance, the expression <code>x + poly(x, 2)</code> has only the variable <code>x</code>.</li>
-<li>
-<strong>term</strong>: terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/poly">poly(x, 2)</a></code>.</li>
-<li>
-<strong>random slopes</strong>: variables that are used as random slope in a mixed effects model.</li>
-<li>
-<strong>random or grouping factors</strong>: variables that are used as grouping variables in a mixed effects model.</li>
+<strong>random or grouping factors</strong>: variables that are specified as grouping variables in a mixed effects model.</li>
 </ul>
 <p><em>Aren’t the predictors, terms and parameters the same thing?</em></p>
 <p>In some cases, yes. But not in all cases. Find out more by <a href="https://easystats.github.io/insight/articles/insight.html"><strong>clicking here to access the documentation</strong></a>.</p>
+</div>
 </div>
 <div id="functions" class="section level2">
 <h2 class="hasAnchor">

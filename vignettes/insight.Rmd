@@ -47,7 +47,7 @@ Values estimated or learned from data that capture the relationship between vari
 * **response**: the outcome or response variable (dependent variable) of a regression model.
 * **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are only in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are "unique". As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.
 
-```{r out.width="70%", echo=FALSE}
+```{r out.width="65%", echo=FALSE}
 knitr::include_graphics("figure3a.png", dpi = 72)
 ```
 
@@ -72,7 +72,7 @@ knitr::include_graphics("figure3c.png", dpi = 72)
 * **random slopes**: variables that are specified as random slopes in a mixed effects model.
 * **random or grouping factors**: variables that are specified as grouping variables in a mixed effects model.
 
-```{r out.width="70%", echo=FALSE}
+```{r out.width="65%", echo=FALSE}
 knitr::include_graphics("figure3d.png", dpi = 72)
 ```
 

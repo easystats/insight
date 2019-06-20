@@ -95,28 +95,50 @@
 <h2 class="hasAnchor">
 <a href="#definition-of-model-components" class="anchor"></a>Definition of Model Components</h2>
 <p>The functions from <strong>insight</strong> address different components of a model. In an effort to avoid confusion about specific “targets” of each function, in this section we provide a short explanation of <em>insight</em>’s definitions of regression model components.</p>
+<div id="data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#data" class="anchor"></a>Data</h3>
+<p>The dataset used to fit the model.</p>
+</div>
+<div id="parameters" class="section level3">
+<h3 class="hasAnchor">
+<a href="#parameters" class="anchor"></a>Parameters</h3>
+<p>Values estimated or learned from data that capture the relationship between variables. In regression models, these are usually referred to as <em>coefficients</em>.</p>
+</div>
+<div id="response-and-predictors" class="section level3">
+<h3 class="hasAnchor">
+<a href="#response-and-predictors" class="anchor"></a>Response and Predictors</h3>
 <ul>
-<li>
-<strong>data</strong>: the dataset used to fit the model.</li>
 <li>
 <strong>response</strong>: the outcome or response variable (dependent variable) of a regression model.</li>
 <li>
-<strong>predictor</strong>: independent variables of (the <em>fixed</em> part of) a regression model. For mixed models, variables that are only in the <em>random effects</em> part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are “unqiue.” As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.</li>
+<strong>predictor</strong>: independent variables of (the <em>fixed</em> part of) a regression model. For mixed models, variables that are only in the <em>random effects</em> part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are “unique”. As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.</li>
+</ul>
+<p><img src="figure3a.png" width="65%"></p>
+</div>
+<div id="variables" class="section level3">
+<h3 class="hasAnchor">
+<a href="#variables" class="anchor"></a>Variables</h3>
+<p>Any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A “variable” only relates to the unique occurence of a term, or the term name. For instance, the expression <code>x + poly(x, 2)</code> has only the variable <code>x</code>.</p>
+<p><img src="figure3b.png" width="80%"></p>
+</div>
+<div id="terms" class="section level3">
+<h3 class="hasAnchor">
+<a href="#terms" class="anchor"></a>Terms</h3>
+<p>Terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/poly">poly(x, 2)</a></code>.</p>
+<p><img src="figure3c.png" width="80%"></p>
+</div>
+<div id="random-effects" class="section level3">
+<h3 class="hasAnchor">
+<a href="#random-effects" class="anchor"></a>Random Effects</h3>
+<ul>
 <li>
 <strong>random slopes</strong>: variables that are specified as random slopes in a mixed effects model.</li>
 <li>
 <strong>random or grouping factors</strong>: variables that are specified as grouping variables in a mixed effects model.</li>
-<li>
-<strong>parameters</strong>: values estimated or learned from data that capture the relationship between variables. In regression models, these are usually referred to as <em>coefficients</em>.</li>
 </ul>
-<p><img src="insight_design_2.png" width="100%"></p>
-<ul>
-<li>
-<strong>variable</strong>: any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A “variable” only relates to the unique occurence of a term, or the term name. For instance, the expression <code>x + poly(x, 2)</code> has only the variable <code>x</code>.</li>
-<li>
-<strong>term</strong>: terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/poly">poly(x, 2)</a></code>.</li>
-</ul>
-<p><img src="insight_design_3.png" width="100%"></p>
+<p><img src="figure3d.png" width="65%"></p>
+</div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -181,7 +203,7 @@
 <a class="sourceLine" id="cb2-35" title="35"><span class="co">#&gt; [1] "Days"         "I(Days^2)"    "log1p(Weeks)" "cat"         </span></a>
 <a class="sourceLine" id="cb2-36" title="36"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-37" title="37"><span class="co">#&gt; $random</span></a>
-<a class="sourceLine" id="cb2-38" title="38"><span class="co">#&gt; [1] "mysubgrp" "mygrp"    "mygrp"    "Days"     "Subject"</span></a>
+<a class="sourceLine" id="cb2-38" title="38"><span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Days"     "Subject"</span></a>
 <a class="sourceLine" id="cb2-39" title="39"></a>
 <a class="sourceLine" id="cb2-40" title="40"><span class="co"># find all variables, i.e. also quadratic or log-transformed predictors</span></a>
 <a class="sourceLine" id="cb2-41" title="41"><span class="kw"><a href="../reference/find_variables.html">find_variables</a></span>(model)</a>

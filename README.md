@@ -14,16 +14,33 @@ Built with non-programmers in mind, **insight** offers a broad toolbox for makin
 
 ## Definition of Model Components
 
-The functions from **insight** address different components of a model. In an effort to avoid confusion about specific "targets" of each function, we provide a short explanation of **insight**'s definitions of regression model components. Such components are:
+The functions from **insight** address different components of a model. In an effort to avoid confusion about specific "targets" of each function, in this section we provide a short explanation of *insight*'s definitions of regression model components.
 
-* **data**: the dataset used to fit the model.
+#### Data
+
+The dataset used to fit the model.
+
+#### Parameters
+
+Values estimated or learned from data that capture the relationship between variables. In regression models, these are usually referred to as *coefficients*.
+
+#### Response and Predictors
+
 * **response**: the outcome or response variable (dependent variable) of a regression model.
-* **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are (only) in the _random effects_ part of the model are not returned as predictors by default, however, these can be returned using additional arguments to the function call. Predictors are "unqiue", hence if a variable appears as fixed effect and random slope, it is considered as one predictor (it is the same variable).
-* **parameters**: values estimated or learned from data that encapsulate the relationship between variables. In regressions, these are usually referred to as *coefficients*.
-* **variable**: any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A "variable" only relates to the unique occurence of a term, or the term name. For instance, the expression `x + poly(x, 2)` has only the variable `x`.
-* **term**: terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression `x + poly(x, 2)` has _one_ variable `x`, but _two_ terms `x` and `poly(x, 2)`.
-* **random slopes**: variables that are used as random slope in a mixed effects model.
-* **random or grouping factors**: variables that are used as grouping variables in a mixed effects model.
+* **predictor**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are only in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are "unique". As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.
+
+#### Variables
+
+Any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A "variable" only relates to the unique occurence of a term, or the term name. For instance, the expression `x + poly(x, 2)` has only the variable `x`.
+
+#### Terms
+
+Terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression `x + poly(x, 2)` has _one_ variable `x`, but _two_ terms `x` and `poly(x, 2)`.
+
+#### Random Effects
+
+* **random slopes**: variables that are specified as random slopes in a mixed effects model.
+* **random or grouping factors**: variables that are specified as grouping variables in a mixed effects model.
 
 *Aren't the predictors, terms and parameters the same thing?*
 
