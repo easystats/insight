@@ -6,6 +6,7 @@
 #'
 #' @param weighted For survey designs, returns the weighted sample size.
 #' @inheritParams find_predictors
+#' @inheritParams get_response
 #' @inheritParams find_formula
 #'
 #' @return The number of observations used to fit the model, or \code{NULL} if
@@ -173,17 +174,34 @@ n_obs.BBreg <- function(x, ...) {
   x$nObs
 }
 
+#' @export
+nobs.BBreg <- n_obs.BBreg
+
+
+
 
 #' @export
 n_obs.BBmm <- function(x, ...) {
   x$nObs
 }
 
+#' @export
+nobs.BBmm <- n_obs.BBmm
+
+
+
 
 #' @export
 n_obs.crq <- function(x, ...) {
-  nrow(x$residuals)
+  n <- nrow(x$residuals)
+  if (.is_empty_object(n))
+    n <- nrow(x$fitted.values)
+  n
 }
+
+#' @export
+nobs.crq <- n_obs.crq
+
 
 
 #' @export
@@ -191,11 +209,21 @@ n_obs.survfit <- function(x, ...) {
   length(x$n.event)
 }
 
+#' @export
+nobs.survfit <- n_obs.survfit
+
+
+
 
 #' @export
 n_obs.coxph <- function(x, ...) {
   max(x$n)
 }
+
+#' @export
+nobs.coxph <- n_obs.coxph
+
+
 
 
 #' @export
@@ -203,11 +231,21 @@ n_obs.coxme <- function(x, ...) {
   max(x$n)
 }
 
+#' @export
+nobs.coxme <- n_obs.coxme
+
+
+
 
 #' @export
 n_obs.felm <- function(x, ...) {
   x$N
 }
+
+#' @export
+nobs.felm <- n_obs.felm
+
+
 
 
 #' @export
@@ -215,17 +253,41 @@ n_obs.feis <- function(x, ...) {
   length(x$fitted.values)
 }
 
+#' @export
+nobs.feis <- n_obs.feis
+
+
 
 #' @export
 n_obs.aovlist <- function(x, ...) {
   nrow(stats::model.frame(x))
 }
 
+#' @export
+nobs.aovlist <- n_obs.aovlist
+
+
+
+#' @rdname n_obs
+#' @export
+n_obs.stanmvreg <- function(x, select = NULL, ...) {
+  n <- min(x$n_yobs)
+  if (!is.null(select)) {
+    if (select %in% names(x$n_yobs))
+      n <- x$n_yobs[select]
+    else {
+      print_color(sprintf("Could not find response '%s'. Model's response variables are named %s.\n", select, paste(names(x$n_yobs), collapse = ", ")), "red")
+      cat("Returning smallest number of observations now.\n")
+      n <- min(x$n_yobs)
+    }
+  }
+  n
+}
 
 #' @export
-n_obs.stanmvreg <- function(x, ...) {
-  min(x$n_yobs)
-}
+nobs.stanmvreg <- n_obs.stanmvreg
+
+
 
 
 #' @export
@@ -233,11 +295,20 @@ n_obs.mlogit <- function(x, ...) {
   nrow(x$model)
 }
 
+#' @export
+nobs.mlogit <- n_obs.mlogit
+
+
+
 
 #' @export
 n_obs.hurdle <- function(x, ...) {
   x$n
 }
+
+#' @export
+nobs.hurdle <- n_obs.hurdle
+
 
 
 #' @export
@@ -245,11 +316,21 @@ n_obs.zerotrunc <- function(x, ...) {
   x$n
 }
 
+#' @export
+nobs.zerotrunc <- n_obs.zerotrunc
+
+
+
 
 #' @export
 n_obs.zeroinfl <- function(x, ...) {
   x$n
 }
+
+#' @export
+nobs.zeroinfl <- n_obs.zeroinfl
+
+
 
 
 #' @export

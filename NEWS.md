@@ -1,5 +1,9 @@
 # insight 0.3.1
 
+## General
+
+* Added `nobs()`-method for those model-objects supported by *insight* that did not yet provide such a method.
+
 ## New supported model classes
 
 * `betabin` and `negbin` (*aod*), `BBreg` and `BBmm` (*HRQoL*), `wbm` (*panelr*), `survfit` (*survival*)
