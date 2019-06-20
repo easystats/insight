@@ -58,9 +58,9 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       )
     })
 
-    test_that("find_terms", {
-      expect_equal(find_terms(m1), list(response = "lcrmrte", conditional = c("lprbarr", "year"), instruments = c("lprbarr", "lmix")))
-      expect_equal(find_terms(m1, flatten = TRUE), c("lcrmrte", "lprbarr", "year", "lmix"))
+    test_that("find_variables", {
+      expect_equal(find_variables(m1), list(response = "lcrmrte", conditional = c("lprbarr", "year"), instruments = c("lprbarr", "lmix")))
+      expect_equal(find_variables(m1, flatten = TRUE), c("lcrmrte", "lprbarr", "year", "lmix"))
     })
 
     test_that("n_obs", {

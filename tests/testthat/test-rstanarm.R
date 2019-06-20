@@ -15,8 +15,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     m3 <- insight::download_model("stanreg_glm_1")
 
     data("puzzles")
-    m4 <- stan_glm(RT ~ color * shape, data = puzzles, prior = cauchy(0, c(3, 1, 2)), iter = 500, chains = 2)
-    m5 <- stan_glm(RT ~ color * shape, data = puzzles, prior = cauchy(0, c(1, 2, 3)), iter = 500, chains = 2)
+    m4 <- stan_glm(RT ~ color * shape, data = puzzles, prior = rstanarm::cauchy(0, c(3, 1, 2)), iter = 500, chains = 2)
+    m5 <- stan_glm(RT ~ color * shape, data = puzzles, prior = rstanarm::cauchy(0, c(1, 2, 3)), iter = 500, chains = 2)
     m6 <- insight::download_model("stanreg_gamm4_1")
 
     test_that("get_priors", {

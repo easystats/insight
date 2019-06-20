@@ -52,9 +52,9 @@ if (require("testthat") && require("insight") && require("survival")) {
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = c("futime", "fustat"), conditional = c("ecog.ps", "rx")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("futime", "fustat", "ecog.ps", "rx"))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = c("futime", "fustat"), conditional = c("ecog.ps", "rx")))
+    expect_equal(find_variables(m1, flatten = TRUE), c("futime", "fustat", "ecog.ps", "rx"))
   })
 
   test_that("n_obs", {

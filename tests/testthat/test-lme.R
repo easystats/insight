@@ -110,10 +110,10 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
     )
   })
 
-  test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "Reaction", conditional = "Days", random = "Subject"))
-    expect_equal(find_terms(m1, flatten = TRUE), c("Reaction", "Days", "Subject"))
-    expect_equal(find_terms(m2), list(response = "distance", conditional = c("age", "Sex")))
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(response = "Reaction", conditional = "Days", random = "Subject"))
+    expect_equal(find_variables(m1, flatten = TRUE), c("Reaction", "Days", "Subject"))
+    expect_equal(find_variables(m2), list(response = "distance", conditional = c("age", "Sex")))
   })
 
   test_that("n_obs", {

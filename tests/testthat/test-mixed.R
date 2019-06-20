@@ -97,19 +97,19 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
     )
   })
 
-  test_that("find_terms", {
-    expect_identical(find_terms(m1), list(
+  test_that("find_variables", {
+    expect_identical(find_variables(m1), list(
       response = "Reaction",
       conditional = "Days",
       random = "Subject"
     ))
-    expect_identical(find_terms(m1, flatten = TRUE), c("Reaction", "Days", "Subject"))
-    expect_identical(find_terms(m2), list(
+    expect_identical(find_variables(m1, flatten = TRUE), c("Reaction", "Days", "Subject"))
+    expect_identical(find_variables(m2), list(
       response = "Reaction",
       conditional = "Days",
       random = c("mysubgrp", "mygrp", "Subject")
     ))
-    expect_identical(find_terms(m2, flatten = TRUE), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
+    expect_identical(find_variables(m2, flatten = TRUE), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
   })
 
   test_that("get_response", {
