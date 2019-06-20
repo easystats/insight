@@ -77,10 +77,17 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
     test_that("find_terms", {
-      expect_equal(find_terms(m1), list(response = "agaaus", conditional = c("vitluc", "altitude")))
-      expect_equal(find_terms(m1, flatten = TRUE), c("agaaus", "vitluc", "altitude"))
-      expect_equal(find_terms(m2), list(response = c("agaaus", "kniexc"), conditional = c("vitluc", "altitude")))
-      expect_equal(find_terms(m2, flatten = TRUE), c("agaaus", "kniexc", "vitluc", "altitude"))
+      expect_equal(find_terms(m1), list(response = "agaaus", conditional = c("vitluc", "s(altitude, df = 2)")))
+      expect_equal(find_terms(m1, flatten = TRUE), c("agaaus", "vitluc", "s(altitude, df = 2)"))
+      expect_equal(find_terms(m2), list(response = "cbind(agaaus, kniexc)", conditional = c("vitluc", "s(altitude, df = c(2, 3))")))
+      expect_equal(find_terms(m2, flatten = TRUE), c("cbind(agaaus, kniexc)", "vitluc", "s(altitude, df = c(2, 3))"))
+    })
+
+    test_that("find_variables", {
+      expect_equal(find_variables(m1), list(response = "agaaus", conditional = c("vitluc", "altitude")))
+      expect_equal(find_variables(m1, flatten = TRUE), c("agaaus", "vitluc", "altitude"))
+      expect_equal(find_variables(m2), list(response = c("agaaus", "kniexc"), conditional = c("vitluc", "altitude")))
+      expect_equal(find_variables(m2, flatten = TRUE), c("agaaus", "kniexc", "vitluc", "altitude"))
     })
 
     test_that("n_obs", {
