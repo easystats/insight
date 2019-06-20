@@ -16,8 +16,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     p <- 1 / (1 + exp(-(beta[1] + beta[2] * x)))
     phi <- 1.2
 
-    y <- rBB(k, m, p, phi)
-    z <- as.factor(rBI(k,4,0.5,2))
+    y <- HRQoL::rBB(k, m, p, phi)
+    z <- as.factor(HRQoL::rBI(k,4,0.5,2))
 
     dat <- data.frame(y, x, j, fac, z)
 
@@ -51,16 +51,16 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_identical(find_random(m1), list(random = "z"))
     })
 
-    test_that("get_random", {
-      expect_equal(get_random(m1), dat[, "z", drop = FALSE])
-    })
-
     test_that("find_response", {
       expect_identical(find_response(m1), "y")
     })
 
     test_that("get_response", {
-      expect_equal(get_response(m1), dat$y)
+      expect_identical(get_response(m1), dat$y)
+    })
+
+    test_that("get_random", {
+      expect_identical(get_random(m1), dat[, "z", drop = FALSE])
     })
 
     test_that("get_predictors", {

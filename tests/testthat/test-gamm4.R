@@ -50,8 +50,8 @@ if (require("testthat") && require("insight") && require("gamm4")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "y", conditional = c("s(x0)", "s(x1)", "s(x2)")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("y", "s(x0)", "s(x1)", "s(x2)"))
+    expect_equal(find_terms(m1), list(response = "y", conditional = c("s(x0)", "x1", "s(x2)")))
+    expect_equal(find_terms(m1, flatten = TRUE), c("y", "s(x0)", "x1", "s(x2)"))
   })
 
   test_that("find_variables", {

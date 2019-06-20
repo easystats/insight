@@ -43,10 +43,19 @@ if (require("testthat") && require("insight") && require("nlme")) {
   test_that("find_terms", {
     expect_equal(find_terms(m1), list(
       response = "follicles",
+      conditional = c("sin(2 * pi * Time)", "cos(2 * pi * Time)"),
+      correlation = c("1", "Mare")
+    ))
+    expect_equal(find_terms(m1, flatten = TRUE), c("follicles", "sin(2 * pi * Time)", "cos(2 * pi * Time)", "1", "Mare"))
+  })
+
+  test_that("find_variables", {
+    expect_equal(find_variables(m1), list(
+      response = "follicles",
       conditional = "Time",
       correlation = "Mare"
     ))
-    expect_equal(find_terms(m1, flatten = TRUE), c("follicles", "Time", "Mare"))
+    expect_equal(find_variables(m1, flatten = TRUE), c("follicles", "Time", "Mare"))
   })
 
   test_that("n_obs", {
