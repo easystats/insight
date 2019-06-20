@@ -11,8 +11,14 @@
 #'   like \code{s()} for splines or \code{log()} are removed from
 #'   the model terms.
 #'
-#' @note If \code{x} is a regression model, this function is (almost) equal to
-#'   calling \code{find_variables()}.
+#' @note Typically, this method is intended to work on character vectors,
+#'   in order to remove patterns that obscure the variable names. For
+#'   convenience reasons it is also possible to call \code{clean_names()}
+#'   also on a model object. If \code{x} is a regression model, this
+#'   function is (almost) equal to calling \code{find_variables()}. The
+#'   main difference is that \code{clean_names()} always returns a character
+#'   vector, while \code{find_variables()} returns a list of character
+#'   vectors, unless \code{flatten = TRUE}. See 'Examples'.
 #'
 #' @examples
 #' # example from ?stats::glm
@@ -21,6 +27,19 @@
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ log(outcome) + as.factor(treatment), family = poisson())
 #' clean_names(m)
+#'
+#' # difference "clean_names()" and "find_variables()"
+#' library(lme4)
+#' m <- glmer(
+#'   cbind(incidence, size - incidence) ~ period + (1 | herd),
+#'   data = cbpp,
+#'   family = binomial
+#' )
+#'
+#' clean_names(m)
+#' find_variables(m)
+#' find_variables(m, flatten = TRUE)
+#'
 #' @export
 clean_names <- function(x) {
   UseMethod("clean_names")
