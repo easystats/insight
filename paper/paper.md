@@ -63,7 +63,7 @@ Values estimated or learned from data that capture the relationship between vari
 ### Response and Predictors
 
 * **response**: the outcome or response variable (dependent variable) of a regression model.
-* **predictors**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are only in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors as "unique." As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.
+* **predictors**: independent variables of (the _fixed_ part of) a regression model. For mixed models, variables that are only in the _random effects_ part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors as "unique". As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.
 
 ![Definition of Model Components: Response and Predictors](figure3a.png)
 
