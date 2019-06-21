@@ -177,6 +177,77 @@ find_formula(sample3)
 
 ## Examples of Use Cases in R Packages
 
+```{R}
+library(insight)
+m <- lm(
+  Sepal.Length ~ Species + Petal.Width + Sepal.Width, 
+  data = iris
+)
+
+dat <- get_data(m)
+pred <- find_predictors(m, flatten = TRUE)
+
+l <- lapply(pred, function(x) {
+  if (is.numeric(dat[[x]]))
+    mean(dat[[x]])
+  else
+    unique(dat[[x]])
+})
+
+names(l) <- pred
+l <- as.data.frame(l)
+
+cbind(l, predictions = predict(m, newdata = l))
+#>      Species Petal.Width Sepal.Width predictions
+#> 1     setosa    1.199333    3.057333    5.101427
+#> 2 versicolor    1.199333    3.057333    6.089557
+#> 3  virginica    1.199333    3.057333    6.339015
+```
+
+
+```{R}
+print_params <- function(model){
+  paste0(
+    "My parameters are ",
+    paste0(row.names(summary(model)$coefficients),  collapse = ", "),
+    ", thank you for your attention!"
+  )
+}
+
+m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+print_params(m1)
+#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
+
+# obviously, something is missing in the output
+m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
+print_params(m2)
+#> [1] "My parameters are , thank you for your attention!"
+```
+
+
+"Oh no, it doens't work for this class of models!" As the access to models depends on the type of the model in the R ecosystem, we would need to create specific methods for all types. With *insight*, users can write a function without having to worry about the model type.
+
+
+``` r
+print_params <- function(model){
+  paste0(
+    "My parameters are ",
+    paste0(insight::find_parameters(model, flatten = TRUE),  collapse = ", "),
+    ", thank you for your attention!"
+  )
+}
+
+m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+print_params(m1)
+#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
+
+m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
+print_params(m2)
+#> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"
+```
+
+
+
 *insight* is already used by different packages to solve problems that typically occur when the users' inputs are different model objects of varying complexity.
 
 For example, *ggeffects* [@ludecke_ggeffects_2018], a package that computes and visualizes marginal effects of regression models, requires extraction of the data (`get_data()`) that was used to fit the models, and also the retrieval all model predictors (`find_predictors()`) to decide which covariates are held constant when computing marginal effects. All of this information is required in order to create a data frame for `predict(newdata=<data frame>)`. Furthermore, the models' link-functions (`link_function()`) resp. link-inverse-functions (`link_inverse()`) are required to obtain predictons at the model's response scale.
