@@ -27,6 +27,7 @@ Suggests:
     afex,
     aod,
     BayesFactor,
+    bayestestR,
     betareg,
     biglm,
     blme,
