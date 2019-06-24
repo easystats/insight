@@ -140,14 +140,87 @@
 <p><img src="https://raw.githubusercontent.com/easystats/insight/master/paper/figure1.png"></p>
 <p>In total, the <strong>insight</strong> package includes 16 core functions: <a href="https://easystats.github.io/insight/reference/get_data.html">get_data()</a>, <a href="https://easystats.github.io/insight/reference/get_priors.html">get_priors()</a>, <a href="https://easystats.github.io/insight/reference/get_variance.html">get_variance()</a>, <a href="https://easystats.github.io/insight/reference/get_parameters.html">get_parameters()</a>, <a href="https://easystats.github.io/insight/reference/get_predictors.html">get_predictors()</a>, <a href="https://easystats.github.io/insight/reference/get_random.html">get_random()</a>, <a href="https://easystats.github.io/insight/reference/get_response.html">get_response()</a>, <a href="https://easystats.github.io/insight/reference/find_algorithm.html">find_algorithm()</a>, <a href="https://easystats.github.io/insight/reference/find_formula.html">find_formula()</a>, <a href="https://easystats.github.io/insight/reference/find_variables.html">find_variables()</a>, <a href="https://easystats.github.io/insight/reference/find_terms.html">find_terms()</a>, <a href="https://easystats.github.io/insight/reference/find_parameters.html">find_parameters()</a>, <a href="https://easystats.github.io/insight/reference/find_predictors.html">find_predictors()</a>, <a href="https://easystats.github.io/insight/reference/find_random.html">find_random()</a>, <a href="https://easystats.github.io/insight/reference/find_response.html">find_response()</a>, and <a href="https://easystats.github.io/insight/reference/model_info.html">model_info()</a>. In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the <code><a href="reference/find_terms.html">find_terms()</a></code> function’s <code>effects</code> argument allows for the extraction of “fixed effects” terms, “random effects” terms, or by default, “all” terms in the model object. We point users to the package documentation or the complementary package website, <a href="https://easystats.github.io/insight/" class="uri">https://easystats.github.io/insight/</a>, for a detailed list of the arguments associated with each function as well as the returned values from each function.</p>
 </div>
+<div id="examples-of-use-cases-in-r" class="section level2">
+<h2 class="hasAnchor">
+<a href="#examples-of-use-cases-in-r" class="anchor"></a>Examples of Use Cases in R</h2>
+<p>We now would like to provide examples of use cases of the <em>insight</em> package. These examples probably do not cover typical real-world problems, but serve as illustration of the core idea of this package: The unified interface to access model information. <em>insight</em> should help both users and package developers so they do not have to grapple with the many exceptions from various modelling packages when accessing model information.</p>
+<div id="making-predictions-at-specific-values-of-a-term-of-interest" class="section level4">
+<h4 class="hasAnchor">
+<a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor"></a>Making Predictions at Specific Values of a Term of Interest</h4>
+<p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code>.</p>
+<p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
+<pre class="{r}"><code>library(insight)
+m &lt;- lm(
+  Sepal.Length ~ Species + Petal.Width + Sepal.Width, 
+  data = iris
+)
+
+dat &lt;- get_data(m)
+pred &lt;- find_predictors(m, flatten = TRUE)
+
+l &lt;- lapply(pred, function(x) {
+  if (is.numeric(dat[[x]]))
+    mean(dat[[x]])
+  else
+    unique(dat[[x]])
+})
+
+names(l) &lt;- pred
+l &lt;- as.data.frame(l)
+
+cbind(l, predictions = predict(m, newdata = l))
+#&gt;      Species Petal.Width Sepal.Width predictions
+#&gt; 1     setosa    1.199333    3.057333    5.101427
+#&gt; 2 versicolor    1.199333    3.057333    6.089557
+#&gt; 3  virginica    1.199333    3.057333    6.339015</code></pre>
+</div>
+<div id="printing-model-coefficients" class="section level4">
+<h4 class="hasAnchor">
+<a href="#printing-model-coefficients" class="anchor"></a>Printing Model Coefficients</h4>
+<p>The next example should emphasize the possibilities to generalize functions to many different model objects using <em>insight</em>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
+<p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
+<pre class="{r}"><code>print_params &lt;- function(model){
+  paste0(
+    "My parameters are ",
+    paste0(row.names(summary(model)$coefficients),  collapse = ", "),
+    ", thank you for your attention!"
+  )
+}
+
+m1 &lt;- lm(Sepal.Length ~ Petal.Width, data = iris)
+print_params(m1)
+#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
+
+# obviously, something is missing in the output
+m2 &lt;- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
+print_params(m2)
+#&gt; [1] "My parameters are , thank you for your attention!"</code></pre>
+<p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <em>insight</em>, users can write a function without having to worry about the model type.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model){</a>
+<a class="sourceLine" id="cb3-2" title="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(</a>
+<a class="sourceLine" id="cb3-3" title="3">    <span class="st">"My parameters are "</span>,</a>
+<a class="sourceLine" id="cb3-4" title="4">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(insight<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/insight/topics/find_parameters">find_parameters</a></span>(model, <span class="dt">flatten =</span> <span class="ot">TRUE</span>),  <span class="dt">collapse =</span> <span class="st">", "</span>),</a>
+<a class="sourceLine" id="cb3-5" title="5">    <span class="st">", thank you for your attention!"</span></a>
+<a class="sourceLine" id="cb3-6" title="6">  )</a>
+<a class="sourceLine" id="cb3-7" title="7">}</a>
+<a class="sourceLine" id="cb3-8" title="8"></a>
+<a class="sourceLine" id="cb3-9" title="9">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="kw">print_params</span>(m1)</a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
+<a class="sourceLine" id="cb3-12" title="12"></a>
+<a class="sourceLine" id="cb3-13" title="13">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="kw">print_params</span>(m2)</a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></a></code></pre></div>
+</div>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Run the following to install the latest GitHub-version of <strong>insight</strong>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
 <p>Or install the latest stable release from CRAN:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"insight"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"insight"</span>)</a></code></pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
