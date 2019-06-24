@@ -56,7 +56,7 @@ In total, the **insight** package includes 16 core functions: [get_data()](https
 
 ## Examples of Use Cases in R
 
-We now would like to provide examples of use cases of the *insight* package. These examples probably do not cover typical real-world problems, but serve as illustration of the core idea of this package: The unified interface to access model information. *insight* should help both users and package developers so they do not have to grapple with the many exceptions from various modelling packages when accessing model information.
+We now would like to provide examples of use cases of the *insight* package. These examples probably do not cover typical real-world problems, but serve as illustration of the core idea of this package: The unified interface to access model information. *insight* should help both users and package developers in order to reduce the hassle with the many exceptions from various modelling packages when accessing model information.
 
 #### Making Predictions at Specific Values of a Term of Interest
 
