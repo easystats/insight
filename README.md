@@ -64,7 +64,7 @@ Say, the goal is to make predictions for a certain term, holding remaining co-va
 
 In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is "universal" and applies to many different model objects.
 
-```{R}
+```r
 library(insight)
 m <- lm(
   Sepal.Length ~ Species + Petal.Width + Sepal.Width, 
@@ -97,7 +97,7 @@ The next example should emphasize the possibilities to generalize functions to m
 
 The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.
 
-```{R}
+```r
 print_params <- function(model){
   paste0(
     "My parameters are ",
@@ -118,7 +118,7 @@ print_params(m2)
 
 As we can see, the function fails for *gam*-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With *insight*, users can write a function without having to worry about the model type.
 
-``` r
+```r
 print_params <- function(model){
   paste0(
     "My parameters are ",
