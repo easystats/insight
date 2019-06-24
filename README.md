@@ -54,6 +54,88 @@ The package revolves around two key prefixes: `get_*` and `find_*`. The `get_*` 
 
 In total, the **insight** package includes 16 core functions: [get_data()](https://easystats.github.io/insight/reference/get_data.html), [get_priors()](https://easystats.github.io/insight/reference/get_priors.html), [get_variance()](https://easystats.github.io/insight/reference/get_variance.html), [get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html), [get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html), [get_random()](https://easystats.github.io/insight/reference/get_random.html), [get_response()](https://easystats.github.io/insight/reference/get_response.html), [find_algorithm()](https://easystats.github.io/insight/reference/find_algorithm.html), [find_formula()](https://easystats.github.io/insight/reference/find_formula.html), [find_variables()](https://easystats.github.io/insight/reference/find_variables.html), [find_terms()](https://easystats.github.io/insight/reference/find_terms.html), [find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html), [find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html), [find_random()](https://easystats.github.io/insight/reference/find_random.html), [find_response()](https://easystats.github.io/insight/reference/find_response.html), and [model_info()](https://easystats.github.io/insight/reference/model_info.html). In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_terms()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
 
+## Examples of Use Cases in R
+
+We now would like to provide examples of use cases of the *insight* package. These examples probably do not cover typical real-world problems, but serve as illustration of the core idea of this package: The unified interface to access model information. *insight* should help both users and package developers so they do not have to grapple with the many exceptions from various modelling packages when accessing model information.
+
+#### Making Predictions at Specific Values of a Term of Interest
+
+Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is  achieved by calling `predict()` and feeding the `newdata`-argument with the values of the term of interest as well as the "constant" values for remaining co-variates. The functions `get_data()` and `find_predictors()` are used to get this information, which then can be used in the call to `predict()`.
+
+In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is "universal" and applies to many different model objects.
+
+```{R}
+library(insight)
+m <- lm(
+  Sepal.Length ~ Species + Petal.Width + Sepal.Width, 
+  data = iris
+)
+
+dat <- get_data(m)
+pred <- find_predictors(m, flatten = TRUE)
+
+l <- lapply(pred, function(x) {
+  if (is.numeric(dat[[x]]))
+    mean(dat[[x]])
+  else
+    unique(dat[[x]])
+})
+
+names(l) <- pred
+l <- as.data.frame(l)
+
+cbind(l, predictions = predict(m, newdata = l))
+#>      Species Petal.Width Sepal.Width predictions
+#> 1     setosa    1.199333    3.057333    5.101427
+#> 2 versicolor    1.199333    3.057333    6.089557
+#> 3  virginica    1.199333    3.057333    6.339015
+```
+
+#### Printing Model Coefficients
+
+The next example should emphasize the possibilities to generalize functions to many different model objects using *insight*. The aim is simply to print coefficients in a complete, human readable sentence.
+
+The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.
+
+```{R}
+print_params <- function(model){
+  paste0(
+    "My parameters are ",
+    paste0(row.names(summary(model)$coefficients),  collapse = ", "),
+    ", thank you for your attention!"
+  )
+}
+
+m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+print_params(m1)
+#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
+
+# obviously, something is missing in the output
+m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
+print_params(m2)
+#> [1] "My parameters are , thank you for your attention!"
+```
+
+As we can see, the function fails for *gam*-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With *insight*, users can write a function without having to worry about the model type.
+
+``` r
+print_params <- function(model){
+  paste0(
+    "My parameters are ",
+    paste0(insight::find_parameters(model, flatten = TRUE),  collapse = ", "),
+    ", thank you for your attention!"
+  )
+}
+
+m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+print_params(m1)
+#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
+
+m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
+print_params(m2)
+#> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"
+```
+
 ## Installation
 
 Run the following to install the latest GitHub-version of **insight**:

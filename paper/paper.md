@@ -26,6 +26,7 @@ bibliography: paper.bib
 ---
 
 
+
 # Summary
 
 When fitting any statistical model, there are many useful pieces of information that are simultaneously calculated and stored beyond coefficient estimates and general model fit statistics. Although there exist some generic functions to obtain model information and data, many package-specific modeling functions do not provide such methods to allow users to access such valuable information. 
@@ -92,7 +93,7 @@ Terms themselves consist of variable and factor names separated by operators, or
 
 For a more intuitive introduction, consider the following examples for three major types of models: ordinary least squares (OLS) regression, linear mixed effects models, and Bayesian models. Importantly, though only a few functions are included below for the sake of space, users are encouraged to inspect the package documentation for an exhaustive list of package functionality with accompanying examples.
 
-```{R}
+``` r
 # Load the "insight" package
 install.packages("insight")
 library(insight)
@@ -175,9 +176,17 @@ find_formula(sample3)
 #> Sepal.Width ~ Species * Petal.Length
 ```
 
-## Examples of Use Cases in R Packages
+## Examples of Use Cases in R
 
-```{R}
+We now would like to provide examples of use cases of the *insight* package. These examples probably do not cover typical real-world problems, but serve as illustration of the core idea of this package: The unified interface to access model information. *insight* should help both users and package developers so they do not have to grapple with the many exceptions from various modelling packages when accessing model information.
+
+#### Making Predictions at Specific Values of a Term of Interest
+
+Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is  achieved by calling `predict()` and feeding the `newdata`-argument with the values of the term of interest as well as the "constant" values for remaining co-variates. The functions `get_data()` and `find_predictors()` are used to get this information, which then can be used in the call to `predict()`.
+
+In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is "universal" and applies to many different model objects.
+
+``` r
 library(insight)
 m <- lm(
   Sepal.Length ~ Species + Petal.Width + Sepal.Width, 
@@ -204,8 +213,13 @@ cbind(l, predictions = predict(m, newdata = l))
 #> 3  virginica    1.199333    3.057333    6.339015
 ```
 
+#### Printing Model Coefficients
 
-```{R}
+The next example should emphasize the possibilities to generalize functions to many different model objects using *insight*. The aim is simply to print coefficients in a complete, human readable sentence.
+
+The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.
+
+``` r
 print_params <- function(model){
   paste0(
     "My parameters are ",
@@ -224,9 +238,7 @@ print_params(m2)
 #> [1] "My parameters are , thank you for your attention!"
 ```
 
-
-"Oh no, it doens't work for this class of models!" As the access to models depends on the type of the model in the R ecosystem, we would need to create specific methods for all types. With *insight*, users can write a function without having to worry about the model type.
-
+As we can see, the function fails for *gam*-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With *insight*, users can write a function without having to worry about the model type.
 
 ``` r
 print_params <- function(model){
@@ -246,7 +258,7 @@ print_params(m2)
 #> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"
 ```
 
-
+## Examples of Use Cases in R packages
 
 *insight* is already used by different packages to solve problems that typically occur when the users' inputs are different model objects of varying complexity.
 
