@@ -64,8 +64,8 @@ n_obs.gamm <- function(x, ...) {
 }
 
 #' @export
-nobs.gamm <- function(x, ...) {
-  x <- x$gam
+nobs.gamm <- function(object, ...) {
+  x <- object$gam
   class(x) <- c(class(x), c("glm", "lm"))
   n_obs(x, ...)
 }
@@ -78,7 +78,9 @@ n_obs.lmRob <- function(x, ...) {
 }
 
 #' @export
-nobs.lmRob <- n_obs.lmRob
+nobs.lmRob <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -94,7 +96,9 @@ n_obs.biglm <- function(x, ...) {
 }
 
 #' @export
-nobs.biglm <- n_obs.biglm
+nobs.biglm <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -104,7 +108,9 @@ n_obs.bigglm <- function(x, ...) {
 }
 
 #' @export
-nobs.bigglm <- n_obs.bigglm
+nobs.bigglm <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -114,7 +120,9 @@ n_obs.gbm <- function(x, ...) {
 }
 
 #' @export
-nobs.gbm <- n_obs.gbm
+nobs.gbm <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -124,7 +132,9 @@ n_obs.glimML <- function(x, ...) {
 }
 
 #' @export
-nobs.glimML <- n_obs.glimML
+nobs.glimML <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -134,7 +144,9 @@ n_obs.glmRob <- function(x, ...) {
 }
 
 #' @export
-nobs.glmRob <- n_obs.glmRob
+nobs.glmRob <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -144,7 +156,9 @@ n_obs.gmnl <- function(x, ...) {
 }
 
 #' @export
-nobs.gmnl <- n_obs.gmnl
+nobs.gmnl <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -155,7 +169,9 @@ n_obs.multinom <- function(x, ...) {
 }
 
 #' @export
-nobs.multinom <- n_obs.multinom
+nobs.multinom <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -165,7 +181,9 @@ n_obs.rq <- function(x, ...) {
 }
 
 #' @export
-nobs.rq <- n_obs.rq
+nobs.rq <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -175,7 +193,9 @@ n_obs.BBreg <- function(x, ...) {
 }
 
 #' @export
-nobs.BBreg <- n_obs.BBreg
+nobs.BBreg <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -186,7 +206,9 @@ n_obs.BBmm <- function(x, ...) {
 }
 
 #' @export
-nobs.BBmm <- n_obs.BBmm
+nobs.BBmm <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -200,7 +222,9 @@ n_obs.crq <- function(x, ...) {
 }
 
 #' @export
-nobs.crq <- n_obs.crq
+nobs.crq <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -210,7 +234,9 @@ n_obs.survfit <- function(x, ...) {
 }
 
 #' @export
-nobs.survfit <- n_obs.survfit
+nobs.survfit <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -221,7 +247,9 @@ n_obs.coxph <- function(x, ...) {
 }
 
 #' @export
-nobs.coxph <- n_obs.coxph
+nobs.coxph <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -232,7 +260,9 @@ n_obs.coxme <- function(x, ...) {
 }
 
 #' @export
-nobs.coxme <- n_obs.coxme
+nobs.coxme <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -243,7 +273,9 @@ n_obs.felm <- function(x, ...) {
 }
 
 #' @export
-nobs.felm <- n_obs.felm
+nobs.felm <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -254,7 +286,9 @@ n_obs.feis <- function(x, ...) {
 }
 
 #' @export
-nobs.feis <- n_obs.feis
+nobs.feis <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -264,7 +298,9 @@ n_obs.aovlist <- function(x, ...) {
 }
 
 #' @export
-nobs.aovlist <- n_obs.aovlist
+nobs.aovlist <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -285,7 +321,9 @@ n_obs.stanmvreg <- function(x, select = NULL, ...) {
 }
 
 #' @export
-nobs.stanmvreg <- n_obs.stanmvreg
+nobs.stanmvreg <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -296,7 +334,9 @@ n_obs.mlogit <- function(x, ...) {
 }
 
 #' @export
-nobs.mlogit <- n_obs.mlogit
+nobs.mlogit <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -307,7 +347,9 @@ n_obs.hurdle <- function(x, ...) {
 }
 
 #' @export
-nobs.hurdle <- n_obs.hurdle
+nobs.hurdle <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -317,7 +359,9 @@ n_obs.zerotrunc <- function(x, ...) {
 }
 
 #' @export
-nobs.zerotrunc <- n_obs.zerotrunc
+nobs.zerotrunc <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
@@ -328,7 +372,9 @@ n_obs.zeroinfl <- function(x, ...) {
 }
 
 #' @export
-nobs.zeroinfl <- n_obs.zeroinfl
+nobs.zeroinfl <- function(object, ...) {
+  n_obs(object, ...)
+}
 
 
 
