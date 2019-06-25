@@ -94,7 +94,7 @@
 <div id="definition-of-model-components" class="section level2">
 <h2 class="hasAnchor">
 <a href="#definition-of-model-components" class="anchor"></a>Definition of Model Components</h2>
-<p>The functions from <strong>insight</strong> address different components of a model. In an effort to avoid confusion about specific “targets” of each function, in this section we provide a short explanation of <em>insight</em>’s definitions of regression model components.</p>
+<p>The functions from <strong>insight</strong> address different components of a model. In an effort to avoid confusion about specific “targets” of each function, in this section we provide a short explanation of <strong>insight</strong>’s definitions of regression model components.</p>
 <div id="data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#data" class="anchor"></a>Data</h3>
@@ -232,6 +232,88 @@
 <a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt; $random$mygrp</span></a>
 <a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; [1] "(Intercept)"</span></a></code></pre></div>
 </div>
+<div id="examples-of-use-cases-in-r" class="section level2">
+<h2 class="hasAnchor">
+<a href="#examples-of-use-cases-in-r" class="anchor"></a>Examples of Use Cases in R</h2>
+<p>We now would like to provide examples of use cases of the <strong>insight</strong> package. These examples probably do not cover typical real-world problems, but serve as illustration of the core idea of this package: The unified interface to access model information. <strong>insight</strong> should help both users and package developers in order to reduce the hassle with the many exceptions from various modelling packages when accessing model information.</p>
+<div id="making-predictions-at-specific-values-of-a-term-of-interest" class="section level3">
+<h3 class="hasAnchor">
+<a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor"></a>Making Predictions at Specific Values of a Term of Interest</h3>
+<p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="../reference/get_data.html">get_data()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code>.</p>
+<p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(insight)</a>
+<a class="sourceLine" id="cb4-2" title="2">m &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(</a>
+<a class="sourceLine" id="cb4-3" title="3">  Sepal.Length <span class="op">~</span><span class="st"> </span>Species <span class="op">+</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>Sepal.Width, </a>
+<a class="sourceLine" id="cb4-4" title="4">  <span class="dt">data =</span> iris</a>
+<a class="sourceLine" id="cb4-5" title="5">)</a>
+<a class="sourceLine" id="cb4-6" title="6"></a>
+<a class="sourceLine" id="cb4-7" title="7">dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_data.html">get_data</a></span>(m)</a>
+<a class="sourceLine" id="cb4-8" title="8">pred &lt;-<span class="st"> </span><span class="kw"><a href="../reference/find_predictors.html">find_predictors</a></span>(m, <span class="dt">flatten =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb4-9" title="9"></a>
+<a class="sourceLine" id="cb4-10" title="10">l &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">lapply</a></span>(pred, <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb4-11" title="11">  <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">is.numeric</a></span>(dat[[x]]))</a>
+<a class="sourceLine" id="cb4-12" title="12">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(dat[[x]])</a>
+<a class="sourceLine" id="cb4-13" title="13">  <span class="cf">else</span></a>
+<a class="sourceLine" id="cb4-14" title="14">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(dat[[x]])</a>
+<a class="sourceLine" id="cb4-15" title="15">})</a>
+<a class="sourceLine" id="cb4-16" title="16"></a>
+<a class="sourceLine" id="cb4-17" title="17"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(l) &lt;-<span class="st"> </span>pred</a>
+<a class="sourceLine" id="cb4-18" title="18">l &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(l)</a>
+<a class="sourceLine" id="cb4-19" title="19"></a>
+<a class="sourceLine" id="cb4-20" title="20"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(l, <span class="dt">predictions =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(m, <span class="dt">newdata =</span> l))</a>
+<a class="sourceLine" id="cb4-21" title="21"><span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span></a>
+<a class="sourceLine" id="cb4-22" title="22"><span class="co">#&gt; 1     setosa    1.199333    3.057333    5.101427</span></a>
+<a class="sourceLine" id="cb4-23" title="23"><span class="co">#&gt; 2 versicolor    1.199333    3.057333    6.089557</span></a>
+<a class="sourceLine" id="cb4-24" title="24"><span class="co">#&gt; 3  virginica    1.199333    3.057333    6.339015</span></a></code></pre></div>
+</div>
+<div id="printing-model-coefficients" class="section level3">
+<h3 class="hasAnchor">
+<a href="#printing-model-coefficients" class="anchor"></a>Printing Model Coefficients</h3>
+<p>The next example should emphasize the possibilities to generalize functions to many different model objects using <strong>insight</strong>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
+<p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model){</a>
+<a class="sourceLine" id="cb5-2" title="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(</a>
+<a class="sourceLine" id="cb5-3" title="3">    <span class="st">"My parameters are "</span>,</a>
+<a class="sourceLine" id="cb5-4" title="4">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/row.names">row.names</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model)<span class="op">$</span>coefficients),  <span class="dt">collapse =</span> <span class="st">", "</span>),</a>
+<a class="sourceLine" id="cb5-5" title="5">    <span class="st">", thank you for your attention!"</span></a>
+<a class="sourceLine" id="cb5-6" title="6">  )</a>
+<a class="sourceLine" id="cb5-7" title="7">}</a>
+<a class="sourceLine" id="cb5-8" title="8"></a>
+<a class="sourceLine" id="cb5-9" title="9">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb5-10" title="10"><span class="kw">print_params</span>(m1)</a>
+<a class="sourceLine" id="cb5-11" title="11"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
+<a class="sourceLine" id="cb5-12" title="12"></a>
+<a class="sourceLine" id="cb5-13" title="13"><span class="co"># obviously, something is missing in the output</span></a>
+<a class="sourceLine" id="cb5-14" title="14">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb5-15" title="15"><span class="kw">print_params</span>(m2)</a>
+<a class="sourceLine" id="cb5-16" title="16"><span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></a></code></pre></div>
+<p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model){</a>
+<a class="sourceLine" id="cb6-2" title="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(</a>
+<a class="sourceLine" id="cb6-3" title="3">    <span class="st">"My parameters are "</span>,</a>
+<a class="sourceLine" id="cb6-4" title="4">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(insight<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/insight/topics/find_parameters">find_parameters</a></span>(model, <span class="dt">flatten =</span> <span class="ot">TRUE</span>),  <span class="dt">collapse =</span> <span class="st">", "</span>),</a>
+<a class="sourceLine" id="cb6-5" title="5">    <span class="st">", thank you for your attention!"</span></a>
+<a class="sourceLine" id="cb6-6" title="6">  )</a>
+<a class="sourceLine" id="cb6-7" title="7">}</a>
+<a class="sourceLine" id="cb6-8" title="8"></a>
+<a class="sourceLine" id="cb6-9" title="9">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="kw">print_params</span>(m1)</a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
+<a class="sourceLine" id="cb6-12" title="12"></a>
+<a class="sourceLine" id="cb6-13" title="13">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb6-14" title="14"><span class="kw">print_params</span>(m2)</a>
+<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></a></code></pre></div>
+</div>
+</div>
+<div id="examples-of-use-cases-in-r-packages" class="section level2">
+<h2 class="hasAnchor">
+<a href="#examples-of-use-cases-in-r-packages" class="anchor"></a>Examples of Use Cases in R packages</h2>
+<p><strong>insight</strong> is already used by different packages to solve problems that typically occur when the users’ inputs are different model objects of varying complexity.</p>
+<p>For example, <a href="https://strengejacke.github.io/ggeffects"><strong>ggeffects</strong></a>, a package that computes and visualizes marginal effects of regression models, requires extraction of the data (<code><a href="../reference/get_data.html">get_data()</a></code>) that was used to fit the models, and also the retrieval all model predictors (<code><a href="../reference/find_predictors.html">find_predictors()</a></code>) to decide which covariates are held constant when computing marginal effects. All of this information is required in order to create a data frame for <code>predict(newdata=&lt;data frame&gt;)</code>. Furthermore, the models’ link-functions (<code><a href="../reference/link_function.html">link_function()</a></code>) resp. link-inverse-functions (<code><a href="../reference/link_inverse.html">link_inverse()</a></code>) are required to obtain predictons at the model’s response scale.</p>
+<p>The <a href="https://strengejacke.github.io/sjPlot/"><strong>sjPlot</strong>-package</a> creates plots or summary tables from regression models, and uses <strong>insight</strong>-functions to get model-information (<code><a href="../reference/model_info.html">model_info()</a></code> or <code><a href="../reference/find_response.html">find_response()</a></code>), which is used to build the components of the final plot or table. This information helps, for example, in labeling table columns by providing information on the effect type (odds ratio, incidence rate ratio, etc.) or the different model components, which split plots and tables into the “conditional” and “zero-inflated” parts of a model, in the cases of models with zero-inflation.</p>
+<p><a href="https://easystats.github.io/bayestestR/"><strong>bayestestR</strong></a> mainly relies on <code><a href="../reference/get_priors.html">get_priors()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> to retrieve the necessary information to compute various indices or statistics of Bayesian models (like HDI, Credible Interval, MCSE, effective sample size, Bayes factors, etc.). The advantage of <code><a href="../reference/get_parameters.html">get_parameters()</a></code> in this context is that regardless of the number of parameters the posterior distribution has, the necessary data can be easily accessed from the model objects. There is no need to write original, complicated code or regular expressions.</p>
+<p>A last example is the <a href="https://easystats.github.io/performance/"><strong>performance</strong>-package</a>, which provides functions for computing measures to assess model quality. Many of these indices (e.g. check for overdispersion or zero-inflation, predictive accuracy, logloss, RMSE, etc.) require the number of observations (<code><a href="../reference/n_obs.html">n_obs()</a></code>) or the data from the response-variable (<code><a href="../reference/get_response.html">get_response()</a></code>). Again, in this context, functions from <strong>insight</strong> are helpful, because they offer a unified access to this information.</p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -242,6 +324,8 @@
 <li><a href="#overview-of-core-functions">Overview of Core Functions</a></li>
       <li><a href="#definition-of-model-components">Definition of Model Components</a></li>
       <li><a href="#examples">Examples</a></li>
+      <li><a href="#examples-of-use-cases-in-r">Examples of Use Cases in R</a></li>
+      <li><a href="#examples-of-use-cases-in-r-packages">Examples of Use Cases in R packages</a></li>
       </ul>
 </div>
       </div>

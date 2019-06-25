@@ -26,7 +26,6 @@ bibliography: paper.bib
 ---
 
 
-
 # Summary
 
 When fitting any statistical model, there are many useful pieces of information that are simultaneously calculated and stored beyond coefficient estimates and general model fit statistics. Although there exist some generic functions to obtain model information and data, many package-specific modeling functions do not provide such methods to allow users to access such valuable information. 
