@@ -175,7 +175,7 @@ find_formula(sample3)
 #> Sepal.Width ~ Species * Petal.Length
 ```
 
-For further examples and use cases, we point users to the [get started-vignette](https://easystats.github.io/insight/articles/insight.html).
+*insight* is already used by different packages to solve problems that typically occur when the users' inputs are different model objects of varying complexity, e.g. *ggeffects* [@ludecke_ggeffects_2018], the *sjPlot*-package [@pkg_sjPlot], *bayestestR* [@pkg_bayestestR] and the *performance*-package [@pkg_performance]. We point users to the [get started-vignette](https://easystats.github.io/insight/articles/insight.html) for further details and examples.
 
 ## Supported Models
 
