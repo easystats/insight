@@ -242,6 +242,19 @@ nobs.survfit <- function(object, ...) {
 
 
 #' @export
+n_obs.survreg <- function(x, ...) {
+  length(x$y)
+}
+
+#' @export
+nobs.survreg <- function(object, ...) {
+  n_obs(object, ...)
+}
+
+
+
+
+#' @export
 n_obs.coxph <- function(x, ...) {
   max(x$n)
 }
