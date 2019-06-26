@@ -44,6 +44,7 @@
 * `get_variance()` did not calculate random effect variances, when interaction terms in random slopes were also present in fixed effects, but the interaction was written in different order (e.g., `a*b` and `b*a`) (#112).
 * Fixed issue with tibbles in `get_data()`.
 * Fixed issue with `get_priors()` for *stanreg*-models, when `prior_summary()` returned `NULL` for a prior (#116).
+* Fixed issue with the recent update of *GLMMadaptive*, which broke some of the functions.
 
 # insight 0.3.0
 
