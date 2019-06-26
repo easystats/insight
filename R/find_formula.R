@@ -789,5 +789,32 @@ find_formula.BFBayesFactor <- function(x, ...) {
     zi.form <- NULL
   }
 
+  ## TODO could be extended to all find_formula()
+
+  # fix dot-formulas
+  c.form <- tryCatch(
+    {
+      if (as.character(c.form[[3]]) == ".") {
+        resp <- .safe_deparse(c.form[[2]])
+        pred <- setdiff(colnames(.get_data_from_env(x)), resp)
+        stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
+      }
+    },
+    error = function(e) { c.form }
+  )
+
+  # fix dot-formulas
+  zi.form <- tryCatch(
+    {
+      if (as.character(zi.form[[2]]) == ".") {
+        resp <- .safe_deparse(c.form[[2]])
+        pred <- setdiff(colnames(.get_data_from_env(x)), resp)
+        stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
+      }
+    },
+    error = function(e) { zi.form }
+  )
+
+
   .compact_list(list(conditional = c.form, zero_inflated = zi.form))
 }
