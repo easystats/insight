@@ -43,7 +43,8 @@ contains "human readable" parameter names (which are mostly identical to
 or for specific terms like smooth- or spline-terms).
 }
 \examples{
+\dontrun{
 library(brms)
 model <- download_model("brms_zi_2")
-clean_parameters(model)
+clean_parameters(model)}
 }

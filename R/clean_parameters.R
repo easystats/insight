@@ -33,9 +33,10 @@
 #' or for specific terms like smooth- or spline-terms).
 #'
 #' @examples
+#' \dontrun{
 #' library(brms)
 #' model <- download_model("brms_zi_2")
-#' clean_parameters(model)
+#' clean_parameters(model)}
 #' @export
 clean_parameters <- function(x, ...) {
   UseMethod("clean_parameters")
