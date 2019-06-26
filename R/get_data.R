@@ -495,7 +495,7 @@ get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component 
       fitfram <- .merge_dataframes(x$model_frames$mfZ_zi, fitfram, replace = TRUE)
     }
 
-    fitfram$grp__id <- x$id
+    fitfram$grp__id <- x$id[[x$id_name[1]]]
     colnames(fitfram)[ncol(fitfram)] <- x$id_name[1]
 
     # test...
