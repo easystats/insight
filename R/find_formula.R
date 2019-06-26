@@ -794,8 +794,8 @@ find_formula.BFBayesFactor <- function(x, ...) {
   # fix dot-formulas
   c.form <- tryCatch(
     {
-      if (as.character(c.form[[3]]) == ".") {
-        resp <- .safe_deparse(c.form[[2]])
+      if (as.character(c.form[3]) == ".") {
+        resp <- .safe_deparse(c.form[2])
         pred <- setdiff(colnames(.get_data_from_env(x)), resp)
         c.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
       }
@@ -807,8 +807,8 @@ find_formula.BFBayesFactor <- function(x, ...) {
   # fix dot-formulas
   zi.form <- tryCatch(
     {
-      if (as.character(zi.form[[2]]) == ".") {
-        resp <- .safe_deparse(c.form[[2]])
+      if (as.character(zi.form[2]) == ".") {
+        resp <- .safe_deparse(c.form[2])
         pred <- setdiff(colnames(.get_data_from_env(x)), resp)
         zi.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
       }
