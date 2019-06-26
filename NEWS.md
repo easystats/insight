@@ -2,6 +2,7 @@
 
 ## General
 
+* Updates `CITATION`, based on publication in [JOSS](https://doi.org/10.21105/joss.01412).
 * Added `nobs()`-method for those model-objects supported by *insight* that did not yet provide such a method.
 
 ## New supported model classes

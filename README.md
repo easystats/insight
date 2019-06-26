@@ -1,8 +1,6 @@
 # insight <img src='man/figures/logo.png' align="right" height="139" />
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight) [![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/) [![Build Status](https://travis-ci.org/easystats/insight.svg?branch=master)](https://travis-ci.org/easystats/insight)
-[![codecov](https://codecov.io/gh/easystats/insight/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/insight)
-[![downloads](http://cranlogs.r-pkg.org/badges/insight)](http://cranlogs.r-pkg.org/) [![total](http://cranlogs.r-pkg.org/badges/grand-total/insight)](http://cranlogs.r-pkg.org/)
+[![DOI](http://joss.theoj.org/papers/10.21105/joss.01412/status.svg)](https://doi.org/10.21105/joss.01412) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight) [![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/) [![downloads](http://cranlogs.r-pkg.org/badges/insight)](http://cranlogs.r-pkg.org/) [![total](http://cranlogs.r-pkg.org/badges/grand-total/insight)](http://cranlogs.r-pkg.org/)
 
 **Gain insight into your models!**
 
@@ -169,5 +167,4 @@ In case you want to file an issue or contribute in another way to the package, p
 
 If this package helped you, please consider citing as follows:
 
-- Lüdecke D, Makowski D (2019). *insight: Easy Access to Model Information for Various Model Objects*. R package. https://easystats.github.io/insight/.
-
+Lüdecke D, Waggoner P, Makowski D. insight: A Unified Interface to Access Information from Model Objects in R. Journal of Open Source Software 2019;4:1412. doi:10.21105/joss.01412
