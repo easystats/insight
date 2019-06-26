@@ -806,7 +806,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
   # add weighting variable
   weighting_var <- find_weights(x)
-  if (!is.null(weighting_var) && !weighting_var %in% colnames(mf)) {
+  if (!is.null(weighting_var) && !weighting_var %in% colnames(mf) && length(weighting_var) == 1) {
     mf <- tryCatch(
       {
         tmp <- cbind(mf, get_weights(x))
