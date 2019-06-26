@@ -80,7 +80,6 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("get_response", {
-      skip_on_travis()
       expect_identical(get_response(m3), cbpp[, c("incidence", "size")])
     })
 
@@ -104,7 +103,6 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_identical(colnames(get_data(m, component = "cond", effects = "random")), "persons")
       expect_identical(colnames(get_data(m, component = "dispersion")), "count")
       expect_null(get_data(m, component = "dispersion", effects = "random"))
-      skip_on_travis()
       expect_identical(colnames(get_data(m3)), c("incidence", "size", "period", "herd"))
     })
 
