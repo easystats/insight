@@ -291,21 +291,21 @@ get_data.clm2 <- function(x, ...) {
 #' @export
 get_data.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
   component <- match.arg(component)
-  .reurn_zeroinf_data(x, component)
+  .return_zeroinf_data(x, component)
 }
 
 
 #' @export
 get_data.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
   component <- match.arg(component)
-  .reurn_zeroinf_data(x, component)
+  .return_zeroinf_data(x, component)
 }
 
 
 #' @export
 get_data.zerotrunc <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
   component <- match.arg(component)
-  .reurn_zeroinf_data(x, component)
+  .return_zeroinf_data(x, component)
 }
 
 
@@ -933,7 +933,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 }
 
 
-.reurn_zeroinf_data <- function(x, component) {
+.return_zeroinf_data <- function(x, component) {
   model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE)
 
   mf <- tryCatch({

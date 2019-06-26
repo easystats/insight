@@ -797,8 +797,9 @@ find_formula.BFBayesFactor <- function(x, ...) {
       if (as.character(c.form[[3]]) == ".") {
         resp <- .safe_deparse(c.form[[2]])
         pred <- setdiff(colnames(.get_data_from_env(x)), resp)
-        stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
+        c.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
       }
+      c.form
     },
     error = function(e) { c.form }
   )
@@ -809,8 +810,9 @@ find_formula.BFBayesFactor <- function(x, ...) {
       if (as.character(zi.form[[2]]) == ".") {
         resp <- .safe_deparse(c.form[[2]])
         pred <- setdiff(colnames(.get_data_from_env(x)), resp)
-        stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
+        zi.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
       }
+      zi.form
     },
     error = function(e) { zi.form }
   )
