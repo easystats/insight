@@ -861,17 +861,17 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
   } else {
     fixed.component.data <- switch(
       component,
-      all = c(model.terms$conditional, model.terms$zero_inflated, model.terms$dispersion),
-      conditional = model.terms$conditional,
+      all           = c(model.terms$conditional, model.terms$zero_inflated, model.terms$dispersion),
+      conditional   = model.terms$conditional,
       zi = ,
       zero_inflated = model.terms$zero_inflated,
-      dispersion = model.terms$dispersion
+      dispersion    = model.terms$dispersion
     )
 
     random.component.data <- switch(
       component,
-      all = c(model.terms$random, model.terms$zero_inflated_random),
-      conditional = model.terms$random,
+      all           = c(model.terms$random, model.terms$zero_inflated_random),
+      conditional   = model.terms$random,
       zi = ,
       zero_inflated = model.terms$zero_inflated_random
     )
