@@ -49,6 +49,7 @@
 #' names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'.
 #'
 #' @examples
+#' \dontrun{
 #' library(bayestestR)
 #' model <- download_model("brms_zi_2")
 #' x <- hdi(model, effects = "all", component = "all")
@@ -66,7 +67,7 @@
 #' # For printing methods, it is easy to print complex summary statistics
 #' # in a clean way to the console by splitting the information into
 #' # different model components.
-#' x
+#' x}
 #'
 #' @importFrom stats na.omit
 #' @export
