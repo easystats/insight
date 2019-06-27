@@ -1,4 +1,4 @@
-# insight 0.3.1
+# insight 0.4.0
 
 ## General
 
