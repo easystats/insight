@@ -75,7 +75,7 @@ into several parts, depending on the model. See details below." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -190,106 +190,27 @@ names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>bayestestR</span>)
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>bayestestR</span>)
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='download_model.html'>download_model</a></span>(<span class='st'>"brms_zi_2"</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/bayestestR/topics/hdi'>hdi</a></span>(<span class='no'>model</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='st'>"all"</span>)
 
 <span class='co'># hdi() returns a data frame; here we use only the informaton on</span>
 <span class='co'># parameter names and HDI values</span>
 <span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>as.data.frame</a></span>(<span class='no'>x</span>)[, <span class='fl'>1</span>:<span class='fl'>4</span>]
-<span class='no'>tmp</span></div><div class='output co'>#&gt;                     Parameter CI      CI_low      CI_high
-#&gt; 1                 b_Intercept 89 -1.44367775 -0.285928716
-#&gt; 2                   b_persons 89  0.65996508  1.057302585
-#&gt; 3                     b_child 89 -1.29038410 -0.979470868
-#&gt; 4                    b_camper 89  0.58466097  0.888628499
-#&gt; 5              b_zi_Intercept 89 -1.92989437  0.523586791
-#&gt; 6                  b_zi_child 89  1.40263759  2.434058918
-#&gt; 7                 b_zi_camper 89 -1.41117927 -0.240865684
-#&gt; 8      r_persons.1.Intercept. 89 -0.38076861  0.281269029
-#&gt; 9      r_persons.2.Intercept. 89 -0.17446946  0.296893180
-#&gt; 10     r_persons.3.Intercept. 89 -0.26366619  0.175531854
-#&gt; 11     r_persons.4.Intercept. 89 -0.31916533  0.333190760
-#&gt; 12 r_persons__zi.1.Intercept. 89  0.07672287  2.701988990
-#&gt; 13 r_persons__zi.2.Intercept. 89 -0.90163251  1.572141783
-#&gt; 14 r_persons__zi.3.Intercept. 89 -1.51441438  1.007744675
-#&gt; 15 r_persons__zi.4.Intercept. 89 -2.62285811 -0.008930842</div><div class='input'>
+<span class='no'>tmp</span>
+
 <span class='co'># Based on the "split_by" argument, we get a list of data frames that</span>
 <span class='co'># is split into several parts that reflect the model components.</span>
-<span class='fu'>print_parameters</span>(<span class='no'>model</span>, <span class='no'>tmp</span>)</div><div class='output co'>#&gt; $fixed.conditional
-#&gt;   Cleaned_Parameter   Parameter Group CI     CI_low    CI_high
-#&gt; 1       (Intercept) b_Intercept       89 -1.4436777 -0.2859287
-#&gt; 2           persons   b_persons       89  0.6599651  1.0573026
-#&gt; 3             child     b_child       89 -1.2903841 -0.9794709
-#&gt; 4            camper    b_camper       89  0.5846610  0.8886285
-#&gt; 
-#&gt; $fixed.zero_inflated
-#&gt;    Cleaned_Parameter      Parameter Group CI    CI_low    CI_high
-#&gt; 9        (Intercept) b_zi_Intercept       89 -1.929894  0.5235868
-#&gt; 10             child     b_zi_child       89  1.402638  2.4340589
-#&gt; 11            camper    b_zi_camper       89 -1.411179 -0.2408657
-#&gt; 
-#&gt; $`random.conditional.Intercept: persons`
-#&gt;   Cleaned_Parameter              Parameter              Group CI     CI_low
-#&gt; 5         persons.1 r_persons.1.Intercept. Intercept: persons 89 -0.3807686
-#&gt; 6         persons.2 r_persons.2.Intercept. Intercept: persons 89 -0.1744695
-#&gt; 7         persons.3 r_persons.3.Intercept. Intercept: persons 89 -0.2636662
-#&gt; 8         persons.4 r_persons.4.Intercept. Intercept: persons 89 -0.3191653
-#&gt;     CI_high
-#&gt; 5 0.2812690
-#&gt; 6 0.2968932
-#&gt; 7 0.1755319
-#&gt; 8 0.3331908
-#&gt; 
-#&gt; $`random.zero_inflated.Intercept: persons`
-#&gt;    Cleaned_Parameter                  Parameter              Group CI
-#&gt; 12         persons.1 r_persons__zi.1.Intercept. Intercept: persons 89
-#&gt; 13         persons.2 r_persons__zi.2.Intercept. Intercept: persons 89
-#&gt; 14         persons.3 r_persons__zi.3.Intercept. Intercept: persons 89
-#&gt; 15         persons.4 r_persons__zi.4.Intercept. Intercept: persons 89
-#&gt;         CI_low      CI_high
-#&gt; 12  0.07672287  2.701988990
-#&gt; 13 -0.90163251  1.572141783
-#&gt; 14 -1.51441438  1.007744675
-#&gt; 15 -2.62285811 -0.008930842
-#&gt; </div><div class='input'>
+<span class='fu'>print_parameters</span>(<span class='no'>model</span>, <span class='no'>tmp</span>)
+
 <span class='co'># This is the standard print()-method for "bayestestR::hdi"-objects.</span>
 <span class='co'># For printing methods, it is easy to print complex summary statistics</span>
 <span class='co'># in a clean way to the console by splitting the information into</span>
 <span class='co'># different model components.</span>
-<span class='no'>x</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Highest Density Interval
-#&gt; 
-#&gt; </span><span style='color: #BB0000;'># fixed effects, conditional component</span><span>
-#&gt; 
-#&gt;  Parameter        89% HDI
-#&gt;  Intercept [-1.44, -0.29]
-#&gt;    persons [ 0.66,  1.06]
-#&gt;      child [-1.29, -0.98]
-#&gt;     camper [ 0.58,  0.89]
-#&gt; 
-#&gt; </span><span style='color: #BB0000;'># fixed effects, zero-inflation component</span><span>
-#&gt; 
-#&gt;  Parameter        89% HDI
-#&gt;  Intercept [-1.93,  0.52]
-#&gt;      child [ 1.40,  2.43]
-#&gt;     camper [-1.41, -0.24]
-#&gt; 
-#&gt; </span><span style='color: #BB0000;'># random effects, conditional component</span><span>
-#&gt; 
-#&gt;               Parameter        89% HDI
-#&gt;  r_persons.1.Intercept. [-0.38,  0.28]
-#&gt;  r_persons.2.Intercept. [-0.17,  0.30]
-#&gt;  r_persons.3.Intercept. [-0.26,  0.18]
-#&gt;  r_persons.4.Intercept. [-0.32,  0.33]
-#&gt; 
-#&gt; </span><span style='color: #BB0000;'># random effects, zero-inflation component</span><span>
-#&gt; 
-#&gt;               Parameter        89% HDI
-#&gt;  r_persons.1.Intercept. [ 0.08,  2.70]
-#&gt;  r_persons.2.Intercept. [-0.90,  1.57]
-#&gt;  r_persons.3.Intercept. [-1.51,  1.01]
-#&gt;  r_persons.4.Intercept. [-2.62, -0.01]
-#&gt; </div><div class='input'>
-</div></span></pre>
+<span class='no'>x</span>
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

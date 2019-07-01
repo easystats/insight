@@ -81,7 +81,7 @@ to return only certain results (see print_parameters)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -176,46 +176,11 @@ or for specific terms like smooth- or spline-terms).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>brms</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'xts':</span>
-#&gt; <span class='message'>  method     from</span>
-#&gt; <span class='message'>  as.zoo.xts zoo </span></div><div class='output co'>#&gt; <span class='message'>Loading 'brms' package (version 2.9.0). Useful instructions</span>
-#&gt; <span class='message'>can be found by typing help('brms'). A more detailed introduction</span>
-#&gt; <span class='message'>to the package is available through vignette('brms_overview').</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'brms'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:lme4':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    ngrps</span></div><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='download_model.html'>download_model</a></span>(<span class='st'>"brms_zi_2"</span>)
-<span class='fu'>clean_parameters</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;                     Parameter Effects     Component              Group
-#&gt; 1                 b_Intercept   fixed   conditional                   
-#&gt; 2                   b_persons   fixed   conditional                   
-#&gt; 3                     b_child   fixed   conditional                   
-#&gt; 4                    b_camper   fixed   conditional                   
-#&gt; 5      r_persons.1.Intercept.  random   conditional Intercept: persons
-#&gt; 6      r_persons.2.Intercept.  random   conditional Intercept: persons
-#&gt; 7      r_persons.3.Intercept.  random   conditional Intercept: persons
-#&gt; 8      r_persons.4.Intercept.  random   conditional Intercept: persons
-#&gt; 9              b_zi_Intercept   fixed zero_inflated                   
-#&gt; 10                 b_zi_child   fixed zero_inflated                   
-#&gt; 11                b_zi_camper   fixed zero_inflated                   
-#&gt; 12 r_persons__zi.1.Intercept.  random zero_inflated Intercept: persons
-#&gt; 13 r_persons__zi.2.Intercept.  random zero_inflated Intercept: persons
-#&gt; 14 r_persons__zi.3.Intercept.  random zero_inflated Intercept: persons
-#&gt; 15 r_persons__zi.4.Intercept.  random zero_inflated Intercept: persons
-#&gt;    Cleaned_Parameter
-#&gt; 1        (Intercept)
-#&gt; 2            persons
-#&gt; 3              child
-#&gt; 4             camper
-#&gt; 5          persons.1
-#&gt; 6          persons.2
-#&gt; 7          persons.3
-#&gt; 8          persons.4
-#&gt; 9        (Intercept)
-#&gt; 10             child
-#&gt; 11            camper
-#&gt; 12         persons.1
-#&gt; 13         persons.2
-#&gt; 14         persons.3
-#&gt; 15         persons.4</div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>brms</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='download_model.html'>download_model</a></span>(<span class='st'>"brms_zi_2"</span>)
+<span class='fu'>clean_parameters</span>(<span class='no'>model</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
