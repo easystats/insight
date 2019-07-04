@@ -292,12 +292,12 @@
         sqrt = 0.25,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
-    } else if (faminfo$is_exponential) {
+    } else if (faminfo$family %in% c("Gamma", "gamma")) {
       ## TODO needs some more checking
       dist.variance <- switch(
         faminfo$link_function,
         inverse = ,
-        identity = ,
+        identity = stats::family(x)$variance,
         log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
