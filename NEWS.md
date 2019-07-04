@@ -1,3 +1,9 @@
+# insight 0.4.1
+
+## Changes to functions
+
+* `get_variance()` now supports models with Gamma-family.
+
 # insight 0.4.0
 
 ## General

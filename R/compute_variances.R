@@ -292,6 +292,15 @@
         sqrt = 0.25,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
+    } else if (faminfo$is_exponential) {
+      ## TODO needs some more checking
+      dist.variance <- switch(
+        faminfo$link_function,
+        inverse = ,
+        identity = ,
+        log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+      )
     } else if (faminfo$family == "beta") {
       dist.variance <- switch(
         faminfo$link_function,
@@ -304,6 +313,8 @@
         log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
+    } else {
+      dist.variance <- sig
     }
   }
 
@@ -376,6 +387,9 @@
       # hurdle-poisson
       `hurdle poisson`    = ,
       truncated_poisson   = stats::family(x)$variance(sig),
+
+      # Gamma, exponential
+      Gamma               = stats::family(x)$variance(sig),
 
       # (zero-inflated) negative binomial
       `zero-inflated negative binomial` = ,
