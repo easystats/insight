@@ -750,19 +750,19 @@ get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE,
       as.data.frame(suppressMessages(
         BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)
       ))
-    data.frame("rho" = posteriors$rho)
+    data.frame("rho" = as.numeric(posteriors$rho))
   } else if (.classify_BFBayesFactor(x) == "ttest") {
     posteriors <-
       as.data.frame(suppressMessages(
         BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)
       ))
-    data.frame("Difference" = posteriors$mu)
+    data.frame("Difference" = as.numeric(posteriors[, 2]))
   } else if (.classify_BFBayesFactor(x) == "meta") {
     posteriors <-
       as.data.frame(suppressMessages(
         BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)
       ))
-    data.frame("Effect" = posteriors$delta)
+    data.frame("Effect" = as.numeric(posteriors$delta))
   } else{
     NULL
   }
