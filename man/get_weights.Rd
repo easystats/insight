@@ -4,10 +4,12 @@
 \alias{get_weights}
 \title{Get the values from model weights}
 \usage{
-get_weights(x)
+get_weights(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{...}{Currently not used.}
 }
 \value{
 The weighting variable, or \code{NULL} if no weights were specified.

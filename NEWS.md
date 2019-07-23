@@ -3,6 +3,11 @@
 ## Changes to functions
 
 * `get_variance()` now supports models with Gamma-family.
+* `get_weights()` and `find_weights()` now work for *brms*-models.
+
+## Bug fixes
+
+* Fix CRAN-check issues due to recent update from the *panelr*-package.
 
 # insight 0.4.0
 

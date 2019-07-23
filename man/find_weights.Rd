@@ -4,10 +4,12 @@
 \alias{find_weights}
 \title{Find names of model weights}
 \usage{
-find_weights(x)
+find_weights(x, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{...}{Currently not used.}
 }
 \value{
 The name of the weighting variable as character vector, or \code{NULL}

@@ -4,6 +4,7 @@
 #' @description Returns weighting variable of a model.
 #'
 #' @param x A fitted model.
+#' @param ... Currently not used.
 #'
 #' @return The weighting variable, or \code{NULL} if no weights were specified.
 #'
@@ -14,7 +15,13 @@
 #' get_weights(m)
 #'
 #' @export
-get_weights <- function(x) {
+get_weights <- function(x, ...) {
+  UseMethod("get_weights")
+}
+
+
+#' @export
+get_weights.default <- function(x) {
   w <- NULL
   tryCatch(
     {
@@ -48,4 +55,14 @@ get_weights <- function(x) {
   }
 
   w
+}
+
+
+#' @export
+get_weights.brmsfit <- function(x, ...) {
+  w <- find_weights(x)
+
+  if (!is.null(w)) {
+    get_data(x)[[w]]
+  }
 }
