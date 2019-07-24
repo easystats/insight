@@ -70,7 +70,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -111,6 +111,28 @@
       
     </div>
 
+    <div id="insight-041" class="section level1">
+<h1 class="page-header">
+<a href="#insight-041" class="anchor"></a>insight 0.4.1<small> Unreleased </small>
+</h1>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>
+<code><a href="../reference/get_variance.html">get_variance()</a></code> now supports models with Gamma-family.</li>
+<li>
+<code><a href="../reference/get_weights.html">get_weights()</a></code> and <code><a href="../reference/find_weights.html">find_weights()</a></code> now work for <em>brms</em>-models.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fix CRAN-check issues due to recent update from the <em>panelr</em>-package.</li>
+</ul>
+</div>
+</div>
     <div id="insight-040" class="section level1">
 <h1 class="page-header">
 <a href="#insight-040" class="anchor"></a>insight 0.4.0<small> 2019-07-01 </small>
@@ -154,9 +176,9 @@
 <li>The functions <code><a href="../reference/find_variables.html">find_variables()</a></code> and <code><a href="../reference/find_terms.html">find_terms()</a></code> were flipped, because what previously was considered as “term” was actually a “variable”, and vice versa.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now allow to return a <code>sigma</code>-element for multivariate-response models (<em>brmsfit</em>, <em>stanmvreg</em>).</li>
@@ -170,9 +192,9 @@
 <code><a href="../reference/model_info.html">model_info()</a></code> now returns an element <code>$is_hurdle</code> for hurdle models.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> returned priors for <code>brmsfit</code>-objects as <code>$random</code>-element. Now, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> returns a <code>$priors</code>-element (#98).</li>
@@ -228,9 +250,9 @@
 <code><a href="../reference/get_variance.html">get_variance()</a></code> no longer stops if random effects variance cannot be calculated. Rather, the return-value for <code>$var.random</code> will be <code>NULL</code>.</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now computes the full variance for mixed models with zero-inflation component.</li>
@@ -242,9 +264,9 @@
 <code><a href="../reference/find_variables.html">find_variables()</a></code> gets a <code>flatten</code>-argument, to either return results as list or as simple vector.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/get_data.html">get_data()</a></code> did not work when model formula contained a function with namespace-prefix (like <code>lm(Sepal.Length ~ splines::bs(Petal.Width, df=4)</code>) (#93).</li>
@@ -308,9 +330,9 @@
 <code><a href="../reference/print_color.html">print_color()</a></code> (resp. <code><a href="../reference/print_color.html">print_colour()</a></code>) to print coloured output to the console. Mainly implemented to reduce package dependencies.</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> get a <code>parameters</code>-argument for <code>brmsfit</code> and <code>stanreg</code> models, to allow selection of specific parameters that should be returned (#55).</li>
@@ -323,9 +345,9 @@
 <code>model_info</code> now returns <code>$is_tweedie</code> for models from tweedie-families.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not preserve coefficients of monotonic category-specific effects from <strong>brmsfit</strong>-objects.</li>
@@ -353,6 +375,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#insight-041">0.4.1</a></li>
         <li><a href="#insight-040">0.4.0</a></li>
         <li><a href="#insight-030">0.3.0</a></li>
         <li><a href="#insight-020">0.2.0</a></li>
