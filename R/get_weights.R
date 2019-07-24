@@ -21,7 +21,7 @@ get_weights <- function(x, ...) {
 
 
 #' @export
-get_weights.default <- function(x) {
+get_weights.default <- function(x, ...) {
   w <- NULL
   tryCatch(
     {
