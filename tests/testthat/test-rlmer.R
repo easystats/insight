@@ -204,16 +204,12 @@ if (.runThisTest) {
       tolerance = 1e-4)
 
       expect_equal(get_variance(m2), list(
-        var.fixed = 933.76220429582349424891,
-        var.random = 1407.94716829000185498444,
-        var.residual = 836.39065198362175124203,
-        var.distribution = 836.39065198362175124203,
+        var.fixed = 914.841369525452,
+        var.random = 1406.78220090082,
+        var.residual = 809.318117324236,
+        var.distribution = 809.318117324236,
         var.dispersion = 0,
-        var.intercept = c(
-          `mysubgrp:mygrp` = 0,
-          Subject = 1407.94716828999730751093,
-          mygrp = 0
-        )
+        var.intercept = c(`mysubgrp:mygrp` = 0, Subject = 1390.66848951126, mygrp = 16.113711389561)
       ),
       tolerance = 1e-4)
     })
