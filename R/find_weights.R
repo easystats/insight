@@ -43,12 +43,12 @@ find_weights.brmsfit <- function(x, ...) {
     resp <- .safe_deparse(f$conditional[[2L]])
   }
 
-  resp <- .compact_character(sapply(resp, function(i) {
-    if (.string_contains("weights", i) && .string_contains("|", i))
+  resp <- .compact_character(unname(sapply(resp, function(i) {
+    if (grepl("(.*)\\|(\\s+)weights\\((.*)\\)", i))
       i
     else
       ""
-  }))
+  })))
 
   w <- .trim(sub("(.*)\\|(\\s+)weights\\((.*)\\)", "\\3", resp))
   if (.is_empty_object(w)) w <- NULL
