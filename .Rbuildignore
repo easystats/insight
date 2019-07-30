@@ -13,3 +13,4 @@
 ^CODE_OF_CONDUCT.*$
 ^doc$
 ^Meta$
+^.github$
