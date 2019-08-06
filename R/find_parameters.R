@@ -101,7 +101,7 @@ find_parameters.polr <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
   pars <- list(
-    conditional = names(stats::coef(x)),
+    conditional = names(stats::na.omit(stats::coef(x))),
     sigma = names(stats::coef(x, what = "sigma")),
     nu = names(stats::coef(x, what = "nu")),
     tau = names(stats::coef(x, what = "tau"))

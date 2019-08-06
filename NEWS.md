@@ -2,7 +2,8 @@
 
 ## Bug fixed
 
-* `find_formula()` now extracts group factors of random effects for *gamlss* models
+* `find_formula()` now extracts group factors of random effects for *gamlss* models.
+* `find_parameters()` and `get_parameters()` no longer show `NA` coefficients from group factors of random effects for *gamlss* models.
 
 # insight 0.4.1
 

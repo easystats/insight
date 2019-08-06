@@ -184,11 +184,11 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
 }
 
 
-
+#' @importFrom stats na.omit
 #' @export
 get_parameters.gamlss <- function(x, ...) {
   pars <- list(
-    conditional = stats::coef(x),
+    conditional = stats::na.omit(stats::coef(x)),
     sigma = stats::coef(x, what = "sigma"),
     nu = stats::coef(x, what = "nu"),
     tau = stats::coef(x, what = "tau")
