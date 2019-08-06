@@ -61,6 +61,16 @@
 }
 
 
+# checks if a brms-models is a multi-membership-model
+.is_multi_membership <- function(x) {
+  if (inherits(x, "brmsfit")) {
+    re <- find_random(x, split_nested = TRUE, flatten = TRUE)
+    any(grepl("^(mmc|mm)\\(", re))
+  } else {
+    return(FALSE)
+  }
+}
+
 
 # merge data frames, remove double columns
 .merge_dataframes <- function(data, ..., replace = TRUE) {

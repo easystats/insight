@@ -520,6 +520,12 @@ get_data.brmsfit <- function(x, effects = c("all", "fixed", "random"), component
   model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE)
   mf <- stats::model.frame(x)
 
+  if (.is_multi_membership(x)) {
+    model.terms <- lapply(model.terms, .clean_brms_mm)
+    rs <- setdiff(unname(unlist(find_random_slopes(x))), unname(unlist(model.terms)))
+    if (!.is_empty_object(rs)) model.terms$random <- c(rs, model.terms$random)
+  }
+
   .return_data(
     x,
     .prepare_get_data(x, mf, effects = effects),
