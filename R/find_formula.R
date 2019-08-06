@@ -66,12 +66,25 @@ find_formula.data.frame <- function(x, ...) {
 #' @export
 find_formula.gamlss <- function(x, ...) {
   tryCatch({
-    list(
-      conditional = x$mu.formula,
+    if (!requireNamespace("lme4", quietly = TRUE)) {
+      stop("To use this function, please install package 'lme4'.")
+    }
+    f.random <- lapply(lme4::findbars(x$mu.formula), function(.x) {
+      f <- .safe_deparse(.x)
+      stats::as.formula(paste0("~", f))
+    })
+
+    if (length(f.random) == 1) {
+      f.random <- f.random[[1]]
+    }
+
+    .compact_list(list(
+      conditional = stats::as.formula(.get_fixed_effects(x$mu.formula)),
+      random = f.random,
       sigma = x$sigma.formula,
       nu = x$nu.formula,
       tau = x$tau.formula
-    )
+    ))
   },
   error = function(x) {
     NULL

@@ -1,3 +1,9 @@
+# insight 0.4.2
+
+## Bug fixed
+
+* `find_formula()` now extracts group factors of random effects for *gamlss* models
+
 # insight 0.4.1
 
 ## Changes to functions
