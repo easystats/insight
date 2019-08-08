@@ -4,6 +4,7 @@
 
 * `find_formula()` now extracts group factors of random effects for *gamlss* models.
 * `find_parameters()` and `get_parameters()` no longer show `NA` coefficients from group factors of random effects for *gamlss* models.
+* `get_data()` dropped value and variable label attributes, when model frame contained matrix variables (like splines).
 
 # insight 0.4.1
 

@@ -757,7 +757,21 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
         mf <- md
       } else {
         needed.vars <- unique(clean_names(needed.vars))
-        mf <- stats::na.omit(md[, needed.vars, drop = FALSE])
+        mf <- md[, needed.vars, drop = FALSE]
+        # we need this hack to save variable and value label attributes, if any
+        value_labels <- lapply(mf, function(.l) attr(.l, "labels", exact = TRUE))
+        variable_labels <- lapply(mf, function(.l) attr(.l, "label", exact = TRUE))
+        # removing NAs drops all label-attributes
+        mf <- stats::na.omit(mf)
+        # then set back attributes
+        mf <- as.data.frame(mapply(function(.d, .l) {
+          attr(.d, "labels") <- .l
+          .d
+        }, mf, value_labels, SIMPLIFY = FALSE), stringsAsFactors = FALSE)
+        mf <- as.data.frame(mapply(function(.d, .l) {
+          attr(.d, "label") <- .l
+          .d
+        }, mf, variable_labels, SIMPLIFY = FALSE), stringsAsFactors = FALSE)
       }
 
       # add back model weights, if any
