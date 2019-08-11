@@ -39,7 +39,6 @@
 #' clean_names(m)
 #' find_variables(m)
 #' find_variables(m, flatten = TRUE)
-#'
 #' @export
 clean_names <- function(x) {
   UseMethod("clean_names")
@@ -61,7 +60,9 @@ clean_names.character <- function(x) {
 
 .remove_pattern_from_names <- function(x, ignore_asis = FALSE, ignore_lag = FALSE) {
   # return if x is empty
-  if (.is_empty_string(x)) return("")
+  if (.is_empty_string(x)) {
+    return("")
+  }
 
   # for gam-smoothers/loess, remove s()- and lo()-function in column name
   # for survival, remove strata(), and so on...
@@ -117,7 +118,9 @@ clean_names.character <- function(x) {
 
 .clean_brms_mm <- function(x) {
   # only clean for mm() / mmc() functions, else return x
-  if (!grepl("^(mmc|mm)\\(", x)) return(x)
+  if (!grepl("^(mmc|mm)\\(", x)) {
+    return(x)
+  }
 
   # extract terms from mm() / mmc() functions, i.e. get
   # multimembership-terms

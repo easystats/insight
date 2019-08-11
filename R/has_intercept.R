@@ -5,7 +5,7 @@
 #'
 #' @param x A model object.
 #'
-#' @return \code{TRUE} if \code{x} has an intercept, \code{FALSE} othwerwise.
+#' @return \code{TRUE} if \code{x} has an intercept, \code{FALSE} otherwise.
 #'
 #' @examples
 #' model <- lm(mpg ~ 0 + gear, data = mtcars)
@@ -20,7 +20,6 @@
 #'
 #' model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
 #' has_intercept(model)
-#'
 #' @export
 has_intercept <- function(x) {
   if (is_multivariate(x)) {

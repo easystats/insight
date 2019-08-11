@@ -22,7 +22,6 @@
 #'
 #' m <- lm(mpg ~ wt * cyl + vs * hp * gear + carb, data = mtcars)
 #' find_interactions(m)
-#'
 #' @export
 find_interactions <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"), flatten = FALSE) {
   component <- match.arg(component)
@@ -54,15 +53,18 @@ find_interactions <- function(x, component = c("all", "conditional", "zi", "zero
 
 
 .get_interaction_terms <- function(f, main_effects = FALSE) {
-  if (is.null(f)) return(NULL)
+  if (is.null(f)) {
+    return(NULL)
+  }
   terms <- labels(stats::terms(f))
   if (main_effects) {
     terms
   } else {
     interaction_terms <- grepl(":", terms, fixed = TRUE)
-    if (any(interaction_terms))
+    if (any(interaction_terms)) {
       terms[interaction_terms]
-    else
+    } else {
       NULL
+    }
   }
 }

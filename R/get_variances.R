@@ -49,7 +49,7 @@
 #'      \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub>}}{\eqn{\sigma^2_d}},
 #'      depends on the model family. For Gaussian models, it is
 #'      \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}} (i.e.
-#'      \code{sigma(model)^2}). For models with binary outome, it is
+#'      \code{sigma(model)^2}). For models with binary outcome, it is
 #'      \eqn{\pi^2 / 3} for logit-link and \code{1} for probit-link. For all
 #'      other models, the distribution-specific variance is based on lognormal
 #'      approximation, \eqn{log(1 + var(x) / \mu^2)} (see \cite{Nakagawa et al. 2017}).
@@ -108,7 +108,8 @@
 #'
 #' get_variance(m)
 #' get_variance_fixed(m)
-#' get_variance_residual(m)}
+#' get_variance_residual(m)
+#' }
 #'
 #' @export
 get_variance <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {

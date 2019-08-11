@@ -1,12 +1,11 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-
   if (require("testthat") && require("insight") && require("aod")) {
     context("insight, negbin")
 
     data(dja)
-    m1 <- aod::negbin(y ~ group + offset(log(trisk)), random = ~ village, data = dja)
+    m1 <- aod::negbin(y ~ group + offset(log(trisk)), random = ~village, data = dja)
 
     test_that("model_info", {
       expect_true(model_info(m1)$is_negbin)
@@ -57,7 +56,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
     test_that("get_data", {
       expect_equal(nrow(get_data(m1)), 75)
-      expect_equal(colnames(get_data(m1)),  c("y", "group", "trisk", "village"))
+      expect_equal(colnames(get_data(m1)), c("y", "group", "trisk", "village"))
     })
 
     test_that("find_formula", {
@@ -85,13 +84,15 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         find_parameters(m1),
         list(
           conditional = c("(Intercept)", "groupTREAT"),
-          random = c("phi.villageBAK",
-                     "phi.villageBAM", "phi.villageBAN", "phi.villageBIJ", "phi.villageBOU",
-                     "phi.villageBYD", "phi.villageDEM", "phi.villageDIA", "phi.villageHAM",
-                     "phi.villageLAM", "phi.villageLAY", "phi.villageMAF", "phi.villageMAH",
-                     "phi.villageMAK", "phi.villageMED", "phi.villageNAB", "phi.villageSAG",
-                     "phi.villageSAM", "phi.villageSOU"
-        ))
+          random = c(
+            "phi.villageBAK",
+            "phi.villageBAM", "phi.villageBAN", "phi.villageBIJ", "phi.villageBOU",
+            "phi.villageBYD", "phi.villageDEM", "phi.villageDIA", "phi.villageHAM",
+            "phi.villageLAM", "phi.villageLAY", "phi.villageMAF", "phi.villageMAH",
+            "phi.villageMAK", "phi.villageMED", "phi.villageNAB", "phi.villageSAG",
+            "phi.villageSAM", "phi.villageSOU"
+          )
+        )
       )
       expect_equal(nrow(get_parameters(m1)), 2)
       expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "groupTREAT"))

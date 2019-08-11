@@ -1,27 +1,29 @@
-#' @title Checks if an object is a regression model object
-#' @name is_model
+#' @title Checks if an object is a regression model object supported in
+#'   `insight` package.
+#' @name is_supported_model
 #'
-#' @description Small helper that checks if a model is a regression model
-#'   object.
+#' @description Small helper that checks if a model is a \emph{supported}
+#'  (regression) model object.
 #'
-#' @param x An object.
+#' @inheritParams is_model
 #'
 #' @return A logical, \code{TRUE} if \code{x} is a (supported) model object.
 #'
-#' @details This function returns \code{TRUE} if \code{x} is a model object.
+#' @details This function returns \code{TRUE} if \code{x} is a model object
+#'   that works with the package's functions. A list of supported models can
+#'   also be found here: \url{https://github.com/easystats/insight}.
 #'
 #' @examples
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #'
-#' is_model(m)
-#' is_model(mtcars)
+#' is_supported_model(m)
+#' is_supported_model(mtcars)
 #' @export
-is_model <- function(x) {
+is_supported_model <- function(x) {
   inherits(
     x,
     c(
-      "aareg",
       "aov",
       "aovlist",
       "BBmm",
@@ -31,36 +33,27 @@ is_model <- function(x) {
       "biglm",
       "bigglm",
       "brmsfit",
-      "btergm",
-      "cch",
       "censReg",
       "clm",
       "clm2",
       "clmm",
-      "confusionMatrix",
       "coxme",
       "coxph",
       "crch",
       "crq",
-      "drc",
-      "ergm",
       "feis",
       "felm",
       "gam",
       "Gam",
       "gamlss",
       "gamm",
-      "garch",
       "gbm",
       "gee",
       "geeglm",
       "glimML",
       "glm",
-      "glmerMod",
-      "glmmadmb",
       "glmmPQL",
       "glmmTMB",
-      "glmnet",
       "glmrob",
       "glmRob",
       "gls",
@@ -75,35 +68,19 @@ is_model <- function(x) {
       "lmrob",
       "lmRob",
       "logistf",
-      "loo",
       "LORgee",
-      "lmodel2",
-      "lqmm",
       "lrm",
       "ols",
-      "orcutt",
-      "mclogit",
-      "mmclogit",
       "MCMCglmm",
-      "mediate",
       "merMod",
       "mixed",
       "MixMod",
-      "mjoint",
-      "mle2",
       "mlm",
       "mlogit",
       "multinom",
-      "negbin",
-      "nlrq",
-      "nls",
       "plm",
-      "plmm",
       "polr",
       "psm",
-      "ridgelm",
-      "rjags",
-      "rlme",
       "rlmerMod",
       "rq",
       "rqss",

@@ -1,7 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-
   if (require("testthat") && require("insight") && require("glmmTMB") && require("biglm")) {
     context("insight, model_info")
 
@@ -49,7 +48,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
 
     test_that("get_data", {
       expect_equal(nrow(get_data(m1)), 644)
-      expect_equal(colnames(get_data(m1)), c("site", "mined", "cover", "sample", "DOP", "Wtemp", "DOY", "spp", "count" ))
+      expect_equal(colnames(get_data(m1)), c("site", "mined", "cover", "sample", "DOP", "Wtemp", "DOY", "spp", "count"))
     })
 
     test_that("find_formula", {

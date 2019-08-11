@@ -1,4 +1,4 @@
-#' @title Prepare summary statistics of model paramters for printing
+#' @title Prepare summary statistics of model parameters for printing
 #' @name print_parameters
 #'
 #' @description This function takes a data frame, typically a data frame with
@@ -67,17 +67,19 @@
 #' # For printing methods, it is easy to print complex summary statistics
 #' # in a clean way to the console by splitting the information into
 #' # different model components.
-#' x}
+#' x
+#' }
 #'
 #' @importFrom stats na.omit
 #' @export
 print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group", "Response")) {
   obj <- list(...)
 
-  cp <- if (!inherits(x, "clean_parameters"))
+  cp <- if (!inherits(x, "clean_parameters")) {
     clean_parameters(x)
-  else
+  } else {
     x
+  }
   cn1 <- colnames(cp)
 
   obj <- lapply(obj, function(i) {
@@ -97,7 +99,9 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
   )
 
   # return merged data frame if no splitting requested
-  if (.is_empty_object(split_by)) return(obj)
+  if (.is_empty_object(split_by)) {
+    return(obj)
+  }
 
   # determine where to split data frames
   split_by <- split_by[split_by %in% colnames(obj)]
@@ -108,7 +112,9 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
 
   # split into groups, remove empty elements
   out <- split(obj, f)
-  out <- .compact_list(lapply(out, function(i) { if (nrow(i) > 0) i }))
+  out <- .compact_list(lapply(out, function(i) {
+    if (nrow(i) > 0) i
+  }))
 
   # remove trailing dots
   names(out) <- list_names <- gsub("(.*)\\.$", "\\1", names(out))
@@ -135,7 +141,7 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
       # Rename "fixed", "random" etc. into proper titles. Here we have the
       # "Main title" of a subcomponent (like "Random effects")
       if (parts[j] %in% c("fixed", "random") ||
-          (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
+        (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
         tmp <- switch(
           parts[j],
           "fixed" = "Fixed effects",
@@ -144,7 +150,6 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
           "zero_inflated" = "(zero-inflated)"
         )
         title1 <- paste0(title1, " ", tmp)
-
       } else if (!parts[j] %in% c("conditional", "zero_inflated")) {
         # here we have the "subtitles" of a subcomponent
         # (like "Intercept: Group-Level 1")

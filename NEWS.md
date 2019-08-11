@@ -1,10 +1,21 @@
-# insight 0.4.2
+# insight 0.4.1.9000
+
+## Breaking Changes
+
+  - The previous `is_model` function has been renamed to `is_supported_model`
+    since it was unclear if the function checked the entered object was a model
+    or a supported model in `insight`. The new `is_model` function checks if the
+    entered object is a model object, while `is_supported_model` checks if a
+    supported model object.
 
 ## Bug fixed
 
-* `find_formula()` now extracts group factors of random effects for *gamlss* models.
-* `find_parameters()` and `get_parameters()` no longer show `NA` coefficients from group factors of random effects for *gamlss* models.
-* `get_data()` dropped value and variable label attributes, when model frame contained matrix variables (like splines).
+  - `find_formula()` now extracts group factors of random effects for *gamlss*
+    models.
+  - `find_parameters()` and `get_parameters()` no longer show `NA` coefficients
+    from group factors of random effects for *gamlss* models.
+  - `get_data()` dropped value and variable label attributes, when model frame
+    contained matrix variables (like splines).
 
 # insight 0.4.1
 
@@ -30,7 +41,7 @@
 
 ## New functions
 
-* `clean_parameters()`, which returns a data frame with "decomposed" parameters, i.e. a data frame with information about the clean paramter name, whether it is a fixed or random effect, from conditional or zero-inflated component, and if it is a parameter related to specific grouping factors of random effects (#106).
+* `clean_parameters()`, which returns a data frame with "decomposed" parameters, i.e. a data frame with information about the clean parameter name, whether it is a fixed or random effect, from conditional or zero-inflated component, and if it is a parameter related to specific grouping factors of random effects (#106).
 * `print_parameters()`, which can be called on top of `clean_parameters()` to get a list of data frames that represent the different model components (fixed, random, zero-inflated, ...) and which is in shape for printing summary statistics of complex models.
 * `find_interactions()` to return all low/high order interaction terms in a model.
 * `find_weights()` and `get_weights()` to find / get model weights.
@@ -55,7 +66,7 @@
 * `find_parameters()` did not remove smooth-parameters that used `te()` or `ti()`.
 * Fixed various issues with non-linear *brms*-models.
 * `find_formula()` (and hence, `find_response()` or `get_data()`) did not work for multi-column responses in null-models (#100).
-* Fixed bugs with models from package *plm* that occured during the latest plm-update.
+* Fixed bugs with models from package *plm* that occurred during the latest plm-update.
 * `find_predictors()` did not split nested random effects when these were written as `g1:g2` instead `g2/g2` in the random part of the model formula.
 * Fixed issues with `all_model_equal()`.
 * `get_data()` did not return `(weights)` columns for some model objects.

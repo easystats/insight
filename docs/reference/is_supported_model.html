@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find name of the response variable — find_response • insight</title>
+<title>Checks if an object is a regression model object supported in
+  `insight` package. — is_supported_model • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -39,9 +40,11 @@
 
 
 
-<meta property="og:title" content="Find name of the response variable — find_response" />
+<meta property="og:title" content="Checks if an object is a regression model object supported in
+  `insight` package. — is_supported_model" />
 
-<meta property="og:description" content="Returns the name(s) of the response variable(s) from a model object." />
+<meta property="og:description" content="Small helper that checks if a model is a supported
+ (regression) model object." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -113,47 +116,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find name of the response variable</h1>
+    <h1>Checks if an object is a regression model object supported in
+  `insight` package.</h1>
     
-    <div class="hidden name"><code>find_response.Rd</code></div>
+    <div class="hidden name"><code>is_supported_model.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns the name(s) of the response variable(s) from a model object.</p>
+    <p>Small helper that checks if a model is a <em>supported</em>
+ (regression) model object.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_response</span>(<span class='no'>x</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>is_supported_model</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr>
-    <tr>
-      <th>combine</th>
-      <td><p>Logical, if <code>TRUE</code> and the response is a matrix-column,
-the name of the response matches the notation in formula, and would for
-instance also contain patterns like <code>"cbind(...)"</code>. Else, the original
-variable names from the matrix-column are returned. See 'Examples'.</p></td>
+      <td><p>An object.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The name(s) of the response variable(s) from <code>x</code> as character vector.</p>
+    <p>A logical, <code>TRUE</code> if <code>x</code> is a (supported) model object.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function returns <code>TRUE</code> if <code>x</code> is a model object
+  that works with the package's functions. A list of supported models can
+  also be found here: <a href='https://github.com/easystats/insight'>https://github.com/easystats/insight</a>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>cbpp</span>)
-<span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>trials</span>) ~ <span class='no'>period</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>mtcars</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 
-<span class='fu'>find_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "cbind(incidence, trials)"</div><div class='input'><span class='fu'>find_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "incidence" "trials"   </div></pre>
+<span class='fu'>is_supported_model</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>is_supported_model</span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; [1] FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -161,6 +163,8 @@ variable names from the matrix-column are returned. See 'Examples'.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

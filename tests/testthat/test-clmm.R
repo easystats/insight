@@ -4,8 +4,8 @@ if (require("testthat") && require("insight") && require("ordinal")) {
   data(wine, package = "ordinal")
   data(soup)
 
-  m1 <- clmm(rating ~ temp + contact + (1|judge), data = wine)
-  m2 <- clmm(SURENESS ~ PROD + (1|RESP) + (1|RESP:PROD), data = soup, link = "probit", threshold = "equidistant")
+  m1 <- clmm(rating ~ temp + contact + (1 | judge), data = wine)
+  m2 <- clmm(SURENESS ~ PROD + (1 | RESP) + (1 | RESP:PROD), data = soup, link = "probit", threshold = "equidistant")
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_ordinal)

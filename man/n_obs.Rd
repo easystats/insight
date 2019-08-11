@@ -38,5 +38,4 @@ a \code{nobs()}-method, \pkg{insight} provides a \code{nobs()}-method as well.
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 n_obs(m)
-
 }

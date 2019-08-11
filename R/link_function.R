@@ -39,10 +39,14 @@ link_function.default <- function(x, ...) {
     ff <- stats::family(x)
 
     # return link function, if exists
-    if ("linkfun" %in% names(ff)) return(ff$linkfun)
+    if ("linkfun" %in% names(ff)) {
+      return(ff$linkfun)
+    }
 
     # else, create link function from link-string
-    if ("link" %in% names(ff)) return(match.fun(ff$link))
+    if ("link" %in% names(ff)) {
+      return(match.fun(ff$link))
+    }
 
     NULL
   },

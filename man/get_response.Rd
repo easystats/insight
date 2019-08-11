@@ -13,7 +13,7 @@ get_response(x, select = NULL)
 Can be used in case of regression models with multiple response variables.}
 }
 \value{
-The values of the reponse variable, as vector, or a data frame if
+The values of the response variable, as vector, or a data frame if
   \code{x} has more than one defined response variable.
 }
 \description{

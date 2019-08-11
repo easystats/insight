@@ -2,7 +2,7 @@ if (require("testthat") && require("insight") && require("aod")) {
   context("insight, betabin")
 
   data(dja)
-  m1 <- betabin(cbind(y, n - y) ~ group * trisk, ~ village, data = dja)
+  m1 <- betabin(cbind(y, n - y) ~ group * trisk, ~village, data = dja)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_binomial)
@@ -54,7 +54,7 @@ if (require("testthat") && require("insight") && require("aod")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 75)
-    expect_equal(colnames(get_data(m1)),  c("y", "n", "group", "trisk", "village"))
+    expect_equal(colnames(get_data(m1)), c("y", "n", "group", "trisk", "village"))
   })
 
   test_that("find_formula", {
@@ -82,12 +82,14 @@ if (require("testthat") && require("insight") && require("aod")) {
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "groupTREAT", "trisk", "groupTREAT:trisk"),
-        random = c("phi.villageBAK", "phi.villageBAM", "phi.villageBAN",
-                    "phi.villageBIJ", "phi.villageBOU", "phi.villageBYD", "phi.villageDEM",
-                    "phi.villageDIA", "phi.villageHAM", "phi.villageLAM", "phi.villageLAY",
-                    "phi.villageMAF", "phi.villageMAH", "phi.villageMAK", "phi.villageMED",
-                    "phi.villageNAB", "phi.villageSAG", "phi.villageSAM", "phi.villageSOU"
-      ))
+        random = c(
+          "phi.villageBAK", "phi.villageBAM", "phi.villageBAN",
+          "phi.villageBIJ", "phi.villageBOU", "phi.villageBYD", "phi.villageDEM",
+          "phi.villageDIA", "phi.villageHAM", "phi.villageLAM", "phi.villageLAY",
+          "phi.villageMAF", "phi.villageMAH", "phi.villageMAK", "phi.villageMED",
+          "phi.villageNAB", "phi.villageSAG", "phi.villageSAM", "phi.villageSOU"
+        )
+      )
     )
     expect_equal(nrow(get_parameters(m1)), 4)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "groupTREAT", "trisk", "groupTREAT:trisk"))

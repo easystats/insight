@@ -10,7 +10,7 @@ has_intercept(x)
 \item{x}{A model object.}
 }
 \value{
-\code{TRUE} if \code{x} has an intercept, \code{FALSE} othwerwise.
+\code{TRUE} if \code{x} has an intercept, \code{FALSE} otherwise.
 }
 \description{
 Checks if model has an intercept.
@@ -28,5 +28,4 @@ has_intercept(model)
 
 model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
 has_intercept(model)
-
 }

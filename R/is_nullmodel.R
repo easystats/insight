@@ -6,7 +6,7 @@
 #'
 #' @param x A model object.
 #'
-#' @return \code{TRUE} if \code{x} is a null-model, \code{FALSE} othwerwise.
+#' @return \code{TRUE} if \code{x} is a null-model, \code{FALSE} otherwise.
 #'
 #' @examples
 #' model <- lm(mpg ~ 1, data = mtcars)
@@ -21,7 +21,6 @@
 #'
 #' model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
 #' is_nullmodel(model)
-#'
 #' @export
 is_nullmodel <- function(x) {
   if (is_multivariate(x)) {

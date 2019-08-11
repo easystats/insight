@@ -53,9 +53,13 @@ if (require("testthat") && require("insight") && require("MASS")) {
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(conditional =
-             c("Intercept: Low|Medium", "Intercept: Medium|High", "InflMedium",
-               "InflHigh", "TypeApartment", "TypeAtrium", "TypeTerrace", "ContHigh"))
+      list(
+        conditional =
+          c(
+            "Intercept: Low|Medium", "Intercept: Medium|High", "InflMedium",
+            "InflHigh", "TypeApartment", "TypeAtrium", "TypeTerrace", "ContHigh"
+          )
+      )
     )
   })
 

@@ -65,7 +65,7 @@ reference:
   contents:
   - all_models_same_class
   - has_intercept
-  - is_model
+  - ends_with("_model")
   - is_multivariate
   - is_nullmodel
 

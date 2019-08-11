@@ -59,7 +59,7 @@ if (require("testthat") && require("insight") && require("HRQoL")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 1000)
-    expect_equal(colnames(get_data(m1)),  c("y", "x", "x2", "j", "fac"))
+    expect_equal(colnames(get_data(m1)), c("y", "x", "x2", "j", "fac"))
   })
 
   test_that("find_formula", {

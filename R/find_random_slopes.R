@@ -29,15 +29,18 @@ find_random_slopes <- function(x) {
 
   random_slopes <- .compact_list(random_slopes)
 
-  if (.is_empty_object(random_slopes))
+  if (.is_empty_object(random_slopes)) {
     NULL
-  else
+  } else {
     random_slopes
+  }
 }
 
 
 .extract_random_slopes <- function(fr) {
-  if (is.null(fr)) return(NULL)
+  if (is.null(fr)) {
+    return(NULL)
+  }
   if (!is.list(fr)) fr <- list(fr)
 
   random_slope <- lapply(fr, function(forms) {

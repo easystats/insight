@@ -185,7 +185,6 @@ if (require("testthat") && require("insight") && require("lme4")) {
   })
 
   test_that("get_variance", {
-
     skip_on_cran()
     skip_on_travis()
 
@@ -285,7 +284,8 @@ if (require("testthat") && require("insight") && require("lme4")) {
           as.formula("~1 | mygrp"),
           as.formula("~1 | Subject")
         )
-    ))
+      )
+    )
 
     expect_equal(
       find_formula(m6),
@@ -296,6 +296,7 @@ if (require("testthat") && require("insight") && require("lme4")) {
           as.formula("~1 | mygrp"),
           as.formula("~1 | Subject")
         )
-      ))
+      )
+    )
   })
 }

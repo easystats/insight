@@ -4,9 +4,9 @@ if (require("testthat") && require("insight") && require("rms")) {
   n <- 400
   set.seed(1)
   age <- rnorm(n, 50, 12)
-  sex <- factor(sample(c('Female', 'Male'), n, TRUE))
+  sex <- factor(sample(c("Female", "Male"), n, TRUE))
   # Population hazard function:
-  h <- .02 * exp(.06 * (age - 50) + .8 * (sex == 'Female'))
+  h <- .02 * exp(.06 * (age - 50) + .8 * (sex == "Female"))
   d.time <- -log(runif(n)) / h
   cens <- 15 * runif(n)
   death <- ifelse(d.time <= cens, 1, 0)
@@ -14,7 +14,7 @@ if (require("testthat") && require("insight") && require("rms")) {
 
   dat <- data.frame(d.time, death, sex, age, stringsAsFactors = FALSE)
 
-  m1 <- psm(Surv(d.time, death) ~ sex * pol(age, 2), dist = 'lognormal', data = dat)
+  m1 <- psm(Surv(d.time, death) ~ sex * pol(age, 2), dist = "lognormal", data = dat)
 
   test_that("model_info", {
     expect_false(model_info(m1)$is_binomial)
