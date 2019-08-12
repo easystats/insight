@@ -15,7 +15,7 @@ if (require("testthat") && require("insight")) {
     expect_false(all_models_equal(m1, m2, m3))
     expect_message(expect_false(all_models_equal(m1, m4, m2, m3, verbose = TRUE)))
 
-    expect_true(is_supported_model(m1))
-    expect_false(is_supported_model(mtcars))
+    expect_true(is_model_supported(m1))
+    expect_false(is_model_supported(mtcars))
   })
 }
