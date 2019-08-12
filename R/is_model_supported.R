@@ -1,6 +1,6 @@
 #' @title Checks if an object is a regression model object supported in
 #'   `insight` package.
-#' @name is_supported_model
+#' @name is_model_supported
 #'
 #' @description Small helper that checks if a model is a \emph{supported}
 #'  (regression) model object.
@@ -17,10 +17,10 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #'
-#' is_supported_model(m)
-#' is_supported_model(mtcars)
+#' is_model_supported(m)
+#' is_model_supported(mtcars)
 #' @export
-is_supported_model <- function(x) {
+is_model_supported <- function(x) {
   inherits(
     x,
     c(

@@ -29,7 +29,7 @@ all_models_equal <- function(..., verbose = FALSE) {
   objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
 
-  all_supported <- sapply(objects, is_supported_model)
+  all_supported <- sapply(objects, is_model_supported)
   all_classes <- sapply(objects, class)
 
   if (is.matrix(all_classes)) {

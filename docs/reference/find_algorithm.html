@@ -172,7 +172,7 @@
 #&gt; $optimizer
 #&gt; [1] "nloptwrap"
 #&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>rstanarm</span>)</div><div class='output co'>#&gt; <span class='message'>rstanarm (Version 2.18.2, packaged: 2018-11-08 22:19:38 UTC)</span></div><div class='output co'>#&gt; <span class='message'>- Do not expect the default priors to remain the same in future rstanarm versions.</span></div><div class='output co'>#&gt; <span class='message'>Thus, R scripts should specify priors explicitly, even if they are just the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='message'>- Plotting theme set to bayesplot::theme_default().</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘rstanarm’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:brms’:</span>
+#&gt; <span class='message'>Attaching package: 'rstanarm'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:brms':</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    dirichlet, exponential, get_y, kfold, lasso, ngrps</span></div><div class='input'><span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/rstanarm/man/stan_glmer.html'>stan_lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>)</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
@@ -195,9 +195,9 @@
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 1.263 seconds (Warm-up)
-#&gt; Chain 1:                0.526 seconds (Sampling)
-#&gt; Chain 1:                1.789 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 1.631 seconds (Warm-up)
+#&gt; Chain 1:                0.57 seconds (Sampling)
+#&gt; Chain 1:                2.201 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
@@ -220,9 +220,9 @@
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 1.282 seconds (Warm-up)
-#&gt; Chain 2:                0.395 seconds (Sampling)
-#&gt; Chain 2:                1.677 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 1.81 seconds (Warm-up)
+#&gt; Chain 2:                0.624 seconds (Sampling)
+#&gt; Chain 2:                2.434 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
@@ -245,9 +245,9 @@
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 1.282 seconds (Warm-up)
-#&gt; Chain 3:                0.522 seconds (Sampling)
-#&gt; Chain 3:                1.804 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 1.602 seconds (Warm-up)
+#&gt; Chain 3:                0.698 seconds (Sampling)
+#&gt; Chain 3:                2.3 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
@@ -270,9 +270,9 @@
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 1.416 seconds (Warm-up)
-#&gt; Chain 4:                0.626 seconds (Sampling)
-#&gt; Chain 4:                2.042 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 2.021 seconds (Warm-up)
+#&gt; Chain 4:                0.95 seconds (Sampling)
+#&gt; Chain 4:                2.971 seconds (Total)
 #&gt; Chain 4: </div><div class='input'><span class='fu'>find_algorithm</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $algorithm
 #&gt; [1] "sampling"
 #&gt; 
@@ -303,7 +303,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Indrajeet Patil, Philip Waggoner.</p>
 </div>
 
 <div class="pkgdown">

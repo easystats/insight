@@ -118,7 +118,7 @@ if (require("testthat") && require("insight") && require("stats")) {
   })
 
   test_that("is_model", {
-    expect_false(is_supported_model(m3))
+    expect_false(is_model_supported(m3))
   })
 
   test_that("all_models_equal", {
