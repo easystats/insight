@@ -23,7 +23,7 @@
 #'    }
 #'
 #' @note For models of class \code{lme} or \code{gls} the correlation-component
-#'   is only returned, when it is explicitely defined as named argument
+#'   is only returned, when it is explicitly defined as named argument
 #'   (\code{form}), e.g. \code{corAR1(form = ~1 | Mare)}
 #'
 #' @examples
@@ -214,12 +214,13 @@ find_formula.plm <- function(x, ...) {
     f <- .safe_deparse(stats::formula(x))
     bar_pos <- regexpr(pattern = "\\|", f)
 
-    if (bar_pos == -1)
+    if (bar_pos == -1) {
       stop_pos <- nchar(f) + 1
-    else
+    } else {
       stop_pos <- bar_pos
+    }
 
-    cond <- .trim(substr(f, start = 0, stop =  stop_pos - 1))
+    cond <- .trim(substr(f, start = 0, stop = stop_pos - 1))
     instr <- .trim(substr(f, stop_pos + 1, stop = 10000L))
 
     if (.is_empty_string(instr)) {
@@ -684,7 +685,6 @@ find_formula.MixMod <- function(x, ...) {
 #' @export
 find_formula.BFBayesFactor <- function(x, ...) {
   if (.classify_BFBayesFactor(x) == "linear") {
-
     fcond <- utils::tail(x@numerator, 1)[[1]]@identifier$formula
     dt <- utils::tail(x@numerator, 1)[[1]]@dataTypes
     frand <- names(dt)[which(dt == "random")]
@@ -698,8 +698,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
       f.random <- NULL
       f.cond <- stats::as.formula(fcond)
     }
-
-  } else{
+  } else {
     return(NULL)
   }
 
@@ -805,29 +804,31 @@ find_formula.BFBayesFactor <- function(x, ...) {
   ## TODO could be extended to all find_formula()
 
   # fix dot-formulas
-  c.form <- tryCatch(
-    {
-      if (as.character(c.form[3]) == ".") {
-        resp <- .safe_deparse(c.form[2])
-        pred <- setdiff(colnames(.get_data_from_env(x)), resp)
-        c.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
-      }
-      c.form
-    },
-    error = function(e) { c.form }
+  c.form <- tryCatch({
+    if (as.character(c.form[3]) == ".") {
+      resp <- .safe_deparse(c.form[2])
+      pred <- setdiff(colnames(.get_data_from_env(x)), resp)
+      c.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
+    }
+    c.form
+  },
+  error = function(e) {
+    c.form
+  }
   )
 
   # fix dot-formulas
-  zi.form <- tryCatch(
-    {
-      if (as.character(zi.form[2]) == ".") {
-        resp <- .safe_deparse(c.form[2])
-        pred <- setdiff(colnames(.get_data_from_env(x)), resp)
-        zi.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
-      }
-      zi.form
-    },
-    error = function(e) { zi.form }
+  zi.form <- tryCatch({
+    if (as.character(zi.form[2]) == ".") {
+      resp <- .safe_deparse(c.form[2])
+      pred <- setdiff(colnames(.get_data_from_env(x)), resp)
+      zi.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
+    }
+    zi.form
+  },
+  error = function(e) {
+    zi.form
+  }
   )
 
 

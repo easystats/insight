@@ -10,7 +10,7 @@ is_nullmodel(x)
 \item{x}{A model object.}
 }
 \value{
-\code{TRUE} if \code{x} is a null-model, \code{FALSE} othwerwise.
+\code{TRUE} if \code{x} is a null-model, \code{FALSE} otherwise.
 }
 \description{
 Checks if model is a null-model (intercept-only), i.e. if
@@ -29,5 +29,4 @@ is_nullmodel(model)
 
 model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
 is_nullmodel(model)
-
 }

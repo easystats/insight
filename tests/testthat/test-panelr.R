@@ -51,8 +51,10 @@ if (require("testthat") && require("insight") && require("panelr")) {
     expect_equal(nrow(get_data(m1)), 3570)
     expect_equal(
       colnames(get_data(m1)),
-      c("lwage", "id", "t", "lag(union)", "wks", "blk", "fem", "imean(lag(union))",
-        "imean(wks)", "lag(union)*blk", "imean(lag(union):blk)", "lag(union):blk")
+      c(
+        "lwage", "id", "t", "lag(union)", "wks", "blk", "fem", "imean(lag(union))",
+        "imean(wks)", "lag(union)*blk", "imean(lag(union):blk)", "lag(union):blk"
+      )
     )
     expect_equal(
       colnames(get_data(m2)),
@@ -112,21 +114,25 @@ if (require("testthat") && require("insight") && require("panelr")) {
       find_parameters(m2),
       list(
         conditional = c("(Intercept)", "imean(lag(union))", "imean(wks)", "lag(union)", "wks", "blk", "fem"),
-        random = list(id = c("(Intercept)", "t")))
+        random = list(id = c("(Intercept)", "t"))
+      )
     )
-
   })
 
   test_that("find_terms", {
     expect_equal(
       find_terms(m1),
-      list(response = "lwage", conditional = c("lag(union)", "wks"),
-           instruments = c("blk", "fem"), random = c("blk", "lag(union)"))
+      list(
+        response = "lwage", conditional = c("lag(union)", "wks"),
+        instruments = c("blk", "fem"), random = c("blk", "lag(union)")
       )
+    )
     expect_equal(
       find_terms(m2),
-      list(response = "lwage", conditional = c("lag(union)", "wks"),
-           instruments = c("blk", "fem"), random = c("blk", "t", "id"))
+      list(
+        response = "lwage", conditional = c("lag(union)", "wks"),
+        instruments = c("blk", "fem"), random = c("blk", "t", "id")
+      )
     )
   })
 

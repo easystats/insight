@@ -2,7 +2,7 @@
 % Please edit documentation in R/is_model.R
 \name{is_model}
 \alias{is_model}
-\title{Checks if an object is a (supported) regression model object}
+\title{Checks if an object is a regression model object}
 \usage{
 is_model(x)
 }
@@ -13,13 +13,11 @@ is_model(x)
 A logical, \code{TRUE} if \code{x} is a (supported) model object.
 }
 \description{
-Small helper that checks if a model is a \emph{supported}
- (regression) model object.
+Small helper that checks if a model is a regression model
+  object.
 }
 \details{
-This function returns \code{TRUE} is \code{x} is a model object
-  that works with the package's functions. A list of supported models can
-  also be found here: \url{https://github.com/easystats/insight}.
+This function returns \code{TRUE} if \code{x} is a model object.
 }
 \examples{
 data(mtcars)
@@ -27,5 +25,4 @@ m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 
 is_model(m)
 is_model(mtcars)
-
 }

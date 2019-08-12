@@ -3,7 +3,8 @@ authors:
     href: https://github.com/strengejacke
   Dominique Makowski:
     href: https://dominiquemakowski.github.io/
-
+  Indrajeet Patil:
+    href: https://github.com/IndrajeetPatil/
 
 template:
   params:
@@ -66,6 +67,7 @@ reference:
   - all_models_same_class
   - has_intercept
   - is_model
+  - is_model_supported
   - is_multivariate
   - is_nullmodel
 

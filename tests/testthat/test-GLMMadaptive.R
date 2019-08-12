@@ -1,7 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-
   if (require("testthat") && require("insight") && require("GLMMadaptive") && require("lme4")) {
     context("insight, model_info")
 
@@ -166,7 +165,5 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         algorithm = "quasi-Newton", optimizer = "optim"
       ))
     })
-
   }
-
 }

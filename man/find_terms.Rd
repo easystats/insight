@@ -48,5 +48,4 @@ m <- lmer(
 )
 
 find_terms(m)
-
 }

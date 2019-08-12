@@ -22,13 +22,14 @@ find_weights <- function(x, ...) {
 
 #' @export
 find_weights.default <- function(x, ...) {
-  tryCatch(
-    {
-      w <- as.character(parse(text = .safe_deparse(x$call))[[1]]$weights)
-      if (.is_empty_object(w)) w <- NULL
-      w
-    },
-    error = function(e) { NULL }
+  tryCatch({
+    w <- as.character(parse(text = .safe_deparse(x$call))[[1]]$weights)
+    if (.is_empty_object(w)) w <- NULL
+    w
+  },
+  error = function(e) {
+    NULL
+  }
   )
 }
 
@@ -44,10 +45,11 @@ find_weights.brmsfit <- function(x, ...) {
   }
 
   resp <- .compact_character(unname(sapply(resp, function(i) {
-    if (grepl("(.*)\\|(\\s+)weights\\((.*)\\)", i))
+    if (grepl("(.*)\\|(\\s+)weights\\((.*)\\)", i)) {
       i
-    else
+    } else {
       ""
+    }
   })))
 
   w <- .trim(sub("(.*)\\|(\\s+)weights\\((.*)\\)", "\\3", resp))

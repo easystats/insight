@@ -22,7 +22,8 @@ Provides a summary of the prior distributions used
 \examples{
 \dontrun{
 library(rstanarm)
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data=iris)
-get_priors(model)}
+model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
+get_priors(model)
+}
 
 }

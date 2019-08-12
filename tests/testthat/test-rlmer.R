@@ -1,7 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-
   if (require("testthat") && require("insight") && require("lme4") && require("robustlmm")) {
     context("insight, find_predictors")
 
@@ -187,7 +186,6 @@ if (.runThisTest) {
     })
 
     test_that("get_variance", {
-
       skip_on_cran()
       skip_on_travis()
 
@@ -201,7 +199,8 @@ if (.runThisTest) {
         var.slope = c(Subject.Days = 41.06728604073937560770),
         cor.slope_intercept = c(Subject = -0.00703001666895963079)
       ),
-      tolerance = 1e-4)
+      tolerance = 1e-4
+      )
 
       expect_equal(get_variance(m2), list(
         var.fixed = 914.841369525452,
@@ -211,7 +210,8 @@ if (.runThisTest) {
         var.dispersion = 0,
         var.intercept = c(`mysubgrp:mygrp` = 0, Subject = 1390.66848951126, mygrp = 16.113711389561)
       ),
-      tolerance = 1e-4)
+      tolerance = 1e-4
+      )
     })
 
     test_that("find_algorithm", {
@@ -225,5 +225,4 @@ if (.runThisTest) {
       expect_null(find_random_slopes(m2))
     })
   }
-
 }

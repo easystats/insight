@@ -9,7 +9,7 @@
 #'   Can be used in case of regression models with multiple response variables.
 #' @inheritParams find_predictors
 #'
-#' @return The values of the reponse variable, as vector, or a data frame if
+#' @return The values of the response variable, as vector, or a data frame if
 #'   \code{x} has more than one defined response variable.
 #'
 #' @examples

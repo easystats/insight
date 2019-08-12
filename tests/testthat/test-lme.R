@@ -9,7 +9,7 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
     data = sleepstudy
   )
 
-  m2 <- lme(distance ~ age + Sex, data = Orthodont, random = ~ 1)
+  m2 <- lme(distance ~ age + Sex, data = Orthodont, random = ~1)
 
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -26,7 +26,6 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
   )
 
   test_that("nested_varCorr", {
-
     skip_on_travis()
     skip_on_cran()
 
@@ -37,12 +36,14 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
           7.508310765,
           .Dim = c(1L, 1L),
           .Dimnames = list(
-            "(Intercept)", "(Intercept)")
-          ),
+            "(Intercept)", "(Intercept)"
+          )
+        ),
         mygrp = structure(
           0.004897827,
           .Dim = c(1L, 1L),
-          .Dimnames = list("(Intercept)", "(Intercept)"))
+          .Dimnames = list("(Intercept)", "(Intercept)")
+        )
       ),
       tolerance = 1e-4
     )
@@ -150,7 +151,6 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
   })
 
   test_that("get_variance", {
-
     skip_on_cran()
 
     expect_equal(get_variance(m1), list(
@@ -163,7 +163,7 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
       var.slope = c(Subject.Days = 35.07130179308116169068),
       cor.slope_intercept = 0.06600000000000000311
     ),
-    tolerance = 1e-4)
+    tolerance = 1e-4
+    )
   })
-
 }

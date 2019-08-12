@@ -425,10 +425,11 @@ find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatte
   }
 
   re <- lme4::ranef(x)
-  if (is.data.frame(re))
+  if (is.data.frame(re)) {
     rn <- colnames(re)
-  else
+  } else {
     rn <- lapply(re, colnames)
+  }
 
   l <- .compact_list(list(
     conditional = names(lme4::fixef(x)),
@@ -522,7 +523,7 @@ find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), co
 
 #' @rdname find_parameters
 #' @export
-find_parameters.zeroinfl <- function(x,  component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
+find_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
   l <- .compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
@@ -543,7 +544,7 @@ find_parameters.zeroinfl <- function(x,  component = c("all", "conditional", "zi
 
 #' @rdname find_parameters
 #' @export
-find_parameters.hurdle <- function(x,  component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
+find_parameters.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
   l <- .compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
@@ -563,7 +564,7 @@ find_parameters.hurdle <- function(x,  component = c("all", "conditional", "zi",
 
 
 #' @export
-find_parameters.zerotrunc <- function(x,  component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
+find_parameters.zerotrunc <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
   l <- .compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
@@ -819,5 +820,3 @@ find_parameters.wbm <- function(x, effects = c("all", "fixed", "random"), flatte
     l
   }
 }
-
-

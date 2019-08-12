@@ -287,8 +287,8 @@ get_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_t
 get_parameters.crq <- function(x, ...) {
   sc <- summary(x)
   data.frame(
-    parameter = names(sc$coefficients[ ,1]),
-    estimate = unname(sc$coefficients[ ,1])
+    parameter = names(sc$coefficients[, 1]),
+    estimate = unname(sc$coefficients[, 1])
   )
 }
 
@@ -304,7 +304,7 @@ get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_t
   names(smooth_terms) <- rownames(sc$qsstab)
 
   .return_smooth_parms(
-    conditional = sc$coef[ ,1],
+    conditional = sc$coef[, 1],
     smooth_terms = smooth_terms,
     component = component
   )
@@ -763,7 +763,7 @@ get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE,
         BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)
       ))
     data.frame("Effect" = as.numeric(posteriors$delta))
-  } else{
+  } else {
     NULL
   }
 }
@@ -850,7 +850,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
     row.names = NULL
   )
 
-  smooth <-  data.frame(
+  smooth <- data.frame(
     parameter = names(smooth_terms),
     estimate = smooth_terms,
     component = "smooth_terms",

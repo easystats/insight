@@ -2,8 +2,8 @@ if (require("testthat") && require("insight") && require("crch")) {
   context("insight, model_info")
 
   data("RainIbk")
-  RainIbk$sqrtensmean <- apply(sqrt(RainIbk[,grep('^rainfc',names(RainIbk))]), 1, mean)
-  RainIbk$sqrtenssd <- apply(sqrt(RainIbk[,grep('^rainfc',names(RainIbk))]), 1, sd)
+  RainIbk$sqrtensmean <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
+  RainIbk$sqrtenssd <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, sd)
 
   m1 <- crch(sqrt(rain) ~ sqrtensmean, data = RainIbk, dist = "gaussian")
 

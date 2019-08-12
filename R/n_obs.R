@@ -19,7 +19,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' n_obs(m)
-#'
 #' @importFrom stats model.frame nobs
 #' @export
 n_obs <- function(x, ...) {
@@ -48,10 +47,11 @@ n_obs.default <- function(x, ...) {
 #' @rdname n_obs
 #' @export
 n_obs.svyolr <- function(x, weighted = FALSE, ...) {
-  if (weighted)
+  if (weighted) {
     stats::nobs(x)
-  else
+  } else {
     nrow(stats::model.frame(x))
+  }
 }
 
 
@@ -216,8 +216,9 @@ nobs.BBmm <- function(object, ...) {
 #' @export
 n_obs.crq <- function(x, ...) {
   n <- nrow(x$residuals)
-  if (.is_empty_object(n))
+  if (.is_empty_object(n)) {
     n <- nrow(x$fitted.values)
+  }
   n
 }
 
@@ -322,9 +323,9 @@ nobs.aovlist <- function(object, ...) {
 n_obs.stanmvreg <- function(x, select = NULL, ...) {
   n <- min(x$n_yobs)
   if (!is.null(select)) {
-    if (select %in% names(x$n_yobs))
+    if (select %in% names(x$n_yobs)) {
       n <- x$n_yobs[select]
-    else {
+    } else {
       print_color(sprintf("Could not find response '%s'. Model's response variables are named %s.\n", select, paste(names(x$n_yobs), collapse = ", ")), "red")
       cat("Returning smallest number of observations now.\n")
       n <- min(x$n_yobs)

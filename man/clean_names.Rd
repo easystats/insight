@@ -48,5 +48,4 @@ m <- glmer(
 clean_names(m)
 find_variables(m)
 find_variables(m, flatten = TRUE)
-
 }

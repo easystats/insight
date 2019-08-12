@@ -35,7 +35,6 @@
 #' )
 #'
 #' find_terms(m)
-#'
 #' @export
 find_terms <- function(x, flatten = FALSE, ...) {
   f <- find_formula(x)

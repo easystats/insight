@@ -5,7 +5,7 @@ if (require("testthat") && require("insight") && require("betareg")) {
   data("FoodExpenditure")
 
   m1 <- betareg(yield ~ batch + temp, data = GasolineYield)
-  m2 <- betareg(I(food/income) ~ income + persons, data = FoodExpenditure)
+  m2 <- betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_beta)

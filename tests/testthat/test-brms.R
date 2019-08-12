@@ -1,7 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-
   if (suppressWarnings(
     require("testthat") &&
       require("insight") &&
@@ -334,21 +333,29 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
           list(
             Parameter = c(
               "b_Intercept", "b_child", "b_camper", "r_persons.1.Intercept.", "r_persons.2.Intercept.",
-              "r_persons.3.Intercept.", "r_persons.4.Intercept.",  "b_zi_Intercept", "b_zi_child",
+              "r_persons.3.Intercept.", "r_persons.4.Intercept.", "b_zi_Intercept", "b_zi_child",
               "b_zi_camper", "r_persons__zi.1.Intercept.", "r_persons__zi.2.Intercept.", "r_persons__zi.3.Intercept.",
               "r_persons__zi.4.Intercept."
             ),
-            Effects = c("fixed", "fixed", "fixed", "random", "random", "random", "random",
-                        "fixed", "fixed", "fixed", "random", "random", "random", "random"),
-            Component = c("conditional", "conditional", "conditional", "conditional", "conditional", "conditional",
-                          "conditional", "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
-                          "zero_inflated", "zero_inflated", "zero_inflated"),
-            Group = c("", "", "", "Intercept: persons", "Intercept: persons", "Intercept: persons",
-                      "Intercept: persons", "", "", "", "Intercept: persons", "Intercept: persons",
-                      "Intercept: persons", "Intercept: persons"),
-            Cleaned_Parameter = c("(Intercept)", "child", "camper", "persons.1", "persons.2",
-                                  "persons.3", "persons.4", "(Intercept)", "child", "camper",
-                                  "persons.1", "persons.2", "persons.3", "persons.4")
+            Effects = c(
+              "fixed", "fixed", "fixed", "random", "random", "random", "random",
+              "fixed", "fixed", "fixed", "random", "random", "random", "random"
+            ),
+            Component = c(
+              "conditional", "conditional", "conditional", "conditional", "conditional", "conditional",
+              "conditional", "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
+              "zero_inflated", "zero_inflated", "zero_inflated"
+            ),
+            Group = c(
+              "", "", "", "Intercept: persons", "Intercept: persons", "Intercept: persons",
+              "Intercept: persons", "", "", "", "Intercept: persons", "Intercept: persons",
+              "Intercept: persons", "Intercept: persons"
+            ),
+            Cleaned_Parameter = c(
+              "(Intercept)", "child", "camper", "persons.1", "persons.2",
+              "persons.3", "persons.4", "(Intercept)", "child", "camper",
+              "persons.1", "persons.2", "persons.3", "persons.4"
+            )
           ),
           class = c("clean_parameters", "data.frame"),
           row.names = c(NA, -14L)
@@ -409,7 +416,5 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         )
       )
     })
-
   }
-
 }

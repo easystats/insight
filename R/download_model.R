@@ -30,8 +30,9 @@ download_model <- function(name, url = NULL) {
     stop("Package `httr` required to download models from the circus-repo.", call. = FALSE)
   }
 
-  if (is.null(url))
+  if (is.null(url)) {
     url <- "https://raw.github.com/easystats/circus/master/data/"
+  }
 
   url <- paste0(url, name, ".rda")
 
@@ -49,4 +50,3 @@ download_model <- function(name, url = NULL) {
 
   model
 }
-

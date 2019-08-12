@@ -10,7 +10,7 @@ if (require("testthat") && require("insight") && require("mgcv")) {
       y ~ s(x0) + s(x1) + s(x2),
       family = poisson,
       data = dat,
-      random = list(fac = ~ 1)
+      random = list(fac = ~1)
     )
 
   test_that("model_info", {

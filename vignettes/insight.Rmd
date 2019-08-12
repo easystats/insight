@@ -53,7 +53,7 @@ knitr::include_graphics("figure3a.png", dpi = 72)
 
 ### Variables
 
-Any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A "variable" only relates to the unique occurence of a term, or the term name. For instance, the expression `x + poly(x, 2)` has only the variable `x`.
+Any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A "variable" only relates to the unique occurrence of a term, or the term name. For instance, the expression `x + poly(x, 2)` has only the variable `x`.
 
 ```{r out.width="80%", echo=FALSE}
 knitr::include_graphics("figure3b.png", dpi = 72)
@@ -226,7 +226,7 @@ print_params(m2)
 
 **insight** is already used by different packages to solve problems that typically occur when the users' inputs are different model objects of varying complexity.
 
-For example, [**ggeffects**](https://strengejacke.github.io/ggeffects), a package that computes and visualizes marginal effects of regression models, requires extraction of the data (`get_data()`) that was used to fit the models, and also the retrieval all model predictors (`find_predictors()`) to decide which covariates are held constant when computing marginal effects. All of this information is required in order to create a data frame for `predict(newdata=<data frame>)`. Furthermore, the models' link-functions (`link_function()`) resp. link-inverse-functions (`link_inverse()`) are required to obtain predictons at the model's response scale.
+For example, [**ggeffects**](https://strengejacke.github.io/ggeffects), a package that computes and visualizes marginal effects of regression models, requires extraction of the data (`get_data()`) that was used to fit the models, and also the retrieval all model predictors (`find_predictors()`) to decide which covariates are held constant when computing marginal effects. All of this information is required in order to create a data frame for `predict(newdata=<data frame>)`. Furthermore, the models' link-functions (`link_function()`) resp. link-inverse-functions (`link_inverse()`) are required to obtain predictors at the model's response scale.
 
 The [**sjPlot**-package](https://strengejacke.github.io/sjPlot/) creates plots or summary tables from regression models, and uses **insight**-functions to get model-information (`model_info()` or `find_response()`), which is used to build the components of the final plot or table. This information helps, for example, in labeling table columns by providing information on the effect type (odds ratio, incidence rate ratio, etc.) or the different model components, which split plots and tables into the "conditional" and "zero-inflated" parts of a model, in the cases of models with zero-inflation.
 

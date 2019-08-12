@@ -60,7 +60,6 @@ dat <- data.frame(ldose, sex, SF, stringsAsFactors = FALSE)
 m <- glm(SF ~ sex * ldose, family = binomial)
 
 model_info(m)
-
 \dontrun{
 library(glmmTMB)
 data("Salamanders")
@@ -70,7 +69,8 @@ m <- glmmTMB(
   dispformula = ~DOY,
   data = Salamanders,
   family = nbinom2
-)}
+)
+}
 
 model_info(m)
 }

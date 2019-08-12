@@ -1,7 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-
   if (require("testthat") && require("insight") && require("HRQoL")) {
     context("insight, BBmm")
 
@@ -17,13 +16,13 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     phi <- 1.2
 
     y <- HRQoL::rBB(k, m, p, phi)
-    z <- as.factor(HRQoL::rBI(k,4,0.5,2))
+    z <- as.factor(HRQoL::rBI(k, 4, 0.5, 2))
 
     dat <- data.frame(y, x, j, fac, z)
 
     m1 <- BBmm(
       fixed.formula = y ~ x,
-      random.formula = ~ z,
+      random.formula = ~z,
       m = m,
       data = dat
     )

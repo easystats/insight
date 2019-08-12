@@ -181,7 +181,6 @@ if (require("testthat") && require("insight") && require("blme")) {
   })
 
   test_that("get_variance", {
-
     skip_on_cran()
 
     expect_equal(get_variance(m1), list(
@@ -194,7 +193,8 @@ if (require("testthat") && require("insight") && require("blme")) {
       var.slope = c(Subject.Days = 35.08106944030500073950),
       cor.slope_intercept = c(Subject = 0.06561803142425107205)
     ),
-    tolerance = 1e-4)
+    tolerance = 1e-4
+    )
 
     expect_equal(get_variance_fixed(m1), c(var.fixed = 908.95336262316459396970), tolerance = 1e-4)
     expect_equal(get_variance_random(m1), c(var.random = 1698.23306388298283309268), tolerance = 1e-4)

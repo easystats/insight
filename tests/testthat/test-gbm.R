@@ -1,18 +1,19 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-
   if (require("testthat") && require("insight") && require("gbm")) {
     context("insight, gbm")
 
-    set.seed(102)  # for reproducibility
-    m1 <- gbm(mpg ~ gear + cyl + wt, data = mtcars,
-              var.monotone = c(0, 0, 0),
-              distribution = "gaussian", shrinkage = 0.1,
-              interaction.depth = 1, bag.fraction = 0.5,
-              train.fraction = 0.5,
-              n.minobsinnode = 1, cv.folds = 3, keep.data = TRUE,
-              verbose = FALSE, n.cores = 1)
+    set.seed(102) # for reproducibility
+    m1 <- gbm(mpg ~ gear + cyl + wt,
+      data = mtcars,
+      var.monotone = c(0, 0, 0),
+      distribution = "gaussian", shrinkage = 0.1,
+      interaction.depth = 1, bag.fraction = 0.5,
+      train.fraction = 0.5,
+      n.minobsinnode = 1, cv.folds = 3, keep.data = TRUE,
+      verbose = FALSE, n.cores = 1
+    )
 
     test_that("model_info", {
       expect_true(model_info(m1)$is_linear)
@@ -76,7 +77,6 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("find_parameters", {
-
       skip_on_travis()
 
       expect_equal(

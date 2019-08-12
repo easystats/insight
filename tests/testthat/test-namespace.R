@@ -56,18 +56,23 @@ if (require("testthat") && require("insight") && require("splines")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("(Intercept)", "splines::bs(Petal.Width, df = 4)1",
-                        "splines::bs(Petal.Width, df = 4)2", "splines::bs(Petal.Width, df = 4)3",
-                        "splines::bs(Petal.Width, df = 4)4", "Speciesversicolor",
-                        "Speciesvirginica"
-      )))
+        conditional = c(
+          "(Intercept)", "splines::bs(Petal.Width, df = 4)1",
+          "splines::bs(Petal.Width, df = 4)2", "splines::bs(Petal.Width, df = 4)3",
+          "splines::bs(Petal.Width, df = 4)4", "Speciesversicolor",
+          "Speciesvirginica"
+        )
+      )
+    )
   })
 
   test_that("get_parameters", {
     expect_equal(nrow(get_parameters(m1)), 7)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "splines::bs(Petal.Width, df = 4)1", "splines::bs(Petal.Width, df = 4)2",
-                                                 "splines::bs(Petal.Width, df = 4)3", "splines::bs(Petal.Width, df = 4)4",
-                                                 "Speciesversicolor", "Speciesvirginica"))
+    expect_equal(get_parameters(m1)$parameter, c(
+      "(Intercept)", "splines::bs(Petal.Width, df = 4)1", "splines::bs(Petal.Width, df = 4)2",
+      "splines::bs(Petal.Width, df = 4)3", "splines::bs(Petal.Width, df = 4)4",
+      "Speciesversicolor", "Speciesvirginica"
+    ))
   })
 
   test_that("find_algorithm", {

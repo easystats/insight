@@ -40,5 +40,4 @@ find_interactions(m)
 
 m <- lm(mpg ~ wt * cyl + vs * hp * gear + carb, data = mtcars)
 find_interactions(m)
-
 }

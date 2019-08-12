@@ -284,7 +284,6 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       find_parameters(m3, effects = "fixed", component = "zi", flatten = TRUE),
       c("(Intercept)", "child", "livebait1")
     )
-
   })
 
 
@@ -336,7 +335,6 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("find_random_slopes", {
-
     skip_on_cran()
     skip_on_travis()
 
@@ -364,5 +362,4 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       )
     )
   })
-
 }

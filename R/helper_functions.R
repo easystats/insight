@@ -34,9 +34,12 @@
 # is string empty?
 .is_empty_object <- function(x) {
   if (is.list(x)) {
-    x <- tryCatch(
-      {.compact_list(x)},
-      error = function(x) { x }
+    x <- tryCatch({
+      .compact_list(x)
+    },
+    error = function(x) {
+      x
+    }
     )
   }
   # this is an ugly fix because of ugly tibbles
@@ -77,7 +80,9 @@
   # check for identical column names
   tmp <- cbind(...)
 
-  if (nrow(data) == 0) return(tmp)
+  if (nrow(data) == 0) {
+    return(tmp)
+  }
 
   doubles <- colnames(tmp) %in% colnames(data)
 
@@ -142,7 +147,6 @@
 
 # extract random effects from formula
 .get_model_random <- function(f, split_nested = FALSE, model) {
-
   is_special <- inherits(model, c("MCMCglmm", "gee", "LORgee", "felm", "feis", "BFBayesFactor", "BBmm", "glimML"))
 
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -187,7 +191,9 @@
     f <- .get_model_random(f, split_nested = TRUE, x)
   }
 
-  if (is.null(f)) return(NULL)
+  if (is.null(f)) {
+    return(NULL)
+  }
 
   if (is.list(f)) {
     f <- lapply(f, function(i) sapply(i, as.symbol))
@@ -236,20 +242,22 @@
 # and subset the data, if necessary
 .get_data_from_env <- function(x) {
   # first try, parent frame
-  dat <- tryCatch(
-    {
-      eval(x$call$data, envir = parent.frame())
-    },
-    error = function(e) { NULL }
+  dat <- tryCatch({
+    eval(x$call$data, envir = parent.frame())
+  },
+  error = function(e) {
+    NULL
+  }
   )
 
   if (is.null(dat)) {
     # second try, global env
-    dat <- tryCatch(
-      {
-        eval(x$call$data, envir = globalenv())
-      },
-      error = function(e) { NULL }
+    dat <- tryCatch({
+      eval(x$call$data, envir = globalenv())
+    },
+    error = function(e) {
+      NULL
+    }
     )
   }
 
@@ -271,26 +279,27 @@
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
-  tryCatch(
-    {
-      if (inherits(x, "glmmTMB")) {
-        is_si <- any(sapply(vals$vc, function(.x) any(abs(diag(.x)) < tolerance)))
-      } else if (inherits(x, "merMod")) {
-        theta <- lme4::getME(x, "theta")
-        diag.element <- lme4::getME(x, "lower") == 0
-        is_si <- any(abs(theta[diag.element]) < tolerance)
-      } else if (inherits(x, "MixMod")) {
-        vc <- diag(x$D)
-        is_si <- any(sapply(vc, function(.x) any(abs(.x) < tolerance)))
-      } else if (inherits(x, "lme")) {
-        is_si <- any(abs(stats::na.omit(as.numeric(diag(vals$vc))) < tolerance))
-      } else {
-        is_si <- FALSE
-      }
+  tryCatch({
+    if (inherits(x, "glmmTMB")) {
+      is_si <- any(sapply(vals$vc, function(.x) any(abs(diag(.x)) < tolerance)))
+    } else if (inherits(x, "merMod")) {
+      theta <- lme4::getME(x, "theta")
+      diag.element <- lme4::getME(x, "lower") == 0
+      is_si <- any(abs(theta[diag.element]) < tolerance)
+    } else if (inherits(x, "MixMod")) {
+      vc <- diag(x$D)
+      is_si <- any(sapply(vc, function(.x) any(abs(.x) < tolerance)))
+    } else if (inherits(x, "lme")) {
+      is_si <- any(abs(stats::na.omit(as.numeric(diag(vals$vc))) < tolerance))
+    } else {
+      is_si <- FALSE
+    }
 
-      is_si
-    },
-    error = function(x) { FALSE }
+    is_si
+  },
+  error = function(x) {
+    FALSE
+  }
   )
 }
 

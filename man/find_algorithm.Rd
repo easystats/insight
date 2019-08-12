@@ -42,10 +42,10 @@ library(lme4)
 data(sleepstudy)
 m <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
 find_algorithm(m)
-
 \dontrun{
 library(rstanarm)
 m <- stan_lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-find_algorithm(m)}
+find_algorithm(m)
+}
 
 }

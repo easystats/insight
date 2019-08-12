@@ -51,7 +51,6 @@
 #' m <- glm(SF ~ sex * ldose, family = binomial)
 #'
 #' model_info(m)
-#'
 #' \dontrun{
 #' library(glmmTMB)
 #' data("Salamanders")
@@ -61,7 +60,8 @@
 #'   dispformula = ~DOY,
 #'   data = Salamanders,
 #'   family = nbinom2
-#' )}
+#' )
+#' }
 #'
 #' model_info(m)
 #' @importFrom stats formula terms
@@ -85,15 +85,16 @@ model_info.default <- function(x, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
-  faminfo <- tryCatch(
-    {
-      if (inherits(x, c("Zelig-relogit"))) {
-        stats::binomial(link = "logit")
-      } else {
-        stats::family(x)
-      }
-    },
-    error = function(x) { NULL }
+  faminfo <- tryCatch({
+    if (inherits(x, c("Zelig-relogit"))) {
+      stats::binomial(link = "logit")
+    } else {
+      stats::family(x)
+    }
+  },
+  error = function(x) {
+    NULL
+  }
   )
 
   if (!is.null(faminfo)) {
@@ -918,12 +919,13 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
 
     obj_type <- .classify_BFBayesFactor(x)
 
-    if (obj_type == "correlation")
+    if (obj_type == "correlation") {
       is_correlation <- TRUE
-    else if (obj_type == "ttest")
+    } else if (obj_type == "ttest") {
       is_ttest <- TRUE
-    else if (obj_type == "meta")
+    } else if (obj_type == "meta") {
       is_meta <- TRUE
+    }
   }
 
 
@@ -1001,7 +1003,7 @@ get_ordinal_link <- function(x) {
     "meta"
   } else if (any(class(x@denominator) %in% c("BFlinearModel"))) {
     "linear"
-  } else{
+  } else {
     class(x@denominator)
   }
 }

@@ -1,7 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-
   if (suppressWarnings(
     require("testthat") &&
       require("insight") &&
@@ -29,7 +28,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_equal(get_priors(m5)$adjusted_scale, c(25.5992021152256, 2.55992021152256, 5.11984042304512, 7.67976063456768), tolerance = 1e-3)
       expect_equal(
         get_priors(m6),
-        data.frame(parameter = "(Intercept)", distribution = "normal",location = 0, scale = 10, adjusted_scale = 4.35866284936698, stringsAsFactors = FALSE, row.names = NULL),
+        data.frame(parameter = "(Intercept)", distribution = "normal", location = 0, scale = 10, adjusted_scale = 4.35866284936698, stringsAsFactors = FALSE, row.names = NULL),
         tolerance = 1e-3
       )
     })
@@ -157,7 +156,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         var.dispersion = 0,
         var.intercept = c(herd = 0.6113405)
       ),
-      tolerance = 1e-4)
+      tolerance = 1e-4
+      )
 
       expect_equal(get_variance_fixed(m1), c(var.fixed = 0.3710157), tolerance = 1e-4)
       expect_equal(get_variance_random(m1), c(var.random = 0.6113405), tolerance = 1e-4)
@@ -178,18 +178,25 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     test_that("clean_parameters", {
       expect_equal(
         clean_parameters(m2),
-        structure(list(Parameter = c("(Intercept)", "Speciesversicolor",
-          "Speciesvirginica", "Petal.Length", "Speciesversicolor:Petal.Length",
-          "Speciesvirginica:Petal.Length"), Effects = c("fixed", "fixed",
-          "fixed", "fixed", "fixed", "fixed"), Component = c("conditional",
-          "conditional", "conditional", "conditional", "conditional", "conditional"),
-          Cleaned_Parameter = c("(Intercept)", "Speciesversicolor",
-          "Speciesvirginica", "Petal.Length", "Speciesversicolor:Petal.Length",
-          "Speciesvirginica:Petal.Length")), class = c("clean_parameters", "data.frame"), row.names = c(NA, -6L)
-        )
+        structure(list(
+          Parameter = c(
+            "(Intercept)", "Speciesversicolor",
+            "Speciesvirginica", "Petal.Length", "Speciesversicolor:Petal.Length",
+            "Speciesvirginica:Petal.Length"
+          ), Effects = c(
+            "fixed", "fixed",
+            "fixed", "fixed", "fixed", "fixed"
+          ), Component = c(
+            "conditional",
+            "conditional", "conditional", "conditional", "conditional", "conditional"
+          ),
+          Cleaned_Parameter = c(
+            "(Intercept)", "Speciesversicolor",
+            "Speciesvirginica", "Petal.Length", "Speciesversicolor:Petal.Length",
+            "Speciesvirginica:Petal.Length"
+          )
+        ), class = c("clean_parameters", "data.frame"), row.names = c(NA, -6L))
       )
     })
-
   }
-
 }

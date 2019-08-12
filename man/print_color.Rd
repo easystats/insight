@@ -30,5 +30,4 @@ This function prints \code{text} directly to the console using
 }
 \examples{
 print_color("I'm blue dabedi dabedei", "blue")
-
 }

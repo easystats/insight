@@ -17,7 +17,6 @@
 #'
 #' @examples
 #' print_color("I'm blue dabedi dabedei", "blue")
-#'
 #' @export
 print_color <- function(text, color) {
   cat(.colour(colour = color, x = text))
@@ -35,7 +34,7 @@ print_colour <- function(text, colour) {
     return(FALSE)
   }
   if ((cols <- Sys.getenv("RSTUDIO_CONSOLE_COLOR", "")) !=
-      "" && !is.na(as.numeric(cols))) {
+    "" && !is.na(as.numeric(cols))) {
     return(TRUE)
   }
   requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable() &&
@@ -70,7 +69,7 @@ print_colour <- function(text, colour) {
     return(FALSE)
   }
   grepl("^screen|^xterm|^vt100|color|ansi|cygwin|linux", Sys.getenv("TERM"),
-        ignore.case = TRUE, perl = TRUE
+    ignore.case = TRUE, perl = TRUE
   )
 }
 

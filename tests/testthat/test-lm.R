@@ -102,16 +102,23 @@ if (require("testthat") && require("insight") && require("stats")) {
 
   data("DNase")
   DNase1 <- subset(DNase, Run == 1)
-  m3 <- stats::nls(density ~ stats::SSlogis(log(conc), Asym, xmid, scal), DNase1)
+  m3 <- stats::nls(density ~ stats::SSlogis(log(conc), Asym, xmid, scal),
+    DNase1,
+    start = list(Asym = 1, xmid = 1, scal = 1)
+  )
 
   ## Dobson (1990) Page 93: Randomized Controlled Trial :
-  counts <- c(18,17,15,20,10,20,25,13,12)
-  outcome <- gl(3,1,9)
-  treatment <- gl(3,3)
+  counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
+  outcome <- gl(3, 1, 9)
+  treatment <- gl(3, 3)
   m4 <- glm(counts ~ outcome + treatment, family = poisson())
 
   test_that("is_model", {
-    expect_false(is_model(m3))
+    expect_true(is_model(m3))
+  })
+
+  test_that("is_model", {
+    expect_false(is_model_supported(m3))
   })
 
   test_that("all_models_equal", {

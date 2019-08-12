@@ -135,7 +135,6 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           is_mv = "1"
         )
       )
-
     })
 
     test_that("get_paramaters", {
@@ -965,6 +964,5 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         )
       )
     })
-
   }
 }

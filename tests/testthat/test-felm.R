@@ -81,9 +81,12 @@ if (require("testthat") && require("insight") && require("lfe")) {
         conditional = c("x", "x2"),
         random = c("id", "firm"),
         instruments = c("(Q", "W  x3", "factor(x4))")
-      ))
-    expect_equal(find_terms(m1, flatten = TRUE),
-                 c("y", "x", "x2", "id", "firm", "(Q", "W  x3", "factor(x4))"))
+      )
+    )
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("y", "x", "x2", "id", "firm", "(Q", "W  x3", "factor(x4))")
+    )
   })
 
 

@@ -1,7 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-
   if (require("testthat") && require("insight") && require("VGAM")) {
     context("insight, model_info")
 

@@ -12,10 +12,11 @@
 #' head(get_predictors(m))
 #' @export
 get_predictors <- function(x) {
-  vars <- if (inherits(x, "wbm"))
+  vars <- if (inherits(x, "wbm")) {
     unlist(.compact_list(find_terms(x, flatten = FALSE)[c("conditional", "instruments")]))
-  else
+  } else {
     find_predictors(x, effects = "fixed", component = "all", flatten = TRUE)
+  }
 
   dat <- get_data(x)[, vars, drop = FALSE]
 
