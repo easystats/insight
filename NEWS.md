@@ -8,6 +8,13 @@
     entered object is a model object, while `is_model_supported` checks if a
     supported model object.
 
+## New functions
+
+  - `format_value()` and `format_table()` as utility-functions to format (model) 
+    output, especially for tabular output.
+  - `color_if()` as utility-function to add color formatting to values, depending
+    on certain conditions.
+
 ## Bug fixed
 
   - `find_formula()` now extracts group factors of random effects for *gamlss*
