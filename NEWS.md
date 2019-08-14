@@ -2,10 +2,10 @@
 
 ## Breaking Changes
 
-  - The previous `is_model` function has been renamed to `is_model_supported`
+  - The previous `is_model()` function has been renamed to `is_model_supported()`
     since it was unclear if the function checked the entered object was a model
-    or a supported model in `insight`. The new `is_model` function checks if the
-    entered object is a model object, while `is_model_supported` checks if a
+    or a supported model in *insight*. The new `is_model()` function checks if the
+    entered object is a model object, while `is_model_supported()` checks if a
     supported model object.
 
 ## New functions
