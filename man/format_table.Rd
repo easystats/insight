@@ -8,7 +8,7 @@ format_table(x, sep = " | ", header = "-", digits = 2,
   protect_integers = TRUE, missing = "")
 }
 \arguments{
-\item{x}{A dataframe.}
+\item{x}{A data frame.}
 
 \item{sep}{Column separator.}
 
@@ -18,17 +18,15 @@ format_table(x, sep = " | ", header = "-", digits = 2,
 
 \item{protect_integers}{Should integers be kept as integers (i.e., without decimals)?}
 
-\item{missing}{Value by which `NA` values are replaced. By default, an empty string (i.e. \code{""}) is returned for `NA`.}
+\item{missing}{Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.}
 }
 \value{
-A data.frame in character format.
+A data frame in character format.
 }
 \description{
 Dataframe and Tables Pretty Formatting
 }
 \examples{
-library(parameters)
-
 cat(format_table(iris))
 cat(format_table(iris, sep = " ", header = "*", digits = 1))
 }

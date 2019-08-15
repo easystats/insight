@@ -1,14 +1,12 @@
 #' Dataframe and Tables Pretty Formatting
 #'
-#' @param x A dataframe.
+#' @param x A data frame.
 #' @param sep Column separator.
 #' @param header Header separator. Can be \code{NULL}.
 #' @inheritParams format_value
 #'
-#' @return A data.frame in character format.
+#' @return A data frame in character format.
 #' @examples
-#' library(parameters)
-#'
 #' cat(format_table(iris))
 #' cat(format_table(iris, sep = " ", header = "*", digits = 1))
 #' @export

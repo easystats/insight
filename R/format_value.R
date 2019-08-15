@@ -3,7 +3,7 @@
 #' @param x Numeric value.
 #' @param digits Number of significant digits.
 #' @param protect_integers Should integers be kept as integers (i.e., without decimals)?
-#' @param missing Value by which `NA` values are replaced. By default, an empty string (i.e. \code{""}) is returned for `NA`.
+#' @param missing Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.
 #' @param ... Arguments passed to or from other methods.
 #'
 #'
