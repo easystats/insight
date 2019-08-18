@@ -4,11 +4,15 @@ if (require("testthat") && require("insight") && require("gamm4")) {
   context("insight, model_info")
 
   set.seed(0)
-  dat <- gamSim(1, n = 400, scale = 2) ## simulate 4 term additive truth
+  dat <-
+    gamSim(1, n = 400, scale = 2) ## simulate 4 term additive truth
   dat$fac <- fac <- as.factor(sample(1:20, 400, replace = TRUE))
-  dat$y <- dat$y + model.matrix(~ fac - 1) %*% rnorm(20) * .5
+  dat$y <- dat$y + model.matrix( ~ fac - 1) %*% rnorm(20) * .5
 
-  m1 <- gamm4(y ~ s(x0) + x1 + s(x2), data = dat, random = ~ (1 | fac))
+  m1 <-
+    gamm4(y ~ s(x0) + x1 + s(x2),
+          data = dat,
+          random = ~ (1 | fac))
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -38,24 +42,45 @@ if (require("testthat") && require("insight") && require("gamm4")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 400)
-    expect_equal(colnames(get_data(m1)), c("y", "x1", "x0", "x2", "fac", "y.0", "Xr", "Xr.0", "X.(Intercept)", "X.x1", "X.s(x0)Fx1", "X.s(x2)Fx1"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c(
+        "y",
+        "x1",
+        "x0",
+        "x2",
+        "fac",
+        "y.0",
+        "Xr",
+        "Xr.0",
+        "X.(Intercept)",
+        "X.x1",
+        "X.s(x0)Fx1",
+        "X.s(x2)Fx1"
+      )
+    )
   })
 
   test_that("find_formula", {
     expect_length(find_formula(m1), 1)
-    expect_equal(
-      find_formula(m1),
-      list(conditional = as.formula("y ~ s(x0) + x1 + s(x2)"))
-    )
+    expect_equal(find_formula(m1),
+                 list(conditional = as.formula("y ~ s(x0) + x1 + s(x2)")))
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "y", conditional = c("s(x0)", "x1", "s(x2)")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("y", "s(x0)", "x1", "s(x2)"))
+    expect_equal(find_terms(m1), list(
+      response = "y",
+      conditional = c("s(x0)", "x1", "s(x2)")
+    ))
+    expect_equal(find_terms(m1, flatten = TRUE),
+                 c("y", "s(x0)", "x1", "s(x2)"))
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = "y", conditional = c("x0", "x1", "x2")))
+    expect_equal(find_variables(m1), list(
+      response = "y",
+      conditional = c("x0", "x1", "x2")
+    ))
     expect_equal(find_variables(m1, flatten = TRUE), c("y", "x0", "x1", "x2"))
   })
 
@@ -68,15 +93,14 @@ if (require("testthat") && require("insight") && require("gamm4")) {
   })
 
   test_that("find_parameters", {
-    expect_equal(
-      find_parameters(m1),
-      list(
-        conditional = c("(Intercept)", "x1"),
-        smooth_terms = c("s(x0)", "s(x2)")
-      )
-    )
+    expect_equal(find_parameters(m1),
+                 list(
+                   conditional = c("(Intercept)", "x1"),
+                   smooth_terms = c("s(x0)", "s(x2)")
+                 ))
     expect_equal(nrow(get_parameters(m1)), 4)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "x1", "s(x0)", "s(x2)"))
+    expect_equal(get_parameters(m1)$parameter,
+                 c("(Intercept)", "x1", "s(x0)", "s(x2)"))
   })
 
   test_that("is_multivariate", {

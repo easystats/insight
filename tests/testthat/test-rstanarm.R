@@ -350,6 +350,5 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_null(find_statistic(m5))
       expect_null(find_statistic(m6))
     })
-
   }
 }

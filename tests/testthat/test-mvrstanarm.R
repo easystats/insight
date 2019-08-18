@@ -1,18 +1,19 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-  if (suppressWarnings(
-    require("testthat") &&
-      require("insight") &&
-      require("rstanarm")
-  )) {
+  if (suppressWarnings(require("testthat") &&
+    require("insight") &&
+    require("rstanarm"))) {
     context("insight, mv-rstanarm")
 
     data("pbcLong")
     m1 <- download_model("stanmvreg_1")
 
     test_that("clean_names", {
-      expect_identical(clean_names(m1), c("logBili", "albumin", "year", "id", "sex"))
+      expect_identical(
+        clean_names(m1),
+        c("logBili", "albumin", "year", "id", "sex")
+      )
     })
 
     test_that("find_predictors", {
@@ -28,23 +29,41 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         find_predictors(m1, effects = "all", component = "all"),
         list(
           y1 = list(conditional = "year", random = "id"),
-          y2 = list(conditional = c("sex", "year"), random = "id")
+          y2 = list(
+            conditional = c("sex", "year"),
+            random = "id"
+          )
         )
       )
       expect_identical(
-        find_predictors(m1, effects = "all", component = "all", flatten = TRUE),
+        find_predictors(
+          m1,
+          effects = "all",
+          component = "all",
+          flatten = TRUE
+        ),
         c("year", "id", "sex")
       )
     })
 
     test_that("find_response", {
-      expect_equal(find_response(m1, combine = TRUE), c(y1 = "logBili", y2 = "albumin"))
-      expect_equal(find_response(m1, combine = FALSE), c(y1 = "logBili", y2 = "albumin"))
+      expect_equal(
+        find_response(m1, combine = TRUE),
+        c(y1 = "logBili", y2 = "albumin")
+      )
+      expect_equal(
+        find_response(m1, combine = FALSE),
+        c(y1 = "logBili", y2 = "albumin")
+      )
     })
 
     test_that("get_response", {
       expect_equal(nrow(get_response(m1)), 304)
       expect_equal(colnames(get_response(m1)), c("logBili", "albumin"))
+    })
+
+    test_that("find_statistic", {
+      expect_null(find_statistic(m1))
     })
 
     test_that("find_variables", {
@@ -53,7 +72,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         list(
           response = c(y1 = "logBili", y2 = "albumin"),
           y1 = list(conditional = "year", random = "id"),
-          y2 = list(conditional = c("sex", "year"), random = "id")
+          y2 = list(
+            conditional = c("sex", "year"),
+            random = "id"
+          )
         )
       )
       expect_identical(
@@ -74,8 +96,16 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_identical(
         find_terms(m1),
         list(
-          y1 = list(response = "logBili", conditional = "year", random = "id"),
-          y2 = list(response = "albumin", conditional = c("sex", "year"), random = c("year", "id"))
+          y1 = list(
+            response = "logBili",
+            conditional = "year",
+            random = "id"
+          ),
+          y2 = list(
+            response = "albumin",
+            conditional = c("sex", "year"),
+            random = c("year", "id")
+          )
         )
       )
       expect_identical(
@@ -91,48 +121,51 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     test_that("find_paramaters", {
       expect_equal(
         find_parameters(m1),
-        structure(
-          list(
-            y1 = list(
-              conditional = c("(Intercept)", "year", "sigma"),
-              random = sprintf("b[(Intercept) id:%i]", 1:40),
-              sigma = "sigma"
-            ),
-            y2 = list(
-              conditional = c("(Intercept)", "sexf", "year", "sigma"),
-              random = sprintf(c("b[(Intercept) id:%i]", "b[year id:%i]"), rep(1:40, each = 2)),
-              sigma = "sigma"
-            )
+        structure(list(
+          y1 = list(
+            conditional = c("(Intercept)", "year", "sigma"),
+            random = sprintf("b[(Intercept) id:%i]", 1:40),
+            sigma = "sigma"
           ),
-          is_mv = "1"
+          y2 = list(
+            conditional = c("(Intercept)", "sexf", "year", "sigma"),
+            random = sprintf(
+              c("b[(Intercept) id:%i]", "b[year id:%i]"),
+              rep(1:40, each = 2)
+            ),
+            sigma = "sigma"
+          )
+        ),
+        is_mv = "1"
         )
       )
 
       expect_equal(
         find_parameters(m1, effects = "fixed"),
-        structure(
-          list(
-            y1 = list(
-              conditional = c("(Intercept)", "year", "sigma"),
-              sigma = "sigma"
-            ),
-            y2 = list(
-              conditional = c("(Intercept)", "sexf", "year", "sigma"),
-              sigma = "sigma"
-            )
+        structure(list(
+          y1 = list(
+            conditional = c("(Intercept)", "year", "sigma"),
+            sigma = "sigma"
           ),
-          is_mv = "1"
+          y2 = list(
+            conditional = c("(Intercept)", "sexf", "year", "sigma"),
+            sigma = "sigma"
+          )
+        ),
+        is_mv = "1"
         )
       )
 
       expect_equal(
         find_parameters(m1, effects = "random"),
-        structure(
-          list(
-            y1 = list(random = sprintf("b[(Intercept) id:%i]", 1:40)),
-            y2 = list(random = sprintf(c("b[(Intercept) id:%i]", "b[year id:%i]"), rep(1:40, each = 2)))
-          ),
-          is_mv = "1"
+        structure(list(
+          y1 = list(random = sprintf("b[(Intercept) id:%i]", 1:40)),
+          y2 = list(random = sprintf(
+            c("b[(Intercept) id:%i]", "b[year id:%i]"),
+            rep(1:40, each = 2)
+          ))
+        ),
+        is_mv = "1"
         )
       )
     })
@@ -140,14 +173,31 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     test_that("get_paramaters", {
       expect_equal(
         colnames(get_parameters(m1)),
-        c("y1|(Intercept)", "y1|year", "y1|sigma", "y2|(Intercept)", "y2|sexf", "y2|year", "y2|sigma")
+        c(
+          "y1|(Intercept)",
+          "y1|year",
+          "y1|sigma",
+          "y2|(Intercept)",
+          "y2|sexf",
+          "y2|year",
+          "y2|sigma"
+        )
       )
       expect_equal(
         colnames(get_parameters(m1, effects = "all")),
         c(
-          "y1|(Intercept)", "y1|year", "y1|sigma", sprintf("b[y1|(Intercept) id:%i]", 1:40),
-          "y2|(Intercept)", "y2|sexf", "y2|year", "y2|sigma",
-          sprintf(c("b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"), rep(1:40, each = 2))
+          "y1|(Intercept)",
+          "y1|year",
+          "y1|sigma",
+          sprintf("b[y1|(Intercept) id:%i]", 1:40),
+          "y2|(Intercept)",
+          "y2|sexf",
+          "y2|year",
+          "y2|sigma",
+          sprintf(
+            c("b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"),
+            rep(1:40, each = 2)
+          )
         )
       )
     })

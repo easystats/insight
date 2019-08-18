@@ -1,7 +1,8 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-  if (require("testthat") && require("insight") && require("GLMMadaptive") && require("lme4")) {
+  if (require("testthat") &&
+    require("insight") && require("GLMMadaptive") && require("lme4")) {
     context("insight, model_info")
 
     m <- download_model("GLMMadaptive_zi_2")
@@ -23,22 +24,100 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("find_predictors", {
-      expect_identical(find_predictors(m, effects = "fixed")$conditional, c("child", "camper"))
-      expect_identical(find_predictors(m, effects = "fixed")$zero_inflated, c("child", "livebait"))
-      expect_identical(find_predictors(m, effects = "all", flatten = TRUE), c("child", "camper", "persons", "livebait"))
-      expect_identical(find_predictors(m, effects = "all")$zero_inflated_random, c("persons"))
+      expect_identical(
+        find_predictors(m, effects = "fixed")$conditional,
+        c("child", "camper")
+      )
+      expect_identical(
+        find_predictors(m, effects = "fixed")$zero_inflated,
+        c("child", "livebait")
+      )
+      expect_identical(
+        find_predictors(m, effects = "all", flatten = TRUE),
+        c("child", "camper", "persons", "livebait")
+      )
+      expect_identical(
+        find_predictors(m, effects = "all")$zero_inflated_random,
+        c("persons")
+      )
       expect_identical(find_predictors(m, effects = "random")$random, "persons")
-      expect_identical(find_predictors(m, effects = "fixed", component = "cond", flatten = TRUE), c("child", "camper"))
-      expect_identical(find_predictors(m, effects = "all", component = "cond", flatten = TRUE), c("child", "camper", "persons"))
-      expect_identical(find_predictors(m, effects = "all", component = "cond")$conditional, c("child", "camper"))
+      expect_identical(
+        find_predictors(
+          m,
+          effects = "fixed",
+          component = "cond",
+          flatten = TRUE
+        ),
+        c("child", "camper")
+      )
+      expect_identical(
+        find_predictors(
+          m,
+          effects = "all",
+          component = "cond",
+          flatten = TRUE
+        ),
+        c("child", "camper", "persons")
+      )
+      expect_identical(
+        find_predictors(m, effects = "all", component = "cond")$conditional,
+        c("child", "camper")
+      )
 
-      expect_identical(find_predictors(m, effects = "random", component = "cond", flatten = TRUE), "persons")
-      expect_identical(find_predictors(m, effects = "fixed", component = "zi", flatten = TRUE), c("child", "livebait"))
-      expect_identical(find_predictors(m, effects = "all", component = "zi", flatten = TRUE), c("child", "livebait", "persons"))
-      expect_identical(find_predictors(m, effects = "random", component = "zi", flatten = TRUE), "persons")
-      expect_null(find_predictors(m, effects = "fixed", component = "dispersion", flatten = TRUE))
-      expect_null(find_predictors(m, effects = "all", component = "dispersion", flatten = TRUE))
-      expect_null(find_predictors(m, effects = "random", component = "dispersion", flatten = TRUE))
+      expect_identical(
+        find_predictors(
+          m,
+          effects = "random",
+          component = "cond",
+          flatten = TRUE
+        ),
+        "persons"
+      )
+      expect_identical(
+        find_predictors(
+          m,
+          effects = "fixed",
+          component = "zi",
+          flatten = TRUE
+        ),
+        c("child", "livebait")
+      )
+      expect_identical(
+        find_predictors(
+          m,
+          effects = "all",
+          component = "zi",
+          flatten = TRUE
+        ),
+        c("child", "livebait", "persons")
+      )
+      expect_identical(
+        find_predictors(
+          m,
+          effects = "random",
+          component = "zi",
+          flatten = TRUE
+        ),
+        "persons"
+      )
+      expect_null(find_predictors(
+        m,
+        effects = "fixed",
+        component = "dispersion",
+        flatten = TRUE
+      ))
+      expect_null(find_predictors(
+        m,
+        effects = "all",
+        component = "dispersion",
+        flatten = TRUE
+      ))
+      expect_null(find_predictors(
+        m,
+        effects = "random",
+        component = "dispersion",
+        flatten = TRUE
+      ))
     })
 
     test_that("find_response", {
@@ -50,16 +129,30 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("clean_names", {
-      expect_identical(clean_names(m), c("count", "child", "camper", "persons", "livebait"))
+      expect_identical(
+        clean_names(m),
+        c("count", "child", "camper", "persons", "livebait")
+      )
     })
 
     test_that("find_formula", {
       expect_length(find_formula(m), 4)
-      expect_identical(names(find_formula(m)), c("conditional", "random", "zero_inflated", "zero_inflated_random"))
+      expect_identical(
+        names(find_formula(m)),
+        c(
+          "conditional",
+          "random",
+          "zero_inflated",
+          "zero_inflated_random"
+        )
+      )
     })
 
     test_that("find_random", {
-      expect_identical(find_random(m), list(random = "persons", zero_inflated_random = "persons"))
+      expect_identical(
+        find_random(m),
+        list(random = "persons", zero_inflated_random = "persons")
+      )
       expect_identical(find_random(m, flatten = TRUE), "persons")
     })
 
@@ -68,14 +161,20 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("find_terms", {
-      expect_identical(find_terms(m), list(
-        response = "count",
-        conditional = c("child", "camper"),
-        random = "persons",
-        zero_inflated = c("child", "livebait"),
-        zero_inflated_random = "persons"
-      ))
-      expect_identical(find_terms(m, flatten = TRUE), c("count", "child", "camper", "persons", "livebait"))
+      expect_identical(
+        find_terms(m),
+        list(
+          response = "count",
+          conditional = c("child", "camper"),
+          random = "persons",
+          zero_inflated = c("child", "livebait"),
+          zero_inflated_random = "persons"
+        )
+      )
+      expect_identical(
+        find_terms(m, flatten = TRUE),
+        c("count", "child", "camper", "persons", "livebait")
+      )
     })
 
     test_that("get_response", {
@@ -83,7 +182,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("get_predictors", {
-      expect_identical(colnames(get_predictors(m)), c("child", "camper", "livebait"))
+      expect_identical(
+        colnames(get_predictors(m)),
+        c("child", "camper", "livebait")
+      )
     })
 
     test_that("get_random", {
@@ -91,18 +193,45 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("get_data", {
-      expect_identical(colnames(get_data(m)), c("count", "child", "camper", "livebait", "persons"))
-      expect_identical(colnames(get_data(m, effects = "fixed")), c("count", "child", "camper", "livebait"))
+      expect_identical(
+        colnames(get_data(m)),
+        c("count", "child", "camper", "livebait", "persons")
+      )
+      expect_identical(
+        colnames(get_data(m, effects = "fixed")),
+        c("count", "child", "camper", "livebait")
+      )
       expect_identical(colnames(get_data(m, effects = "random")), "persons")
-      expect_identical(colnames(get_data(m, component = "zi")), c("count", "child", "livebait", "persons"))
-      expect_identical(colnames(get_data(m, component = "zi", effects = "fixed")), c("count", "child", "livebait"))
-      expect_identical(colnames(get_data(m, component = "zi", effects = "random")), "persons")
-      expect_identical(colnames(get_data(m, component = "cond")), c("count", "child", "camper", "persons"))
-      expect_identical(colnames(get_data(m, component = "cond", effects = "fixed")), c("count", "child", "camper"))
-      expect_identical(colnames(get_data(m, component = "cond", effects = "random")), "persons")
+      expect_identical(
+        colnames(get_data(m, component = "zi")),
+        c("count", "child", "livebait", "persons")
+      )
+      expect_identical(colnames(get_data(
+        m,
+        component = "zi", effects = "fixed"
+      )), c("count", "child", "livebait"))
+      expect_identical(colnames(get_data(
+        m,
+        component = "zi", effects = "random"
+      )), "persons")
+      expect_identical(
+        colnames(get_data(m, component = "cond")),
+        c("count", "child", "camper", "persons")
+      )
+      expect_identical(colnames(get_data(
+        m,
+        component = "cond", effects = "fixed"
+      )), c("count", "child", "camper"))
+      expect_identical(colnames(get_data(
+        m,
+        component = "cond", effects = "random"
+      )), "persons")
       expect_identical(colnames(get_data(m, component = "dispersion")), "count")
       expect_null(get_data(m, component = "dispersion", effects = "random"))
-      expect_identical(colnames(get_data(m3)), c("incidence", "size", "period", "herd"))
+      expect_identical(
+        colnames(get_data(m3)),
+        c("incidence", "size", "period", "herd")
+      )
     })
 
     test_that("find_parameter", {
@@ -141,12 +270,21 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         tolerance = 1e-5
       )
       expect_equal(nrow(get_parameters(m2)), 6)
-      expect_equal(
-        get_parameters(m2, effects = "random"),
-        list(random = c(-1.3262364, -0.2048055, 1.3852572, 0.5282277)),
+      expect_equal(get_parameters(m2, effects = "random"),
+        list(random = c(
+          -1.3262364, -0.2048055, 1.3852572, 0.5282277
+        )),
         tolerance = 1e-5
       )
-      expect_equal(get_parameters(m3)$component, c("conditional", "conditional", "conditional", "conditional"))
+      expect_equal(
+        get_parameters(m3)$component,
+        c(
+          "conditional",
+          "conditional",
+          "conditional",
+          "conditional"
+        )
+      )
       expect_error(get_parameters(m3, "zi"))
     })
 
@@ -161,9 +299,17 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("find_algorithm", {
-      expect_equal(find_algorithm(m), list(
-        algorithm = "quasi-Newton", optimizer = "optim"
-      ))
+      expect_equal(
+        find_algorithm(m),
+        list(algorithm = "quasi-Newton", optimizer = "optim")
+      )
     })
   }
+
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
+    expect_identical(find_statistic(m2), "z-statistic")
+    expect_identical(find_statistic(m3), "z-statistic")
+  })
 }

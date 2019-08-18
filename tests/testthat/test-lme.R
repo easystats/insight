@@ -1,10 +1,12 @@
-if (require("testthat") && require("insight") && require("nlme") && require("lme4")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("nlme") &&
+  require("lme4")) {
   context("insight, model_info")
 
   data("sleepstudy")
   data(Orthodont)
-  m1 <- lme(
-    Reaction ~ Days,
+  m1 <- lme(Reaction ~ Days,
     random = ~ 1 + Days | Subject,
     data = sleepstudy
   )
@@ -16,11 +18,11 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
   sleepstudy$mysubgrp <- NA
   for (i in 1:5) {
     filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+    sleepstudy$mysubgrp[filter_group] <-
+      sample(1:30, size = sum(filter_group), replace = TRUE)
   }
 
-  m3 <- lme(
-    Reaction ~ Days,
+  m3 <- lme(Reaction ~ Days,
     random = ~ 1 | mygrp / mysubgrp,
     data = sleepstudy
   )
@@ -35,9 +37,7 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
         mysubgrp = structure(
           7.508310765,
           .Dim = c(1L, 1L),
-          .Dimnames = list(
-            "(Intercept)", "(Intercept)"
-          )
+          .Dimnames = list("(Intercept)", "(Intercept)")
         ),
         mygrp = structure(
           0.004897827,
@@ -57,10 +57,16 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = "Days"))
     expect_identical(find_predictors(m2), list(conditional = c("age", "Sex")))
-    expect_identical(find_predictors(m1, effects = "all"), list(conditional = "Days", random = "Subject"))
+    expect_identical(
+      find_predictors(m1, effects = "all"),
+      list(conditional = "Days", random = "Subject")
+    )
     expect_identical(find_predictors(m2, effects = "all"), list(conditional = c("age", "Sex")))
     expect_identical(find_predictors(m1, flatten = TRUE), "Days")
-    expect_identical(find_predictors(m1, effects = "random"), list(random = "Subject"))
+    expect_identical(
+      find_predictors(m1, effects = "random"),
+      list(random = "Subject")
+    )
   })
 
   test_that("find_response", {
@@ -112,9 +118,25 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = "Reaction", conditional = "Days", random = "Subject"))
-    expect_equal(find_variables(m1, flatten = TRUE), c("Reaction", "Days", "Subject"))
-    expect_equal(find_variables(m2), list(response = "distance", conditional = c("age", "Sex")))
+    expect_equal(
+      find_variables(m1),
+      list(
+        response = "Reaction",
+        conditional = "Days",
+        random = "Subject"
+      )
+    )
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("Reaction", "Days", "Subject")
+    )
+    expect_equal(
+      find_variables(m2),
+      list(
+        response = "distance",
+        conditional = c("age", "Sex")
+      )
+    )
   })
 
   test_that("n_obs", {
@@ -145,25 +167,34 @@ if (require("testthat") && require("insight") && require("nlme") && require("lme
   })
 
   test_that("find_algorithm", {
-    expect_equal(find_algorithm(m1), list(
-      algorithm = "REML", optimizer = "nlminb"
-    ))
+    expect_equal(
+      find_algorithm(m1),
+      list(algorithm = "REML", optimizer = "nlminb")
+    )
   })
 
   test_that("get_variance", {
     skip_on_cran()
 
-    expect_equal(get_variance(m1), list(
-      var.fixed = 908.95336262308865116211,
-      var.random = 1698.06593646939654718153,
-      var.residual = 654.94240352794997761521,
-      var.distribution = 654.94240352794997761521,
-      var.dispersion = 0,
-      var.intercept = c(Subject = 612.07951112963326067984),
-      var.slope = c(Subject.Days = 35.07130179308116169068),
-      cor.slope_intercept = 0.06600000000000000311
-    ),
-    tolerance = 1e-4
+    expect_equal(
+      get_variance(m1),
+      list(
+        var.fixed = 908.95336262308865116211,
+        var.random = 1698.06593646939654718153,
+        var.residual = 654.94240352794997761521,
+        var.distribution = 654.94240352794997761521,
+        var.dispersion = 0,
+        var.intercept = c(Subject = 612.07951112963326067984),
+        var.slope = c(Subject.Days = 35.07130179308116169068),
+        cor.slope_intercept = 0.06600000000000000311
+      ),
+      tolerance = 1e-4
     )
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
+    expect_identical(find_statistic(m2), "t-statistic")
+    expect_identical(find_statistic(m3), "t-statistic")
   })
 }

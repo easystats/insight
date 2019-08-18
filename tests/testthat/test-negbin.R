@@ -5,7 +5,11 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     context("insight, negbin")
 
     data(dja)
-    m1 <- aod::negbin(y ~ group + offset(log(trisk)), random = ~village, data = dja)
+    m1 <-
+      aod::negbin(y ~ group + offset(log(trisk)),
+        random = ~village,
+        data = dja
+      )
 
     test_that("model_info", {
       expect_true(model_info(m1)$is_negbin)
@@ -15,7 +19,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     test_that("find_predictors", {
       expect_identical(find_predictors(m1), list(conditional = c("group", "trisk")))
       expect_identical(find_predictors(m1, flatten = TRUE), c("group", "trisk"))
-      expect_identical(find_predictors(m1, effects = "random"), list(random = "village"))
+      expect_identical(
+        find_predictors(m1, effects = "random"),
+        list(random = "village")
+      )
       expect_identical(
         find_predictors(m1, effects = "all"),
         list(
@@ -71,8 +78,18 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
     test_that("find_variables", {
-      expect_equal(find_variables(m1), list(response = "y", conditional = c("group", "trisk"), random = "village"))
-      expect_equal(find_variables(m1, flatten = TRUE), c("y", "group", "trisk", "village"))
+      expect_equal(
+        find_variables(m1),
+        list(
+          response = "y",
+          conditional = c("group", "trisk"),
+          random = "village"
+        )
+      )
+      expect_equal(
+        find_variables(m1, flatten = TRUE),
+        c("y", "group", "trisk", "village")
+      )
     })
 
     test_that("n_obs", {
@@ -86,16 +103,32 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           conditional = c("(Intercept)", "groupTREAT"),
           random = c(
             "phi.villageBAK",
-            "phi.villageBAM", "phi.villageBAN", "phi.villageBIJ", "phi.villageBOU",
-            "phi.villageBYD", "phi.villageDEM", "phi.villageDIA", "phi.villageHAM",
-            "phi.villageLAM", "phi.villageLAY", "phi.villageMAF", "phi.villageMAH",
-            "phi.villageMAK", "phi.villageMED", "phi.villageNAB", "phi.villageSAG",
-            "phi.villageSAM", "phi.villageSOU"
+            "phi.villageBAM",
+            "phi.villageBAN",
+            "phi.villageBIJ",
+            "phi.villageBOU",
+            "phi.villageBYD",
+            "phi.villageDEM",
+            "phi.villageDIA",
+            "phi.villageHAM",
+            "phi.villageLAM",
+            "phi.villageLAY",
+            "phi.villageMAF",
+            "phi.villageMAH",
+            "phi.villageMAK",
+            "phi.villageMED",
+            "phi.villageNAB",
+            "phi.villageSAG",
+            "phi.villageSAM",
+            "phi.villageSOU"
           )
         )
       )
       expect_equal(nrow(get_parameters(m1)), 2)
-      expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "groupTREAT"))
+      expect_equal(
+        get_parameters(m1)$parameter,
+        c("(Intercept)", "groupTREAT")
+      )
     })
 
     test_that("is_multivariate", {
@@ -115,6 +148,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
     test_that("find_algorithm", {
       expect_equal(find_algorithm(m1), list(algorithm = "ML"))
+    })
+
+    test_that("find_statistic", {
+      expect_identical(find_statistic(m1), "z-statistic")
     })
   }
 }

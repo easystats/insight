@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("glmmTMB")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("glmmTMB")) {
   context("insight, glmmTMB")
 
   fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
@@ -20,7 +22,12 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
     data = Salamanders
   )
 
-  m6 <- glmmTMB(count ~ 1, ziformula = ~1, family = poisson(), data = Salamanders)
+  m6 <-
+    glmmTMB(count ~ 1,
+      ziformula = ~1,
+      family = poisson(),
+      data = Salamanders
+    )
 
   test_that("find_weights", {
     expect_null(find_weights(m2))
@@ -42,8 +49,22 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   test_that("clean_names", {
     expect_identical(clean_names(m1), c("count", "child", "camper", "persons"))
     expect_identical(clean_names(m2), c("count", "child", "camper", "persons"))
-    expect_identical(clean_names(m3), c("count", "child", "camper", "persons", "livebait"))
-    expect_identical(clean_names(m4), c("count", "child", "camper", "persons", "livebait", "ID", "xb"))
+    expect_identical(
+      clean_names(m3),
+      c("count", "child", "camper", "persons", "livebait")
+    )
+    expect_identical(
+      clean_names(m4),
+      c(
+        "count",
+        "child",
+        "camper",
+        "persons",
+        "livebait",
+        "ID",
+        "xb"
+      )
+    )
     expect_identical(clean_names(m6), c("count"))
   })
 
@@ -57,18 +78,59 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
         zero_inflated_random = "persons"
       )
     )
-    expect_identical(find_predictors(m1, effects = "all", flatten = TRUE), c("child", "camper", "persons"))
-    expect_identical(find_predictors(m1, effects = "random"), list(random = "persons", zero_inflated_random = "persons"))
-    expect_identical(find_predictors(m1, effects = "random", flatten = TRUE), "persons")
-    expect_identical(find_predictors(m1, effects = "random", component = "conditional"), list(random = "persons"))
-    expect_identical(find_predictors(m1, effects = "random", component = "conditional", flatten = TRUE), "persons")
-    expect_identical(find_predictors(m1), list(conditional = c("child", "camper"), zero_inflated = c("child", "camper")))
+    expect_identical(
+      find_predictors(m1, effects = "all", flatten = TRUE),
+      c("child", "camper", "persons")
+    )
+    expect_identical(
+      find_predictors(m1, effects = "random"),
+      list(random = "persons", zero_inflated_random = "persons")
+    )
+    expect_identical(
+      find_predictors(m1, effects = "random", flatten = TRUE),
+      "persons"
+    )
+    expect_identical(
+      find_predictors(m1, effects = "random", component = "conditional"),
+      list(random = "persons")
+    )
+    expect_identical(
+      find_predictors(
+        m1,
+        effects = "random",
+        component = "conditional",
+        flatten = TRUE
+      ),
+      "persons"
+    )
+    expect_identical(
+      find_predictors(m1),
+      list(
+        conditional = c("child", "camper"),
+        zero_inflated = c("child", "camper")
+      )
+    )
     expect_identical(find_predictors(m1, flatten = TRUE), c("child", "camper"))
 
-    expect_identical(find_predictors(m2, effects = "all"), list(conditional = c("child", "camper"), random = "persons"))
-    expect_identical(find_predictors(m2, effects = "all", flatten = TRUE), c("child", "camper", "persons"))
-    expect_identical(find_predictors(m2, effects = "random"), list(random = "persons"))
-    expect_identical(find_predictors(m2, effects = "random", flatten = TRUE), "persons")
+    expect_identical(
+      find_predictors(m2, effects = "all"),
+      list(
+        conditional = c("child", "camper"),
+        random = "persons"
+      )
+    )
+    expect_identical(
+      find_predictors(m2, effects = "all", flatten = TRUE),
+      c("child", "camper", "persons")
+    )
+    expect_identical(
+      find_predictors(m2, effects = "random"),
+      list(random = "persons")
+    )
+    expect_identical(
+      find_predictors(m2, effects = "random", flatten = TRUE),
+      "persons"
+    )
     expect_identical(find_predictors(m2), list(conditional = c("child", "camper")))
 
     expect_null(find_predictors(m6))
@@ -86,11 +148,23 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("get_data", {
-    expect_equal(colnames(get_data(m1)), c("count", "child", "camper", "persons"))
-    expect_equal(colnames(get_data(m1, effects = "all")), c("count", "child", "camper", "persons"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("count", "child", "camper", "persons")
+    )
+    expect_equal(
+      colnames(get_data(m1, effects = "all")),
+      c("count", "child", "camper", "persons")
+    )
     expect_equal(colnames(get_data(m1, effects = "random")), "persons")
-    expect_equal(colnames(get_data(m2)), c("count", "child", "camper", "persons"))
-    expect_equal(colnames(get_data(m2, effects = "all")), c("count", "child", "camper", "persons"))
+    expect_equal(
+      colnames(get_data(m2)),
+      c("count", "child", "camper", "persons")
+    )
+    expect_equal(
+      colnames(get_data(m2, effects = "all")),
+      c("count", "child", "camper", "persons")
+    )
     expect_equal(colnames(get_data(m2, effects = "random")), "persons")
     get_data(m3)
     expect_equal(colnames(get_data(m6)), "count")
@@ -98,27 +172,145 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m3, effects = "fixed", component = "conditional"), list(conditional = c("child", "camper")))
-    expect_identical(find_predictors(m3, effects = "fixed", component = "conditional", flatten = TRUE), c("child", "camper"))
-    expect_identical(find_predictors(m3, effects = "fixed", component = "zero_inflated"), list(zero_inflated = c("child", "livebait")))
-    expect_identical(find_predictors(m3, effects = "fixed", component = "zero_inflated", flatten = TRUE), c("child", "livebait"))
-    expect_identical(find_predictors(m3, effects = "all", component = "conditional"), list(conditional = c("child", "camper"), random = "persons"))
-    expect_identical(find_predictors(m3, effects = "all", component = "conditional", flatten = TRUE), c("child", "camper", "persons"))
-    expect_identical(find_predictors(m3, effects = "all", component = "zero_inflated"), list(zero_inflated = c("child", "livebait"), zero_inflated_random = "persons"))
-    expect_identical(find_predictors(m3, effects = "all", component = "zero_inflated", flatten = TRUE), c("child", "livebait", "persons"))
-    expect_identical(find_predictors(m3, effects = "random", component = "conditional"), list(random = "persons"))
-    expect_identical(find_predictors(m3, effects = "random", component = "conditional", flatten = TRUE), "persons")
-    expect_identical(find_predictors(m3, effects = "random", component = "zero_inflated"), list(zero_inflated_random = "persons"))
-    expect_identical(find_predictors(m3, effects = "random", component = "zero_inflated", flatten = TRUE), "persons")
+    expect_identical(
+      find_predictors(m3, effects = "fixed", component = "conditional"),
+      list(conditional = c("child", "camper"))
+    )
+    expect_identical(
+      find_predictors(
+        m3,
+        effects = "fixed",
+        component = "conditional",
+        flatten = TRUE
+      ),
+      c("child", "camper")
+    )
+    expect_identical(
+      find_predictors(m3, effects = "fixed", component = "zero_inflated"),
+      list(zero_inflated = c("child", "livebait"))
+    )
+    expect_identical(
+      find_predictors(
+        m3,
+        effects = "fixed",
+        component = "zero_inflated",
+        flatten = TRUE
+      ),
+      c("child", "livebait")
+    )
+    expect_identical(
+      find_predictors(m3, effects = "all", component = "conditional"),
+      list(
+        conditional = c("child", "camper"),
+        random = "persons"
+      )
+    )
+    expect_identical(
+      find_predictors(
+        m3,
+        effects = "all",
+        component = "conditional",
+        flatten = TRUE
+      ),
+      c("child", "camper", "persons")
+    )
+    expect_identical(
+      find_predictors(m3, effects = "all", component = "zero_inflated"),
+      list(
+        zero_inflated = c("child", "livebait"),
+        zero_inflated_random = "persons"
+      )
+    )
+    expect_identical(
+      find_predictors(
+        m3,
+        effects = "all",
+        component = "zero_inflated",
+        flatten = TRUE
+      ),
+      c("child", "livebait", "persons")
+    )
+    expect_identical(
+      find_predictors(m3, effects = "random", component = "conditional"),
+      list(random = "persons")
+    )
+    expect_identical(
+      find_predictors(
+        m3,
+        effects = "random",
+        component = "conditional",
+        flatten = TRUE
+      ),
+      "persons"
+    )
+    expect_identical(
+      find_predictors(m3, effects = "random", component = "zero_inflated"),
+      list(zero_inflated_random = "persons")
+    )
+    expect_identical(
+      find_predictors(
+        m3,
+        effects = "random",
+        component = "zero_inflated",
+        flatten = TRUE
+      ),
+      "persons"
+    )
 
-    expect_identical(find_predictors(m3, effects = "fixed", component = "all"), list(conditional = c("child", "camper"), zero_inflated = c("child", "livebait")))
-    expect_identical(find_predictors(m3, effects = "fixed", component = "all", flatten = TRUE), c("child", "camper", "livebait"))
-    expect_identical(find_predictors(m3, effects = "all", component = "all"), list(conditional = c("child", "camper"), random = "persons", zero_inflated = c("child", "livebait"), zero_inflated_random = "persons"))
-    expect_identical(find_predictors(m3, effects = "all", component = "all", flatten = TRUE), c("child", "camper", "persons", "livebait"))
-    expect_identical(find_predictors(m3, effects = "random", component = "all"), list(random = "persons", zero_inflated_random = "persons"))
-    expect_identical(find_predictors(m3, effects = "random", component = "all", flatten = TRUE), "persons")
+    expect_identical(
+      find_predictors(m3, effects = "fixed", component = "all"),
+      list(
+        conditional = c("child", "camper"),
+        zero_inflated = c("child", "livebait")
+      )
+    )
+    expect_identical(
+      find_predictors(
+        m3,
+        effects = "fixed",
+        component = "all",
+        flatten = TRUE
+      ),
+      c("child", "camper", "livebait")
+    )
+    expect_identical(
+      find_predictors(m3, effects = "all", component = "all"),
+      list(
+        conditional = c("child", "camper"),
+        random = "persons",
+        zero_inflated = c("child", "livebait"),
+        zero_inflated_random = "persons"
+      )
+    )
+    expect_identical(
+      find_predictors(
+        m3,
+        effects = "all",
+        component = "all",
+        flatten = TRUE
+      ),
+      c("child", "camper", "persons", "livebait")
+    )
+    expect_identical(
+      find_predictors(m3, effects = "random", component = "all"),
+      list(random = "persons", zero_inflated_random = "persons")
+    )
+    expect_identical(
+      find_predictors(
+        m3,
+        effects = "random",
+        component = "all",
+        flatten = TRUE
+      ),
+      "persons"
+    )
 
-    expect_null(find_predictors(m6, effects = "random", component = "all", flatten = TRUE))
+    expect_null(find_predictors(
+      m6,
+      effects = "random",
+      component = "all",
+      flatten = TRUE
+    ))
   })
 
   test_that("find_formula", {
@@ -137,27 +329,101 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m4), list(conditional = c("child", "camper"), zero_inflated = c("child", "livebait"), dispersion = "xb"))
-    expect_identical(find_predictors(m4, flatten = TRUE), c("child", "camper", "livebait", "xb"))
-    expect_identical(find_predictors(m4, effects = "random"), list(random = "persons", zero_inflated_random = "ID"))
-    expect_identical(find_predictors(m4, effects = "all", flatten = TRUE), c("child", "camper", "persons", "livebait", "ID", "xb"))
-    expect_identical(find_predictors(m4, effects = "all"), list(conditional = c("child", "camper"), random = "persons", zero_inflated = c("child", "livebait"), zero_inflated_random = "ID", dispersion = "xb"))
-    expect_identical(find_predictors(m4, component = "conditional", flatten = TRUE), c("child", "camper"))
-    expect_identical(find_predictors(m4, component = "conditional", flatten = FALSE), list(conditional = c("child", "camper")))
-    expect_identical(find_predictors(m4, effects = "random", component = "conditional"), list(random = "persons"))
-    expect_identical(find_predictors(m4, effects = "all", component = "conditional"), list(conditional = c("child", "camper"), random = "persons"))
-    expect_identical(find_predictors(m4, component = "zero_inflated"), list(zero_inflated = c("child", "livebait")))
-    expect_identical(find_predictors(m4, effects = "random", component = "zero_inflated"), list(zero_inflated_random = "ID"))
-    expect_identical(find_predictors(m4, effects = "all", component = "zero_inflated", flatten = TRUE), c("child", "livebait", "ID"))
-    expect_identical(find_predictors(m4, component = "dispersion"), list(dispersion = "xb"))
-    expect_identical(find_predictors(m4, component = "dispersion", flatten = TRUE), "xb")
+    expect_identical(
+      find_predictors(m4),
+      list(
+        conditional = c("child", "camper"),
+        zero_inflated = c("child", "livebait"),
+        dispersion = "xb"
+      )
+    )
+    expect_identical(
+      find_predictors(m4, flatten = TRUE),
+      c("child", "camper", "livebait", "xb")
+    )
+    expect_identical(
+      find_predictors(m4, effects = "random"),
+      list(random = "persons", zero_inflated_random = "ID")
+    )
+    expect_identical(
+      find_predictors(m4, effects = "all", flatten = TRUE),
+      c("child", "camper", "persons", "livebait", "ID", "xb")
+    )
+    expect_identical(
+      find_predictors(m4, effects = "all"),
+      list(
+        conditional = c("child", "camper"),
+        random = "persons",
+        zero_inflated = c("child", "livebait"),
+        zero_inflated_random = "ID",
+        dispersion = "xb"
+      )
+    )
+    expect_identical(
+      find_predictors(m4, component = "conditional", flatten = TRUE),
+      c("child", "camper")
+    )
+    expect_identical(
+      find_predictors(m4, component = "conditional", flatten = FALSE),
+      list(conditional = c("child", "camper"))
+    )
+    expect_identical(
+      find_predictors(m4, effects = "random", component = "conditional"),
+      list(random = "persons")
+    )
+    expect_identical(
+      find_predictors(m4, effects = "all", component = "conditional"),
+      list(
+        conditional = c("child", "camper"),
+        random = "persons"
+      )
+    )
+    expect_identical(
+      find_predictors(m4, component = "zero_inflated"),
+      list(zero_inflated = c("child", "livebait"))
+    )
+    expect_identical(
+      find_predictors(m4, effects = "random", component = "zero_inflated"),
+      list(zero_inflated_random = "ID")
+    )
+    expect_identical(
+      find_predictors(
+        m4,
+        effects = "all",
+        component = "zero_inflated",
+        flatten = TRUE
+      ),
+      c("child", "livebait", "ID")
+    )
+    expect_identical(
+      find_predictors(m4, component = "dispersion"),
+      list(dispersion = "xb")
+    )
+    expect_identical(
+      find_predictors(m4, component = "dispersion", flatten = TRUE),
+      "xb"
+    )
     expect_null(find_predictors(m4, effects = "random", component = "dispersion"))
-    expect_identical(find_predictors(m4, effects = "all", component = "dispersion"), list(dispersion = "xb"))
-    expect_identical(find_predictors(m4, effects = "all", component = "dispersion", flatten = TRUE), "xb")
+    expect_identical(
+      find_predictors(m4, effects = "all", component = "dispersion"),
+      list(dispersion = "xb")
+    )
+    expect_identical(
+      find_predictors(
+        m4,
+        effects = "all",
+        component = "dispersion",
+        flatten = TRUE
+      ),
+      "xb"
+    )
   })
 
   test_that("find_random", {
-    expect_identical(find_random(m4), list(random = "persons", zero_inflated_random = "ID"))
+    expect_identical(
+      find_random(m4),
+      list(random = "persons", zero_inflated_random = "ID")
+    )
     expect_identical(find_random(m4, flatten = TRUE), c("persons", "ID"))
     expect_null(find_random(m6, flatten = TRUE))
   })
@@ -168,29 +434,57 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("find_terms", {
-    expect_identical(find_terms(m4), list(
-      response = "count",
-      conditional = c("child", "camper"),
-      random = "persons",
-      zero_inflated = c("child", "livebait"),
-      zero_inflated_random = "ID",
-      dispersion = "xb"
-    ))
-    expect_identical(find_terms(m4, flatten = TRUE), c("count", "child", "camper", "persons", "livebait", "ID", "xb"))
+    expect_identical(
+      find_terms(m4),
+      list(
+        response = "count",
+        conditional = c("child", "camper"),
+        random = "persons",
+        zero_inflated = c("child", "livebait"),
+        zero_inflated_random = "ID",
+        dispersion = "xb"
+      )
+    )
+    expect_identical(
+      find_terms(m4, flatten = TRUE),
+      c(
+        "count",
+        "child",
+        "camper",
+        "persons",
+        "livebait",
+        "ID",
+        "xb"
+      )
+    )
     expect_identical(find_terms(m6), list(response = "count", conditional = "1"))
     expect_identical(find_terms(m6, flatten = TRUE), c("count", "1"))
   })
 
   test_that("find_variables", {
-    expect_identical(find_variables(m4), list(
-      response = "count",
-      conditional = c("child", "camper"),
-      random = "persons",
-      zero_inflated = c("child", "livebait"),
-      zero_inflated_random = "ID",
-      dispersion = "xb"
-    ))
-    expect_identical(find_variables(m4, flatten = TRUE), c("count", "child", "camper", "persons", "livebait", "ID", "xb"))
+    expect_identical(
+      find_variables(m4),
+      list(
+        response = "count",
+        conditional = c("child", "camper"),
+        random = "persons",
+        zero_inflated = c("child", "livebait"),
+        zero_inflated_random = "ID",
+        dispersion = "xb"
+      )
+    )
+    expect_identical(
+      find_variables(m4, flatten = TRUE),
+      c(
+        "count",
+        "child",
+        "camper",
+        "persons",
+        "livebait",
+        "ID",
+        "xb"
+      )
+    )
     expect_identical(find_variables(m6), list(response = "count"))
     expect_identical(find_variables(m6, flatten = TRUE), "count")
   })
@@ -201,7 +495,10 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("get_predictors", {
-    expect_identical(colnames(get_predictors(m4)), c("child", "camper", "livebait", "xb"))
+    expect_identical(
+      colnames(get_predictors(m4)),
+      c("child", "camper", "livebait", "xb")
+    )
     expect_null(get_predictors(m6))
   })
 
@@ -211,17 +508,49 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   })
 
   test_that("get_data", {
-    expect_identical(colnames(get_data(m4)), c("count", "child", "camper", "livebait", "xb", "persons", "ID"))
-    expect_identical(colnames(get_data(m4, effects = "fixed")), c("count", "child", "camper", "livebait", "xb"))
+    expect_identical(
+      colnames(get_data(m4)),
+      c(
+        "count",
+        "child",
+        "camper",
+        "livebait",
+        "xb",
+        "persons",
+        "ID"
+      )
+    )
+    expect_identical(
+      colnames(get_data(m4, effects = "fixed")),
+      c("count", "child", "camper", "livebait", "xb")
+    )
     expect_identical(colnames(get_data(m4, effects = "random")), c("persons", "ID"))
     expect_identical(colnames(get_data(m4, component = "zi")), c("count", "child", "livebait", "ID"))
-    expect_identical(colnames(get_data(m4, component = "zi", effects = "fixed")), c("count", "child", "livebait"))
-    expect_identical(colnames(get_data(m4, component = "zi", effects = "random")), "ID")
-    expect_identical(colnames(get_data(m4, component = "cond")), c("count", "child", "camper", "persons"))
-    expect_identical(colnames(get_data(m4, component = "cond", effects = "fixed")), c("count", "child", "camper"))
-    expect_identical(colnames(get_data(m4, component = "cond", effects = "random")), "persons")
+    expect_identical(colnames(get_data(
+      m4,
+      component = "zi", effects = "fixed"
+    )), c("count", "child", "livebait"))
+    expect_identical(colnames(get_data(
+      m4,
+      component = "zi", effects = "random"
+    )), "ID")
+    expect_identical(
+      colnames(get_data(m4, component = "cond")),
+      c("count", "child", "camper", "persons")
+    )
+    expect_identical(colnames(get_data(
+      m4,
+      component = "cond", effects = "fixed"
+    )), c("count", "child", "camper"))
+    expect_identical(colnames(get_data(
+      m4,
+      component = "cond", effects = "random"
+    )), "persons")
     expect_identical(colnames(get_data(m4, component = "disp")), c("count", "xb"))
-    expect_identical(colnames(get_data(m4, component = "disp", effects = "fixed")), c("count", "xb"))
+    expect_identical(colnames(get_data(
+      m4,
+      component = "disp", effects = "fixed"
+    )), c("count", "xb"))
     expect_null(get_data(m4, component = "disp", effects = "random"))
   })
 
@@ -236,7 +565,10 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       )
     )
 
-    expect_equal(find_parameters(m4, flatten = TRUE), c("(Intercept)", "child", "camper1", "livebait1"))
+    expect_equal(
+      find_parameters(m4, flatten = TRUE),
+      c("(Intercept)", "child", "camper1", "livebait1")
+    )
     expect_equal(
       find_parameters(m6),
       list(
@@ -275,13 +607,16 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
 
     expect_equal(
       find_parameters(m3, effects = "random", component = "zi"),
-      list(
-        zero_inflated_random = list(persons = "(Intercept)")
-      )
+      list(zero_inflated_random = list(persons = "(Intercept)"))
     )
 
     expect_equal(
-      find_parameters(m3, effects = "fixed", component = "zi", flatten = TRUE),
+      find_parameters(
+        m3,
+        effects = "fixed",
+        component = "zi",
+        flatten = TRUE
+      ),
       c("(Intercept)", "child", "livebait1")
     )
   })
@@ -289,10 +624,36 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
 
   test_that("get_paramaters", {
     expect_equal(nrow(get_parameters(m4)), 6)
-    expect_equal(colnames(get_parameters(m4)), c("parameter", "estimate", "component"))
-    expect_equal(get_parameters(m4)$parameter, c("(Intercept)", "child", "camper1", "(Intercept)", "child", "livebait1"))
-    expect_equal(get_parameters(m4)$component, c("conditional", "conditional", "conditional", "zero_inflated", "zero_inflated", "zero_inflated"))
-    expect_equal(get_parameters(m6)$parameter, c("(Intercept)", "(Intercept)"))
+    expect_equal(
+      colnames(get_parameters(m4)),
+      c("parameter", "estimate", "component")
+    )
+    expect_equal(
+      get_parameters(m4)$parameter,
+      c(
+        "(Intercept)",
+        "child",
+        "camper1",
+        "(Intercept)",
+        "child",
+        "livebait1"
+      )
+    )
+    expect_equal(
+      get_parameters(m4)$component,
+      c(
+        "conditional",
+        "conditional",
+        "conditional",
+        "zero_inflated",
+        "zero_inflated",
+        "zero_inflated"
+      )
+    )
+    expect_equal(
+      get_parameters(m6)$parameter,
+      c("(Intercept)", "(Intercept)")
+    )
   })
 
   test_that("linkfun", {
@@ -329,9 +690,10 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
   # })
 
   test_that("find_algorithm", {
-    expect_equal(find_algorithm(m1), list(
-      algorithm = "ML", optimizer = "nlminb"
-    ))
+    expect_equal(
+      find_algorithm(m1),
+      list(algorithm = "ML", optimizer = "nlminb")
+    )
   })
 
   test_that("find_random_slopes", {
@@ -342,7 +704,10 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
 
     expect_equal(
       find_random_slopes(m7),
-      list(random = "xb", zero_inflated_random = c("zg", "nofish"))
+      list(
+        random = "xb",
+        zero_inflated_random = c("zg", "nofish")
+      )
     )
   })
 
@@ -351,15 +716,61 @@ if (require("testthat") && require("insight") && require("glmmTMB")) {
       clean_parameters(m1),
       structure(
         list(
-          Parameter = c("(Intercept)", "child", "camper1", "(Intercept)", "(Intercept)", "child", "camper1", "(Intercept)"),
-          Effects = c("fixed", "fixed", "fixed", "random", "fixed", "fixed", "fixed", "random"),
-          Component = c("conditional", "conditional", "conditional", "conditional", "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated"),
+          Parameter = c(
+            "(Intercept)",
+            "child",
+            "camper1",
+            "(Intercept)",
+            "(Intercept)",
+            "child",
+            "camper1",
+            "(Intercept)"
+          ),
+          Effects = c(
+            "fixed",
+            "fixed",
+            "fixed",
+            "random",
+            "fixed",
+            "fixed",
+            "fixed",
+            "random"
+          ),
+          Component = c(
+            "conditional",
+            "conditional",
+            "conditional",
+            "conditional",
+            "zero_inflated",
+            "zero_inflated",
+            "zero_inflated",
+            "zero_inflated"
+          ),
           Group = c("", "", "", "persons", "", "", "", "persons"),
-          Cleaned_Parameter = c("(Intercept)", "child", "camper1", "(Intercept)", "(Intercept)", "child", "camper1", "(Intercept)")
+          Cleaned_Parameter = c(
+            "(Intercept)",
+            "child",
+            "camper1",
+            "(Intercept)",
+            "(Intercept)",
+            "child",
+            "camper1",
+            "(Intercept)"
+          )
         ),
         class = c("clean_parameters", "data.frame"),
         row.names = c(NA, -8L)
       )
     )
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
+    expect_identical(find_statistic(m2), "z-statistic")
+    expect_identical(find_statistic(m3), "z-statistic")
+    expect_identical(find_statistic(m4), "z-statistic")
+    expect_identical(find_statistic(m5), "z-statistic")
+    expect_identical(find_statistic(m6), "z-statistic")
+    expect_identical(find_statistic(m7), "z-statistic")
   })
 }

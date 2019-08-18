@@ -13,19 +13,21 @@
 #'   statistic available with a distribution, a `NULL` will be returned.
 #'
 #' @examples
+#' # regression model object
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
-#'
 #' find_statistic(m)
+#'
+#' # a dataframe
+#' find_statistic(mtcars)
 #' @export
 find_statistic <- function(x, ...) {
 
   # model object check --------------------------------------------------------
 
   # check if the object is a model object; if so, quit early
-  if (isFALSE(is_model(x))) {
+  if (!isTRUE(is_model(x))) {
     stop(message("The entered object is not a model object."), call. = FALSE)
-    return(invisible(NULL))
   }
 
   # t-value objects ----------------------------------------------------------
@@ -45,17 +47,19 @@ find_statistic <- function(x, ...) {
       "gmm",
       "ivreg",
       "lm",
+      "lm_robust",
       "lm.beta",
+      "lme",
       "lmerMod",
       "lmRob",
       "lmrob",
+      "mixed",
       "mlm",
       "multinom",
       "nlmerMod",
       "nlrq",
       "nls",
       "orcutt",
-      "plm",
       "polr",
       "rlm",
       "rlmerMod",
@@ -63,7 +67,8 @@ find_statistic <- function(x, ...) {
       "speedglm",
       "speedlm",
       "svyglm",
-      "svyolr"
+      "svyolr",
+      "wblm"
     )
 
   # z-value objects ----------------------------------------------------------
@@ -75,9 +80,11 @@ find_statistic <- function(x, ...) {
       "clmm",
       "coxph",
       "ergm",
+      "glimML",
       "glmmadmb",
       "glmmTMB",
       "lavaan",
+      "MixMod",
       "mjoint",
       "mle2",
       "mclogit",
@@ -105,7 +112,7 @@ find_statistic <- function(x, ...) {
       "vgam"
     )
 
-  # mixed big ----------------------------------------------------------------
+  # mixed bag ----------------------------------------------------------------
 
   # models for which there is no clear t-or z-statistic
   # which statistic to use will be decided based on the family used
@@ -135,27 +142,63 @@ find_statistic <- function(x, ...) {
       "poisson"
     )
 
+  # pattern finding ----------------------------------------------------------
+
+  unclear.mods <-
+    c(
+      "plm"
+    )
+
   # no statistic -------------------------------------------------------------
 
   unsupported.mods <-
     c(
-      "stanreg"
+      "stanreg",
+      "stanmvreg",
+      "gbm"
     )
 
   # statistic check -----------------------------------------------------------
 
-  if (class(x)[[1]] %in% unsupported.mods) return(NULL)
-  if (class(x)[[1]] %in% t.mods) return("t-statistic")
-  if (class(x)[[1]] %in% z.mods) return("z-statistic")
-  if (class(x)[[1]] %in% f.mods) return("F-statistic")
-  if (class(x)[[1]] %in% chi.mods) return("chi-squared statistic")
+  if (class(x)[[1]] %in% unsupported.mods) {
+    return(NULL)
+  }
+
+  if (class(x)[[1]] %in% t.mods) {
+    return("t-statistic")
+  }
+
+  if (class(x)[[1]] %in% z.mods) {
+    return("z-statistic")
+  }
+
+  if (class(x)[[1]] %in% f.mods) {
+    return("F-statistic")
+  }
+
+  if (class(x)[[1]] %in% chi.mods) {
+    return("chi-squared statistic")
+  }
 
   if (class(x)[[1]] %in% g.mods) {
-    if (class(x)[[1]] == "glm" && summary(x)$family$family[[1]] %in% g.t.mods) {
+    if (class(x)[[1]] == "glm" && model_info(x)$family %in% g.t.mods) {
       return("t-statistic")
-    } else if (class(x)[[1]] == "glmerMod" && summary(x)$family[[1]] %in% g.t.mods) {
+    } else if (class(x)[[1]] == "glmerMod" && model_info(x)$family %in% g.t.mods) {
       return("t-statistic")
     } else {
+      return("z-statistic")
+    }
+  }
+
+  if (class(x)[[1]] %in% unclear.mods) {
+    col_names <- colnames(as.data.frame(summary(x)$coefficients))
+    t_names <- c("t-value", "t value", "t.value", "Pr(>|t|)")
+    z_names <- c("z-value", "z value", "z.value", "Pr(>|z|)")
+
+    if (any(t_names %in% col_names)) {
+      return("t-statistic")
+    }
+    if (any(z_names %in% col_names)) {
       return("z-statistic")
     }
   }
