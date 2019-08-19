@@ -7,12 +7,13 @@ if (require("testthat") && require("insight") && require("gamm4")) {
   dat <-
     gamSim(1, n = 400, scale = 2) ## simulate 4 term additive truth
   dat$fac <- fac <- as.factor(sample(1:20, 400, replace = TRUE))
-  dat$y <- dat$y + model.matrix( ~ fac - 1) %*% rnorm(20) * .5
+  dat$y <- dat$y + model.matrix(~ fac - 1) %*% rnorm(20) * .5
 
   m1 <-
     gamm4(y ~ s(x0) + x1 + s(x2),
-          data = dat,
-          random = ~ (1 | fac))
+      data = dat,
+      random = ~ (1 | fac)
+    )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -63,8 +64,10 @@ if (require("testthat") && require("insight") && require("gamm4")) {
 
   test_that("find_formula", {
     expect_length(find_formula(m1), 1)
-    expect_equal(find_formula(m1),
-                 list(conditional = as.formula("y ~ s(x0) + x1 + s(x2)")))
+    expect_equal(
+      find_formula(m1),
+      list(conditional = as.formula("y ~ s(x0) + x1 + s(x2)"))
+    )
   })
 
   test_that("find_terms", {
@@ -72,8 +75,10 @@ if (require("testthat") && require("insight") && require("gamm4")) {
       response = "y",
       conditional = c("s(x0)", "x1", "s(x2)")
     ))
-    expect_equal(find_terms(m1, flatten = TRUE),
-                 c("y", "s(x0)", "x1", "s(x2)"))
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("y", "s(x0)", "x1", "s(x2)")
+    )
   })
 
   test_that("find_variables", {
@@ -93,17 +98,25 @@ if (require("testthat") && require("insight") && require("gamm4")) {
   })
 
   test_that("find_parameters", {
-    expect_equal(find_parameters(m1),
-                 list(
-                   conditional = c("(Intercept)", "x1"),
-                   smooth_terms = c("s(x0)", "s(x2)")
-                 ))
+    expect_equal(
+      find_parameters(m1),
+      list(
+        conditional = c("(Intercept)", "x1"),
+        smooth_terms = c("s(x0)", "s(x2)")
+      )
+    )
     expect_equal(nrow(get_parameters(m1)), 4)
-    expect_equal(get_parameters(m1)$parameter,
-                 c("(Intercept)", "x1", "s(x0)", "s(x2)"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "x1", "s(x0)", "s(x2)")
+    )
   })
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
+  })
+
+  test_that("find_statistic", {
+    expect_output(find_statistic(m1))
   })
 }

@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("rms")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("rms")) {
   context("insight, model_info")
 
   data(mtcars)
@@ -53,7 +55,10 @@ if (require("testthat") && require("insight") && require("rms")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "am", conditional = c("mpg", "gear")))
+    expect_equal(find_terms(m1), list(
+      response = "am",
+      conditional = c("mpg", "gear")
+    ))
     expect_equal(find_terms(m1, flatten = TRUE), c("am", "mpg", "gear"))
   })
 
@@ -72,12 +77,13 @@ if (require("testthat") && require("insight") && require("rms")) {
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(
-        conditional = c("Intercept", "mpg", "gear")
-      )
+      list(conditional = c("Intercept", "mpg", "gear"))
     )
     expect_equal(nrow(get_parameters(m1)), 3)
-    expect_equal(get_parameters(m1)$parameter, c("Intercept", "mpg", "gear"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("Intercept", "mpg", "gear")
+    )
   })
 
   test_that("is_multivariate", {
@@ -86,5 +92,9 @@ if (require("testthat") && require("insight") && require("rms")) {
 
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "ML"))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

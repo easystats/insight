@@ -10,4 +10,8 @@ if (require("testthat") && require("insight")) {
   test_that("find_formula", {
     expect_error(find_formula(iris))
   })
+
+  test_that("find_statistic", {
+    expect_error(find_statistic(iris))
+  })
 }

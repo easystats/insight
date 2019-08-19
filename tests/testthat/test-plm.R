@@ -30,13 +30,17 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("find_predictors", {
-      expect_identical(find_predictors(m1),
-                       list(
-                         conditional = c("lprbarr", "year"),
-                         instruments = c("lprbarr", "lmix")
-                       ))
-      expect_identical(find_predictors(m1, flatten = TRUE),
-                       c("lprbarr", "year", "lmix"))
+      expect_identical(
+        find_predictors(m1),
+        list(
+          conditional = c("lprbarr", "year"),
+          instruments = c("lprbarr", "lmix")
+        )
+      )
+      expect_identical(
+        find_predictors(m1, flatten = TRUE),
+        c("lprbarr", "year", "lmix")
+      )
       expect_null(find_predictors(m1, effects = "random"))
     })
 
@@ -66,17 +70,21 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
 
     test_that("get_data", {
       expect_equal(nrow(get_data(m1)), 630)
-      expect_equal(colnames(get_data(m1)),
-                   c("lcrmrte", "lprbarr", "year", "lmix"))
+      expect_equal(
+        colnames(get_data(m1)),
+        c("lcrmrte", "lprbarr", "year", "lmix")
+      )
     })
 
     test_that("find_formula", {
       expect_length(find_formula(m1), 2)
-      expect_equal(find_formula(m1),
-                   list(
-                     conditional = as.formula("lcrmrte ~ lprbarr + factor(year)"),
-                     instruments = as.formula("~-lprbarr + lmix")
-                   ))
+      expect_equal(
+        find_formula(m1),
+        list(
+          conditional = as.formula("lcrmrte ~ lprbarr + factor(year)"),
+          instruments = as.formula("~-lprbarr + lmix")
+        )
+      )
     })
 
     test_that("find_variables", {
@@ -88,8 +96,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
           instruments = c("lprbarr", "lmix")
         )
       )
-      expect_equal(find_variables(m1, flatten = TRUE),
-                   c("lcrmrte", "lprbarr", "year", "lmix"))
+      expect_equal(
+        find_variables(m1, flatten = TRUE),
+        c("lcrmrte", "lprbarr", "year", "lmix")
+      )
     })
 
     test_that("n_obs", {
@@ -101,19 +111,21 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("find_parameters", {
-      expect_equal(find_parameters(m1),
-                   list(
-                     conditional = c(
-                       "(Intercept)",
-                       "lprbarr",
-                       "factor(year)82",
-                       "factor(year)83",
-                       "factor(year)84",
-                       "factor(year)85",
-                       "factor(year)86",
-                       "factor(year)87"
-                     )
-                   ))
+      expect_equal(
+        find_parameters(m1),
+        list(
+          conditional = c(
+            "(Intercept)",
+            "lprbarr",
+            "factor(year)82",
+            "factor(year)83",
+            "factor(year)84",
+            "factor(year)85",
+            "factor(year)86",
+            "factor(year)87"
+          )
+        )
+      )
       expect_equal(nrow(get_parameters(m1)), 8)
     })
 
@@ -123,9 +135,6 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
 
     test_that("find_statistic", {
       expect_identical(find_statistic(m1), "z-statistic")
-    })
-
-    test_that("find_statistic", {
       expect_identical(find_statistic(m2), "t-statistic")
     })
   }

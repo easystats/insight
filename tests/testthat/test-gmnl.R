@@ -1,10 +1,20 @@
-if (require("testthat") && require("insight") && require("gmnl") && require("mlogit") && require("MASS")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("gmnl") &&
+  require("mlogit") &&
+  require("MASS")) {
   context("insight, polr")
 
   data(housing, package = "MASS")
 
   dat <- mlogit.data(housing, choice = "Sat", shape = "wide")
-  m1 <- gmnl(Sat ~ Infl + Type + Cont | 1, data = dat, model = "smnl", R = 100)
+  m1 <-
+    gmnl(Sat ~ Infl + Type + Cont |
+      1,
+    data = dat,
+    model = "smnl",
+    R = 100
+    )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_ordinal)
@@ -12,7 +22,10 @@ if (require("testthat") && require("insight") && require("gmnl") && require("mlo
 
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = c("Infl", "Type", "Cont")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("Infl", "Type", "Cont"))
+    expect_identical(
+      find_predictors(m1, flatten = TRUE),
+      c("Infl", "Type", "Cont")
+    )
     expect_null(find_predictors(m1, effects = "random"))
   })
 
@@ -34,8 +47,14 @@ if (require("testthat") && require("insight") && require("gmnl") && require("mlo
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "Sat", conditional = c("Infl", "Type", "Cont", "1")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("Sat", "Infl", "Type", "Cont", "1"))
+    expect_equal(find_terms(m1), list(
+      response = "Sat",
+      conditional = c("Infl", "Type", "Cont", "1")
+    ))
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("Sat", "Infl", "Type", "Cont", "1")
+    )
   })
 
   test_that("n_obs", {
@@ -43,8 +62,14 @@ if (require("testthat") && require("insight") && require("gmnl") && require("mlo
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = "Sat", conditional = c("Infl", "Type", "Cont")))
-    expect_equal(find_variables(m1, flatten = TRUE), c("Sat", "Infl", "Type", "Cont"))
+    expect_equal(find_variables(m1), list(
+      response = "Sat",
+      conditional = c("Infl", "Type", "Cont")
+    ))
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("Sat", "Infl", "Type", "Cont")
+    )
   })
 
 
@@ -54,5 +79,9 @@ if (require("testthat") && require("insight") && require("gmnl") && require("mlo
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

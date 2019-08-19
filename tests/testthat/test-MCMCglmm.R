@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("MCMCglmm")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("MCMCglmm")) {
   context("insight, model_info")
 
   data(PlodiaPO)
@@ -19,7 +21,10 @@ if (require("testthat") && require("insight") && require("MCMCglmm")) {
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = "plate"))
     expect_identical(find_predictors(m1, flatten = TRUE), "plate")
-    expect_identical(find_predictors(m1, effects = "random"), list(random = "FSfamily"))
+    expect_identical(
+      find_predictors(m1, effects = "random"),
+      list(random = "FSfamily")
+    )
   })
 
   test_that("find_random", {
@@ -63,7 +68,14 @@ if (require("testthat") && require("insight") && require("MCMCglmm")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "PO", conditional = "plate", random = "FSfamily"))
+    expect_equal(
+      find_terms(m1),
+      list(
+        response = "PO",
+        conditional = "plate",
+        random = "FSfamily"
+      )
+    )
     expect_equal(find_terms(m1, flatten = TRUE), c("PO", "plate", "FSfamily"))
   })
 
@@ -85,10 +97,17 @@ if (require("testthat") && require("insight") && require("MCMCglmm")) {
     )
     expect_equal(nrow(get_parameters(m1)), 2)
     expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "plate"))
-    expect_equal(get_parameters(m1, effects = "random")$parameter, "FSfamily")
+    expect_equal(
+      get_parameters(m1, effects = "random")$parameter,
+      "FSfamily"
+    )
   })
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
+  })
+
+  test_that("find_statistic", {
+    expect_null(find_statistic(m1))
   })
 }

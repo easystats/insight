@@ -35,9 +35,12 @@ find_statistic <- function(x, ...) {
   t.mods <-
     c(
       "biglm",
+      "blmerMod",
       "cch",
+      "censReg",
       "coeftest",
       "drc",
+      "feis",
       "felm",
       "gam",
       "gamlss",
@@ -46,6 +49,7 @@ find_statistic <- function(x, ...) {
       "gls",
       "gmm",
       "ivreg",
+      "iv_robust",
       "lm",
       "lm_robust",
       "lm.beta",
@@ -64,10 +68,10 @@ find_statistic <- function(x, ...) {
       "rlm",
       "rlmerMod",
       "rq",
-      "speedglm",
       "speedlm",
       "svyglm",
       "svyolr",
+      "truncreg",
       "wblm"
     )
 
@@ -76,22 +80,32 @@ find_statistic <- function(x, ...) {
   z.mods <-
     c(
       "aareg",
+      "betareg",
       "clm",
+      "clm2",
       "clmm",
+      "coxme",
       "coxph",
       "ergm",
+      "gee",
       "glimML",
       "glmmadmb",
       "glmmTMB",
+      "gmnl",
+      "hurdle",
       "lavaan",
+      "LORgee",
+      "lrm",
       "MixMod",
       "mjoint",
       "mle2",
+      "mlogit",
       "mclogit",
       "mmclogit",
       "negbin",
       "psm",
-      "survreg"
+      "survreg",
+      "tobit"
     )
 
   # F-value objects ----------------------------------------------------------
@@ -109,6 +123,8 @@ find_statistic <- function(x, ...) {
 
   chi.mods <-
     c(
+      "geeglm",
+      "logistf",
       "vgam"
     )
 
@@ -118,10 +134,12 @@ find_statistic <- function(x, ...) {
   # which statistic to use will be decided based on the family used
   g.mods <-
     c(
+      "bigglm",
       "glm",
       "glmerMod",
       "glmRob",
-      "glmrob"
+      "glmrob",
+      "speedglm"
     )
 
   # t-statistic
@@ -155,7 +173,12 @@ find_statistic <- function(x, ...) {
     c(
       "stanreg",
       "stanmvreg",
-      "gbm"
+      "gbm",
+      "list",
+      "MCMCglmm",
+      "multinom",
+      "nnet",
+      "survfit"
     )
 
   # statistic check -----------------------------------------------------------
@@ -181,9 +204,7 @@ find_statistic <- function(x, ...) {
   }
 
   if (class(x)[[1]] %in% g.mods) {
-    if (class(x)[[1]] == "glm" && model_info(x)$family %in% g.t.mods) {
-      return("t-statistic")
-    } else if (class(x)[[1]] == "glmerMod" && model_info(x)$family %in% g.t.mods) {
+    if (model_info(x)$family %in% g.t.mods) {
       return("t-statistic")
     } else {
       return("z-statistic")
@@ -192,14 +213,45 @@ find_statistic <- function(x, ...) {
 
   if (class(x)[[1]] %in% unclear.mods) {
     col_names <- colnames(as.data.frame(summary(x)$coefficients))
-    t_names <- c("t-value", "t value", "t.value", "Pr(>|t|)")
-    z_names <- c("z-value", "z value", "z.value", "Pr(>|z|)")
+    t_names <-
+      c(
+        "t",
+        "t-value",
+        "t value",
+        "t.value",
+        "Pr(>|t|)"
+      )
+    z_names <-
+      c(
+        "z",
+        "z-value",
+        "z value",
+        "z.value",
+        "Pr(>|z|)",
+        "Pr(>|Z|)",
+        "Naive z",
+        "Robust z",
+        "san.z",
+        "Wald Z"
+      )
+    f_names <- c("F", "F-value", "F value")
+    chi_names <-
+      c("Chisq", "chi-sq", "chi.sq", "Wald", "W", "Pr(>|W|)")
 
+    if (is.null(col_names)) {
+      return(NULL)
+    }
     if (any(t_names %in% col_names)) {
       return("t-statistic")
     }
     if (any(z_names %in% col_names)) {
       return("z-statistic")
+    }
+    if (any(f_names %in% col_names)) {
+      return("F-statistic")
+    }
+    if (any(chi_names %in% col_names)) {
+      return("chi-squared statistic")
     }
   }
 }

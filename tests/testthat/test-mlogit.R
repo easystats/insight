@@ -1,8 +1,15 @@
-if (require("testthat") && require("insight") && require("mlogit")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("mlogit")) {
   context("insight, polr")
 
   data("Fishing")
-  Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
+  Fish <-
+    mlogit.data(Fishing,
+      varying = c(2:9),
+      shape = "wide",
+      choice = "mode"
+    )
 
   m1 <- mlogit(mode ~ price + catch, data = Fish)
   m2 <- mlogit(mode ~ price + catch | income, data = Fish)
@@ -17,7 +24,10 @@ if (require("testthat") && require("insight") && require("mlogit")) {
     expect_identical(find_predictors(m1, flatten = TRUE), c("price", "catch"))
     expect_null(find_predictors(m1, effects = "random"))
     expect_identical(find_predictors(m2), list(conditional = c("price", "catch", "income")))
-    expect_identical(find_predictors(m2, flatten = TRUE), c("price", "catch", "income"))
+    expect_identical(
+      find_predictors(m2, flatten = TRUE),
+      c("price", "catch", "income")
+    )
     expect_null(find_predictors(m2, effects = "random"))
   })
 
@@ -38,8 +48,21 @@ if (require("testthat") && require("insight") && require("mlogit")) {
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 4728)
     expect_equal(nrow(get_data(m2)), 4728)
-    expect_equal(colnames(get_data(m1)), c("mode", "price", "catch", "probabilities", "linpred"))
-    expect_equal(colnames(get_data(m2)), c("mode", "price", "catch", "income", "probabilities", "linpred"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("mode", "price", "catch", "probabilities", "linpred")
+    )
+    expect_equal(
+      colnames(get_data(m2)),
+      c(
+        "mode",
+        "price",
+        "catch",
+        "income",
+        "probabilities",
+        "linpred"
+      )
+    )
   })
 
   test_that("find_formula", {
@@ -48,10 +71,19 @@ if (require("testthat") && require("insight") && require("mlogit")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "mode", conditional = c("price", "catch")))
+    expect_equal(find_terms(m1), list(
+      response = "mode",
+      conditional = c("price", "catch")
+    ))
     expect_equal(find_terms(m1, flatten = TRUE), c("mode", "price", "catch"))
-    expect_equal(find_terms(m2), list(response = "mode", conditional = c("price", "catch", "income")))
-    expect_equal(find_terms(m2, flatten = TRUE), c("mode", "price", "catch", "income"))
+    expect_equal(find_terms(m2), list(
+      response = "mode",
+      conditional = c("price", "catch", "income")
+    ))
+    expect_equal(
+      find_terms(m2, flatten = TRUE),
+      c("mode", "price", "catch", "income")
+    )
   })
 
   test_that("n_obs", {
@@ -62,5 +94,10 @@ if (require("testthat") && require("insight") && require("mlogit")) {
   test_that("linkfun", {
     expect_false(is.null(link_function(m1)))
     expect_false(is.null(link_function(m2)))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
+    expect_identical(find_statistic(m2), "z-statistic")
   })
 }

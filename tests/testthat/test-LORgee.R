@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("multgee")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("multgee")) {
   context("insight, multgee")
 
   data(arthritis)
@@ -17,9 +19,15 @@ if (require("testthat") && require("insight") && require("multgee")) {
 
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = c("time", "trt", "baseline")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("time", "trt", "baseline"))
+    expect_identical(
+      find_predictors(m1, flatten = TRUE),
+      c("time", "trt", "baseline")
+    )
     expect_identical(find_predictors(m1, effects = "random"), list(random = "id"))
-    expect_identical(find_predictors(m1, effects = "all", flatten = TRUE), c("time", "trt", "baseline", "id"))
+    expect_identical(
+      find_predictors(m1, effects = "all", flatten = TRUE),
+      c("time", "trt", "baseline", "id")
+    )
   })
 
   test_that("find_response", {
@@ -48,7 +56,10 @@ if (require("testthat") && require("insight") && require("multgee")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 888)
-    expect_equal(colnames(get_data(m1)), c("y", "time", "trt", "baseline", "id"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("y", "time", "trt", "baseline", "id")
+    )
   })
 
   test_that("find_formula", {
@@ -75,8 +86,18 @@ if (require("testthat") && require("insight") && require("multgee")) {
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = "y", conditional = c("time", "trt", "baseline"), random = "id"))
-    expect_equal(find_variables(m1, flatten = TRUE), c("y", "time", "trt", "baseline", "id"))
+    expect_equal(
+      find_variables(m1),
+      list(
+        response = "y",
+        conditional = c("time", "trt", "baseline"),
+        random = "id"
+      )
+    )
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("y", "time", "trt", "baseline", "id")
+    )
   })
 
   test_that("n_obs", {
@@ -91,11 +112,38 @@ if (require("testthat") && require("insight") && require("multgee")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("beta10", "beta20", "beta30", "beta40", "factor(time)3", "factor(time)5", "factor(trt)2", "factor(baseline)2", "factor(baseline)3", "factor(baseline)4", "factor(baseline)5")
+        conditional = c(
+          "beta10",
+          "beta20",
+          "beta30",
+          "beta40",
+          "factor(time)3",
+          "factor(time)5",
+          "factor(trt)2",
+          "factor(baseline)2",
+          "factor(baseline)3",
+          "factor(baseline)4",
+          "factor(baseline)5"
+        )
       )
     )
     expect_equal(nrow(get_parameters(m1)), 11)
-    expect_equal(get_parameters(m1)$parameter, c("beta10", "beta20", "beta30", "beta40", "factor(time)3", "factor(time)5", "factor(trt)2", "factor(baseline)2", "factor(baseline)3", "factor(baseline)4", "factor(baseline)5"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c(
+        "beta10",
+        "beta20",
+        "beta30",
+        "beta40",
+        "factor(time)3",
+        "factor(time)5",
+        "factor(trt)2",
+        "factor(baseline)2",
+        "factor(baseline)3",
+        "factor(baseline)4",
+        "factor(baseline)5"
+      )
+    )
   })
 
   test_that("is_multivariate", {
@@ -104,5 +152,9 @@ if (require("testthat") && require("insight") && require("multgee")) {
 
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "Fisher's scoring ML"))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

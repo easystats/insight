@@ -1,11 +1,14 @@
-if (require("testthat") && require("insight") && require("betareg")) {
+if (require("testthat") &&
+    require("insight") &&
+    require("betareg")) {
   context("insight, betareg")
 
   data("GasolineYield")
   data("FoodExpenditure")
 
   m1 <- betareg(yield ~ batch + temp, data = GasolineYield)
-  m2 <- betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
+  m2 <-
+    betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_beta)
@@ -36,25 +39,30 @@ if (require("testthat") && require("insight") && require("betareg")) {
     expect_equal(nrow(get_data(m1)), 32)
     expect_equal(colnames(get_data(m1)), c("yield", "batch", "temp"))
     expect_equal(nrow(get_data(m2)), 38)
-    expect_equal(colnames(get_data(m2)), c("I(food/income)", "income", "persons", "food", "income.1"))
+    expect_equal(
+      colnames(get_data(m2)),
+      c("I(food/income)", "income", "persons", "food", "income.1")
+    )
   })
 
   test_that("find_formula", {
     expect_length(find_formula(m1), 1)
-    expect_equal(
-      find_formula(m1),
-      list(conditional = as.formula("yield ~ batch + temp"))
-    )
-    expect_equal(
-      find_formula(m2),
-      list(conditional = as.formula("I(food/income) ~ income + persons"))
-    )
+    expect_equal(find_formula(m1),
+                 list(conditional = as.formula("yield ~ batch + temp")))
+    expect_equal(find_formula(m2),
+                 list(conditional = as.formula("I(food/income) ~ income + persons")))
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = "yield", conditional = c("batch", "temp")))
-    expect_equal(find_variables(m1, flatten = TRUE), c("yield", "batch", "temp"))
-    expect_equal(find_variables(m2, flatten = TRUE), c("food", "income", "persons"))
+    expect_equal(find_variables(m1),
+                 list(
+                   response = "yield",
+                   conditional = c("batch", "temp")
+                 ))
+    expect_equal(find_variables(m1, flatten = TRUE),
+                 c("yield", "batch", "temp"))
+    expect_equal(find_variables(m2, flatten = TRUE),
+                 c("food", "income", "persons"))
   })
 
   test_that("n_obs", {
@@ -70,23 +78,53 @@ if (require("testthat") && require("insight") && require("betareg")) {
   })
 
   test_that("find_parameters", {
+    expect_equal(find_parameters(m1),
+                 list(
+                   conditional = c(
+                     "(Intercept)",
+                     "batch1",
+                     "batch2",
+                     "batch3",
+                     "batch4",
+                     "batch5",
+                     "batch6",
+                     "batch7",
+                     "batch8",
+                     "batch9",
+                     "temp",
+                     "(phi)"
+                   )
+                 ))
+    expect_equal(nrow(get_parameters(m1)), 12)
     expect_equal(
-      find_parameters(m1),
-      list(
-        conditional = c("(Intercept)", "batch1", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "temp", "(phi)")
+      get_parameters(m1)$parameter,
+      c(
+        "(Intercept)",
+        "batch1",
+        "batch2",
+        "batch3",
+        "batch4",
+        "batch5",
+        "batch6",
+        "batch7",
+        "batch8",
+        "batch9",
+        "temp",
+        "(phi)"
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 12)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "batch1", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "temp", "(phi)"))
   })
 
   test_that("find_terms", {
-    expect_equal(
-      find_terms(m2),
-      list(
-        response = "I(food/income)",
-        conditional = c("income", "persons")
-      )
-    )
+    expect_equal(find_terms(m2),
+                 list(
+                   response = "I(food/income)",
+                   conditional = c("income", "persons")
+                 ))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
+    expect_identical(find_statistic(m2), "z-statistic")
   })
 }

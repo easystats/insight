@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("rms")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("rms")) {
   context("insight, model_info")
 
   data(mtcars)
@@ -48,8 +50,14 @@ if (require("testthat") && require("insight") && require("rms")) {
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = "mpg", conditional = c("hp", "cyl", "wt")))
-    expect_equal(find_variables(m1, flatten = TRUE), c("mpg", "hp", "cyl", "wt"))
+    expect_equal(find_variables(m1), list(
+      response = "mpg",
+      conditional = c("hp", "cyl", "wt")
+    ))
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("mpg", "hp", "cyl", "wt")
+    )
   })
 
   test_that("n_obs", {
@@ -72,7 +80,10 @@ if (require("testthat") && require("insight") && require("rms")) {
       )
     )
     expect_equal(nrow(get_parameters(m1)), 7)
-    expect_equal(get_parameters(m1)$parameter, c("Intercept", "hp", "hp'", "cyl", "wt", "hp * cyl", "hp' * cyl"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("Intercept", "hp", "hp'", "cyl", "wt", "hp * cyl", "hp' * cyl")
+    )
   })
 
   test_that("is_multivariate", {
@@ -82,4 +93,9 @@ if (require("testthat") && require("insight") && require("rms")) {
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "OLS"))
   })
+
+  # TO DO
+  # test_that("find_statistic", {
+  #   expect_null(find_statistic(m1))
+  # })
 }

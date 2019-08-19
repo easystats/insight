@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("robustbase")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("robustbase")) {
   context("insight, model_info")
 
   data(carrots)
@@ -46,7 +48,13 @@ if (require("testthat") && require("insight") && require("robustbase")) {
     expect_equal(nrow(get_data(m1)), 24)
     expect_equal(
       colnames(get_data(m1)),
-      c("cbind(success, total - success)", "logdose", "block", "success", "total")
+      c(
+        "cbind(success, total - success)",
+        "logdose",
+        "block",
+        "success",
+        "total"
+      )
     )
   })
 
@@ -54,18 +62,35 @@ if (require("testthat") && require("insight") && require("robustbase")) {
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("cbind(success, total - success) ~ logdose + block"))
+      list(
+        conditional = as.formula("cbind(success, total - success) ~ logdose + block")
+      )
     )
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "cbind(success, total - success)", conditional = c("logdose", "block")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("cbind(success, total - success)", "logdose", "block"))
+    expect_equal(
+      find_terms(m1),
+      list(
+        response = "cbind(success, total - success)",
+        conditional = c("logdose", "block")
+      )
+    )
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("cbind(success, total - success)", "logdose", "block")
+    )
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = c("success", "total"), conditional = c("logdose", "block")))
-    expect_equal(find_variables(m1, flatten = TRUE), c("success", "total", "logdose", "block"))
+    expect_equal(find_variables(m1), list(
+      response = c("success", "total"),
+      conditional = c("logdose", "block")
+    ))
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("success", "total", "logdose", "block")
+    )
   })
 
   test_that("n_obs", {
@@ -88,7 +113,10 @@ if (require("testthat") && require("insight") && require("robustbase")) {
       )
     )
     expect_equal(nrow(get_parameters(m1)), 4)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "logdose", "blockB2", "blockB3"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "logdose", "blockB2", "blockB3")
+    )
   })
 
   test_that("is_multivariate", {
@@ -97,5 +125,9 @@ if (require("testthat") && require("insight") && require("robustbase")) {
 
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "Mqle"))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

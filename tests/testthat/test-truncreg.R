@@ -1,8 +1,12 @@
-if (require("testthat") && require("insight") && require("truncreg") && require("survival")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("truncreg") &&
+  require("survival")) {
   context("insight, truncreg")
 
   data("tobin", package = "survival")
-  m1 <- truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
+  m1 <-
+    truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -36,7 +40,10 @@ if (require("testthat") && require("insight") && require("truncreg") && require(
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "durable", conditional = c("age", "quant")))
+    expect_equal(find_terms(m1), list(
+      response = "durable",
+      conditional = c("age", "quant")
+    ))
     expect_equal(find_terms(m1, flatten = TRUE), c("durable", "age", "quant"))
   })
 
@@ -51,11 +58,18 @@ if (require("testthat") && require("insight") && require("truncreg") && require(
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(
-        conditional = c("(Intercept)", "age", "quant", "sigma")
-      )
+      list(conditional = c(
+        "(Intercept)", "age", "quant", "sigma"
+      ))
     )
     expect_equal(nrow(get_parameters(m1)), 4)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "age", "quant", "sigma"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "age", "quant", "sigma")
+    )
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
   })
 }
