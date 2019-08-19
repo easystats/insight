@@ -9,7 +9,13 @@ if (require("testthat") && require("insight") && require("VGAM")) {
     counts = c(18, 17, 15, 20, 10, 20, 25, 13, 12)
   )
 
-  m1 <- vglm(counts ~ outcome + treatment, family = poissonff, data = d.AD, trace = TRUE)
+  m1 <-
+    vglm(
+      counts ~ outcome + treatment,
+      family = poissonff,
+      data = d.AD,
+      trace = TRUE
+    )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_poisson)
@@ -18,7 +24,10 @@ if (require("testthat") && require("insight") && require("VGAM")) {
 
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = c("outcome", "treatment")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("outcome", "treatment"))
+    expect_identical(
+      find_predictors(m1, flatten = TRUE),
+      c("outcome", "treatment")
+    )
     expect_null(find_predictors(m1, effects = "random"))
   })
 
@@ -62,8 +71,14 @@ if (require("testthat") && require("insight") && require("VGAM")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "counts", conditional = c("outcome", "treatment")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("counts", "outcome", "treatment"))
+    expect_equal(find_terms(m1), list(
+      response = "counts",
+      conditional = c("outcome", "treatment")
+    ))
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("counts", "outcome", "treatment")
+    )
   })
 
   test_that("n_obs", {
@@ -78,14 +93,33 @@ if (require("testthat") && require("insight") && require("VGAM")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("(Intercept)", "outcome2", "outcome3", "treatment2", "treatment3")
+        conditional = c(
+          "(Intercept)",
+          "outcome2",
+          "outcome3",
+          "treatment2",
+          "treatment3"
+        )
       )
     )
     expect_equal(nrow(get_parameters(m1)), 5)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "outcome2", "outcome3", "treatment2", "treatment3"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c(
+        "(Intercept)",
+        "outcome2",
+        "outcome3",
+        "treatment2",
+        "treatment3"
+      )
+    )
   })
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

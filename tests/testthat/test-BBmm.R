@@ -36,7 +36,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     test_that("find_predictors", {
       expect_identical(find_predictors(m1), list(conditional = "x"))
       expect_identical(find_predictors(m1, flatten = TRUE), "x")
-      expect_identical(find_predictors(m1, effects = "random"), list(random = "z"))
+      expect_identical(
+        find_predictors(m1, effects = "random"),
+        list(random = "z")
+      )
       expect_identical(
         find_predictors(m1, effects = "all"),
         list(
@@ -74,7 +77,14 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
     test_that("find_variables", {
-      expect_equal(find_variables(m1), list(response = "y", conditional = "x", random = "z"))
+      expect_equal(
+        find_variables(m1),
+        list(
+          response = "y",
+          conditional = "x",
+          random = "z"
+        )
+      )
       expect_equal(find_variables(m1, flatten = TRUE), c("y", "x", "z"))
     })
 
@@ -108,7 +118,14 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
     test_that("find_algorithm", {
-      expect_equal(find_algorithm(m1), list(algorithm = "extended likelihood", optimizer = "BB-NR"))
+      expect_equal(
+        find_algorithm(m1),
+        list(algorithm = "extended likelihood", optimizer = "BB-NR")
+      )
+    })
+
+    test_that("find_statistic", {
+      expect_identical(find_statistic(m1), "t-statistic")
     })
   }
 }

@@ -113,4 +113,8 @@ if (require("testthat") && require("insight") && require("aod")) {
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "ML"))
   })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
+  })
 }

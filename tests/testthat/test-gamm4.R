@@ -117,6 +117,6 @@ if (require("testthat") && require("insight") && require("gamm4")) {
   })
 
   test_that("find_statistic", {
-    expect_output(find_statistic(m1))
+    expect_error(find_statistic(m1))
   })
 }

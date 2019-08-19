@@ -34,7 +34,10 @@ find_statistic <- function(x, ...) {
 
   t.mods <-
     c(
+      "BBreg",
+      "BBmm",
       "biglm",
+      "bglmerMod",
       "blmerMod",
       "cch",
       "censReg",
@@ -42,7 +45,6 @@ find_statistic <- function(x, ...) {
       "drc",
       "feis",
       "felm",
-      "gam",
       "gamlss",
       "garch",
       "glmmPQL",
@@ -86,6 +88,7 @@ find_statistic <- function(x, ...) {
       "clmm",
       "coxme",
       "coxph",
+      "crch",
       "ergm",
       "gee",
       "glimML",
@@ -105,7 +108,9 @@ find_statistic <- function(x, ...) {
       "negbin",
       "psm",
       "survreg",
-      "tobit"
+      "tobit",
+      "vglm",
+      "zeroinfl"
     )
 
   # F-value objects ----------------------------------------------------------
@@ -171,8 +176,11 @@ find_statistic <- function(x, ...) {
 
   unsupported.mods <-
     c(
+      "BFBayesFactor",
+      "brmsfit",
       "stanreg",
       "stanmvreg",
+      "gam",
       "gbm",
       "list",
       "MCMCglmm",
@@ -234,11 +242,11 @@ find_statistic <- function(x, ...) {
         "san.z",
         "Wald Z"
       )
-    f_names <- c("F", "F-value", "F value")
+    f_names <- c("F", "F-value", "F value", "F.value")
     chi_names <-
       c("Chisq", "chi-sq", "chi.sq", "Wald", "W", "Pr(>|W|)")
 
-    if (is.null(col_names)) {
+    if (length(colnames(as.data.frame(summary(x)$coefficients)))) {
       return(NULL)
     }
     if (any(t_names %in% col_names)) {
