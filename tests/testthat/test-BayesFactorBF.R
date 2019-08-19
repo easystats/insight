@@ -204,6 +204,6 @@ if (require("testthat") &&
   })
 
   test_that("find_statistic", {
-    expect_null(find_statistic(m1))
+    expect_null(find_statistic(x))
   })
 }

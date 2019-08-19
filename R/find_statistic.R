@@ -17,9 +17,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_statistic(m)
-#'
-#' # a dataframe
-#' find_statistic(mtcars)
 #' @export
 find_statistic <- function(x, ...) {
 
@@ -246,7 +243,7 @@ find_statistic <- function(x, ...) {
     chi_names <-
       c("Chisq", "chi-sq", "chi.sq", "Wald", "W", "Pr(>|W|)")
 
-    if (length(colnames(as.data.frame(summary(x)$coefficients)))) {
+    if (length(colnames(as.data.frame(summary(x)$coefficients))) == 0L) {
       return(NULL)
     }
     if (any(t_names %in% col_names)) {

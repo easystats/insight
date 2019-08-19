@@ -27,7 +27,4 @@ Small helper that checks if a model is a regression model
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 find_statistic(m)
-
-# a dataframe
-find_statistic(mtcars)
 }
