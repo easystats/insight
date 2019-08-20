@@ -15,7 +15,7 @@
   - `color_if()` as utility-function to add color formatting to values, depending
     on certain conditions.
 
-## Bug fixed
+## Bug fixes
 
   - `find_formula()` now extracts group factors of random effects for *gamlss*
     models.
@@ -23,6 +23,7 @@
     from group factors of random effects for *gamlss* models.
   - `get_data()` dropped value and variable label attributes, when model frame
     contained matrix variables (like splines).
+  - `get_priors()` swapped column names `location` and `scale` for *brmsfit* -objects.
 
 # insight 0.4.1
 

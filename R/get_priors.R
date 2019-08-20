@@ -91,8 +91,8 @@ get_priors.brmsfit <- function(x, ...) {
   prior_info <- x$prior[x$prior$coef != "" & x$prior$class %in% c("b", "(Intercept)"), ]
 
   prior_info$distribution <- gsub("(.*)\\(.*", "\\1", prior_info$prior)
-  prior_info$scale <- gsub("(.*)\\((.*)\\,(.*)", "\\2", prior_info$prior)
-  prior_info$location <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior)
+  prior_info$location <- gsub("(.*)\\((.*)\\,(.*)", "\\2", prior_info$prior)
+  prior_info$scale <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior)
   prior_info$parameter <- prior_info$coef
 
   prior_info <- prior_info[, c("parameter", "distribution", "location", "scale")]
