@@ -171,7 +171,9 @@
   }
 
   if (split_nested) {
-    unique(unlist(strsplit(re, "\\:")))
+    # remove parenthesis for nested models
+    sub(pattern = "[\\(\\)]", replacement = "", x = unique(unlist(strsplit(re, "\\:"))))
+    # unique(unlist(strsplit(re, "\\:")))
   } else {
     unique(re)
   }

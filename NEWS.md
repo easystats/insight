@@ -24,6 +24,7 @@
   - `get_data()` dropped value and variable label attributes, when model frame
     contained matrix variables (like splines).
   - `get_priors()` swapped column names `location` and `scale` for *brmsfit* -objects.
+  - `find_predictors()` did not remove parentheses from terms in multiple nested random effects.
 
 # insight 0.4.1
 
