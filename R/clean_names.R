@@ -82,7 +82,7 @@ clean_names.character <- function(x) {
 
   # do we have a "log()" pattern here? if yes, get capture region
   # which matches the "cleaned" variable name
-  cleaned <- vapply(1:length(x), function(i) {
+  cleaned <- sapply(1:length(x), function(i) {
     for (j in 1:length(pattern)) {
       # remove possible  namespace
       x[i] <- sub("(.*)::(.*)", "\\2", x[i])
@@ -106,7 +106,7 @@ clean_names.character <- function(x) {
     }
     # for coxme-models, remove random-effect things...
     .trim(sub("^(.*)\\|(.*)", "\\2", x[i]))
-  }, FUN.VALUE = character(1))
+  })
 
   # remove for random intercept only models
   .remove_values(cleaned, c("1", "0"))
