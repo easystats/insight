@@ -34,7 +34,7 @@ if (require("testthat") &&
     expect_null(find_predictors(m1, effects = "random"))
 
     expect_identical(find_predictors(m2), list(conditional = c("x2", "x3"), zero_inflated = c("x0", "x1")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("x2", "x3", "x0", "x1"))
+    expect_identical(find_predictors(m2, flatten = TRUE), c("x2", "x3", "x0", "x1"))
     expect_null(find_predictors(m2, effects = "random"))
 
     expect_identical(find_predictors(m3), list(y0 = list(conditional = c("x0", "x1")), y1 = list(conditional = c("x2", "x3"))))
@@ -45,7 +45,7 @@ if (require("testthat") &&
   test_that("find_response", {
     expect_identical(find_response(m1), "y")
     expect_identical(find_response(m2), "y")
-    expect_identical(find_response(m3), c("y0", "y1"))
+    expect_identical(find_response(m3), c(y0 = "y0", y1 = "y1"))
   })
 
   test_that("get_response", {
@@ -99,8 +99,8 @@ if (require("testthat") &&
     expect_equal(find_variables(m1, flatten = TRUE), c("y", "x0", "x1", "x2", "x3"))
     expect_equal(find_variables(m2), list(response = "y", conditional = c("x2", "x3"), zero_inflated = c("x0", "x1")))
     expect_equal(find_variables(m2, flatten = TRUE), c("y", "x2", "x3", "x0", "x1"))
-    expect_equal(find_variables(m3), list(response = c("y0", "y1"), y0 = list(conditional = c("x0", "x1")), y1 = list(conditional = c("x2", "x3"))))
-    expect_equal(find_variables(m2, flatten = TRUE), c("y0", "y1", "x0", "x1", "x2", "x3"))
+    expect_equal(find_variables(m3), list(response = c(y0 = "y0", y1 = "y1"), y0 = list(conditional = c("x0", "x1")), y1 = list(conditional = c("x2", "x3"))))
+    expect_equal(find_variables(m3, flatten = TRUE), c("y0", "y1", "x0", "x1", "x2", "x3"))
   })
 
   test_that("n_obs", {
