@@ -361,12 +361,17 @@ model_info.gam <- function(x, ...) {
   }
 
   faminfo <- stats::family(x)
+  link <- faminfo$link[1]
+  is.mv <- faminfo$family == "Multivariate normal"
+
+  if (is.mv) link <- "identity"
+
   make_family(
     x = x,
     fitfam = faminfo$family,
-    logit.link = faminfo$link == "logit",
-    link.fun = faminfo$link,
-    multi.var = faminfo$family == "Multivariate normal",
+    logit.link = link == "logit",
+    link.fun = link,
+    multi.var = is.mv,
     ...
   )
 }
