@@ -60,7 +60,7 @@ link_function.default <- function(x, ...) {
 
 #' @export
 link_function.gam <- function(x, ...) {
-  li <-   tryCatch({
+  lf <-   tryCatch({
     # get model family
     ff <- stats::family(x)
 
@@ -81,14 +81,17 @@ link_function.gam <- function(x, ...) {
   }
   )
 
-  if (is.null(li)) {
+  if (is.null(lf)) {
     mi <- stats::family(x)
     if (.obj_has_name(mi, "linfo")) {
-      li <- mi$linfo$linkfun
+      if (.obj_has_name(mi$linfo, "linkfun"))
+        lf <- mi$linfo$linkfun
+      else
+        lf <- mi$linfo[[1]]$linkfun
     }
   }
 
-  li
+  lf
 }
 
 

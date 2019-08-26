@@ -61,7 +61,10 @@ link_inverse.gam <- function(x, ...) {
   if (is.null(li)) {
     mi <- stats::family(x)
     if (.obj_has_name(mi, "linfo")) {
-      li <- mi$linfo$linkinv
+      if (.obj_has_name(mi$linfo, "linkinv"))
+        li <- mi$linfo$linkinv
+      else
+        li <- mi$linfo[[1]]$linkinv
     }
   }
 
