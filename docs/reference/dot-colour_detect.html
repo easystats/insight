@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find all model terms — find_terms • insight</title>
+<title>Detect coloured cells — .colour_detect • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,12 +37,9 @@
 
 
 
-<meta property="og:title" content="Find all model terms — find_terms" />
+<meta property="og:title" content="Detect coloured cells — .colour_detect" />
 
-<meta property="og:description" content="Returns a list with the names of all terms, including
-  response value and random effects, &quot;as is&quot;. This means, on-the-fly
-  tranformations or arithmetic expressions like log(), I(),
-  as.factor() etc. are preserved." />
+<meta property="og:description" content="Detect coloured cells" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -124,92 +121,25 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find all model terms</h1>
+    <h1>Detect coloured cells</h1>
     
-    <div class="hidden name"><code>find_terms.Rd</code></div>
+    <div class="hidden name"><code>dot-colour_detect.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns a list with the names of all terms, including
-  response value and random effects, "as is". This means, on-the-fly
-  tranformations or arithmetic expressions like <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log()</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/AsIs'>I()</a></code>,
-  <code><a href='https://www.rdocumentation.org/packages/base/topics/factor'>as.factor()</a></code> etc. are preserved.</p>
+    <p>Detect coloured cells</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_terms</span>(<span class='no'>x</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr>
-    <tr>
-      <th>flatten</th>
-      <td><p>Logical, if <code>TRUE</code>, the values are returned
-as character vector, not as list. Duplicated values are removed.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='fu'>.colour_detect</span>(<span class='no'>x</span>)</pre>
+        
 
-    <p>A list with (depending on the model) following elements (character
-   vectors):</p><ul>
-<li><p><code>response</code>, the name of the response variable</p></li>
-<li><p><code>conditional</code>, the names of the predictor variables from the <em>conditional</em> model (as opposed to the zero-inflated part of a model)</p></li>
-<li><p><code>random</code>, the names of the random effects (grouping factors)</p></li>
-<li><p><code>zero_inflated</code>, the names of the predictor variables from the <em>zero-inflated</em> part of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the names of the random effects (grouping factors)</p></li>
-<li><p><code>dispersion</code>, the name of the dispersion terms</p></li>
-<li><p><code>instruments</code>, the names of instrumental variables</p></li>
-</ul>
-
-    
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>The difference to <code><a href='find_variables.html'>find_variables</a></code> is that <code>find_terms()</code>
-  may return a variable multiple times in case of multiple transformations
-  (see examples below), while <code><a href='find_variables.html'>find_variables()</a></code> returns each variable
-  name only once.</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>sleepstudy</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Reaction</span>) ~ <span class='no'>Days</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/AsIs'>I</a></span>(<span class='no'>Days</span>^<span class='fl'>2</span>) + (<span class='fl'>1</span> + <span class='no'>Days</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>exp</a></span>(<span class='no'>Days</span>) <span class='kw'>|</span> <span class='no'>Subject</span>),
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>
-)</div><div class='output co'>#&gt; <span class='warning'>Warning: Model failed to converge with max|grad| = 14.7145 (tol = 0.002, component 1)</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Model is nearly unidentifiable: very large eigenvalue</span>
-#&gt; <span class='warning'> - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio</span>
-#&gt; <span class='warning'> - Rescale variables?</span></div><div class='input'>
-<span class='fu'>find_terms</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $response
-#&gt; [1] "log(Reaction)"
-#&gt; 
-#&gt; $conditional
-#&gt; [1] "Days"      "I(Days^2)"
-#&gt; 
-#&gt; $random
-#&gt; [1] "Days"      "exp(Days)" "Subject"  
-#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#note">Note</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

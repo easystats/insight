@@ -13,16 +13,15 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Easy Access to Model Information for Various Model Objects">
 <meta property="og:description" content="A tool to provide an easy, intuitive and consistent access to 
    information contained in various R models, like model formulas, model terms, 
    information about random effects, data that was used to fit the model or 
-   data from response variables. insight mainly revolves around two types 
+   data from response variables. 'insight' mainly revolves around two types 
    of functions: Functions that find (the names of) information, starting with 
-   find_, and functions that get the underlying data, starting with get_. 
+   'find_', and functions that get the underlying data, starting with 'get_'. 
    The package has a consistent syntax and works with many different model 
    objects, where otherwise functions to access these information are missing.">
 <meta property="og:image" content="/logo.png">
@@ -33,7 +32,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-home">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -53,7 +52,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -62,6 +61,18 @@
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/tests_and_coverage.html">Tests and Coverage</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
@@ -76,22 +87,25 @@
 <!--/.navbar -->
 
       
-
       </header><div class="row">
-  <div class="contents col-md-9">
-<div id="insight-" class="section level1">
+  <div class="col-md-9 contents">
+    
+
+    
+    
+<div id="insight" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#insight-" class="anchor"></a>insight <img src="reference/figures/logo.png" align="right" height="139">
+<a href="#insight" class="anchor"></a>insight <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 
 <p><strong>Gain insight into your models!</strong></p>
 <p>When fitting any statistical model, there are many useful pieces of information that are simultaneously calculated and stored beyond coefficient estimates and general model fit statistics. Although there exist some generic functions to obtain model information and data, many package-specific modeling functions do not provide such methods to allow users to access such valuable information.</p>
 <p><strong>insight</strong> is an R-package that fills this important gap by providing a suite of functions to support almost any model (see a list of the many models supported below in the <strong>List of Supported Packages and Models</strong> section). The goal of <strong>insight</strong>, then, is to provide tools to provide <em>easy</em>, <em>intuitive</em>, and <em>consistent</em> access to information contained in model objects. These tools aid applied research in virtually any field who fit, diagnose, and present statistical models by streamlining access to every aspect of many model objects via consistent syntax and output.</p>
-<p>Built with non-programmers in mind, <strong>insight</strong> offers a broad toolbox for making model and data information easily accessible. While <strong>insight</strong> offers many useful functions for working with and understanding model objects (discussed below), we suggest users start with <code><a href="reference/model_info.html">model_info()</a></code>, as this function provides a clean and consistent overview of model objects (<em>e.g.</em>, functional form of the model, the model family, link function, number of observations, variables included in the specification, etc.). With a clear understanding of the model introduced, users are able to adapt other functions for more nuanced exploration of and interaction with virtually any model object.</p>
+<p>Built with non-programmers in mind, <strong>insight</strong> offers a broad toolbox for making model and data information easily accessible. While <strong>insight</strong> offers many useful functions for working with and understanding model objects (discussed below), we suggest users start with <code><a href="reference/model_info.html">model_info()</a></code>, as this function provides a clean and consistent overview of model objects (e.g., functional form of the model, the model family, link function, number of observations, variables included in the specification, etc.). With a clear understanding of the model introduced, users are able to adapt other functions for more nuanced exploration of and interaction with virtually any model object.</p>
 <div id="definition-of-model-components" class="section level2">
 <h2 class="hasAnchor">
 <a href="#definition-of-model-components" class="anchor"></a>Definition of Model Components</h2>
-<p>The functions from <strong>insight</strong> address different components of a model. In an effort to avoid confusion about specific “targets” of each function, in this section we provide a short explanation of <em>insight</em>’s definitions of regression model components.</p>
+<p>The functions from <strong>insight</strong> address different components of a model. In an effort to avoid confusion about specific “targets” of each function, in this section we provide a short explanation of <strong>insight</strong>’s definitions of regression model components.</p>
 <div id="data" class="section level4">
 <h4 class="hasAnchor">
 <a href="#data" class="anchor"></a>Data</h4>
@@ -120,7 +134,7 @@
 <div id="terms" class="section level4">
 <h4 class="hasAnchor">
 <a href="#terms" class="anchor"></a>Terms</h4>
-<p>Terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://rdrr.io/r/stats/poly.html">poly(x, 2)</a></code>.</p>
+<p>Terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/poly">poly(x, 2)</a></code>.</p>
 </div>
 <div id="random-effects" class="section level4">
 <h4 class="hasAnchor">
@@ -145,84 +159,75 @@
 <div id="examples-of-use-cases-in-r" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples-of-use-cases-in-r" class="anchor"></a>Examples of Use Cases in R</h2>
-<p>We now would like to provide examples of use cases of the <em>insight</em> package. These examples probably do not cover typical real-world problems, but serve as illustration of the core idea of this package: The unified interface to access model information. <em>insight</em> should help both users and package developers in order to reduce the hassle with the many exceptions from various modelling packages when accessing model information.</p>
+<p>We now would like to provide examples of use cases of the <strong>insight</strong> package. These examples probably do not cover typical real-world problems, but serve as illustration of the core idea of this package: The unified interface to access model information. <strong>insight</strong> should help both users and package developers in order to reduce the hassle with the many exceptions from various modelling packages when accessing model information.</p>
 <div id="making-predictions-at-specific-values-of-a-term-of-interest" class="section level4">
 <h4 class="hasAnchor">
 <a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor"></a>Making Predictions at Specific Values of a Term of Interest</h4>
-<p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>.</p>
+<p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code>.</p>
 <p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(insight)</a>
-<a class="sourceLine" id="cb1-2" title="2">m &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(</a>
-<a class="sourceLine" id="cb1-3" title="3">  Sepal.Length <span class="op">~</span><span class="st"> </span>Species <span class="op">+</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>Sepal.Width, </a>
-<a class="sourceLine" id="cb1-4" title="4">  <span class="dt">data =</span> iris</a>
-<a class="sourceLine" id="cb1-5" title="5">)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(insight)</a>
+<a class="sourceLine" id="cb1-2" title="2">m &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Species <span class="op">+</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>Sepal.Width, <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4">dat &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_data.html">get_data</a></span>(m)</a>
+<a class="sourceLine" id="cb1-5" title="5">pred &lt;-<span class="st"> </span><span class="kw"><a href="reference/find_predictors.html">find_predictors</a></span>(m, <span class="dt">flatten =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7">dat &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_data.html">get_data</a></span>(m)</a>
-<a class="sourceLine" id="cb1-8" title="8">pred &lt;-<span class="st"> </span><span class="kw"><a href="reference/find_predictors.html">find_predictors</a></span>(m, <span class="dt">flatten =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-9" title="9"></a>
-<a class="sourceLine" id="cb1-10" title="10">l &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(pred, <span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb1-11" title="11">  <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(dat[[x]]))</a>
-<a class="sourceLine" id="cb1-12" title="12">    <span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(dat[[x]])</a>
-<a class="sourceLine" id="cb1-13" title="13">  <span class="cf">else</span></a>
-<a class="sourceLine" id="cb1-14" title="14">    <span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(dat[[x]])</a>
-<a class="sourceLine" id="cb1-15" title="15">})</a>
-<a class="sourceLine" id="cb1-16" title="16"></a>
-<a class="sourceLine" id="cb1-17" title="17"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(l) &lt;-<span class="st"> </span>pred</a>
-<a class="sourceLine" id="cb1-18" title="18">l &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(l)</a>
-<a class="sourceLine" id="cb1-19" title="19"></a>
-<a class="sourceLine" id="cb1-20" title="20"><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(l, <span class="dt">predictions =</span> <span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(m, <span class="dt">newdata =</span> l))</a>
-<a class="sourceLine" id="cb1-21" title="21"><span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span></a>
-<a class="sourceLine" id="cb1-22" title="22"><span class="co">#&gt; 1     setosa    1.199333    3.057333    5.101427</span></a>
-<a class="sourceLine" id="cb1-23" title="23"><span class="co">#&gt; 2 versicolor    1.199333    3.057333    6.089557</span></a>
-<a class="sourceLine" id="cb1-24" title="24"><span class="co">#&gt; 3  virginica    1.199333    3.057333    6.339015</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-7" title="7">l &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">lapply</a></span>(pred, <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb1-8" title="8">    <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">is.numeric</a></span>(dat[[x]])) </a>
+<a class="sourceLine" id="cb1-9" title="9">        <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(dat[[x]]) <span class="cf">else</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(dat[[x]])</a>
+<a class="sourceLine" id="cb1-10" title="10">})</a>
+<a class="sourceLine" id="cb1-11" title="11"></a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(l) &lt;-<span class="st"> </span>pred</a>
+<a class="sourceLine" id="cb1-13" title="13">l &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(l)</a>
+<a class="sourceLine" id="cb1-14" title="14"></a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(l, <span class="dt">predictions =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(m, <span class="dt">newdata =</span> l))</a>
+<a class="sourceLine" id="cb1-16" title="16"><span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span></a>
+<a class="sourceLine" id="cb1-17" title="17"><span class="co">#&gt; 1     setosa       1.199       3.057       5.101</span></a>
+<a class="sourceLine" id="cb1-18" title="18"><span class="co">#&gt; 2 versicolor       1.199       3.057       6.090</span></a>
+<a class="sourceLine" id="cb1-19" title="19"><span class="co">#&gt; 3  virginica       1.199       3.057       6.339</span></a></code></pre></div>
 </div>
 <div id="printing-model-coefficients" class="section level4">
 <h4 class="hasAnchor">
 <a href="#printing-model-coefficients" class="anchor"></a>Printing Model Coefficients</h4>
-<p>The next example should emphasize the possibilities to generalize functions to many different model objects using <em>insight</em>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
+<p>The next example should emphasize the possibilities to generalize functions to many different model objects using <strong>insight</strong>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
 <p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model){</a>
-<a class="sourceLine" id="cb2-2" title="2">  <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(</a>
-<a class="sourceLine" id="cb2-3" title="3">    <span class="st">"My parameters are "</span>,</a>
-<a class="sourceLine" id="cb2-4" title="4">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(model)<span class="op">$</span>coefficients),  <span class="dt">collapse =</span> <span class="st">", "</span>),</a>
-<a class="sourceLine" id="cb2-5" title="5">    <span class="st">", thank you for your attention!"</span></a>
-<a class="sourceLine" id="cb2-6" title="6">  )</a>
-<a class="sourceLine" id="cb2-7" title="7">}</a>
-<a class="sourceLine" id="cb2-8" title="8"></a>
-<a class="sourceLine" id="cb2-9" title="9">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="kw">print_params</span>(m1)</a>
-<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
-<a class="sourceLine" id="cb2-12" title="12"></a>
-<a class="sourceLine" id="cb2-13" title="13"><span class="co"># obviously, something is missing in the output</span></a>
-<a class="sourceLine" id="cb2-14" title="14">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb2-15" title="15"><span class="kw">print_params</span>(m2)</a>
-<a class="sourceLine" id="cb2-16" title="16"><span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></a></code></pre></div>
-<p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <em>insight</em>, users can write a function without having to worry about the model type.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model){</a>
-<a class="sourceLine" id="cb3-2" title="2">  <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(</a>
-<a class="sourceLine" id="cb3-3" title="3">    <span class="st">"My parameters are "</span>,</a>
-<a class="sourceLine" id="cb3-4" title="4">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(insight<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/insight/man/find_parameters.html">find_parameters</a></span>(model, <span class="dt">flatten =</span> <span class="ot">TRUE</span>),  <span class="dt">collapse =</span> <span class="st">", "</span>),</a>
-<a class="sourceLine" id="cb3-5" title="5">    <span class="st">", thank you for your attention!"</span></a>
-<a class="sourceLine" id="cb3-6" title="6">  )</a>
-<a class="sourceLine" id="cb3-7" title="7">}</a>
-<a class="sourceLine" id="cb3-8" title="8"></a>
-<a class="sourceLine" id="cb3-9" title="9">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="kw">print_params</span>(m1)</a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
-<a class="sourceLine" id="cb3-12" title="12"></a>
-<a class="sourceLine" id="cb3-13" title="13">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="kw">print_params</span>(m2)</a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model) {</a>
+<a class="sourceLine" id="cb2-2" title="2">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/row.names">row.names</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model)<span class="op">$</span>coefficients), </a>
+<a class="sourceLine" id="cb2-3" title="3">        <span class="dt">collapse =</span> <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4">}</a>
+<a class="sourceLine" id="cb2-5" title="5"></a>
+<a class="sourceLine" id="cb2-6" title="6">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="kw">print_params</span>(m1)</a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
+<a class="sourceLine" id="cb2-9" title="9"></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="co"># obviously, something is missing in the output</span></a>
+<a class="sourceLine" id="cb2-11" title="11">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), </a>
+<a class="sourceLine" id="cb2-12" title="12">    <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="kw">print_params</span>(m2)</a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></a></code></pre></div>
+<p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model) {</a>
+<a class="sourceLine" id="cb3-2" title="2">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(insight<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/insight/topics/find_parameters">find_parameters</a></span>(model, </a>
+<a class="sourceLine" id="cb3-3" title="3">        <span class="dt">flatten =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)</a>
+<a class="sourceLine" id="cb3-4" title="4">}</a>
+<a class="sourceLine" id="cb3-5" title="5"></a>
+<a class="sourceLine" id="cb3-6" title="6">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="kw">print_params</span>(m1)</a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
+<a class="sourceLine" id="cb3-9" title="9"></a>
+<a class="sourceLine" id="cb3-10" title="10">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), </a>
+<a class="sourceLine" id="cb3-11" title="11">    <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="kw">print_params</span>(m2)</a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></a></code></pre></div>
 </div>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Run the following to install the latest GitHub-version of <strong>insight</strong>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
-<a class="sourceLine" id="cb4-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/reexports.html">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
 <p>Or install the latest stable release from CRAN:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"insight"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"insight"</span>)</a></code></pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
@@ -268,13 +273,6 @@
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
 </ul>
 </div>
-<div class="community">
-<h2>Community</h2>
-<ul class="list-unstyled">
-<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
-<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
-</ul>
-</div>
 <div class="citation">
 <h2>Citation</h2>
 <ul class="list-unstyled">
@@ -285,16 +283,16 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 <li>
-<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 <li>
-<a href="https://github.com/IndrajeetPatil/">Indrajeet Patil</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
-<li>Philip Waggoner <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-7825-7573" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<a href="https://github.com/IndrajeetPatil/">Indrajeet Patil</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>Philip Waggoner <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-7825-7573" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 </ul>
 </div>
 
-  <div class="dev-status">
+      <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://doi.org/10.21105/joss.01412"><img src="http://joss.theoj.org/papers/10.21105/joss.01412/status.svg" alt="DOI"></a></li>
@@ -305,6 +303,7 @@
 </ul>
 </div>
 </div>
+
 </div>
 
 
@@ -313,14 +312,12 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9100.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
-
       </footer>
 </div>
 
   
-
 
   </body>
 </html>
