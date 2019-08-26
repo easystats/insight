@@ -173,6 +173,16 @@
   if (split_nested) {
     # remove parenthesis for nested models
     re <- unique(unlist(strsplit(re, "\\:")))
+
+    # nested random effects, e.g. g1 / g2 / g3, deparse to "g0:(g1:g2)".
+    # when we split at ":", we have "g0", "(g1" and "g2)". In such cases,
+    # we need to remove the parantheses. But we need to preserve them in
+    # case we have group factors in other models, like panelr, where we can
+    # have "lag(union)" as group factor. In such cases, parantheses should be
+    # preserved. We here check if group factors, after passing to "clean_names()",
+    # still have "(" or ")" in their name, and if so, just remove parantheses
+    # for these cases...
+
     has_parantheses <- vapply(
       clean_names(re),
       function(i) {
@@ -180,11 +190,12 @@
       },
       logical(1)
     )
+
     if (any(has_parantheses)) {
       re[has_parantheses] <- sub(pattern = "[\\(\\)]", replacement = "", x = re[has_parantheses])
     }
+
     re
-    # unique(unlist(strsplit(re, "\\:")))
   } else {
     unique(re)
   }
