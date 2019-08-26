@@ -1,12 +1,10 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-  if (suppressWarnings(
-    require("testthat") &&
-      require("insight") &&
-      require("BayesFactor") &&
-      require("rstanarm")
-  )) {
+  if (suppressWarnings(require("testthat") &&
+    require("insight") &&
+    require("BayesFactor") &&
+    require("rstanarm"))) {
     context("insight, rstanarm")
 
     m1 <- insight::download_model("stanreg_merMod_5")
@@ -14,41 +12,133 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     m3 <- insight::download_model("stanreg_glm_1")
 
     data("puzzles")
-    m4 <- stan_glm(RT ~ color * shape, data = puzzles, prior = rstanarm::cauchy(0, c(3, 1, 2)), iter = 500, chains = 2)
-    m5 <- stan_glm(RT ~ color * shape, data = puzzles, prior = rstanarm::cauchy(0, c(1, 2, 3)), iter = 500, chains = 2)
+    m4 <-
+      stan_glm(
+        RT ~ color * shape,
+        data = puzzles,
+        prior = rstanarm::cauchy(0, c(3, 1, 2)),
+        iter = 500,
+        chains = 2
+      )
+    m5 <-
+      stan_glm(
+        RT ~ color * shape,
+        data = puzzles,
+        prior = rstanarm::cauchy(0, c(1, 2, 3)),
+        iter = 500,
+        chains = 2
+      )
     m6 <- insight::download_model("stanreg_gamm4_1")
 
     test_that("get_priors", {
-      expect_equal(colnames(get_priors(m1)), c("parameter", "distribution", "location", "scale"))
-      expect_equal(colnames(get_priors(m2)), c("parameter", "distribution", "location", "scale", "adjusted_scale"))
-      expect_equal(get_priors(m1)$scale, c(10.0, 2.5, 2.5, 2.5, 2.5), tolerance = 1e-3)
-      expect_equal(get_priors(m2)$adjusted_scale, c(4.35866284936698, 1.08966571234175, 1.08966571234175, 0.617270040728345, 0.536028320794122, 0.411970489526739), tolerance = 1e-3)
-      expect_equal(get_priors(m3)$adjusted_scale, c(NA, 2.555042), tolerance = 1e-3)
-      expect_equal(get_priors(m4)$adjusted_scale, c(25.5992021152256, 7.67976063456768, 2.55992021152256, 5.11984042304512), tolerance = 1e-3)
-      expect_equal(get_priors(m5)$adjusted_scale, c(25.5992021152256, 2.55992021152256, 5.11984042304512, 7.67976063456768), tolerance = 1e-3)
+      expect_equal(
+        colnames(get_priors(m1)),
+        c("parameter", "distribution", "location", "scale")
+      )
+      expect_equal(
+        colnames(get_priors(m2)),
+        c(
+          "parameter",
+          "distribution",
+          "location",
+          "scale",
+          "adjusted_scale"
+        )
+      )
+      expect_equal(get_priors(m1)$scale,
+        c(10.0, 2.5, 2.5, 2.5, 2.5),
+        tolerance = 1e-3
+      )
+      expect_equal(
+        get_priors(m2)$adjusted_scale,
+        c(
+          4.35866284936698,
+          1.08966571234175,
+          1.08966571234175,
+          0.617270040728345,
+          0.536028320794122,
+          0.411970489526739
+        ),
+        tolerance = 1e-3
+      )
+      expect_equal(get_priors(m3)$adjusted_scale,
+        c(NA, 2.555042),
+        tolerance = 1e-3
+      )
+      expect_equal(
+        get_priors(m4)$adjusted_scale,
+        c(
+          25.5992021152256,
+          7.67976063456768,
+          2.55992021152256,
+          5.11984042304512
+        ),
+        tolerance = 1e-3
+      )
+      expect_equal(
+        get_priors(m5)$adjusted_scale,
+        c(
+          25.5992021152256,
+          2.55992021152256,
+          5.11984042304512,
+          7.67976063456768
+        ),
+        tolerance = 1e-3
+      )
       expect_equal(
         get_priors(m6),
-        data.frame(parameter = "(Intercept)", distribution = "normal", location = 0, scale = 10, adjusted_scale = 4.35866284936698, stringsAsFactors = FALSE, row.names = NULL),
+        data.frame(
+          parameter = "(Intercept)",
+          distribution = "normal",
+          location = 0,
+          scale = 10,
+          adjusted_scale = 4.35866284936698,
+          stringsAsFactors = FALSE,
+          row.names = NULL
+        ),
         tolerance = 1e-3
       )
     })
 
 
     test_that("clean_names", {
-      expect_identical(clean_names(m1), c("incidence", "size", "period", "herd"))
+      expect_identical(
+        clean_names(m1),
+        c("incidence", "size", "period", "herd")
+      )
     })
 
 
     test_that("find_predictors", {
       expect_identical(find_predictors(m1), list(conditional = c("size", "period")))
       expect_identical(find_predictors(m1, flatten = TRUE), c("size", "period"))
-      expect_identical(find_predictors(m1, effects = "all", component = "all"), list(conditional = c("size", "period"), random = "herd"))
-      expect_identical(find_predictors(m1, effects = "all", component = "all", flatten = TRUE), c("size", "period", "herd"))
+      expect_identical(
+        find_predictors(m1, effects = "all", component = "all"),
+        list(
+          conditional = c("size", "period"),
+          random = "herd"
+        )
+      )
+      expect_identical(
+        find_predictors(
+          m1,
+          effects = "all",
+          component = "all",
+          flatten = TRUE
+        ),
+        c("size", "period", "herd")
+      )
     })
 
     test_that("find_response", {
-      expect_equal(find_response(m1, combine = TRUE), "cbind(incidence, size - incidence)")
-      expect_equal(find_response(m1, combine = FALSE), c("incidence", "size"))
+      expect_equal(
+        find_response(m1, combine = TRUE),
+        "cbind(incidence, size - incidence)"
+      )
+      expect_equal(
+        find_response(m1, combine = FALSE),
+        c("incidence", "size")
+      )
     })
 
     test_that("get_response", {
@@ -106,7 +196,17 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
           random = sprintf("b[(Intercept) herd:%i]", 1:15)
         )
       )
-      expect_equal(find_parameters(m1, flatten = TRUE), c("(Intercept)", "size", "period2", "period3", "period4", sprintf("b[(Intercept) herd:%i]", 1:15)))
+      expect_equal(
+        find_parameters(m1, flatten = TRUE),
+        c(
+          "(Intercept)",
+          "size",
+          "period2",
+          "period3",
+          "period4",
+          sprintf("b[(Intercept) herd:%i]", 1:15)
+        )
+      )
     })
 
     test_that("find_paramaters", {
@@ -116,7 +216,14 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       )
       expect_equal(
         colnames(get_parameters(m1, effects = "all")),
-        c("(Intercept)", "size", "period2", "period3", "period4", sprintf("b[(Intercept) herd:%i]", 1:15))
+        c(
+          "(Intercept)",
+          "size",
+          "period2",
+          "period3",
+          "period4",
+          sprintf("b[(Intercept) herd:%i]", 1:15)
+        )
       )
     })
 
@@ -148,55 +255,100 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("get_variance", {
-      expect_equal(get_variance(m1), list(
-        var.fixed = 0.3710157,
-        var.random = 0.6113405,
-        var.residual = 3.289868,
-        var.distribution = 3.289868,
-        var.dispersion = 0,
-        var.intercept = c(herd = 0.6113405)
-      ),
-      tolerance = 1e-4
+      expect_equal(
+        get_variance(m1),
+        list(
+          var.fixed = 0.3710157,
+          var.random = 0.6113405,
+          var.residual = 3.289868,
+          var.distribution = 3.289868,
+          var.dispersion = 0,
+          var.intercept = c(herd = 0.6113405)
+        ),
+        tolerance = 1e-4
       )
 
-      expect_equal(get_variance_fixed(m1), c(var.fixed = 0.3710157), tolerance = 1e-4)
-      expect_equal(get_variance_random(m1), c(var.random = 0.6113405), tolerance = 1e-4)
-      expect_equal(get_variance_residual(m1), c(var.residual = 3.289868), tolerance = 1e-4)
-      expect_equal(get_variance_distribution(m1), c(var.distribution = 3.289868), tolerance = 1e-4)
-      expect_equal(get_variance_dispersion(m1), c(var.dispersion = 0), tolerance = 1e-4)
+      expect_equal(get_variance_fixed(m1),
+        c(var.fixed = 0.3710157),
+        tolerance = 1e-4
+      )
+      expect_equal(get_variance_random(m1),
+        c(var.random = 0.6113405),
+        tolerance = 1e-4
+      )
+      expect_equal(get_variance_residual(m1),
+        c(var.residual = 3.289868),
+        tolerance = 1e-4
+      )
+      expect_equal(get_variance_distribution(m1),
+        c(var.distribution = 3.289868),
+        tolerance = 1e-4
+      )
+      expect_equal(get_variance_dispersion(m1),
+        c(var.dispersion = 0),
+        tolerance = 1e-4
+      )
     })
 
     test_that("find_algorithm", {
-      expect_equal(find_algorithm(m1), list(
-        algorithm = "sampling",
-        chains = 2,
-        iterations = 500,
-        warmup = 250
-      ))
+      expect_equal(
+        find_algorithm(m1),
+        list(
+          algorithm = "sampling",
+          chains = 2,
+          iterations = 500,
+          warmup = 250
+        )
+      )
     })
 
     test_that("clean_parameters", {
       expect_equal(
         clean_parameters(m2),
-        structure(list(
-          Parameter = c(
-            "(Intercept)", "Speciesversicolor",
-            "Speciesvirginica", "Petal.Length", "Speciesversicolor:Petal.Length",
-            "Speciesvirginica:Petal.Length"
-          ), Effects = c(
-            "fixed", "fixed",
-            "fixed", "fixed", "fixed", "fixed"
-          ), Component = c(
-            "conditional",
-            "conditional", "conditional", "conditional", "conditional", "conditional"
+        structure(
+          list(
+            Parameter = c(
+              "(Intercept)",
+              "Speciesversicolor",
+              "Speciesvirginica",
+              "Petal.Length",
+              "Speciesversicolor:Petal.Length",
+              "Speciesvirginica:Petal.Length"
+            ),
+            Effects = c(
+              "fixed", "fixed",
+              "fixed", "fixed", "fixed", "fixed"
+            ),
+            Component = c(
+              "conditional",
+              "conditional",
+              "conditional",
+              "conditional",
+              "conditional",
+              "conditional"
+            ),
+            Cleaned_Parameter = c(
+              "(Intercept)",
+              "Speciesversicolor",
+              "Speciesvirginica",
+              "Petal.Length",
+              "Speciesversicolor:Petal.Length",
+              "Speciesvirginica:Petal.Length"
+            )
           ),
-          Cleaned_Parameter = c(
-            "(Intercept)", "Speciesversicolor",
-            "Speciesvirginica", "Petal.Length", "Speciesversicolor:Petal.Length",
-            "Speciesvirginica:Petal.Length"
-          )
-        ), class = c("clean_parameters", "data.frame"), row.names = c(NA, -6L))
+          class = c("clean_parameters", "data.frame"),
+          row.names = c(NA, -6L)
+        )
       )
+    })
+
+    test_that("find_statistic", {
+      expect_null(find_statistic(m1))
+      expect_null(find_statistic(m2))
+      expect_null(find_statistic(m3))
+      expect_null(find_statistic(m4))
+      expect_null(find_statistic(m5))
+      expect_null(find_statistic(m6))
     })
   }
 }

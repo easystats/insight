@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("rms")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("rms")) {
   context("insight, rms")
 
   n <- 400
@@ -12,9 +14,14 @@ if (require("testthat") && require("insight") && require("rms")) {
   death <- ifelse(d.time <= cens, 1, 0)
   d.time <- pmin(d.time, cens)
 
-  dat <- data.frame(d.time, death, sex, age, stringsAsFactors = FALSE)
+  dat <-
+    data.frame(d.time, death, sex, age, stringsAsFactors = FALSE)
 
-  m1 <- psm(Surv(d.time, death) ~ sex * pol(age, 2), dist = "lognormal", data = dat)
+  m1 <-
+    psm(Surv(d.time, death) ~ sex * pol(age, 2),
+      dist = "lognormal",
+      data = dat
+    )
 
   test_that("model_info", {
     expect_false(model_info(m1)$is_binomial)
@@ -61,7 +68,9 @@ if (require("testthat") && require("insight") && require("rms")) {
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("Surv(d.time, death) ~ sex * pol(age, 2)"))
+      list(conditional = as.formula(
+        "Surv(d.time, death) ~ sex * pol(age, 2)"
+      ))
     )
   })
 
@@ -77,8 +86,14 @@ if (require("testthat") && require("insight") && require("rms")) {
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = c("d.time", "death"), conditional = c("sex", "age")))
-    expect_equal(find_variables(m1, flatten = TRUE), c("d.time", "death", "sex", "age"))
+    expect_equal(find_variables(m1), list(
+      response = c("d.time", "death"),
+      conditional = c("sex", "age")
+    ))
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("d.time", "death", "sex", "age")
+    )
   })
 
   test_that("n_obs", {
@@ -97,11 +112,28 @@ if (require("testthat") && require("insight") && require("rms")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("(Intercept)", "sex=Male", "age", "age^2", "sex=Male * age", "sex=Male * age^2")
+        conditional = c(
+          "(Intercept)",
+          "sex=Male",
+          "age",
+          "age^2",
+          "sex=Male * age",
+          "sex=Male * age^2"
+        )
       )
     )
     expect_equal(nrow(get_parameters(m1)), 6)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "sex=Male", "age", "age^2", "sex=Male * age", "sex=Male * age^2"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c(
+        "(Intercept)",
+        "sex=Male",
+        "age",
+        "age^2",
+        "sex=Male * age",
+        "sex=Male * age^2"
+      )
+    )
   })
 
   test_that("is_multivariate", {
@@ -110,5 +142,9 @@ if (require("testthat") && require("insight") && require("rms")) {
 
   test_that("find_algorithm", {
     expect_warning(find_algorithm(m1))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

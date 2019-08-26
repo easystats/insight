@@ -1,4 +1,7 @@
-if (require("testthat") && require("insight") && require("lme4") && require("afex")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("lme4") &&
+  require("afex")) {
   context("insight, find_predictors")
 
   data(sleepstudy)
@@ -8,16 +11,15 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
   sleepstudy$mysubgrp <- NA
   for (i in 1:5) {
     filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+    sleepstudy$mysubgrp[filter_group] <-
+      sample(1:30, size = sum(filter_group), replace = TRUE)
   }
 
-  m1 <- mixed(
-    Reaction ~ Days + (1 + Days | Subject),
+  m1 <- mixed(Reaction ~ Days + (1 + Days | Subject),
     data = sleepstudy
   )
 
-  m2 <- mixed(
-    Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  m2 <- mixed(Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
     data = sleepstudy
   )
 
@@ -27,15 +29,45 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
   })
 
   test_that("find_predictors", {
-    expect_equal(find_predictors(m1, effects = "all"), list(conditional = "Days", random = "Subject"))
-    expect_equal(find_predictors(m1, effects = "all", flatten = TRUE), c("Days", "Subject"))
-    expect_equal(find_predictors(m1, effects = "fixed"), list(conditional = "Days"))
-    expect_equal(find_predictors(m1, effects = "fixed", flatten = TRUE), "Days")
-    expect_equal(find_predictors(m1, effects = "random"), list(random = "Subject"))
-    expect_equal(find_predictors(m1, effects = "random", flatten = TRUE), "Subject")
-    expect_equal(find_predictors(m2, effects = "all"), list(conditional = "Days", random = c("mysubgrp", "mygrp", "Subject")))
-    expect_equal(find_predictors(m2, effects = "all", flatten = TRUE), c("Days", "mysubgrp", "mygrp", "Subject"))
-    expect_equal(find_predictors(m2, effects = "fixed"), list(conditional = "Days"))
+    expect_equal(
+      find_predictors(m1, effects = "all"),
+      list(conditional = "Days", random = "Subject")
+    )
+    expect_equal(
+      find_predictors(m1, effects = "all", flatten = TRUE),
+      c("Days", "Subject")
+    )
+    expect_equal(
+      find_predictors(m1, effects = "fixed"),
+      list(conditional = "Days")
+    )
+    expect_equal(
+      find_predictors(m1, effects = "fixed", flatten = TRUE),
+      "Days"
+    )
+    expect_equal(
+      find_predictors(m1, effects = "random"),
+      list(random = "Subject")
+    )
+    expect_equal(
+      find_predictors(m1, effects = "random", flatten = TRUE),
+      "Subject"
+    )
+    expect_equal(
+      find_predictors(m2, effects = "all"),
+      list(
+        conditional = "Days",
+        random = c("mysubgrp", "mygrp", "Subject")
+      )
+    )
+    expect_equal(
+      find_predictors(m2, effects = "all", flatten = TRUE),
+      c("Days", "mysubgrp", "mygrp", "Subject")
+    )
+    expect_equal(
+      find_predictors(m2, effects = "fixed"),
+      list(conditional = "Days")
+    )
     expect_equal(find_predictors(m2, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
     expect_null(find_predictors(m2, effects = "all", component = "zi"))
     expect_null(find_predictors(m2, effects = "fixed", component = "zi"))
@@ -47,8 +79,14 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
     expect_equal(find_random(m1, flatten = TRUE), "Subject")
     expect_equal(find_random(m2), list(random = c("mysubgrp:mygrp", "mygrp", "Subject")))
     expect_equal(find_random(m2, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
-    expect_equal(find_random(m2, flatten = TRUE), c("mysubgrp:mygrp", "mygrp", "Subject"))
-    expect_equal(find_random(m2, split_nested = TRUE, flatten = TRUE), c("mysubgrp", "mygrp", "Subject"))
+    expect_equal(
+      find_random(m2, flatten = TRUE),
+      c("mysubgrp:mygrp", "mygrp", "Subject")
+    )
+    expect_equal(
+      find_random(m2, split_nested = TRUE, flatten = TRUE),
+      c("mysubgrp", "mygrp", "Subject")
+    )
   })
 
   test_that("find_response", {
@@ -69,8 +107,14 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
     expect_equal(colnames(get_data(m1)), c("Reaction", "Days", "Subject"))
     expect_equal(colnames(get_data(m1, effects = "all")), c("Reaction", "Days", "Subject"))
     expect_equal(colnames(get_data(m1, effects = "random")), "Subject")
-    expect_equal(colnames(get_data(m2)), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
-    expect_equal(colnames(get_data(m2, effects = "all")), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
+    expect_equal(
+      colnames(get_data(m2)),
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
+    )
+    expect_equal(
+      colnames(get_data(m2, effects = "all")),
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
+    )
     expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
   })
 
@@ -98,18 +142,30 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
   })
 
   test_that("find_variables", {
-    expect_identical(find_variables(m1), list(
-      response = "Reaction",
-      conditional = "Days",
-      random = "Subject"
-    ))
-    expect_identical(find_variables(m1, flatten = TRUE), c("Reaction", "Days", "Subject"))
-    expect_identical(find_variables(m2), list(
-      response = "Reaction",
-      conditional = "Days",
-      random = c("mysubgrp", "mygrp", "Subject")
-    ))
-    expect_identical(find_variables(m2, flatten = TRUE), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
+    expect_identical(
+      find_variables(m1),
+      list(
+        response = "Reaction",
+        conditional = "Days",
+        random = "Subject"
+      )
+    )
+    expect_identical(
+      find_variables(m1, flatten = TRUE),
+      c("Reaction", "Days", "Subject")
+    )
+    expect_identical(
+      find_variables(m2),
+      list(
+        response = "Reaction",
+        conditional = "Days",
+        random = c("mysubgrp", "mygrp", "Subject")
+      )
+    )
+    expect_identical(
+      find_variables(m2, flatten = TRUE),
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
+    )
   })
 
   test_that("get_response", {
@@ -128,7 +184,10 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
 
   test_that("clean_names", {
     expect_identical(clean_names(m1), c("Reaction", "Days", "Subject"))
-    expect_identical(clean_names(m2), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
+    expect_identical(
+      clean_names(m2),
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
+    )
   })
 
   test_that("linkfun", {
@@ -161,7 +220,10 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
 
     expect_equal(nrow(get_parameters(m2)), 2)
     expect_equal(get_parameters(m2)$parameter, c("(Intercept)", "Days"))
-    expect_equal(names(get_parameters(m2, effects = "random")), c("mysubgrp:mygrp", "Subject", "mygrp"))
+    expect_equal(
+      names(get_parameters(m2, effects = "random")),
+      c("mysubgrp:mygrp", "Subject", "mygrp")
+    )
   })
 
   test_that("is_multivariate", {
@@ -173,28 +235,59 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
     skip_on_cran()
     skip_on_travis()
 
-    expect_equal(get_variance(m1), list(
-      var.fixed = 908.95336262316459396970,
-      var.random = 1698.23306388298283309268,
-      var.residual = 654.94079585243218843971,
-      var.distribution = 654.94079585243218843971,
-      var.dispersion = 0,
-      var.intercept = c(Subject = 611.89760710463770010392),
-      var.slope = c(Subject.Days = 35.08106944030500073950),
-      cor.slope_intercept = c(Subject = 0.06561803142425107205)
-    ),
-    tolerance = 1e-4
+    expect_equal(
+      get_variance(m1),
+      list(
+        var.fixed = 908.95336262316459396970,
+        var.random = 1698.23306388298283309268,
+        var.residual = 654.94079585243218843971,
+        var.distribution = 654.94079585243218843971,
+        var.dispersion = 0,
+        var.intercept = c(Subject = 611.89760710463770010392),
+        var.slope = c(Subject.Days = 35.08106944030500073950),
+        cor.slope_intercept = c(Subject = 0.06561803142425107205)
+      ),
+      tolerance = 1e-4
     )
 
-    expect_equal(get_variance_fixed(m1), c(var.fixed = 908.95336262316459396970), tolerance = 1e-4)
-    expect_equal(get_variance_random(m1), c(var.random = 1698.23306388298283309268), tolerance = 1e-4)
-    expect_equal(get_variance_residual(m1), c(var.residual = 654.94079585243218843971), tolerance = 1e-4)
-    expect_equal(get_variance_distribution(m1), c(var.distribution = 654.94079585243218843971), tolerance = 1e-4)
-    expect_equal(get_variance_dispersion(m1), c(var.dispersion = 0), tolerance = 1e-4)
+    expect_equal(get_variance_fixed(m1),
+      c(var.fixed = 908.95336262316459396970),
+      tolerance = 1e-4
+    )
+    expect_equal(get_variance_random(m1),
+      c(var.random = 1698.23306388298283309268),
+      tolerance = 1e-4
+    )
+    expect_equal(
+      get_variance_residual(m1),
+      c(var.residual = 654.94079585243218843971),
+      tolerance = 1e-4
+    )
+    expect_equal(
+      get_variance_distribution(m1),
+      c(var.distribution = 654.94079585243218843971),
+      tolerance = 1e-4
+    )
+    expect_equal(get_variance_dispersion(m1),
+      c(var.dispersion = 0),
+      tolerance = 1e-4
+    )
 
-    expect_equal(get_variance_intercept(m1), c(var.intercept.Subject = 611.89760710463770010392), toleance = 1e-4)
-    expect_equal(get_variance_slope(m1), c(var.slope.Subject.Days = 35.08106944030500073950), toleance = 1e-4)
-    expect_equal(get_correlation_slope_intercept(m1), c(cor.slope_intercept.Subject = 0.06561803), toleance = 1e-4)
+    expect_equal(
+      get_variance_intercept(m1),
+      c(var.intercept.Subject = 611.89760710463770010392),
+      toleance = 1e-4
+    )
+    expect_equal(
+      get_variance_slope(m1),
+      c(var.slope.Subject.Days = 35.08106944030500073950),
+      toleance = 1e-4
+    )
+    expect_equal(
+      get_correlation_slope_intercept(m1),
+      c(cor.slope_intercept.Subject = 0.06561803),
+      toleance = 1e-4
+    )
 
     expect_warning(expect_equal(
       get_variance(m2),
@@ -203,20 +296,30 @@ if (require("testthat") && require("insight") && require("lme4") && require("afe
         var.residual = 941.817768377025,
         var.distribution = 941.817768377025,
         var.dispersion = 0,
-        var.intercept = c(`mysubgrp:mygrp` = 0, Subject = 1357.35782386825, mygrp = 24.4073139080596)
+        var.intercept = c(
+          `mysubgrp:mygrp` = 0,
+          Subject = 1357.35782386825,
+          mygrp = 24.4073139080596
+        )
       ),
       tolerance = 1e-4,
     ))
   })
 
   test_that("find_algorithm", {
-    expect_equal(find_algorithm(m1), list(
-      algorithm = "REML", optimizer = "nloptwrap"
-    ))
+    expect_equal(
+      find_algorithm(m1),
+      list(algorithm = "REML", optimizer = "nloptwrap")
+    )
   })
 
   test_that("find_random_slopes", {
     expect_equal(find_random_slopes(m1), list(random = "Days"))
     expect_null(find_random_slopes(m2))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
+    expect_identical(find_statistic(m2), "t-statistic")
   })
 }

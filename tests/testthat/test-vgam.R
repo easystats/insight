@@ -5,8 +5,14 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     context("insight, model_info")
 
     data("hunua")
-    m1 <- vgam(agaaus ~ vitluc + s(altitude, df = 2), binomialff, data = hunua)
-    m2 <- vgam(cbind(agaaus, kniexc) ~ vitluc + s(altitude, df = c(2, 3)), binomialff(multiple.responses = TRUE), data = hunua)
+    m1 <-
+      vgam(agaaus ~ vitluc + s(altitude, df = 2), binomialff, data = hunua)
+    m2 <-
+      vgam(
+        cbind(agaaus, kniexc) ~ vitluc + s(altitude, df = c(2, 3)),
+        binomialff(multiple.responses = TRUE),
+        data = hunua
+      )
 
     test_that("model_info", {
       expect_true(model_info(m1)$is_binomial)
@@ -17,10 +23,16 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
     test_that("find_predictors", {
       expect_identical(find_predictors(m1), list(conditional = c("vitluc", "altitude")))
-      expect_identical(find_predictors(m1, flatten = TRUE), c("vitluc", "altitude"))
+      expect_identical(
+        find_predictors(m1, flatten = TRUE),
+        c("vitluc", "altitude")
+      )
       expect_null(find_predictors(m1, effects = "random"))
       expect_identical(find_predictors(m2), list(conditional = c("vitluc", "altitude")))
-      expect_identical(find_predictors(m2, flatten = TRUE), c("vitluc", "altitude"))
+      expect_identical(
+        find_predictors(m2, flatten = TRUE),
+        c("vitluc", "altitude")
+      )
       expect_null(find_predictors(m2, effects = "random"))
     })
 
@@ -42,7 +54,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
     test_that("get_response", {
       expect_equal(get_response(m1), hunua$agaaus)
-      expect_equal(get_response(m2), data.frame(agaaus = hunua$agaaus, kniexc = hunua$kniexc))
+      expect_equal(
+        get_response(m2),
+        data.frame(agaaus = hunua$agaaus, kniexc = hunua$kniexc)
+      )
     })
 
     test_that("get_predictors", {
@@ -59,7 +74,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_equal(nrow(get_data(m1)), 392)
       expect_equal(nrow(get_data(m2)), 392)
       expect_equal(colnames(get_data(m1)), c("agaaus", "vitluc", "altitude"))
-      expect_equal(colnames(get_data(m2)), c("agaaus", "kniexc", "vitluc", "altitude"))
+      expect_equal(
+        colnames(get_data(m2)),
+        c("agaaus", "kniexc", "vitluc", "altitude")
+      )
     })
 
     test_that("find_formula", {
@@ -71,22 +89,61 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_length(find_formula(m2), 1)
       expect_equal(
         find_formula(m2),
-        list(conditional = as.formula("cbind(agaaus, kniexc) ~ vitluc + s(altitude, df = c(2, 3))"))
+        list(
+          conditional = as.formula("cbind(agaaus, kniexc) ~ vitluc + s(altitude, df = c(2, 3))")
+        )
       )
     })
 
     test_that("find_terms", {
-      expect_equal(find_terms(m1), list(response = "agaaus", conditional = c("vitluc", "s(altitude, df = 2)")))
-      expect_equal(find_terms(m1, flatten = TRUE), c("agaaus", "vitluc", "s(altitude, df = 2)"))
-      expect_equal(find_terms(m2), list(response = "cbind(agaaus, kniexc)", conditional = c("vitluc", "s(altitude, df = c(2, 3))")))
-      expect_equal(find_terms(m2, flatten = TRUE), c("cbind(agaaus, kniexc)", "vitluc", "s(altitude, df = c(2, 3))"))
+      expect_equal(
+        find_terms(m1),
+        list(
+          response = "agaaus",
+          conditional = c("vitluc", "s(altitude, df = 2)")
+        )
+      )
+      expect_equal(
+        find_terms(m1, flatten = TRUE),
+        c("agaaus", "vitluc", "s(altitude, df = 2)")
+      )
+      expect_equal(
+        find_terms(m2),
+        list(
+          response = "cbind(agaaus, kniexc)",
+          conditional = c("vitluc", "s(altitude, df = c(2, 3))")
+        )
+      )
+      expect_equal(
+        find_terms(m2, flatten = TRUE),
+        c(
+          "cbind(agaaus, kniexc)",
+          "vitluc",
+          "s(altitude, df = c(2, 3))"
+        )
+      )
     })
 
     test_that("find_variables", {
-      expect_equal(find_variables(m1), list(response = "agaaus", conditional = c("vitluc", "altitude")))
-      expect_equal(find_variables(m1, flatten = TRUE), c("agaaus", "vitluc", "altitude"))
-      expect_equal(find_variables(m2), list(response = c("agaaus", "kniexc"), conditional = c("vitluc", "altitude")))
-      expect_equal(find_variables(m2, flatten = TRUE), c("agaaus", "kniexc", "vitluc", "altitude"))
+      expect_equal(
+        find_variables(m1),
+        list(
+          response = "agaaus",
+          conditional = c("vitluc", "altitude")
+        )
+      )
+      expect_equal(
+        find_variables(m1, flatten = TRUE),
+        c("agaaus", "vitluc", "altitude")
+      )
+      expect_equal(find_variables(m2), list(
+        response = c("agaaus", "kniexc"),
+        conditional = c("vitluc", "altitude")
+      ))
+      expect_equal(
+        find_variables(m2, flatten = TRUE),
+        c("agaaus", "kniexc", "vitluc", "altitude")
+      )
     })
 
     test_that("n_obs", {
@@ -108,22 +165,45 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         )
       )
       expect_equal(nrow(get_parameters(m1)), 3)
-      expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "vitluc", "s(altitude, df = 2)"))
+      expect_equal(
+        get_parameters(m1)$parameter,
+        c("(Intercept)", "vitluc", "s(altitude, df = 2)")
+      )
 
       expect_equal(
         find_parameters(m2),
         list(
-          conditional = c("(Intercept):1", "(Intercept):2", "vitluc:1", "vitluc:2"),
+          conditional = c(
+            "(Intercept):1",
+            "(Intercept):2",
+            "vitluc:1",
+            "vitluc:2"
+          ),
           smooth_terms = c("s(altitude, df = c(2, 3)):1", "s(altitude, df = c(2, 3)):2")
         )
       )
       expect_equal(nrow(get_parameters(m2)), 6)
-      expect_equal(get_parameters(m2)$parameter, c("(Intercept):1", "(Intercept):2", "vitluc:1", "vitluc:2", "s(altitude, df = c(2, 3)):1", "s(altitude, df = c(2, 3)):2"))
+      expect_equal(
+        get_parameters(m2)$parameter,
+        c(
+          "(Intercept):1",
+          "(Intercept):2",
+          "vitluc:1",
+          "vitluc:2",
+          "s(altitude, df = c(2, 3)):1",
+          "s(altitude, df = c(2, 3)):2"
+        )
+      )
     })
 
     test_that("is_multivariate", {
       expect_false(is_multivariate(m1))
       expect_false(is_multivariate(m2))
+    })
+
+    test_that("find_statistic", {
+      expect_identical(find_statistic(m1), "chi-squared statistic")
+      expect_identical(find_statistic(m2), "chi-squared statistic")
     })
   }
 }

@@ -1,9 +1,12 @@
-if (require("testthat") && require("insight") && require("MASS")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("MASS")) {
   context("insight, polr")
 
   data(housing, package = "MASS")
 
-  m1 <- polr(Sat ~ Infl + Type + Cont, data = housing, weights = Freq)
+  m1 <-
+    polr(Sat ~ Infl + Type + Cont, data = housing, weights = Freq)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_ordinal)
@@ -11,7 +14,10 @@ if (require("testthat") && require("insight") && require("MASS")) {
 
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = c("Infl", "Type", "Cont")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("Infl", "Type", "Cont"))
+    expect_identical(
+      find_predictors(m1, flatten = TRUE),
+      c("Infl", "Type", "Cont")
+    )
     expect_null(find_predictors(m1, effects = "random"))
   })
 
@@ -25,7 +31,10 @@ if (require("testthat") && require("insight") && require("MASS")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 72)
-    expect_equal(colnames(get_data(m1)), c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq")
+    )
   })
 
   test_that("find_formula", {
@@ -37,8 +46,14 @@ if (require("testthat") && require("insight") && require("MASS")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "Sat", conditional = c("Infl", "Type", "Cont")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("Sat", "Infl", "Type", "Cont"))
+    expect_equal(find_terms(m1), list(
+      response = "Sat",
+      conditional = c("Infl", "Type", "Cont")
+    ))
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("Sat", "Infl", "Type", "Cont")
+    )
   })
 
   test_that("n_obs", {
@@ -56,8 +71,14 @@ if (require("testthat") && require("insight") && require("MASS")) {
       list(
         conditional =
           c(
-            "Intercept: Low|Medium", "Intercept: Medium|High", "InflMedium",
-            "InflHigh", "TypeApartment", "TypeAtrium", "TypeTerrace", "ContHigh"
+            "Intercept: Low|Medium",
+            "Intercept: Medium|High",
+            "InflMedium",
+            "InflHigh",
+            "TypeApartment",
+            "TypeAtrium",
+            "TypeTerrace",
+            "ContHigh"
           )
       )
     )
@@ -67,11 +88,33 @@ if (require("testthat") && require("insight") && require("MASS")) {
     expect_equal(
       get_parameters(m1),
       data.frame(
-        parameter = c("Intercept: Low|Medium", "Intercept: Medium|High", "InflMedium", "InflHigh", "TypeApartment", "TypeAtrium", "TypeTerrace", "ContHigh"),
-        estimate = c(-0.4961353438375, 0.690708290379271, 0.566393738890106, 1.28881906381232, -0.572350146429611, -0.366186566153346, -1.09101490767244, 0.360284149947385),
+        parameter = c(
+          "Intercept: Low|Medium",
+          "Intercept: Medium|High",
+          "InflMedium",
+          "InflHigh",
+          "TypeApartment",
+          "TypeAtrium",
+          "TypeTerrace",
+          "ContHigh"
+        ),
+        estimate = c(
+          -0.4961353438375,
+          0.690708290379271,
+          0.566393738890106,
+          1.28881906381232,
+          -0.572350146429611,
+          -0.366186566153346,
+          -1.09101490767244,
+          0.360284149947385
+        ),
         stringsAsFactors = FALSE,
         row.names = NULL
       )
     )
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
   })
 }

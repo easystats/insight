@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("estimatr")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("estimatr")) {
   context("insight, model_info")
 
   data(mtcars)
@@ -9,12 +11,21 @@ if (require("testthat") && require("insight") && require("estimatr")) {
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(
-      conditional = c("gear", "cyl"),
-      instruments = c("carb", "wt")
-    ))
-    expect_identical(find_predictors(m1, component = "instruments"), list(instruments = c("carb", "wt")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("gear", "cyl", "carb", "wt"))
+    expect_identical(
+      find_predictors(m1),
+      list(
+        conditional = c("gear", "cyl"),
+        instruments = c("carb", "wt")
+      )
+    )
+    expect_identical(
+      find_predictors(m1, component = "instruments"),
+      list(instruments = c("carb", "wt"))
+    )
+    expect_identical(
+      find_predictors(m1, flatten = TRUE),
+      c("gear", "cyl", "carb", "wt")
+    )
     expect_null(find_predictors(m1, effects = "random"))
   })
 
@@ -40,7 +51,10 @@ if (require("testthat") && require("insight") && require("estimatr")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 32)
-    expect_equal(colnames(get_data(m1)), c("mpg", "carb + wt", "gear", "cyl", "carb", "wt"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("mpg", "carb + wt", "gear", "cyl", "carb", "wt")
+    )
   })
 
   test_that("find_formula", {
@@ -55,12 +69,18 @@ if (require("testthat") && require("insight") && require("estimatr")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(
-      response = "mpg",
-      conditional = c("gear", "cyl"),
-      instruments = c("carb", "wt")
-    ))
-    expect_equal(find_terms(m1, flatten = TRUE), c("mpg", "gear", "cyl", "carb", "wt"))
+    expect_equal(
+      find_terms(m1),
+      list(
+        response = "mpg",
+        conditional = c("gear", "cyl"),
+        instruments = c("carb", "wt")
+      )
+    )
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("mpg", "gear", "cyl", "carb", "wt")
+    )
   })
 
   test_that("n_obs", {
@@ -78,12 +98,13 @@ if (require("testthat") && require("insight") && require("estimatr")) {
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(
-        conditional = c("(Intercept)", "gear", "cyl")
-      )
+      list(conditional = c("(Intercept)", "gear", "cyl"))
     )
     expect_equal(nrow(get_parameters(m1)), 3)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "gear", "cyl"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "gear", "cyl")
+    )
   })
 
   test_that("is_multivariate", {
@@ -92,5 +113,9 @@ if (require("testthat") && require("insight") && require("estimatr")) {
 
   test_that("find_algorithm", {
     expect_warning(expect_null(find_algorithm(m1)))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
   })
 }

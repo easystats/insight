@@ -1,8 +1,12 @@
-if (require("testthat") && require("insight") && require("ordinal") && require("MASS")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("ordinal") &&
+  require("MASS")) {
   context("insight, model_info")
 
   data(housing, package = "MASS")
-  m1 <- clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+  m1 <-
+    clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_ordinal)
@@ -10,7 +14,10 @@ if (require("testthat") && require("insight") && require("ordinal") && require("
 
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = c("Infl", "Type", "Cont")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("Infl", "Type", "Cont"))
+    expect_identical(
+      find_predictors(m1, flatten = TRUE),
+      c("Infl", "Type", "Cont")
+    )
     expect_null(find_predictors(m1, effects = "random"))
   })
 
@@ -48,7 +55,10 @@ if (require("testthat") && require("insight") && require("ordinal") && require("
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 72)
-    expect_equal(colnames(get_data(m1)), c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq")
+    )
   })
 
   test_that("find_formula", {
@@ -60,8 +70,14 @@ if (require("testthat") && require("insight") && require("ordinal") && require("
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "Sat", conditional = c("Infl", "Type", "Cont")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("Sat", "Infl", "Type", "Cont"))
+    expect_equal(find_terms(m1), list(
+      response = "Sat",
+      conditional = c("Infl", "Type", "Cont")
+    ))
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("Sat", "Infl", "Type", "Cont")
+    )
   })
 
   test_that("n_obs", {
@@ -80,14 +96,39 @@ if (require("testthat") && require("insight") && require("ordinal") && require("
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("Low|Medium", "Medium|High", "InflMedium", "InflHigh", "TypeApartment", "TypeAtrium", "TypeTerrace", "ContHigh")
+        conditional = c(
+          "Low|Medium",
+          "Medium|High",
+          "InflMedium",
+          "InflHigh",
+          "TypeApartment",
+          "TypeAtrium",
+          "TypeTerrace",
+          "ContHigh"
+        )
       )
     )
     expect_equal(nrow(get_parameters(m1)), 8)
-    expect_equal(get_parameters(m1)$parameter, c("Low|Medium", "Medium|High", "InflMedium", "InflHigh", "TypeApartment", "TypeAtrium", "TypeTerrace", "ContHigh"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c(
+        "Low|Medium",
+        "Medium|High",
+        "InflMedium",
+        "InflHigh",
+        "TypeApartment",
+        "TypeAtrium",
+        "TypeTerrace",
+        "ContHigh"
+      )
+    )
   })
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

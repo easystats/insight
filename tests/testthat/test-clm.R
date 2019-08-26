@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("ordinal")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("ordinal")) {
   context("insight, model_info")
 
   data(wine, package = "ordinal")
@@ -52,8 +54,14 @@ if (require("testthat") && require("insight") && require("ordinal")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "rating", conditional = c("temp", "contact")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("rating", "temp", "contact"))
+    expect_equal(find_terms(m1), list(
+      response = "rating",
+      conditional = c("temp", "contact")
+    ))
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("rating", "temp", "contact")
+    )
   })
 
   test_that("n_obs", {
@@ -68,14 +76,37 @@ if (require("testthat") && require("insight") && require("ordinal")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("1|2", "2|3", "3|4", "4|5", "tempwarm", "contactyes", "tempwarm:contactyes")
+        conditional = c(
+          "1|2",
+          "2|3",
+          "3|4",
+          "4|5",
+          "tempwarm",
+          "contactyes",
+          "tempwarm:contactyes"
+        )
       )
     )
     expect_equal(nrow(get_parameters(m1)), 7)
-    expect_equal(get_parameters(m1)$parameter, c("1|2", "2|3", "3|4", "4|5", "tempwarm", "contactyes", "tempwarm:contactyes"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c(
+        "1|2",
+        "2|3",
+        "3|4",
+        "4|5",
+        "tempwarm",
+        "contactyes",
+        "tempwarm:contactyes"
+      )
+    )
   })
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

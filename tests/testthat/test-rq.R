@@ -1,16 +1,28 @@
-if (require("testthat") && require("insight") && require("quantreg")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("quantreg")) {
   context("insight, model_info")
 
   data(stackloss)
-  m1 <- rq(stack.loss ~ Air.Flow + Water.Temp, data = stackloss, tau = .25)
+  m1 <-
+    rq(stack.loss ~ Air.Flow + Water.Temp,
+      data = stackloss,
+      tau = .25
+    )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(conditional = c("Air.Flow", "Water.Temp")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("Air.Flow", "Water.Temp"))
+    expect_identical(
+      find_predictors(m1),
+      list(conditional = c("Air.Flow", "Water.Temp"))
+    )
+    expect_identical(
+      find_predictors(m1, flatten = TRUE),
+      c("Air.Flow", "Water.Temp")
+    )
     expect_null(find_predictors(m1, effects = "random"))
   })
 
@@ -36,7 +48,10 @@ if (require("testthat") && require("insight") && require("quantreg")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 21)
-    expect_equal(colnames(get_data(m1)), c("stack.loss", "Air.Flow", "Water.Temp"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("stack.loss", "Air.Flow", "Water.Temp")
+    )
   })
 
   test_that("find_formula", {
@@ -48,8 +63,17 @@ if (require("testthat") && require("insight") && require("quantreg")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "stack.loss", conditional = c("Air.Flow", "Water.Temp")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("stack.loss", "Air.Flow", "Water.Temp"))
+    expect_equal(
+      find_terms(m1),
+      list(
+        response = "stack.loss",
+        conditional = c("Air.Flow", "Water.Temp")
+      )
+    )
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("stack.loss", "Air.Flow", "Water.Temp")
+    )
   })
 
   test_that("n_obs", {
@@ -67,12 +91,15 @@ if (require("testthat") && require("insight") && require("quantreg")) {
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(
-        conditional = c("(Intercept)", "Air.Flow", "Water.Temp")
-      )
+      list(conditional = c(
+        "(Intercept)", "Air.Flow", "Water.Temp"
+      ))
     )
     expect_equal(nrow(get_parameters(m1)), 3)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "Air.Flow", "Water.Temp"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "Air.Flow", "Water.Temp")
+    )
   })
 
   test_that("is_multivariate", {
@@ -81,5 +108,9 @@ if (require("testthat") && require("insight") && require("quantreg")) {
 
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "br"))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
   })
 }

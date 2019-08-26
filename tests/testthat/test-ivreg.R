@@ -1,20 +1,37 @@
-if (require("testthat") && require("insight") && require("AER")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("AER")) {
   context("insight, model_info")
 
   data(CigarettesSW)
   CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
-  CigarettesSW$rincome <- with(CigarettesSW, income / population / cpi)
+  CigarettesSW$rincome <-
+    with(CigarettesSW, income / population / cpi)
   CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax) / cpi)
 
-  m1 <- ivreg(log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi), data = CigarettesSW, subset = year == "1995")
+  m1 <-
+    ivreg(
+      log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi),
+      data = CigarettesSW,
+      subset = year == "1995"
+    )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(conditional = c("rprice", "rincome"), instruments = c("rincome", "tdiff", "tax", "cpi")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("rprice", "rincome", "tdiff", "tax", "cpi"))
+    expect_identical(
+      find_predictors(m1),
+      list(
+        conditional = c("rprice", "rincome"),
+        instruments = c("rincome", "tdiff", "tax", "cpi")
+      )
+    )
+    expect_identical(
+      find_predictors(m1, flatten = TRUE),
+      c("rprice", "rincome", "tdiff", "tax", "cpi")
+    )
     expect_null(find_predictors(m1, effects = "random"))
   })
 
@@ -35,7 +52,10 @@ if (require("testthat") && require("insight") && require("AER")) {
   })
 
   test_that("get_predictors", {
-    expect_equal(colnames(get_predictors(m1)), c("rprice", "rincome", "tdiff", "tax", "cpi"))
+    expect_equal(
+      colnames(get_predictors(m1)),
+      c("rprice", "rincome", "tdiff", "tax", "cpi")
+    )
   })
 
   test_that("link_inverse", {
@@ -44,7 +64,10 @@ if (require("testthat") && require("insight") && require("AER")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 48)
-    expect_equal(colnames(get_data(m1)), c("packs", "rprice", "rincome", "tdiff", "tax", "cpi"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("packs", "rprice", "rincome", "tdiff", "tax", "cpi")
+    )
   })
 
   test_that("find_formula", {
@@ -59,8 +82,18 @@ if (require("testthat") && require("insight") && require("AER")) {
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = "packs", conditional = c("rprice", "rincome"), instruments = c("rincome", "tdiff", "tax", "cpi")))
-    expect_equal(find_variables(m1, flatten = TRUE), c("packs", "rprice", "rincome", "tdiff", "tax", "cpi"))
+    expect_equal(
+      find_variables(m1),
+      list(
+        response = "packs",
+        conditional = c("rprice", "rincome"),
+        instruments = c("rincome", "tdiff", "tax", "cpi")
+      )
+    )
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("packs", "rprice", "rincome", "tdiff", "tax", "cpi")
+    )
   })
 
   test_that("n_obs", {
@@ -79,7 +112,10 @@ if (require("testthat") && require("insight") && require("AER")) {
       )
     )
     expect_equal(nrow(get_parameters(m1)), 3)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "log(rprice)", "log(rincome)"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "log(rprice)", "log(rincome)")
+    )
   })
 
   test_that("is_multivariate", {
@@ -96,6 +132,13 @@ if (require("testthat") && require("insight") && require("AER")) {
       )
     )
     expect_equal(nrow(get_parameters(m1)), 3)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "log(rprice)", "log(rincome)"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "log(rprice)", "log(rincome)")
+    )
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
   })
 }

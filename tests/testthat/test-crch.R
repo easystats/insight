@@ -1,11 +1,16 @@
-if (require("testthat") && require("insight") && require("crch")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("crch")) {
   context("insight, model_info")
 
   data("RainIbk")
-  RainIbk$sqrtensmean <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
-  RainIbk$sqrtenssd <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, sd)
+  RainIbk$sqrtensmean <-
+    apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
+  RainIbk$sqrtenssd <-
+    apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, sd)
 
-  m1 <- crch(sqrt(rain) ~ sqrtensmean, data = RainIbk, dist = "gaussian")
+  m1 <-
+    crch(sqrt(rain) ~ sqrtensmean, data = RainIbk, dist = "gaussian")
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -56,13 +61,31 @@ if (require("testthat") && require("insight") && require("crch")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "sqrt(rain)", conditional = c("sqrtensmean")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("sqrt(rain)", "sqrtensmean"))
+    expect_equal(
+      find_terms(m1),
+      list(
+        response = "sqrt(rain)",
+        conditional = c("sqrtensmean")
+      )
+    )
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("sqrt(rain)", "sqrtensmean")
+    )
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = "rain", conditional = c("sqrtensmean")))
-    expect_equal(find_variables(m1, flatten = TRUE), c("rain", "sqrtensmean"))
+    expect_equal(
+      find_variables(m1),
+      list(
+        response = "rain",
+        conditional = c("sqrtensmean")
+      )
+    )
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("rain", "sqrtensmean")
+    )
   })
 
   test_that("n_obs", {
@@ -81,10 +104,17 @@ if (require("testthat") && require("insight") && require("crch")) {
       )
     )
     expect_equal(nrow(get_parameters(m1)), 3)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "sqrtensmean", "(scale)_(Intercept)"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "sqrtensmean", "(scale)_(Intercept)")
+    )
   })
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

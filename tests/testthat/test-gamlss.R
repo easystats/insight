@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("gamlss")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("gamlss")) {
   context("insight, model_info")
 
   data(abdom)
@@ -60,22 +62,28 @@ if (require("testthat") && require("insight") && require("gamlss")) {
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(
-      response = "y",
-      conditional = "x",
-      sigma = "x"
-    ))
+    expect_equal(
+      find_variables(m1),
+      list(
+        response = "y",
+        conditional = "x",
+        sigma = "x"
+      )
+    )
     expect_equal(find_variables(m1, flatten = TRUE), c("y", "x"))
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(
-      response = "y",
-      conditional = "pb(x)",
-      sigma = "pb(x)",
-      nu = "1",
-      tau = "1"
-    ))
+    expect_equal(
+      find_terms(m1),
+      list(
+        response = "y",
+        conditional = "pb(x)",
+        sigma = "pb(x)",
+        nu = "1",
+        tau = "1"
+      )
+    )
   })
 
   test_that("n_obs", {
@@ -109,5 +117,9 @@ if (require("testthat") && require("insight") && require("gamlss")) {
 
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "mixed"))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
   })
 }

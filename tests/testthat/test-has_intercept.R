@@ -7,9 +7,13 @@ if (require("testthat") && require("insight")) {
 
   m1 <- lm(mpg ~ 0 + gear, data = mtcars)
   m2 <- lm(mpg ~ gear, data = mtcars)
-  m3 <- suppressWarnings(lmer(Reaction ~ 0 + Days + (Days | Subject), data = sleepstudy))
+  m3 <-
+    suppressWarnings(lmer(Reaction ~ 0 + Days + (Days |
+      Subject), data = sleepstudy))
   m4 <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
-  m5 <- suppressWarnings(lmer(Reaction ~ 0 + (Days | Subject), data = sleepstudy))
+  m5 <-
+    suppressWarnings(lmer(Reaction ~ 0 + (Days |
+      Subject), data = sleepstudy))
 
   test_that("has_intercept", {
     expect_true(has_intercept(m2))

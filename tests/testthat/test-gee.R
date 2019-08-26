@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("gee")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("gee")) {
   context("insight, model_info")
 
   data(warpbreaks)
@@ -11,8 +13,14 @@ if (require("testthat") && require("insight") && require("gee")) {
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = "tension"))
     expect_identical(find_predictors(m1, flatten = TRUE), "tension")
-    expect_identical(find_predictors(m1, effects = "random"), list(random = "wool"))
-    expect_identical(find_predictors(m1, effects = "all", flatten = TRUE), c("tension", "wool"))
+    expect_identical(
+      find_predictors(m1, effects = "random"),
+      list(random = "wool")
+    )
+    expect_identical(
+      find_predictors(m1, effects = "all", flatten = TRUE),
+      c("tension", "wool")
+    )
   })
 
   test_that("find_response", {
@@ -56,8 +64,18 @@ if (require("testthat") && require("insight") && require("gee")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "breaks", conditional = "tension", random = "wool"))
-    expect_equal(find_terms(m1, flatten = TRUE), c("breaks", "tension", "wool"))
+    expect_equal(
+      find_terms(m1),
+      list(
+        response = "breaks",
+        conditional = "tension",
+        random = "wool"
+      )
+    )
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("breaks", "tension", "wool")
+    )
   })
 
   test_that("n_obs", {
@@ -71,12 +89,15 @@ if (require("testthat") && require("insight") && require("gee")) {
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(
-        conditional = c("(Intercept)", "tensionM", "tensionH")
-      )
+      list(conditional = c(
+        "(Intercept)", "tensionM", "tensionH"
+      ))
     )
     expect_equal(nrow(get_parameters(m1)), 3)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "tensionM", "tensionH"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "tensionM", "tensionH")
+    )
   })
 
   test_that("is_multivariate", {
@@ -85,5 +106,9 @@ if (require("testthat") && require("insight") && require("gee")) {
 
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "ML"))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

@@ -1,13 +1,18 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-  if (require("testthat") && require("insight") && require("glmmTMB") && require("biglm")) {
+  if (require("testthat") &&
+    require("insight") && require("glmmTMB") && require("biglm")) {
     context("insight, model_info")
 
     data(Salamanders)
     Salamanders$cover <- abs(Salamanders$cover)
 
-    m1 <- bigglm(count ~ mined + log(cover) + sample, family = poisson(), data = Salamanders)
+    m1 <-
+      bigglm(count ~ mined + log(cover) + sample,
+        family = poisson(),
+        data = Salamanders
+      )
 
     test_that("model_info", {
       expect_true(model_info(m1)$is_poisson)
@@ -18,7 +23,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
 
     test_that("find_predictors", {
       expect_identical(find_predictors(m1), list(conditional = c("mined", "cover", "sample")))
-      expect_identical(find_predictors(m1, flatten = TRUE), c("mined", "cover", "sample"))
+      expect_identical(
+        find_predictors(m1, flatten = TRUE),
+        c("mined", "cover", "sample")
+      )
       expect_null(find_predictors(m1, effects = "random"))
     })
 
@@ -39,7 +47,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("get_predictors", {
-      expect_equal(colnames(get_predictors(m1)), c("mined", "cover", "sample"))
+      expect_equal(
+        colnames(get_predictors(m1)),
+        c("mined", "cover", "sample")
+      )
     })
 
     test_that("link_inverse", {
@@ -48,7 +59,20 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
 
     test_that("get_data", {
       expect_equal(nrow(get_data(m1)), 644)
-      expect_equal(colnames(get_data(m1)), c("site", "mined", "cover", "sample", "DOP", "Wtemp", "DOY", "spp", "count"))
+      expect_equal(
+        colnames(get_data(m1)),
+        c(
+          "site",
+          "mined",
+          "cover",
+          "sample",
+          "DOP",
+          "Wtemp",
+          "DOY",
+          "spp",
+          "count"
+        )
+      )
     })
 
     test_that("find_formula", {
@@ -60,8 +84,17 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("find_variables", {
-      expect_equal(find_variables(m1), list(response = "count", conditional = c("mined", "cover", "sample")))
-      expect_equal(find_variables(m1, flatten = TRUE), c("count", "mined", "cover", "sample"))
+      expect_equal(
+        find_variables(m1),
+        list(
+          response = "count",
+          conditional = c("mined", "cover", "sample")
+        )
+      )
+      expect_equal(
+        find_variables(m1, flatten = TRUE),
+        c("count", "mined", "cover", "sample")
+      )
     })
 
     test_that("n_obs", {
@@ -80,7 +113,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         )
       )
       expect_equal(nrow(get_parameters(m1)), 4)
-      expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "minedno", "log(cover)", "sample"))
+      expect_equal(
+        get_parameters(m1)$parameter,
+        c("(Intercept)", "minedno", "log(cover)", "sample")
+      )
     })
 
     test_that("is_multivariate", {
@@ -99,6 +135,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
 
     test_that("find_algorithm", {
       expect_equal(find_algorithm(m1), list(algorithm = "ML"))
+    })
+
+    test_that("find_statistic", {
+      expect_identical(find_statistic(m1), "z-statistic")
     })
   }
 }

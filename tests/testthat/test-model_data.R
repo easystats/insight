@@ -1,12 +1,18 @@
-if (require("testthat") && require("insight") && require("splines") && require("glmmTMB")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("splines") &&
+  require("glmmTMB")) {
   context("insight, get_data")
 
   data(iris)
 
   m1 <- lm(Sepal.Length ~ Species + ns(Petal.Width), data = iris)
-  m2 <- lm(Sepal.Length ~ Species + ns(Petal.Width, knots = 2), data = iris)
-  m3 <- lm(Sepal.Length ~ Species + bs(Petal.Width, degree = 3), data = iris)
-  m4 <- lm(Sepal.Length ~ Species + bs(Petal.Width, degree = 1), data = iris)
+  m2 <-
+    lm(Sepal.Length ~ Species + ns(Petal.Width, knots = 2), data = iris)
+  m3 <-
+    lm(Sepal.Length ~ Species + bs(Petal.Width, degree = 3), data = iris)
+  m4 <-
+    lm(Sepal.Length ~ Species + bs(Petal.Width, degree = 1), data = iris)
 
   m5 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
@@ -36,6 +42,9 @@ if (require("testthat") && require("insight") && require("splines") && require("
   test_that("get_data", {
     mf <- get_data(m)
     expect_equal(ncol(mf), 7)
-    expect_equal(colnames(mf), c("count", "spp", "cover", "mined", "DOP", "DOY", "site"))
+    expect_equal(
+      colnames(mf),
+      c("count", "spp", "cover", "mined", "DOP", "DOY", "site")
+    )
   })
 }

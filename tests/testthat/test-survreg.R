@@ -1,8 +1,14 @@
-if (require("testthat") && require("insight") && require("survival")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("survival")) {
   context("insight, model_info")
 
   data("ovarian")
-  m1 <- survreg(Surv(futime, fustat) ~ ecog.ps + rx, data = ovarian, dist = "exponential")
+  m1 <-
+    survreg(Surv(futime, fustat) ~ ecog.ps + rx,
+      data = ovarian,
+      dist = "exponential"
+    )
 
   test_that("model_info", {
     expect_false(model_info(m1)$is_linear)
@@ -41,7 +47,10 @@ if (require("testthat") && require("insight") && require("survival")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 26)
-    expect_equal(colnames(get_data(m1)), c("futime", "fustat", "Surv(futime, fustat)", "ecog.ps", "rx"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("futime", "fustat", "Surv(futime, fustat)", "ecog.ps", "rx")
+    )
   })
 
   test_that("find_formula", {
@@ -53,8 +62,14 @@ if (require("testthat") && require("insight") && require("survival")) {
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = c("futime", "fustat"), conditional = c("ecog.ps", "rx")))
-    expect_equal(find_variables(m1, flatten = TRUE), c("futime", "fustat", "ecog.ps", "rx"))
+    expect_equal(find_variables(m1), list(
+      response = c("futime", "fustat"),
+      conditional = c("ecog.ps", "rx")
+    ))
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("futime", "fustat", "ecog.ps", "rx")
+    )
   })
 
   test_that("n_obs", {
@@ -68,15 +83,20 @@ if (require("testthat") && require("insight") && require("survival")) {
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(
-        conditional = c("(Intercept)", "ecog.ps", "rx")
-      )
+      list(conditional = c("(Intercept)", "ecog.ps", "rx"))
     )
     expect_equal(nrow(get_parameters(m1)), 3)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "ecog.ps", "rx"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "ecog.ps", "rx")
+    )
   })
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

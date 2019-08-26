@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("survey")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("survey")) {
   context("insight, svyglm")
 
   data(api)
@@ -36,7 +38,10 @@ if (require("testthat") && require("insight") && require("survey")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 200)
-    expect_equal(colnames(get_data(m1)), c("api00", "ell", "meals", "mobility", "(weights)"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("api00", "ell", "meals", "mobility", "(weights)")
+    )
   })
 
   test_that("find_formula", {
@@ -48,8 +53,14 @@ if (require("testthat") && require("insight") && require("survey")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "api00", conditional = c("ell", "meals", "mobility")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("api00", "ell", "meals", "mobility"))
+    expect_equal(find_terms(m1), list(
+      response = "api00",
+      conditional = c("ell", "meals", "mobility")
+    ))
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("api00", "ell", "meals", "mobility")
+    )
   })
 
   test_that("n_obs", {
@@ -63,11 +74,18 @@ if (require("testthat") && require("insight") && require("survey")) {
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(
-        conditional = c("(Intercept)", "ell", "meals", "mobility")
-      )
+      list(conditional = c(
+        "(Intercept)", "ell", "meals", "mobility"
+      ))
     )
     expect_equal(nrow(get_parameters(m1)), 4)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "ell", "meals", "mobility"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "ell", "meals", "mobility")
+    )
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
   })
 }

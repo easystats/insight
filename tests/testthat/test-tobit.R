@@ -1,8 +1,13 @@
-if (require("testthat") && require("insight") && require("AER")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("AER")) {
   context("insight, AER")
 
   data("Affairs", package = "AER")
-  m1 <- AER::tobit(affairs ~ age + yearsmarried + religiousness + occupation + rating, data = Affairs)
+  m1 <-
+    AER::tobit(affairs ~ age + yearsmarried + religiousness + occupation + rating,
+      data = Affairs
+    )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -10,8 +15,25 @@ if (require("testthat") && require("insight") && require("AER")) {
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(conditional = c("age", "yearsmarried", "religiousness", "occupation", "rating")))
-    expect_identical(find_predictors(m1, flatten = TRUE), c("age", "yearsmarried", "religiousness", "occupation", "rating"))
+    expect_identical(find_predictors(m1), list(
+      conditional = c(
+        "age",
+        "yearsmarried",
+        "religiousness",
+        "occupation",
+        "rating"
+      )
+    ))
+    expect_identical(
+      find_predictors(m1, flatten = TRUE),
+      c(
+        "age",
+        "yearsmarried",
+        "religiousness",
+        "occupation",
+        "rating"
+      )
+    )
     expect_null(find_predictors(m1, effects = "random"))
   })
 
@@ -32,7 +54,16 @@ if (require("testthat") && require("insight") && require("AER")) {
   })
 
   test_that("get_predictors", {
-    expect_equal(colnames(get_predictors(m1)), c("age", "yearsmarried", "religiousness", "occupation", "rating"))
+    expect_equal(
+      colnames(get_predictors(m1)),
+      c(
+        "age",
+        "yearsmarried",
+        "religiousness",
+        "occupation",
+        "rating"
+      )
+    )
   })
 
   test_that("link_inverse", {
@@ -41,20 +72,53 @@ if (require("testthat") && require("insight") && require("AER")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 601)
-    expect_equal(colnames(get_data(m1)), c("affairs", "age", "yearsmarried", "religiousness", "occupation", "rating"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c(
+        "affairs",
+        "age",
+        "yearsmarried",
+        "religiousness",
+        "occupation",
+        "rating"
+      )
+    )
   })
 
   test_that("find_formula", {
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("affairs ~ age + yearsmarried + religiousness + occupation + rating"))
+      list(
+        conditional = as.formula(
+          "affairs ~ age + yearsmarried + religiousness + occupation + rating"
+        )
+      )
     )
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "affairs", conditional = c("age", "yearsmarried", "religiousness", "occupation", "rating")))
-    expect_equal(find_terms(m1, flatten = TRUE), c("affairs", "age", "yearsmarried", "religiousness", "occupation", "rating"))
+    expect_equal(find_terms(m1), list(
+      response = "affairs",
+      conditional = c(
+        "age",
+        "yearsmarried",
+        "religiousness",
+        "occupation",
+        "rating"
+      )
+    ))
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c(
+        "affairs",
+        "age",
+        "yearsmarried",
+        "religiousness",
+        "occupation",
+        "rating"
+      )
+    )
   })
 
   test_that("n_obs", {
@@ -69,14 +133,35 @@ if (require("testthat") && require("insight") && require("AER")) {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("(Intercept)", "age", "yearsmarried", "religiousness", "occupation", "rating")
+        conditional = c(
+          "(Intercept)",
+          "age",
+          "yearsmarried",
+          "religiousness",
+          "occupation",
+          "rating"
+        )
       )
     )
     expect_equal(nrow(get_parameters(m1)), 6)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "age", "yearsmarried", "religiousness", "occupation", "rating"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c(
+        "(Intercept)",
+        "age",
+        "yearsmarried",
+        "religiousness",
+        "occupation",
+        "rating"
+      )
+    )
   })
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
   })
 }

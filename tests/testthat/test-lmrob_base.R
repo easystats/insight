@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("robustbase")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("robustbase")) {
   context("insight, model_info")
 
   data(mtcars)
@@ -48,7 +50,10 @@ if (require("testthat") && require("insight") && require("robustbase")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "mpg", conditional = c("gear", "wt", "cyl")))
+    expect_equal(find_terms(m1), list(
+      response = "mpg",
+      conditional = c("gear", "wt", "cyl")
+    ))
     expect_equal(find_terms(m1, flatten = TRUE), c("mpg", "gear", "wt", "cyl"))
   })
 
@@ -67,12 +72,13 @@ if (require("testthat") && require("insight") && require("robustbase")) {
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(
-        conditional = c("(Intercept)", "gear", "wt", "cyl")
-      )
+      list(conditional = c("(Intercept)", "gear", "wt", "cyl"))
     )
     expect_equal(nrow(get_parameters(m1)), 4)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "gear", "wt", "cyl"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("(Intercept)", "gear", "wt", "cyl")
+    )
   })
 
   test_that("is_multivariate", {
@@ -81,5 +87,9 @@ if (require("testthat") && require("insight") && require("robustbase")) {
 
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "SM"))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
   })
 }

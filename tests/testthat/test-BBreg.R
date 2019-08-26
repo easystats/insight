@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("HRQoL")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("HRQoL")) {
   context("insight, BBreg")
 
   set.seed(18)
@@ -71,8 +73,14 @@ if (require("testthat") && require("insight") && require("HRQoL")) {
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = "y", conditional = c("x", "x2", "j", "fac")))
-    expect_equal(find_variables(m1, flatten = TRUE), c("y", "x", "x2", "j", "fac"))
+    expect_equal(find_variables(m1), list(
+      response = "y",
+      conditional = c("x", "x2", "j", "fac")
+    ))
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("y", "x", "x2", "j", "fac")
+    )
   })
 
   test_that("n_obs", {
@@ -87,7 +95,10 @@ if (require("testthat") && require("insight") && require("HRQoL")) {
       )
     )
     expect_equal(nrow(get_parameters(m1)), 7)
-    expect_equal(get_parameters(m1)$parameter, c("Intercept", "x", "x2", "j", "facb", "facc", "facd"))
+    expect_equal(
+      get_parameters(m1)$parameter,
+      c("Intercept", "x", "x2", "j", "facb", "facc", "facd")
+    )
   })
 
   test_that("is_multivariate", {
@@ -106,5 +117,9 @@ if (require("testthat") && require("insight") && require("HRQoL")) {
 
   test_that("find_algorithm", {
     expect_equal(find_algorithm(m1), list(algorithm = "ML"))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "t-statistic")
   })
 }

@@ -1,11 +1,21 @@
-if (require("testthat") && require("insight") && require("ordinal")) {
+if (require("testthat") &&
+  require("insight") &&
+  require("ordinal")) {
   context("insight, model_info")
 
   data(wine, package = "ordinal")
   data(soup)
 
   m1 <- clmm(rating ~ temp + contact + (1 | judge), data = wine)
-  m2 <- clmm(SURENESS ~ PROD + (1 | RESP) + (1 | RESP:PROD), data = soup, link = "probit", threshold = "equidistant")
+  m2 <-
+    clmm(
+      SURENESS ~ PROD + (1 |
+        RESP) + (1 |
+        RESP:PROD),
+      data = soup,
+      link = "probit",
+      threshold = "equidistant"
+    )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_ordinal)
@@ -16,11 +26,29 @@ if (require("testthat") && require("insight") && require("ordinal")) {
 
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = c("temp", "contact")))
-    expect_identical(find_predictors(m1, effects = "all"), list(conditional = c("temp", "contact"), random = "judge"))
-    expect_identical(find_predictors(m1, effects = "all", flatten = TRUE), c("temp", "contact", "judge"))
+    expect_identical(
+      find_predictors(m1, effects = "all"),
+      list(
+        conditional = c("temp", "contact"),
+        random = "judge"
+      )
+    )
+    expect_identical(
+      find_predictors(m1, effects = "all", flatten = TRUE),
+      c("temp", "contact", "judge")
+    )
     expect_identical(find_predictors(m2), list(conditional = "PROD"))
-    expect_identical(find_predictors(m2, effects = "all"), list(conditional = "PROD", random = c("RESP", "PROD")))
-    expect_identical(find_predictors(m2, effects = "all", flatten = TRUE), c("PROD", "RESP"))
+    expect_identical(
+      find_predictors(m2, effects = "all"),
+      list(
+        conditional = "PROD",
+        random = c("RESP", "PROD")
+      )
+    )
+    expect_identical(
+      find_predictors(m2, effects = "all", flatten = TRUE),
+      c("PROD", "RESP")
+    )
   })
 
   test_that("find_random", {
@@ -56,7 +84,10 @@ if (require("testthat") && require("insight") && require("ordinal")) {
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 72)
-    expect_equal(colnames(get_data(m1)), c("rating", "temp", "contact", "judge"))
+    expect_equal(
+      colnames(get_data(m1)),
+      c("rating", "temp", "contact", "judge")
+    )
     expect_equal(nrow(get_data(m2)), 1847)
     expect_equal(colnames(get_data(m2)), c("SURENESS", "PROD", "RESP"))
   })
@@ -81,10 +112,30 @@ if (require("testthat") && require("insight") && require("ordinal")) {
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(response = "rating", conditional = c("temp", "contact"), random = "judge"))
-    expect_equal(find_terms(m1, flatten = TRUE), c("rating", "temp", "contact", "judge"))
-    expect_equal(find_terms(m2), list(response = "SURENESS", conditional = "PROD", random = c("RESP", "PROD")))
-    expect_equal(find_terms(m2, flatten = TRUE), c("SURENESS", "PROD", "RESP"))
+    expect_equal(
+      find_terms(m1),
+      list(
+        response = "rating",
+        conditional = c("temp", "contact"),
+        random = "judge"
+      )
+    )
+    expect_equal(
+      find_terms(m1, flatten = TRUE),
+      c("rating", "temp", "contact", "judge")
+    )
+    expect_equal(
+      find_terms(m2),
+      list(
+        response = "SURENESS",
+        conditional = "PROD",
+        random = c("RESP", "PROD")
+      )
+    )
+    expect_equal(
+      find_terms(m2, flatten = TRUE),
+      c("SURENESS", "PROD", "RESP")
+    )
   })
 
   test_that("n_obs", {
@@ -106,14 +157,17 @@ if (require("testthat") && require("insight") && require("ordinal")) {
     )
     expect_equal(
       find_parameters(m2),
-      list(
-        conditional = c("threshold.1", "spacing", "PRODTest")
-      )
+      list(conditional = c("threshold.1", "spacing", "PRODTest"))
     )
   })
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
     expect_false(is_multivariate(m2))
+  })
+
+  test_that("find_statistic", {
+    expect_identical(find_statistic(m1), "z-statistic")
+    expect_identical(find_statistic(m2), "z-statistic")
   })
 }
