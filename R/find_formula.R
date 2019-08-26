@@ -81,8 +81,8 @@ find_formula.gam <- function(x, ...) {
         f <- list(conditional = f[[1]], zero_inflated = f[[2]])
       } else if (mi$family == "Multivariate normal") {
         # handle formula for multivariate models
-        f <- lapply(f, function(.i) .i)
         r <- lapply(f, function(.i) deparse(.i[[2]]))
+        f <- lapply(f, function(.i) list(conditional = .i))
         names(f) <- r
         attr(f, "is_mv") <- "1"
       }
