@@ -488,8 +488,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         data.frame(
           parameter = c("Age", "Base", "Base:Trt1", "Trt1"),
           distribution = c("student_t", "student_t", "student_t", "student_t"),
-          location = c(10, 10, 10, 10),
-          scale = c("5, 0", "5, 0", "5, 0", "5, 0"),
+          location = c("5, 0", "5, 0", "5, 0", "5, 0"),
+          scale = c(10, 10, 10, 10),
           stringsAsFactors = FALSE
         )
       )

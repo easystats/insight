@@ -2,13 +2,20 @@
 
 ## Breaking Changes
 
-  - The previous `is_model` function has been renamed to `is_model_supported`
+  - The previous `is_model()` function has been renamed to `is_model_supported()`
     since it was unclear if the function checked the entered object was a model
-    or a supported model in `insight`. The new `is_model` function checks if the
-    entered object is a model object, while `is_model_supported` checks if a
+    or a supported model in *insight*. The new `is_model()` function checks if the
+    entered object is a model object, while `is_model_supported()` checks if a
     supported model object.
 
-## Bug fixed
+## New functions
+
+  - `format_value()` and `format_table()` as utility-functions to format (model) 
+    output, especially for tabular output.
+  - `color_if()` as utility-function to add color formatting to values, depending
+    on certain conditions.
+
+## Bug fixes
 
   - `find_formula()` now extracts group factors of random effects for *gamlss*
     models.
@@ -16,6 +23,9 @@
     from group factors of random effects for *gamlss* models.
   - `get_data()` dropped value and variable label attributes, when model frame
     contained matrix variables (like splines).
+  - `get_priors()` swapped column names `location` and `scale` for *brmsfit* -objects.
+  - `find_predictors()` did not remove parentheses from terms in multiple nested random effects.
+  - Better support for *gam* models (package *mgcv*) with `ziplss` or `mvn` families.
 
 # insight 0.4.1
 

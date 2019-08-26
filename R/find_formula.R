@@ -64,6 +64,39 @@ find_formula.data.frame <- function(x, ...) {
 
 
 #' @export
+find_formula.gam <- function(x, ...) {
+  f <- tryCatch({
+    stats::formula(x)
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  if (!is.null(f)) {
+    if (is.list(f)) {
+      mi <- stats::family(x)
+      if (mi$family == "ziplss") {
+        # handle formula for zero-inflated models
+        f <- list(conditional = f[[1]], zero_inflated = f[[2]])
+      } else if (mi$family == "Multivariate normal") {
+        # handle formula for multivariate models
+        r <- lapply(f, function(.i) deparse(.i[[2]]))
+        f <- lapply(f, function(.i) list(conditional = .i))
+        names(f) <- r
+        attr(f, "is_mv") <- "1"
+      }
+    } else {
+      f <- list(conditional = f)
+    }
+  }
+
+  f
+}
+
+
+
+#' @export
 find_formula.gamlss <- function(x, ...) {
   tryCatch({
     if (!requireNamespace("lme4", quietly = TRUE)) {

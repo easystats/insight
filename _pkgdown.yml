@@ -75,10 +75,12 @@ reference:
 - title: "Utilities"
   desc: >
     Functions that are not specifically related to access model information,
-    but rather small utility functions.
+    but rather small utility functions (mostly for printing)
   contents:
   - clean_names
   - clean_parameters
   - download_model
+  - format_table
+  - format_value
   - print_color
   - print_parameters

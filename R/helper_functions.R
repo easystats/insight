@@ -171,7 +171,9 @@
   }
 
   if (split_nested) {
-    unique(unlist(strsplit(re, "\\:")))
+    # remove parenthesis for nested models
+    sub(pattern = "[\\(\\)]", replacement = "", x = unique(unlist(strsplit(re, "\\:"))))
+    # unique(unlist(strsplit(re, "\\:")))
   } else {
     unique(re)
   }
@@ -362,14 +364,26 @@
 
 
 
+.grep_zi_smoothers <- function(x) {
+  grepl("^(s\\.\\d\\()", x, perl = TRUE) |
+    grepl("^(gam::s\\.\\d\\()", x, perl = TRUE) |
+    grepl("^(mgcv::s\\.\\d\\()", x, perl = TRUE)
+}
+
+
+
 .grep_non_smoothers <- function(x) {
   grepl("^(?!(s\\())", x, perl = TRUE) &
+    # this one captures smoothers in zi- or mv-models from gam
+    grepl("^(?!(s\\.\\d\\())", x, perl = TRUE) &
     grepl("^(?!(ti\\())", x, perl = TRUE) &
     grepl("^(?!(te\\())", x, perl = TRUE) &
     grepl("^(?!(t2\\())", x, perl = TRUE) &
     grepl("^(?!(gam::s\\())", x, perl = TRUE) &
+    grepl("^(?!(gam::s\\.\\d\\())", x, perl = TRUE) &
     grepl("^(?!(VGAM::s\\())", x, perl = TRUE) &
     grepl("^(?!(mgcv::s\\())", x, perl = TRUE) &
+    grepl("^(?!(mgcv::s\\.\\d\\())", x, perl = TRUE) &
     grepl("^(?!(mgcv::ti\\())", x, perl = TRUE) &
     grepl("^(?!(mgcv::te\\())", x, perl = TRUE) &
     grepl("^(?!(brms::s\\())", x, perl = TRUE) &

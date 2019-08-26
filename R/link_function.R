@@ -57,6 +57,45 @@ link_function.default <- function(x, ...) {
 }
 
 
+
+#' @export
+link_function.gam <- function(x, ...) {
+  lf <-   tryCatch({
+    # get model family
+    ff <- stats::family(x)
+
+    # return link function, if exists
+    if ("linkfun" %in% names(ff)) {
+      return(ff$linkfun)
+    }
+
+    # else, create link function from link-string
+    if ("link" %in% names(ff)) {
+      return(match.fun(ff$link))
+    }
+
+    NULL
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  if (is.null(lf)) {
+    mi <- stats::family(x)
+    if (.obj_has_name(mi, "linfo")) {
+      if (.obj_has_name(mi$linfo, "linkfun"))
+        lf <- mi$linfo$linkfun
+      else
+        lf <- mi$linfo[[1]]$linkfun
+    }
+  }
+
+  lf
+}
+
+
+
 #' @export
 link_function.speedglm <- function(x, ...) {
   stats::family(x)$linkfun

@@ -48,6 +48,30 @@ link_inverse.default <- function(x, ...) {
 
 
 #' @export
+link_inverse.gam <- function(x, ...) {
+  li <- tryCatch({
+    stats::family(x)$linkinv
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  if (is.null(li)) {
+    mi <- stats::family(x)
+    if (.obj_has_name(mi, "linfo")) {
+      if (.obj_has_name(mi$linfo, "linkinv"))
+        li <- mi$linfo$linkinv
+      else
+        li <- mi$linfo[[1]]$linkinv
+    }
+  }
+
+  li
+}
+
+
+#' @export
 link_inverse.glm <- function(x, ...) {
   tryCatch({
     stats::family(x)$linkinv
@@ -75,18 +99,6 @@ link_inverse.bigglm <- function(x, ...) {
 link_inverse.gamlss <- function(x, ...) {
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
   faminfo$mu.linkinv
-}
-
-
-#' @export
-link_inverse.gam <- function(x, ...) {
-  tryCatch({
-    stats::family(x)$linkinv
-  },
-  error = function(x) {
-    NULL
-  }
-  )
 }
 
 

@@ -178,8 +178,7 @@
     )
   }
 
-  # for glmmTMB, use conditional component of model only,
-  # and tell user that zero-inflation is ignored
+  # for glmmTMB, tell user that dispersion model is ignored
 
   if (inherits(x, "glmmTMB")) {
     vals <- lapply(vals, .collapse_cond)
