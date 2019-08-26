@@ -1,5 +1,5 @@
 #' @title Find statistic for model
-#' @description Returns the statistic for the a regression model (*t*-statistic,
+#' @description Returns the statistic for a regression model (*t*-statistic,
 #'   *z*-statistic, etc.).
 #' @name find_statistic
 #'

@@ -16,7 +16,7 @@ A character describing the type of statistic. If there is no
   statistic available with a distribution, a `NULL` will be returned.
 }
 \description{
-Returns the statistic for the a regression model (*t*-statistic,
+Returns the statistic for a regression model (*t*-statistic,
   *z*-statistic, etc.).
 
 Small helper that checks if a model is a regression model

@@ -10,6 +10,7 @@
 
 ## New functions
 
+  - `find_statistic()` to return the test statistic of a regression model.
   - `format_value()` and `format_table()` as utility-functions to format (model) 
     output, especially for tabular output.
   - `color_if()` as utility-function to add color formatting to values, depending
