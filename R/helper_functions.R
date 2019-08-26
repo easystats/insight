@@ -172,7 +172,18 @@
 
   if (split_nested) {
     # remove parenthesis for nested models
-    sub(pattern = "[\\(\\)]", replacement = "", x = unique(unlist(strsplit(re, "\\:"))))
+    re <- unique(unlist(strsplit(re, "\\:")))
+    has_parantheses <- vapply(
+      clean_names(re),
+      function(i) {
+        grepl("[\\(\\)]", x = i)
+      },
+      logical(1)
+    )
+    if (any(has_parantheses)) {
+      re[has_parantheses] <- sub(pattern = "[\\(\\)]", replacement = "", x = re[has_parantheses])
+    }
+    re
     # unique(unlist(strsplit(re, "\\:")))
   } else {
     unique(re)
