@@ -25,6 +25,7 @@
     contained matrix variables (like splines).
   - `get_priors()` swapped column names `location` and `scale` for *brmsfit* -objects.
   - `find_predictors()` did not remove parentheses from terms in multiple nested random effects.
+  - Better support for *gam* models (package *mgcv*) with `ziplss` or `mvn` families.
 
 # insight 0.4.1
 

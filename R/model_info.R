@@ -366,6 +366,7 @@ model_info.gam <- function(x, ...) {
     fitfam = faminfo$family,
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
+    multi.var = faminfo$family == "Multivariate normal",
     ...
   )
 }
