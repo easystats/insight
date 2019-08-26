@@ -47,6 +47,29 @@ link_inverse.default <- function(x, ...) {
 }
 
 
+
+#' @export
+link_inverse.gam <- function(x, ...) {
+  li <- tryCatch({
+    stats::family(x)$linkinv
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  if (is.null(li)) {
+    mi <- stats::family(x)
+    if (.obj_has_name(mi, "linfo")) {
+      li <- mi$linfo$linkinv
+    }
+  }
+
+  li
+}
+
+
+
 #' @export
 link_inverse.glm <- function(x, ...) {
   tryCatch({
