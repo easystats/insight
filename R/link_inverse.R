@@ -47,7 +47,6 @@ link_inverse.default <- function(x, ...) {
 }
 
 
-
 #' @export
 link_inverse.gam <- function(x, ...) {
   li <- tryCatch({
@@ -70,7 +69,6 @@ link_inverse.gam <- function(x, ...) {
 
   li
 }
-
 
 
 #' @export
@@ -101,18 +99,6 @@ link_inverse.bigglm <- function(x, ...) {
 link_inverse.gamlss <- function(x, ...) {
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
   faminfo$mu.linkinv
-}
-
-
-#' @export
-link_inverse.gam <- function(x, ...) {
-  tryCatch({
-    stats::family(x)$linkinv
-  },
-  error = function(x) {
-    NULL
-  }
-  )
 }
 
 
