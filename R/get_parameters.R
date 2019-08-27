@@ -913,9 +913,10 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
 
     for (i in 1:length(re)) {
       dn <- dimnames(re[[i]])[[2]]
+      cn <- dimnames(re[[i]])[[3]]
       l <- lapply(1:length(dn), function(j) {
         d <- as.data.frame(re[[i]][, j, ])
-        colnames(d) <- sprintf("%s.%s", colnames(d), dn[j])
+        colnames(d) <- sprintf("%s.%s", cn, dn[j])
         d
       })
       if (ncol(dat) == 0)
