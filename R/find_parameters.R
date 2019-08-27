@@ -726,6 +726,31 @@ find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), co
 }
 
 
+#' @rdname find_parameters
+#' @export
+find_parameters.sim.merMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, parameters = NULL, ...) {
+  fe <- colnames(.get_armsim_fixef_parms(x))
+  re <- colnames(.get_armsim_ranef_parms(x))
+
+  l <- .compact_list(list(
+    conditional = fe,
+    random = re
+  ))
+
+  l <- .filter_pars(l, parameters)
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  l <- .compact_list(l[elements])
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
 #' @export
 find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "sigma"), flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))

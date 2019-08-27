@@ -22,6 +22,7 @@ BugReports: https://github.com/easystats/insight/issues
 Depends:
     R (>= 3.0)
 Imports:
+    methods,
     stats,
     utils
 Suggests:

@@ -16,6 +16,10 @@
   - `color_if()` as utility-function to add color formatting to values, depending
     on certain conditions.
 
+## Changes to functions
+
+  - `find_parameters()` and `get_parameters()` now also support objects of class `sim` and `sim.merMod` (from `arm::sim()`).
+
 ## Bug fixes
 
   - `find_formula()` now extracts group factors of random effects for *gamlss*

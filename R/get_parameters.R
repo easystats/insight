@@ -737,6 +737,20 @@ get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), par
 }
 
 
+#' @rdname get_parameters
+#' @export
+get_parameters.sim.merMod <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, ...) {
+  effects <- match.arg(effects)
+  fe <- re <- NULL
+  if (effects %in% c("fixed", "all")) fe <- .get_armsim_fixef_parms(x)
+  if (effects %in% c("fixed", "all")) re <- .get_armsim_ranef_parms(x)
+
+  dat <- do.call(cbind, .compact_list(list(fe, re)))
+
+  as.data.frame(dat)[.get_parms_data(x, effects, "all", parameters)]
+}
+
+
 
 #' @rdname get_parameters
 #' @export
@@ -870,4 +884,38 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
   }
 
   pars
+}
+
+
+
+#' @importFrom methods slot slotNames
+.get_armsim_fixef_parms <- function(x) {
+  sn <- methods::slotNames(x)
+  as.data.frame(methods::slot(x, sn[1]))
+}
+
+
+
+#' @importFrom methods .hasSlot
+.get_armsim_ranef_parms <- function(x) {
+  dat <- NULL
+  if (methods::.hasSlot(x, "ranef")) {
+    re <- x@ranef
+    dat <- data.frame()
+
+    for (i in 1:length(re)) {
+      dn <- dimnames(re[[i]])[[2]]
+      l <- lapply(1:length(dn), function(j) {
+        d <- as.data.frame(re[[i]][, j, ])
+        colnames(d) <- sprintf("%s.%s", colnames(d), dn[j])
+        d
+      })
+      if (ncol(dat) == 0)
+        dat <- do.call(cbind, l)
+      else
+        dat <- cbind(dat, do.call(cbind, l))
+    }
+  }
+
+  dat
 }
