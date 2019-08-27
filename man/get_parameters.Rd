@@ -23,6 +23,7 @@
 \alias{get_parameters.brmsfit}
 \alias{get_parameters.stanreg}
 \alias{get_parameters.sim.merMod}
+\alias{get_parameters.sim}
 \alias{get_parameters.BFBayesFactor}
 \alias{get_parameters.stanmvreg}
 \title{Get model parameters}
@@ -89,6 +90,8 @@ get_parameters(x, ...)
 
 \method{get_parameters}{sim.merMod}(x, effects = c("fixed", "random",
   "all"), parameters = NULL, ...)
+
+\method{get_parameters}{sim}(x, parameters = NULL, ...)
 
 \method{get_parameters}{BFBayesFactor}(x, iterations = 4000,
   progress = FALSE, ...)

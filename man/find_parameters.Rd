@@ -9,6 +9,7 @@
 \alias{find_parameters.brmsfit}
 \alias{find_parameters.stanreg}
 \alias{find_parameters.sim.merMod}
+\alias{find_parameters.sim}
 \title{Find names of model parameters}
 \usage{
 find_parameters(x, ...)
@@ -36,6 +37,9 @@ find_parameters(x, ...)
 
 \method{find_parameters}{sim.merMod}(x, effects = c("all", "fixed",
   "random"), flatten = FALSE, parameters = NULL, ...)
+
+\method{find_parameters}{sim}(x, flatten = FALSE, parameters = NULL,
+  ...)
 }
 \arguments{
 \item{x}{A fitted model.}

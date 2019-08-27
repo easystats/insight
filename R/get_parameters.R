@@ -754,6 +754,15 @@ get_parameters.sim.merMod <- function(x, effects = c("fixed", "random", "all"), 
 
 #' @rdname get_parameters
 #' @export
+get_parameters.sim <- function(x, parameters = NULL, ...) {
+  dat <- .get_armsim_fixef_parms(x)
+  as.data.frame(dat)[.get_parms_data(x, "all", "all", parameters)]
+}
+
+
+
+#' @rdname get_parameters
+#' @export
 get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE, ...) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("This function requires package `BayesFactor` to work. Please install it.")
