@@ -751,7 +751,6 @@ find_parameters.sim.merMod <- function(x, effects = c("all", "fixed", "random"),
 }
 
 
-#' @rdname find_parameters
 #' @export
 find_parameters.sim <- function(x, flatten = FALSE, parameters = NULL, ...) {
   l <- .filter_pars(
