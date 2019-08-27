@@ -743,7 +743,7 @@ get_parameters.sim.merMod <- function(x, effects = c("fixed", "random", "all"), 
   effects <- match.arg(effects)
   fe <- re <- NULL
   if (effects %in% c("fixed", "all")) fe <- .get_armsim_fixef_parms(x)
-  if (effects %in% c("fixed", "all")) re <- .get_armsim_ranef_parms(x)
+  if (effects %in% c("random", "all")) re <- .get_armsim_ranef_parms(x)
 
   dat <- do.call(cbind, .compact_list(list(fe, re)))
 
