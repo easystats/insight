@@ -69,7 +69,7 @@ format_value.logical <- format_value.numeric
 #' @importFrom stats na.omit
 #' @keywords internal
 .format_value_unless_integer <- function(x, digits = 2, .missing = "", .width = NULL, ...) {
-  if (is.numeric(x) && !all(is.int(stats::na.omit(x)))) {
+  if (is.numeric(x) && !all(.is.int(stats::na.omit(x)))) {
     .format_value(x, digits = digits, .missing = .missing, .width = .width)
   } else if (anyNA(x)) {
     .convert_missing(x, .missing)
