@@ -4,6 +4,7 @@
 #' @param digits Number of significant digits.
 #' @param protect_integers Should integers be kept as integers (i.e., without decimals)?
 #' @param missing Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.
+#' @param width Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.
 #' @param ... Arguments passed to or from other methods.
 #'
 #'
@@ -23,23 +24,23 @@
 #'
 #' format_value(iris)
 #' @export
-format_value <- function(x, digits = 2, protect_integers = FALSE, missing = "", ...) {
+format_value <- function(x, digits = 2, protect_integers = FALSE, missing = "", width = NULL, ...) {
   UseMethod("format_value")
 }
 
 
 #' @export
-format_value.data.frame <- function(x, digits = 2, protect_integers = FALSE, missing = "", ...) {
-  as.data.frame(sapply(x, format_value, digits = digits, protect_integers = protect_integers, missing = missing, simplify = FALSE))
+format_value.data.frame <- function(x, digits = 2, protect_integers = FALSE, missing = "", width = NULL, ...) {
+  as.data.frame(sapply(x, format_value, digits = digits, protect_integers = protect_integers, missing = missing, width = width, simplify = FALSE))
 }
 
 
 #' @export
-format_value.numeric <- function(x, digits = 2, protect_integers = FALSE, missing = "", ...) {
+format_value.numeric <- function(x, digits = 2, protect_integers = FALSE, missing = "", width = NULL, ...) {
   if (protect_integers) {
-    out <- .format_value_unless_integer(x, digits = digits, .missing = missing, ...)
+    out <- .format_value_unless_integer(x, digits = digits, .missing = missing, .width = width, ...)
   } else {
-    out <- .format_value(x, digits = digits, .missing = missing, ...)
+    out <- .format_value(x, digits = digits, .missing = missing, .width = width, ...)
   }
   # Deal with negative zeros
   out[out == "-0"] <- "0"
@@ -67,9 +68,9 @@ format_value.logical <- format_value.numeric
 
 #' @importFrom stats na.omit
 #' @keywords internal
-.format_value_unless_integer <- function(x, digits = 2, .missing = "", ...) {
-  if (is.numeric(x) && !all(.is.int(stats::na.omit(x)))) {
-    .format_value(x, digits = digits, .missing = .missing)
+.format_value_unless_integer <- function(x, digits = 2, .missing = "", .width = NULL, ...) {
+  if (is.numeric(x) && !all(is.int(stats::na.omit(x)))) {
+    .format_value(x, digits = digits, .missing = .missing, .width = .width)
   } else if (anyNA(x)) {
     .convert_missing(x, .missing)
   } else {
@@ -78,12 +79,17 @@ format_value.logical <- format_value.numeric
 }
 
 #' @keywords internal
-.format_value <- function(x, digits = 2, .missing = "", ...) {
+.format_value <- function(x, digits = 2, .missing = "", .width = NULL, ...) {
   if (is.numeric(x)) {
-    x <- ifelse(is.na(x), .missing, sprintf(paste0("%.", digits, "f"), x))
+    x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
   } else if (anyNA(x)) {
     x <- .convert_missing(x, .missing)
   }
+
+  if (!is.null(.width)) {
+    x <- format(x, justify = "right", width = .width)
+  }
+
   x
 }
 
@@ -99,6 +105,7 @@ format_value.logical <- format_value.numeric
 }
 
 
+
 .is.int <- function(x) {
-  x %% 1 == 0
+  ifelse(is.infinite(x), FALSE, x %% 1 == 0)
 }
