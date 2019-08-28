@@ -5,7 +5,7 @@
 \title{Numeric Values Formatting}
 \usage{
 format_value(x, digits = 2, protect_integers = FALSE, missing = "",
-  ...)
+  width = NULL, ...)
 }
 \arguments{
 \item{x}{Numeric value.}
@@ -15,6 +15,8 @@ format_value(x, digits = 2, protect_integers = FALSE, missing = "",
 \item{protect_integers}{Should integers be kept as integers (i.e., without decimals)?}
 
 \item{missing}{Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.}
+
+\item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
