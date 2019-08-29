@@ -155,6 +155,10 @@ get_variance.clmm <- get_variance.merMod
 
 
 #' @export
+get_variance.wblm <- get_variance.merMod
+
+
+#' @export
 get_variance.lme <- get_variance.merMod
 
 

@@ -5,12 +5,8 @@ if (require("testthat") &&
 
   data("WageData")
   wages <- panel_data(WageData, id = id, wave = t)
-  m1 <-
-    wbm(lwage ~ lag(union) + wks |
-      blk + fem | blk * lag(union), data = wages)
-  m2 <-
-    wbm(lwage ~ lag(union) + wks |
-      blk + fem | blk * (t | id), data = wages)
+  m1 <- wbm(lwage ~ lag(union) + wks | blk + fem | blk * lag(union), data = wages)
+  m2 <- wbm(lwage ~ lag(union) + wks | blk + fem | blk * (t | id), data = wages)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
