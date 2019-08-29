@@ -19,6 +19,7 @@
 ## Changes to functions
 
   - `find_parameters()` and `get_parameters()` now also support objects of class `sim` and `sim.merMod` (from `arm::sim()`).
+  - `get_variance()` now also supports models of class *clmm*.
 
 ## Bug fixes
 

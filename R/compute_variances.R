@@ -169,6 +169,17 @@
 
     names(vals$re) <- re_names
     names(vals$vc) <- re_names
+  } else if (inherits(x, "clmm")) {
+    if (requireNamespace("ordinal", quietly = TRUE)) {
+      f <- find_formula(x)$conditional
+      mm <- stats::model.matrix(f, x$model)
+      vals <- list(
+        beta = c("(Intercept)" = 1, stats::coef(x)[intersect(names(coef(x)), colnames(mm))]),
+        X = mm,
+        vc = ordinal::VarCorr(x),
+        re = ordinal::ranef(x)
+      )
+    }
   } else {
     vals <- list(
       beta = lme4::fixef(x),
@@ -234,7 +245,7 @@
 #
 #' @importFrom stats nobs
 .compute_variance_random <- function(terms, x, vals) {
-  sigma_sum <- function(Sigma) {
+  .sigma_sum <- function(Sigma) {
     rn <- rownames(Sigma)
 
     if (!is.null(rn)) {
@@ -251,9 +262,9 @@
   }
 
   if (inherits(x, "MixMod")) {
-    sigma_sum(vals$vc)
+    .sigma_sum(vals$vc)
   } else {
-    sum(sapply(vals$vc[terms], sigma_sum))
+    sum(sapply(vals$vc[terms], .sigma_sum))
   }
 }
 

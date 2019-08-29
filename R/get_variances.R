@@ -132,44 +132,33 @@ get_variance.merMod <- function(x, component = c("all", "fixed", "random", "resi
 
 
 #' @export
-get_variance.rlmerMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
-  component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
-}
+get_variance.rlmerMod <- get_variance.merMod
 
 
 #' @export
-get_variance.glmmTMB <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
-  component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
-}
+get_variance.glmmTMB <- get_variance.merMod
 
 
 #' @export
-get_variance.stanreg <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
-  component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
-}
+get_variance.stanreg <- get_variance.merMod
 
 
 #' @export
-get_variance.MixMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
-  component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
-}
+get_variance.MixMod <- get_variance.merMod
 
 
 #' @export
-get_variance.lme <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
-  component <- match.arg(component)
-  .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances, verbose = verbose")
-}
+get_variance.clmm <- get_variance.merMod
+
+
+#' @export
+get_variance.lme <- get_variance.merMod
 
 
 #' @export
 get_variance.mixed <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   component <- match.arg(component)
-  .compute_variances(x$full_model, component = component, name_fun = "get_variance", name_full = "random effect variances, verbose = verbose")
+  .compute_variances(x$full_model, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
 }
 
 
