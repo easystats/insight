@@ -88,18 +88,6 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/tests_and_coverage.html">Tests and Coverage</a>
-    </li>
-  </ul>
-</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -123,9 +111,9 @@
       
     </div>
 
-    <div id="insight-0419000" class="section level1">
+    <div id="insight-050" class="section level1">
 <h1 class="page-header">
-<a href="#insight-0419000" class="anchor"></a>insight 0.4.1.9000<small> Unreleased </small>
+<a href="#insight-050" class="anchor"></a>insight 0.5.0<small> Unreleased </small>
 </h1>
 <div id="breaking-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -144,6 +132,16 @@
 <code><a href="../reference/format_value.html">format_value()</a></code> and <code><a href="../reference/format_table.html">format_table()</a></code> as utility-functions to format (model) output, especially for tabular output.</li>
 <li>
 <code><a href="../reference/color_if.html">color_if()</a></code> as utility-function to add color formatting to values, depending on certain conditions.</li>
+</ul>
+</div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>
+<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also support objects of class <code>sim</code> and <code>sim.merMod</code> (from <code><a href="https://www.rdocumentation.org/packages/arm/topics/sim">arm::sim()</a></code>).</li>
+<li>
+<code><a href="../reference/get_variance.html">get_variance()</a></code> now also supports models of class <em>clmm</em>.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
@@ -168,9 +166,9 @@
 <h1 class="page-header">
 <a href="#insight-041" class="anchor"></a>insight 0.4.1<small> 2019-07-24 </small>
 </h1>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now supports models with Gamma-family.</li>
@@ -229,9 +227,9 @@
 <li>The functions <code><a href="../reference/find_variables.html">find_variables()</a></code> and <code><a href="../reference/find_terms.html">find_terms()</a></code> were flipped, because what previously was considered as “term” was actually a “variable”, and vice versa.</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now allow to return a <code>sigma</code>-element for multivariate-response models (<em>brmsfit</em>, <em>stanmvreg</em>).</li>
@@ -303,9 +301,9 @@
 <code><a href="../reference/get_variance.html">get_variance()</a></code> no longer stops if random effects variance cannot be calculated. Rather, the return-value for <code>$var.random</code> will be <code>NULL</code>.</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now computes the full variance for mixed models with zero-inflation component.</li>
@@ -383,9 +381,9 @@
 <code><a href="../reference/print_color.html">print_color()</a></code> (resp. <code><a href="../reference/print_color.html">print_colour()</a></code>) to print coloured output to the console. Mainly implemented to reduce package dependencies.</li>
 </ul>
 </div>
-<div id="changes-to-functions-3" class="section level2">
+<div id="changes-to-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> get a <code>parameters</code>-argument for <code>brmsfit</code> and <code>stanreg</code> models, to allow selection of specific parameters that should be returned (#55).</li>
@@ -428,7 +426,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#insight-0419000">0.4.1.9000</a></li>
+        <li><a href="#insight-050">0.5.0</a></li>
         <li><a href="#insight-041">0.4.1</a></li>
         <li><a href="#insight-040">0.4.0</a></li>
         <li><a href="#insight-030">0.3.0</a></li>
