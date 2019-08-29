@@ -481,7 +481,7 @@ get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
   ))
 
   fixed <- data.frame(
-    parameter = names(l$conditional),
+    parameter = gsub("`", "", names(l$conditional), fixed = TRUE),
     estimate = unname(l$conditional),
     stringsAsFactors = FALSE
   )

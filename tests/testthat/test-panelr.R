@@ -204,6 +204,38 @@ if (require("testthat") &&
     )
   })
 
+
+  test_that("get_parameters", {
+    expect_equal(
+      get_parameters(m1),
+      data.frame(
+        parameter = c(
+          "(Intercept)",
+          "imean(lag(union))",
+          "imean(wks)",
+          "lag(union)",
+          "wks",
+          "blk",
+          "fem",
+          "lag(union):blk"
+        ),
+        estimate = c(
+          6.59813245629044,
+          -0.0279959204722801,
+          0.00438047648390025,
+          0.0582474262882615,
+          -0.00163678667081885,
+          -0.229414915661438,
+          -0.441756913071962,
+          -0.127319623945541
+        ),
+        stringsAsFactors = FALSE
+      ),
+      tolerance = 1e-4
+    )
+  })
+
+
   test_that("find_terms", {
     expect_equal(
       find_terms(m1),
