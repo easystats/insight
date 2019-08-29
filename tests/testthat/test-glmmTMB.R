@@ -654,6 +654,18 @@ if (require("testthat") &&
       get_parameters(m6)$parameter,
       c("(Intercept)", "(Intercept)")
     )
+
+    expect_equal(
+      get_parameters(m2)$parameter,
+      c("(Intercept)", "child", "camper1")
+    )
+
+    expect_equal(
+      get_parameters(m2, component = "all")$parameter,
+      c("(Intercept)", "child", "camper1")
+    )
+
+    expect_null(get_parameters(m2, component = "zi"))
   })
 
   test_that("linkfun", {

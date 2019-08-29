@@ -684,12 +684,16 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
     stringsAsFactors = FALSE
   )
 
-  fixedzi <- data.frame(
-    parameter = names(l$zero_inflated),
-    estimate = unname(l$zero_inflated),
-    component = "zero_inflated",
-    stringsAsFactors = FALSE
-  )
+  if (.obj_has_name(l, "zero_inflated")) {
+    fixedzi <- data.frame(
+      parameter = names(l$zero_inflated),
+      estimate = unname(l$zero_inflated),
+      component = "zero_inflated",
+      stringsAsFactors = FALSE
+    )
+  } else {
+    fixedzi <- NULL
+  }
 
   if (effects == "fixed") {
     switch(

@@ -30,6 +30,7 @@
   - `get_data()` dropped value and variable label attributes, when model frame
     contained matrix variables (like splines).
   - `get_priors()` swapped column names `location` and `scale` for *brmsfit* -objects.
+  - `get_parameters()` did not work for *glmmTMB* models without zero-inflation component.
   - `find_predictors()` did not remove parentheses from terms in multiple nested random effects.
   - Better support for *gam* models (package *mgcv*) with `ziplss` or `mvn` families.
 
