@@ -333,7 +333,7 @@
 .filter_pars <- function(l, parameters = NULL, is_mv = NULL) {
   if (!is.null(parameters)) {
     if (is.null(is_mv)) {
-      is_mv <- !is.null(attr(l, "is_mv", exact = TRUE)) && attr(l, "is_mv", exact = TRUE) == "1"
+      is_mv <- isTRUE(attr(l, "is_mv", exact = TRUE) == "1")
     }
     if (is_multivariate(l) || is_mv) {
       for (i in names(l)) {
