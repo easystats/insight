@@ -16,6 +16,10 @@
   - `color_if()` as utility-function to add color formatting to values, depending
     on certain conditions.
 
+## General
+
+  - Make extraction of model family information more stable for gam-objects.
+
 ## Changes to functions
 
   - `find_parameters()` and `get_parameters()` now also support objects of class `sim` and `sim.merMod` (from `arm::sim()`).
