@@ -12,7 +12,7 @@
 #'   (in comparison with \code{value}) is met.
 #' @param value The comparator. May be used in conjunction with \code{predicate}
 #'   to quickly set up a function which compares elements in \code{colums} to \code{value}.
-#'   May be ignored when \code{predicate} is a function that interally computes other
+#'   May be ignored when \code{predicate} is a function that internally computes other
 #'   comparisons. See 'Examples'.
 #' @param color_if,colour_if Character vector, indicating the color code used to
 #'   format values in \code{x} that meet the condition of \code{predicate} and \code{value}.

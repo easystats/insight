@@ -5,7 +5,8 @@
 ^docs$
 ^doc$
 ^LICENSE
-^_pkgdown$
+^_pkgdown\.$
+^appveyor\.$
 ^pkgdown$
 ^README.Rmd
 ^paper$
