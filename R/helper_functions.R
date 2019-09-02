@@ -332,7 +332,9 @@
 # Filter parameters from Stan-model fits
 .filter_pars <- function(l, parameters = NULL, is_mv = NULL) {
   if (!is.null(parameters)) {
-    if (is.null(is_mv)) is_mv <- attr(l, "is_mv", exact = TRUE)
+    if (is.null(is_mv)) {
+      is_mv <- !is.null(attr(l, "is_mv", exact = TRUE)) && attr(l, "is_mv", exact = TRUE) == "1"
+    }
     if (is_multivariate(l) || is_mv) {
       for (i in names(l)) {
         l[[i]] <- .filter_pars_univariate(l[[i]], parameters)
@@ -340,7 +342,7 @@
     } else {
       l <- .filter_pars_univariate(l, parameters)
     }
-    attr(l, "is_mv") <- is_mv
+    if (isTRUE(is_mv)) attr(l, "is_mv") <- "1"
   }
 
   l
