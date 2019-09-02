@@ -5,14 +5,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     context("insight, model_info")
 
     data("hunua")
-    m1 <-
-      vgam(agaaus ~ vitluc + s(altitude, df = 2), binomialff, data = hunua)
-    m2 <-
-      vgam(
-        cbind(agaaus, kniexc) ~ vitluc + s(altitude, df = c(2, 3)),
-        binomialff(multiple.responses = TRUE),
-        data = hunua
-      )
+    m1 <- download_model("vgam_1")
+    m2 <- download_model("vgam_2")
 
     test_that("model_info", {
       expect_true(model_info(m1)$is_binomial)

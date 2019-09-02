@@ -5,8 +5,8 @@
 ^docs$
 ^doc$
 ^LICENSE
-^_pkgdown\.$
-^appveyor\.$
+^_pkgdown\.yml$
+^appveyor\.yml$
 ^pkgdown$
 ^README.Rmd
 ^paper$
