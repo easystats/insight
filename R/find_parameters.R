@@ -685,7 +685,7 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
     l <- .compact_list(l[elements])
   }
 
-  l <- .filter_pars(l, parameters)
+  l <- .filter_pars(l, parameters, !is.null(is_mv) && is_mv == "1")
   attr(l, "is_mv") <- is_mv
 
   if (flatten) {
@@ -820,7 +820,7 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
 
 
   l <- mapply(c, l.cond, l.random, l.sigma, SIMPLIFY = FALSE)
-  l <- .filter_pars(l, parameters)
+  l <- .filter_pars(l, parameters, is_mv = TRUE)
 
   effects <- match.arg(effects)
   component <- match.arg(component)

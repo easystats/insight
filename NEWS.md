@@ -31,6 +31,7 @@
     models.
   - `find_parameters()` and `get_parameters()` no longer show `NA` coefficients
     from group factors of random effects for *gamlss* models.
+  - `find_parameters()` and `get_parameters()` did not work for multivariate response models of class *brmsfit* when argument `parameters` was specified.
   - `get_data()` dropped value and variable label attributes, when model frame
     contained matrix variables (like splines).
   - `get_priors()` swapped column names `location` and `scale` for *brmsfit* -objects.
