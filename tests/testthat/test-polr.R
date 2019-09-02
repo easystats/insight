@@ -5,8 +5,7 @@ if (require("testthat") &&
 
   data(housing, package = "MASS")
 
-  m1 <-
-    polr(Sat ~ Infl + Type + Cont, data = housing, weights = Freq)
+  m1 <- polr(Sat ~ Infl + Type + Cont, data = housing, weights = Freq)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_ordinal)
