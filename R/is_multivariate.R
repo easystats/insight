@@ -29,8 +29,14 @@
 #' }
 #' @export
 is_multivariate <- function(x) {
+
+  if (inherits(x, "gam", which = TRUE) == 1) {
+    f <- .gam_family(x)
+    gam_mv <- !is.null(f) && f$family == "Multivariate normal"
+  } else {
+    gam_mv <- FALSE
+  }
+
   (inherits(x, "brmsfit") && !is.null(stats::formula(x)$response)) |
-    inherits(x, "stanmvreg") |
-    (inherits(x, "gam", which = TRUE) == 1 && stats::family(x)$family == "Multivariate normal") |
-    !is.null(attr(x, "is_mv", exact = TRUE))
+    inherits(x, "stanmvreg") | gam_mv | !is.null(attr(x, "is_mv", exact = TRUE))
 }

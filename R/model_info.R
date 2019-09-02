@@ -360,7 +360,8 @@ model_info.gam <- function(x, ...) {
     class(x) <- c(class(x), "glm", "lm")
   }
 
-  faminfo <- stats::family(x)
+  faminfo <- .gam_family(x)
+
   link <- faminfo$link[1]
   is.mv <- faminfo$family == "Multivariate normal"
 

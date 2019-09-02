@@ -36,7 +36,7 @@ link_function.default <- function(x, ...) {
 
   tryCatch({
     # get model family
-    ff <- stats::family(x)
+    ff <- .gam_family(x)
 
     # return link function, if exists
     if ("linkfun" %in% names(ff)) {
@@ -62,7 +62,7 @@ link_function.default <- function(x, ...) {
 link_function.gam <- function(x, ...) {
   lf <-   tryCatch({
     # get model family
-    ff <- stats::family(x)
+    ff <- .gam_family(x)
 
     # return link function, if exists
     if ("linkfun" %in% names(ff)) {
@@ -82,7 +82,7 @@ link_function.gam <- function(x, ...) {
   )
 
   if (is.null(lf)) {
-    mi <- stats::family(x)
+    mi <- .gam_family(x)
     if (.obj_has_name(mi, "linfo")) {
       if (.obj_has_name(mi$linfo, "linkfun"))
         lf <- mi$linfo$linkfun

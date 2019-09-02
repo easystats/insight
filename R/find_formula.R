@@ -75,8 +75,8 @@ find_formula.gam <- function(x, ...) {
 
   if (!is.null(f)) {
     if (is.list(f)) {
-      mi <- stats::family(x)
-      if (mi$family == "ziplss") {
+      mi <- .gam_family(x)
+      if (!is.null(mi) && mi$family == "ziplss") {
         # handle formula for zero-inflated models
         f <- list(conditional = f[[1]], zero_inflated = f[[2]])
       } else if (mi$family == "Multivariate normal") {

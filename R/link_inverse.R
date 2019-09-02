@@ -50,7 +50,7 @@ link_inverse.default <- function(x, ...) {
 #' @export
 link_inverse.gam <- function(x, ...) {
   li <- tryCatch({
-    stats::family(x)$linkinv
+    .gam_family(x)$linkinv
   },
   error = function(x) {
     NULL
@@ -58,7 +58,7 @@ link_inverse.gam <- function(x, ...) {
   )
 
   if (is.null(li)) {
-    mi <- stats::family(x)
+    mi <- .gam_family(x)
     if (.obj_has_name(mi, "linfo")) {
       if (.obj_has_name(mi$linfo, "linkinv"))
         li <- mi$linfo$linkinv

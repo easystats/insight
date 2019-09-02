@@ -443,3 +443,27 @@
 .safe_deparse <- function(string) {
   paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = " ")
 }
+
+
+
+#' @importFrom stats family
+.gam_family <- function(x) {
+  faminfo <- tryCatch(
+    {
+      stats::family(x)
+    },
+    error = function(e) { NULL }
+  )
+
+  # try to set manually, if not found otherwise
+  if (is.null(faminfo)) {
+    faminfo <- tryCatch(
+      {
+        x$family
+      },
+      error = function(e) { NULL }
+    )
+  }
+
+  faminfo
+}
