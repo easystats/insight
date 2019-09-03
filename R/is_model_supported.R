@@ -81,6 +81,7 @@ is_model_supported <- function(x) {
       "plm",
       "polr",
       "psm",
+      "rlm",
       "rlmerMod",
       "rq",
       "rqss",

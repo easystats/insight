@@ -106,6 +106,7 @@ is_model <- function(x) {
       "psm",
       "ridgelm",
       "rjags",
+      "rlm",
       "rlme",
       "rlmerMod",
       "rms",
