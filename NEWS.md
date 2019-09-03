@@ -24,6 +24,7 @@
 
   - `find_parameters()` and `get_parameters()` now also support objects of class `sim` and `sim.merMod` (from `arm::sim()`).
   - `get_variance()` now also supports models of class *clmm*.
+  - `find_predictors()` and `find_variables()` now include the Euclidean distance matrix for spatial models from *glmmTMB* (returned as random effects element, or more precise, as random slope).
 
 ## Bug fixes
 

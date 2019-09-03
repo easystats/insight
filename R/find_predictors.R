@@ -107,6 +107,17 @@ return_vars <- function(f, x) {
   l <- lapply(l, function(i) gsub("`", "", i, fixed = TRUE))
   names(l) <- names(f)[!empty_elements]
 
+  # check if random slopes are in model terms
+  for (i in c("random", "zero_inflated_random")) {
+    if (i %in% names(l)) {
+      .rs <- find_random_slopes(x)[[i]]
+      if (!is.null(.rs)) {
+        .rs_in_pred <- .rs %in% unname(unlist(l))
+        if (!all(.rs_in_pred)) l[[i]] <- c(.rs[!.rs_in_pred], l[[i]])
+      }
+    }
+  }
+
   l
 }
 
