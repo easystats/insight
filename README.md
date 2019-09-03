@@ -102,7 +102,7 @@ predictors). These are powerful families of functions allowing for great
 flexibility in use, whether at a high, descriptive level (`find_*`) or
 narrower level of statistical inspection and reporting (`get_*`).
 
-![](https://raw.githubusercontent.com/easystats/insight/master/paper/figure1.png)
+![](https://raw.githubusercontent.com/easystats/insight/master/paper/figure1_small.png)
 
 In total, the **insight** package includes 16 core functions:
 [get\_data()](https://easystats.github.io/insight/reference/get_data.html),
@@ -285,4 +285,4 @@ If this package helped you, please consider citing as follows:
 Lüdecke D, Waggoner P, Makowski D. insight: A Unified Interface to
 Access Information from Model Objects in R. Journal of Open Source
 Software 2019;4:1412.
-[doi:10.21105/joss.01412](https://joss.theoj.org/papers/10.21105/joss.01412)
+[doi:10.21105/joss.01412](https://doi.org/10.21105/joss.01412)
