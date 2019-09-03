@@ -265,7 +265,7 @@ iv\_robust*), **feisr** (*feis*), **gam** (*Gam*), **gamm4** ,
 **gamlss**, **gbm**, **gee**, **geepack** (*geeglm*), **GLMMadaptive**
 (*MixMod*), **glmmTMB** (*glmmTMB*), **gmnl**, **HRQoL** (*BBreg*,
 *BBmm*), **lfe** (*felm*), **lme4** (*lmer, glmer, nlmer, glmer.nb*),
-**MASS** (*glmmPQL, polr*), **mgcv** (*gam, gamm*), **multgee**
+**MASS** (*glmmPQL, polr, rlm*), **mgcv** (*gam, gamm*), **multgee**
 (*LORgee*), **nnet** (*multinom*), **nlme** (*lme, gls*), **ordinal**
 (*clm, clm2, clmm*), **panelr** (*wbm*), **plm**, **pscl** (*zeroinf,
 hurdle*), **quantreg** (*rq, crq, rqss*), **rms** (*lsr, ols, psm*),
