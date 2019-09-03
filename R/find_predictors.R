@@ -110,10 +110,11 @@ return_vars <- function(f, x) {
   # check if random slopes are in model terms
   for (i in c("random", "zero_inflated_random")) {
     if (i %in% names(l)) {
-      .rs <- find_random_slopes(x)[[i]]
-      if (!is.null(.rs)) {
-        .rs_in_pred <- .rs %in% unname(unlist(l))
-        if (!all(.rs_in_pred)) l[[i]] <- c(.rs[!.rs_in_pred], l[[i]])
+      rs <- find_random_slopes(x)[[i]]
+      if (!is.null(rs)) {
+        comp <- ifelse(i == "random", "conditional", "zero_inflated")
+        rs_in_pred <- rs %in% unname(unlist(.prepare_predictors(x, find_formula(x), comp)))
+        if (!all(rs_in_pred)) l[[i]] <- c(rs[!rs_in_pred], l[[i]])
       }
     }
   }
