@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -37,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get clean names of model parameters — clean_parameters" />
 
+<meta property="og:title" content="Get clean names of model parameters — clean_parameters" />
 <meta property="og:description" content="This function &quot;cleans&quot; names of model parameters by removing
 patterns like &quot;r_&quot; or &quot;b[]&quot; (mostly applicable to Stan models)
 and adding columns with information to which group or component parameters
@@ -49,9 +51,9 @@ in particular of - but not limited to - posterior samples from Stan models,
 depending on certain characteristics. This might be useful when only selective
 results should be reported or results from all parameters should be filtered
 to return only certain results (see print_parameters)." />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -81,7 +83,7 @@ to return only certain results (see print_parameters)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -103,7 +105,6 @@ to return only certain results (see print_parameters)." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -124,7 +125,6 @@ to return only certain results (see print_parameters)." />
     </div>
 
     <div class="ref-description">
-    
     <p>This function "cleans" names of model parameters by removing
 patterns like <code>"r_"</code> or <code>"b[]"</code> (mostly applicable to Stan models)
 and adding columns with information to which group or component parameters
@@ -135,11 +135,10 @@ in particular of - but not limited to - posterior samples from Stan models,
 depending on certain characteristics. This might be useful when only selective
 results should be reported or results from all parameters should be filtered
 to return only certain results (see <code><a href='print_parameters.html'>print_parameters</a></code>).</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>clean_parameters</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -152,7 +151,7 @@ to return only certain results (see <code><a href='print_parameters.html'>print_
       <td><p>Currently not used.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with "cleaned" parameter names and information on
@@ -160,7 +159,6 @@ to return only certain results (see <code><a href='print_parameters.html'>print_
   across different models, the returned data frame always has at least four
   columns <code>Parameter</code>, <code>Effects</code>, <code>Component</code> and
   <code>Cleaned_Parameter</code>. See 'Details'.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <code>Effects</code> column indicate if a parameter is a <em>fixed</em>
@@ -173,7 +171,6 @@ formula. Furthermore, <em>Cleaned_Parameter</em> column is returned that
 contains "human readable" parameter names (which are mostly identical to
 <code>Parameter</code>, except for for models from <span class="pkg">brms</span> or <span class="pkg">rstanarm</span>,
 or for specific terms like smooth- or spline-terms).</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
@@ -186,11 +183,8 @@ or for specific terms like smooth- or spline-terms).</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

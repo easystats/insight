@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -37,10 +39,11 @@
 
 
 
-<meta property="og:title" content="Changelog" />
 
+<meta property="og:title" content="Changelog" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -70,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -92,7 +95,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -134,6 +136,13 @@
 <code><a href="../reference/color_if.html">color_if()</a></code> as utility-function to add color formatting to values, depending on certain conditions.</li>
 </ul>
 </div>
+<div id="general" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general" class="anchor"></a>General</h2>
+<ul>
+<li>Make extraction of model family information more stable for gam-objects.</li>
+</ul>
+</div>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
@@ -153,9 +162,13 @@
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> no longer show <code>NA</code> coefficients from group factors of random effects for <em>gamlss</em> models.</li>
 <li>
+<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not work for multivariate response models of class <em>brmsfit</em> when argument <code>parameters</code> was specified.</li>
+<li>
 <code><a href="../reference/get_data.html">get_data()</a></code> dropped value and variable label attributes, when model frame contained matrix variables (like splines).</li>
 <li>
 <code><a href="../reference/get_priors.html">get_priors()</a></code> swapped column names <code>location</code> and <code>scale</code> for <em>brmsfit</em> -objects.</li>
+<li>
+<code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not work for <em>glmmTMB</em> models without zero-inflation component.</li>
 <li>
 <code><a href="../reference/find_predictors.html">find_predictors()</a></code> did not remove parentheses from terms in multiple nested random effects.</li>
 <li>Better support for <em>gam</em> models (package <em>mgcv</em>) with <code>ziplss</code> or <code>mvn</code> families.</li>
@@ -188,9 +201,9 @@
 <h1 class="page-header">
 <a href="#insight-040" class="anchor"></a>insight 0.4.0<small> 2019-07-01 </small>
 </h1>
-<div id="general" class="section level2">
+<div id="general-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general" class="anchor"></a>General</h2>
+<a href="#general-1" class="anchor"></a>General</h2>
 <ul>
 <li>Updates <code>CITATION</code>, based on publication in <a href="https://doi.org/10.21105/joss.01412">JOSS</a>.</li>
 <li>Added <code><a href="https://www.rdocumentation.org/packages/stats/topics/nobs">nobs()</a></code>-method for those model-objects supported by <em>insight</em> that did not yet provide such a method.</li>
@@ -345,9 +358,9 @@
 <h1 class="page-header">
 <a href="#insight-020" class="anchor"></a>insight 0.2.0<small> 2019-03-29 </small>
 </h1>
-<div id="general-1" class="section level2">
+<div id="general-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-1" class="anchor"></a>General</h2>
+<a href="#general-2" class="anchor"></a>General</h2>
 <ul>
 <li>Better handling of <code>AsIs</code>-variables with division-operation as dependent variables, e.g. if outcome was defined as <code><a href="https://www.rdocumentation.org/packages/base/topics/AsIs">I(income/frequency)</a></code>, especially for <code><a href="../reference/find_response.html">find_response()</a></code> and <code><a href="../reference/get_data.html">get_data()</a></code>.</li>
 <li>Revised package-functions related to <code>felm</code>-models due to breaking changes in the <em>lfe</em>-package.</li>
@@ -412,9 +425,9 @@
 <h1 class="page-header">
 <a href="#insight-012" class="anchor"></a>insight 0.1.2<small> 2019-03-05 </small>
 </h1>
-<div id="general-2" class="section level2">
+<div id="general-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-2" class="anchor"></a>General</h2>
+<a href="#general-3" class="anchor"></a>General</h2>
 <ul>
 <li>Initial release.</li>
 </ul>

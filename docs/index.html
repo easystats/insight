@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -141,7 +141,7 @@
 <h2 class="hasAnchor">
 <a href="#functions" class="anchor"></a>Functions</h2>
 <p>The package revolves around two key prefixes: <code>get_*</code> and <code>find_*</code>. The <code>get_*</code> prefix extracts <em>values</em> (or <em>data</em>) associated with model-specific objects (e.g., parameters or variables), while the <code>find_*</code> prefix <em>lists</em> model-specific objects (e.g., priors or predictors). These are powerful families of functions allowing for great flexibility in use, whether at a high, descriptive level (<code>find_*</code>) or narrower level of statistical inspection and reporting (<code>get_*</code>).</p>
-<p><img src="https://raw.githubusercontent.com/easystats/insight/master/paper/figure1.png"></p>
+<p><img src="https://raw.githubusercontent.com/easystats/insight/master/paper/figure1_small.png"></p>
 <p>In total, the <strong>insight</strong> package includes 16 core functions: <a href="https://easystats.github.io/insight/reference/get_data.html">get_data()</a>, <a href="https://easystats.github.io/insight/reference/get_priors.html">get_priors()</a>, <a href="https://easystats.github.io/insight/reference/get_variance.html">get_variance()</a>, <a href="https://easystats.github.io/insight/reference/get_parameters.html">get_parameters()</a>, <a href="https://easystats.github.io/insight/reference/get_predictors.html">get_predictors()</a>, <a href="https://easystats.github.io/insight/reference/get_random.html">get_random()</a>, <a href="https://easystats.github.io/insight/reference/get_response.html">get_response()</a>, <a href="https://easystats.github.io/insight/reference/find_algorithm.html">find_algorithm()</a>, <a href="https://easystats.github.io/insight/reference/find_formula.html">find_formula()</a>, <a href="https://easystats.github.io/insight/reference/find_variables.html">find_variables()</a>, <a href="https://easystats.github.io/insight/reference/find_terms.html">find_terms()</a>, <a href="https://easystats.github.io/insight/reference/find_parameters.html">find_parameters()</a>, <a href="https://easystats.github.io/insight/reference/find_predictors.html">find_predictors()</a>, <a href="https://easystats.github.io/insight/reference/find_random.html">find_random()</a>, <a href="https://easystats.github.io/insight/reference/find_response.html">find_response()</a>, and <a href="https://easystats.github.io/insight/reference/model_info.html">model_info()</a>. In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the <code><a href="reference/find_terms.html">find_terms()</a></code> function’s <code>effects</code> argument allows for the extraction of “fixed effects” terms, “random effects” terms, or by default, “all” terms in the model object. We point users to the package documentation or the complementary package website, <a href="https://easystats.github.io/insight/" class="uri">https://easystats.github.io/insight/</a>, for a detailed list of the arguments associated with each function as well as the returned values from each function.</p>
 </div>
 <div id="examples-of-use-cases-in-r" class="section level2">
@@ -240,7 +240,7 @@
 <h2 class="hasAnchor">
 <a href="#credits" class="anchor"></a>Credits</h2>
 <p>If this package helped you, please consider citing as follows:</p>
-<p>Lüdecke D, Waggoner P, Makowski D. insight: A Unified Interface to Access Information from Model Objects in R. Journal of Open Source Software 2019;4:1412. <a href="doi:10.21105/joss.01412" class="uri">doi:10.21105/joss.01412</a></p>
+<p>Lüdecke D, Waggoner P, Makowski D. insight: A Unified Interface to Access Information from Model Objects in R. Journal of Open Source Software 2019;4:1412. doi: <a href="https://doi.org/10.21105/joss.01412">10.21105/joss.01412</a></p>
 </div>
 </div>
   </div>
@@ -279,6 +279,7 @@
 <li>Philip Waggoner <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-7825-7573" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 </ul>
 </div>
+
 
       <div class="dev-status">
 <h2>Dev status</h2>

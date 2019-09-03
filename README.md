@@ -284,5 +284,5 @@ If this package helped you, please consider citing as follows:
 
 Lüdecke D, Waggoner P, Makowski D. insight: A Unified Interface to
 Access Information from Model Objects in R. Journal of Open Source
-Software 2019;4:1412.
-[doi:10.21105/joss.01412](https://doi.org/10.21105/joss.01412)
+Software 2019;4:1412. doi:
+[10.21105/joss.01412](https://doi.org/10.21105/joss.01412)
