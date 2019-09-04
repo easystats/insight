@@ -69,7 +69,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
   # as fixed effect predictor. In such cases, we have to add the random slope term
   # manually, so other functions like "get_data()" work as expected...
 
-  if (.obj_has_name(l, "random") && effects %in% c("all", "random")) {
+  if (.obj_has_name(l, "random") && effects == "all") {
     random_slope <- unname(unlist(find_random_slopes(x)))
     all_predictors <- unlist(unique(l))
     rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
