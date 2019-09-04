@@ -27,14 +27,12 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         find_predictors(m1, effects = "all", flatten = TRUE),
         c("elevation", "region", "pos", "ID")
       )
+
       expect_identical(
         find_predictors(m1, effects = "random"),
-        list(random = c("pos", "ID"))
+        list(random = "ID")
       )
-      expect_identical(
-        find_predictors(m1, effects = "random", flatten = TRUE),
-        c("pos", "ID")
-      )
+      expect_identical(find_predictors(m1, effects = "random", flatten = TRUE), "ID")
     })
 
     test_that("find_response", {
@@ -137,7 +135,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     test_that("get_paramaters", {
       expect_equal(nrow(get_parameters(m1)),4)
       expect_equal(
-        colnames(get_parameters(m1)$parameter),
+        get_parameters(m1)$parameter,
         c("(Intercept)", "elevation", "region2", "region3")
       )
     })

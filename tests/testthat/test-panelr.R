@@ -150,12 +150,12 @@ if (require("testthat") &&
         response = "lwage",
         conditional = c("union", "wks"),
         instruments = c("blk", "fem"),
-        random = "id"
+        random = c("t", "id")
       )
     )
     expect_equal(
       find_variables(m2, flatten = TRUE),
-      c("lwage", "union", "wks", "blk", "fem", "id")
+      c("lwage", "union", "wks", "blk", "fem", "t", "id")
     )
   })
 
