@@ -64,6 +64,19 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
     return(NULL)
   }
 
+
+  # some models, like spatial models, have random slopes that are not defined
+  # as fixed effect predictor. In such cases, we have to add the random slope term
+  # manually, so other functions like "get_data()" work as expected...
+
+  if (.obj_has_name(l, "random") && effects %in% c("all", "random")) {
+    random_slope <- unname(unlist(find_random_slopes(x)))
+    all_predictors <- unlist(unique(l))
+    rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
+    if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
+  }
+
+
   if (flatten) {
     unique(unlist(l))
   } else {
@@ -106,18 +119,6 @@ return_vars <- function(f, x) {
   l <- lapply(l, .remove_values, c(0, 1))
   l <- lapply(l, function(i) gsub("`", "", i, fixed = TRUE))
   names(l) <- names(f)[!empty_elements]
-
-  # check if random slopes are in model terms
-  for (i in c("random", "zero_inflated_random")) {
-    if (i %in% names(l)) {
-      rs <- find_random_slopes(x)[[i]]
-      if (!is.null(rs)) {
-        comp <- ifelse(i == "random", "conditional", "zero_inflated")
-        rs_in_pred <- rs %in% unname(deparse(unlist(.prepare_predictors(x, find_formula(x), comp)[[comp]])))
-        if (!all(rs_in_pred) && !rs[!rs_in_pred] %in% l[[i]]) l[[i]] <- c(rs[!rs_in_pred], l[[i]])
-      }
-    }
-  }
 
   l
 }
