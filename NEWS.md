@@ -1,3 +1,9 @@
+# insight 0.5.1
+
+## Bug fixes
+
+  - Fixed issue in `find_parameters()` and `get_parameters()` for *gamlss* models.
+
 # insight 0.5.0
 
 ## Breaking Changes

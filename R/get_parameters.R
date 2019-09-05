@@ -187,25 +187,35 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
 #' @importFrom stats na.omit
 #' @export
 get_parameters.gamlss <- function(x, ...) {
-  pars <- list(
-    conditional = stats::na.omit(stats::coef(x)),
-    sigma = stats::coef(x, what = "sigma"),
-    nu = stats::coef(x, what = "nu"),
-    tau = stats::coef(x, what = "tau")
-  )
+  pars <- lapply(x$parameters, function(i) {
+    stats::na.omit(stats::coef(x, what = i))
+  })
 
-  data.frame(
-    parameter = c(names(pars$conditional), names(pars$sigma), names(pars$nu), names(pars$tau)),
-    estimate = c(unname(pars$conditional), unname(pars$sigma), unname(pars$nu), unname(pars$tau)),
-    component = c(
-      rep("conditional", length(pars$conditional)),
-      rep("sigma", length(pars$sigma)),
-      rep("nu", length(pars$nu)),
-      rep("tau", length(pars$tau))
-    ),
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
+  names(pars) <- x$parameters
+  if ("mu" %in% names(pars)) names(pars)[1] <- "conditional"
+
+  do.call(rbind, lapply(names(pars), function(i) {
+    data.frame(
+      parameter = names(pars[[i]]),
+      estimate = pars[[i]],
+      component = i,
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }))
+  #
+  # data.frame(
+  #   parameter = c(names(pars$conditional), names(pars$sigma), names(pars$nu), names(pars$tau)),
+  #   estimate = c(unname(pars$conditional), unname(pars$sigma), unname(pars$nu), unname(pars$tau)),
+  #   component = c(
+  #     rep("conditional", length(pars$conditional)),
+  #     rep("sigma", length(pars$sigma)),
+  #     rep("nu", length(pars$nu)),
+  #     rep("tau", length(pars$tau))
+  #   ),
+  #   stringsAsFactors = FALSE,
+  #   row.names = NULL
+  # )
 }
 
 
