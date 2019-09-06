@@ -170,6 +170,13 @@
     re <- .trim(substring(re, max(gregexpr(pattern = "\\|", re)[[1]]) + 1))
   }
 
+  # check for multi-membership models
+  if (inherits(model, "brmsfit")) {
+    if (grepl("mm\\((.*)\\)", re)) {
+      re <- trimws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",")))
+    }
+  }
+
   if (split_nested) {
     # remove parenthesis for nested models
     re <- unique(unlist(strsplit(re, "\\:")))
@@ -192,7 +199,7 @@
     )
 
     if (any(has_parantheses)) {
-      re[has_parantheses] <- sub(pattern = "[\\(\\)]", replacement = "", x = re[has_parantheses])
+      re[has_parantheses] <- gsub(pattern = "[\\(\\)]", replacement = "", x = re[has_parantheses])
     }
 
     re

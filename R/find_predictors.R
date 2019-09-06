@@ -55,9 +55,9 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 
   # random effects are returned as list, so we need to unlist here
   if (is_mv) {
-    l <- lapply(f, function(.i) return_vars(.i, x))
+    l <- lapply(f, function(.i) .return_vars(.i, x))
   } else {
-    l <- return_vars(f, x)
+    l <- .return_vars(f, x)
   }
 
   if (.is_empty_object(l) || .is_empty_object(.compact_list(l))) {
@@ -85,7 +85,7 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
 }
 
 
-return_vars <- function(f, x) {
+.return_vars <- function(f, x) {
   l <- lapply(names(f), function(i) {
     if (i %in% c("random", "zero_inflated_random")) {
       unique(paste(unlist(f[[i]])))
