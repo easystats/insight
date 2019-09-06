@@ -259,3 +259,9 @@ get_group_factor <- function(x, f) {
     grepl("^(?!(brms::s\\())", x, perl = TRUE) &
     grepl("^(?!(smooth_sd\\[))", x, perl = TRUE)
 }
+
+
+.rename_values <- function(x, old, new) {
+  x[x %in% old] <- new
+  x
+}
