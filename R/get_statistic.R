@@ -219,6 +219,7 @@ get_statistic.gamlss <- function(model, statistic_column = 3, ...) {
 # Other models -------------------------------------------------------
 
 
+#' @importFrom stats vcov
 #' @export
 get_statistic.svyglm.nb <- function(x, ...) {
   if (!isNamespaceLoaded("survey")) {
@@ -242,3 +243,22 @@ get_statistic.svyglm.nb <- function(x, ...) {
 
 #' @export
 get_statistic.svyglm.zip <- get_statistic.svyglm.nb
+
+
+#' @importFrom stats coef
+#' @export
+get_statistic.betareg <- function(model, ...) {
+  parms <- get_parameters(model)
+  cs <- do.call(rbind, stats::coef(summary(model)))
+  se <- as.vector(cs[, 2])
+
+  out <- data.frame(
+    Parameter = parms$parameter,
+    Statistic = parms$estimate / se,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "z"
+  out
+}
