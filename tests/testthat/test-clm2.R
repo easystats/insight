@@ -5,8 +5,7 @@ if (require("testthat") &&
   context("insight, model_info")
 
   data(housing, package = "MASS")
-  m1 <-
-    clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+  m1 <- clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_ordinal)

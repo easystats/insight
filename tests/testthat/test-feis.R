@@ -4,14 +4,12 @@ if (require("testthat") &&
   context("insight, feisr")
 
   data(mwp)
-  m1 <-
-    feis(
-      lnw ~ marry + enrol + as.factor(yeargr) |
-        exp + I(exp^2),
-      data = mwp,
-      id = "id",
-      robust = TRUE
-    )
+  m1 <- feis(
+    lnw ~ marry + enrol + as.factor(yeargr) | exp + I(exp^2),
+    data = mwp,
+    id = "id",
+    robust = TRUE
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
