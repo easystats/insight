@@ -4,6 +4,7 @@
 
   - Fixed issue in `find_parameters()` and `get_parameters()` for *gamlss* models.
   - Fixed issue in `get_data()` for *plm* models, where the `index`-argument was used in the `plm()`-function call.
+  - Fixed issue in `get_data()`, `find_predictors()` and `find_variables()` for *brmsfit*  multi-membership-models.
 
 # insight 0.5.0
 
