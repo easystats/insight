@@ -1,5 +1,9 @@
 # insight 0.5.1
 
+## New functions
+
+  - `get_statistic()` to return the test statistic of model estimates.
+
 ## Bug fixes
 
   - Fixed issue in `find_parameters()` and `get_parameters()` for *gamlss* models.

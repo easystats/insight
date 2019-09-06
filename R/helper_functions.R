@@ -23,6 +23,13 @@
 }
 
 
+# rename values in a vector
+.rename_values <- function(x, old, new) {
+  x[x %in% old] <- new
+  x
+}
+
+
 
 # is string empty?
 .is_empty_string <- function(x) {
@@ -475,4 +482,21 @@
   }
 
   faminfo
+}
+
+
+
+# for models with zero-inflation component, return
+# required component of model-summary
+.filter_component <- function(dat, component) {
+  switch(
+    component,
+    "cond" = ,
+    "conditional" = dat[dat$component == "conditional", ],
+    "zi" = ,
+    "zero_inflated" = dat[dat$component == "zero_inflated", ],
+    "dispersion" = dat[dat$component == "dispersion", ],
+    "smooth_terms" = dat[dat$component == "smooth_terms", ],
+    dat
+  )
 }

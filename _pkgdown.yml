@@ -25,7 +25,6 @@ reference:
   - find_interactions
   - find_random_slopes
   - find_terms
-  - find_statistic
   - find_variables
 
 - title: "Get Data from Model Objects"
@@ -50,6 +49,8 @@ reference:
   - get_random
   - find_response
   - get_response
+  - find_statistic
+  - get_statistic
   - find_weights
   - get_weights
 
