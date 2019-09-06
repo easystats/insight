@@ -5,17 +5,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     context("insight, model_info")
 
     data(Crime)
-    m1 <-
-      plm(
-        lcrmrte ~ lprbarr + factor(year) |
-          . - lprbarr + lmix,
-        data = Crime,
-        model = "random"
-      )
+    m1 <- plm(lcrmrte ~ lprbarr + factor(year) | . - lprbarr + lmix, data = Crime, model = "random")
 
     # data
     set.seed(123)
-    library(plm)
     data("Produc", package = "plm")
 
     # model
@@ -73,6 +66,12 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_equal(
         colnames(get_data(m1)),
         c("lcrmrte", "lprbarr", "year", "lmix")
+      )
+
+      expect_equal(nrow(get_data(m2)), 816)
+      expect_equal(
+        colnames(get_data(m2)),
+        c("gsp", "pcap", "pc", "emp", "unemp", "state", "year")
       )
     })
 

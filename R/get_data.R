@@ -192,10 +192,24 @@ get_data.data.frame <- function(x, ...) {
 #' @export
 get_data.plm <- function(x, ...) {
   mf <- stats::model.frame(x)
+  model_terms <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
   cn <- colnames(mf)
   mf <- as.data.frame(lapply(mf, as.vector))
   colnames(mf) <- clean_names(cn)
-  model_terms <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
+
+  # find index variables
+  index <- eval(parse(text = .safe_deparse(x$call))[[1]]$index)
+
+  # try to get index variables from orignal data
+  if (!is.null(index)) {
+    original_data <- .get_data_from_env(x)
+    keep <- intersect(index, colnames(original_data))
+    if (length(keep)) {
+      mf <- cbind(mf, original_data[, keep, drop = FALSE])
+      model_terms <- c(model_terms, keep)
+    }
+  }
+
   .prepare_get_data(x, mf[, model_terms, drop = FALSE])
 }
 
