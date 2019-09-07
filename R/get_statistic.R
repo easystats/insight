@@ -71,6 +71,10 @@ get_statistic.truncreg <- get_statistic.default
 
 
 #' @export
+get_statistic.negbin <- get_statistic.default
+
+
+#' @export
 get_statistic.feis <- get_statistic.default
 
 
