@@ -5,8 +5,7 @@ if (require("testthat") &&
   context("insight, truncreg")
 
   data("tobin", package = "survival")
-  m1 <-
-    truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
+  m1 <- truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)

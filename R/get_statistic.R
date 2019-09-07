@@ -67,6 +67,10 @@ get_statistic.plm <- get_statistic.default
 
 
 #' @export
+get_statistic.truncreg <- get_statistic.default
+
+
+#' @export
 get_statistic.feis <- get_statistic.default
 
 
