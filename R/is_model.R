@@ -22,6 +22,7 @@ is_model <- function(x) {
     x,
     c(
       "aareg",
+      "anova",
       "aov",
       "aovlist",
       "BBmm",
