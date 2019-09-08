@@ -249,8 +249,10 @@ get_statistic.svyglm.nb <- function(x, ...) {
 }
 
 
+
 #' @export
 get_statistic.svyglm.zip <- get_statistic.svyglm.nb
+
 
 
 #' @importFrom stats coef
@@ -274,7 +276,7 @@ get_statistic.betareg <- function(model, ...) {
 
 
 #' @export
-.get_statistic.survreg <- function(model, ...) {
+get_statistic.survreg <- function(model, ...) {
   parms <- get_parameters(model)
   s <- summary(model)
   out <- data.frame(
@@ -292,7 +294,7 @@ get_statistic.betareg <- function(model, ...) {
 
 #' @importFrom methods slot
 #' @export
-.get_statistic.glimML <- function(model, ...) {
+get_statistic.glimML <- function(model, ...) {
   if (!requireNamespace("aod", quietly = TRUE)) {
     stop("Package 'aod' required for this function to work. Please install it.")
   }
@@ -303,6 +305,25 @@ get_statistic.betareg <- function(model, ...) {
   out <- data.frame(
     Parameter = parms$parameter,
     Statistic = s[, 3],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "z"
+  out
+}
+
+
+
+#' @importFrom stats coef vcov
+#' @export
+get_statistic.lrm <- function(model, ...) {
+  parms <- get_parameters(model)
+  stat <- stats::coef(model) / sqrt(diag(stats::vcov(model)))
+
+  out <- data.frame(
+    Parameter = parms$parameter,
+    Statistic = as.vector(stat),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
