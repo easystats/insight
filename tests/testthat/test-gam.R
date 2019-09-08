@@ -173,6 +173,6 @@ if (require("testthat") &&
   })
 
   test_that("find_statistic", {
-    expect_null(find_statistic(m1))
+    expect_identical(find_statistic(m1), "t-statistic")
   })
 }

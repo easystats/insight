@@ -69,6 +69,7 @@ is_model <- function(x) {
       "glmRob",
       "gls",
       "gmnl",
+      "gmm",
       "htest",
       "hurdle",
       "iv_robust",
