@@ -331,3 +331,11 @@ get_statistic.lrm <- function(model, ...) {
   attr(out, "statistic") <- "z"
   out
 }
+
+
+#' @export
+get_statistic.ols <- get_statistic.lrm
+
+
+#' @export
+get_statistic.rms <- get_statistic.lrm
