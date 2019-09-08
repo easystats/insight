@@ -42,6 +42,7 @@ find_statistic <- function(x, ...) {
       "drc",
       "feis",
       "felm",
+      "gam",
       "gamlss",
       "garch",
       "glmmPQL",
@@ -165,9 +166,7 @@ find_statistic <- function(x, ...) {
   # pattern finding ----------------------------------------------------------
 
   unclear.mods <-
-    c(
-      "plm"
-    )
+    c("plm")
 
   # no statistic -------------------------------------------------------------
 
@@ -177,12 +176,9 @@ find_statistic <- function(x, ...) {
       "brmsfit",
       "stanreg",
       "stanmvreg",
-      "gam",
       "gbm",
       "list",
       "MCMCglmm",
-      "multinom",
-      "nnet",
       "survfit"
     )
 
