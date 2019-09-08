@@ -270,3 +270,37 @@ get_statistic.betareg <- function(model, ...) {
   attr(out, "statistic") <- "z"
   out
 }
+
+
+
+#' @export
+.get_statistic.survreg <- function(model, ...) {
+  parms <- insight::get_parameters(model)
+  s <- summary(model)
+  out <- data.frame(
+    Parameter = parms$parameter,
+    Statistic = s$table[, 3],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "z"
+  out
+}
+
+
+
+#' @export
+.get_statistic.glimML <- function(model, ...) {
+  parms <- insight::get_parameters(model)
+  s <- summary(model)
+  out <- data.frame(
+    Parameter = parms$parameter,
+    Statistic = s@Coef[, 3],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "z"
+  out
+}
