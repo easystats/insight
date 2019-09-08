@@ -249,6 +249,25 @@ get_statistic.vglm <- function(model, ...) {
 # Other models -------------------------------------------------------
 
 
+#' @importFrom stats qchisq
+#' @importFrom utils capture.output
+get_statistic.logistf <- function(model, ...) {
+  parms <- get_parameters(model)
+  utils::capture.output(s <- summary(model))
+
+  out <- data.frame(
+    Parameter = parms$parameter,
+    Statistic = as.vector(stats::qchisq(1 - s$prob, df = 1)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "chisq"
+  out
+}
+
+
+
 #' @importFrom stats vcov
 #' @export
 get_statistic.svyglm.nb <- function(x, ...) {
