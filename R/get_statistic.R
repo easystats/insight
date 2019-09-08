@@ -275,7 +275,7 @@ get_statistic.betareg <- function(model, ...) {
 
 #' @export
 .get_statistic.survreg <- function(model, ...) {
-  parms <- insight::get_parameters(model)
+  parms <- get_parameters(model)
   s <- summary(model)
   out <- data.frame(
     Parameter = parms$parameter,
@@ -290,13 +290,19 @@ get_statistic.betareg <- function(model, ...) {
 
 
 
+#' @importFrom methods slot
 #' @export
 .get_statistic.glimML <- function(model, ...) {
-  parms <- insight::get_parameters(model)
-  s <- summary(model)
+  if (!requireNamespace("aod", quietly = TRUE)) {
+    stop("Package 'aod' required for this function to work. Please install it.")
+  }
+
+  parms <- get_parameters(model)
+  s <- methods::slot(aod::summary(model), "Coef")
+
   out <- data.frame(
     Parameter = parms$parameter,
-    Statistic = s@Coef[, 3],
+    Statistic = s[, 3],
     stringsAsFactors = FALSE,
     row.names = NULL
   )
