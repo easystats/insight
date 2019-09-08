@@ -222,6 +222,28 @@ get_statistic.gamlss <- function(model, statistic_column = 3, ...) {
 
 
 
+#' @export
+get_statistic.vglm <- function(model, ...) {
+  if (!require("VGAM", quietly = TRUE)) {
+    stop("Package 'VGAM' needed for this function to work. Please install it.")
+  }
+
+  cs <- VGAM::coef(VGAM::summary(model))
+
+  out <- data.frame(
+    Parameter = gsub("`", "", rownames(cs), fixed = TRUE),
+    Statistic = as.vector(cs[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "z"
+  out
+}
+
+
+
+
 
 
 # Other models -------------------------------------------------------
