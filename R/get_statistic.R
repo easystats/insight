@@ -339,3 +339,7 @@ get_statistic.ols <- get_statistic.lrm
 
 #' @export
 get_statistic.rms <- get_statistic.lrm
+
+
+#' @export
+get_statistic.psm <- get_statistic.lrm
