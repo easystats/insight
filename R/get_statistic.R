@@ -36,7 +36,7 @@ get_statistic <- function(x, ...) {
 #' @export
 get_statistic.default <- function(x, column_index = 3, ...) {
   cs <- stats::coef(summary(x))
-  cs_names <- dimnames(cs)[[2]]
+  cs_names <- tolower(dimnames(cs)[[2]])
 
   out <- data.frame(
     parameter = gsub("`", "", rownames(cs), fixed = TRUE),
@@ -45,9 +45,9 @@ get_statistic.default <- function(x, column_index = 3, ...) {
     row.names = NULL
   )
 
-  if (any(c("t val.", "t", "t-value", "t.value", "tvalue") %in% cs_names))
+  if (any(c("t val.", "t", "t-value", "t.value", "t value", "tvalue") %in% cs_names))
     attr(out, "statistic") <- "t"
-  else if (any(c("z val.", "z", "z-value", "z.value", "z value") %in% cs_names))
+  else if (any(c("z val.", "z", "z-value", "z.value", "z value", "zvalue") %in% cs_names))
     attr(out, "statistic") <- "z"
   else
     attr(out, "statistic") <- "statistic"
@@ -68,6 +68,10 @@ get_statistic.plm <- get_statistic.default
 
 #' @export
 get_statistic.truncreg <- get_statistic.default
+
+
+#' @export
+get_statistic.censReg <- get_statistic.default
 
 
 #' @export
