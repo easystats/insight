@@ -58,7 +58,7 @@ get_statistic.default <- function(x, column_index = 3, ...) {
 
 #' @export
 get_statistic.lme <- function(x, ...) {
-  get_statistic.default(x, statistic_column = 4)
+  get_statistic.default(x, column_index = 4)
 }
 
 
@@ -84,7 +84,7 @@ get_statistic.feis <- get_statistic.default
 
 #' @export
 get_statistic.coxph <- function(x, ...) {
-  get_statistic.default(x, statistic_column = 4)
+  get_statistic.default(x, column_index = 4)
 }
 
 
@@ -188,13 +188,13 @@ get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "z
 
 
 #' @export
-get_statistic.gam <- function(model, statistic_column = 3, ...) {
+get_statistic.gam <- function(model, ...) {
   cs <- summary(model)$p.table
   cs.smooth <- summary(model)$s.table
 
   out <- data.frame(
     parameter = c(rownames(cs), rownames(cs.smooth)),
-    statistic = c(as.vector(cs[, statistic_column]), as.vector(cs.smooth[, statistic_column])),
+    statistic = c(as.vector(cs[, 3]), as.vector(cs.smooth[, 3])),
     component = c(rep("conditional", nrow(cs)), rep("smooth_terms", nrow(cs.smooth))),
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -205,16 +205,33 @@ get_statistic.gam <- function(model, statistic_column = 3, ...) {
 }
 
 
+#' @export
+get_statistic.gamm <- function(model, ...) {
+  model <- model$gam
+  class(model) <- c("gam", "lm", "glm")
+  get_statistic.gam(model, ...)
+}
+
+
+#' @export
+get_statistic.list <- function(model, ...) {
+  if ("gam" %in% names(model)) {
+    model <- model$gam
+    class(model) <- c("gam", "lm", "glm")
+    get_statistic.gam(model, ...)
+  }
+}
+
 
 #' @importFrom utils capture.output
 #' @export
-get_statistic.gamlss <- function(model, statistic_column = 3, ...) {
+get_statistic.gamlss <- function(model, ...) {
   parms <- get_parameters(model)
   utils::capture.output(cs <- summary(model))
 
   out <- data.frame(
     parameter = parms$parameter,
-    statistic = as.vector(cs[, statistic_column]),
+    statistic = as.vector(cs[, 3]),
     component = parms$component,
     stringsAsFactors = FALSE,
     row.names = NULL
