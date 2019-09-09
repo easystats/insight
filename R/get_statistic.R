@@ -365,6 +365,28 @@ get_statistic.betareg <- function(model, ...) {
 
 
 
+#' @importFrom stats vcov
+#' @export
+get_statistic.coxme <- function(model, ...) {
+  beta <- model$coefficients
+  out <- NULL
+
+  if (length(beta) > 0) {
+    out <- data.frame(
+      Parameter = names(beta),
+      Statistic = as.vector(beta / sqrt(diag(stats::vcov(model)))),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+
+    attr(out, "statistic") <- "z"
+  }
+
+  out
+}
+
+
+
 #' @export
 get_statistic.survreg <- function(model, ...) {
   parms <- get_parameters(model)

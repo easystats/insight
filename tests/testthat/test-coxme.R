@@ -12,8 +12,7 @@ if (require("testthat") &&
     factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
 
   m1 <- coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), lung)
-  m2 <-
-    coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst) + (1 | inst2), lung)
+  m2 <- coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst) + (1 | inst2), lung)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_logit)
