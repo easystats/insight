@@ -224,7 +224,7 @@ get_statistic.gamlss <- function(model, statistic_column = 3, ...) {
 
 #' @export
 get_statistic.vglm <- function(model, ...) {
-  if (!require("VGAM", quietly = TRUE)) {
+  if (!requireNamespace("VGAM", quietly = TRUE)) {
     stop("Package 'VGAM' needed for this function to work. Please install it.")
   }
 
