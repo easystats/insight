@@ -47,7 +47,7 @@ get_statistic.default <- function(x, column_index = 3, ...) {
 
   if (any(c("t val.", "t", "t-value", "t.value", "t value", "tvalue") %in% cs_names))
     attr(out, "statistic") <- "t"
-  else if (any(c("z val.", "z", "z-value", "z.value", "z value", "zvalue") %in% cs_names))
+  else if (any(c("z val.", "z", "z-value", "z.value", "z value", "zvalue", "wald") %in% cs_names))
     attr(out, "statistic") <- "z"
   else
     attr(out, "statistic") <- "statistic"
@@ -67,7 +67,15 @@ get_statistic.plm <- get_statistic.default
 
 
 #' @export
+get_statistic.geeglm <- get_statistic.default
+
+
+#' @export
 get_statistic.truncreg <- get_statistic.default
+
+
+#' @export
+get_statistic.tobit <- get_statistic.default
 
 
 #' @export
@@ -252,8 +260,8 @@ get_statistic.vglm <- function(model, ...) {
   cs <- VGAM::coef(VGAM::summary(model))
 
   out <- data.frame(
-    Parameter = gsub("`", "", rownames(cs), fixed = TRUE),
-    Statistic = as.vector(cs[, 3]),
+    parameter = gsub("`", "", rownames(cs), fixed = TRUE),
+    statistic = as.vector(cs[, 3]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -270,15 +278,35 @@ get_statistic.vglm <- function(model, ...) {
 # Other models -------------------------------------------------------
 
 
+#' @importFrom stats coef
+#' @export
+get_statistic.gee <- function(model, ...) {
+  parms <- get_parameters(model)
+  cs <- stats::coef(summary(model))
+
+  out <- data.frame(
+    parameter = parms$parameter,
+    statistic = as.vector(cs[, "Naive z"]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "z"
+  out
+}
+
+
+
 #' @importFrom stats qchisq
 #' @importFrom utils capture.output
+#' @export
 get_statistic.logistf <- function(model, ...) {
   parms <- get_parameters(model)
   utils::capture.output(s <- summary(model))
 
   out <- data.frame(
-    Parameter = parms$parameter,
-    Statistic = as.vector(stats::qchisq(1 - s$prob, df = 1)),
+    parameter = parms$parameter,
+    statistic = as.vector(stats::qchisq(1 - s$prob, df = 1)),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -325,8 +353,8 @@ get_statistic.betareg <- function(model, ...) {
   se <- as.vector(cs[, 2])
 
   out <- data.frame(
-    Parameter = parms$parameter,
-    Statistic = parms$estimate / se,
+    parameter = parms$parameter,
+    statistic = parms$estimate / se,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -342,8 +370,8 @@ get_statistic.survreg <- function(model, ...) {
   parms <- get_parameters(model)
   s <- summary(model)
   out <- data.frame(
-    Parameter = parms$parameter,
-    Statistic = s$table[, 3],
+    parameter = parms$parameter,
+    statistic = s$table[, 3],
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -365,8 +393,8 @@ get_statistic.glimML <- function(model, ...) {
   s <- methods::slot(aod::summary(model), "Coef")
 
   out <- data.frame(
-    Parameter = parms$parameter,
-    Statistic = s[, 3],
+    parameter = parms$parameter,
+    statistic = s[, 3],
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -384,8 +412,8 @@ get_statistic.lrm <- function(model, ...) {
   stat <- stats::coef(model) / sqrt(diag(stats::vcov(model)))
 
   out <- data.frame(
-    Parameter = parms$parameter,
-    Statistic = as.vector(stat),
+    parameter = parms$parameter,
+    statistic = as.vector(stat),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
