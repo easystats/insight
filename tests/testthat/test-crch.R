@@ -4,13 +4,10 @@ if (require("testthat") &&
   context("insight, model_info")
 
   data("RainIbk")
-  RainIbk$sqrtensmean <-
-    apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
-  RainIbk$sqrtenssd <-
-    apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, sd)
+  RainIbk$sqrtensmean <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
+  RainIbk$sqrtenssd <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, sd)
 
-  m1 <-
-    crch(sqrt(rain) ~ sqrtensmean, data = RainIbk, dist = "gaussian")
+  m1 <- crch(sqrt(rain) ~ sqrtensmean, data = RainIbk, dist = "gaussian")
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
