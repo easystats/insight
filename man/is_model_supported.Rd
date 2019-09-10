@@ -2,10 +2,13 @@
 % Please edit documentation in R/is_model_supported.R
 \name{is_model_supported}
 \alias{is_model_supported}
+\alias{supported_models}
 \title{Checks if an object is a regression model object supported in
   `insight` package.}
 \usage{
 is_model_supported(x)
+
+supported_models()
 }
 \arguments{
 \item{x}{An object.}
@@ -15,7 +18,8 @@ A logical, \code{TRUE} if \code{x} is a (supported) model object.
 }
 \description{
 Small helper that checks if a model is a \emph{supported}
- (regression) model object.
+ (regression) model object. \code{supported_models()} prints a list
+ of currently supported model classes.
 }
 \details{
 This function returns \code{TRUE} if \code{x} is a model object
