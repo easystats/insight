@@ -281,9 +281,10 @@ get_statistic.vglm <- function(model, ...) {
 #' @export
 get_statistic.crch <- function(model, ...) {
   cs <- do.call(rbind, stats::coef(summary(model), model = "full"))
+  params <- get_parameters(model)
 
   out <- data.frame(
-    Parameter = rownames(cs),
+    Parameter = params$parameter,
     Statistic = as.vector(cs[, 3]),
     stringsAsFactors = FALSE,
     row.names = NULL
