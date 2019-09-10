@@ -278,6 +278,22 @@ get_statistic.vglm <- function(model, ...) {
 # Other models -------------------------------------------------------
 
 
+#' @export
+get_statistic.crch <- function(model, ...) {
+  cs <- do.call(rbind, stats::coef(summary(model), model = "full"))
+
+  out <- data.frame(
+    Parameter = rownames(cs),
+    Statistic = as.vector(cs[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "z"
+  out
+}
+
+
 #' @importFrom stats coef
 #' @export
 get_statistic.gee <- function(model, ...) {
@@ -360,6 +376,28 @@ get_statistic.betareg <- function(model, ...) {
   )
 
   attr(out, "statistic") <- "z"
+  out
+}
+
+
+
+#' @importFrom stats vcov
+#' @export
+get_statistic.coxme <- function(model, ...) {
+  beta <- model$coefficients
+  out <- NULL
+
+  if (length(beta) > 0) {
+    out <- data.frame(
+      Parameter = names(beta),
+      Statistic = as.vector(beta / sqrt(diag(stats::vcov(model)))),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+
+    attr(out, "statistic") <- "z"
+  }
+
   out
 }
 
