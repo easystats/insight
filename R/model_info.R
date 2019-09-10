@@ -27,7 +27,8 @@
 #'      \item \code{is_tweedie}: family is tweedie
 #'      \item \code{is_ordinal}: family is ordinal or cumulative link
 #'      \item \code{is_categorical}: family is categorical link
-#'      \item \code{is_censored}: model is a censored model
+#'      \item \code{is_censored}: model is a censored model (has a censored response)
+#'      \item \code{is_truncated}: model is a truncated model (has a truncated response)
 #'      \item \code{is_zeroinf}: model has zero-inflation component
 #'      \item \code{is_zero_inflated}: alias for \code{is_zeroinf}
 #'      \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
@@ -866,18 +867,26 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
 
 
   # check if we have binomial models with trials instead of binary outcome
+  # and check if we have truncated or censored brms-regression
 
   is.trial <- FALSE
+  is.censored <- FALSE
+  is.truncated <- FALSE
 
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {
-    is.trial <- tryCatch({
-      rv <- .safe_deparse(stats::formula(x)$formula[[2L]])
-      .trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
+    rv <- tryCatch({
+      .safe_deparse(stats::formula(x)$formula[[2L]])
     },
     error = function(x) {
-      FALSE
+      NULL
     }
     )
+
+    if (!is.null(rv)) {
+      is.trial <- .trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
+      is.censored <- grepl("(.*)\\|(.*)cens\\(", rv)
+      is.truncated <- grepl("(.*)\\|(.*)trunc\\(", rv)
+    }
   }
 
   if (binom_fam && !inherits(x, "brmsfit")) {
@@ -890,6 +899,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
     }
     )
   }
+
 
   dots <- list(...)
   if (.obj_has_name(dots, "no_terms") && isTRUE(dots$no_terms)) {
@@ -946,7 +956,8 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
     is_exponential = exponential_fam,
     is_logit = logit.link,
     is_probit = link.fun == "probit",
-    is_censored = inherits(x, c("tobit", "crch", "censReg")),
+    is_censored = inherits(x, c("tobit", "crch", "censReg")) | is.censored,
+    is_truncated = inherits(x, "truncreg") | is.truncated,
     is_linear = linear_model,
     is_tweedie = tweedie_model,
     is_zeroinf = zero.inf,
@@ -957,7 +968,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
     is_mixed = !is.null(find_random(x)),
     is_multivariate = multi.var,
     is_trial = is.trial,
-    is_bayesian = inherits(x, c("brmsfit", "stanfit", "stanreg", "stanmvreg", "bmerMod", "BFBayesFactor")),
+    is_bayesian = inherits(x, c("brmsfit", "stanfit", "MCMCglmm", "stanreg", "stanmvreg", "bmerMod", "BFBayesFactor")),
     is_anova = inherits(x, c("aov", "aovlist")),
     is_ttest = is_ttest,
     is_correlation = is_correlation,

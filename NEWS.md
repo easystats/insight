@@ -4,12 +4,17 @@
 
   - `get_statistic()` to return the test statistic of model estimates.
 
+## Changes to functions
+
+  - `model_info()` now returns the element `is_truncated` for truncated regression, or *brmsfit* models with `trunc()` as additional response part.
+
 ## Bug fixes
 
   - Fixed issue in `find_parameters()` and `get_parameters()` for *gamlss* models.
   - Fixed issue in `get_data()` for *plm* models, where the `index`-argument was used in the `plm()`-function call.
   - Fixed issue in `get_data()`, `find_predictors()` and `find_variables()` for *brmsfit*  multi-membership-models.
   - `is_model()` did not recognize objects of class `anova` and `manova`.
+  - `model_info()` now correctly recognizes censored regression models from *brmsfit*.
 
 # insight 0.5.0
 
