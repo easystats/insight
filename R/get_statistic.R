@@ -208,7 +208,12 @@ get_statistic.gam <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "t / F"
+  if (model_info(model)$is_binomial) {
+    attr(out, "statistic") <- "z / Chisq"
+  } else {
+    attr(out, "statistic") <- "t / F"
+  }
+
   out
 }
 
