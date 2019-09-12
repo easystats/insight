@@ -833,7 +833,18 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
       grepl("\\Qnegbinomial\\E", fitfam, ignore.case = TRUE) |
       grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE)
 
-  beta_fam <- inherits(x, "betareg") | fitfam %in% c("beta", "betabinomial")
+  beta_fam <-
+    inherits(x, "betareg") |
+    fitfam %in% c(
+      "beta",
+      "Beta",
+      "betabinomial",
+      "Beta Inflated",
+      "Zero Inflated Beta",
+      "Beta Inflated zero",
+      "Beta Inflated one"
+    )
+
   betabin_fam <- inherits(x, "BBreg") | fitfam %in% "betabinomial"
 
   ## TODO beta-binomial = binomial?

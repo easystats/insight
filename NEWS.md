@@ -8,6 +8,7 @@
 ## Changes to functions
 
   - `model_info()` now returns the element `is_truncated` for truncated regression, or *brmsfit* models with `trunc()` as additional response part.
+  - `model_info()` now recognizes beta and beta inflated families from package *gamlss*.
 
 ## Bug fixes
 
