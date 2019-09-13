@@ -459,6 +459,16 @@ find_formula.zerotrunc <- function(x, ...) {
 
 
 #' @export
+find_formula.clmm2 <- function(x, ...) {
+  list(
+    conditional = stats::as.formula(.safe_deparse(attr(x$location, "terms", exact = TRUE))),
+    random  = stats::as.formula(paste0("~", parse(text = .safe_deparse(x$call))[[1]]$random))
+  )
+}
+
+
+
+#' @export
 find_formula.clm2 <- function(x, ...) {
   list(conditional = attr(x$location, "terms", exact = TRUE))
 }

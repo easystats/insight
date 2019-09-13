@@ -155,6 +155,19 @@ find_parameters.gbm <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.clmm2 <- function(x, flatten = FALSE, ...) {
+  s <- summary(x)
+  pars <- list(conditional = as.character(rownames(s$coefficients)))
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+#' @export
 find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   pars <- names(stats::coef(x))
 
