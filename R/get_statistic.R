@@ -67,6 +67,10 @@ get_statistic.plm <- get_statistic.default
 
 
 #' @export
+get_statistic.lm_robust <- get_statistic.default
+
+
+#' @export
 get_statistic.geeglm <- get_statistic.default
 
 
@@ -195,6 +199,23 @@ get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "z
 # gam models --------------------------------------------------------------
 
 
+#' @importFrom stats na.omit
+#' @export
+get_statistic.Gam <- function(model, ...) {
+  p.aov <- stats::na.omit(summary(model)$parametric.anova)
+
+  out <- data.frame(
+    Parameter = rownames(p.aov),
+    Statistic = as.vector(p.aov[, 4]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "F"
+  out
+}
+
+
 #' @export
 get_statistic.gam <- function(model, ...) {
   cs <- summary(model)$p.table
@@ -281,6 +302,14 @@ get_statistic.vglm <- function(model, ...) {
 
 
 # Other models -------------------------------------------------------
+
+
+#' @export
+get_statistic.LORgee <- function(x, ...) {
+  out <- get_statistic.default(x)
+  attr(out, "statistic") <- "z"
+  out
+}
 
 
 #' @export

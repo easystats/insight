@@ -2,63 +2,54 @@
 
 ## New functions
 
-  - `get_statistic()` to return the test statistic of model estimates.
-  - `supported_models()` to print a list of supported models.
+* `get_statistic()` to return the test statistic of model estimates.
+* `supported_models()` to print a list of supported models.
 
 ## Changes to functions
 
-  - `model_info()` now returns the element `is_truncated` for truncated regression, or *brmsfit* models with `trunc()` as additional response part.
-  - `model_info()` now recognizes beta and beta inflated families from package *gamlss*.
+* `model_info()` now returns the element `is_truncated` for truncated regression, or *brmsfit* models with `trunc()` as additional response part.
+* `model_info()` now recognizes beta and beta inflated families from package *gamlss*.
 
 ## Bug fixes
 
-  - Fixed issue in `find_parameters()` and `get_parameters()` for *gamlss* models.
-  - Fixed issue in `get_data()` for *plm* models, where the `index`-argument was used in the `plm()`-function call.
-  - Fixed issue in `get_data()`, `find_predictors()` and `find_variables()` for *brmsfit*  multi-membership-models.
-  - `is_model()` did not recognize objects of class `anova` and `manova`.
-  - `model_info()` now correctly recognizes censored regression models from *brmsfit*.
+* Fixed issue in `find_parameters()` and `get_parameters()` for *gamlss* models.
+* Fixed issue in `get_data()` for *plm* models, where the `index`-argument was used in the `plm()`-function call.
+* Fixed issue in `get_data()`, `find_predictors()` and `find_variables()` for *brmsfit*  multi-membership-models.
+* `is_model()` did not recognize objects of class `anova` and `manova`.
+* `model_info()` now correctly recognizes censored regression models from *brmsfit*.
 
 # insight 0.5.0
 
 ## Breaking Changes
 
-  - The previous `is_model()` function has been renamed to `is_model_supported()`
-    since it was unclear if the function checked the entered object was a model
-    or a supported model in *insight*. The new `is_model()` function checks if the
-    entered object is a model object, while `is_model_supported()` checks if a
-    supported model object.
+* The previous `is_model()` function has been renamed to `is_model_supported()` since it was unclear if the function checked the entered object was a model or a supported model in *insight*. The new `is_model()` function checks if the entered object is a model object, while `is_model_supported()` checks if a supported model object.
 
 ## New functions
 
-  - `find_statistic()` to return the test statistic of a regression model.
-  - `format_value()` and `format_table()` as utility-functions to format (model) 
-    output, especially for tabular output.
-  - `color_if()` as utility-function to add color formatting to values, depending
-    on certain conditions.
+* `find_statistic()` to return the test statistic of a regression model.
+* `format_value()` and `format_table()` as utility-functions to format (model) output, especially for tabular output.
+* `color_if()` as utility-function to add color formatting to values, dependingon certain conditions.
 
 ## General
 
-  - Make extraction of model family information more stable for gam-objects.
+* Make extraction of model family information more stable for gam-objects.
 
 ## Changes to functions
 
-  - `find_parameters()` and `get_parameters()` now also support objects of class `sim` and `sim.merMod` (from `arm::sim()`).
-  - `get_variance()` now also supports models of class *clmm*.
-  - `find_predictors()` and `find_variables()` now include the Euclidean distance matrix for spatial models from *glmmTMB* (returned as random effects element, or more precise, as random slope).
+* `find_parameters()` and `get_parameters()` now also support objects of class `sim` and `sim.merMod` (from `arm::sim()`).
+* `get_variance()` now also supports models of class *clmm*.
+* `find_predictors()` and `find_variables()` now include the Euclidean distance matrix for spatial models from *glmmTMB* (returned as random effects element, or more precise, as random slope).
 
 ## Bug fixes
 
-  - `find_formula()` now extracts group factors of random effects for *gamlss*
-    models.
-  - `find_parameters()` and `get_parameters()` no longer show `NA` coefficients
-    from group factors of random effects for *gamlss* models.
-  - `find_parameters()` and `get_parameters()` did not work for multivariate response models of class *brmsfit* when argument `parameters` was specified.
-  - `get_data()` dropped value and variable label attributes, when model frame
-    contained matrix variables (like splines).
-  - `get_priors()` swapped column names `location` and `scale` for *brmsfit* -objects.
-  - `get_parameters()` did not work for *glmmTMB* models without zero-inflation component.
-  - `find_predictors()` did not remove parentheses from terms in multiple nested random effects.
-  - Better support for *gam* models (package *mgcv*) with `ziplss` or `mvn` families.
+* `find_formula()` now extracts group factors of random effects for *gamlss* models.
+* `find_parameters()` and `get_parameters()` no longer show `NA` coefficients from group factors of random effects for *gamlss* models.
+* `find_parameters()` and `get_parameters()` did not work for multivariate response models of class *brmsfit* when argument `parameters` was specified.
+* `get_data()` dropped value and variable label attributes, when model frame contained matrix variables (like splines).
+* `get_priors()` swapped column names `location` and `scale` for *brmsfit* -objects.
+* `get_parameters()` did not work for *glmmTMB* models without zero-inflation component.
+* `find_predictors()` did not remove parentheses from terms in multiple nested random effects.
+* Better support for *gam* models (package *mgcv*) with `ziplss` or `mvn` families.
 
 # insight 0.4.1
 
