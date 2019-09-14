@@ -9,7 +9,7 @@ if (require("testthat") &&
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_poisson)
-    expect_true(model_info(m1)$is_zeroinf)
+    expect_true(model_info(m1)$is_zero_inflated)
   })
 
   test_that("find_predictors", {

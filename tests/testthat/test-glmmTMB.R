@@ -38,8 +38,8 @@ if (require("testthat") &&
   })
 
   test_that("model_info", {
-    expect_true(model_info(m1)$is_zeroinf)
-    expect_false(model_info(m2)$is_zeroinf)
+    expect_true(model_info(m1)$is_zero_inflated)
+    expect_false(model_info(m2)$is_zero_inflated)
     expect_true(model_info(m3)$is_count)
     expect_true(model_info(m3)$is_pois)
     expect_false(model_info(m3)$is_negbin)

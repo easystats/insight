@@ -433,7 +433,7 @@
 
 # Get distributional variance for poisson-family
 .variance_family_poisson <- function(x, mu, faminfo) {
-  if (faminfo$is_zeroinf) {
+  if (faminfo$is_zero_inflated) {
     .variance_zip(x, faminfo, family_var = mu)
   } else {
     if (inherits(x, "MixMod")) {
@@ -472,7 +472,7 @@
 
 # Get distributional variance for nbinom-family
 .variance_family_nbinom <- function(x, mu, sig, faminfo) {
-  if (faminfo$is_zeroinf) {
+  if (faminfo$is_zero_inflated) {
     if (missing(sig)) sig <- 0
     .variance_zinb(x, sig, faminfo, family_var = mu * (1 + sig))
   } else {

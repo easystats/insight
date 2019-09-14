@@ -17,7 +17,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     )
 
     test_that("model_info", {
-      expect_true(model_info(m)$is_zeroinf)
+      expect_true(model_info(m)$is_zero_inflated)
       expect_true(model_info(m)$is_count)
       expect_true(model_info(m)$is_pois)
       expect_false(model_info(m)$is_negbin)
