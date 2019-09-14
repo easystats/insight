@@ -42,7 +42,6 @@ find_statistic <- function(x, ...) {
       "drc",
       "feis",
       "felm",
-      "gam",
       "gamlss",
       "garch",
       "glmmPQL",
@@ -138,6 +137,7 @@ find_statistic <- function(x, ...) {
   g.mods <-
     c(
       "bigglm",
+      "gam",
       "glm",
       "glmerMod",
       "glmRob",

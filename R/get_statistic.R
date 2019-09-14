@@ -45,13 +45,7 @@ get_statistic.default <- function(x, column_index = 3, ...) {
     row.names = NULL
   )
 
-  if (any(c("t val.", "t", "t-value", "t.value", "t value", "tvalue") %in% cs_names))
-    attr(out, "statistic") <- "t"
-  else if (any(c("z val.", "z", "z-value", "z.value", "z value", "zvalue", "wald") %in% cs_names))
-    attr(out, "statistic") <- "z"
-  else
-    attr(out, "statistic") <- "statistic"
-
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
@@ -128,7 +122,7 @@ get_statistic.glmmTMB <- function(x, component = c("all", "conditional", "zi", "
   stat$component <- .rename_values(stat$component, "zi", "zero_inflated")
 
   stat <- .filter_component(stat, component)
-  attr(stat, "statistic") <- "z"
+  attr(stat, "statistic") <- find_statistic(x)
 
   stat
 }
@@ -155,7 +149,7 @@ get_statistic.zeroinfl <- function(x, component = c("all", "conditional", "zi", 
   stat$component <- .rename_values(stat$component, "zi", "zero_inflated")
 
   stat <- .filter_component(stat, component)
-  attr(stat, "statistic") <- "z"
+  attr(stat, "statistic") <- find_statistic(x)
 
   stat
 }
@@ -186,7 +180,7 @@ get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "z
 
   stat <- do.call(rbind, out)
   .filter_component(stat, component)
-  attr(stat, "statistic") <- "z"
+  attr(stat, "statistic") <- find_statistic(x)
 
   stat
 }
@@ -201,8 +195,8 @@ get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "z
 
 #' @importFrom stats na.omit
 #' @export
-get_statistic.Gam <- function(model, ...) {
-  p.aov <- stats::na.omit(summary(model)$parametric.anova)
+get_statistic.Gam <- function(x, ...) {
+  p.aov <- stats::na.omit(summary(x)$parametric.anova)
 
   out <- data.frame(
     Parameter = rownames(p.aov),
@@ -211,15 +205,15 @@ get_statistic.Gam <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "F"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
 
 #' @export
-get_statistic.gam <- function(model, ...) {
-  cs <- summary(model)$p.table
-  cs.smooth <- summary(model)$s.table
+get_statistic.gam <- function(x, ...) {
+  cs <- summary(x)$p.table
+  cs.smooth <- summary(x)$s.table
 
   out <- data.frame(
     parameter = c(rownames(cs), rownames(cs.smooth)),
@@ -229,39 +223,34 @@ get_statistic.gam <- function(model, ...) {
     row.names = NULL
   )
 
-  if (model_info(model)$is_binomial) {
-    attr(out, "statistic") <- "z / Chisq"
-  } else {
-    attr(out, "statistic") <- "t / F"
-  }
-
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
 
 #' @export
-get_statistic.gamm <- function(model, ...) {
-  model <- model$gam
-  class(model) <- c("gam", "lm", "glm")
-  get_statistic.gam(model, ...)
+get_statistic.gamm <- function(x, ...) {
+  x <- x$gam
+  class(x) <- c("gam", "lm", "glm")
+  get_statistic.gam(x, ...)
 }
 
 
 #' @export
-get_statistic.list <- function(model, ...) {
-  if ("gam" %in% names(model)) {
-    model <- model$gam
-    class(model) <- c("gam", "lm", "glm")
-    get_statistic.gam(model, ...)
+get_statistic.list <- function(x, ...) {
+  if ("gam" %in% names(x)) {
+    x <- x$gam
+    class(x) <- c("gam", "lm", "glm")
+    get_statistic.gam(x, ...)
   }
 }
 
 
 #' @importFrom utils capture.output
 #' @export
-get_statistic.gamlss <- function(model, ...) {
-  parms <- get_parameters(model)
-  utils::capture.output(cs <- summary(model))
+get_statistic.gamlss <- function(x, ...) {
+  parms <- get_parameters(x)
+  utils::capture.output(cs <- summary(x))
 
   out <- data.frame(
     parameter = parms$parameter,
@@ -271,19 +260,19 @@ get_statistic.gamlss <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "t"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
 
 
 #' @export
-get_statistic.vglm <- function(model, ...) {
+get_statistic.vglm <- function(x, ...) {
   if (!requireNamespace("VGAM", quietly = TRUE)) {
     stop("Package 'VGAM' needed for this function to work. Please install it.")
   }
 
-  cs <- VGAM::coef(VGAM::summary(model))
+  cs <- VGAM::coef(VGAM::summary(x))
 
   out <- data.frame(
     parameter = gsub("`", "", rownames(cs), fixed = TRUE),
@@ -292,7 +281,7 @@ get_statistic.vglm <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "z"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
@@ -305,9 +294,9 @@ get_statistic.vglm <- function(model, ...) {
 
 
 #' @export
-get_statistic.bigglm <- function(model, ...) {
-  parms <- get_parameters(model)
-  cs <- summary(model)$mat
+get_statistic.bigglm <- function(x, ...) {
+  parms <- get_parameters(x)
+  cs <- summary(x)$mat
   se <- as.vector(cs[, 4])
 
   out <- data.frame(
@@ -317,15 +306,15 @@ get_statistic.bigglm <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "z"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
 
 #' @export
-get_statistic.biglm <- function(model, ...) {
-  parms <- get_parameters(model)
-  cs <- summary(model)$mat
+get_statistic.biglm <- function(x, ...) {
+  parms <- get_parameters(x)
+  cs <- summary(x)$mat
   se <- as.vector(cs[, 4])
 
   out <- data.frame(
@@ -335,7 +324,7 @@ get_statistic.biglm <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "t"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
@@ -343,15 +332,15 @@ get_statistic.biglm <- function(model, ...) {
 #' @export
 get_statistic.LORgee <- function(x, ...) {
   out <- get_statistic.default(x)
-  attr(out, "statistic") <- "z"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
 
 #' @export
-get_statistic.crch <- function(model, ...) {
-  cs <- do.call(rbind, stats::coef(summary(model), model = "full"))
-  params <- get_parameters(model)
+get_statistic.crch <- function(x, ...) {
+  cs <- do.call(rbind, stats::coef(summary(x), model = "full"))
+  params <- get_parameters(x)
 
   out <- data.frame(
     Parameter = params$parameter,
@@ -360,16 +349,16 @@ get_statistic.crch <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "z"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
 
 #' @importFrom stats coef
 #' @export
-get_statistic.gee <- function(model, ...) {
-  parms <- get_parameters(model)
-  cs <- stats::coef(summary(model))
+get_statistic.gee <- function(x, ...) {
+  parms <- get_parameters(x)
+  cs <- stats::coef(summary(x))
 
   out <- data.frame(
     parameter = parms$parameter,
@@ -378,7 +367,7 @@ get_statistic.gee <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "z"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
@@ -387,9 +376,9 @@ get_statistic.gee <- function(model, ...) {
 #' @importFrom stats qchisq
 #' @importFrom utils capture.output
 #' @export
-get_statistic.logistf <- function(model, ...) {
-  parms <- get_parameters(model)
-  utils::capture.output(s <- summary(model))
+get_statistic.logistf <- function(x, ...) {
+  parms <- get_parameters(x)
+  utils::capture.output(s <- summary(x))
 
   out <- data.frame(
     parameter = parms$parameter,
@@ -398,7 +387,7 @@ get_statistic.logistf <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "chisq"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
@@ -412,7 +401,7 @@ get_statistic.svyglm.nb <- function(x, ...) {
   }
 
   parms <- get_parameters(x)
-  se <- sqrt(diag(stats::vcov(model, stderr = "robust")))
+  se <- sqrt(diag(stats::vcov(x, stderr = "robust")))
 
   out <- data.frame(
     parameter = parms$parameter,
@@ -421,7 +410,7 @@ get_statistic.svyglm.nb <- function(x, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "t"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
@@ -434,9 +423,9 @@ get_statistic.svyglm.zip <- get_statistic.svyglm.nb
 
 #' @importFrom stats coef
 #' @export
-get_statistic.betareg <- function(model, ...) {
-  parms <- get_parameters(model)
-  cs <- do.call(rbind, stats::coef(summary(model)))
+get_statistic.betareg <- function(x, ...) {
+  parms <- get_parameters(x)
+  cs <- do.call(rbind, stats::coef(summary(x)))
   se <- as.vector(cs[, 2])
 
   out <- data.frame(
@@ -446,7 +435,7 @@ get_statistic.betareg <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "z"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
@@ -454,19 +443,19 @@ get_statistic.betareg <- function(model, ...) {
 
 #' @importFrom stats vcov
 #' @export
-get_statistic.coxme <- function(model, ...) {
-  beta <- model$coefficients
+get_statistic.coxme <- function(x, ...) {
+  beta <- x$coefficients
   out <- NULL
 
   if (length(beta) > 0) {
     out <- data.frame(
       Parameter = names(beta),
-      Statistic = as.vector(beta / sqrt(diag(stats::vcov(model)))),
+      Statistic = as.vector(beta / sqrt(diag(stats::vcov(x)))),
       stringsAsFactors = FALSE,
       row.names = NULL
     )
 
-    attr(out, "statistic") <- "z"
+    attr(out, "statistic") <- find_statistic(x)
   }
 
   out
@@ -475,9 +464,9 @@ get_statistic.coxme <- function(model, ...) {
 
 
 #' @export
-get_statistic.survreg <- function(model, ...) {
-  parms <- get_parameters(model)
-  s <- summary(model)
+get_statistic.survreg <- function(x, ...) {
+  parms <- get_parameters(x)
+  s <- summary(x)
   out <- data.frame(
     parameter = parms$parameter,
     statistic = s$table[, 3],
@@ -485,7 +474,7 @@ get_statistic.survreg <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "z"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
@@ -493,13 +482,13 @@ get_statistic.survreg <- function(model, ...) {
 
 #' @importFrom methods slot
 #' @export
-get_statistic.glimML <- function(model, ...) {
+get_statistic.glimML <- function(x, ...) {
   if (!requireNamespace("aod", quietly = TRUE)) {
     stop("Package 'aod' required for this function to work. Please install it.")
   }
 
-  parms <- get_parameters(model)
-  s <- methods::slot(aod::summary(model), "Coef")
+  parms <- get_parameters(x)
+  s <- methods::slot(aod::summary(x), "Coef")
 
   out <- data.frame(
     parameter = parms$parameter,
@@ -508,7 +497,7 @@ get_statistic.glimML <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "z"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
@@ -516,9 +505,9 @@ get_statistic.glimML <- function(model, ...) {
 
 #' @importFrom stats coef vcov
 #' @export
-get_statistic.lrm <- function(model, ...) {
-  parms <- get_parameters(model)
-  stat <- stats::coef(model) / sqrt(diag(stats::vcov(model)))
+get_statistic.lrm <- function(x, ...) {
+  parms <- get_parameters(x)
+  stat <- stats::coef(x) / sqrt(diag(stats::vcov(x)))
 
   out <- data.frame(
     parameter = parms$parameter,
@@ -527,7 +516,7 @@ get_statistic.lrm <- function(model, ...) {
     row.names = NULL
   )
 
-  attr(out, "statistic") <- "z"
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
