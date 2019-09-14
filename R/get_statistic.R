@@ -305,6 +305,42 @@ get_statistic.vglm <- function(model, ...) {
 
 
 #' @export
+get_statistic.bigglm <- function(model, ...) {
+  parms <- get_parameters(model)
+  cs <- summary(model)$mat
+  se <- as.vector(cs[, 4])
+
+  out <- data.frame(
+    Parameter = parms$parameter,
+    Statistic = parms$estimate / se,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "z"
+  out
+}
+
+
+#' @export
+get_statistic.biglm <- function(model, ...) {
+  parms <- get_parameters(model)
+  cs <- summary(model)$mat
+  se <- as.vector(cs[, 4])
+
+  out <- data.frame(
+    Parameter = parms$parameter,
+    Statistic = parms$estimate / se,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- "t"
+  out
+}
+
+
+#' @export
 get_statistic.LORgee <- function(x, ...) {
   out <- get_statistic.default(x)
   attr(out, "statistic") <- "z"
