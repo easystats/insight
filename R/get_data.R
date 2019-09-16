@@ -412,7 +412,7 @@ get_data.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
   }
   )
 
-  .get_data_from_modelframe(x, dat, effects)
+  stats::na.omit(.get_data_from_modelframe(x, dat, effects))
 }
 
 
