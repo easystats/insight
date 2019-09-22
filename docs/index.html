@@ -13,15 +13,16 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Easy Access to Model Information for Various Model Objects">
 <meta property="og:description" content="A tool to provide an easy, intuitive and consistent access to 
    information contained in various R models, like model formulas, model terms, 
    information about random effects, data that was used to fit the model or 
-   data from response variables. 'insight' mainly revolves around two types 
+   data from response variables. insight mainly revolves around two types 
    of functions: Functions that find (the names of) information, starting with 
-   'find_', and functions that get the underlying data, starting with 'get_'. 
+   find_, and functions that get the underlying data, starting with get_. 
    The package has a consistent syntax and works with many different model 
    objects, where otherwise functions to access these information are missing.">
 <meta property="og:image" content="/logo.png">
@@ -32,7 +33,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -44,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
       </span>
     </div>
 
@@ -52,7 +53,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -75,15 +76,12 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    
 
-    
-    
-<div id="insight" class="section level1">
+      </header><div class="row">
+  <div class="contents col-md-9">
+<div id="insight-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#insight" class="anchor"></a>insight <img src="reference/figures/logo.png" align="right" height="139">
+<a href="#insight-" class="anchor"></a>insight <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 
 <p><strong>Gain insight into your models!</strong></p>
@@ -122,7 +120,7 @@
 <div id="terms" class="section level4">
 <h4 class="hasAnchor">
 <a href="#terms" class="anchor"></a>Terms</h4>
-<p>Terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/poly">poly(x, 2)</a></code>.</p>
+<p>Terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://rdrr.io/r/stats/poly.html">poly(x, 2)</a></code>.</p>
 </div>
 <div id="random-effects" class="section level4">
 <h4 class="hasAnchor">
@@ -151,23 +149,23 @@
 <div id="making-predictions-at-specific-values-of-a-term-of-interest" class="section level4">
 <h4 class="hasAnchor">
 <a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor"></a>Making Predictions at Specific Values of a Term of Interest</h4>
-<p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code>.</p>
+<p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>.</p>
 <p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(insight)</a>
-<a class="sourceLine" id="cb1-2" title="2">m &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Species <span class="op">+</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>Sepal.Width, <span class="dt">data =</span> iris)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(insight)</a>
+<a class="sourceLine" id="cb1-2" title="2">m &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Species <span class="op">+</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>Sepal.Width, <span class="dt">data =</span> iris)</a>
 <a class="sourceLine" id="cb1-3" title="3"></a>
 <a class="sourceLine" id="cb1-4" title="4">dat &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_data.html">get_data</a></span>(m)</a>
 <a class="sourceLine" id="cb1-5" title="5">pred &lt;-<span class="st"> </span><span class="kw"><a href="reference/find_predictors.html">find_predictors</a></span>(m, <span class="dt">flatten =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7">l &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">lapply</a></span>(pred, <span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb1-8" title="8">    <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">is.numeric</a></span>(dat[[x]])) </a>
-<a class="sourceLine" id="cb1-9" title="9">        <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(dat[[x]]) <span class="cf">else</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(dat[[x]])</a>
+<a class="sourceLine" id="cb1-7" title="7">l &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(pred, <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb1-8" title="8">    <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(dat[[x]])) </a>
+<a class="sourceLine" id="cb1-9" title="9">        <span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(dat[[x]]) <span class="cf">else</span> <span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(dat[[x]])</a>
 <a class="sourceLine" id="cb1-10" title="10">})</a>
 <a class="sourceLine" id="cb1-11" title="11"></a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(l) &lt;-<span class="st"> </span>pred</a>
-<a class="sourceLine" id="cb1-13" title="13">l &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(l)</a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(l) &lt;-<span class="st"> </span>pred</a>
+<a class="sourceLine" id="cb1-13" title="13">l &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(l)</a>
 <a class="sourceLine" id="cb1-14" title="14"></a>
-<a class="sourceLine" id="cb1-15" title="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(l, <span class="dt">predictions =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(m, <span class="dt">newdata =</span> l))</a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(l, <span class="dt">predictions =</span> <span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(m, <span class="dt">newdata =</span> l))</a>
 <a class="sourceLine" id="cb1-16" title="16"><span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span></a>
 <a class="sourceLine" id="cb1-17" title="17"><span class="co">#&gt; 1     setosa       1.199       3.057       5.101</span></a>
 <a class="sourceLine" id="cb1-18" title="18"><span class="co">#&gt; 2 versicolor       1.199       3.057       6.090</span></a>
@@ -179,30 +177,30 @@
 <p>The next example should emphasize the possibilities to generalize functions to many different model objects using <strong>insight</strong>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
 <p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model) {</a>
-<a class="sourceLine" id="cb2-2" title="2">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/row.names">row.names</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(model)<span class="op">$</span>coefficients), </a>
+<a class="sourceLine" id="cb2-2" title="2">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(model)<span class="op">$</span>coefficients), </a>
 <a class="sourceLine" id="cb2-3" title="3">        <span class="dt">collapse =</span> <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)</a>
 <a class="sourceLine" id="cb2-4" title="4">}</a>
 <a class="sourceLine" id="cb2-5" title="5"></a>
-<a class="sourceLine" id="cb2-6" title="6">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb2-6" title="6">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
 <a class="sourceLine" id="cb2-7" title="7"><span class="kw">print_params</span>(m1)</a>
 <a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
 <a class="sourceLine" id="cb2-9" title="9"></a>
 <a class="sourceLine" id="cb2-10" title="10"><span class="co"># obviously, something is missing in the output</span></a>
-<a class="sourceLine" id="cb2-11" title="11">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), </a>
+<a class="sourceLine" id="cb2-11" title="11">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), </a>
 <a class="sourceLine" id="cb2-12" title="12">    <span class="dt">data =</span> iris)</a>
 <a class="sourceLine" id="cb2-13" title="13"><span class="kw">print_params</span>(m2)</a>
 <a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></a></code></pre></div>
 <p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model) {</a>
-<a class="sourceLine" id="cb3-2" title="2">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(insight<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/insight/topics/find_parameters">find_parameters</a></span>(model, </a>
+<a class="sourceLine" id="cb3-2" title="2">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(insight<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/insight/man/find_parameters.html">find_parameters</a></span>(model, </a>
 <a class="sourceLine" id="cb3-3" title="3">        <span class="dt">flatten =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)</a>
 <a class="sourceLine" id="cb3-4" title="4">}</a>
 <a class="sourceLine" id="cb3-5" title="5"></a>
-<a class="sourceLine" id="cb3-6" title="6">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb3-6" title="6">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
 <a class="sourceLine" id="cb3-7" title="7"><span class="kw">print_params</span>(m1)</a>
 <a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
 <a class="sourceLine" id="cb3-9" title="9"></a>
-<a class="sourceLine" id="cb3-10" title="10">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/mgcv/topics/gam">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), </a>
+<a class="sourceLine" id="cb3-10" title="10">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), </a>
 <a class="sourceLine" id="cb3-11" title="11">    <span class="dt">data =</span> iris)</a>
 <a class="sourceLine" id="cb3-12" title="12"><span class="kw">print_params</span>(m2)</a>
 <a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></a></code></pre></div>
@@ -212,15 +210,15 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Run the following to install the latest GitHub-version of <strong>insight</strong>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
-<a class="sourceLine" id="cb4-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
 <p>Or install the latest stable release from CRAN:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"insight"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"insight"</span>)</a></code></pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h2>
-<p>Please visit <a href="https://easystats.github.io/insight/">https://easystats.github.io/insight/</a> for documentation.</p>
+<p>Please visit <a href="https://easystats.github.io/insight/" class="uri">https://easystats.github.io/insight/</a> for documentation.</p>
 </div>
 <div id="contributing-and-support" class="section level2">
 <h2 class="hasAnchor">
@@ -230,7 +228,7 @@
 <div id="list-of-supported-packages-and-models" class="section level2">
 <h2 class="hasAnchor">
 <a href="#list-of-supported-packages-and-models" class="anchor"></a>List of Supported Packages and Models</h2>
-<p><strong>AER</strong> (<em>ivreg, tobit</em>), <strong>afex</strong> (<em>mixed</em>), <strong>aod</strong> (<em>betabin, negbin</em>), <strong>base</strong> (<em>aov, aovlist, lm, glm</em>), <strong>BayesFactor</strong> (<em>BFBayesFactor</em>), <strong>betareg</strong> (<em>betareg</em>), <strong>biglm</strong> (<em>biglm, bigglm</em>), <strong>blme</strong> (<em>blmer, bglmer</em>), <strong>brms</strong> (<em>brmsfit</em>), <strong>censReg</strong>, <strong>crch</strong>, <strong>countreg</strong> (<em>zerontrunc</em>), <strong>coxme</strong>, <strong>estimatr</strong> (<em>lm_robust, iv_robust</em>), <strong>feisr</strong> (<em>feis</em>), <strong>gam</strong> (<em>Gam</em>), <strong>gamm4</strong> , <strong>gamlss</strong>, <strong>gbm</strong>, <strong>gee</strong>, <strong>geepack</strong> (<em>geeglm</em>), <strong>GLMMadaptive</strong> (<em>MixMod</em>), <strong>glmmTMB</strong> (<em>glmmTMB</em>), <strong>gmnl</strong>, <strong>HRQoL</strong> (<em>BBreg</em>, <em>BBmm</em>), <strong>lfe</strong> (<em>felm</em>), <strong>lme4</strong> (<em>lmer, glmer, nlmer, glmer.nb</em>), <strong>MASS</strong> (<em>glmmPQL, polr</em>), <strong>mgcv</strong> (<em>gam, gamm</em>), <strong>multgee</strong> (<em>LORgee</em>), <strong>nnet</strong> (<em>multinom</em>), <strong>nlme</strong> (<em>lme, gls</em>), <strong>ordinal</strong> (<em>clm, clm2, clmm</em>), <strong>panelr</strong> (<em>wbm</em>), <strong>plm</strong>, <strong>pscl</strong> (<em>zeroinf, hurdle</em>), <strong>quantreg</strong> (<em>rq, crq, rqss</em>), <strong>rms</strong> (<em>lsr, ols, psm</em>), <strong>robust</strong> (<em>glmRob, lmRob</em>), <strong>robustbase</strong> (<em>glmrob, lmrob</em>), <strong>robustlmm</strong> (<em>rlmer</em>), <strong>rstanarm</strong> (<em>stanreg, stanmvreg</em>), <strong>speedlm</strong> (<em>speedlm, speedglm</em>), <strong>survey</strong>, <strong>survival</strong> (<em>coxph, survreg</em>), <strong>truncreg</strong> (<em>truncreg</em>), <strong>VGAM</strong> (<em>vgam, vglm</em>)</p>
+<p><strong>AER</strong> (<em>ivreg, tobit</em>), <strong>afex</strong> (<em>mixed</em>), <strong>aod</strong> (<em>betabin, negbin</em>), <strong>base</strong> (<em>aov, aovlist, lm, glm</em>), <strong>BayesFactor</strong> (<em>BFBayesFactor</em>), <strong>betareg</strong> (<em>betareg</em>), <strong>biglm</strong> (<em>biglm, bigglm</em>), <strong>blme</strong> (<em>blmer, bglmer</em>), <strong>brms</strong> (<em>brmsfit</em>), <strong>censReg</strong>, <strong>crch</strong>, <strong>countreg</strong> (<em>zerontrunc</em>), <strong>coxme</strong>, <strong>estimatr</strong> (<em>lm_robust, iv_robust</em>), <strong>feisr</strong> (<em>feis</em>), <strong>gam</strong> (<em>Gam</em>), <strong>gamm4</strong> , <strong>gamlss</strong>, <strong>gbm</strong>, <strong>gee</strong>, <strong>geepack</strong> (<em>geeglm</em>), <strong>GLMMadaptive</strong> (<em>MixMod</em>), <strong>glmmTMB</strong> (<em>glmmTMB</em>), <strong>gmnl</strong>, <strong>HRQoL</strong> (<em>BBreg</em>, <em>BBmm</em>), <strong>lfe</strong> (<em>felm</em>), <strong>lme4</strong> (<em>lmer, glmer, nlmer, glmer.nb</em>), <strong>MASS</strong> (<em>glmmPQL, polr, rlm</em>), <strong>mgcv</strong> (<em>gam, gamm</em>), <strong>multgee</strong> (<em>LORgee</em>), <strong>nnet</strong> (<em>multinom</em>), <strong>nlme</strong> (<em>lme, gls</em>), <strong>ordinal</strong> (<em>clm, clm2, clmm</em>), <strong>panelr</strong> (<em>wbm</em>), <strong>plm</strong>, <strong>pscl</strong> (<em>zeroinf, hurdle</em>), <strong>quantreg</strong> (<em>rq, crq, rqss</em>), <strong>rms</strong> (<em>lsr, ols, psm</em>), <strong>robust</strong> (<em>glmRob, lmRob</em>), <strong>robustbase</strong> (<em>glmrob, lmrob</em>), <strong>robustlmm</strong> (<em>rlmer</em>), <strong>rstanarm</strong> (<em>stanreg, stanmvreg</em>), <strong>speedlm</strong> (<em>speedlm, speedglm</em>), <strong>survey</strong>, <strong>survival</strong> (<em>coxph, survreg</em>), <strong>truncreg</strong> (<em>truncreg</em>), <strong>VGAM</strong> (<em>vgam, vglm</em>)</p>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues">File an issue</a> and request additional model-support in <em>insight</em>!</li>
@@ -261,6 +259,13 @@
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
 </ul>
 </div>
+<div class="community">
+<h2>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+</ul>
+</div>
 <div class="citation">
 <h2>Citation</h2>
 <ul class="list-unstyled">
@@ -271,28 +276,27 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
 <li>
-<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
 <li>
-<a href="https://github.com/IndrajeetPatil/">Indrajeet Patil</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
-<li>Philip Waggoner <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-7825-7573" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<a href="https://github.com/IndrajeetPatil/">Indrajeet Patil</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<li>Philip Waggoner <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-7825-7573" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
 </ul>
 </div>
 
-
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://doi.org/10.21105/joss.01412"><img src="http://joss.theoj.org/papers/10.21105/joss.01412/status.svg" alt="DOI"></a></li>
 <li><a href="https://cran.r-project.org/package=insight"><img src="http://www.r-pkg.org/badges/version/insight" alt="CRAN_Status_Badge"></a></li>
 <li><a href="https://easystats.github.io/insight/"><img src="https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63" alt="Documentation"></a></li>
+<li><a href="https://travis-ci.org/easystats/insight"><img src="https://travis-ci.org/easystats/insight.svg?branch=master" alt="Build Status"></a></li>
 <li><a href="http://cranlogs.r-pkg.org/"><img src="http://cranlogs.r-pkg.org/badges/insight" alt="downloads"></a></li>
 <li><a href="http://cranlogs.r-pkg.org/"><img src="http://cranlogs.r-pkg.org/badges/grand-total/insight" alt="total"></a></li>
 </ul>
 </div>
 </div>
-
 </div>
 
 
@@ -301,12 +305,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

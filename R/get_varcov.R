@@ -16,7 +16,7 @@
 #' @note \code{get_varcov()} tries to return the nearest positive definite matrix
 #'   in case of a negative variance-covariance matrix.
 #'
-#' @return The variance-covariance matrix.
+#' @return The variance-covariance matrix, as \code{matrix}-object.
 #'
 #' @examples
 #' data(mtcars)
@@ -40,7 +40,7 @@ get_varcov.default <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 
@@ -66,7 +66,7 @@ get_varcov.hurdle <- function(x, component = c("conditional", "zero_inflated", "
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 #' @export
@@ -98,7 +98,7 @@ get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 
@@ -118,7 +118,7 @@ get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", 
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 
@@ -137,7 +137,7 @@ get_varcov.feis <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 
@@ -152,7 +152,7 @@ get_varcov.glimML <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 
@@ -167,7 +167,7 @@ get_varcov.vglm <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 
@@ -183,7 +183,7 @@ get_varcov.geeglm <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 
@@ -196,7 +196,7 @@ get_varcov.tobit <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 
@@ -208,7 +208,7 @@ get_varcov.lmRob <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 
@@ -225,7 +225,7 @@ get_varcov.gee <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  vc
+  as.matrix(vc)
 }
 
 

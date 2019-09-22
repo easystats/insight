@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find name of the response variable — find_response • insight</title>
+<title>Get variance-covariance matrix from models — get_varcov • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,10 @@
 
 
 
-<meta property="og:title" content="Find name of the response variable — find_response" />
-<meta property="og:description" content="Returns the name(s) of the response variable(s) from a model object." />
+<meta property="og:title" content="Get variance-covariance matrix from models — get_varcov" />
+<meta property="og:description" content="Returns the variance-covariance, as retrieved by
+  stats::vcov(), but works for more model objects that probably
+  don't provide a vcov()-method." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -114,50 +116,75 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find name of the response variable</h1>
+    <h1>Get variance-covariance matrix from models</h1>
     
-    <div class="hidden name"><code>find_response.Rd</code></div>
+    <div class="hidden name"><code>get_varcov.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the name(s) of the response variable(s) from a model object.</p>
+    <p>Returns the variance-covariance, as retrieved by
+  <code><a href='https://rdrr.io/r/stats/vcov.html'>stats::vcov()</a></code>, but works for more model objects that probably
+  don't provide a <code><a href='https://rdrr.io/r/stats/vcov.html'>vcov()</a></code>-method.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_response</span>(<span class='no'>x</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for hurdle</span>
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>,
+  <span class='st'>"zero_inflated"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for MixMod</span>
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>,
+  <span class='st'>"zero_inflated"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for glmmTMB</span>
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>,
+  <span class='st'>"zero_inflated"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted model.</p></td>
+      <td><p>A model.</p></td>
     </tr>
     <tr>
-      <th>combine</th>
-      <td><p>Logical, if <code>TRUE</code> and the response is a matrix-column,
-the name of the response matches the notation in formula, and would for
-instance also contain patterns like <code>"cbind(...)"</code>. Else, the original
-variable names from the matrix-column are returned. See 'Examples'.</p></td>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>component</th>
+      <td><p>Should the complete variance-covariance matrix of the model
+be returned, or only for the count or zero-inlfated model? Applies to models
+with zero-inflated component. <code>component</code> may be one of
+<code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code> or <code>"all"</code>.
+May be abbreviated.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The name(s) of the response variable(s) from <code>x</code> as character vector.</p>
+    <p>The variance-covariance matrix.</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><code>get_varcov()</code> tries to return the nearest positive definite matrix
+  in case of a negative variance-covariance matrix.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>cbpp</span>)
-<span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>trials</span>) ~ <span class='no'>period</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>)
-
-<span class='fu'>find_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "cbind(incidence, trials)"</div><div class='input'><span class='fu'>find_response</span>(<span class='no'>m</span>, <span class='kw'>combine</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "incidence" "trials"   </div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>mtcars</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>get_varcov</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt;             (Intercept)         wt        cyl         vs
+#&gt; (Intercept)   11.552774  0.1680680 -1.5843752 -4.7487893
+#&gt; wt             0.168068  0.6207461 -0.3301421 -0.2797924
+#&gt; cyl           -1.584375 -0.3301421  0.3764045  0.7257641
+#&gt; vs            -4.748789 -0.2797924  0.7257641  2.6475113</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#note">Note</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

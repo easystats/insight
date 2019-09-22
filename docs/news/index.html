@@ -25,13 +25,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -57,6 +59,7 @@
 <![endif]-->
 
 
+
   </head>
 
   <body>
@@ -73,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
       </span>
     </div>
 
@@ -81,7 +84,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -104,6 +107,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -113,9 +117,49 @@
       
     </div>
 
+    <div id="insight-051" class="section level1">
+<h1 class="page-header">
+<a href="#insight-051" class="anchor"></a>insight 0.5.1<small> Unreleased </small>
+</h1>
+<div id="new-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-functions" class="anchor"></a>New functions</h2>
+<ul>
+<li>
+<code><a href="../reference/get_statistic.html">get_statistic()</a></code> to return the test statistic of model estimates.</li>
+<li>
+<code><a href="../reference/get_varcov.html">get_varcov()</a></code> to return the variance-covariance matrix for models.</li>
+<li>
+<code><a href="../reference/is_model_supported.html">supported_models()</a></code> to print a list of supported models.</li>
+</ul>
+</div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>
+<code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_truncated</code> for truncated regression, or <em>brmsfit</em> models with <code><a href="https://rdrr.io/r/base/Round.html">trunc()</a></code> as additional response part.</li>
+<li>
+<code><a href="../reference/model_info.html">model_info()</a></code> now recognizes beta and beta inflated families from package <em>gamlss</em>.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>gamlss</em> models.</li>
+<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>plm</em> models, where the <code>index</code>-argument was used in the <code>plm()</code>-function call.</li>
+<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> for <em>brmsfit</em> multi-membership-models.</li>
+<li>
+<code><a href="../reference/is_model.html">is_model()</a></code> did not recognize objects of class <code>anova</code> and <code>manova</code>.</li>
+<li>
+<code><a href="../reference/model_info.html">model_info()</a></code> now correctly recognizes censored regression models from <em>brmsfit</em>.</li>
+</ul>
+</div>
+</div>
     <div id="insight-050" class="section level1">
 <h1 class="page-header">
-<a href="#insight-050" class="anchor"></a>insight 0.5.0<small> Unreleased </small>
+<a href="#insight-050" class="anchor"></a>insight 0.5.0<small> 2019-09-07 </small>
 </h1>
 <div id="breaking-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -124,16 +168,16 @@
 <li>The previous <code><a href="../reference/is_model.html">is_model()</a></code> function has been renamed to <code><a href="../reference/is_model_supported.html">is_model_supported()</a></code> since it was unclear if the function checked the entered object was a model or a supported model in <em>insight</em>. The new <code><a href="../reference/is_model.html">is_model()</a></code> function checks if the entered object is a model object, while <code><a href="../reference/is_model_supported.html">is_model_supported()</a></code> checks if a supported model object.</li>
 </ul>
 </div>
-<div id="new-functions" class="section level2">
+<div id="new-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions" class="anchor"></a>New functions</h2>
+<a href="#new-functions-1" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_statistic.html">find_statistic()</a></code> to return the test statistic of a regression model.</li>
 <li>
 <code><a href="../reference/format_value.html">format_value()</a></code> and <code><a href="../reference/format_table.html">format_table()</a></code> as utility-functions to format (model) output, especially for tabular output.</li>
 <li>
-<code><a href="../reference/color_if.html">color_if()</a></code> as utility-function to add color formatting to values, depending on certain conditions.</li>
+<code><a href="../reference/color_if.html">color_if()</a></code> as utility-function to add color formatting to values, dependingon certain conditions.</li>
 </ul>
 </div>
 <div id="general" class="section level2">
@@ -143,19 +187,21 @@
 <li>Make extraction of model family information more stable for gam-objects.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
-<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also support objects of class <code>sim</code> and <code>sim.merMod</code> (from <code><a href="https://www.rdocumentation.org/packages/arm/topics/sim">arm::sim()</a></code>).</li>
+<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also support objects of class <code>sim</code> and <code>sim.merMod</code> (from <code><a href="https://rdrr.io/pkg/arm/man/sim.html">arm::sim()</a></code>).</li>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now also supports models of class <em>clmm</em>.</li>
+<li>
+<code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> now include the Euclidean distance matrix for spatial models from <em>glmmTMB</em> (returned as random effects element, or more precise, as random slope).</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_formula.html">find_formula()</a></code> now extracts group factors of random effects for <em>gamlss</em> models.</li>
@@ -179,9 +225,9 @@
 <h1 class="page-header">
 <a href="#insight-041" class="anchor"></a>insight 0.4.1<small> 2019-07-24 </small>
 </h1>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now supports models with Gamma-family.</li>
@@ -189,9 +235,9 @@
 <code><a href="../reference/get_weights.html">get_weights()</a></code> and <code><a href="../reference/find_weights.html">find_weights()</a></code> now work for <em>brms</em>-models.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix CRAN-check issues due to recent update from the <em>panelr</em>-package.</li>
 </ul>
@@ -206,7 +252,7 @@
 <a href="#general-1" class="anchor"></a>General</h2>
 <ul>
 <li>Updates <code>CITATION</code>, based on publication in <a href="https://doi.org/10.21105/joss.01412">JOSS</a>.</li>
-<li>Added <code><a href="https://www.rdocumentation.org/packages/stats/topics/nobs">nobs()</a></code>-method for those model-objects supported by <em>insight</em> that did not yet provide such a method.</li>
+<li>Added <code><a href="https://rdrr.io/r/stats/nobs.html">nobs()</a></code>-method for those model-objects supported by <em>insight</em> that did not yet provide such a method.</li>
 </ul>
 </div>
 <div id="new-supported-model-classes" class="section level2">
@@ -217,9 +263,9 @@
 <code>betabin</code> and <code>negbin</code> (<em>aod</em>), <code>BBreg</code> and <code>BBmm</code> (<em>HRQoL</em>), <code>wbm</code> (<em>panelr</em>), <code>survfit</code> (<em>survival</em>)</li>
 </ul>
 </div>
-<div id="new-functions-1" class="section level2">
+<div id="new-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-1" class="anchor"></a>New functions</h2>
+<a href="#new-functions-2" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>, which returns a data frame with “decomposed” parameters, i.e. a data frame with information about the clean parameter name, whether it is a fixed or random effect, from conditional or zero-inflated component, and if it is a parameter related to specific grouping factors of random effects (#106).</li>
@@ -240,9 +286,9 @@
 <li>The functions <code><a href="../reference/find_variables.html">find_variables()</a></code> and <code><a href="../reference/find_terms.html">find_terms()</a></code> were flipped, because what previously was considered as “term” was actually a “variable”, and vice versa.</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now allow to return a <code>sigma</code>-element for multivariate-response models (<em>brmsfit</em>, <em>stanmvreg</em>).</li>
@@ -256,9 +302,9 @@
 <code><a href="../reference/model_info.html">model_info()</a></code> now returns an element <code>$is_hurdle</code> for hurdle models.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> returned priors for <code>brmsfit</code>-objects as <code>$random</code>-element. Now, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> returns a <code>$priors</code>-element (#98).</li>
@@ -295,9 +341,9 @@
 <code>biglm</code> and <code>bigglm</code> (<em>biglm</em>), <code>feis</code> (<em>feisr</em>), <code>gbm</code> (<em>gbm</em>), <code>BFBayesFactor</code> (<em>BayesFactor</em>), <code>psm</code> (<em>rms</em>), <code>LORgee</code> (<em>multgee</em>), <code>censReg</code> (<em>censReg</em>), <code>ols</code> (<em>rms</em>), <code>speedlm</code> and <code>speedglm</code> (<em>speedglm</em>), <code>svyolr</code> (<em>survey</em>)</li>
 </ul>
 </div>
-<div id="new-functions-2" class="section level2">
+<div id="new-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-2" class="anchor"></a>New functions</h2>
+<a href="#new-functions-3" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/is_nullmodel.html">is_nullmodel()</a></code> to check if model is a null-model (intercept-only), i.e. if the conditional part of the model has no predictors.</li>
@@ -314,9 +360,9 @@
 <code><a href="../reference/get_variance.html">get_variance()</a></code> no longer stops if random effects variance cannot be calculated. Rather, the return-value for <code>$var.random</code> will be <code>NULL</code>.</li>
 </ul>
 </div>
-<div id="changes-to-functions-3" class="section level2">
+<div id="changes-to-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now computes the full variance for mixed models with zero-inflation component.</li>
@@ -328,9 +374,9 @@
 <code><a href="../reference/find_variables.html">find_variables()</a></code> gets a <code>flatten</code>-argument, to either return results as list or as simple vector.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/get_data.html">get_data()</a></code> did not work when model formula contained a function with namespace-prefix (like <code>lm(Sepal.Length ~ splines::bs(Petal.Width, df=4)</code>) (#93).</li>
@@ -362,7 +408,7 @@
 <h2 class="hasAnchor">
 <a href="#general-2" class="anchor"></a>General</h2>
 <ul>
-<li>Better handling of <code>AsIs</code>-variables with division-operation as dependent variables, e.g. if outcome was defined as <code><a href="https://www.rdocumentation.org/packages/base/topics/AsIs">I(income/frequency)</a></code>, especially for <code><a href="../reference/find_response.html">find_response()</a></code> and <code><a href="../reference/get_data.html">get_data()</a></code>.</li>
+<li>Better handling of <code>AsIs</code>-variables with division-operation as dependent variables, e.g. if outcome was defined as <code><a href="https://rdrr.io/r/base/AsIs.html">I(income/frequency)</a></code>, especially for <code><a href="../reference/find_response.html">find_response()</a></code> and <code><a href="../reference/get_data.html">get_data()</a></code>.</li>
 <li>Revised package-functions related to <code>felm</code>-models due to breaking changes in the <em>lfe</em>-package.</li>
 </ul>
 </div>
@@ -374,9 +420,9 @@
 <code>iv_robust</code> (<em>estimatr</em>), <code>crch</code> (<em>crch</em>), <code>gamlss</code> (<em>gamlss</em>), <code>lmrob</code> and <code>glmrob</code> (<em>robustbase</em>, #64), <code>rq</code>, <code>rqss</code> and <code>crq</code> (<em>quantreg</em>), <code>rlmer</code> (<em>robustlmm</em>), <code>mixed</code> (<em>afex</em>), <code>tobit</code> (<em>AER</em>) and <code>survreg</code> (<em>survival</em>).</li>
 </ul>
 </div>
-<div id="new-functions-3" class="section level2">
+<div id="new-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-3" class="anchor"></a>New functions</h2>
+<a href="#new-functions-4" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code>, to calculate the variance components from mixed models of class <code>merMod</code>, <code>glmmTMB</code>, <code>MixMod</code>, <code>rlmer</code>, <code>mixed</code>, <code>lme</code> and <code>stanreg</code> (#52). Furthermore, convenient shortcuts to return the related components directly, like <code><a href="../reference/get_variance.html">get_variance_random()</a></code> or <code><a href="../reference/get_variance.html">get_variance_residual()</a></code>.</li>
@@ -394,9 +440,9 @@
 <code><a href="../reference/print_color.html">print_color()</a></code> (resp. <code><a href="../reference/print_color.html">print_colour()</a></code>) to print coloured output to the console. Mainly implemented to reduce package dependencies.</li>
 </ul>
 </div>
-<div id="changes-to-functions-4" class="section level2">
+<div id="changes-to-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> get a <code>parameters</code>-argument for <code>brmsfit</code> and <code>stanreg</code> models, to allow selection of specific parameters that should be returned (#55).</li>
@@ -409,15 +455,15 @@
 <code>model_info</code> now returns <code>$is_tweedie</code> for models from tweedie-families.</li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not preserve coefficients of monotonic category-specific effects from <strong>brmsfit</strong>-objects.</li>
 <li>Fixed bug that sometimes returned more elements for <code><a href="../reference/find_predictors.html">find_predictors()</a></code> or <code><a href="../reference/get_parameters.html">get_parameters()</a></code> than requested.</li>
-<li>Fixed bug in <code><a href="../reference/get_data.html">get_data()</a></code> for <strong>MixMod</strong>-objects when response variable was defined via <code><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind()</a></code>.</li>
-<li>Fixed bug in <code><a href="../reference/get_response.html">get_response()</a></code> for models that used <code><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind()</a></code> with a substraction (e.g. <code><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind(success, total - success)</a></code>). In such cases, values for second column (in this example: <code>total</code>) were the substracted values <code>total - success</code>, not the original values from <code>total</code>.</li>
+<li>Fixed bug in <code><a href="../reference/get_data.html">get_data()</a></code> for <strong>MixMod</strong>-objects when response variable was defined via <code><a href="https://rdrr.io/r/base/cbind.html">cbind()</a></code>.</li>
+<li>Fixed bug in <code><a href="../reference/get_response.html">get_response()</a></code> for models that used <code><a href="https://rdrr.io/r/base/cbind.html">cbind()</a></code> with a substraction (e.g. <code><a href="https://rdrr.io/r/base/cbind.html">cbind(success, total - success)</a></code>). In such cases, values for second column (in this example: <code>total</code>) were the substracted values <code>total - success</code>, not the original values from <code>total</code>.</li>
 </ul>
 </div>
 </div>
@@ -439,6 +485,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#insight-051">0.5.1</a></li>
         <li><a href="#insight-050">0.5.0</a></li>
         <li><a href="#insight-041">0.4.1</a></li>
         <li><a href="#insight-040">0.4.0</a></li>
@@ -451,19 +498,23 @@
 
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, <a href='https://github.com/IndrajeetPatil/'>Indrajeet Patil</a>, Philip Waggoner.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
