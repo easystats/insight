@@ -35,6 +35,7 @@ reference:
   - get_data
   - get_priors
   - get_variance
+  - get_varcov
 
 - title: "Find Information or Get Data from Model Objects"
   desc: >

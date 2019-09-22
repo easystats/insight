@@ -3,6 +3,7 @@
 ## New functions
 
 * `get_statistic()` to return the test statistic of model estimates.
+* `get_varcov()` to return the variance-covariance matrix for models.
 * `supported_models()` to print a list of supported models.
 
 ## Changes to functions
