@@ -7,10 +7,11 @@
 #'
 #' @param x A model.
 #' @param component Should the complete variance-covariance matrix of the model
-#'   be returned, or only for the count or zero-inlfated model? Applies to models
-#'   with zero-inflated component. \code{component} may be one of
-#'   \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"} or \code{"all"}.
-#'   May be abbreviated.
+#'   be returned, or only for specific model components only (like count or
+#'   zero-inlfated model parts)? Applies to models with zero-inflated component,
+#'   or models with precision (e.g. \code{betareg}) component. \code{component}
+#'   may be one of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"},
+#'   \code{"precision"}, or \code{"all"}. May be abbreviated.
 #' @param ... Currently not used.
 #'
 #' @note \code{get_varcov()} tries to return the nearest positive definite matrix
@@ -42,6 +43,70 @@ get_varcov.default <- function(x, ...) {
 
   as.matrix(vc)
 }
+
+
+
+
+
+# models with special components ---------------------------------------------
+
+
+#' @rdname get_varcov
+#' @export
+get_varcov.betareg <- function(x, component = c("conditional", "precision", "all"), ...) {
+  component <- match.arg(component)
+
+  vc <- switch(
+    component,
+    "conditional" = stats::vcov(object = x, model = "mean"),
+    "precision" = stats::vcov(object = x, model = "precision"),
+    stats::vcov(object = x)
+  )
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  as.matrix(vc)
+}
+
+
+#' @rdname get_varcov
+#' @export
+get_varcov.truncreg <- function(x, component = c("conditional", "all"), ...) {
+  component <- match.arg(component)
+  vc <- stats::vcov(x)
+
+  if (component == "conditional") {
+    vc <- vc[1:(nrow(vc) - 1), 1:(ncol(vc) - 1)]
+  }
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  as.matrix(vc)
+}
+
+
+#' @rdname get_varcov
+#' @export
+get_varcov.gamlss <- function(x, component = c("conditional", "all"), ...) {
+  component <- match.arg(component)
+  vc <- suppressWarnings(stats::vcov(x))
+
+  if (component == "conditional") {
+    cond_pars <- length(find_parameters(x)$conditional)
+    vc <- as.matrix(vc)[1:cond_pars, 1:cond_pars]
+  }
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  as.matrix(vc)
+}
+
 
 
 
