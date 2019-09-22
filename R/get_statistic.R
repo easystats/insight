@@ -36,11 +36,10 @@ get_statistic <- function(x, ...) {
 #' @export
 get_statistic.default <- function(x, column_index = 3, ...) {
   cs <- stats::coef(summary(x))
-  cs_names <- tolower(dimnames(cs)[[2]])
 
   out <- data.frame(
-    parameter = gsub("`", "", rownames(cs), fixed = TRUE),
-    statistic = as.vector(cs[, column_index]),
+    Parameter = gsub("`", "", rownames(cs), fixed = TRUE),
+    Statistic = as.vector(cs[, column_index]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -109,9 +108,9 @@ get_statistic.glmmTMB <- function(x, component = c("all", "conditional", "zi", "
   cs <- .compact_list(stats::coef(summary(x)))
   out <- lapply(names(cs), function(i) {
     data.frame(
-      parameter = find_parameters(x, effects = "fixed", component = i, flatten = TRUE),
-      statistic = as.vector(cs[[i]][, 3]),
-      component = i,
+      Parameter = find_parameters(x, effects = "fixed", component = i, flatten = TRUE),
+      Statistic = as.vector(cs[[i]][, 3]),
+      Component = i,
       stringsAsFactors = FALSE,
       row.names = NULL
     )
@@ -136,9 +135,9 @@ get_statistic.zeroinfl <- function(x, component = c("all", "conditional", "zi", 
   out <- lapply(names(cs), function(i) {
     comp <- ifelse(i == "count", "conditional", "zi")
     data.frame(
-      parameter = find_parameters(x, effects = "fixed", component = comp, flatten = TRUE),
-      statistic = as.vector(cs[[i]][, 3]),
-      component = comp,
+      Parameter = find_parameters(x, effects = "fixed", component = comp, flatten = TRUE),
+      Statistic = as.vector(cs[[i]][, 3]),
+      Component = comp,
       stringsAsFactors = FALSE,
       row.names = NULL
     )
@@ -170,9 +169,9 @@ get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "z
   cs <- .compact_list(cs)
   out <- lapply(names(cs), function(i) {
     data.frame(
-      parameter = find_parameters(x, effects = "fixed", component = i, flatten = TRUE),
-      statistic = as.vector(cs[[i]][, 3]),
-      component = i,
+      Parameter = find_parameters(x, effects = "fixed", component = i, flatten = TRUE),
+      Statistic = as.vector(cs[[i]][, 3]),
+      Component = i,
       stringsAsFactors = FALSE,
       row.names = NULL
     )
@@ -216,9 +215,9 @@ get_statistic.gam <- function(x, ...) {
   cs.smooth <- summary(x)$s.table
 
   out <- data.frame(
-    parameter = c(rownames(cs), rownames(cs.smooth)),
-    statistic = c(as.vector(cs[, 3]), as.vector(cs.smooth[, 3])),
-    component = c(rep("conditional", nrow(cs)), rep("smooth_terms", nrow(cs.smooth))),
+    Parameter = c(rownames(cs), rownames(cs.smooth)),
+    Statistic = c(as.vector(cs[, 3]), as.vector(cs.smooth[, 3])),
+    Component = c(rep("conditional", nrow(cs)), rep("smooth_terms", nrow(cs.smooth))),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -253,9 +252,9 @@ get_statistic.gamlss <- function(x, ...) {
   utils::capture.output(cs <- summary(x))
 
   out <- data.frame(
-    parameter = parms$parameter,
-    statistic = as.vector(cs[, 3]),
-    component = parms$component,
+    Parameter = parms$parameter,
+    Statistic = as.vector(cs[, 3]),
+    Component = parms$component,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -275,8 +274,8 @@ get_statistic.vglm <- function(x, ...) {
   cs <- VGAM::coef(VGAM::summary(x))
 
   out <- data.frame(
-    parameter = gsub("`", "", rownames(cs), fixed = TRUE),
-    statistic = as.vector(cs[, 3]),
+    Parameter = gsub("`", "", rownames(cs), fixed = TRUE),
+    Statistic = as.vector(cs[, 3]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -361,8 +360,8 @@ get_statistic.gee <- function(x, ...) {
   cs <- stats::coef(summary(x))
 
   out <- data.frame(
-    parameter = parms$parameter,
-    statistic = as.vector(cs[, "Naive z"]),
+    Parameter = parms$parameter,
+    Statistic = as.vector(cs[, "Naive z"]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -381,8 +380,8 @@ get_statistic.logistf <- function(x, ...) {
   utils::capture.output(s <- summary(x))
 
   out <- data.frame(
-    parameter = parms$parameter,
-    statistic = as.vector(stats::qchisq(1 - s$prob, df = 1)),
+    Parameter = parms$parameter,
+    Statistic = as.vector(stats::qchisq(1 - s$prob, df = 1)),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -404,8 +403,8 @@ get_statistic.svyglm.nb <- function(x, ...) {
   se <- sqrt(diag(stats::vcov(x, stderr = "robust")))
 
   out <- data.frame(
-    parameter = parms$parameter,
-    statistic = parms$estimate / se,
+    Parameter = parms$parameter,
+    Statistic = parms$estimate / se,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -429,8 +428,8 @@ get_statistic.betareg <- function(x, ...) {
   se <- as.vector(cs[, 2])
 
   out <- data.frame(
-    parameter = parms$parameter,
-    statistic = parms$estimate / se,
+    Parameter = parms$parameter,
+    Statistic = parms$estimate / se,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -468,8 +467,8 @@ get_statistic.survreg <- function(x, ...) {
   parms <- get_parameters(x)
   s <- summary(x)
   out <- data.frame(
-    parameter = parms$parameter,
-    statistic = s$table[, 3],
+    Parameter = parms$parameter,
+    Statistic = s$table[, 3],
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -491,8 +490,8 @@ get_statistic.glimML <- function(x, ...) {
   s <- methods::slot(aod::summary(x), "Coef")
 
   out <- data.frame(
-    parameter = parms$parameter,
-    statistic = s[, 3],
+    Parameter = parms$parameter,
+    Statistic = s[, 3],
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -510,8 +509,8 @@ get_statistic.lrm <- function(x, ...) {
   stat <- stats::coef(x) / sqrt(diag(stats::vcov(x)))
 
   out <- data.frame(
-    parameter = parms$parameter,
-    statistic = as.vector(stat),
+    Parameter = parms$parameter,
+    Statistic = as.vector(stat),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
