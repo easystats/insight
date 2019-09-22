@@ -5,18 +5,22 @@
 \alias{get_varcov.hurdle}
 \alias{get_varcov.MixMod}
 \alias{get_varcov.glmmTMB}
+\alias{get_varcov.brmsfit}
 \title{Get variance-covariance matrix from models}
 \usage{
 get_varcov(x, ...)
 
 \method{get_varcov}{hurdle}(x, component = c("conditional",
-  "zero_inflated", "all"), ...)
+  "zero_inflated", "zi", "all"), ...)
 
 \method{get_varcov}{MixMod}(x, component = c("conditional",
-  "zero_inflated", "all"), ...)
+  "zero_inflated", "zi", "all"), ...)
 
 \method{get_varcov}{glmmTMB}(x, component = c("conditional",
-  "zero_inflated", "all"), ...)
+  "zero_inflated", "zi", "all"), ...)
+
+\method{get_varcov}{brmsfit}(x, component = c("conditional",
+  "zero_inflated", "zi", "all"), ...)
 }
 \arguments{
 \item{x}{A model.}

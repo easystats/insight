@@ -52,12 +52,13 @@ get_varcov.default <- function(x, ...) {
 
 #' @rdname get_varcov
 #' @export
-get_varcov.hurdle <- function(x, component = c("conditional", "zero_inflated", "all"), ...) {
+get_varcov.hurdle <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
   component <- match.arg(component)
 
   vc <- switch(
     component,
     "conditional" = stats::vcov(object = x, model = "count"),
+    "zi" = ,
     "zero_inflated" = stats::vcov(object = x, model = "zero"),
     stats::vcov(object = x)
   )
@@ -84,12 +85,13 @@ get_varcov.zerocount <- get_varcov.hurdle
 
 #' @rdname get_varcov
 #' @export
-get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "all"), ...) {
+get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
   component <- match.arg(component)
 
   vc <- switch(
     component,
     "conditional" = stats::vcov(x, parm = "fixed-effects"),
+    "zi" = ,
     "zero_inflated" = stats::vcov(x, parm = "zero_part"),
     stats::vcov(x)
   )
@@ -104,12 +106,13 @@ get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "
 
 #' @rdname get_varcov
 #' @export
-get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", "all"), ...) {
+get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
   component <- match.arg(component)
 
   vc <- switch(
     component,
     "conditional" = stats::vcov(x)[["cond"]],
+    "zi" = ,
     "zero_inflated" = stats::vcov(x)[["zi"]],
     stats::vcov(x, full = TRUE)
   )
@@ -126,7 +129,63 @@ get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", 
 
 
 
+# Bayesian models ------------------------------------------------
+
+
+#' @rdname get_varcov
+#' @export
+get_varcov.brmsfit <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
+  component <- match.arg(component)
+  params <- find_parameters(x, effects = "fixed", component = component, flatten = TRUE)
+  params <- gsub("^b_", "", params)
+
+  vc <- stats::vcov(x)[params, params]
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  as.matrix(vc)
+}
+
+
+
+
+
+
 # Other models with special handling -----------------------------------------
+
+
+#' @export
+get_varcov.rq <- function(x, ...) {
+  s <- summary(x, covariance = TRUE)
+  vc <- as.matrix(s$cov)
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  as.matrix(vc)
+}
+
+
+#' @export
+get_varcov.crq <- get_varcov.rq
+
+#' @export
+get_varcov.nlrq <- get_varcov.rq
+
+
+#' @export
+get_varcov.mixed <- function(x, ...) {
+  vc <- as.matrix(stats::vcov(x$full_model))
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  as.matrix(vc)
+}
 
 
 #' @export
