@@ -24,9 +24,7 @@ if (require("testthat") &&
   y <- y + Q + W
   dat <- data.frame(y, x, x2, x3, x4, id, firm, Q, W)
 
-  m1 <-
-    felm(y ~ x + x2 |
-      id + firm | (Q | W ~ x3 + factor(x4)), data = dat)
+  m1 <- felm(y ~ x + x2 | id + firm | (Q | W ~ x3 + factor(x4)), data = dat)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)

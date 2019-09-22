@@ -130,6 +130,56 @@ get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", 
 
 
 #' @export
+get_varcov.gamm <- function(x, ...) {
+  vc <- stats::vcov(x$gam)
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  as.matrix(vc)
+}
+
+
+#' @export
+get_varcov.list <- function(x, ...) {
+  if ("gam" %in% names(x)) {
+    vc <- stats::vcov(x$gam)
+
+    if (.is_negativ_matrix(vc)) {
+      vc <- .fix_negative_matrix(vc)
+    }
+
+    as.matrix(vc)
+  }
+}
+
+
+#' @export
+get_varcov.BBmm <- function(x, ...) {
+  vc <- x$fixed.vcov
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  as.matrix(vc)
+}
+
+
+#' @export
+get_varcov.BBreg <- function(x, ...) {
+  vc <- x$vcov
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  as.matrix(vc)
+}
+
+
+#' @export
 get_varcov.feis <- function(x, ...) {
   vc <- x$vcov
 

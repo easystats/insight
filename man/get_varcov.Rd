@@ -30,7 +30,7 @@ with zero-inflated component. \code{component} may be one of
 May be abbreviated.}
 }
 \value{
-The variance-covariance matrix.
+The variance-covariance matrix, as \code{matrix}-object.
 }
 \description{
 Returns the variance-covariance, as retrieved by
