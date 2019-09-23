@@ -467,6 +467,23 @@ get_data.rqss <- function(x, effects = c("all", "fixed", "random"), ...) {
 }
 
 
+#' @rdname get_data
+#' @export
+get_data.nlrq <- function(x, ...) {
+  mf <- tryCatch({
+    dat <- .get_data_from_env(x)
+    data_columns <- intersect(colnames(dat), find_variables(x, flatten = TRUE))
+    dat[, data_columns, drop = FALSE]
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  .prepare_get_data(x, stats::na.omit(mf))
+}
+
+
 #' @export
 get_data.gls <- function(x, ...) {
   mf <- tryCatch({

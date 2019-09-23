@@ -11,6 +11,7 @@
 \alias{get_data.lme}
 \alias{get_data.gee}
 \alias{get_data.rqss}
+\alias{get_data.nlrq}
 \alias{get_data.MixMod}
 \alias{get_data.brmsfit}
 \alias{get_data.stanreg}
@@ -40,6 +41,8 @@ get_data(x, ...)
 \method{get_data}{gee}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{rqss}(x, effects = c("all", "fixed", "random"), ...)
+
+\method{get_data}{nlrq}(x, ...)
 
 \method{get_data}{MixMod}(x, effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated",
