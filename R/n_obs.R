@@ -228,6 +228,18 @@ nobs.crq <- function(object, ...) {
 }
 
 
+#' @importFrom stats fitted
+#' @export
+n_obs.nlrq <- function(x, ...) {
+  length(stats::fitted(x))
+}
+
+#' @export
+nobs.nlrq <- function(object, ...) {
+  n_obs(object, ...)
+}
+
+
 
 #' @export
 n_obs.survfit <- function(x, ...) {

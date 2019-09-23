@@ -39,6 +39,7 @@ find_statistic <- function(x, ...) {
       "cch",
       "censReg",
       "coeftest",
+      "crq",
       "drc",
       "feis",
       "felm",

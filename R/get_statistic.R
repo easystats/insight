@@ -293,6 +293,39 @@ get_statistic.vglm <- function(x, ...) {
 
 
 #' @export
+get_statistic.rq <- function(x, ...) {
+  stat <- tryCatch(
+    {
+      cs <- stats::coef(summary(x))
+      cs[, "t value"]
+    },
+    error = function(e) {
+      cs <- stats::coef(summary(x, covariance = TRUE))
+      cs[, "t value"]
+    }
+  )
+
+  params <- get_parameters(x)
+
+  out <- data.frame(
+    Parameter = params$parameter,
+    Statistic = stat,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+#' @export
+get_statistic.crq <- get_statistic.rq
+
+#' @export
+get_statistic.nlrq <- get_statistic.rq
+
+
+#' @export
 get_statistic.bigglm <- function(x, ...) {
   parms <- get_parameters(x)
   cs <- summary(x)$mat

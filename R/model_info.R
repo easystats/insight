@@ -308,6 +308,12 @@ model_info.crq <- function(x, ...) {
 
 
 #' @export
+model_info.nlrq <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
 model_info.rqss <- function(x, ...) {
   make_family(x, ...)
 }
