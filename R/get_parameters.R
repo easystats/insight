@@ -482,6 +482,32 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
 
 
 
+#' @export
+get_parameters.wblm <- function(x, ...) {
+  s <- summary(x)
+
+  terms <- c(
+    rownames(s$within_table),
+    rownames(s$between_table),
+    rownames(s$ints_table)
+  )
+
+  params <- rbind(
+    data.frame(params = s$within_table, component = "within", stringsAsFactors = FALSE),
+    data.frame(params = s$between_table, component = "between", stringsAsFactors = FALSE),
+    data.frame(params = s$ints_table, component = "interactions", stringsAsFactors = FALSE)
+  )
+
+  data.frame(
+    parameter = gsub("`", "", terms, fixed = TRUE),
+    estimate = params[[1]],
+    component = params[["component"]],
+    stringsAsFactors = FALSE
+  )
+}
+
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {

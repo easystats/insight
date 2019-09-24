@@ -229,6 +229,10 @@ if (require("testthat") &&
           -0.441756913071962,
           -0.127319623945541
         ),
+        component = c(
+          "within", "within", "between", "between",
+          "between", "between", "between", "interactions"
+        ),
         stringsAsFactors = FALSE
       ),
       tolerance = 1e-4
