@@ -72,6 +72,7 @@ find_statistic <- function(x, ...) {
       "svyglm",
       "svyolr",
       "truncreg",
+      "wbm",
       "wblm"
     )
 

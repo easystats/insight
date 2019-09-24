@@ -315,6 +315,24 @@ get_statistic.vglm <- function(x, ...) {
 
 
 #' @export
+get_statistic.wbm <- function(x, ...) {
+  sum <- as.data.frame(x@summ$coeftable, stringsAsFactors = FALSE)
+  params <- get_parameters(x)
+
+  out <- data.frame(
+    Parameter = params$parameter,
+    Statistic = sum[, "t val."],
+    Component = params$component,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.rq <- function(x, ...) {
   stat <- tryCatch(
     {

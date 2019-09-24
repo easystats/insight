@@ -483,7 +483,7 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
 
 
 #' @export
-get_parameters.wblm <- function(x, effects = c("fixed", "random"), ...) {
+get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
   effects <- match.arg(effects)
 
   if (effects == "fixed") {
