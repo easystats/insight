@@ -316,12 +316,23 @@ get_statistic.vglm <- function(x, ...) {
 
 #' @export
 get_statistic.wbm <- function(x, ...) {
-  sum <- as.data.frame(x@summ$coeftable, stringsAsFactors = FALSE)
+  s <- summary(model)
+
+  statistic_column <- if ("t val." %in% colnames(s$within_table))
+    "t val."
+  else
+    "z val."
+
+  stat <- c(
+    s$within_table[, statistic_column],
+    s$between_table[, statistic_column],
+    s$ints_table[, statistic_column]
+  )
   params <- get_parameters(x)
 
   out <- data.frame(
     Parameter = params$parameter,
-    Statistic = sum[, "t val."],
+    Statistic = as.vector(stat),
     Component = params$component,
     stringsAsFactors = FALSE,
     row.names = NULL
