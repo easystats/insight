@@ -48,20 +48,6 @@ get_parameters.default <- function(x, ...) {
     return(get_parameters.gam(x, ...))
   }
 
-  ## TODO We may think about returning standard errors as well in a
-  ## later update... However, we need to check models classes. "rms::lrm()"
-  ## e.g. is of class "lrm", "glm" and "lm", and would go into this default
-  ## method, which works with "stats::coef()", but not with "summary()$coefficients"
-
-  # cf <- summary(x)$coefficients
-  # data.frame(
-  #   parameter = row.names(cf),
-  #   estimate = unname(cf[, 1]),
-  #   # std.error = unname(cf[, 2]),
-  #   stringsAsFactors = FALSE,
-  #   row.names = NULL
-  # )
-
   tryCatch({
     cf <- stats::coef(x)
     data.frame(
@@ -76,6 +62,26 @@ get_parameters.default <- function(x, ...) {
     NULL
   }
   )
+}
+
+
+
+#' @export
+get_parameters.mlm <- function(x, ...) {
+  cs <- stats::coef(summary(x))
+
+  out <- lapply(names(cs), function(i) {
+    params <- cs[[i]]
+    data.frame(
+      parameter = rownames(params),
+      estimate = params[, 1],
+      response = gsub("^Response (.*)", "\\1", i),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  })
+
+  do.call(rbind, out)
 }
 
 

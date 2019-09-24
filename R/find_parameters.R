@@ -86,6 +86,25 @@ find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.mlm <- function(x, flatten = FALSE, ...) {
+  cs <- stats::coef(summary(x))
+
+  out <- lapply(cs, function(i) {
+    list(conditional = rownames(i))
+  })
+
+  names(out) <- gsub("^Response (.*)", "\\1", names(cs))
+  attr(out, "is_mv") <- TRUE
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
+#' @export
 find_parameters.polr <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = c(sprintf("Intercept: %s", names(x$zeta)), names(stats::coef(x))))
 

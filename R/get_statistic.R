@@ -50,6 +50,26 @@ get_statistic.default <- function(x, column_index = 3, ...) {
 
 
 #' @export
+get_statistic.mlm <- function(x, ...) {
+  cs <- stats::coef(summary(x))
+
+  out <- lapply(names(cs), function(i) {
+    params <- cs[[i]]
+    data.frame(
+      Parameter = rownames(params),
+      Statistic = as.vector(params[, 3]),
+      Response = gsub("^Response (.*)", "\\1", i),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  })
+
+  attr(out, "statistic") <- find_statistic(x)
+  do.call(rbind, out)
+}
+
+
+#' @export
 get_statistic.lme <- function(x, ...) {
   get_statistic.default(x, column_index = 4)
 }
