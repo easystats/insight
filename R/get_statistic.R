@@ -64,8 +64,10 @@ get_statistic.mlm <- function(x, ...) {
     )
   })
 
+  out <- do.call(rbind, out)
   attr(out, "statistic") <- find_statistic(x)
-  do.call(rbind, out)
+
+  out
 }
 
 
