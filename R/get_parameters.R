@@ -483,27 +483,36 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
 
 
 #' @export
-get_parameters.wblm <- function(x, ...) {
-  s <- summary(x)
+get_parameters.wblm <- function(x, effects = c("fixed", "random"), ...) {
+  effects <- match.arg(effects)
 
-  terms <- c(
-    rownames(s$within_table),
-    rownames(s$between_table),
-    rownames(s$ints_table)
-  )
+  if (effects == "fixed") {
+    s <- summary(x)
 
-  params <- rbind(
-    data.frame(params = s$within_table, component = "within", stringsAsFactors = FALSE),
-    data.frame(params = s$between_table, component = "between", stringsAsFactors = FALSE),
-    data.frame(params = s$ints_table, component = "interactions", stringsAsFactors = FALSE)
-  )
+    terms <- c(
+      rownames(s$within_table),
+      rownames(s$between_table),
+      rownames(s$ints_table)
+    )
 
-  data.frame(
-    parameter = gsub("`", "", terms, fixed = TRUE),
-    estimate = params[[1]],
-    component = params[["component"]],
-    stringsAsFactors = FALSE
-  )
+    params <- rbind(
+      data.frame(params = s$within_table, component = "within", stringsAsFactors = FALSE),
+      data.frame(params = s$between_table, component = "between", stringsAsFactors = FALSE),
+      data.frame(params = s$ints_table, component = "interactions", stringsAsFactors = FALSE)
+    )
+
+    data.frame(
+      parameter = gsub("`", "", terms, fixed = TRUE),
+      estimate = params[[1]],
+      component = params[["component"]],
+      stringsAsFactors = FALSE
+    )
+  } else {
+    if (!requireNamespace("lme4", quietly = TRUE)) {
+      stop("To use this function, please install package 'lme4'.")
+    }
+    lme4::ranef(x)
+  }
 }
 
 
