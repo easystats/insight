@@ -19,7 +19,8 @@
 * Fixed issue in `get_data()`, `find_predictors()` and `find_variables()` for *brmsfit*  multi-membership-models.
 * `is_model()` did not recognize objects of class `anova` and `manova`.
 * `model_info()` now correctly recognizes censored regression models from *brmsfit*.
-* Fixed issues in `find_parameters()` and `get_parameters()` with *multinom* models
+* Fixed issues in `find_parameters()` and `get_parameters()` with *multinom* models.
+* Fixed issues in `clean_names()` for cases where variable transformations where made in specific patterns, like `log(test/10)`.
 
 # insight 0.5.0
 
