@@ -93,14 +93,16 @@ clean_names.character <- function(x) {
       } else if (pattern[j] == "asis") {
         if (!ignore_asis) x[i] <- .trim(unique(sub("asis\\((\\w*).*", "\\1", x[i])))
       } else if (pattern[j] == "log-log") {
-        x[i] <- .trim(unique(sub("^log\\(log\\(([^,)]*)).*", "\\1", x[i])))
+        x[i] <- .trim(unique(sub("^log\\(log\\((\\w*).*", "\\1", x[i])))
       } else if (pattern[j] %in% c("mmc", "mm")) {
         ## TODO multimembership-models need to be fixed
         p <- paste0("^", pattern[j], "\\((.*)\\).*")
         g <- .trim(sub(p, "\\1", x[i]))
         x[i] <- .trim(unlist(strsplit(g, ",")))
       } else {
-        p <- paste0("^", pattern[j], "\\(([^,)]*).*")
+        # p <- paste0("^", pattern[j], "\\(([^,/)]*).*")
+        # this one should be more generic...
+        p <- paste0("^", pattern[j], "\\((\\w*).*")
         x[i] <- unique(sub(p, "\\1", x[i]))
       }
     }
