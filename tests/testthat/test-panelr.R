@@ -210,11 +210,11 @@ if (require("testthat") &&
       get_parameters(m1),
       data.frame(
         parameter = c(
+          "lag(union)",
+          "wks",
           "(Intercept)",
           "imean(lag(union))",
           "imean(wks)",
-          "lag(union)",
-          "wks",
           "blk",
           "fem",
           "lag(union):blk"

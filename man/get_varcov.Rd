@@ -40,7 +40,7 @@ get_varcov(x, ...)
 
 \item{component}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model components only (like count or
-zero-inlfated model parts)? Applies to models with zero-inflated component,
+zero-inflated model parts)? Applies to models with zero-inflated component,
 or models with precision (e.g. \code{betareg}) component. \code{component}
 may be one of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"},
 \code{"precision"}, or \code{"all"}. May be abbreviated.}

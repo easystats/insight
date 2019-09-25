@@ -31,7 +31,7 @@ with zero-inflated component. \code{component} may be one of
 (default). May be abbreviated.}
 }
 \value{
-
+A data frame with the model's parameter names and the related test statistic.
 }
 \description{
 Returns the statistic (\emph{t}, \code{z}, ...) for model estimates.

@@ -16,7 +16,7 @@
 #'   (default). May be abbreviated.
 #' @param ... Currently not used.
 #'
-#' @return
+#' @return A data frame with the model's parameter names and the related test statistic.
 #'
 #' @examples
 #' data(mtcars)
@@ -316,7 +316,7 @@ get_statistic.vglm <- function(x, ...) {
 
 #' @export
 get_statistic.wbm <- function(x, ...) {
-  s <- summary(model)
+  s <- summary(x)
 
   statistic_column <- if ("t val." %in% colnames(s$within_table))
     "t val."
