@@ -187,6 +187,25 @@ find_parameters.clmm2 <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.multinom <- function(x, flatten = FALSE, ...) {
+  params <- stats::coef(x)
+
+
+  pars <- if (is.matrix(params)) {
+    list(conditional = colnames(params))
+  } else {
+    list(conditional = names(params))
+  }
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+#' @export
 find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   pars <- names(stats::coef(x))
 

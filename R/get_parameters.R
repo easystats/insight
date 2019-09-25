@@ -767,6 +767,39 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
 
 
 
+
+
+#' @export
+get_parameters.multinom <- function(x, ...) {
+  params <- stats::coef(x)
+
+  if (is.matrix(params)) {
+    out <- data.frame()
+    for (i in 1:nrow(params)) {
+      out <- rbind(out, data.frame(
+        parameter = colnames(params),
+        estimate = unname(params[i, ]),
+        response = rownames(params)[i],
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      ))
+    }
+  } else {
+    out <- data.frame(
+      parameter = names(params),
+      estimate = unname(params),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
+
+  out
+}
+
+
+
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), parameters = NULL, ...) {
