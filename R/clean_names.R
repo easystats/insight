@@ -89,11 +89,11 @@ clean_names.character <- function(x) {
       if (pattern[j] == "offset") {
         x[i] <- .trim(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
       } else if (pattern[j] == "I") {
-        if (!ignore_asis) x[i] <- .trim(unique(sub("I\\((\\w*).*", "\\1", x[i])))
+        if (!ignore_asis) x[i] <- .trim(unique(sub("I\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] == "asis") {
-        if (!ignore_asis) x[i] <- .trim(unique(sub("asis\\((\\w*).*", "\\1", x[i])))
+        if (!ignore_asis) x[i] <- .trim(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] == "log-log") {
-        x[i] <- .trim(unique(sub("^log\\(log\\((\\w*).*", "\\1", x[i])))
+        x[i] <- .trim(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] %in% c("mmc", "mm")) {
         ## TODO multimembership-models need to be fixed
         p <- paste0("^", pattern[j], "\\((.*)\\).*")
@@ -102,7 +102,7 @@ clean_names.character <- function(x) {
       } else {
         # p <- paste0("^", pattern[j], "\\(([^,/)]*).*")
         # this one should be more generic...
-        p <- paste0("^", pattern[j], "\\((\\w*).*")
+        p <- paste0("^", pattern[j], "\\(((\\w|\\.)*).*")
         x[i] <- unique(sub(p, "\\1", x[i]))
       }
     }
