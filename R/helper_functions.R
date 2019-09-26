@@ -154,7 +154,7 @@
 
 # extract random effects from formula
 .get_model_random <- function(f, split_nested = FALSE, model) {
-  is_special <- inherits(model, c("MCMCglmm", "gee", "LORgee", "felm", "feis", "BFBayesFactor", "BBmm", "glimML"))
+  is_special <- inherits(model, c("MCMCglmm", "gee", "LORgee", "clmm2", "felm", "feis", "BFBayesFactor", "BBmm", "glimML"))
 
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
