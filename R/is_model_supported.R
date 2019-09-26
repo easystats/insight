@@ -50,6 +50,7 @@ supported_models <- function() {
     "clm",
     "clm2",
     "clmm",
+    "clmm2",
     "coxme",
     "coxph",
     "crch",

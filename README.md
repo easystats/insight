@@ -269,9 +269,9 @@ iv\_robust*), **feisr** (*feis*), **gam** (*Gam*), **gamm4** ,
 *BBmm*), **lfe** (*felm*), **lme4** (*lmer, glmer, nlmer, glmer.nb*),
 **MASS** (*glmmPQL, polr, rlm*), **mgcv** (*gam, gamm*), **multgee**
 (*LORgee*), **nnet** (*multinom*), **nlme** (*lme, gls*), **ordinal**
-(*clm, clm2, clmm*), **panelr** (*wbm*), **plm**, **pscl** (*zeroinf,
-hurdle*), **quantreg** (*rq, crq, rqss*), **rms** (*lsr, ols, psm*),
-**robust** (*glmRob, lmRob*), **robustbase** (*glmrob, lmrob*),
+(*clm, clm2, clmm, clmm2*), **panelr** (*wbm*), **plm**, **pscl**
+(*zeroinf, hurdle*), **quantreg** (*rq, crq, rqss*), **rms** (*lsr, ols,
+psm*), **robust** (*glmRob, lmRob*), **robustbase** (*glmrob, lmrob*),
 **robustlmm** (*rlmer*), **rstanarm** (*stanreg, stanmvreg*),
 **speedlm** (*speedlm, speedglm*), **survey**, **survival** (*coxph,
 survreg*), **truncreg** (*truncreg*), **VGAM** (*vgam, vglm*)
