@@ -126,6 +126,18 @@ find_formula.gamlss <- function(x, ...) {
 }
 
 
+#' @importFrom stats as.formula
+#' @export
+find_formula.bamlss <- function(x, ...) {
+  f <- stats::formula(x)
+
+  .compact_list(list(
+    conditional = stats::as.formula(.safe_deparse(f$mu$formula)),
+    sigma = stats::as.formula(paste0("~", as.character(f$sigma$formula)[3]))
+  ))
+}
+
+
 
 #' @export
 find_formula.gamm <- function(x, ...) {

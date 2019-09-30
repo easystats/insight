@@ -114,6 +114,20 @@ model_info.default <- function(x, ...) {
 
 #' @importFrom stats family
 #' @export
+model_info.bamlss <- function(x, ...) {
+  faminfo <- stats::family(x)
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$links[1] == "logit",
+    link.fun = faminfo$links[1],
+    ...
+  )
+}
+
+
+#' @importFrom stats family
+#' @export
 model_info.speedglm <- function(x, ...) {
   faminfo <- stats::family(x)
   make_family(
@@ -837,7 +851,8 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
       grepl("\\Qnzbinom\\E", fitfam, ignore.case = TRUE) |
       grepl("\\Qgenpois\\E", fitfam, ignore.case = TRUE) |
       grepl("\\Qnegbinomial\\E", fitfam, ignore.case = TRUE) |
-      grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE)
+      grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE) |
+      fitfam %in% c("ztnbinom", "nbinom")
 
   beta_fam <-
     inherits(x, "betareg") |
@@ -856,7 +871,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
   ## TODO beta-binomial = binomial?
   if (betabin_fam) binom_fam <- TRUE
 
-  exponential_fam <- fitfam %in% c("Gamma", "weibull")
+  exponential_fam <- fitfam %in% c("Gamma", "gamma", "weibull")
 
   linear_model <- (!binom_fam & !exponential_fam & !poisson_fam & !neg_bin_fam & !logit.link) ||
     fitfam %in% c("Student's-t", "t Family") || grepl("(\\st)$", fitfam)
@@ -874,7 +889,8 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
   hurdle <- hurdle |
     grepl("\\Qhurdle\\E", fitfam, ignore.case = TRUE) |
     grepl("^hu", fitfam, perl = TRUE) |
-    grepl("^truncated", fitfam, perl = TRUE)
+    grepl("^truncated", fitfam, perl = TRUE) |
+    fitfam == "ztnbinom"
 
   is.ordinal <-
     inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "gmnl", "mlogit", "multinom", "LORgee")) |
@@ -882,6 +898,9 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
 
   is.categorical <- fitfam == "categorical"
 
+  is.bayes <- inherits(x, c("brmsfit", "stanfit", "MCMCglmm", "stanreg",
+                            "stanmvreg", "bmerMod", "BFBayesFactor", "bamlss",
+                            "bayesx"))
 
   # check if we have binomial models with trials instead of binary outcome
   # and check if we have truncated or censored brms-regression
@@ -985,7 +1004,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
     is_mixed = !is.null(find_random(x)),
     is_multivariate = multi.var,
     is_trial = is.trial,
-    is_bayesian = inherits(x, c("brmsfit", "stanfit", "MCMCglmm", "stanreg", "stanmvreg", "bmerMod", "BFBayesFactor")),
+    is_bayesian = is.bayes,
     is_anova = inherits(x, c("aov", "aovlist")),
     is_ttest = is_ttest,
     is_correlation = is_correlation,
