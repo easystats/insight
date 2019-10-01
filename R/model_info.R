@@ -1033,19 +1033,27 @@ get_ordinal_link <- function(x) {
 
 
 #' @importFrom stats gaussian binomial Gamma
-.make_tobit_family <- function(x) {
+.make_tobit_family <- function(x, dist = NULL) {
+  if (is.null(dist)) dist <- x$dist
   f <- switch(
-    x$dist,
+    dist,
     gaussian = stats::gaussian("identity"),
     logistic = stats::binomial("logit"),
+    llogis = ,
     loglogistic = stats::binomial("log"),
+    lnorm = ,
     lognormal = stats::gaussian("log"),
+    gompertz = stats::Gamma("log"),
+    gamma = ,
+    gengamma = ,
+    gengamma.orig = stats::Gamma(),
     exponential = ,
+    exp = ,
     weibull = stats::Gamma("log"),
     stats::gaussian("identity")
   )
 
-  if (x$dist == "weibull") f$family <- "weibull"
+  if (dist == "weibull") f$family <- "weibull"
   f
 }
 

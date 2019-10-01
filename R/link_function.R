@@ -103,6 +103,13 @@ link_function.bayesx <- function(x, ...) {
 
 
 #' @export
+link_function.flexsurvreg <- function(x, ...) {
+  dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
+  .make_tobit_family(x, dist)$linkfun
+}
+
+
+#' @export
 link_function.speedglm <- function(x, ...) {
   stats::family(x)$linkfun
 }

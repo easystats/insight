@@ -91,6 +91,7 @@ find_statistic <- function(x, ...) {
       "coxph",
       "crch",
       "ergm",
+      "flexsurvreg",
       "gee",
       "glimML",
       "glmmadmb",

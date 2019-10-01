@@ -85,6 +85,18 @@ nobs.bayesx <- function(object, ...) {
 
 
 #' @export
+n_obs.flexsurvreg <- function(x, ...) {
+  x$N
+}
+
+#' @export
+nobs.flexsurvreg <- function(object, ...) {
+  n_obs(object, ...)
+}
+
+
+
+#' @export
 n_obs.bamlss <- function(x, ...) {
   nrow(x$model.frame)
 }

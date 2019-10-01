@@ -67,6 +67,19 @@ get_parameters.default <- function(x, ...) {
 
 
 #' @export
+get_parameters.flexsurvreg <- function(x, ...) {
+  cf <- stats::coef(x)[c(1, x$covpars)]
+  data.frame(
+    parameter = names(cf),
+    estimate = unname(cf),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+
+#' @export
 get_parameters.mlm <- function(x, ...) {
   cs <- stats::coef(summary(x))
 

@@ -263,17 +263,17 @@ negbin*), **bamlss** (*bamlss*), **base** (*aov, aovlist, lm, glm*),
 **BayesFactor** (*BFBayesFactor*), **betareg** (*betareg*), **biglm**
 (*biglm, bigglm*), **blme** (*blmer, bglmer*), **brms** (*brmsfit*),
 **censReg**, **crch**, **countreg** (*zerontrunc*), **coxme**,
-**estimatr** (*lm\_robust, iv\_robust*), **feisr** (*feis*), **gam**
-(*Gam*), **gamm4** , **gamlss**, **gbm**, **gee**, **geepack**
-(*geeglm*), **GLMMadaptive** (*MixMod*), **glmmTMB** (*glmmTMB*),
-**gmnl**, **HRQoL** (*BBreg*, *BBmm*), **lfe** (*felm*), **lme4**
-(*lmer, glmer, nlmer, glmer.nb*), **MASS** (*glmmPQL, polr, rlm*),
-**mgcv** (*gam, gamm*), **multgee** (*LORgee*), **nnet** (*multinom*),
-**nlme** (*lme, gls*), **ordinal** (*clm, clm2, clmm, clmm2*),
-**panelr** (*wbm*), **plm**, **pscl** (*zeroinf, hurdle*), **quantreg**
-(*rq, crq, rqss*), **R2BayesX** (*bayesx*), **rms** (*lsr, ols, psm*),
-**robust** (*glmRob, lmRob*), **robustbase** (*glmrob, lmrob*),
-**robustlmm** (*rlmer*), **rstanarm** (*stanreg, stanmvreg*),
+**estimatr** (*lm\_robust, iv\_robust*), **feisr** (*feis*),
+**flexsurv** (*flexsurvreg*), **gam** (*Gam*), **gamm4** , **gamlss**,
+**gbm**, **gee**, **geepack** (*geeglm*), **GLMMadaptive** (*MixMod*),
+**glmmTMB** (*glmmTMB*), **gmnl**, **HRQoL** (*BBreg*, *BBmm*), **lfe**
+(*felm*), **lme4** (*lmer, glmer, nlmer, glmer.nb*), **MASS** (*glmmPQL,
+polr, rlm*), **mgcv** (*gam, gamm*), **multgee** (*LORgee*), **nnet**
+(*multinom*), **nlme** (*lme, gls*), **ordinal** (*clm, clm2, clmm,
+clmm2*), **panelr** (*wbm*), **plm**, **pscl** (*zeroinf, hurdle*),
+**quantreg** (*rq, crq, rqss*), **R2BayesX** (*bayesx*), **rms** (*lsr,
+ols, psm*), **robust** (*glmRob, lmRob*), **robustbase** (*glmrob,
+lmrob*), **robustlmm** (*rlmer*), **rstanarm** (*stanreg, stanmvreg*),
 **speedlm** (*speedlm, speedglm*), **survey**, **survival** (*coxph,
 survreg*), **truncreg** (*truncreg*), **VGAM** (*vgam, vglm*)
 

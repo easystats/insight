@@ -242,6 +242,19 @@ get_varcov.nlrq <- get_varcov.rq
 
 
 #' @export
+get_varcov.flexsurvreg <- function(x, ...) {
+  pars <- find_parameters(x, flatten = TRUE)
+  vc <- as.matrix(stats::vcov(x))[pars, pars]
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  as.matrix(vc)
+}
+
+
+#' @export
 get_varcov.mixed <- function(x, ...) {
   vc <- as.matrix(stats::vcov(x$full_model))
 

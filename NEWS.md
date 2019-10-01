@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `bayesx` (*R2BayesX*), `bamlss` (*bamlss*). Note that support for these models is still somewhat experimental.
+* `bayesx` (*R2BayesX*), `bamlss` (*bamlss*) and `flexsurvreg` (*flexsurv*). Note that support for these models is still somewhat experimental.
 
 ## New functions
 

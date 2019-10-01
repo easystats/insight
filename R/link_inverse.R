@@ -96,6 +96,13 @@ link_inverse.bigglm <- function(x, ...) {
 
 
 #' @export
+link_inverse.flexsurvreg <- function(x, ...) {
+  dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
+  .make_tobit_family(x, dist)$linkinv
+}
+
+
+#' @export
 link_inverse.gamlss <- function(x, ...) {
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
   faminfo$mu.linkinv

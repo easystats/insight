@@ -709,7 +709,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
   if (mc[1] && rn == colnames(mf)[1]) {
     mc[1] <- FALSE
-    if (inherits(x, c("coxph", "coxme", "survreg", "survfit", "crq", "psm"))) {
+    if (inherits(x, c("coxph", "flexsurvreg", "coxme", "survreg", "survfit", "crq", "psm"))) {
       mf <- cbind(mf[[1]][, 1], mf[[1]][, 2], mf)
       colnames(mf)[1:2] <- rn_not_combined
     } else {

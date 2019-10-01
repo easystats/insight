@@ -60,6 +60,7 @@ supported_models <- function() {
     "crq",
     "feis",
     "felm",
+    "flexsurv",
     "gam",
     "Gam",
     "gamlss",

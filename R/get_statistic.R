@@ -563,6 +563,24 @@ get_statistic.survreg <- function(x, ...) {
 
 
 
+#' @export
+get_statistic.flexsurvreg <- function(x, ...) {
+  parms <- get_parameters(x)
+  se <- x$res[, "se"]
+
+  out <- data.frame(
+    Parameter = parms$parameter,
+    Statistic = parms$estimate / se,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
 #' @importFrom methods slot
 #' @export
 get_statistic.glimML <- function(x, ...) {

@@ -58,6 +58,7 @@ is_model <- function(x) {
       "feis",
       "felm",
       "fitdistr",
+      "flexsurv",
       "gam",
       "Gam",
       "gamlss",
