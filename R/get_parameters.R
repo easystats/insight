@@ -68,7 +68,7 @@ get_parameters.default <- function(x, ...) {
 
 #' @export
 get_parameters.flexsurvreg <- function(x, ...) {
-  cf <- stats::coef(x)[c(1, x$covpars)]
+  cf <- stats::coef(x)
   data.frame(
     parameter = names(cf),
     estimate = unname(cf),

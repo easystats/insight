@@ -80,7 +80,7 @@ find_parameters.default <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.flexsurvreg <- function(x, flatten = FALSE, ...) {
-  pars <- list(conditional = names(stats::coef(x))[c(1, x$covpars)])
+  pars <- list(conditional = names(stats::coef(x)))
 
   if (flatten) {
     unique(unlist(pars))
