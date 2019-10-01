@@ -1049,7 +1049,12 @@ get_ordinal_link <- function(x) {
 
 #' @importFrom stats gaussian binomial Gamma
 .make_tobit_family <- function(x, dist = NULL) {
-  if (is.null(dist)) dist <- x$dist
+  if (is.null(dist)) {
+    if (inherits(x, "flexsurvreg"))
+      dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
+    else
+      dist <- x$dist
+  }
   f <- switch(
     dist,
     gaussian = stats::gaussian("identity"),
