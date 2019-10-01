@@ -39,6 +39,9 @@ supported_models <- function() {
   c(
     "aov",
     "aovlist",
+    "bamlss",
+    "bamlss.frame",
+    "bayesx",
     "BBmm",
     "BBreg",
     "betareg",

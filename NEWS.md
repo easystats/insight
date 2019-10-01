@@ -1,5 +1,9 @@
 # insight 0.5.1
 
+## New supported model classes
+
+* `bayesx` (*R2BayesX*), `bamlss` (*bamlss*). Note that support for these models is still somewhat experimental.
+
 ## New functions
 
 * `get_statistic()` to return the test statistic of model estimates.

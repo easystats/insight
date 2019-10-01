@@ -748,6 +748,34 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
 }
 
 
+
+#' @importFrom stats coef
+#' @rdname find_parameters
+#' @export
+find_parameters.bayesx <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
+  cond <- rownames(stats::coef(x))
+  smooth_terms <- rownames(x$smooth.hyp)
+
+  l <- .compact_list(list(
+    conditional = cond,
+    smooth_terms = smooth_terms
+  ))
+
+  l <- .filter_pars(l, parameters)
+
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component)
+  l <- .compact_list(l[elements])
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
 #' @rdname find_parameters
 #' @export
 find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {

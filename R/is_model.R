@@ -28,6 +28,7 @@ is_model <- function(x) {
       "Arima",
       "bamlss",
       "bamlss.frame",
+      "bayesx",
       "BBmm",
       "BBreg",
       "betareg",

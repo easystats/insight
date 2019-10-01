@@ -122,6 +122,12 @@ link_inverse.lm <- function(x, ...) {
 
 
 #' @export
+link_inverse.bayesx <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkinv
+}
+
+
+#' @export
 link_inverse.biglm <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }

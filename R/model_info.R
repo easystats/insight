@@ -267,6 +267,12 @@ model_info.lme <- function(x, ...) {
 
 
 #' @export
+model_info.bayesx <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+#' @export
 model_info.rq <- function(x, ...) {
   make_family(x, ...)
 }
@@ -874,7 +880,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
   exponential_fam <- fitfam %in% c("Gamma", "gamma", "weibull")
 
   linear_model <- (!binom_fam & !exponential_fam & !poisson_fam & !neg_bin_fam & !logit.link) ||
-    fitfam %in% c("Student's-t", "t Family") || grepl("(\\st)$", fitfam)
+    fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian") || grepl("(\\st)$", fitfam)
 
   tweedie_model <- linear_model && grepl("tweedie", fitfam, fixed = TRUE)
 

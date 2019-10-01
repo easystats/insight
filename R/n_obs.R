@@ -73,6 +73,30 @@ nobs.gamm <- function(object, ...) {
 
 
 #' @export
+n_obs.bayesx <- function(x, ...) {
+  length(x$response)
+}
+
+#' @export
+nobs.bayesx <- function(object, ...) {
+  n_obs(object, ...)
+}
+
+
+
+#' @export
+n_obs.bamlss <- function(x, ...) {
+  nrow(x$model.frame)
+}
+
+#' @export
+nobs.bamlss <- function(object, ...) {
+  n_obs(object, ...)
+}
+
+
+
+#' @export
 n_obs.lmRob <- function(x, ...) {
   length(x$fitted.values)
 }

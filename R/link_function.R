@@ -97,6 +97,12 @@ link_function.gam <- function(x, ...) {
 
 
 #' @export
+link_function.bayesx <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+
+#' @export
 link_function.speedglm <- function(x, ...) {
   stats::family(x)$linkfun
 }

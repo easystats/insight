@@ -151,6 +151,31 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
 
 
 
+#' @importFrom stats coef
+#' @rdname find_parameters
+#' @export
+get_parameters.bayesx <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
+  component <- match.arg(component)
+
+  smooth_terms <- find_parameters(x, component = "smooth_terms", flatten = TRUE)
+
+  fixed_dat <- attr(x$fixed.effects, "sample")
+  smooth_dat <- do.call(cbind, lapply(smooth_terms, function(i) {
+    dat <- data.frame(x$effects[[i]]$Mean)
+    colnames(dat) <- i
+    dat
+  }))
+
+  switch(
+    component,
+    "all" = cbind(fixed_dat, smooth_dat),
+    "conditional" = fixed_dat,
+    "smooth_terms" = smooth_dat
+  )
+}
+
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...) {
