@@ -224,7 +224,8 @@ model_info.survreg <- function(x, ...) {
 
 #' @export
 model_info.flexsurvreg <- function(x, ...) {
-  faminfo <- .make_tobit_family(x)
+  dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
+  faminfo <- .make_tobit_family(x, dist)
 
   make_family(
     x = x,
