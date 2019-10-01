@@ -223,6 +223,20 @@ model_info.survreg <- function(x, ...) {
 
 
 #' @export
+model_info.flexsurvreg <- function(x, ...) {
+  faminfo <- .make_tobit_family(x)
+
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.LORgee <- function(x, ...) {
   if (grepl(pattern = "logit", x = x$link, fixed = TRUE)) {
     link <- "logit"
