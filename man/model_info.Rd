@@ -36,8 +36,9 @@ Retrieve information from model objects.
      \item \code{is_tweedie}: family is tweedie
      \item \code{is_ordinal}: family is ordinal or cumulative link
      \item \code{is_categorical}: family is categorical link
-     \item \code{is_censored}: model is a censored model (has a censored response)
+     \item \code{is_censored}: model is a censored model (has a censored response, including survival models)
      \item \code{is_truncated}: model is a truncated model (has a truncated response)
+     \item \code{is_survival}: model is a survival model
      \item \code{is_zeroinf}: model has zero-inflation component
      \item \code{is_zero_inflated}: alias for \code{is_zeroinf}
      \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)

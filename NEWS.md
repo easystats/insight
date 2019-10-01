@@ -12,6 +12,7 @@
 
 ## Changes to functions
 
+* `model_info()` now returns the element `is_survival` for survival models.
 * `model_info()` now returns the element `is_truncated` for truncated regression, or *brmsfit* models with `trunc()` as additional response part.
 * `model_info()` now recognizes beta and beta inflated families from package *gamlss*.
 * Better support for nonlinear quantile regression (`quantreg::nlrq()`).

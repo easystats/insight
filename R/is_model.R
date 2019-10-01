@@ -133,6 +133,7 @@ is_model <- function(x) {
       "stanreg",
       "survfit",
       "survreg",
+      "survPresmooth",
       "svyglm",
       "svyolr",
       "tobit",

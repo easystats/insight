@@ -27,8 +27,9 @@
 #'      \item \code{is_tweedie}: family is tweedie
 #'      \item \code{is_ordinal}: family is ordinal or cumulative link
 #'      \item \code{is_categorical}: family is categorical link
-#'      \item \code{is_censored}: model is a censored model (has a censored response)
+#'      \item \code{is_censored}: model is a censored model (has a censored response, including survival models)
 #'      \item \code{is_truncated}: model is a truncated model (has a truncated response)
+#'      \item \code{is_survival}: model is a survival model
 #'      \item \code{is_zeroinf}: model has zero-inflation component
 #'      \item \code{is_zero_inflated}: alias for \code{is_zeroinf}
 #'      \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
@@ -923,6 +924,8 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
                             "stanmvreg", "bmerMod", "BFBayesFactor", "bamlss",
                             "bayesx"))
 
+  is.survival <- inherits(x, c("survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph", "coxme"))
+
   # check if we have binomial models with trials instead of binary outcome
   # and check if we have truncated or censored brms-regression
 
@@ -1013,8 +1016,9 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
     is_exponential = exponential_fam,
     is_logit = logit.link,
     is_probit = link.fun == "probit",
-    is_censored = inherits(x, c("tobit", "crch", "censReg")) | is.censored,
+    is_censored = inherits(x, c("tobit", "crch", "censReg")) | is.censored | is.survival,
     is_truncated = inherits(x, "truncreg") | is.truncated,
+    is_survival = is.survival,
     is_linear = linear_model,
     is_tweedie = tweedie_model,
     is_zeroinf = zero.inf,
