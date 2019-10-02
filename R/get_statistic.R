@@ -139,8 +139,8 @@ get_statistic.glmmTMB <- function(x, component = c("all", "conditional", "zi", "
   })
 
   stat <- do.call(rbind, out)
-  stat$component <- .rename_values(stat$component, "cond", "conditional")
-  stat$component <- .rename_values(stat$component, "zi", "zero_inflated")
+  stat$Component <- .rename_values(stat$Component, "cond", "conditional")
+  stat$Component <- .rename_values(stat$Component, "zi", "zero_inflated")
 
   stat <- .filter_component(stat, component)
   attr(stat, "statistic") <- find_statistic(x)
@@ -166,8 +166,8 @@ get_statistic.zeroinfl <- function(x, component = c("all", "conditional", "zi", 
   })
 
   stat <- do.call(rbind, out)
-  stat$component <- .rename_values(stat$component, "cond", "conditional")
-  stat$component <- .rename_values(stat$component, "zi", "zero_inflated")
+  stat$Component <- .rename_values(stat$Component, "cond", "conditional")
+  stat$Component <- .rename_values(stat$Component, "zi", "zero_inflated")
 
   stat <- .filter_component(stat, component)
   attr(stat, "statistic") <- find_statistic(x)
