@@ -39,8 +39,7 @@ Retrieve information from model objects.
      \item \code{is_censored}: model is a censored model (has a censored response, including survival models)
      \item \code{is_truncated}: model is a truncated model (has a truncated response)
      \item \code{is_survival}: model is a survival model
-     \item \code{is_zeroinf}: model has zero-inflation component
-     \item \code{is_zero_inflated}: alias for \code{is_zeroinf}
+     \item \code{is_zero_inflated}: model has zero-inflation component
      \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
      \item \code{is_mixed}: model is a mixed effects model (with random effects)
      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
