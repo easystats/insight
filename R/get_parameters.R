@@ -129,10 +129,10 @@ get_parameters.lavaan <- function(x, ...) {
   params$parameter = paste0(params$lhs, params$op, params$rhs)
   params$comp <- NA
 
-  params$comp[params$comp == "~"] <- "regression"
-  params$comp[params$comp == "=~"] <- "latent"
-  params$comp[params$comp == "~~"] <- "residual"
-  params$comp[params$comp == "~1"] <- "intercept"
+  params$comp[params$op == "~"] <- "regression"
+  params$comp[params$op == "=~"] <- "latent"
+  params$comp[params$op == "~~"] <- "residual"
+  params$comp[params$op == "~1"] <- "intercept"
 
   data.frame(
     parameter = params$parameter,
