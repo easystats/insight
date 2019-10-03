@@ -141,22 +141,37 @@ get_priors.BFBayesFactor <- function(x, ...) {
 
 #' @export
 get_priors.blavaan <- function(x, ...) {
-  prior <- .compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
+  if (!requireNamespace("lavaan", quietly = TRUE)) {
+    stop("Package 'lavaan' required for this function to work. Please install it.")
+  }
 
-  switch(
-    .classify_BFBayesFactor(x),
-    "correlation" = names(prior) <- "rho",
-    "ttest" = names(prior) <- "Difference"
+  PE <- lavaan::parameterEstimates(
+    x, se = FALSE, ci = FALSE, remove.eq = FALSE, remove.system.eq = TRUE,
+    remove.ineq = FALSE, remove.def = FALSE, add.attributes = TRUE
   )
 
-  data.frame(
-    parameter = names(prior),
-    distribution = "cauchy",
-    location = 0,
-    scale = unlist(prior),
-    stringsAsFactors = FALSE,
-    row.names = NULL
+  if (!("group" %in% names(PE))) PE$group <- 1
+
+  newpt <- x@ParTable
+  pte2 <- which(newpt$free > 0)
+
+  relevant_rows <- match(
+    with(newpt, paste(lhs[pte2], op[pte2], rhs[pte2], group[pte2], sep = "")),
+    paste(PE$lhs, PE$op, PE$rhs, PE$group, sep = "")
   )
+
+  # Priors
+  priors <- rep(NA, nrow(PE))
+  priors[relevant_rows] <- newpt$prior[pte2]
+  priors[is.na(PE$prior)] <- NA
+
+  stats::na.omit(data.frame(
+    parameter = paste(PE$lhs, PE$op, PE$rhs, sep = ""),
+    distribution = gsub("(.*)\\((.*)", "\\1", priors),
+    location = as.numeric(gsub("(.*)\\((.*)\\,(.*)\\)(.*)", "\\2", priors)),
+    scale = as.numeric(gsub("(.*)\\((.*)\\,(.*)\\)(.*)", "\\3", priors)),
+    stringsAsFactors = FALSE
+  ))
 }
 
 
