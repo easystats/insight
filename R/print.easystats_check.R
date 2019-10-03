@@ -1,7 +1,20 @@
 #' @export
 print.easystats_check <- function(x, ...) {
-  if (!is.null(x$title)) {
-    insight::print_color(x$title, "blue")
+  # check attributes
+  title <- attr(x, "title")
+  text <- attr(x, "text")
+  color <- attr(x, "color")
+
+  # no attributes found? check list elements then...
+  if (is.null(title) && is.null(text) && is.null(color)) {
+    if ("title" %in% names(x)) title <- x$title
+    if ("text" %in% names(x)) text <- x$text
+    if ("color" %in% names(x)) color <- x$color
   }
-  insight::print_color(x$text, x$color)
+
+  if (!is.null(title)) {
+    print_color(title, "blue")
+  }
+
+  print_color(text, color)
 }
