@@ -765,6 +765,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 
 
+
 .get_brms_formula <- function(f) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
@@ -809,6 +810,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 
 
+
 .get_stanmv_formula <- function(f) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
@@ -834,6 +836,8 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 
 
+# Find formula for zero-inflated regressions, where
+# zero-inflated part is separated by | from count part
 .zeroinf_formula <- function(x) {
   f <- tryCatch({
     stats::formula(x)
@@ -859,18 +863,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
   ## TODO could be extended to all find_formula()
 
   # fix dot-formulas
-  c.form <- tryCatch({
-    if (as.character(c.form[3]) == ".") {
-      resp <- .safe_deparse(c.form[2])
-      pred <- setdiff(colnames(.get_data_from_env(x)), resp)
-      c.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
-    }
-    c.form
-  },
-  error = function(e) {
-    c.form
-  }
-  )
+  c.form <- .dot_formula(f = c.form, model = x)
 
   # fix dot-formulas
   zi.form <- tryCatch({
@@ -888,4 +881,24 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 
   .compact_list(list(conditional = c.form, zero_inflated = zi.form))
+}
+
+
+
+# try to guess "full" formula for dot-abbreviation, e.g.
+# lm(mpg ~., data = mtcars)
+.dot_formula <- function(f, model) {
+  # fix dot-formulas
+  tryCatch({
+    if (as.character(f[3]) == ".") {
+      resp <- .safe_deparse(f[2])
+      pred <- setdiff(colnames(.get_data_from_env(model)), resp)
+      f <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
+    }
+    f
+  },
+  error = function(e) {
+    f
+  }
+  )
 }
