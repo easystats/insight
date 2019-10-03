@@ -79,6 +79,64 @@ find_parameters.default <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
+  if (!requireNamespace("lavaan", quietly = TRUE)) {
+    stop("Package 'lavaan' required for this function to work. Please install it.")
+  }
+
+  pars <- data.frame(
+    pars = names(lavaan::coef(x)),
+    comp = NA,
+    stringsAsFactors = FALSE
+  )
+
+  pars$comp[grepl("~", pars$pars, fixed = TRUE)] <- "regression"
+  pars$comp[grepl("=~", pars$pars, fixed = TRUE)] <- "latent"
+  pars$comp[grepl("~~", pars$pars, fixed = TRUE)] <- "residual"
+  pars$comp[grepl("~1", pars$pars, fixed = TRUE)] <- "intercept"
+
+  pos_latent <- grep("=~", pars$pars, fixed = TRUE)
+  pos_residual <- grep("~~", pars$pars, fixed = TRUE)
+  pos_intercept <- grep("~1", pars$pars, fixed = TRUE)
+  pos_regression <- setdiff(1:nrow(pars), c(pos_latent, pos_residual, pos_intercept))
+
+  pos <- c(min(pos_latent), min(pos_residual), min(pos_intercept), min(pos_regression))
+
+  comp_levels <- c("latent", "residual", "intercept", "regression")
+  comp_levels <- comp_levels[order(pos)]
+
+  pars$comp <- factor(pars$comp, levels = comp_levels)
+  pars <- split(pars, pars$comp)
+  pars <- lapply(pars, function(i) i$pars)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+#' @export
+find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
+  if (!requireNamespace("lavaan", quietly = TRUE)) {
+    stop("Package 'lavaan' required for this function to work. Please install it.")
+  }
+
+  pars <- get_parameters(x)
+  ## TODO fix with get_parameters fix
+  pars$component <- factor(pars$component, levels = unique(pars$component))
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+
+#' @export
 find_parameters.flexsurvreg <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
 

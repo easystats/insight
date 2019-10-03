@@ -100,6 +100,51 @@ get_parameters.mlm <- function(x, ...) {
 
 
 #' @export
+get_parameters.blavaan <- function(x, ...) {
+  if (!requireNamespace("lavaan", quietly = TRUE)) {
+    stop("Package 'lavaan' required for this function to work. Please install it.")
+  }
+
+  if (!requireNamespace("blavaan", quietly = TRUE)) {
+    stop("Package 'blavaan' required for this function to work. Please install it.")
+  }
+
+  draws <- blavaan::blavInspect(x, "draws")
+  posteriors <- as.data.frame(as.matrix(draws))
+
+  names(posteriors) <- names(lavaan::coef(x))
+  posteriors
+}
+
+
+
+#' @export
+get_parameters.lavaan <- function(x, ...) {
+  if (!requireNamespace("lavaan", quietly = TRUE)) {
+    stop("Package 'lavaan' required for this function to work. Please install it.")
+  }
+
+  params <- lavaan::parameterEstimates(x)
+
+  params$parameter = paste0(params$lhs, params$op, params$rhs)
+  params$comp <- NA
+
+  params$comp[params$comp == "~"] <- "regression"
+  params$comp[params$comp == "=~"] <- "latent"
+  params$comp[params$comp == "~~"] <- "residual"
+  params$comp[params$comp == "~1"] <- "intercept"
+
+  data.frame(
+    parameter = params$parameter,
+    estimate = params$est,
+    component = params$comp,
+    stringsAsFactors = FALSE
+  )
+}
+
+
+
+#' @export
 get_parameters.polr <- function(x, ...) {
   pars <- c(sprintf("Intercept: %s", names(x$zeta)), names(x$coefficients))
   data.frame(

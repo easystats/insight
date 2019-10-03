@@ -142,6 +142,20 @@ find_algorithm.speedlm <- function(x, ...) {
 
 
 #' @export
+find_algorithm.blavaan <- function(x, ...) {
+  if (!requireNamespace("blavaan", quietly = TRUE)) {
+    stop("Package 'blavaan' required for this function to work. Please install it.")
+  }
+
+  list(
+    "chains" = blavaan::blavInspect(x, "n.chains"),
+    "sample" = x@external$sample,
+    "warmup" = x@external$burnin
+  )
+}
+
+
+#' @export
 find_algorithm.speedglm <- function(x, ...) {
   list("algorithm" = x$method)
 }
@@ -158,7 +172,7 @@ find_algorithm.bayesx <- function(x, ...) {
   list(
     "algorithm" = x$method,
     "iterations" = x$iterations,
-    "burnin" = x$burnin
+    "warmup" = x$burnin
   )
 }
 
