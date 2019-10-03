@@ -110,6 +110,23 @@ get_data.LORgee <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.lavaan <- function(x, ...) {
+  mf <- tryCatch({
+    .get_S4_data_from_env(x)
+  },
+  error = function(x) {
+    NULL
+  }
+  )
+
+  .prepare_get_data(x, stats::na.omit(mf))
+}
+
+#' @export
+get_data.blavaan <- get_data.lavaan
+
+
+#' @export
 get_data.survfit <- function(x, ...) {
   mf <- tryCatch({
     .get_data_from_env(x)[, find_variables(x, flatten = TRUE), drop = FALSE]

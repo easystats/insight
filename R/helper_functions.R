@@ -309,6 +309,39 @@
 
 
 
+# return data from a data frame that is in the environment,
+# and subset the data, if necessary
+.get_S4_data_from_env <- function(x) {
+  # first try, parent frame
+  dat <- tryCatch({
+    eval(x@call$data, envir = parent.frame())
+  },
+  error = function(e) {
+    NULL
+  }
+  )
+
+  if (is.null(dat)) {
+    # second try, global env
+    dat <- tryCatch({
+      eval(x@call$data, envir = globalenv())
+    },
+    error = function(e) {
+      NULL
+    }
+    )
+  }
+
+
+  if (!is.null(dat) && .obj_has_name(x@call, "subset")) {
+    dat <- subset(dat, subset = eval(x@call$subset))
+  }
+
+  dat
+}
+
+
+
 # checks if a mixed model fit is singular or not. Need own function,
 # because lme4::isSingular() does not work with glmmTMB
 #' @importFrom stats na.omit

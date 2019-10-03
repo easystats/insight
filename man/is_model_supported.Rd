@@ -4,7 +4,7 @@
 \alias{is_model_supported}
 \alias{supported_models}
 \title{Checks if an object is a regression model object supported in
-  `insight` package.}
+  \pkg{insight} package.}
 \usage{
 is_model_supported(x)
 

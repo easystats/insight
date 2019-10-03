@@ -1,5 +1,5 @@
 #' @title Checks if an object is a regression model object supported in
-#'   `insight` package.
+#'   \pkg{insight} package.
 #' @name is_model_supported
 #'
 #' @description Small helper that checks if a model is a \emph{supported}
@@ -29,7 +29,7 @@ is_model_supported <- function(x) {
 #' @rdname is_model_supported
 #' @export
 supported_models <- function() {
-  .supported_models_list()
+  sort(.supported_models_list())
 }
 
 
@@ -48,6 +48,7 @@ supported_models <- function() {
     "BFBayesFactor",
     "biglm",
     "bigglm",
+    "blavaan",
     "brmsfit",
     "censReg",
     "clm",
@@ -81,6 +82,7 @@ supported_models <- function() {
     "hurdle",
     "iv_robust",
     "ivreg",
+    "lavaan",
     "lm",
     "lm_robust",
     "lme",
