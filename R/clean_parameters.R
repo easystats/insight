@@ -104,6 +104,40 @@ clean_parameters.default <- function(x, ...) {
 
 
 #' @export
+clean_parameters.lavaan <- function(x, ...) {
+  params <- get_parameters(x)
+
+  data.frame(
+    Parameter = params$parameter,
+    Component = params$component,
+    Group = "",
+    Function = "",
+    Cleaned_Parameter = params$parameter,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+
+#' @export
+clean_parameters.blavaan <- function(x, ...) {
+  params <- get_parameters.lavaan(x)
+
+  data.frame(
+    Parameter = params$parameter,
+    Component = params$component,
+    Group = "",
+    Function = "",
+    Cleaned_Parameter = params$parameter,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+
+#' @export
 clean_parameters.brmsfit <- function(x, ...) {
   pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
   is_mv <- is_multivariate(pars)
