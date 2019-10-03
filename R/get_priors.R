@@ -139,6 +139,28 @@ get_priors.BFBayesFactor <- function(x, ...) {
 
 
 
+#' @export
+get_priors.blavaan <- function(x, ...) {
+  prior <- .compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
+
+  switch(
+    .classify_BFBayesFactor(x),
+    "correlation" = names(prior) <- "rho",
+    "ttest" = names(prior) <- "Difference"
+  )
+
+  data.frame(
+    parameter = names(prior),
+    distribution = "cauchy",
+    location = 0,
+    scale = unlist(prior),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+
 #' @importFrom stats na.omit
 .is_numeric_character <- function(x) {
   (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x))))) ||

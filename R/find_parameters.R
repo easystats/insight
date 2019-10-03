@@ -126,6 +126,7 @@ find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
   pars <- get_parameters(x)
   ## TODO fix with get_parameters fix
   pars$component <- factor(pars$component, levels = unique(pars$component))
+  pars <- split(pars$parameter, pars$component)
 
   if (flatten) {
     unique(unlist(pars))
