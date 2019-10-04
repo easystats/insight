@@ -13,7 +13,7 @@ print.easystats_check <- function(x, ...) {
   }
 
   if (!is.null(title)) {
-    print_color(title, "blue")
+    print_color(paste0("# ", title, "\n\n"), "blue")
   }
 
   print_color(text, color)
