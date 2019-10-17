@@ -18,7 +18,8 @@ get_predictors <- function(x) {
     find_predictors(x, effects = "fixed", component = "all", flatten = TRUE)
   }
 
-  dat <- get_data(x)[, vars, drop = FALSE]
+  dat <- get_data(x)
+  dat <- dat[, intersect(colnames(dat), vars), drop = FALSE]
 
   if (.is_empty_object(dat)) {
     print_color("Warning: Data frame is empty, probably you have an intercept-only model?\n", "red")

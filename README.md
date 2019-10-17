@@ -256,26 +256,40 @@ guide](https://github.com/easystats/insight/blob/master/.github/CONTRIBUTING.md)
 For questions about the functionality, you may either contact us via
 email or also file an issue.
 
-## List of Supported Packages and Models
+## List of Supported Models by Class
 
-**AER** (*ivreg, tobit*), **afex** (*mixed*), **aod** (*betabin,
-negbin*), **bamlss** (*bamlss*), **base** (*aov, aovlist, lm, glm*),
-**BayesFactor** (*BFBayesFactor*), **betareg** (*betareg*), **biglm**
-(*biglm, bigglm*), **blme** (*blmer, bglmer*), **brms** (*brmsfit*),
-**censReg**, **crch**, **countreg** (*zerontrunc*), **coxme**,
-**estimatr** (*lm\_robust, iv\_robust*), **feisr** (*feis*),
-**flexsurv** (*flexsurvreg*), **gam** (*Gam*), **gamm4** , **gamlss**,
-**gbm**, **gee**, **geepack** (*geeglm*), **GLMMadaptive** (*MixMod*),
-**glmmTMB** (*glmmTMB*), **gmnl**, **HRQoL** (*BBreg*, *BBmm*), **lfe**
-(*felm*), **lme4** (*lmer, glmer, nlmer, glmer.nb*), **MASS** (*glmmPQL,
-polr, rlm*), **mgcv** (*gam, gamm*), **multgee** (*LORgee*), **nnet**
-(*multinom*), **nlme** (*lme, gls*), **ordinal** (*clm, clm2, clmm,
-clmm2*), **panelr** (*wbm*), **plm**, **pscl** (*zeroinf, hurdle*),
-**quantreg** (*rq, crq, rqss*), **R2BayesX** (*bayesx*), **rms** (*lsr,
-ols, psm*), **robust** (*glmRob, lmRob*), **robustbase** (*glmrob,
-lmrob*), **robustlmm** (*rlmer*), **rstanarm** (*stanreg, stanmvreg*),
-**speedlm** (*speedlm, speedglm*), **survey**, **survival** (*coxph,
-survreg*), **truncreg** (*truncreg*), **VGAM** (*vgam, vglm*)
+``` r
+supported_models()
+#>  [1] "aov"           "aovlist"       "bamlss"       
+#>  [4] "bamlss.frame"  "bayesx"        "BBmm"         
+#>  [7] "BBreg"         "betareg"       "BFBayesFactor"
+#> [10] "bigglm"        "biglm"         "blavaan"      
+#> [13] "brmsfit"       "censReg"       "clm"          
+#> [16] "clm2"          "clmm"          "clmm2"        
+#> [19] "coxme"         "coxph"         "crch"         
+#> [22] "crq"           "feis"          "felm"         
+#> [25] "flexsurvreg"   "gam"           "Gam"          
+#> [28] "gamlss"        "gamm"          "gamm4"        
+#> [31] "gbm"           "gee"           "geeglm"       
+#> [34] "glimML"        "glm"           "glmmPQL"      
+#> [37] "glmmTMB"       "glmrob"        "glmRob"       
+#> [40] "gls"           "gmnl"          "htest"        
+#> [43] "hurdle"        "iv_robust"     "ivreg"        
+#> [46] "lavaan"        "lm"            "lm_robust"    
+#> [49] "lme"           "lmrob"         "lmRob"        
+#> [52] "logistf"       "LORgee"        "lrm"          
+#> [55] "MCMCglmm"      "merMod"        "mixed"        
+#> [58] "MixMod"        "mlm"           "mlogit"       
+#> [61] "multinom"      "ols"           "plm"          
+#> [64] "polr"          "psm"           "rlm"          
+#> [67] "rlmerMod"      "rq"            "rqss"         
+#> [70] "speedglm"      "speedlm"       "stanmvreg"    
+#> [73] "stanreg"       "survfit"       "survreg"      
+#> [76] "svyglm"        "svyolr"        "tobit"        
+#> [79] "truncreg"      "vgam"          "vglm"         
+#> [82] "wblm"          "wbm"           "zeroinfl"     
+#> [85] "zerotrunc"
+```
 
   - **Didn’t find a model?** [File an
     issue](https://github.com/easystats/insight/issues) and request

@@ -247,19 +247,19 @@
 # to reduce redundant code, I extract this part which is used several
 # times accross this package
 .get_elements <- function(effects, component) {
-  elements <- c("conditional", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes")
+  elements <- c("conditional", "nonlinear", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes")
 
   elements <- switch(
     effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments", "simplex", "smooth_terms", "correlation", "slopes", "sigma")],
+    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
   elements <- switch(
     component,
     all = elements,
-    conditional = elements[elements %in% c("conditional", "random", "slopes")],
+    conditional = elements[elements %in% c("conditional", "nonlinear", "random", "slopes")],
     zi = ,
     zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random")],
     dispersion = elements[elements == "dispersion"],
@@ -268,6 +268,7 @@
     sigma = elements[elements == "sigma"],
     smooth_terms = elements[elements == "smooth_terms"],
     correlation = elements[elements == "correlation"],
+    nonlinear = elements[elements == "nonlinear"],
     slopes = elements[elements == "slopes"]
   )
 

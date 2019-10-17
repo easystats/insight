@@ -600,6 +600,44 @@ get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
 
 
 
+#' @export
+get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  effects <- match.arg(effects)
+  startvectors <- .get_startvector_from_env(x)
+  fx <- lme4::fixef(x)
+
+  l <- .compact_list(list(
+    conditional = fx[setdiff(names(fx), startvectors)],
+    nonlinear = fx[startvectors],
+    random = lapply(lme4::ranef(x), colnames)
+  ))
+
+  fixed <- data.frame(
+    parameter = c(
+      gsub("`", "", names(l$conditional), fixed = TRUE),
+      gsub("`", "", names(l$nonlinear), fixed = TRUE)
+    ),
+    estimate = c(unname(l$conditional), unname(l$nonlinear)),
+    component = c(
+      rep("fixed", length(l$conditional)),
+      rep("nonlinear", length(l$nonlinear))
+    ),
+    stringsAsFactors = FALSE
+  )
+
+  if (effects == "fixed") {
+    fixed
+  } else {
+    l$random
+  }
+}
+
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {

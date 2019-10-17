@@ -471,3 +471,19 @@
 
   dat
 }
+
+
+
+# find start vector of nlmer-models from the environment -----------------------------------
+
+# return data from a data frame that is in the environment,
+# and subset the data, if necessary
+.get_startvector_from_env <- function(x) {
+  tryCatch({
+    names(eval(parse(text = .safe_deparse(x@call))[[1]]$start))
+  },
+  error = function(e) {
+    NULL
+  }
+  )
+}

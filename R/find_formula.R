@@ -554,6 +554,36 @@ find_formula.glmmTMB <- function(x, ...) {
 
 
 #' @export
+find_formula.nlmerMod <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  f.cond <- stats::formula(x)
+  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+    f <- .safe_deparse(.x)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1) {
+    f.random <- f.random[[1]]
+  }
+
+  fx <- .get_fixed_effects(f.cond)
+
+  f.cond <- stats::as.formula(gsub("(.*)(~)(.*)~(.*)", "\\1\\2\\4", fx))
+  f.nonlin <- stats::as.formula(paste0("~", .trim(gsub("(.*)~(.*)~(.*)", "\\2", fx))))
+
+  .compact_list(list(
+    conditional = f.cond,
+    nonlinear = f.nonlin,
+    random = f.random
+  ))
+}
+
+
+
+#' @export
 find_formula.merMod <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")

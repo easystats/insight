@@ -17,6 +17,7 @@
 * `model_info()` now returns the element `is_truncated` for truncated regression, or *brmsfit* models with `trunc()` as additional response part.
 * `model_info()` now recognizes beta and beta inflated families from package *gamlss*.
 * Better support for nonlinear quantile regression (`quantreg::nlrq()`).
+* Better support for nonlinear mixed models (`lmer::nlmer()`). Note that model-specification requires the random term to be written in parantheses, i.e. `(slope | group)`.
 
 ## Bug fixes
 

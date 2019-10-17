@@ -58,6 +58,8 @@ clean_parameters.default <- function(x, ...) {
 
     com <- if (grepl("zero_inflated", i, fixed = TRUE)) {
       "zero_inflated"
+    } else if (grepl("nonlinear", i, fixed = TRUE)) {
+      "nonlinear"
     } else {
       "conditional"
     }

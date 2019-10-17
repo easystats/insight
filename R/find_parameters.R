@@ -447,6 +447,32 @@ find_parameters.MixMod <- function(x, effects = c("all", "fixed", "random"), com
 }
 
 
+#' @export
+find_parameters.nlmerMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package 'lme4' required for this function to work. Please install it.")
+  }
+
+  startvectors <- .get_startvector_from_env(x)
+
+  l <- .compact_list(list(
+    conditional = setdiff(names(lme4::fixef(x)), startvectors),
+    nonlinear = startvectors,
+    random = lapply(lme4::ranef(x), colnames)
+  ))
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  l <- .compact_list(l[elements])
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
 #' @rdname find_parameters
 #' @export
 find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
