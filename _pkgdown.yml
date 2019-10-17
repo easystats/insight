@@ -81,6 +81,7 @@ reference:
   contents:
   - clean_names
   - clean_parameters
+  - color_if
   - download_model
   - format_table
   - format_value
