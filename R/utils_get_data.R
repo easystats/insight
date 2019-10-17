@@ -480,7 +480,9 @@
 # and subset the data, if necessary
 .get_startvector_from_env <- function(x) {
   tryCatch({
-    names(eval(parse(text = .safe_deparse(x@call))[[1]]$start))
+    sv <- eval(parse(text = .safe_deparse(x@call))[[1]]$start)
+    if (is.list(sv)) sv <- sv[["nlpars"]]
+    names(sv)
   },
   error = function(e) {
     NULL
