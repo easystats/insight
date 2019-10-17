@@ -10,7 +10,7 @@ Description: A tool to provide an easy, intuitive and consistent access to
    The package has a consistent syntax and works with many different model 
    objects, where otherwise functions to access these information are missing.
 Version: 0.6.0
-Date: 2019-10-07
+Date: 2019-10-17
 Authors@R: c(person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206")),
              person("Dominique", "Makowski", role = c("aut", "ctb"), email = "dom.makowski@gmail.com", comment = c(ORCID = "0000-0001-5375-9967")),
              person("Indrajeet", "Patil", role = c("aut", "ctb"), email = "patilindrajeet.science@gmail.com", comment = c(ORCID = "0000-0003-1995-6531")),
