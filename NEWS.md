@@ -1,4 +1,4 @@
-# insight 0.5.1
+# insight 0.6.0
 
 ## New supported model classes
 
