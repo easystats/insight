@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -225,10 +225,39 @@
 <a href="#contributing-and-support" class="anchor"></a>Contributing and Support</h2>
 <p>In case you want to file an issue or contribute in another way to the package, please follow <a href="https://github.com/easystats/insight/blob/master/.github/CONTRIBUTING.md">this guide</a>. For questions about the functionality, you may either contact us via email or also file an issue.</p>
 </div>
-<div id="list-of-supported-packages-and-models" class="section level2">
+<div id="list-of-supported-models-by-class" class="section level2">
 <h2 class="hasAnchor">
-<a href="#list-of-supported-packages-and-models" class="anchor"></a>List of Supported Packages and Models</h2>
-<p><strong>AER</strong> (<em>ivreg, tobit</em>), <strong>afex</strong> (<em>mixed</em>), <strong>aod</strong> (<em>betabin, negbin</em>), <strong>base</strong> (<em>aov, aovlist, lm, glm</em>), <strong>BayesFactor</strong> (<em>BFBayesFactor</em>), <strong>betareg</strong> (<em>betareg</em>), <strong>biglm</strong> (<em>biglm, bigglm</em>), <strong>blme</strong> (<em>blmer, bglmer</em>), <strong>brms</strong> (<em>brmsfit</em>), <strong>censReg</strong>, <strong>crch</strong>, <strong>countreg</strong> (<em>zerontrunc</em>), <strong>coxme</strong>, <strong>estimatr</strong> (<em>lm_robust, iv_robust</em>), <strong>feisr</strong> (<em>feis</em>), <strong>gam</strong> (<em>Gam</em>), <strong>gamm4</strong> , <strong>gamlss</strong>, <strong>gbm</strong>, <strong>gee</strong>, <strong>geepack</strong> (<em>geeglm</em>), <strong>GLMMadaptive</strong> (<em>MixMod</em>), <strong>glmmTMB</strong> (<em>glmmTMB</em>), <strong>gmnl</strong>, <strong>HRQoL</strong> (<em>BBreg</em>, <em>BBmm</em>), <strong>lfe</strong> (<em>felm</em>), <strong>lme4</strong> (<em>lmer, glmer, nlmer, glmer.nb</em>), <strong>MASS</strong> (<em>glmmPQL, polr, rlm</em>), <strong>mgcv</strong> (<em>gam, gamm</em>), <strong>multgee</strong> (<em>LORgee</em>), <strong>nnet</strong> (<em>multinom</em>), <strong>nlme</strong> (<em>lme, gls</em>), <strong>ordinal</strong> (<em>clm, clm2, clmm</em>), <strong>panelr</strong> (<em>wbm</em>), <strong>plm</strong>, <strong>pscl</strong> (<em>zeroinf, hurdle</em>), <strong>quantreg</strong> (<em>rq, crq, rqss</em>), <strong>rms</strong> (<em>lsr, ols, psm</em>), <strong>robust</strong> (<em>glmRob, lmRob</em>), <strong>robustbase</strong> (<em>glmrob, lmrob</em>), <strong>robustlmm</strong> (<em>rlmer</em>), <strong>rstanarm</strong> (<em>stanreg, stanmvreg</em>), <strong>speedlm</strong> (<em>speedlm, speedglm</em>), <strong>survey</strong>, <strong>survival</strong> (<em>coxph, survreg</em>), <strong>truncreg</strong> (<em>truncreg</em>), <strong>VGAM</strong> (<em>vgam, vglm</em>)</p>
+<a href="#list-of-supported-models-by-class" class="anchor"></a>List of Supported Models by Class</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="reference/is_model_supported.html">supported_models</a></span>()</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt;  [1] "aov"           "aovlist"       "bamlss"       </span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt;  [4] "bamlss.frame"  "bayesx"        "BBmm"         </span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;  [7] "BBreg"         "betareg"       "BFBayesFactor"</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; [10] "bigglm"        "biglm"         "blavaan"      </span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt; [13] "brmsfit"       "censReg"       "clm"          </span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt; [16] "clm2"          "clmm"          "clmm2"        </span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt; [19] "coxme"         "coxph"         "crch"         </span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt; [22] "crq"           "feis"          "felm"         </span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt; [25] "flexsurvreg"   "gam"           "Gam"          </span></a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt; [28] "gamlss"        "gamm"          "gamm4"        </span></a>
+<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt; [31] "gbm"           "gee"           "geeglm"       </span></a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt; [34] "glimML"        "glm"           "glmmPQL"      </span></a>
+<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt; [37] "glmmTMB"       "glmrob"        "glmRob"       </span></a>
+<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt; [40] "gls"           "gmnl"          "htest"        </span></a>
+<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt; [43] "hurdle"        "iv_robust"     "ivreg"        </span></a>
+<a class="sourceLine" id="cb6-17" title="17"><span class="co">#&gt; [46] "lavaan"        "lm"            "lm_robust"    </span></a>
+<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt; [49] "lme"           "lmrob"         "lmRob"        </span></a>
+<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt; [52] "logistf"       "LORgee"        "lrm"          </span></a>
+<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt; [55] "MCMCglmm"      "merMod"        "mixed"        </span></a>
+<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt; [58] "MixMod"        "mlm"           "mlogit"       </span></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt; [61] "multinom"      "ols"           "plm"          </span></a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt; [64] "polr"          "psm"           "rlm"          </span></a>
+<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt; [67] "rlmerMod"      "rq"            "rqss"         </span></a>
+<a class="sourceLine" id="cb6-25" title="25"><span class="co">#&gt; [70] "speedglm"      "speedlm"       "stanmvreg"    </span></a>
+<a class="sourceLine" id="cb6-26" title="26"><span class="co">#&gt; [73] "stanreg"       "survfit"       "survreg"      </span></a>
+<a class="sourceLine" id="cb6-27" title="27"><span class="co">#&gt; [76] "svyglm"        "svyolr"        "tobit"        </span></a>
+<a class="sourceLine" id="cb6-28" title="28"><span class="co">#&gt; [79] "truncreg"      "vgam"          "vglm"         </span></a>
+<a class="sourceLine" id="cb6-29" title="29"><span class="co">#&gt; [82] "wblm"          "wbm"           "zeroinfl"     </span></a>
+<a class="sourceLine" id="cb6-30" title="30"><span class="co">#&gt; [85] "zerotrunc"</span></a></code></pre></div>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues">File an issue</a> and request additional model-support in <em>insight</em>!</li>
@@ -305,7 +334,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

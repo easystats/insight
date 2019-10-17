@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -160,10 +160,10 @@
 <li><p><code>is_tweedie</code>: family is tweedie</p></li>
 <li><p><code>is_ordinal</code>: family is ordinal or cumulative link</p></li>
 <li><p><code>is_categorical</code>: family is categorical link</p></li>
-<li><p><code>is_censored</code>: model is a censored model (has a censored response)</p></li>
+<li><p><code>is_censored</code>: model is a censored model (has a censored response, including survival models)</p></li>
 <li><p><code>is_truncated</code>: model is a truncated model (has a truncated response)</p></li>
-<li><p><code>is_zeroinf</code>: model has zero-inflation component</p></li>
-<li><p><code>is_zero_inflated</code>: alias for <code>is_zeroinf</code></p></li>
+<li><p><code>is_survival</code>: model is a survival model</p></li>
+<li><p><code>is_zero_inflated</code>: model has zero-inflation component</p></li>
 <li><p><code>is_hurdle</code>: model has zero-inflation component and is a hurdle-model (truncated family distribution)</p></li>
 <li><p><code>is_mixed</code>: model is a mixed effects model (with random effects)</p></li>
 <li><p><code>is_multivariate</code>: model is a multivariate response model (currently only works for <em>brmsfit</em> objects)</p></li>
@@ -216,6 +216,9 @@
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_truncated
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $is_survival
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_linear
@@ -324,6 +327,9 @@
 #&gt; $is_truncated
 #&gt; [1] FALSE
 #&gt; 
+#&gt; $is_survival
+#&gt; [1] FALSE
+#&gt; 
 #&gt; $is_linear
 #&gt; [1] FALSE
 #&gt; 
@@ -406,7 +412,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>
