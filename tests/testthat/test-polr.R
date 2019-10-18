@@ -87,7 +87,7 @@ if (require("testthat") &&
     expect_equal(
       get_parameters(m1),
       data.frame(
-        parameter = c(
+        Parameter = c(
           "Intercept: Low|Medium",
           "Intercept: Medium|High",
           "InflMedium",
@@ -97,7 +97,7 @@ if (require("testthat") &&
           "TypeTerrace",
           "ContHigh"
         ),
-        estimate = c(
+        Estimate = c(
           -0.4961353438375,
           0.690708290379271,
           0.566393738890106,

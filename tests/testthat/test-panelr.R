@@ -209,7 +209,7 @@ if (require("testthat") &&
     expect_equal(
       get_parameters(m1),
       data.frame(
-        parameter = c(
+        Parameter = c(
           "lag(union)",
           "wks",
           "(Intercept)",
@@ -219,10 +219,10 @@ if (require("testthat") &&
           "fem",
           "lag(union):blk"
         ),
-        estimate = c(0.0582474262882615, -0.00163678667081885, 6.59813245629044,
+        Estimate = c(0.0582474262882615, -0.00163678667081885, 6.59813245629044,
                      -0.0279959204722801, 0.00438047648390025, -0.229414915661438,
                      -0.441756913071962, -0.127319623945541),
-        component = c(
+        Component = c(
           "within", "within", "between", "between",
           "between", "between", "between", "interactions"
         ),

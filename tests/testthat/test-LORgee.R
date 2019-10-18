@@ -129,7 +129,7 @@ if (require("testthat") &&
     )
     expect_equal(nrow(get_parameters(m1)), 11)
     expect_equal(
-      get_parameters(m1)$parameter,
+      get_parameters(m1)$Parameter,
       c(
         "beta10",
         "beta20",

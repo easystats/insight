@@ -107,7 +107,7 @@ if (require("testthat") && require("insight") && require("gamm4")) {
     )
     expect_equal(nrow(get_parameters(m1)), 4)
     expect_equal(
-      get_parameters(m1)$parameter,
+      get_parameters(m1)$Parameter,
       c("(Intercept)", "x1", "s(x0)", "s(x2)")
     )
   })

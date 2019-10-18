@@ -626,7 +626,7 @@ if (require("testthat") &&
     expect_equal(nrow(get_parameters(m4)), 6)
     expect_equal(
       colnames(get_parameters(m4)),
-      c("parameter", "estimate", "component")
+      c("Parameter", "Estimate", "Component")
     )
     expect_equal(
       get_parameters(m4)$Parameter,
