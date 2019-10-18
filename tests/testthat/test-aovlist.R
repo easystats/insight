@@ -107,7 +107,7 @@ if (require("testthat") &&
     expect_equal(nrow(get_parameters(m1, effects = "all")), 8)
 
     expect_equal(
-      get_parameters(m1, effects = "all")$effects,
+      get_parameters(m1, effects = "all")$Effects,
       c(
         "fixed",
         "fixed",

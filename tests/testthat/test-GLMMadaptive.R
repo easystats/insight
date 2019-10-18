@@ -277,7 +277,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         tolerance = 1e-5
       )
       expect_equal(
-        get_parameters(m3)$component,
+        get_parameters(m3)$Component,
         c(
           "conditional",
           "conditional",

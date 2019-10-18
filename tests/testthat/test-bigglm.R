@@ -114,7 +114,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       )
       expect_equal(nrow(get_parameters(m1)), 4)
       expect_equal(
-        get_parameters(m1)$parameter,
+        get_parameters(m1)$Parameter,
         c("(Intercept)", "minedno", "log(cover)", "sample")
       )
     })

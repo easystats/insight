@@ -177,13 +177,13 @@ if (require("testthat") &&
     )
     expect_equal(nrow(get_parameters(m1)), 3)
     expect_equal(
-      get_parameters(m1)$parameter,
+      get_parameters(m1)$Parameter,
       c("ph.ecogok", "ph.ecoglimited", "age")
     )
 
     expect_equal(nrow(get_parameters(m2)), 3)
     expect_equal(
-      get_parameters(m2)$parameter,
+      get_parameters(m2)$Parameter,
       c("ph.ecogok", "ph.ecoglimited", "age")
     )
 

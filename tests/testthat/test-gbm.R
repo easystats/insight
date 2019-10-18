@@ -102,7 +102,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         list(conditional = c("wt", "gear", "cyl"))
       )
       expect_equal(nrow(get_parameters(m1)), 3)
-      expect_equal(get_parameters(m1)$parameter, c("wt", "gear", "cyl"))
+      expect_equal(get_parameters(m1)$Parameter, c("wt", "gear", "cyl"))
     })
 
     test_that("find_terms", {

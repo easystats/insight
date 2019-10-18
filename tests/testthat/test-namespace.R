@@ -91,7 +91,7 @@ if (require("testthat") &&
   test_that("get_parameters", {
     expect_equal(nrow(get_parameters(m1)), 7)
     expect_equal(
-      get_parameters(m1)$parameter,
+      get_parameters(m1)$Parameter,
       c(
         "(Intercept)",
         "splines::bs(Petal.Width, df = 4)1",

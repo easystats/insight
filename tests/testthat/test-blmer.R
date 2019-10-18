@@ -218,7 +218,7 @@ if (require("testthat") &&
       )
     )
     expect_equal(nrow(get_parameters(m1)), 2)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "Days"))
+    expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "Days"))
 
     expect_equal(
       find_parameters(m2),
@@ -233,7 +233,7 @@ if (require("testthat") &&
     )
 
     expect_equal(nrow(get_parameters(m2)), 2)
-    expect_equal(get_parameters(m2)$parameter, c("(Intercept)", "Days"))
+    expect_equal(get_parameters(m2)$Parameter, c("(Intercept)", "Days"))
     expect_equal(
       names(get_parameters(m2, effects = "random")),
       c("mysubgrp:mygrp", "Subject", "mygrp")

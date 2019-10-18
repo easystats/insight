@@ -160,7 +160,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       )
       expect_equal(nrow(get_parameters(m1)), 3)
       expect_equal(
-        get_parameters(m1)$parameter,
+        get_parameters(m1)$Parameter,
         c("(Intercept)", "vitluc", "s(altitude, df = 2)")
       )
 
@@ -178,7 +178,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       )
       expect_equal(nrow(get_parameters(m2)), 6)
       expect_equal(
-        get_parameters(m2)$parameter,
+        get_parameters(m2)$Parameter,
         c(
           "(Intercept):1",
           "(Intercept):2",

@@ -120,7 +120,7 @@ if (require("testthat") &&
     )
     expect_equal(nrow(get_parameters(m1)), 5)
     expect_equal(
-      get_parameters(m1)$parameter,
+      get_parameters(m1)$Parameter,
       c("(Intercept)", "s(x0)", "s(x1)", "s(x2)", "s(x3)")
     )
     expect_equal(nrow(get_parameters(m1, "smooth_terms")), 4)

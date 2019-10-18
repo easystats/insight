@@ -72,7 +72,7 @@ if (require("testthat") &&
     )
     expect_equal(nrow(get_parameters(m1)), 5)
     expect_equal(
-      get_parameters(m1)$parameter,
+      get_parameters(m1)$Parameter,
       c("(Intercept)", "age", "lwt", "race", "smoke")
     )
   })

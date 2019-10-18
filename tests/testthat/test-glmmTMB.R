@@ -629,7 +629,7 @@ if (require("testthat") &&
       c("parameter", "estimate", "component")
     )
     expect_equal(
-      get_parameters(m4)$parameter,
+      get_parameters(m4)$Parameter,
       c(
         "(Intercept)",
         "child",
@@ -640,7 +640,7 @@ if (require("testthat") &&
       )
     )
     expect_equal(
-      get_parameters(m4)$component,
+      get_parameters(m4)$Component,
       c(
         "conditional",
         "conditional",
@@ -651,17 +651,17 @@ if (require("testthat") &&
       )
     )
     expect_equal(
-      get_parameters(m6)$parameter,
+      get_parameters(m6)$Parameter,
       c("(Intercept)", "(Intercept)")
     )
 
     expect_equal(
-      get_parameters(m2)$parameter,
+      get_parameters(m2)$Parameter,
       c("(Intercept)", "child", "camper1")
     )
 
     expect_equal(
-      get_parameters(m2, component = "all")$parameter,
+      get_parameters(m2, component = "all")$Parameter,
       c("(Intercept)", "child", "camper1")
     )
 

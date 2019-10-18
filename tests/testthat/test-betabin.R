@@ -92,7 +92,7 @@ if (require("testthat") && require("insight") && require("aod")) {
       )
     )
     expect_equal(nrow(get_parameters(m1)), 4)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "groupTREAT", "trisk", "groupTREAT:trisk"))
+    expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "groupTREAT", "trisk", "groupTREAT:trisk"))
   })
 
   test_that("is_multivariate", {

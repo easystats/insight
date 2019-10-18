@@ -96,9 +96,9 @@ if (require("testthat") &&
       )
     )
     expect_equal(nrow(get_parameters(m1)), 2)
-    expect_equal(get_parameters(m1)$parameter, c("(Intercept)", "plate"))
+    expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "plate"))
     expect_equal(
-      get_parameters(m1, effects = "random")$parameter,
+      get_parameters(m1, effects = "random")$Parameter,
       "FSfamily"
     )
   })

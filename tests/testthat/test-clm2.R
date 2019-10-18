@@ -109,7 +109,7 @@ if (require("testthat") &&
     )
     expect_equal(nrow(get_parameters(m1)), 8)
     expect_equal(
-      get_parameters(m1)$parameter,
+      get_parameters(m1)$Parameter,
       c(
         "Low|Medium",
         "Medium|High",
