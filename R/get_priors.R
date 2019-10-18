@@ -111,7 +111,7 @@ get_priors.brmsfit <- function(x, ...) {
     }
   }), stringsAsFactors = FALSE)
 
-  if (.is_empty_string(pinfo$distribution)) {
+  if (.is_empty_string(pinfo$Distribution)) {
     print_color("Model was fitted with uninformative (flat) priors!\n", "red")
     pinfo$Distribution <- "uniform"
     pinfo$Location <- 0
