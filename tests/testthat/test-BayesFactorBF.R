@@ -146,10 +146,10 @@ if (require("testthat") &&
     expect_equal(
       get_priors(x),
       data.frame(
-        parameter = c("fixed", "random", "continuous"),
-        distribution = c("cauchy", "cauchy", "cauchy"),
-        location = c(0, 0, 0),
-        scale = c(0.5, 1, 0.353553390593274),
+        Parameter = c("fixed", "random", "continuous"),
+        Distribution = c("cauchy", "cauchy", "cauchy"),
+        Location = c(0, 0, 0),
+        Scale = c(0.5, 1, 0.353553390593274),
         stringsAsFactors = FALSE,
         row.names = NULL
       ),
@@ -192,10 +192,10 @@ if (require("testthat") &&
     expect_equal(
       get_priors(x),
       data.frame(
-        parameter = c("fixed", "random", "continuous"),
-        distribution = c("cauchy", "cauchy", "cauchy"),
-        location = c(0, 0, 0),
-        scale = c(0.5, 1, 0.353553390593274),
+        Parameter = c("fixed", "random", "continuous"),
+        Distribution = c("cauchy", "cauchy", "cauchy"),
+        Location = c(0, 0, 0),
+        Scale = c(0.5, 1, 0.353553390593274),
         stringsAsFactors = FALSE,
         row.names = NULL
       ),

@@ -486,10 +486,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_equal(
         get_priors(m1),
         data.frame(
-          parameter = c("Age", "Base", "Base:Trt1", "Trt1"),
-          distribution = c("student_t", "student_t", "student_t", "student_t"),
-          location = c("5, 0", "5, 0", "5, 0", "5, 0"),
-          scale = c(10, 10, 10, 10),
+          Parameter = c("Age", "Base", "Base:Trt1", "Trt1"),
+          Distribution = c("student_t", "student_t", "student_t", "student_t"),
+          Location = c("5, 0", "5, 0", "5, 0", "5, 0"),
+          Scale = c(10, 10, 10, 10),
           stringsAsFactors = FALSE
         )
       )
@@ -497,10 +497,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_equal(
         get_priors(m3),
         data.frame(
-          parameter = c("c2", "treat1", "treat1:c2"),
-          distribution = c("uniform", "uniform", "uniform"),
-          location = c(0, 0, 0),
-          scale = c(NA, NA, NA),
+          Parameter = c("c2", "treat1", "treat1:c2"),
+          Distribution = c("uniform", "uniform", "uniform"),
+          Location = c(0, 0, 0),
+          Scale = c(NA, NA, NA),
           stringsAsFactors = FALSE
         )
       )

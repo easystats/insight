@@ -33,24 +33,24 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     test_that("get_priors", {
       expect_equal(
         colnames(get_priors(m1)),
-        c("parameter", "distribution", "location", "scale")
+        c("Parameter", "Distribution", "Location", "Scale")
       )
       expect_equal(
         colnames(get_priors(m2)),
         c(
-          "parameter",
-          "distribution",
-          "location",
-          "scale",
-          "adjusted_scale"
+          "Parameter",
+          "Distribution",
+          "Location",
+          "Scale",
+          "Adjusted_Scale"
         )
       )
-      expect_equal(get_priors(m1)$scale,
+      expect_equal(get_priors(m1)$Scale,
         c(10.0, 2.5, 2.5, 2.5, 2.5),
         tolerance = 1e-3
       )
       expect_equal(
-        get_priors(m2)$adjusted_scale,
+        get_priors(m2)$Adjusted_Scale,
         c(
           4.35866284936698,
           1.08966571234175,
@@ -61,12 +61,12 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         ),
         tolerance = 1e-3
       )
-      expect_equal(get_priors(m3)$adjusted_scale,
+      expect_equal(get_priors(m3)$Adjusted_Scale,
         c(NA, 2.555042),
         tolerance = 1e-3
       )
       expect_equal(
-        get_priors(m4)$adjusted_scale,
+        get_priors(m4)$Adjusted_Scale,
         c(
           25.5992021152256,
           7.67976063456768,
@@ -76,7 +76,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         tolerance = 1e-3
       )
       expect_equal(
-        get_priors(m5)$adjusted_scale,
+        get_priors(m5)$Adjusted_Scale,
         c(
           25.5992021152256,
           2.55992021152256,
@@ -88,11 +88,11 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_equal(
         get_priors(m6),
         data.frame(
-          parameter = "(Intercept)",
-          distribution = "normal",
-          location = 0,
-          scale = 10,
-          adjusted_scale = 4.35866284936698,
+          Parameter = "(Intercept)",
+          Distribution = "normal",
+          Location = 0,
+          Scale = 10,
+          Adjusted_Scale = 4.35866284936698,
           stringsAsFactors = FALSE,
           row.names = NULL
         ),
