@@ -5,8 +5,10 @@ Anova
 aod
 aov
 aovlist
+bamlss
 BayesFactor
 bayestestR
+BayesX
 BBmm
 BBreg
 betabin
@@ -15,6 +17,7 @@ BFBayesFactor
 bglmer
 bigglm
 biglm
+blavaan
 blme
 blmer
 brms
@@ -38,6 +41,7 @@ et
 feis
 feisr
 felm
+flexsurv
 gam
 Gam
 gamlss
@@ -67,6 +71,7 @@ io
 ivreg
 joss
 JOSS
+lavaan
 lfe
 lm
 lme
