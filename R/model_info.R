@@ -1020,8 +1020,6 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
     is_survival = is.survival,
     is_linear = linear_model,
     is_tweedie = tweedie_model,
-    ## TODO remove after insight 0.6.0
-    is_zeroinf = zero.inf,
     is_zero_inflated = zero.inf,
     is_hurdle = hurdle,
     is_ordinal = is.ordinal,
