@@ -49,13 +49,19 @@ get_priors.stanreg <- function(x, ...) {
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
   colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info))
 
-  as.data.frame(lapply(prior_info, function(x) {
+  priors <- as.data.frame(lapply(prior_info, function(x) {
     if (.is_numeric_character(x)) {
       as.numeric(as.character(x))
     } else {
       as.character(x)
     }
   }), stringsAsFactors = FALSE)
+
+  string <- strsplit(names(priors), "_", fixed = TRUE)
+  string <- lapply(string, .capitalize)
+  names(priors) <- unlist(lapply(string, paste0, collapse = "_"))
+
+  priors
 }
 
 
@@ -90,12 +96,12 @@ get_priors.brmsfit <- function(x, ...) {
 
   prior_info <- x$prior[x$prior$coef != "" & x$prior$class %in% c("b", "(Intercept)"), ]
 
-  prior_info$distribution <- gsub("(.*)\\(.*", "\\1", prior_info$prior)
-  prior_info$location <- gsub("(.*)\\((.*)\\,(.*)", "\\2", prior_info$prior)
-  prior_info$scale <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior)
-  prior_info$parameter <- prior_info$coef
+  prior_info$Distribution <- gsub("(.*)\\(.*", "\\1", prior_info$prior)
+  prior_info$Location <- gsub("(.*)\\((.*)\\,(.*)", "\\2", prior_info$prior)
+  prior_info$Scale <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior)
+  prior_info$Parameter <- prior_info$coef
 
-  prior_info <- prior_info[, c("parameter", "distribution", "location", "scale")]
+  prior_info <- prior_info[, c("Parameter", "Distribution", "Location", "Scale")]
 
   pinfo <- as.data.frame(lapply(prior_info, function(x) {
     if (.is_numeric_character(x)) {
@@ -107,9 +113,9 @@ get_priors.brmsfit <- function(x, ...) {
 
   if (.is_empty_string(pinfo$distribution)) {
     print_color("Model was fitted with uninformative (flat) priors!\n", "red")
-    pinfo$distribution <- "uniform"
-    pinfo$location <- 0
-    pinfo$scale <- NA
+    pinfo$Distribution <- "uniform"
+    pinfo$Location <- 0
+    pinfo$Scale <- NA
   }
 
   pinfo
@@ -128,10 +134,10 @@ get_priors.BFBayesFactor <- function(x, ...) {
   )
 
   data.frame(
-    parameter = names(prior),
-    distribution = "cauchy",
-    location = 0,
-    scale = unlist(prior),
+    Parameter = names(prior),
+    Distribution = "cauchy",
+    Location = 0,
+    Scale = unlist(prior),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -166,10 +172,10 @@ get_priors.blavaan <- function(x, ...) {
   priors[is.na(PE$prior)] <- NA
 
   stats::na.omit(data.frame(
-    parameter = paste(PE$lhs, PE$op, PE$rhs, sep = ""),
-    distribution = gsub("(.*)\\((.*)", "\\1", priors),
-    location = as.numeric(gsub("(.*)\\((.*)\\,(.*)\\)(.*)", "\\2", priors)),
-    scale = as.numeric(gsub("(.*)\\((.*)\\,(.*)\\)(.*)", "\\3", priors)),
+    Parameter = paste(PE$lhs, PE$op, PE$rhs, sep = ""),
+    Distribution = gsub("(.*)\\((.*)", "\\1", priors),
+    Location = as.numeric(gsub("(.*)\\((.*)\\,(.*)\\)(.*)", "\\2", priors)),
+    Scale = as.numeric(gsub("(.*)\\((.*)\\,(.*)\\)(.*)", "\\3", priors)),
     stringsAsFactors = FALSE
   ))
 }

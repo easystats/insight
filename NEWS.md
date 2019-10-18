@@ -2,7 +2,7 @@
 
 ## Breaking changes
 
-* In order to unify column names across easystats-packages, `get_parameters()` now returns column names according to our naming conventions (i.e. capitalized column names).
+* In order to unify column names across easystats-packages, `get_parameters()` and `get_priors()` now return column names according to our naming conventions (i.e. capitalized column names).
 * `model_info()` returned both `$is_zeroinf` and `$is_zero_inflated` for zero-inflated models. Now `$is_zeroinf` was removed, so `model_info()` only returns `$is_zero_inflated` .
 
 # insight 0.6.0
