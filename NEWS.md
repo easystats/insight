@@ -1,3 +1,10 @@
+# insight 0.6.1
+
+## Breaking changes
+
+* In order to unify column names across easystats-packages, `get_parameters()` now returns column names according to our naming conventions (i.e. capitalized column names).
+
+
 # insight 0.6.0
 
 ## New supported model classes

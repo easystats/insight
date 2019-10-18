@@ -110,11 +110,11 @@ clean_parameters.lavaan <- function(x, ...) {
   params <- get_parameters(x)
 
   data.frame(
-    Parameter = params$parameter,
-    Component = params$component,
+    Parameter = params$Parameter,
+    Component = params$Component,
     Group = "",
     Function = "",
-    Cleaned_Parameter = params$parameter,
+    Cleaned_Parameter = params$Parameter,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -127,11 +127,11 @@ clean_parameters.blavaan <- function(x, ...) {
   params <- get_parameters.lavaan(x)
 
   data.frame(
-    Parameter = params$parameter,
-    Component = params$component,
+    Parameter = params$Parameter,
+    Component = params$Component,
     Group = "",
     Function = "",
-    Cleaned_Parameter = params$parameter,
+    Cleaned_Parameter = params$Parameter,
     stringsAsFactors = FALSE,
     row.names = NULL
   )

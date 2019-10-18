@@ -274,9 +274,9 @@ get_statistic.gamlss <- function(x, ...) {
   utils::capture.output(cs <- summary(x))
 
   out <- data.frame(
-    Parameter = parms$parameter,
+    Parameter = parms$Parameter,
     Statistic = as.vector(cs[, 3]),
-    Component = parms$component,
+    Component = parms$Component,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -331,9 +331,9 @@ get_statistic.wbm <- function(x, ...) {
   params <- get_parameters(x)
 
   out <- data.frame(
-    Parameter = params$parameter,
+    Parameter = params$Parameter,
     Statistic = as.vector(stat),
-    Component = params$component,
+    Component = params$Component,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -359,7 +359,7 @@ get_statistic.rq <- function(x, ...) {
   params <- get_parameters(x)
 
   out <- data.frame(
-    Parameter = params$parameter,
+    Parameter = params$Parameter,
     Statistic = stat,
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -383,8 +383,8 @@ get_statistic.bigglm <- function(x, ...) {
   se <- as.vector(cs[, 4])
 
   out <- data.frame(
-    Parameter = parms$parameter,
-    Statistic = parms$estimate / se,
+    Parameter = parms$Parameter,
+    Statistic = parms$Estimate / se,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -401,8 +401,8 @@ get_statistic.biglm <- function(x, ...) {
   se <- as.vector(cs[, 4])
 
   out <- data.frame(
-    Parameter = parms$parameter,
-    Statistic = parms$estimate / se,
+    Parameter = parms$Parameter,
+    Statistic = parms$Estimate / se,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -426,7 +426,7 @@ get_statistic.crch <- function(x, ...) {
   params <- get_parameters(x)
 
   out <- data.frame(
-    Parameter = params$parameter,
+    Parameter = params$Parameter,
     Statistic = as.vector(cs[, 3]),
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -444,7 +444,7 @@ get_statistic.gee <- function(x, ...) {
   cs <- stats::coef(summary(x))
 
   out <- data.frame(
-    Parameter = parms$parameter,
+    Parameter = parms$Parameter,
     Statistic = as.vector(cs[, "Naive z"]),
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -464,7 +464,7 @@ get_statistic.logistf <- function(x, ...) {
   utils::capture.output(s <- summary(x))
 
   out <- data.frame(
-    Parameter = parms$parameter,
+    Parameter = parms$Parameter,
     Statistic = as.vector(stats::qchisq(1 - s$prob, df = 1)),
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -487,8 +487,8 @@ get_statistic.svyglm.nb <- function(x, ...) {
   se <- sqrt(diag(stats::vcov(x, stderr = "robust")))
 
   out <- data.frame(
-    Parameter = parms$parameter,
-    Statistic = parms$estimate / se,
+    Parameter = parms$Parameter,
+    Statistic = parms$Estimate / se,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -512,8 +512,8 @@ get_statistic.betareg <- function(x, ...) {
   se <- as.vector(cs[, 2])
 
   out <- data.frame(
-    Parameter = parms$parameter,
-    Statistic = parms$estimate / se,
+    Parameter = parms$Parameter,
+    Statistic = parms$Estimate / se,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -551,7 +551,7 @@ get_statistic.survreg <- function(x, ...) {
   parms <- get_parameters(x)
   s <- summary(x)
   out <- data.frame(
-    Parameter = parms$parameter,
+    Parameter = parms$Parameter,
     Statistic = s$table[, 3],
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -569,8 +569,8 @@ get_statistic.flexsurvreg <- function(x, ...) {
   se <- x$res[, "se"]
 
   out <- data.frame(
-    Parameter = parms$parameter,
-    Statistic = parms$estimate / se,
+    Parameter = parms$Parameter,
+    Statistic = parms$Estimate / se,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -592,7 +592,7 @@ get_statistic.glimML <- function(x, ...) {
   s <- methods::slot(aod::summary(x), "Coef")
 
   out <- data.frame(
-    Parameter = parms$parameter,
+    Parameter = parms$Parameter,
     Statistic = s[, 3],
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -611,7 +611,7 @@ get_statistic.lrm <- function(x, ...) {
   stat <- stats::coef(x) / sqrt(diag(stats::vcov(x)))
 
   out <- data.frame(
-    Parameter = parms$parameter,
+    Parameter = parms$Parameter,
     Statistic = as.vector(stat),
     stringsAsFactors = FALSE,
     row.names = NULL
