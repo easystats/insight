@@ -5,6 +5,10 @@
 * In order to unify column names across easystats-packages, `get_parameters()` and `get_priors()` now return column names according to our naming conventions (i.e. capitalized column names).
 * `model_info()` returned both `$is_zeroinf` and `$is_zero_inflated` for zero-inflated models. Now `$is_zeroinf` was removed, so `model_info()` only returns `$is_zero_inflated` .
 
+## Changes to functions
+
+* `link_inverse()` gets a `what`-argument, to return the link-inverse function for specific distribution paramters from **gamls** models.
+
 # insight 0.6.0
 
 ## New supported model classes

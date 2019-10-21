@@ -10,6 +10,9 @@ link_inverse(x, ...)
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
+
+\item{what}{For \code{gamlss} models, indicates for which distriubtion
+parameter the link (inverse) function should be returned.}
 }
 \value{
 A function, describing the inverse-link function from a model-object.
