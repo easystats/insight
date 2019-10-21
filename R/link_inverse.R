@@ -104,6 +104,7 @@ link_inverse.flexsurvreg <- function(x, ...) {
 }
 
 
+#' @rdname link_inverse
 #' @export
 link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
   what <- match.arg(what)

@@ -2,9 +2,13 @@
 % Please edit documentation in R/link_inverse.R
 \name{link_inverse}
 \alias{link_inverse}
+\alias{link_inverse.gamlss}
 \title{Get link-inverse function from model object}
 \usage{
 link_inverse(x, ...)
+
+\method{link_inverse}{gamlss}(x, what = c("mu", "sigma", "nu", "tau"),
+  ...)
 }
 \arguments{
 \item{x}{A fitted model.}
