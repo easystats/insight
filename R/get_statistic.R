@@ -377,6 +377,23 @@ get_statistic.nlrq <- get_statistic.rq
 
 
 #' @export
+get_statistic.multinom <- function(x, ...) {
+  parms <- get_parameters(x)
+  se <- summary(x)$standard.errors
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = parms$Estimate / se,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.bigglm <- function(x, ...) {
   parms <- get_parameters(x)
   cs <- summary(x)$mat
