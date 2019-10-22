@@ -145,10 +145,19 @@ link_function.glimML <- function(x, ...) {
 }
 
 
+#' @rdname link_function
 #' @export
-link_function.gamlss <- function(x, ...) {
+link_function.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
+  what <- match.arg(what)
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
-  faminfo$mu.linkfun
+  switch(
+    what,
+    "mu" = faminfo$mu.linkfun,
+    "sigma" = faminfo$sigma.linkfun,
+    "nu" = faminfo$nu.linkfun,
+    "tau" = faminfo$tau.linkfun,
+    faminfo$mu.linkfun
+  )
 }
 
 

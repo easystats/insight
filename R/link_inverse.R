@@ -3,6 +3,8 @@
 #'
 #' @description Returns the link-inverse function from a model object.
 #'
+#' @param what For \code{gamlss} models, indicates for which distriubtion
+#'   parameter the link (inverse) function should be returned.
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
 #'
@@ -102,10 +104,19 @@ link_inverse.flexsurvreg <- function(x, ...) {
 }
 
 
+#' @rdname link_inverse
 #' @export
-link_inverse.gamlss <- function(x, ...) {
+link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
+  what <- match.arg(what)
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
-  faminfo$mu.linkinv
+  switch(
+    what,
+    "mu" = faminfo$mu.linkinv,
+    "sigma" = faminfo$sigma.linkinv,
+    "nu" = faminfo$nu.linkinv,
+    "tau" = faminfo$tau.linkinv,
+    faminfo$mu.linkinv
+  )
 }
 
 
