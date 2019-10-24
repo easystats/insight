@@ -33,12 +33,13 @@ n_obs.default <- function(x, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
-  tryCatch({
-    stats::nobs(x)
-  },
-  error = function(x) {
-    NULL
-  }
+  tryCatch(
+    {
+      stats::nobs(x)
+    },
+    error = function(x) {
+      NULL
+    }
   )
 }
 

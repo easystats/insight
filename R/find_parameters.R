@@ -54,12 +54,13 @@ find_parameters.default <- function(x, flatten = FALSE, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
     pars <- find_parameters.gam(x)
   } else {
-    pars <- tryCatch({
-      list(conditional = names(stats::coef(x)))
-    },
-    error = function(x) {
-      NULL
-    }
+    pars <- tryCatch(
+      {
+        list(conditional = names(stats::coef(x)))
+      },
+      error = function(x) {
+        NULL
+      }
     )
   }
 

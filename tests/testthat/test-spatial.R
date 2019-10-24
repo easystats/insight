@@ -1,7 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-
   if (require("testthat") && require("insight") && require("glmmTMB")) {
     context("insight, glmmTMB")
     m1 <- download_model("glmmTMB_spatial_1")
@@ -133,7 +132,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
 
 
     test_that("get_paramaters", {
-      expect_equal(nrow(get_parameters(m1)),4)
+      expect_equal(nrow(get_parameters(m1)), 4)
       expect_equal(
         get_parameters(m1)$Parameter,
         c("(Intercept)", "elevation", "region2", "region3")

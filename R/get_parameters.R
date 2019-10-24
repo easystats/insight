@@ -48,19 +48,20 @@ get_parameters.default <- function(x, ...) {
     return(get_parameters.gam(x, ...))
   }
 
-  tryCatch({
-    cf <- stats::coef(x)
-    data.frame(
-      Parameter = names(cf),
-      Estimate = unname(cf),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
-  },
-  error = function(x) {
-    print_color(sprintf("Parameters can't be retrieved for objects of class '%s'.\n", class(x)[1]), "red")
-    NULL
-  }
+  tryCatch(
+    {
+      cf <- stats::coef(x)
+      data.frame(
+        Parameter = names(cf),
+        Estimate = unname(cf),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    },
+    error = function(x) {
+      print_color(sprintf("Parameters can't be retrieved for objects of class '%s'.\n", class(x)[1]), "red")
+      NULL
+    }
   )
 }
 
@@ -311,18 +312,19 @@ get_parameters.gamlss <- function(x, ...) {
 
 #' @export
 get_parameters.lrm <- function(x, ...) {
-  tryCatch({
-    cf <- stats::coef(x)
-    data.frame(
-      Parameter = names(cf),
-      Estimate = unname(cf),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
-  },
-  error = function(x) {
-    NULL
-  }
+  tryCatch(
+    {
+      cf <- stats::coef(x)
+      data.frame(
+        Parameter = names(cf),
+        Estimate = unname(cf),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    },
+    error = function(x) {
+      NULL
+    }
   )
 }
 
@@ -1130,10 +1132,11 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
         colnames(d) <- sprintf("%s.%s", cn, dn[j])
         d
       })
-      if (ncol(dat) == 0)
+      if (ncol(dat) == 0) {
         dat <- do.call(cbind, l)
-      else
+      } else {
         dat <- cbind(dat, do.call(cbind, l))
+      }
     }
   }
 

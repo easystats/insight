@@ -22,14 +22,15 @@ find_weights <- function(x, ...) {
 
 #' @export
 find_weights.default <- function(x, ...) {
-  tryCatch({
-    w <- as.character(parse(text = .safe_deparse(x$call))[[1]]$weights)
-    if (.is_empty_object(w)) w <- NULL
-    w
-  },
-  error = function(e) {
-    NULL
-  }
+  tryCatch(
+    {
+      w <- as.character(parse(text = .safe_deparse(x$call))[[1]]$weights)
+      if (.is_empty_object(w)) w <- NULL
+      w
+    },
+    error = function(e) {
+      NULL
+    }
   )
 }
 
