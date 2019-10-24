@@ -51,7 +51,7 @@ get_parameters.default <- function(x, ...) {
   tryCatch({
     cf <- stats::coef(x)
     data.frame(
-      Parameter = names(cf),
+      Parameter = gsub("`", "", names(cf), fixed = TRUE),
       Estimate = unname(cf),
       stringsAsFactors = FALSE,
       row.names = NULL
@@ -70,7 +70,7 @@ get_parameters.default <- function(x, ...) {
 get_parameters.flexsurvreg <- function(x, ...) {
   cf <- stats::coef(x)
   data.frame(
-    Parameter = names(cf),
+    Parameter = gsub("`", "", names(cf), fixed = TRUE),
     Estimate = unname(cf),
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -86,7 +86,7 @@ get_parameters.mlm <- function(x, ...) {
   out <- lapply(names(cs), function(i) {
     params <- cs[[i]]
     data.frame(
-      Parameter = rownames(params),
+      Parameter = gsub("`", "", rownames(params), fixed = TRUE),
       Estimate = params[, 1],
       Response = gsub("^Response (.*)", "\\1", i),
       stringsAsFactors = FALSE,
@@ -135,7 +135,7 @@ get_parameters.lavaan <- function(x, ...) {
   params$comp[params$op == "~1"] <- "intercept"
 
   data.frame(
-    Parameter = params$parameter,
+    Parameter = gsub("`", "", params$parameter, fixed = TRUE),
     Estimate = params$est,
     Component = params$comp,
     stringsAsFactors = FALSE
@@ -148,7 +148,7 @@ get_parameters.lavaan <- function(x, ...) {
 get_parameters.polr <- function(x, ...) {
   pars <- c(sprintf("Intercept: %s", names(x$zeta)), names(x$coefficients))
   data.frame(
-    Parameter = pars,
+    Parameter = gsub("`", "", pars, fixed = TRUE),
     Estimate = c(unname(x$zeta), unname(x$coefficients)),
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -161,7 +161,7 @@ get_parameters.polr <- function(x, ...) {
 get_parameters.gbm <- function(x, ...) {
   s <- summary(x, plotit = FALSE)
   data.frame(
-    Parameter = as.character(s$var),
+    Parameter = gsub("`", "", as.character(s$var), fixed = TRUE),
     Estimate = s$rel.inf,
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -174,7 +174,7 @@ get_parameters.gbm <- function(x, ...) {
 get_parameters.BBreg <- function(x, ...) {
   pars <- summary(x)$coefficients
   data.frame(
-    Parameter = rownames(pars),
+    Parameter = gsub("`", "", rownames(pars), fixed = TRUE),
     Estimate = pars[, "Estimate"],
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -194,7 +194,7 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
   ))
 
   fixed <- data.frame(
-    Parameter = rownames(l$conditional),
+    Parameter = gsub("`", "", rownames(l$conditional), fixed = TRUE),
     Estimate = l$conditional,
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -245,14 +245,14 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
   ))
 
   fixed <- data.frame(
-    Parameter = names(l$conditional),
+    Parameter = gsub("`", "", names(l$conditional), fixed = TRUE),
     Estimate = l$conditional,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
 
   random <- data.frame(
-    Parameter = names(l$random),
+    Parameter = gsub("`", "", names(l$random), fixed = TRUE),
     Estimate = l$random,
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -285,7 +285,7 @@ get_parameters.gamlss <- function(x, ...) {
 
   do.call(rbind, lapply(names(pars), function(i) {
     data.frame(
-      Parameter = names(pars[[i]]),
+      Parameter = gsub("`", "", names(pars[[i]]), fixed = TRUE),
       Estimate = pars[[i]],
       Component = i,
       stringsAsFactors = FALSE,
@@ -314,7 +314,7 @@ get_parameters.lrm <- function(x, ...) {
   tryCatch({
     cf <- stats::coef(x)
     data.frame(
-      Parameter = names(cf),
+      Parameter = gsub("`", "", names(cf), fixed = TRUE),
       Estimate = unname(cf),
       stringsAsFactors = FALSE,
       row.names = NULL
@@ -332,7 +332,7 @@ get_parameters.lrm <- function(x, ...) {
 get_parameters.aov <- function(x, ...) {
   cf <- stats::coef(x)
   data.frame(
-    Parameter = names(cf),
+    Parameter = gsub("`", "", names(cf), fixed = TRUE),
     Estimate = unname(cf),
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -1042,7 +1042,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
   zero_inflated <- grepl("^zero_", names(cf), perl = TRUE)
 
   cond <- data.frame(
-    Parameter = names(cf)[conditional],
+    Parameter = gsub("`", "", names(cf)[conditional], fixed = TRUE),
     Estimate = unname(cf)[conditional],
     Component = "conditional",
     stringsAsFactors = FALSE,
@@ -1050,7 +1050,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
   )
 
   zi <- data.frame(
-    Parameter = names(cf)[zero_inflated],
+    Parameter = gsub("`", "", names(cf)[zero_inflated], fixed = TRUE),
     Estimate = unname(cf)[zero_inflated],
     Component = "zero_inflated",
     stringsAsFactors = FALSE,
@@ -1076,7 +1076,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
 
 .return_smooth_parms <- function(conditional, smooth_terms, component) {
   cond <- data.frame(
-    Parameter = names(conditional),
+    Parameter = gsub("`", "", names(conditional), fixed = TRUE),
     Estimate = conditional,
     Component = "conditional",
     stringsAsFactors = FALSE,
@@ -1084,7 +1084,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
   )
 
   smooth <- data.frame(
-    Parameter = names(smooth_terms),
+    Parameter = gsub("`", "", names(smooth_terms), fixed = TRUE),
     Estimate = smooth_terms,
     Component = "smooth_terms",
     stringsAsFactors = FALSE,
