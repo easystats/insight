@@ -87,7 +87,8 @@ if (require("testthat") &&
         y0 = list(conditional = as.formula("y0 ~ s(x0) + s(x1)")),
         y1 = list(conditional = as.formula("y1 ~ s(x2) + s(x3)"))
       ),
-      is_mv = "1")
+      is_mv = "1"
+      )
     )
   })
 

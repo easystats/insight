@@ -385,44 +385,45 @@
     }
   }
 
-  cvsquared <- tryCatch({
-    vv <- switch(
-      faminfo$family,
+  cvsquared <- tryCatch(
+    {
+      vv <- switch(
+        faminfo$family,
 
-      # (zero-inflated) poisson
-      `zero-inflated poisson` = ,
-      poisson = .variance_family_poisson(x, mu, faminfo),
+        # (zero-inflated) poisson
+        `zero-inflated poisson` = ,
+        poisson = .variance_family_poisson(x, mu, faminfo),
 
-      # hurdle-poisson
-      `hurdle poisson` = ,
-      truncated_poisson = stats::family(x)$variance(sig),
+        # hurdle-poisson
+        `hurdle poisson` = ,
+        truncated_poisson = stats::family(x)$variance(sig),
 
-      # Gamma, exponential
-      Gamma = stats::family(x)$variance(sig),
+        # Gamma, exponential
+        Gamma = stats::family(x)$variance(sig),
 
-      # (zero-inflated) negative binomial
-      `zero-inflated negative binomial` = ,
-      `negative binomial` = ,
-      genpois = ,
-      nbinom1 = ,
-      nbinom2 = .variance_family_nbinom(x, mu, sig, faminfo),
+        # (zero-inflated) negative binomial
+        `zero-inflated negative binomial` = ,
+        `negative binomial` = ,
+        genpois = ,
+        nbinom1 = ,
+        nbinom2 = .variance_family_nbinom(x, mu, sig, faminfo),
 
-      # other distributions
-      tweedie = .variance_family_tweedie(x, mu, sig),
-      beta = .variance_family_beta(x, mu, sig),
+        # other distributions
+        tweedie = .variance_family_tweedie(x, mu, sig),
+        beta = .variance_family_beta(x, mu, sig),
 
-      # default variance for non-captured distributions
-      .variance_family_default(x, mu, verbose)
-    )
+        # default variance for non-captured distributions
+        .variance_family_default(x, mu, verbose)
+      )
 
-    vv / mu^2
-  },
-  error = function(x) {
-    if (verbose) {
-      warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = F)
+      vv / mu^2
+    },
+    error = function(x) {
+      if (verbose) {
+        warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = F)
+      }
+      0
     }
-    0
-  }
   )
 
   log1p(cvsquared)
@@ -561,21 +562,22 @@
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
-  tryCatch({
-    if (inherits(x, "merMod")) {
-      mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
-    } else if (inherits(x, "MixMod")) {
-      stats::family(x)$variance(mu)
-    } else {
-      mu * (1 + mu / x$theta)
+  tryCatch(
+    {
+      if (inherits(x, "merMod")) {
+        mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
+      } else if (inherits(x, "MixMod")) {
+        stats::family(x)$variance(mu)
+      } else {
+        mu * (1 + mu / x$theta)
+      }
+    },
+    error = function(x) {
+      if (verbose) {
+        warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = F)
+      }
+      0
     }
-  },
-  error = function(x) {
-    if (verbose) {
-      warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = F)
-    }
-    0
-  }
   )
 }
 
@@ -600,20 +602,21 @@
     resp <- find_response(model)
     re.terms <- paste0("(", sapply(lme4::findbars(f), .safe_deparse), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
-    null.model <- tryCatch({
-      stats::update(model, nullform)
-    },
-    error = function(e) {
-      msg <- e$message
-      if (verbose) {
-        if (grepl("(^object)(.*)(not found$)", msg)) {
-          insight::print_color("Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n", "red")
-        } else if (grepl("^could not find function", msg)) {
-          insight::print_color("Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n", "red")
+    null.model <- tryCatch(
+      {
+        stats::update(model, nullform)
+      },
+      error = function(e) {
+        msg <- e$message
+        if (verbose) {
+          if (grepl("(^object)(.*)(not found$)", msg)) {
+            insight::print_color("Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n", "red")
+          } else if (grepl("^could not find function", msg)) {
+            insight::print_color("Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n", "red")
+          }
         }
+        return(NULL)
       }
-      return(NULL)
-    }
     )
   }
 

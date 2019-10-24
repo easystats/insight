@@ -41,12 +41,13 @@
 # is string empty?
 .is_empty_object <- function(x) {
   if (is.list(x)) {
-    x <- tryCatch({
-      .compact_list(x)
-    },
-    error = function(x) {
-      x
-    }
+    x <- tryCatch(
+      {
+        .compact_list(x)
+      },
+      error = function(x) {
+        x
+      }
     )
   }
   # this is an ugly fix because of ugly tibbles
@@ -285,27 +286,28 @@
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
 
-  tryCatch({
-    if (inherits(x, c("glmmTMB", "clmm"))) {
-      is_si <- any(sapply(vals$vc, function(.x) any(abs(diag(.x)) < tolerance)))
-    } else if (inherits(x, "merMod")) {
-      theta <- lme4::getME(x, "theta")
-      diag.element <- lme4::getME(x, "lower") == 0
-      is_si <- any(abs(theta[diag.element]) < tolerance)
-    } else if (inherits(x, "MixMod")) {
-      vc <- diag(x$D)
-      is_si <- any(sapply(vc, function(.x) any(abs(.x) < tolerance)))
-    } else if (inherits(x, "lme")) {
-      is_si <- any(abs(stats::na.omit(as.numeric(diag(vals$vc))) < tolerance))
-    } else {
-      is_si <- FALSE
-    }
+  tryCatch(
+    {
+      if (inherits(x, c("glmmTMB", "clmm"))) {
+        is_si <- any(sapply(vals$vc, function(.x) any(abs(diag(.x)) < tolerance)))
+      } else if (inherits(x, "merMod")) {
+        theta <- lme4::getME(x, "theta")
+        diag.element <- lme4::getME(x, "lower") == 0
+        is_si <- any(abs(theta[diag.element]) < tolerance)
+      } else if (inherits(x, "MixMod")) {
+        vc <- diag(x$D)
+        is_si <- any(sapply(vc, function(.x) any(abs(.x) < tolerance)))
+      } else if (inherits(x, "lme")) {
+        is_si <- any(abs(stats::na.omit(as.numeric(diag(vals$vc))) < tolerance))
+      } else {
+        is_si <- FALSE
+      }
 
-    is_si
-  },
-  error = function(x) {
-    FALSE
-  }
+      is_si
+    },
+    error = function(x) {
+      FALSE
+    }
   )
 }
 
@@ -436,7 +438,9 @@
     {
       stats::family(x)
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      NULL
+    }
   )
 
   # try to set manually, if not found otherwise
@@ -445,7 +449,9 @@
       {
         x$family
       },
-      error = function(e) { NULL }
+      error = function(e) {
+        NULL
+      }
     )
   }
 

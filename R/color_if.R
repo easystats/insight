@@ -45,7 +45,6 @@
 #' # all values in Sepal.Length between 4.9 and 5.1 in green, all remaining in red
 #' x <- color_if(iris[1:10, ], columns = "Sepal.Length", predicate = p)
 #' cat(x$Sepal.Length)
-#'
 #' @export
 color_if <- function(x, columns, predicate = `>`, value = 0, color_if = "green", color_else = "red", digits = 2) {
   xnew <- x
@@ -57,10 +56,11 @@ color_if <- function(x, columns, predicate = `>`, value = 0, color_if = "green",
     values <- x[, columns]
 
     xnew[, columns] <- format(
-      if (is.numeric(values))
+      if (is.numeric(values)) {
         round(values, digits = digits)
-      else
-        values,
+      } else {
+        values
+      },
       width = nchar(columns),
       nsmall = digits,
       justify = "right"

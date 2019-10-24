@@ -44,22 +44,23 @@
       mf <- cbind(mf[[1]][, 1], mf[[1]][, 2], mf)
       colnames(mf)[1:2] <- rn_not_combined
     } else {
-      tryCatch({
-        trials.data <- as.data.frame(mf[[1]])
-        colnames(trials.data) <- rn_not_combined
+      tryCatch(
+        {
+          trials.data <- as.data.frame(mf[[1]])
+          colnames(trials.data) <- rn_not_combined
 
-        # if columns were bound via substraction, e.g.
-        # "cbind(succes, total - success)", we need to sum up success and
-        # total for the original total-column.
+          # if columns were bound via substraction, e.g.
+          # "cbind(succes, total - success)", we need to sum up success and
+          # total for the original total-column.
 
-        pattern <- sprintf("%s(\\s*)-(\\s*)%s", rn_not_combined[2], rn_not_combined[1])
-        if (grepl(pattern = pattern, x = rn)) {
-          trials.data[[2]] <- trials.data[[1]] + trials.data[[2]]
+          pattern <- sprintf("%s(\\s*)-(\\s*)%s", rn_not_combined[2], rn_not_combined[1])
+          if (grepl(pattern = pattern, x = rn)) {
+            trials.data[[2]] <- trials.data[[1]] + trials.data[[2]]
+          }
+        },
+        error = function(x) {
+          NULL
         }
-      },
-      error = function(x) {
-        NULL
-      }
       )
     }
   }
@@ -69,12 +70,13 @@
   # proper column names and bind them back to the original model frame
   if (any(mc)) {
     # try to get model data from environment
-    md <- tryCatch({
-      eval(stats::getCall(x)$data, environment(stats::formula(x)))
-    },
-    error = function(x) {
-      NULL
-    }
+    md <- tryCatch(
+      {
+        eval(stats::getCall(x)$data, environment(stats::formula(x)))
+      },
+      error = function(x) {
+        NULL
+      }
     )
 
     # if data not found in environment, reduce matrix variables into regular vectors
@@ -146,12 +148,13 @@
     }
 
     # check if we really have all formula terms in our model frame now
-    pv <- tryCatch({
-      find_predictors(x, effects = effects, flatten = TRUE)
-    },
-    error = function(x) {
-      NULL
-    }
+    pv <- tryCatch(
+      {
+        find_predictors(x, effects = effects, flatten = TRUE)
+      },
+      error = function(x) {
+        NULL
+      }
     )
 
     if (!is.null(pv) && !all(pv %in% colnames(mf))) {
@@ -169,13 +172,14 @@
 
   # keep "as is" variable for response variables in data frame
   if (colnames(mf)[1] == rn[1] && grepl("^I\\(", rn[1])) {
-    md <- tryCatch({
-      tmp <- .get_data_from_env(x)[, unique(c(rn_not_combined, cvn)), drop = FALSE]
-      tmp[, rn_not_combined, drop = FALSE]
-    },
-    error = function(x) {
-      NULL
-    }
+    md <- tryCatch(
+      {
+        tmp <- .get_data_from_env(x)[, unique(c(rn_not_combined, cvn)), drop = FALSE]
+        tmp[, rn_not_combined, drop = FALSE]
+      },
+      error = function(x) {
+        NULL
+      }
     )
 
     if (!is.null(md)) {
@@ -194,14 +198,15 @@
   # add weighting variable
   weighting_var <- find_weights(x)
   if (!is.null(weighting_var) && !weighting_var %in% colnames(mf) && length(weighting_var) == 1) {
-    mf <- tryCatch({
-      tmp <- cbind(mf, get_weights(x))
-      colnames(tmp)[ncol(tmp)] <- weighting_var
-      tmp
-    },
-    error = function(e) {
-      mf
-    }
+    mf <- tryCatch(
+      {
+        tmp <- cbind(mf, get_weights(x))
+        colnames(tmp)[ncol(tmp)] <- weighting_var
+        tmp
+      },
+      error = function(e) {
+        mf
+      }
     )
   }
 
@@ -316,17 +321,18 @@
 # has other variables than the count component.
 #
 .add_zeroinf_data <- function(x, mf, tn) {
-  tryCatch({
-    env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
-    if (.obj_has_name(x$call, "subset")) {
-      env_data <- subset(env_data, subset = eval(x$call$subset))
-    }
+  tryCatch(
+    {
+      env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
+      if (.obj_has_name(x$call, "subset")) {
+        env_data <- subset(env_data, subset = eval(x$call$subset))
+      }
 
-    .merge_dataframes(env_data, mf, replace = TRUE)
-  },
-  error = function(x) {
-    mf
-  }
+      .merge_dataframes(env_data, mf, replace = TRUE)
+    },
+    error = function(x) {
+      mf
+    }
   )
 }
 
@@ -348,12 +354,13 @@
 .return_zeroinf_data <- function(x, component) {
   model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE)
 
-  mf <- tryCatch({
-    stats::model.frame(x)
-  },
-  error = function(x) {
-    NULL
-  }
+  mf <- tryCatch(
+    {
+      stats::model.frame(x)
+    },
+    error = function(x) {
+      NULL
+    }
   )
 
   mf <- .prepare_get_data(x, mf)
@@ -390,12 +397,13 @@
 
   remain <- intersect(c(ft, find_weights(x)), cn)
 
-  mf <- tryCatch({
-    dat[, remain, drop = FALSE]
-  },
-  error = function(x) {
-    dat
-  }
+  mf <- tryCatch(
+    {
+      dat[, remain, drop = FALSE]
+    },
+    error = function(x) {
+      dat
+    }
   )
 
   .prepare_get_data(x, mf, effects)
@@ -410,22 +418,24 @@
 # and subset the data, if necessary
 .get_data_from_env <- function(x) {
   # first try, parent frame
-  dat <- tryCatch({
-    eval(x$call$data, envir = parent.frame())
-  },
-  error = function(e) {
-    NULL
-  }
-  )
-
-  if (is.null(dat)) {
-    # second try, global env
-    dat <- tryCatch({
-      eval(x$call$data, envir = globalenv())
+  dat <- tryCatch(
+    {
+      eval(x$call$data, envir = parent.frame())
     },
     error = function(e) {
       NULL
     }
+  )
+
+  if (is.null(dat)) {
+    # second try, global env
+    dat <- tryCatch(
+      {
+        eval(x$call$data, envir = globalenv())
+      },
+      error = function(e) {
+        NULL
+      }
     )
   }
 
@@ -445,22 +455,24 @@
 # and subset the data, if necessary
 .get_S4_data_from_env <- function(x) {
   # first try, parent frame
-  dat <- tryCatch({
-    eval(x@call$data, envir = parent.frame())
-  },
-  error = function(e) {
-    NULL
-  }
-  )
-
-  if (is.null(dat)) {
-    # second try, global env
-    dat <- tryCatch({
-      eval(x@call$data, envir = globalenv())
+  dat <- tryCatch(
+    {
+      eval(x@call$data, envir = parent.frame())
     },
     error = function(e) {
       NULL
     }
+  )
+
+  if (is.null(dat)) {
+    # second try, global env
+    dat <- tryCatch(
+      {
+        eval(x@call$data, envir = globalenv())
+      },
+      error = function(e) {
+        NULL
+      }
     )
   }
 
@@ -479,13 +491,14 @@
 # return data from a data frame that is in the environment,
 # and subset the data, if necessary
 .get_startvector_from_env <- function(x) {
-  tryCatch({
-    sv <- eval(parse(text = .safe_deparse(x@call))[[1]]$start)
-    if (is.list(sv)) sv <- sv[["nlpars"]]
-    names(sv)
-  },
-  error = function(e) {
-    NULL
-  }
+  tryCatch(
+    {
+      sv <- eval(parse(text = .safe_deparse(x@call))[[1]]$start)
+      if (is.list(sv)) sv <- sv[["nlpars"]]
+      names(sv)
+    },
+    error = function(e) {
+      NULL
+    }
   )
 }

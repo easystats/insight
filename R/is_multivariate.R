@@ -29,7 +29,6 @@
 #' }
 #' @export
 is_multivariate <- function(x) {
-
   if (inherits(x, "gam", which = TRUE) == 1) {
     f <- .gam_family(x)
     gam_mv <- !is.null(f) && f$family == "Multivariate normal"
