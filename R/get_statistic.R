@@ -38,12 +38,13 @@ get_statistic.default <- function(x, column_index = 3, ...) {
   cs <- stats::coef(summary(x))
 
   out <- data.frame(
-    Parameter = gsub("`", "", rownames(cs), fixed = TRUE),
+    Parameter = rownames(cs),
     Statistic = as.vector(cs[, column_index]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
 
+  out <- .fix_parameter_names(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -296,12 +297,13 @@ get_statistic.vglm <- function(x, ...) {
   cs <- VGAM::coef(VGAM::summary(x))
 
   out <- data.frame(
-    Parameter = gsub("`", "", rownames(cs), fixed = TRUE),
+    Parameter = rownames(cs),
     Statistic = as.vector(cs[, 3]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
 
+  out <- .fix_parameter_names(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }

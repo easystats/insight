@@ -624,7 +624,7 @@ get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
   fixed <- data.frame(
     Parameter = c(
       names(l$conditional),
-      names(l$nonlinear), fixed = TRUE)
+      names(l$nonlinear)
     ),
     Estimate = c(unname(l$conditional), unname(l$nonlinear)),
     Component = c(
