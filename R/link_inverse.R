@@ -38,12 +38,13 @@ link_inverse.default <- function(x, ...) {
   if (inherits(x, "Zelig-relogit")) {
     stats::make.link(link = "logit")$linkinv
   } else {
-    tryCatch({
-      stats::family(x)$linkinv
-    },
-    error = function(x) {
-      NULL
-    }
+    tryCatch(
+      {
+        stats::family(x)$linkinv
+      },
+      error = function(x) {
+        NULL
+      }
     )
   }
 }
@@ -51,21 +52,23 @@ link_inverse.default <- function(x, ...) {
 
 #' @export
 link_inverse.gam <- function(x, ...) {
-  li <- tryCatch({
-    .gam_family(x)$linkinv
-  },
-  error = function(x) {
-    NULL
-  }
+  li <- tryCatch(
+    {
+      .gam_family(x)$linkinv
+    },
+    error = function(x) {
+      NULL
+    }
   )
 
   if (is.null(li)) {
     mi <- .gam_family(x)
     if (.obj_has_name(mi, "linfo")) {
-      if (.obj_has_name(mi$linfo, "linkinv"))
+      if (.obj_has_name(mi$linfo, "linkinv")) {
         li <- mi$linfo$linkinv
-      else
+      } else {
         li <- mi$linfo[[1]]$linkinv
+      }
     }
   }
 
@@ -75,12 +78,13 @@ link_inverse.gam <- function(x, ...) {
 
 #' @export
 link_inverse.glm <- function(x, ...) {
-  tryCatch({
-    stats::family(x)$linkinv
-  },
-  error = function(x) {
-    NULL
-  }
+  tryCatch(
+    {
+      stats::family(x)$linkinv
+    },
+    error = function(x) {
+      NULL
+    }
   )
 }
 
@@ -123,12 +127,13 @@ link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
 #' @export
 link_inverse.bamlss <- function(x, ...) {
   flink <- stats::family(x)$links[1]
-  tryCatch({
-    stats::make.link(flink)$linkinv
-  },
-  error = function(e) {
-    print_colour("\nCould not find appropriate link-inverse-function.\n", "red")
-  }
+  tryCatch(
+    {
+      stats::make.link(flink)$linkinv
+    },
+    error = function(e) {
+      print_colour("\nCould not find appropriate link-inverse-function.\n", "red")
+    }
   )
 }
 

@@ -22,23 +22,9 @@ get_weights <- function(x, ...) {
 #' @export
 get_weights.default <- function(x, ...) {
   w <- NULL
-  tryCatch({
-    w <- stats::weights(x)
-  },
-  error = function(x) {
-    NULL
-  },
-  warning = function(x) {
-    NULL
-  },
-  finally = function(x) {
-    NULL
-  }
-  )
-
-  if (is.null(w)) {
-    tryCatch({
-      w <- stats::model.frame(x)[["(weights)"]]
+  tryCatch(
+    {
+      w <- stats::weights(x)
     },
     error = function(x) {
       NULL
@@ -49,22 +35,39 @@ get_weights.default <- function(x, ...) {
     finally = function(x) {
       NULL
     }
+  )
+
+  if (is.null(w)) {
+    tryCatch(
+      {
+        w <- stats::model.frame(x)[["(weights)"]]
+      },
+      error = function(x) {
+        NULL
+      },
+      warning = function(x) {
+        NULL
+      },
+      finally = function(x) {
+        NULL
+      }
     )
   }
 
   if (is.null(w)) {
-    tryCatch({
-      w <- .get_data_from_env(x)[[find_weights(x)]]
-    },
-    error = function(x) {
-      NULL
-    },
-    warning = function(x) {
-      NULL
-    },
-    finally = function(x) {
-      NULL
-    }
+    tryCatch(
+      {
+        w <- .get_data_from_env(x)[[find_weights(x)]]
+      },
+      error = function(x) {
+        NULL
+      },
+      warning = function(x) {
+        NULL
+      },
+      finally = function(x) {
+        NULL
+      }
     )
   }
 

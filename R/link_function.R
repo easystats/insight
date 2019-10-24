@@ -34,25 +34,26 @@ link_function.default <- function(x, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
-  tryCatch({
-    # get model family
-    ff <- .gam_family(x)
+  tryCatch(
+    {
+      # get model family
+      ff <- .gam_family(x)
 
-    # return link function, if exists
-    if ("linkfun" %in% names(ff)) {
-      return(ff$linkfun)
+      # return link function, if exists
+      if ("linkfun" %in% names(ff)) {
+        return(ff$linkfun)
+      }
+
+      # else, create link function from link-string
+      if ("link" %in% names(ff)) {
+        return(match.fun(ff$link))
+      }
+
+      NULL
+    },
+    error = function(x) {
+      NULL
     }
-
-    # else, create link function from link-string
-    if ("link" %in% names(ff)) {
-      return(match.fun(ff$link))
-    }
-
-    NULL
-  },
-  error = function(x) {
-    NULL
-  }
   )
 }
 
@@ -60,34 +61,36 @@ link_function.default <- function(x, ...) {
 
 #' @export
 link_function.gam <- function(x, ...) {
-  lf <-   tryCatch({
-    # get model family
-    ff <- .gam_family(x)
+  lf <- tryCatch(
+    {
+      # get model family
+      ff <- .gam_family(x)
 
-    # return link function, if exists
-    if ("linkfun" %in% names(ff)) {
-      return(ff$linkfun)
+      # return link function, if exists
+      if ("linkfun" %in% names(ff)) {
+        return(ff$linkfun)
+      }
+
+      # else, create link function from link-string
+      if ("link" %in% names(ff)) {
+        return(match.fun(ff$link))
+      }
+
+      NULL
+    },
+    error = function(x) {
+      NULL
     }
-
-    # else, create link function from link-string
-    if ("link" %in% names(ff)) {
-      return(match.fun(ff$link))
-    }
-
-    NULL
-  },
-  error = function(x) {
-    NULL
-  }
   )
 
   if (is.null(lf)) {
     mi <- .gam_family(x)
     if (.obj_has_name(mi, "linfo")) {
-      if (.obj_has_name(mi$linfo, "linkfun"))
+      if (.obj_has_name(mi$linfo, "linkfun")) {
         lf <- mi$linfo$linkfun
-      else
+      } else {
         lf <- mi$linfo[[1]]$linkfun
+      }
     }
   }
 
@@ -184,12 +187,13 @@ link_function.clm2 <- function(x, ...) {
 #' @export
 link_function.bamlss <- function(x, ...) {
   flink <- stats::family(x)$links[1]
-  tryCatch({
-    stats::make.link(flink)$linkfun
-  },
-  error = function(e) {
-    print_colour("\nCould not find appropriate link-function.\n", "red")
-  }
+  tryCatch(
+    {
+      stats::make.link(flink)$linkfun
+    },
+    error = function(e) {
+      print_colour("\nCould not find appropriate link-function.\n", "red")
+    }
   )
 }
 

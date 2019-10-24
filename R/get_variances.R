@@ -127,10 +127,14 @@ get_variance.default <- function(x, component = c("all", "fixed", "random", "res
 #' @export
 get_variance.merMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   component <- match.arg(component)
-  tryCatch({
-    .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
-  },
-  error = function(e) { NULL })
+  tryCatch(
+    {
+      .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
+    },
+    error = function(e) {
+      NULL
+    }
+  )
 }
 
 

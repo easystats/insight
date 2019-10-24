@@ -86,16 +86,17 @@ model_info.default <- function(x, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
-  faminfo <- tryCatch({
-    if (inherits(x, c("Zelig-relogit"))) {
-      stats::binomial(link = "logit")
-    } else {
-      stats::family(x)
+  faminfo <- tryCatch(
+    {
+      if (inherits(x, c("Zelig-relogit"))) {
+        stats::binomial(link = "logit")
+      } else {
+        stats::family(x)
+      }
+    },
+    error = function(x) {
+      NULL
     }
-  },
-  error = function(x) {
-    NULL
-  }
   )
 
   if (!is.null(faminfo)) {
@@ -877,15 +878,15 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
 
   beta_fam <-
     inherits(x, "betareg") |
-    fitfam %in% c(
-      "beta",
-      "Beta",
-      "betabinomial",
-      "Beta Inflated",
-      "Zero Inflated Beta",
-      "Beta Inflated zero",
-      "Beta Inflated one"
-    )
+      fitfam %in% c(
+        "beta",
+        "Beta",
+        "betabinomial",
+        "Beta Inflated",
+        "Zero Inflated Beta",
+        "Beta Inflated zero",
+        "Beta Inflated one"
+      )
 
   betabin_fam <- inherits(x, "BBreg") | fitfam %in% "betabinomial"
 
@@ -919,9 +920,11 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
 
   is.categorical <- fitfam == "categorical"
 
-  is.bayes <- inherits(x, c("brmsfit", "stanfit", "MCMCglmm", "stanreg",
-                            "stanmvreg", "bmerMod", "BFBayesFactor", "bamlss",
-                            "bayesx"))
+  is.bayes <- inherits(x, c(
+    "brmsfit", "stanfit", "MCMCglmm", "stanreg",
+    "stanmvreg", "bmerMod", "BFBayesFactor", "bamlss",
+    "bayesx"
+  ))
 
   is.survival <- inherits(x, c("survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph", "coxme"))
 
@@ -933,12 +936,13 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
   is.truncated <- FALSE
 
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {
-    rv <- tryCatch({
-      .safe_deparse(stats::formula(x)$formula[[2L]])
-    },
-    error = function(x) {
-      NULL
-    }
+    rv <- tryCatch(
+      {
+        .safe_deparse(stats::formula(x)$formula[[2L]])
+      },
+      error = function(x) {
+        NULL
+      }
     )
 
     if (!is.null(rv)) {
@@ -949,13 +953,14 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
   }
 
   if (binom_fam && !inherits(x, "brmsfit")) {
-    is.trial <- tryCatch({
-      rv <- .safe_deparse(stats::formula(x)[[2L]])
-      grepl("cbind\\((.*)\\)", rv)
-    },
-    error = function(x) {
-      FALSE
-    }
+    is.trial <- tryCatch(
+      {
+        rv <- .safe_deparse(stats::formula(x)[[2L]])
+        grepl("cbind\\((.*)\\)", rv)
+      },
+      error = function(x) {
+        FALSE
+      }
     )
   }
 
@@ -964,12 +969,13 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
   if (.obj_has_name(dots, "no_terms") && isTRUE(dots$no_terms)) {
     model_terms <- NULL
   } else {
-    model_terms <- tryCatch({
-      find_variables(x, effects = "all", component = "all", flatten = FALSE)
-    },
-    error = function(x) {
-      NULL
-    }
+    model_terms <- tryCatch(
+      {
+        find_variables(x, effects = "all", component = "all", flatten = FALSE)
+      },
+      error = function(x) {
+        NULL
+      }
     )
   }
 
@@ -1052,10 +1058,11 @@ get_ordinal_link <- function(x) {
 #' @importFrom stats gaussian binomial Gamma
 .make_tobit_family <- function(x, dist = NULL) {
   if (is.null(dist)) {
-    if (inherits(x, "flexsurvreg"))
+    if (inherits(x, "flexsurvreg")) {
       dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
-    else
+    } else {
       dist <- x$dist
+    }
   }
   f <- switch(
     dist,

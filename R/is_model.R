@@ -135,6 +135,7 @@ is_model <- function(x) {
       "rms",
       "rq",
       "rqss",
+      "slm",
       "speedlm",
       "speedglm",
       "stanmvreg",

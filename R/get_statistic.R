@@ -318,10 +318,11 @@ get_statistic.vglm <- function(x, ...) {
 get_statistic.wbm <- function(x, ...) {
   s <- summary(x)
 
-  statistic_column <- if ("t val." %in% colnames(s$within_table))
+  statistic_column <- if ("t val." %in% colnames(s$within_table)) {
     "t val."
-  else
+  } else {
     "z val."
+  }
 
   stat <- c(
     s$within_table[, statistic_column],

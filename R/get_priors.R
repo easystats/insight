@@ -152,7 +152,8 @@ get_priors.blavaan <- function(x, ...) {
   }
 
   PE <- lavaan::parameterEstimates(
-    x, se = FALSE, ci = FALSE, remove.eq = FALSE, remove.system.eq = TRUE,
+    x,
+    se = FALSE, ci = FALSE, remove.eq = FALSE, remove.system.eq = TRUE,
     remove.ineq = FALSE, remove.def = FALSE, add.attributes = TRUE
   )
 
