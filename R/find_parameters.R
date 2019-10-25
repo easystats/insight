@@ -56,7 +56,8 @@ find_parameters.default <- function(x, flatten = FALSE, ...) {
   } else {
     pars <- tryCatch(
       {
-        list(conditional = names(stats::coef(x)))
+        p <- .remove_backticks_from_string(names(stats::coef(x)))
+        list(conditional = p)
       },
       error = function(x) {
         NULL
@@ -139,7 +140,8 @@ find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.flexsurvreg <- function(x, flatten = FALSE, ...) {
-  pars <- list(conditional = names(stats::coef(x)))
+  p <- names(stats::coef(x))
+  pars <- list(conditional = .remove_backticks_from_string(p))
 
   if (flatten) {
     unique(unlist(pars))
@@ -161,7 +163,7 @@ find_parameters.mlm <- function(x, flatten = FALSE, ...) {
   cs <- stats::coef(summary(x))
 
   out <- lapply(cs, function(i) {
-    list(conditional = rownames(i))
+    list(conditional = .remove_backticks_from_string(rownames(i)))
   })
 
   names(out) <- gsub("^Response (.*)", "\\1", names(cs))
@@ -178,6 +180,7 @@ find_parameters.mlm <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.polr <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = c(sprintf("Intercept: %s", names(x$zeta)), names(stats::coef(x))))
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -192,7 +195,7 @@ find_parameters.polr <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
   pars <- lapply(x$parameters, function(i) {
-    names(stats::na.omit(stats::coef(x, what = i)))
+    .remove_backticks_from_string(names(stats::na.omit(stats::coef(x, what = i))))
   })
 
   names(pars) <- x$parameters
@@ -212,6 +215,8 @@ find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
   st <- summary(x)$s.table
 
   pars$conditional <- pars$conditional[.grep_non_smoothers(pars$conditional)]
@@ -235,6 +240,7 @@ find_parameters.gam <- function(x, component = c("all", "conditional", "smooth_t
 find_parameters.gbm <- function(x, flatten = FALSE, ...) {
   s <- summary(x, plotit = FALSE)
   pars <- list(conditional = as.character(s$var))
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -248,6 +254,7 @@ find_parameters.gbm <- function(x, flatten = FALSE, ...) {
 find_parameters.clmm2 <- function(x, flatten = FALSE, ...) {
   s <- summary(x)
   pars <- list(conditional = as.character(rownames(s$coefficients)))
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -268,6 +275,8 @@ find_parameters.multinom <- function(x, flatten = FALSE, ...) {
     list(conditional = names(params))
   }
 
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
   if (flatten) {
     unique(unlist(pars))
   } else {
@@ -284,6 +293,8 @@ find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_t
     conditional = pars[.grep_non_smoothers(pars)],
     smooth_terms = pars[.grep_smoothers(pars)]
   ))
+
+  l <- lapply(l, .remove_backticks_from_string)
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
@@ -306,6 +317,8 @@ find_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_
     smooth_terms = pars[.grep_smoothers(pars)]
   ))
 
+  l <- lapply(l, .remove_backticks_from_string)
+
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
   l <- .compact_list(l[elements])
@@ -321,6 +334,7 @@ find_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_
 #' @export
 find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = rownames(stats::coef(x)))
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -336,6 +350,8 @@ find_parameters.BBmm <- function(x, effects = c("all", "fixed", "random"), flatt
     conditional = rownames(x$fixed.coef),
     random = x$namesRand
   ))
+
+  l <- lapply(l, .remove_backticks_from_string)
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
@@ -356,6 +372,8 @@ find_parameters.glimML <- function(x, effects = c("all", "fixed", "random"), fla
     random = names(x@random.param)
   ))
 
+  l <- lapply(l, .remove_backticks_from_string)
+
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
   l <- .compact_list(l[elements])
@@ -370,11 +388,13 @@ find_parameters.glimML <- function(x, effects = c("all", "fixed", "random"), fla
 
 #' @export
 find_parameters.lrm <- function(x, flatten = FALSE, ...) {
-  l <- list(conditional = names(stats::coef(x)))
+  pars <- list(conditional = names(stats::coef(x)))
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(pars))
   } else {
-    l
+    pars
   }
 }
 
@@ -399,6 +419,8 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
   # merge "intercept" and "block" into conditional
   # while "Within" becomes "random"
   l <- list(unname(unlist(l[c(1, 2)])), l[[3]])
+  l <- lapply(l, .remove_backticks_from_string)
+
   names(l) <- c("conditional", "random")
 
   if (flatten) {
@@ -434,6 +456,8 @@ find_parameters.MixMod <- function(x, effects = c("all", "fixed", "random"), com
     zero_inflated_random = z_inflated_random
   ))
 
+  l <- lapply(l, .remove_backticks_from_string)
+
   effects <- match.arg(effects)
   component <- match.arg(component)
   elements <- .get_elements(effects = effects, component = component)
@@ -461,6 +485,8 @@ find_parameters.nlmerMod <- function(x, effects = c("all", "fixed", "random"), f
     random = lapply(lme4::ranef(x), colnames)
   ))
 
+  l <- lapply(l, .remove_backticks_from_string)
+
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
   l <- .compact_list(l[elements])
@@ -485,6 +511,8 @@ find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), fla
     random = lapply(lme4::ranef(x), colnames)
   ))
 
+  l <- lapply(l, .remove_backticks_from_string)
+
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
   l <- .compact_list(l[elements])
@@ -507,6 +535,8 @@ find_parameters.rlmerMod <- function(x, effects = c("all", "fixed", "random"), f
     conditional = names(lme4::fixef(x)),
     random = lapply(lme4::ranef(x), colnames)
   ))
+
+  l <- lapply(l, .remove_backticks_from_string)
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
@@ -531,6 +561,8 @@ find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flat
     random = lapply(lme4::ranef(x$full_model), colnames)
   ))
 
+  l <- lapply(l, .remove_backticks_from_string)
+
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
   l <- .compact_list(l[elements])
@@ -554,6 +586,8 @@ find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flat
     conditional = names(lme4::fixef(x)),
     random = names(lme4::ranef(x))
   ))
+
+  l <- lapply(l, .remove_backticks_from_string)
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
@@ -585,6 +619,8 @@ find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatte
     random = rn
   ))
 
+  l <- lapply(l, .remove_backticks_from_string)
+
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
   l <- .compact_list(l[elements])
@@ -604,6 +640,8 @@ find_parameters.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), f
     conditional = rownames(sc$solutions),
     random = rownames(sc$Gcovariances)
   ))
+
+  l <- lapply(l, .remove_backticks_from_string)
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")

@@ -137,12 +137,12 @@ if (require("testthat") &&
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(conditional = c("x", "x2", "`Q(fit)`", "`W(fit)`"))
+      list(conditional = c("x", "x2", "Q(fit)", "W(fit)"))
     )
     expect_equal(nrow(get_parameters(m1)), 4)
     expect_equal(
       get_parameters(m1)$Parameter,
-      c("x", "x2", "`Q(fit)`", "`W(fit)`")
+      c("x", "x2", "Q(fit)", "W(fit)")
     )
   })
 
