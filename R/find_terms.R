@@ -73,7 +73,7 @@ find_terms <- function(x, flatten = FALSE, ...) {
     if (any(nchar(f_parts) == 0)) {
       f_parts <- f_parts[-which(nchar(f_parts) == 0)]
     }
-    unique(f_parts)
+    .remove_backticks_from_string(unique(f_parts))
   })
 
 
