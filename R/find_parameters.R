@@ -395,7 +395,28 @@ find_parameters.rlmerMod <- find_parameters.merMod
 
 
 #' @export
-find_parameters.coxme <- find_parameters.merMod
+find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package 'lme4' required for this function to work. Please install it.")
+  }
+
+  l <- .compact_list(list(
+    conditional = names(lme4::fixef(x)),
+    random = names(lme4::ranef(x))
+  ))
+
+  l <- lapply(l, .remove_backticks_from_string)
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  l <- .compact_list(l[elements])
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
 
 
 
