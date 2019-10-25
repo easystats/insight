@@ -73,7 +73,5 @@ if (require("testthat") && require("insight")) {
     expect_equal(find_response(m), "Sepal Width")
 
     expect_equal(get_response(m), iris[["Sepal Width"]])
-
-
   })
 }
