@@ -44,7 +44,7 @@ get_statistic.default <- function(x, column_index = 3, ...) {
     row.names = NULL
   )
 
-  out <- .fix_parameter_names(out)
+  out <- .remove_backticks_from_parameter_names(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -303,7 +303,7 @@ get_statistic.vglm <- function(x, ...) {
     row.names = NULL
   )
 
-  out <- .fix_parameter_names(out)
+  out <- .remove_backticks_from_parameter_names(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }

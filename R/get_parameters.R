@@ -58,7 +58,7 @@ get_parameters.default <- function(x, ...) {
       row.names = NULL
     )
 
-    .fix_parameter_names(params)
+    .remove_backticks_from_parameter_names(params)
   },
   error = function(x) {
     print_color(sprintf("Parameters can't be retrieved for objects of class '%s'.\n", class(x)[1]), "red")
@@ -72,12 +72,14 @@ get_parameters.default <- function(x, ...) {
 #' @export
 get_parameters.flexsurvreg <- function(x, ...) {
   cf <- stats::coef(x)
-  data.frame(
+  params <- data.frame(
     Parameter = names(cf),
     Estimate = unname(cf),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  .remove_backticks_from_parameter_names(params)
 }
 
 
@@ -87,14 +89,15 @@ get_parameters.mlm <- function(x, ...) {
   cs <- stats::coef(summary(x))
 
   out <- lapply(names(cs), function(i) {
-    params <- cs[[i]]
-    data.frame(
-      Parameter = rownames(params),
-      Estimate = params[, 1],
+    params <- data.frame(
+      Parameter = rownames(cs[[i]]),
+      Estimate = cs[[i]][, 1],
       Response = gsub("^Response (.*)", "\\1", i),
       stringsAsFactors = FALSE,
       row.names = NULL
     )
+
+    .remove_backticks_from_parameter_names(params)
   })
 
   do.call(rbind, out)
@@ -137,12 +140,14 @@ get_parameters.lavaan <- function(x, ...) {
   params$comp[params$op == "~~"] <- "residual"
   params$comp[params$op == "~1"] <- "intercept"
 
-  data.frame(
+  params <- data.frame(
     Parameter = params$parameter,
     Estimate = params$est,
     Component = params$comp,
     stringsAsFactors = FALSE
   )
+
+  .remove_backticks_from_parameter_names(params)
 }
 
 
@@ -150,12 +155,15 @@ get_parameters.lavaan <- function(x, ...) {
 #' @export
 get_parameters.polr <- function(x, ...) {
   pars <- c(sprintf("Intercept: %s", names(x$zeta)), names(x$coefficients))
-  data.frame(
+
+  params <- data.frame(
     Parameter = pars,
     Estimate = c(unname(x$zeta), unname(x$coefficients)),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  .remove_backticks_from_parameter_names(params)
 }
 
 
@@ -163,12 +171,15 @@ get_parameters.polr <- function(x, ...) {
 #' @export
 get_parameters.gbm <- function(x, ...) {
   s <- summary(x, plotit = FALSE)
-  data.frame(
+
+  params <- data.frame(
     Parameter = as.character(s$var),
     Estimate = s$rel.inf,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  .remove_backticks_from_parameter_names(params)
 }
 
 
@@ -176,12 +187,15 @@ get_parameters.gbm <- function(x, ...) {
 #' @export
 get_parameters.BBreg <- function(x, ...) {
   pars <- summary(x)$coefficients
-  data.frame(
+
+  params <- data.frame(
     Parameter = rownames(pars),
     Estimate = pars[, "Estimate"],
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  .remove_backticks_from_parameter_names(params)
 }
 
 
@@ -204,7 +218,7 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    fixed
+    .remove_backticks_from_parameter_names(fixed)
   } else {
     l$random
   }
@@ -254,12 +268,16 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
     row.names = NULL
   )
 
+  fixed <- .remove_backticks_from_parameter_names(fixed)
+
   random <- data.frame(
     Parameter = names(l$random),
     Estimate = l$random,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  random <- .remove_backticks_from_parameter_names(random)
 
   all <- rbind(
     cbind(fixed, data.frame(Effects = "fixed", stringsAsFactors = FALSE)),
@@ -287,15 +305,17 @@ get_parameters.gamlss <- function(x, ...) {
   if ("mu" %in% names(pars)) names(pars)[1] <- "conditional"
 
   do.call(rbind, lapply(names(pars), function(i) {
-    data.frame(
+    params <- data.frame(
       Parameter = names(pars[[i]]),
       Estimate = pars[[i]],
       Component = i,
       stringsAsFactors = FALSE,
       row.names = NULL
     )
+
+    .remove_backticks_from_parameter_names(params)
   }))
-  #
+
   # data.frame(
   #   Parameter = c(names(pars$conditional), names(pars$sigma), names(pars$nu), names(pars$tau)),
   #   Estimate = c(unname(pars$conditional), unname(pars$sigma), unname(pars$nu), unname(pars$tau)),
@@ -316,12 +336,15 @@ get_parameters.gamlss <- function(x, ...) {
 get_parameters.lrm <- function(x, ...) {
   tryCatch({
     cf <- stats::coef(x)
-    data.frame(
+
+    params <- data.frame(
       Parameter = names(cf),
       Estimate = unname(cf),
       stringsAsFactors = FALSE,
       row.names = NULL
     )
+
+    .remove_backticks_from_parameter_names(params)
   },
   error = function(x) {
     NULL
@@ -334,12 +357,15 @@ get_parameters.lrm <- function(x, ...) {
 #' @export
 get_parameters.aov <- function(x, ...) {
   cf <- stats::coef(x)
-  data.frame(
+
+  params <- data.frame(
     Parameter = names(cf),
     Estimate = unname(cf),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  .remove_backticks_from_parameter_names(params)
 }
 
 
@@ -388,12 +414,15 @@ get_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_t
 #' @export
 get_parameters.crq <- function(x, ...) {
   sc <- summary(x)
-  data.frame(
+
+  params <- data.frame(
     Parameter = names(sc$coefficients[, 1]),
     Estimate = unname(sc$coefficients[, 1]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  .remove_backticks_from_parameter_names(params)
 }
 
 
@@ -464,11 +493,12 @@ get_parameters.aovlist <- function(x, effects = c("fixed", "random", "all"), ...
   effects <- match.arg(effects)
 
   l <- lapply(stats::coef(x), function(i) {
-    data.frame(
+    params <- data.frame(
       Parameter = names(i),
       Estimate = unname(i),
       stringsAsFactors = FALSE
     )
+    .remove_backticks_from_parameter_names(params)
   })
 
   l <- list(rbind(l[[1]], l[[2]]), l[[3]])
@@ -519,11 +549,15 @@ get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), ..
     stringsAsFactors = FALSE
   )
 
+  fixed <- .remove_backticks_from_parameter_names(fixed)
+
   random <- data.frame(
     Parameter = names(l$random),
     Estimate = unname(l$random),
     stringsAsFactors = FALSE
   )
+
+  random <- .remove_backticks_from_parameter_names(random)
 
   all <- rbind(
     cbind(fixed, data.frame(Effects = "fixed", stringsAsFactors = FALSE)),
@@ -562,7 +596,7 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    fixed
+    .remove_backticks_from_parameter_names(fixed)
   } else {
     l$random
   }
@@ -589,12 +623,14 @@ get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
       data.frame(params = s$ints_table, component = "interactions", stringsAsFactors = FALSE)
     )
 
-    data.frame(
+    out <- data.frame(
       Parameter = terms,
       Estimate = params[[1]],
       Component = params[["component"]],
       stringsAsFactors = FALSE
     )
+
+    .remove_backticks_from_parameter_names(out)
   } else {
     if (!requireNamespace("lme4", quietly = TRUE)) {
       stop("To use this function, please install package 'lme4'.")
@@ -635,7 +671,7 @@ get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    fixed
+    .remove_backticks_from_parameter_names(fixed)
   } else {
     l$random
   }
@@ -664,7 +700,7 @@ get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    fixed
+    .remove_backticks_from_parameter_names(fixed)
   } else {
     l$random
   }
@@ -693,7 +729,7 @@ get_parameters.rlmerMod <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    fixed
+    .remove_backticks_from_parameter_names(fixed)
   } else {
     l$random
   }
@@ -722,7 +758,7 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    fixed
+    .remove_backticks_from_parameter_names(fixed)
   } else {
     l$random
   }
@@ -751,7 +787,7 @@ get_parameters.lme <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    fixed
+    .remove_backticks_from_parameter_names(fixed)
   } else {
     l$random
   }
@@ -816,13 +852,14 @@ get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component =
   }
 
   if (effects == "fixed") {
-    switch(
+    params <- switch(
       component,
       all = rbind(fixed, fixedzi),
       conditional = fixed,
       zi = ,
       zero_inflated = fixedzi
     )
+    .remove_backticks_from_parameter_names(params)
   } else if (effects == "random") {
     switch(
       component,
@@ -873,13 +910,14 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
   }
 
   if (effects == "fixed") {
-    switch(
+    out <- switch(
       component,
       all = rbind(fixed, fixedzi),
       conditional = fixed,
       zi = ,
       zero_inflated = fixedzi
     )
+    .remove_backticks_from_parameter_names(out)
   } else if (effects == "random") {
     switch(
       component,
@@ -919,7 +957,7 @@ get_parameters.multinom <- function(x, ...) {
     )
   }
 
-  out
+  .remove_backticks_from_parameter_names(out)
 }
 
 
@@ -1072,14 +1110,14 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
     pars <- .remove_column(pars, "Component")
   }
 
-  .fix_parameter_names(pars)
+  .remove_backticks_from_parameter_names(pars)
 }
 
 
 
 .return_smooth_parms <- function(conditional, smooth_terms, component) {
   cond <- data.frame(
-    Parameter = gsub("`", "", names(conditional), fixed = TRUE),
+    Parameter = names(conditional),
     Estimate = conditional,
     Component = "conditional",
     stringsAsFactors = FALSE,
@@ -1087,7 +1125,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
   )
 
   smooth <- data.frame(
-    Parameter = gsub("`", "", names(smooth_terms), fixed = TRUE),
+    Parameter = names(smooth_terms),
     Estimate = smooth_terms,
     Component = "smooth_terms",
     stringsAsFactors = FALSE,
@@ -1105,7 +1143,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
     pars <- .remove_column(pars, "Component")
   }
 
-  pars
+  .remove_backticks_from_parameter_names(pars)
 }
 
 
@@ -1145,7 +1183,9 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
 }
 
 
-.fix_parameter_names <- function(x) {
-  x$Parameter <- gsub("`", "", x$Parameter, fixed = TRUE)
+.remove_backticks_from_parameter_names <- function(x) {
+  if (is.data.frame(x) && "Parameter" %in% colnames(x)) {
+    x$Parameter <- gsub("`", "", x$Parameter, fixed = TRUE)
+  }
   x
 }
