@@ -98,7 +98,7 @@ clean_parameters.default <- function(x, ...) {
     }
   })
 
-  out <- do.call(rbind, l)
+  out <- .remove_backticks_from_parameter_names(do.call(rbind, l))
   out <- .remove_empty_columns_from_pars(out)
   .fix_random_effect_smooth(x, out)
 }
