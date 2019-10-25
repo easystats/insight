@@ -65,7 +65,7 @@ get_statistic.mlm <- function(x, ...) {
     )
   })
 
-  out <- do.call(rbind, out)
+  out <- .remove_backticks_from_parameter_names(do.call(rbind, out))
   attr(out, "statistic") <- find_statistic(x)
 
   out
@@ -144,6 +144,7 @@ get_statistic.glmmTMB <- function(x, component = c("all", "conditional", "zi", "
   stat$Component <- .rename_values(stat$Component, "zi", "zero_inflated")
 
   stat <- .filter_component(stat, component)
+  stat <- .remove_backticks_from_parameter_names(stat)
   attr(stat, "statistic") <- find_statistic(x)
 
   stat
@@ -171,6 +172,7 @@ get_statistic.zeroinfl <- function(x, component = c("all", "conditional", "zi", 
   stat$Component <- .rename_values(stat$Component, "zi", "zero_inflated")
 
   stat <- .filter_component(stat, component)
+  stat <- .remove_backticks_from_parameter_names(stat)
   attr(stat, "statistic") <- find_statistic(x)
 
   stat
@@ -190,6 +192,7 @@ get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "z
   cs <- list(s$coef_table, s$coef_table_zi)
   names(cs) <- c("conditional", "zero_inflated")
   cs <- .compact_list(cs)
+
   out <- lapply(names(cs), function(i) {
     data.frame(
       Parameter = find_parameters(x, effects = "fixed", component = i, flatten = TRUE),
@@ -200,8 +203,8 @@ get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "z
     )
   })
 
-  stat <- do.call(rbind, out)
-  .filter_component(stat, component)
+  stat <- .filter_component(do.call(rbind, out), component)
+  stat <- .remove_backticks_from_parameter_names(stat)
   attr(stat, "statistic") <- find_statistic(x)
 
   stat
@@ -227,6 +230,7 @@ get_statistic.Gam <- function(x, ...) {
     row.names = NULL
   )
 
+  out <- .remove_backticks_from_parameter_names(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -245,6 +249,7 @@ get_statistic.gam <- function(x, ...) {
     row.names = NULL
   )
 
+  out <- .remove_backticks_from_parameter_names(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -331,6 +336,7 @@ get_statistic.wbm <- function(x, ...) {
     s$between_table[, statistic_column],
     s$ints_table[, statistic_column]
   )
+
   params <- get_parameters(x)
 
   out <- data.frame(
@@ -558,6 +564,7 @@ get_statistic.coxme <- function(x, ...) {
       row.names = NULL
     )
 
+    out <- .remove_backticks_from_parameter_names(out)
     attr(out, "statistic") <- find_statistic(x)
   }
 
@@ -570,6 +577,7 @@ get_statistic.coxme <- function(x, ...) {
 get_statistic.survreg <- function(x, ...) {
   parms <- get_parameters(x)
   s <- summary(x)
+
   out <- data.frame(
     Parameter = parms$Parameter,
     Statistic = s$table[, 3],
