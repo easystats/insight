@@ -41,7 +41,7 @@ get_varcov.default <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -67,7 +67,7 @@ get_varcov.betareg <- function(x, component = c("conditional", "precision", "all
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -85,7 +85,7 @@ get_varcov.truncreg <- function(x, component = c("conditional", "all"), ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -104,7 +104,7 @@ get_varcov.gamlss <- function(x, component = c("conditional", "all"), ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -132,7 +132,7 @@ get_varcov.hurdle <- function(x, component = c("conditional", "zero_inflated", "
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 #' @export
@@ -165,7 +165,7 @@ get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -186,7 +186,7 @@ get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", 
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -210,7 +210,7 @@ get_varcov.brmsfit <- function(x, component = c("conditional", "zero_inflated", 
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -230,7 +230,7 @@ get_varcov.rq <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -250,7 +250,7 @@ get_varcov.flexsurvreg <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -262,7 +262,7 @@ get_varcov.mixed <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -274,7 +274,7 @@ get_varcov.gamm <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -287,7 +287,7 @@ get_varcov.list <- function(x, ...) {
       vc <- .fix_negative_matrix(vc)
     }
 
-    as.matrix(vc)
+    .remove_backticks_from_matrix_names(as.matrix(vc))
   }
 }
 
@@ -300,7 +300,7 @@ get_varcov.BBmm <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -312,7 +312,7 @@ get_varcov.BBreg <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -324,7 +324,7 @@ get_varcov.feis <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -339,7 +339,7 @@ get_varcov.glimML <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -354,7 +354,7 @@ get_varcov.vglm <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -370,7 +370,7 @@ get_varcov.geeglm <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -383,7 +383,7 @@ get_varcov.tobit <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -395,7 +395,7 @@ get_varcov.lmRob <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 
@@ -412,7 +412,7 @@ get_varcov.gee <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  as.matrix(vc)
+  .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
 

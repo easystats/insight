@@ -494,9 +494,19 @@
   x
 }
 
+
 .remove_backticks_from_string <- function(x) {
   if (is.character(x)) {
     x <- gsub("`", "", x, fixed = TRUE)
+  }
+  x
+}
+
+
+.remove_backticks_from_matrix_names <- function(x) {
+  if (is.matrix(x)) {
+    colnames(x) <- gsub("`", "", colnames(x), fixed = TRUE)
+    rownames(x) <- gsub("`", "", colnames(x), fixed = TRUE)
   }
   x
 }
