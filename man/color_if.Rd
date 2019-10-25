@@ -65,5 +65,4 @@ p <- function(x, y) {
 # all values in Sepal.Length between 4.9 and 5.1 in green, all remaining in red
 x <- color_if(iris[1:10, ], columns = "Sepal.Length", predicate = p)
 cat(x$Sepal.Length)
-
 }
