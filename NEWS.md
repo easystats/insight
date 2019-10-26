@@ -10,6 +10,10 @@
 * `get_statistic()` supports `multinom` models (*nnet*).
 * `link_inverse()` gets a `what`-argument, to return the link-inverse function for specific distribution paramters from **gamls** models.
 
+## Bug fixes
+
+* Fixed edge case for `find_weights()`.
+
 # insight 0.6.0
 
 ## New supported model classes
