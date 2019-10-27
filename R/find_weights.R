@@ -31,7 +31,7 @@ find_weights.default <- function(x, ...) {
         w <- eval(parse(text = .trim(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
       }
 
-      if (.is_empty_object(w)) w <- NULL
+      if (.is_empty_object(w) || w == "NULL") w <- NULL
       w
     },
     error = function(e) {
