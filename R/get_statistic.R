@@ -388,7 +388,16 @@ get_statistic.nlrq <- get_statistic.rq
 #' @export
 get_statistic.multinom <- function(x, ...) {
   parms <- get_parameters(x)
-  se <- summary(x)$standard.errors
+  stderr <- summary(x)$standard.errors
+
+  if (is.matrix(stderr)) {
+    se <- c()
+    for (i in 1:nrow(stderr)) {
+      se <- c(se, as.vector(stderr[i, ]))
+    }
+  } else {
+    se <- as.vector(stderr)
+  }
 
   out <- data.frame(
     Parameter = parms$Parameter,
