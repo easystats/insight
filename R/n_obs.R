@@ -383,12 +383,6 @@ n_obs.stanmvreg <- function(x, select = NULL, ...) {
   n
 }
 
-#' @export
-nobs.stanmvreg <- function(object, ...) {
-  n_obs(object, ...)
-}
-
-
 
 
 #' @export
