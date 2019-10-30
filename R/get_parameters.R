@@ -327,6 +327,23 @@ get_parameters.polr <- function(x, ...) {
 }
 
 
+#' @export
+get_parameters.bracl <- function(x, ...) {
+  pars <- stats::coef(x)
+
+  params <- data.frame(
+    Parameter = names(pars),
+    Estimate = unname(pars),
+    Response = gsub("(.*):(.*)", "\\1", names(pars)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+
 
 
 

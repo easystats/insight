@@ -787,3 +787,11 @@ get_data.clm2 <- function(x, ...) {
 
   .prepare_get_data(x, mf)
 }
+
+
+
+#' @export
+get_data.bracl <- function(x, ...) {
+  mf <- stats::model.frame(x)
+  suppressWarnings(.prepare_get_data(x, mf))
+}

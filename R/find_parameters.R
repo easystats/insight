@@ -113,6 +113,20 @@ find_parameters.polr <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.bracl <- function(x, flatten = FALSE, ...) {
+  pars <- list(conditional = names(stats::coef(x)))
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+
+#' @export
 find_parameters.clmm2 <- function(x, flatten = FALSE, ...) {
   s <- summary(x)
   pars <- list(conditional = as.character(rownames(s$coefficients)))

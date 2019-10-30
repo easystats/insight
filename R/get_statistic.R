@@ -402,6 +402,61 @@ get_statistic.aareg <- function(x, ...) {
 
 
 
+# Ordinal models --------------------------------------------------
+
+
+#' @export
+get_statistic.multinom <- function(x, ...) {
+  parms <- get_parameters(x)
+  stderr <- summary(x)$standard.errors
+
+  if (is.matrix(stderr)) {
+    se <- c()
+    for (i in 1:nrow(stderr)) {
+      se <- c(se, as.vector(stderr[i, ]))
+    }
+  } else {
+    se <- as.vector(stderr)
+  }
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = parms$Estimate / se,
+    Response = parms$Response,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
+get_statistic.brmultinom <- get_statistic.multinom
+
+#' @export
+get_statistic.bracl <- function(x, ...) {
+  parms <- get_parameters(x)
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = stats::coef(summary(m))[, "z value"],
+    Response = parms$Response,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+
+
+
+
 # Other models -------------------------------------------------------
 
 
@@ -467,37 +522,6 @@ get_statistic.crq <- get_statistic.rq
 
 #' @export
 get_statistic.nlrq <- get_statistic.rq
-
-
-#' @export
-get_statistic.multinom <- function(x, ...) {
-  parms <- get_parameters(x)
-  stderr <- summary(x)$standard.errors
-
-  if (is.matrix(stderr)) {
-    se <- c()
-    for (i in 1:nrow(stderr)) {
-      se <- c(se, as.vector(stderr[i, ]))
-    }
-  } else {
-    se <- as.vector(stderr)
-  }
-
-  out <- data.frame(
-    Parameter = parms$Parameter,
-    Statistic = parms$Estimate / se,
-    Response = parms$Response,
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
-
-  attr(out, "statistic") <- find_statistic(x)
-  out
-}
-
-
-#' @export
-get_statistic.brmultinom <- get_statistic.multinom
 
 
 #' @export
