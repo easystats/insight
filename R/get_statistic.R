@@ -387,7 +387,7 @@ get_statistic.aareg <- function(x, ...) {
 
   out <- data.frame(
     Parameter = parms$Parameter,
-    Statistic = unnames(sc$test.statistic),
+    Statistic = unname(sc$test.statistic),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
