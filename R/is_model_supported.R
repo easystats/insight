@@ -51,6 +51,7 @@ supported_models <- function() {
     "bigglm",
     "blavaan",
     "brmsfit",
+    "brmultinom",
     "censReg",
     "clm",
     "clm2",

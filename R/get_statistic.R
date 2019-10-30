@@ -497,6 +497,10 @@ get_statistic.multinom <- function(x, ...) {
 
 
 #' @export
+get_statistic.brmultinom <- get_statistic.multinom
+
+
+#' @export
 get_statistic.bigglm <- function(x, ...) {
   parms <- get_parameters(x)
   cs <- summary(x)$mat

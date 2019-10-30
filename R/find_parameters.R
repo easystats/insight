@@ -148,6 +148,9 @@ find_parameters.multinom <- function(x, flatten = FALSE, ...) {
 }
 
 
+#' @export
+find_parameters.brmultinom <- find_parameters.multinom
+
 
 
 

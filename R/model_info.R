@@ -722,6 +722,19 @@ model_info.multinom <- function(x, ...) {
 
 
 #' @export
+model_info.brmultinom <- function(x, ...) {
+  faminfo <- stats::family(x)
+  make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.gamlss <- function(x, ...) {
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
   make_family(
@@ -927,7 +940,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
     fitfam == "ztnbinom"
 
   is.ordinal <-
-    inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "gmnl", "mlogit", "multinom", "LORgee")) |
+    inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "gmnl", "mlogit", "multinom", "LORgee", "brmultinom")) |
       fitfam %in% c("cumulative", "cratio", "sratio", "acat", "ordinal", "multinomial")
 
   is.categorical <- fitfam == "categorical"
@@ -938,7 +951,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
     "bayesx"
   ))
 
-  is.survival <- inherits(x, c("survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph", "coxme"))
+  is.survival <- inherits(x, c("aareg", "survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph", "coxme"))
 
   # check if we have binomial models with trials instead of binary outcome
   # and check if we have truncated or censored brms-regression

@@ -5,6 +5,10 @@
 * In order to unify column names across easystats-packages, `get_parameters()` and `get_priors()` now return column names according to our naming conventions (i.e. capitalized column names).
 * `model_info()` returned both `$is_zeroinf` and `$is_zero_inflated` for zero-inflated models. Now `$is_zeroinf` was removed, so `model_info()` only returns `$is_zero_inflated` .
 
+## New supported model classes
+
+* `aareg` (*survival*) and `brmultinom` (*brglm2*).
+
 ## Changes to functions
 
 * `get_statistic()` supports `multinom` models (*nnet*).
@@ -18,7 +22,7 @@
 
 ## New supported model classes
 
-* `bayesx` (*R2BayesX*), `bamlss` (*bamlss*), `aareg` (*survival*) and `flexsurvreg` (*flexsurv*). Note that support for these models is still somewhat experimental.
+* `bayesx` (*R2BayesX*), `bamlss` (*bamlss*) and `flexsurvreg` (*flexsurv*). Note that support for these models is still somewhat experimental.
 * Support for *lavaan* and *blavaan* was added, but only applies to some of the functions: `get_data()`, `get_parameters()`, `find_parameters()`, `clean_parameters()`, `find_algorithm()` and `get_priors()` (the two latter only for *blavaan*).
 
 ## New functions

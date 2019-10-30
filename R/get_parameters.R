@@ -200,6 +200,11 @@ get_parameters.multinom <- function(x, ...) {
 
 
 #' @export
+get_parameters.brmultinom <- get_parameters.multinom
+
+
+
+#' @export
 get_parameters.mlm <- function(x, ...) {
   cs <- stats::coef(summary(x))
 
