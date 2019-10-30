@@ -421,6 +421,9 @@ find_formula.wbm <- function(x, ...) {
 }
 
 
+#' @export
+find_formula.wbgee <- find_formula.wbm
+
 
 #' @export
 find_formula.BBmm <- function(x, ...) {
