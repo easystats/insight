@@ -402,6 +402,7 @@ get_statistic.multinom <- function(x, ...) {
   out <- data.frame(
     Parameter = parms$Parameter,
     Statistic = parms$Estimate / se,
+    Response = parms$Response,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
