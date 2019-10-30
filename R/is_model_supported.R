@@ -37,6 +37,7 @@ supported_models <- function() {
 
 .supported_models_list <- function() {
   c(
+    "aareg",
     "aov",
     "aovlist",
     "bamlss",

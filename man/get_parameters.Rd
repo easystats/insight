@@ -2,17 +2,7 @@
 % Please edit documentation in R/get_parameters.R
 \name{get_parameters}
 \alias{get_parameters}
-\alias{get_parameters.BBmm}
-\alias{get_parameters.glimML}
-\alias{get_parameters.gam}
-\alias{get_parameters.vgam}
 \alias{get_parameters.rqss}
-\alias{get_parameters.Gam}
-\alias{get_parameters.zeroinfl}
-\alias{get_parameters.gamm}
-\alias{get_parameters.aovlist}
-\alias{get_parameters.hurdle}
-\alias{get_parameters.MCMCglmm}
 \alias{get_parameters.coxme}
 \alias{get_parameters.merMod}
 \alias{get_parameters.rlmerMod}
@@ -20,46 +10,26 @@
 \alias{get_parameters.lme}
 \alias{get_parameters.MixMod}
 \alias{get_parameters.glmmTMB}
+\alias{get_parameters.BBmm}
+\alias{get_parameters.glimML}
+\alias{get_parameters.gamm}
+\alias{get_parameters.Gam}
+\alias{get_parameters.gam}
+\alias{get_parameters.vgam}
+\alias{get_parameters.zeroinfl}
+\alias{get_parameters.aovlist}
+\alias{get_parameters.MCMCglmm}
+\alias{get_parameters.BFBayesFactor}
+\alias{get_parameters.stanmvreg}
 \alias{get_parameters.brmsfit}
 \alias{get_parameters.stanreg}
 \alias{get_parameters.sim.merMod}
-\alias{get_parameters.BFBayesFactor}
-\alias{get_parameters.stanmvreg}
 \title{Get model parameters}
 \usage{
 get_parameters(x, ...)
 
-\method{get_parameters}{BBmm}(x, effects = c("fixed", "random"), ...)
-
-\method{get_parameters}{glimML}(x, effects = c("fixed", "random", "all"),
-  ...)
-
-\method{get_parameters}{gam}(x, component = c("all", "conditional",
-  "smooth_terms"), ...)
-
-\method{get_parameters}{vgam}(x, component = c("all", "conditional",
-  "smooth_terms"), ...)
-
 \method{get_parameters}{rqss}(x, component = c("all", "conditional",
   "smooth_terms"), ...)
-
-\method{get_parameters}{Gam}(x, component = c("all", "conditional",
-  "smooth_terms"), ...)
-
-\method{get_parameters}{zeroinfl}(x, component = c("all", "conditional",
-  "zi", "zero_inflated"), ...)
-
-\method{get_parameters}{gamm}(x, component = c("all", "conditional",
-  "smooth_terms"), ...)
-
-\method{get_parameters}{aovlist}(x, effects = c("fixed", "random",
-  "all"), ...)
-
-\method{get_parameters}{hurdle}(x, component = c("all", "conditional",
-  "zi", "zero_inflated"), ...)
-
-\method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random",
-  "all"), ...)
 
 \method{get_parameters}{coxme}(x, effects = c("fixed", "random"), ...)
 
@@ -79,6 +49,38 @@ get_parameters(x, ...)
   component = c("all", "conditional", "zi", "zero_inflated",
   "dispersion"), ...)
 
+\method{get_parameters}{BBmm}(x, effects = c("fixed", "random"), ...)
+
+\method{get_parameters}{glimML}(x, effects = c("fixed", "random", "all"),
+  ...)
+
+\method{get_parameters}{gamm}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
+
+\method{get_parameters}{Gam}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
+
+\method{get_parameters}{gam}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
+
+\method{get_parameters}{vgam}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
+
+\method{get_parameters}{zeroinfl}(x, component = c("all", "conditional",
+  "zi", "zero_inflated"), ...)
+
+\method{get_parameters}{aovlist}(x, effects = c("fixed", "random",
+  "all"), ...)
+
+\method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random",
+  "all"), ...)
+
+\method{get_parameters}{BFBayesFactor}(x, iterations = 4000,
+  progress = FALSE, ...)
+
+\method{get_parameters}{stanmvreg}(x, effects = c("fixed", "random",
+  "all"), parameters = NULL, ...)
+
 \method{get_parameters}{brmsfit}(x, effects = c("fixed", "random",
   "all"), component = c("all", "conditional", "zi", "zero_inflated",
   "dispersion", "simplex", "sigma", "smooth_terms"), parameters = NULL,
@@ -89,20 +91,11 @@ get_parameters(x, ...)
 
 \method{get_parameters}{sim.merMod}(x, effects = c("fixed", "random",
   "all"), parameters = NULL, ...)
-
-\method{get_parameters}{BFBayesFactor}(x, iterations = 4000,
-  progress = FALSE, ...)
-
-\method{get_parameters}{stanmvreg}(x, effects = c("fixed", "random",
-  "all"), parameters = NULL, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
-
-\item{effects}{Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{component}{Should all parameters, parameters for the
 conditional model, the zero-inflated part of the model, the dispersion
@@ -110,12 +103,15 @@ term or the instrumental variables be returned? Applies to models
 with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated.}
 
-\item{parameters}{Regular expression pattern that describes the parameters that
-should be returned.}
+\item{effects}{Should parameters for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{iterations}{Number of posterior draws.}
 
 \item{progress}{Display progress.}
+
+\item{parameters}{Regular expression pattern that describes the parameters that
+should be returned.}
 }
 \value{
 \itemize{

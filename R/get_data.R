@@ -51,6 +51,19 @@ get_data.default <- function(x, ...) {
     }
   )
 
+
+  if (is.null(mf)) {
+    mf <- tryCatch(
+      {
+        .get_data_from_env(x)[, find_variables(x, flatten = TRUE), drop = FALSE]
+      },
+      error = function(x) {
+        NULL
+      }
+    )
+  }
+
+
   .prepare_get_data(x, mf)
 }
 
@@ -65,7 +78,7 @@ get_data.data.frame <- function(x, ...) {
 
 
 
-# classical models ------------------------------------------------------
+# classical and survival models -----------------------------------------------
 
 #' @rdname get_data
 #' @export
@@ -105,6 +118,11 @@ get_data.gls <- function(x, ...) {
 }
 
 
+#' @export
+get_data.survfit <- get_data.gls
+
+#' @export
+get_data.aareg <- get_data.gls
 
 
 
@@ -121,17 +139,11 @@ get_data.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_i
 
 
 #' @export
-get_data.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  component <- match.arg(component)
-  .return_zeroinf_data(x, component)
-}
+get_data.zeroinfl <- get_data.hurdle
 
 
 #' @export
-get_data.zerotrunc <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  component <- match.arg(component)
-  .return_zeroinf_data(x, component)
-}
+get_data.zerotrunc <- get_data.hurdle
 
 
 
@@ -734,21 +746,6 @@ get_data.gmnl <- function(x, ...) {
   )
 
   .prepare_get_data(x, mf)
-}
-
-
-#' @export
-get_data.survfit <- function(x, ...) {
-  mf <- tryCatch(
-    {
-      .get_data_from_env(x)[, find_variables(x, flatten = TRUE), drop = FALSE]
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
-  .prepare_get_data(x, stats::na.omit(mf))
 }
 
 

@@ -305,6 +305,12 @@ nobs.survreg <- function(object, ...) {
 
 
 #' @export
+n_obs.aareg <- function(x, ...) {
+  max(x$n)
+}
+
+
+#' @export
 n_obs.coxph <- function(x, ...) {
   max(x$n)
 }

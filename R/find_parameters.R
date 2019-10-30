@@ -1069,3 +1069,19 @@ find_parameters.rqss <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
+
+
+
+#' @export
+find_parameters.aareg <- function(x, flatten = FALSE, ...) {
+  sc <- summary(x)
+
+  pars <- list(conditional = rownames(sc$table))
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}

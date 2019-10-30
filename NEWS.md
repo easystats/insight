@@ -18,7 +18,7 @@
 
 ## New supported model classes
 
-* `bayesx` (*R2BayesX*), `bamlss` (*bamlss*) and `flexsurvreg` (*flexsurv*). Note that support for these models is still somewhat experimental.
+* `bayesx` (*R2BayesX*), `bamlss` (*bamlss*), `aareg` (*survival*) and `flexsurvreg` (*flexsurv*). Note that support for these models is still somewhat experimental.
 * Support for *lavaan* and *blavaan* was added, but only applies to some of the functions: `get_data()`, `get_parameters()`, `find_parameters()`, `clean_parameters()`, `find_algorithm()` and `get_priors()` (the two latter only for *blavaan*).
 
 ## New functions

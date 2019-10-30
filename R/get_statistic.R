@@ -110,10 +110,6 @@ get_statistic.negbin <- get_statistic.default
 get_statistic.feis <- get_statistic.default
 
 
-#' @export
-get_statistic.coxph <- function(x, ...) {
-  get_statistic.default(x, column_index = 4)
-}
 
 
 
@@ -312,6 +308,94 @@ get_statistic.vglm <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
+
+
+
+
+
+# Survival models ------------------------------------------
+
+
+#' @export
+get_statistic.coxph <- function(x, ...) {
+  get_statistic.default(x, column_index = 4)
+}
+
+
+#' @importFrom stats vcov
+#' @export
+get_statistic.coxme <- function(x, ...) {
+  beta <- x$coefficients
+  out <- NULL
+
+  if (length(beta) > 0) {
+    out <- data.frame(
+      Parameter = names(beta),
+      Statistic = as.vector(beta / sqrt(diag(stats::vcov(x)))),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+
+    out <- .remove_backticks_from_parameter_names(out)
+    attr(out, "statistic") <- find_statistic(x)
+  }
+
+  out
+}
+
+
+
+#' @export
+get_statistic.survreg <- function(x, ...) {
+  parms <- get_parameters(x)
+  s <- summary(x)
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = s$table[, 3],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+#' @export
+get_statistic.flexsurvreg <- function(x, ...) {
+  parms <- get_parameters(x)
+  se <- x$res[, "se"]
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = parms$Estimate / se,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
+get_statistic.aareg <- function(x, ...) {
+  sc <- summary(x)
+  parms <- get_parameters(x)
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = unnames(sc$test.statistic),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
 
 
 
@@ -546,65 +630,6 @@ get_statistic.betareg <- function(x, ...) {
   parms <- get_parameters(x)
   cs <- do.call(rbind, stats::coef(summary(x)))
   se <- as.vector(cs[, 2])
-
-  out <- data.frame(
-    Parameter = parms$Parameter,
-    Statistic = parms$Estimate / se,
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
-
-  attr(out, "statistic") <- find_statistic(x)
-  out
-}
-
-
-
-#' @importFrom stats vcov
-#' @export
-get_statistic.coxme <- function(x, ...) {
-  beta <- x$coefficients
-  out <- NULL
-
-  if (length(beta) > 0) {
-    out <- data.frame(
-      Parameter = names(beta),
-      Statistic = as.vector(beta / sqrt(diag(stats::vcov(x)))),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
-
-    out <- .remove_backticks_from_parameter_names(out)
-    attr(out, "statistic") <- find_statistic(x)
-  }
-
-  out
-}
-
-
-
-#' @export
-get_statistic.survreg <- function(x, ...) {
-  parms <- get_parameters(x)
-  s <- summary(x)
-
-  out <- data.frame(
-    Parameter = parms$Parameter,
-    Statistic = s$table[, 3],
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
-
-  attr(out, "statistic") <- find_statistic(x)
-  out
-}
-
-
-
-#' @export
-get_statistic.flexsurvreg <- function(x, ...) {
-  parms <- get_parameters(x)
-  se <- x$res[, "se"]
 
   out <- data.frame(
     Parameter = parms$Parameter,
