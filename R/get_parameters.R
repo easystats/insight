@@ -51,22 +51,23 @@ get_parameters.default <- function(x, ...) {
     return(get_parameters.gam(x, ...))
   }
 
-  tryCatch({
-    cf <- stats::coef(x)
+  tryCatch(
+    {
+      cf <- stats::coef(x)
 
-    params <- data.frame(
-      Parameter = names(cf),
-      Estimate = unname(cf),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
+      params <- data.frame(
+        Parameter = names(cf),
+        Estimate = unname(cf),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
 
-    .remove_backticks_from_parameter_names(params)
-  },
-  error = function(x) {
-    print_color(sprintf("Parameters can't be retrieved for objects of class '%s'.\n", class(x)[1]), "red")
-    NULL
-  }
+      .remove_backticks_from_parameter_names(params)
+    },
+    error = function(x) {
+      print_color(sprintf("Parameters can't be retrieved for objects of class '%s'.\n", class(x)[1]), "red")
+      NULL
+    }
   )
 }
 
@@ -152,21 +153,22 @@ get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_t
 
 #' @export
 get_parameters.lrm <- function(x, ...) {
-  tryCatch({
-    cf <- stats::coef(x)
+  tryCatch(
+    {
+      cf <- stats::coef(x)
 
-    params <- data.frame(
-      Parameter = names(cf),
-      Estimate = unname(cf),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
+      params <- data.frame(
+        Parameter = names(cf),
+        Estimate = unname(cf),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
 
-    .remove_backticks_from_parameter_names(params)
-  },
-  error = function(x) {
-    NULL
-  }
+      .remove_backticks_from_parameter_names(params)
+    },
+    error = function(x) {
+      NULL
+    }
   )
 }
 
