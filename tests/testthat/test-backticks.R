@@ -9,27 +9,35 @@ if (require("testthat") && require("insight")) {
   test_that("backticks", {
     expect_equal(
       find_parameters(m),
-      list(conditional = c("(Intercept)", "Petal.Length", "a mversicolor",
-                           "a mvirginica", "log(Sepal.Length)", "a mversicolor:log(Sepal.Length)",
-                           "a mvirginica:log(Sepal.Length)"))
+      list(conditional = c(
+        "(Intercept)", "Petal.Length", "a mversicolor",
+        "a mvirginica", "log(Sepal.Length)", "a mversicolor:log(Sepal.Length)",
+        "a mvirginica:log(Sepal.Length)"
+      ))
     )
 
     expect_equal(
       get_parameters(m)$Parameter,
-      c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica", "log(Sepal.Length)",
-        "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)")
+      c(
+        "(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica", "log(Sepal.Length)",
+        "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)"
+      )
     )
 
     expect_equal(
       get_statistic(m)$Parameter,
-      c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica", "log(Sepal.Length)",
-        "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)")
+      c(
+        "(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica", "log(Sepal.Length)",
+        "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)"
+      )
     )
 
     expect_equal(
       clean_parameters(m)$Parameter,
-      c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica", "log(Sepal.Length)",
-        "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)")
+      c(
+        "(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica", "log(Sepal.Length)",
+        "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)"
+      )
     )
 
     expect_equal(
@@ -60,7 +68,8 @@ if (require("testthat") && require("insight")) {
 
     expect_equal(
       rownames(get_varcov(m)),
-      c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica",
+      c(
+        "(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica",
         "log(Sepal.Length)", "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)"
       )
     )
