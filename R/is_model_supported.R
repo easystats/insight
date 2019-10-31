@@ -123,6 +123,7 @@ supported_models <- function() {
     "vglm",
     "wbm",
     "wblm",
+    "wbgee",
     "zeroinfl",
     "zerotrunc"
   )
