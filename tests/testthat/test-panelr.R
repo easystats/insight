@@ -18,7 +18,8 @@ if (require("testthat") &&
       find_predictors(m1),
       list(
         conditional = c("union", "wks"),
-        instruments = c("blk", "fem")
+        instruments = c("blk", "fem"),
+        interactions = c("blk", "union")
       )
     )
     expect_identical(
@@ -131,7 +132,8 @@ if (require("testthat") &&
       list(
         response = "lwage",
         conditional = c("union", "wks"),
-        instruments = c("blk", "fem")
+        instruments = c("blk", "fem"),
+        interactions = c("blk", "union")
       )
     )
     expect_equal(
