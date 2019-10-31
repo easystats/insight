@@ -402,20 +402,25 @@ find_formula.wbm <- function(x, ...) {
   if (length(f_parts) > 2) {
     f_parts[3] <- .trim(f_parts[3])
     if (grepl("\\((.+)\\|(.+)\\)", f_parts[3])) {
-      f_parts[3] <- gsub("(\\(|\\))", "", f_parts[3])
+      f.rand <- gsub("(\\(|\\))", "", f_parts[3])
+      f.rand <- paste0("~", .trim(f.rand))
+      f.clint <- NULL
     } else {
       ## TODO dangerous fix to convert cross-level interactions
       # into random effects...
-      f_parts[3] <- gsub("*", "|", f_parts[3], fixed = TRUE)
+      f.clint <- f_parts[3]
+      f.clint <- paste0("~", .trim(f.clint))
+      f.rand <- NULL
     }
-    f.rand <- paste0("~", .trim(f_parts[3]))
   } else {
     f.rand <- NULL
+    f.clint <- NULL
   }
 
   .compact_list(list(
     conditional = stats::as.formula(f.cond),
     instruments = stats::as.formula(f.instr),
+    interactions = stats::as.formula(f.clint),
     random = stats::as.formula(f.rand)
   ))
 }
