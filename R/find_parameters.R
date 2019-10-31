@@ -404,10 +404,6 @@ find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), fla
 
 
 #' @export
-find_parameters.wbm <- find_parameters.merMod
-
-
-#' @export
 find_parameters.rlmerMod <- find_parameters.merMod
 
 
@@ -920,6 +916,36 @@ find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
+
+
+
+
+# Panel models ----------------------------------------
+
+
+#' @export
+find_parameters.wbm <- function(x, flatten = FALSE, ...) {
+  s <- summary(x)
+
+  pars <- .compact_list(list(
+    conditional = rownames(s$within_table),
+    instruments = rownames(s$between_table),
+    random = rownames(s$ints_table)
+  ))
+
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+#' @export
+find_parameters.wbgee <- find_parameters.wbm
+
 
 
 

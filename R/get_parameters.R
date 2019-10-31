@@ -415,6 +415,12 @@ get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
 }
 
 
+#' @export
+get_parameters.wbgee <- function(x, ...) {
+  get_parameters.wbm(x, effects = "fixed", ...)
+}
+
+
 
 #' @export
 get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {

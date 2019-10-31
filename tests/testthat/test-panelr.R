@@ -172,34 +172,19 @@ if (require("testthat") &&
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c(
-          "(Intercept)",
-          "imean(lag(union))",
-          "imean(wks)",
-          "lag(union)",
-          "wks",
-          "blk",
-          "fem",
-          "lag(union):blk"
-        ),
-        random = list(id = "(Intercept)")
+        conditional = c("lag(union)", "wks"),
+        instruments = c("(Intercept)", "imean(lag(union))", "imean(wks)", "blk", "fem"),
+        random = "lag(union):blk"
       )
     )
+
     expect_equal(nrow(get_parameters(m1)), 8)
 
     expect_equal(
       find_parameters(m2),
       list(
-        conditional = c(
-          "(Intercept)",
-          "imean(lag(union))",
-          "imean(wks)",
-          "lag(union)",
-          "wks",
-          "blk",
-          "fem"
-        ),
-        random = list(id = c("(Intercept)", "t"))
+        conditional = c("lag(union)", "wks"),
+        instruments = c("(Intercept)", "imean(lag(union))", "imean(wks)", "blk", "fem")
       )
     )
   })

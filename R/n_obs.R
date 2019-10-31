@@ -446,3 +446,10 @@ nobs.zeroinfl <- function(object, ...) {
 n_obs.wbm <- function(x, ...) {
   nrow(x@frame)
 }
+
+
+
+#' @export
+n_obs.wbgee <- function(x, ...) {
+  stats::nobs(x)
+}

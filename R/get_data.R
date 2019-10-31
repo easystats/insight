@@ -474,6 +474,10 @@ get_data.wbm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.wbgee <- get_data.wbm
+
+
+#' @export
 get_data.ivreg <- function(x, ...) {
   mf <- stats::model.frame(x)
   cn <- clean_names(colnames(mf))
