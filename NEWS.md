@@ -7,7 +7,7 @@
 
 ## New supported model classes
 
-* `aareg` (*survival*), `brmultinom` and `bracl` (*brglm2*).
+* `aareg` (*survival*), `brmultinom` and `bracl` (*brglm2*), and `wbgee` (*panelr*). Furthermore, for different model-types from *panelr* models (within-between, between, etc.) are now also supported.
 
 ## Changes to functions
 
