@@ -394,11 +394,21 @@ get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
       rownames(s$ints_table)
     )
 
-    params <- rbind(
-      data.frame(params = s$within_table, component = "within", stringsAsFactors = FALSE),
-      data.frame(params = s$between_table, component = "between", stringsAsFactors = FALSE),
-      data.frame(params = s$ints_table, component = "interactions", stringsAsFactors = FALSE)
-    )
+    wt <- s$within_table
+    bt <- s$between_table
+    it <- s$ints_table
+
+    if (!is.null(wt)) {
+      wt <- data.frame(params = wt, component = "within", stringsAsFactors = FALSE)
+    }
+    if (!is.null(bt)) {
+      bt <- data.frame(params = bt, component = "between", stringsAsFactors = FALSE)
+    }
+    if (!is.null(it)) {
+      it <- data.frame(params = it, component = "interactions", stringsAsFactors = FALSE)
+    }
+
+    params <- rbind(wt, bt, it)
 
     out <- data.frame(
       Parameter = terms,
