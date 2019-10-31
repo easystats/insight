@@ -419,7 +419,7 @@ get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
 
 #' @export
 get_parameters.wbgee <- function(x, ...) {
-  get_parameters.wbm(x, effects = "fixed", ...)
+  get_parameters.wbm(x, effects = "fixed")
 }
 
 
