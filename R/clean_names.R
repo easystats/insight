@@ -67,10 +67,10 @@ clean_names.character <- function(x) {
   # for gam-smoothers/loess, remove s()- and lo()-function in column name
   # for survival, remove strata(), and so on...
   pattern <- c(
-    "as.factor", "as.numeric", "factor", "offset", "log1p", "log10", "log2", "log-log",
-    "log", "lag", "diff", "pspline", "poly", "catg", "asis", "matrx", "pol",
-    "strata", "strat", "scale", "scored", "interaction", "sqrt", "lsp", "rcs",
-    "pb", "lo", "bs", "ns", "t2", "te", "ti", "tt", # need to be fixed first "mmc", "mm",
+    "as.factor", "as.numeric", "factor", "imean", "offset", "log1p", "log10",
+    "log2", "log-log", "log", "lag", "diff", "pspline", "poly", "catg", "asis",
+    "matrx", "pol", "strata", "strat", "scale", "scored", "interaction",
+    "sqrt", "lsp", "rcs", "pb", "lo", "bs", "ns", "t2", "te", "ti", "tt", # need to be fixed first "mmc", "mm",
     "mi", "mo", "gp", "s", "I"
   )
 

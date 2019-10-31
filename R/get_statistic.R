@@ -492,6 +492,10 @@ get_statistic.wbm <- function(x, ...) {
 
 
 #' @export
+get_statistic.wbgee <- get_statistic.wbm
+
+
+#' @export
 get_statistic.rq <- function(x, ...) {
   stat <- tryCatch(
     {

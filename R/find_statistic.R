@@ -119,6 +119,7 @@ find_statistic <- function(x, ...) {
       "survreg",
       "tobit",
       "vglm",
+      "wbgee",
       "zeroinfl"
     )
 
