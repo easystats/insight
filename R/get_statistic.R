@@ -464,7 +464,11 @@ get_statistic.bracl <- function(x, ...) {
 get_statistic.wbm <- function(x, ...) {
   s <- summary(x)
 
-  statistic_column <- if ("t val." %in% colnames(s$within_table)) {
+  statistic_column <- if ("t val." %in% c(
+    colnames(s$within_table),
+    colnames(s$between_table),
+    colnames(s$ints_table)
+  )) {
     "t val."
   } else {
     "z val."
