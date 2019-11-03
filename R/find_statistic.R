@@ -116,6 +116,7 @@ find_statistic <- function(x, ...) {
       "negbin",
       "psm",
       "rma",
+      "rma.uni",
       "slm",
       "survreg",
       "tobit",
