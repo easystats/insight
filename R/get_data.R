@@ -799,3 +799,19 @@ get_data.bracl <- function(x, ...) {
   mf <- stats::model.frame(x)
   suppressWarnings(.prepare_get_data(x, mf))
 }
+
+
+
+#' @export
+get_data.rma <- function(x, ...) {
+  mf <- tryCatch(
+    {
+      .get_data_from_env(x)
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, stats::na.omit(mf))
+}
