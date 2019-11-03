@@ -108,6 +108,7 @@ supported_models <- function() {
     "rlm",
     "rlmerMod",
     "rma",
+    "rma.uni",
     "rq",
     "rqss",
     "speedlm",
