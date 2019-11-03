@@ -256,6 +256,29 @@ get_parameters.BBreg <- function(x, ...) {
 }
 
 
+#' @export
+get_parameters.rma <- function(x, ...) {
+  tryCatch(
+    {
+      cf <- stats::coef(x)
+
+      params <- data.frame(
+        Parameter = names(cf),
+        Estimate = unname(cf),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+
+      params$Parameter[grepl("intrcpt", params$Parameter)] <- "(Intercept)"
+      .remove_backticks_from_parameter_names(params)
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+}
+
+
 
 
 

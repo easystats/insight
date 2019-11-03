@@ -145,6 +145,7 @@ is_model <- function(x) {
       "rlm",
       "rlme",
       "rlmerMod",
+      "rma",
       "rms",
       "rq",
       "rqss",

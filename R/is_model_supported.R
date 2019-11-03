@@ -107,6 +107,7 @@ supported_models <- function() {
     "psm",
     "rlm",
     "rlmerMod",
+    "rma",
     "rq",
     "rqss",
     "speedlm",

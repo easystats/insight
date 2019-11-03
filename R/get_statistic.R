@@ -731,3 +731,23 @@ get_statistic.rms <- get_statistic.lrm
 
 #' @export
 get_statistic.psm <- get_statistic.lrm
+
+
+
+#' @export
+get_statistic.rma <- function(x, ...) {
+  parms <- get_parameters(x)
+  stat <- x$zval
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = as.vector(stat),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+

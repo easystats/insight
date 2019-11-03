@@ -1128,3 +1128,27 @@ find_parameters.aareg <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
+
+
+
+#' @export
+find_parameters.rma <- function(x, flatten = FALSE, ...) {
+  tryCatch(
+    {
+      cf <- stats::coef(x)
+      pars <- list(conditional = names(cf))
+
+      pars$conditional[grepl("intrcpt", pars$conditional)] <- "(Intercept)"
+      pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+      if (flatten) {
+        unique(unlist(pars))
+      } else {
+        pars
+      }
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+}

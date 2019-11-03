@@ -882,6 +882,13 @@ model_info.mlm <- function(x, ...) {
 }
 
 
+#' @export
+model_info.rma <- function(x, ...) {
+  make_family(x, ...)
+}
+
+
+
 make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity", ...) {
   # create logical for family
   binom_fam <-
@@ -1034,6 +1041,9 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
       is_meta <- TRUE
     }
   }
+
+
+  if (inherits(x, "rma")) is_meta <- TRUE
 
 
   list(
