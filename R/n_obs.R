@@ -196,7 +196,7 @@ n_obs.survfit <- function(x, ...) {
 
 #' @export
 n_obs.survreg <- function(x, ...) {
-  length(x$y)
+  length(x$linear.predictors)
 }
 
 
