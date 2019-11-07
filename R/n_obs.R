@@ -12,9 +12,6 @@
 #' @return The number of observations used to fit the model, or \code{NULL} if
 #'   this information is not available.
 #'
-#' @note For model-objects supported by \pkg{insight} that \emph{do not} have
-#' a \code{nobs()}-method, \pkg{insight} provides a \code{nobs()}-method as well.
-#'
 #' @examples
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
@@ -64,23 +61,11 @@ n_obs.gamm <- function(x, ...) {
   NextMethod()
 }
 
-#' @export
-nobs.gamm <- function(object, ...) {
-  x <- object$gam
-  class(x) <- c(class(x), c("glm", "lm"))
-  n_obs(x, ...)
-}
-
 
 
 #' @export
 n_obs.bayesx <- function(x, ...) {
   length(x$response)
-}
-
-#' @export
-nobs.bayesx <- function(object, ...) {
-  n_obs(object, ...)
 }
 
 
@@ -90,11 +75,6 @@ n_obs.flexsurvreg <- function(x, ...) {
   x$N
 }
 
-#' @export
-nobs.flexsurvreg <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 #' @export
@@ -102,21 +82,11 @@ n_obs.bamlss <- function(x, ...) {
   nrow(x$model.frame)
 }
 
-#' @export
-nobs.bamlss <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 #' @export
 n_obs.lmRob <- function(x, ...) {
   length(x$fitted.values)
-}
-
-#' @export
-nobs.lmRob <- function(object, ...) {
-  n_obs(object, ...)
 }
 
 
@@ -127,14 +97,10 @@ n_obs.LORgee <- function(x, ...) {
 }
 
 
+
 #' @export
 n_obs.biglm <- function(x, ...) {
   x$n
-}
-
-#' @export
-nobs.biglm <- function(object, ...) {
-  n_obs(object, ...)
 }
 
 
@@ -144,21 +110,11 @@ n_obs.bigglm <- function(x, ...) {
   x$n
 }
 
-#' @export
-nobs.bigglm <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 #' @export
 n_obs.gbm <- function(x, ...) {
   length(x$fit)
-}
-
-#' @export
-nobs.gbm <- function(object, ...) {
-  n_obs(object, ...)
 }
 
 
@@ -168,21 +124,11 @@ n_obs.glimML <- function(x, ...) {
   nrow(x@data)
 }
 
-#' @export
-nobs.glimML <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 #' @export
 n_obs.glmRob <- function(x, ...) {
   length(x$fitted.values)
-}
-
-#' @export
-nobs.glmRob <- function(object, ...) {
-  n_obs(object, ...)
 }
 
 
@@ -192,22 +138,11 @@ n_obs.gmnl <- function(x, ...) {
   x$logLik$nobs
 }
 
-#' @export
-nobs.gmnl <- function(object, ...) {
-  n_obs(object, ...)
-}
-
-
 
 
 #' @export
 n_obs.multinom <- function(x, ...) {
   nrow(x$fitted.values)
-}
-
-#' @export
-nobs.multinom <- function(object, ...) {
-  n_obs(object, ...)
 }
 
 
@@ -217,11 +152,6 @@ n_obs.rq <- function(x, ...) {
   length(x$fitted.values)
 }
 
-#' @export
-nobs.rq <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 #' @export
@@ -229,24 +159,12 @@ n_obs.BBreg <- function(x, ...) {
   x$nObs
 }
 
-#' @export
-nobs.BBreg <- function(object, ...) {
-  n_obs(object, ...)
-}
-
-
 
 
 #' @export
 n_obs.BBmm <- function(x, ...) {
   x$nObs
 }
-
-#' @export
-nobs.BBmm <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 
@@ -259,21 +177,12 @@ n_obs.crq <- function(x, ...) {
   n
 }
 
-#' @export
-nobs.crq <- function(object, ...) {
-  n_obs(object, ...)
-}
 
 
 #' @importFrom stats fitted
 #' @export
 n_obs.nlrq <- function(x, ...) {
   length(stats::fitted(x))
-}
-
-#' @export
-nobs.nlrq <- function(object, ...) {
-  n_obs(object, ...)
 }
 
 
@@ -283,24 +192,12 @@ n_obs.survfit <- function(x, ...) {
   length(x$n.event)
 }
 
-#' @export
-nobs.survfit <- function(object, ...) {
-  n_obs(object, ...)
-}
-
-
 
 
 #' @export
 n_obs.survreg <- function(x, ...) {
   length(x$y)
 }
-
-#' @export
-nobs.survreg <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 
@@ -310,16 +207,11 @@ n_obs.aareg <- function(x, ...) {
 }
 
 
+
 #' @export
 n_obs.coxph <- function(x, ...) {
   max(x$n)
 }
-
-#' @export
-nobs.coxph <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 
@@ -328,24 +220,12 @@ n_obs.coxme <- function(x, ...) {
   max(x$n)
 }
 
-#' @export
-nobs.coxme <- function(object, ...) {
-  n_obs(object, ...)
-}
-
-
 
 
 #' @export
 n_obs.felm <- function(x, ...) {
   x$N
 }
-
-#' @export
-nobs.felm <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 
@@ -354,21 +234,11 @@ n_obs.feis <- function(x, ...) {
   length(x$fitted.values)
 }
 
-#' @export
-nobs.feis <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 #' @export
 n_obs.aovlist <- function(x, ...) {
   nrow(stats::model.frame(x))
-}
-
-#' @export
-nobs.aovlist <- function(object, ...) {
-  n_obs(object, ...)
 }
 
 
@@ -396,22 +266,11 @@ n_obs.mlogit <- function(x, ...) {
   nrow(x$model)
 }
 
-#' @export
-nobs.mlogit <- function(object, ...) {
-  n_obs(object, ...)
-}
-
-
 
 
 #' @export
 n_obs.hurdle <- function(x, ...) {
   x$n
-}
-
-#' @export
-nobs.hurdle <- function(object, ...) {
-  n_obs(object, ...)
 }
 
 
@@ -421,24 +280,12 @@ n_obs.zerotrunc <- function(x, ...) {
   x$n
 }
 
-#' @export
-nobs.zerotrunc <- function(object, ...) {
-  n_obs(object, ...)
-}
-
-
 
 
 #' @export
 n_obs.zeroinfl <- function(x, ...) {
   x$n
 }
-
-#' @export
-nobs.zeroinfl <- function(object, ...) {
-  n_obs(object, ...)
-}
-
 
 
 
