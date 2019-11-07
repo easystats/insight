@@ -18,6 +18,7 @@
 ## Bug fixes
 
 * Fixed edge case for `find_weights()`.
+* Fixed bug inb `get_statistic()` for *glmmTMB* models that won't return any data.
 
 # insight 0.6.0
 

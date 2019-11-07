@@ -467,11 +467,11 @@
   switch(
     component,
     "cond" = ,
-    "conditional" = dat[dat$component == "conditional", ],
+    "conditional" = dat[dat$Component == "conditional", ],
     "zi" = ,
-    "zero_inflated" = dat[dat$component == "zero_inflated", ],
-    "dispersion" = dat[dat$component == "dispersion", ],
-    "smooth_terms" = dat[dat$component == "smooth_terms", ],
+    "zero_inflated" = dat[dat$Component == "zero_inflated", ],
+    "dispersion" = dat[dat$Component == "dispersion", ],
+    "smooth_terms" = dat[dat$Component == "smooth_terms", ],
     dat
   )
 }
