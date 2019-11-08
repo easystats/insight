@@ -441,7 +441,7 @@ get_statistic.bracl <- function(x, ...) {
 
   out <- data.frame(
     Parameter = parms$Parameter,
-    Statistic = stats::coef(summary(m))[, "z value"],
+    Statistic = stats::coef(summary(x))[, "z value"],
     Response = parms$Response,
     stringsAsFactors = FALSE,
     row.names = NULL
