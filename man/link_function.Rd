@@ -7,15 +7,14 @@
 \usage{
 link_function(x, ...)
 
-\method{link_function}{gamlss}(x, what = c("mu", "sigma", "nu", "tau"),
-  ...)
+\method{link_function}{gamlss}(x, what = c("mu", "sigma", "nu", "tau"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
 
-\item{what}{For \code{gamlss} models, indicates for which distriubtion
+\item{what}{For \code{gamlss} models, indicates for which distribution
 parameter the link (inverse) function should be returned.}
 }
 \value{

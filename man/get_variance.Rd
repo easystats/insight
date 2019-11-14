@@ -12,9 +12,13 @@
 \alias{get_correlation_slope_intercept}
 \title{Get variance components from random effects models}
 \usage{
-get_variance(x, component = c("all", "fixed", "random", "residual",
-  "distribution", "dispersion", "intercept", "slope", "rho01"),
-  verbose = TRUE, ...)
+get_variance(
+  x,
+  component = c("all", "fixed", "random", "residual", "distribution", "dispersion",
+    "intercept", "slope", "rho01"),
+  verbose = TRUE,
+  ...
+)
 
 get_variance_residual(x, ...)
 

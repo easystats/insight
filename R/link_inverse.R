@@ -3,7 +3,7 @@
 #'
 #' @description Returns the link-inverse function from a model object.
 #'
-#' @param what For \code{gamlss} models, indicates for which distriubtion
+#' @param what For \code{gamlss} models, indicates for which distribution
 #'   parameter the link (inverse) function should be returned.
 #' @inheritParams find_predictors
 #' @inheritParams find_formula

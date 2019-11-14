@@ -4,8 +4,15 @@
 \alias{format_table}
 \title{Dataframe and Tables Pretty Formatting}
 \usage{
-format_table(x, sep = " | ", header = "-", digits = 2,
-  protect_integers = TRUE, missing = "", width = NULL)
+format_table(
+  x,
+  sep = " | ",
+  header = "-",
+  digits = 2,
+  protect_integers = TRUE,
+  missing = "",
+  width = NULL
+)
 }
 \arguments{
 \item{x}{A data frame.}

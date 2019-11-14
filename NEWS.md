@@ -13,7 +13,7 @@
 ## Changes to functions
 
 * `get_statistic()` supports `multinom` models (*nnet*).
-* `link_inverse()` gets a `what`-argument, to return the link-inverse function for specific distribution paramters from **gamls** models.
+* `link_inverse()` gets a `what`-argument, to return the link-inverse function for specific distribution parameters from **gamls** models.
 
 ## Bug fixes
 
