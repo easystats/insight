@@ -1,9 +1,9 @@
-# insight 0.6.1
+# insight 0.7.0
 
 ## Breaking changes
 
 * In order to unify column names across easystats-packages, `get_parameters()` and `get_priors()` now return column names according to our naming conventions (i.e. capitalized column names).
-* `model_info()` returned both `$is_zeroinf` and `$is_zero_inflated` for zero-inflated models. Now `$is_zeroinf` was removed, so `model_info()` only returns `$is_zero_inflated` .
+* `model_info()` returned both `$is_zeroinf` and `$is_zero_inflated` for zero-inflated models. Now `$is_zeroinf` is softly deprecated, so `model_info()` will return `$is_zero_inflated` only in future updates.
 
 ## New supported model classes
 
@@ -18,7 +18,7 @@
 ## Bug fixes
 
 * Fixed edge case for `find_weights()`.
-* Fixed bug inb `get_statistic()` for *glmmTMB* models that won't return any data.
+* Fixed bug in `get_statistic()` for *glmmTMB* models that won't return any data.
 
 # insight 0.6.0
 
