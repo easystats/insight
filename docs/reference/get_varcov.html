@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -130,31 +130,25 @@
     <pre class="usage"><span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for betareg</span>
-<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"precision"</span>,
-  <span class='st'>"all"</span>), <span class='no'>...</span>)
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"precision"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for truncreg</span>
-<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"all"</span>),
-  <span class='no'>...</span>)
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for gamlss</span>
 <span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for hurdle</span>
-<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>,
-  <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for MixMod</span>
-<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>,
-  <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for glmmTMB</span>
-<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>,
-  <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for brmsfit</span>
-<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>,
-  <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)</pre>
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

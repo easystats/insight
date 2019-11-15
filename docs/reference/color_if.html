@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -127,11 +127,25 @@
   Columns are then printed in color in the console.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>color_if</span>(<span class='no'>x</span>, <span class='no'>columns</span>, <span class='kw'>predicate</span> <span class='kw'>=</span> <span class='no'>`&gt;`</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>color_if</span> <span class='kw'>=</span> <span class='st'>"green"</span>,
-  <span class='kw'>color_else</span> <span class='kw'>=</span> <span class='st'>"red"</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+    <pre class="usage"><span class='fu'>color_if</span>(
+  <span class='no'>x</span>,
+  <span class='no'>columns</span>,
+  <span class='kw'>predicate</span> <span class='kw'>=</span> <span class='no'>`&gt;`</span>,
+  <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>color_if</span> <span class='kw'>=</span> <span class='st'>"green"</span>,
+  <span class='kw'>color_else</span> <span class='kw'>=</span> <span class='st'>"red"</span>,
+  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>
+)
 
-<span class='fu'>colour_if</span>(<span class='no'>x</span>, <span class='no'>columns</span>, <span class='kw'>predicate</span> <span class='kw'>=</span> <span class='no'>`&gt;`</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>colour_if</span> <span class='kw'>=</span> <span class='st'>"green"</span>, <span class='kw'>colour_else</span> <span class='kw'>=</span> <span class='st'>"red"</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
+<span class='fu'>colour_if</span>(
+  <span class='no'>x</span>,
+  <span class='no'>columns</span>,
+  <span class='kw'>predicate</span> <span class='kw'>=</span> <span class='no'>`&gt;`</span>,
+  <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>colour_if</span> <span class='kw'>=</span> <span class='st'>"green"</span>,
+  <span class='kw'>colour_else</span> <span class='kw'>=</span> <span class='st'>"red"</span>,
+  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -207,8 +221,7 @@ that are <em>not</em> met.</p></td>
 }
 <span class='co'># all values in Sepal.Length between 4.9 and 5.1 in green, all remaining in red</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>color_if</span>(<span class='no'>iris</span>[<span class='fl'>1</span>:<span class='fl'>10</span>, ], <span class='kw'>columns</span> <span class='kw'>=</span> <span class='st'>"Sepal.Length"</span>, <span class='kw'>predicate</span> <span class='kw'>=</span> <span class='no'>p</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>x</span>$<span class='no'>Sepal.Length</span>)</div><div class='output co'>#&gt; </span><span style='color: #00BB00;'>        5.10</span><span> </span><span style='color: #00BB00;'>        4.90</span><span> </span><span style='color: #BB0000;'>        4.70</span><span> </span><span style='color: #BB0000;'>        4.60</span><span> </span><span style='color: #00BB00;'>        5.00</span><span> </span><span style='color: #BB0000;'>        5.40</span><span> </span><span style='color: #BB0000;'>        4.60</span><span> </span><span style='color: #00BB00;'>        5.00</span><span> </span><span style='color: #BB0000;'>        4.40</span><span> </span><span style='color: #00BB00;'>        4.90</span><span></div><div class='input'>
-</div></span></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>x</span>$<span class='no'>Sepal.Length</span>)</div><div class='output co'>#&gt; </span><span style='color: #00BB00;'>        5.10</span><span> </span><span style='color: #00BB00;'>        4.90</span><span> </span><span style='color: #BB0000;'>        4.70</span><span> </span><span style='color: #BB0000;'>        4.60</span><span> </span><span style='color: #00BB00;'>        5.00</span><span> </span><span style='color: #BB0000;'>        5.40</span><span> </span><span style='color: #BB0000;'>        4.60</span><span> </span><span style='color: #00BB00;'>        5.00</span><span> </span><span style='color: #BB0000;'>        4.40</span><span> </span><span style='color: #00BB00;'>        4.90</span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

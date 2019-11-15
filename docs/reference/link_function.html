@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -123,7 +123,10 @@
     <p>Returns the link-function from a model object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>link_function</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>link_function</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for gamlss</span>
+<span class='fu'>link_function</span>(<span class='no'>x</span>, <span class='kw'>what</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mu"</span>, <span class='st'>"sigma"</span>, <span class='st'>"nu"</span>, <span class='st'>"tau"</span>), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,6 +138,11 @@
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>what</th>
+      <td><p>For <code>gamlss</code> models, indicates for which distribution
+parameter the link (inverse) function should be returned.</p></td>
     </tr>
     </table>
 
