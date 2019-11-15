@@ -4,14 +4,8 @@
 \alias{format_value}
 \title{Numeric Values Formatting}
 \usage{
-format_value(
-  x,
-  digits = 2,
-  protect_integers = FALSE,
-  missing = "",
-  width = NULL,
-  ...
-)
+format_value(x, digits = 2, protect_integers = FALSE, missing = "",
+  width = NULL, ...)
 }
 \arguments{
 \item{x}{Numeric value.}

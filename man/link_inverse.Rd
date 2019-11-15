@@ -7,7 +7,8 @@
 \usage{
 link_inverse(x, ...)
 
-\method{link_inverse}{gamlss}(x, what = c("mu", "sigma", "nu", "tau"), ...)
+\method{link_inverse}{gamlss}(x, what = c("mu", "sigma", "nu", "tau"),
+  ...)
 }
 \arguments{
 \item{x}{A fitted model.}
