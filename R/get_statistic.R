@@ -749,5 +749,3 @@ get_statistic.rma <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
-
-
