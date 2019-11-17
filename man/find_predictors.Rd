@@ -4,9 +4,13 @@
 \alias{find_predictors}
 \title{Find names of model predictors}
 \usage{
-find_predictors(x, effects = c("fixed", "random", "all"),
-  component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion", "instruments", "correlation"), flatten = FALSE)
+find_predictors(
+  x,
+  effects = c("fixed", "random", "all"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion",
+    "instruments", "correlation"),
+  flatten = FALSE
+)
 }
 \arguments{
 \item{x}{A fitted model.}
