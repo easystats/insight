@@ -4,9 +4,13 @@
 \alias{find_variables}
 \title{Find names of all variables}
 \usage{
-find_variables(x, effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion", "instruments"), flatten = FALSE)
+find_variables(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion",
+    "instruments"),
+  flatten = FALSE
+)
 }
 \arguments{
 \item{x}{A fitted model.}

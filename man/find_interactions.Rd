@@ -4,8 +4,12 @@
 \alias{find_interactions}
 \title{Find interaction terms from models}
 \usage{
-find_interactions(x, component = c("all", "conditional", "zi",
-  "zero_inflated", "dispersion", "instruments"), flatten = FALSE)
+find_interactions(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion",
+    "instruments"),
+  flatten = FALSE
+)
 }
 \arguments{
 \item{x}{A fitted model.}

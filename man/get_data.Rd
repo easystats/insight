@@ -22,17 +22,22 @@ get_data(x, ...)
 
 \method{get_data}{gee}(x, effects = c("all", "fixed", "random"), ...)
 
-\method{get_data}{hurdle}(x, component = c("all", "conditional", "zi",
-  "zero_inflated", "dispersion"), ...)
+\method{get_data}{hurdle}(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  ...
+)
 
-\method{get_data}{glmmTMB}(x, effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion"), ...)
+\method{get_data}{glmmTMB}(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  ...
+)
 
 \method{get_data}{merMod}(x, effects = c("all", "fixed", "random"), ...)
 
-\method{get_data}{rlmerMod}(x, effects = c("all", "fixed", "random"),
-  ...)
+\method{get_data}{rlmerMod}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{mixed}(x, effects = c("all", "fixed", "random"), ...)
 
@@ -40,17 +45,23 @@ get_data(x, ...)
 
 \method{get_data}{lme}(x, effects = c("all", "fixed", "random"), ...)
 
-\method{get_data}{MixMod}(x, effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated",
-  "dispersion"), ...)
+\method{get_data}{MixMod}(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  ...
+)
 
-\method{get_data}{brmsfit}(x, effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated"), ...)
+\method{get_data}{brmsfit}(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated"),
+  ...
+)
 
 \method{get_data}{stanreg}(x, effects = c("all", "fixed", "random"), ...)
 
-\method{get_data}{MCMCglmm}(x, effects = c("all", "fixed", "random"),
-  ...)
+\method{get_data}{MCMCglmm}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{rqss}(x, effects = c("all", "fixed", "random"), ...)
 
