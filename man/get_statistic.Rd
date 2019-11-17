@@ -10,11 +10,8 @@ get_statistic(x, ...)
 
 \method{get_statistic}{default}(x, column_index = 3, ...)
 
-\method{get_statistic}{glmmTMB}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated"),
-  ...
-)
+\method{get_statistic}{glmmTMB}(x, component = c("all", "conditional",
+  "zi", "zero_inflated"), ...)
 }
 \arguments{
 \item{x}{A model.}

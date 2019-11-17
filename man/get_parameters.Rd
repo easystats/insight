@@ -28,7 +28,8 @@
 \usage{
 get_parameters(x, ...)
 
-\method{get_parameters}{rqss}(x, component = c("all", "conditional", "smooth_terms"), ...)
+\method{get_parameters}{rqss}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
 
 \method{get_parameters}{coxme}(x, effects = c("fixed", "random"), ...)
 
@@ -40,73 +41,56 @@ get_parameters(x, ...)
 
 \method{get_parameters}{lme}(x, effects = c("fixed", "random"), ...)
 
-\method{get_parameters}{MixMod}(
-  x,
-  effects = c("fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-  ...
-)
+\method{get_parameters}{MixMod}(x, effects = c("fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), ...)
 
-\method{get_parameters}{glmmTMB}(
-  x,
-  effects = c("fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-  ...
-)
+\method{get_parameters}{glmmTMB}(x, effects = c("fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion"), ...)
 
 \method{get_parameters}{BBmm}(x, effects = c("fixed", "random"), ...)
 
-\method{get_parameters}{glimML}(x, effects = c("fixed", "random", "all"), ...)
+\method{get_parameters}{glimML}(x, effects = c("fixed", "random", "all"),
+  ...)
 
-\method{get_parameters}{gamm}(x, component = c("all", "conditional", "smooth_terms"), ...)
+\method{get_parameters}{gamm}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
 
-\method{get_parameters}{Gam}(x, component = c("all", "conditional", "smooth_terms"), ...)
+\method{get_parameters}{Gam}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
 
-\method{get_parameters}{gam}(x, component = c("all", "conditional", "smooth_terms"), ...)
+\method{get_parameters}{gam}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
 
-\method{get_parameters}{vgam}(x, component = c("all", "conditional", "smooth_terms"), ...)
+\method{get_parameters}{vgam}(x, component = c("all", "conditional",
+  "smooth_terms"), ...)
 
-\method{get_parameters}{zeroinfl}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated"),
-  ...
-)
+\method{get_parameters}{zeroinfl}(x, component = c("all", "conditional",
+  "zi", "zero_inflated"), ...)
 
-\method{get_parameters}{aovlist}(x, effects = c("fixed", "random", "all"), ...)
+\method{get_parameters}{aovlist}(x, effects = c("fixed", "random",
+  "all"), ...)
 
-\method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random", "all"), ...)
+\method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random",
+  "all"), ...)
 
-\method{get_parameters}{BFBayesFactor}(x, iterations = 4000, progress = FALSE, ...)
+\method{get_parameters}{BFBayesFactor}(x, iterations = 4000,
+  progress = FALSE, ...)
 
-\method{get_parameters}{stanmvreg}(
-  x,
-  effects = c("fixed", "random", "all"),
-  parameters = NULL,
-  ...
-)
+\method{get_parameters}{stanmvreg}(x, effects = c("fixed", "random",
+  "all"), parameters = NULL, ...)
 
-\method{get_parameters}{brmsfit}(
-  x,
-  effects = c("fixed", "random", "all"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex",
-    "sigma", "smooth_terms"),
-  parameters = NULL,
-  ...
-)
+\method{get_parameters}{brmsfit}(x, effects = c("fixed", "random",
+  "all"), component = c("all", "conditional", "zi", "zero_inflated",
+  "dispersion", "simplex", "sigma", "smooth_terms"), parameters = NULL,
+  ...)
 
-\method{get_parameters}{stanreg}(
-  x,
-  effects = c("fixed", "random", "all"),
-  parameters = NULL,
-  ...
-)
+\method{get_parameters}{stanreg}(x, effects = c("fixed", "random",
+  "all"), parameters = NULL, ...)
 
-\method{get_parameters}{sim.merMod}(
-  x,
-  effects = c("fixed", "random", "all"),
-  parameters = NULL,
-  ...
-)
+\method{get_parameters}{sim.merMod}(x, effects = c("fixed", "random",
+  "all"), parameters = NULL, ...)
 }
 \arguments{
 \item{x}{A fitted model.}

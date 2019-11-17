@@ -13,19 +13,25 @@
 \usage{
 get_varcov(x, ...)
 
-\method{get_varcov}{betareg}(x, component = c("conditional", "precision", "all"), ...)
+\method{get_varcov}{betareg}(x, component = c("conditional", "precision",
+  "all"), ...)
 
-\method{get_varcov}{truncreg}(x, component = c("conditional", "all"), ...)
+\method{get_varcov}{truncreg}(x, component = c("conditional", "all"),
+  ...)
 
 \method{get_varcov}{gamlss}(x, component = c("conditional", "all"), ...)
 
-\method{get_varcov}{hurdle}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+\method{get_varcov}{hurdle}(x, component = c("conditional",
+  "zero_inflated", "zi", "all"), ...)
 
-\method{get_varcov}{MixMod}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+\method{get_varcov}{MixMod}(x, component = c("conditional",
+  "zero_inflated", "zi", "all"), ...)
 
-\method{get_varcov}{glmmTMB}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+\method{get_varcov}{glmmTMB}(x, component = c("conditional",
+  "zero_inflated", "zi", "all"), ...)
 
-\method{get_varcov}{brmsfit}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+\method{get_varcov}{brmsfit}(x, component = c("conditional",
+  "zero_inflated", "zi", "all"), ...)
 }
 \arguments{
 \item{x}{A model.}
