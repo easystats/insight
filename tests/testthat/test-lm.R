@@ -177,6 +177,19 @@ if (require("testthat") &&
     expect_true(all_models_equal(m1, m2))
   })
 
+  test_that("get_varcov", {
+    expect_equal(diag(get_varcov(m1)), diag(vcov(m1)))
+  })
+
+  test_that("get_statistic", {
+    expect_equal(get_statistic(m1)$Statistic, c(57.5427, 4.7298, -0.2615, -0.1398), tolerance = 1e-3)
+  })
+
+  test_that("find_statistic", {
+    expect_equal(find_statistic(m1), "t-statistic")
+  })
+
+
   data("DNase")
   DNase1 <- subset(DNase, Run == 1)
   m3 <-

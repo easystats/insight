@@ -100,6 +100,7 @@ supported_models <- function() {
     "mixed",
     "MixMod",
     "mlm",
+    "mclogit",
     "mlogit",
     "multinom",
     "plm",
