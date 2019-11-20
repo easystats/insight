@@ -4,8 +4,11 @@
 \alias{print_parameters}
 \title{Prepare summary statistics of model parameters for printing}
 \usage{
-print_parameters(x, ..., split_by = c("Effects", "Component", "Group",
-  "Response"))
+print_parameters(
+  x,
+  ...,
+  split_by = c("Effects", "Component", "Group", "Response")
+)
 }
 \arguments{
 \item{x}{A fitted model, or a data frame returned by \code{\link{clean_parameters}}.}

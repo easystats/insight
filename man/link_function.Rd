@@ -7,8 +7,7 @@
 \usage{
 link_function(x, ...)
 
-\method{link_function}{gamlss}(x, what = c("mu", "sigma", "nu", "tau"),
-  ...)
+\method{link_function}{gamlss}(x, what = c("mu", "sigma", "nu", "tau"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}
