@@ -141,6 +141,13 @@ model_info.speedglm <- function(x, ...) {
 }
 
 
+#' @importFrom stats family
+#' @export
+model_info.mmclogit <- function(x, ...) {
+  make_family(x = x, ...)
+}
+
+
 #' @export
 model_info.glmmPQL <- function(x, ...) {
   faminfo <- x$family

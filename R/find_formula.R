@@ -692,6 +692,22 @@ find_formula.clmm <- function(x, ...) {
 }
 
 
+#' @export
+find_formula.mmclogit <- function(x, ...) {
+  tryCatch(
+    {
+      list(
+        conditional = stats::formula(x),
+        random = as.formula(parse(text = .safe_deparse(x$call))[[1]]$random)
+      )
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+}
+
+
 
 #' @export
 find_formula.stanreg <- function(x, ...) {

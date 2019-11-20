@@ -102,6 +102,7 @@ supported_models <- function() {
     "mlm",
     "mclogit",
     "mlogit",
+    "mmlogit",
     "multinom",
     "plm",
     "polr",

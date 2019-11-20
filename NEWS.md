@@ -1,3 +1,9 @@
+# insight 0.7.1
+
+## New supported model classes
+
+* `mclogit` and `mmclogit` (*mclogit*).
+
 # insight 0.7.0
 
 ## Breaking changes
