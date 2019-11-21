@@ -4,6 +4,10 @@
 
 * `mclogit` and `mmclogit` (*mclogit*).
 
+## Bug fixes
+
+* Fix bug in `find_formula()` for mixed models, when random effects are written before any fixed effects terms (like `social ~ (1|school) + open + extro`).
+
 # insight 0.7.0
 
 ## Breaking changes
