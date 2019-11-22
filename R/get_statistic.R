@@ -317,6 +317,7 @@ get_statistic.vgam <- function(x, ...) {
   out <- data.frame(
     Parameter = params$Parameter,
     Statistic = as.vector(params$Estimate / sqrt(diag(get_varcov(x)))),
+    Component = params$Component,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
