@@ -292,6 +292,8 @@
         faminfo$link_function,
         logit = pi^2 / 3,
         probit = 1,
+        cloglog = ,
+        clogloglink = pi^2 / 6,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_count) {
