@@ -26,6 +26,7 @@
 #'      \item \code{is_linear}: family is gaussian
 #'      \item \code{is_tweedie}: family is tweedie
 #'      \item \code{is_ordinal}: family is ordinal or cumulative link
+#'      \item \code{is_cumulative}: family is ordinal or cumulative link
 #'      \item \code{is_categorical}: family is categorical link
 #'      \item \code{is_censored}: model is a censored model (has a censored response, including survival models)
 #'      \item \code{is_truncated}: model is a truncated model (has a truncated response)
@@ -432,7 +433,7 @@ model_info.gam <- function(x, ...) {
 model_info.vgam <- function(x, ...) {
   faminfo <- x@family
   link.fun <- faminfo@blurb[3]
-  if (grepl("^\\Qlogit(\\E", link.fun, perl = TRUE)) link.fun <- "logit"
+  if (grepl("^(l|L)ogit", link.fun)) link.fun <- "logit"
   make_family(
     x = x,
     fitfam = faminfo@vfamily[1],
@@ -447,7 +448,7 @@ model_info.vgam <- function(x, ...) {
 model_info.vglm <- function(x, ...) {
   faminfo <- x@family
   link.fun <- faminfo@blurb[3]
-  if (grepl("^\\Qlogit(\\E", link.fun, perl = TRUE)) link.fun <- "logit"
+  if (grepl("^(l|L)ogit", link.fun)) link.fun <- "logit"
   make_family(
     x = x,
     fitfam = faminfo@vfamily[1],
@@ -1072,6 +1073,7 @@ make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE
     is_zero_inflated = zero.inf,
     is_hurdle = hurdle,
     is_ordinal = is.ordinal,
+    is_cumulative = is.ordinal,
     is_categorical = is.categorical,
     is_mixed = !is.null(find_random(x)),
     is_multivariate = multi.var,

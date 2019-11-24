@@ -6,7 +6,8 @@
 
 ## Bug fixes
 
-* Fix bug in `find_formula()` for mixed models, when random effects are written before any fixed effects terms (like `social ~ (1|school) + open + extro`).
+* Fixed bug in `find_formula()` for mixed models, when random effects are written before any fixed effects terms (like `social ~ (1|school) + open + extro`).
+* Fixed bug in `model_info()` for *VGAM* models, where logit-link was not always correctly identified.
 
 # insight 0.7.0
 
