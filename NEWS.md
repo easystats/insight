@@ -8,6 +8,7 @@
 
 * Fixed bug in `find_formula()` for mixed models, when random effects are written before any fixed effects terms (like `social ~ (1|school) + open + extro`).
 * Fixed bug in `model_info()` for *VGAM* models, where logit-link was not always correctly identified.
+* Fixed issue in `get_priors()` for *brmsfit* models, where parameters of conditional and zero-inflated model components had identical names. This caused errors in `bayestestR::simulate_prior()`.
 
 # insight 0.7.0
 
