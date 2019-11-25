@@ -414,13 +414,13 @@ link_inverse.glimML <- function(x, ...) {
 
 #' @export
 link_inverse.clm <- function(x, ...) {
-  stats::make.link(get_ordinal_link(x))$linkinv
+  stats::make.link(.get_ordinal_link(x))$linkinv
 }
 
 
 #' @export
 link_inverse.clmm <- function(x, ...) {
-  stats::make.link(get_ordinal_link(x))$linkinv
+  stats::make.link(.get_ordinal_link(x))$linkinv
 }
 
 
@@ -446,7 +446,7 @@ link_inverse.MCMCglmm <- function(x, ...) {
 
 #' @export
 link_inverse.clm2 <- function(x, ...) {
-  stats::make.link(get_ordinal_link(x))$linkinv
+  stats::make.link(.get_ordinal_link(x))$linkinv
 }
 
 #' @export

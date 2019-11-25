@@ -174,13 +174,13 @@ link_function.gamm <- function(x, ...) {
 
 #' @export
 link_function.clm <- function(x, ...) {
-  stats::make.link(link = get_ordinal_link(x))$linkfun
+  stats::make.link(link = .get_ordinal_link(x))$linkfun
 }
 
 
 #' @export
 link_function.clm2 <- function(x, ...) {
-  stats::make.link(link = get_ordinal_link(x))$linkfun
+  stats::make.link(link = .get_ordinal_link(x))$linkfun
 }
 
 
@@ -218,7 +218,7 @@ link_function.LORgee <- function(x, ...) {
 
 #' @export
 link_function.clmm <- function(x, ...) {
-  stats::make.link(link = get_ordinal_link(x))$linkfun
+  stats::make.link(link = .get_ordinal_link(x))$linkfun
 }
 
 
