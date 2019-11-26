@@ -3,11 +3,10 @@ if (require("testthat") &&
   require("nlme")) {
 
   data(Ovary)
-  m1 <-
-    gls(follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time),
-      Ovary,
-      correlation = corAR1(form = ~ 1 | Mare)
-    )
+  m1 <- gls(follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time),
+    Ovary,
+    correlation = corAR1(form = ~ 1 | Mare)
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -32,7 +31,7 @@ if (require("testthat") &&
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 308)
-    expect_equal(colnames(get_data(m1)), c("Time", "Mare", "follicles"))
+    expect_equal(colnames(get_data(m1)), c("Mare", "Time", "follicles"))
   })
 
   test_that("find_formula", {
