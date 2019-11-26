@@ -631,6 +631,24 @@ get_statistic.gee <- function(x, ...) {
 
 
 
+#' @export
+get_statistic.complmrob <- function(x, ...) {
+  parms <- get_parameters(x)
+  stat <- summary(x)$stats
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = as.vector(stat[, "t value"]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
 #' @importFrom stats qchisq
 #' @importFrom utils capture.output
 #' @export

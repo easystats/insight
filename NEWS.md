@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `mclogit` and `mmclogit` (*mclogit*).
+* `complmrob`, `mclogit` and `mmclogit` (*mclogit*).
 
 ## Bug fixes
 
