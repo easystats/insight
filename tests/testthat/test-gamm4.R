@@ -1,19 +1,15 @@
 unloadNamespace("gam")
 
 if (require("testthat") && require("insight") && require("gamm4")) {
-  context("insight, model_info")
-
   set.seed(0)
-  dat <-
-    gamSim(1, n = 400, scale = 2) ## simulate 4 term additive truth
+  dat <- gamSim(1, n = 400, scale = 2) ## simulate 4 term additive truth
   dat$fac <- fac <- as.factor(sample(1:20, 400, replace = TRUE))
   dat$y <- dat$y + model.matrix(~ fac - 1) %*% rnorm(20) * .5
 
-  m1 <-
-    gamm4(y ~ s(x0) + x1 + s(x2),
-      data = dat,
-      random = ~ (1 | fac)
-    )
+  m1 <- gamm4(y ~ s(x0) + x1 + s(x2),
+    data = dat,
+    random = ~ (1 | fac)
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
