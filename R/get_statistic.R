@@ -619,7 +619,7 @@ get_statistic.crch <- function(x, ...) {
 
 #' @export
 get_statistic.fixest <- function(x, ...) {
-  cs <- x$coeftable
+  cs <- summary(x)$coeftable
   params <- get_parameters(x)
 
   out <- data.frame(
