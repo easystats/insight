@@ -11,6 +11,7 @@
   neg_bin_fam <-
     grepl("\\Qnegative binomial\\E", fitfam, ignore.case = TRUE) |
     grepl("\\Qnbinom\\E", fitfam, ignore.case = TRUE) |
+    grepl("\\Qnegbin\\E", fitfam, ignore.case = TRUE) |
     grepl("\\Qnzbinom\\E", fitfam, ignore.case = TRUE) |
     grepl("\\Qgenpois\\E", fitfam, ignore.case = TRUE) |
     grepl("\\Qnegbinomial\\E", fitfam, ignore.case = TRUE) |

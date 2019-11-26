@@ -372,6 +372,46 @@ model_info.MixMod <- function(x, ...) {
 model_info.glmmPQL <- model_info.MixMod
 
 
+#' @export
+model_info.fixest <- function(x, ...) {
+  faminfo <- x$family
+
+  if (inherits(faminfo, "family")) {
+    .make_family(
+      x = x,
+      fitfam = faminfo$family,
+      logit.link = faminfo$link == "logit",
+      link.fun = faminfo$link,
+      ...
+    )
+  } else {
+    fitfam <- switch(
+      faminfo,
+      "negbin" = "negative binomial",
+      "logit" = "binomial",
+      faminfo
+    )
+
+    link <- switch(
+      faminfo,
+      "poisson" = ,
+      "negbin" = "log",
+      "logit" = "logit",
+      "gaussian" = "identity"
+    )
+
+    .make_family(
+      x = x,
+      fitfam = fitfam,
+      logit.link = link == "logit",
+      link.fun = link,
+      ...
+    )
+  }
+}
+
+
+
 
 
 

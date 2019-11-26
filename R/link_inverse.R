@@ -283,6 +283,23 @@ link_inverse.clm2 <- link_inverse.clm
 
 
 #' @export
+link_inverse.fixest <- function(x, ...) {
+  if (inherits(x$family, "family")) {
+    x$family$linkinv
+  } else {
+    link <- switch(
+      x$family,
+      "poisson" = ,
+      "negbin" = "log",
+      "logit" = "logit",
+      "gaussian" = "identity"
+    )
+    stats::make.link(link)$linkinv
+  }
+}
+
+
+#' @export
 link_inverse.polr <- function(x, ...) {
   link <- x$method
   if (link == "logistic") link <- "logit"

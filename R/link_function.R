@@ -268,6 +268,23 @@ link_function.clmm <- link_function.clm
 
 
 #' @export
+link_function.fixest <- function(x, ...) {
+  if (inherits(x$family, "family")) {
+    x$family$linkfun
+  } else {
+    link <- switch(
+      x$family,
+      "poisson" = ,
+      "negbin" = "log",
+      "logit" = "logit",
+      "gaussian" = "identity"
+    )
+    stats::make.link(link)$linkfun
+  }
+}
+
+
+#' @export
 link_function.gam <- function(x, ...) {
   lf <- tryCatch(
     {

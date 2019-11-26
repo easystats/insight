@@ -434,7 +434,7 @@ get_data.feis <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   mf <- tryCatch(
     {
-      get(.safe_deparse(x$call$data), envir = parent.frame())[, find_variables(x, flatten = TRUE), drop = FALSE]
+      .get_data_from_env(x)
     },
     error = function(x) {
       stats::model.frame(x)
@@ -442,6 +442,13 @@ get_data.feis <- function(x, effects = c("all", "fixed", "random"), ...) {
   )
 
   .get_data_from_modelframe(x, mf, effects)
+}
+
+
+#' @export
+get_data.fixest <- function(x, ...) {
+  mf <- .get_data_from_env(x)
+  .get_data_from_modelframe(x, mf, effects = "all")
 }
 
 

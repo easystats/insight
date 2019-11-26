@@ -269,12 +269,12 @@
 # to reduce redundant code, I extract this part which is used several
 # times accross this package
 .get_elements <- function(effects, component) {
-  elements <- c("conditional", "nonlinear", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes")
+  elements <- c("conditional", "nonlinear", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes", "cluster")
 
   elements <- switch(
     effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear")],
+    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
@@ -291,6 +291,7 @@
     sigma = elements[elements == "sigma"],
     smooth_terms = elements[elements == "smooth_terms"],
     correlation = elements[elements == "correlation"],
+    cluster = elements[elements == "cluster"],
     nonlinear = elements[elements == "nonlinear"],
     slopes = elements[elements == "slopes"]
   )

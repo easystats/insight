@@ -237,6 +237,13 @@ n_obs.feis <- function(x, ...) {
 
 
 #' @export
+n_obs.fixest <- function(x, ...) {
+  x$nobs
+}
+
+
+
+#' @export
 n_obs.complmrob <- function(x, ...) {
   nrow(get_data(x))
 }

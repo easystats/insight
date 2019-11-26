@@ -450,9 +450,9 @@ get_statistic.multinom <- function(x, ...) {
   out
 }
 
-
 #' @export
 get_statistic.brmultinom <- get_statistic.multinom
+
 
 #' @export
 get_statistic.bracl <- function(x, ...) {
@@ -513,9 +513,9 @@ get_statistic.wbm <- function(x, ...) {
   out
 }
 
-
 #' @export
 get_statistic.wbgee <- get_statistic.wbm
+
 
 
 #' @export
@@ -551,6 +551,7 @@ get_statistic.crq <- get_statistic.rq
 get_statistic.nlrq <- get_statistic.rq
 
 
+
 #' @export
 get_statistic.bigglm <- function(x, ...) {
   parms <- get_parameters(x)
@@ -567,6 +568,7 @@ get_statistic.bigglm <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
+
 
 
 #' @export
@@ -587,12 +589,14 @@ get_statistic.biglm <- function(x, ...) {
 }
 
 
+
 #' @export
 get_statistic.LORgee <- function(x, ...) {
   out <- get_statistic.default(x)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
+
 
 
 #' @export
@@ -610,6 +614,25 @@ get_statistic.crch <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
+
+
+
+#' @export
+get_statistic.fixest <- function(x, ...) {
+  cs <- x$coeftable
+  params <- get_parameters(x)
+
+  out <- data.frame(
+    Parameter = params$Parameter,
+    Statistic = as.vector(cs[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
 
 
 #' @importFrom stats coef
@@ -690,8 +713,6 @@ get_statistic.svyglm.nb <- function(x, ...) {
   out
 }
 
-
-
 #' @export
 get_statistic.svyglm.zip <- get_statistic.svyglm.nb
 
@@ -757,14 +778,11 @@ get_statistic.lrm <- function(x, ...) {
   out
 }
 
-
 #' @export
 get_statistic.ols <- get_statistic.lrm
 
-
 #' @export
 get_statistic.rms <- get_statistic.lrm
-
 
 #' @export
 get_statistic.psm <- get_statistic.lrm
