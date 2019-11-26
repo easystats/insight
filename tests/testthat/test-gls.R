@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("nlme")) {
-  context("insight, model_info")
 
   data(Ovary)
   m1 <-
@@ -33,7 +32,7 @@ if (require("testthat") &&
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 308)
-    expect_equal(colnames(get_data(m1)), c("follicles", "Time", "Mare"))
+    expect_equal(colnames(get_data(m1)), c("Time", "Mare", "follicles"))
   })
 
   test_that("find_formula", {
