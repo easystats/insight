@@ -1,11 +1,9 @@
 if (require("testthat") &&
   require("insight") &&
   require("survival")) {
-  context("insight, survfit")
 
   data("lung")
-  m1 <-
-    survfit(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
+  m1 <- survfit(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_logit)
@@ -29,7 +27,7 @@ if (require("testthat") &&
     expect_equal(nrow(get_data(m1)), 227)
     expect_equal(
       colnames(get_data(m1)),
-      c("time", "status", "sex", "age", "ph.ecog")
+      c("time", "status", "age", "sex", "ph.ecog")
     )
   })
 
