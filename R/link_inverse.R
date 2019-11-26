@@ -28,6 +28,10 @@ link_inverse <- function(x, ...) {
 }
 
 
+
+# Default method ---------------------------------------
+
+
 #' @export
 link_inverse.default <- function(x, ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
@@ -50,30 +54,13 @@ link_inverse.default <- function(x, ...) {
 }
 
 
-#' @export
-link_inverse.gam <- function(x, ...) {
-  li <- tryCatch(
-    {
-      .gam_family(x)$linkinv
-    },
-    error = function(x) {
-      NULL
-    }
-  )
 
-  if (is.null(li)) {
-    mi <- .gam_family(x)
-    if (.obj_has_name(mi, "linfo")) {
-      if (.obj_has_name(mi$linfo, "linkinv")) {
-        li <- mi$linfo$linkinv
-      } else {
-        li <- mi$linfo[[1]]$linkinv
-      }
-    }
-  }
 
-  li
-}
+
+
+
+
+# GLM families ---------------------------------------------------
 
 
 #' @export
@@ -88,18 +75,36 @@ link_inverse.glm <- function(x, ...) {
   )
 }
 
+#' @export
+link_inverse.speedglm <- link_inverse.glm
 
 #' @export
-link_inverse.speedglm <- function(x, ...) {
-  stats::family(x)$linkinv
-}
+link_inverse.bigglm <- link_inverse.glm
+
+
+
+
+
+
+
+
+
+# Tobit Family ---------------------------------
 
 
 #' @export
-link_inverse.bigglm <- function(x, ...) {
-  stats::family(x)$linkinv
+link_inverse.tobit <- function(x, ...) {
+  .make_tobit_family(x)$linkinv
 }
 
+#' @export
+link_inverse.crch <- link_inverse.tobit
+
+#' @export
+link_inverse.survreg <- link_inverse.tobit
+
+#' @export
+link_inverse.psm <- link_inverse.tobit
 
 #' @export
 link_inverse.flexsurvreg <- function(x, ...) {
@@ -108,34 +113,12 @@ link_inverse.flexsurvreg <- function(x, ...) {
 }
 
 
-#' @rdname link_inverse
-#' @export
-link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
-  what <- match.arg(what)
-  faminfo <- get(x$family[1], asNamespace("gamlss"))()
-  switch(
-    what,
-    "mu" = faminfo$mu.linkinv,
-    "sigma" = faminfo$sigma.linkinv,
-    "nu" = faminfo$nu.linkinv,
-    "tau" = faminfo$tau.linkinv,
-    faminfo$mu.linkinv
-  )
-}
 
 
-#' @export
-link_inverse.bamlss <- function(x, ...) {
-  flink <- stats::family(x)$links[1]
-  tryCatch(
-    {
-      stats::make.link(flink)$linkinv
-    },
-    error = function(e) {
-      print_colour("\nCould not find appropriate link-inverse-function.\n", "red")
-    }
-  )
-}
+
+
+
+# Gaussian identity links ---------------------------------
 
 
 #' @export
@@ -143,53 +126,118 @@ link_inverse.lm <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
 
+#' @export
+link_inverse.bayesx <- link_inverse.lm
 
 #' @export
-link_inverse.bayesx <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
+link_inverse.biglm <- link_inverse.lm
+
+#' @export
+link_inverse.aovlist <- link_inverse.lm
+
+#' @export
+link_inverse.ivreg <- link_inverse.lm
+
+#' @export
+link_inverse.iv_robust <- link_inverse.lm
+
+#' @export
+link_inverse.mixed <- link_inverse.lm
+#' @export
+link_inverse.lme <- link_inverse.lm
+
+#' @export
+link_inverse.rq <- link_inverse.lm
+
+#' @export
+link_inverse.crq <- link_inverse.lm
+
+#' @export
+link_inverse.censReg <- link_inverse.lm
+
+#' @export
+link_inverse.plm <- link_inverse.lm
+
+#' @export
+link_inverse.lm_robust <- link_inverse.lm
+
+#' @export
+link_inverse.truncreg <- link_inverse.lm
+
+#' @export
+link_inverse.felm <- link_inverse.lm
+
+#' @export
+link_inverse.feis <- link_inverse.lm
+
+#' @export
+link_inverse.gls <- link_inverse.lm
+
+#' @export
+link_inverse.lmRob <- link_inverse.lm
+
+#' @export
+link_inverse.lmrob <- link_inverse.lm
+
+#' @export
+link_inverse.complmrob <- link_inverse.lm
+
+#' @export
+link_inverse.speedlm <- link_inverse.lm
+
+
+
+#' @export
+link_inverse.betareg <- function(x, ...) {
+  x$link$mean$linkinv
 }
 
 
-#' @export
-link_inverse.biglm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
+
+
+
+# Logit links -----------------------------------
 
 
 #' @export
-link_inverse.aovlist <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.ivreg <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.iv_robust <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.coxph <- function(x, ...) {
+link_inverse.gmnl <- function(x, ...) {
   stats::make.link("logit")$linkinv
 }
 
+#' @export
+link_inverse.mlogit <- link_inverse.gmnl
 
 #' @export
-link_inverse.survfit <- function(x, ...) {
-  stats::make.link("logit")$linkinv
-}
-
+link_inverse.BBreg <- link_inverse.gmnl
 
 #' @export
-link_inverse.coxme <- function(x, ...) {
-  stats::make.link("logit")$linkinv
-}
+link_inverse.BBmm <- link_inverse.gmnl
+
+#' @export
+link_inverse.coxph <- link_inverse.gmnl
+
+#' @export
+link_inverse.survfit <- link_inverse.gmnl
+
+#' @export
+link_inverse.coxme <- link_inverse.gmnl
+
+#' @export
+link_inverse.lrm <- link_inverse.gmnl
+
+#' @export
+link_inverse.logistf <- link_inverse.gmnl
+
+#' @export
+link_inverse.multinom <- link_inverse.gmnl
+
+
+
+
+
+
+
+# Log-links ---------------------------------------
 
 
 #' @export
@@ -197,155 +245,41 @@ link_inverse.zeroinfl <- function(x, ...) {
   stats::make.link("log")$linkinv
 }
 
+#' @export
+link_inverse.hurdle <- link_inverse.zeroinfl
 
 #' @export
-link_inverse.hurdle <- function(x, ...) {
-  stats::make.link("log")$linkinv
-}
+link_inverse.zerotrunc <- link_inverse.zeroinfl
 
 
-#' @export
-link_inverse.zerotrunc <- function(x, ...) {
-  stats::make.link("log")$linkinv
-}
 
 
-#' @export
-link_inverse.glmmPQL <- function(x, ...) {
-  x$family$linkinv
-}
+
+
+
+
+# Ordinal models -----------------------------------
 
 
 #' @export
-link_inverse.MixMod <- function(x, ...) {
-  x$family$linkinv
+link_inverse.clm <- function(x, ...) {
+  stats::make.link(.get_ordinal_link(x))$linkinv
 }
-
 
 #' @export
-link_inverse.vgam <- function(x, ...) {
-  x@family@linkinv
-}
-
+link_inverse.clmm <- link_inverse.clm
 
 #' @export
-link_inverse.vglm <- function(x, ...) {
-  x@family@linkinv
-}
+link_inverse.clm2 <- link_inverse.clm
 
 
-#' @export
-link_inverse.lme <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
 
 
-#' @export
-link_inverse.rq <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
 
 
-#' @export
-link_inverse.crq <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
 
 
-#' @export
-link_inverse.tobit <- function(x, ...) {
-  .make_tobit_family(x)$linkinv
-}
-
-
-#' @export
-link_inverse.crch <- function(x, ...) {
-  .make_tobit_family(x)$linkinv
-}
-
-
-#' @export
-link_inverse.survreg <- function(x, ...) {
-  .make_tobit_family(x)$linkinv
-}
-
-
-#' @export
-link_inverse.psm <- function(x, ...) {
-  .make_tobit_family(x)$linkinv
-}
-
-
-#' @export
-link_inverse.mixed <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.censReg <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.plm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.lm_robust <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.truncreg <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.felm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.feis <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.gls <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.lmRob <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.lmrob <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.speedlm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
-}
-
-
-#' @export
-link_inverse.betareg <- function(x, ...) {
-  x$link$mean$linkinv
-}
+# Other models ----------------------------
 
 
 #' @export
@@ -383,44 +317,8 @@ link_inverse.LORgee <- function(x, ...) {
 
 
 #' @export
-link_inverse.gmnl <- function(x, ...) {
-  stats::make.link("logit")$linkinv
-}
-
-
-#' @export
-link_inverse.mlogit <- function(x, ...) {
-  stats::make.link("logit")$linkinv
-}
-
-
-#' @export
-link_inverse.BBreg <- function(x, ...) {
-  stats::make.link("logit")$linkinv
-}
-
-
-#' @export
-link_inverse.BBmm <- function(x, ...) {
-  stats::make.link("logit")$linkinv
-}
-
-
-#' @export
 link_inverse.glimML <- function(x, ...) {
   stats::make.link(x@link)$linkinv
-}
-
-
-#' @export
-link_inverse.clm <- function(x, ...) {
-  stats::make.link(.get_ordinal_link(x))$linkinv
-}
-
-
-#' @export
-link_inverse.clmm <- function(x, ...) {
-  stats::make.link(.get_ordinal_link(x))$linkinv
 }
 
 
@@ -445,33 +343,10 @@ link_inverse.MCMCglmm <- function(x, ...) {
 
 
 #' @export
-link_inverse.clm2 <- function(x, ...) {
-  stats::make.link(.get_ordinal_link(x))$linkinv
-}
-
-#' @export
 link_inverse.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
   NextMethod()
-}
-
-
-#' @export
-link_inverse.lrm <- function(x, ...) {
-  stats::make.link(link = "logit")$linkinv
-}
-
-
-#' @export
-link_inverse.logistf <- function(x, ...) {
-  stats::make.link(link = "logit")$linkinv
-}
-
-
-#' @export
-link_inverse.multinom <- function(x, ...) {
-  stats::make.link(link = "logit")$linkinv
 }
 
 
@@ -502,14 +377,101 @@ link_inverse.gbm <- function(x, ...) {
 link_inverse.brmsfit <- function(x, ...) {
   fam <- stats::family(x)
   if (is_multivariate(x)) {
-    lapply(fam, brms_link_inverse)
+    lapply(fam, .brms_link_inverse)
   } else {
-    brms_link_inverse(fam)
+    .brms_link_inverse(fam)
   }
 }
 
 
-brms_link_inverse <- function(fam) {
+#' @rdname link_inverse
+#' @export
+link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
+  what <- match.arg(what)
+  faminfo <- get(x$family[1], asNamespace("gamlss"))()
+  switch(
+    what,
+    "mu" = faminfo$mu.linkinv,
+    "sigma" = faminfo$sigma.linkinv,
+    "nu" = faminfo$nu.linkinv,
+    "tau" = faminfo$tau.linkinv,
+    faminfo$mu.linkinv
+  )
+}
+
+
+#' @export
+link_inverse.bamlss <- function(x, ...) {
+  flink <- stats::family(x)$links[1]
+  tryCatch(
+    {
+      stats::make.link(flink)$linkinv
+    },
+    error = function(e) {
+      print_colour("\nCould not find appropriate link-inverse-function.\n", "red")
+    }
+  )
+}
+
+
+#' @export
+link_inverse.glmmPQL <- function(x, ...) {
+  x$family$linkinv
+}
+
+
+#' @export
+link_inverse.MixMod <- function(x, ...) {
+  x$family$linkinv
+}
+
+
+#' @export
+link_inverse.vgam <- function(x, ...) {
+  x@family@linkinv
+}
+
+
+#' @export
+link_inverse.vglm <- function(x, ...) {
+  x@family@linkinv
+}
+
+
+#' @export
+link_inverse.gam <- function(x, ...) {
+  li <- tryCatch(
+    {
+      .gam_family(x)$linkinv
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  if (is.null(li)) {
+    mi <- .gam_family(x)
+    if (.obj_has_name(mi, "linfo")) {
+      if (.obj_has_name(mi$linfo, "linkinv")) {
+        li <- mi$linfo$linkinv
+      } else {
+        li <- mi$linfo[[1]]$linkinv
+      }
+    }
+  }
+
+  li
+}
+
+
+
+
+
+
+# helper --------------
+
+
+.brms_link_inverse <- function(fam) {
   # do we have custom families?
   if (!is.null(fam$family) && (is.character(fam$family) && fam$family == "custom")) {
     il <- stats::make.link(fam$link)$linkinv

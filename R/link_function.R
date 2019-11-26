@@ -27,6 +27,10 @@ link_function <- function(x, ...) {
 }
 
 
+
+# Default method ---------------------------
+
+
 #' @export
 link_function.default <- function(x, ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
@@ -57,6 +61,210 @@ link_function.default <- function(x, ...) {
   )
 }
 
+
+
+
+
+# Gaussian family ------------------------------------------
+
+
+#' @export
+link_function.lm <- function(x, ...) {
+  stats::gaussian(link = "identity")$linkfun
+}
+
+#' @export
+link_function.lme <- link_function.lm
+
+#' @export
+link_function.bayesx <- link_function.lm
+
+#' @export
+link_function.mixed <- link_function.lm
+
+#' @export
+link_function.truncreg <- link_function.lm
+
+#' @export
+link_function.censReg <- link_function.lm
+
+#' @export
+link_function.gls <- link_function.lm
+
+#' @export
+link_function.rq <- link_function.lm
+
+#' @export
+link_function.crq <- link_function.lm
+
+#' @export
+link_function.lmRob <- link_function.lm
+
+#' @export
+link_function.complmRob <- link_function.lm
+
+#' @export
+link_function.speedlm <- link_function.lm
+
+#' @export
+link_function.biglm <- link_function.lm
+
+#' @export
+link_function.lmrob <- link_function.lm
+
+#' @export
+link_function.lm_robust <- link_function.lm
+
+#' @export
+link_function.iv_robust <- link_function.lm
+
+#' @export
+link_function.aovlist <- link_function.lm
+
+#' @export
+link_function.felm <- link_function.lm
+
+#' @export
+link_function.feis <- link_function.lm
+
+#' @export
+link_function.ivreg <- link_function.lm
+
+#' @export
+link_function.plm <- link_function.lm
+
+
+
+
+
+
+
+# General family ---------------------------------
+
+#' @export
+link_function.speedglm <- function(x, ...) {
+  stats::family(x)$linkfun
+}
+
+#' @export
+link_function.bigglm <- link_function.speedglm
+
+
+
+
+
+
+# Logit link ------------------------
+
+
+#' @export
+link_function.multinom <- function(x, ...) {
+  stats::make.link(link = "logit")$linkfun
+}
+
+#' @export
+link_function.BBreg <- link_function.multinom
+
+#' @export
+link_function.BBmm <- link_function.multinom
+
+#' @export
+link_function.gmnl <- link_function.multinom
+
+#' @export
+link_function.logistf <- link_function.multinom
+
+#' @export
+link_function.lrm <- link_function.multinom
+
+#' @export
+link_function.mlogit <- link_function.multinom
+
+#' @export
+link_function.coxph <- link_function.multinom
+
+#' @export
+link_function.survfit <- link_function.multinom
+
+#' @export
+link_function.coxme <- link_function.multinom
+
+
+
+
+
+
+# Log links ------------------------
+
+
+#' @export
+link_function.zeroinfl <- function(x, ...) {
+  stats::make.link("log")$linkfun
+}
+
+#' @export
+link_function.hurdle <- link_function.zeroinfl
+
+#' @export
+link_function.zerotrunc <- link_function.zeroinfl
+
+
+
+
+
+
+
+# Tobit links ---------------------------------
+
+
+#' @export
+link_function.tobit <- function(x, ...) {
+  .make_tobit_family(x)$linkfun
+}
+
+#' @export
+link_function.crch <- link_function.tobit
+
+#' @export
+link_function.survreg <- link_function.tobit
+
+#' @export
+link_function.psm <- link_function.tobit
+
+
+#' @export
+link_function.flexsurvreg <- function(x, ...) {
+  dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
+  .make_tobit_family(x, dist)$linkfun
+}
+
+
+
+
+
+
+
+# Ordinal and cumulative links --------------------------
+
+
+#' @export
+link_function.clm <- function(x, ...) {
+  stats::make.link(link = .get_ordinal_link(x))$linkfun
+}
+
+#' @export
+link_function.clm2 <- link_function.clm
+
+#' @export
+link_function.clmm <- link_function.clm
+
+
+
+
+
+
+
+# Other models -----------------------------
 
 
 #' @export
@@ -100,52 +308,10 @@ link_function.gam <- function(x, ...) {
 
 
 #' @export
-link_function.bayesx <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.flexsurvreg <- function(x, ...) {
-  dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
-  .make_tobit_family(x, dist)$linkfun
-}
-
-
-#' @export
-link_function.speedglm <- function(x, ...) {
-  stats::family(x)$linkfun
-}
-
-
-#' @export
-link_function.bigglm <- function(x, ...) {
-  stats::family(x)$linkfun
-}
-
-
-#' @export
-link_function.multinom <- function(x, ...) {
-  stats::make.link(link = "logit")$linkfun
-}
-
-
-#' @export
-link_function.BBreg <- function(x, ...) {
-  stats::make.link(link = "logit")$linkfun
-}
-
-
-#' @export
-link_function.BBmm <- function(x, ...) {
-  stats::make.link(link = "logit")$linkfun
-}
-
-
-#' @export
 link_function.glimML <- function(x, ...) {
   stats::make.link(link = x@link)$linkfun
 }
+
 
 
 #' @rdname link_function
@@ -164,6 +330,7 @@ link_function.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
 }
 
 
+
 #' @export
 link_function.gamm <- function(x, ...) {
   x <- x$gam
@@ -171,17 +338,6 @@ link_function.gamm <- function(x, ...) {
   NextMethod()
 }
 
-
-#' @export
-link_function.clm <- function(x, ...) {
-  stats::make.link(link = .get_ordinal_link(x))$linkfun
-}
-
-
-#' @export
-link_function.clm2 <- function(x, ...) {
-  stats::make.link(link = .get_ordinal_link(x))$linkfun
-}
 
 
 #' @export
@@ -196,6 +352,7 @@ link_function.bamlss <- function(x, ...) {
     }
   )
 }
+
 
 
 #' @export
@@ -215,11 +372,6 @@ link_function.LORgee <- function(x, ...) {
   stats::make.link(link)$linkfun
 }
 
-
-#' @export
-link_function.clmm <- function(x, ...) {
-  stats::make.link(link = .get_ordinal_link(x))$linkfun
-}
 
 
 #' @export
@@ -260,202 +412,12 @@ link_function.svyolr <- function(x, ...) {
 }
 
 
-#' @export
-link_function.gmnl <- function(x, ...) {
-  stats::make.link("logit")$linkfun
-}
-
-
-#' @export
-link_function.logistf <- function(x, ...) {
-  stats::make.link("logit")$linkfun
-}
-
-
-#' @export
-link_function.lrm <- function(x, ...) {
-  stats::make.link("logit")$linkfun
-}
-
-
-#' @export
-link_function.mlogit <- function(x, ...) {
-  stats::make.link("logit")$linkfun
-}
-
-
-#' @export
-link_function.zeroinfl <- function(x, ...) {
-  stats::make.link("log")$linkfun
-}
-
-
-#' @export
-link_function.hurdle <- function(x, ...) {
-  stats::make.link("log")$linkfun
-}
-
-
-#' @export
-link_function.zerotrunc <- function(x, ...) {
-  stats::make.link("log")$linkfun
-}
-
 
 #' @export
 link_function.betareg <- function(x, ...) {
   x$link$mean$linkfun
 }
 
-
-#' @export
-link_function.mixed <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.truncreg <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.censReg <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.gls <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.lme <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.rq <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.crq <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.tobit <- function(x, ...) {
-  .make_tobit_family(x)$linkfun
-}
-
-
-#' @export
-link_function.crch <- function(x, ...) {
-  .make_tobit_family(x)$linkfun
-}
-
-
-#' @export
-link_function.survreg <- function(x, ...) {
-  .make_tobit_family(x)$linkfun
-}
-
-
-#' @export
-link_function.psm <- function(x, ...) {
-  .make_tobit_family(x)$linkfun
-}
-
-
-#' @export
-link_function.lmRob <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.speedlm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.biglm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.lmrob <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.lm_robust <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.iv_robust <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.aovlist <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.felm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.feis <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.ivreg <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.plm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
-}
-
-
-#' @export
-link_function.coxph <- function(x, ...) {
-  stats::make.link("logit")$linkfun
-}
-
-
-#' @export
-link_function.survfit <- function(x, ...) {
-  stats::make.link("logit")$linkfun
-}
-
-
-#' @export
-link_function.coxme <- function(x, ...) {
-  stats::make.link("logit")$linkfun
-}
 
 
 #' @importFrom stats poisson
@@ -475,6 +437,7 @@ link_function.gbm <- function(x, ...) {
 }
 
 
+
 #' @export
 link_function.stanmvreg <- function(x, ...) {
   fam <- stats::family(x)
@@ -482,18 +445,29 @@ link_function.stanmvreg <- function(x, ...) {
 }
 
 
+
 #' @export
 link_function.brmsfit <- function(x, ...) {
   fam <- stats::family(x)
   if (is_multivariate(x)) {
-    lapply(fam, brms_link_fun)
+    lapply(fam, .brms_link_fun)
   } else {
-    brms_link_fun(fam)
+    .brms_link_fun(fam)
   }
 }
 
 
-brms_link_fun <- function(fam) {
+
+
+
+
+
+
+
+# helper -----------------------
+
+
+.brms_link_fun <- function(fam) {
   # do we have custom families?
   if (!is.null(fam$family) && (is.character(fam$family) && fam$family == "custom")) {
     il <- stats::make.link(fam$link)$linkfun
