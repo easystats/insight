@@ -14,9 +14,9 @@ if (require("testthat") &&
   })
 
   test_that("find_predictors", {
-    expect_identical(find_predictors(m1), list(conditional = "dist_km"))
-    expect_identical(find_predictors(m2), list(conditional = "dist_km"))
-    expect_identical(find_predictors(m3), list(conditional = "dist_km"))
+    expect_identical(find_predictors(m1), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
+    expect_identical(find_predictors(m2), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
+    expect_identical(find_predictors(m3), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
     expect_identical(
       find_predictors(m1, component = "all"),
       list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
@@ -184,20 +184,20 @@ if (require("testthat") &&
 
   test_that("get_statistic", {
     expect_equal(
-      get_parameters(m1),
+      get_statistic(m1),
       data.frame(
         Parameter = "log(dist_km)",
-        Estimate = -103.524779806449,
+        Estimate = -13.21028,
         row.names = NULL,
         stringsAsFactors = FALSE
       ),
       tolerance = 1e-4
     )
     expect_equal(
-      get_parameters(m2),
+      get_statistic(m2),
       data.frame(
         Parameter = "log(dist_km)",
-        Estimate = -793625.184858115,
+        Estimate = -14.06276,
         row.names = NULL,
         stringsAsFactors = FALSE
       ),
