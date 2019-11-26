@@ -179,6 +179,9 @@ model_info.speedlm <- model_info.mmclogit
 model_info.lmrob <- model_info.mmclogit
 
 #' @export
+model_info.complmrob <- model_info.mmclogit
+
+#' @export
 model_info.lm_robust <- model_info.mmclogit
 
 #' @export
