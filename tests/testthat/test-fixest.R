@@ -185,22 +185,16 @@ if (require("testthat") &&
   test_that("get_statistic", {
     expect_equal(
       get_statistic(m1),
-      data.frame(
-        Parameter = "log(dist_km)",
-        Estimate = -13.21028,
-        row.names = NULL,
-        stringsAsFactors = FALSE
-      ),
+      structure(list(
+        Parameter = "log(dist_km)", Statistic = -13.2102796112222),
+        class = "data.frame", row.names = c(NA, -1L), statistic = "z-statistic"),
       tolerance = 1e-4
     )
     expect_equal(
       get_statistic(m2),
-      data.frame(
-        Parameter = "log(dist_km)",
-        Estimate = -14.06276,
-        row.names = NULL,
-        stringsAsFactors = FALSE
-      ),
+      structure(list(
+        Parameter = "log(dist_km)", Statistic = -14.0627647683725),
+        class = "data.frame", row.names = c(NA, -1L), statistic = "z-statistic"),
       tolerance = 1e-4
     )
   })
