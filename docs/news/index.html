@@ -76,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.1</span>
       </span>
     </div>
 
@@ -117,6 +117,29 @@
       
     </div>
 
+    <div id="insight-071" class="section level1">
+<h1 class="page-header">
+<a href="#insight-071" class="anchor"></a>insight 0.7.1<small> Unreleased </small>
+</h1>
+<div id="new-supported-model-classes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
+<ul>
+<li>
+<code>complmrob</code> (<em>complmrob</em>), <code>fixest</code> (<em>fixest</em>), <code>mclogit</code> and <code>mmclogit</code> (<em>mclogit</em>).</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fixed bug in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models, when random effects are written before any fixed effects terms (like <code>social ~ (1|school) + open + extro</code>).</li>
+<li>Fixed bug in <code><a href="../reference/model_info.html">model_info()</a></code> for <em>VGAM</em> models, where logit-link was not always correctly identified.</li>
+<li>Fixed issue in <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>brmsfit</em> models, where parameters of conditional and zero-inflated model components had identical names. This caused errors in <code><a href="https://rdrr.io/pkg/bayestestR/man/simulate_prior.html">bayestestR::simulate_prior()</a></code>.</li>
+<li>Fixed CRAN check issue.</li>
+</ul>
+</div>
+</div>
     <div id="insight-070" class="section level1">
 <h1 class="page-header">
 <a href="#insight-070" class="anchor"></a>insight 0.7.0<small> 2019-11-14 </small>
@@ -130,9 +153,9 @@
 <code><a href="../reference/model_info.html">model_info()</a></code> returned both <code>$is_zeroinf</code> and <code>$is_zero_inflated</code> for zero-inflated models. Now <code>$is_zeroinf</code> is softly deprecated, so <code><a href="../reference/model_info.html">model_info()</a></code> will return <code>$is_zero_inflated</code> only in future updates.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes" class="section level2">
+<div id="new-supported-model-classes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-1" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>aareg</code> (<em>survival</em>), <code>brmultinom</code> and <code>bracl</code> (<em>brglm2</em>), and <code>wbgee</code> (<em>panelr</em>). Furthermore, for different model-types from <em>panelr</em> models (within-between, between, etc.) are now also supported.</li>
@@ -149,9 +172,9 @@
 <code><a href="../reference/link_inverse.html">link_inverse()</a></code> gets a <code>what</code>-argument, to return the link-inverse function for specific distribution parameters from <strong>gamls</strong> models.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed edge case for <code><a href="../reference/find_weights.html">find_weights()</a></code>.</li>
 <li>Fixed bug in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>glmmTMB</em> models that won’t return any data.</li>
@@ -162,9 +185,9 @@
 <h1 class="page-header">
 <a href="#insight-060" class="anchor"></a>insight 0.6.0<small> 2019-10-17 </small>
 </h1>
-<div id="new-supported-model-classes-1" class="section level2">
+<div id="new-supported-model-classes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-1" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-2" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>bayesx</code> (<em>R2BayesX</em>), <code>bamlss</code> (<em>bamlss</em>) and <code>flexsurvreg</code> (<em>flexsurv</em>). Note that support for these models is still somewhat experimental.</li>
@@ -197,9 +220,9 @@
 <li>Better support for nonlinear mixed models (<code><a href="https://rdrr.io/pkg/lme4/man/nlmer.html">lme4::nlmer()</a></code>). Note that model-specification requires the random term to be written in parentheses, i.e. <code>(slope | group)</code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issues in <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>gamlss</em> models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>plm</em> models, where the <code>index</code>-argument was used in the <code>plm()</code>-function call.</li>
@@ -255,9 +278,9 @@
 <code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> now include the Euclidean distance matrix for spatial models from <em>glmmTMB</em> (returned as random effects element, or more precise, as random slope).</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_formula.html">find_formula()</a></code> now extracts group factors of random effects for <em>gamlss</em> models.</li>
@@ -291,9 +314,9 @@
 <code><a href="../reference/get_weights.html">get_weights()</a></code> and <code><a href="../reference/find_weights.html">find_weights()</a></code> now work for <em>brms</em>-models.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix CRAN-check issues due to recent update from the <em>panelr</em>-package.</li>
 </ul>
@@ -311,9 +334,9 @@
 <li>Added <code><a href="https://rdrr.io/r/stats/nobs.html">nobs()</a></code>-method for those model-objects supported by <em>insight</em> that did not yet provide such a method.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes-2" class="section level2">
+<div id="new-supported-model-classes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-2" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-3" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>betabin</code> and <code>negbin</code> (<em>aod</em>), <code>BBreg</code> and <code>BBmm</code> (<em>HRQoL</em>), <code>wbm</code> (<em>panelr</em>), <code>survfit</code> (<em>survival</em>)</li>
@@ -358,9 +381,9 @@
 <code><a href="../reference/model_info.html">model_info()</a></code> now returns an element <code>$is_hurdle</code> for hurdle models.</li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> returned priors for <code>brmsfit</code>-objects as <code>$random</code>-element. Now, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> returns a <code>$priors</code>-element (#98).</li>
@@ -389,9 +412,9 @@
 <h1 class="page-header">
 <a href="#insight-030" class="anchor"></a>insight 0.3.0<small> 2019-05-11 </small>
 </h1>
-<div id="new-supported-model-classes-3" class="section level2">
+<div id="new-supported-model-classes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-3" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-4" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>biglm</code> and <code>bigglm</code> (<em>biglm</em>), <code>feis</code> (<em>feisr</em>), <code>gbm</code> (<em>gbm</em>), <code>BFBayesFactor</code> (<em>BayesFactor</em>), <code>psm</code> (<em>rms</em>), <code>LORgee</code> (<em>multgee</em>), <code>censReg</code> (<em>censReg</em>), <code>ols</code> (<em>rms</em>), <code>speedlm</code> and <code>speedglm</code> (<em>speedglm</em>), <code>svyolr</code> (<em>survey</em>)</li>
@@ -430,9 +453,9 @@
 <code><a href="../reference/find_variables.html">find_variables()</a></code> gets a <code>flatten</code>-argument, to either return results as list or as simple vector.</li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/get_data.html">get_data()</a></code> did not work when model formula contained a function with namespace-prefix (like <code>lm(Sepal.Length ~ splines::bs(Petal.Width, df=4)</code>) (#93).</li>
@@ -468,9 +491,9 @@
 <li>Revised package-functions related to <code>felm</code>-models due to breaking changes in the <em>lfe</em>-package.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes-4" class="section level2">
+<div id="new-supported-model-classes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-4" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-5" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>iv_robust</code> (<em>estimatr</em>), <code>crch</code> (<em>crch</em>), <code>gamlss</code> (<em>gamlss</em>), <code>lmrob</code> and <code>glmrob</code> (<em>robustbase</em>, #64), <code>rq</code>, <code>rqss</code> and <code>crq</code> (<em>quantreg</em>), <code>rlmer</code> (<em>robustlmm</em>), <code>mixed</code> (<em>afex</em>), <code>tobit</code> (<em>AER</em>) and <code>survreg</code> (<em>survival</em>).</li>
@@ -511,9 +534,9 @@
 <code>model_info</code> now returns <code>$is_tweedie</code> for models from tweedie-families.</li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not preserve coefficients of monotonic category-specific effects from <strong>brmsfit</strong>-objects.</li>
@@ -541,6 +564,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#insight-071">0.7.1</a></li>
         <li><a href="#insight-070">0.7.0</a></li>
         <li><a href="#insight-060">0.6.0</a></li>
         <li><a href="#insight-050">0.5.0</a></li>
