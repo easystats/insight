@@ -86,6 +86,7 @@ find_statistic <- function(x, ...) {
       "aareg",
       "betareg",
       "bracl",
+      "brglm",
       "brglmFit",
       "brmultinom",
       "clm",

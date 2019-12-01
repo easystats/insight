@@ -1,3 +1,9 @@
+# insight 0.7.2
+
+## New supported model classes
+
+* `brglm` (*brglm*).
+
 # insight 0.7.1
 
 ## New supported model classes

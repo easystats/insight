@@ -39,6 +39,7 @@ is_model <- function(x) {
       "blavaan",
       "blmerMod",
       "bracl",
+      "brglm",
       "brglmFit",
       "brmsfit",
       "brmultinom",
