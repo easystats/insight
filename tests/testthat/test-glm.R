@@ -6,11 +6,10 @@ if (require("testthat") &&
   data(Salamanders)
   Salamanders$cover <- abs(Salamanders$cover)
 
-  m1 <-
-    glm(count ~ mined + log(cover) + sample,
-      family = poisson,
-      data = Salamanders
-    )
+  m1 <- glm(count ~ mined + log(cover) + sample,
+    family = poisson,
+    data = Salamanders
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_poisson)
@@ -52,6 +51,10 @@ if (require("testthat") &&
     expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
   })
 
+  test_that("linkfun", {
+    expect_equal(link_function(m1)(.2), -1.609438, tolerance = 1e-4)
+  })
+
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 644)
     expect_equal(
@@ -84,10 +87,6 @@ if (require("testthat") &&
 
   test_that("n_obs", {
     expect_equal(n_obs(m1), 644)
-  })
-
-  test_that("linkfun", {
-    expect_false(is.null(link_function(m1)))
   })
 
   test_that("find_parameters", {
@@ -125,4 +124,9 @@ if (require("testthat") &&
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "z-statistic")
   })
+
+  test_that("get_statistic", {
+    expect_equal(get_statistic(m1)$Statistic, c(-10.7066515607315, 18.1533878215937, -1.68918157150882, 2.23541768590273), tolernce = 1e-4)
+  })
+
 }
