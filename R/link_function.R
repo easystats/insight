@@ -142,12 +142,16 @@ link_function.plm <- link_function.lm
 # General family ---------------------------------
 
 #' @export
-link_function.speedglm <- function(x, ...) {
-  stats::family(x)$linkfun
-}
+link_function.glm <- link_function.default
 
 #' @export
-link_function.bigglm <- link_function.speedglm
+link_function.speedglm <- link_function.default
+
+#' @export
+link_function.bigglm <- link_function.default
+
+#' @export
+link_function.brglm <- link_function.default
 
 
 
