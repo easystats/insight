@@ -4,6 +4,10 @@
 
 * `brglm` (*brglm*).
 
+## Changes to functions
+
+* Suppress non-informative warning in `get_data()` for model data with weights.
+
 # insight 0.7.1
 
 ## New supported model classes
