@@ -200,7 +200,7 @@
   if (!is.null(weighting_var) && !weighting_var %in% colnames(mf) && length(weighting_var) == 1) {
     mf <- tryCatch(
       {
-        tmp <- cbind(mf, get_weights(x))
+        tmp <- suppressWarnings(cbind(mf, get_weights(x)))
         colnames(tmp)[ncol(tmp)] <- weighting_var
         tmp
       },
