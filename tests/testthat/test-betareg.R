@@ -90,20 +90,8 @@ if (require("testthat") &&
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c(
-          "(Intercept)",
-          "batch1",
-          "batch2",
-          "batch3",
-          "batch4",
-          "batch5",
-          "batch6",
-          "batch7",
-          "batch8",
-          "batch9",
-          "temp",
-          "(phi)"
-        )
+        conditional = c("(Intercept)", "batch1", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "temp"),
+        precision = "(phi)"
       )
     )
     expect_equal(nrow(get_parameters(m1)), 12)

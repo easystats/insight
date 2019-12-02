@@ -242,6 +242,22 @@ get_parameters.gbm <- function(x, ...) {
 
 
 #' @export
+get_parameters.betareg <- function(x, ...) {
+  cf <- stats::coef(x)
+
+  params <- data.frame(
+    Parameter = names(cf),
+    Estimate = unname(cf),
+    Component = c(rep("conditional", length(x$coefficients$mean)), rep("precision", length(x$coefficients$precision))),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+#' @export
 get_parameters.BBreg <- function(x, ...) {
   pars <- summary(x)$coefficients
 

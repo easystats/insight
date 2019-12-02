@@ -13,7 +13,9 @@
 #'   or for the zero-inflated part of the model be returned? Applies to models
 #'   with zero-inflated component. \code{component} may be one of
 #'   \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"} or \code{"all"}
-#'   (default). May be abbreviated.
+#'   (default). May be abbreviated. Note that the
+#'   \emph{conditional} component is also called \emph{count} or \emph{mean}
+#'   component, depending on the model.
 #' @param ... Currently not used.
 #'
 #' @return A data frame with the model's parameter names and the related test statistic.

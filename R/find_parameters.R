@@ -14,7 +14,9 @@
 #'    conditional model, the zero-inflated part of the model, the dispersion
 #'    term or the instrumental variables be returned? Applies to models
 #'    with zero-inflated and/or dispersion formula, or to models with instrumental
-#'    variable (so called fixed-effects regressions). May be abbreviated.
+#'    variable (so called fixed-effects regressions). May be abbreviated. Note that the
+#'   \emph{conditional} component is also called \emph{count} or \emph{mean}
+#'   component, depending on the model.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -115,6 +117,24 @@ find_parameters.polr <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.bracl <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+
+#' @export
+find_parameters.betareg <- function(x, flatten = FALSE, ...) {
+  pars <- list(
+    conditional = names(x$coefficients$mean),
+    precision = names(x$coefficients$precision)
+  )
+
   pars$conditional <- .remove_backticks_from_string(pars$conditional)
 
   if (flatten) {
