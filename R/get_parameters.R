@@ -241,8 +241,10 @@ get_parameters.gbm <- function(x, ...) {
 }
 
 
+#' @rdname get_parameters
 #' @export
-get_parameters.betareg <- function(x, ...) {
+get_parameters.betareg <- function(x, component = c("all", "conditional", "precision"), ...) {
+  component <- match.arg(component)
   cf <- stats::coef(x)
 
   params <- data.frame(
@@ -252,6 +254,10 @@ get_parameters.betareg <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  if (component != "all") {
+    params <- params[params$Component == component, ]
+  }
 
   .remove_backticks_from_parameter_names(params)
 }

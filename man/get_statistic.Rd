@@ -4,6 +4,7 @@
 \alias{get_statistic}
 \alias{get_statistic.default}
 \alias{get_statistic.glmmTMB}
+\alias{get_statistic.betareg}
 \title{Get statistic associated with estimates}
 \usage{
 get_statistic(x, ...)
@@ -15,6 +16,8 @@ get_statistic(x, ...)
   component = c("all", "conditional", "zi", "zero_inflated"),
   ...
 )
+
+\method{get_statistic}{betareg}(x, component = c("all", "conditional", "precision"), ...)
 }
 \arguments{
 \item{x}{A model.}

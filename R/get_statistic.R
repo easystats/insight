@@ -720,9 +720,11 @@ get_statistic.svyglm.zip <- get_statistic.svyglm.nb
 
 
 
+#' @rdname get_statistic
 #' @importFrom stats coef
 #' @export
-get_statistic.betareg <- function(x, ...) {
+get_statistic.betareg <- function(x, component = c("all", "conditional", "precision"), ...) {
+  component <- match.arg(component)
   parms <- get_parameters(x)
   cs <- do.call(rbind, stats::coef(summary(x)))
   se <- as.vector(cs[, 2])
@@ -734,6 +736,10 @@ get_statistic.betareg <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  if (component != "all") {
+    out <- out[out$Component == component, ]
+  }
 
   attr(out, "statistic") <- find_statistic(x)
   out
