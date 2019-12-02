@@ -730,6 +730,7 @@ get_statistic.betareg <- function(x, ...) {
   out <- data.frame(
     Parameter = parms$Parameter,
     Statistic = parms$Estimate / se,
+    Component = parms$Component,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
