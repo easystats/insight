@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `brglm` (*brglm*), `glmmadmb` (*glmmadmb*).
+* `brglm` (*brglm*), `glmmadmb` (*glmmADMB*).
 
 ## Changes to functions
 
