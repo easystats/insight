@@ -180,6 +180,13 @@
         re = ordinal::ranef(x)
       )
     }
+  } else if (inherits(x, "glmmadmb")) {
+    vals <- list(
+      beta = lme4::fixef(x),
+      X = stats::model.matrix(x),
+      vc = lme4::VarCorr(x),
+      re = lme4::ranef(x)
+    )
   } else {
     vals <- list(
       beta = lme4::fixef(x),

@@ -335,6 +335,13 @@ link_function.glimML <- function(x, ...) {
 
 
 
+#' @export
+link_function.glmmadmb <- function(x, ...) {
+  x$linkfun
+}
+
+
+
 #' @rdname link_function
 #' @export
 link_function.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {

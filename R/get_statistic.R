@@ -85,6 +85,10 @@ get_statistic.plm <- get_statistic.default
 
 
 #' @export
+get_statistic.glmmadmb <- get_statistic.default
+
+
+#' @export
 get_statistic.lm_robust <- get_statistic.default
 
 

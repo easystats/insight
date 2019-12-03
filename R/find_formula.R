@@ -38,6 +38,9 @@ find_formula <- function(x, ...) {
 
 
 
+# Default method -----------------------------------
+
+
 #' @export
 find_formula.default <- function(x, ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
@@ -62,6 +65,23 @@ find_formula.data.frame <- function(x, ...) {
   stop("A data frame is no valid object for this function")
 }
 
+
+
+#' @export
+find_formula.aovlist <- function(x, ...) {
+  f <- attr(x, "terms", exact = TRUE)
+  attributes(f) <- NULL
+  list(conditional = f)
+}
+
+
+
+
+
+
+
+
+# GAM -----------------------------------------------------------
 
 
 #' @export
@@ -129,6 +149,7 @@ find_formula.gamlss <- function(x, ...) {
 }
 
 
+
 #' @importFrom stats as.formula
 #' @export
 find_formula.bamlss <- function(x, ...) {
@@ -149,6 +170,12 @@ find_formula.gamm <- function(x, ...) {
   NextMethod()
 }
 
+
+
+
+
+
+# Other models ----------------------------------------------
 
 
 #' @export
@@ -217,6 +244,17 @@ find_formula.LORgee <- function(x, ...) {
   )
 }
 
+
+
+
+
+
+
+
+
+
+
+# Panel data models ---------------------------------------
 
 
 #' @export
@@ -292,33 +330,6 @@ find_formula.plm <- function(x, ...) {
       NULL
     }
   )
-}
-
-
-
-#' @export
-find_formula.coxme <- function(x, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
-
-  f.cond <- stats::formula(x)
-
-  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
-    f <- .safe_deparse(.x)
-    stats::as.formula(paste0("~", f))
-  })
-
-  if (length(f.random) == 1) {
-    f.random <- f.random[[1]]
-  }
-
-  f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
-
-  .compact_list(list(
-    conditional = f.cond,
-    random = f.random
-  ))
 }
 
 
@@ -449,22 +460,8 @@ find_formula.wbm <- function(x, ...) {
   ))
 }
 
-
 #' @export
 find_formula.wbgee <- find_formula.wbm
-
-
-#' @export
-find_formula.BBmm <- function(x, ...) {
-  f.cond <- parse(text = .safe_deparse(x$call))[[1]]$fixed.formula
-  f.rand <- parse(text = .safe_deparse(x$call))[[1]]$random.formula
-
-  .compact_list(list(
-    conditional = stats::as.formula(f.cond),
-    random = stats::as.formula(f.rand)
-  ))
-}
-
 
 
 #' @export
@@ -491,25 +488,30 @@ find_formula.tobit <- function(x, ...) {
 
 
 
+
+
+# Zero inflated models --------------------------------------
+
+
 #' @export
 find_formula.hurdle <- function(x, ...) {
   .zeroinf_formula(x)
 }
 
-
+#' @export
+find_formula.zeroinfl <- find_formula.hurdle
 
 #' @export
-find_formula.zeroinfl <- function(x, ...) {
-  .zeroinf_formula(x)
-}
+find_formula.zerotrunc <- find_formula.hurdle
 
 
 
-#' @export
-find_formula.zerotrunc <- function(x, ...) {
-  .zeroinf_formula(x)
-}
 
+
+
+
+
+# Ordinal models  --------------------------------------
 
 
 #' @export
@@ -529,13 +531,14 @@ find_formula.clm2 <- function(x, ...) {
 
 
 
-#' @export
-find_formula.aovlist <- function(x, ...) {
-  f <- attr(x, "terms", exact = TRUE)
-  attributes(f) <- NULL
-  list(conditional = f)
-}
 
+
+
+
+
+
+
+# Mixed models -----------------------
 
 
 #' @export
@@ -646,74 +649,67 @@ find_formula.merMod <- function(x, ...) {
   .compact_list(list(conditional = f.cond, random = f.random))
 }
 
+#' @export
+find_formula.rlmerMod <- find_formula.merMod
+
+#' @export
+find_formula.glmmadmb <- find_formula.merMod
+
+#' @export
+find_formula.mixed <- find_formula.merMod
+
+#' @export
+find_formula.clmm <- find_formula.merMod
+
+#' @export
+find_formula.coxme <- find_formula.merMod
+
 
 
 #' @export
-find_formula.rlmerMod <- function(x, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
+find_formula.lme <- function(x, ...) {
+  fm <- eval(x$call$fixed)
+  fmr <- eval(x$call$random)
+  ## TODO this is an intermediate fix to return the correlation variables from lme-objects
+  fc <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
 
-  f.cond <- stats::formula(x)
-  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
-    f <- .safe_deparse(.x)
-    stats::as.formula(paste0("~", f))
-  })
-
-  if (length(f.random) == 1) {
-    f.random <- f.random[[1]]
-  }
-
-  f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
-
-  .compact_list(list(conditional = f.cond, random = f.random))
+  .compact_list(list(
+    conditional = fm,
+    random = fmr,
+    correlation = stats::as.formula(fc)
+  ))
 }
 
 
 
 #' @export
-find_formula.mixed <- function(x, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
-
+find_formula.MixMod <- function(x, ...) {
   f.cond <- stats::formula(x)
-  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
-    f <- .safe_deparse(.x)
-    stats::as.formula(paste0("~", f))
-  })
+  f.zi <- stats::formula(x, type = "zi_fixed")
+  f.random <- stats::formula(x, type = "random")
+  f.zirandom <- stats::formula(x, type = "zi_random")
 
-  if (length(f.random) == 1) {
-    f.random <- f.random[[1]]
-  }
-
-  f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
-
-  .compact_list(list(conditional = f.cond, random = f.random))
+  .compact_list(list(
+    conditional = f.cond,
+    random = f.random,
+    zero_inflated = f.zi,
+    zero_inflated_random = f.zirandom
+  ))
 }
 
 
 
 #' @export
-find_formula.clmm <- function(x, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
+find_formula.BBmm <- function(x, ...) {
+  f.cond <- parse(text = .safe_deparse(x$call))[[1]]$fixed.formula
+  f.rand <- parse(text = .safe_deparse(x$call))[[1]]$random.formula
 
-  f.cond <- stats::formula(x)
-  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
-    f <- .safe_deparse(.x)
-    stats::as.formula(paste0("~", f))
-  })
-
-  if (length(f.random) == 1) {
-    f.random <- f.random[[1]]
-  }
-
-  f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
-
-  .compact_list(list(conditional = f.cond, random = f.random))
+  .compact_list(list(
+    conditional = stats::as.formula(f.cond),
+    random = stats::as.formula(f.rand)
+  ))
 }
+
 
 
 #' @export
@@ -731,6 +727,12 @@ find_formula.mmclogit <- function(x, ...) {
   )
 }
 
+
+
+
+
+
+# Bayesian models --------------------------------
 
 
 #' @export
@@ -791,39 +793,6 @@ find_formula.MCMCglmm <- function(x, ...) {
 
 
 
-#' @export
-find_formula.lme <- function(x, ...) {
-  fm <- eval(x$call$fixed)
-  fmr <- eval(x$call$random)
-  ## TODO this is an intermediate fix to return the correlation variables from lme-objects
-  fc <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
-
-  .compact_list(list(
-    conditional = fm,
-    random = fmr,
-    correlation = stats::as.formula(fc)
-  ))
-}
-
-
-
-#' @export
-find_formula.MixMod <- function(x, ...) {
-  f.cond <- stats::formula(x)
-  f.zi <- stats::formula(x, type = "zi_fixed")
-  f.random <- stats::formula(x, type = "random")
-  f.zirandom <- stats::formula(x, type = "zi_random")
-
-  .compact_list(list(
-    conditional = f.cond,
-    random = f.random,
-    zero_inflated = f.zi,
-    zero_inflated_random = f.zirandom
-  ))
-}
-
-
-
 #' @importFrom utils tail
 #' @export
 find_formula.BFBayesFactor <- function(x, ...) {
@@ -852,6 +821,14 @@ find_formula.BFBayesFactor <- function(x, ...) {
 }
 
 
+
+
+
+
+
+
+
+# helper ---------------------------
 
 
 .get_brms_formula <- function(f) {

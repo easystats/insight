@@ -221,6 +221,33 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 #' @rdname get_data
 #' @export
+get_data.glmmadmb <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+
+  fixed_data <- x$frame
+  random_data <- .get_data_from_env(x)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
+
+  mf <- tryCatch(
+    {
+      switch(
+        effects,
+        fixed = fixed_data,
+        all = cbind(fixed_data, random_data),
+        random = random_data
+      )
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, mf, effects)
+}
+
+
+
+#' @rdname get_data
+#' @export
 get_data.rlmerMod <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   .get_data_from_modelframe(x, stats::model.frame(x), effects)

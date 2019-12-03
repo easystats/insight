@@ -78,6 +78,7 @@ supported_models <- function() {
     "geeglm",
     "glimML",
     "glm",
+    "glmmadmb",
     "glmmPQL",
     "glmmTMB",
     "glmrob",

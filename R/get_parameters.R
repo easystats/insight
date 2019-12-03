@@ -544,34 +544,15 @@ get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
   }
 }
 
+#' @export
+get_parameters.rlmerMod <- get_parameters.merMod
 
+#' @export
+get_parameters.glmmadmb <- get_parameters.merMod
 
 #' @rdname get_parameters
 #' @export
-get_parameters.rlmerMod <- function(x, effects = c("fixed", "random"), ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
-
-  effects <- match.arg(effects)
-
-  l <- .compact_list(list(
-    conditional = lme4::fixef(x),
-    random = lme4::ranef(x)
-  ))
-
-  fixed <- data.frame(
-    Parameter = names(l$conditional),
-    Estimate = unname(l$conditional),
-    stringsAsFactors = FALSE
-  )
-
-  if (effects == "fixed") {
-    .remove_backticks_from_parameter_names(fixed)
-  } else {
-    l$random
-  }
-}
+get_parameters.lme <- get_parameters.merMod
 
 
 
@@ -587,35 +568,6 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
   l <- .compact_list(list(
     conditional = lme4::fixef(x$full_model),
     random = lme4::ranef(x$full_model)
-  ))
-
-  fixed <- data.frame(
-    Parameter = names(l$conditional),
-    Estimate = unname(l$conditional),
-    stringsAsFactors = FALSE
-  )
-
-  if (effects == "fixed") {
-    .remove_backticks_from_parameter_names(fixed)
-  } else {
-    l$random
-  }
-}
-
-
-
-#' @rdname get_parameters
-#' @export
-get_parameters.lme <- function(x, effects = c("fixed", "random"), ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
-
-  effects <- match.arg(effects)
-
-  l <- .compact_list(list(
-    conditional = lme4::fixef(x),
-    random = lme4::ranef(x)
   ))
 
   fixed <- data.frame(

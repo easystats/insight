@@ -6,9 +6,8 @@
 \alias{get_parameters.betareg}
 \alias{get_parameters.coxme}
 \alias{get_parameters.merMod}
-\alias{get_parameters.rlmerMod}
-\alias{get_parameters.mixed}
 \alias{get_parameters.lme}
+\alias{get_parameters.mixed}
 \alias{get_parameters.MixMod}
 \alias{get_parameters.glmmTMB}
 \alias{get_parameters.BBmm}
@@ -37,11 +36,9 @@ get_parameters(x, ...)
 
 \method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
 
-\method{get_parameters}{rlmerMod}(x, effects = c("fixed", "random"), ...)
+\method{get_parameters}{lme}(x, effects = c("fixed", "random"), ...)
 
 \method{get_parameters}{mixed}(x, effects = c("fixed", "random"), ...)
-
-\method{get_parameters}{lme}(x, effects = c("fixed", "random"), ...)
 
 \method{get_parameters}{MixMod}(
   x,

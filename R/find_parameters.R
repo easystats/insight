@@ -422,9 +422,12 @@ find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), fla
   }
 }
 
-
 #' @export
 find_parameters.rlmerMod <- find_parameters.merMod
+
+#' @export
+find_parameters.glmmadmb <- find_parameters.merMod
+
 
 
 #' @export

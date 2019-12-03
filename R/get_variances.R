@@ -147,6 +147,10 @@ get_variance.glmmTMB <- get_variance.merMod
 
 
 #' @export
+get_variance.glmmadmb <- get_variance.merMod
+
+
+#' @export
 get_variance.stanreg <- get_variance.merMod
 
 

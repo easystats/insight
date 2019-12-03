@@ -7,6 +7,7 @@
 \alias{get_data.hurdle}
 \alias{get_data.glmmTMB}
 \alias{get_data.merMod}
+\alias{get_data.glmmadmb}
 \alias{get_data.rlmerMod}
 \alias{get_data.clmm}
 \alias{get_data.mixed}
@@ -37,6 +38,8 @@ get_data(x, ...)
 )
 
 \method{get_data}{merMod}(x, effects = c("all", "fixed", "random"), ...)
+
+\method{get_data}{glmmadmb}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{rlmerMod}(x, effects = c("all", "fixed", "random"), ...)
 

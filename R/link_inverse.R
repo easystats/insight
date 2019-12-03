@@ -300,6 +300,12 @@ link_inverse.fixest <- function(x, ...) {
 
 
 #' @export
+link_inverse.glmmadmb <- function(x, ...) {
+  x$ilinkfun
+}
+
+
+#' @export
 link_inverse.polr <- function(x, ...) {
   link <- x$method
   if (link == "logistic") link <- "logit"
