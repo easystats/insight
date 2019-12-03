@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.1.1</span>
       </span>
     </div>
 
@@ -168,7 +168,9 @@ be returned, or only for specific model components only (like count or
 zero-inflated model parts)? Applies to models with zero-inflated component,
 or models with precision (e.g. <code>betareg</code>) component. <code>component</code>
 may be one of <code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code>,
-<code>"precision"</code>, or <code>"all"</code>. May be abbreviated.</p></td>
+<code>"precision"</code>, or <code>"all"</code>. May be abbreviated. Note that the
+<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
+component, depending on the model.</p></td>
     </tr>
     </table>
 
