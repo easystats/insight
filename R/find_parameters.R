@@ -878,6 +878,20 @@ find_parameters.sim <- function(x, flatten = FALSE, parameters = NULL, ...) {
 
 
 
+#' @export
+find_parameters.mcmc <- function(x, flatten = FALSE, parameters = NULL, ...) {
+  l <- .filter_pars(list(conditional = colnames(x)), parameters)
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
+
 
 
 

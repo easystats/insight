@@ -87,6 +87,6 @@ Suggests:
     spelling
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 Language: en-US
