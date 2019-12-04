@@ -66,7 +66,7 @@
   is.bayes <- inherits(x, c(
     "brmsfit", "stanfit", "MCMCglmm", "stanreg",
     "stanmvreg", "bmerMod", "BFBayesFactor", "bamlss",
-    "bayesx"
+    "bayesx", "mcmc"
   ))
 
   is.survival <- inherits(x, c("aareg", "survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph", "coxme"))
@@ -112,14 +112,18 @@
   if (.obj_has_name(dots, "no_terms") && isTRUE(dots$no_terms)) {
     model_terms <- NULL
   } else {
-    model_terms <- tryCatch(
-      {
-        find_variables(x, effects = "all", component = "all", flatten = FALSE)
-      },
-      error = function(x) {
-        NULL
-      }
-    )
+    if (inherits(x, "mcmc")) {
+      model_terms <- find_parameters(x)
+    } else {
+      model_terms <- tryCatch(
+        {
+          find_variables(x, effects = "all", component = "all", flatten = FALSE)
+        },
+        error = function(x) {
+          NULL
+        }
+      )
+    }
   }
 
   if (inherits(x, "htest")) {

@@ -99,6 +99,13 @@ n_obs.LORgee <- function(x, ...) {
 
 
 #' @export
+n_obs.mcmc <- function(x, ...) {
+  nrow(as.data.frame(x))
+}
+
+
+
+#' @export
 n_obs.biglm <- function(x, ...) {
   x$n
 }
