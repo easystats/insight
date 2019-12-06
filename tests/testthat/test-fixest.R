@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("fixest")) {
-
   data(trade)
   m1 <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
   m2 <- femlm(log1p(Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")
@@ -186,15 +185,19 @@ if (require("testthat") &&
     expect_equal(
       get_statistic(m1),
       structure(list(
-        Parameter = "log(dist_km)", Statistic = -13.2102796112222),
-        class = "data.frame", row.names = c(NA, -1L), statistic = "z-statistic"),
+        Parameter = "log(dist_km)", Statistic = -13.2102796112222
+      ),
+      class = "data.frame", row.names = c(NA, -1L), statistic = "z-statistic"
+      ),
       tolerance = 1e-4
     )
     expect_equal(
       get_statistic(m2),
       structure(list(
-        Parameter = "log(dist_km)", Statistic = -14.0627647683725),
-        class = "data.frame", row.names = c(NA, -1L), statistic = "z-statistic"),
+        Parameter = "log(dist_km)", Statistic = -14.0627647683725
+      ),
+      class = "data.frame", row.names = c(NA, -1L), statistic = "z-statistic"
+      ),
       tolerance = 1e-4
     )
   })

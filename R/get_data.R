@@ -39,25 +39,29 @@ get_data.default <- function(x, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
-  mf <- tryCatch({
-    if (inherits(x, "Zelig-relogit")) {
-      .get_zelig_relogit_frame(x)
-    } else {
-      stats::model.frame(x)
-    }
-  },
-  error = function(x) {
-    NULL
-  })
-
-  if (is.null(mf)) {
-    mf <- tryCatch({
-      .get_data_from_env(x)[, find_variables(x, flatten = TRUE), drop = FALSE]
+  mf <- tryCatch(
+    {
+      if (inherits(x, "Zelig-relogit")) {
+        .get_zelig_relogit_frame(x)
+      } else {
+        stats::model.frame(x)
+      }
     },
     error = function(x) {
       NULL
     }
-  )}
+  )
+
+  if (is.null(mf)) {
+    mf <- tryCatch(
+      {
+        .get_data_from_env(x)[, find_variables(x, flatten = TRUE), drop = FALSE]
+      },
+      error = function(x) {
+        NULL
+      }
+    )
+  }
 
   .prepare_get_data(x, mf)
 }
