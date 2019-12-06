@@ -2,33 +2,33 @@
   # create logical for family
   binom_fam <-
     fitfam %in% c("bernoulli", "binomial", "quasibinomial", "binomialff") |
-    grepl("\\Qbinomial\\E", fitfam, ignore.case = TRUE)
+      grepl("\\Qbinomial\\E", fitfam, ignore.case = TRUE)
 
   poisson_fam <-
     fitfam %in% c("poisson", "quasipoisson", "genpois", "ziplss") |
-    grepl("\\Qpoisson\\E", fitfam, ignore.case = TRUE)
+      grepl("\\Qpoisson\\E", fitfam, ignore.case = TRUE)
 
   neg_bin_fam <-
     grepl("\\Qnegative binomial\\E", fitfam, ignore.case = TRUE) |
-    grepl("\\Qnbinom\\E", fitfam, ignore.case = TRUE) |
-    grepl("\\Qnegbin\\E", fitfam, ignore.case = TRUE) |
-    grepl("\\Qnzbinom\\E", fitfam, ignore.case = TRUE) |
-    grepl("\\Qgenpois\\E", fitfam, ignore.case = TRUE) |
-    grepl("\\Qnegbinomial\\E", fitfam, ignore.case = TRUE) |
-    grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE) |
-    fitfam %in% c("ztnbinom", "nbinom")
+      grepl("\\Qnbinom\\E", fitfam, ignore.case = TRUE) |
+      grepl("\\Qnegbin\\E", fitfam, ignore.case = TRUE) |
+      grepl("\\Qnzbinom\\E", fitfam, ignore.case = TRUE) |
+      grepl("\\Qgenpois\\E", fitfam, ignore.case = TRUE) |
+      grepl("\\Qnegbinomial\\E", fitfam, ignore.case = TRUE) |
+      grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE) |
+      fitfam %in% c("ztnbinom", "nbinom")
 
   beta_fam <-
     inherits(x, "betareg") |
-    fitfam %in% c(
-      "beta",
-      "Beta",
-      "betabinomial",
-      "Beta Inflated",
-      "Zero Inflated Beta",
-      "Beta Inflated zero",
-      "Beta Inflated one"
-    )
+      fitfam %in% c(
+        "beta",
+        "Beta",
+        "betabinomial",
+        "Beta Inflated",
+        "Zero Inflated Beta",
+        "Beta Inflated zero",
+        "Beta Inflated one"
+      )
 
   betabin_fam <- inherits(x, "BBreg") | fitfam %in% "betabinomial"
 
@@ -59,7 +59,7 @@
 
   is.ordinal <-
     inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "gmnl", "mlogit", "multinom", "LORgee", "brmultinom")) |
-    fitfam %in% c("cumulative", "cratio", "sratio", "acat", "ordinal", "multinomial")
+      fitfam %in% c("cumulative", "cratio", "sratio", "acat", "ordinal", "multinomial")
 
   is.categorical <- fitfam == "categorical"
 

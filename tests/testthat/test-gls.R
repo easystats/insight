@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("nlme")) {
-
   data(Ovary)
   m1 <- gls(follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time),
     Ovary,
