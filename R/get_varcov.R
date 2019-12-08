@@ -73,6 +73,24 @@ get_varcov.betareg <- function(x, component = c("conditional", "precision", "all
 }
 
 
+#' @export
+get_varcov.glmx <- function(x, component = c("all", "conditional", "extra"), ...) {
+  component <- match.arg(component)
+  vc <- stats::vcov(object = x)
+
+  if (component != "all") {
+    keep <- match(insight::find_parameters(x)[[component]], rownames(vc))
+    vc <- vc[keep, keep]
+  }
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  .remove_backticks_from_matrix_names(as.matrix(vc))
+}
+
+
 #' @rdname get_varcov
 #' @export
 get_varcov.truncreg <- function(x, component = c("conditional", "all"), ...) {

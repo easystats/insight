@@ -642,7 +642,8 @@ get_statistic.fixest <- function(x, ...) {
 
 
 #' @export
-get_statistic.glmx <- function(x, ...) {
+get_statistic.glmx <- function(x, component = c("all", "conditional", "extra"), ...) {
+  component <- match.arg(component)
   cf <- stats::coef(summary(x))
   parms <- get_parameters(x)
 
@@ -662,6 +663,10 @@ get_statistic.glmx <- function(x, ...) {
       row.names = NULL
     )
   )
+
+  if (component != "all") {
+    out <- out[out$Component == component, ]
+  }
 
   attr(out, "statistic") <- find_statistic(x)
   out

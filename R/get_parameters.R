@@ -207,7 +207,8 @@ get_parameters.brmultinom <- get_parameters.multinom
 
 
 #' @export
-get_parameters.glmx <- function(x, ...) {
+get_parameters.glmx <- function(x, component = c("all", "conditional", "extra"), ...) {
+  component <- match.arg(component)
   cf <- stats::coef(summary(x))
 
   params <- rbind(
@@ -226,6 +227,10 @@ get_parameters.glmx <- function(x, ...) {
       row.names = NULL
     )
   )
+
+  if (component != "all") {
+    params <- params[params$Component == component, ]
+  }
 
   .remove_backticks_from_parameter_names(params)
 }
