@@ -651,14 +651,14 @@ get_statistic.glmx <- function(x, component = c("all", "conditional", "extra"), 
     data.frame(
       Parameter = parms$Parameter[parms$Component == "conditional"],
       Statistic = unname(cf$glm[, 3]),
-      Component = "Conditional",
+      Component = "conditional",
       stringsAsFactors = FALSE,
       row.names = NULL
     ),
     data.frame(
       Parameter = parms$Parameter[parms$Component == "extra"],
       Statistic = cf$extra[, 3],
-      Component = "Extra",
+      Component = "extra",
       stringsAsFactors = FALSE,
       row.names = NULL
     )
