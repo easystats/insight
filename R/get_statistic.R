@@ -641,6 +641,34 @@ get_statistic.fixest <- function(x, ...) {
 
 
 
+#' @export
+get_statistic.glmx <- function(x, ...) {
+  cf <- stats::coef(summary(x))
+  parms <- get_parameters(x)
+
+  out <- rbind(
+    data.frame(
+      Parameter = parms$Parameter[parms$Component == "conditional"],
+      Statistic = unname(cf$glm[, 3]),
+      Component = "Conditional",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    ),
+    data.frame(
+      Parameter = parms$Parameter[parms$Component == "extra"],
+      Statistic = cf$extra[, 3],
+      Component = "Extra",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
 #' @importFrom stats coef
 #' @export
 get_statistic.gee <- function(x, ...) {

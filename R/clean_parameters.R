@@ -62,6 +62,8 @@ clean_parameters.default <- function(x, ...) {
       "nonlinear"
     } else if (grepl("instruments", i, fixed = TRUE)) {
       "instruments"
+    } else if (grepl("extra", i, fixed = TRUE)) {
+      "extra"
     } else {
       "conditional"
     }

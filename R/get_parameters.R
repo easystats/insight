@@ -207,6 +207,32 @@ get_parameters.brmultinom <- get_parameters.multinom
 
 
 #' @export
+get_parameters.glmx <- function(x, ...) {
+  cf <- stats::coef(summary(x))
+
+  params <- rbind(
+    data.frame(
+      Parameter = names(cf$glm[, 1]),
+      Estimate = unname(cf$glm[, 1]),
+      Component = "conditional",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    ),
+    data.frame(
+      Parameter = rownames(cf$extra),
+      Estimate = cf$extra[, 1],
+      Component = "extra",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  )
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+
+#' @export
 get_parameters.mlm <- function(x, ...) {
   cs <- stats::coef(summary(x))
 

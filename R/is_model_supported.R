@@ -84,6 +84,7 @@ supported_models <- function() {
     "glmmTMB",
     "glmrob",
     "glmRob",
+    "glmx",
     "gls",
     "gmnl",
     "htest",

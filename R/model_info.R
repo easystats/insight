@@ -376,6 +376,19 @@ model_info.glmmPQL <- model_info.MixMod
 
 
 #' @export
+model_info.glmx <- function(x, ...) {
+  faminfo <- x$family$glm
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.fixest <- function(x, ...) {
   faminfo <- x$family
 

@@ -303,6 +303,12 @@ link_inverse.feglm <- link_inverse.fixest
 
 
 #' @export
+link_inverse.glmx <- function(x, ...) {
+  x$family$glm$linkinv
+}
+
+
+#' @export
 link_inverse.glmmadmb <- function(x, ...) {
   x$ilinkfun
 }

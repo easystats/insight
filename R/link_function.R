@@ -292,6 +292,12 @@ link_function.feglm <- link_function.fixest
 
 
 #' @export
+link_function.glmx <- function(x, ...) {
+  x$family$glm$linkfun
+}
+
+
+#' @export
 link_function.gam <- function(x, ...) {
   lf <- tryCatch(
     {
