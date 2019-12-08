@@ -413,7 +413,8 @@ model_info.fixest <- function(x, ...) {
   }
 }
 
-
+#' @export
+model_info.feglm <- model_info.fixest
 
 
 

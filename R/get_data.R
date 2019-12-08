@@ -484,6 +484,13 @@ get_data.fixest <- function(x, ...) {
 
 
 #' @export
+get_data.feglm <- function(x, ...) {
+  mf <- as.data.frame(x$data)
+  .get_data_from_modelframe(x, mf, effects = "all")
+}
+
+
+#' @export
 get_data.plm <- function(x, ...) {
   mf <- stats::model.frame(x)
   model_terms <- find_variables(x, effects = "all", component = "all", flatten = TRUE)

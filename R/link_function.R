@@ -287,6 +287,9 @@ link_function.fixest <- function(x, ...) {
   }
 }
 
+#' @export
+link_function.feglm <- link_function.fixest
+
 
 #' @export
 link_function.gam <- function(x, ...) {

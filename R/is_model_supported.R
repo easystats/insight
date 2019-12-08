@@ -66,6 +66,7 @@ supported_models <- function() {
     "crq",
     "feis",
     "felm",
+    "feglm",
     "fixest",
     "flexsurvreg",
     "gam",

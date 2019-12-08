@@ -298,6 +298,9 @@ link_inverse.fixest <- function(x, ...) {
   }
 }
 
+#' @export
+link_inverse.feglm <- link_inverse.fixest
+
 
 #' @export
 link_inverse.glmmadmb <- function(x, ...) {

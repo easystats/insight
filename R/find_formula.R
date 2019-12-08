@@ -370,6 +370,34 @@ find_formula.felm <- function(x, ...) {
 
 
 #' @export
+find_formula.feglm <- function(x, ...) {
+  f <- .safe_deparse(stats::formula(x))
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+
+  f.cond <- .trim(f_parts[1])
+
+  if (length(f_parts) > 1) {
+    f.instr <- paste0("~", .trim(f_parts[2]))
+  } else {
+    f.instr <- NULL
+  }
+
+  if (length(f_parts) > 2) {
+    f.clus <- paste0("~", .trim(f_parts[3]))
+  } else {
+    f.clus <- NULL
+  }
+
+  .compact_list(list(
+    conditional = stats::as.formula(f.cond),
+    instruments = stats::as.formula(f.instr),
+    cluster = stats::as.formula(f.clus)
+  ))
+}
+
+
+
+#' @export
 find_formula.fixest <- function(x, ...) {
   f <- .safe_deparse(stats::formula(x))
   f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
