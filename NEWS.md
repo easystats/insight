@@ -7,6 +7,7 @@
 ## Changes to functions
 
 * Suppress non-informative warning in `get_data()` for model data with weights.
+* `format_value()` automatically uses scientific notation for *very* large numbers (> 1e+5). Furthermore, the check for integer values was made more robust, to avoid warnings when checking *very* large numbers for integer type.
 
 # insight 0.7.1
 
