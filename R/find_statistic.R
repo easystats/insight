@@ -119,6 +119,7 @@ find_statistic <- function(x, ...) {
       "mlogit",
       "mclogit",
       "mmclogit",
+      "mvmeta",
       "negbin",
       "nlreg",
       "objectiveML",
@@ -138,6 +139,7 @@ find_statistic <- function(x, ...) {
 
   f.mods <-
     c(
+      "Anova.mlm",
       "aov",
       "aovlist",
       "anova",
