@@ -568,6 +568,29 @@ find_parameters.zerotrunc <- find_parameters.zeroinfl
 
 
 #' @export
+find_parameters.BFBayesFactor <- function(x, flatten = FALSE, ...) {
+  param <- NULL
+
+  if (.classify_BFBayesFactor(x) == "correlation") {
+    param <- "rho"
+  } else if (.classify_BFBayesFactor(x) == "ttest") {
+    param <- "Difference"
+  } else if (.classify_BFBayesFactor(x) == "meta") {
+    param <- "Effect"
+  }
+
+  l <- .compact_list(list(conditional = param))
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
+#' @export
 find_parameters.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   sc <- summary(x)
   l <- .compact_list(list(
