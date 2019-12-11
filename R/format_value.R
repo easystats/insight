@@ -82,7 +82,7 @@ format_value.logical <- format_value.numeric
 
 .format_value <- function(x, digits = 2, .missing = "", .width = NULL, ...) {
   if (is.numeric(x)) {
-    x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
+    x <- ifelse(is.na(x), .missing, ifelse(x > 1e+5, sprintf("%.5e", x), sprintf("%.*f", digits, x)))
   } else if (anyNA(x)) {
     x <- .convert_missing(x, .missing)
   }
