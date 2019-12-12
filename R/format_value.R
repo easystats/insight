@@ -109,8 +109,14 @@ format_value.logical <- format_value.numeric
 
 .is.int <- function(x) {
   tryCatch(
-    expr = {ifelse(is.infinite(x), FALSE, x %% 1 == 0)},
-    warning = function(w) { is.integer(x) },
-    error = function(e) { FALSE }
+    expr = {
+      ifelse(is.infinite(x), FALSE, x %% 1 == 0)
+    },
+    warning = function(w) {
+      is.integer(x)
+    },
+    error = function(e) {
+      FALSE
+    }
   )
 }

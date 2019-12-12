@@ -21,8 +21,10 @@ is_model <- function(x) {
   inherits(
     x,
     c(
+      "_ranger",
       "aareg",
       "anova",
+      "Anova.mlm",
       "aov",
       "aovlist",
       "Arima",
@@ -136,6 +138,7 @@ is_model <- function(x) {
       "mlm",
       "mlogit",
       "multinom",
+      "mvmeta",
       "mvr",
       "negbin",
       "nlreg",
