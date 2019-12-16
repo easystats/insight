@@ -4,6 +4,10 @@
 
 * `brglm` (*brglm*), `feglm` (*apaca*), `glmmadmb` (*glmmADMB*), `glmx` (*glmx*), partial support for `mcmc` (*coda*).
 
+## New functions
+
+* `format_ci()` (re-implemented and slighlty enhanced from _parameters_), to format confidence/credible intervals.
+
 ## Changes to functions
 
 * `find_parameters()` now also works for `BFBayesFactor` objects.
