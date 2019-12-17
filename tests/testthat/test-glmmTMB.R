@@ -3,16 +3,18 @@ if (require("testthat") &&
   require("glmmTMB")) {
   context("insight, glmmTMB")
 
-  fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
-  fish$nofish <- as.factor(fish$nofish)
-  fish$livebait <- as.factor(fish$livebait)
-  fish$camper <- as.factor(fish$camper)
+  # fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
+  # fish$nofish <- as.factor(fish$nofish)
+  # fish$livebait <- as.factor(fish$livebait)
+  # fish$camper <- as.factor(fish$camper)
 
   m1 <- download_model("glmmTMB_zi_1")
   m2 <- download_model("glmmTMB_1")
   m3 <- download_model("glmmTMB_zi_2")
   m4 <- download_model("glmmTMB_zi_5")
   m7 <- download_model("glmmTMB_zi_6")
+
+  fish <- get_data(m7)
 
   data(Salamanders)
   m5 <- glmmTMB(
