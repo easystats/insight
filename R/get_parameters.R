@@ -1062,24 +1062,23 @@ get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE,
     stop("This function requires package `BayesFactor` to work. Please install it.")
   }
 
-  if (.classify_BFBayesFactor(x) == "correlation") {
+  bf_type <- .classify_BFBayesFactor(x)
+
+  if (bf_type %in% c("correlation", "ttest", "meta", "linear")) {
     posteriors <-
       as.data.frame(suppressMessages(
         BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)
       ))
-    data.frame("rho" = as.numeric(posteriors$rho))
-  } else if (.classify_BFBayesFactor(x) == "ttest") {
-    posteriors <-
-      as.data.frame(suppressMessages(
-        BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)
-      ))
-    data.frame("Difference" = as.numeric(posteriors[, 2]))
-  } else if (.classify_BFBayesFactor(x) == "meta") {
-    posteriors <-
-      as.data.frame(suppressMessages(
-        BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)
-      ))
-    data.frame("Effect" = as.numeric(posteriors$delta))
+
+    switch(
+      bf_type,
+      "correlation" = data.frame("rho" = as.numeric(posteriors$rho)),
+      "ttest" = data.frame("Difference" = as.numeric(posteriors[, 2])),
+      "meta" = data.frame("Effect" = as.numeric(posteriors$delta)),
+      "linear" = posteriors,
+      NULL
+    )
+
   } else {
     NULL
   }

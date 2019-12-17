@@ -577,6 +577,11 @@ find_parameters.BFBayesFactor <- function(x, flatten = FALSE, ...) {
     param <- "Difference"
   } else if (.classify_BFBayesFactor(x) == "meta") {
     param <- "Effect"
+  } else if (.classify_BFBayesFactor(x) == "linear") {
+    posteriors <- as.data.frame(suppressMessages(
+      BayesFactor::posterior(x, iterations = 20, progress = FALSE, ...)
+    ))
+    param <- colnames(posteriors)
   }
 
   l <- .compact_list(list(conditional = param))
