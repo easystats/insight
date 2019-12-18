@@ -269,6 +269,9 @@ model_info.clm2 <- model_info.clm
 #' @export
 model_info.clmm <- model_info.clm
 
+#' @export
+model_info.mixor <- model_info.clm
+
 
 
 

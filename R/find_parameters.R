@@ -162,6 +162,33 @@ find_parameters.clmm2 <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  coefs <- x$Model
+  random_start <- grep("(\\(Intercept\\) \\(Intercept\\)|Random\\.\\(Intercept\\))", rownames(coefs))
+  thresholds <- grep("Threshold\\d", rownames(coefs))
+
+  l <- list(
+    conditional = rownames(coefs)[c(1, thresholds, 2:(random_start - 1))],
+    random = rownames(coefs)[random_start:(thresholds[1] - 1)]
+  )
+
+  l <- rapply(l, .remove_backticks_from_string, how = "list")
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+
+  l <- .compact_list(l[elements])
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
+#' @export
 find_parameters.multinom <- function(x, flatten = FALSE, ...) {
   params <- stats::coef(x)
 

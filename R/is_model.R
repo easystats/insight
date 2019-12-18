@@ -132,6 +132,7 @@ is_model <- function(x) {
       "mediate",
       "merMod",
       "mixed",
+      "mixor",
       "MixMod",
       "mjoint",
       "mle2",

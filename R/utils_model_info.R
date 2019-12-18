@@ -58,7 +58,7 @@
     fitfam %in% c("truncpoiss", "truncnbinom", "truncnbinom1")
 
   is.ordinal <-
-    inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "gmnl", "mlogit", "multinom", "LORgee", "brmultinom")) |
+    inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "gmnl", "mixor", "mlogit", "multinom", "LORgee", "brmultinom")) |
       fitfam %in% c("cumulative", "cratio", "sratio", "acat", "ordinal", "multinomial")
 
   is.categorical <- fitfam == "categorical"

@@ -113,6 +113,7 @@ find_statistic <- function(x, ...) {
       "loggammacenslmrob",
       "LORgee",
       "lrm",
+      "mixor",
       "MixMod",
       "mjoint",
       "mle2",

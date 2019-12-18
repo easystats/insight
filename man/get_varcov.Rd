@@ -9,6 +9,7 @@
 \alias{get_varcov.MixMod}
 \alias{get_varcov.glmmTMB}
 \alias{get_varcov.brmsfit}
+\alias{get_varcov.mixor}
 \title{Get variance-covariance matrix from models}
 \usage{
 get_varcov(x, ...)
@@ -26,6 +27,8 @@ get_varcov(x, ...)
 \method{get_varcov}{glmmTMB}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
 
 \method{get_varcov}{brmsfit}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+
+\method{get_varcov}{mixor}(x, effects = c("all", "fixed", "random"), ...)
 }
 \arguments{
 \item{x}{A model.}
@@ -40,6 +43,10 @@ may be one of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"},
 \code{"precision"}, or \code{"all"}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
+
+\item{effects}{Should the complete variance-covariance matrix of the model
+be returned, or only for specific model parameters only? Currently only
+applies to models of class \code{mixor}.}
 }
 \value{
 The variance-covariance matrix, as \code{matrix}-object.

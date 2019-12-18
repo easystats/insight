@@ -223,6 +223,32 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 
+#' @export
+get_data.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+
+  mf <- tryCatch(
+    {
+      switch(
+        effects,
+        fixed = stats::model.frame(x),
+        all = cbind(stats::model.frame(x), x$id),
+        random = data.frame(x$id)
+      )
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  fix_cn <- which(colnames(mf) %in% c("x.id", "x$id"))
+  colnames(mf)[fix_cn] <- deparse(x$call$id)
+
+  .prepare_get_data(x, mf, effects)
+}
+
+
+
 #' @rdname get_data
 #' @export
 get_data.glmmadmb <- function(x, effects = c("all", "fixed", "random"), ...) {

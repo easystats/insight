@@ -431,6 +431,25 @@ get_statistic.aareg <- function(x, ...) {
 
 
 #' @export
+get_statistic.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
+  stats <- x$Model[, "z value"]
+  effects <- match.arg(effects)
+
+  parms <- get_parameters(x, effects = effects)
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = stats[parms$Parameter],
+    Effects = parms$Effects,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+#' @export
 get_statistic.multinom <- function(x, ...) {
   parms <- get_parameters(x)
   stderr <- summary(x)$standard.errors

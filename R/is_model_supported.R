@@ -104,6 +104,7 @@ supported_models <- function() {
     "MCMCglmm",
     "merMod",
     "mixed",
+    "mixor",
     "MixMod",
     "mlm",
     "mclogit",

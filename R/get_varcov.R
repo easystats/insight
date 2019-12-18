@@ -14,6 +14,9 @@
 #'   \code{"precision"}, or \code{"all"}. May be abbreviated. Note that the
 #'   \emph{conditional} component is also called \emph{count} or \emph{mean}
 #'   component, depending on the model.
+#' @param effects Should the complete variance-covariance matrix of the model
+#'   be returned, or only for specific model parameters only? Currently only
+#'   applies to models of class \code{mixor}.
 #' @param ... Currently not used.
 #'
 #' @note \code{get_varcov()} tries to return the nearest positive definite matrix
@@ -277,6 +280,21 @@ get_varcov.flexsurvreg <- function(x, ...) {
 #' @export
 get_varcov.mixed <- function(x, ...) {
   vc <- as.matrix(stats::vcov(x$full_model))
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  .remove_backticks_from_matrix_names(as.matrix(vc))
+}
+
+
+#' @rdname get_varcov
+#' @export
+get_varcov.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  params <- find_parameters(x, effects = effects, flatten = TRUE)
+  vc <- as.matrix(stats::vcov(x))[params, params]
 
   if (.is_negativ_matrix(vc)) {
     vc <- .fix_negative_matrix(vc)

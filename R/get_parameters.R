@@ -752,6 +752,37 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
 
 
 
+#' @export
+get_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
+  coefs <- stats::coef(x)
+  effects <- match.arg(effects)
+
+  params <- find_parameters(x, effects = "fixed", flatten = TRUE)
+  fixed <- data.frame(
+    Parameter = params,
+    Estimate = unname(coefs[params]),
+    Effects = "fixed",
+    stringsAsFactors = FALSE
+  )
+
+  params <- find_parameters(x, effects = "random", flatten = TRUE)
+  random <- data.frame(
+    Parameter = params,
+    Estimate = unname(coefs[params]),
+    Effects = "random",
+    stringsAsFactors = FALSE
+  )
+
+  switch(
+    effects,
+    "all" = rbind(fixed, random),
+    "fixed" = fixed,
+    "random" = random
+  )
+}
+
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {

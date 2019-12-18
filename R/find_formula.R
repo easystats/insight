@@ -719,6 +719,30 @@ find_formula.lme <- function(x, ...) {
 
 
 #' @export
+find_formula.mixor <- function(x, ...) {
+  fm <- x$call$formula
+
+  f_id <- deparse(x$call$id)
+  f_rs <- x$call$which.random.slope
+
+  if (!is.null(f_rs)) {
+    f_rs <- trimws(unlist(strsplit(.safe_deparse(x$call$formula[[3]]), "\\+")))[f_rs]
+    fmr <- paste(f_rs, "|", f_id)
+  } else {
+    fmr <- f_id
+  }
+
+  fmr <- stats::as.formula(paste("~", fmr))
+
+  .compact_list(list(
+    conditional = fm,
+    random = fmr
+  ))
+}
+
+
+
+#' @export
 find_formula.MixMod <- function(x, ...) {
   f.cond <- stats::formula(x)
   f.zi <- stats::formula(x, type = "zi_fixed")
