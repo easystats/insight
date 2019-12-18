@@ -465,8 +465,17 @@ find_formula.wbm <- function(x, ...) {
   if (length(f_parts) > 2) {
     f_parts[3] <- .trim(f_parts[3])
     if (grepl("\\((.+)\\|(.+)\\)", f_parts[3])) {
-      f.rand <- gsub("(\\(|\\))", "", f_parts[3])
-      f.rand <- paste0("~", .trim(f.rand))
+      # we have multiple random effects, which we can better extract
+      # via "lme4::findbars()"
+      if (length(gregexpr(pattern = "\\|", f_parts[3])[[1]]) > 1) {
+        if (!requireNamespace("lme4", quietly = TRUE)) {
+          stop("To use this function, please install package 'lme4'.")
+        }
+        f.rand <- lme4::findbars(stats::as.formula(paste("~", f_parts[3])))
+      } else {
+        f.rand <- gsub("(\\(|\\))", "", f_parts[3])
+        f.rand <- stats::as.formula(paste0("~", .trim(f.rand)))
+      }
       f.clint <- NULL
     } else {
       ## TODO dangerous fix to convert cross-level interactions
@@ -484,7 +493,7 @@ find_formula.wbm <- function(x, ...) {
     conditional = stats::as.formula(f.cond),
     instruments = stats::as.formula(f.instr),
     interactions = stats::as.formula(f.clint),
-    random = stats::as.formula(f.rand)
+    random = f.rand
   ))
 }
 
@@ -673,7 +682,6 @@ find_formula.merMod <- function(x, ...) {
   }
 
   f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
-
   .compact_list(list(conditional = f.cond, random = f.random))
 }
 
