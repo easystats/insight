@@ -76,7 +76,14 @@ get_parameters(x, ...)
 
 \method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random", "all"), ...)
 
-\method{get_parameters}{BFBayesFactor}(x, iterations = 4000, progress = FALSE, ...)
+\method{get_parameters}{BFBayesFactor}(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "extra"),
+  iterations = 4000,
+  progress = FALSE,
+  ...
+)
 
 \method{get_parameters}{stanmvreg}(
   x,

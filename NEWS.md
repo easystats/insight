@@ -13,6 +13,8 @@
 * `find_parameters()` now also works for `BFBayesFactor` objects.
 * Suppress non-informative warning in `get_data()` for model data with weights.
 * `format_value()` automatically uses scientific notation for *very* large numbers (> 1e+5). Furthermore, the check for integer values was made more robust, to avoid warnings when checking *very* large numbers for integer type.
+* Improved `find_parameters()`, `get_parameters()` and `clean_parameters()` for `BFBayesFactor`-objects.
+
 
 # insight 0.7.1
 

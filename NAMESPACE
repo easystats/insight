@@ -2,6 +2,7 @@
 
 S3method(clean_names,character)
 S3method(clean_names,default)
+S3method(clean_parameters,BFBayesFactor)
 S3method(clean_parameters,blavaan)
 S3method(clean_parameters,brmsfit)
 S3method(clean_parameters,default)

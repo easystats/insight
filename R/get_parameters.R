@@ -1057,12 +1057,16 @@ get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), ..
 
 #' @rdname get_parameters
 #' @export
-get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE, ...) {
+get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"), component = c("all", "extra"), iterations = 4000, progress = FALSE, ...) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("This function requires package `BayesFactor` to work. Please install it.")
   }
 
+  effects <- match.arg(effects)
+  component <- match.arg(component)
   bf_type <- .classify_BFBayesFactor(x)
+
+  params <- find_parameters(x, effects = effects, component = component, flatten = TRUE)
 
   if (bf_type %in% c("correlation", "ttest", "meta", "linear")) {
     posteriors <-
@@ -1075,7 +1079,7 @@ get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE,
       "correlation" = data.frame("rho" = as.numeric(posteriors$rho)),
       "ttest" = data.frame("Difference" = as.numeric(posteriors[, 2])),
       "meta" = data.frame("Effect" = as.numeric(posteriors$delta)),
-      "linear" = posteriors,
+      "linear" = .get_bf_posteriors(posteriors, params),
       NULL
     )
 
@@ -1313,4 +1317,11 @@ get_parameters.mcmc <- function(x, parameters = NULL, ...) {
   }
 
   dat
+}
+
+
+
+.get_bf_posteriors <- function(posteriors, params) {
+  cn <- intersect(colnames(posteriors), params)
+  posteriors[, cn, drop = FALSE]
 }

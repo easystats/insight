@@ -566,25 +566,57 @@ find_parameters.zerotrunc <- find_parameters.zeroinfl
 
 # Bayesian models -----------------------------------------
 
-
+#' @rdname find_parameters
 #' @export
-find_parameters.BFBayesFactor <- function(x, flatten = FALSE, ...) {
-  param <- NULL
+find_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"), component = c("all", "extra"), flatten = FALSE, ...) {
+  conditional <- NULL
+  random <- NULL
+  extra <- NULL
+
+  effects <- match.arg(effects)
+  component <- match.arg(component)
 
   if (.classify_BFBayesFactor(x) == "correlation") {
-    param <- "rho"
+    conditional <- "rho"
   } else if (.classify_BFBayesFactor(x) == "ttest") {
-    param <- "Difference"
+    conditional <- "Difference"
   } else if (.classify_BFBayesFactor(x) == "meta") {
-    param <- "Effect"
+    conditional <- "Effect"
   } else if (.classify_BFBayesFactor(x) == "linear") {
     posteriors <- as.data.frame(suppressMessages(
       BayesFactor::posterior(x, iterations = 20, progress = FALSE, index = 1, ...)
     ))
-    param <- colnames(posteriors)
+
+    params <- colnames(posteriors)
+    vars <- find_variables(x, effects = "all")
+    dat <- get_data(x)
+
+    if ("conditional" %in% names(vars)) {
+      conditional <- unlist(lapply(vars$conditional, function(i) {
+        if (is.factor(dat[[i]])) {
+          sprintf("%s-%s", i, levels(dat[[i]]))
+        } else {
+          i
+        }
+      }))
+    }
+
+    if ("random" %in% names(vars)) {
+      random <- unlist(lapply(vars$random, function(i) {
+        if (is.factor(dat[[i]])) {
+          sprintf("%s-%s", i, levels(dat[[i]]))
+        } else {
+          i
+        }
+      }))
+    }
+
+    extra <- setdiff(params, c(conditional, random))
   }
 
-  l <- .compact_list(list(conditional = param))
+  elements <- .get_elements(effects, component = component)
+  l <- lapply(.compact_list(list(conditional = conditional, random = random, extra = extra)), .remove_backticks_from_string)
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))

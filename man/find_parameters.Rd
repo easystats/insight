@@ -6,6 +6,7 @@
 \alias{find_parameters.merMod}
 \alias{find_parameters.zeroinfl}
 \alias{find_parameters.hurdle}
+\alias{find_parameters.BFBayesFactor}
 \alias{find_parameters.brmsfit}
 \alias{find_parameters.bayesx}
 \alias{find_parameters.stanreg}
@@ -34,6 +35,14 @@ find_parameters(x, ...)
 \method{find_parameters}{hurdle}(
   x,
   component = c("all", "conditional", "zi", "zero_inflated"),
+  flatten = FALSE,
+  ...
+)
+
+\method{find_parameters}{BFBayesFactor}(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "extra"),
   flatten = FALSE,
   ...
 )
