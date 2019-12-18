@@ -579,7 +579,7 @@ find_parameters.BFBayesFactor <- function(x, flatten = FALSE, ...) {
     param <- "Effect"
   } else if (.classify_BFBayesFactor(x) == "linear") {
     posteriors <- as.data.frame(suppressMessages(
-      BayesFactor::posterior(x, iterations = 20, progress = FALSE, ...)
+      BayesFactor::posterior(x, iterations = 20, progress = FALSE, index = 1, ...)
     ))
     param <- colnames(posteriors)
   }

@@ -1067,7 +1067,7 @@ get_parameters.BFBayesFactor <- function(x, iterations = 4000, progress = FALSE,
   if (bf_type %in% c("correlation", "ttest", "meta", "linear")) {
     posteriors <-
       as.data.frame(suppressMessages(
-        BayesFactor::posterior(x, iterations = iterations, progress = progress, ...)
+        BayesFactor::posterior(x, iterations = iterations, progress = progress, index = 1, ...)
       ))
 
     switch(
