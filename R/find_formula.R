@@ -467,7 +467,7 @@ find_formula.wbm <- function(x, ...) {
     if (grepl("\\((.+)\\|(.+)\\)", f_parts[3])) {
       # we have multiple random effects, which we can better extract
       # via "lme4::findbars()"
-      if (length(gregexpr(pattern = "\\|", f_parts[3])[[1]]) > 1) {
+      if (length(gregexpr("\\|", f_parts[3])[[1]]) > 1) {
         if (!requireNamespace("lme4", quietly = TRUE)) {
           stop("To use this function, please install package 'lme4'.")
         }
