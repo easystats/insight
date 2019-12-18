@@ -84,15 +84,14 @@ if (require("testthat") &&
   })
 
   test_that("get_parameters", {
-    expect_null(get_parameters(x))
+    expect_equal(colnames(get_parameters(x)), c("mu", "supp-OJ", "supp-VC", "sig2", "g_supp"))
   })
 
 
   # ---------------------------
   context("BF ANOVA Random")
   data(puzzles)
-  x <-
-    anovaBF(RT ~ shape * color + ID, data = puzzles, whichRandom = "ID")
+  x <- anovaBF(RT ~ shape * color + ID, data = puzzles, whichRandom = "ID")
 
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
@@ -109,7 +108,12 @@ if (require("testthat") &&
   })
 
   test_that("get_parameters", {
-    expect_null(get_parameters(x))
+    expect_equal(
+      colnames(get_parameters(x)),
+      c("mu", "shape-round", "shape-square", "ID-1", "ID-2", "ID-3",
+        "ID-4", "ID-5", "ID-6", "ID-7", "ID-8", "ID-9", "ID-10", "ID-11",
+        "ID-12", "sig2", "g_shape", "g_ID")
+    )
   })
 
   test_that("find_response", {
@@ -171,7 +175,11 @@ if (require("testthat") &&
     expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")))
   })
   test_that("get_parameters", {
-    expect_null(get_parameters(x))
+    expect_equal(
+      colnames(get_parameters(x)),
+      c("mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
+        "sig2", "g_supp", "g_dose")
+    )
   })
 
 
@@ -185,7 +193,11 @@ if (require("testthat") &&
     expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")))
   })
   test_that("get_parameters", {
-    expect_null(get_parameters(x))
+    expect_equal(
+      colnames(get_parameters(x)),
+      c("mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
+        "sig2", "g_supp", "g_dose")
+    )
   })
 
   test_that("get_priors", {
