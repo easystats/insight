@@ -235,7 +235,6 @@ link_function.survreg <- link_function.tobit
 #' @export
 link_function.psm <- link_function.tobit
 
-
 #' @export
 link_function.flexsurvreg <- function(x, ...) {
   dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
@@ -262,6 +261,8 @@ link_function.clm2 <- link_function.clm
 #' @export
 link_function.clmm <- link_function.clm
 
+#' @export
+link_function.mixor <- link_function.clm
 
 
 
