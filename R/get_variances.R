@@ -108,9 +108,7 @@
 #'
 #' get_variance(m)
 #' get_variance_fixed(m)
-#' get_variance_residual(m)
-#' }
-#'
+#' get_variance_residual(m)}
 #' @export
 get_variance <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
   UseMethod("get_variance")
