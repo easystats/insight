@@ -659,6 +659,8 @@ model_info.cpglmm <- function(x, ...) {
   )
 }
 
+#' @export
+model_info.cpglm <- model_info.cpglmm
 
 
 #' @export

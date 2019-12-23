@@ -62,6 +62,7 @@ supported_models <- function() {
     "complmrob",
     "coxme",
     "coxph",
+    "cpglm",
     "cpglmm",
     "crch",
     "crq",

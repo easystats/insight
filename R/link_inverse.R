@@ -290,6 +290,9 @@ link_inverse.cpglmm <- function(x, ...) {
   f$linkinv
 }
 
+#' @export
+link_inverse.cpglm <- link_inverse.cpglmm
+
 
 #' @export
 link_inverse.fixest <- function(x, ...) {

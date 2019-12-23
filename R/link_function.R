@@ -304,6 +304,9 @@ link_function.cpglmm <- function(x, ...) {
   f$linkfun
 }
 
+#' @export
+link_function.cpglm <- link_function.cpglmm
+
 
 #' @export
 link_function.gam <- function(x, ...) {

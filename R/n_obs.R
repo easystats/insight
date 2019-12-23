@@ -162,6 +162,13 @@ n_obs.cpglmm <- function(x, ...) {
 
 
 #' @export
+n_obs.cpglm <- function(x, ...) {
+  nrow(x$model.frame)
+}
+
+
+
+#' @export
 n_obs.rq <- function(x, ...) {
   length(x$fitted.values)
 }

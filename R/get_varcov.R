@@ -300,6 +300,10 @@ get_varcov.cpglmm <- function(x, ...) {
   .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
+#' @export
+get_varcov.cpglm <- get_varcov.cpglmm
+
+
 
 #' @rdname get_varcov
 #' @export

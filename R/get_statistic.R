@@ -566,6 +566,28 @@ get_statistic.cpglmm <- function(x, ...) {
 }
 
 
+#' @importFrom utils capture.output
+#' @export
+get_statistic.cpglm <- function(x, ...) {
+  if (!requireNamespace("cplm", quietly = TRUE)) {
+    stop("To use this function, please install package 'cplm'.")
+  }
+
+  junk <- utils::capture.output(stats <- cplm::summary(x)$coefficients)
+  params <- get_parameters(x)
+
+  out <- data.frame(
+    Parameter = params$Parameter,
+    Statistic = as.vector(stats[, "t value"]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
 
 #' @export
 get_statistic.rq <- function(x, ...) {
