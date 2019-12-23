@@ -16,6 +16,8 @@
 #'   (default). May be abbreviated. Note that the
 #'   \emph{conditional} component is also called \emph{count} or \emph{mean}
 #'   component, depending on the model.
+#' @param robust Logical, if \code{TRUE}, test statistic based on robust standard
+#'   errors is returned.
 #' @param ... Currently not used.
 #'
 #' @return A data frame with the model's parameter names and the related test statistic.
@@ -692,16 +694,22 @@ get_statistic.glmx <- function(x, component = c("all", "conditional", "extra"), 
 }
 
 
-
+#' @rdname get_statistic
 #' @importFrom stats coef
 #' @export
-get_statistic.gee <- function(x, ...) {
+get_statistic.gee <- function(x, robust = FALSE, ...) {
   parms <- get_parameters(x)
   cs <- stats::coef(summary(x))
 
+  if (isTRUE(robust)) {
+    stats <- as.vector(cs[, "Robust z"])
+  } else {
+    stats <- as.vector(cs[, "Naive z"])
+  }
+
   out <- data.frame(
     Parameter = parms$Parameter,
-    Statistic = as.vector(cs[, "Naive z"]),
+    Statistic = stats,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
