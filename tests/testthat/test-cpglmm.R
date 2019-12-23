@@ -123,12 +123,12 @@ if (require("testthat") &&
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("(Intercept)", "Stock", "Spacing"),
-        random = list(Subject = c("(Intercept)", "Stock", "Spacing"))
+        conditional = c("(Intercept)", "StockMM106", "StockMark", "Spacing5x3"),
+        random = list(Plant = c("(Intercept)"))
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 2)
-    expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "Stock", "Spacing"))
+    expect_equal(nrow(get_parameters(m1)), 4)
+    expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "StockMM106", "StockMark", "Spacing5x3"))
   })
 
   test_that("is_multivariate", {
