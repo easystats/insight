@@ -458,6 +458,32 @@ find_parameters.glmmadmb <- find_parameters.merMod
 
 
 #' @export
+find_parameters.cpglmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  if (!requireNamespace("cplm", quietly = TRUE)) {
+    stop("Package 'cplm' required for this function to work. Please install it.")
+  }
+
+  l <- .compact_list(list(
+    conditional = names(cplm::fixef(x)),
+    random = lapply(cplm::ranef(x), colnames)
+  ))
+
+  l <- rapply(l, .remove_backticks_from_string, how = "list")
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+
+  l <- .compact_list(l[elements])
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+#' @export
 find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package 'lme4' required for this function to work. Please install it.")

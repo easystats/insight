@@ -587,6 +587,33 @@ get_parameters.lme <- get_parameters.merMod
 
 
 
+#' @export
+get_parameters.cpglmm <- function(x, effects = c("fixed", "random"), ...) {
+  if (!requireNamespace("cplm", quietly = TRUE)) {
+    stop("To use this function, please install package 'cplm'.")
+  }
+
+  effects <- match.arg(effects)
+
+  l <- .compact_list(list(
+    conditional = cplm::fixef(x),
+    random = cplm::ranef(x)
+  ))
+
+  fixed <- data.frame(
+    Parameter = names(l$conditional),
+    Estimate = unname(l$conditional),
+    stringsAsFactors = FALSE
+  )
+
+  if (effects == "fixed") {
+    .remove_backticks_from_parameter_names(fixed)
+  } else {
+    l$random
+  }
+}
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {

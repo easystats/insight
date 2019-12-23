@@ -42,6 +42,7 @@ find_statistic <- function(x, ...) {
       "cgamm",
       "coeftest",
       "complmrob",
+      "cpglmm",
       "crq",
       "drc",
       "feis",

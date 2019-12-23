@@ -155,6 +155,13 @@ n_obs.multinom <- function(x, ...) {
 
 
 #' @export
+n_obs.cpglmm <- function(x, ...) {
+  nrow(x@frame)
+}
+
+
+
+#' @export
 n_obs.rq <- function(x, ...) {
   length(x$fitted.values)
 }

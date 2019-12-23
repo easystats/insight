@@ -224,6 +224,30 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.cpglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  dat <- stats::model.frame(x)
+
+  mf <- tryCatch(
+    {
+      switch(
+        effects,
+        fixed = dat[, find_predictors(x, effects = "fixed", flatten = TRUE), drop = FALSE],
+        all = dat,
+        random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
+      )
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, mf, effects)
+}
+
+
+
+#' @export
 get_data.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
 

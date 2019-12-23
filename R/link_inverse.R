@@ -285,6 +285,13 @@ link_inverse.mixor <- link_inverse.clm
 
 
 #' @export
+link_inverse.cpglmm <- function(x, ...) {
+  f <- .get_cplm_family(x)
+  f$linkinv
+}
+
+
+#' @export
 link_inverse.fixest <- function(x, ...) {
   if (inherits(x$family, "family")) {
     x$family$linkinv
@@ -521,4 +528,19 @@ link_inverse.gam <- function(x, ...) {
   }
 
   il
+}
+
+
+#' @importFrom stats poisson
+.get_cplm_family <- function(x) {
+  link <- parse(text = .safe_deparse(x@call))[[1]]$link
+
+  if (!is.numeric(link)) {
+    stats::poisson(link = link)
+  } else {
+    if (!requireNamespace("statmod", quietly = TRUE)) {
+      stop("Package 'statmod' required. Please install it.")
+    }
+    statmod::tweedie(link.power = link)
+  }
 }

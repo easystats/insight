@@ -299,6 +299,13 @@ link_function.glmx <- function(x, ...) {
 
 
 #' @export
+link_function.cpglmm <- function(x, ...) {
+  f <- .get_cplm_family(x)
+  f$linkfun
+}
+
+
+#' @export
 link_function.gam <- function(x, ...) {
   lf <- tryCatch(
     {

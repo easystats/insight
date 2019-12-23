@@ -187,6 +187,16 @@
       vc = lme4::VarCorr(x),
       re = lme4::ranef(x)
     )
+  } else if (inherits(x, "cpglmm")) {
+    if (!requireNamespace("cplm", quietly = TRUE)) {
+      stop("Package 'cplm' required. Please install it.")
+    }
+    vals <- list(
+      beta = cplm::fixef(x),
+      X = cplm::model.matrix(x),
+      vc = cplm::VarCorr(x),
+      re = cplm::ranef(x)
+    )
   } else {
     vals <- list(
       beta = lme4::fixef(x),
@@ -376,7 +386,14 @@
 
   # check if null-model could be computed
   if (!is.null(null_model)) {
-    null_fixef <- unname(.collapse_cond(lme4::fixef(null_model)))
+    if (inherits(null_model, "cpglmm")) {
+      if (!requireNamespace("cplm", quietly = TRUE)) {
+        stop("Package 'cplm' required. Please install it.")
+      }
+      null_fixef <- unname(cplm::fixef(null_model))
+    } else {
+      null_fixef <- unname(.collapse_cond(lme4::fixef(null_model)))
+    }
     mu <- exp(null_fixef)
   } else {
     mu <- NA
@@ -448,6 +465,8 @@
   } else {
     if (inherits(x, "MixMod")) {
       return(mu)
+    } else if (inherits(x, "cpglmm")) {
+      .get_cplm_family(x)$variance(mu)
     } else {
       stats::family(x)$variance(mu)
     }
@@ -606,6 +625,9 @@
   if (inherits(model, "MixMod")) {
     nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
     null.model <- stats::update(model, fixed = nullform)
+  } else if (inherits(model, "cpglmm")) {
+    nullform <- find_formula(model)[["random"]]
+    null.model <- stats::update(model, nullform)
   } else {
     f <- stats::formula(model)
     resp <- find_response(model)

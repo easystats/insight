@@ -546,6 +546,28 @@ get_statistic.wbgee <- get_statistic.wbm
 
 
 #' @export
+get_statistic.cpglmm <- function(x, ...) {
+  if (!requireNamespace("cplm", quietly = TRUE)) {
+    stop("To use this function, please install package 'cplm'.")
+  }
+
+  stats <- cplm::summary(x)$coefs
+  params <- get_parameters(x)
+
+  out <- data.frame(
+    Parameter = params$Parameter,
+    Statistic = as.vector(stats[, "t value"]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+#' @export
 get_statistic.rq <- function(x, ...) {
   stat <- tryCatch(
     {

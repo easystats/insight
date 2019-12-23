@@ -60,6 +60,8 @@ is_model <- function(x) {
       "confusionMatrix",
       "coxme",
       "coxph",
+      "cpglm",
+      "cpglmm",
       "crch",
       "crq",
       "drc",

@@ -289,6 +289,18 @@ get_varcov.mixed <- function(x, ...) {
 }
 
 
+#' @export
+get_varcov.cpglmm <- function(x, ...) {
+  vc <- as.matrix(x@vcov)
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  .remove_backticks_from_matrix_names(as.matrix(vc))
+}
+
+
 #' @rdname get_varcov
 #' @export
 get_varcov.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {

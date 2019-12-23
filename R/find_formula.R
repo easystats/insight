@@ -689,6 +689,9 @@ find_formula.merMod <- function(x, ...) {
 find_formula.rlmerMod <- find_formula.merMod
 
 #' @export
+find_formula.cpglmm <- find_formula.merMod
+
+#' @export
 find_formula.glmmadmb <- find_formula.merMod
 
 #' @export

@@ -632,14 +632,29 @@ model_info.BBmm <- model_info.BBreg
 
 
 #' @export
-model_info.glmmadmb <- function(x, ...) {
+model_info.BBreg <- function(x, ...) {
   .make_family(
     x = x,
-    fitfam = x$family,
-    logit.link = x$link == "logit",
+    fitfam = "betabinomial",
+    logit.link = TRUE,
     multi.var = FALSE,
-    zero.inf = x$zeroInflation,
-    link.fun = x$link,
+    zero.inf = FALSE,
+    link.fun = "logit",
+    ...
+  )
+}
+
+
+#' @export
+model_info.cpglmm <- function(x, ...) {
+  link <- parse(text = .safe_deparse(x@call))[[1]]$link
+  if (is.numeric(link)) link <- "tweedie"
+  .make_family(
+    x = x,
+    fitfam = "poisson",
+    logit.link = FALSE,
+    multi.var = FALSE,
+    link.fun = link,
     ...
   )
 }
