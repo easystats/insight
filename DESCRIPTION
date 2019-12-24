@@ -78,6 +78,7 @@ Suggests:
     rstudioapi,
     speedglm,
     splines,
+    statmod,
     survey,
     survival,
     truncreg,
