@@ -212,6 +212,14 @@ find_statistic <- function(x, ...) {
       "survfit"
     )
 
+
+  # edge cases -----------------------------------------------------------
+
+  if (model_info(x)$is_tweedie) {
+    return("t-statistic")
+  }
+
+
   # statistic check -----------------------------------------------------------
 
   if (class(x)[[1]] %in% unsupported.mods) {
