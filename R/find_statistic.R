@@ -215,7 +215,7 @@ find_statistic <- function(x, ...) {
 
   # edge cases -----------------------------------------------------------
 
-  if (model_info(x)$is_tweedie) {
+  if (!is_multivariate(x) && model_info(x)$is_tweedie) {
     return("t-statistic")
   }
 

@@ -170,6 +170,9 @@ model_info.mcmc <- model_info.mmclogit
 model_info.gls <- model_info.mmclogit
 
 #' @export
+model_info.nls <- model_info.mmclogit
+
+#' @export
 model_info.truncreg <- model_info.mmclogit
 
 #' @export
