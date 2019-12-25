@@ -553,17 +553,21 @@ find_formula.zerotrunc <- find_formula.hurdle
 
 #' @export
 find_formula.clmm2 <- function(x, ...) {
-  list(
+  .compact_list(list(
     conditional = stats::as.formula(.safe_deparse(attr(x$location, "terms", exact = TRUE))),
+    scale = stats::as.formula(.safe_deparse(attr(x$scale, "terms", exact = TRUE))),
     random = stats::as.formula(paste0("~", parse(text = .safe_deparse(x$call))[[1]]$random))
-  )
+  ))
 }
 
 
-
+#' @importFrom stats formula
 #' @export
 find_formula.clm2 <- function(x, ...) {
-  list(conditional = attr(x$location, "terms", exact = TRUE))
+  .compact_list(list(
+    conditional = stats::formula(attr(x$location, "terms", exact = TRUE)),
+    scale = stats::formula(attr(x$scale, "terms", exact = TRUE))
+  ))
 }
 
 

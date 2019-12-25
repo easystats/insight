@@ -846,7 +846,15 @@ get_data.tobit <- function(x, ...) {
 get_data.clm2 <- function(x, ...) {
   mf <- tryCatch(
     {
-      x$location
+      data_complete <- x$location
+      data_scale <- x$scale
+
+      if (!is.null(data_scale)) {
+        remain <- setdiff(colnames(data_scale), colnames(data_complete))
+        if (length(remain)) data_complete <- cbind(data_complete, data_scale[, remain, drop = FALSE])
+      }
+
+      data_complete
     },
     error = function(x) {
       NULL

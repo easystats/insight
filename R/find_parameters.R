@@ -115,6 +115,33 @@ find_parameters.polr <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.clm2 <- function(x, flatten = FALSE, ...) {
+  cf <- stats::coef(x)
+  n_intercepts <- length(x$xi)
+  n_location <- length(x$beta)
+  n_scale <- length(x$zeta)
+
+  if (n_scale == 0) {
+    pars <- list(conditional = names(cf))
+    pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  } else {
+    pars <- .compact_list(list(
+      conditional = names(cf)[1:(n_intercepts + n_location)],
+      scale = names(cf)[(1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)]
+    ))
+    pars <- rapply(pars, .remove_backticks_from_string, how = "list")
+  }
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+
+#' @export
 find_parameters.bracl <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
   pars$conditional <- .remove_backticks_from_string(pars$conditional)
@@ -211,6 +238,8 @@ find_parameters.multinom <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.brmultinom <- find_parameters.multinom
+
+
 
 
 

@@ -421,6 +421,32 @@ get_parameters.bracl <- function(x, ...) {
 }
 
 
+#' @rdname get_parameters
+#' @export
+get_parameters.clm2 <- function(x, component = c("all", "conditional", "scale"), ...) {
+  component <- match.arg(component)
+
+  cf <- stats::coef(x)
+  n_intercepts <- length(x$xi)
+  n_location <- length(x$beta)
+  n_scale <- length(x$zeta)
+
+  params <- data.frame(
+    Parameter = names(cf),
+    Estimate = unname(cf),
+    Component = c(rep("conditional", times = n_intercepts + n_location), rep("scale", times = n_scale)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (component != "all") {
+    params <- params[params$Component == component, ]
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
 
 
 

@@ -64,6 +64,8 @@ clean_parameters.default <- function(x, ...) {
       "instruments"
     } else if (grepl("extra", i, fixed = TRUE)) {
       "extra"
+    } else if (grepl("scale", i, fixed = TRUE)) {
+      "scale"
     } else {
       "conditional"
     }

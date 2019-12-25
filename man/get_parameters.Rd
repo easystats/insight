@@ -4,6 +4,7 @@
 \alias{get_parameters}
 \alias{get_parameters.rqss}
 \alias{get_parameters.betareg}
+\alias{get_parameters.clm2}
 \alias{get_parameters.coxme}
 \alias{get_parameters.merMod}
 \alias{get_parameters.lme}
@@ -31,6 +32,8 @@ get_parameters(x, ...)
 \method{get_parameters}{rqss}(x, component = c("all", "conditional", "smooth_terms"), ...)
 
 \method{get_parameters}{betareg}(x, component = c("all", "conditional", "precision"), ...)
+
+\method{get_parameters}{clm2}(x, component = c("all", "conditional", "scale"), ...)
 
 \method{get_parameters}{coxme}(x, effects = c("fixed", "random"), ...)
 
