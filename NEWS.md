@@ -4,6 +4,10 @@
 
 * `brglm` (*brglm*), `cpglm`, `cpglmm` (*cplm*), `feglm` (*apaca*), `glmmadmb` (*glmmADMB*), `glmx` (*glmx*), partial support for `mcmc` (*coda*), `mixor` (*mixor*).
 
+## General
+
+* Better handling of `clm2`-models.
+
 ## New functions
 
 * `format_ci()` (re-implemented and slighlty enhanced from _parameters_), to format confidence/credible intervals.
