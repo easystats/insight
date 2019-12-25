@@ -4,6 +4,7 @@
 \alias{get_statistic}
 \alias{get_statistic.default}
 \alias{get_statistic.glmmTMB}
+\alias{get_statistic.clm2}
 \alias{get_statistic.gee}
 \alias{get_statistic.betareg}
 \title{Get statistic associated with estimates}
@@ -17,6 +18,8 @@ get_statistic(x, ...)
   component = c("all", "conditional", "zi", "zero_inflated"),
   ...
 )
+
+\method{get_statistic}{clm2}(x, component = c("all", "conditional", "scale"), ...)
 
 \method{get_statistic}{gee}(x, robust = FALSE, ...)
 

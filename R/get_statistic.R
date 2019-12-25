@@ -432,6 +432,34 @@ get_statistic.aareg <- function(x, ...) {
 # Ordinal models --------------------------------------------------
 
 
+#' @rdname get_statistic
+#' @export
+get_statistic.clm2 <- function(x, component = c("all", "conditional", "scale"), ...) {
+  component <- match.arg(component)
+
+  stats <- stats::coef(summary(x))
+  n_intercepts <- length(x$xi)
+  n_location <- length(x$beta)
+  n_scale <- length(x$zeta)
+
+  out <- data.frame(
+    Parameter = rownames(stats),
+    Statistic = unname(stats[, "z value"]),
+    Component = c(rep("conditional", times = n_intercepts + n_location), rep("scale", times = n_scale)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (component != "all") {
+    out <- out[out$Component == component, ]
+  }
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
 #' @export
 get_statistic.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
   stats <- x$Model[, "z value"]

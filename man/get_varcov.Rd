@@ -3,6 +3,7 @@
 \name{get_varcov}
 \alias{get_varcov}
 \alias{get_varcov.betareg}
+\alias{get_varcov.clm2}
 \alias{get_varcov.truncreg}
 \alias{get_varcov.gamlss}
 \alias{get_varcov.hurdle}
@@ -15,6 +16,8 @@
 get_varcov(x, ...)
 
 \method{get_varcov}{betareg}(x, component = c("conditional", "precision", "all"), ...)
+
+\method{get_varcov}{clm2}(x, component = c("all", "conditional", "scale"), ...)
 
 \method{get_varcov}{truncreg}(x, component = c("conditional", "all"), ...)
 

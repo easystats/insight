@@ -76,6 +76,33 @@ get_varcov.betareg <- function(x, component = c("conditional", "precision", "all
 }
 
 
+#' @rdname get_varcov
+#' @export
+get_varcov.clm2 <- function(x, component = c("all", "conditional", "scale"), ...) {
+  component <- match.arg(component)
+
+  n_intercepts <- length(x$xi)
+  n_location <- length(x$beta)
+  n_scale <- length(x$zeta)
+
+  vc <- stats::vcov(x)
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  range <- switch(
+    component,
+    "all" = 1:(n_scale + n_intercepts + n_location),
+    "conditional" = 1:(n_intercepts + n_location),
+    "scale" = (1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)
+  )
+
+  vc <- vc[range, range]
+  .remove_backticks_from_matrix_names(as.matrix(vc))
+}
+
+
 #' @export
 get_varcov.glmx <- function(x, component = c("all", "conditional", "extra"), ...) {
   component <- match.arg(component)
