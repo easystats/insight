@@ -6,7 +6,7 @@
 
 ## General
 
-* Better handling of `clm2`-models.
+* Better handling of `clm2` and `clmm2` models.
 
 ## New functions
 
