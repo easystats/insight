@@ -174,18 +174,7 @@ find_parameters.betareg <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.clmm2 <- function(x, flatten = FALSE, ...) {
-  s <- summary(x)
-  pars <- list(conditional = as.character(rownames(s$coefficients)))
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
-
-  if (flatten) {
-    unique(unlist(pars))
-  } else {
-    pars
-  }
-}
-
+find_parameters.clmm2 <- find_parameters.clm2
 
 
 #' @export

@@ -102,6 +102,9 @@ get_varcov.clm2 <- function(x, component = c("all", "conditional", "scale"), ...
   .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
+#' @export
+get_varcov.clmm2 <- get_varcov.clm2
+
 
 #' @export
 get_varcov.glmx <- function(x, component = c("all", "conditional", "extra"), ...) {

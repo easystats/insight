@@ -426,14 +426,14 @@ get_parameters.bracl <- function(x, ...) {
 get_parameters.clm2 <- function(x, component = c("all", "conditional", "scale"), ...) {
   component <- match.arg(component)
 
-  cf <- stats::coef(x)
+  cf <- stats::coef(summary(x))
   n_intercepts <- length(x$xi)
   n_location <- length(x$beta)
   n_scale <- length(x$zeta)
 
   params <- data.frame(
-    Parameter = names(cf),
-    Estimate = unname(cf),
+    Parameter = rownames(cf),
+    Estimate = unname(cf[, "Estimate"]),
     Component = c(rep("conditional", times = n_intercepts + n_location), rep("scale", times = n_scale)),
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -453,6 +453,9 @@ get_parameters.clm2 <- function(x, component = c("all", "conditional", "scale"),
 
 # Mixed models ---------------------------------------------
 
+
+#' @export
+get_parameters.clmm2 <- get_parameters.clm2
 
 #' @rdname get_parameters
 #' @export

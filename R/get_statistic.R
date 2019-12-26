@@ -459,6 +459,9 @@ get_statistic.clm2 <- function(x, component = c("all", "conditional", "scale"), 
 }
 
 
+#' @export
+get_statistic.clmm2 <- get_statistic.clm2
+
 
 #' @export
 get_statistic.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {

@@ -551,6 +551,7 @@ find_formula.zerotrunc <- find_formula.hurdle
 # Ordinal models  --------------------------------------
 
 
+#' @importFrom stats as.formula
 #' @export
 find_formula.clmm2 <- function(x, ...) {
   .compact_list(list(
