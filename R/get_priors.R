@@ -66,6 +66,56 @@ get_priors.stanreg <- function(x, ...) {
 
 
 #' @export
+get_priors.stanmvreg <- function(x, ...) {
+  if (!requireNamespace("rstanarm", quietly = TRUE)) {
+    stop("To use this function, please install package 'rstanarm'.")
+  }
+
+  ps <- rstanarm::prior_summary(x)
+
+  l <- .compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) {
+    lapply(.x, function(.i) {
+      if (!is.null(.i)) do.call(cbind, .i)
+    })
+  }))
+
+  prior_info <- do.call(rbind, lapply(l, function(.x) {
+    if (length(.x) > 1) {
+      out <- lapply(names(.x), function(.i) {
+        if (!("adjusted_scale" %in% colnames(.x[[.i]]))) .x[[.i]] <- cbind(.x[[.i]], adjusted_scale = NA)
+        data.frame(.x[[.i]], response = .i, stringsAsFactors = FALSE)
+      })
+      do.call(rbind, out)
+    } else {
+      cn <- colnames(.x[[1]])
+      prior_info <- as.data.frame(.x)
+      colnames(prior_info) <- cn
+    }
+  }))
+
+  prior_info$parameter <- unlist(lapply(find_parameters(x), function(.i) .i$conditional))
+  prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale", "response"), colnames(prior_info))]
+
+  colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
+  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info))
+
+  priors <- as.data.frame(lapply(prior_info, function(x) {
+    if (.is_numeric_character(x)) {
+      as.numeric(as.character(x))
+    } else {
+      as.character(x)
+    }
+  }), stringsAsFactors = FALSE)
+
+  string <- strsplit(names(priors), "_", fixed = TRUE)
+  string <- lapply(string, .capitalize)
+  names(priors) <- unlist(lapply(string, paste0, collapse = "_"))
+
+  priors
+}
+
+
+#' @export
 get_priors.brmsfit <- function(x, ...) {
   ## TODO needs testing for edge cases - check if "coef"-column is
   # always empty for intercept-class

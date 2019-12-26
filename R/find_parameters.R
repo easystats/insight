@@ -898,7 +898,7 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
   fe <- colnames(as.data.frame(x))
   rn <- names(find_response(x))
 
-  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
+  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !grepl(pattern = "\\|sigma$", fe, perl = TRUE)]
   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
   sigma <- fe[grepl(pattern = "\\|sigma$", fe, perl = TRUE) & .grep_non_smoothers(fe)]
 
