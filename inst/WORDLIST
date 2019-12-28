@@ -4,6 +4,7 @@ afex
 al
 Anova
 aod
+apaca
 bamlss
 BayesFactor
 bayestestR
@@ -19,6 +20,8 @@ colour
 coloured
 Coloured
 comparator
+complmrob
+cplm
 crch
 doi
 DOI
@@ -26,6 +29,7 @@ easystats
 estimatr
 et
 feisr
+fixest
 flexsurv
 gam
 gamls
@@ -35,7 +39,9 @@ ggeffects
 github
 GLMM
 GLMMadaptive
+glmmADMB
 glmmTMB
+glmx
 HDI
 HRQoL
 https
@@ -48,10 +54,12 @@ JOSS
 lavaan
 lfe
 logloss
+mclogit
 MCSE
 metafor
 mgcv
 MixMod
+mixor
 modelling
 monotic
 multgee
@@ -83,8 +91,10 @@ substraction
 tibbles
 tranformations
 tweedie
+Tweedie
 untransformed
 variates
+VGAM
 warmup
 warmups
 Zuur

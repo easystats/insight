@@ -252,10 +252,6 @@ find_statistic <- function(x, ...) {
 
   # ambiguous cases -----------------------------------------------------------
 
-  if (!is_multivariate(x) && model_info(x)$is_tweedie) {
-    return("t-statistic")
-  }
-
   if (class(x)[[1]] %in% unclear.mods) {
     col_names <- colnames(as.data.frame(summary(x)$coefficients))
     t_names <-
