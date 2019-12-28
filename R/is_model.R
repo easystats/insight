@@ -34,6 +34,7 @@ is_model <- function(x) {
       "bayesx",
       "BBmm",
       "BBreg",
+      "bcplm",
       "betareg",
       "BFBayesFactor",
       "bglmerMod",
@@ -56,6 +57,7 @@ is_model <- function(x) {
       "clm2",
       "clmm",
       "clmm2",
+      "coeftest",
       "complmrob",
       "confusionMatrix",
       "coxme",
@@ -120,6 +122,7 @@ is_model <- function(x) {
       "lmRob",
       "loggammacenslmrob",
       "logistf",
+      "LogitBoost",
       "loo",
       "LORgee",
       "lmodel2",
@@ -182,6 +185,7 @@ is_model <- function(x) {
       "vglm",
       "wbm",
       "wblm",
+      "zcpglm",
       "zeroinfl",
       "zerotrunc"
     )

@@ -145,7 +145,8 @@ m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
 get_variance(m)
 get_variance_fixed(m)
-get_variance_residual(m)}
+get_variance_residual(m)
+}
 }
 \references{
 \itemize{
