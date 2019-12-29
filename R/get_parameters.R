@@ -126,6 +126,7 @@ get_parameters.crq <- function(x, ...) {
 }
 
 
+#' @importFrom stats setNames
 #' @rdname get_parameters
 #' @export
 get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
@@ -136,7 +137,7 @@ get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_t
   names(smooth_terms) <- rownames(sc$qsstab)
 
   .return_smooth_parms(
-    conditional = sc$coef[, 1],
+    conditional = stats::setNames(sc$coef[, 1], rownames(sc$coef)),
     smooth_terms = smooth_terms,
     component = component
   )

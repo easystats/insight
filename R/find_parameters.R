@@ -1289,8 +1289,13 @@ find_parameters.crq <- function(x, flatten = FALSE, ...) {
 find_parameters.rqss <- function(x, flatten = FALSE, ...) {
   sc <- summary(x)
 
-  pars <- list(conditional = rownames(sc$coef))
+  pars <- list(
+    conditional = rownames(sc$coef),
+    smooth_terms = rownames(sc$qsstab)
+  )
+
   pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$smooth_terms <- .remove_backticks_from_string(pars$smooth_terms)
 
   if (flatten) {
     unique(unlist(pars))

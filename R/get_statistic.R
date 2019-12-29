@@ -655,6 +655,26 @@ get_statistic.nlrq <- get_statistic.rq
 
 
 #' @export
+get_statistic.rqss <- function(x, ...) {
+  cs <- summary(x)
+  stat <- c(as.vector(cs$coef[, "t value"]), as.vector(cs$qsstab[, "F value"]))
+
+  params <- get_parameters(x)
+
+  out <- data.frame(
+    Parameter = params$Parameter,
+    Statistic = unname(stat),
+    Component = params$Component,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.bigglm <- function(x, ...) {
   parms <- get_parameters(x)
   cs <- summary(x)$mat
