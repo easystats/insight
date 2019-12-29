@@ -74,6 +74,7 @@ find_statistic <- function(x, ...) {
       "rlm",
       "rlmerMod",
       "rq",
+      "rqss",
       "speedlm",
       "svyglm",
       "svyolr",
