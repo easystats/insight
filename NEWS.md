@@ -24,6 +24,7 @@
 
 * Fixed issue in `find_random_slopes()` for *panelr*-models with multiple random-effect parts.
 * Better detect Tweedie-models in `model_info()`.
+* Fixed issues with `zerotrunc` models.
 
 # insight 0.7.1
 

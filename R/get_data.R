@@ -158,7 +158,7 @@ get_data.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_i
 get_data.zeroinfl <- get_data.hurdle
 
 #' @export
-get_data.zerotrunc <- get_data.hurdle
+get_data.zerotrunc <- get_data.default
 
 
 

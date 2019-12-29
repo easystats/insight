@@ -1028,13 +1028,13 @@ get_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi",
   .return_zeroinf_parms(x, component)
 }
 
-
-#' @export
-get_parameters.zerotrunc <- get_parameters.zeroinfl
-
-
 #' @export
 get_parameters.hurdle <- get_parameters.zeroinfl
+
+#' @export
+get_parameters.zerotrunc <- get_parameters.default
+
+
 
 
 

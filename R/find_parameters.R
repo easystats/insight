@@ -628,7 +628,7 @@ find_parameters.hurdle <- find_parameters.zeroinfl
 
 
 #' @export
-find_parameters.zerotrunc <- find_parameters.zeroinfl
+find_parameters.zerotrunc <- find_parameters.default
 
 
 
