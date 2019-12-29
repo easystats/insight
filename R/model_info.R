@@ -635,14 +635,14 @@ model_info.BBmm <- model_info.BBreg
 
 
 #' @export
-model_info.BBreg <- function(x, ...) {
+model_info.glmmadmb <- function(x, ...) {
   .make_family(
     x = x,
-    fitfam = "betabinomial",
-    logit.link = TRUE,
+    fitfam = x$family,
+    logit.link = x$link == "logit",
     multi.var = FALSE,
-    zero.inf = FALSE,
-    link.fun = "logit",
+    zero.inf = x$zeroInflation,
+    link.fun = x$link,
     ...
   )
 }
