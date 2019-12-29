@@ -138,7 +138,8 @@ find_statistic <- function(x, ...) {
       "tobit",
       "vglm",
       "wbgee",
-      "zeroinfl"
+      "zeroinfl",
+      "zerotrunc"
     )
 
   # F-value objects ----------------------------------------------------------
