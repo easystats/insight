@@ -313,7 +313,7 @@
 
   tryCatch(
     {
-      if (inherits(x, c("glmmTMB", "clmm"))) {
+      if (inherits(x, c("glmmTMB", "clmm", "cpglmm"))) {
         is_si <- any(sapply(vals$vc, function(.x) any(abs(diag(.x)) < tolerance)))
       } else if (inherits(x, "merMod")) {
         theta <- lme4::getME(x, "theta")
