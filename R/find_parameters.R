@@ -1286,7 +1286,7 @@ find_parameters.crq <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.rqss <- function(x, flatten = FALSE, ...) {
+find_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   sc <- summary(x)
 
   pars <- list(
@@ -1296,6 +1296,10 @@ find_parameters.rqss <- function(x, flatten = FALSE, ...) {
 
   pars$conditional <- .remove_backticks_from_string(pars$conditional)
   pars$smooth_terms <- .remove_backticks_from_string(pars$smooth_terms)
+
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component)
+  pars <- .compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))

@@ -13,9 +13,10 @@
 #'   or for the zero-inflated part of the model be returned? Applies to models
 #'   with zero-inflated component. \code{component} may be one of
 #'   \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"} or \code{"all"}
-#'   (default). May be abbreviated. Note that the
-#'   \emph{conditional} component is also called \emph{count} or \emph{mean}
-#'   component, depending on the model.
+#'   (default). For models with smooth terms, \code{component = "smooth_terms"}
+#'   is also possible. May be abbreviated. Note that the \emph{conditional}
+#'   component is also called \emph{count} or \emph{mean} component, depending
+#'   on the model.
 #' @param robust Logical, if \code{TRUE}, test statistic based on robust standard
 #'   errors is returned.
 #' @param ... Currently not used.
@@ -655,7 +656,9 @@ get_statistic.nlrq <- get_statistic.rq
 
 
 #' @export
-get_statistic.rqss <- function(x, ...) {
+get_statistic.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+  component <- match.arg(component)
+
   cs <- summary(x)
   stat <- c(as.vector(cs$coef[, "t value"]), as.vector(cs$qsstab[, "F value"]))
 
@@ -668,6 +671,10 @@ get_statistic.rqss <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  if (component != "all") {
+    out <- out[out$Component == component, ]
+  }
 
   attr(out, "statistic") <- find_statistic(x)
   out
