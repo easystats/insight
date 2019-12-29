@@ -214,6 +214,12 @@ find_statistic <- function(x, ...) {
       "survfit"
     )
 
+  # edge cases ---------------------------------------------------------------
+
+  if (!is_multivariate(x) && model_info(x)$is_tweedie) {
+    return("t-statistic")
+  }
+
   # statistic check -----------------------------------------------------------
 
   if (class(x)[[1]] %in% unsupported.mods) {
@@ -242,12 +248,6 @@ find_statistic <- function(x, ...) {
     } else {
       return("z-statistic")
     }
-  }
-
-  # edge cases ---------------------------------------------------------------
-
-  if (!is_multivariate(x) && model_info(x)$is_tweedie) {
-    return("t-statistic")
   }
 
   # ambiguous cases -----------------------------------------------------------
