@@ -1,9 +1,8 @@
 if (require("testthat") &&
-    require("insight") &&
-    require("cplm")) {
-
+  require("insight") &&
+  require("cplm")) {
   data("FineRoot")
-  m1 <- cpglmm(RLD ~ Stock + Spacing +  (1|Plant), data = FineRoot)
+  m1 <- cpglmm(RLD ~ Stock + Spacing + (1 | Plant), data = FineRoot)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_count)

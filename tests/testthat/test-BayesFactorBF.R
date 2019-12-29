@@ -110,9 +110,11 @@ if (require("testthat") &&
   test_that("get_parameters", {
     expect_equal(
       colnames(get_parameters(x)),
-      c("mu", "shape-round", "shape-square", "ID-1", "ID-2", "ID-3",
+      c(
+        "mu", "shape-round", "shape-square", "ID-1", "ID-2", "ID-3",
         "ID-4", "ID-5", "ID-6", "ID-7", "ID-8", "ID-9", "ID-10", "ID-11",
-        "ID-12", "sig2", "g_shape", "g_ID")
+        "ID-12", "sig2", "g_shape", "g_ID"
+      )
     )
   })
 
@@ -177,8 +179,10 @@ if (require("testthat") &&
   test_that("get_parameters", {
     expect_equal(
       colnames(get_parameters(x)),
-      c("mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
-        "sig2", "g_supp", "g_dose")
+      c(
+        "mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
+        "sig2", "g_supp", "g_dose"
+      )
     )
   })
 
@@ -195,8 +199,10 @@ if (require("testthat") &&
   test_that("get_parameters", {
     expect_equal(
       colnames(get_parameters(x)),
-      c("mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
-        "sig2", "g_supp", "g_dose")
+      c(
+        "mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
+        "sig2", "g_supp", "g_dose"
+      )
     )
   })
 

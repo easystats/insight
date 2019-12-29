@@ -33,6 +33,7 @@ find_statistic <- function(x, ...) {
     c(
       "BBreg",
       "BBmm",
+      "bcplm",
       "biglm",
       "bglmerMod",
       "blmerMod",
@@ -78,7 +79,8 @@ find_statistic <- function(x, ...) {
       "svyolr",
       "truncreg",
       "wbm",
-      "wblm"
+      "wblm",
+      "zcpglm"
     )
 
   # z-value objects ----------------------------------------------------------
@@ -212,14 +214,6 @@ find_statistic <- function(x, ...) {
       "survfit"
     )
 
-
-  # edge cases -----------------------------------------------------------
-
-  if (!is_multivariate(x) && model_info(x)$is_tweedie) {
-    return("t-statistic")
-  }
-
-
   # statistic check -----------------------------------------------------------
 
   if (class(x)[[1]] %in% unsupported.mods) {
@@ -250,6 +244,14 @@ find_statistic <- function(x, ...) {
     }
   }
 
+  # edge cases ---------------------------------------------------------------
+
+  if (!is_multivariate(x) && model_info(x)$is_tweedie) {
+    return("t-statistic")
+  }
+
+  # ambiguous cases -----------------------------------------------------------
+
   if (class(x)[[1]] %in% unclear.mods) {
     col_names <- colnames(as.data.frame(summary(x)$coefficients))
     t_names <-
@@ -274,8 +276,7 @@ find_statistic <- function(x, ...) {
         "Wald Z"
       )
     f_names <- c("F", "F-value", "F value", "F.value")
-    chi_names <-
-      c("Chisq", "chi-sq", "chi.sq", "Wald", "W", "Pr(>|W|)")
+    chi_names <- c("Chisq", "chi-sq", "chi.sq", "Wald", "W", "Pr(>|W|)")
 
     if (length(colnames(as.data.frame(summary(x)$coefficients))) == 0L) {
       return(NULL)

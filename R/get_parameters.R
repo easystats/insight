@@ -1169,7 +1169,6 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
       "linear" = .get_bf_posteriors(posteriors, params),
       NULL
     )
-
   } else {
     NULL
   }

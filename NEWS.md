@@ -10,7 +10,7 @@
 
 ## New functions
 
-* `format_ci()` (re-implemented and slighlty enhanced from _parameters_), to format confidence/credible intervals.
+* `format_ci()` (re-implemented and slightly enhanced from _parameters_), to format confidence/credible intervals.
 
 ## Changes to functions
 
