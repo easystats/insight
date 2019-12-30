@@ -93,7 +93,11 @@ get_priors.stanmvreg <- function(x, ...) {
     }
   }))
 
-  prior_info$parameter <- unlist(lapply(find_parameters(x), function(.i) .i$conditional))
+  # find parameter names
+  params <- unlist(lapply(find_parameters(x), function(.i) .i$conditional))
+  params <- params[c(which(params == "(Intercept)"), which(params != "(Intercept)"))]
+  prior_info$parameter <- params
+
   prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale", "response"), colnames(prior_info))]
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
