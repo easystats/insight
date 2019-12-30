@@ -176,7 +176,6 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         c(
           "y1|(Intercept)",
           "y1|year",
-          "y1|sigma",
           "y2|(Intercept)",
           "y2|sexf",
           "y2|year"
