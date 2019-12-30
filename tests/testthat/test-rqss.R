@@ -1,6 +1,7 @@
 if (require("testthat") &&
   require("insight") &&
-  require("quantreg")) {
+  require("quantreg") &&
+  require("tripack")) {
   context("insight, model_info")
 
   data(CobarOre)

@@ -81,6 +81,7 @@ Suggests:
     statmod,
     survey,
     survival,
+    tripack,
     truncreg,
     testthat,
     VGAM,
