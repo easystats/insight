@@ -4,7 +4,7 @@ if (require("testthat") &&
   require("tripack")) {
   context("insight, model_info")
 
-  data(CobarOre)
+  data("CobarOre")
   set.seed(123)
   CobarOre$w <- rnorm(nrow(CobarOre))
 
@@ -38,22 +38,6 @@ if (require("testthat") &&
 
   test_that("find_response", {
     expect_identical(find_response(m1), "z")
-  })
-
-  test_that("get_response", {
-    expect_equal(get_response(m1), CobarOre$z)
-  })
-
-  test_that("get_predictors", {
-    expect_equal(colnames(get_predictors(m1)), c("w", "x", "y"))
-  })
-
-  test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 38)
-    expect_equal(
-      colnames(get_data(m1)),
-      c("z", "w", "x", "y")
-    )
   })
 
   test_that("find_formula", {
