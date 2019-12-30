@@ -646,8 +646,7 @@ find_formula.nlmerMod <- function(x, ...) {
     stop("To use this function, please install package 'lme4'.")
   }
 
-  f.cond <- stats::formula(x)
-  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+  f.random <- lapply(lme4::findbars(stats::formula(x)), function(.x) {
     f <- .safe_deparse(.x)
     stats::as.formula(paste0("~", f))
   })
@@ -656,10 +655,8 @@ find_formula.nlmerMod <- function(x, ...) {
     f.random <- f.random[[1]]
   }
 
-  fx <- .get_fixed_effects(f.cond)
-
-  f.cond <- stats::as.formula(gsub("(.*)(~)(.*)~(.*)", "\\1\\2\\4", fx))
-  f.nonlin <- stats::as.formula(paste0("~", .trim(gsub("(.*)~(.*)~(.*)", "\\2", fx))))
+  f.cond <- lme4::nobars(stats::as.formula(gsub("(.*)(~)(.*)~(.*)", "\\1\\2\\4", .safe_deparse(stats::formula(x)))))
+  f.nonlin <- stats::as.formula(paste0("~", .trim(gsub("(.*)~(.*)~(.*)", "\\2", .safe_deparse(stats::formula(x))))))
 
   .compact_list(list(
     conditional = f.cond,
