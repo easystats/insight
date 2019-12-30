@@ -123,12 +123,12 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         find_parameters(m1),
         structure(list(
           y1 = list(
-            conditional = c("(Intercept)", "year", "sigma"),
+            conditional = c("(Intercept)", "year"),
             random = sprintf("b[(Intercept) id:%i]", 1:40),
             sigma = "sigma"
           ),
           y2 = list(
-            conditional = c("(Intercept)", "sexf", "year", "sigma"),
+            conditional = c("(Intercept)", "sexf", "year"),
             random = sprintf(
               c("b[(Intercept) id:%i]", "b[year id:%i]"),
               rep(1:40, each = 2)
@@ -144,11 +144,11 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         find_parameters(m1, effects = "fixed"),
         structure(list(
           y1 = list(
-            conditional = c("(Intercept)", "year", "sigma"),
+            conditional = c("(Intercept)", "year"),
             sigma = "sigma"
           ),
           y2 = list(
-            conditional = c("(Intercept)", "sexf", "year", "sigma"),
+            conditional = c("(Intercept)", "sexf", "year"),
             sigma = "sigma"
           )
         ),
@@ -179,8 +179,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
           "y1|sigma",
           "y2|(Intercept)",
           "y2|sexf",
-          "y2|year",
-          "y2|sigma"
+          "y2|year"
         )
       )
       expect_equal(
@@ -188,12 +187,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         c(
           "y1|(Intercept)",
           "y1|year",
-          "y1|sigma",
           sprintf("b[y1|(Intercept) id:%i]", 1:40),
           "y2|(Intercept)",
           "y2|sexf",
           "y2|year",
-          "y2|sigma",
           sprintf(
             c("b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"),
             rep(1:40, each = 2)
@@ -225,11 +222,9 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
             Parameter = c(
               "(Intercept)",
               "year",
-              "sigma",
               "(Intercept)",
               "sexf",
               "year",
-              "sigma",
               "b[(Intercept) id:1]",
               "b[(Intercept) id:2]",
               "b[(Intercept) id:3]",
@@ -354,8 +349,6 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
               "sigma"
             ),
             Effects = c(
-              "fixed",
-              "fixed",
               "fixed",
               "fixed",
               "fixed",
@@ -610,14 +603,10 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
               "conditional",
               "conditional",
               "conditional",
-              "conditional",
-              "conditional",
               "sigma",
               "sigma"
             ),
             Group = c(
-              "",
-              "",
               "",
               "",
               "",
@@ -749,8 +738,6 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
             Response = c(
               "y1",
               "y1",
-              "y1",
-              "y2",
               "y2",
               "y2",
               "y2",
@@ -880,11 +867,9 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
             Cleaned_Parameter = c(
               "(Intercept)",
               "year",
-              "sigma",
               "(Intercept)",
               "sexf",
               "year",
-              "sigma",
               "id:1",
               "id:2",
               "id:3",
@@ -1010,7 +995,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
             )
           ),
           class = c("clean_parameters", "data.frame"),
-          row.names = c(NA, -129L)
+          row.names = c(NA, -127L)
         )
       )
     })
