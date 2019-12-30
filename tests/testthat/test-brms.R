@@ -13,6 +13,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     m3 <- insight::download_model("brms_2")
     m4 <- insight::download_model("brms_zi_3")
     m5 <- insight::download_model("brms_mv_5")
+    m6 <- insight::download_model("brms_corr_re1")
 
     # Tests -------------------------------------------------------------------
 
@@ -172,6 +173,14 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         )
       )
       expect_identical(
+        find_variables(m6),
+        list(
+          response = "y",
+          conditional = "x",
+          random = "id"
+        )
+      )
+      expect_identical(
         find_variables(m1, effects = "fixed"),
         list(
           response = "count",
@@ -243,12 +252,20 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         )
       ))
       expect_equal(find_random(m5, flatten = TRUE), "persons")
+      expect_equal(find_random(m6, flatten = TRUE), "id")
     })
 
 
     test_that("get_random", {
       zinb <- get_data(m4)
       expect_equal(get_random(m4), zinb[, "persons", drop = FALSE])
+    })
+
+
+    test_that("get_data", {
+      d <- get_data(m6)
+      expect_equal(nrow(d), 200)
+      expect_equal(ncol(d), 3)
     })
 
 
