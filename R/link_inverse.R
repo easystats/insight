@@ -143,11 +143,15 @@ link_inverse.iv_robust <- link_inverse.lm
 
 #' @export
 link_inverse.mixed <- link_inverse.lm
+
 #' @export
 link_inverse.lme <- link_inverse.lm
 
 #' @export
 link_inverse.rq <- link_inverse.lm
+
+#' @export
+link_inverse.rqss <- link_inverse.lm
 
 #' @export
 link_inverse.crq <- link_inverse.lm

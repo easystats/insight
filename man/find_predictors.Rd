@@ -8,7 +8,7 @@ find_predictors(
   x,
   effects = c("fixed", "random", "all"),
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion",
-    "instruments", "correlation"),
+    "instruments", "correlation", "smooth_terms"),
   flatten = FALSE
 )
 }

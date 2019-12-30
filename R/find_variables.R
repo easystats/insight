@@ -51,7 +51,7 @@
 #' find_variables(m2)
 #' find_variables(m2, flatten = TRUE)
 #' @export
-find_variables <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"), flatten = FALSE) {
+find_variables <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "smooth_terms"), flatten = FALSE) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 

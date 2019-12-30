@@ -1,4 +1,4 @@
-# insight 0.7.2
+# insight 0.8.0
 
 ## New supported model classes
 
@@ -19,12 +19,15 @@
 * `format_value()` automatically uses scientific notation for *very* large numbers (> 1e+5). Furthermore, the check for integer values was made more robust, to avoid warnings when checking *very* large numbers for integer type.
 * Improved `find_parameters()`, `get_parameters()` and `clean_parameters()` for `BFBayesFactor`-objects.
 * `get_priors()` now works for `stanmvreg` objects.
+* Other minor improvements.
 
 ## Bug fixes
 
-* Fixed issue in `find_random_slopes()` for *panelr*-models with multiple random-effect parts.
 * Better detect Tweedie-models in `model_info()`.
+* Fixed issue in `find_random_slopes()` for *panelr*-models with multiple random-effect parts.
 * Fixed issues with `zerotrunc` models.
+* Fixed issues with `brmsfit` models with correlated random effects.
+* Further minor bug fixes.
 
 # insight 0.7.1
 
@@ -37,7 +40,6 @@
 * Fixed bug in `find_formula()` for mixed models, when random effects are written before any fixed effects terms (like `social ~ (1|school) + open + extro`).
 * Fixed bug in `model_info()` for *VGAM* models, where logit-link was not always correctly identified.
 * Fixed issue in `get_priors()` for *brmsfit* models, where parameters of conditional and zero-inflated model components had identical names. This caused errors in `bayestestR::simulate_prior()`.
-* Fix issues with `brms` models with correlated random effects.
 * Fixed CRAN check issue.
 
 # insight 0.7.0

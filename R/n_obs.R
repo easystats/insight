@@ -110,12 +110,24 @@ n_obs.biglm <- function(x, ...) {
   x$n
 }
 
-
+#' @export
+n_obs.bigglm <- n_obs.biglm
 
 #' @export
-n_obs.bigglm <- function(x, ...) {
-  x$n
-}
+n_obs.rqss <- n_obs.biglm
+
+#' @export
+n_obs.hurdle <- n_obs.biglm
+
+#' @export
+n_obs.zerotrunc <- n_obs.biglm
+
+#' @export
+n_obs.zeroinfl <- n_obs.biglm
+
+
+
+
 
 
 
@@ -180,12 +192,8 @@ n_obs.BBreg <- function(x, ...) {
   x$nObs
 }
 
-
-
 #' @export
-n_obs.BBmm <- function(x, ...) {
-  x$nObs
-}
+n_obs.BBmm <- n_obs.BBreg
 
 
 
@@ -227,19 +235,12 @@ n_obs.aareg <- function(x, ...) {
   max(x$n)
 }
 
+#' @export
+n_obs.coxph <- n_obs.aareg
 
 
 #' @export
-n_obs.coxph <- function(x, ...) {
-  max(x$n)
-}
-
-
-
-#' @export
-n_obs.coxme <- function(x, ...) {
-  max(x$n)
-}
+n_obs.coxme <- n_obs.aareg
 
 
 
@@ -306,27 +307,6 @@ n_obs.stanmvreg <- function(x, select = NULL, ...) {
 #' @export
 n_obs.mlogit <- function(x, ...) {
   nrow(x$model)
-}
-
-
-
-#' @export
-n_obs.hurdle <- function(x, ...) {
-  x$n
-}
-
-
-
-#' @export
-n_obs.zerotrunc <- function(x, ...) {
-  x$n
-}
-
-
-
-#' @export
-n_obs.zeroinfl <- function(x, ...) {
-  x$n
 }
 
 

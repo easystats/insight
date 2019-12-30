@@ -22,7 +22,7 @@ get_data(x, ...)
 
 \method{get_data}{gee}(x, effects = c("all", "fixed", "random"), ...)
 
-\method{get_data}{rqss}(x, effects = c("all", "fixed", "random"), ...)
+\method{get_data}{rqss}(x, component = c("all", "conditional", "smooth_terms"), ...)
 
 \method{get_data}{hurdle}(
   x,

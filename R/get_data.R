@@ -104,7 +104,22 @@ get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 #' @rdname get_data
 #' @export
-get_data.rqss <- get_data.gee
+get_data.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+  component <- match.arg(component)
+  mf <- tryCatch(
+    {
+      dat <- .get_data_from_env(x)
+      dat[, find_variables(x, effects = "all", component = component, flatten = TRUE), drop = FALSE]
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, stats::na.omit(mf))
+}
+
+
 
 
 
