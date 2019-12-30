@@ -111,6 +111,9 @@ get_priors.stanmvreg <- function(x, ...) {
   string <- lapply(string, .capitalize)
   names(priors) <- unlist(lapply(string, paste0, collapse = "_"))
 
+  # minor fixes
+  priors$Parameter <- sprintf("%s|%s", priors$Response, priors$Parameter)
+
   priors
 }
 
