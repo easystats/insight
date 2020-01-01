@@ -129,7 +129,10 @@ n_obs.zeroinfl <- n_obs.biglm
 
 
 
-
+#' @export
+n_obs.cgam <- function(x, ...) {
+  nrow(get_data(x))
+}
 
 #' @export
 n_obs.gbm <- function(x, ...) {
@@ -271,12 +274,8 @@ n_obs.feglm <- function(x, ...) {
 }
 
 
-
 #' @export
-n_obs.complmrob <- function(x, ...) {
-  nrow(get_data(x))
-}
-
+n_obs.complmrob <- n_obs.cgam
 
 
 #' @export
