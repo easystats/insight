@@ -137,6 +137,12 @@
   <span class='no'>...</span>
 )
 
+<span class='co'># S3 method for clm2</span>
+<span class='fu'>get_statistic</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"scale"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for gee</span>
+<span class='fu'>get_statistic</span>(<span class='no'>x</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+
 <span class='co'># S3 method for betareg</span>
 <span class='fu'>get_statistic</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>), <span class='no'>...</span>)</pre>
 
@@ -165,9 +171,15 @@ default statistic column for most models' summary-output.</p></td>
 or for the zero-inflated part of the model be returned? Applies to models
 with zero-inflated component. <code>component</code> may be one of
 <code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code> or <code>"all"</code>
-(default). May be abbreviated. Note that the
-<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model.</p></td>
+(default). For models with smooth terms, <code>component = "smooth_terms"</code>
+is also possible. May be abbreviated. Note that the <em>conditional</em>
+component is also called <em>count</em> or <em>mean</em> component, depending
+on the model.</p></td>
+    </tr>
+    <tr>
+      <th>robust</th>
+      <td><p>Logical, if <code>TRUE</code>, test statistic based on robust standard
+errors is returned.</p></td>
     </tr>
     </table>
 

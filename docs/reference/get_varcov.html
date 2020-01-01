@@ -132,6 +132,9 @@
 <span class='co'># S3 method for betareg</span>
 <span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"precision"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
+<span class='co'># S3 method for clm2</span>
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"scale"</span>), <span class='no'>...</span>)
+
 <span class='co'># S3 method for truncreg</span>
 <span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
@@ -148,7 +151,10 @@
 <span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for brmsfit</span>
-<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)</pre>
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for mixor</span>
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,6 +177,12 @@ may be one of <code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflate
 <code>"precision"</code>, or <code>"all"</code>. May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
 component, depending on the model.</p></td>
+    </tr>
+    <tr>
+      <th>effects</th>
+      <td><p>Should the complete variance-covariance matrix of the model
+be returned, or only for specific model parameters only? Currently only
+applies to models of class <code>mixor</code>.</p></td>
     </tr>
     </table>
 
