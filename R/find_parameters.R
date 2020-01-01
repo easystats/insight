@@ -328,9 +328,31 @@ find_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_
 }
 
 
+#' @export
+find_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
+  component <- match.arg(component)
+  sc <- summary(x)
 
+  estimates <- sc$coefficients
+  smooth_terms <- sc$coefficients2
 
+  l <- .compact_list(list(
+    conditional = rownames(estimates),
+    smooth_terms = rownames(smooth_terms)
+  ))
 
+  l <- lapply(l, .remove_backticks_from_string)
+
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component = component)
+  l <- .compact_list(l[elements])
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
 
 
 
