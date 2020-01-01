@@ -36,6 +36,7 @@ Suggests:
     blme,
     brms,
     censReg,
+    cgam,
     coxme,
     cplm,
     crch,

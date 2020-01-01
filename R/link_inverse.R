@@ -467,11 +467,12 @@ link_inverse.glmmPQL <- function(x, ...) {
   x$family$linkinv
 }
 
+#' @export
+link_inverse.MixMod <- link_inverse.glmmPQL
 
 #' @export
-link_inverse.MixMod <- function(x, ...) {
-  x$family$linkinv
-}
+link_inverse.cgam <- link_inverse.glmmPQL
+
 
 
 #' @export
@@ -479,11 +480,8 @@ link_inverse.vgam <- function(x, ...) {
   x@family@linkinv
 }
 
-
 #' @export
-link_inverse.vglm <- function(x, ...) {
-  x@family@linkinv
-}
+link_inverse.vglm <- link_inverse.vgam
 
 
 #' @export

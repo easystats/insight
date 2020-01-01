@@ -156,6 +156,8 @@ link_function.bigglm <- link_function.default
 #' @export
 link_function.brglm <- link_function.default
 
+#' @export
+link_function.cgam <- link_function.default
 
 
 

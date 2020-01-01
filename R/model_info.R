@@ -581,6 +581,19 @@ model_info.stanmvreg <- function(x, ...) {
 
 
 #' @export
+model_info.cgam <- function(x, ...) {
+  faminfo <- x$family
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
