@@ -170,6 +170,8 @@ find_statistic <- function(x, ...) {
   g.mods <-
     c(
       "bigglm",
+      "cgam",
+      "cgamm",
       "gam",
       "glm",
       "glmc",
@@ -221,14 +223,15 @@ find_statistic <- function(x, ...) {
   # tweedie-check needs to come first, because glm can also have tweedie
   # family, so this exception needs to be caught before checking for g.mods
 
-  tryCatch({
-    suppressWarnings(
-      if (!is_multivariate(x) && model_info(x)$is_tweedie) {
-        return("t-statistic")
-      }
-    )
-  },
-  error = function(e) {}
+  tryCatch(
+    {
+      suppressWarnings(
+        if (!is_multivariate(x) && model_info(x)$is_tweedie) {
+          return("t-statistic")
+        }
+      )
+    },
+    error = function(e) {}
   )
 
   # statistic check -----------------------------------------------------------
