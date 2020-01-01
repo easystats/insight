@@ -144,6 +144,25 @@ get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_t
 }
 
 
+#' @importFrom stats setNames
+#' @rdname get_parameters
+#' @export
+get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+  component <- match.arg(component)
+  sc <- summary(x)
+
+  estimates <- sc$coefficients
+  smooth_terms <- sc$coefficients2
+
+  if (!is.null(smooth_terms)) smooth_terms <- stats::setNames(smooth_terms[, 1], rownames(smooth_terms))
+
+  .return_smooth_parms(
+    conditional = stats::setNames(estimates[, 1], rownames(estimates)),
+    smooth_terms = smooth_terms,
+    component = component
+  )
+}
+
 
 
 
@@ -1348,13 +1367,17 @@ get_parameters.mcmc <- function(x, parameters = NULL, ...) {
     row.names = NULL
   )
 
-  smooth <- data.frame(
-    Parameter = names(smooth_terms),
-    Estimate = smooth_terms,
-    Component = "smooth_terms",
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
+  if (!is.null(smooth_terms)) {
+    smooth <- data.frame(
+      Parameter = names(smooth_terms),
+      Estimate = smooth_terms,
+      Component = "smooth_terms",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    smooth <- NULL
+  }
 
   pars <- switch(
     component,
