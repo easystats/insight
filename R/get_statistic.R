@@ -346,6 +346,7 @@ get_statistic.cgam <- function(x, ...) {
   out <- data.frame(
     Parameter = params$Parameter,
     Statistic = as.vector(sc$coefficients[, 3]),
+    Component = "conditional",
     stringsAsFactors = FALSE,
     row.names = NULL
   )

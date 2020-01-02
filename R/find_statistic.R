@@ -39,8 +39,6 @@ find_statistic <- function(x, ...) {
       "blmerMod",
       "cch",
       "censReg",
-      "cgam",
-      "cgamm",
       "coeftest",
       "complmrob",
       "cpglm",
