@@ -339,19 +339,27 @@ get_statistic.vgam <- function(x, ...) {
 
 
 #' @export
-get_statistic.cgam <- function(x, ...) {
-  params <- get_parameters(x, component = "conditional")
+get_statistic.cgam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+  component <- match.arg(component)
+
   sc <- summary(x)
+  stat <- as.vector(sc$coefficients[, 3])
+  if (!is.null(sc$coefficients2)) stat <- c(stat, rep(NA, nrow(sc$coefficients2)))
+
+  params <- get_parameters(x, component = "all")
 
   out <- data.frame(
     Parameter = params$Parameter,
-    Statistic = as.vector(sc$coefficients[, 3]),
-    Component = "conditional",
+    Statistic = stat,
+    Component = params$Component,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  if (component != "all") {
+    out <- out[out$Component == component, ]
+  }
+
   attr(out, "statistic") <- find_statistic(x)
   out
 }
