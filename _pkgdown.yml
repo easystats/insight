@@ -74,6 +74,16 @@ reference:
   - is_multivariate
   - is_nullmodel
 
+- title: "Value Formatting"
+  desc: >
+    Functions for formatting (summary) output for printing
+  contents:
+  - color_if
+  - format_ci
+  - format_table
+  - format_value
+  - print_color
+
 - title: "Utilities"
   desc: >
     Functions that are not specifically related to access model information,
@@ -81,9 +91,5 @@ reference:
   contents:
   - clean_names
   - clean_parameters
-  - color_if
   - download_model
-  - format_table
-  - format_value
-  - print_color
   - print_parameters
