@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `brglm` (*brglm*), `cgam` (*cgam*), `cpglm`, `cpglmm` (*cplm*), `feglm` (*apaca*), `glmmadmb` (*glmmADMB*), `glmx` (*glmx*), partial support for `mcmc` (*coda*), `mixor` (*mixor*).
+* `brglm` (*brglm*), `cgam`, `cgamm` (*cgam*), `cpglm`, `cpglmm` (*cplm*), `feglm` (*apaca*), `glmmadmb` (*glmmADMB*), `glmx` (*glmx*), partial support for `mcmc` (*coda*), `mixor` (*mixor*).
 
 ## General
 

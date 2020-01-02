@@ -703,6 +703,9 @@ find_formula.mixed <- find_formula.merMod
 find_formula.clmm <- find_formula.merMod
 
 #' @export
+find_formula.cgamm <- find_formula.merMod
+
+#' @export
 find_formula.coxme <- find_formula.merMod
 
 

@@ -475,6 +475,7 @@ link_inverse.cgam <- link_inverse.glmmPQL
 
 
 
+
 #' @export
 link_inverse.vgam <- function(x, ...) {
   x@family@linkinv

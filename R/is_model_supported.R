@@ -56,6 +56,7 @@ supported_models <- function() {
     "brmultinom",
     "censReg",
     "cgam",
+    "cgamm",
     "clm",
     "clm2",
     "clmm",
