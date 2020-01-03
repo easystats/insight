@@ -27,6 +27,7 @@
 * Fixed issue in `find_random_slopes()` for *panelr*-models with multiple random-effect parts.
 * Fixed issues with `zerotrunc` models.
 * Fixed issues with `brmsfit` models with correlated random effects.
+* Fixed isses with edge-cases in `clean_names()`.
 * Further minor bug fixes.
 
 # insight 0.7.1
