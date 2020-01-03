@@ -12,6 +12,7 @@ if (require("testthat") && require("insight")) {
     expect_equal(clean_names("log(log(test))"), "test")
     expect_equal(clean_names("log(log(test/10))"), "test")
     expect_equal(clean_names("log(log(test*2))"), "test")
+    expect_equal(clean_names("scale(log(Days1))"), "Days1")
     expect_equal(clean_names("I(test^2)"), "test")
     expect_equal(clean_names("I(test/10)"), "test")
     expect_equal(clean_names("I(test ^ 2)"), "test")

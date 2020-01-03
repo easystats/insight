@@ -68,7 +68,7 @@ clean_names.character <- function(x) {
   # for survival, remove strata(), and so on...
   pattern <- c(
     "as.factor", "as.numeric", "factor", "offset", "log1p", "log10",
-    "log2", "log-log", "log", "lag", "diff", "pspline", "poly", "catg", "asis",
+    "log2", "log-log", "scale-log", "log", "lag", "diff", "pspline", "poly", "catg", "asis",
     "matrx", "pol", "strata", "strat", "scale", "scored", "interaction",
     "sqrt", "lsp", "rcs", "pb", "lo", "bs", "ns", "t2", "te", "ti", "tt", # need to be fixed first "mmc", "mm",
     "mi", "mo", "gp", "s", "I"
@@ -94,6 +94,11 @@ clean_names.character <- function(x) {
         if (!ignore_asis) x[i] <- .trim(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] == "log-log") {
         x[i] <- .trim(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
+      } else if (pattern[j] == "scale-log") {
+        x[i] <- .trim(unique(sub("^scale\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
+        x[i] <- .trim(unique(sub("^scale\\(log1p\\(((\\w|\\.)*).*", "\\1", x[i])))
+        x[i] <- .trim(unique(sub("^scale\\(log2\\(((\\w|\\.)*).*", "\\1", x[i])))
+        x[i] <- .trim(unique(sub("^scale\\(log10\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] %in% c("mmc", "mm")) {
         ## TODO multimembership-models need to be fixed
         p <- paste0("^", pattern[j], "\\((.*)\\).*")
