@@ -1026,7 +1026,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
   # fix dot-formulas
   tryCatch(
     {
-      if (as.character(f[[3]]) == ".") {
+      if (as.character(f[[3]])[1] == ".") {
         resp <- .safe_deparse(f[[2]])
         pred <- setdiff(colnames(.get_data_from_env(model)), resp)
         f <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
