@@ -173,6 +173,12 @@ model_info.gls <- model_info.mmclogit
 model_info.nls <- model_info.mmclogit
 
 #' @export
+model_info.MANOVA <- model_info.mmclogit
+
+#' @export
+model_info.RM <- model_info.mmclogit
+
+#' @export
 model_info.truncreg <- model_info.mmclogit
 
 #' @export

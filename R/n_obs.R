@@ -211,6 +211,16 @@ n_obs.crq <- function(x, ...) {
 
 
 
+#' @export
+n_obs.MANOVA <- function(x, ...) {
+  nrow(x$input$data)
+}
+
+#' @export
+n_obs.RM <- n_obs.MANOVA
+
+
+
 #' @importFrom stats fitted
 #' @export
 n_obs.nlrq <- function(x, ...) {

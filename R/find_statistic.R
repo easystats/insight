@@ -158,6 +158,8 @@ find_statistic <- function(x, ...) {
     c(
       "geeglm",
       "logistf",
+      "MANOVA",
+      "RM",
       "vgam"
     )
 

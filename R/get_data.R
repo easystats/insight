@@ -239,6 +239,32 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.MANOVA <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+
+  mf <- tryCatch(
+    {
+      switch(
+        effects,
+        fixed = .remove_column(x$input$data, x$input$subject),
+        all = x$input$data,
+        random = x$input$data[, x$input$subject, drop = FALSE]
+      )
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, mf, effects)
+}
+
+#' @export
+get_data.RM <- get_data.MANOVA
+
+
+
+#' @export
 get_data.cpglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   dat <- stats::model.frame(x)

@@ -202,6 +202,19 @@ find_formula.gee <- function(x, ...) {
 
 
 #' @export
+find_formula.MANOVA <- function(x, ...) {
+  .compact_list(list(
+    conditional = x$input$formula,
+    random = stats::as.formula(paste0("~", x$input$subject))
+  ))
+}
+
+#' @export
+find_formula.RM <- find_formula.MANOVA
+
+
+
+#' @export
 find_formula.gls <- function(x, ...) {
   ## TODO this is an intermediate fix to return the correlation variables from gls-objects
   f_corr <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form

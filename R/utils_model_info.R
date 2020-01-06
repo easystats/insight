@@ -187,7 +187,7 @@
     is_multivariate = multi.var,
     is_trial = is.trial,
     is_bayesian = is.bayes,
-    is_anova = inherits(x, c("aov", "aovlist")),
+    is_anova = inherits(x, c("aov", "aovlist", "MANOVA", "RM")),
     is_ttest = is_ttest,
     is_correlation = is_correlation,
     is_meta = is_meta,

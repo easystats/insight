@@ -652,6 +652,26 @@ get_statistic.cpglm <- function(x, ...) {
 
 
 #' @export
+get_statistic.MANOVA <- function(x, ...) {
+  stats <- as.data.frame(x$WTS)
+
+  out <- data.frame(
+    Parameter = rownames(stats),
+    Statistic = as.vector(stats[[1]]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+#' @export
+get_statistic.RM <- get_statistic.MANOVA
+
+
+
+#' @export
 get_statistic.rq <- function(x, ...) {
   stat <- tryCatch(
     {
