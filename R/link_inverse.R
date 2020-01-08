@@ -181,6 +181,12 @@ link_inverse.gls <- link_inverse.lm
 link_inverse.lmRob <- link_inverse.lm
 
 #' @export
+link_inverse.MANOVA <- link_inverse.lm
+
+#' @export
+link_inverse.RM <- link_inverse.lm
+
+#' @export
 link_inverse.lmrob <- link_inverse.lm
 
 #' @export

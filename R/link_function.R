@@ -136,6 +136,12 @@ link_function.ivreg <- link_function.lm
 #' @export
 link_function.plm <- link_function.lm
 
+#' @export
+link_function.MANOVA <- link_function.lm
+
+#' @export
+link_function.RM <- link_function.lm
+
 
 
 
