@@ -1227,9 +1227,9 @@ get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), com
   if (is_multivariate(x)) {
     parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
     elements <- .get_elements(effects, component)
-    as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
+    as.data.frame(x, optional = FALSE)[unlist(lapply(parms, function(i) i[elements]))]
   } else {
-    as.data.frame(x)[.get_parms_data(x, effects, component, parameters)]
+    as.data.frame(x, optional = FALSE)[.get_parms_data(x, effects, component, parameters)]
   }
 }
 

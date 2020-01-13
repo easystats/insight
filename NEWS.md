@@ -28,6 +28,7 @@
 * Fixed issues with `zerotrunc` models.
 * Fixed issues with `brmsfit` models with correlated random effects.
 * Fixed isses with edge-cases in `clean_names()`.
+* Fixed issue with breaking changes with latest *brms*-update.
 * Further minor bug fixes.
 
 # insight 0.7.1
