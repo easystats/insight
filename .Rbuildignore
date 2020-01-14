@@ -12,3 +12,4 @@
 ^paper$
 ^Meta$
 ^.github$
+^cran-comments.md$
