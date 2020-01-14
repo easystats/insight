@@ -72,7 +72,6 @@ Suggests:
     pscl,
     quantreg,
     rms,
-    robust,
     robustbase,
     robustlmm,
     rstanarm,
