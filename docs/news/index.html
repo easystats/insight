@@ -76,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
       </span>
     </div>
 
@@ -119,14 +119,14 @@
 
     <div id="insight-080" class="section level1">
 <h1 class="page-header">
-<a href="#insight-080" class="anchor"></a>insight 0.8.0<small> Unreleased </small>
+<a href="#insight-080" class="anchor"></a>insight 0.8.0<small> 2020-01-14 </small>
 </h1>
 <div id="new-supported-model-classes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
-<code>brglm</code> (<em>brglm</em>), <code>cgam</code>, <code>cgamm</code> (<em>cgam</em>), <code>cpglm</code>, <code>cpglmm</code> (<em>cplm</em>), <code>feglm</code> (<em>apaca</em>), <code>glmmadmb</code> (<em>glmmADMB</em>), <code>glmx</code> (<em>glmx</em>), partial support for <code>mcmc</code> (<em>coda</em>), <code>mixor</code> (<em>mixor</em>).</li>
+<code>brglm</code> (<em>brglm</em>), <code>cgam</code>, <code>cgamm</code> (<em>cgam</em>), <code>cpglm</code>, <code>cpglmm</code> (<em>cplm</em>), <code>feglm</code> (<em>apaca</em>), <code>glmmadmb</code> (<em>glmmADMB</em>), <code>glmx</code> (<em>glmx</em>), partial support for <code>mcmc</code> (<em>coda</em>), <code>mixor</code> (<em>mixor</em>), <code>MANOVA</code>, <code>RM</code> (<em>MANOVA.RM</em>).</li>
 </ul>
 </div>
 <div id="general" class="section level2">
@@ -167,6 +167,8 @@
 <li>Fixed issue in <code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code> for <em>panelr</em>-models with multiple random-effect parts.</li>
 <li>Fixed issues with <code>zerotrunc</code> models.</li>
 <li>Fixed issues with <code>brmsfit</code> models with correlated random effects.</li>
+<li>Fixed issue with edge-cases in <code><a href="../reference/clean_names.html">clean_names()</a></code>.</li>
+<li>Fixed issue with breaking changes with latest <em>brms</em>-update.</li>
 <li>Further minor bug fixes.</li>
 </ul>
 </div>
