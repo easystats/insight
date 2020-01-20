@@ -319,6 +319,9 @@ n_obs.mlogit <- function(x, ...) {
 }
 
 
+#' @export
+n_obs.maxLik <- n_obs.mlogit
+
 
 #' @export
 n_obs.wbm <- function(x, ...) {
