@@ -41,6 +41,9 @@ n_obs.default <- function(x, ...) {
 }
 
 
+#' @export
+n_obs.censReg <- n_obs.default
+
 
 #' @rdname n_obs
 #' @export
