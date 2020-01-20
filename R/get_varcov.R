@@ -50,6 +50,9 @@ get_varcov.default <- function(x, ...) {
 }
 
 
+#' @export
+get_varcov.maxLik <- get_varcov.default
+
 
 
 
@@ -514,9 +517,14 @@ get_varcov.LORgee <- get_varcov.gee
 
 .is_negativ_matrix <- function(x) {
   if (is.matrix(x) && (nrow(x) == ncol(x))) {
-    eigenvalues <- eigen(x, only.values = TRUE)$values
-    eigenvalues[abs(eigenvalues) < 1e-07] <- 0
-    rv <- any(eigenvalues <= 0)
+    rv <- tryCatch(
+      {
+        eigenvalues <- eigen(x, only.values = TRUE)$values
+        eigenvalues[abs(eigenvalues) < 1e-07] <- 0
+        any(eigenvalues <= 0)
+      },
+      error = function(e) { FALSE }
+    )
   } else {
     rv <- FALSE
   }

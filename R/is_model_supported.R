@@ -105,6 +105,7 @@ supported_models <- function() {
     "LORgee",
     "lrm",
     "MANOVA",
+    "maxLik",
     "mcmc",
     "MCMCglmm",
     "merMod",

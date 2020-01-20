@@ -130,6 +130,7 @@ is_model <- function(x) {
       "lrm",
       "manova",
       "MANOVA",
+      "maxLik",
       "mboostLSS",
       "mclogit",
       "mmclogit",

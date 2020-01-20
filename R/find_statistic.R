@@ -61,6 +61,7 @@ find_statistic <- function(x, ...) {
       "lmerMod",
       "lmRob",
       "lmrob",
+      "maxLik",
       "mixed",
       "mlm",
       "multinom",
