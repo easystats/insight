@@ -1,3 +1,9 @@
+# insight 0.8.1
+
+## Bug fixes
+
+* Fixed issue in `get_data()` for *clmm2*-models.
+
 # insight 0.8.0
 
 ## New supported model classes
