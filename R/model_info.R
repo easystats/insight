@@ -407,7 +407,11 @@ model_info.glmx <- function(x, ...) {
 model_info.fixest <- function(x, ...) {
   faminfo <- x$family
 
-  if (inherits(faminfo, "family")) {
+  if (is.null(faminfo)) {
+    if (!is.null(x$method) && x$method == "feols") {
+      .make_family(x, ...)
+    }
+  } else if (inherits(faminfo, "family")) {
     .make_family(
       x = x,
       fitfam = faminfo$family,

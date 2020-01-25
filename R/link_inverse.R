@@ -319,7 +319,11 @@ link_inverse.cpglm <- link_inverse.cpglmm
 
 #' @export
 link_inverse.fixest <- function(x, ...) {
-  if (inherits(x$family, "family")) {
+  if (is.null(x$family)) {
+    if (!is.null(x$method) && x$method == "feols") {
+      stats::gaussian(link = "identity")$linkinv
+    }
+  } else if (inherits(x$family, "family")) {
     x$family$linkinv
   } else {
     link <- switch(
