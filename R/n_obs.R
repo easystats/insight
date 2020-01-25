@@ -138,6 +138,11 @@ n_obs.cgam <- function(x, ...) {
 }
 
 #' @export
+n_obs.cglm <- n_obs.cgam
+
+
+
+#' @export
 n_obs.gbm <- function(x, ...) {
   length(x$fit)
 }

@@ -295,6 +295,19 @@ link_inverse.mixor <- link_inverse.clm
 
 
 #' @export
+link_function.cglm <- function(x, ...) {
+  link <- parse(text = .safe_deparse(x$call))[[1]]$link
+  method <- parse(text = .safe_deparse(x$call))[[1]]$method
+
+  if (!is.null(method) && method == "clm") {
+    link <- "identiy"
+  }
+  stats::make.link(link = link)$linkinv
+}
+
+
+
+#' @export
 link_inverse.cpglmm <- function(x, ...) {
   f <- .get_cplm_family(x)
   f$linkinv

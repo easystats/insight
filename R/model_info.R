@@ -590,6 +590,26 @@ model_info.stanmvreg <- function(x, ...) {
 
 
 #' @export
+model_info.cglm <- function(x, ...) {
+  link <- parse(text = .safe_deparse(x$call))[[1]]$link
+  method <- parse(text = .safe_deparse(x$call))[[1]]$method
+
+  if (!is.null(method) && method == "clm") {
+    .make_family(x, ...)
+  } else if (!is.null(link)) {
+    .make_family(
+      x,
+      logit.link = link == "logit",
+      link.fun = link,
+      ...
+    )
+  } else {
+    .make_family(x, ...)
+  }
+}
+
+
+#' @export
 model_info.cgam <- function(x, ...) {
   faminfo <- x$family
   .make_family(

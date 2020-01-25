@@ -259,8 +259,26 @@ find_formula.LORgee <- function(x, ...) {
 
 
 
+#' @export
+find_formula.cglm <- function(x, ...) {
+  tryCatch(
+    {
+      id <- parse(text = .safe_deparse(x$call))[[1]]$id
 
+      # alternative regex-patterns that also work:
+      # sub(".*id ?= ?(.*?),.*", "\\1", .safe_deparse(x$call), perl = TRUE)
+      # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", .safe_deparse(x$call), perl = TRUE)
 
+      list(
+        conditional = stats::formula(x),
+        random = stats::as.formula(paste0("~", id))
+      )
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+}
 
 
 

@@ -1,5 +1,9 @@
 # insight 0.8.1
 
+## New supported model classes
+
+* `cglm` (*cglm*)
+
 ## Bug fixes
 
 * Fixed issue in `get_data()` for *clmm2*-models.

@@ -283,6 +283,20 @@ link_function.mixor <- link_function.clm
 # Other models -----------------------------
 
 
+
+#' @export
+link_function.cglm <- function(x, ...) {
+  link <- parse(text = .safe_deparse(x$call))[[1]]$link
+  method <- parse(text = .safe_deparse(x$call))[[1]]$method
+
+  if (!is.null(method) && method == "clm") {
+    link <- "identiy"
+  }
+  stats::make.link(link = link)$linkfun
+}
+
+
+
 #' @export
 link_function.fixest <- function(x, ...) {
   if (inherits(x$family, "family")) {

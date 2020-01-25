@@ -57,6 +57,7 @@ supported_models <- function() {
     "censReg",
     "cgam",
     "cgamm",
+    "cglm",
     "clm",
     "clm2",
     "clmm",
