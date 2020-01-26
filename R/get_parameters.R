@@ -314,6 +314,45 @@ get_parameters.betareg <- function(x, component = c("all", "conditional", "preci
 }
 
 
+#' @rdname get_parameters
+#' @export
+get_parameters.DirichletRegModel <- function(x, component = c("all", "conditional", "precision"), ...) {
+  component <- match.arg(component)
+  cf <- stats::coef(x)
+
+  if (x$parametrization == "common") {
+    component <- "all"
+    n_comp <- lapply(cf, length)
+    pattern <- paste0("(", paste(x$varnames, collapse = "|"), ")\\.(.*)")
+    p_names <- gsub(pattern, "\\2", names(unlist(cf)))
+
+    params <- data.frame(
+      Parameter = p_names,
+      Estimate = unname(unlist(cf)),
+      Response = rep(names(n_comp), sapply(n_comp, function(i) i)),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    out1 <- .gather(data.frame(do.call(cbind, cf$beta)), names_to = "Response", values_to = "Estimate")
+    out2 <- .gather(data.frame(do.call(cbind, cf$gamma)), names_to = "Component", values_to = "Estimate")
+    out1$Component <- "conditional"
+    out2$Component <- "precision"
+    out2$Response <- NA
+    params <- merge(out1, out2, all = TRUE, sort = FALSE)
+    params$Parameter <- gsub("(.*)\\.(.*)\\.(.*)", "\\3", names(unlist(cf)))
+    params <- params[c("Parameter", "Estimate", "Component", "Response")]
+  }
+
+  if (component != "all") {
+    params <- params[params$Component == component, ]
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+
 #' @export
 get_parameters.BBreg <- function(x, ...) {
   pars <- summary(x)$coefficients

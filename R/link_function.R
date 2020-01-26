@@ -490,9 +490,32 @@ link_function.svyolr <- function(x, ...) {
 
 
 
+#' @rdname link_function
 #' @export
-link_function.betareg <- function(x, ...) {
-  x$link$mean$linkfun
+link_function.betareg <- function(x, what = c("mean", "precision"), ...) {
+  what <- match.arg(what)
+  switch(
+    what,
+    "mean" = x$link$mean$linkfun,
+    "precision" = x$link$precision$linkfun
+  )
+}
+
+
+
+#' @rdname link_function
+#' @export
+link_function.DirichletRegModel <- function(x, what = c("mean", "precision"), ...) {
+  what <- match.arg(what)
+  if (x$parametrization == "common") {
+    stats::make.link("logit")$linkfun
+  } else {
+    switch(
+      what,
+      "mean" = stats::make.link("logit")$linkfun,
+      "precision" = stats::make.link("log")$linkfun
+    )
+  }
 }
 
 

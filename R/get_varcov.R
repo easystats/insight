@@ -81,6 +81,34 @@ get_varcov.betareg <- function(x, component = c("conditional", "precision", "all
 
 #' @rdname get_varcov
 #' @export
+get_varcov.DirichletRegModel <- function(x, component = c("conditional", "precision", "all"), ...) {
+  component <- match.arg(component)
+  if (x$parametrization == "common") {
+    vc <- stats::vcov(x)
+  } else {
+    if (component == "conditional") {
+      vc <- stats::vcov(x)
+      keep <- grepl("^(?!\\(phi\\))", rownames(vc), perl = TRUE)
+      vc <- vc[keep, keep]
+    } else if (component == "precision") {
+      vc <- stats::vcov(x)
+      keep <- grepl("^\\(phi\\)", rownames(vc), perl = TRUE)
+      vc <- vc[keep, keep]
+    } else {
+      vc <- stats::vcov(x)
+    }
+  }
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  .remove_backticks_from_matrix_names(as.matrix(vc))
+}
+
+
+#' @rdname get_varcov
+#' @export
 get_varcov.clm2 <- function(x, component = c("all", "conditional", "scale"), ...) {
   component <- match.arg(component)
 

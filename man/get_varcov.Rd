@@ -3,6 +3,7 @@
 \name{get_varcov}
 \alias{get_varcov}
 \alias{get_varcov.betareg}
+\alias{get_varcov.DirichletRegModel}
 \alias{get_varcov.clm2}
 \alias{get_varcov.truncreg}
 \alias{get_varcov.gamlss}
@@ -16,6 +17,8 @@
 get_varcov(x, ...)
 
 \method{get_varcov}{betareg}(x, component = c("conditional", "precision", "all"), ...)
+
+\method{get_varcov}{DirichletRegModel}(x, component = c("conditional", "precision", "all"), ...)
 
 \method{get_varcov}{clm2}(x, component = c("all", "conditional", "scale"), ...)
 

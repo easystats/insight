@@ -4,7 +4,8 @@
 #' @description Returns the link-inverse function from a model object.
 #'
 #' @param what For \code{gamlss} models, indicates for which distribution
-#'   parameter the link (inverse) function should be returned.
+#'   parameter the link (inverse) function should be returned; for \code{betareg}
+#'   or \code{DirichletRegModel}, can be \code{"mean"} or \code{"precision"}.
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
 #'
@@ -197,11 +198,33 @@ link_inverse.speedlm <- link_inverse.lm
 
 
 
+#' @rdname link_inverse
 #' @export
-link_inverse.betareg <- function(x, ...) {
-  x$link$mean$linkinv
+link_inverse.betareg <- function(x, what = c("mean", "precision"), ...) {
+  what <- match.arg(what)
+  switch(
+    what,
+    "mean" = x$link$mean$linkinv,
+    "precision" = x$link$precision$linkinv
+  )
 }
 
+
+
+#' @rdname link_inverse
+#' @export
+link_inverse.DirichletRegModel <- function(x, what = c("mean", "precision"), ...) {
+  what <- match.arg(what)
+  if (x$parametrization == "common") {
+    stats::make.link("logit")$linkinv
+  } else {
+    switch(
+      what,
+      "mean" = stats::make.link("logit")$linkinv,
+      "precision" = stats::make.link("log")$linkinv
+    )
+  }
+}
 
 
 

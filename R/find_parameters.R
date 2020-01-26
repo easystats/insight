@@ -139,6 +139,9 @@ find_parameters.clm2 <- function(x, flatten = FALSE, ...) {
   }
 }
 
+#' @export
+find_parameters.clmm2 <- find_parameters.clm2
+
 
 
 #' @export
@@ -174,7 +177,28 @@ find_parameters.betareg <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.clmm2 <- find_parameters.clm2
+find_parameters.DirichletRegModel <- function(x, flatten = FALSE, ...) {
+  if (x$parametrization == "common") {
+    pars <- list(conditional = names(unlist(stats::coef(x))))
+  } else {
+    pars <- .compact_list(list(
+      conditional = names(unlist(stats::coef(x)[["beta"]])),
+      precision = names(unlist(stats::coef(x)[["gamma"]]))
+    ))
+    pars$precision <- .remove_backticks_from_string(pars$precision)
+  }
+
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+
 
 
 #' @export
