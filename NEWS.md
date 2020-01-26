@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `cglm` (*cglm*)
+* `cglm` (*cglm*), `DirichletRegModel` (*DirichletReg*).
 
 ## Bug fixes
 

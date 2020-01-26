@@ -20,13 +20,15 @@
 #'      \item \code{is_count}: model is a count model (i.e. family is either poisson or negative binomial)
 #'      \item \code{is_beta}: family is beta
 #'      \item \code{is_betabinomial}: family is beta-binomial
+#'      \item \code{is_dirichlet}: family is dirichlet
 #'      \item \code{is_exponential}: family is exponential (e.g. Gamma or Weibull)
 #'      \item \code{is_logit}: model has logit link
 #'      \item \code{is_progit}: model has probit link
 #'      \item \code{is_linear}: family is gaussian
 #'      \item \code{is_tweedie}: family is tweedie
-#'      \item \code{is_ordinal}: family is ordinal or cumulative link
-#'      \item \code{is_cumulative}: family is ordinal or cumulative link
+#'      \item \code{is_ordinal}: family is ordinal, multinomial, or cumulative link
+#'      \item \code{is_cumulative}: family is ordinal, multinomial, or cumulative link
+#'      \item \code{is_multinomial}: family is ordinal, multinomial, categorical, or cumulative link
 #'      \item \code{is_categorical}: family is categorical link
 #'      \item \code{is_censored}: model is a censored model (has a censored response, including survival models)
 #'      \item \code{is_truncated}: model is a truncated model (has a truncated response)
@@ -799,6 +801,19 @@ model_info.betareg <- function(x, ...) {
     fitfam = "beta",
     logit.link = x$link$mean$name == "logit",
     link.fun = x$link$mean$name,
+    ...
+  )
+}
+
+
+
+#' @export
+model_info.DirichletRegModel <- function(x, ...) {
+  .make_family(
+    x = x,
+    fitfam = "dirichlet",
+    logit.link = TRUE,
+    link.fun = "logit",
     ...
   )
 }

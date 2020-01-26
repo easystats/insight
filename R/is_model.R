@@ -66,6 +66,7 @@ is_model <- function(x) {
       "cpglmm",
       "crch",
       "crq",
+      "DirichletRegModel",
       "drc",
       "emmGrid",
       "epi.2by2",

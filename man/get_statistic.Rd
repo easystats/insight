@@ -7,6 +7,7 @@
 \alias{get_statistic.clm2}
 \alias{get_statistic.gee}
 \alias{get_statistic.betareg}
+\alias{get_statistic.DirichletRegModel}
 \title{Get statistic associated with estimates}
 \usage{
 get_statistic(x, ...)
@@ -24,6 +25,8 @@ get_statistic(x, ...)
 \method{get_statistic}{gee}(x, robust = FALSE, ...)
 
 \method{get_statistic}{betareg}(x, component = c("all", "conditional", "precision"), ...)
+
+\method{get_statistic}{DirichletRegModel}(x, component = c("all", "conditional", "precision"), ...)
 }
 \arguments{
 \item{x}{A model.}

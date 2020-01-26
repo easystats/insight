@@ -967,6 +967,39 @@ get_statistic.betareg <- function(x, component = c("all", "conditional", "precis
 
 
 
+#' @rdname get_statistic
+#' @importFrom stats coef
+#' @importFrom utils capture.output
+#' @export
+get_statistic.DirichletRegModel <- function(x, component = c("all", "conditional", "precision"), ...) {
+  component <- match.arg(component)
+  parms <- get_parameters(x)
+  junk <- utils::capture.output(cs <- summary(x)$coef.mat)
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = unname(cs[, "z value"]),
+    Response = parms$Response,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (!is.null(parms$Component)) {
+    out$Component <- parms$Component
+  } else {
+    component <- "all"
+  }
+
+  if (component != "all") {
+    out <- out[out$Component == component, ]
+  }
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
 #' @importFrom methods slot
 #' @export
 get_statistic.glimML <- function(x, ...) {
