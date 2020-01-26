@@ -28,7 +28,10 @@
 get_response <- function(x, select = NULL) {
   rn <- find_response(x, combine = FALSE)
 
-  if (length(rn) > 1) {
+  # exceptions
+  if (inherits(x, "DirichletRegModel")) {
+    x$Y
+  } else if (length(rn) > 1) {
     rv <- get_data(x)[, rn, drop = FALSE]
     colnames(rv) <- rn
     # if user only wants specific response value, return this only

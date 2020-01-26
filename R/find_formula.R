@@ -11,7 +11,7 @@
 #'    only one list-element, \code{conditional}, is returned. For more complex
 #'    models, the returned list may have following elements:
 #'    \itemize{
-#'      \item \code{conditional}, the "fixed effects" part from the model
+#'      \item \code{conditional}, the "fixed effects" part from the model. One exception are \code{DirichletRegModel} models from \pkg{DirichletReg}, which has two or three components, depending on \code{model}.
 #'      \item \code{random}, the "random effects" part from the model (or the \code{id} for gee-models and similar)
 #'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
@@ -20,6 +20,7 @@
 #'      \item \code{cluster}, for fixed-effects regressions like \code{felm}, the cluster specification
 #'      \item \code{correlation}, for models with correlation-component like \code{gls}, the formula that describes the correlation structure
 #'      \item \code{slopes}, for fixed-effects individual-slope models like \code{feis}, the formula for the slope parameters
+#'      \item \code{precision}, for \code{DirichletRegModel} models from \pkg{DirichletReg}, when parametrization (i.e. \code{model}) is \code{"alternative"}.
 #'    }
 #'
 #' @note For models of class \code{lme} or \code{gls} the correlation-component
@@ -601,6 +602,41 @@ find_formula.clm2 <- function(x, ...) {
     scale = stats::formula(attr(x$scale, "terms", exact = TRUE))
   ))
 }
+
+
+#' @export
+find_formula.DirichletRegModel <- function(x, ...) {
+  f <- .safe_deparse(stats::formula(x))
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+
+  f.cond <- .trim(f_parts[1])
+
+  if (length(f_parts) > 1) {
+    f.cond2 <- paste0("~", .trim(f_parts[2]))
+  } else {
+    f.cond2 <- NULL
+  }
+
+  if (length(f_parts) > 2) {
+    f.cond3 <- paste0("~", .trim(f_parts[3]))
+  } else {
+    f.cond3 <- NULL
+  }
+
+  out <- .compact_list(list(
+    conditional = stats::as.formula(f.cond),
+    conditional2 = stats::as.formula(f.cond2),
+    conditional3 = stats::as.formula(f.cond3)
+  ))
+
+  if (x$parametrization == "alternative") {
+    if (length(out) == 2) names(out)[2] <- "precision"
+  }
+
+  out
+}
+
+
 
 
 

@@ -31,13 +31,15 @@ find_response <- function(x, combine = TRUE) {
     resp <- .safe_deparse(f$conditional[[2L]])
   }
 
-  check_cbind(resp, combine)
+  check_cbind(resp, combine, model = x)
 }
 
 
 # should not be called for brms-models!
-check_cbind <- function(resp, combine) {
-  if (!combine && any(grepl("cbind\\((.*)\\)", resp))) {
+check_cbind <- function(resp, combine, model) {
+  if (!combine && inherits(model, "DirichletRegModel")) {
+    resp <- model$varnames
+  } else if (!combine && any(grepl("cbind\\((.*)\\)", resp))) {
     resp <- .extract_combined_response(resp, "cbind")
   } else if (!combine && any(grepl("Surv\\((.*)\\)", resp))) {
     resp <- .extract_combined_response(resp, "Surv")

@@ -269,19 +269,19 @@
 # to reduce redundant code, I extract this part which is used several
 # times accross this package
 .get_elements <- function(effects, component) {
-  elements <- c("conditional", "nonlinear", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale")
+  elements <- c("conditional", "conditional2", "conditional3", "precision", "nonlinear", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale")
 
   elements <- switch(
     effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale")],
+    fixed = elements[elements %in% c("conditional", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
   elements <- switch(
     component,
     all = elements,
-    conditional = elements[elements %in% c("conditional", "nonlinear", "random", "slopes")],
+    conditional = elements[elements %in% c("conditional", "conditional2", "conditional3", "precision", "nonlinear", "random", "slopes")],
     zi = ,
     zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random")],
     dispersion = elements[elements == "dispersion"],
@@ -295,7 +295,8 @@
     nonlinear = elements[elements == "nonlinear"],
     slopes = elements[elements == "slopes"],
     extra = elements[elements == "extra"],
-    scale = elements[elements == "scale"]
+    scale = elements[elements == "scale"],
+    precision = elements[elements == "precision"]
   )
 
   elements
