@@ -30,7 +30,9 @@ get_response <- function(x, select = NULL) {
 
   # exceptions
   if (inherits(x, "DirichletRegModel")) {
-    x$Y
+    rv <- x$Y
+    class(rv) <- "matrix"
+    data.frame(rv)
   } else if (length(rn) > 1) {
     rv <- get_data(x)[, rn, drop = FALSE]
     colnames(rv) <- rn

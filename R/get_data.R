@@ -784,7 +784,9 @@ get_data.stanmvreg <- function(x, ...) {
 
 #' @export
 get_data.DirichletRegModel <- function(x, ...) {
-  .prepare_get_data(x, x$data)
+  mf <- x$data
+  resp <- sapply(x$data, inherits, "DirichletRegData")
+  .prepare_get_data(x, mf[!resp])
 }
 
 

@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("betareg")) {
-  context("insight, betareg")
-
   data("GasolineYield")
   data("FoodExpenditure")
 
