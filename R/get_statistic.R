@@ -534,10 +534,13 @@ get_statistic.multinom <- function(x, ...) {
   out <- data.frame(
     Parameter = parms$Parameter,
     Statistic = parms$Estimate / se,
-    Response = parms$Response,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  if ("Response" %in% colnames(parms)) {
+    out$Response <- parms$Response
+  }
 
   attr(out, "statistic") <- find_statistic(x)
   out

@@ -8,6 +8,7 @@
 
 * Fixed issue in `get_data()` for *clmm2*-models.
 * Fixed issue in `get_data()` for models that used the `lspline()`-function.
+* Fixed issue in `get_statistic()` for *multinom* models.
 
 # insight 0.8.0
 
