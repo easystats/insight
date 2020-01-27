@@ -7,6 +7,7 @@
 ## Bug fixes
 
 * Fixed issue in `get_data()` for *clmm2*-models.
+* Fixed issue in `get_data()` for models that used the `lspline()`-function.
 
 # insight 0.8.0
 
