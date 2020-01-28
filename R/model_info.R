@@ -157,6 +157,9 @@ model_info.rq <- model_info.mmclogit
 model_info.crq <- model_info.mmclogit
 
 #' @export
+model_info.crqs <- model_info.mmclogit
+
+#' @export
 model_info.nlrq <- model_info.mmclogit
 
 #' @export

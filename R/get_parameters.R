@@ -115,15 +115,34 @@ get_parameters.aareg <- function(x, ...) {
 get_parameters.crq <- function(x, ...) {
   sc <- summary(x)
 
-  params <- data.frame(
-    Parameter = names(sc$coefficients[, 1]),
-    Estimate = unname(sc$coefficients[, 1]),
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
+  if (all(lapply(sc, is.list))) {
+    list_sc <- lapply(sc, function(i) {
+      .x <- as.data.frame(i)
+      .x$Parameter <- rownames(.x)
+      .x
+    })
+    out <- do.call(rbind, list_sc)
+    params <- data.frame(
+      Parameter = out$Parameter,
+      Estimate = out$coefficients.Value,
+      Component = sprintf("tau (%g)", out$tau),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    params <- data.frame(
+      Parameter = names(sc$coefficients[, 1]),
+      Estimate = unname(sc$coefficients[, 1]),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
 
   .remove_backticks_from_parameter_names(params)
 }
+
+#' @export
+get_parameters.crqs <- get_parameters.crq
 
 
 #' @importFrom stats setNames

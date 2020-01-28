@@ -1320,7 +1320,11 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
 find_parameters.crq <- function(x, flatten = FALSE, ...) {
   sc <- summary(x)
 
-  pars <- list(conditional = rownames(sc$coefficients))
+  if (all(lapply(sc, is.list))) {
+    pars <- list(conditional = rownames(sc[[1]]$coefficients))
+  } else {
+    pars <- list(conditional = rownames(sc$coefficients))
+  }
   pars$conditional <- .remove_backticks_from_string(pars$conditional)
 
   if (flatten) {
@@ -1329,6 +1333,9 @@ find_parameters.crq <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
+
+#' @export
+find_parameters.crqs <- find_parameters.crq
 
 
 

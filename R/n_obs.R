@@ -217,6 +217,8 @@ n_obs.crq <- function(x, ...) {
   n
 }
 
+#' @export
+n_obs.crqs <- n_obs.crq
 
 
 #' @export

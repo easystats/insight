@@ -158,6 +158,9 @@ link_inverse.rqss <- link_inverse.lm
 link_inverse.crq <- link_inverse.lm
 
 #' @export
+link_inverse.crqs <- link_inverse.lm
+
+#' @export
 link_inverse.censReg <- link_inverse.lm
 
 #' @export
