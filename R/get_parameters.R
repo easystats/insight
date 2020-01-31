@@ -664,10 +664,14 @@ get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
 
   effects <- match.arg(effects)
 
-  l <- .compact_list(list(
-    conditional = lme4::fixef(x),
-    random = lme4::ranef(x)
-  ))
+  if (effects == "fixed") {
+    l <- list(conditional = lme4::fixef(x))
+  } else {
+    l <- .compact_list(list(
+      conditional = lme4::fixef(x),
+      random = lme4::ranef(x)
+    ))
+  }
 
   fixed <- data.frame(
     Parameter = names(l$conditional),
@@ -838,13 +842,21 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
   effects <- match.arg(effects)
   component <- match.arg(component)
 
-  l <- .compact_list(list(
-    conditional = lme4::fixef(x)$cond,
-    random = lme4::ranef(x)$cond,
-    zero_inflated = lme4::fixef(x)$zi,
-    zero_inflated_random = lme4::ranef(x)$zi,
-    dispersion = lme4::fixef(x)$disp
-  ))
+  if (effects == "fixed") {
+    l <- .compact_list(list(
+      conditional = lme4::fixef(x)$cond,
+      zero_inflated = lme4::fixef(x)$zi,
+      dispersion = lme4::fixef(x)$disp
+    ))
+  } else {
+    l <- .compact_list(list(
+      conditional = lme4::fixef(x)$cond,
+      random = lme4::ranef(x)$cond,
+      zero_inflated = lme4::fixef(x)$zi,
+      zero_inflated_random = lme4::ranef(x)$zi,
+      dispersion = lme4::fixef(x)$disp
+    ))
+  }
 
   fixed <- data.frame(
     Parameter = names(l$conditional),

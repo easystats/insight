@@ -388,24 +388,36 @@ find_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_
 
 #' @export
 find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE, ...) {
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
-  l <- .compact_list(list(
-    conditional = names(lme4::fixef(x)$cond),
-    random = lapply(lme4::ranef(x)$cond, colnames),
-    zero_inflated = names(lme4::fixef(x)$zi),
-    zero_inflated_random = lapply(lme4::ranef(x)$zi, colnames),
-    dispersion = names(lme4::fixef(x)$disp)
-  ))
+  if (effects == "fixed") {
+    l <- .compact_list(list(
+      conditional = names(lme4::fixef(x)$cond),
+      zero_inflated = names(lme4::fixef(x)$zi),
+      dispersion = names(lme4::fixef(x)$disp)
+    ))
+  } else {
+    l <- .compact_list(list(
+      conditional = names(lme4::fixef(x)$cond),
+      random = lapply(lme4::ranef(x)$cond, colnames),
+      zero_inflated = names(lme4::fixef(x)$zi),
+      zero_inflated_random = lapply(lme4::ranef(x)$zi, colnames),
+      dispersion = names(lme4::fixef(x)$disp)
+    ))
+  }
 
+  # recursively remove back-ticks from all list-elements parameters
   l <- rapply(l, .remove_backticks_from_string, how = "list")
 
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+  # keep only requested effects
   elements <- .get_elements(effects = effects, component = component)
 
+  # remove empty list-elements
   l <- .compact_list(l[elements])
 
   if (flatten) {
