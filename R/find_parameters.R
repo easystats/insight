@@ -494,10 +494,14 @@ find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), fla
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
-  l <- .compact_list(list(
-    conditional = names(lme4::fixef(x)),
-    random = lapply(lme4::ranef(x), colnames)
-  ))
+  if (effects == "fixed") {
+    l <- list(conditional = names(lme4::fixef(x)))
+  } else {
+    l <- .compact_list(list(
+      conditional = names(lme4::fixef(x)),
+      random = lapply(lme4::ranef(x), colnames)
+    ))
+  }
 
   l <- rapply(l, .remove_backticks_from_string, how = "list")
 
