@@ -490,6 +490,8 @@ find_parameters.nlmerMod <- function(x, effects = c("all", "fixed", "random"), f
 #' @rdname find_parameters
 #' @export
 find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  effects <- match.arg(effects)
+
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
@@ -503,11 +505,13 @@ find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), fla
     ))
   }
 
+  # recursively remove back-ticks from all list-elements parameters
   l <- rapply(l, .remove_backticks_from_string, how = "list")
 
-  effects <- match.arg(effects)
+  # keep only requested effects
   elements <- .get_elements(effects, component = "all")
 
+  # remove empty list-elements
   l <- .compact_list(l[elements])
 
   if (flatten) {
