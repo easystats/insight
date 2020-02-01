@@ -4,6 +4,10 @@
 
 * `cglm` (*cglm*), `DirichletRegModel` (*DirichletReg*).
 
+## General
+
+* Improved efficiency of `find_parameters()` and `get_parameters()` for mixed models with large samples and many random effects, and only fixed effects where requested.
+
 ## Bug fixes
 
 * Fixed issue in `get_data()` for *clmm2*-models.
