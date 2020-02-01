@@ -544,10 +544,14 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
 
   effects <- match.arg(effects)
 
-  l <- .compact_list(list(
-    conditional = lme4::fixef(x),
-    random = lme4::ranef(x)
-  ))
+  if (effects == "fixed") {
+    l <- list(conditional = lme4::fixef(x))
+  } else {
+    l <- .compact_list(list(
+      conditional = lme4::fixef(x),
+      random = lme4::ranef(x)
+    ))
+  }
 
   fixed <- data.frame(
     Parameter = names(l$conditional),
@@ -627,11 +631,19 @@ get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
   startvectors <- .get_startvector_from_env(x)
   fx <- lme4::fixef(x)
 
-  l <- .compact_list(list(
-    conditional = fx[setdiff(names(fx), startvectors)],
-    nonlinear = fx[startvectors],
-    random = lapply(lme4::ranef(x), colnames)
-  ))
+  if (effects == "fixed") {
+    l <- .compact_list(list(
+      conditional = fx[setdiff(names(fx), startvectors)],
+      nonlinear = fx[startvectors]
+    ))
+  } else {
+    l <- .compact_list(list(
+      conditional = fx[setdiff(names(fx), startvectors)],
+      nonlinear = fx[startvectors],
+      random = lapply(lme4::ranef(x), colnames)
+    ))
+  }
+
 
   fixed <- data.frame(
     Parameter = c(
@@ -706,10 +718,14 @@ get_parameters.cpglmm <- function(x, effects = c("fixed", "random"), ...) {
 
   effects <- match.arg(effects)
 
-  l <- .compact_list(list(
-    conditional = cplm::fixef(x),
-    random = cplm::ranef(x)
-  ))
+  if (effects == "fixed") {
+    l <- list(conditional = cplm::fixef(x))
+  } else {
+    l <- .compact_list(list(
+      conditional = cplm::fixef(x),
+      random = cplm::ranef(x)
+    ))
+  }
 
   fixed <- data.frame(
     Parameter = names(l$conditional),
@@ -734,10 +750,14 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
 
   effects <- match.arg(effects)
 
-  l <- .compact_list(list(
-    conditional = lme4::fixef(x$full_model),
-    random = lme4::ranef(x$full_model)
-  ))
+  if (effects == "fixed") {
+    l <- list(conditional = lme4::fixef(x$full_model))
+  } else {
+    l <- .compact_list(list(
+      conditional = lme4::fixef(x$full_model),
+      random = lme4::ranef(x$full_model)
+    ))
+  }
 
   fixed <- data.frame(
     Parameter = names(l$conditional),
@@ -911,13 +931,17 @@ get_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), ...) 
     stringsAsFactors = FALSE
   )
 
-  params <- find_parameters(x, effects = "random", flatten = TRUE)
-  random <- data.frame(
-    Parameter = params,
-    Estimate = unname(coefs[params]),
-    Effects = "random",
-    stringsAsFactors = FALSE
-  )
+  if (effects != "fixed") {
+    params <- find_parameters(x, effects = "random", flatten = TRUE)
+    random <- data.frame(
+      Parameter = params,
+      Estimate = unname(coefs[params]),
+      Effects = "random",
+      stringsAsFactors = FALSE
+    )
+  } else {
+    random <- NULL
+  }
 
   switch(
     effects,
