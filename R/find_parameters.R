@@ -203,6 +203,7 @@ find_parameters.DirichletRegModel <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  effects <- match.arg(effects)
   coefs <- x$Model
   random_start <- grep("(\\(Intercept\\) \\(Intercept\\)|Random\\.\\(Intercept\\))", rownames(coefs))
   thresholds <- grep("Threshold\\d", rownames(coefs))
@@ -212,18 +213,7 @@ find_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), flat
     random = rownames(coefs)[random_start:(thresholds[1] - 1)]
   )
 
-  l <- rapply(l, .remove_backticks_from_string, how = "list")
-
-  effects <- match.arg(effects)
-  elements <- .get_elements(effects, component = "all")
-
-  l <- .compact_list(l[elements])
-
-  if (flatten) {
-    unique(unlist(l))
-  } else {
-    l
-  }
+  .return_mixed_parameters(l, effects, flatten)
 }
 
 
@@ -395,6 +385,10 @@ find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), co
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
+  # we extract random effects only when really necessary, to save
+  # computational time. In particular model with large sample and
+  # many random effects groups may take some time to return random effects
+
   if (effects == "fixed") {
     l <- .compact_list(list(
       conditional = names(lme4::fixef(x)$cond),
@@ -411,20 +405,7 @@ find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), co
     ))
   }
 
-  # recursively remove back-ticks from all list-elements parameters
-  l <- rapply(l, .remove_backticks_from_string, how = "list")
-
-  # keep only requested effects
-  elements <- .get_elements(effects = effects, component = component)
-
-  # remove empty list-elements
-  l <- .compact_list(l[elements])
-
-  if (flatten) {
-    unique(unlist(l))
-  } else {
-    l
-  }
+  .return_mixed_parameters(l, effects, flatten, component)
 }
 
 
@@ -476,25 +457,23 @@ find_parameters.nlmerMod <- function(x, effects = c("all", "fixed", "random"), f
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
+  effects <- match.arg(effects)
   startvectors <- .get_startvector_from_env(x)
 
-  l <- .compact_list(list(
-    conditional = setdiff(names(lme4::fixef(x)), startvectors),
-    nonlinear = startvectors,
-    random = lapply(lme4::ranef(x), colnames)
-  ))
-
-  l <- rapply(l, .remove_backticks_from_string, how = "list")
-
-  effects <- match.arg(effects)
-  elements <- .get_elements(effects, component = "all")
-  l <- .compact_list(l[elements])
-
-  if (flatten) {
-    unique(unlist(l))
+  if (effects == "fixed") {
+    l <- .compact_list(list(
+      conditional = setdiff(names(lme4::fixef(x)), startvectors),
+      nonlinear = startvectors
+    ))
   } else {
-    l
+    l <- .compact_list(list(
+      conditional = setdiff(names(lme4::fixef(x)), startvectors),
+      nonlinear = startvectors,
+      random = lapply(lme4::ranef(x), colnames)
+    ))
   }
+
+  .return_mixed_parameters(l, effects, flatten)
 }
 
 
@@ -508,6 +487,10 @@ find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), fla
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
+  # we extract random effects only when really necessary, to save
+  # computational time. In particular model with large sample and
+  # many random effects groups may take some time to return random effects
+
   if (effects == "fixed") {
     l <- list(conditional = names(lme4::fixef(x)))
   } else {
@@ -517,20 +500,7 @@ find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), fla
     ))
   }
 
-  # recursively remove back-ticks from all list-elements parameters
-  l <- rapply(l, .remove_backticks_from_string, how = "list")
-
-  # keep only requested effects
-  elements <- .get_elements(effects, component = "all")
-
-  # remove empty list-elements
-  l <- .compact_list(l[elements])
-
-  if (flatten) {
-    unique(unlist(l))
-  } else {
-    l
-  }
+  .return_mixed_parameters(l, effects, flatten)
 }
 
 #' @export
@@ -547,24 +517,16 @@ find_parameters.cpglmm <- function(x, effects = c("all", "fixed", "random"), fla
     stop("Package 'cplm' required for this function to work. Please install it.")
   }
 
+  effects <- match.arg(effects)
+
   l <- .compact_list(list(
     conditional = names(cplm::fixef(x)),
     random = lapply(cplm::ranef(x), colnames)
   ))
 
-  l <- rapply(l, .remove_backticks_from_string, how = "list")
-
-  effects <- match.arg(effects)
-  elements <- .get_elements(effects, component = "all")
-
-  l <- .compact_list(l[elements])
-
-  if (flatten) {
-    unique(unlist(l))
-  } else {
-    l
-  }
+  .return_mixed_parameters(l, effects, flatten)
 }
+
 
 
 #' @export
@@ -599,24 +561,14 @@ find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flat
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
+  effects <- match.arg(effects)
+
   l <- .compact_list(list(
     conditional = names(lme4::fixef(x$full_model)),
     random = lapply(lme4::ranef(x$full_model), colnames)
   ))
 
-  l <- rapply(l, .remove_backticks_from_string, how = "list")
-
-  effects <- match.arg(effects)
-  elements <- .get_elements(effects, component = "all")
-
-  l <- .compact_list(l[elements])
-
-
-  if (flatten) {
-    unique(unlist(l))
-  } else {
-    l
-  }
+  .return_mixed_parameters(l, effects, flatten)
 }
 
 
@@ -627,30 +579,25 @@ find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatte
     stop("Package 'lme4' required for this function to work. Please install it.")
   }
 
-  re <- lme4::ranef(x)
-  if (is.data.frame(re)) {
-    rn <- colnames(re)
-  } else {
-    rn <- lapply(re, colnames)
-  }
-
-  l <- .compact_list(list(
-    conditional = names(lme4::fixef(x)),
-    random = rn
-  ))
-
-  l <- rapply(l, .remove_backticks_from_string, how = "list")
-
   effects <- match.arg(effects)
-  elements <- .get_elements(effects, component = "all")
 
-  l <- .compact_list(l[elements])
-
-  if (flatten) {
-    unique(unlist(l))
+  if (effects == "fixed") {
+    l <- list(conditional = names(lme4::fixef(x)))
   } else {
-    l
+    re <- lme4::ranef(x)
+    if (is.data.frame(re)) {
+      rn <- colnames(re)
+    } else {
+      rn <- lapply(re, colnames)
+    }
+
+    l <- .compact_list(list(
+      conditional = names(lme4::fixef(x)),
+      random = rn
+    ))
   }
+
+  .return_mixed_parameters(l, effects, flatten)
 }
 
 
@@ -1420,4 +1367,28 @@ find_parameters.rma <- function(x, flatten = FALSE, ...) {
       NULL
     }
   )
+}
+
+
+
+
+
+
+# helper ----------------------------
+
+.return_mixed_parameters <- function(l, effects, flatten, component = "all") {
+  # recursively remove back-ticks from all list-elements parameters
+  l <- rapply(l, .remove_backticks_from_string, how = "list")
+
+  # keep only requested effects
+  elements <- .get_elements(effects, component = component)
+
+  # remove empty list-elements
+  l <- .compact_list(l[elements])
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
 }
