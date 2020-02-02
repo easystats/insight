@@ -32,7 +32,17 @@ get_priors.stanreg <- function(x, ...) {
   ps <- rstanarm::prior_summary(x)
 
   l <- .compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) {
-    if (!is.null(.x)) do.call(cbind, .x)
+    if (!is.null(.x)) {
+      # quick and dirty fix for flat priors
+      # else, .compact_list() will set this item as "NA"
+      if (is.na(.x$dist)) {
+        .x$dist <- "uniform"
+        .x$location <- 0
+        .x$scale <- 0
+        .x$adjusted_scale <- 0
+      }
+      do.call(cbind, .x)
+    }
   }))
 
   if (length(l) > 1) {
@@ -41,6 +51,14 @@ get_priors.stanreg <- function(x, ...) {
     cn <- colnames(l[[1]])
     prior_info <- as.data.frame(l)
     colnames(prior_info) <- cn
+  }
+
+  # fix parameters for flat priors here
+  flat <- which(prior_info$dist == "uniform")
+  if (length(flat) > 0) {
+    prior_info$location[flat] <- NA
+    prior_info$scale[flat] <- NA
+    prior_info$adjusted_scale[flat] <- NA
   }
 
   prior_info$parameter <- find_parameters(x)$conditional

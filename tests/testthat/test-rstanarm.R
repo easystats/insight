@@ -5,7 +5,6 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     require("insight") &&
     require("BayesFactor") &&
     require("rstanarm"))) {
-    context("insight, rstanarm")
 
     m1 <- insight::download_model("stanreg_merMod_5")
     m2 <- insight::download_model("stanreg_glm_6")
@@ -349,6 +348,19 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_null(find_statistic(m4))
       expect_null(find_statistic(m5))
       expect_null(find_statistic(m6))
+    })
+
+    model <- stan_glm(
+      disp ~ carb,
+      data = mtcars,
+      priors = NULL,
+      prior_intercept = NULL
+    )
+
+    test_that("flat_priors", {
+      p <- get_priors(model)
+      expect_equal(p$Distribution, c("uniform", "normal"))
+      expect_equal(p$Location, c(NA, 0), tolerance = 1e-3)
     })
   }
 }
