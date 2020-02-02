@@ -10,6 +10,7 @@ format_value(
   protect_integers = FALSE,
   missing = "",
   width = NULL,
+  as_percent = FALSE,
   ...
 )
 }
@@ -24,6 +25,8 @@ format_value(
 
 \item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
 
+\item{as_percent}{Logical, if \code{TRUE}, value is formatted as percentage value.}
+
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{
@@ -37,6 +40,8 @@ format_value(1.20)
 format_value(1.2)
 format_value(1.2012313)
 format_value(c(0.0045, 234, -23))
+format_value(c(0.0045, .12, .34))
+format_value(c(0.0045, .12, .34), as_percent = TRUE)
 
 format_value(as.factor(c("A", "B", "A")))
 format_value(iris$Species)

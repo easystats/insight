@@ -11,6 +11,7 @@
 ## Changes to functions
 
 * `model_info()` now returns `$is_multinomial` for multinomial (but not ordinal or cumulative) link models.
+* `format_value()` gets an `as_percent` argument to format values as percentages.
 
 ## Bug fixes
 

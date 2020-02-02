@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
       </span>
     </div>
 
@@ -126,7 +126,13 @@
     <pre class="usage"><span class='fu'>link_function</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for gamlss</span>
-<span class='fu'>link_function</span>(<span class='no'>x</span>, <span class='kw'>what</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mu"</span>, <span class='st'>"sigma"</span>, <span class='st'>"nu"</span>, <span class='st'>"tau"</span>), <span class='no'>...</span>)</pre>
+<span class='fu'>link_function</span>(<span class='no'>x</span>, <span class='kw'>what</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mu"</span>, <span class='st'>"sigma"</span>, <span class='st'>"nu"</span>, <span class='st'>"tau"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for betareg</span>
+<span class='fu'>link_function</span>(<span class='no'>x</span>, <span class='kw'>what</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>, <span class='st'>"precision"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for DirichletRegModel</span>
+<span class='fu'>link_function</span>(<span class='no'>x</span>, <span class='kw'>what</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>, <span class='st'>"precision"</span>), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,7 +148,8 @@
     <tr>
       <th>what</th>
       <td><p>For <code>gamlss</code> models, indicates for which distribution
-parameter the link (inverse) function should be returned.</p></td>
+parameter the link (inverse) function should be returned; for <code>betareg</code>
+or <code>DirichletRegModel</code>, can be <code>"mean"</code> or <code>"precision"</code>.</p></td>
     </tr>
     </table>
 

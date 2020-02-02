@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
       </span>
     </div>
 
@@ -153,13 +153,15 @@
 <li><p><code>is_count</code>: model is a count model (i.e. family is either poisson or negative binomial)</p></li>
 <li><p><code>is_beta</code>: family is beta</p></li>
 <li><p><code>is_betabinomial</code>: family is beta-binomial</p></li>
+<li><p><code>is_dirichlet</code>: family is dirichlet</p></li>
 <li><p><code>is_exponential</code>: family is exponential (e.g. Gamma or Weibull)</p></li>
 <li><p><code>is_logit</code>: model has logit link</p></li>
 <li><p><code>is_progit</code>: model has probit link</p></li>
 <li><p><code>is_linear</code>: family is gaussian</p></li>
 <li><p><code>is_tweedie</code>: family is tweedie</p></li>
-<li><p><code>is_ordinal</code>: family is ordinal or cumulative link</p></li>
-<li><p><code>is_cumulative</code>: family is ordinal or cumulative link</p></li>
+<li><p><code>is_ordinal</code>: family is ordinal, multinomial, or cumulative link</p></li>
+<li><p><code>is_cumulative</code>: family is ordinal, multinomial, or cumulative link</p></li>
+<li><p><code>is_multinomial</code>: family is multinomial or categorical link</p></li>
 <li><p><code>is_categorical</code>: family is categorical link</p></li>
 <li><p><code>is_censored</code>: model is a censored model (has a censored response, including survival models)</p></li>
 <li><p><code>is_truncated</code>: model is a truncated model (has a truncated response)</p></li>
@@ -204,6 +206,9 @@
 #&gt; $is_betabinomial
 #&gt; [1] FALSE
 #&gt; 
+#&gt; $is_dirichlet
+#&gt; [1] FALSE
+#&gt; 
 #&gt; $is_exponential
 #&gt; [1] FALSE
 #&gt; 
@@ -241,6 +246,9 @@
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_cumulative
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $is_multinomial
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_categorical
@@ -316,6 +324,9 @@
 #&gt; $is_betabinomial
 #&gt; [1] FALSE
 #&gt; 
+#&gt; $is_dirichlet
+#&gt; [1] FALSE
+#&gt; 
 #&gt; $is_exponential
 #&gt; [1] FALSE
 #&gt; 
@@ -353,6 +364,9 @@
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_cumulative
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $is_multinomial
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_categorical
