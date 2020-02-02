@@ -175,9 +175,9 @@ l <- as.data.frame(l)
 
 cbind(l, predictions = predict(m, newdata = l))
 #>      Species Petal.Width Sepal.Width predictions
-#> 1     setosa       1.199       3.057       5.101
-#> 2 versicolor       1.199       3.057       6.090
-#> 3  virginica       1.199       3.057       6.339
+#> 1     setosa         1.2         3.1         5.1
+#> 2 versicolor         1.2         3.1         6.1
+#> 3  virginica         1.2         3.1         6.3
 ```
 
 #### Printing Model Coefficients
@@ -192,8 +192,8 @@ coefficients.
 
 ``` r
 print_params <- function(model) {
-    paste0("My parameters are ", paste0(row.names(summary(model)$coefficients), 
-        collapse = ", "), ", thank you for your attention!")
+    paste0("My parameters are ", paste0(row.names(summary(model)$coefficients), collapse = ", "), 
+        ", thank you for your attention!")
 }
 
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
@@ -201,8 +201,7 @@ print_params(m1)
 #> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
 
 # obviously, something is missing in the output
-m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), 
-    data = iris)
+m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
 print_params(m2)
 #> [1] "My parameters are , thank you for your attention!"
 ```
@@ -215,16 +214,15 @@ the model type.
 
 ``` r
 print_params <- function(model) {
-    paste0("My parameters are ", paste0(insight::find_parameters(model, 
-        flatten = TRUE), collapse = ", "), ", thank you for your attention!")
+    paste0("My parameters are ", paste0(insight::find_parameters(model, flatten = TRUE), 
+        collapse = ", "), ", thank you for your attention!")
 }
 
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 print_params(m1)
 #> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
 
-m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), 
-    data = iris)
+m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
 print_params(m2)
 #> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"
 ```
@@ -260,42 +258,43 @@ email or also file an issue.
 
 ``` r
 supported_models()
-#>   [1] "aareg"         "aov"           "aovlist"      
-#>   [4] "bamlss"        "bamlss.frame"  "bayesx"       
-#>   [7] "BBmm"          "BBreg"         "betareg"      
-#>  [10] "BFBayesFactor" "bigglm"        "biglm"        
-#>  [13] "blavaan"       "bracl"         "brglm"        
-#>  [16] "brmsfit"       "brmultinom"    "censReg"      
-#>  [19] "cgam"          "cgamm"         "clm"          
-#>  [22] "clm2"          "clmm"          "clmm2"        
-#>  [25] "complmrob"     "coxme"         "coxph"        
-#>  [28] "cpglm"         "cpglmm"        "crch"         
-#>  [31] "crq"           "feglm"         "feis"         
-#>  [34] "felm"          "fixest"        "flexsurvreg"  
-#>  [37] "gam"           "Gam"           "gamlss"       
-#>  [40] "gamm"          "gamm4"         "gbm"          
-#>  [43] "gee"           "geeglm"        "glimML"       
-#>  [46] "glm"           "glmmadmb"      "glmmPQL"      
-#>  [49] "glmmTMB"       "glmrob"        "glmRob"       
-#>  [52] "glmx"          "gls"           "gmnl"         
-#>  [55] "htest"         "hurdle"        "iv_robust"    
-#>  [58] "ivreg"         "lavaan"        "lm"           
-#>  [61] "lm_robust"     "lme"           "lmrob"        
-#>  [64] "lmRob"         "logistf"       "LORgee"       
-#>  [67] "lrm"           "MANOVA"        "mclogit"      
-#>  [70] "mcmc"          "MCMCglmm"      "merMod"       
-#>  [73] "mixed"         "MixMod"        "mixor"        
-#>  [76] "mlm"           "mlogit"        "mmlogit"      
-#>  [79] "multinom"      "ols"           "plm"          
-#>  [82] "polr"          "psm"           "rlm"          
-#>  [85] "rlmerMod"      "RM"            "rma"          
-#>  [88] "rma.uni"       "rq"            "rqss"         
-#>  [91] "speedglm"      "speedlm"       "stanmvreg"    
-#>  [94] "stanreg"       "survfit"       "survreg"      
-#>  [97] "svyglm"        "svyolr"        "tobit"        
-#> [100] "truncreg"      "vgam"          "vglm"         
-#> [103] "wbgee"         "wblm"          "wbm"          
-#> [106] "zeroinfl"      "zerotrunc"
+#>   [1] "aareg"             "aov"               "aovlist"          
+#>   [4] "bamlss"            "bamlss.frame"      "bayesx"           
+#>   [7] "BBmm"              "BBreg"             "betareg"          
+#>  [10] "BFBayesFactor"     "bigglm"            "biglm"            
+#>  [13] "blavaan"           "bracl"             "brglm"            
+#>  [16] "brmsfit"           "brmultinom"        "censReg"          
+#>  [19] "cgam"              "cgamm"             "cglm"             
+#>  [22] "clm"               "clm2"              "clmm"             
+#>  [25] "clmm2"             "complmrob"         "coxme"            
+#>  [28] "coxph"             "cpglm"             "cpglmm"           
+#>  [31] "crch"              "crq"               "crqs"             
+#>  [34] "DirichletRegModel" "feglm"             "feis"             
+#>  [37] "felm"              "fixest"            "flexsurvreg"      
+#>  [40] "gam"               "Gam"               "gamlss"           
+#>  [43] "gamm"              "gamm4"             "gbm"              
+#>  [46] "gee"               "geeglm"            "glimML"           
+#>  [49] "glm"               "glmmadmb"          "glmmPQL"          
+#>  [52] "glmmTMB"           "glmrob"            "glmRob"           
+#>  [55] "glmx"              "gls"               "gmnl"             
+#>  [58] "htest"             "hurdle"            "iv_robust"        
+#>  [61] "ivreg"             "lavaan"            "lm"               
+#>  [64] "lm_robust"         "lme"               "lmrob"            
+#>  [67] "lmRob"             "logistf"           "LORgee"           
+#>  [70] "lrm"               "MANOVA"            "maxLik"           
+#>  [73] "mclogit"           "mcmc"              "MCMCglmm"         
+#>  [76] "merMod"            "mixed"             "MixMod"           
+#>  [79] "mixor"             "mlm"               "mlogit"           
+#>  [82] "mmlogit"           "multinom"          "ols"              
+#>  [85] "plm"               "polr"              "psm"              
+#>  [88] "rlm"               "rlmerMod"          "RM"               
+#>  [91] "rma"               "rma.uni"           "rq"               
+#>  [94] "rqss"              "speedglm"          "speedlm"          
+#>  [97] "stanmvreg"         "stanreg"           "survfit"          
+#> [100] "survreg"           "svyglm"            "svyolr"           
+#> [103] "tobit"             "truncreg"          "vgam"             
+#> [106] "vglm"              "wbgee"             "wblm"             
+#> [109] "wbm"               "zeroinfl"          "zerotrunc"
 ```
 
   - **Didn’t find a model?** [File an

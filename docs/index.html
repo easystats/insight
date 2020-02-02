@@ -167,9 +167,9 @@
 <a class="sourceLine" id="cb1-14" title="14"></a>
 <a class="sourceLine" id="cb1-15" title="15"><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(l, <span class="dt">predictions =</span> <span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(m, <span class="dt">newdata =</span> l))</a>
 <a class="sourceLine" id="cb1-16" title="16"><span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span></a>
-<a class="sourceLine" id="cb1-17" title="17"><span class="co">#&gt; 1     setosa       1.199       3.057       5.101</span></a>
-<a class="sourceLine" id="cb1-18" title="18"><span class="co">#&gt; 2 versicolor       1.199       3.057       6.090</span></a>
-<a class="sourceLine" id="cb1-19" title="19"><span class="co">#&gt; 3  virginica       1.199       3.057       6.339</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-17" title="17"><span class="co">#&gt; 1     setosa         1.2         3.1         5.1</span></a>
+<a class="sourceLine" id="cb1-18" title="18"><span class="co">#&gt; 2 versicolor         1.2         3.1         6.1</span></a>
+<a class="sourceLine" id="cb1-19" title="19"><span class="co">#&gt; 3  virginica         1.2         3.1         6.3</span></a></code></pre></div>
 </div>
 <div id="printing-model-coefficients" class="section level4">
 <h4 class="hasAnchor">
@@ -177,8 +177,8 @@
 <p>The next example should emphasize the possibilities to generalize functions to many different model objects using <strong>insight</strong>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
 <p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model) {</a>
-<a class="sourceLine" id="cb2-2" title="2">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(model)<span class="op">$</span>coefficients), </a>
-<a class="sourceLine" id="cb2-3" title="3">        <span class="dt">collapse =</span> <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(model)<span class="op">$</span>coefficients), <span class="dt">collapse =</span> <span class="st">", "</span>), </a>
+<a class="sourceLine" id="cb2-3" title="3">        <span class="st">", thank you for your attention!"</span>)</a>
 <a class="sourceLine" id="cb2-4" title="4">}</a>
 <a class="sourceLine" id="cb2-5" title="5"></a>
 <a class="sourceLine" id="cb2-6" title="6">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
@@ -186,24 +186,22 @@
 <a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
 <a class="sourceLine" id="cb2-9" title="9"></a>
 <a class="sourceLine" id="cb2-10" title="10"><span class="co"># obviously, something is missing in the output</span></a>
-<a class="sourceLine" id="cb2-11" title="11">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), </a>
-<a class="sourceLine" id="cb2-12" title="12">    <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb2-13" title="13"><span class="kw">print_params</span>(m2)</a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-11" title="11">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="kw">print_params</span>(m2)</a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></a></code></pre></div>
 <p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model) {</a>
-<a class="sourceLine" id="cb3-2" title="2">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(insight<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/insight/man/find_parameters.html">find_parameters</a></span>(model, </a>
-<a class="sourceLine" id="cb3-3" title="3">        <span class="dt">flatten =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)</a>
+<a class="sourceLine" id="cb3-2" title="2">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(insight<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/insight/man/find_parameters.html">find_parameters</a></span>(model, <span class="dt">flatten =</span> <span class="ot">TRUE</span>), </a>
+<a class="sourceLine" id="cb3-3" title="3">        <span class="dt">collapse =</span> <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)</a>
 <a class="sourceLine" id="cb3-4" title="4">}</a>
 <a class="sourceLine" id="cb3-5" title="5"></a>
 <a class="sourceLine" id="cb3-6" title="6">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
 <a class="sourceLine" id="cb3-7" title="7"><span class="kw">print_params</span>(m1)</a>
 <a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
 <a class="sourceLine" id="cb3-9" title="9"></a>
-<a class="sourceLine" id="cb3-10" title="10">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), </a>
-<a class="sourceLine" id="cb3-11" title="11">    <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="kw">print_params</span>(m2)</a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-10" title="10">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="kw">print_params</span>(m2)</a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></a></code></pre></div>
 </div>
 </div>
 <div id="installation" class="section level2">
@@ -229,42 +227,43 @@
 <h2 class="hasAnchor">
 <a href="#list-of-supported-models-by-class" class="anchor"></a>List of Supported Models by Class</h2>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="reference/is_model_supported.html">supported_models</a></span>()</a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt;   [1] "aareg"         "aov"           "aovlist"      </span></a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt;   [4] "bamlss"        "bamlss.frame"  "bayesx"       </span></a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;   [7] "BBmm"          "BBreg"         "betareg"      </span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt;  [10] "BFBayesFactor" "bigglm"        "biglm"        </span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;  [13] "blavaan"       "bracl"         "brglm"        </span></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;  [16] "brmsfit"       "brmultinom"    "censReg"      </span></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;  [19] "cgam"          "cgamm"         "clm"          </span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;  [22] "clm2"          "clmm"          "clmm2"        </span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;  [25] "complmrob"     "coxme"         "coxph"        </span></a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt;  [28] "cpglm"         "cpglmm"        "crch"         </span></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;  [31] "crq"           "feglm"         "feis"         </span></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;  [34] "felm"          "fixest"        "flexsurvreg"  </span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt;  [37] "gam"           "Gam"           "gamlss"       </span></a>
-<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt;  [40] "gamm"          "gamm4"         "gbm"          </span></a>
-<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt;  [43] "gee"           "geeglm"        "glimML"       </span></a>
-<a class="sourceLine" id="cb6-17" title="17"><span class="co">#&gt;  [46] "glm"           "glmmadmb"      "glmmPQL"      </span></a>
-<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt;  [49] "glmmTMB"       "glmrob"        "glmRob"       </span></a>
-<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt;  [52] "glmx"          "gls"           "gmnl"         </span></a>
-<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt;  [55] "htest"         "hurdle"        "iv_robust"    </span></a>
-<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt;  [58] "ivreg"         "lavaan"        "lm"           </span></a>
-<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt;  [61] "lm_robust"     "lme"           "lmrob"        </span></a>
-<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt;  [64] "lmRob"         "logistf"       "LORgee"       </span></a>
-<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt;  [67] "lrm"           "MANOVA"        "mclogit"      </span></a>
-<a class="sourceLine" id="cb6-25" title="25"><span class="co">#&gt;  [70] "mcmc"          "MCMCglmm"      "merMod"       </span></a>
-<a class="sourceLine" id="cb6-26" title="26"><span class="co">#&gt;  [73] "mixed"         "MixMod"        "mixor"        </span></a>
-<a class="sourceLine" id="cb6-27" title="27"><span class="co">#&gt;  [76] "mlm"           "mlogit"        "mmlogit"      </span></a>
-<a class="sourceLine" id="cb6-28" title="28"><span class="co">#&gt;  [79] "multinom"      "ols"           "plm"          </span></a>
-<a class="sourceLine" id="cb6-29" title="29"><span class="co">#&gt;  [82] "polr"          "psm"           "rlm"          </span></a>
-<a class="sourceLine" id="cb6-30" title="30"><span class="co">#&gt;  [85] "rlmerMod"      "RM"            "rma"          </span></a>
-<a class="sourceLine" id="cb6-31" title="31"><span class="co">#&gt;  [88] "rma.uni"       "rq"            "rqss"         </span></a>
-<a class="sourceLine" id="cb6-32" title="32"><span class="co">#&gt;  [91] "speedglm"      "speedlm"       "stanmvreg"    </span></a>
-<a class="sourceLine" id="cb6-33" title="33"><span class="co">#&gt;  [94] "stanreg"       "survfit"       "survreg"      </span></a>
-<a class="sourceLine" id="cb6-34" title="34"><span class="co">#&gt;  [97] "svyglm"        "svyolr"        "tobit"        </span></a>
-<a class="sourceLine" id="cb6-35" title="35"><span class="co">#&gt; [100] "truncreg"      "vgam"          "vglm"         </span></a>
-<a class="sourceLine" id="cb6-36" title="36"><span class="co">#&gt; [103] "wbgee"         "wblm"          "wbm"          </span></a>
-<a class="sourceLine" id="cb6-37" title="37"><span class="co">#&gt; [106] "zeroinfl"      "zerotrunc"</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt;   [1] "aareg"             "aov"               "aovlist"          </span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt;   [4] "bamlss"            "bamlss.frame"      "bayesx"           </span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;   [7] "BBmm"              "BBreg"             "betareg"          </span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt;  [10] "BFBayesFactor"     "bigglm"            "biglm"            </span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;  [13] "blavaan"           "bracl"             "brglm"            </span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;  [16] "brmsfit"           "brmultinom"        "censReg"          </span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;  [19] "cgam"              "cgamm"             "cglm"             </span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;  [22] "clm"               "clm2"              "clmm"             </span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;  [25] "clmm2"             "complmrob"         "coxme"            </span></a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt;  [28] "coxph"             "cpglm"             "cpglmm"           </span></a>
+<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;  [31] "crch"              "crq"               "crqs"             </span></a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;  [34] "DirichletRegModel" "feglm"             "feis"             </span></a>
+<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt;  [37] "felm"              "fixest"            "flexsurvreg"      </span></a>
+<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt;  [40] "gam"               "Gam"               "gamlss"           </span></a>
+<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt;  [43] "gamm"              "gamm4"             "gbm"              </span></a>
+<a class="sourceLine" id="cb6-17" title="17"><span class="co">#&gt;  [46] "gee"               "geeglm"            "glimML"           </span></a>
+<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt;  [49] "glm"               "glmmadmb"          "glmmPQL"          </span></a>
+<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt;  [52] "glmmTMB"           "glmrob"            "glmRob"           </span></a>
+<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt;  [55] "glmx"              "gls"               "gmnl"             </span></a>
+<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt;  [58] "htest"             "hurdle"            "iv_robust"        </span></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt;  [61] "ivreg"             "lavaan"            "lm"               </span></a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt;  [64] "lm_robust"         "lme"               "lmrob"            </span></a>
+<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt;  [67] "lmRob"             "logistf"           "LORgee"           </span></a>
+<a class="sourceLine" id="cb6-25" title="25"><span class="co">#&gt;  [70] "lrm"               "MANOVA"            "maxLik"           </span></a>
+<a class="sourceLine" id="cb6-26" title="26"><span class="co">#&gt;  [73] "mclogit"           "mcmc"              "MCMCglmm"         </span></a>
+<a class="sourceLine" id="cb6-27" title="27"><span class="co">#&gt;  [76] "merMod"            "mixed"             "MixMod"           </span></a>
+<a class="sourceLine" id="cb6-28" title="28"><span class="co">#&gt;  [79] "mixor"             "mlm"               "mlogit"           </span></a>
+<a class="sourceLine" id="cb6-29" title="29"><span class="co">#&gt;  [82] "mmlogit"           "multinom"          "ols"              </span></a>
+<a class="sourceLine" id="cb6-30" title="30"><span class="co">#&gt;  [85] "plm"               "polr"              "psm"              </span></a>
+<a class="sourceLine" id="cb6-31" title="31"><span class="co">#&gt;  [88] "rlm"               "rlmerMod"          "RM"               </span></a>
+<a class="sourceLine" id="cb6-32" title="32"><span class="co">#&gt;  [91] "rma"               "rma.uni"           "rq"               </span></a>
+<a class="sourceLine" id="cb6-33" title="33"><span class="co">#&gt;  [94] "rqss"              "speedglm"          "speedlm"          </span></a>
+<a class="sourceLine" id="cb6-34" title="34"><span class="co">#&gt;  [97] "stanmvreg"         "stanreg"           "survfit"          </span></a>
+<a class="sourceLine" id="cb6-35" title="35"><span class="co">#&gt; [100] "survreg"           "svyglm"            "svyolr"           </span></a>
+<a class="sourceLine" id="cb6-36" title="36"><span class="co">#&gt; [103] "tobit"             "truncreg"          "vgam"             </span></a>
+<a class="sourceLine" id="cb6-37" title="37"><span class="co">#&gt; [106] "vglm"              "wbgee"             "wblm"             </span></a>
+<a class="sourceLine" id="cb6-38" title="38"><span class="co">#&gt; [109] "wbm"               "zeroinfl"          "zerotrunc"</span></a></code></pre></div>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues">File an issue</a> and request additional model-support in <em>insight</em>!</li>
