@@ -14,6 +14,7 @@ if (require("testthat") &&
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_ordinal)
+    expect_true(model_info(m1)$is_multinomial)
     expect_true(model_info(m1)$is_logit)
   })
 

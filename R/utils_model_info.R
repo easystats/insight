@@ -64,6 +64,10 @@
     inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "gmnl", "mixor", "mlogit", "DirichletRegModel", "multinom", "LORgee", "brmultinom")) |
       fitfam %in% c("cumulative", "cratio", "sratio", "acat", "ordinal", "multinomial", "dirichlet")
 
+  is.multinomial <-
+    inherits(x, c("gmnl", "mlogit", "DirichletRegModel", "multinom", "brmultinom")) |
+    fitfam %in% c("cratio", "sratio", "acat", "multinomial", "dirichlet")
+
   is.categorical <- fitfam == "categorical"
 
   is.bayes <- inherits(x, c(
@@ -185,7 +189,7 @@
     is_hurdle = hurdle,
     is_ordinal = is.ordinal,
     is_cumulative = is.ordinal,
-    is_multinomial = is.ordinal | is.categorical,
+    is_multinomial = is.multinomial | is.categorical,
     is_categorical = is.categorical,
     is_mixed = !is.null(find_random(x)),
     is_multivariate = multi.var,

@@ -8,6 +8,10 @@
 
 * Improved efficiency of `find_parameters()` and `get_parameters()` for mixed models with large samples and many random effects, and only fixed effects where requested.
 
+## Changes to functions
+
+* `model_info()` now returns `$is_multinomial` for multinomial (but not ordinal or cumulative) link models.
+
 ## Bug fixes
 
 * Fixed issue in `get_data()` for *clmm2*-models.
