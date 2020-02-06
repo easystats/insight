@@ -98,6 +98,7 @@ find_statistic <- function(x, ...) {
       "clm2",
       "clmm",
       "clmm2",
+      "clogit",
       "coxme",
       "coxph",
       "crch",

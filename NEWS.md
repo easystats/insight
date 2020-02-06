@@ -1,3 +1,9 @@
+# insight 0.8.2
+
+## General
+
+* Improved support for `clogit`-models.
+
 # insight 0.8.1
 
 ## New supported model classes

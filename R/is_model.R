@@ -57,6 +57,7 @@ is_model <- function(x) {
       "clm2",
       "clmm",
       "clmm2",
+      "clogit",
       "coeftest",
       "complmrob",
       "confusionMatrix",

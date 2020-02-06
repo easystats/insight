@@ -55,6 +55,11 @@ check_cbind <- function(resp, combine, model) {
     resp <- c(r1, r2)
   }
 
+  # exception
+  if (inherits(model, "clogit") && grepl("^rep\\(", resp[1]) && length(resp) == 3) {
+    resp <- c(paste0(resp[1], resp[2]), resp[3])
+  }
+
   .remove_pattern_from_names(resp, ignore_asis = TRUE)
 }
 

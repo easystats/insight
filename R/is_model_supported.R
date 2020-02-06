@@ -62,6 +62,7 @@ supported_models <- function() {
     "clm2",
     "clmm",
     "clmm2",
+    "clogit",
     "complmrob",
     "coxme",
     "coxph",
