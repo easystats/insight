@@ -4,6 +4,10 @@
 
 * Improved support for `clogit`-models.
 
+## Bug fixes
+
+* Fixes issue in `get_statistic()` for *zeroinfl*  models with theta-coefficients.
+
 # insight 0.8.1
 
 ## New supported model classes

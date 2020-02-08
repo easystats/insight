@@ -167,9 +167,17 @@ get_statistic.zeroinfl <- function(x, component = c("all", "conditional", "zi", 
   cs <- .compact_list(stats::coef(summary(x)))
   out <- lapply(names(cs), function(i) {
     comp <- ifelse(i == "count", "conditional", "zi")
+    stats <- cs[[i]]
+
+    # remove log(theta)
+    theta <- grepl("Log(theta)", rownames(stats), fixed = TRUE)
+    if (any(theta)) {
+      stats <- stats[!theta, ]
+    }
+
     data.frame(
       Parameter = find_parameters(x, effects = "fixed", component = comp, flatten = TRUE),
-      Statistic = as.vector(cs[[i]][, 3]),
+      Statistic = as.vector(stats[, 3]),
       Component = comp,
       stringsAsFactors = FALSE,
       row.names = NULL
