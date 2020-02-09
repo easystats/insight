@@ -85,7 +85,7 @@ if (require("testthat") &&
   })
 
   test_that("get_response", {
-    # expect_equal(get_response(m1), dat$y)
+    expect_equal(get_response(m1), dat$y)
     expect_equal(length(get_response(m2)), 500)
     expect_equal(ncol(get_response(m3)), 2)
   })
