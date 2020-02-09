@@ -4,7 +4,7 @@ if (require("testthat") &&
 
   # model 1
   set.seed(123)
-  dat <- gamSim(1, n = 400, dist = "normal", scale = 2)
+  dat <<- gamSim(1, n = 400, dist = "normal", scale = 2)
   m1 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
 
   # model 2
@@ -46,7 +46,7 @@ if (require("testthat") &&
     y[i, ] <- rmvn(1, mu, V)
   }
 
-  dat3 <- data.frame(y0 = y[, 1], y1 = y[, 2], x0 = x0, x1 = x1, x2 = x2, x3 = x3)
+  dat3 <<- data.frame(y0 = y[, 1], y1 = y[, 2], x0 = x0, x1 = x1, x2 = x2, x3 = x3)
   m3 <- gam(list(y0 ~ s(x0) + s(x1), y1 ~ s(x2) + s(x3)), family = mvn(d = 2), data = dat3)
 
   test_that("model_info", {
