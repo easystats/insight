@@ -11,5 +11,6 @@
 ^README.Rmd
 ^paper$
 ^Meta$
+^WIP$
 ^.github$
 ^cran-comments.md$

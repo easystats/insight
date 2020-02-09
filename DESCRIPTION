@@ -42,7 +42,6 @@ Suggests:
     crch,
     estimatr,
     feisr,
-    fixest,
     gam,
     gamm4,
     gamlss,
