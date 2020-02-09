@@ -3,8 +3,6 @@
 if (.runThisTest || Sys.getenv("USER") == "travis") {
   unloadNamespace("gam")
   if (require("testthat") && require("insight") && require("mgcv")) {
-    context("insight, model_info")
-
     set.seed(0)
     dat <- gamSim(6, n = 200, scale = .2, dist = "poisson")
     m1 <-
