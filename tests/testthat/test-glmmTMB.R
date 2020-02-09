@@ -1,20 +1,47 @@
 if (require("testthat") &&
   require("insight") &&
   require("glmmTMB")) {
-  context("insight, glmmTMB")
-
   # fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
   # fish$nofish <- as.factor(fish$nofish)
   # fish$livebait <- as.factor(fish$livebait)
   # fish$camper <- as.factor(fish$camper)
 
-  m1 <- download_model("glmmTMB_zi_1")
-  m2 <- download_model("glmmTMB_1")
-  m3 <- download_model("glmmTMB_zi_2")
-  m4 <- download_model("glmmTMB_zi_5")
-  m7 <- download_model("glmmTMB_zi_6")
+  data("fish")
+  m1 <- glmmTMB(
+    count ~ child + camper + (1 | persons),
+    ziformula = ~ child + camper + (1 | persons),
+    data = fish,
+    family = truncated_poisson()
+  )
 
-  fish <- get_data(m7)
+  m2 <- glmmTMB(
+    count ~ child + camper + (1 | persons),
+    data = fish,
+    family = poisson()
+  )
+
+  m3 <- glmmTMB(
+    count ~ child + camper + (1 | persons),
+    ziformula = ~ child + livebait + (1 | persons),
+    data = fish,
+    family = poisson()
+  )
+
+  m4 <- glmmTMB(
+    count ~ child + camper + (1 | persons),
+    ziformula = ~ child + livebait + (1 | ID),
+    dispformula = ~xb,
+    data = fish,
+    family = truncated_poisson()
+  )
+
+  m7 <- glmmTMB(
+    count ~ child + camper + (1 + xb | persons),
+    ziformula = ~ child + livebait + (1 + zg + nofish | ID),
+    dispformula = ~xb,
+    data = fish,
+    family = truncated_poisson()
+  )
 
   data(Salamanders)
   m5 <- glmmTMB(

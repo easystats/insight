@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("stats")) {
-  context("insight, aovlist")
-
   data(npk)
   m1 <- aov(yield ~ N * P * K + Error(block), data = npk)
   m2 <- aov(yield ~ N * P * K, data = npk)

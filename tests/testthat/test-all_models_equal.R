@@ -1,6 +1,4 @@
 if (require("testthat") && require("insight")) {
-  context("insight, all_models_equal")
-
   library(lme4)
   data(mtcars)
   data(sleepstudy)

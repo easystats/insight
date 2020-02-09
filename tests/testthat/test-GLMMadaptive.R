@@ -1,10 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-  if (require("testthat") &&
-    require("insight") && require("GLMMadaptive") && require("lme4")) {
-    context("insight, model_info")
-
+  if (require("testthat") && require("insight") && require("GLMMadaptive") && require("lme4")) {
     m <- download_model("GLMMadaptive_zi_2")
     m2 <- download_model("GLMMadaptive_zi_1")
 
