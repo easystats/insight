@@ -129,6 +129,8 @@ is_model <- function(x) {
       "loo",
       "LORgee",
       "lmodel2",
+      "lmerMod",
+      "lmerModLmerTest",
       "lqmm",
       "lrm",
       "manova",

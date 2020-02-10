@@ -105,6 +105,8 @@ supported_models <- function() {
     "lme",
     "lmrob",
     "lmRob",
+    "lmerMod",
+    "lmerModLmerTest",
     "logistf",
     "LORgee",
     "lrm",

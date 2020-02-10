@@ -59,6 +59,7 @@ find_statistic <- function(x, ...) {
       "lm.beta",
       "lme",
       "lmerMod",
+      "lmerModLmerTest",
       "lmRob",
       "lmrob",
       "maxLik",
