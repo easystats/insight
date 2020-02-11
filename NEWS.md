@@ -7,6 +7,7 @@
 ## Bug fixes
 
 * Fixed issue in `get_statistic()` for *zeroinfl*  models with theta-coefficients.
+* Fixed issue in `get_statistic()` for *lmerModLmerTest*  models with.
 * Fixed issue related to CRAN checks.
 
 # insight 0.8.1

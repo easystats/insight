@@ -82,6 +82,11 @@ get_statistic.lme <- function(x, ...) {
   get_statistic.default(x, column_index = 4)
 }
 
+#' @export
+get_statistic.lmerModLmerTest <- get_statistic.lme
+
+
+
 
 #' @export
 get_statistic.plm <- get_statistic.default
