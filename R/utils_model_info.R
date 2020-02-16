@@ -61,8 +61,8 @@
     fitfam %in% c("truncpoiss", "truncnbinom", "truncnbinom1")
 
   is.ordinal <-
-    inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "gmnl", "mixor", "mlogit", "DirichletRegModel", "multinom", "LORgee", "brmultinom")) |
-      fitfam %in% c("cumulative", "cratio", "sratio", "acat", "ordinal", "multinomial", "dirichlet")
+    inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "mixor", "LORgee")) |
+      fitfam %in% c("cumulative", "ordinal")
 
   is.multinomial <-
     inherits(x, c("gmnl", "mlogit", "DirichletRegModel", "multinom", "brmultinom")) |

@@ -26,8 +26,8 @@
 #'      \item \code{is_progit}: model has probit link
 #'      \item \code{is_linear}: family is gaussian
 #'      \item \code{is_tweedie}: family is tweedie
-#'      \item \code{is_ordinal}: family is ordinal, multinomial, or cumulative link
-#'      \item \code{is_cumulative}: family is ordinal, multinomial, or cumulative link
+#'      \item \code{is_ordinal}: family is ordinal or cumulative link
+#'      \item \code{is_cumulative}: family is ordinal or cumulative link
 #'      \item \code{is_multinomial}: family is multinomial or categorical link
 #'      \item \code{is_categorical}: family is categorical link
 #'      \item \code{is_censored}: model is a censored model (has a censored response, including survival models)

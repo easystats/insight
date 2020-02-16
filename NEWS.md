@@ -1,5 +1,9 @@
 # insight 0.8.2
 
+## Breaking changes
+
+* `model_info()` now only returns `TRUE` for `$is_ordinal`, when model is an ordinal or cumulative link model. In past version, `$is_ordinal` was also `TRUE` for multinomial models.
+
 ## General
 
 * Improved support for `clogit`-models.
