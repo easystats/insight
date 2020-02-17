@@ -292,11 +292,15 @@
     random.component.data <- .remove_values(random.component.data, c(1, 0))
   }
 
+  weights <- find_weights(x)
+  # if (!is.null(weights) && "(weights)" %in% colnames(mf)) {
+  #   weights <- c(weights, "(weights)")
+  # }
 
   dat <- switch(
     effects,
-    all = mf[, unique(c(response, fixed.component.data, random.component.data, find_weights(x))), drop = FALSE],
-    fixed = mf[, unique(c(response, fixed.component.data, find_weights(x))), drop = FALSE],
+    all = mf[, unique(c(response, fixed.component.data, random.component.data, weights)), drop = FALSE],
+    fixed = mf[, unique(c(response, fixed.component.data, weights)), drop = FALSE],
     random = mf[, unique(random.component.data), drop = FALSE]
   )
 
