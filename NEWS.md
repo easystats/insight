@@ -10,6 +10,7 @@
 
 ## Bug fixes
 
+* Fixed issue in `find_weights()` for `merMod` models.
 * Fixed issue in `get_data()` for models with weights, when weights also contained missing data.
 * Fixed issue in `get_statistic()` for *zeroinfl*  models with theta-coefficients.
 * Fixed issue in `get_statistic()` for *lmerModLmerTest*  models with.
