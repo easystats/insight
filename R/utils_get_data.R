@@ -120,6 +120,9 @@
       if ("(weights)" %in% needed.vars && !.obj_has_name(md, "(weights)")) {
         needed.vars <- needed.vars[-which(needed.vars == "(weights)")]
         mw <- mf[["(weights)"]]
+        if (find_weights(x) %in% colnames(md)) {
+          needed.vars <- c(needed.vars, find_weights(x))
+        }
       }
 
       if (inherits(x, c("coxph", "coxme"))) {
