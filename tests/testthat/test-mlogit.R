@@ -15,8 +15,10 @@ if (require("testthat") &&
   m2 <- mlogit(mode ~ price + catch | income, data = Fish)
 
   test_that("model_info", {
-    expect_true(model_info(m1)$is_ordinal)
-    expect_true(model_info(m2)$is_ordinal)
+    expect_false(model_info(m1)$is_ordinal)
+    expect_false(model_info(m2)$is_ordinal)
+    expect_true(model_info(m1)$is_multinomial)
+    expect_true(model_info(m2)$is_multinomial)
   })
 
   test_that("find_predictors", {

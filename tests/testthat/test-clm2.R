@@ -9,6 +9,7 @@ if (require("testthat") &&
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_ordinal)
+    expect_false(model_info(m1)$is_multinomial)
   })
 
   test_that("find_predictors", {
