@@ -290,9 +290,11 @@ n_obs.fixest <- function(x, ...) {
 
 #' @export
 n_obs.feglm <- function(x, ...) {
-  x$nobs["nobs"]
+  x$nobs[["nobs"]]
 }
 
+#' @export
+n_obs.bife <- n_obs.feglm
 
 #' @export
 n_obs.complmrob <- n_obs.cgam

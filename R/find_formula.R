@@ -481,6 +481,27 @@ find_formula.feis <- function(x, ...) {
 
 
 #' @export
+find_formula.bife <- function(x, ...) {
+  f <- .safe_deparse(stats::formula(x))
+  f_parts <- unlist(strsplit(f, "|", fixed = TRUE))
+
+  f.cond <- .trim(f_parts[1])
+
+  if (length(f_parts) > 1) {
+    f.rand <- paste0("~", .trim(f_parts[2]))
+  } else {
+    f.rand <- NULL
+  }
+
+  .compact_list(list(
+    conditional = stats::as.formula(f.cond),
+    random = stats::as.formula(f.rand)
+  ))
+}
+
+
+
+#' @export
 find_formula.wbm <- function(x, ...) {
   f <- .safe_deparse(stats::formula(x))
   f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))

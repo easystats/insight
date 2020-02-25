@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("lfe")) {
-  context("insight, lfe")
-
   x <- rnorm(1000)
   x2 <- rnorm(length(x))
   id <- factor(sample(20, length(x), replace = TRUE))
@@ -15,10 +13,8 @@ if (require("testthat") &&
   x3 <- rnorm(length(x))
   x4 <- sample(12, length(x), replace = TRUE)
 
-  Q <-
-    0.3 * x3 + x + 0.2 * x2 + id.eff[id] + 0.3 * log(x4) - 0.3 * y + rnorm(length(x), sd = 0.3)
-  W <-
-    0.7 * x3 - 2 * x + 0.1 * x2 - 0.7 * id.eff[id] + 0.8 * cos(x4) - 0.2 * y + rnorm(length(x), sd = 0.6)
+  Q <- 0.3 * x3 + x + 0.2 * x2 + id.eff[id] + 0.3 * log(x4) - 0.3 * y + rnorm(length(x), sd = 0.3)
+  W <- 0.7 * x3 - 2 * x + 0.1 * x2 - 0.7 * id.eff[id] + 0.8 * cos(x4) - 0.2 * y + rnorm(length(x), sd = 0.6)
 
   # add them to the outcome
   y <- y + Q + W

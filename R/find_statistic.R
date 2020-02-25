@@ -90,6 +90,7 @@ find_statistic <- function(x, ...) {
     c(
       "aareg",
       "betareg",
+      "bife",
       "bracl",
       "brglm",
       "brglmFit",

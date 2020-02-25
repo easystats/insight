@@ -1082,3 +1082,23 @@ get_statistic.rma <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
+
+
+
+#' @export
+get_statistic.bife <- function(x, ...) {
+  parms <- get_parameters(x)
+  cs <- summary(x)
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = as.vector(cs$cm[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+

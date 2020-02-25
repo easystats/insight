@@ -657,6 +657,22 @@ get_data.ivreg <- function(x, ...) {
 get_data.iv_robust <- get_data.ivreg
 
 
+#' @export
+get_data.bife <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  mf <- as.data.frame(x$data)
+
+  if (effects == "random") {
+    return(stats::na.omit(mf[, unique(find_random(x, split_nested = TRUE, flatten = TRUE)), drop = FALSE]))
+  } else if (effects == "fixed") {
+    mf <- mf[, setdiff(colnames(mf), unique(find_random(x, split_nested = TRUE, flatten = TRUE))), drop = FALSE]
+  }
+
+  .prepare_get_data(x, stats::na.omit(mf))
+}
+
+
+
 
 
 

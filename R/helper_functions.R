@@ -176,7 +176,7 @@
 
 # extract random effects from formula
 .get_model_random <- function(f, split_nested = FALSE, model) {
-  is_special <- inherits(model, c("MCMCglmm", "gee", "LORgee", "mixor", "clmm2", "felm", "feis", "BFBayesFactor", "BBmm", "glimML", "MANOVA", "RM", "cglm"))
+  is_special <- inherits(model, c("MCMCglmm", "gee", "LORgee", "mixor", "clmm2", "felm", "feis", "bife", "BFBayesFactor", "BBmm", "glimML", "MANOVA", "RM", "cglm"))
 
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
@@ -212,11 +212,11 @@
 
     # nested random effects, e.g. g1 / g2 / g3, deparse to "g0:(g1:g2)".
     # when we split at ":", we have "g0", "(g1" and "g2)". In such cases,
-    # we need to remove the parantheses. But we need to preserve them in
+    # we need to remove the parentheses. But we need to preserve them in
     # case we have group factors in other models, like panelr, where we can
-    # have "lag(union)" as group factor. In such cases, parantheses should be
+    # have "lag(union)" as group factor. In such cases, parentheses should be
     # preserved. We here check if group factors, after passing to "clean_names()",
-    # still have "(" or ")" in their name, and if so, just remove parantheses
+    # still have "(" or ")" in their name, and if so, just remove parentheses
     # for these cases...
 
     has_parantheses <- vapply(

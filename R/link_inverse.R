@@ -374,6 +374,12 @@ link_inverse.glmx <- function(x, ...) {
 
 
 #' @export
+link_inverse.bife <- function(x, ...) {
+  x$family$linkinv
+}
+
+
+#' @export
 link_inverse.glmmadmb <- function(x, ...) {
   x$ilinkfun
 }

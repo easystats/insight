@@ -394,6 +394,9 @@ model_info.MixMod <- function(x, ...) {
 #' @export
 model_info.glmmPQL <- model_info.MixMod
 
+#' @export
+model_info.bife <- model_info.MixMod
+
 
 #' @export
 model_info.glmx <- function(x, ...) {
