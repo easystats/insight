@@ -888,6 +888,18 @@ find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), co
 
 
 #' @export
+find_parameters.bcplm <- function(x, flatten = FALSE, parameters = NULL, ...) {
+  l <- .filter_pars(list(conditional = dimnames(x$sims.list[[1]])[[2]]), parameters)
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
+#' @export
 find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "sigma"), flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
   rn <- names(find_response(x))

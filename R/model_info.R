@@ -598,6 +598,7 @@ model_info.stanmvreg <- function(x, ...) {
 
 
 
+
 # Other models ----------------------------
 
 
@@ -721,6 +722,9 @@ model_info.cpglmm <- function(x, ...) {
 
 #' @export
 model_info.cpglm <- model_info.cpglmm
+
+#' @export
+model_info.bcplm <- model_info.cpglmm
 
 
 #' @export

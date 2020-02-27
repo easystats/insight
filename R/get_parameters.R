@@ -1339,6 +1339,16 @@ get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), par
 }
 
 
+#' @export
+get_parameters.bcplm <- function(x, parameters = NULL, ...) {
+  samples <- as.data.frame(do.call(rbind, x$sims.list))
+  if (!is.null(parameters)) {
+    samples <- samples[grepl(pattern = parameters, x = colnames(samples), perl = TRUE)]
+  }
+  samples
+}
+
+
 #' @importFrom stats coef
 #' @rdname find_parameters
 #' @export

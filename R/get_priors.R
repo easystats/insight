@@ -201,6 +201,28 @@ get_priors.brmsfit <- function(x, ...) {
 }
 
 
+
+#' @export
+get_priors.bcplm <- function(x, ...) {
+  params <- setdiff(find_parameters(x, flatten = TRUE), c("phi", "p"))
+
+  location <- eval(parse(text = .safe_deparse(x@call))[[1]]$prior.beta.mean)
+  if (is.null(location)) location <- 0
+
+  scale <- eval(parse(text = .safe_deparse(x@call))[[1]]$prior.beta.var)
+  if (is.null(scale)) scale <- 10000
+
+  data.frame(
+    Parameter = params,
+    Distribution = "normal",
+    Location = location,
+    Scale = scale,
+    stringsAsFactors = FALSE
+  )
+}
+
+
+
 #' @importFrom utils tail
 #' @export
 get_priors.BFBayesFactor <- function(x, ...) {

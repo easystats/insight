@@ -220,6 +220,7 @@ find_statistic <- function(x, ...) {
       "gbm",
       "list",
       "MCMCglmm",
+      "bcplm",
       "survfit"
     )
 
