@@ -230,6 +230,10 @@ get_varcov.zerocount <- get_varcov.hurdle
 get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
   component <- match.arg(component)
 
+  if (!requireNamespace("cplm", quietly = TRUE)) {
+    stop("To use this function, please install package 'cplm'.")
+  }
+
   vc <- stats::vcov(x)
   tweedie <- which(grepl("^tw_", rownames(vc)))
   zero <- which(grepl("^zero_", rownames(vc)))
