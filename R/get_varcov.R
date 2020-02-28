@@ -234,7 +234,7 @@ get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "
     stop("To use this function, please install package 'cplm'.")
   }
 
-  vc <- stats::vcov(x)
+  vc <- cplm::vcov(x)
   tweedie <- which(grepl("^tw_", rownames(vc)))
   zero <- which(grepl("^zero_", rownames(vc)))
 
