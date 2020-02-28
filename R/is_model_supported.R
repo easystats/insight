@@ -151,6 +151,7 @@ supported_models <- function() {
     "wbm",
     "wblm",
     "wbgee",
+    "zcpglm",
     "zeroinfl",
     "zerotrunc"
   )

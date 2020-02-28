@@ -5,6 +5,7 @@
 \alias{get_data.gee}
 \alias{get_data.rqss}
 \alias{get_data.hurdle}
+\alias{get_data.zcpglm}
 \alias{get_data.glmmTMB}
 \alias{get_data.merMod}
 \alias{get_data.glmmadmb}
@@ -29,6 +30,8 @@ get_data(x, ...)
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
   ...
 )
+
+\method{get_data}{zcpglm}(x, component = c("all", "conditional", "zi", "zero_inflated"), ...)
 
 \method{get_data}{glmmTMB}(
   x,

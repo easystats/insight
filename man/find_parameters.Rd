@@ -6,6 +6,7 @@
 \alias{find_parameters.merMod}
 \alias{find_parameters.zeroinfl}
 \alias{find_parameters.hurdle}
+\alias{find_parameters.zcpglm}
 \alias{find_parameters.BFBayesFactor}
 \alias{find_parameters.brmsfit}
 \alias{find_parameters.bayesx}
@@ -33,6 +34,13 @@ find_parameters(x, ...)
 )
 
 \method{find_parameters}{hurdle}(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated"),
+  flatten = FALSE,
+  ...
+)
+
+\method{find_parameters}{zcpglm}(
   x,
   component = c("all", "conditional", "zi", "zero_inflated"),
   flatten = FALSE,

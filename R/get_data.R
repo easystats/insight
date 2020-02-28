@@ -176,6 +176,40 @@ get_data.zeroinfl <- get_data.hurdle
 get_data.zerotrunc <- get_data.default
 
 
+#' @rdname get_data
+#' @export
+get_data.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+
+  mf <- stats::model.frame(x)
+  mf_zero <- mf$zero
+  mf_tweedie <- mf$tweedie
+
+  response <- find_response(x)
+
+  # zcpglm saves variables twice, once in the model frame for zero-inflated
+  # model and once for the tweedie-model. we now need to remove duplicates
+  cn <- setdiff(colnames(mf$zero), colnames(mf$tweedie))
+
+  if (length(cn)) {
+    mf_zero <- mf_zero[cn]
+  } else {
+    mf_zero <- NULL
+  }
+
+  mf <- switch(
+    component,
+    "all" = do.call(cbind, .compact_list(list(mf_tweedie, mf_zero))),
+    "conditional" = mf_tweedie,
+    "zi" = ,
+    "zero_inflated" = mf_zero
+  )
+
+  .prepare_get_data(x, stats::na.omit(mf))
+}
+
+
+
 
 
 

@@ -225,6 +225,32 @@ get_varcov.zeroinfl <- get_varcov.hurdle
 #' @export
 get_varcov.zerocount <- get_varcov.hurdle
 
+#' @rdname get_varcov
+#' @export
+get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
+  component <- match.arg(component)
+
+  vc <- stats::vcov(x)
+  tweedie <- which(grepl("^tw_", rownames(vc)))
+  zero <- which(grepl("^zero_", rownames(vc)))
+
+  vc <- switch(
+    component,
+    "conditional" = vc[tweedie, tweedie],
+    "zi" = ,
+    "zero_inflated" = vc[zero, zero],
+    vc[c(tweedie, zero), c(tweedie, zero)]
+  )
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  .remove_backticks_from_matrix_names(as.matrix(vc))
+}
+
+
+
 
 
 

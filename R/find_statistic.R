@@ -80,8 +80,7 @@ find_statistic <- function(x, ...) {
       "svyolr",
       "truncreg",
       "wbm",
-      "wblm",
-      "zcpglm"
+      "wblm"
     )
 
   # z-value objects ----------------------------------------------------------
@@ -141,6 +140,7 @@ find_statistic <- function(x, ...) {
       "tobit",
       "vglm",
       "wbgee",
+      "zcpglm",
       "zeroinfl",
       "zerotrunc"
     )

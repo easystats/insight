@@ -1147,6 +1147,44 @@ get_parameters.hurdle <- get_parameters.zeroinfl
 #' @export
 get_parameters.zerotrunc <- get_parameters.default
 
+#' @rdname get_parameters
+#' @export
+get_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+  cf <- stats::coef(x)
+
+  cond <- data.frame(
+    Parameter = names(cf$tweedie),
+    Estimate = unname(cf$tweedie),
+    Component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  zi <- data.frame(
+    Parameter = names(cf$zero),
+    Estimate = unname(cf$zero),
+    Component = "zero_inflated",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  pars <- switch(
+    component,
+    all = rbind(cond, zi),
+    conditional = cond,
+    zi = ,
+    zero_inflated = zi
+  )
+
+  if (component != "all") {
+    pars <- .remove_column(pars, "Component")
+  }
+
+  .remove_backticks_from_parameter_names(pars)
+}
+
+
 
 
 

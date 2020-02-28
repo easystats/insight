@@ -6,7 +6,7 @@
 
 ## New supported model classes
 
-* `bife` (*bife*), `bcplm` (*cplm*)
+* `bife` (*bife*), `bcplm` and `zcpglm` (*cplm*)
  
 ## General
 

@@ -42,8 +42,8 @@
   linear_model <- (!binom_fam & !exponential_fam & !poisson_fam & !neg_bin_fam & !logit.link) ||
     fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian") || grepl("(\\st)$", fitfam)
 
-  tweedie_fam <- grepl("^(tweedie|Tweedie)", fitfam)
-  tweedie_model <- (linear_model && tweedie_fam) || inherits(x, c("cpglm", "cpglmm"))
+  tweedie_fam <- grepl("^(tweedie|Tweedie)", fitfam) | grepl("^(tweedie|Tweedie)", link.fun)
+  tweedie_model <- (linear_model && tweedie_fam) || inherits(x, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
 
   zero.inf <- zero.inf | fitfam == "ziplss" |
     grepl("\\Qzero_inflated\\E", fitfam, ignore.case = TRUE) |

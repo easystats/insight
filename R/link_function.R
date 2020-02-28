@@ -346,6 +346,9 @@ link_function.cpglmm <- function(x, ...) {
 link_function.cpglm <- link_function.cpglmm
 
 #' @export
+link_function.zcpglm <- link_function.cpglmm
+
+#' @export
 link_function.bcplm <- link_function.cpglmm
 
 

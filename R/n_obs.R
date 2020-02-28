@@ -189,6 +189,11 @@ n_obs.cpglm <- function(x, ...) {
   nrow(x$model.frame)
 }
 
+#' @export
+n_obs.zcpglm <- n_obs.cpglm
+
+#' @export
+n_obs.bcplm <- n_obs.cpglm
 
 
 #' @export

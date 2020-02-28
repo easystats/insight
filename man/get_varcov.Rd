@@ -8,6 +8,7 @@
 \alias{get_varcov.truncreg}
 \alias{get_varcov.gamlss}
 \alias{get_varcov.hurdle}
+\alias{get_varcov.zcpglm}
 \alias{get_varcov.MixMod}
 \alias{get_varcov.glmmTMB}
 \alias{get_varcov.brmsfit}
@@ -27,6 +28,8 @@ get_varcov(x, ...)
 \method{get_varcov}{gamlss}(x, component = c("conditional", "all"), ...)
 
 \method{get_varcov}{hurdle}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+
+\method{get_varcov}{zcpglm}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
 
 \method{get_varcov}{MixMod}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
 

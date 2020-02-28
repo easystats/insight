@@ -344,6 +344,9 @@ link_inverse.cpglmm <- function(x, ...) {
 link_inverse.cpglm <- link_inverse.cpglmm
 
 #' @export
+link_inverse.zcpglm <- link_inverse.cpglmm
+
+#' @export
 link_inverse.bcplm <- link_inverse.cpglmm
 
 
@@ -599,6 +602,8 @@ link_inverse.gam <- function(x, ...) {
 #' @importFrom stats poisson
 .get_cplm_family <- function(x) {
   link <- parse(text = .safe_deparse(x@call))[[1]]$link
+
+  if (is.null(link)) link <- "log"
 
   if (!is.numeric(link)) {
     stats::poisson(link = link)

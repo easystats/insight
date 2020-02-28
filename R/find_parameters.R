@@ -632,6 +632,22 @@ find_parameters.hurdle <- find_parameters.zeroinfl
 find_parameters.zerotrunc <- find_parameters.default
 
 
+#' @rdname find_parameters
+#' @export
+find_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
+  cf <- stats::coef(x)
+  component <- match.arg(component)
+
+  l <- .compact_list(list(
+    conditional = names(cf$tweedie),
+    zero_inflated = names(cf$zero)
+  ))
+
+  .filter_parameters(l, effects = "all", component = component, flatten = flatten, recursive = FALSE)
+}
+
+
+
 
 
 

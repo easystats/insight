@@ -20,6 +20,7 @@
 \alias{get_parameters.gam}
 \alias{get_parameters.vgam}
 \alias{get_parameters.zeroinfl}
+\alias{get_parameters.zcpglm}
 \alias{get_parameters.aovlist}
 \alias{get_parameters.MCMCglmm}
 \alias{get_parameters.BFBayesFactor}
@@ -76,6 +77,12 @@ get_parameters(x, ...)
 \method{get_parameters}{vgam}(x, component = c("all", "conditional", "smooth_terms"), ...)
 
 \method{get_parameters}{zeroinfl}(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated"),
+  ...
+)
+
+\method{get_parameters}{zcpglm}(
   x,
   component = c("all", "conditional", "zi", "zero_inflated"),
   ...

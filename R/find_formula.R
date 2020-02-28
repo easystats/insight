@@ -595,6 +595,13 @@ find_formula.zeroinfl <- find_formula.hurdle
 find_formula.zerotrunc <- find_formula.hurdle
 
 
+#' @export
+find_formula.zcpglm <- function(x, ...) {
+  .zeroinf_formula(x, separator = "\\|\\|")
+}
+
+
+
 
 
 
@@ -1059,7 +1066,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 # Find formula for zero-inflated regressions, where
 # zero-inflated part is separated by | from count part
-.zeroinf_formula <- function(x) {
+.zeroinf_formula <- function(x, separator = "\\|") {
   f <- tryCatch(
     {
       stats::formula(x)
@@ -1073,7 +1080,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
     return(NULL)
   }
 
-  f <- .trim(unlist(strsplit(.safe_deparse(f), "\\|")))
+  f <- .trim(unlist(strsplit(.safe_deparse(f), separator)))
 
   c.form <- stats::as.formula(f[1])
   if (length(f) == 2) {

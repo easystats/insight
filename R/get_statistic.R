@@ -671,6 +671,42 @@ get_statistic.cpglm <- function(x, ...) {
 
 
 
+#' @importFrom utils capture.output
+#' @export
+get_statistic.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+  if (!requireNamespace("cplm", quietly = TRUE)) {
+    stop("To use this function, please install package 'cplm'.")
+  }
+
+  component <- match.arg(component)
+  junk <- utils::capture.output(stats <- cplm::summary(x)$coefficients)
+  params <- get_parameters(x)
+
+  tweedie <- data.frame(
+    Parameter = params$Parameter[params$Component == "conditional"],
+    Statistic = as.vector(stats$tweedie[, "z value"]),
+    Component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  zero <- data.frame(
+    Parameter = params$Parameter[params$Component == "zero_inflated"],
+    Statistic = as.vector(stats$zero[, "z value"]),
+    Component = "zero_inflated",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- .filter_component(rbind(tweedie, zero), component)
+  out <- .remove_backticks_from_parameter_names(out)
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
 #' @export
 get_statistic.MANOVA <- function(x, ...) {
   stats <- as.data.frame(x$WTS)
