@@ -153,7 +153,12 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
       } else if (!parts[j] %in% c("conditional", "zero_inflated")) {
         # here we have the "subtitles" of a subcomponent
         # (like "Intercept: Group-Level 1")
-        title2 <- paste0(title2, " ", parts[j])
+        tmp <- switch(
+          parts[j],
+          "simplex" = "(monotonic effects)",
+          parts[j]
+        )
+        title2 <- paste0(title2, " ", tmp)
       }
     }
 
