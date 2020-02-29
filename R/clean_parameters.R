@@ -386,7 +386,7 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
   simplex <- grepl("^simo_", out$Cleaned_Parameter)
   if (length(simplex)) {
-    out$Cleaned_Parameter <- gsub("^simo_", "", out$Cleaned_Parameter)
+    out$Cleaned_Parameter[simplex] <- gsub("^(simo_|simo_mo)(.*)\\.(\\d)\\.$", "\\2[\\3]", out$Cleaned_Parameter[simplex])
     out$Component[simplex] <- "simplex"
   }
 
