@@ -352,6 +352,8 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
   # clean fixed effects, conditional and zero-inflated
 
+  out$Cleaned_Parameter <- gsub(pattern = "b_(?!zi_)(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter, perl = TRUE)
+  out$Cleaned_Parameter <- gsub(pattern = "b_zi_(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter, perl = TRUE)
   out$Cleaned_Parameter <- gsub(pattern = "(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", "\\2", out$Cleaned_Parameter, perl = TRUE)
   out$Cleaned_Parameter <- gsub(pattern = "(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)(.*)", "\\2", out$Cleaned_Parameter, perl = TRUE)
 
