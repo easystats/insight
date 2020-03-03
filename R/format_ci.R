@@ -25,8 +25,12 @@
 #' @export
 format_ci <- function(CI_low, CI_high, ci = 0.95, digits = 2, brackets = TRUE, width = NULL, width_low = width, width_high = width) {
   if (!is.null(width) && width == "auto") {
-    width_low <- max(unlist(lapply(stats::na.omit(round(CI_low, digits)), function(.i) nchar(as.character(.i)))))
-    width_high <- max(unlist(lapply(stats::na.omit(round(CI_high, digits)), function(.i) nchar(as.character(.i)))))
+    if (is.numeric(CI_low) && is.numeric(CI_high)) {
+      CI_low <- round(CI_low, digits)
+      CI_high <- round(CI_high, digits)
+    }
+    width_low <- max(unlist(lapply(stats::na.omit(CI_low), function(.i) nchar(as.character(.i)))))
+    width_high <- max(unlist(lapply(stats::na.omit(CI_high), function(.i) nchar(as.character(.i)))))
   }
 
   if (!is.null(ci)) {
