@@ -9,6 +9,7 @@ bamlss
 BayesFactor
 bayestestR
 BayesX
+bife
 biglm
 blavaan
 brglm
@@ -25,6 +26,7 @@ comparator
 complmrob
 cplm
 crch
+dirichlet
 DirichletReg
 doi
 DOI
@@ -56,6 +58,7 @@ joss
 JOSS
 lavaan
 lfe
+lmerModLmerTest
 logloss
 mclogit
 MCSE

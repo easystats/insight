@@ -2,7 +2,7 @@
 
 ## Breaking changes
 
-* `model_info()` now only returns `TRUE` for `$is_ordinal`, when model is an ordinal or cumulative link model. In past version, `$is_ordinal` was also `TRUE` for multinomial models.
+* `model_info()` now only returns `TRUE` for `$is_ordinal`, when model is an ordinal or cumulative link model. In past versions, `$is_ordinal` was also `TRUE` for multinomial models.
 
 ## New supported model classes
 
