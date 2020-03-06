@@ -124,18 +124,23 @@ if (require("testthat") &&
     )
   })
 
+
   m2 <- zeroinfl(formula = art ~ . | 1, data = bioChemists, dist = "negbin")
-  test_that("get_statistic", {
-    expect_equal(
-      get_statistic(m2)$Statistic,
-      c(1.8486, -2.97799, 1.83288, -3.32486, 0.42372, 8.38053, -0.21241),
-      tolerance = 1e-3
-    )
-    expect_equal(
-      get_statistic(m2)$Component,
-      c("conditional", "conditional", "conditional", "conditional",
-        "conditional", "conditional", "zero_inflated"),
-      tolerance = 1e-3
-    )
-  })
+  .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
+  if (.runThisTest || Sys.getenv("USER") == "travis") {
+    test_that("get_statistic", {
+      expect_equal(
+        get_statistic(m2)$Statistic,
+        c(1.8486, -2.97799, 1.83288, -3.32486, 0.42372, 8.38053, -0.21241),
+        tolerance = 1e-3
+      )
+      expect_equal(
+        get_statistic(m2)$Component,
+        c("conditional", "conditional", "conditional", "conditional",
+          "conditional", "conditional", "zero_inflated"),
+        tolerance = 1e-3
+      )
+    })
+  }
 }

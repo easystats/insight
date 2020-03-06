@@ -220,8 +220,33 @@
     if (!.is_empty_string(new.cols)) mf <- cbind(mf, trials.data[, new.cols, drop = FALSE])
   }
 
+  .add_remaining_missing_variables(x, mf, effects, component = "all")
+}
+
+
+
+# add remainng variables with special pattern -------------------------------
+
+.add_remaining_missing_variables <- function(model, mf, effects, component) {
+  missing_vars <- setdiff(
+    find_predictors(model, effects = effects, component = component, flatten = TRUE),
+    colnames(mf)
+  )
+
+  if (length(missing_vars)) {
+    env_data <- .get_data_from_env(model)
+    if (!is.null(env_data) && all(missing_vars %in% colnames(env_data))) {
+      common_columns <- intersect(colnames(env_data), c(missing_vars, colnames(mf)))
+      env_data <- stats::na.omit(env_data[common_columns])
+      if (nrow(env_data) == nrow(mf) && !any(missing_vars %in% colnames(mf))) {
+        mf <- cbind(mf, env_data[missing_vars])
+      }
+    }
+  }
+
   mf
 }
+
 
 
 
@@ -298,16 +323,24 @@
   #   weights <- c(weights, "(weights)")
   # }
 
-  dat <- switch(
+  vars <- switch(
     effects,
-    all = mf[, unique(c(response, fixed.component.data, random.component.data, weights)), drop = FALSE],
-    fixed = mf[, unique(c(response, fixed.component.data, weights)), drop = FALSE],
-    random = mf[, unique(random.component.data), drop = FALSE]
+    all = unique(c(response, fixed.component.data, random.component.data, weights)),
+    fixed = unique(c(response, fixed.component.data, weights)),
+    random = unique(random.component.data)
   )
+
+  still_missing <- setdiff(vars, colnames(mf))
+  vars <- intersect(vars, colnames(mf))
+  dat <- mf[, vars, drop = FALSE]
 
   if (.is_empty_object(dat)) {
     print_color(sprintf("Warning: Data frame is empty, probably component '%s' does not exist in the %s-part of the model?\n", component, effects), "red")
     return(NULL)
+  }
+
+  if (length(still_missing)) {
+    print_color(sprintf("Warning: Following potential variables could not be found in the data: %s\n", paste0(still_missing, collapse = " ,")), "red")
   }
 
   if ("(offset)" %in% colnames(mf) && !("(offset)" %in% colnames(dat))) {

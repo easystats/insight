@@ -733,8 +733,8 @@ find_parameters.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), f
 #' @rdname find_parameters
 #' @export
 find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
-  ## TODO remove "make.names()" in a future update
-  fe <- make.names(colnames(as.data.frame(x)))
+  ## TODO remove "optional = FALSE" in a future update
+  fe <- colnames(as.data.frame(x, optional = FALSE))
   is_mv <- NULL
 
   cond <- fe[grepl(pattern = "^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
