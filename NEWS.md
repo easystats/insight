@@ -18,6 +18,7 @@
 * Fixed issue in `get_data()` for models with weights, when weights also contained missing data.
 * Fixed issue in `get_statistic()` for *zeroinfl*  models with theta-coefficients.
 * Fixed issue in `get_statistic()` for *lmerModLmerTest*  models with.
+* Fixed issue in `find_parameters()` for *brmsfit*  models for rare situations where a specific pattern of variables names, when used as random effects, did not properly separate fixed from random effects in the return value.
 * Fixed issue related to CRAN checks.
 
 # insight 0.8.1
