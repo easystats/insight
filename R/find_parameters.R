@@ -737,10 +737,10 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
   fe <- make.names(colnames(as.data.frame(x)))
   is_mv <- NULL
 
-  cond <- fe[grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
-  zi <- fe[grepl(pattern = "(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
+  cond <- fe[grepl(pattern = "^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
+  zi <- fe[grepl(pattern = "^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
   rand <- fe[grepl(pattern = "(?!.*__zi)(?=.*r_)", fe, perl = TRUE) & !grepl(pattern = "^prior_", fe, perl = TRUE)]
-  randzi <- fe[grepl(pattern = "r_(.*__zi)", fe, perl = TRUE)]
+  randzi <- fe[grepl(pattern = "^r_(.*__zi)", fe, perl = TRUE)]
   simo <- fe[grepl(pattern = "^simo_", fe, perl = TRUE)]
   smooth_terms <- fe[grepl(pattern = "^sds_", fe, perl = TRUE)]
   priors <- fe[grepl(pattern = "^prior_", fe, perl = TRUE)]
