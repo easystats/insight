@@ -233,7 +233,7 @@
     colnames(mf)
   )
 
-  if (length(missing_vars)) {
+  if (!is.null(missing_vars) && length(missing_vars) > 0) {
     env_data <- .get_data_from_env(model)
     if (!is.null(env_data) && all(missing_vars %in% colnames(env_data))) {
       common_columns <- intersect(colnames(env_data), c(missing_vars, colnames(mf)))

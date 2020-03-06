@@ -180,6 +180,12 @@ find_formula.gamm <- function(x, ...) {
 
 
 #' @export
+find_formula.rma <- function(x, ...) {
+  NULL
+}
+
+
+#' @export
 find_formula.gee <- function(x, ...) {
   tryCatch(
     {
