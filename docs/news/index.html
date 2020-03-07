@@ -76,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
       </span>
     </div>
 
@@ -119,14 +119,14 @@
 
     <div id="insight-082" class="section level1">
 <h1 class="page-header">
-<a href="#insight-082" class="anchor"></a>insight 0.8.2<small> Unreleased </small>
+<a href="#insight-082" class="anchor"></a>insight 0.8.2<small> 2020-03-06 </small>
 </h1>
 <div id="breaking-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>
-<code><a href="../reference/model_info.html">model_info()</a></code> now only returns <code>TRUE</code> for <code>$is_ordinal</code>, when model is an ordinal or cumulative link model. In past version, <code>$is_ordinal</code> was also <code>TRUE</code> for multinomial models.</li>
+<code><a href="../reference/model_info.html">model_info()</a></code> now only returns <code>TRUE</code> for <code>$is_ordinal</code>, when model is an ordinal or cumulative link model. In past versions, <code>$is_ordinal</code> was also <code>TRUE</code> for multinomial models.</li>
 </ul>
 </div>
 <div id="new-supported-model-classes" class="section level2">
@@ -150,8 +150,10 @@
 <ul>
 <li>Fixed issue in <code><a href="../reference/find_weights.html">find_weights()</a></code> for <code>merMod</code> models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with weights, when weights also contained missing data.</li>
+<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for mixed models with complex offset-terms.</li>
 <li>Fixed issue in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>zeroinfl</em> models with theta-coefficients.</li>
 <li>Fixed issue in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>lmerModLmerTest</em> models with.</li>
+<li>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for <em>brmsfit</em> models for rare situations where a specific pattern of variables names, when used as random effects, did not properly separate fixed from random effects in the return value.</li>
 <li>Fixed issue related to CRAN checks.</li>
 </ul>
 </div>
