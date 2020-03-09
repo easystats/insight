@@ -1241,6 +1241,26 @@ get_parameters.aovlist <- function(x, effects = c("fixed", "random", "all"), ...
 
 
 
+#' @importFrom stats na.omit coef
+#' @export
+get_parameters.manova <- function(x, ...) {
+  params <- stats::na.omit(stats::coef(x))
+  out <- .gather(as.data.frame(params), names_to = "Response", values_to = "Estimate")
+  out$Parameter <- rownames(out)
+
+  out <- out[c("Parameter", "Estimate", "Response")]
+  rownames(out) <- NULL
+
+  pattern <- paste0("(", paste0(paste0(".", unique(out$Response)), collapse = "|"), ")$")
+  out$Parameter <- gsub(pattern, "", out$Parameter)
+
+  .remove_backticks_from_parameter_names(out)
+}
+
+
+
+
+
 
 
 

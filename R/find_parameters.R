@@ -1144,6 +1144,19 @@ find_parameters.wbgee <- find_parameters.wbm
 # Other models -----------------------------------
 
 
+#' @importFrom stats na.omit coef
+#' @export
+find_parameters.manova <- function(x, flatten = FALSE, ...) {
+  out <- list(conditional = .remove_backticks_from_string(rownames(stats::na.omit(stats::coef(x)))))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
 #' @export
 find_parameters.mlm <- function(x, flatten = FALSE, ...) {
   cs <- stats::coef(summary(x))
