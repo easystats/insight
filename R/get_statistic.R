@@ -589,6 +589,23 @@ get_statistic.bracl <- function(x, ...) {
 
 
 #' @export
+get_statistic.Arima <- function(x, ...) {
+  params <- get_parameters(x)
+  out <- data.frame(
+    Parameter = params$Parameter,
+    Statistic = as.vector(params$Estimate / sqrt(diag(get_varcov(x)))),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+#' @export
 get_statistic.wbm <- function(x, ...) {
   s <- summary(x)
 

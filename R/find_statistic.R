@@ -88,6 +88,7 @@ find_statistic <- function(x, ...) {
   z.mods <-
     c(
       "aareg",
+      "Arima",
       "betareg",
       "bife",
       "bracl",

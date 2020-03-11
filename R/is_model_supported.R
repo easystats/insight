@@ -40,6 +40,7 @@ supported_models <- function() {
     "aareg",
     "aov",
     "aovlist",
+    "Arima",
     "bamlss",
     "bamlss.frame",
     "bayesx",

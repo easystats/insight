@@ -95,6 +95,12 @@ find_algorithm.BBreg <- function(x, ...) {
 
 
 #' @export
+find_algorithm.Arima <- function(x, ...) {
+  list("algorithm" = "ML")
+}
+
+
+#' @export
 find_algorithm.glimML <- function(x, ...) {
   list("algorithm" = "ML")
 }

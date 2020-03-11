@@ -1,3 +1,9 @@
+# insight 0.8.3
+
+## New supported model classes
+
+* `arima` (*stats*)
+
 # insight 0.8.2
 
 ## Breaking changes
