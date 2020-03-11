@@ -117,6 +117,7 @@ model_info.default <- function(x, ...) {
     )
   } else {
     warning("Could not access model information.", call. = FALSE)
+    NULL
   }
 }
 
