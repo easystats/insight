@@ -2,14 +2,19 @@
 % Please edit documentation in R/model_info.R
 \name{model_info}
 \alias{model_info}
+\alias{model_info.default}
 \title{Access information from model objects}
 \usage{
 model_info(x, ...)
+
+\method{model_info}{default}(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
+
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 A list with information about the model, like family, link-function

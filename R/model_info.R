@@ -3,6 +3,7 @@
 #'
 #' @description Retrieve information from model objects.
 #'
+#' @param verbose Toggle off warnings.
 #' @inheritParams find_predictors
 #' @inheritParams link_inverse
 #' @inheritParams find_formula
@@ -87,8 +88,9 @@ model_info.data.frame <- function(x, ...) {
 
 
 #' @importFrom stats family
+#' @rdname model_info
 #' @export
-model_info.default <- function(x, ...) {
+model_info.default <- function(x, verbose = TRUE, ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
@@ -116,7 +118,9 @@ model_info.default <- function(x, ...) {
       ...
     )
   } else {
-    warning("Could not access model information.", call. = FALSE)
+    if (isTRUE(verbose)) {
+      warning("Could not access model information.", call. = FALSE)
+    }
     NULL
   }
 }
