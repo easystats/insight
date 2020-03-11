@@ -604,6 +604,13 @@ model_info.stanmvreg <- function(x, ...) {
 
 
 #' @export
+model_info.Arima <- function(x, ...) {
+  ## TODO provide some information...
+  NULL
+}
+
+
+#' @export
 model_info.cglm <- function(x, ...) {
   link <- parse(text = .safe_deparse(x$call))[[1]]$link
   method <- parse(text = .safe_deparse(x$call))[[1]]$method
