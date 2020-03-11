@@ -833,6 +833,34 @@ get_data.stanmvreg <- function(x, ...) {
 
 
 #' @export
+get_data.Arima <- function(x, ...) {
+  # first try, parent frame
+  dat <- tryCatch(
+    {
+      eval(x$call$x, envir = parent.frame())
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(dat)) {
+    # second try, global env
+    dat <- tryCatch(
+      {
+        eval(x$call$x, envir = globalenv())
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
+
+  dat
+}
+
+
+#' @export
 get_data.DirichletRegModel <- function(x, ...) {
   mf <- x$data
   resp <- sapply(x$data, inherits, "DirichletRegData")
