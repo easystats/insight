@@ -4,6 +4,10 @@
 
 * `arima` (*stats*)
 
+## Bug fixes
+
+* Fixed issue in `find_parameters()` and `clean_parameters()` for *brmsfit* models with specific variable name patterns.
+
 # insight 0.8.2
 
 ## Breaking changes
