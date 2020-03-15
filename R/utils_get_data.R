@@ -49,12 +49,12 @@
           trials.data <- as.data.frame(mf[[1]])
           colnames(trials.data) <- rn_not_combined
 
-          # if columns were bound via substraction, e.g.
+          # if columns were bound via subtraction, e.g.
           # "cbind(succes, total - success)", we need to sum up success and
           # total for the original total-column.
 
           pattern <- sprintf("%s(\\s*)-(\\s*)%s", rn_not_combined[2], rn_not_combined[1])
-          if (grepl(pattern = pattern, x = rn)) {
+          if (any(grepl(pattern = pattern, x = rn))) {
             trials.data[[2]] <- trials.data[[1]] + trials.data[[2]]
           }
         },
