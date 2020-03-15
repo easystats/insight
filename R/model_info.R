@@ -609,8 +609,7 @@ model_info.stanmvreg <- function(x, ...) {
 
 #' @export
 model_info.Arima <- function(x, ...) {
-  ## TODO provide some information...
-  NULL
+  .make_family(x, ...)
 }
 
 

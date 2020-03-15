@@ -739,18 +739,20 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
 
   cond <- fe[grepl(pattern = "^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
   zi <- fe[grepl(pattern = "^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
-  rand <- fe[grepl(pattern = "(?!.*__zi)(?=.*r_)", fe, perl = TRUE) & !grepl(pattern = "^prior_", fe, perl = TRUE)]
+  rand <- fe[grepl(pattern = "(?!.*__zi)(?=.*^r_)", fe, perl = TRUE) & !grepl(pattern = "^prior_", fe, perl = TRUE)]
   randzi <- fe[grepl(pattern = "^r_(.*__zi)", fe, perl = TRUE)]
   simo <- fe[grepl(pattern = "^simo_", fe, perl = TRUE)]
   smooth_terms <- fe[grepl(pattern = "^sds_", fe, perl = TRUE)]
   priors <- fe[grepl(pattern = "^prior_", fe, perl = TRUE)]
   sigma <- fe[grepl(pattern = "^sigma_", fe, perl = TRUE)]
+  rand_sd <- fe[grepl(pattern = "(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
+  randzi_sd <- fe[grepl(pattern = "^sd_(.*_zi)", fe, perl = TRUE)]
 
   l <- .compact_list(list(
     conditional = cond,
-    random = rand,
+    random = c(rand, rand_sd),
     zero_inflated = zi,
-    zero_inflated_random = randzi,
+    zero_inflated_random = c(randzi, randzi_sd),
     simplex = simo,
     smooth_terms = smooth_terms,
     sigma = sigma,
