@@ -132,7 +132,7 @@ if (require("testthat") &&
     test_that("get_statistic", {
       expect_equal(
         get_statistic(m2)$Statistic,
-        c(1.8486, -2.97799, 1.83288, -3.32486, 0.42372, 8.38053, -0.21241),
+        c(1.84902, -2.97806, 1.83266, -3.32478, 0.42324, 8.38088, -0.14579),
         tolerance = 1e-3
       )
       expect_equal(
