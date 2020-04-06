@@ -4,6 +4,10 @@
 
 * `arima` (*stats*)
 
+## Changes to functions
+
+* Improve family detection in `model_info()` for *MCMCglmm*.
+
 ## Bug fixes
 
 * Fixed issue in `find_parameters()` and `clean_parameters()` for *brmsfit* models with specific variable name patterns.
