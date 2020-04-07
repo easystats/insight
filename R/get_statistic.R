@@ -580,6 +580,29 @@ get_statistic.bracl <- function(x, ...) {
 }
 
 
+#' @export
+get_statistic.mlogit <- function(x, ...) {
+  if (requireNamespace("mlogit", quietly = TRUE)) {
+    cs <- stats::coef(summary(x))
+
+    out <- data.frame(
+      Parameter = rownames(cs),
+      Statistic = as.vector(cs[, 3]),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+
+    out <- .remove_backticks_from_parameter_names(out)
+    attr(out, "statistic") <- find_statistic(x)
+    out
+  } else {
+    NULL
+  }
+}
+
+
+
+
 
 
 
