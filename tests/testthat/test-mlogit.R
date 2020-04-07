@@ -52,7 +52,7 @@ if (require("testthat") &&
     expect_equal(nrow(get_data(m2)), 4728)
     expect_equal(
       colnames(get_data(m1)),
-      c("mode", "price", "catch", "probabilities", "linpred")
+      c("mode", "price", "catch", "idx", "probabilities", "linpred")
     )
     expect_equal(
       colnames(get_data(m2)),
@@ -61,6 +61,7 @@ if (require("testthat") &&
         "price",
         "catch",
         "income",
+        "idx",
         "probabilities",
         "linpred"
       )
