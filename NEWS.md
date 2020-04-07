@@ -7,6 +7,7 @@
 ## Changes to functions
 
 * Improve family detection in `model_info()` for *MCMCglmm*.
+* Minor revisions to meet changes in *mlogit* package.
 
 ## Bug fixes
 
