@@ -1028,6 +1028,22 @@ get_data.bracl <- function(x, ...) {
 
 
 #' @export
+get_data.mlogit <- function(x, ...) {
+  mf <- tryCatch(
+    {
+      as.data.frame(stats::model.frame(x))
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, mf)
+}
+
+
+
+#' @export
 get_data.rma <- function(x, ...) {
   mf <- tryCatch(
     {
