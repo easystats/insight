@@ -1,5 +1,9 @@
 # insight 0.8.3
 
+## General
+
+* The function to calculate null-models for mixed effects models is now exported (`null_model()`.)
+
 ## New supported model classes
 
 * `arima` (*stats*)

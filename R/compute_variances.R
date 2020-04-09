@@ -382,17 +382,17 @@
   # see Nakagawa et al. 2017
 
   # in general want log(1+var(x)/mu^2)
-  null_model <- .null_model(x, verbose = verbose)
+  .null_model <- null_model(x, verbose = verbose)
 
   # check if null-model could be computed
-  if (!is.null(null_model)) {
-    if (inherits(null_model, "cpglmm")) {
+  if (!is.null(.null_model)) {
+    if (inherits(.null_model, "cpglmm")) {
       if (!requireNamespace("cplm", quietly = TRUE)) {
         stop("Package 'cplm' required. Please install it.")
       }
-      null_fixef <- unname(cplm::fixef(null_model))
+      null_fixef <- unname(cplm::fixef(.null_model))
     } else {
-      null_fixef <- unname(.collapse_cond(lme4::fixef(null_model)))
+      null_fixef <- unname(.collapse_cond(lme4::fixef(.null_model)))
     }
     mu <- exp(null_fixef)
   } else {
@@ -607,51 +607,6 @@
       0
     }
   )
-}
-
-
-
-
-# Null model is needed to calculate the mean for the model's response,
-# which we need to compute the distribution-specific variance
-# (see .variance_distributional())
-#
-#' @importFrom stats as.formula update reformulate
-.null_model <- function(model, verbose = TRUE) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
-
-  if (inherits(model, "MixMod")) {
-    nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
-    null.model <- stats::update(model, fixed = nullform)
-  } else if (inherits(model, "cpglmm")) {
-    nullform <- find_formula(model)[["random"]]
-    null.model <- stats::update(model, nullform)
-  } else {
-    f <- stats::formula(model)
-    resp <- find_response(model)
-    re.terms <- paste0("(", sapply(lme4::findbars(f), .safe_deparse), ")")
-    nullform <- stats::reformulate(re.terms, response = resp)
-    null.model <- tryCatch(
-      {
-        stats::update(model, nullform)
-      },
-      error = function(e) {
-        msg <- e$message
-        if (verbose) {
-          if (grepl("(^object)(.*)(not found$)", msg)) {
-            insight::print_color("Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n", "red")
-          } else if (grepl("^could not find function", msg)) {
-            insight::print_color("Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n", "red")
-          }
-        }
-        return(NULL)
-      }
-    )
-  }
-
-  null.model
 }
 
 

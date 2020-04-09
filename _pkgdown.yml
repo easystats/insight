@@ -92,4 +92,5 @@ reference:
   - clean_names
   - clean_parameters
   - download_model
+  - null_model
   - print_parameters
