@@ -15,6 +15,14 @@ null_model(model, verbose = TRUE)
 The null-model of \code{x}
 }
 \description{
-This function compute the null-model (i.e. \code(y ~ 1) for the
+This function compute the null-model (i.e. \code{(y ~ 1)}) for the
   fixed effects part) of a random-intercept model.
+}
+\examples{
+if (require("lme4")) {
+  data(sleepstudy)
+  m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+  summary(m)
+  summary(null_model(m))
+}
 }

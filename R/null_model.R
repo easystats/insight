@@ -1,7 +1,7 @@
 #' @title Compute intercept-only model for mixed models
 #' @name null_model
 #'
-#' @description This function compute the null-model (i.e. \code(y ~ 1) for the
+#' @description This function compute the null-model (i.e. \code{(y ~ 1)}) for the
 #'   fixed effects part) of a random-intercept model.
 #'
 #' @param x A mixed effects model.
@@ -10,12 +10,11 @@
 #' @return The null-model of \code{x}
 #'
 #' @examples
-#' library(lme4)
-#' data(sleepstudy)
-#' m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-#' summary(m)
-#'
-#' summary(null_model(m))
+#' if (require("lme4")) {
+#'   data(sleepstudy)
+#'   m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+#'   summary(m)
+#'   summary(null_model(m))
 #' }
 #' @importFrom stats as.formula update reformulate
 #' @export
