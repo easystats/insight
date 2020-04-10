@@ -89,6 +89,7 @@ find_statistic <- function(x, ...) {
     c(
       "aareg",
       "Arima",
+      "averaging",
       "betareg",
       "bife",
       "bracl",
@@ -243,27 +244,29 @@ find_statistic <- function(x, ...) {
 
   # statistic check -----------------------------------------------------------
 
-  if (class(x)[[1]] %in% unsupported.mods) {
+  model_class <- class(x)[[1]]
+
+  if (model_class %in% unsupported.mods) {
     return(NULL)
   }
 
-  if (class(x)[[1]] %in% t.mods) {
+  if (model_class %in% t.mods) {
     return("t-statistic")
   }
 
-  if (class(x)[[1]] %in% z.mods) {
+  if (model_class %in% z.mods) {
     return("z-statistic")
   }
 
-  if (class(x)[[1]] %in% f.mods) {
+  if (model_class %in% f.mods) {
     return("F-statistic")
   }
 
-  if (class(x)[[1]] %in% chi.mods) {
+  if (model_class %in% chi.mods) {
     return("chi-squared statistic")
   }
 
-  if (class(x)[[1]] %in% g.mods) {
+  if (model_class %in% g.mods) {
     if (model_info(x)$family %in% g.t.mods) {
       return("t-statistic")
     } else {
@@ -273,7 +276,7 @@ find_statistic <- function(x, ...) {
 
   # ambiguous cases -----------------------------------------------------------
 
-  if (class(x)[[1]] %in% unclear.mods) {
+  if (model_class %in% unclear.mods) {
     col_names <- colnames(as.data.frame(summary(x)$coefficients))
     t_names <-
       c(

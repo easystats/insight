@@ -4,6 +4,7 @@
 \alias{get_parameters}
 \alias{get_parameters.rqss}
 \alias{get_parameters.cgam}
+\alias{get_parameters.averaging}
 \alias{get_parameters.betareg}
 \alias{get_parameters.DirichletRegModel}
 \alias{get_parameters.clm2}
@@ -35,6 +36,8 @@ get_parameters(x, ...)
 \method{get_parameters}{rqss}(x, component = c("all", "conditional", "smooth_terms"), ...)
 
 \method{get_parameters}{cgam}(x, component = c("all", "conditional", "smooth_terms"), ...)
+
+\method{get_parameters}{averaging}(x, component = c("conditional", "full"), ...)
 
 \method{get_parameters}{betareg}(x, component = c("all", "conditional", "precision"), ...)
 

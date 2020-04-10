@@ -287,6 +287,13 @@ n_obs.feis <- function(x, ...) {
 
 
 #' @export
+n_obs.averaging <- function(x, ...) {
+  attr(x, "nobs")
+}
+
+
+
+#' @export
 n_obs.fixest <- function(x, ...) {
   x$nobs
 }

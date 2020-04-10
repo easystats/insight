@@ -28,6 +28,7 @@ is_model <- function(x) {
       "aov",
       "aovlist",
       "Arima",
+      "averaging",
       "bamlss",
       "bamlss.frame",
       "bayesmeta",

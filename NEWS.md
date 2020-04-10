@@ -6,7 +6,7 @@
 
 ## New supported model classes
 
-* `arima` (*stats*)
+* `arima` (*stats*), `averaging` (*MuMIn*)
 
 ## Changes to functions
 

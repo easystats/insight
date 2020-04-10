@@ -1159,6 +1159,21 @@ find_parameters.manova <- function(x, flatten = FALSE, ...) {
 }
 
 
+#' @rdname find_parameters
+#' @export
+find_parameters.averaging <- function(x, component = c("conditional", "full"), flatten = FALSE, ...) {
+  component <- match.arg(component)
+  cf <- stats::coef(x, full = component == "full")
+  out <- list(conditional = .remove_backticks_from_string(names(cf)))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
 #' @export
 find_parameters.mlm <- function(x, flatten = FALSE, ...) {
   cs <- stats::coef(summary(x))

@@ -190,6 +190,23 @@ get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_t
 # Special models ---------------------------------------------
 
 
+#' @rdname get_parameters
+#' @export
+get_parameters.averaging <- function(x, component = c("conditional", "full"), ...) {
+  component <- match.arg(component)
+  cf <- stats::coef(x, full = component == "full")
+
+  params <- data.frame(
+    Parameter = names(cf),
+    Estimate = unname(cf),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
 #' @export
 get_parameters.lrm <- function(x, ...) {
   tryCatch(

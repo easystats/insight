@@ -612,6 +612,31 @@ get_statistic.mlogit <- function(x, ...) {
 
 
 #' @export
+get_statistic.averaging <- function(x, component = c("conditional", "full"), ...) {
+  component <- match.arg(component)
+  params <- get_parameters(x, component = component)
+  s <-
+  if (component == "full") {
+    s <- summary(x)$coefmat.full
+  } else {
+    s <- summary(x)$coefmat.subset
+  }
+
+  out <- data.frame(
+    Parameter = params$Parameter,
+    Statistic = s[, 4],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+#' @export
 get_statistic.Arima <- function(x, ...) {
   params <- get_parameters(x)
   out <- data.frame(

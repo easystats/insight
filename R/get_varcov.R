@@ -336,6 +336,16 @@ get_varcov.brmsfit <- function(x, component = c("conditional", "zero_inflated", 
 
 
 #' @export
+get_varcov.averaging <- function(x, ...) {
+  if (is.null(attributes(x)$modelList)) {
+    warning("Can't calculate covariance matrix. Please use 'fit = TRUE' in 'model.avg()'.", call. = FALSE)
+  } else {
+    get_varcov.default(x)
+  }
+}
+
+
+#' @export
 get_varcov.rq <- function(x, ...) {
   s <- summary(x, covariance = TRUE)
   vc <- as.matrix(s$cov)

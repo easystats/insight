@@ -12,6 +12,7 @@
 \alias{find_parameters.bayesx}
 \alias{find_parameters.stanreg}
 \alias{find_parameters.sim.merMod}
+\alias{find_parameters.averaging}
 \alias{get_parameters.bayesx}
 \title{Find names of model parameters}
 \usage{
@@ -89,6 +90,8 @@ find_parameters(x, ...)
   parameters = NULL,
   ...
 )
+
+\method{find_parameters}{averaging}(x, component = c("conditional", "full"), flatten = FALSE, ...)
 
 \method{get_parameters}{bayesx}(
   x,
