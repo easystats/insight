@@ -614,6 +614,16 @@ model_info.Arima <- function(x, ...) {
 
 
 #' @export
+model_info.averaging <- function(x, ...) {
+  if (is.null(attributes(x)$modelList)) {
+    warning("Can't calculate covariance matrix. Please use 'fit = TRUE' in 'model.avg()'.", call. = FALSE)
+    return(NULL)
+  }
+  model_info.default(x = attributes(x)$modelList[[1]])
+}
+
+
+#' @export
 model_info.cglm <- function(x, ...) {
   link <- parse(text = .safe_deparse(x$call))[[1]]$link
   method <- parse(text = .safe_deparse(x$call))[[1]]$method

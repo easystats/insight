@@ -615,7 +615,6 @@ get_statistic.mlogit <- function(x, ...) {
 get_statistic.averaging <- function(x, component = c("conditional", "full"), ...) {
   component <- match.arg(component)
   params <- get_parameters(x, component = component)
-  s <-
   if (component == "full") {
     s <- summary(x)$coefmat.full
   } else {
