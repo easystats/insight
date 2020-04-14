@@ -361,9 +361,13 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
   cor_sd <- grepl("(sd_|cor_)(.*)", out$Cleaned_Parameter)
   if (any(cor_sd)) {
-    # out$Cleaned_Parameter[cor_sd] <- gsub("(sd_|cor_)(.*)__(.*)", "\\2_\\3", out$Cleaned_Parameter[cor_sd])
     out$Cleaned_Parameter[cor_sd] <- gsub("^(sd_|cor_)(.*?)__(.*)", "\\3", out$Parameter[cor_sd], perl = TRUE)
     out$Group[cor_sd] <- paste("SD/Cor:", gsub("^(sd_|cor_)(.*?)__(.*)", "\\2", out$Parameter[cor_sd], perl = TRUE))
+    # replace "__" by "~"
+    cor_only <- grepl("^cor_", out$Parameter[cor_sd])
+    if (any(cor_only)) {
+      out$Cleaned_Parameter[which(cor_sd)[cor_only]] <- sub("__", " ~ ", out$Cleaned_Parameter[which(cor_sd)[cor_only]])
+    }
   }
 
   # extract group-names from random effects and clean random effects
@@ -450,7 +454,7 @@ clean_parameters.stanmvreg <- function(x, ...) {
     out$Cleaned_Parameter[which(cor_sd)] <- parm1
     rand_cor <- parm1 != parm2
     if (any(rand_cor)) {
-      out$Cleaned_Parameter[which(cor_sd)[rand_cor]] <- paste0(parm1[rand_cor], ", ", parm2[rand_cor])
+      out$Cleaned_Parameter[which(cor_sd)[rand_cor]] <- paste0(parm1[rand_cor], " ~ ", parm2[rand_cor])
     }
     out$Group[cor_sd] <- paste("SD/Cor:", gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\1", out$Parameter[cor_sd], perl = TRUE))
   }
