@@ -7,9 +7,9 @@
 null_model(model, verbose = TRUE)
 }
 \arguments{
-\item{verbose}{Toggle off warnings.}
+\item{model}{A mixed effects model.}
 
-\item{x}{A mixed effects model.}
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 The null-model of \code{x}

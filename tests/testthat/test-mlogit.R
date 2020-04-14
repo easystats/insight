@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("mlogit")) {
-  context("insight, polr")
-
   data("Fishing")
   Fish <-
     mlogit.data(Fishing,
@@ -39,7 +37,7 @@ if (require("testthat") &&
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), Fish$mode)
+    expect_equal(get_response(m1), as.vector(Fish$mode))
   })
 
   test_that("link_inverse", {

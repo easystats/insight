@@ -4,7 +4,7 @@
 #' @description This function compute the null-model (i.e. \code{(y ~ 1)}) for the
 #'   fixed effects part) of a random-intercept model.
 #'
-#' @param x A mixed effects model.
+#' @param model A mixed effects model.
 #' @param verbose Toggle off warnings.
 #'
 #' @return The null-model of \code{x}

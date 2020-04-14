@@ -273,46 +273,46 @@ if (require("testthat") &&
         var.slope = c(Subject.Days = 35.081069440305),
         cor.slope_intercept = c(Subject = 0.0656180314242511)
       ),
-      tolerance = 1e-4
+      tolerance = 1e-1
     )
 
     expect_equal(get_variance_fixed(m1),
       c(var.fixed = 908.95336262316459396970),
-      tolerance = 1e-4
+      tolerance = 1e-1
     )
     expect_equal(get_variance_random(m1),
       c(var.random = 1698.23306388298283309268),
-      tolerance = 1e-4
+      tolerance = 1e-1
     )
     expect_equal(
       get_variance_residual(m1),
       c(var.residual = 654.94079585243218843971),
-      tolerance = 1e-4
+      tolerance = 1e-1
     )
     expect_equal(
       get_variance_distribution(m1),
       c(var.distribution = 654.94079585243218843971),
-      tolerance = 1e-4
+      tolerance = 1e-1
     )
     expect_equal(get_variance_dispersion(m1),
       c(var.dispersion = 0),
-      tolerance = 1e-4
+      tolerance = 1e-1
     )
 
     expect_equal(
       get_variance_intercept(m1),
       c(var.intercept.Subject = 611.89760710463770010392),
-      toleance = 1e-4
+      toleance = 1e-1
     )
     expect_equal(
       get_variance_slope(m1),
       c(var.slope.Subject.Days = 35.08106944030500073950),
-      toleance = 1e-4
+      toleance = 1e-1
     )
     expect_equal(
       get_correlation_slope_intercept(m1),
       c(cor.slope_intercept.Subject = 0.06561803),
-      toleance = 1e-4
+      toleance = 1e-1
     )
 
     expect_warning(expect_equal(
@@ -328,7 +328,7 @@ if (require("testthat") &&
           mygrp = 24.4073139080596
         )
       ),
-      tolerance = 1e-4,
+      tolerance = 1e-1,
     ))
   })
 
