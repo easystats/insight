@@ -441,6 +441,21 @@ clean_parameters.stanmvreg <- function(x, ...) {
   }
 
 
+  # correlation and sd
+
+  cor_sd <- grepl("^Sigma\\[(.*)", out$Cleaned_Parameter)
+  if (any(cor_sd)) {
+    parm1 <- gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\2", out$Parameter[cor_sd], perl = TRUE)
+    parm2 <- gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\3", out$Parameter[cor_sd], perl = TRUE)
+    out$Cleaned_Parameter[which(cor_sd)] <- parm1
+    rand_cor <- parm1 != parm2
+    if (any(rand_cor)) {
+      out$Cleaned_Parameter[which(cor_sd)[rand_cor]] <- paste0(parm1[rand_cor], ", ", parm2[rand_cor])
+    }
+    out$Group[cor_sd] <- paste("SD/Cor:", gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\1", out$Parameter[cor_sd], perl = TRUE))
+  }
+
+
   # extract group-names from random effects and clean random effects
 
   rand_effects <- grepl("^b\\[", out$Cleaned_Parameter)

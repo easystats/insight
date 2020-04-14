@@ -883,11 +883,12 @@ find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), co
 
   cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
+  rand_sd <- fe[grepl(pattern = "^Sigma\\[", fe, perl = TRUE)]
   smooth_terms <- fe[grepl(pattern = "^smooth_sd", fe, perl = TRUE)]
 
   l <- .compact_list(list(
     conditional = cond,
-    random = rand,
+    random = c(rand, rand_sd),
     smooth_terms = smooth_terms
   ))
 
