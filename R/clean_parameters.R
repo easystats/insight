@@ -361,8 +361,9 @@ clean_parameters.stanmvreg <- function(x, ...) {
 
   cor_sd <- grepl("(sd_|cor_)(.*)", out$Cleaned_Parameter)
   if (any(cor_sd)) {
-    out$Cleaned_Parameter[cor_sd] <- gsub("(sd_|cor_)(.*)__(.*)", "\\2_\\3", out$Cleaned_Parameter[cor_sd])
-    out$Group[cor_sd] <- "SD/Cor"
+    # out$Cleaned_Parameter[cor_sd] <- gsub("(sd_|cor_)(.*)__(.*)", "\\2_\\3", out$Cleaned_Parameter[cor_sd])
+    out$Cleaned_Parameter[cor_sd] <- gsub("^(sd_|cor_)(.*?)__(.*)", "\\3", out$Parameter[cor_sd], perl = TRUE)
+    out$Group[cor_sd] <- paste("SD/Cor:", gsub("^(sd_|cor_)(.*?)__(.*)", "\\2", out$Parameter[cor_sd], perl = TRUE))
   }
 
   # extract group-names from random effects and clean random effects

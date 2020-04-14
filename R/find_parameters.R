@@ -747,12 +747,14 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
   sigma <- fe[grepl(pattern = "^sigma_", fe, perl = TRUE)]
   rand_sd <- fe[grepl(pattern = "(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
   randzi_sd <- fe[grepl(pattern = "^sd_(.*_zi)", fe, perl = TRUE)]
+  rand_cor <- fe[grepl(pattern = "(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
+  randzi_cor <- fe[grepl(pattern = "^cor_(.*_zi)", fe, perl = TRUE)]
 
   l <- .compact_list(list(
     conditional = cond,
-    random = c(rand, rand_sd),
+    random = c(rand, rand_sd, rand_cor),
     zero_inflated = zi,
-    zero_inflated_random = c(randzi, randzi_sd),
+    zero_inflated_random = c(randzi, randzi_sd, randzi_cor),
     simplex = simo,
     smooth_terms = smooth_terms,
     sigma = sigma,

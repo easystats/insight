@@ -566,7 +566,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "Intercept: persons",
               "Intercept: persons",
               "Intercept: persons",
-              "SD/Cor",
+              "SD/Cor: persons",
               "",
               "",
               "",
@@ -574,7 +574,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "Intercept: persons",
               "Intercept: persons",
               "Intercept: persons",
-              "SD/Cor"
+              "SD/Cor: persons"
             ),
             Cleaned_Parameter = c(
               "(Intercept)",
@@ -584,7 +584,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "persons.2",
               "persons.3",
               "persons.4",
-              "persons_Intercept",
+              "(Intercept)",
               "(Intercept)",
               "child",
               "camper",
@@ -592,7 +592,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "persons.2",
               "persons.3",
               "persons.4",
-              "persons_zi_Intercept"
+              "zi_Intercept"
             )
           ),
           class = c("clean_parameters", "data.frame"),
