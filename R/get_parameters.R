@@ -1424,27 +1424,33 @@ get_parameters.bcplm <- function(x, parameters = NULL, ...) {
 }
 
 
-#' @importFrom stats coef
 #' @rdname find_parameters
 #' @export
-get_parameters.bayesx <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
+get_parameters.bayesx <- function(x, component = c("conditional", "smooth_terms", "all"), ...) {
   component <- match.arg(component)
 
-  smooth_terms <- find_parameters(x, component = "smooth_terms", flatten = TRUE)
+  smooth_dat <- data.frame(
+    Parameter = find_parameters(x, component = "smooth_terms", flatten = TRUE),
+    Estimate = x$smooth.hyp[, 1],
+    Component = "smooth_terms",
+    stringsAsFactors = FALSE
+  )
 
-  fixed_dat <- attr(x$fixed.effects, "sample")
-  smooth_dat <- do.call(cbind, lapply(smooth_terms, function(i) {
-    dat <- data.frame(x$effects[[i]]$Mean)
-    colnames(dat) <- i
-    dat
-  }))
+  fixed_dat <- data.frame(
+    Parameter = find_parameters(x, component = "conditional", flatten = TRUE),
+    Estimate = x$fixed.effects[, 1],
+    Component = "conditional",
+    stringsAsFactors = FALSE
+  )
 
-  switch(
+  params <- switch(
     component,
-    "all" = cbind(fixed_dat, smooth_dat),
+    "all" = rbind(fixed_dat, smooth_dat),
     "conditional" = fixed_dat,
     "smooth_terms" = smooth_dat
   )
+
+  .remove_backticks_from_parameter_names(params)
 }
 
 

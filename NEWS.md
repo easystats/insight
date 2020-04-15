@@ -12,6 +12,7 @@
 
 * Improve family detection in `model_info()` for *MCMCglmm*.
 * Minor revisions to meet changes in *mlogit* package.
+* Improve support for *bayesx* and *BBmm* models.
 
 ## Bug fixes
 

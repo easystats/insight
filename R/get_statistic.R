@@ -439,6 +439,24 @@ get_statistic.survreg <- function(x, ...) {
 
 
 #' @export
+get_statistic.BBmm <- function(x, ...) {
+  parms <- get_parameters(x)
+  s <- summary(x)
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = s$fixed.coefficients[, 3],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+#' @export
 get_statistic.flexsurvreg <- function(x, ...) {
   parms <- get_parameters(x)
   se <- x$res[, "se"]
@@ -633,6 +651,22 @@ get_statistic.averaging <- function(x, component = c("conditional", "full"), ...
   out
 }
 
+
+
+#' @importFrom stats coef
+#' @rdname find_parameters
+#' @export
+get_statistic.bayesx <- function(x, ...) {
+  out <- data.frame(
+    Parameter = find_parameters(x, component = "conditional", flatten = TRUE),
+    Statistic = x$fixed.effects[, 3],
+    stringsAsFactors = FALSE
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
 
 
 #' @export

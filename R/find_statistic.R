@@ -31,6 +31,7 @@ find_statistic <- function(x, ...) {
 
   t.mods <-
     c(
+      "bayesx",
       "BBreg",
       "BBmm",
       "bcplm",
