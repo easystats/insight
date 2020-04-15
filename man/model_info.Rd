@@ -37,7 +37,7 @@ Retrieve information from model objects.
      \item \code{is_dirichlet}: family is dirichlet
      \item \code{is_exponential}: family is exponential (e.g. Gamma or Weibull)
      \item \code{is_logit}: model has logit link
-     \item \code{is_progit}: model has probit link
+     \item \code{is_probit}: model has probit link
      \item \code{is_linear}: family is gaussian
      \item \code{is_tweedie}: family is tweedie
      \item \code{is_ordinal}: family is ordinal or cumulative link
