@@ -17,4 +17,5 @@ print.easystats_check <- function(x, ...) {
   }
 
   print_color(text, color)
+  invisible(x)
 }
