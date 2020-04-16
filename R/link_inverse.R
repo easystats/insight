@@ -448,7 +448,21 @@ link_inverse.glmmTMB <- function(x, ...) {
 
 #' @export
 link_inverse.MCMCglmm <- function(x, ...) {
-  NULL
+  switch(
+    x$Residual$original.family,
+    "cengaussian" = ,
+    "gaussian" = stats::gaussian(link = "identity")$linkinv,
+    "categorical" = ,
+    "multinomial" = ,
+    "zibinomial" = ,
+    "ordinal" = stats::make.link("logit")$linkinv,
+    "poisson" = ,
+    "cenpoisson" = ,
+    "zipoisson" = ,
+    "zapoisson" = ,
+    "ztpoisson" = ,
+    "hupoisson" = stats::make.link("log")$linkinv
+  )
 }
 
 

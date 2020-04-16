@@ -288,6 +288,26 @@ link_function.mixor <- link_function.clm
 
 
 #' @export
+link_function.MCMCglmm <- function(x, ...) {
+  switch(
+    x$Residual$original.family,
+    "cengaussian" = ,
+    "gaussian" = stats::gaussian(link = "identity")$linkfun,
+    "categorical" = ,
+    "multinomial" = ,
+    "zibinomial" = ,
+    "ordinal" = stats::make.link("logit")$linkfun,
+    "poisson" = ,
+    "cenpoisson" = ,
+    "zipoisson" = ,
+    "zapoisson" = ,
+    "ztpoisson" = ,
+    "hupoisson" = stats::make.link("log")$linkfun
+  )
+}
+
+
+#' @export
 link_function.cglm <- function(x, ...) {
   link <- parse(text = .safe_deparse(x$call))[[1]]$link
   method <- parse(text = .safe_deparse(x$call))[[1]]$method

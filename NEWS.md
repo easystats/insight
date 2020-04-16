@@ -10,7 +10,7 @@
 
 ## Changes to functions
 
-* Improve family detection in `model_info()` for *MCMCglmm*.
+* Improve family detection in `model_info()`, `link_inverse()` and `link_function()` for *MCMCglmm*.
 * Minor revisions to meet changes in *mlogit* package.
 * Improve support for *bayesx* and *BBmm* models.
 
