@@ -134,9 +134,12 @@
   f_predictors <- sub(f_response, "", f_string, fixed = TRUE)
 
   if (grepl("|", f_predictors, fixed = TRUE)) {
+    # get first parentheses. for mixed models, might not be the random effects
+    # e.g.: (country + cohort + country * cohort) + age + (1 + age_c | mergeid)
+    first_parentheses <- gsub("^\\((.*?)\\)(.*)", "\\1", .safe_deparse(f[[3]]))
     # intercept only model, w/o "1" in formula notation?
     # e.g. "Reaction ~ (1 + Days | Subject)"
-    if (length(f) > 2 && grepl("^\\(", .safe_deparse(f[[3]]))) {
+    if (length(f) > 2 && grepl("\\|", first_parentheses)) {
       # check if we have any terms *after* random effects, e.g.
       # social ~ (1|school) + open + extro + agree + school
       if (.formula_empty_after_random_effect(f_predictors)) {
