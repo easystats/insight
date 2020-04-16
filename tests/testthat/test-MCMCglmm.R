@@ -83,7 +83,7 @@ if (require("testthat") &&
   })
 
   test_that("linkfun", {
-    expect_null(link_function(m1))
+    expect_equal(link_function(m1)(.5), .5, tolerance = 1e-1)
   })
 
   test_that("find_parameters", {
