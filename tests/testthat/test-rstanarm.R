@@ -192,7 +192,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         find_parameters(m1),
         list(
           conditional = c("(Intercept)", "size", "period2", "period3", "period4"),
-          random = sprintf("b[(Intercept) herd:%i]", 1:15)
+          random = c(sprintf("b[(Intercept) herd:%i]", 1:15), "Sigma[herd:(Intercept),(Intercept)]")
         )
       )
       expect_equal(
@@ -203,7 +203,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
           "period2",
           "period3",
           "period4",
-          sprintf("b[(Intercept) herd:%i]", 1:15)
+          sprintf("b[(Intercept) herd:%i]", 1:15),
+          "Sigma[herd:(Intercept),(Intercept)]"
         )
       )
     })
@@ -221,7 +222,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
           "period2",
           "period3",
           "period4",
-          sprintf("b[(Intercept) herd:%i]", 1:15)
+          sprintf("b[(Intercept) herd:%i]", 1:15),
+          "Sigma[herd:(Intercept),(Intercept)]"
         )
       )
     })

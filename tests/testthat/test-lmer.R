@@ -1,10 +1,8 @@
 if (require("testthat") &&
   require("insight") &&
   require("lme4")) {
-  context("insight, find_predictors")
 
   data(sleepstudy)
-
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
   sleepstudy$mysubgrp <- NA
@@ -258,40 +256,37 @@ if (require("testthat") &&
   })
 
   test_that("get_variance", {
-    skip_on_cran()
-    skip_on_travis()
-
     expect_equal(
       get_variance(m1),
       list(
-        var.fixed = 908.953362623165,
-        var.random = 1698.23306388298,
-        var.residual = 654.940795852432,
-        var.distribution = 654.940795852432,
+        var.fixed = 908.9534,
+        var.random = 1698.084,
+        var.residual = 654.94,
+        var.distribution = 654.94,
         var.dispersion = 0,
-        var.intercept = c(Subject = 611.897607104638),
-        var.slope = c(Subject.Days = 35.081069440305),
-        cor.slope_intercept = c(Subject = 0.0656180314242511)
+        var.intercept = c(Subject = 612.1002),
+        var.slope = c(Subject.Days = 35.07171),
+        cor.slope_intercept = c(Subject = 0.06555124)
       ),
       tolerance = 1e-1
     )
 
     expect_equal(get_variance_fixed(m1),
-      c(var.fixed = 908.95336262316459396970),
+      c(var.fixed = 908.9534),
       tolerance = 1e-1
     )
     expect_equal(get_variance_random(m1),
-      c(var.random = 1698.23306388298283309268),
+      c(var.random = 1698.084),
       tolerance = 1e-1
     )
     expect_equal(
       get_variance_residual(m1),
-      c(var.residual = 654.94079585243218843971),
+      c(var.residual = 654.94),
       tolerance = 1e-1
     )
     expect_equal(
       get_variance_distribution(m1),
-      c(var.distribution = 654.94079585243218843971),
+      c(var.distribution = 654.94),
       tolerance = 1e-1
     )
     expect_equal(get_variance_dispersion(m1),
@@ -301,31 +296,31 @@ if (require("testthat") &&
 
     expect_equal(
       get_variance_intercept(m1),
-      c(var.intercept.Subject = 611.89760710463770010392),
-      toleance = 1e-1
+      c(var.intercept.Subject = 612.1002),
+      tolerance = 1e-1
     )
     expect_equal(
       get_variance_slope(m1),
-      c(var.slope.Subject.Days = 35.08106944030500073950),
-      toleance = 1e-1
+      c(var.slope.Subject.Days = 35.07171),
+      tolerance = 1e-1
     )
     expect_equal(
       get_correlation_slope_intercept(m1),
-      c(cor.slope_intercept.Subject = 0.06561803),
-      toleance = 1e-1
+      c(cor.slope_intercept.Subject = 0.06555124),
+      tolerance = 1e-1
     )
 
     expect_warning(expect_equal(
       get_variance(m2),
       list(
-        var.fixed = 889.329700216337,
-        var.residual = 941.817768377025,
-        var.distribution = 941.817768377025,
+        var.fixed = 889.3301,
+        var.residual = 941.8135,
+        var.distribution = 941.8135,
         var.dispersion = 0,
         var.intercept = c(
           `mysubgrp:mygrp` = 0,
-          Subject = 1357.35782386825,
-          mygrp = 24.4073139080596
+          Subject = 1357.4257,
+          mygrp = 24.4064
         )
       ),
       tolerance = 1e-1,
