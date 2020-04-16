@@ -2,7 +2,6 @@
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
   if (require("testthat") && require("insight") && require("glmmTMB")) {
-    context("insight, glmmTMB")
     m1 <- download_model("glmmTMB_spatial_1")
 
     test_that("find_weights", {

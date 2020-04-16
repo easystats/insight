@@ -126,7 +126,7 @@
 .get_fixed_effects <- function(f) {
   f_string <- .safe_deparse(f)
 
-  # for some wird brms-models, we also have a "|" in the response.
+  # for some weird brms-models, we also have a "|" in the response.
   # in order to check for "|" only in the random effects, we have
   # to remove the response here...
 
@@ -134,12 +134,19 @@
   f_predictors <- sub(f_response, "", f_string, fixed = TRUE)
 
   if (grepl("|", f_predictors, fixed = TRUE)) {
+    if (length(f) > 2) {
+      f_cond <- .safe_deparse(f[[3]])
+    } else {
+      f_cond <- .safe_deparse(f[[length(f)]])
+    }
     # get first parentheses. for mixed models, might not be the random effects
     # e.g.: (country + cohort + country * cohort) + age + (1 + age_c | mergeid)
-    first_parentheses <- gsub("^\\((.*?)\\)(.*)", "\\1", .safe_deparse(f[[3]]))
+    first_parentheses <- gsub("^\\((.*?)\\)(.*)", "\\1", f_cond)
+    has_bar <- grepl("\\|", first_parentheses)
+    starts_with_parantheses <- grepl("^\\(", f_cond)
     # intercept only model, w/o "1" in formula notation?
     # e.g. "Reaction ~ (1 + Days | Subject)"
-    if (length(f) > 2 && grepl("\\|", first_parentheses)) {
+    if (length(f) > 2 && starts_with_parantheses && has_bar) {
       # check if we have any terms *after* random effects, e.g.
       # social ~ (1|school) + open + extro + agree + school
       if (.formula_empty_after_random_effect(f_predictors)) {
