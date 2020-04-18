@@ -2,7 +2,6 @@
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
   if (require("testthat") && require("insight") && require("gbm")) {
-    context("insight, gbm")
 
     set.seed(102) # for reproducibility
     m1 <- gbm(

@@ -1,3 +1,5 @@
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
 if (require("testthat") &&
   require("insight") &&
   require("lme4") &&
@@ -284,21 +286,23 @@ if (require("testthat") &&
       tolerance = 1e-1
     )
 
-    expect_warning(expect_equal(
-      get_variance(m2),
-      list(
-        var.fixed = 889.3301,
-        var.residual = 941.8135,
-        var.distribution = 941.8135,
-        var.dispersion = 0,
-        var.intercept = c(
-          `mysubgrp:mygrp` = 0,
-          Subject = 1357.4257,
-          mygrp = 24.4064
-        )
-      ),
-      tolerance = 1e-1,
-    ))
+    if (.runThisTest || Sys.getenv("USER") == "travis") {
+      expect_warning(expect_equal(
+        get_variance(m2),
+        list(
+          var.fixed = 889.3301,
+          var.residual = 941.8135,
+          var.distribution = 941.8135,
+          var.dispersion = 0,
+          var.intercept = c(
+            `mysubgrp:mygrp` = 0,
+            Subject = 1357.4257,
+            mygrp = 24.4064
+          )
+        ),
+        tolerance = 1e-1,
+      ))
+    }
   })
 
   test_that("find_algorithm", {
