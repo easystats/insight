@@ -48,22 +48,41 @@ if (require("testthat") &&
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 4728)
     expect_equal(nrow(get_data(m2)), 4728)
-    expect_equal(
-      colnames(get_data(m1)),
-      c("mode", "price", "catch", "idx", "probabilities", "linpred")
-    )
-    expect_equal(
-      colnames(get_data(m2)),
-      c(
-        "mode",
-        "price",
-        "catch",
-        "income",
-        "idx",
-        "probabilities",
-        "linpred"
+
+    if (packageVersion("mlogit") <= "1.0-3.1") {
+      expect_equal(
+        colnames(get_data(m1)),
+        c("mode", "price", "catch", "probabilities", "linpred")
       )
-    )
+      expect_equal(
+        colnames(get_data(m2)),
+        c(
+          "mode",
+          "price",
+          "catch",
+          "income",
+          "probabilities",
+          "linpred"
+        )
+      )
+    } else {
+      expect_equal(
+        colnames(get_data(m1)),
+        c("mode", "price", "catch", "idx", "probabilities", "linpred")
+      )
+      expect_equal(
+        colnames(get_data(m2)),
+        c(
+          "mode",
+          "price",
+          "catch",
+          "income",
+          "idx",
+          "probabilities",
+          "linpred"
+        )
+      )
+    }
   })
 
   test_that("find_formula", {
