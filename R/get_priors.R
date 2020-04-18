@@ -231,7 +231,8 @@ get_priors.BFBayesFactor <- function(x, ...) {
   switch(
     .classify_BFBayesFactor(x),
     "correlation" = names(prior) <- "rho",
-    "ttest" = names(prior) <- "Difference"
+    "ttest" = names(prior) <- "Difference",
+    "meta" = names(prior) <- "Effect"
   )
 
   data.frame(
