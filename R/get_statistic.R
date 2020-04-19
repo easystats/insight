@@ -374,7 +374,7 @@ get_statistic.cgam <- function(x, component = c("all", "conditional", "smooth_te
   )
 
   if (component != "all") {
-    out <- out[out$Component == component, ]
+    out <- out[out$Component == component, , drop = FALSE]
   }
 
   attr(out, "statistic") <- find_statistic(x)
@@ -517,7 +517,7 @@ get_statistic.clm2 <- function(x, component = c("all", "conditional", "scale"), 
   )
 
   if (component != "all") {
-    out <- out[out$Component == component, ]
+    out <- out[out$Component == component, , drop = FALSE]
   }
 
   attr(out, "statistic") <- find_statistic(x)
@@ -877,7 +877,7 @@ get_statistic.rqss <- function(x, component = c("all", "conditional", "smooth_te
   )
 
   if (component != "all") {
-    out <- out[out$Component == component, ]
+    out <- out[out$Component == component, , drop = FALSE]
   }
 
   attr(out, "statistic") <- find_statistic(x)
@@ -992,7 +992,7 @@ get_statistic.glmx <- function(x, component = c("all", "conditional", "extra"), 
   )
 
   if (component != "all") {
-    out <- out[out$Component == component, ]
+    out <- out[out$Component == component, , drop = FALSE]
   }
 
   attr(out, "statistic") <- find_statistic(x)
@@ -1108,7 +1108,7 @@ get_statistic.betareg <- function(x, component = c("all", "conditional", "precis
   )
 
   if (component != "all") {
-    out <- out[out$Component == component, ]
+    out <- out[out$Component == component, , drop = FALSE]
   }
 
   attr(out, "statistic") <- find_statistic(x)
@@ -1141,7 +1141,7 @@ get_statistic.DirichletRegModel <- function(x, component = c("all", "conditional
   }
 
   if (component != "all") {
-    out <- out[out$Component == component, ]
+    out <- out[out$Component == component, , drop = FALSE]
   }
 
   attr(out, "statistic") <- find_statistic(x)

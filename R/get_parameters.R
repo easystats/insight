@@ -285,7 +285,7 @@ get_parameters.glmx <- function(x, component = c("all", "conditional", "extra"),
   )
 
   if (component != "all") {
-    params <- params[params$Component == component, ]
+    params <- params[params$Component == component, , drop = FALSE]
   }
 
   .remove_backticks_from_parameter_names(params)
@@ -343,7 +343,7 @@ get_parameters.betareg <- function(x, component = c("all", "conditional", "preci
   )
 
   if (component != "all") {
-    params <- params[params$Component == component, ]
+    params <- params[params$Component == component, , drop = FALSE]
   }
 
   .remove_backticks_from_parameter_names(params)
@@ -381,7 +381,7 @@ get_parameters.DirichletRegModel <- function(x, component = c("all", "conditiona
   }
 
   if (component != "all") {
-    params <- params[params$Component == component, ]
+    params <- params[params$Component == component, , drop = FALSE]
   }
 
   .remove_backticks_from_parameter_names(params)
@@ -535,7 +535,7 @@ get_parameters.clm2 <- function(x, component = c("all", "conditional", "scale"),
   )
 
   if (component != "all") {
-    params <- params[params$Component == component, ]
+    params <- params[params$Component == component, , drop = FALSE]
   }
 
   .remove_backticks_from_parameter_names(params)
