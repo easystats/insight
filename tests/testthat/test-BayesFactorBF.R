@@ -2,7 +2,7 @@ if (require("testthat") &&
   require("insight") &&
   require("stats") &&
   require("BayesFactor")) {
-  context("BF correlation")
+
   x <- correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
@@ -36,7 +36,6 @@ if (require("testthat") &&
 
 
   # ---------------------------
-  context("BF t.test two samples")
   data(chickwts)
   chickwts <-
     chickwts[chickwts$feed %in% c("horsebean", "linseed"), ]
@@ -54,7 +53,6 @@ if (require("testthat") &&
 
 
   # ---------------------------
-  context("BF t.test meta-analytic")
   t <- c(-.15, 2.39, 2.42, 2.43)
   N <- c(100, 150, 97, 99)
   x <- meta.ttestBF(t = t, n1 = N, rscale = 1)
@@ -69,7 +67,6 @@ if (require("testthat") &&
   })
 
   # ---------------------------
-  context("BF ANOVA")
   data(ToothGrowth)
   ToothGrowth$dose <- factor(ToothGrowth$dose)
   levels(ToothGrowth$dose) <- c("Low", "Medium", "High")
@@ -89,7 +86,6 @@ if (require("testthat") &&
 
 
   # ---------------------------
-  context("BF ANOVA Random")
   data(puzzles)
   x <- anovaBF(RT ~ shape * color + ID, data = puzzles, whichRandom = "ID")
 
@@ -168,7 +164,6 @@ if (require("testthat") &&
 
 
   # ---------------------------
-  context("BF lm")
   x <- lmBF(len ~ supp + dose, data = ToothGrowth)
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
