@@ -114,6 +114,20 @@ if (require("testthat") &&
     )
   })
 
+  test_that("get_parameters", {
+    expect_equal(
+      find_parameters(x[4]),
+      list(
+        conditional = c("shape-round", "shape-square", "color-color", "color-monochromatic",
+                        "shape:color-round.&.color", "shape:color-round.&.monochromatic",
+                        "shape:color-square.&.color", "shape:color-square.&.monochromatic"),
+        random = c("ID-1", "ID-2", "ID-3", "ID-4", "ID-5", "ID-6", "ID-7",
+                   "ID-8", "ID-9", "ID-10", "ID-11", "ID-12"),
+        extra = c("mu", "sig2", "g_shape", "g_color", "g_ID", "g_shape:color")
+      )
+    )
+  })
+
   test_that("find_response", {
     expect_equal(find_response(x), "RT")
   })
