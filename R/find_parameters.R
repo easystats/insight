@@ -677,6 +677,7 @@ find_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random
 
     params <- colnames(posteriors)
     vars <- find_variables(x, effects = "all")
+    interactions <- find_interactions(x)
     dat <- get_data(x)
 
     if ("conditional" %in% names(vars)) {
@@ -687,6 +688,13 @@ find_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random
           i
         }
       }))
+    }
+
+    # add interaction terms to conditional
+    if ("conditional" %in% names(interactions)) {
+      for (i in interactions$conditional) {
+        conditional <- c(conditional, params[grepl(paste0("^\\Q", i, "\\E"), params)])
+      }
     }
 
     if ("random" %in% names(vars)) {

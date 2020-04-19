@@ -20,6 +20,7 @@
 * Fixed issue in `format_ci()` when confidence interval only contained `NA`s and `width` was set to `"auto"`.
 * Fixed issue in `find_formula()` for mixed models when formula contained parentheses in the non-random parts, around a certain set of predictors.
 * Fixed issue in `get_priors.BFBayesFactor()` for `BFMetat` class.
+* Fixed issue in `clean_parameters.BFBayesFactor()` when model contained interaction terms and these were assigned to the "extra" component.
 
 # insight 0.8.2
 
