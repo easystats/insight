@@ -54,7 +54,3 @@ null_model <- function(model, verbose = TRUE) {
 
   null.model
 }
-
-
-
-

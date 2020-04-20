@@ -118,8 +118,10 @@ if (require("testthat") &&
     )
     expect_equal(
       get_statistic(m1)$Component,
-      c("conditional", "conditional", "conditional", "conditional",
-        "conditional", "zero_inflated", "zero_inflated", "zero_inflated"),
+      c(
+        "conditional", "conditional", "conditional", "conditional",
+        "conditional", "zero_inflated", "zero_inflated", "zero_inflated"
+      ),
       tolerance = 1e-3
     )
   })
@@ -137,8 +139,10 @@ if (require("testthat") &&
       )
       expect_equal(
         get_statistic(m2)$Component,
-        c("conditional", "conditional", "conditional", "conditional",
-          "conditional", "conditional", "zero_inflated"),
+        c(
+          "conditional", "conditional", "conditional", "conditional",
+          "conditional", "conditional", "zero_inflated"
+        ),
         tolerance = 1e-3
       )
     })

@@ -415,29 +415,23 @@
     {
       vv <- switch(
         faminfo$family,
-
         # (zero-inflated) poisson
         `zero-inflated poisson` = ,
         poisson = .variance_family_poisson(x, mu, faminfo),
-
         # hurdle-poisson
         `hurdle poisson` = ,
         truncated_poisson = stats::family(x)$variance(sig),
-
         # Gamma, exponential
         Gamma = stats::family(x)$variance(sig),
-
         # (zero-inflated) negative binomial
         `zero-inflated negative binomial` = ,
         `negative binomial` = ,
         genpois = ,
         nbinom1 = ,
         nbinom2 = .variance_family_nbinom(x, mu, sig, faminfo),
-
         # other distributions
         tweedie = .variance_family_tweedie(x, mu, sig),
         beta = .variance_family_beta(x, mu, sig),
-
         # default variance for non-captured distributions
         .variance_family_default(x, mu, verbose)
       )

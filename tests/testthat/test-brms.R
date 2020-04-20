@@ -363,16 +363,20 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       )
       expect_equal(
         colnames(get_parameters(m4, effects = "all")),
-        c("b_Intercept", "b_child", "b_camper", "r_persons.1.Intercept.",
+        c(
+          "b_Intercept", "b_child", "b_camper", "r_persons.1.Intercept.",
           "r_persons.2.Intercept.", "r_persons.3.Intercept.", "r_persons.4.Intercept.",
           "sd_persons__Intercept", "b_zi_Intercept", "b_zi_child", "b_zi_camper",
           "r_persons__zi.1.Intercept.", "r_persons__zi.2.Intercept.", "r_persons__zi.3.Intercept.",
-          "r_persons__zi.4.Intercept.", "sd_persons__zi_Intercept")
+          "r_persons__zi.4.Intercept.", "sd_persons__zi_Intercept"
+        )
       )
       expect_equal(
         colnames(get_parameters(m4, effects = "random", component = "cond")),
-        c("r_persons.1.Intercept.", "r_persons.2.Intercept.", "r_persons.3.Intercept.",
-          "r_persons.4.Intercept.", "sd_persons__Intercept")
+        c(
+          "r_persons.1.Intercept.", "r_persons.2.Intercept.", "r_persons.3.Intercept.",
+          "r_persons.4.Intercept.", "sd_persons__Intercept"
+        )
       )
       expect_equal(
         colnames(get_parameters(m5, effects = "random", component = "cond")),
@@ -596,8 +600,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
             )
           ),
           class = c("clean_parameters", "data.frame"),
-          row.names = c(NA,
-                        -16L)
+          row.names = c(
+            NA,
+            -16L
+          )
         )
       )
 
@@ -774,8 +780,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "persons2.4"
             )
           ),
-          class = c("clean_parameters",
-                    "data.frame"),
+          class = c(
+            "clean_parameters",
+            "data.frame"
+          ),
           row.names = c(NA, -26L)
         )
       )

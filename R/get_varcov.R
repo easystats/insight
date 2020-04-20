@@ -604,7 +604,9 @@ get_varcov.LORgee <- get_varcov.gee
         eigenvalues[abs(eigenvalues) < 1e-07] <- 0
         any(eigenvalues <= 0)
       },
-      error = function(e) { FALSE }
+      error = function(e) {
+        FALSE
+      }
     )
   } else {
     rv <- FALSE

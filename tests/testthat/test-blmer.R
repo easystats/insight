@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("blme")) {
-
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
