@@ -1,3 +1,9 @@
+# insight 0.8.4
+
+## Changes to functions
+
+* `null_model()` now also works for non-mixed models.
+
 # insight 0.8.3
 
 ## General

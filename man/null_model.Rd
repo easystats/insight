@@ -2,12 +2,12 @@
 % Please edit documentation in R/null_model.R
 \name{null_model}
 \alias{null_model}
-\title{Compute intercept-only model for mixed models}
+\title{Compute intercept-only model for regression models}
 \usage{
-null_model(model, verbose = TRUE)
+null_model(model, verbose = TRUE, ...)
 }
 \arguments{
-\item{model}{A mixed effects model.}
+\item{model}{A (mixed effects) model.}
 
 \item{verbose}{Toggle off warnings.}
 }
@@ -15,8 +15,8 @@ null_model(model, verbose = TRUE)
 The null-model of \code{x}
 }
 \description{
-This function compute the null-model (i.e. \code{(y ~ 1)}) for the
-  fixed effects part) of a random-intercept model.
+This function computes the null-model (i.e. \code{(y ~ 1)}) of
+  a model. For mixed models, the null-model takes random effects into account.
 }
 \examples{
 if (require("lme4")) {

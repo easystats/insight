@@ -1,10 +1,10 @@
-#' @title Compute intercept-only model for mixed models
+#' @title Compute intercept-only model for regression models
 #' @name null_model
 #'
-#' @description This function compute the null-model (i.e. \code{(y ~ 1)}) for the
-#'   fixed effects part) of a random-intercept model.
+#' @description This function computes the null-model (i.e. \code{(y ~ 1)}) of
+#'   a model. For mixed models, the null-model takes random effects into account.
 #'
-#' @param model A mixed effects model.
+#' @param model A (mixed effects) model.
 #' @param verbose Toggle off warnings.
 #'
 #' @return The null-model of \code{x}
@@ -18,7 +18,20 @@
 #' }
 #' @importFrom stats as.formula update reformulate
 #' @export
-null_model <- function(model, verbose = TRUE) {
+null_model <- function(model, verbose = TRUE, ...) {
+  if (.is_mixed_model(model)) {
+    .null_model_mixed(model, verbose)
+  } else if (inherits(model, "clm2")) {
+    stats::update(model, location = ~1, scale = ~1)
+  } else if (inherits(model, "multinom")) {
+    stats::update(model, ~1, trace = FALSE)
+  } else {
+    stats::update(model, ~1, ...)
+  }
+}
+
+
+.null_model_mixed <- function(model, verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
