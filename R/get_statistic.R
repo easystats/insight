@@ -1234,5 +1234,3 @@ get_statistic.bife <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
-
-

@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("MCMCglmm")) {
-
   data(PlodiaPO)
   m1 <- MCMCglmm(
     PO ~ plate,

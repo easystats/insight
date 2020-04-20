@@ -5,7 +5,6 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     require("insight") &&
     require("BayesFactor") &&
     require("rstanarm"))) {
-
     m1 <- insight::download_model("stanreg_merMod_5")
     m2 <- insight::download_model("stanreg_glm_6")
     m3 <- insight::download_model("stanreg_glm_1")

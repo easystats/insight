@@ -679,10 +679,11 @@ model_info.LORgee <- function(x, ...) {
     link <- "logit"
   }
 
-  if (x$link == "Cumulative logit")
+  if (x$link == "Cumulative logit") {
     family <- "ordinal"
-  else
+  } else {
     family <- "multinomial"
+  }
 
   .make_family(
     x = x,
