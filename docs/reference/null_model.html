@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Checks if an object is a regression model object supported in
-  <span class="pkg">insight</span> package. — is_model_supported • insight</title>
+<title>Compute intercept-only model for mixed models — null_model • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,11 +46,9 @@
 
 
 
-<meta property="og:title" content="Checks if an object is a regression model object supported in
-  <span class="pkg">insight</span> package. — is_model_supported" />
-<meta property="og:description" content="Small helper that checks if a model is a supported
- (regression) model object. supported_models() prints a list
- of currently supported model classes." />
+<meta property="og:title" content="Compute intercept-only model for mixed models — null_model" />
+<meta property="og:description" content="This function compute the null-model (i.e. (y ~ 1)) for the
+  fixed effects part) of a random-intercept model." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -126,45 +123,61 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Checks if an object is a regression model object supported in
-  <span class="pkg">insight</span> package.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/is_model_supported.R'><code>R/is_model_supported.R</code></a></small>
-    <div class="hidden name"><code>is_model_supported.Rd</code></div>
+    <h1>Compute intercept-only model for mixed models</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/null_model.R'><code>R/null_model.R</code></a></small>
+    <div class="hidden name"><code>null_model.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Small helper that checks if a model is a <em>supported</em>
- (regression) model object. <code>supported_models()</code> prints a list
- of currently supported model classes.</p>
+    <p>This function compute the null-model (i.e. <code>(y ~ 1)</code>) for the
+  fixed effects part) of a random-intercept model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_model_supported</span>(<span class='no'>x</span>)
-
-<span class='fu'>supported_models</span>()</pre>
+    <pre class="usage"><span class='fu'>null_model</span>(<span class='no'>model</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>An object.</p></td>
+      <th>model</th>
+      <td><p>A mixed effects model.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle off warnings.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A logical, <code>TRUE</code> if <code>x</code> is a (supported) model object.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function returns <code>TRUE</code> if <code>x</code> is a model object
-  that works with the package's functions. A list of supported models can
-  also be found here: <a href='https://github.com/easystats/insight'>https://github.com/easystats/insight</a>.</p>
+    <p>The null-model of <code>x</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>mtcars</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-
-<span class='fu'>is_model_supported</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>is_model_supported</span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; [1] FALSE</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"lme4"</span>)) {
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sleepstudy</span>)
+  <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> + <span class='no'>Days</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>m</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='fu'>null_model</span>(<span class='no'>m</span>))
+}</div><div class='output co'>#&gt; Linear mixed model fit by REML ['lmerMod']
+#&gt; Formula: Reaction ~ (1 + Days | Subject)
+#&gt;    Data: sleepstudy
+#&gt; 
+#&gt; REML criterion at convergence: 1769.8
+#&gt; 
+#&gt; Scaled residuals: 
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -4.0449 -0.4486  0.0089  0.4819  5.2186 
+#&gt; 
+#&gt; Random effects:
+#&gt;  Groups   Name        Variance Std.Dev. Corr 
+#&gt;  Subject  (Intercept) 651.6    25.53         
+#&gt;           Days        142.2    11.93    -0.18
+#&gt;  Residual             654.9    25.59         
+#&gt; Number of obs: 180, groups:  Subject, 18
+#&gt; 
+#&gt; Fixed effects:
+#&gt;             Estimate Std. Error t value
+#&gt; (Intercept)   257.76       6.76   38.13</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

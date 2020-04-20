@@ -12,10 +12,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Easy Access to Model Information for Various Model Objects">
 <meta property="og:description" content="A tool to provide an easy, intuitive and consistent access to 
    information contained in various R models, like model formulas, model terms, 
@@ -26,13 +27,12 @@
    The package has a consistent syntax and works with many different model 
    objects, where otherwise functions to access these information are missing.">
 <meta property="og:image" content="/logo.png">
-<meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.3</span>
       </span>
     </div>
 
@@ -67,7 +67,14 @@
   <a href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/easystats/insight/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -151,67 +158,67 @@
 <a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor"></a>Making Predictions at Specific Values of a Term of Interest</h4>
 <p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>.</p>
 <p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(insight)</a>
-<a class="sourceLine" id="cb1-2" title="2">m &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Species <span class="op">+</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>Sepal.Width, <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb1-3" title="3"></a>
-<a class="sourceLine" id="cb1-4" title="4">dat &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_data.html">get_data</a></span>(m)</a>
-<a class="sourceLine" id="cb1-5" title="5">pred &lt;-<span class="st"> </span><span class="kw"><a href="reference/find_predictors.html">find_predictors</a></span>(m, <span class="dt">flatten =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7">l &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(pred, <span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb1-8" title="8">    <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(dat[[x]])) </a>
-<a class="sourceLine" id="cb1-9" title="9">        <span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(dat[[x]]) <span class="cf">else</span> <span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(dat[[x]])</a>
-<a class="sourceLine" id="cb1-10" title="10">})</a>
-<a class="sourceLine" id="cb1-11" title="11"></a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(l) &lt;-<span class="st"> </span>pred</a>
-<a class="sourceLine" id="cb1-13" title="13">l &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(l)</a>
-<a class="sourceLine" id="cb1-14" title="14"></a>
-<a class="sourceLine" id="cb1-15" title="15"><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(l, <span class="dt">predictions =</span> <span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(m, <span class="dt">newdata =</span> l))</a>
-<a class="sourceLine" id="cb1-16" title="16"><span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span></a>
-<a class="sourceLine" id="cb1-17" title="17"><span class="co">#&gt; 1     setosa         1.2         3.1         5.1</span></a>
-<a class="sourceLine" id="cb1-18" title="18"><span class="co">#&gt; 2 versicolor         1.2         3.1         6.1</span></a>
-<a class="sourceLine" id="cb1-19" title="19"><span class="co">#&gt; 3  virginica         1.2         3.1         6.3</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">insight</span>)
+<span class="no">m</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Sepal.Length</span> ~ <span class="no">Species</span> + <span class="no">Petal.Width</span> + <span class="no">Sepal.Width</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
+
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/get_data.html">get_data</a></span>(<span class="no">m</span>)
+<span class="no">pred</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/find_predictors.html">find_predictors</a></span>(<span class="no">m</span>, <span class="kw">flatten</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+
+<span class="no">l</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">pred</span>, <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(<span class="no">dat</span><span class="kw">[[</span><span class="no">x</span>]]))
+        <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">dat</span><span class="kw">[[</span><span class="no">x</span>]]) <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">dat</span><span class="kw">[[</span><span class="no">x</span>]])
+})
+
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">l</span>) <span class="kw">&lt;-</span> <span class="no">pred</span>
+<span class="no">l</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">l</span>)
+
+<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">l</span>, <span class="kw">predictions</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">m</span>, <span class="kw">newdata</span> <span class="kw">=</span> <span class="no">l</span>))
+<span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span>
+<span class="co">#&gt; 1     setosa         1.2         3.1         5.1</span>
+<span class="co">#&gt; 2 versicolor         1.2         3.1         6.1</span>
+<span class="co">#&gt; 3  virginica         1.2         3.1         6.3</span></pre></div>
 </div>
 <div id="printing-model-coefficients" class="section level4">
 <h4 class="hasAnchor">
 <a href="#printing-model-coefficients" class="anchor"></a>Printing Model Coefficients</h4>
 <p>The next example should emphasize the possibilities to generalize functions to many different model objects using <strong>insight</strong>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
 <p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model) {</a>
-<a class="sourceLine" id="cb2-2" title="2">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(model)<span class="op">$</span>coefficients), <span class="dt">collapse =</span> <span class="st">", "</span>), </a>
-<a class="sourceLine" id="cb2-3" title="3">        <span class="st">", thank you for your attention!"</span>)</a>
-<a class="sourceLine" id="cb2-4" title="4">}</a>
-<a class="sourceLine" id="cb2-5" title="5"></a>
-<a class="sourceLine" id="cb2-6" title="6">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="kw">print_params</span>(m1)</a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
-<a class="sourceLine" id="cb2-9" title="9"></a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="co"># obviously, something is missing in the output</span></a>
-<a class="sourceLine" id="cb2-11" title="11">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="kw">print_params</span>(m2)</a>
-<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="no">print_params</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">model</span>) {
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">model</span>)$<span class="no">coefficients</span>), <span class="kw">collapse</span> <span class="kw">=</span> <span class="st">", "</span>),
+        <span class="st">", thank you for your attention!"</span>)
+}
+
+<span class="no">m1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Sepal.Length</span> ~ <span class="no">Petal.Width</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
+<span class="fu">print_params</span>(<span class="no">m1</span>)
+<span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span>
+
+<span class="co"># obviously, something is missing in the output</span>
+<span class="no">m2</span> <span class="kw">&lt;-</span> <span class="kw pkg">mgcv</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="no">Sepal.Length</span> ~ <span class="no">Petal.Width</span> + <span class="fu">s</span>(<span class="no">Petal.Length</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
+<span class="fu">print_params</span>(<span class="no">m2</span>)
+<span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></pre></div>
 <p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">print_params &lt;-<span class="st"> </span><span class="cf">function</span>(model) {</a>
-<a class="sourceLine" id="cb3-2" title="2">    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(insight<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/insight/man/find_parameters.html">find_parameters</a></span>(model, <span class="dt">flatten =</span> <span class="ot">TRUE</span>), </a>
-<a class="sourceLine" id="cb3-3" title="3">        <span class="dt">collapse =</span> <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)</a>
-<a class="sourceLine" id="cb3-4" title="4">}</a>
-<a class="sourceLine" id="cb3-5" title="5"></a>
-<a class="sourceLine" id="cb3-6" title="6">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="kw">print_params</span>(m1)</a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></a>
-<a class="sourceLine" id="cb3-9" title="9"></a>
-<a class="sourceLine" id="cb3-10" title="10">m2 &lt;-<span class="st"> </span>mgcv<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Petal.Length), <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="kw">print_params</span>(m2)</a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="no">print_params</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">model</span>) {
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw pkg">insight</span><span class="kw ns">::</span><span class="fu"><a href="reference/find_parameters.html">find_parameters</a></span>(<span class="no">model</span>, <span class="kw">flatten</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
+        <span class="kw">collapse</span> <span class="kw">=</span> <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)
+}
+
+<span class="no">m1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Sepal.Length</span> ~ <span class="no">Petal.Width</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
+<span class="fu">print_params</span>(<span class="no">m1</span>)
+<span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span>
+
+<span class="no">m2</span> <span class="kw">&lt;-</span> <span class="kw pkg">mgcv</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="no">Sepal.Length</span> ~ <span class="no">Petal.Width</span> + <span class="fu">s</span>(<span class="no">Petal.Length</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
+<span class="fu">print_params</span>(<span class="no">m2</span>)
+<span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></pre></div>
 </div>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Run the following to install the latest GitHub-version of <strong>insight</strong>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
-<a class="sourceLine" id="cb4-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"easystats/insight"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)
+<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"easystats/insight"</span>)</pre></div>
 <p>Or install the latest stable release from CRAN:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"insight"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"insight"</span>)</pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
@@ -226,46 +233,47 @@
 <div id="list-of-supported-models-by-class" class="section level2">
 <h2 class="hasAnchor">
 <a href="#list-of-supported-models-by-class" class="anchor"></a>List of Supported Models by Class</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="reference/is_model_supported.html">supported_models</a></span>()</a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt;   [1] "aareg"             "aov"               "aovlist"          </span></a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt;   [4] "bamlss"            "bamlss.frame"      "bayesx"           </span></a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;   [7] "BBmm"              "BBreg"             "bcplm"            </span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt;  [10] "betareg"           "BFBayesFactor"     "bife"             </span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;  [13] "bigglm"            "biglm"             "blavaan"          </span></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;  [16] "bracl"             "brglm"             "brmsfit"          </span></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;  [19] "brmultinom"        "censReg"           "cgam"             </span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;  [22] "cgamm"             "cglm"              "clm"              </span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;  [25] "clm2"              "clmm"              "clmm2"            </span></a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt;  [28] "clogit"            "complmrob"         "coxme"            </span></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;  [31] "coxph"             "cpglm"             "cpglmm"           </span></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;  [34] "crch"              "crq"               "crqs"             </span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt;  [37] "DirichletRegModel" "feglm"             "feis"             </span></a>
-<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt;  [40] "felm"              "fixest"            "flexsurvreg"      </span></a>
-<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt;  [43] "gam"               "Gam"               "gamlss"           </span></a>
-<a class="sourceLine" id="cb6-17" title="17"><span class="co">#&gt;  [46] "gamm"              "gamm4"             "gbm"              </span></a>
-<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt;  [49] "gee"               "geeglm"            "glimML"           </span></a>
-<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt;  [52] "glm"               "glmmadmb"          "glmmPQL"          </span></a>
-<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt;  [55] "glmmTMB"           "glmrob"            "glmRob"           </span></a>
-<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt;  [58] "glmx"              "gls"               "gmnl"             </span></a>
-<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt;  [61] "htest"             "hurdle"            "iv_robust"        </span></a>
-<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt;  [64] "ivreg"             "lavaan"            "lm"               </span></a>
-<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt;  [67] "lm_robust"         "lme"               "lmerMod"          </span></a>
-<a class="sourceLine" id="cb6-25" title="25"><span class="co">#&gt;  [70] "lmerModLmerTest"   "lmrob"             "lmRob"            </span></a>
-<a class="sourceLine" id="cb6-26" title="26"><span class="co">#&gt;  [73] "logistf"           "LORgee"            "lrm"              </span></a>
-<a class="sourceLine" id="cb6-27" title="27"><span class="co">#&gt;  [76] "MANOVA"            "maxLik"            "mclogit"          </span></a>
-<a class="sourceLine" id="cb6-28" title="28"><span class="co">#&gt;  [79] "mcmc"              "MCMCglmm"          "merMod"           </span></a>
-<a class="sourceLine" id="cb6-29" title="29"><span class="co">#&gt;  [82] "mixed"             "MixMod"            "mixor"            </span></a>
-<a class="sourceLine" id="cb6-30" title="30"><span class="co">#&gt;  [85] "mlm"               "mlogit"            "mmlogit"          </span></a>
-<a class="sourceLine" id="cb6-31" title="31"><span class="co">#&gt;  [88] "multinom"          "ols"               "plm"              </span></a>
-<a class="sourceLine" id="cb6-32" title="32"><span class="co">#&gt;  [91] "polr"              "psm"               "rlm"              </span></a>
-<a class="sourceLine" id="cb6-33" title="33"><span class="co">#&gt;  [94] "rlmerMod"          "RM"                "rma"              </span></a>
-<a class="sourceLine" id="cb6-34" title="34"><span class="co">#&gt;  [97] "rma.uni"           "rq"                "rqss"             </span></a>
-<a class="sourceLine" id="cb6-35" title="35"><span class="co">#&gt; [100] "speedglm"          "speedlm"           "stanmvreg"        </span></a>
-<a class="sourceLine" id="cb6-36" title="36"><span class="co">#&gt; [103] "stanreg"           "survfit"           "survreg"          </span></a>
-<a class="sourceLine" id="cb6-37" title="37"><span class="co">#&gt; [106] "svyglm"            "svyolr"            "tobit"            </span></a>
-<a class="sourceLine" id="cb6-38" title="38"><span class="co">#&gt; [109] "truncreg"          "vgam"              "vglm"             </span></a>
-<a class="sourceLine" id="cb6-39" title="39"><span class="co">#&gt; [112] "wbgee"             "wblm"              "wbm"              </span></a>
-<a class="sourceLine" id="cb6-40" title="40"><span class="co">#&gt; [115] "zcpglm"            "zeroinfl"          "zerotrunc"</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="reference/is_model_supported.html">supported_models</a></span>()
+<span class="co">#&gt;   [1] "aareg"             "aov"               "aovlist"          </span>
+<span class="co">#&gt;   [4] "Arima"             "averaging"         "bamlss"           </span>
+<span class="co">#&gt;   [7] "bamlss.frame"      "bayesx"            "BBmm"             </span>
+<span class="co">#&gt;  [10] "BBreg"             "bcplm"             "betareg"          </span>
+<span class="co">#&gt;  [13] "BFBayesFactor"     "bife"              "bigglm"           </span>
+<span class="co">#&gt;  [16] "biglm"             "blavaan"           "bracl"            </span>
+<span class="co">#&gt;  [19] "brglm"             "brmsfit"           "brmultinom"       </span>
+<span class="co">#&gt;  [22] "censReg"           "cgam"              "cgamm"            </span>
+<span class="co">#&gt;  [25] "cglm"              "clm"               "clm2"             </span>
+<span class="co">#&gt;  [28] "clmm"              "clmm2"             "clogit"           </span>
+<span class="co">#&gt;  [31] "complmrob"         "coxme"             "coxph"            </span>
+<span class="co">#&gt;  [34] "cpglm"             "cpglmm"            "crch"             </span>
+<span class="co">#&gt;  [37] "crq"               "crqs"              "DirichletRegModel"</span>
+<span class="co">#&gt;  [40] "feglm"             "feis"              "felm"             </span>
+<span class="co">#&gt;  [43] "fixest"            "flexsurvreg"       "gam"              </span>
+<span class="co">#&gt;  [46] "Gam"               "gamlss"            "gamm"             </span>
+<span class="co">#&gt;  [49] "gamm4"             "gbm"               "gee"              </span>
+<span class="co">#&gt;  [52] "geeglm"            "glimML"            "glm"              </span>
+<span class="co">#&gt;  [55] "glmmadmb"          "glmmPQL"           "glmmTMB"          </span>
+<span class="co">#&gt;  [58] "glmrob"            "glmRob"            "glmx"             </span>
+<span class="co">#&gt;  [61] "gls"               "gmnl"              "htest"            </span>
+<span class="co">#&gt;  [64] "hurdle"            "iv_robust"         "ivreg"            </span>
+<span class="co">#&gt;  [67] "lavaan"            "lm"                "lm_robust"        </span>
+<span class="co">#&gt;  [70] "lme"               "lmerMod"           "lmerModLmerTest"  </span>
+<span class="co">#&gt;  [73] "lmrob"             "lmRob"             "logistf"          </span>
+<span class="co">#&gt;  [76] "LORgee"            "lrm"               "MANOVA"           </span>
+<span class="co">#&gt;  [79] "maxLik"            "mclogit"           "mcmc"             </span>
+<span class="co">#&gt;  [82] "MCMCglmm"          "merMod"            "mixed"            </span>
+<span class="co">#&gt;  [85] "MixMod"            "mixor"             "mlm"              </span>
+<span class="co">#&gt;  [88] "mlogit"            "mmlogit"           "multinom"         </span>
+<span class="co">#&gt;  [91] "ols"               "plm"               "polr"             </span>
+<span class="co">#&gt;  [94] "psm"               "rlm"               "rlmerMod"         </span>
+<span class="co">#&gt;  [97] "RM"                "rma"               "rma.uni"          </span>
+<span class="co">#&gt; [100] "rq"                "rqss"              "speedglm"         </span>
+<span class="co">#&gt; [103] "speedlm"           "stanmvreg"         "stanreg"          </span>
+<span class="co">#&gt; [106] "survfit"           "survreg"           "svyglm"           </span>
+<span class="co">#&gt; [109] "svyolr"            "tobit"             "truncreg"         </span>
+<span class="co">#&gt; [112] "vgam"              "vglm"              "wbgee"            </span>
+<span class="co">#&gt; [115] "wblm"              "wbm"               "zcpglm"           </span>
+<span class="co">#&gt; [118] "zeroinfl"          "zerotrunc"</span></pre></div>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues">File an issue</a> and request additional model-support in <em>insight</em>!</li>
@@ -280,11 +288,13 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=insight">https://​cloud.r-project.org/​package=insight</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/easystats/insight/">https://​github.com/​easystats/​insight/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/easystats/insight/issues">https://​github.com/​easystats/​insight/​issues</a>
 </li>
@@ -313,12 +323,12 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
-<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
-<a href="https://github.com/IndrajeetPatil/">Indrajeet Patil</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
-<li>Philip Waggoner <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-7825-7573" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<a href="https://github.com/IndrajeetPatil/">Indrajeet Patil</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Philip Waggoner <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-7825-7573" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
@@ -342,7 +352,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

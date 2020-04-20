@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -44,7 +48,6 @@
 
 <meta property="og:title" content="Changelog" />
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -62,7 +65,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -76,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.3</span>
       </span>
     </div>
 
@@ -99,7 +102,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/easystats/insight/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -113,12 +121,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/easystats/insight/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="insight-083" class="section level1">
+<h1 class="page-header" data-toc-text="0.8.3">
+<a href="#insight-083" class="anchor"></a>insight 0.8.3<small> Unreleased </small>
+</h1>
+<div id="general" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general" class="anchor"></a>General</h2>
+<ul>
+<li>The function to calculate null-models for mixed effects models is now exported (<code><a href="../reference/null_model.html">null_model()</a></code>.)</li>
+</ul>
+</div>
+<div id="new-supported-model-classes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
+<ul>
+<li>
+<code>arima</code> (<em>stats</em>), <code>averaging</code> (<em>MuMIn</em>)</li>
+</ul>
+</div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>Improve family detection in <code><a href="../reference/model_info.html">model_info()</a></code>, <code><a href="../reference/link_inverse.html">link_inverse()</a></code> and <code><a href="../reference/link_function.html">link_function()</a></code> for <em>MCMCglmm</em>.</li>
+<li>Minor revisions to meet changes in <em>mlogit</em> package.</li>
+<li>Improve support for <em>bayesx</em> and <em>BBmm</em> models.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <em>brmsfit</em> models with specific variable name patterns.</li>
+<li>Fixed issue in <code><a href="../reference/format_ci.html">format_ci()</a></code> when confidence interval only contained <code>NA</code>s and <code>width</code> was set to <code>"auto"</code>.</li>
+<li>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models when formula contained parentheses in the non-random parts, around a certain set of predictors.</li>
+<li>Fixed issue in <code>get_priors.BFBayesFactor()</code> for <code>BFMetat</code> class.</li>
+<li>Fixed issue in <code>clean_parameters.BFBayesFactor()</code> when model contained interaction terms and these were assigned to the “extra” component.</li>
+</ul>
+</div>
+</div>
     <div id="insight-082" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.8.2">
 <a href="#insight-082" class="anchor"></a>insight 0.8.2<small> 2020-03-06 </small>
 </h1>
 <div id="breaking-changes" class="section level2">
@@ -129,24 +177,24 @@
 <code><a href="../reference/model_info.html">model_info()</a></code> now only returns <code>TRUE</code> for <code>$is_ordinal</code>, when model is an ordinal or cumulative link model. In past versions, <code>$is_ordinal</code> was also <code>TRUE</code> for multinomial models.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes" class="section level2">
+<div id="new-supported-model-classes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-1" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>bife</code> (<em>bife</em>), <code>bcplm</code> and <code>zcpglm</code> (<em>cplm</em>)</li>
 </ul>
 </div>
-<div id="general" class="section level2">
+<div id="general-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general" class="anchor"></a>General</h2>
+<a href="#general-1" class="anchor"></a>General</h2>
 <ul>
 <li>Improved support for <code>clogit</code>-models.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/find_weights.html">find_weights()</a></code> for <code>merMod</code> models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with weights, when weights also contained missing data.</li>
@@ -159,27 +207,27 @@
 </div>
 </div>
     <div id="insight-081" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.8.1">
 <a href="#insight-081" class="anchor"></a>insight 0.8.1<small> 2020-02-02 </small>
 </h1>
-<div id="new-supported-model-classes-1" class="section level2">
+<div id="new-supported-model-classes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-1" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-2" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>cglm</code> (<em>cglm</em>), <code>DirichletRegModel</code> (<em>DirichletReg</em>).</li>
 </ul>
 </div>
-<div id="general-1" class="section level2">
+<div id="general-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-1" class="anchor"></a>General</h2>
+<a href="#general-2" class="anchor"></a>General</h2>
 <ul>
 <li>Improved efficiency of <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for mixed models with large samples and many random effects, and only fixed effects where requested.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_multinomial</code> for multinomial (but not ordinal or cumulative) link models.</li>
@@ -187,9 +235,9 @@
 <code><a href="../reference/format_value.html">format_value()</a></code> gets an <code>as_percent</code> argument to format values as percentages.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>clmm2</em>-models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models that used the <code>lspline()</code>-function.</li>
@@ -200,20 +248,20 @@
 </div>
 </div>
     <div id="insight-080" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.8.0">
 <a href="#insight-080" class="anchor"></a>insight 0.8.0<small> 2020-01-14 </small>
 </h1>
-<div id="new-supported-model-classes-2" class="section level2">
+<div id="new-supported-model-classes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-2" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-3" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>brglm</code> (<em>brglm</em>), <code>cgam</code>, <code>cgamm</code> (<em>cgam</em>), <code>cpglm</code>, <code>cpglmm</code> (<em>cplm</em>), <code>feglm</code> (<em>apaca</em>), <code>glmmadmb</code> (<em>glmmADMB</em>), <code>glmx</code> (<em>glmx</em>), partial support for <code>mcmc</code> (<em>coda</em>), <code>mixor</code> (<em>mixor</em>), <code>MANOVA</code>, <code>RM</code> (<em>MANOVA.RM</em>).</li>
 </ul>
 </div>
-<div id="general-2" class="section level2">
+<div id="general-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-2" class="anchor"></a>General</h2>
+<a href="#general-3" class="anchor"></a>General</h2>
 <ul>
 <li>Better handling of <code>clm2</code>, <code>clmm2</code> and <code>rqss</code> models.</li>
 </ul>
@@ -226,9 +274,9 @@
 <code><a href="../reference/format_ci.html">format_ci()</a></code> (re-implemented and slightly enhanced from <em>parameters</em>), to format confidence/credible intervals.</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> now also works for <code>BFBayesFactor</code> objects.</li>
@@ -241,9 +289,9 @@
 <li>Other minor improvements.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Better detect Tweedie-models in <code><a href="../reference/model_info.html">model_info()</a></code>.</li>
 <li>Fixed issue in <code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code> for <em>panelr</em>-models with multiple random-effect parts.</li>
@@ -256,20 +304,20 @@
 </div>
 </div>
     <div id="insight-071" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.7.1">
 <a href="#insight-071" class="anchor"></a>insight 0.7.1<small> 2019-11-28 </small>
 </h1>
-<div id="new-supported-model-classes-3" class="section level2">
+<div id="new-supported-model-classes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-3" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-4" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>complmrob</code> (<em>complmrob</em>), <code>fixest</code> (<em>fixest</em>), <code>mclogit</code> and <code>mmclogit</code> (<em>mclogit</em>).</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed bug in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models, when random effects are written before any fixed effects terms (like <code>social ~ (1|school) + open + extro</code>).</li>
 <li>Fixed bug in <code><a href="../reference/model_info.html">model_info()</a></code> for <em>VGAM</em> models, where logit-link was not always correctly identified.</li>
@@ -279,7 +327,7 @@
 </div>
 </div>
     <div id="insight-070" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.7.0">
 <a href="#insight-070" class="anchor"></a>insight 0.7.0<small> 2019-11-14 </small>
 </h1>
 <div id="breaking-changes-1" class="section level2">
@@ -291,18 +339,18 @@
 <code><a href="../reference/model_info.html">model_info()</a></code> returned both <code>$is_zeroinf</code> and <code>$is_zero_inflated</code> for zero-inflated models. Now <code>$is_zeroinf</code> is softly deprecated, so <code><a href="../reference/model_info.html">model_info()</a></code> will return <code>$is_zero_inflated</code> only in future updates.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes-4" class="section level2">
+<div id="new-supported-model-classes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-4" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-5" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>aareg</code> (<em>survival</em>), <code>brmultinom</code> and <code>bracl</code> (<em>brglm2</em>), and <code>wbgee</code> (<em>panelr</em>). Furthermore, for different model-types from <em>panelr</em> models (within-between, between, etc.) are now also supported.</li>
 <li>Preliminary support for <code>rma</code> models (<em>metafor</em>).</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_statistic.html">get_statistic()</a></code> supports <code>multinom</code> models (<em>nnet</em>).</li>
@@ -310,9 +358,9 @@
 <code><a href="../reference/link_inverse.html">link_inverse()</a></code> gets a <code>what</code>-argument, to return the link-inverse function for specific distribution parameters from <strong>gamls</strong> models.</li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed edge case for <code><a href="../reference/find_weights.html">find_weights()</a></code>.</li>
 <li>Fixed bug in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>glmmTMB</em> models that won’t return any data.</li>
@@ -320,12 +368,12 @@
 </div>
 </div>
     <div id="insight-060" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.6.0">
 <a href="#insight-060" class="anchor"></a>insight 0.6.0<small> 2019-10-17 </small>
 </h1>
-<div id="new-supported-model-classes-5" class="section level2">
+<div id="new-supported-model-classes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-5" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-6" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>bayesx</code> (<em>R2BayesX</em>), <code>bamlss</code> (<em>bamlss</em>) and <code>flexsurvreg</code> (<em>flexsurv</em>). Note that support for these models is still somewhat experimental.</li>
@@ -344,9 +392,9 @@
 <code><a href="../reference/is_model_supported.html">supported_models()</a></code> to print a list of supported models.</li>
 </ul>
 </div>
-<div id="changes-to-functions-3" class="section level2">
+<div id="changes-to-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_survival</code> for survival models.</li>
@@ -358,9 +406,9 @@
 <li>Better support for nonlinear mixed models (<code><a href="https://rdrr.io/pkg/lme4/man/nlmer.html">lme4::nlmer()</a></code>). Note that model-specification requires the random term to be written in parentheses, i.e. <code>(slope | group)</code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issues in <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>gamlss</em> models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>plm</em> models, where the <code>index</code>-argument was used in the <code>plm()</code>-function call.</li>
@@ -375,7 +423,7 @@
 </div>
 </div>
     <div id="insight-050" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.5.0">
 <a href="#insight-050" class="anchor"></a>insight 0.5.0<small> 2019-09-07 </small>
 </h1>
 <div id="breaking-changes-2" class="section level2">
@@ -397,16 +445,16 @@
 <code><a href="../reference/color_if.html">color_if()</a></code> as utility-function to add color formatting to values, depending on certain conditions.</li>
 </ul>
 </div>
-<div id="general-3" class="section level2">
+<div id="general-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-3" class="anchor"></a>General</h2>
+<a href="#general-4" class="anchor"></a>General</h2>
 <ul>
 <li>Make extraction of model family information more stable for gam-objects.</li>
 </ul>
 </div>
-<div id="changes-to-functions-4" class="section level2">
+<div id="changes-to-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also support objects of class <code>sim</code> and <code>sim.merMod</code> (from <code><a href="https://rdrr.io/pkg/arm/man/sim.html">arm::sim()</a></code>).</li>
@@ -416,9 +464,9 @@
 <code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> now include the Euclidean distance matrix for spatial models from <em>glmmTMB</em> (returned as random effects element, or more precise, as random slope).</li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_formula.html">find_formula()</a></code> now extracts group factors of random effects for <em>gamlss</em> models.</li>
@@ -439,12 +487,12 @@
 </div>
 </div>
     <div id="insight-041" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.4.1">
 <a href="#insight-041" class="anchor"></a>insight 0.4.1<small> 2019-07-24 </small>
 </h1>
-<div id="changes-to-functions-5" class="section level2">
+<div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now supports models with Gamma-family.</li>
@@ -452,9 +500,9 @@
 <code><a href="../reference/get_weights.html">get_weights()</a></code> and <code><a href="../reference/find_weights.html">find_weights()</a></code> now work for <em>brms</em>-models.</li>
 </ul>
 </div>
-<div id="bug-fixes-7" class="section level2">
+<div id="bug-fixes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix CRAN-check issues due to recent update from the <em>panelr</em>-package.</li>
 </ul>
@@ -462,20 +510,10 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#insight-082">0.8.2</a></li>
-        <li><a href="#insight-081">0.8.1</a></li>
-        <li><a href="#insight-080">0.8.0</a></li>
-        <li><a href="#insight-071">0.7.1</a></li>
-        <li><a href="#insight-070">0.7.0</a></li>
-        <li><a href="#insight-060">0.6.0</a></li>
-        <li><a href="#insight-050">0.5.0</a></li>
-        <li><a href="#insight-041">0.4.1</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
@@ -487,7 +525,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
