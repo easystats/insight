@@ -22,8 +22,6 @@
 \alias{get_parameters.vgam}
 \alias{get_parameters.zeroinfl}
 \alias{get_parameters.zcpglm}
-\alias{get_parameters.aovlist}
-\alias{get_parameters.afex_aov}
 \alias{get_parameters.MCMCglmm}
 \alias{get_parameters.BFBayesFactor}
 \alias{get_parameters.stanmvreg}
@@ -91,10 +89,6 @@ get_parameters(x, ...)
   component = c("all", "conditional", "zi", "zero_inflated"),
   ...
 )
-
-\method{get_parameters}{aovlist}(x, effects = c("fixed", "random", "all"), ...)
-
-\method{get_parameters}{afex_aov}(x, effects = c("fixed", "random", "all"), ...)
 
 \method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random", "all"), ...)
 

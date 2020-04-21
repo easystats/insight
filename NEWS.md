@@ -3,6 +3,7 @@
 ## Changes to functions
 
 * `null_model()` now also works for non-mixed models.
+* Improved support for `afex_aov` and `aovlist` (i.e. Anova with error term).
 
 # insight 0.8.3
 

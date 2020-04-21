@@ -1225,37 +1225,21 @@ get_parameters.aov <- function(x, ...) {
 }
 
 
-#' @rdname get_parameters
-#' @export
-get_parameters.aovlist <- function(x, effects = c("fixed", "random", "all"), ...) {
-  effects <- match.arg(effects)
 
-  l <- lapply(stats::coef(x), function(i) {
+#' @export
+get_parameters.aovlist <- function(x, ...) {
+  cs <- stats::coef(x)
+  out <- do.call(rbind, lapply(names(cs), function(i) {
     params <- data.frame(
-      Parameter = names(i),
-      Estimate = unname(i),
+      Parameter = names(cs[[i]]),
+      Estimate = unname(cs[[i]]),
+      Group = i,
       stringsAsFactors = FALSE
     )
     .remove_backticks_from_parameter_names(params)
-  })
-
-  ## TODO needs to be fixed, see https://github.com/easystats/insight/issues/194
-
-  l <- list(rbind(l[[1]], l[[2]]), l[[3]])
-  names(l) <- c("conditional", "random")
-
-  all <- rbind(
-    cbind(l$conditional, data.frame(Effects = "fixed", stringsAsFactors = FALSE)),
-    cbind(l$random, data.frame(Effects = "random", stringsAsFactors = FALSE))
-  )
-
-  if (effects == "fixed") {
-    l$conditional
-  } else if (effects == "random") {
-    l$random
-  } else {
-    all
-  }
+  }))
+  rownames(out) <- NULL
+  out
 }
 
 
@@ -1277,14 +1261,12 @@ get_parameters.manova <- function(x, ...) {
 }
 
 
-#' @rdname get_parameters
 #' @export
-get_parameters.afex_aov <- function(x, effects = c("fixed", "random", "all"), ...) {
-  effects <- match.arg(effects)
+get_parameters.afex_aov <- function(x, ...) {
   if ("aov" %in% names(x)) {
-    get_parameters(x$aov, effects = effects, ...)
+    get_parameters(x$aov, ...)
   } else {
-    get_parameters(x$lm, effects = effects, ...)
+    get_parameters(x$lm, ...)
   }
 }
 

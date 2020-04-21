@@ -1307,13 +1307,7 @@ find_parameters.glimML <- function(x, effects = c("all", "fixed", "random"), fla
 
 #' @export
 find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
-  l <- lapply(stats::coef(x), names)
-  # merge "intercept" and "block" into conditional
-  # while "Within" becomes "random"
-  l <- list(unname(unlist(l[c(1, 2)])), l[[3]])
-  l <- lapply(l, .remove_backticks_from_string)
-
-  names(l) <- c("conditional", "random")
+  l <- list(conditional = .remove_backticks_from_string(unlist(lapply(stats::coef(x), names))))
 
   if (flatten) {
     unique(unlist(l))

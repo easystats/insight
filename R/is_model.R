@@ -23,6 +23,7 @@ is_model <- function(x) {
     c(
       "_ranger",
       "aareg",
+      "afex_aov",
       "anova",
       "Anova.mlm",
       "aov",
