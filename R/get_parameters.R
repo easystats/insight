@@ -1239,6 +1239,8 @@ get_parameters.aovlist <- function(x, effects = c("fixed", "random", "all"), ...
     .remove_backticks_from_parameter_names(params)
   })
 
+  ## TODO needs to be fixed, see https://github.com/easystats/insight/issues/194
+
   l <- list(rbind(l[[1]], l[[2]]), l[[3]])
   names(l) <- c("conditional", "random")
 
