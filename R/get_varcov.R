@@ -379,6 +379,16 @@ get_varcov.flexsurvreg <- function(x, ...) {
 
 
 #' @export
+get_varcov.afex_aov <- function(x, ...) {
+  if ("lm" %in% names(x)) {
+    get_varcov(x$lm)
+  } else {
+    NULL
+  }
+}
+
+
+#' @export
 get_varcov.mixed <- function(x, ...) {
   vc <- as.matrix(stats::vcov(x$full_model))
 

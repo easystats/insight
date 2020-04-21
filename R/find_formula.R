@@ -186,6 +186,16 @@ find_formula.rma <- function(x, ...) {
 
 
 #' @export
+find_formula.afex_aov <- function(x, ...) {
+  if ("aov" %in% names(x)) {
+    find_formula(x$aov)
+  } else {
+    find_formula(x$lm)
+  }
+}
+
+
+#' @export
 find_formula.gee <- function(x, ...) {
   tryCatch(
     {

@@ -1186,6 +1186,16 @@ find_parameters.averaging <- function(x, component = c("conditional", "full"), f
 
 
 #' @export
+find_parameters.afex_aov <- function(x, flatten = FALSE, ...) {
+  if ("aov" %in% names(x)) {
+    find_parameters(x$aov, flatten = flatten, ...)
+  } else {
+    find_parameters(x$lm, flatten = flatten, ...)
+  }
+}
+
+
+#' @export
 find_parameters.mlm <- function(x, flatten = FALSE, ...) {
   cs <- stats::coef(summary(x))
 

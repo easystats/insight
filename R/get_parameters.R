@@ -1275,6 +1275,20 @@ get_parameters.manova <- function(x, ...) {
 }
 
 
+#' @rdname get_parameters
+#' @export
+get_parameters.afex_aov <- function(x, effects = c("fixed", "random", "all"), ...) {
+  effects <- match.arg(effects)
+  if ("aov" %in% names(x)) {
+    get_parameters(x$aov, effects = effects, ...)
+  } else {
+    get_parameters(x$lm, effects = effects, ...)
+  }
+}
+
+
+
+
 
 
 

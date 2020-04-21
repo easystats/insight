@@ -142,6 +142,12 @@ find_algorithm.lm <- function(x, ...) {
 
 
 #' @export
+find_algorithm.afex_aov <- function(x, ...) {
+  list("algorithm" = "OLS")
+}
+
+
+#' @export
 find_algorithm.speedlm <- function(x, ...) {
   list("algorithm" = x$method)
 }
