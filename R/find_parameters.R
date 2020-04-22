@@ -1307,7 +1307,7 @@ find_parameters.glimML <- function(x, effects = c("all", "fixed", "random"), fla
 
 #' @export
 find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
-  l <- list(conditional = .remove_backticks_from_string(unlist(lapply(stats::coef(x), names))))
+  l <- list(conditional = unname(.remove_backticks_from_string(unlist(lapply(stats::coef(x), names)))))
 
   if (flatten) {
     unique(unlist(l))
