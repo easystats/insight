@@ -139,6 +139,7 @@ find_statistic <- function(x, ...) {
       "psm",
       "robmixglm",
       "rma",
+      "rma.mv",
       "rma.uni",
       "sem",
       "slm",
