@@ -1,5 +1,9 @@
 # insight 0.8.4
 
+## General
+
+* *HRQoL* was removed from suggested packages, as it was removed from CRAN.
+
 ## Changes to functions
 
 * `null_model()` now also works for non-mixed models.
