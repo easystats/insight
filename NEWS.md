@@ -9,6 +9,10 @@
 * `null_model()` now also works for non-mixed models.
 * Improved support for `afex_aov` and `aovlist` (i.e. Anova with error term).
 
+## Bug fixes
+
+* Fixed some issues with deparsings `NULL` strings under R 4.0.0.
+
 # insight 0.8.3
 
 ## General
