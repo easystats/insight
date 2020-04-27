@@ -94,8 +94,8 @@ This function returns different variance components from mixed models,
    \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}} (i.e.
    \code{sigma(model)^2}). For models with binary outcome, it is
    \eqn{\pi^2 / 3} for logit-link, \code{1} for probit-link, and \eqn{\pi^2 / 3}
-   for cloglog-links. Models from Gamma-families use \eqn{\mu^2)} (as obtained
-   from \code{family$variance()}. For all other models, the distribution-specific
+   for cloglog-links. Models from Gamma-families use \eqn{\mu^2} (as obtained
+   from \code{family$variance()}). For all other models, the distribution-specific
    variance is based on lognormal approximation, \eqn{log(1 + var(x) / \mu^2)}
    (see \cite{Nakagawa et al. 2017}). The expected variance of a zero-inflated
    model is computed according to \cite{Zuur et al. 2012, p277}.
