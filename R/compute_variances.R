@@ -325,8 +325,9 @@
       dist.variance <- switch(
         faminfo$link_function,
         inverse = ,
-        identity = stats::family(x)$variance(sig),
-        log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+        identity = ,
+        log = stats::family(x)$variance(sig),
+        # log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family == "beta") {
