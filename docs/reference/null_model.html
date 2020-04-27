@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute intercept-only model for mixed models — null_model • insight</title>
+<title>Compute intercept-only model for regression models — null_model • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,9 @@
 
 
 
-<meta property="og:title" content="Compute intercept-only model for mixed models — null_model" />
-<meta property="og:description" content="This function compute the null-model (i.e. (y ~ 1)) for the
-  fixed effects part) of a random-intercept model." />
+<meta property="og:title" content="Compute intercept-only model for regression models — null_model" />
+<meta property="og:description" content="This function computes the null-model (i.e. (y ~ 1)) of
+  a model. For mixed models, the null-model takes random effects into account." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.3.1</span>
       </span>
     </div>
 
@@ -123,24 +123,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute intercept-only model for mixed models</h1>
+    <h1>Compute intercept-only model for regression models</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/null_model.R'><code>R/null_model.R</code></a></small>
     <div class="hidden name"><code>null_model.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function compute the null-model (i.e. <code>(y ~ 1)</code>) for the
-  fixed effects part) of a random-intercept model.</p>
+    <p>This function computes the null-model (i.e. <code>(y ~ 1)</code>) of
+  a model. For mixed models, the null-model takes random effects into account.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>null_model</span>(<span class='no'>model</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>null_model</span>(<span class='no'>model</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A mixed effects model.</p></td>
+      <td><p>A (mixed effects) model.</p></td>
     </tr>
     <tr>
       <th>verbose</th>

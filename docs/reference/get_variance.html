@@ -83,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.3.1</span>
       </span>
     </div>
 
@@ -220,11 +220,12 @@ take a few seconds to calculate.</p></td>
    depends on the model family. For Gaussian models, it is
    &sigma;<sup>2</sup> (i.e.
    <code>sigma(model)^2</code>). For models with binary outcome, it is
-   \(\pi^2 / 3\) for logit-link and <code>1</code> for probit-link. For all
-   other models, the distribution-specific variance is based on lognormal
-   approximation, \(log(1 + var(x) / \mu^2)\) (see <cite>Nakagawa et al. 2017</cite>).
-   The expected variance of a zero-inflated model is computed according
-   to <cite>Zuur et al. 2012, p277</cite>.</p><p></p><h3>Variance for the additive overdispersion term</h3>
+   \(\pi^2 / 3\) for logit-link, <code>1</code> for probit-link, and \(\pi^2 / 3\)
+   for cloglog-links. Models from Gamma-families use \(\mu^2)\) (as obtained
+   from <code>family$variance()</code>. For all other models, the distribution-specific
+   variance is based on lognormal approximation, \(log(1 + var(x) / \mu^2)\)
+   (see <cite>Nakagawa et al. 2017</cite>). The expected variance of a zero-inflated
+   model is computed according to <cite>Zuur et al. 2012, p277</cite>.</p><p></p><h3>Variance for the additive overdispersion term</h3>
 <p>The variance for the additive overdispersion term,
    &sigma;<sup>2</sup><sub><em>e</em></sub>,
    represents &#8220;the excess variation relative to what is expected
