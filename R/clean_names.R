@@ -69,8 +69,8 @@ clean_names.character <- function(x) {
   pattern <- c(
     "as.factor", "as.numeric", "factor", "offset", "log1p", "log10",
     "log2", "log-log", "scale-log", "log", "lag", "diff", "lspline",
-    "pspline", "poly", "catg", "asis", "matrx", "pol", "strata", "strat",
-    "scale", "scored", "interaction", "sqrt", "lsp", "rcs", "pb", "lo",
+    "pspline", "scale-poly", "poly", "catg", "asis", "matrx", "pol", "strata",
+    "strat", "scale", "scored", "interaction", "sqrt", "lsp", "rcs", "pb", "lo",
     "bs", "ns", "t2", "te", "ti", "tt", # need to be fixed first "mmc", "mm",
     "mi", "mo", "gp", "s", "I"
   )
@@ -100,6 +100,8 @@ clean_names.character <- function(x) {
         x[i] <- .trim(unique(sub("^scale\\(log1p\\(((\\w|\\.)*).*", "\\1", x[i])))
         x[i] <- .trim(unique(sub("^scale\\(log2\\(((\\w|\\.)*).*", "\\1", x[i])))
         x[i] <- .trim(unique(sub("^scale\\(log10\\(((\\w|\\.)*).*", "\\1", x[i])))
+      } else if (pattern[j] == "scale-poly") {
+        x[i] <- .trim(unique(sub("^scale\\(poly\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] %in% c("mmc", "mm")) {
         ## TODO multimembership-models need to be fixed
         p <- paste0("^", pattern[j], "\\((.*)\\).*")

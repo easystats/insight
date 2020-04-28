@@ -13,6 +13,7 @@
 
 * Fixed some issues with deparsings `NULL` strings under R 4.0.0.
 * Fixed accuracy in `get_variance()` for models from Gamma family.
+* Fixed edge case in `clean_names()`.
 
 # insight 0.8.3
 
