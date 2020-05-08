@@ -831,7 +831,12 @@ find_formula.lme <- function(x, ...) {
   fm <- eval(x$call$fixed)
   fmr <- eval(x$call$random)
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
-  fc <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
+  fcorr <- x$call$correlation
+  if (!is.null(fcorr)) {
+    fc <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
+  } else {
+    fc <- NULL
+  }
 
   .compact_list(list(
     conditional = fm,
