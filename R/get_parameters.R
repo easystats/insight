@@ -895,12 +895,16 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
     ))
   }
 
+  # ---- fixed effects (conditional model)
+
   fixed <- data.frame(
     Parameter = names(l$conditional),
     Estimate = unname(l$conditional),
     Component = "conditional",
     stringsAsFactors = FALSE
   )
+
+  # ---- fixed effects (zero_inflated model)
 
   if (.obj_has_name(l, "zero_inflated")) {
     fixedzi <- data.frame(
@@ -913,13 +917,29 @@ get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component 
     fixedzi <- NULL
   }
 
+  # ---- fixed effects (dispersion model)
+
+  if (.obj_has_name(l, "dispersion")) {
+    fixeddisp <- data.frame(
+      Parameter = names(l$dispersion),
+      Estimate = unname(l$dispersion),
+      Component = "dispersion",
+      stringsAsFactors = FALSE
+    )
+  } else {
+    fixeddisp <- NULL
+  }
+
+  # ---- build result
+
   if (effects == "fixed") {
     out <- switch(
       component,
-      all = rbind(fixed, fixedzi),
+      all = rbind(fixed, fixedzi, fixeddisp),
       conditional = fixed,
       zi = ,
-      zero_inflated = fixedzi
+      zero_inflated = fixedzi,
+      dispersion = fixeddisp
     )
     .remove_backticks_from_parameter_names(out)
   } else if (effects == "random") {

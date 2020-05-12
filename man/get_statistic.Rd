@@ -16,7 +16,7 @@ get_statistic(x, ...)
 
 \method{get_statistic}{glmmTMB}(
   x,
-  component = c("all", "conditional", "zi", "zero_inflated"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
   ...
 )
 

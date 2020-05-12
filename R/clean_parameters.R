@@ -58,6 +58,8 @@ clean_parameters.default <- function(x, group = "", ...) {
 
     com <- if (grepl("zero_inflated", i, fixed = TRUE)) {
       "zero_inflated"
+    } else if (grepl("dispersion", i, fixed = TRUE)) {
+      "dispersion"
     } else if (grepl("nonlinear", i, fixed = TRUE)) {
       "nonlinear"
     } else if (grepl("instruments", i, fixed = TRUE)) {

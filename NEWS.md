@@ -3,6 +3,7 @@
 ## General
 
 * *HRQoL* was removed from suggested packages, as it was removed from CRAN.
+* Better support for dispersion models in *glmmTMB*.
 
 ## Changes to functions
 
@@ -15,6 +16,7 @@
 * Fixed accuracy in `get_variance()` for models from Gamma family.
 * Fixed edge case in `clean_names()`.
 * Fixed issues with `find_formula.lme()` under R 4.0.0.
+* Fixed isses with examples from `clean_names()` under R-devel.
 
 # insight 0.8.3
 

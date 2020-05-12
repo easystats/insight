@@ -293,6 +293,7 @@ get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", 
     "conditional" = stats::vcov(x)[["cond"]],
     "zi" = ,
     "zero_inflated" = stats::vcov(x)[["zi"]],
+    "dispersion" = stats::vcov(x)[["disp"]],
     stats::vcov(x, full = TRUE)
   )
 

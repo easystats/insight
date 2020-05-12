@@ -814,4 +814,49 @@ if (require("testthat") &&
     expect_identical(find_statistic(m6), "z-statistic")
     expect_identical(find_statistic(m7), "z-statistic")
   })
+
+
+  # dispersion model, example from ?glmmTMB
+  sim1 <- function(nfac = 40, nt = 100, facsd = 0.1, tsd = 0.15, mu = 0, residsd = 1) {
+    dat <- expand.grid(fac=factor(letters[1:nfac]), t=1:nt)
+    n <- nrow(dat)
+    dat$REfac <- rnorm(nfac, sd=facsd)[dat$fac]
+    dat$REt <- rnorm(nt, sd=tsd)[dat$t]
+    dat$x <- rnorm(n, mean=mu, sd=residsd) + dat$REfac + dat$REt
+    dat
+  }
+  set.seed(101)
+  d1 <- sim1(mu = 100, residsd = 10)
+  d2 <- sim1(mu = 200, residsd = 5)
+  d1$sd <- "ten"
+  d2$sd <- "five"
+  dat <- rbind(d1, d2)
+  m0 <- glmmTMB(x ~ sd + (1 | t), dispformula =  ~ sd, data = dat)
+
+  test_that("get_paramaters", {
+    expect_equal(nrow(get_parameters(m0)), 4)
+    expect_equal(
+      colnames(get_parameters(m0)),
+      c("Parameter", "Estimate", "Component")
+    )
+    expect_equal(
+      get_parameters(m0)$Parameter,
+      c(
+        "(Intercept)",
+        "sdten",
+        "(Intercept)",
+        "sdten"
+      )
+    )
+    expect_equal(
+      get_parameters(m0)$Estimate,
+      c(200.03431, -99.71491, 3.20287, 1.38648),
+      tolerance = 1e-3
+    )
+    expect_equal(
+      get_parameters(m0)$Component,
+      c("conditional", "conditional", "dispersion", "dispersion")
+    )
+  })
+
 }

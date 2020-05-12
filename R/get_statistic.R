@@ -139,7 +139,7 @@ get_statistic.feis <- get_statistic.default
 #' @importFrom stats coef
 #' @rdname get_statistic
 #' @export
-get_statistic.glmmTMB <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+get_statistic.glmmTMB <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
   component <- match.arg(component)
 
   cs <- .compact_list(stats::coef(summary(x)))
@@ -156,6 +156,7 @@ get_statistic.glmmTMB <- function(x, component = c("all", "conditional", "zi", "
   stat <- do.call(rbind, out)
   stat$Component <- .rename_values(stat$Component, "cond", "conditional")
   stat$Component <- .rename_values(stat$Component, "zi", "zero_inflated")
+  stat$Component <- .rename_values(stat$Component, "disp", "dispersion")
 
   stat <- .filter_component(stat, component)
   stat <- .remove_backticks_from_parameter_names(stat)
