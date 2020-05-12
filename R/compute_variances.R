@@ -10,10 +10,6 @@
 
   faminfo <- model_info(x)
 
-  if (!faminfo$is_mixed) {
-    stop("Model is not a mixed model.", call. = FALSE)
-  }
-
   if (faminfo$family %in% c("truncated_nbinom1", "truncated_nbinom2")) {
     if (verbose) {
       warning(sprintf("Truncated negative binomial families are currently not supported by `%s`.", name_fun), call. = F)
@@ -262,6 +258,9 @@
 #
 #' @importFrom stats nobs
 .compute_variance_random <- function(terms, x, vals) {
+  if (is.null(terms)) {
+    return(NULL)
+  }
   .sigma_sum <- function(Sigma) {
     rn <- rownames(Sigma)
 
