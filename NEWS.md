@@ -8,6 +8,7 @@
 ## Changes to functions
 
 * `null_model()` now also works for non-mixed models.
+* `get_variance()` now also computes variance components for models (from mixed models packages) without random effects.
 * Improved support for `afex_aov` and `aovlist` (i.e. Anova with error term).
 
 ## Bug fixes
