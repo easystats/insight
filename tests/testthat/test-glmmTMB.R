@@ -818,11 +818,11 @@ if (require("testthat") &&
 
   # dispersion model, example from ?glmmTMB
   sim1 <- function(nfac = 40, nt = 100, facsd = 0.1, tsd = 0.15, mu = 0, residsd = 1) {
-    dat <- expand.grid(fac=factor(letters[1:nfac]), t=1:nt)
+    dat <- expand.grid(fac = factor(letters[1:nfac]), t = 1:nt)
     n <- nrow(dat)
-    dat$REfac <- rnorm(nfac, sd=facsd)[dat$fac]
-    dat$REt <- rnorm(nt, sd=tsd)[dat$t]
-    dat$x <- rnorm(n, mean=mu, sd=residsd) + dat$REfac + dat$REt
+    dat$REfac <- rnorm(nfac, sd = facsd)[dat$fac]
+    dat$REt <- rnorm(nt, sd = tsd)[dat$t]
+    dat$x <- rnorm(n, mean = mu, sd = residsd) + dat$REfac + dat$REt
     dat
   }
   set.seed(101)
