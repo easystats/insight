@@ -131,10 +131,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
 
 
     test_that("get_paramaters", {
-      expect_equal(nrow(get_parameters(m1)), 4)
+      expect_equal(nrow(get_parameters(m1)), 5)
       expect_equal(
         get_parameters(m1)$Parameter,
-        c("(Intercept)", "elevation", "region2", "region3")
+        c("(Intercept)", "elevation", "region2", "region3", "(Intercept)")
       )
     })
 
