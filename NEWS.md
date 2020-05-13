@@ -17,7 +17,7 @@
 * Fixed accuracy in `get_variance()` for models from Gamma family.
 * Fixed edge case in `clean_names()`.
 * Fixed issues with `find_formula.lme()` under R 4.0.0.
-* Fixed isses with examples from `clean_names()` under R-devel.
+* Fixed issues with examples from `clean_names()` under R-devel.
 
 # insight 0.8.3
 
