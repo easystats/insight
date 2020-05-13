@@ -6,6 +6,7 @@
 #'
 #' @param model A (mixed effects) model.
 #' @param verbose Toggle off warnings.
+#' @param ... Arguments passed to or from other methods.
 #'
 #' @return The null-model of \code{x}
 #'
