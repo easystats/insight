@@ -236,7 +236,7 @@ find_formula.gls <- function(x, ...) {
   ## TODO this is an intermediate fix to return the correlation variables from gls-objects
   fcorr <- x$call$correlation
   if (!is.null(fcorr)) {
-    f_corr <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
+    f_corr <- parse(text = .safe_deparse(x$call$correlation))[[1]]
   } else {
     f_corr <- NULL
   }
