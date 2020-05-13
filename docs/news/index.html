@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4</span>
       </span>
     </div>
 
@@ -135,6 +135,7 @@
 <ul>
 <li>
 <em>HRQoL</em> was removed from suggested packages, as it was removed from CRAN.</li>
+<li>Better support for dispersion models in <em>glmmTMB</em>.</li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
@@ -143,6 +144,8 @@
 <ul>
 <li>
 <code><a href="../reference/null_model.html">null_model()</a></code> now also works for non-mixed models.</li>
+<li>
+<code><a href="../reference/get_variance.html">get_variance()</a></code> now also computes variance components for models (from mixed models packages) without random effects.</li>
 <li>Improved support for <code>afex_aov</code> and <code>aovlist</code> (i.e. Anova with error term).</li>
 </ul>
 </div>
@@ -152,6 +155,9 @@
 <ul>
 <li>Fixed some issues with deparsings <code>NULL</code> strings under R 4.0.0.</li>
 <li>Fixed accuracy in <code><a href="../reference/get_variance.html">get_variance()</a></code> for models from Gamma family.</li>
+<li>Fixed edge case in <code><a href="../reference/clean_names.html">clean_names()</a></code>.</li>
+<li>Fixed issues with <code>find_formula.lme()</code> under R 4.0.0.</li>
+<li>Fixed issues with examples from <code><a href="../reference/clean_names.html">clean_names()</a></code> under R-devel.</li>
 </ul>
 </div>
 </div>
