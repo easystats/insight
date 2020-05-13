@@ -234,7 +234,12 @@ find_formula.RM <- find_formula.MANOVA
 #' @export
 find_formula.gls <- function(x, ...) {
   ## TODO this is an intermediate fix to return the correlation variables from gls-objects
-  f_corr <- parse(text = .safe_deparse(x$call$correlation))[[1]]
+  fcorr <- x$call$correlation
+  if (!is.null(fcorr)) {
+    f_corr <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
+  } else {
+    f_corr <- NULL
+  }
   if (is.symbol(f_corr)) {
     f_corr <- paste("~", .safe_deparse(f_corr))
   } else {

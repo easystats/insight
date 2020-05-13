@@ -320,7 +320,7 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family %in% c("Gamma", "gamma")) {
-      ## TODO needs some more checking
+      ## TODO needs some more checking - should now be in line with other packages
       dist.variance <- switch(
         faminfo$link_function,
         inverse = ,
