@@ -268,7 +268,7 @@
       valid <- rownames(Sigma) %in% colnames(vals$X)
       if (!all(valid)) {
         rn <- rn[valid]
-        Sigma <- Sigma[valid, valid]
+        Sigma <- Sigma[valid, valid, drop = FALSE]
       }
     }
 
