@@ -58,7 +58,7 @@
     grepl("^hu", fitfam, perl = TRUE) |
     grepl("^truncated", fitfam, perl = TRUE) |
     fitfam == "ztnbinom" |
-    fitfam %in% c("truncpoiss", "truncnbinom", "truncnbinom1")
+    fitfam %in% c("truncpoiss", "truncnbinom", "truncnbinom1", "truncpoisson")
 
   is.ordinal <-
     inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "mixor", "LORgee")) |

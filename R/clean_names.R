@@ -84,8 +84,12 @@ clean_names.character <- function(x) {
   # do we have a "log()" pattern here? if yes, get capture region
   # which matches the "cleaned" variable name
   cleaned <- sapply(1:length(x), function(i) {
+    # check if we have special patterns like 100 * log(xy), and remove it
+    if (grepl("^([0-9]+)", x[i])) {
+      x[i] <- gsub("^([0-9]+)[^[:alnum:]]+(.*)", "\\2", x[i])
+    }
     for (j in 1:length(pattern)) {
-      # remove possible  namespace
+      # remove possible namespace
       x[i] <- sub("(.*)::(.*)", "\\2", x[i])
       if (pattern[j] == "offset") {
         x[i] <- .trim(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))

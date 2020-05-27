@@ -322,6 +322,20 @@ link_inverse.mixor <- link_inverse.clm
 
 
 #' @export
+link_inverse.robmixglm <- function(x, ...) {
+  switch(
+    tolower(x$family),
+    gaussian = stats::make.link(link = "identity")$linkinv,
+    binomial = stats::make.link(link = "logit")$linkinv,
+    gamma = stats::make.link(link = "inverse")$linkinv,
+    poisson = ,
+    truncpoisson = stats::make.link(link = "log")$linkinv,
+    stats::make.link(link = "identity")$linkinv
+  )
+}
+
+
+#' @export
 link_inverse.cglm <- function(x, ...) {
   link <- parse(text = .safe_deparse(x$call))[[1]]$link
   method <- parse(text = .safe_deparse(x$call))[[1]]$method

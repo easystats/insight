@@ -288,6 +288,20 @@ link_function.mixor <- link_function.clm
 
 
 #' @export
+link_function.robmixglm <- function(x, ...) {
+  switch(
+    tolower(x$family),
+    gaussian = stats::make.link(link = "identity")$linkfun,
+    binomial = stats::make.link(link = "logit")$linkfun,
+    gamma = stats::make.link(link = "inverse")$linkfun,
+    poisson = ,
+    truncpoisson = stats::make.link(link = "log")$linkfun,
+    stats::make.link(link = "identity")$linkfun
+  )
+}
+
+
+#' @export
 link_function.MCMCglmm <- function(x, ...) {
   switch(
     x$Residual$original.family,

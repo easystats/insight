@@ -153,7 +153,8 @@ get_data.complmrob <- get_data.gls
 #' @export
 get_data.nlrq <- get_data.gls
 
-
+#' @export
+get_data.robmixglm <- get_data.gls
 
 
 

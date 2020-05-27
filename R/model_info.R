@@ -619,6 +619,30 @@ model_info.stanmvreg <- function(x, ...) {
 
 
 #' @export
+model_info.robmixglm <- function(x, ...) {
+  f <- switch(
+    tolower(x$family),
+    gaussian = stats::gaussian("identity"),
+    binomial = stats::binomial("logit"),
+    poisson = stats::poisson("log"),
+    gamma = stats::Gamma("inverse"),
+    truncpoisson = stats::poisson("log"),
+    stats::gaussian("identity")
+  )
+  .make_family(
+    x = x,
+    fitfam = f$family,
+    logit.link = f$link == "logit",
+    multi.var = FALSE,
+    link.fun = f$link,
+    zero.inf = x$family == "truncpoisson",
+    hurdle = x$family == "truncpoisson",
+    ...
+  )
+}
+
+
+#' @export
 model_info.Arima <- function(x, ...) {
   .make_family(x, ...)
 }

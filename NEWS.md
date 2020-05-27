@@ -1,9 +1,14 @@
 # insight 0.8.5
 
+## New supported model classes
+
+* `robmixglm` (*robmixglm*)
+
 ## Changes to functions
 
 * `get_varcov.glmmTMB()` now also returns the variance-covariance matrix for the dispersion model.
 * `model_info()` returns `$is_dispersion = TRUE` for *glmmTMB* objects with dispersion model.
+* `clean_names()` now also removes mathematical operations (like `100 * log(x)`, which will return `"x"`).
 
 # insight 0.8.4
 

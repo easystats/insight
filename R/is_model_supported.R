@@ -137,6 +137,7 @@ supported_models <- function() {
     "RM",
     "rma",
     "rma.uni",
+    "robmixglm",
     "rq",
     "rqss",
     "speedlm",

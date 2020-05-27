@@ -631,6 +631,24 @@ get_statistic.mlogit <- function(x, ...) {
 
 
 #' @export
+get_statistic.robmixglm <- function(x, ...) {
+  cs <- stats::coef(summary(x))
+
+  out <- data.frame(
+    Parameter = rownames(cs),
+    Statistic = as.vector(cs[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- out[!is.na(out$Statistic), ]
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.averaging <- function(x, component = c("conditional", "full"), ...) {
   component <- match.arg(component)
   params <- get_parameters(x, component = component)
