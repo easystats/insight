@@ -11,9 +11,9 @@
 #'   zero-inflated model parts)? Applies to models with zero-inflated component,
 #'   or models with precision (e.g. \code{betareg}) component. \code{component}
 #'   may be one of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"},
-#'   \code{"precision"}, or \code{"all"}. May be abbreviated. Note that the
-#'   \emph{conditional} component is also called \emph{count} or \emph{mean}
-#'   component, depending on the model.
+#'   \code{"dispersion"}, \code{"precision"}, or \code{"all"}. May be abbreviated.
+#'   Note that the \emph{conditional} component is also called \emph{count} or
+#'   \emph{mean} component, depending on the model.
 #' @param effects Should the complete variance-covariance matrix of the model
 #'   be returned, or only for specific model parameters only? Currently only
 #'   applies to models of class \code{mixor}.
@@ -285,7 +285,7 @@ get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "
 
 #' @rdname get_varcov
 #' @export
-get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
+get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", "zi", "dispersion", "all"), ...) {
   component <- match.arg(component)
 
   vc <- switch(

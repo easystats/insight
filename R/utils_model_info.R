@@ -1,4 +1,4 @@
-.make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity", ...) {
+.make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity", dispersion = FALSE, ...) {
   # create logical for family
   binom_fam <-
     fitfam %in% c("bernoulli", "binomial", "quasibinomial", "binomialff") |
@@ -186,6 +186,7 @@
     is_tweedie = tweedie_model,
     is_zeroinf = zero.inf,
     is_zero_inflated = zero.inf,
+    is_dispersion = dispersion,
     is_hurdle = hurdle,
     is_ordinal = is.ordinal,
     is_cumulative = is.ordinal,

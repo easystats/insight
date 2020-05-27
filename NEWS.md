@@ -1,3 +1,10 @@
+# insight 0.8.5
+
+## Changes to functions
+
+* `get_varcov.glmmTMB()` now also returns the variance-covariance matrix for the dispersion model.
+* `model_info()` returns `$is_dispersion = TRUE` for *glmmTMB* objects with dispersion model.
+
 # insight 0.8.4
 
 ## General
