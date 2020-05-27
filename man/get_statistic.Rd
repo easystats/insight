@@ -23,7 +23,7 @@ get_statistic(x, ...)
 
 \method{get_statistic}{clm2}(x, component = c("all", "conditional", "scale"), ...)
 
-\method{get_statistic}{emmGrid}(model, ci = 0.95, adjust = "none", ...)
+\method{get_statistic}{emmGrid}(x, ci = 0.95, adjust = "none", ...)
 
 \method{get_statistic}{gee}(x, robust = FALSE, ...)
 

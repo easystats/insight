@@ -636,7 +636,7 @@ get_statistic.mlogit <- function(x, ...) {
 #' @export
 get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", ...) {
   s <- summary(x, level = ci, adjust = adjust)
-  estimate_pos <- which(colnames(s) == "emmean")
+  estimate_pos <- which(colnames(s) == x@misc$estName)
 
   if (length(estimate_pos)) {
     msg <- attributes(s)$mesg
@@ -656,8 +656,13 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", ...) {
     }
 
     fac <- stats::qt((1 + ci_level) / 2, df = s$df)
-    se <- (s$upper.CL - s$lower.CL) / (2 * fac)
-    stat <- s$emmean / se
+
+    if ("asymp.LCL" %in% colnames(s)) {
+      se <- (s$asymp.UCL - s$asymp.LCL) / (2 * fac)
+    } else {
+      se <- (s$upper.CL - s$lower.CL) / (2 * fac)
+    }
+    stat <- s[[x@misc$estName]] / se
 
     out <- data.frame(
       s[, 1:(estimate_pos - 1), drop = FALSE],

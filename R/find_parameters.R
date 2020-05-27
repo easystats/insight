@@ -1160,7 +1160,7 @@ find_parameters.wbgee <- find_parameters.wbm
 #' @export
 find_parameters.emmGrid <- function(x, flatten = TRUE, ...) {
   s <- summary(x)
-  estimate_pos <- which(colnames(s) == "emmean")
+  estimate_pos <- which(colnames(s) == x@misc$estName)
   out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
 
   if (flatten) {

@@ -193,7 +193,7 @@ get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_t
 #' @export
 get_parameters.emmGrid <- function(x, ...) {
   s <- summary(x)
-  estimate_pos <- which(colnames(s) == "emmean")
+  estimate_pos <- which(colnames(s) == x@misc$estName)
 
   params <- data.frame(
     s[, 1:(estimate_pos - 1), drop = FALSE],
