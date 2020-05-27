@@ -49,6 +49,7 @@ Retrieve information from model objects.
      \item \code{is_survival}: model is a survival model
      \item \code{is_zero_inflated}: model has zero-inflation component
      \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
+     \item \code{is_dispersion}: model has dispersion component
      \item \code{is_mixed}: model is a mixed effects model (with random effects)
      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
      \item \code{is_trial}: model response contains additional information about the trials
