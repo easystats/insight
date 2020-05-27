@@ -292,13 +292,14 @@ supported_models()
 #>  [91] "multinom"          "ols"               "plm"              
 #>  [94] "polr"              "psm"               "rlm"              
 #>  [97] "rlmerMod"          "RM"                "rma"              
-#> [100] "rma.uni"           "rq"                "rqss"             
-#> [103] "speedglm"          "speedlm"           "stanmvreg"        
-#> [106] "stanreg"           "survfit"           "survreg"          
-#> [109] "svyglm"            "svyolr"            "tobit"            
-#> [112] "truncreg"          "vgam"              "vglm"             
-#> [115] "wbgee"             "wblm"              "wbm"              
-#> [118] "zcpglm"            "zeroinfl"          "zerotrunc"
+#> [100] "rma.uni"           "robmixglm"         "rq"               
+#> [103] "rqss"              "speedglm"          "speedlm"          
+#> [106] "stanmvreg"         "stanreg"           "survfit"          
+#> [109] "survreg"           "svyglm"            "svyolr"           
+#> [112] "tobit"             "truncreg"          "vgam"             
+#> [115] "vglm"              "wbgee"             "wblm"             
+#> [118] "wbm"               "zcpglm"            "zeroinfl"         
+#> [121] "zerotrunc"
 ```
 
   - **Didn’t find a model?** [File an
