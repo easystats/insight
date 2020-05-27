@@ -5,6 +5,7 @@
 \alias{get_statistic.default}
 \alias{get_statistic.glmmTMB}
 \alias{get_statistic.clm2}
+\alias{get_statistic.emmGrid}
 \alias{get_statistic.gee}
 \alias{get_statistic.betareg}
 \alias{get_statistic.DirichletRegModel}
@@ -21,6 +22,8 @@ get_statistic(x, ...)
 )
 
 \method{get_statistic}{clm2}(x, component = c("all", "conditional", "scale"), ...)
+
+\method{get_statistic}{emmGrid}(model, ci = 0.95, adjust = "none", ...)
 
 \method{get_statistic}{gee}(x, robust = FALSE, ...)
 
@@ -47,6 +50,10 @@ with zero-inflated component. \code{component} may be one of
 is also possible. May be abbreviated. Note that the \emph{conditional}
 component is also called \emph{count} or \emph{mean} component, depending
 on the model.}
+
+\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%). Currently only applies to objects of class \code{emmGrid}.}
+
+\item{adjust}{Character value naming the method used to adjust p-values or confidence intervals. See \code{\link[emmeans]{summary.emmGrid}} for details.}
 
 \item{robust}{Logical, if \code{TRUE}, test statistic based on robust standard
 errors is returned.}

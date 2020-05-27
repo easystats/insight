@@ -190,6 +190,22 @@ get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_t
 # Special models ---------------------------------------------
 
 
+#' @export
+get_parameters.emmGrid <- function(x, ...) {
+  s <- summary(x)
+  estimate_pos <- which(colnames(s) == "emmean")
+
+  params <- data.frame(
+    s[, 1:(estimate_pos - 1), drop = FALSE],
+    Estimate = s[[estimate_pos]],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.averaging <- function(x, component = c("conditional", "full"), ...) {

@@ -19,6 +19,8 @@
 #'   on the model.
 #' @param robust Logical, if \code{TRUE}, test statistic based on robust standard
 #'   errors is returned.
+#' @param adjust Character value naming the method used to adjust p-values or confidence intervals. See \code{\link[emmeans]{summary.emmGrid}} for details.
+#' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%). Currently only applies to objects of class \code{emmGrid}.
 #' @param ... Currently not used.
 #'
 #' @return A data frame with the model's parameter names and the related test statistic.
@@ -628,6 +630,49 @@ get_statistic.mlogit <- function(x, ...) {
 
 
 # Other models -------------------------------------------------------
+
+
+#' @rdname get_statistic
+#' @export
+get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", ...) {
+  s <- summary(x, level = ci, adjust = adjust)
+  estimate_pos <- which(colnames(s) == "emmean")
+
+  if (length(estimate_pos)) {
+    msg <- attributes(s)$mesg
+    if (!is.null(msg)) {
+      msg <- msg[grepl("^Confidence level", msg)]
+      if (length(msg)) {
+        ci_level <- tryCatch(
+          {
+            as.numeric(trimws(gsub("Confidence level used:", "", msg, fixed = TRUE)))
+          },
+          warning = function(w) { .95 },
+          error = function(e) { .95 }
+        )
+      } else {
+        ci_level <- .95
+      }
+    }
+
+    fac <- stats::qt((1 + ci_level) / 2, df = s$df)
+    se <- (s$upper.CL - s$lower.CL) / (2 * fac)
+    stat <- s$emmean / se
+
+    out <- data.frame(
+      s[, 1:(estimate_pos - 1), drop = FALSE],
+      Statistic = as.vector(stat),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+
+    out <- .remove_backticks_from_parameter_names(out)
+    attr(out, "statistic") <- find_statistic(x)
+    out
+  } else {
+    return(NULL)
+  }
+}
 
 
 #' @export

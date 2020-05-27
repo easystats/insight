@@ -1157,6 +1157,20 @@ find_parameters.wbgee <- find_parameters.wbm
 # Other models -----------------------------------
 
 
+#' @export
+find_parameters.emmGrid <- function(x, flatten = TRUE, ...) {
+  s <- summary(x)
+  estimate_pos <- which(colnames(s) == "emmean")
+  out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
 #' @importFrom stats na.omit coef
 #' @export
 find_parameters.manova <- function(x, flatten = FALSE, ...) {
