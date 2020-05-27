@@ -89,11 +89,11 @@ get_varcov.DirichletRegModel <- function(x, component = c("conditional", "precis
     if (component == "conditional") {
       vc <- stats::vcov(x)
       keep <- grepl("^(?!\\(phi\\))", rownames(vc), perl = TRUE)
-      vc <- vc[keep, keep]
+      vc <- vc[keep, keep, drop = FALSE]
     } else if (component == "precision") {
       vc <- stats::vcov(x)
       keep <- grepl("^\\(phi\\)", rownames(vc), perl = TRUE)
-      vc <- vc[keep, keep]
+      vc <- vc[keep, keep, drop = FALSE]
     } else {
       vc <- stats::vcov(x)
     }
@@ -129,7 +129,7 @@ get_varcov.clm2 <- function(x, component = c("all", "conditional", "scale"), ...
     "scale" = (1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)
   )
 
-  vc <- vc[range, range]
+  vc <- vc[range, range, drop = FALSE]
   .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
@@ -144,7 +144,7 @@ get_varcov.glmx <- function(x, component = c("all", "conditional", "extra"), ...
 
   if (component != "all") {
     keep <- match(insight::find_parameters(x)[[component]], rownames(vc))
-    vc <- vc[keep, keep]
+    vc <- vc[keep, keep, drop = FALSE]
   }
 
   if (.is_negativ_matrix(vc)) {
@@ -162,7 +162,7 @@ get_varcov.truncreg <- function(x, component = c("conditional", "all"), ...) {
   vc <- stats::vcov(x)
 
   if (component == "conditional") {
-    vc <- vc[1:(nrow(vc) - 1), 1:(ncol(vc) - 1)]
+    vc <- vc[1:(nrow(vc) - 1), 1:(ncol(vc) - 1), drop = FALSE]
   }
 
   if (.is_negativ_matrix(vc)) {
@@ -181,7 +181,7 @@ get_varcov.gamlss <- function(x, component = c("conditional", "all"), ...) {
 
   if (component == "conditional") {
     cond_pars <- length(find_parameters(x)$conditional)
-    vc <- as.matrix(vc)[1:cond_pars, 1:cond_pars]
+    vc <- as.matrix(vc)[1:cond_pars, 1:cond_pars, drop = FALSE]
   }
 
   if (.is_negativ_matrix(vc)) {
@@ -240,10 +240,10 @@ get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "
 
   vc <- switch(
     component,
-    "conditional" = vc[tweedie, tweedie],
+    "conditional" = vc[tweedie, tweedie, drop = FALSE],
     "zi" = ,
-    "zero_inflated" = vc[zero, zero],
-    vc[c(tweedie, zero), c(tweedie, zero)]
+    "zero_inflated" = vc[zero, zero, drop = FALSE],
+    vc[c(tweedie, zero), c(tweedie, zero), drop = FALSE]
   )
 
   if (.is_negativ_matrix(vc)) {
@@ -319,7 +319,7 @@ get_varcov.brmsfit <- function(x, component = c("conditional", "zero_inflated", 
   params <- find_parameters(x, effects = "fixed", component = component, flatten = TRUE)
   params <- gsub("^b_", "", params)
 
-  vc <- stats::vcov(x)[params, params]
+  vc <- stats::vcov(x)[params, params, drop = FALSE]
 
   if (.is_negativ_matrix(vc)) {
     vc <- .fix_negative_matrix(vc)
@@ -347,6 +347,22 @@ get_varcov.averaging <- function(x, ...) {
 
 
 #' @export
+get_varcov.robmixglm <- function(x, ...) {
+  params <- find_parameters(x, flatten = TRUE)
+  np <- length(params)
+  vc <- x$fit@vcov[1:np, 1:np, drop = FALSE]
+
+  dimnames(vc) <- list(params, params)
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  .remove_backticks_from_matrix_names(as.matrix(vc))
+}
+
+
+#' @export
 get_varcov.rq <- function(x, ...) {
   s <- summary(x, covariance = TRUE)
   vc <- as.matrix(s$cov)
@@ -369,7 +385,7 @@ get_varcov.nlrq <- get_varcov.rq
 #' @export
 get_varcov.flexsurvreg <- function(x, ...) {
   pars <- find_parameters(x, flatten = TRUE)
-  vc <- as.matrix(stats::vcov(x))[pars, pars]
+  vc <- as.matrix(stats::vcov(x))[pars, pars, drop = FALSE]
 
   if (.is_negativ_matrix(vc)) {
     vc <- .fix_negative_matrix(vc)
@@ -435,7 +451,7 @@ get_varcov.cglm <- function(x, ...) {
 get_varcov.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   params <- find_parameters(x, effects = effects, flatten = TRUE)
-  vc <- as.matrix(stats::vcov(x))[params, params]
+  vc <- as.matrix(stats::vcov(x))[params, params, drop = FALSE]
 
   if (.is_negativ_matrix(vc)) {
     vc <- .fix_negative_matrix(vc)
@@ -556,7 +572,7 @@ get_varcov.geeglm <- function(x, ...) {
 #' @export
 get_varcov.tobit <- function(x, ...) {
   coef_names <- find_parameters(x, flatten = TRUE)
-  vc <- stats::vcov(x)[coef_names, coef_names]
+  vc <- stats::vcov(x)[coef_names, coef_names, drop = FALSE]
 
   if (.is_negativ_matrix(vc)) {
     vc <- .fix_negative_matrix(vc)
