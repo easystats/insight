@@ -288,6 +288,19 @@ find_algorithm.stanreg <- function(x, ...) {
 
 
 #' @export
+find_algorithm.stanfit <- function(x, ...) {
+  info <- x$sim
+
+  list(
+    "algorithm" = x$algorithm,
+    "chains" = info$chains,
+    "iterations" = info$iter,
+    "warmup" = info$warmup
+  )
+}
+
+
+#' @export
 find_algorithm.brmsfit <- function(x, ...) {
   info <- x$fit@sim
 
