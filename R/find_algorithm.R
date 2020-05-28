@@ -290,9 +290,10 @@ find_algorithm.stanreg <- function(x, ...) {
 #' @export
 find_algorithm.stanfit <- function(x, ...) {
   info <- x@sim
+  algorithm <- unlist(x@stan_args)
 
   list(
-    "algorithm" = x$algorithm,
+    "algorithm" = as.vector(algorithm["algorithm"]),
     "chains" = info$chains,
     "iterations" = info$iter,
     "warmup" = info$warmup
