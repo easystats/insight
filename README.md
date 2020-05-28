@@ -5,8 +5,6 @@
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
 [![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/)
 ![R-check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)
-[![Build
-Status](https://travis-ci.org/easystats/insight.svg?branch=master)](https://travis-ci.org/easystats/insight)
 [![downloads](http://cranlogs.r-pkg.org/badges/insight)](http://cranlogs.r-pkg.org/)
 [![total](http://cranlogs.r-pkg.org/badges/grand-total/insight)](http://cranlogs.r-pkg.org/)
 
