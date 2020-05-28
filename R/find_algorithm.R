@@ -289,7 +289,7 @@ find_algorithm.stanreg <- function(x, ...) {
 
 #' @export
 find_algorithm.stanfit <- function(x, ...) {
-  info <- x$sim
+  info <- x@sim
 
   list(
     "algorithm" = x$algorithm,
