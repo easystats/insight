@@ -1057,8 +1057,22 @@ find_parameters.mcmc <- function(x, flatten = FALSE, parameters = NULL, ...) {
 
 
 #' @export
-find_parameters.stanfit <- function(x, flatten = FALSE, parameters = NULL, ...) {
-  l <- .filter_pars(list(conditional = colnames(as.data.frame(x))), parameters)
+find_parameters.stanfit <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, parameters = NULL, ...) {
+  fe <- colnames(as.data.frame(x))
+
+  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma|lp__))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
+  rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
+
+  l <- .compact_list(list(
+    conditional = cond,
+    random = rand
+  ))
+
+  l <- .filter_pars(l, parameters)
+
+  effects <- match.arg(effects)
+  elements <- .get_elements(effects, component = "all")
+  l <- .compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
