@@ -1525,6 +1525,12 @@ get_parameters.mcmc <- function(x, parameters = NULL, ...) {
 }
 
 
+#' @export
+get_parameters.stanfit <- function(x, parameters = NULL, ...) {
+  as.data.frame(x)[.get_parms_data(x, "all", "all", parameters)]
+}
+
+
 
 
 

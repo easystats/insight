@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `robmixglm` (*robmixglm*), partial support for *emmGrid*
+* `robmixglm` (*robmixglm*), partial support for *emmGrid* and *stanfit*
 
 ## Changes to functions
 

@@ -1056,6 +1056,18 @@ find_parameters.mcmc <- function(x, flatten = FALSE, parameters = NULL, ...) {
 }
 
 
+#' @export
+find_parameters.stanfit <- function(x, flatten = FALSE, parameters = NULL, ...) {
+  l <- .filter_pars(list(conditional = colnames(as.data.frame(x))), parameters)
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
 
 
 
