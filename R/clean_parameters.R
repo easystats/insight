@@ -272,6 +272,9 @@ clean_parameters.stanmvreg <- function(x, ...) {
 }
 
 
+#' @export
+clean_parameters.stanfit <- clean_parameters.stanreg
+
 
 #' @export
 clean_parameters.aovlist <- function(x, ...) {
