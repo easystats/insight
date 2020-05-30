@@ -187,10 +187,12 @@
 # extract random effects from formula
 .get_model_random <- function(f, split_nested = FALSE, model) {
   is_special <- inherits(
-      model,
-      c("MCMCglmm", "gee", "LORgee", "mixor", "clmm2", "felm", "feis", "bife",
-        "BFBayesFactor", "BBmm", "glimML", "MANOVA", "RM", "cglm")
+    model,
+    c(
+      "MCMCglmm", "gee", "LORgee", "mixor", "clmm2", "felm", "feis", "bife",
+      "BFBayesFactor", "BBmm", "glimML", "MANOVA", "RM", "cglm"
     )
+  )
 
   if (identical(.safe_deparse(f), "~0") ||
     identical(.safe_deparse(f), "~1")) {
