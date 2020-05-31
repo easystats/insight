@@ -1004,12 +1004,13 @@ model_info.logitmfx <- function(x, ...) {
 #' @export
 model_info.poissonmfx <- model_info.logitmfx
 
+#' @export
+model_info.negbinmfx <- model_info.logitmfx
 
 #' @export
 model_info.betamfx <- function(x, ...) {
   model_info.betareg(x$fit)
 }
-
 
 #' @export
 model_info.betaor <- model_info.betamfx

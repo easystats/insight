@@ -276,6 +276,10 @@ get_parameters.logitmfx <- function(x, include_marginal = FALSE, ...) {
 #' @export
 get_parameters.poissonmfx <- get_parameters.logitmfx
 
+#' @export
+get_parameters.negbinmfx <- get_parameters.logitmfx
+
+
 
 
 

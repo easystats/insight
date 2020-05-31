@@ -340,6 +340,10 @@ link_inverse.logitmfx <- function(x, ...) {
 #' @export
 link_inverse.poissonmfx <- link_inverse.logitmfx
 
+#' @export
+link_inverse.negbinmfx <- link_inverse.logitmfx
+
+
 
 
 

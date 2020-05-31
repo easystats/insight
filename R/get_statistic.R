@@ -714,6 +714,10 @@ get_statistic.logitmfx <- function(x, include_marginal = FALSE, ...) {
 #' @export
 get_statistic.poissonmfx <- get_statistic.logitmfx
 
+#' @export
+get_statistic.negbinmfx <- get_statistic.logitmfx
+
+
 
 
 

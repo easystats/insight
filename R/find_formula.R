@@ -345,6 +345,8 @@ find_formula.logitmfx <- function(x, ...) {
 #' @export
 find_formula.poissonmfx <- find_formula.logitmfx
 
+#' @export
+find_formula.negbinmfx <- find_formula.logitmfx
 
 
 
