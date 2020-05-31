@@ -47,7 +47,7 @@ clean_parameters <- function(x, ...) {
 
 #' @export
 clean_parameters.default <- function(x, group = "", ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE, include_marginal = TRUE)
 
   l <- lapply(names(pars), function(i) {
     eff <- if (grepl("random", i, fixed = TRUE)) {
@@ -68,6 +68,8 @@ clean_parameters.default <- function(x, group = "", ...) {
       "extra"
     } else if (grepl("scale", i, fixed = TRUE)) {
       "scale"
+    } else if (grepl("marginal", i, fixed = TRUE)) {
+      "marginal"
     } else {
       "conditional"
     }
