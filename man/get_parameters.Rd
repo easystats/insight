@@ -6,6 +6,7 @@
 \alias{get_parameters.cgam}
 \alias{get_parameters.averaging}
 \alias{get_parameters.betareg}
+\alias{get_parameters.betamfx}
 \alias{get_parameters.DirichletRegModel}
 \alias{get_parameters.clm2}
 \alias{get_parameters.coxme}
@@ -39,6 +40,13 @@ get_parameters(x, ...)
 \method{get_parameters}{averaging}(x, component = c("conditional", "full"), ...)
 
 \method{get_parameters}{betareg}(x, component = c("all", "conditional", "precision"), ...)
+
+\method{get_parameters}{betamfx}(
+  x,
+  component = c("all", "conditional", "precision"),
+  include_marginal = FALSE,
+  ...
+)
 
 \method{get_parameters}{DirichletRegModel}(x, component = c("all", "conditional", "precision"), ...)
 
@@ -143,6 +151,9 @@ get_parameters(x, ...)
  variable (so called fixed-effects regressions). May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
+
+\item{include_marginal}{Logical, for models with marginal effects (from \pkg{mfx})
+includes the parameter names of marginal effects.}
 
 \item{effects}{Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}

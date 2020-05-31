@@ -17,6 +17,8 @@
 #'    variable (so called fixed-effects regressions). May be abbreviated. Note that the
 #'   \emph{conditional} component is also called \emph{count} or \emph{mean}
 #'   component, depending on the model.
+#' @param include_marginal Logical, for models with marginal effects (from \pkg{mfx})
+#'   includes the parameter names of marginal effects.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -164,6 +166,30 @@ find_parameters.betareg <- function(x, flatten = FALSE, ...) {
     conditional = names(x$coefficients$mean),
     precision = names(x$coefficients$precision)
   )
+
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+
+#' @export
+find_parameters.betamfx <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
+  pars <- list(
+    marginal = rownames(x$mfxest),
+    conditional = names(x$fit$coefficients$mean),
+    precision = names(x$fit$coefficients$precision)
+  )
+
+  if (!include_marginal) {
+    pars$marginal <- NULL
+    pars <- .compact_list(pars)
+  }
 
   pars$conditional <- .remove_backticks_from_string(pars$conditional)
 

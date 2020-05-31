@@ -180,6 +180,25 @@ find_formula.gamm <- function(x, ...) {
 
 
 #' @export
+find_formula.betareg <- function(x, ...) {
+  f <- stats::formula(x)
+  fs <- .safe_deparse(f)
+
+  if (grepl("|", fs, fixed = TRUE)) {
+    fs <- trimws(unlist(strsplit(fs, "|", fixed = TRUE)))
+    list(conditional = stats::as.formula(fs[1]),
+         precision = stats::as.formula(paste0("~", fs[2])))
+  } else {
+    list(conditional = f)
+  }
+}
+
+
+#' @export
+find_formula.betamfx <- find_formula.betareg
+
+
+#' @export
 find_formula.rma <- function(x, ...) {
   NULL
 }

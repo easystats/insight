@@ -19,7 +19,7 @@
       fitfam %in% c("ztnbinom", "nbinom")
 
   beta_fam <-
-    inherits(x, "betareg") |
+    inherits(x, c("betareg", "betamfx")) |
       fitfam %in% c(
         "beta",
         "Beta",

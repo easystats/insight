@@ -120,6 +120,9 @@ or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{parameters}{Regular expression pattern that describes the parameters that
 should be returned.}
+
+\item{include_marginal}{Logical, for models with marginal effects (from \pkg{mfx})
+includes the parameter names of marginal effects.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,
