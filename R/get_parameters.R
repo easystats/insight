@@ -279,6 +279,61 @@ get_parameters.poissonmfx <- get_parameters.logitmfx
 #' @export
 get_parameters.negbinmfx <- get_parameters.logitmfx
 
+#' @export
+get_parameters.probitmfx <- get_parameters.logitmfx
+
+#' @rdname get_parameters
+#' @export
+get_parameters.logitor <- function(x, include_marginal = FALSE, ...) {
+  params <- get_parameters.default(x$fit, ...)
+  params$Component = "conditional"
+  mfx <- x$oddsratio
+
+  params <- rbind(
+    data.frame(
+      Parameter = rownames(mfx),
+      Estimate = as.vector(mfx[, 1]),
+      Component = "marginal",
+      stringsAsFactors = FALSE
+    ),
+    params
+  )
+
+  if (!include_marginal) {
+    params <- params[params$Component != "marginal", , drop = FALSE]
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+#' @export
+get_parameters.poissonirr <- function(x, include_marginal = FALSE, ...) {
+  params <- get_parameters.default(x$fit, ...)
+  params$Component = "conditional"
+  mfx <- x$irr
+
+  params <- rbind(
+    data.frame(
+      Parameter = rownames(mfx),
+      Estimate = as.vector(mfx[, 1]),
+      Component = "marginal",
+      stringsAsFactors = FALSE
+    ),
+    params
+  )
+
+  if (!include_marginal) {
+    params <- params[params$Component != "marginal", , drop = FALSE]
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+#' @export
+get_parameters.negbinirr <- get_parameters.poissonirr
+
+
+
 
 
 

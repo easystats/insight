@@ -838,25 +838,29 @@ get_data.betamfx <- function(x, ...) {
 }
 
 #' @export
-get_data.betaor <- function(x, ...) {
-  get_data(x$fit, ...)
-}
+get_data.betaor <- get_data.betamfx
 
 #' @export
-get_data.logitmfx <- function(x, ...) {
-  get_data(x$fit, ...)
-}
+get_data.logitor <- get_data.betamfx
 
 #' @export
-get_data.poissonmfx <- get_data.logitmfx
+get_data.poissonirr <- get_data.betamfx
 
 #' @export
-get_data.negbinmfx <- get_data.logitmfx
+get_data.negbinirr <- get_data.betamfx
 
 #' @export
-get_data.logitor <- function(x, ...) {
-  get_data(x$fit, ...)
-}
+get_data.logitmfx <- get_data.betamfx
+
+#' @export
+get_data.poissonmfx <- get_data.betamfx
+
+#' @export
+get_data.probitmfx <- get_data.betamfx
+
+#' @export
+get_data.negbinmfx <- get_data.betamfx
+
 
 
 

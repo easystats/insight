@@ -6,6 +6,7 @@
 \alias{get_parameters.cgam}
 \alias{get_parameters.betamfx}
 \alias{get_parameters.logitmfx}
+\alias{get_parameters.logitor}
 \alias{get_parameters.averaging}
 \alias{get_parameters.betareg}
 \alias{get_parameters.DirichletRegModel}
@@ -46,6 +47,8 @@ get_parameters(x, ...)
 )
 
 \method{get_parameters}{logitmfx}(x, include_marginal = FALSE, ...)
+
+\method{get_parameters}{logitor}(x, include_marginal = FALSE, ...)
 
 \method{get_parameters}{averaging}(x, component = c("conditional", "full"), ...)
 

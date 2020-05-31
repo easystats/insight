@@ -717,7 +717,56 @@ get_statistic.poissonmfx <- get_statistic.logitmfx
 #' @export
 get_statistic.negbinmfx <- get_statistic.logitmfx
 
+#' @export
+get_statistic.probitmfx <- get_statistic.logitmfx
 
+#' @rdname get_statistic
+#' @export
+get_statistic.logitor <- function(x, include_marginal = FALSE, ...) {
+  parms <- get_parameters(x, include_marginal = TRUE, ...)
+  cs <- stats::coef(summary(x$fit))
+  stat <- c(as.vector(x$oddsratio[, 3]), as.vector(cs[, 3]))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = stat,
+    Component = parms$Component,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (!include_marginal) {
+    out <- out[out$Component != "marginal", , drop = FALSE]
+  }
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+#' @export
+get_statistic.poissonirr <- function(x, include_marginal = FALSE, ...) {
+  parms <- get_parameters(x, include_marginal = TRUE, ...)
+  cs <- stats::coef(summary(x$fit))
+  stat <- c(as.vector(x$irr[, 3]), as.vector(cs[, 3]))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = stat,
+    Component = parms$Component,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (!include_marginal) {
+    out <- out[out$Component != "marginal", , drop = FALSE]
+  }
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+#' @export
+get_statistic.negbinirr <- get_statistic.poissonirr
 
 
 

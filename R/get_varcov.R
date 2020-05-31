@@ -394,6 +394,17 @@ get_varcov.poissonmfx <- get_varcov.logitmfx
 #' @export
 get_varcov.negbinmfx <- get_varcov.logitmfx
 
+#' @export
+get_varcov.probitmfx <- get_varcov.logitmfx
+
+#' @export
+get_varcov.logitor <- get_varcov.logitmfx
+
+#' @export
+get_varcov.poissonirr <- get_varcov.logitmfx
+
+#' @export
+get_varcov.negbinirr <- get_varcov.logitmfx
 
 
 

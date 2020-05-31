@@ -174,6 +174,45 @@ find_parameters.poissonmfx <- find_parameters.logitmfx
 #' @export
 find_parameters.negbinmfx <- find_parameters.logitmfx
 
+#' @export
+find_parameters.probitmfx <- find_parameters.logitmfx
+
+#' @export
+find_parameters.logitor <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
+  p <- .remove_backticks_from_string(names(stats::coef(x$fit)))
+  pars <- list(marginal = rownames(x$oddsratio), conditional = p)
+
+  if (!include_marginal) {
+    pars$marginal <- NULL
+    pars <- .compact_list(pars)
+  }
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+#' @export
+find_parameters.poissonirr <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
+  p <- .remove_backticks_from_string(names(stats::coef(x$fit)))
+  pars <- list(marginal = rownames(x$irr), conditional = p)
+
+  if (!include_marginal) {
+    pars$marginal <- NULL
+    pars <- .compact_list(pars)
+  }
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+#' @export
+find_parameters.negbinirr <- find_parameters.poissonirr
 
 
 

@@ -7,6 +7,7 @@
 \alias{get_statistic.clm2}
 \alias{get_statistic.betamfx}
 \alias{get_statistic.logitmfx}
+\alias{get_statistic.logitor}
 \alias{get_statistic.emmGrid}
 \alias{get_statistic.gee}
 \alias{get_statistic.betareg}
@@ -33,6 +34,8 @@ get_statistic(x, ...)
 )
 
 \method{get_statistic}{logitmfx}(x, include_marginal = FALSE, ...)
+
+\method{get_statistic}{logitor}(x, include_marginal = FALSE, ...)
 
 \method{get_statistic}{emmGrid}(x, ci = 0.95, adjust = "none", ...)
 
