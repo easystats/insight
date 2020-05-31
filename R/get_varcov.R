@@ -86,6 +86,9 @@ get_varcov.betamfx <- function(x, component = c("conditional", "precision", "all
   get_varcov.betareg(x$fit, component = component, ...)
 }
 
+#' @export
+get_varcov.betaor <- get_varcov.betamfx
+
 
 #' @rdname get_varcov
 #' @export

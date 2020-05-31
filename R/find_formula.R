@@ -197,6 +197,10 @@ find_formula.betareg <- function(x, ...) {
 #' @export
 find_formula.betamfx <- find_formula.betareg
 
+#' @export
+find_formula.betaor <- find_formula.betareg
+
+
 
 #' @export
 find_formula.rma <- function(x, ...) {

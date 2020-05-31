@@ -559,6 +559,8 @@ link_function.betamfx <- function(x, what = c("mean", "precision"), ...) {
   link_function.betareg(x$fit, what = what, ...)
 }
 
+#' @export
+link_function.betaor <- link_function.betamfx
 
 
 #' @rdname link_function

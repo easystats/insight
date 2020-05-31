@@ -901,6 +901,10 @@ model_info.betamfx <- function(x, ...) {
 
 
 #' @export
+model_info.betaor <- model_info.betamfx
+
+
+#' @export
 model_info.DirichletRegModel <- function(x, ...) {
   .make_family(
     x = x,

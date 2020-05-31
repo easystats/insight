@@ -363,6 +363,10 @@ n_obs.betamfx <- function(x, ...) {
 
 
 #' @export
+n_obs.betaor <- n_obs.betamfx
+
+
+#' @export
 n_obs.wbm <- function(x, ...) {
   nrow(x@frame)
 }

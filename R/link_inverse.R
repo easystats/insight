@@ -221,6 +221,11 @@ link_inverse.betamfx <- function(x, what = c("mean", "precision"), ...) {
 }
 
 
+#' @export
+link_inverse.betaor <- link_inverse.betamfx
+
+
+
 #' @rdname link_inverse
 #' @export
 link_inverse.DirichletRegModel <- function(x, what = c("mean", "precision"), ...) {
