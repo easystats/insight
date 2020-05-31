@@ -306,6 +306,21 @@ link_function.logitmfx <- function(x, ...) {
 #' @export
 link_function.poissonmfx <- link_function.logitmfx
 
+#' @export
+link_function.negbinmfx <- link_function.logitmfx
+
+#' @export
+link_function.probitmfx <- link_function.logitmfx
+
+#' @export
+link_function.negbinirr <- link_function.logitmfx
+
+#' @export
+link_function.poissonirr <- link_function.logitmfx
+
+#' @export
+link_function.logitor <- link_function.logitmfx
+
 
 
 

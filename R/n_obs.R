@@ -388,4 +388,16 @@ n_obs.logitmfx <- n_obs.betamfx
 n_obs.poissonmfx <- n_obs.betamfx
 
 #' @export
+n_obs.probitmfx <- n_obs.betamfx
+
+#' @export
 n_obs.negbinmfx <- n_obs.betamfx
+
+#' @export
+n_obs.negbinirr <- n_obs.betamfx
+
+#' @export
+n_obs.poissonirr <- n_obs.betamfx
+
+#' @export
+n_obs.logitor <- n_obs.betamfx

@@ -341,7 +341,20 @@ link_inverse.logitmfx <- function(x, ...) {
 link_inverse.poissonmfx <- link_inverse.logitmfx
 
 #' @export
+link_inverse.probitmfx <- link_inverse.logitmfx
+
+#' @export
 link_inverse.negbinmfx <- link_inverse.logitmfx
+
+#' @export
+link_inverse.logitor <- link_inverse.logitmfx
+
+#' @export
+link_inverse.probitirr <- link_inverse.logitmfx
+
+#' @export
+link_inverse.negbinirr <- link_inverse.logitmfx
+
 
 
 

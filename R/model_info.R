@@ -997,6 +997,14 @@ model_info.gamlss <- function(x, ...) {
 
 
 #' @export
+model_info.betamfx <- function(x, ...) {
+  model_info.betareg(x$fit)
+}
+
+#' @export
+model_info.betaor <- model_info.betamfx
+
+#' @export
 model_info.logitmfx <- function(x, ...) {
   model_info.default(x$fit, ...)
 }
@@ -1008,10 +1016,13 @@ model_info.poissonmfx <- model_info.logitmfx
 model_info.negbinmfx <- model_info.logitmfx
 
 #' @export
-model_info.betamfx <- function(x, ...) {
-  model_info.betareg(x$fit)
-}
+model_info.probitmfx <- model_info.logitmfx
 
 #' @export
-model_info.betaor <- model_info.betamfx
+model_info.logitor <- model_info.logitmfx
 
+#' @export
+model_info.poissonirr <- model_info.logitmfx
+
+#' @export
+model_info.negbinirr <- model_info.logitmfx
