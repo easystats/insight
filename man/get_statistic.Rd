@@ -8,6 +8,7 @@
 \alias{get_statistic.emmGrid}
 \alias{get_statistic.gee}
 \alias{get_statistic.betareg}
+\alias{get_statistic.betamfx}
 \alias{get_statistic.DirichletRegModel}
 \title{Get statistic associated with estimates}
 \usage{
@@ -28,6 +29,13 @@ get_statistic(x, ...)
 \method{get_statistic}{gee}(x, robust = FALSE, ...)
 
 \method{get_statistic}{betareg}(x, component = c("all", "conditional", "precision"), ...)
+
+\method{get_statistic}{betamfx}(
+  x,
+  component = c("all", "conditional", "precision"),
+  include_marginal = FALSE,
+  ...
+)
 
 \method{get_statistic}{DirichletRegModel}(x, component = c("all", "conditional", "precision"), ...)
 }

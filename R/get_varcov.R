@@ -81,6 +81,14 @@ get_varcov.betareg <- function(x, component = c("conditional", "precision", "all
 
 #' @rdname get_varcov
 #' @export
+get_varcov.betamfx <- function(x, component = c("conditional", "precision", "all"), ...) {
+  component <- match.arg(component)
+  get_varcov.betareg(x$fit, component = component, ...)
+}
+
+
+#' @rdname get_varcov
+#' @export
 get_varcov.DirichletRegModel <- function(x, component = c("conditional", "precision", "all"), ...) {
   component <- match.arg(component)
   if (x$parametrization == "common") {

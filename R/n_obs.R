@@ -357,6 +357,12 @@ n_obs.maxLik <- n_obs.mlogit
 
 
 #' @export
+n_obs.betamfx <- function(x, ...) {
+  nrow(x$fit)
+}
+
+
+#' @export
 n_obs.wbm <- function(x, ...) {
   nrow(x@frame)
 }

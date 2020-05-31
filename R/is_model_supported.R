@@ -49,6 +49,7 @@ supported_models <- function() {
     "BBmm",
     "BBreg",
     "bcplm",
+    "betamfx",
     "betareg",
     "BFBayesFactor",
     "bife",

@@ -213,6 +213,13 @@ link_inverse.betareg <- function(x, what = c("mean", "precision"), ...) {
 }
 
 
+#' @rdname link_inverse
+#' @export
+link_inverse.betamfx <- function(x, what = c("mean", "precision"), ...) {
+  what <- match.arg(what)
+  link_inverse.betareg(x$fit, what = what, ...)
+}
+
 
 #' @rdname link_inverse
 #' @export

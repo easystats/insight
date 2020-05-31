@@ -1192,6 +1192,37 @@ get_statistic.betareg <- function(x, component = c("all", "conditional", "precis
 
 #' @rdname get_statistic
 #' @importFrom stats coef
+#' @export
+get_statistic.betamfx <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
+  component <- match.arg(component)
+  parms <- get_parameters(x, component = "all", include_marginal = TRUE, ...)
+  cs <- do.call(rbind, stats::coef(summary(x$fit)))
+  stat <- c(as.vector(x$mfxest[, 3]), as.vector(cs[, 3]))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = stat,
+    Component = parms$Component,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (component != "all") {
+    out <- out[out$Component %in% c(component, "marginal"), , drop = FALSE]
+  }
+
+  if (!include_marginal) {
+    out <- out[out$Component != "marginal", , drop = FALSE]
+  }
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+#' @rdname get_statistic
+#' @importFrom stats coef
 #' @importFrom utils capture.output
 #' @export
 get_statistic.DirichletRegModel <- function(x, component = c("all", "conditional", "precision"), ...) {

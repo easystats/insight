@@ -3,6 +3,7 @@
 \name{link_inverse}
 \alias{link_inverse}
 \alias{link_inverse.betareg}
+\alias{link_inverse.betamfx}
 \alias{link_inverse.DirichletRegModel}
 \alias{link_inverse.gamlss}
 \title{Get link-inverse function from model object}
@@ -10,6 +11,8 @@
 link_inverse(x, ...)
 
 \method{link_inverse}{betareg}(x, what = c("mean", "precision"), ...)
+
+\method{link_inverse}{betamfx}(x, what = c("mean", "precision"), ...)
 
 \method{link_inverse}{DirichletRegModel}(x, what = c("mean", "precision"), ...)
 

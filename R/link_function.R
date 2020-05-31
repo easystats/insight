@@ -554,6 +554,15 @@ link_function.betareg <- function(x, what = c("mean", "precision"), ...) {
 
 #' @rdname link_function
 #' @export
+link_function.betamfx <- function(x, what = c("mean", "precision"), ...) {
+  what <- match.arg(what)
+  link_function.betareg(x$fit, what = what, ...)
+}
+
+
+
+#' @rdname link_function
+#' @export
 link_function.DirichletRegModel <- function(x, what = c("mean", "precision"), ...) {
   what <- match.arg(what)
   if (x$parametrization == "common") {
