@@ -348,6 +348,19 @@ find_formula.poissonmfx <- find_formula.logitmfx
 #' @export
 find_formula.negbinmfx <- find_formula.logitmfx
 
+#' @export
+find_formula.logitor <- find_formula.logitmfx
+
+#' @export
+find_formula.negbinirr <- find_formula.logitmfx
+
+#' @export
+find_formula.poissonirr <- find_formula.logitmfx
+
+#' @export
+find_formula.probitmfx <- find_formula.logitmfx
+
+
 
 
 
