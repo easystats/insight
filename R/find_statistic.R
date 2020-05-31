@@ -92,6 +92,7 @@ find_statistic <- function(x, ...) {
       "aareg",
       "Arima",
       "averaging",
+      "betamfx",
       "betareg",
       "bife",
       "boot_test_mediation",

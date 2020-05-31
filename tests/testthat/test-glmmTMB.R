@@ -831,7 +831,7 @@ if (require("testthat") &&
   d1$sd <- "ten"
   d2$sd <- "five"
   dat <- rbind(d1, d2)
-  m0 <- glmmTMB(x ~ sd + (1 | t), dispformula =  ~ sd, data = dat)
+  m0 <- glmmTMB(x ~ sd + (1 | t), dispformula = ~sd, data = dat)
 
   test_that("get_paramaters", {
     expect_equal(nrow(get_parameters(m0)), 4)
@@ -858,5 +858,4 @@ if (require("testthat") &&
       c("conditional", "conditional", "dispersion", "dispersion")
     )
   })
-
 }

@@ -647,8 +647,12 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", ...) {
           {
             as.numeric(trimws(gsub("Confidence level used:", "", msg, fixed = TRUE)))
           },
-          warning = function(w) { .95 },
-          error = function(e) { .95 }
+          warning = function(w) {
+            .95
+          },
+          error = function(e) {
+            .95
+          }
         )
       } else {
         ci_level <- .95
