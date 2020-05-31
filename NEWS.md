@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `robmixglm` (*robmixglm*), `betamfx`, `betaor` (*mfx*), partial support for *emmGrid* and *stanfit*
+* `robmixglm` (*robmixglm*), `betamfx`, `betaor`, `logitmfx` (*mfx*), partial support for *emmGrid* and *stanfit*
 
 ## Changes to functions
 

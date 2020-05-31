@@ -2,19 +2,19 @@
 % Please edit documentation in R/link_function.R
 \name{link_function}
 \alias{link_function}
+\alias{link_function.betamfx}
 \alias{link_function.gamlss}
 \alias{link_function.betareg}
-\alias{link_function.betamfx}
 \alias{link_function.DirichletRegModel}
 \title{Get link-function from model object}
 \usage{
 link_function(x, ...)
 
+\method{link_function}{betamfx}(x, what = c("mean", "precision"), ...)
+
 \method{link_function}{gamlss}(x, what = c("mu", "sigma", "nu", "tau"), ...)
 
 \method{link_function}{betareg}(x, what = c("mean", "precision"), ...)
-
-\method{link_function}{betamfx}(x, what = c("mean", "precision"), ...)
 
 \method{link_function}{DirichletRegModel}(x, what = c("mean", "precision"), ...)
 }

@@ -139,6 +139,7 @@ is_model <- function(x) {
       "lmerMod",
       "lmerModLmerTest",
       "logitmfx",
+      "logitor",
       "lqmm",
       "lrm",
       "manova",

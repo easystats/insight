@@ -81,17 +81,6 @@ get_varcov.betareg <- function(x, component = c("conditional", "precision", "all
 
 #' @rdname get_varcov
 #' @export
-get_varcov.betamfx <- function(x, component = c("conditional", "precision", "all"), ...) {
-  component <- match.arg(component)
-  get_varcov.betareg(x$fit, component = component, ...)
-}
-
-#' @export
-get_varcov.betaor <- get_varcov.betamfx
-
-
-#' @rdname get_varcov
-#' @export
 get_varcov.DirichletRegModel <- function(x, component = c("conditional", "precision", "all"), ...) {
   component <- match.arg(component)
   if (x$parametrization == "common") {
@@ -337,6 +326,29 @@ get_varcov.brmsfit <- function(x, component = c("conditional", "zero_inflated", 
   }
 
   .remove_backticks_from_matrix_names(as.matrix(vc))
+}
+
+
+
+
+
+
+# mfx models -------------------------------------------------------
+
+
+#' @rdname get_varcov
+#' @export
+get_varcov.betamfx <- function(x, component = c("conditional", "precision", "all"), ...) {
+  component <- match.arg(component)
+  get_varcov.betareg(x$fit, component = component, ...)
+}
+
+#' @export
+get_varcov.betaor <- get_varcov.betamfx
+
+#' @export
+get_varcov.logitmfx <- function(x, ...) {
+  get_varcov(x$fit, ...)
 }
 
 

@@ -643,6 +643,12 @@ model_info.robmixglm <- function(x, ...) {
 
 
 #' @export
+model_info.logitmfx <- function(x, ...) {
+  model_info.default(x$fit, ...)
+}
+
+
+#' @export
 model_info.Arima <- function(x, ...) {
   .make_family(x, ...)
 }

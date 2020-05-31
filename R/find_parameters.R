@@ -99,6 +99,80 @@ find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
 
 
 
+
+# mfx -----------------------------------------------
+
+
+#' @rdname find_parameters
+#' @export
+find_parameters.betamfx <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
+  pars <- list(
+    marginal = rownames(x$mfxest),
+    conditional = names(x$fit$coefficients$mean),
+    precision = names(x$fit$coefficients$precision)
+  )
+
+  if (!include_marginal) {
+    pars$marginal <- NULL
+    pars <- .compact_list(pars)
+  }
+
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+
+#' @export
+find_parameters.betaor <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
+  pars <- list(
+    marginal = rownames(x$oddsratio),
+    conditional = names(x$fit$coefficients$mean),
+    precision = names(x$fit$coefficients$precision)
+  )
+
+  if (!include_marginal) {
+    pars$marginal <- NULL
+    pars <- .compact_list(pars)
+  }
+
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+#' @export
+find_parameters.logitmfx <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
+  p <- .remove_backticks_from_string(names(stats::coef(x$fit)))
+  pars <- list(marginal = rownames(x$mfxest), conditional = p)
+
+  if (!include_marginal) {
+    pars$marginal <- NULL
+    pars <- .compact_list(pars)
+  }
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+
+
+
+
 # Ordinal -----------------------------------------------
 
 
@@ -166,55 +240,6 @@ find_parameters.betareg <- function(x, flatten = FALSE, ...) {
     conditional = names(x$coefficients$mean),
     precision = names(x$coefficients$precision)
   )
-
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
-
-  if (flatten) {
-    unique(unlist(pars))
-  } else {
-    pars
-  }
-}
-
-
-
-#' @rdname find_parameters
-#' @export
-find_parameters.betamfx <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
-  pars <- list(
-    marginal = rownames(x$mfxest),
-    conditional = names(x$fit$coefficients$mean),
-    precision = names(x$fit$coefficients$precision)
-  )
-
-  if (!include_marginal) {
-    pars$marginal <- NULL
-    pars <- .compact_list(pars)
-  }
-
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
-
-  if (flatten) {
-    unique(unlist(pars))
-  } else {
-    pars
-  }
-}
-
-
-
-#' @export
-find_parameters.betaor <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
-  pars <- list(
-    marginal = rownames(x$oddsratio),
-    conditional = names(x$fit$coefficients$mean),
-    precision = names(x$fit$coefficients$precision)
-  )
-
-  if (!include_marginal) {
-    pars$marginal <- NULL
-    pars <- .compact_list(pars)
-  }
 
   pars$conditional <- .remove_backticks_from_string(pars$conditional)
 

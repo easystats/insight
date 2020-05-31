@@ -82,6 +82,10 @@ link_inverse.speedglm <- link_inverse.glm
 #' @export
 link_inverse.bigglm <- link_inverse.glm
 
+#' @export
+link_inverse.logitmfx <- function(x, ...) {
+  link_inverse.glm(x$fit, ...)
+}
 
 
 
@@ -213,18 +217,6 @@ link_inverse.betareg <- function(x, what = c("mean", "precision"), ...) {
 }
 
 
-#' @rdname link_inverse
-#' @export
-link_inverse.betamfx <- function(x, what = c("mean", "precision"), ...) {
-  what <- match.arg(what)
-  link_inverse.betareg(x$fit, what = what, ...)
-}
-
-
-#' @export
-link_inverse.betaor <- link_inverse.betamfx
-
-
 
 #' @rdname link_inverse
 #' @export
@@ -325,6 +317,28 @@ link_inverse.clm2 <- link_inverse.clm
 link_inverse.mixor <- link_inverse.clm
 
 
+
+
+
+
+
+# mfx models ------------------------------------------------------
+
+
+#' @rdname link_inverse
+#' @export
+link_inverse.betamfx <- function(x, what = c("mean", "precision"), ...) {
+  what <- match.arg(what)
+  link_inverse.betareg(x$fit, what = what, ...)
+}
+
+#' @export
+link_inverse.betaor <- link_inverse.betamfx
+
+#' @export
+link_inverse.logitmfx <- function(x, ...) {
+  link_inverse(x$fit, ...)
+}
 
 
 

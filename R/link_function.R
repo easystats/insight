@@ -168,6 +168,11 @@ link_function.brglm <- link_function.default
 #' @export
 link_function.cgam <- link_function.default
 
+#' @export
+link_function.logitmfx <- function(x, ...) {
+  link_inverse.default(x$fit, ...)
+}
+
 
 
 
@@ -277,6 +282,29 @@ link_function.clmm <- link_function.clm
 
 #' @export
 link_function.mixor <- link_function.clm
+
+
+
+
+
+
+# mfx models ------------------------------------------------------
+
+
+#' @rdname link_function
+#' @export
+link_function.betamfx <- function(x, what = c("mean", "precision"), ...) {
+  what <- match.arg(what)
+  link_function.betareg(x$fit, what = what, ...)
+}
+
+#' @export
+link_function.betaor <- link_function.betamfx
+
+#' @export
+link_function.logitmfx <- function(x, ...) {
+  link_function(x$fit, ...)
+}
 
 
 
@@ -550,17 +578,6 @@ link_function.betareg <- function(x, what = c("mean", "precision"), ...) {
   )
 }
 
-
-
-#' @rdname link_function
-#' @export
-link_function.betamfx <- function(x, what = c("mean", "precision"), ...) {
-  what <- match.arg(what)
-  link_function.betareg(x$fit, what = what, ...)
-}
-
-#' @export
-link_function.betaor <- link_function.betamfx
 
 
 #' @rdname link_function

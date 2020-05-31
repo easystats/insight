@@ -187,6 +187,97 @@ get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_t
 
 
 
+
+# mfx models ---------------------------------------------
+
+
+#' @rdname get_parameters
+#' @export
+get_parameters.betamfx <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
+  component <- match.arg(component)
+  params <- get_parameters.betareg(x$fit, component = "all", ...)
+  mfx <- x$mfxest
+
+  params <- rbind(
+    data.frame(
+      Parameter = rownames(mfx),
+      Estimate = as.vector(mfx[, 1]),
+      Component = "marginal",
+      stringsAsFactors = FALSE
+    ),
+    params
+  )
+
+  if (component != "all") {
+    params <- params[params$Component %in% c(component, "marginal"), , drop = FALSE]
+  }
+
+  if (!include_marginal) {
+    params <- params[params$Component != "marginal", , drop = FALSE]
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+#' @export
+get_parameters.betaor <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
+  component <- match.arg(component)
+  params <- get_parameters.betareg(x$fit, component = "all", ...)
+  mfx <- x$oddsratio
+
+  params <- rbind(
+    data.frame(
+      Parameter = rownames(mfx),
+      Estimate = as.vector(mfx[, 1]),
+      Component = "marginal",
+      stringsAsFactors = FALSE
+    ),
+    params
+  )
+
+  if (component != "all") {
+    params <- params[params$Component %in% c(component, "marginal"), , drop = FALSE]
+  }
+
+  if (!include_marginal) {
+    params <- params[params$Component != "marginal", , drop = FALSE]
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+
+#' @rdname get_parameters
+#' @export
+get_parameters.logitmfx <- function(x, include_marginal = FALSE, ...) {
+  params <- get_parameters.default(x$fit, ...)
+  params$Component = "conditional"
+  mfx <- x$mfxest
+
+  params <- rbind(
+    data.frame(
+      Parameter = rownames(mfx),
+      Estimate = as.vector(mfx[, 1]),
+      Component = "marginal",
+      stringsAsFactors = FALSE
+    ),
+    params
+  )
+
+  if (!include_marginal) {
+    params <- params[params$Component != "marginal", , drop = FALSE]
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+
+
+
+
 # Special models ---------------------------------------------
 
 
@@ -364,64 +455,6 @@ get_parameters.betareg <- function(x, component = c("all", "conditional", "preci
 
   .remove_backticks_from_parameter_names(params)
 }
-
-
-#' @rdname get_parameters
-#' @export
-get_parameters.betamfx <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
-  component <- match.arg(component)
-  params <- get_parameters.betareg(x$fit, component = "all", ...)
-  mfx <- x$mfxest
-
-  params <- rbind(
-    data.frame(
-      Parameter = rownames(mfx),
-      Estimate = as.vector(mfx[, 1]),
-      Component = "marginal",
-      stringsAsFactors = FALSE
-    ),
-    params
-  )
-
-  if (component != "all") {
-    params <- params[params$Component %in% c(component, "marginal"), , drop = FALSE]
-  }
-
-  if (!include_marginal) {
-    params <- params[params$Component != "marginal", , drop = FALSE]
-  }
-
-  .remove_backticks_from_parameter_names(params)
-}
-
-
-#' @export
-get_parameters.betaor <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
-  component <- match.arg(component)
-  params <- get_parameters.betareg(x$fit, component = "all", ...)
-  mfx <- x$oddsratio
-
-  params <- rbind(
-    data.frame(
-      Parameter = rownames(mfx),
-      Estimate = as.vector(mfx[, 1]),
-      Component = "marginal",
-      stringsAsFactors = FALSE
-    ),
-    params
-  )
-
-  if (component != "all") {
-    params <- params[params$Component %in% c(component, "marginal"), , drop = FALSE]
-  }
-
-  if (!include_marginal) {
-    params <- params[params$Component != "marginal", , drop = FALSE]
-  }
-
-  .remove_backticks_from_parameter_names(params)
-}
-
 
 
 

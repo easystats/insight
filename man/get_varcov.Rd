@@ -3,7 +3,6 @@
 \name{get_varcov}
 \alias{get_varcov}
 \alias{get_varcov.betareg}
-\alias{get_varcov.betamfx}
 \alias{get_varcov.DirichletRegModel}
 \alias{get_varcov.clm2}
 \alias{get_varcov.truncreg}
@@ -13,14 +12,13 @@
 \alias{get_varcov.MixMod}
 \alias{get_varcov.glmmTMB}
 \alias{get_varcov.brmsfit}
+\alias{get_varcov.betamfx}
 \alias{get_varcov.mixor}
 \title{Get variance-covariance matrix from models}
 \usage{
 get_varcov(x, ...)
 
 \method{get_varcov}{betareg}(x, component = c("conditional", "precision", "all"), ...)
-
-\method{get_varcov}{betamfx}(x, component = c("conditional", "precision", "all"), ...)
 
 \method{get_varcov}{DirichletRegModel}(x, component = c("conditional", "precision", "all"), ...)
 
@@ -43,6 +41,8 @@ get_varcov(x, ...)
 )
 
 \method{get_varcov}{brmsfit}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+
+\method{get_varcov}{betamfx}(x, component = c("conditional", "precision", "all"), ...)
 
 \method{get_varcov}{mixor}(x, effects = c("all", "fixed", "random"), ...)
 }

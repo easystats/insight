@@ -358,12 +358,15 @@ n_obs.maxLik <- n_obs.mlogit
 
 #' @export
 n_obs.betamfx <- function(x, ...) {
-  nrow(x$fit)
+  nobs(x$fit)
 }
-
 
 #' @export
 n_obs.betaor <- n_obs.betamfx
+
+#' @export
+n_obs.logitmfx <- n_obs.betamfx
+
 
 
 #' @export

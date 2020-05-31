@@ -830,6 +830,32 @@ get_data.stanmvreg <- function(x, ...) {
 
 
 
+# mfx models ------------------------------------------------------
+
+#' @export
+get_data.betamfx <- function(x, ...) {
+  get_data(x$fit, ...)
+}
+
+#' @export
+get_data.betaor <- function(x, ...) {
+  get_data(x$fit, ...)
+}
+
+#' @export
+get_data.logitmfx <- function(x, ...) {
+  get_data(x$fit, ...)
+}
+
+#' @export
+get_data.logitor <- function(x, ...) {
+  get_data(x$fit, ...)
+}
+
+
+
+
+
 # other models ------------------------------------------------------
 
 

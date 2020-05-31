@@ -627,6 +627,94 @@ get_statistic.mlogit <- function(x, ...) {
 
 
 
+# mfx models -------------------------------------------------------
+
+
+#' @rdname get_statistic
+#' @importFrom stats coef
+#' @export
+get_statistic.betamfx <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
+  component <- match.arg(component)
+  parms <- get_parameters(x, component = "all", include_marginal = TRUE, ...)
+  cs <- do.call(rbind, stats::coef(summary(x$fit)))
+  stat <- c(as.vector(x$mfxest[, 3]), as.vector(cs[, 3]))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = stat,
+    Component = parms$Component,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (component != "all") {
+    out <- out[out$Component %in% c(component, "marginal"), , drop = FALSE]
+  }
+
+  if (!include_marginal) {
+    out <- out[out$Component != "marginal", , drop = FALSE]
+  }
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
+get_statistic.betaor <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
+  component <- match.arg(component)
+  parms <- get_parameters(x, component = "all", include_marginal = TRUE, ...)
+  cs <- do.call(rbind, stats::coef(summary(x$fit)))
+  stat <- c(as.vector(x$oddsratio[, 3]), as.vector(cs[, 3]))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = stat,
+    Component = parms$Component,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (component != "all") {
+    out <- out[out$Component %in% c(component, "marginal"), , drop = FALSE]
+  }
+
+  if (!include_marginal) {
+    out <- out[out$Component != "marginal", , drop = FALSE]
+  }
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @rdname get_statistic
+#' @export
+get_statistic.logitmfx <- function(x, include_marginal = FALSE, ...) {
+  parms <- get_parameters(x, include_marginal = TRUE, ...)
+  cs <- stats::coef(summary(x$fit))
+  stat <- c(as.vector(x$mfxest[, 3]), as.vector(cs[, 3]))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = stat,
+    Component = parms$Component,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (!include_marginal) {
+    out <- out[out$Component != "marginal", , drop = FALSE]
+  }
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+
+
 
 
 # Other models -------------------------------------------------------
@@ -1187,66 +1275,6 @@ get_statistic.betareg <- function(x, component = c("all", "conditional", "precis
   attr(out, "statistic") <- find_statistic(x)
   out
 }
-
-
-
-#' @rdname get_statistic
-#' @importFrom stats coef
-#' @export
-get_statistic.betamfx <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
-  component <- match.arg(component)
-  parms <- get_parameters(x, component = "all", include_marginal = TRUE, ...)
-  cs <- do.call(rbind, stats::coef(summary(x$fit)))
-  stat <- c(as.vector(x$mfxest[, 3]), as.vector(cs[, 3]))
-
-  out <- data.frame(
-    Parameter = parms$Parameter,
-    Statistic = stat,
-    Component = parms$Component,
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
-
-  if (component != "all") {
-    out <- out[out$Component %in% c(component, "marginal"), , drop = FALSE]
-  }
-
-  if (!include_marginal) {
-    out <- out[out$Component != "marginal", , drop = FALSE]
-  }
-
-  attr(out, "statistic") <- find_statistic(x)
-  out
-}
-
-
-#' @export
-get_statistic.betaor <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
-  component <- match.arg(component)
-  parms <- get_parameters(x, component = "all", include_marginal = TRUE, ...)
-  cs <- do.call(rbind, stats::coef(summary(x$fit)))
-  stat <- c(as.vector(x$oddsratio[, 3]), as.vector(cs[, 3]))
-
-  out <- data.frame(
-    Parameter = parms$Parameter,
-    Statistic = stat,
-    Component = parms$Component,
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
-
-  if (component != "all") {
-    out <- out[out$Component %in% c(component, "marginal"), , drop = FALSE]
-  }
-
-  if (!include_marginal) {
-    out <- out[out$Component != "marginal", , drop = FALSE]
-  }
-
-  attr(out, "statistic") <- find_statistic(x)
-  out
-}
-
 
 
 

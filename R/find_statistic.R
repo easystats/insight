@@ -125,6 +125,8 @@ find_statistic <- function(x, ...) {
       "hurdle",
       "lavaan",
       "loggammacenslmrob",
+      "logitmfx",
+      "logitor",
       "LORgee",
       "lrm",
       "metaplus",
