@@ -132,6 +132,7 @@ supported_models <- function() {
     "mmlogit",
     "multinom",
     "ols",
+    "poissonmfx",
     "plm",
     "polr",
     "psm",

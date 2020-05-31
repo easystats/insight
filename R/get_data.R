@@ -848,6 +848,9 @@ get_data.logitmfx <- function(x, ...) {
 }
 
 #' @export
+get_data.poissonmfx <- get_data.logitmfx
+
+#' @export
 get_data.logitor <- function(x, ...) {
   get_data(x$fit, ...)
 }

@@ -273,6 +273,8 @@ get_parameters.logitmfx <- function(x, include_marginal = FALSE, ...) {
   .remove_backticks_from_parameter_names(params)
 }
 
+#' @export
+get_parameters.poissonmfx <- get_parameters.logitmfx
 
 
 

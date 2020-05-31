@@ -351,6 +351,9 @@ get_varcov.logitmfx <- function(x, ...) {
   get_varcov(x$fit, ...)
 }
 
+#' @export
+get_varcov.poissonmfx <- get_varcov.logitmfx
+
 
 
 

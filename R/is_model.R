@@ -178,6 +178,7 @@ is_model <- function(x) {
       "plm",
       "plmm",
       "poissonmfx",
+      "poissonirr",
       "polr",
       "psm",
       "rdrobust",

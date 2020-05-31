@@ -168,6 +168,11 @@ find_parameters.logitmfx <- function(x, flatten = FALSE, include_marginal = FALS
   }
 }
 
+#' @export
+find_parameters.poissonmfx <- find_parameters.logitmfx
+
+
+
 
 
 

@@ -141,6 +141,8 @@ find_statistic <- function(x, ...) {
       "negbin",
       "nlreg",
       "objectiveML",
+      "poissonmfx",
+      "poissonirr",
       "psm",
       "robmixglm",
       "rma",

@@ -82,10 +82,7 @@ link_inverse.speedglm <- link_inverse.glm
 #' @export
 link_inverse.bigglm <- link_inverse.glm
 
-#' @export
-link_inverse.logitmfx <- function(x, ...) {
-  link_inverse.glm(x$fit, ...)
-}
+
 
 
 
@@ -339,6 +336,10 @@ link_inverse.betaor <- link_inverse.betamfx
 link_inverse.logitmfx <- function(x, ...) {
   link_inverse(x$fit, ...)
 }
+
+#' @export
+link_inverse.poissonmfx <- link_inverse.logitmfx
+
 
 
 

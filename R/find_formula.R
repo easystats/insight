@@ -342,6 +342,10 @@ find_formula.logitmfx <- function(x, ...) {
   find_formula.default(x$fit, ...)
 }
 
+#' @export
+find_formula.poissonmfx <- find_formula.logitmfx
+
+
 
 
 

@@ -643,12 +643,6 @@ model_info.robmixglm <- function(x, ...) {
 
 
 #' @export
-model_info.logitmfx <- function(x, ...) {
-  model_info.default(x$fit, ...)
-}
-
-
-#' @export
 model_info.Arima <- function(x, ...) {
   .make_family(x, ...)
 }
@@ -900,15 +894,6 @@ model_info.betareg <- function(x, ...) {
 }
 
 
-#' @export
-model_info.betamfx <- function(x, ...) {
-  model_info.betareg(x$fit)
-}
-
-
-#' @export
-model_info.betaor <- model_info.betamfx
-
 
 #' @export
 model_info.DirichletRegModel <- function(x, ...) {
@@ -1003,3 +988,29 @@ model_info.gamlss <- function(x, ...) {
     ...
   )
 }
+
+
+
+
+
+# mfx models -------------------------------
+
+
+#' @export
+model_info.logitmfx <- function(x, ...) {
+  model_info.default(x$fit, ...)
+}
+
+#' @export
+model_info.poissonmfx <- model_info.logitmfx
+
+
+#' @export
+model_info.betamfx <- function(x, ...) {
+  model_info.betareg(x$fit)
+}
+
+
+#' @export
+model_info.betaor <- model_info.betamfx
+

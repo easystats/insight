@@ -168,10 +168,7 @@ link_function.brglm <- link_function.default
 #' @export
 link_function.cgam <- link_function.default
 
-#' @export
-link_function.logitmfx <- function(x, ...) {
-  link_inverse.default(x$fit, ...)
-}
+
 
 
 
@@ -305,6 +302,10 @@ link_function.betaor <- link_function.betamfx
 link_function.logitmfx <- function(x, ...) {
   link_function(x$fit, ...)
 }
+
+#' @export
+link_function.poissonmfx <- link_function.logitmfx
+
 
 
 

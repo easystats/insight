@@ -357,19 +357,6 @@ n_obs.maxLik <- n_obs.mlogit
 
 
 #' @export
-n_obs.betamfx <- function(x, ...) {
-  nobs(x$fit)
-}
-
-#' @export
-n_obs.betaor <- n_obs.betamfx
-
-#' @export
-n_obs.logitmfx <- n_obs.betamfx
-
-
-
-#' @export
 n_obs.wbm <- function(x, ...) {
   nrow(x@frame)
 }
@@ -380,3 +367,22 @@ n_obs.wbm <- function(x, ...) {
 n_obs.wbgee <- function(x, ...) {
   stats::nobs(x)
 }
+
+
+
+
+# mfx models --------------------------------------
+
+#' @export
+n_obs.betamfx <- function(x, ...) {
+  nobs(x$fit)
+}
+
+#' @export
+n_obs.betaor <- n_obs.betamfx
+
+#' @export
+n_obs.logitmfx <- n_obs.betamfx
+
+#' @export
+n_obs.poissonmfx <- n_obs.betamfx
