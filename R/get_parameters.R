@@ -193,7 +193,7 @@ get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_t
 
 #' @rdname get_parameters
 #' @export
-get_parameters.betamfx <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
+get_parameters.betamfx <- function(x, component = c("all", "conditional", "precision", "marginal"), ...) {
   component <- match.arg(component)
   params <- get_parameters.betareg(x$fit, component = "all", ...)
   mfx <- x$mfxest
@@ -209,11 +209,7 @@ get_parameters.betamfx <- function(x, component = c("all", "conditional", "preci
   )
 
   if (component != "all") {
-    params <- params[params$Component %in% c(component, "marginal"), , drop = FALSE]
-  }
-
-  if (!include_marginal) {
-    params <- params[params$Component != "marginal", , drop = FALSE]
+    params <- params[params$Component == component, , drop = FALSE]
   }
 
   .remove_backticks_from_parameter_names(params)
@@ -221,37 +217,16 @@ get_parameters.betamfx <- function(x, component = c("all", "conditional", "preci
 
 
 #' @export
-get_parameters.betaor <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
+get_parameters.betaor <- function(x, component = c("all", "conditional", "precision"), ...) {
   component <- match.arg(component)
-  params <- get_parameters.betareg(x$fit, component = "all", ...)
-  mfx <- x$oddsratio
-
-  params <- rbind(
-    data.frame(
-      Parameter = rownames(mfx),
-      Estimate = as.vector(mfx[, 1]),
-      Component = "marginal",
-      stringsAsFactors = FALSE
-    ),
-    params
-  )
-
-  if (component != "all") {
-    params <- params[params$Component %in% c(component, "marginal"), , drop = FALSE]
-  }
-
-  if (!include_marginal) {
-    params <- params[params$Component != "marginal", , drop = FALSE]
-  }
-
-  .remove_backticks_from_parameter_names(params)
+  get_parameters.betareg(x$fit, component = component, ...)
 }
 
 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.logitmfx <- function(x, include_marginal = FALSE, ...) {
+get_parameters.logitmfx <- function(x, component = c("all", "conditional", "marginal"), ...) {
   params <- get_parameters.default(x$fit, ...)
   params$Component = "conditional"
   mfx <- x$mfxest
@@ -266,8 +241,9 @@ get_parameters.logitmfx <- function(x, include_marginal = FALSE, ...) {
     params
   )
 
-  if (!include_marginal) {
-    params <- params[params$Component != "marginal", , drop = FALSE]
+  component <- match.arg(component)
+  if (component != "all") {
+    params <- params[params$Component == component, , drop = FALSE]
   }
 
   .remove_backticks_from_parameter_names(params)
@@ -282,55 +258,16 @@ get_parameters.negbinmfx <- get_parameters.logitmfx
 #' @export
 get_parameters.probitmfx <- get_parameters.logitmfx
 
-#' @rdname get_parameters
 #' @export
-get_parameters.logitor <- function(x, include_marginal = FALSE, ...) {
-  params <- get_parameters.default(x$fit, ...)
-  params$Component = "conditional"
-  mfx <- x$oddsratio
-
-  params <- rbind(
-    data.frame(
-      Parameter = rownames(mfx),
-      Estimate = as.vector(mfx[, 1]),
-      Component = "marginal",
-      stringsAsFactors = FALSE
-    ),
-    params
-  )
-
-  if (!include_marginal) {
-    params <- params[params$Component != "marginal", , drop = FALSE]
-  }
-
-  .remove_backticks_from_parameter_names(params)
+get_parameters.logitor <- function(x, ...) {
+  get_parameters.default(x$fit, ...)
 }
 
 #' @export
-get_parameters.poissonirr <- function(x, include_marginal = FALSE, ...) {
-  params <- get_parameters.default(x$fit, ...)
-  params$Component = "conditional"
-  mfx <- x$irr
-
-  params <- rbind(
-    data.frame(
-      Parameter = rownames(mfx),
-      Estimate = as.vector(mfx[, 1]),
-      Component = "marginal",
-      stringsAsFactors = FALSE
-    ),
-    params
-  )
-
-  if (!include_marginal) {
-    params <- params[params$Component != "marginal", , drop = FALSE]
-  }
-
-  .remove_backticks_from_parameter_names(params)
-}
+get_parameters.poissonirr <- get_parameters.logitor
 
 #' @export
-get_parameters.negbinirr <- get_parameters.poissonirr
+get_parameters.negbinirr <- get_parameters.logitor
 
 
 

@@ -21,7 +21,12 @@
 \usage{
 find_parameters(x, ...)
 
-\method{find_parameters}{betamfx}(x, flatten = FALSE, include_marginal = FALSE, ...)
+\method{find_parameters}{betamfx}(
+  x,
+  component = c("all", "conditional", "precision", "marginal"),
+  flatten = FALSE,
+  ...
+)
 
 \method{find_parameters}{gam}(
   x,
@@ -107,19 +112,17 @@ find_parameters(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
-
-\item{include_marginal}{Logical, for models with marginal effects (from \pkg{mfx})
-includes the parameter names of marginal effects.}
-
 \item{component}{Should all parameters, parameters for the
  conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+ term, the instrumental variables or marginal effects be returned? Applies
+ to models with zero-inflated and/or dispersion formula, or to models with
+ instrumental variables (so called fixed-effects regressions), or models
+ with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
+
+\item{flatten}{Logical, if \code{TRUE}, the values are returned
+as character vector, not as list. Duplicated values are removed.}
 
 \item{effects}{Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
@@ -139,6 +142,7 @@ A list of parameter names. For simple models, only one list-element,
      \item \code{dispersion}, the dispersion parameters
      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
      \item \code{smooth_terms}, the smooth parameters
+     \item \code{marginal}, the marginal effects (for models from \pkg{mfx})
    }
 }
 \description{

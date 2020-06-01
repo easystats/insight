@@ -285,12 +285,12 @@
 # to reduce redundant code, I extract this part which is used several
 # times accross this package
 .get_elements <- function(effects, component) {
-  elements <- c("conditional", "conditional2", "conditional3", "precision", "nonlinear", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale")
+  elements <- c("conditional", "conditional2", "conditional3", "precision", "nonlinear", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale", "marginal")
 
   elements <- switch(
     effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale")],
+    fixed = elements[elements %in% c("conditional", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale", "marginal")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
@@ -312,7 +312,8 @@
     slopes = elements[elements == "slopes"],
     extra = elements[elements == "extra"],
     scale = elements[elements == "scale"],
-    precision = elements[elements == "precision"]
+    precision = elements[elements == "precision"],
+    marginal = elements[elements == "marginal"]
   )
 
   elements

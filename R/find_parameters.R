@@ -12,13 +12,12 @@
 #'    or both be returned? Only applies to mixed models. May be abbreviated.
 #' @param component Should all parameters, parameters for the
 #'    conditional model, the zero-inflated part of the model, the dispersion
-#'    term or the instrumental variables be returned? Applies to models
-#'    with zero-inflated and/or dispersion formula, or to models with instrumental
-#'    variable (so called fixed-effects regressions). May be abbreviated. Note that the
+#'    term, the instrumental variables or marginal effects be returned? Applies
+#'    to models with zero-inflated and/or dispersion formula, or to models with
+#'    instrumental variables (so called fixed-effects regressions), or models
+#'    with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 #'   \emph{conditional} component is also called \emph{count} or \emph{mean}
 #'   component, depending on the model.
-#' @param include_marginal Logical, for models with marginal effects (from \pkg{mfx})
-#'   includes the parameter names of marginal effects.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -33,6 +32,7 @@
 #'      \item \code{dispersion}, the dispersion parameters
 #'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
 #'      \item \code{smooth_terms}, the smooth parameters
+#'      \item \code{marginal}, the marginal effects (for models from \pkg{mfx})
 #'    }
 #'
 #' @details In most cases when models either return different "effects" (fixed,
@@ -105,19 +105,17 @@ find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
 
 #' @rdname find_parameters
 #' @export
-find_parameters.betamfx <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
+find_parameters.betamfx <- function(x, component = c("all", "conditional", "precision", "marginal"), flatten = FALSE, ...) {
+
   pars <- list(
-    marginal = rownames(x$mfxest),
-    conditional = names(x$fit$coefficients$mean),
-    precision = names(x$fit$coefficients$precision)
+    marginal = .remove_backticks_from_string(rownames(x$mfxest)),
+    conditional = .remove_backticks_from_string(names(x$fit$coefficients$mean)),
+    precision = .remove_backticks_from_string(names(x$fit$coefficients$precision))
   )
 
-  if (!include_marginal) {
-    pars$marginal <- NULL
-    pars <- .compact_list(pars)
-  }
-
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component = component)
+  pars <- .compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))
@@ -129,19 +127,15 @@ find_parameters.betamfx <- function(x, flatten = FALSE, include_marginal = FALSE
 
 
 #' @export
-find_parameters.betaor <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
+find_parameters.betaor <- function(x, component = c("all", "conditional", "precision"), flatten = FALSE, ...) {
   pars <- list(
-    marginal = rownames(x$oddsratio),
-    conditional = names(x$fit$coefficients$mean),
-    precision = names(x$fit$coefficients$precision)
+    conditional = .remove_backticks_from_string(names(x$fit$coefficients$mean)),
+    precision = .remove_backticks_from_string(names(x$fit$coefficients$precision))
   )
 
-  if (!include_marginal) {
-    pars$marginal <- NULL
-    pars <- .compact_list(pars)
-  }
-
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component = component)
+  pars <- .compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))
@@ -152,14 +146,13 @@ find_parameters.betaor <- function(x, flatten = FALSE, include_marginal = FALSE,
 
 
 #' @export
-find_parameters.logitmfx <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
+find_parameters.logitmfx <- function(x, component = c("all", "conditional", "marginal"), flatten = FALSE, ...) {
   p <- .remove_backticks_from_string(names(stats::coef(x$fit)))
-  pars <- list(marginal = rownames(x$mfxest), conditional = p)
+  pars <- list(marginal = .remove_backticks_from_string(rownames(x$mfxest)), conditional = p)
 
-  if (!include_marginal) {
-    pars$marginal <- NULL
-    pars <- .compact_list(pars)
-  }
+  component <- match.arg(component)
+  elements <- .get_elements(effects = "all", component = component)
+  pars <- .compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))
@@ -178,14 +171,8 @@ find_parameters.negbinmfx <- find_parameters.logitmfx
 find_parameters.probitmfx <- find_parameters.logitmfx
 
 #' @export
-find_parameters.logitor <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
-  p <- .remove_backticks_from_string(names(stats::coef(x$fit)))
-  pars <- list(marginal = rownames(x$oddsratio), conditional = p)
-
-  if (!include_marginal) {
-    pars$marginal <- NULL
-    pars <- .compact_list(pars)
-  }
+find_parameters.logitor <- function(x, flatten = FALSE, ...) {
+  pars <- list(conditional = .remove_backticks_from_string(names(stats::coef(x$fit))))
 
   if (flatten) {
     unique(unlist(pars))
@@ -195,24 +182,10 @@ find_parameters.logitor <- function(x, flatten = FALSE, include_marginal = FALSE
 }
 
 #' @export
-find_parameters.poissonirr <- function(x, flatten = FALSE, include_marginal = FALSE, ...) {
-  p <- .remove_backticks_from_string(names(stats::coef(x$fit)))
-  pars <- list(marginal = rownames(x$irr), conditional = p)
-
-  if (!include_marginal) {
-    pars$marginal <- NULL
-    pars <- .compact_list(pars)
-  }
-
-  if (flatten) {
-    unique(unlist(pars))
-  } else {
-    pars
-  }
-}
+find_parameters.poissonirr <- find_parameters.logitor
 
 #' @export
-find_parameters.negbinirr <- find_parameters.poissonirr
+find_parameters.negbinirr <- find_parameters.logitor
 
 
 

@@ -47,7 +47,7 @@ clean_parameters <- function(x, ...) {
 
 #' @export
 clean_parameters.default <- function(x, group = "", ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE, include_marginal = TRUE)
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
 
   l <- lapply(names(pars), function(i) {
     eff <- if (grepl("random", i, fixed = TRUE)) {

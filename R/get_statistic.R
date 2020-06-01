@@ -633,9 +633,9 @@ get_statistic.mlogit <- function(x, ...) {
 #' @rdname get_statistic
 #' @importFrom stats coef
 #' @export
-get_statistic.betamfx <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
+get_statistic.betamfx <- function(x, component = c("all", "conditional", "precision", "marginal"), ...) {
   component <- match.arg(component)
-  parms <- get_parameters(x, component = "all", include_marginal = TRUE, ...)
+  parms <- get_parameters(x, component = "all", ...)
   cs <- do.call(rbind, stats::coef(summary(x$fit)))
   stat <- c(as.vector(x$mfxest[, 3]), as.vector(cs[, 3]))
 
@@ -648,11 +648,7 @@ get_statistic.betamfx <- function(x, component = c("all", "conditional", "precis
   )
 
   if (component != "all") {
-    out <- out[out$Component %in% c(component, "marginal"), , drop = FALSE]
-  }
-
-  if (!include_marginal) {
-    out <- out[out$Component != "marginal", , drop = FALSE]
+    out <- out[out$Component == component, , drop = FALSE]
   }
 
   attr(out, "statistic") <- find_statistic(x)
@@ -661,26 +657,21 @@ get_statistic.betamfx <- function(x, component = c("all", "conditional", "precis
 
 
 #' @export
-get_statistic.betaor <- function(x, component = c("all", "conditional", "precision"), include_marginal = FALSE, ...) {
+get_statistic.betaor <- function(x, component = c("all", "conditional", "precision"), ...) {
   component <- match.arg(component)
-  parms <- get_parameters(x, component = "all", include_marginal = TRUE, ...)
+  parms <- get_parameters(x, component = "all", ...)
   cs <- do.call(rbind, stats::coef(summary(x$fit)))
-  stat <- c(as.vector(x$oddsratio[, 3]), as.vector(cs[, 3]))
 
   out <- data.frame(
     Parameter = parms$Parameter,
-    Statistic = stat,
+    Statistic = as.vector(cs[, 3]),
     Component = parms$Component,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
 
   if (component != "all") {
-    out <- out[out$Component %in% c(component, "marginal"), , drop = FALSE]
-  }
-
-  if (!include_marginal) {
-    out <- out[out$Component != "marginal", , drop = FALSE]
+    out <- out[out$Component == component, , drop = FALSE]
   }
 
   attr(out, "statistic") <- find_statistic(x)
@@ -690,8 +681,8 @@ get_statistic.betaor <- function(x, component = c("all", "conditional", "precisi
 
 #' @rdname get_statistic
 #' @export
-get_statistic.logitmfx <- function(x, include_marginal = FALSE, ...) {
-  parms <- get_parameters(x, include_marginal = TRUE, ...)
+get_statistic.logitmfx <- function(x, component = c("all", "conditional", "marginal"), ...) {
+  parms <- get_parameters(x, component = "all", ...)
   cs <- stats::coef(summary(x$fit))
   stat <- c(as.vector(x$mfxest[, 3]), as.vector(cs[, 3]))
 
@@ -703,8 +694,8 @@ get_statistic.logitmfx <- function(x, include_marginal = FALSE, ...) {
     row.names = NULL
   )
 
-  if (!include_marginal) {
-    out <- out[out$Component != "marginal", , drop = FALSE]
+  if (component != "all") {
+    out <- out[out$Component == component, , drop = FALSE]
   }
 
   attr(out, "statistic") <- find_statistic(x)
@@ -720,53 +711,17 @@ get_statistic.negbinmfx <- get_statistic.logitmfx
 #' @export
 get_statistic.probitmfx <- get_statistic.logitmfx
 
-#' @rdname get_statistic
 #' @export
-get_statistic.logitor <- function(x, include_marginal = FALSE, ...) {
-  parms <- get_parameters(x, include_marginal = TRUE, ...)
-  cs <- stats::coef(summary(x$fit))
-  stat <- c(as.vector(x$oddsratio[, 3]), as.vector(cs[, 3]))
-
-  out <- data.frame(
-    Parameter = parms$Parameter,
-    Statistic = stat,
-    Component = parms$Component,
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
-
-  if (!include_marginal) {
-    out <- out[out$Component != "marginal", , drop = FALSE]
-  }
-
-  attr(out, "statistic") <- find_statistic(x)
-  out
+get_statistic.logitor <- function(x, ...) {
+  get_statistic.default(x$fit)
 }
 
 #' @export
-get_statistic.poissonirr <- function(x, include_marginal = FALSE, ...) {
-  parms <- get_parameters(x, include_marginal = TRUE, ...)
-  cs <- stats::coef(summary(x$fit))
-  stat <- c(as.vector(x$irr[, 3]), as.vector(cs[, 3]))
-
-  out <- data.frame(
-    Parameter = parms$Parameter,
-    Statistic = stat,
-    Component = parms$Component,
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
-
-  if (!include_marginal) {
-    out <- out[out$Component != "marginal", , drop = FALSE]
-  }
-
-  attr(out, "statistic") <- find_statistic(x)
-  out
-}
+get_statistic.poissonirr <- get_statistic.logitor
 
 #' @export
-get_statistic.negbinirr <- get_statistic.poissonirr
+get_statistic.negbinirr <- get_statistic.logitor
+
 
 
 

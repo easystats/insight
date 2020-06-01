@@ -6,7 +6,6 @@
 \alias{get_parameters.cgam}
 \alias{get_parameters.betamfx}
 \alias{get_parameters.logitmfx}
-\alias{get_parameters.logitor}
 \alias{get_parameters.averaging}
 \alias{get_parameters.betareg}
 \alias{get_parameters.DirichletRegModel}
@@ -41,14 +40,11 @@ get_parameters(x, ...)
 
 \method{get_parameters}{betamfx}(
   x,
-  component = c("all", "conditional", "precision"),
-  include_marginal = FALSE,
+  component = c("all", "conditional", "precision", "marginal"),
   ...
 )
 
-\method{get_parameters}{logitmfx}(x, include_marginal = FALSE, ...)
-
-\method{get_parameters}{logitor}(x, include_marginal = FALSE, ...)
+\method{get_parameters}{logitmfx}(x, component = c("all", "conditional", "marginal"), ...)
 
 \method{get_parameters}{averaging}(x, component = c("conditional", "full"), ...)
 
@@ -152,14 +148,12 @@ get_parameters(x, ...)
 
 \item{component}{Should all parameters, parameters for the
  conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+ term, the instrumental variables or marginal effects be returned? Applies
+ to models with zero-inflated and/or dispersion formula, or to models with
+ instrumental variables (so called fixed-effects regressions), or models
+ with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
-
-\item{include_marginal}{Logical, for models with marginal effects (from \pkg{mfx})
-includes the parameter names of marginal effects.}
 
 \item{effects}{Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
