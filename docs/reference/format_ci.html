@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4.1</span>
       </span>
     </div>
 
@@ -139,7 +139,8 @@
   <span class='kw'>brackets</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>width_low</span> <span class='kw'>=</span> <span class='no'>width</span>,
-  <span class='kw'>width_high</span> <span class='kw'>=</span> <span class='no'>width</span>
+  <span class='kw'>width_high</span> <span class='kw'>=</span> <span class='no'>width</span>,
+  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>""</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -173,6 +174,10 @@
       <th>width_low, width_high</th>
       <td><p>Like <code>width</code>, but only applies to the lower or higher confidence interval value. This can be used when the values for the lower and upper CI are of very different length.</p></td>
     </tr>
+    <tr>
+      <th>missing</th>
+      <td><p>Value by which <code>NA</code> values are replaced. By default, an empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -180,7 +185,7 @@
     <p>A formatted string.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>format_ci</span>(<span class='fl'>1.20</span>, <span class='fl'>3.57</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.90</span>)</div><div class='output co'>#&gt; [1] "90% CI [1.20, 3.57]"</div><div class='input'><span class='fu'>format_ci</span>(<span class='fl'>1.20</span>, <span class='fl'>3.57</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</div><div class='output co'>#&gt; [1] "[1.20, 3.57]"</div><div class='input'><span class='fu'>format_ci</span>(<span class='fl'>1.20</span>, <span class='fl'>3.57</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>brackets</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "1.20, 3.57"</div><div class='input'><span class='fu'>format_ci</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.205645</span>, <span class='fl'>23.4</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3.57</span>, -<span class='fl'>1.35</span>), <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.90</span>)</div><div class='output co'>#&gt; [1] "90% CI [1.21, 3.57]"   "90% CI [23.40, -1.35]"</div><div class='input'><span class='fu'>format_ci</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.20</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3.57</span>, -<span class='fl'>1.35</span>, <span class='fl'>NA</span>), <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.90</span>)</div><div class='output co'>#&gt; [1] "90% CI [1.20, 3.57]" "90% CI [NA, -1.35]"  ""                   </div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>format_ci</span>(<span class='fl'>1.20</span>, <span class='fl'>3.57</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.90</span>)</div><div class='output co'>#&gt; [1] "90% CI [1.20, 3.57]"</div><div class='input'><span class='fu'>format_ci</span>(<span class='fl'>1.20</span>, <span class='fl'>3.57</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</div><div class='output co'>#&gt; [1] "[1.20, 3.57]"</div><div class='input'><span class='fu'>format_ci</span>(<span class='fl'>1.20</span>, <span class='fl'>3.57</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>brackets</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "1.20, 3.57"</div><div class='input'><span class='fu'>format_ci</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.205645</span>, <span class='fl'>23.4</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3.57</span>, -<span class='fl'>1.35</span>), <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.90</span>)</div><div class='output co'>#&gt; [1] "90% CI [1.21, 3.57]"   "90% CI [23.40, -1.35]"</div><div class='input'><span class='fu'>format_ci</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.20</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3.57</span>, -<span class='fl'>1.35</span>, <span class='fl'>NA</span>), <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.90</span>)</div><div class='output co'>#&gt; [1] "90% CI [1.20, 3.57]" "90% CI [, -1.35]"    ""                   </div><div class='input'>
 <span class='co'># automatic alignment of width, useful for printing multiple CIs in columns</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>format_ci</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.205</span>, <span class='fl'>23.4</span>, <span class='fl'>100.43</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3.57</span>, -<span class='fl'>13.35</span>, <span class='fl'>9.4</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>x</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"\n"</span>)</div><div class='output co'>#&gt; 95% CI [1.21, 3.57]

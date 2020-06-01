@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4.1</span>
       </span>
     </div>
 
@@ -125,9 +125,38 @@
       <small>Source: <a href='https://github.com/easystats/insight/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="insight-085" class="section level1">
+<h1 class="page-header" data-toc-text="0.8.5">
+<a href="#insight-085" class="anchor"></a>insight 0.8.5<small> Unreleased </small>
+</h1>
+<div id="new-supported-model-classes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
+<ul>
+<li>
+<code>robmixglm</code> (<em>robmixglm</em>), <code>betamfx</code>, <code>logitmfx</code>, <code>poissonmfx</code>, <code>probitmfx</code>, <code>negbinmfx</code>, <code>betaor</code>, <code>logitor</code>, <code>poissonirr</code>, <code>negbinirr</code> (<em>mfx</em>), partial support for <em>emmGrid</em>, <em>stanfit</em> and <em>bayesQR</em>.</li>
+</ul>
+</div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>
+<code><a href="../reference/get_varcov.html">get_varcov.glmmTMB()</a></code> now also returns the variance-covariance matrix for the dispersion model.</li>
+<li>
+<code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_dispersion = TRUE</code> for <em>glmmTMB</em> objects with dispersion model.</li>
+<li>
+<code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes mathematical operations (like <code>100 * log(x)</code>, which will return <code>"x"</code>).</li>
+<li>
+<code><a href="../reference/format_ci.html">format_ci()</a></code> gains a <code>missing</code> argument, as option how to print missing values.</li>
+<li>
+<code><a href="../reference/format_value.html">format_value()</a></code> now uses <code>NA_character_</code> as missing if <code>missing = NA</code>.</li>
+</ul>
+</div>
+</div>
     <div id="insight-084" class="section level1">
 <h1 class="page-header" data-toc-text="0.8.4">
-<a href="#insight-084" class="anchor"></a>insight 0.8.4<small> Unreleased </small>
+<a href="#insight-084" class="anchor"></a>insight 0.8.4<small> 2020-05-13 </small>
 </h1>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
@@ -138,9 +167,9 @@
 <li>Better support for dispersion models in <em>glmmTMB</em>.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/null_model.html">null_model()</a></code> now also works for non-mixed models.</li>
@@ -172,17 +201,17 @@
 <li>The function to calculate null-models for mixed effects models is now exported (<code><a href="../reference/null_model.html">null_model()</a></code>.)</li>
 </ul>
 </div>
-<div id="new-supported-model-classes" class="section level2">
+<div id="new-supported-model-classes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-1" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>arima</code> (<em>stats</em>), <code>averaging</code> (<em>MuMIn</em>)</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>Improve family detection in <code><a href="../reference/model_info.html">model_info()</a></code>, <code><a href="../reference/link_inverse.html">link_inverse()</a></code> and <code><a href="../reference/link_function.html">link_function()</a></code> for <em>MCMCglmm</em>.</li>
 <li>Minor revisions to meet changes in <em>mlogit</em> package.</li>
@@ -213,9 +242,9 @@
 <code><a href="../reference/model_info.html">model_info()</a></code> now only returns <code>TRUE</code> for <code>$is_ordinal</code>, when model is an ordinal or cumulative link model. In past versions, <code>$is_ordinal</code> was also <code>TRUE</code> for multinomial models.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes-1" class="section level2">
+<div id="new-supported-model-classes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-1" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-2" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>bife</code> (<em>bife</em>), <code>bcplm</code> and <code>zcpglm</code> (<em>cplm</em>)</li>
@@ -246,9 +275,9 @@
 <h1 class="page-header" data-toc-text="0.8.1">
 <a href="#insight-081" class="anchor"></a>insight 0.8.1<small> 2020-02-02 </small>
 </h1>
-<div id="new-supported-model-classes-2" class="section level2">
+<div id="new-supported-model-classes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-2" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-3" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>cglm</code> (<em>cglm</em>), <code>DirichletRegModel</code> (<em>DirichletReg</em>).</li>
@@ -261,9 +290,9 @@
 <li>Improved efficiency of <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for mixed models with large samples and many random effects, and only fixed effects where requested.</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_multinomial</code> for multinomial (but not ordinal or cumulative) link models.</li>
@@ -287,9 +316,9 @@
 <h1 class="page-header" data-toc-text="0.8.0">
 <a href="#insight-080" class="anchor"></a>insight 0.8.0<small> 2020-01-14 </small>
 </h1>
-<div id="new-supported-model-classes-3" class="section level2">
+<div id="new-supported-model-classes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-3" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-4" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>brglm</code> (<em>brglm</em>), <code>cgam</code>, <code>cgamm</code> (<em>cgam</em>), <code>cpglm</code>, <code>cpglmm</code> (<em>cplm</em>), <code>feglm</code> (<em>apaca</em>), <code>glmmadmb</code> (<em>glmmADMB</em>), <code>glmx</code> (<em>glmx</em>), partial support for <code>mcmc</code> (<em>coda</em>), <code>mixor</code> (<em>mixor</em>), <code>MANOVA</code>, <code>RM</code> (<em>MANOVA.RM</em>).</li>
@@ -310,9 +339,9 @@
 <code><a href="../reference/format_ci.html">format_ci()</a></code> (re-implemented and slightly enhanced from <em>parameters</em>), to format confidence/credible intervals.</li>
 </ul>
 </div>
-<div id="changes-to-functions-3" class="section level2">
+<div id="changes-to-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> now also works for <code>BFBayesFactor</code> objects.</li>
@@ -343,9 +372,9 @@
 <h1 class="page-header" data-toc-text="0.7.1">
 <a href="#insight-071" class="anchor"></a>insight 0.7.1<small> 2019-11-28 </small>
 </h1>
-<div id="new-supported-model-classes-4" class="section level2">
+<div id="new-supported-model-classes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-4" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-5" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>complmrob</code> (<em>complmrob</em>), <code>fixest</code> (<em>fixest</em>), <code>mclogit</code> and <code>mmclogit</code> (<em>mclogit</em>).</li>
@@ -375,18 +404,18 @@
 <code><a href="../reference/model_info.html">model_info()</a></code> returned both <code>$is_zeroinf</code> and <code>$is_zero_inflated</code> for zero-inflated models. Now <code>$is_zeroinf</code> is softly deprecated, so <code><a href="../reference/model_info.html">model_info()</a></code> will return <code>$is_zero_inflated</code> only in future updates.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes-5" class="section level2">
+<div id="new-supported-model-classes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-5" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-6" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>aareg</code> (<em>survival</em>), <code>brmultinom</code> and <code>bracl</code> (<em>brglm2</em>), and <code>wbgee</code> (<em>panelr</em>). Furthermore, for different model-types from <em>panelr</em> models (within-between, between, etc.) are now also supported.</li>
 <li>Preliminary support for <code>rma</code> models (<em>metafor</em>).</li>
 </ul>
 </div>
-<div id="changes-to-functions-4" class="section level2">
+<div id="changes-to-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_statistic.html">get_statistic()</a></code> supports <code>multinom</code> models (<em>nnet</em>).</li>
@@ -407,9 +436,9 @@
 <h1 class="page-header" data-toc-text="0.6.0">
 <a href="#insight-060" class="anchor"></a>insight 0.6.0<small> 2019-10-17 </small>
 </h1>
-<div id="new-supported-model-classes-6" class="section level2">
+<div id="new-supported-model-classes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-6" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-7" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>bayesx</code> (<em>R2BayesX</em>), <code>bamlss</code> (<em>bamlss</em>) and <code>flexsurvreg</code> (<em>flexsurv</em>). Note that support for these models is still somewhat experimental.</li>
@@ -428,9 +457,9 @@
 <code><a href="../reference/is_model_supported.html">supported_models()</a></code> to print a list of supported models.</li>
 </ul>
 </div>
-<div id="changes-to-functions-5" class="section level2">
+<div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_survival</code> for survival models.</li>
@@ -488,9 +517,9 @@
 <li>Make extraction of model family information more stable for gam-objects.</li>
 </ul>
 </div>
-<div id="changes-to-functions-6" class="section level2">
+<div id="changes-to-functions-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also support objects of class <code>sim</code> and <code>sim.merMod</code> (from <code><a href="https://rdrr.io/pkg/arm/man/sim.html">arm::sim()</a></code>).</li>
@@ -526,9 +555,9 @@
 <h1 class="page-header" data-toc-text="0.4.1">
 <a href="#insight-041" class="anchor"></a>insight 0.4.1<small> 2019-07-24 </small>
 </h1>
-<div id="changes-to-functions-7" class="section level2">
+<div id="changes-to-functions-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-8" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now supports models with Gamma-family.</li>

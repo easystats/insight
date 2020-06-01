@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4.1</span>
       </span>
     </div>
 
@@ -162,10 +162,17 @@
 <span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for glmmTMB</span>
-<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
+<span class='fu'>get_varcov</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"dispersion"</span>, <span class='st'>"all"</span>),
+  <span class='no'>...</span>
+)
 
 <span class='co'># S3 method for brmsfit</span>
 <span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"zi"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for betamfx</span>
+<span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"precision"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for mixor</span>
 <span class='fu'>get_varcov</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)</pre>
@@ -188,9 +195,9 @@ be returned, or only for specific model components only (like count or
 zero-inflated model parts)? Applies to models with zero-inflated component,
 or models with precision (e.g. <code>betareg</code>) component. <code>component</code>
 may be one of <code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code>,
-<code>"precision"</code>, or <code>"all"</code>. May be abbreviated. Note that the
-<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model.</p></td>
+<code>"dispersion"</code>, <code>"precision"</code>, or <code>"all"</code>. May be abbreviated.
+Note that the <em>conditional</em> component is also called <em>count</em> or
+<em>mean</em> component, depending on the model.</p></td>
     </tr>
     <tr>
       <th>effects</th>

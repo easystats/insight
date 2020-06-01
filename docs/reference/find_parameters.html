@@ -83,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4.1</span>
       </span>
     </div>
 
@@ -126,7 +126,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find names of model parameters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_parameters.R'><code>R/find_parameters.R</code></a>, <a href='https://github.com/easystats/insight/blob/master/R/get_parameters.R'><code>R/get_parameters.R</code></a>, <a href='https://github.com/easystats/insight/blob/master/R/get_statistic.R'><code>R/get_statistic.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_parameters.R'><code>R/find_parameters.R</code></a></small>
     <div class="hidden name"><code>find_parameters.Rd</code></div>
     </div>
 
@@ -138,6 +138,22 @@
     </div>
 
     <pre class="usage"><span class='fu'>find_parameters</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for betamfx</span>
+<span class='fu'>find_parameters</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>, <span class='st'>"marginal"</span>),
+  <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>
+)
+
+<span class='co'># S3 method for logitmfx</span>
+<span class='fu'>find_parameters</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"marginal"</span>),
+  <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>
+)
 
 <span class='co'># S3 method for gam</span>
 <span class='fu'>find_parameters</span>(
@@ -151,22 +167,6 @@
 <span class='fu'>find_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for zeroinfl</span>
-<span class='fu'>find_parameters</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>),
-  <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>
-)
-
-<span class='co'># S3 method for hurdle</span>
-<span class='fu'>find_parameters</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>),
-  <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>
-)
-
-<span class='co'># S3 method for zcpglm</span>
 <span class='fu'>find_parameters</span>(
   <span class='no'>x</span>,
   <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>),
@@ -223,13 +223,7 @@
 )
 
 <span class='co'># S3 method for averaging</span>
-<span class='fu'>find_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"full"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for bayesx</span>
-<span class='fu'><a href='get_parameters.html'>get_parameters</a></span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
-
-<span class='co'># S3 method for bayesx</span>
-<span class='fu'><a href='get_statistic.html'>get_statistic</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>find_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"full"</span>), <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -246,9 +240,10 @@
       <th>component</th>
       <td><p>Should all parameters, parameters for the
  conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+ term, the instrumental variables or marginal effects be returned? Applies
+ to models with zero-inflated and/or dispersion formula, or to models with
+ instrumental variables (so called fixed-effects regressions), or models
+ with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
 component, depending on the model.</p></td>
     </tr>
@@ -281,6 +276,7 @@ should be returned.</p></td>
 <li><p><code>dispersion</code>, the dispersion parameters</p></li>
 <li><p><code>simplex</code>, simplex parameters of monotonic effects (<span class="pkg">brms</span> only)</p></li>
 <li><p><code>smooth_terms</code>, the smooth parameters</p></li>
+<li><p><code>marginal</code>, the marginal effects (for models from <span class="pkg">mfx</span>)</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>

@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4.1</span>
       </span>
     </div>
 
@@ -183,6 +183,7 @@
 <li><p><code>is_survival</code>: model is a survival model</p></li>
 <li><p><code>is_zero_inflated</code>: model has zero-inflation component</p></li>
 <li><p><code>is_hurdle</code>: model has zero-inflation component and is a hurdle-model (truncated family distribution)</p></li>
+<li><p><code>is_dispersion</code>: model has dispersion component</p></li>
 <li><p><code>is_mixed</code>: model is a mixed effects model (with random effects)</p></li>
 <li><p><code>is_multivariate</code>: model is a multivariate response model (currently only works for <em>brmsfit</em> objects)</p></li>
 <li><p><code>is_trial</code>: model response contains additional information about the trials</p></li>
@@ -252,6 +253,9 @@
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_zero_inflated
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $is_dispersion
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_hurdle
@@ -373,6 +377,9 @@
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_zero_inflated
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $is_dispersion
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_hurdle

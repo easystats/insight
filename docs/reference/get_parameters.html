@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.4.1</span>
       </span>
     </div>
 
@@ -135,11 +135,15 @@
 
     <pre class="usage"><span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for rqss</span>
-<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
+<span class='co'># S3 method for betamfx</span>
+<span class='fu'>get_parameters</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>, <span class='st'>"marginal"</span>),
+  <span class='no'>...</span>
+)
 
-<span class='co'># S3 method for cgam</span>
-<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
+<span class='co'># S3 method for logitmfx</span>
+<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"marginal"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for averaging</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"full"</span>), <span class='no'>...</span>)
@@ -159,19 +163,8 @@
 <span class='co'># S3 method for merMod</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
 
-<span class='co'># S3 method for lme</span>
-<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
-
 <span class='co'># S3 method for mixed</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='no'>...</span>)
-
-<span class='co'># S3 method for MixMod</span>
-<span class='fu'>get_parameters</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
-  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>),
-  <span class='no'>...</span>
-)
 
 <span class='co'># S3 method for glmmTMB</span>
 <span class='fu'>get_parameters</span>(
@@ -187,16 +180,7 @@
 <span class='co'># S3 method for glimML</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>), <span class='no'>...</span>)
 
-<span class='co'># S3 method for gamm</span>
-<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
-
-<span class='co'># S3 method for Gam</span>
-<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
-
 <span class='co'># S3 method for gam</span>
-<span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
-
-<span class='co'># S3 method for vgam</span>
 <span class='fu'>get_parameters</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for zeroinfl</span>
@@ -275,9 +259,10 @@
       <th>component</th>
       <td><p>Should all parameters, parameters for the
  conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+ term, the instrumental variables or marginal effects be returned? Applies
+ to models with zero-inflated and/or dispersion formula, or to models with
+ instrumental variables (so called fixed-effects regressions), or models
+ with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
 component, depending on the model.</p></td>
     </tr>
