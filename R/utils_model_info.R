@@ -73,7 +73,7 @@
   is.bayes <- inherits(x, c(
     "brmsfit", "stanfit", "MCMCglmm", "stanreg",
     "stanmvreg", "bmerMod", "BFBayesFactor", "bamlss",
-    "bayesx", "mcmc", "bcplm"
+    "bayesx", "mcmc", "bcplm", "bayesQR"
   ))
 
   is.survival <- inherits(x, c("aareg", "survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph", "coxme"))

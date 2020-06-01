@@ -1152,6 +1152,20 @@ find_parameters.mcmc <- function(x, flatten = FALSE, parameters = NULL, ...) {
 }
 
 
+
+#' @export
+find_parameters.bayesQR <- function(x, flatten = FALSE, parameters = NULL, ...) {
+  l <- .filter_pars(list(conditional = x[[1]]$names), parameters)
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
 #' @export
 find_parameters.stanfit <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))

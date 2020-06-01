@@ -34,6 +34,7 @@ is_model <- function(x) {
       "bamlss.frame",
       "bayesmeta",
       "bayesx",
+      "bayesQR",
       "BBmm",
       "BBreg",
       "bcplm",

@@ -46,6 +46,7 @@ supported_models <- function() {
     "bamlss",
     "bamlss.frame",
     "bayesx",
+    "bayesQR",
     "BBmm",
     "BBreg",
     "bcplm",

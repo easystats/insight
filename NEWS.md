@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `robmixglm` (*robmixglm*), `betamfx`, `logitmfx`, `poissonmfx`, `probitmfx`, `negbinmfx`, `betaor`, `logitor`, `poissonirr`, `negbinirr` (*mfx*), partial support for *emmGrid* and *stanfit*
+* `robmixglm` (*robmixglm*), `betamfx`, `logitmfx`, `poissonmfx`, `probitmfx`, `negbinmfx`, `betaor`, `logitor`, `poissonirr`, `negbinirr` (*mfx*), partial support for *emmGrid*,  *stanfit* and *bayesQR*.
 
 ## Changes to functions
 

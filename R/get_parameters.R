@@ -1618,6 +1618,14 @@ get_parameters.mcmc <- function(x, parameters = NULL, ...) {
 }
 
 
+#' @export
+get_parameters.bayesQR <- function(x, parameters = NULL, ...) {
+  out <- as.data.frame(x[[1]]$betadraw)
+  names(out) <- x[[1]]$names
+  out[.get_parms_data(x, "all", "all", parameters)]
+}
+
+
 
 
 
