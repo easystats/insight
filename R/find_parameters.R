@@ -145,6 +145,7 @@ find_parameters.betaor <- function(x, component = c("all", "conditional", "preci
 }
 
 
+#' @rdname find_parameters
 #' @export
 find_parameters.logitmfx <- function(x, component = c("all", "conditional", "marginal"), flatten = FALSE, ...) {
   p <- .remove_backticks_from_string(names(stats::coef(x$fit)))
@@ -718,17 +719,13 @@ find_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi"
   .filter_parameters(l, effects = "all", component = component, flatten = flatten, recursive = FALSE)
 }
 
-
-#' @rdname find_parameters
 #' @export
 find_parameters.hurdle <- find_parameters.zeroinfl
-
 
 #' @export
 find_parameters.zerotrunc <- find_parameters.default
 
 
-#' @rdname find_parameters
 #' @export
 find_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   cf <- stats::coef(x)

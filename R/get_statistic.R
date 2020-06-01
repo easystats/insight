@@ -826,7 +826,6 @@ get_statistic.averaging <- function(x, component = c("conditional", "full"), ...
 
 
 #' @importFrom stats coef
-#' @rdname find_parameters
 #' @export
 get_statistic.bayesx <- function(x, ...) {
   out <- data.frame(

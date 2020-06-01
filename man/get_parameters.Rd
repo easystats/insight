@@ -2,8 +2,6 @@
 % Please edit documentation in R/get_parameters.R
 \name{get_parameters}
 \alias{get_parameters}
-\alias{get_parameters.rqss}
-\alias{get_parameters.cgam}
 \alias{get_parameters.betamfx}
 \alias{get_parameters.logitmfx}
 \alias{get_parameters.averaging}
@@ -12,16 +10,11 @@
 \alias{get_parameters.clm2}
 \alias{get_parameters.coxme}
 \alias{get_parameters.merMod}
-\alias{get_parameters.lme}
 \alias{get_parameters.mixed}
-\alias{get_parameters.MixMod}
 \alias{get_parameters.glmmTMB}
 \alias{get_parameters.BBmm}
 \alias{get_parameters.glimML}
-\alias{get_parameters.gamm}
-\alias{get_parameters.Gam}
 \alias{get_parameters.gam}
-\alias{get_parameters.vgam}
 \alias{get_parameters.zeroinfl}
 \alias{get_parameters.zcpglm}
 \alias{get_parameters.MCMCglmm}
@@ -33,10 +26,6 @@
 \title{Get model parameters}
 \usage{
 get_parameters(x, ...)
-
-\method{get_parameters}{rqss}(x, component = c("all", "conditional", "smooth_terms"), ...)
-
-\method{get_parameters}{cgam}(x, component = c("all", "conditional", "smooth_terms"), ...)
 
 \method{get_parameters}{betamfx}(
   x,
@@ -58,16 +47,7 @@ get_parameters(x, ...)
 
 \method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
 
-\method{get_parameters}{lme}(x, effects = c("fixed", "random"), ...)
-
 \method{get_parameters}{mixed}(x, effects = c("fixed", "random"), ...)
-
-\method{get_parameters}{MixMod}(
-  x,
-  effects = c("fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-  ...
-)
 
 \method{get_parameters}{glmmTMB}(
   x,
@@ -80,13 +60,7 @@ get_parameters(x, ...)
 
 \method{get_parameters}{glimML}(x, effects = c("fixed", "random", "all"), ...)
 
-\method{get_parameters}{gamm}(x, component = c("all", "conditional", "smooth_terms"), ...)
-
-\method{get_parameters}{Gam}(x, component = c("all", "conditional", "smooth_terms"), ...)
-
 \method{get_parameters}{gam}(x, component = c("all", "conditional", "smooth_terms"), ...)
-
-\method{get_parameters}{vgam}(x, component = c("all", "conditional", "smooth_terms"), ...)
 
 \method{get_parameters}{zeroinfl}(
   x,

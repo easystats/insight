@@ -146,7 +146,6 @@ get_parameters.crqs <- get_parameters.crq
 
 
 #' @importFrom stats setNames
-#' @rdname get_parameters
 #' @export
 get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
   component <- match.arg(component)
@@ -164,7 +163,6 @@ get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_t
 
 
 #' @importFrom stats setNames
-#' @rdname get_parameters
 #' @export
 get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
   component <- match.arg(component)
@@ -827,7 +825,6 @@ get_parameters.rlmerMod <- get_parameters.merMod
 #' @export
 get_parameters.glmmadmb <- get_parameters.merMod
 
-#' @rdname get_parameters
 #' @export
 get_parameters.lme <- get_parameters.merMod
 
@@ -897,7 +894,6 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
 
 
 
-#' @rdname get_parameters
 #' @export
 get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -1173,7 +1169,6 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
 # GAM models ---------------------------------------------
 
 
-#' @rdname get_parameters
 #' @export
 get_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
   x <- x$gam
@@ -1183,7 +1178,6 @@ get_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_t
 
 
 
-#' @rdname get_parameters
 #' @export
 get_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
   component <- match.arg(component)
@@ -1217,7 +1211,6 @@ get_parameters.gam <- function(x, component = c("all", "conditional", "smooth_te
 
 
 
-#' @rdname get_parameters
 #' @export
 get_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
   component <- match.arg(component)
@@ -1551,7 +1544,6 @@ get_parameters.bcplm <- function(x, parameters = NULL, ...) {
 }
 
 
-#' @rdname find_parameters
 #' @export
 get_parameters.bayesx <- function(x, component = c("conditional", "smooth_terms", "all"), ...) {
   component <- match.arg(component)
