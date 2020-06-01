@@ -302,6 +302,15 @@ find_algorithm.stanfit <- function(x, ...) {
 
 
 #' @export
+find_algorithm.bayesQR <- function(x, ...) {
+  list(
+    "algorithm" = x[[1]]$method,
+    "iterations" = nrow(x[[1]]$betadraw)
+  )
+}
+
+
+#' @export
 find_algorithm.brmsfit <- function(x, ...) {
   info <- x$fit@sim
 
