@@ -92,9 +92,9 @@ format_value.logical <- format_value.numeric
 
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
-      x <- ifelse(is.na(x), .missing, ifelse(x > 1e+5, sprintf("%.5e", x), sprintf("%.*f%%", digits, 100 * x)))
+      x <- ifelse(is.na(x), .missing, ifelse(abs(x) > 1e+5, sprintf("%.5e", x), sprintf("%.*f%%", digits, 100 * x)))
     } else {
-      x <- ifelse(is.na(x), .missing, ifelse(x > 1e+5, sprintf("%.5e", x), sprintf("%.*f", digits, x)))
+      x <- ifelse(is.na(x), .missing, ifelse(abs(x) > 1e+5, sprintf("%.5e", x), sprintf("%.*f", digits, x)))
     }
   } else if (anyNA(x)) {
     x <- .convert_missing(x, .missing)
