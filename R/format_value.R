@@ -87,6 +87,9 @@ format_value.logical <- format_value.numeric
 
 
 .format_value <- function(x, digits = 2, .missing = "", .width = NULL, .as_percent = FALSE, ...) {
+  # proper character NA
+  if (is.na(.missing)) .missing <- NA_character_
+
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
       x <- ifelse(is.na(x), .missing, ifelse(x > 1e+5, sprintf("%.5e", x), sprintf("%.*f%%", digits, 100 * x)))
@@ -106,11 +109,18 @@ format_value.logical <- format_value.numeric
 
 
 .convert_missing <- function(x, .missing) {
-  if (length(x) == 1) {
-    return(as.character(.missing))
+  if (is.na(.missing)) {
+    .missing <- NA_character_
+  } else {
+    .missing <- as.character(.missing)
   }
+
+  if (length(x) == 1) {
+    return(.missing)
+  }
+
   missings <- which(is.na(x))
-  x[missings] <- as.character(.missing)
+  x[missings] <- .missing
   x[!missings] <- as.character(x)
   x
 }
