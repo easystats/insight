@@ -198,7 +198,7 @@ get_parameters.betamfx <- function(x, component = c("all", "conditional", "preci
 
   params <- rbind(
     data.frame(
-      Parameter = rownames(mfx),
+      Parameter = gsub("^\\(phi\\)_", "", rownames(mfx)),
       Estimate = as.vector(mfx[, 1]),
       Component = "marginal",
       stringsAsFactors = FALSE
@@ -438,7 +438,7 @@ get_parameters.betareg <- function(x, component = c("all", "conditional", "preci
   cf <- stats::coef(x)
 
   params <- data.frame(
-    Parameter = names(cf),
+    Parameter = gsub("^\\(phi\\)_", "", names(cf)),
     Estimate = unname(cf),
     Component = c(rep("conditional", length(x$coefficients$mean)), rep("precision", length(x$coefficients$precision))),
     stringsAsFactors = FALSE,
