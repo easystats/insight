@@ -11,6 +11,7 @@
 * `clean_names()` now also removes mathematical operations (like `100 * log(x)`, which will return `"x"`).
 * `format_ci()` gains a `missing` argument, as option how to print missing values.
 * `format_value()` now uses `NA_character_` as missing if `missing = NA`.
+* `format_value()` also converts small numbers with many decimals into scientific notation.
 
 # insight 0.8.4
 
