@@ -701,15 +701,27 @@
 #' @importFrom stats setNames
 .random_slopes_corr <- function(vals, x) {
   corrs <- lapply(vals$vc, attr, "correlation")
-  rho01 <- sapply(corrs, function(i) {
-    if (!is.null(i)) {
-      slope_pairs <- utils::combn(x = unlist(find_random_slopes(x)), m = 2, simplify = FALSE)
-      lapply(slope_pairs, function(j) {
-        stats::setNames(i[j[1], j[2]], paste0("..", paste0(j, collapse = "-")))
+  rnd_slopes <- unlist(find_random_slopes(x))
+
+  if (length(rnd_slopes) < 2) {
+    return(NULL)
+  }
+
+  rho01 <- tryCatch(
+    {
+      sapply(corrs, function(i) {
+        if (!is.null(i)) {
+          slope_pairs <- utils::combn(x = rnd_slopes, m = 2, simplify = FALSE)
+          lapply(slope_pairs, function(j) {
+            stats::setNames(i[j[1], j[2]], paste0("..", paste0(j, collapse = "-")))
+          })
+        } else {
+          NULL
+        }
       })
-    } else {
-      NULL
-    }
-  })
+    },
+    error = function(e) { NULL }
+  )
+
   unlist(rho01)
 }
