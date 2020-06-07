@@ -39,6 +39,7 @@
   var.intercept <- NULL
   var.slope <- NULL
   cor.slope_intercept <- NULL
+  cor.slopes <- NULL
 
   # Get variance of fixed effects: multiply coefs by design matrix
   if (component %in% c("fixed", "all")) {
@@ -87,6 +88,10 @@
     cor.slope_intercept <- .random_slope_intercept_corr(vals, x)
   }
 
+  if (component %in% c("all")) {
+    cor.slopes <- .random_slopes_corr(vals, x)
+  }
+
   # if we only need residual variance, we can delete those
   # values again...
   if (component == "residual") {
@@ -103,7 +108,8 @@
     "var.dispersion" = var.dispersion,
     "var.intercept" = var.intercept,
     "var.slope" = var.slope,
-    "cor.slope_intercept" = cor.slope_intercept
+    "cor.slope_intercept" = cor.slope_intercept,
+    "cor.slopes" = cor.slopes
   ))
 }
 
@@ -686,4 +692,24 @@
     })
     unlist(rho01)
   }
+}
+
+
+
+# slope-slope-correlations (rho 01)
+#' @importFrom utils combn
+#' @importFrom stats setNames
+.random_slopes_corr <- function(vals, x) {
+  corrs <- lapply(vals$vc, attr, "correlation")
+  rho01 <- sapply(corrs, function(i) {
+    if (!is.null(i)) {
+      slope_pairs <- utils::combn(x = unlist(find_random_slopes(x)), m = 2, simplify = FALSE)
+      lapply(slope_pairs, function(j) {
+        stats::setNames(i[j[1], j[2]], paste0("..", paste0(j, collapse = "-")))
+      })
+    } else {
+      NULL
+    }
+  })
+  unlist(rho01)
 }
