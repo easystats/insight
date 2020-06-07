@@ -13,6 +13,10 @@
 * `format_value()` now uses `NA_character_` as missing if `missing = NA`.
 * `format_value()` also converts small numbers with many decimals into scientific notation.
 
+## Bug fixes
+
+* `get_variance()` did not return variance components for random effects for null-models with random slopes.
+
 # insight 0.8.4
 
 ## General

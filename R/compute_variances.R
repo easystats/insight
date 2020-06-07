@@ -617,6 +617,11 @@
     return(TRUE)
   }
 
+  # NULL models have no predictors, so no fixed effect as random slope
+  if (is.null(fe)) {
+    return(FALSE)
+  }
+
   # make sure we have identical subcomponents between random and
   # fixed effects
   fe <- .compact_list(fe[c("conditional", "zero_inflated")])
