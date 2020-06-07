@@ -153,6 +153,16 @@
 <code><a href="../reference/format_value.html">format_value()</a></code> now uses <code>NA_character_</code> as missing if <code>missing = NA</code>.</li>
 <li>
 <code><a href="../reference/format_value.html">format_value()</a></code> also converts small numbers with many decimals into scientific notation.</li>
+<li>
+<code><a href="../reference/get_variance.html">get_variance()</a></code> now also returns the corrlation among random slopes.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>
+<code><a href="../reference/get_variance.html">get_variance()</a></code> did not return variance components for random effects for null-models with random slopes.</li>
 </ul>
 </div>
 </div>
@@ -180,9 +190,9 @@
 <li>Improved support for <code>afex_aov</code> and <code>aovlist</code> (i.e. Anova with error term).</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed some issues with deparsings <code>NULL</code> strings under R 4.0.0.</li>
 <li>Fixed accuracy in <code><a href="../reference/get_variance.html">get_variance()</a></code> for models from Gamma family.</li>
@@ -220,9 +230,9 @@
 <li>Improve support for <em>bayesx</em> and <em>BBmm</em> models.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <em>brmsfit</em> models with specific variable name patterns.</li>
 <li>Fixed issue in <code><a href="../reference/format_ci.html">format_ci()</a></code> when confidence interval only contained <code>NA</code>s and <code>width</code> was set to <code>"auto"</code>.</li>
@@ -259,9 +269,9 @@
 <li>Improved support for <code>clogit</code>-models.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/find_weights.html">find_weights()</a></code> for <code>merMod</code> models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with weights, when weights also contained missing data.</li>
@@ -302,9 +312,9 @@
 <code><a href="../reference/format_value.html">format_value()</a></code> gets an <code>as_percent</code> argument to format values as percentages.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>clmm2</em>-models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models that used the <code>lspline()</code>-function.</li>
@@ -356,9 +366,9 @@
 <li>Other minor improvements.</li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Better detect Tweedie-models in <code><a href="../reference/model_info.html">model_info()</a></code>.</li>
 <li>Fixed issue in <code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code> for <em>panelr</em>-models with multiple random-effect parts.</li>
@@ -382,9 +392,9 @@
 <code>complmrob</code> (<em>complmrob</em>), <code>fixest</code> (<em>fixest</em>), <code>mclogit</code> and <code>mmclogit</code> (<em>mclogit</em>).</li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed bug in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models, when random effects are written before any fixed effects terms (like <code>social ~ (1|school) + open + extro</code>).</li>
 <li>Fixed bug in <code><a href="../reference/model_info.html">model_info()</a></code> for <em>VGAM</em> models, where logit-link was not always correctly identified.</li>
@@ -425,9 +435,9 @@
 <code><a href="../reference/link_inverse.html">link_inverse()</a></code> gets a <code>what</code>-argument, to return the link-inverse function for specific distribution parameters from <strong>gamls</strong> models.</li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed edge case for <code><a href="../reference/find_weights.html">find_weights()</a></code>.</li>
 <li>Fixed bug in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>glmmTMB</em> models that won’t return any data.</li>
@@ -473,9 +483,9 @@
 <li>Better support for nonlinear mixed models (<code><a href="https://rdrr.io/pkg/lme4/man/nlmer.html">lme4::nlmer()</a></code>). Note that model-specification requires the random term to be written in parentheses, i.e. <code>(slope | group)</code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-7" class="section level2">
+<div id="bug-fixes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issues in <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>gamlss</em> models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>plm</em> models, where the <code>index</code>-argument was used in the <code>plm()</code>-function call.</li>
@@ -531,9 +541,9 @@
 <code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> now include the Euclidean distance matrix for spatial models from <em>glmmTMB</em> (returned as random effects element, or more precise, as random slope).</li>
 </ul>
 </div>
-<div id="bug-fixes-8" class="section level2">
+<div id="bug-fixes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_formula.html">find_formula()</a></code> now extracts group factors of random effects for <em>gamlss</em> models.</li>
@@ -567,9 +577,9 @@
 <code><a href="../reference/get_weights.html">get_weights()</a></code> and <code><a href="../reference/find_weights.html">find_weights()</a></code> now work for <em>brms</em>-models.</li>
 </ul>
 </div>
-<div id="bug-fixes-9" class="section level2">
+<div id="bug-fixes-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-10" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix CRAN-check issues due to recent update from the <em>panelr</em>-package.</li>
 </ul>
