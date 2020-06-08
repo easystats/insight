@@ -1,3 +1,13 @@
+# insight 0.8.6
+
+## Changes to functions
+
+* `get_variance()` now also returns the corrlation among random slopes.
+
+## Bug fixes
+
+* `get_variance()` did not return variance components for random effects for null-models with random slopes.
+
 # insight 0.8.5
 
 ## New supported model classes
@@ -12,11 +22,6 @@
 * `format_ci()` gains a `missing` argument, as option how to print missing values.
 * `format_value()` now uses `NA_character_` as missing if `missing = NA`.
 * `format_value()` also converts small numbers with many decimals into scientific notation.
-* `get_variance()` now also returns the corrlation among random slopes.
-
-## Bug fixes
-
-* `get_variance()` did not return variance components for random effects for null-models with random slopes.
 
 # insight 0.8.4
 
