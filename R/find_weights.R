@@ -24,14 +24,19 @@ find_weights <- function(x, ...) {
 find_weights.default <- function(x, ...) {
   tryCatch(
     {
-      w <- .safe_deparse(parse(text = .safe_deparse(x$call))[[1]]$weights)
+      call_string <- .safe_deparse(x$call)
+      if (!is.null(call_string)) {
+        w <- .safe_deparse(parse(text = call_string)[[1]]$weights)
 
-      # edge case, users use "eval(parse())" to parse weight variables
-      if (grepl("^eval\\(parse\\(", w)) {
-        w <- eval(parse(text = .trim(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
+        # edge case, users use "eval(parse())" to parse weight variables
+        if (grepl("^eval\\(parse\\(", w)) {
+          w <- eval(parse(text = .trim(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
+        }
+
+        if (.is_empty_object(w) || w == "NULL") w <- NULL
+      } else {
+        w <- NULL
       }
-
-      if (.is_empty_object(w) || w == "NULL") w <- NULL
       w
     },
     error = function(e) {

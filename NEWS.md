@@ -7,6 +7,7 @@
 ## Bug fixes
 
 * `get_variance()` did not return variance components for random effects for null-models with random slopes.
+* Fixed issue that occured since R 4.0.0 in `find_weights()` when function call had no `weights`-argument.
 
 # insight 0.8.5
 
