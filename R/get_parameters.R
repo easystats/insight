@@ -1407,6 +1407,7 @@ get_parameters.afex_aov <- function(x, ...) {
 get_parameters.BGGM <- function(x, ...) {
   out <- as.data.frame(x$pcor_mat)
   colnames(out) <- colnames(x$Y)
+  out
 }
 
 
