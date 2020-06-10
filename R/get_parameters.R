@@ -531,6 +531,20 @@ get_parameters.rma <- function(x, ...) {
 }
 
 
+#' @export
+get_parameters.metaplus <- function(x, ...) {
+  params <- data.frame(
+    Parameter = rownames(x$results),
+    Estimate = unname(x$results[, 1]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  params$Parameter[grepl("muhat", params$Parameter)] <- "(Intercept)"
+  .remove_backticks_from_parameter_names(params)
+}
+
+
 
 
 

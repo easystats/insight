@@ -168,7 +168,7 @@
   }
 
 
-  if (inherits(x, "rma")) is_meta <- TRUE
+  is_meta <- inherits(x, c("rma", "metaplus"))
 
 
   list(

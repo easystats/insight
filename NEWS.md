@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `BGGM` (*BGGM*)
+* `BGGM` (*BGGM*), `metaplus` (*metaplus*)
 
 ## Changes to functions
 

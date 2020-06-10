@@ -199,6 +199,10 @@ find_formula.rma <- function(x, ...) {
   NULL
 }
 
+#' @export
+find_formula.metaplus <- find_formula.rma
+
+
 
 #' @export
 find_formula.afex_aov <- function(x, ...) {

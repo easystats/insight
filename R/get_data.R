@@ -1131,3 +1131,7 @@ get_data.rma <- function(x, ...) {
 
   .prepare_get_data(x, stats::na.omit(mf))
 }
+
+
+#' @export
+get_data.metaplus <- get_data.rma

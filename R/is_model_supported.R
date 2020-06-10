@@ -125,6 +125,7 @@ supported_models <- function() {
     "maxLik",
     "mcmc",
     "MCMCglmm",
+    "metaplus",
     "merMod",
     "mixed",
     "mixor",
