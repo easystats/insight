@@ -1,5 +1,9 @@
 # insight 0.8.6
 
+## New supported model classes
+
+* `BGGM` (*BGGM*)
+
 ## Changes to functions
 
 * `get_variance()` now also returns the corrlation among random slopes.
