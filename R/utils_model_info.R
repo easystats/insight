@@ -73,7 +73,7 @@
   is.bayes <- inherits(x, c(
     "brmsfit", "stanfit", "MCMCglmm", "stanreg",
     "stanmvreg", "bmerMod", "BFBayesFactor", "bamlss",
-    "bayesx", "mcmc", "bcplm", "bayesQR"
+    "bayesx", "mcmc", "bcplm", "bayesQR", "BGGM"
   ))
 
   is.survival <- inherits(x, c("aareg", "survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph", "coxme"))
@@ -141,6 +141,9 @@
       is_ttest <- FALSE
       is_correlation <- TRUE
     }
+  } else if (inherits(x, "BGGM")) {
+    is_ttest <- FALSE
+    is_correlation <- TRUE
   } else {
     is_ttest <- FALSE
     is_correlation <- FALSE

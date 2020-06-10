@@ -985,6 +985,13 @@ find_formula.mmclogit <- function(x, ...) {
 
 
 #' @export
+find_formula.BGGM <- function(x, ...) {
+  list(conditional = x$formula)
+}
+
+
+
+#' @export
 find_formula.stanreg <- function(x, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")

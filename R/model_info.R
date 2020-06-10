@@ -613,6 +613,32 @@ model_info.stanmvreg <- function(x, ...) {
 }
 
 
+#' @export
+model_info.BGGM <- function(x, ...) {
+  link <- switch(
+    x$type,
+    "continuous" = stats::gaussian(),
+    stats::binomial()
+  )
+
+  family <- switch(
+    x$type,
+    "continuous" = "gaussian",
+    "binary" = "binomial",
+    "ordinal"
+  )
+
+  .make_family(
+    x = x,
+    fitfam = family,
+    zero.inf = FALSE,
+    logit.link = link$link == "logit",
+    link.fun = link$link,
+    ...
+  )
+}
+
+
 
 
 

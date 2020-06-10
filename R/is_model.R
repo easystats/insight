@@ -42,6 +42,7 @@ is_model <- function(x) {
       "betaor",
       "betareg",
       "BFBayesFactor",
+      "BGGM",
       "bglmerMod",
       "bife",
       "biglm",

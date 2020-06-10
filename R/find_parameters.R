@@ -747,6 +747,19 @@ find_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", 
 
 # Bayesian models -----------------------------------------
 
+
+#' @export
+find_parameters.BGGM <- function(x, flatten = FALSE, ...) {
+  l <- list(conditional = colnames(x$Y))
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
 #' @rdname find_parameters
 #' @export
 find_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"), component = c("all", "extra"), flatten = FALSE, ...) {

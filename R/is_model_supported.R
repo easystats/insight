@@ -54,6 +54,7 @@ supported_models <- function() {
     "betaor",
     "betareg",
     "BFBayesFactor",
+    "BGGM",
     "bife",
     "biglm",
     "bigglm",

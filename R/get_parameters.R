@@ -1403,6 +1403,13 @@ get_parameters.afex_aov <- function(x, ...) {
 # Bayesian models -------------------------------------
 
 
+#' @export
+get_parameters.BGGM <- function(x, ...) {
+  out <- as.data.frame(x$pcor_mat)
+  colnames(out) <- colnames(x$Y)
+}
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), ...) {

@@ -930,6 +930,12 @@ get_data.Arima <- function(x, ...) {
 
 
 #' @export
+get_data.BGGM <- function(x, ...) {
+  x$Y
+}
+
+
+#' @export
 get_data.DirichletRegModel <- function(x, ...) {
   mf <- x$data
   resp <- sapply(x$data, inherits, "DirichletRegData")
