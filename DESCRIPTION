@@ -31,6 +31,7 @@ Suggests:
     BayesFactor,
     bayestestR,
     betareg,
+    BGGM,
     biglm,
     blavaan,
     blme,

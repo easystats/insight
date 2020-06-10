@@ -1405,9 +1405,10 @@ get_parameters.afex_aov <- function(x, ...) {
 
 #' @export
 get_parameters.BGGM <- function(x, ...) {
-  out <- as.data.frame(x$pcor_mat)
-  colnames(out) <- colnames(x$Y)
-  out
+  if (!requireNamespace("BGGM", quietly = TRUE)) {
+    stop("Package 'BGGM' required for this function to work. Please install it.")
+  }
+  as.data.frame(BGGM::posterior_samples(x))
 }
 
 
