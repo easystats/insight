@@ -1390,6 +1390,29 @@ get_statistic.rma <- function(x, ...) {
 
 
 
+#' @importFrom stats qnorm
+#' @export
+get_statistic.metaplus <- function(x, ...) {
+  params <- get_parameters(x)
+
+  ci_low <- as.vector(x$results[, "95% ci.lb"])
+  ci_high <- as.vector(x$results[, "95% ci.ub"])
+  cis <- apply(cbind(ci_low, ci_high), MARGIN = 1, diff)
+  se <- cis / (2 * stats::qnorm(.975))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = as.vector(parms$Estimate / se),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
 #' @export
 get_statistic.bife <- function(x, ...) {
   parms <- get_parameters(x)
