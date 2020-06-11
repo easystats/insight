@@ -17,6 +17,7 @@
 \alias{get_parameters.gam}
 \alias{get_parameters.zeroinfl}
 \alias{get_parameters.zcpglm}
+\alias{get_parameters.BGGM}
 \alias{get_parameters.MCMCglmm}
 \alias{get_parameters.BFBayesFactor}
 \alias{get_parameters.stanmvreg}
@@ -73,6 +74,8 @@ get_parameters(x, ...)
   component = c("all", "conditional", "zi", "zero_inflated"),
   ...
 )
+
+\method{get_parameters}{BGGM}(x, component = c("correlation", "intercept", "all"), ...)
 
 \method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random", "all"), ...)
 

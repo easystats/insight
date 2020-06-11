@@ -1417,12 +1417,23 @@ get_parameters.afex_aov <- function(x, ...) {
 # Bayesian models -------------------------------------
 
 
+#' @rdname get_parameters
 #' @export
-get_parameters.BGGM <- function(x, ...) {
+get_parameters.BGGM <- function(x, component = c("correlation", "intercept", "all"), ...) {
   if (!requireNamespace("BGGM", quietly = TRUE)) {
     stop("Package 'BGGM' required for this function to work. Please install it.")
   }
-  as.data.frame(BGGM::posterior_samples(x))
+
+  out <- as.data.frame(BGGM::posterior_samples(x))
+  intercepts <- grepl("_\\(Intercept\\)$", colnames(out))
+
+  component <- match.arg(component)
+  switch(
+    component,
+    "correlation" = out[, !intercepts, drop = FALSE],
+    "intercept" = out[, intercepts, drop = FALSE],
+    out
+  )
 }
 
 

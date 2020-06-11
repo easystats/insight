@@ -70,6 +70,8 @@ clean_parameters.default <- function(x, group = "", ...) {
       "scale"
     } else if (grepl("marginal", i, fixed = TRUE)) {
       "marginal"
+    } else if (grepl("intercept", i, fixed = TRUE)) {
+      "intercept"
     } else {
       "conditional"
     }

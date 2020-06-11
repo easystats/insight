@@ -748,9 +748,22 @@ find_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", 
 # Bayesian models -----------------------------------------
 
 
+
+#' @rdname find_parameters
 #' @export
-find_parameters.BGGM <- function(x, flatten = FALSE, ...) {
-  l <- list(conditional = colnames(x$Y))
+find_parameters.BGGM <- function(x, component = c("correlation", "intercept", "all"), flatten = FALSE, ...) {
+  component <- match.arg(component)
+  l <- switch(
+    component,
+    "correlation" = list(correlation = colnames(get_parameters(x, component = "correlation"))),
+    "intercept" = list(intercept = colnames(x$Y)),
+    "all" = list(
+      intercept = colnames(x$Y),
+      correlation = colnames(get_parameters(x, component = "correlation"))
+    )
+  )
+
+  l <- .compact_list(l)
 
   if (flatten) {
     unique(unlist(l))

@@ -7,6 +7,7 @@
 \alias{find_parameters.gam}
 \alias{find_parameters.merMod}
 \alias{find_parameters.zeroinfl}
+\alias{find_parameters.BGGM}
 \alias{find_parameters.BFBayesFactor}
 \alias{find_parameters.brmsfit}
 \alias{find_parameters.bayesx}
@@ -43,6 +44,13 @@ find_parameters(x, ...)
 \method{find_parameters}{zeroinfl}(
   x,
   component = c("all", "conditional", "zi", "zero_inflated"),
+  flatten = FALSE,
+  ...
+)
+
+\method{find_parameters}{BGGM}(
+  x,
+  component = c("correlation", "intercept", "all"),
   flatten = FALSE,
   ...
 )
