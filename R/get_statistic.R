@@ -1401,8 +1401,8 @@ get_statistic.metaplus <- function(x, ...) {
   se <- cis / (2 * stats::qnorm(.975))
 
   out <- data.frame(
-    Parameter = parms$Parameter,
-    Statistic = as.vector(parms$Estimate / se),
+    Parameter = params$Parameter,
+    Statistic = as.vector(params$Estimate / se),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
