@@ -91,9 +91,10 @@
 #'
 #' @note This function supports models of class \code{merMod} (including models
 #'   from \pkg{blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB},
-#'   \code{MixMod}, \code{lme}, \code{mixed}, \code{rlmerMod}, \code{stanreg} or
-#'   \code{wbm}. Support for objects of class \code{MixMod} (\pkg{GLMMadaptiv}) or
-#'   \code{lme} (\pkg{nlme}) is experimental and may not work for all models.
+#'   \code{MixMod}, \code{lme}, \code{mixed}, \code{rlmerMod}, \code{stanreg},
+#'   \code{brmsfit} or \code{wbm}. Support for objects of class \code{MixMod}
+#'   (\pkg{GLMMadaptiv}), \code{lme} (\pkg{nlme}) or \code{brmsfit} (\pkg{brms})
+#'   is experimental and may not work for all models.
 #'
 #' @references \itemize{
 #'  \item Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. \doi{10.1111/2041-210X.12225}
@@ -167,6 +168,10 @@ get_variance.wblm <- get_variance.merMod
 
 #' @export
 get_variance.lme <- get_variance.merMod
+
+#' @export
+get_variance.brmsfit <- get_variance.merMod
+
 
 
 #' @export

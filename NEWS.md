@@ -7,6 +7,7 @@
 ## Changes to functions
 
 * `get_variance()` now also returns the corrlation among random slopes.
+* `get_variance()` now also (partially) supports `brmsfit` models.
 
 ## Bug fixes
 
