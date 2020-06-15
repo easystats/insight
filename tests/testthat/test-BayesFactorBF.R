@@ -2,6 +2,9 @@ if (require("testthat") &&
   require("insight") &&
   require("stats") &&
   require("BayesFactor")) {
+
+  .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
   x <- correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
@@ -52,18 +55,20 @@ if (require("testthat") &&
 
 
   # ---------------------------
-  t <- c(-.15, 2.39, 2.42, 2.43)
-  N <- c(100, 150, 97, 99)
-  x <- meta.ttestBF(t = t, n1 = N, rscale = 1)
-  test_that("get_data", {
-    expect_true(is.data.frame(get_data(x)))
-  })
-  test_that("find_formula", {
-    expect_null(find_formula(x))
-  })
-  test_that("get_parameters", {
-    expect_equal(nrow(get_parameters(x)), 4000)
-  })
+  if (.runThisTest || Sys.getenv("USER") == "travis") {
+    t <- c(-.15, 2.39, 2.42, 2.43)
+    N <- c(100, 150, 97, 99)
+    x <- meta.ttestBF(t = t, n1 = N, rscale = 1)
+    test_that("get_data", {
+      expect_true(is.data.frame(get_data(x)))
+    })
+    test_that("find_formula", {
+      expect_null(find_formula(x))
+    })
+    test_that("get_parameters", {
+      expect_equal(nrow(get_parameters(x)), 4000)
+    })
+  }
 
   # ---------------------------
   data(ToothGrowth)
