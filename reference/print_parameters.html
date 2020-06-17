@@ -137,10 +137,10 @@ or <code><a href='https://rdrr.io/pkg/bayestestR/man/equivalence_test.html'>equi
 into several parts, depending on the model. See details below.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>print_parameters</span>(
-  <span class='no'>x</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>split_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Effects"</span>, <span class='st'>"Component"</span>, <span class='st'>"Group"</span>, <span class='st'>"Response"</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/print_parameters.html'>print_parameters</a></span>(
+  <span class='kw'>x</span>,
+  <span class='kw'>...</span>,
+  split_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Effects"</span>, <span class='st'>"Component"</span>, <span class='st'>"Group"</span>, <span class='st'>"Response"</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -148,7 +148,7 @@ into several parts, depending on the model. See details below.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted model, or a data frame returned by <code><a href='clean_parameters.html'>clean_parameters</a></code>.</p></td>
+      <td><p>A fitted model, or a data frame returned by <code><a href='https://rdrr.io/pkg/insight/man/clean_parameters.html'>clean_parameters</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -161,7 +161,7 @@ ROPE, ...).</p></td>
       <td><p><code>split_by</code> should be a character vector with one or
 more of the following elements: <code>"Effects"</code>, <code>"Component"</code>,
 <code>"Response"</code> and <code>"Group"</code>. These are the column names returned
-by <code><a href='clean_parameters.html'>clean_parameters</a></code>, which is used to extract the information
+by <code><a href='https://rdrr.io/pkg/insight/man/clean_parameters.html'>clean_parameters</a></code>, which is used to extract the information
 from which the group or component model parameters belong. If <code>NULL</code>, the
 merged data frame is returned. Else, the data frame is split into a list,
 split by the values from those columns defined in <code>split_by</code>.</p></td>
@@ -181,8 +181,8 @@ group-level "persons" from the zero-inflated model component.</p>
 about model parameters for clear printing.
 <br /> <br />
 First, <code>x</code> is required, which should either be a model object or a
-prepared data frame as returned by <code><a href='clean_parameters.html'>clean_parameters</a></code>. If
-<code>x</code> is a model, <code><a href='clean_parameters.html'>clean_parameters()</a></code> is called on that model
+prepared data frame as returned by <code><a href='https://rdrr.io/pkg/insight/man/clean_parameters.html'>clean_parameters</a></code>. If
+<code>x</code> is a model, <code><a href='https://rdrr.io/pkg/insight/man/clean_parameters.html'>clean_parameters()</a></code> is called on that model
 object to get information with which model components the parameters
 are associated.
 <br /> <br />
@@ -194,7 +194,7 @@ have a) a <code>Parameters</code> column and b) columns with the HDI values.
 <br /> <br />
 Now we have a data frame with model parameters and information about the
 association to the different model components, a data frame with model
-parameters, and some summary statistics. <code>print_parameters()</code>
+parameters, and some summary statistics. <code><a href='https://rdrr.io/pkg/insight/man/print_parameters.html'>print_parameters()</a></code>
 then merges these data frames, so the statistic of interest (in our example:
 the HDI) is also associated with the different model components. The data
 frame is split into a list, so for a clear printing. Users can loop over this
@@ -202,26 +202,27 @@ list and print each component for a better overview. Further, parameter
 names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>bayestestR</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='download_model.html'>download_model</a></span>(<span class='st'>"brms_zi_2"</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/bayestestR/man/hdi.html'>hdi</a></span>(<span class='no'>model</span>, <span class='kw'>effects</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='st'>"all"</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://easystats.github.io/bayestestR'>bayestestR</a></span>)
+<span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/insight/man/download_model.html'>download_model</a></span>(<span class='st'>"brms_zi_2"</span>)
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/bayestestR/man/hdi.html'>hdi</a></span>(<span class='kw'>model</span>, effects = <span class='st'>"all"</span>, component = <span class='st'>"all"</span>)
 
 <span class='co'># hdi() returns a data frame; here we use only the informaton on</span>
 <span class='co'># parameter names and HDI values</span>
-<span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>x</span>)[, <span class='fl'>1</span>:<span class='fl'>4</span>]
-<span class='no'>tmp</span>
+<span class='kw'>tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='kw'>x</span>)[, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>]
+<span class='kw'>tmp</span>
 
 <span class='co'># Based on the "split_by" argument, we get a list of data frames that</span>
 <span class='co'># is split into several parts that reflect the model components.</span>
-<span class='fu'>print_parameters</span>(<span class='no'>model</span>, <span class='no'>tmp</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/insight/man/print_parameters.html'>print_parameters</a></span>(<span class='kw'>model</span>, <span class='kw'>tmp</span>)
 
 <span class='co'># This is the standard print()-method for "bayestestR::hdi"-objects.</span>
 <span class='co'># For printing methods, it is easy to print complex summary statistics</span>
 <span class='co'># in a clean way to the console by splitting the information into</span>
 <span class='co'># different model components.</span>
-<span class='no'>x</span>
-}</div></pre>
+<span class='kw'>x</span>
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

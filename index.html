@@ -158,67 +158,77 @@
 <a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor"></a>Making Predictions at Specific Values of a Term of Interest</h4>
 <p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>.</p>
 <p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">insight</span>)
-<span class="no">m</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Sepal.Length</span> ~ <span class="no">Species</span> + <span class="no">Petal.Width</span> + <span class="no">Sepal.Width</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://easystats.github.io/insight">insight</a></span>)
+<span class="kw">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Species</span> <span class="op">+</span> <span class="kw">Petal.Width</span> <span class="op">+</span> <span class="kw">Sepal.Width</span>, data = <span class="kw">iris</span>)
 
-<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/get_data.html">get_data</a></span>(<span class="no">m</span>)
-<span class="no">pred</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/find_predictors.html">find_predictors</a></span>(<span class="no">m</span>, <span class="kw">flatten</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="kw">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_data.html">get_data</a></span>(<span class="kw">m</span>)
+<span class="kw">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/find_predictors.html">find_predictors</a></span>(<span class="kw">m</span>, flatten = <span class="fl">TRUE</span>)
 
-<span class="no">l</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">pred</span>, <span class="kw">function</span>(<span class="no">x</span>) {
-    <span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(<span class="no">dat</span><span class="kw">[[</span><span class="no">x</span>]]))
-        <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">dat</span><span class="kw">[[</span><span class="no">x</span>]]) <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">dat</span><span class="kw">[[</span><span class="no">x</span>]])
+<span class="kw">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">pred</span>, <span class="fu">function</span>(<span class="kw">x</span>) {
+    <span class="co">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(<span class="kw">dat</span>[[<span class="kw">x</span>]])) 
+        <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="kw">dat</span>[[<span class="kw">x</span>]]) <span class="co">else</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">dat</span>[[<span class="kw">x</span>]])
 })
 
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">l</span>) <span class="kw">&lt;-</span> <span class="no">pred</span>
-<span class="no">l</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">l</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">l</span>) <span class="op">&lt;-</span> <span class="kw">pred</span>
+<span class="kw">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="kw">l</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">l</span>, <span class="kw">predictions</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">m</span>, <span class="kw">newdata</span> <span class="kw">=</span> <span class="no">l</span>))
+<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="kw">l</span>, predictions = <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="kw">m</span>, newdata = <span class="kw">l</span>))
 <span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span>
 <span class="co">#&gt; 1     setosa         1.2         3.1         5.1</span>
 <span class="co">#&gt; 2 versicolor         1.2         3.1         6.1</span>
-<span class="co">#&gt; 3  virginica         1.2         3.1         6.3</span></pre></div>
+<span class="co">#&gt; 3  virginica         1.2         3.1         6.3</span>
+</pre></div>
 </div>
 <div id="printing-model-coefficients" class="section level4">
 <h4 class="hasAnchor">
 <a href="#printing-model-coefficients" class="anchor"></a>Printing Model Coefficients</h4>
 <p>The next example should emphasize the possibilities to generalize functions to many different model objects using <strong>insight</strong>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
 <p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="no">print_params</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">model</span>) {
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">model</span>)$<span class="no">coefficients</span>), <span class="kw">collapse</span> <span class="kw">=</span> <span class="st">", "</span>),
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="kw">print_params</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">model</span>) {
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="kw">model</span>)<span class="op">$</span><span class="kw">coefficients</span>), collapse = <span class="st">", "</span>), 
         <span class="st">", thank you for your attention!"</span>)
 }
 
-<span class="no">m1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Sepal.Length</span> ~ <span class="no">Petal.Width</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
-<span class="fu">print_params</span>(<span class="no">m1</span>)
+<span class="kw">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Petal.Width</span>, data = <span class="kw">iris</span>)
+<span class="fu">print_params</span>(<span class="kw">m1</span>)
 <span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span>
 
 <span class="co"># obviously, something is missing in the output</span>
-<span class="no">m2</span> <span class="kw">&lt;-</span> <span class="kw pkg">mgcv</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="no">Sepal.Length</span> ~ <span class="no">Petal.Width</span> + <span class="fu">s</span>(<span class="no">Petal.Length</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
-<span class="fu">print_params</span>(<span class="no">m2</span>)
-<span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></pre></div>
+<span class="kw">m2</span> <span class="op">&lt;-</span> <span class="kw">mgcv</span>::<span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Petal.Width</span> <span class="op">+</span> <span class="fu">s</span>(<span class="kw">Petal.Length</span>), data = <span class="kw">iris</span>)
+<span class="fu">print_params</span>(<span class="kw">m2</span>)
+<span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span>
+</pre></div>
 <p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="no">print_params</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">model</span>) {
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw pkg">insight</span><span class="kw ns">::</span><span class="fu"><a href="reference/find_parameters.html">find_parameters</a></span>(<span class="no">model</span>, <span class="kw">flatten</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-        <span class="kw">collapse</span> <span class="kw">=</span> <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="kw">print_params</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">model</span>) {
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"My parameters are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw">insight</span>::<span class="fu"><a href="reference/find_parameters.html">find_parameters</a></span>(<span class="kw">model</span>, flatten = <span class="fl">TRUE</span>), 
+        collapse = <span class="st">", "</span>), <span class="st">", thank you for your attention!"</span>)
 }
 
-<span class="no">m1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Sepal.Length</span> ~ <span class="no">Petal.Width</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
-<span class="fu">print_params</span>(<span class="no">m1</span>)
+<span class="kw">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Petal.Width</span>, data = <span class="kw">iris</span>)
+<span class="fu">print_params</span>(<span class="kw">m1</span>)
 <span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span>
 
-<span class="no">m2</span> <span class="kw">&lt;-</span> <span class="kw pkg">mgcv</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="no">Sepal.Length</span> ~ <span class="no">Petal.Width</span> + <span class="fu">s</span>(<span class="no">Petal.Length</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
-<span class="fu">print_params</span>(<span class="no">m2</span>)
-<span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></pre></div>
+<span class="kw">m2</span> <span class="op">&lt;-</span> <span class="kw">mgcv</span>::<span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Petal.Width</span> <span class="op">+</span> <span class="fu">s</span>(<span class="kw">Petal.Length</span>), data = <span class="kw">iris</span>)
+<span class="fu">print_params</span>(<span class="kw">m2</span>)
+<span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span>
+</pre></div>
 </div>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Run the following to install the latest GitHub-version of <strong>insight</strong>:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">"easystats/insight"</span>)</pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)
+<span class="kw">devtools</span>::<span class="fu">install_github</span>(<span class="st">"easystats/insight"</span>)
+</pre></div>
 <p>Or install the latest stable release from CRAN:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"insight"</span>)</pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"insight"</span>)
+</pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
@@ -233,7 +243,8 @@
 <div id="list-of-supported-models-by-class" class="section level2">
 <h2 class="hasAnchor">
 <a href="#list-of-supported-models-by-class" class="anchor"></a>List of Supported Models by Class</h2>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="reference/is_model_supported.html">supported_models</a></span>()
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="fu"><a href="reference/is_model_supported.html">supported_models</a></span>()
 <span class="co">#&gt;   [1] "aareg"             "afex_aov"          "aov"              </span>
 <span class="co">#&gt;   [4] "aovlist"           "Arima"             "averaging"        </span>
 <span class="co">#&gt;   [7] "bamlss"            "bamlss.frame"      "bayesQR"          </span>
@@ -277,7 +288,8 @@
 <span class="co">#&gt; [121] "svyglm"            "svyolr"            "tobit"            </span>
 <span class="co">#&gt; [124] "truncreg"          "vgam"              "vglm"             </span>
 <span class="co">#&gt; [127] "wbgee"             "wblm"              "wbm"              </span>
-<span class="co">#&gt; [130] "zcpglm"            "zeroinfl"          "zerotrunc"</span></pre></div>
+<span class="co">#&gt; [130] "zcpglm"            "zeroinfl"          "zerotrunc"</span>
+</pre></div>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues">File an issue</a> and request additional model-support in <em>insight</em>!</li>

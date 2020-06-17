@@ -131,10 +131,10 @@
     <p>Retrieve information from model objects.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>model_info</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/model_info.html'>model_info</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>model_info</span>(<span class='no'>x</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/pkg/insight/man/model_info.html'>model_info</a></span>(<span class='kw'>x</span>, verbose = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,7 +159,7 @@
   etc. (see 'Details').</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>model_info()</code> returns a list with information about the
+    <p><code><a href='https://rdrr.io/pkg/insight/man/model_info.html'>model_info()</a></code> returns a list with information about the
   model for many different model objects. Following information
    is returned, where all values starting with <code>is_</code> are logicals.</p><ul>
 <li><p><code>is_binomial</code>: family is binomial (but not negative binomial)</p></li>
@@ -197,14 +197,14 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>ldose</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span>:<span class='fl'>5</span>, <span class='fl'>2</span>)
-<span class='no'>numdead</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>9</span>, <span class='fl'>13</span>, <span class='fl'>18</span>, <span class='fl'>20</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>6</span>, <span class='fl'>10</span>, <span class='fl'>12</span>, <span class='fl'>16</span>)
-<span class='no'>sex</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"M"</span>, <span class='st'>"F"</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>6</span>)))
-<span class='no'>SF</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>numdead</span>, <span class='kw'>numalive</span> <span class='kw'>=</span> <span class='fl'>20</span> - <span class='no'>numdead</span>)
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>ldose</span>, <span class='no'>sex</span>, <span class='no'>SF</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>SF</span> ~ <span class='no'>sex</span> * <span class='no'>ldose</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>)
+    <pre class="examples"><div class='input'><span class='kw'>ldose</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>2</span>)
+<span class='kw'>numdead</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>9</span>, <span class='fl'>13</span>, <span class='fl'>18</span>, <span class='fl'>20</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>6</span>, <span class='fl'>10</span>, <span class='fl'>12</span>, <span class='fl'>16</span>)
+<span class='kw'>sex</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"M"</span>, <span class='st'>"F"</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>6</span>)))
+<span class='kw'>SF</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>numdead</span>, numalive = <span class='fl'>20</span> <span class='op'>-</span> <span class='kw'>numdead</span>)
+<span class='kw'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>ldose</span>, <span class='kw'>sex</span>, <span class='kw'>SF</span>, stringsAsFactors = <span class='fl'>FALSE</span>)
+<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>SF</span> <span class='op'>~</span> <span class='kw'>sex</span> <span class='op'>*</span> <span class='kw'>ldose</span>, family = <span class='kw'>binomial</span>)
 
-<span class='fu'>model_info</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $is_binomial
+<span class='fu'><a href='https://rdrr.io/pkg/insight/man/model_info.html'>model_info</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; $is_binomial
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $is_count
@@ -316,19 +316,19 @@
 #&gt; $model_terms$conditional
 #&gt; [1] "sex"   "ldose"
 #&gt; 
-#&gt; </div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>glmmTMB</span>)
+#&gt; </div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/glmmTMB'>glmmTMB</a></span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"Salamanders"</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html'>glmmTMB</a></span>(
-  <span class='no'>count</span> ~ <span class='no'>spp</span> + <span class='no'>cover</span> + <span class='no'>mined</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>site</span>),
-  <span class='kw'>ziformula</span> <span class='kw'>=</span> ~ <span class='no'>spp</span> + <span class='no'>mined</span>,
-  <span class='kw'>dispformula</span> <span class='kw'>=</span> ~<span class='no'>DOY</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>,
-  <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>nbinom2</span>
+<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html'>glmmTMB</a></span>(
+  <span class='kw'>count</span> <span class='op'>~</span> <span class='kw'>spp</span> <span class='op'>+</span> <span class='kw'>cover</span> <span class='op'>+</span> <span class='kw'>mined</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>site</span>),
+  ziformula = <span class='op'>~</span> <span class='kw'>spp</span> <span class='op'>+</span> <span class='kw'>mined</span>,
+  dispformula = <span class='op'>~</span><span class='kw'>DOY</span>,
+  data = <span class='kw'>Salamanders</span>,
+  family = <span class='kw'>nbinom2</span>
 )
 }
 
-<span class='fu'>model_info</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $is_binomial
+<span class='fu'><a href='https://rdrr.io/pkg/insight/man/model_info.html'>model_info</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; $is_binomial
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $is_count

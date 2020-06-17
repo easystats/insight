@@ -133,7 +133,7 @@
   model, i.e. a model with multiple outcomes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_multivariate</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/is_multivariate.html'>is_multivariate</a></span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,21 +151,21 @@
    function of <span class="pkg">insight</span> is from a multivariate response model.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>rstanarm</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://mc-stan.org/rstanarm'>rstanarm</a></span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"pbcLong"</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_mvmer.html'>stan_mvmer</a></span>(
-  <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='no'>logBili</span> ~ <span class='no'>year</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>id</span>),
-    <span class='no'>albumin</span> ~ <span class='no'>sex</span> + <span class='no'>year</span> + (<span class='no'>year</span> <span class='kw'>|</span> <span class='no'>id</span>)
+<span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_mvmer.html'>stan_mvmer</a></span>(
+  formula = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='kw'>logBili</span> <span class='op'>~</span> <span class='kw'>year</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>id</span>),
+    <span class='kw'>albumin</span> <span class='op'>~</span> <span class='kw'>sex</span> <span class='op'>+</span> <span class='kw'>year</span> <span class='op'>+</span> (<span class='kw'>year</span> <span class='op'>|</span> <span class='kw'>id</span>)
   ),
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>pbcLong</span>,
-  <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cores</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>12345</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>
+  data = <span class='kw'>pbcLong</span>,
+  chains = <span class='fl'>1</span>, cores = <span class='fl'>1</span>, seed = <span class='fl'>12345</span>, iter = <span class='fl'>1000</span>
 )
 
-<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='find_formula.html'>find_formula</a></span>(<span class='no'>model</span>)
-<span class='fu'>is_multivariate</span>(<span class='no'>model</span>)
-<span class='fu'>is_multivariate</span>(<span class='no'>f</span>)
+<span class='kw'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_formula.html'>find_formula</a></span>(<span class='kw'>model</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/insight/man/is_multivariate.html'>is_multivariate</a></span>(<span class='kw'>model</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/insight/man/is_multivariate.html'>is_multivariate</a></span>(<span class='kw'>f</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

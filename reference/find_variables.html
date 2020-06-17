@@ -133,12 +133,12 @@
   response value and random effects.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_variables</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>effects</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
-  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>,
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables</a></span>(
+  <span class='kw'>x</span>,
+  effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
+  component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>,
     <span class='st'>"instruments"</span>, <span class='st'>"smooth_terms"</span>),
-  <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  flatten = <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -185,31 +185,31 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The difference to <code><a href='find_terms.html'>find_terms</a></code> is that <code>find_variables()</code>
-  returns each variable name only once, while <code><a href='find_terms.html'>find_terms()</a></code> may return a
+    <p>The difference to <code><a href='https://rdrr.io/pkg/insight/man/find_terms.html'>find_terms</a></code> is that <code><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables()</a></code>
+  returns each variable name only once, while <code><a href='https://rdrr.io/pkg/insight/man/find_terms.html'>find_terms()</a></code> may return a
   variable multiple times in case of transformations or when arithmetic expressions
   were used in the formula.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>cbpp</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sleepstudy</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/lme4/lme4'>lme4</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>cbpp</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sleepstudy</span>)
 <span class='co'># some data preparation...</span>
-<span class='no'>cbpp</span>$<span class='no'>trials</span> <span class='kw'>&lt;-</span> <span class='no'>cbpp</span>$<span class='no'>size</span> - <span class='no'>cbpp</span>$<span class='no'>incidence</span>
-<span class='no'>sleepstudy</span>$<span class='no'>mygrp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>180</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>sleepstudy</span>$<span class='no'>mysubgrp</span> <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
-<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fl'>5</span>) {
-  <span class='no'>filter_group</span> <span class='kw'>&lt;-</span> <span class='no'>sleepstudy</span>$<span class='no'>mygrp</span> <span class='kw'>==</span> <span class='no'>i</span>
-  <span class='no'>sleepstudy</span>$<span class='no'>mysubgrp</span>[<span class='no'>filter_group</span>] <span class='kw'>&lt;-</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>30</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>filter_group</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>trials</span> <span class='op'>&lt;-</span> <span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>size</span> <span class='op'>-</span> <span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>incidence</span>
+<span class='kw'>sleepstudy</span><span class='op'>$</span><span class='kw'>mygrp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, size = <span class='fl'>180</span>, replace = <span class='fl'>TRUE</span>)
+<span class='kw'>sleepstudy</span><span class='op'>$</span><span class='kw'>mysubgrp</span> <span class='op'>&lt;-</span> <span class='fl'>NA</span>
+<span class='co'>for</span> (<span class='kw'>i</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>) {
+  <span class='kw'>filter_group</span> <span class='op'>&lt;-</span> <span class='kw'>sleepstudy</span><span class='op'>$</span><span class='kw'>mygrp</span> <span class='op'>==</span> <span class='kw'>i</span>
+  <span class='kw'>sleepstudy</span><span class='op'>$</span><span class='kw'>mysubgrp</span>[<span class='kw'>filter_group</span>] <span class='op'>&lt;-</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>, size = <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>filter_group</span>), replace = <span class='fl'>TRUE</span>)
 }
 
-<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(
-  <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>size</span> - <span class='no'>incidence</span>) ~ <span class='no'>period</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>herd</span>),
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>,
-  <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>
+<span class='kw'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(
+  <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>incidence</span>, <span class='kw'>size</span> <span class='op'>-</span> <span class='kw'>incidence</span>) <span class='op'>~</span> <span class='kw'>period</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>herd</span>),
+  data = <span class='kw'>cbpp</span>,
+  family = <span class='kw'>binomial</span>
 )
-<span class='fu'>find_variables</span>(<span class='no'>m1</span>)</div><div class='output co'>#&gt; $response
+<span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables</a></span>(<span class='kw'>m1</span>)</div><div class='output co'>#&gt; $response
 #&gt; [1] "incidence" "size"     
 #&gt; 
 #&gt; $conditional
@@ -218,11 +218,10 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 #&gt; $random
 #&gt; [1] "herd"
 #&gt; </div><div class='input'>
-<span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(
-  <span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>mygrp</span> / <span class='no'>mysubgrp</span>) + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>),
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleepstudy</span>
-)
-<span class='fu'>find_variables</span>(<span class='no'>m2</span>)</div><div class='output co'>#&gt; $response
+<span class='kw'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(
+  <span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>mygrp</span> <span class='op'>/</span> <span class='kw'>mysubgrp</span>) <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Subject</span>),
+  data = <span class='kw'>sleepstudy</span>
+)</div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables</a></span>(<span class='kw'>m2</span>)</div><div class='output co'>#&gt; $response
 #&gt; [1] "Reaction"
 #&gt; 
 #&gt; $conditional
@@ -230,7 +229,7 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 #&gt; 
 #&gt; $random
 #&gt; [1] "mysubgrp" "mygrp"    "Subject" 
-#&gt; </div><div class='input'><span class='fu'>find_variables</span>(<span class='no'>m2</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Reaction" "Days"     "mysubgrp" "mygrp"    "Subject" </div></pre>
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables</a></span>(<span class='kw'>m2</span>, flatten = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Reaction" "Days"     "mysubgrp" "mygrp"    "Subject" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
