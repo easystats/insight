@@ -68,6 +68,7 @@ Suggests:
     nlme,
     ordinal,
     plm,
+    PROreg,
     pscl,
     quantreg,
     rms,

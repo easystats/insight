@@ -1117,7 +1117,7 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
   ))
 
   fixed <- data.frame(
-    Parameter = rownames(l$conditional),
+    Parameter = names(l$conditional),
     Estimate = l$conditional,
     stringsAsFactors = FALSE,
     row.names = NULL

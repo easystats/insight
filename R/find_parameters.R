@@ -1455,7 +1455,7 @@ find_parameters.flexsurvreg <- find_parameters.lrm
 #' @export
 find_parameters.BBmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   l <- .compact_list(list(
-    conditional = rownames(x$fixed.coef),
+    conditional = names(x$fixed.coef),
     random = x$namesRand
   ))
 
