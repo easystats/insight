@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("PROreg")) {
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
+if (.runThisTest && require("testthat") && require("insight") && require("PROreg")) {
   set.seed(123)
 
   # defining the parameters
