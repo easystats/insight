@@ -981,6 +981,22 @@ find_formula.mmclogit <- function(x, ...) {
 }
 
 
+#' @export
+find_formula.glmm <- function(x, ...) {
+  f.cond <- stats::as.formula(x$fixedcall)
+  f.random <- lapply(x$randcall, function(.x) {
+    stats::as.formula(.x)
+  })
+
+  if (length(f.random) == 1) {
+    f.random <- f.random[[1]]
+  }
+
+  .compact_list(list(conditional = f.cond, random = f.random))
+}
+
+
+
 
 
 

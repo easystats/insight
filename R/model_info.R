@@ -651,6 +651,26 @@ model_info.BGGM <- function(x, ...) {
 
 
 #' @export
+model_info.glmm <- function(x, ...) {
+  f <- switch(
+    tolower(x$m$family.glmm$family.glmm),
+    "bernoulli.glmm" = ,
+    "binomial.glmm" = stats::binomial("logit"),
+    "poisson.glmm" = stats::poisson("log"),
+    stats::gaussian("identity")
+  )
+  .make_family(
+    x = x,
+    fitfam = f$family,
+    logit.link = f$link == "logit",
+    multi.var = FALSE,
+    link.fun = f$link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.robmixglm <- function(x, ...) {
   f <- switch(
     tolower(x$family),
