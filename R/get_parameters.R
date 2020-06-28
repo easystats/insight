@@ -1555,7 +1555,7 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
 
 #' @rdname get_parameters
 #' @export
-get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), parameters = NULL, ...) {
+get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), parameters = NULL, summary = FALSE, ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -1563,20 +1563,42 @@ get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), com
     parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
     elements <- .get_elements(effects, component)
     ## TODO remove "optional = FALSE" in a future update
-    as.data.frame(x, optional = FALSE)[unlist(lapply(parms, function(i) i[elements]))]
+    out <- as.data.frame(x, optional = FALSE)[unlist(lapply(parms, function(i) i[elements]))]
   } else {
     ## TODO remove "optional = FALSE" in a future update
-    as.data.frame(x, optional = FALSE)[.get_parms_data(x, effects, component, parameters)]
+    out <- as.data.frame(x, optional = FALSE)[.get_parms_data(x, effects, component, parameters)]
   }
+
+  if (isTRUE(summary)) {
+    s <- sapply(out, mean)
+    out <- data.frame(
+      Parameter = names(s),
+      Estimate = unname(s),
+      stringsAsFactors = FALSE
+    )
+  }
+
+  out
 }
 
 
 
 #' @rdname get_parameters
 #' @export
-get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, ...) {
+get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, summary = FALSE, ...) {
   effects <- match.arg(effects)
-  as.data.frame(x)[.get_parms_data(x, effects, "all", parameters)]
+  out <- as.data.frame(x)[.get_parms_data(x, effects, "all", parameters)]
+
+  if (isTRUE(summary)) {
+    s <- sapply(out, mean)
+    out <- data.frame(
+      Parameter = names(s),
+      Estimate = unname(s),
+      stringsAsFactors = FALSE
+    )
+  }
+
+  out
 }
 
 #' @export

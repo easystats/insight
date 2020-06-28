@@ -105,6 +105,7 @@ get_parameters(x, ...)
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex",
     "sigma", "smooth_terms"),
   parameters = NULL,
+  summary = FALSE,
   ...
 )
 
@@ -112,6 +113,7 @@ get_parameters(x, ...)
   x,
   effects = c("fixed", "random", "all"),
   parameters = NULL,
+  summary = FALSE,
   ...
 )
 
