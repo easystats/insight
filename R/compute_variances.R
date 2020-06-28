@@ -156,7 +156,7 @@
     # nlme
   } else if (inherits(x, "lme")) {
     re_names <- find_random(x, split_nested = TRUE, flatten = TRUE)
-    comp_x <- as.matrix(cbind(`(Intercept)` = 1, get_predictors(x)))
+    comp_x <- stats::model.matrix(x, data = get_data(x))
     rownames(comp_x) <- 1:nrow(comp_x)
     if (.is_nested_lme(x)) {
       vals_vc <- .get_nested_lme_varcorr(x)

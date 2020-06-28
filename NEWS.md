@@ -13,6 +13,7 @@
 ## Bug fixes
 
 * `get_variance()` did not return variance components for random effects for null-models with random slopes.
+* Fixed issue with `get_variance()` for `lme`-models with categorical random slope.
 * Fixed issue that occured since R 4.0.0 in `find_weights()` when function call had no `weights`-argument.
 * Fixed issue in `get_data()` for models with `cbind()`-response variables and matrix-like variables in the model frame (e.g. when using `poly()`).
 * Fixed issues with `PROreg::BBmm()`, due to changes in latest package update.
