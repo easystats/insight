@@ -1446,54 +1446,27 @@ get_parameters.BGGM <- function(x, component = c("correlation", "conditional", "
 
 #' @rdname get_parameters
 #' @export
-get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), summary = TRUE, ...) {
+get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), summary = FALSE, ...) {
   effects <- match.arg(effects)
 
-  if (isTRUE(summary)) {
-    sc <- summary(x)
+  nF <- x$Fixed$nfl
+  fixed <- as.data.frame(x$Sol[, 1:nF, drop = FALSE])
+  random <- as.data.frame(x$VCV[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE])
+  all <- cbind(fixed, random)
 
-    l <- .compact_list(list(
-      conditional = sc$solutions[, 1],
-      random = sc$Gcovariances[, 1]
-    ))
-
-    names(l$conditional) <- rownames(sc$solutions)
-    names(l$random) <- rownames(sc$Gcovariances)
-
-    fixed <- data.frame(
-      Parameter = names(l$conditional),
-      Estimate = unname(l$conditional),
-      stringsAsFactors = FALSE
-    )
-
-    fixed <- .remove_backticks_from_parameter_names(fixed)
-
-    random <- data.frame(
-      Parameter = names(l$random),
-      Estimate = unname(l$random),
-      stringsAsFactors = FALSE
-    )
-
-    random <- .remove_backticks_from_parameter_names(random)
-
-    all <- rbind(
-      cbind(fixed, data.frame(Effects = "fixed", stringsAsFactors = FALSE)),
-      cbind(random, data.frame(Effects = "random", stringsAsFactors = FALSE))
-    )
-  } else {#
-    nF <- x$Fixed$nfl
-    fixed <- as.data.frame(x$Sol[, 1:nF, drop = FALSE])
-    random <- as.data.frame(x$VCV[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE])
-    all <- cbind(fixed, random)
-  }
-
-  if (effects == "fixed") {
+  out <- if (effects == "fixed") {
     fixed
   } else if (effects == "random") {
     random
   } else {
     all
   }
+
+  if (isTRUE(summary)) {
+    out <- .summary_of_posteriors(out)
+  }
+
+  out
 }
 
 
@@ -1570,12 +1543,7 @@ get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), com
   }
 
   if (isTRUE(summary)) {
-    s <- sapply(out, mean)
-    out <- data.frame(
-      Parameter = names(s),
-      Estimate = unname(s),
-      stringsAsFactors = FALSE
-    )
+    out <- .summary_of_posteriors(out)
   }
 
   out
@@ -1590,12 +1558,7 @@ get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), par
   out <- as.data.frame(x)[.get_parms_data(x, effects, "all", parameters)]
 
   if (isTRUE(summary)) {
-    s <- sapply(out, mean)
-    out <- data.frame(
-      Parameter = names(s),
-      Estimate = unname(s),
-      stringsAsFactors = FALSE
-    )
+    out <- .summary_of_posteriors(out)
   }
 
   out
@@ -1820,4 +1783,21 @@ get_parameters.bayesQR <- function(x, parameters = NULL, ...) {
 .get_bf_posteriors <- function(posteriors, params) {
   cn <- intersect(colnames(posteriors), params)
   posteriors[, cn, drop = FALSE]
+}
+
+
+
+#' @importFrom stats median
+.summary_of_posteriors <- function(out, centrality = "mean") {
+  s <- switch(
+    centrality,
+    "mean" = sapply(out, mean),
+    "median" = sapply(out, stats::median),
+    sapply(out, mean)
+  )
+  data.frame(
+    Parameter = names(s),
+    Estimate = unname(s),
+    stringsAsFactors = FALSE
+  )
 }

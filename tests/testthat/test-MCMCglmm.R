@@ -93,10 +93,12 @@ if (require("testthat") &&
         random = "FSfamily"
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 2)
-    expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "plate"))
+    expect_equal(nrow(get_parameters(m1, summary = TRUE)), 2)
+    expect_equal(nrow(get_parameters(m1, summary = FALSE)), 1000)
+    expect_equal(get_parameters(m1, summary = TRUE)$Parameter, c("(Intercept)", "plate"))
+    expect_equal(colnames(get_parameters(m1, summary = FALSE)), c("(Intercept)", "plate"))
     expect_equal(
-      get_parameters(m1, effects = "random")$Parameter,
+      get_parameters(m1, effects = "random", summary = TRUE)$Parameter,
       "FSfamily"
     )
   })
