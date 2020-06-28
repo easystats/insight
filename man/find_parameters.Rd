@@ -50,7 +50,7 @@ find_parameters(x, ...)
 
 \method{find_parameters}{BGGM}(
   x,
-  component = c("correlation", "intercept", "all"),
+  component = c("correlation", "conditional", "intercept", "all"),
   flatten = FALSE,
   ...
 )

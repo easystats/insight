@@ -75,7 +75,11 @@ get_parameters(x, ...)
   ...
 )
 
-\method{get_parameters}{BGGM}(x, component = c("correlation", "intercept", "all"), ...)
+\method{get_parameters}{BGGM}(
+  x,
+  component = c("correlation", "conditional", "intercept", "all"),
+  ...
+)
 
 \method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random", "all"), summary = TRUE, ...)
 

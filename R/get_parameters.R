@@ -1423,18 +1423,21 @@ get_parameters.afex_aov <- function(x, ...) {
 
 #' @rdname get_parameters
 #' @export
-get_parameters.BGGM <- function(x, component = c("correlation", "intercept", "all"), ...) {
+get_parameters.BGGM <- function(x, component = c("correlation", "conditional", "intercept", "all"), ...) {
   if (!requireNamespace("BGGM", quietly = TRUE)) {
     stop("Package 'BGGM' required for this function to work. Please install it.")
   }
 
   out <- as.data.frame(BGGM::posterior_samples(x))
   intercepts <- grepl("_\\(Intercept\\)$", colnames(out))
+  correlations <- grepl("(.*)--(.*)", colnames(out))
+  conditional <- !intercepts & !correlations
 
   component <- match.arg(component)
   switch(
     component,
-    "correlation" = out[, !intercepts, drop = FALSE],
+    "conditional" = out[, conditional, drop = FALSE],
+    "correlation" = out[, correlations, drop = FALSE],
     "intercept" = out[, intercepts, drop = FALSE],
     out
   )

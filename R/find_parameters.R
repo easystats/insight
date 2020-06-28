@@ -751,15 +751,17 @@ find_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", 
 
 #' @rdname find_parameters
 #' @export
-find_parameters.BGGM <- function(x, component = c("correlation", "intercept", "all"), flatten = FALSE, ...) {
+find_parameters.BGGM <- function(x, component = c("correlation", "conditional", "intercept", "all"), flatten = FALSE, ...) {
   component <- match.arg(component)
   l <- switch(
     component,
     "correlation" = list(correlation = colnames(get_parameters(x, component = "correlation"))),
+    "conditional" = list(conditional = colnames(get_parameters(x, component = "conditional"))),
     "intercept" = list(intercept = colnames(x$Y)),
     "all" = list(
       intercept = colnames(x$Y),
-      correlation = colnames(get_parameters(x, component = "correlation"))
+      correlation = colnames(get_parameters(x, component = "correlation")),
+      conditional = colnames(get_parameters(x, component = "conditional"))
     )
   )
 

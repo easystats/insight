@@ -72,6 +72,8 @@ clean_parameters.default <- function(x, group = "", ...) {
       "marginal"
     } else if (grepl("intercept", i, fixed = TRUE)) {
       "intercept"
+    } else if (grepl("correlation", i, fixed = TRUE)) {
+      "correlation"
     } else {
       "conditional"
     }
