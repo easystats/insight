@@ -78,6 +78,7 @@ get_parameters(x, ...)
 \method{get_parameters}{BGGM}(
   x,
   component = c("correlation", "conditional", "intercept", "all"),
+  summary = FALSE,
   ...
 )
 
@@ -96,6 +97,7 @@ get_parameters(x, ...)
   x,
   effects = c("fixed", "random", "all"),
   parameters = NULL,
+  summary = FALSE,
   ...
 )
 
@@ -121,6 +123,7 @@ get_parameters(x, ...)
   x,
   effects = c("fixed", "random", "all"),
   parameters = NULL,
+  summary = FALSE,
   ...
 )
 }
