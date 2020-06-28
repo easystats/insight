@@ -1319,6 +1319,26 @@ find_parameters.wbgee <- find_parameters.wbm
 
 
 #' @export
+find_parameters.glht <- function(x, flatten = FALSE, ...) {
+  s <- summary(x)
+  alt <- switch(
+    x$alternative,
+    two.sided = "==",
+    less = ">=",
+    greater = "<="
+  )
+
+  l <- list(conditional = paste(names(s$test$coefficients), alt, x$rhs))
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+#' @export
 find_parameters.emmGrid <- function(x, flatten = TRUE, ...) {
   s <- summary(x)
   estimate_pos <- which(colnames(s) == x@misc$estName)

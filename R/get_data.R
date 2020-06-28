@@ -870,6 +870,12 @@ get_data.negbinmfx <- get_data.betamfx
 
 
 #' @export
+get_data.glht <- function(x, ...) {
+  get_data(x$model, ...)
+}
+
+
+#' @export
 get_data.averaging <- function(x, ...) {
   ml <- attributes(x)$modelList
   if (is.null(ml)) {

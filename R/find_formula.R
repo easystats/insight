@@ -180,6 +180,12 @@ find_formula.gamm <- function(x, ...) {
 
 
 #' @export
+find_formula.glht <- function(x, ...) {
+  list(conditional = stats::formula(x$model))
+}
+
+
+#' @export
 find_formula.betareg <- function(x, ...) {
   f <- stats::formula(x)
   fs <- .safe_deparse(f)

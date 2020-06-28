@@ -99,6 +99,7 @@ is_model <- function(x) {
       "gbm",
       "gee",
       "geeglm",
+      "glht",
       "glimML",
       "glm",
       "glmaag",

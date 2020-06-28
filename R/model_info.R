@@ -651,6 +651,12 @@ model_info.BGGM <- function(x, ...) {
 
 
 #' @export
+model_info.glht <- function(x, ...) {
+  model_info(x$model, ...)
+}
+
+
+#' @export
 model_info.glmm <- function(x, ...) {
   f <- switch(
     tolower(x$m$family.glmm$family.glmm),

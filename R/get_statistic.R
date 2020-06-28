@@ -731,6 +731,26 @@ get_statistic.negbinirr <- get_statistic.logitor
 # Other models -------------------------------------------------------
 
 
+#' @export
+get_statistic.glht <- function(x, ...) {
+  s <- summary(x)
+  alt <- switch(
+    x$alternative,
+    two.sided = "==",
+    less = ">=",
+    greater = "<="
+  )
+  out <- data.frame(
+    Parameter = paste(names(s$test$coefficients), alt, x$rhs),
+    Estimates = unname(s$test$tstat),
+    stringsAsFactors = FALSE
+  )
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
 #' @rdname get_statistic
 #' @export
 get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", ...) {
