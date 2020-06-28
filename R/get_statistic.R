@@ -742,7 +742,7 @@ get_statistic.glht <- function(x, ...) {
   )
   out <- data.frame(
     Parameter = paste(names(s$test$coefficients), alt, x$rhs),
-    Estimates = unname(s$test$tstat),
+    Statistic = unname(s$test$tstat),
     stringsAsFactors = FALSE
   )
   out <- .remove_backticks_from_parameter_names(out)
