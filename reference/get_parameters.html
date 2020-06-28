@@ -201,7 +201,7 @@
 <span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"correlation"</span>, <span class='st'>"intercept"</span>, <span class='st'>"all"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for MCMCglmm</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>), <span class='kw'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>), summary = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for BFBayesFactor</span>
 <span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
@@ -273,6 +273,13 @@ component, depending on the model.</p></td>
       <th>effects</th>
       <td><p>Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
+    </tr>
+    <tr>
+      <th>summary</th>
+      <td><p>Logical, indicates whether the full posterior samples
+(<code>summary = FALSE</code>)) or the summarized centrality indices of
+the posterior samples (<code>summary = TRUE</code>)) should be returned as
+estimates.</p></td>
     </tr>
     <tr>
       <th>iterations</th>
