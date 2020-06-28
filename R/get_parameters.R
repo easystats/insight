@@ -292,7 +292,7 @@ get_parameters.glht <- function(x, ...) {
   )
   out <- data.frame(
     Parameter = paste(names(s$test$coefficients), alt, x$rhs),
-    Estimates = unname(s$test$coefficients),
+    Estimate = unname(s$test$coefficients),
     stringsAsFactors = FALSE
   )
   .remove_backticks_from_parameter_names(out)
