@@ -6,6 +6,10 @@
 #'
 #' @param iterations Number of posterior draws.
 #' @param progress Display progress.
+#' @param summary Logical, indicates whether the full posterior samples
+#'   (\code{summary = FALSE})) or the summarized centrality indices of
+#'   the posterior samples (\code{summary = TRUE})) should be returned as
+#'   estimates.
 #' @param ... Currently not used.
 #'
 #' @inheritParams find_parameters
@@ -1439,38 +1443,46 @@ get_parameters.BGGM <- function(x, component = c("correlation", "intercept", "al
 
 #' @rdname get_parameters
 #' @export
-get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), ...) {
+get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), summary = TRUE, ...) {
   effects <- match.arg(effects)
-  sc <- summary(x)
 
-  l <- .compact_list(list(
-    conditional = sc$solutions[, 1],
-    random = sc$Gcovariances[, 1]
-  ))
+  if (isTRUE(summary)) {
+    sc <- summary(x)
 
-  names(l$conditional) <- rownames(sc$solutions)
-  names(l$random) <- rownames(sc$Gcovariances)
+    l <- .compact_list(list(
+      conditional = sc$solutions[, 1],
+      random = sc$Gcovariances[, 1]
+    ))
 
-  fixed <- data.frame(
-    Parameter = names(l$conditional),
-    Estimate = unname(l$conditional),
-    stringsAsFactors = FALSE
-  )
+    names(l$conditional) <- rownames(sc$solutions)
+    names(l$random) <- rownames(sc$Gcovariances)
 
-  fixed <- .remove_backticks_from_parameter_names(fixed)
+    fixed <- data.frame(
+      Parameter = names(l$conditional),
+      Estimate = unname(l$conditional),
+      stringsAsFactors = FALSE
+    )
 
-  random <- data.frame(
-    Parameter = names(l$random),
-    Estimate = unname(l$random),
-    stringsAsFactors = FALSE
-  )
+    fixed <- .remove_backticks_from_parameter_names(fixed)
 
-  random <- .remove_backticks_from_parameter_names(random)
+    random <- data.frame(
+      Parameter = names(l$random),
+      Estimate = unname(l$random),
+      stringsAsFactors = FALSE
+    )
 
-  all <- rbind(
-    cbind(fixed, data.frame(Effects = "fixed", stringsAsFactors = FALSE)),
-    cbind(random, data.frame(Effects = "random", stringsAsFactors = FALSE))
-  )
+    random <- .remove_backticks_from_parameter_names(random)
+
+    all <- rbind(
+      cbind(fixed, data.frame(Effects = "fixed", stringsAsFactors = FALSE)),
+      cbind(random, data.frame(Effects = "random", stringsAsFactors = FALSE))
+    )
+  } else {#
+    nF <- x$Fixed$nfl
+    fixed <- as.data.frame(x$Sol[, 1:nF, drop = FALSE])
+    random <- as.data.frame(x$VCV[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE])
+    all <- cbind(fixed, random)
+  }
 
   if (effects == "fixed") {
     fixed
