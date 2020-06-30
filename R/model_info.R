@@ -1021,6 +1021,20 @@ model_info.polr <- function(x, ...) {
 
 
 #' @export
+model_info.orm <- function(x, ...) {
+  faminfo <- stats::binomial(link = "logit")
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+
+#' @export
 model_info.svyolr <- function(x, ...) {
   l <- switch(x$method, logistic = "logit", x$method)
   faminfo <- stats::binomial(link = l)

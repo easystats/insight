@@ -198,6 +198,12 @@ link_function.logistf <- link_function.multinom
 link_function.lrm <- link_function.multinom
 
 #' @export
+link_function.orm <- link_function.multinom
+
+#' @export
+link_function.cph <- link_function.multinom
+
+#' @export
 link_function.mlogit <- link_function.multinom
 
 #' @export

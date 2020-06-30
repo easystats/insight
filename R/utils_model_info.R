@@ -181,7 +181,7 @@
     is_dirichlet = dirichlet_fam,
     is_exponential = exponential_fam,
     is_logit = logit.link,
-    is_probit = link.fun == "probit",
+    is_probit = isTRUE(link.fun == "probit"),
     is_censored = inherits(x, c("tobit", "crch", "censReg")) | is.censored | is.survival,
     is_truncated = inherits(x, "truncreg") | is.truncated,
     is_survival = is.survival,

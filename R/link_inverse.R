@@ -263,6 +263,12 @@ link_inverse.coxme <- link_inverse.gmnl
 link_inverse.lrm <- link_inverse.gmnl
 
 #' @export
+link_inverse.orm <- link_inverse.gmnl
+
+#' @export
+link_inverse.cph <- link_inverse.gmnl
+
+#' @export
 link_inverse.logistf <- link_inverse.gmnl
 
 #' @export
