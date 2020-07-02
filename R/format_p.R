@@ -17,7 +17,8 @@
 #' format_p(c(.02, .065, 0, .23), stars_only = TRUE)
 #'
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)
-#' format_p(p_value(model)$p, digits = "scientific")
+#' p <- coef(summary(model))[, 4]
+#' format_p(p, digits = "scientific")
 #' @export
 format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing = "", digits = 3, ...) {
   if (digits == "apa") {
