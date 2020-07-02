@@ -82,6 +82,7 @@ reference:
   - format_ci
   - format_number
   - format_p
+  - format_rope
   - format_table
   - format_value
   - print_color
