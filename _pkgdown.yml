@@ -79,9 +79,11 @@ reference:
     Functions for formatting (summary) output for printing
   contents:
   - color_if
+  - format_bf
   - format_ci
   - format_number
   - format_p
+  - format_pd
   - format_rope
   - format_table
   - format_value
