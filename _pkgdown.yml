@@ -80,6 +80,8 @@ reference:
   contents:
   - color_if
   - format_ci
+  - format_number
+  - format_p
   - format_table
   - format_value
   - print_color

@@ -4,6 +4,10 @@
 
 * `BGGM` (*BGGM*), `metaplus` (*metaplus*), `glht` (*multcomp*)
 
+## New functions
+
+* Value formatting functions `format_p()` and `format_number()` were moved from package *parameters* to *insight*.
+
 ## Changes to functions
 
 * `get_variance()` now also returns the corrlation among random slopes.
