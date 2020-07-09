@@ -165,10 +165,10 @@
       no_bars <- stats::drop.terms(f_terms, pos_bar, keep.response = TRUE)
       stats::update(f_terms, no_bars)
     } else {
-      .trim(gsub("\\+(\\s)*\\((.*)\\)", "", f_string))
+      .trim(gsub("\\+(\\s)*\\((.*?)\\)", "", f_string))
     }
   } else {
-    .trim(gsub("\\+(\\s)*\\((.*)\\)", "", f_string))
+    .trim(gsub("\\+(\\s)*\\((.*?)\\)", "", f_string))
   }
 }
 
