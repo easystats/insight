@@ -355,6 +355,10 @@ get_parameters.lrm <- function(x, ...) {
 
 
 #' @export
+get_parameters.orm <- get_parameters.lrm
+
+
+#' @export
 get_parameters.multinom <- function(x, ...) {
   params <- stats::coef(x)
 
