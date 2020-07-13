@@ -16,6 +16,7 @@
 
 ## Bug fixes
 
+* Fixed issue in `find_formula()` that did not properly work for models with random effects in formula (in *lme4* notation), when random effects were in between fixed effects parts.
 * `get_variance()` did not return variance components for random effects for null-models with random slopes.
 * Fixed issue with `get_variance()` for `lme`-models with categorical random slope.
 * Fixed issue that occured since R 4.0.0 in `find_weights()` when function call had no `weights`-argument.

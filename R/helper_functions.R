@@ -122,54 +122,14 @@
 
 
 # removes random effects from a formula that is in lmer-notation
-#' @importFrom stats terms drop.terms update
 .get_fixed_effects <- function(f) {
-  f_string <- .safe_deparse(f)
-
-  # for some weird brms-models, we also have a "|" in the response.
-  # in order to check for "|" only in the random effects, we have
-  # to remove the response here...
-
-  f_response <- .safe_deparse(f[[2]])
-  f_predictors <- sub(f_response, "", f_string, fixed = TRUE)
-
-  if (grepl("|", f_predictors, fixed = TRUE)) {
-    if (length(f) > 2) {
-      f_cond <- .safe_deparse(f[[3]])
-    } else {
-      f_cond <- .safe_deparse(f[[length(f)]])
-    }
-    # get first parentheses. for mixed models, might not be the random effects
-    # e.g.: (country + cohort + country * cohort) + age + (1 + age_c | mergeid)
-    first_parentheses <- gsub("^\\((.*?)\\)(.*)", "\\1", f_cond)
-    has_bar <- grepl("\\|", first_parentheses)
-    starts_with_parantheses <- grepl("^\\(", f_cond)
-    # intercept only model, w/o "1" in formula notation?
-    # e.g. "Reaction ~ (1 + Days | Subject)"
-    if (length(f) > 2 && starts_with_parantheses && has_bar) {
-      # check if we have any terms *after* random effects, e.g.
-      # social ~ (1|school) + open + extro + agree + school
-      if (.formula_empty_after_random_effect(f_predictors)) {
-        # here we fix intercept only models with random effects,
-        # like social ~ (1|school).
-        .trim(paste0(.safe_deparse(f[[2]]), " ~ 1"))
-      } else {
-        # here we fix models where random effects come first,
-        # like social ~ (1|school) + open + extro + agree + school
-        # the regex removes "(1|school) + "
-        .trim(gsub("\\((.*)\\)(\\s)*\\+(\\s)*", "", f_string))
-      }
-    } else if (!grepl("\\+(\\s)*\\((.*)\\)", f_string)) {
-      f_terms <- stats::terms(f)
-      pos_bar <- grep("|", labels(f_terms), fixed = TRUE)
-      no_bars <- stats::drop.terms(f_terms, pos_bar, keep.response = TRUE)
-      stats::update(f_terms, no_bars)
-    } else {
-      .trim(gsub("\\+(\\s)*\\((.*)\\)", "", f_string))
-    }
-  } else {
-    .trim(gsub("\\+(\\s)*\\((.*)\\)", "", f_string))
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package 'lme4' required. Please install it.", call. = FALSE)
   }
+  # remove random effects from RHS
+  fl <- length(f)
+  f[[fl]] <- lme4::nobars(f[[fl]])
+  f
 }
 
 

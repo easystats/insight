@@ -1,40 +1,35 @@
 if (suppressWarnings(require("testthat") &&
   require("insight") &&
   require("lme4"))) {
-  context("insight, find_response")
 
   data(cbpp)
   cbpp$trials <- cbpp$size - cbpp$incidence
 
-  m1 <-
-    glmer(cbind(incidence, trials) ~ period + (1 |
-      herd),
+  m1 <- glmer(
+    cbind(incidence, trials) ~ period + (1 | herd),
     data = cbpp,
     family = binomial
-    )
-  m2 <-
-    glmer(
-      cbind(incidence, size - incidence) ~ period + (1 |
-        herd),
-      data = cbpp,
-      family = binomial
-    )
-  m3 <-
-    glm(cbind(incidence, trials) ~ period,
-      data = cbpp,
-      family = binomial
-    )
-  m4 <-
-    glm(cbind(incidence, size - incidence) ~ period,
-      data = cbpp,
-      family = binomial
-    )
-  m5 <-
-    glmer(cbind(incidence, size - incidence) ~ (1 |
-      herd),
+  )
+  m2 <- glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
     data = cbpp,
     family = binomial
-    )
+  )
+  m3 <- glm(
+    cbind(incidence, trials) ~ period,
+    data = cbpp,
+    family = binomial
+  )
+  m4 <- glm(
+    cbind(incidence, size - incidence) ~ period,
+    data = cbpp,
+    family = binomial
+  )
+  m5 <- glmer(
+    cbind(incidence, size - incidence) ~ (1 | herd),
+    data = cbpp,
+    family = binomial
+  )
 
   test_that("find_response", {
     expect_equal(
