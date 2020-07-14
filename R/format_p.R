@@ -26,7 +26,9 @@ format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing =
       ifelse(p < 0.001, "< .001***",
         ifelse(p < 0.01, "< .01**",
           ifelse(p < 0.05, "< .05*",
-            paste0("= ", format_value(p, 3))
+            ifelse(p > .999, "> .999",
+              paste0("= ", format_value(p, 3))
+            )
           )
         )
       )
@@ -36,7 +38,9 @@ format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing =
       ifelse(p < 0.001, sprintf("= %.5e***", p),
         ifelse(p < 0.01, sprintf("= %.5e**", p),
           ifelse(p < 0.05, sprintf("= %.5e*", p),
-            sprintf("= %.5e", p)
+            ifelse(p > 0.999, sprintf("= %.5e*", p),
+              sprintf("= %.5e", p)
+            )
           )
         )
       )
@@ -46,7 +50,9 @@ format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing =
       ifelse(p < 0.001, "< .001***",
         ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"),
           ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"),
-            paste0("= ", format_value(p, digits))
+            ifelse(p > 0.999, "> .999",
+              paste0("= ", format_value(p, digits))
+           )
           )
         )
       )
