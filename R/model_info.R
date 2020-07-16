@@ -235,6 +235,9 @@ model_info.rma <- model_info.mmclogit
 model_info.metaplus <- model_info.mmclogit
 
 #' @export
+model_info.mclogit <- model_info.mmclogit
+
+#' @export
 model_info.mlm <- function(x, ...) {
   .make_family(x, multi.var = TRUE, ...)
 }
