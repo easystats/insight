@@ -1695,10 +1695,14 @@ get_parameters.mcmc <- function(x, parameters = NULL, summary = FALSE, ...) {
 
 
 #' @export
-get_parameters.bayesQR <- function(x, parameters = NULL, ...) {
+get_parameters.bayesQR <- function(x, parameters = NULL, summary = FALSE, ...) {
   out <- as.data.frame(x[[1]]$betadraw)
   names(out) <- x[[1]]$names
-  out[.get_parms_data(x, "all", "all", parameters)]
+  out <- out[.get_parms_data(x, "all", "all", parameters)]
+  if (isTRUE(summary)) {
+    out <- .summary_of_posteriors(out)
+  }
+  out
 }
 
 
@@ -1838,7 +1842,7 @@ get_parameters.bayesQR <- function(x, parameters = NULL, ...) {
 
 
 #' @importFrom stats median
-.summary_of_posteriors <- function(out, centrality = "mean") {
+.summary_of_posteriors <- function(out, centrality = "mean", ...) {
   s <- switch(
     centrality,
     "mean" = sapply(out, mean),
