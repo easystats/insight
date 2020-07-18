@@ -539,6 +539,7 @@ get_statistic.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
   out <- get_parameters(x, effects = "all")
   out$Statistic <- c(s$coefmat[, 3], s$nucoefmat[, 3])
+  out <- out[, c("Parameter", "Statistic", "Effects")]
 
   if (effects != "all") {
     out <- out[out$Effects == effects, , drop = FALSE]
