@@ -531,6 +531,18 @@ link_inverse.MCMCglmm <- function(x, ...) {
 
 
 #' @export
+link_inverse.glmm <- function(x, ...) {
+  switch(
+    tolower(x$family.glmm$family.glmm),
+    "bernoulli.glmm" = ,
+    "binomial.glmm" = stats::make.link("logit")$linkinv,
+    "poisson.glmm" = stats::make.link("log")$linkinv,
+    stats::gaussian(link = "identity")$linkinv
+  )
+}
+
+
+#' @export
 link_inverse.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))

@@ -662,7 +662,7 @@ model_info.glht <- function(x, ...) {
 #' @export
 model_info.glmm <- function(x, ...) {
   f <- switch(
-    tolower(x$m$family.glmm$family.glmm),
+    tolower(x$family.glmm$family.glmm),
     "bernoulli.glmm" = ,
     "binomial.glmm" = stats::binomial("logit"),
     "poisson.glmm" = stats::poisson("log"),

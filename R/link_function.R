@@ -490,6 +490,19 @@ link_function.glmmadmb <- function(x, ...) {
 
 
 
+#' @export
+link_function.glmm <- function(x, ...) {
+  switch(
+    tolower(x$family.glmm$family.glmm),
+    "bernoulli.glmm" = ,
+    "binomial.glmm" = stats::make.link("logit")$linkfun,
+    "poisson.glmm" = stats::make.link("log")$linkfun,
+    stats::gaussian(link = "identity")$linkfun
+  )
+}
+
+
+
 #' @rdname link_function
 #' @export
 link_function.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
