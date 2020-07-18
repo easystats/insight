@@ -1016,6 +1016,23 @@ get_statistic.zcpglm <- function(x, component = c("all", "conditional", "zi", "z
 
 
 #' @export
+get_statistic.manova <- function(x, ...) {
+  stats <- as.data.frame(summary(x)$stats)
+
+  out <- data.frame(
+    Parameter = rownames(stats),
+    Statistic = as.vector(stats[["approx F"]]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+#' @export
 get_statistic.MANOVA <- function(x, ...) {
   stats <- as.data.frame(x$WTS)
 

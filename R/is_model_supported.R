@@ -123,6 +123,7 @@ supported_models <- function() {
     "logistf",
     "LORgee",
     "lrm",
+    "manova",
     "MANOVA",
     "maxLik",
     "mcmc",

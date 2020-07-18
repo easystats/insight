@@ -63,6 +63,9 @@ Note that the \emph{conditional} component is also called \emph{count} or
 \item{effects}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model parameters only? Currently only
 applies to models of class \code{mixor}.}
+
+\item{complete}{Logical, if \code{TRUE}, for \code{aov}, returns the full
+variance-covariance matrix.}
 }
 \value{
 The variance-covariance matrix, as \code{matrix}-object.

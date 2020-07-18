@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* `BGGM` (*BGGM*), `metaplus` (*metaplus*), `glht` (*multcomp*), `glmm` (*glmm*)
+* `BGGM` (*BGGM*), `metaplus` (*metaplus*), `glht` (*multcomp*), `glmm` (*glmm*), improved support for `manova` (*stats*)
 
 ## New functions
 
