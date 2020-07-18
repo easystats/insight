@@ -133,42 +133,42 @@
   In most cases, this is the related column from <code><a href='https://rdrr.io/r/stats/coef.html'>coef(summary())</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>get_statistic</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(<span class='kw'>x</span>, column_index = <span class='fl'>3</span>, <span class='kw'>...</span>)
+<span class='fu'>get_statistic</span>(<span class='kw'>x</span>, column_index = <span class='fl'>3</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for glmmTMB</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(
+<span class='fu'>get_statistic</span>(
   <span class='kw'>x</span>,
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>),
   <span class='kw'>...</span>
 )
 
 <span class='co'># S3 method for clm2</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"scale"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_statistic</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"scale"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for betamfx</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(
+<span class='fu'>get_statistic</span>(
   <span class='kw'>x</span>,
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>, <span class='st'>"marginal"</span>),
   <span class='kw'>...</span>
 )
 
 <span class='co'># S3 method for logitmfx</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"marginal"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_statistic</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"marginal"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for emmGrid</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(<span class='kw'>x</span>, ci = <span class='fl'>0.95</span>, adjust = <span class='st'>"none"</span>, <span class='kw'>...</span>)
+<span class='fu'>get_statistic</span>(<span class='kw'>x</span>, ci = <span class='fl'>0.95</span>, adjust = <span class='st'>"none"</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for gee</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(<span class='kw'>x</span>, robust = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
+<span class='fu'>get_statistic</span>(<span class='kw'>x</span>, robust = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for betareg</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_statistic</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for DirichletRegModel</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)</pre>
+<span class='fu'>get_statistic</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -183,7 +183,7 @@
     </tr>
     <tr>
       <th>column_index</th>
-      <td><p>For model objects that have no defined <code><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic()</a></code>
+      <td><p>For model objects that have no defined <code>get_statistic()</code>
 method yet, the default method is called. This method tries to extract the
 statistic column from <code><a href='https://rdrr.io/r/stats/coef.html'>coef(summary())</a></code>, where the index of the column
 that is being pulled is <code>column_index</code>. Defaults to 3, which is the
@@ -222,7 +222,7 @@ errors is returned.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>vs</span>, data = <span class='kw'>mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_statistic.html'>get_statistic</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt;     Parameter  Statistic
+<span class='fu'>get_statistic</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt;     Parameter  Statistic
 #&gt; 1 (Intercept) 11.3994647
 #&gt; 2          wt -4.1204121
 #&gt; 3         cyl -2.2234114

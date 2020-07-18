@@ -133,26 +133,26 @@
   model and returns it as data frame.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>get_data</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for gee</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for rqss</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for hurdle</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(
+<span class='fu'>get_data</span>(
   <span class='kw'>x</span>,
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>),
   <span class='kw'>...</span>
 )
 
 <span class='co'># S3 method for zcpglm</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for glmmTMB</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(
+<span class='fu'>get_data</span>(
   <span class='kw'>x</span>,
   effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>),
@@ -160,25 +160,25 @@
 )
 
 <span class='co'># S3 method for merMod</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for glmmadmb</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for rlmerMod</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for clmm</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for mixed</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for lme</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for MixMod</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(
+<span class='fu'>get_data</span>(
   <span class='kw'>x</span>,
   effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>),
@@ -186,7 +186,7 @@
 )
 
 <span class='co'># S3 method for brmsfit</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(
+<span class='fu'>get_data</span>(
   <span class='kw'>x</span>,
   effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>),
@@ -194,10 +194,10 @@
 )
 
 <span class='co'># S3 method for stanreg</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for MCMCglmm</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)</pre>
+<span class='fu'>get_data</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -234,14 +234,14 @@ component, depending on the model.</p></td>
 
     <p>Unlike <code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame()</a></code>, which may contain transformed variables
   (e.g. if <code><a href='https://rdrr.io/r/stats/poly.html'>poly()</a></code> or <code><a href='https://rdrr.io/r/base/scale.html'>scale()</a></code> was used inside the formula to
-  specify the model), <code><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data()</a></code> aims at returning the "original",
+  specify the model), <code>get_data()</code> aims at returning the "original",
   untransformed data.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>cbpp</span>, package = <span class='st'>"lme4"</span>)
 <span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>trials</span> <span class='op'>&lt;-</span> <span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>size</span> <span class='op'>-</span> <span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>incidence</span>
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>incidence</span>, <span class='kw'>trials</span>) <span class='op'>~</span> <span class='kw'>period</span>, data = <span class='kw'>cbpp</span>, family = <span class='kw'>binomial</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>m</span>))</div><div class='output co'>#&gt;   cbind(incidence, trials).incidence cbind(incidence, trials).trials period
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'>get_data</span>(<span class='kw'>m</span>))</div><div class='output co'>#&gt;   cbind(incidence, trials).incidence cbind(incidence, trials).trials period
 #&gt; 1                                  2                              12      1
 #&gt; 2                                  3                               9      2
 #&gt; 3                                  4                               5      3

@@ -133,41 +133,41 @@
    models) from a model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>get_parameters</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for betamfx</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
+<span class='fu'>get_parameters</span>(
   <span class='kw'>x</span>,
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>, <span class='st'>"marginal"</span>),
   <span class='kw'>...</span>
 )
 
 <span class='co'># S3 method for logitmfx</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"marginal"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"marginal"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for averaging</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"full"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"full"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for betareg</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for DirichletRegModel</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for clm2</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"scale"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"scale"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for coxme</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for merMod</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for mixed</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for glmmTMB</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
+<span class='fu'>get_parameters</span>(
   <span class='kw'>x</span>,
   effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>),
@@ -175,30 +175,30 @@
 )
 
 <span class='co'># S3 method for BBmm</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for glimML</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for gam</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>), <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for zeroinfl</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
+<span class='fu'>get_parameters</span>(
   <span class='kw'>x</span>,
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>),
   <span class='kw'>...</span>
 )
 
 <span class='co'># S3 method for zcpglm</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
+<span class='fu'>get_parameters</span>(
   <span class='kw'>x</span>,
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>),
   <span class='kw'>...</span>
 )
 
 <span class='co'># S3 method for BGGM</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
+<span class='fu'>get_parameters</span>(
   <span class='kw'>x</span>,
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"correlation"</span>, <span class='st'>"conditional"</span>, <span class='st'>"intercept"</span>, <span class='st'>"all"</span>),
   summary = <span class='fl'>FALSE</span>,
@@ -206,10 +206,10 @@
 )
 
 <span class='co'># S3 method for MCMCglmm</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>), summary = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
+<span class='fu'>get_parameters</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>), summary = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for BFBayesFactor</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
+<span class='fu'>get_parameters</span>(
   <span class='kw'>x</span>,
   effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"extra"</span>),
@@ -219,7 +219,7 @@
 )
 
 <span class='co'># S3 method for stanmvreg</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
+<span class='fu'>get_parameters</span>(
   <span class='kw'>x</span>,
   effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>),
   parameters = <span class='kw'>NULL</span>,
@@ -228,7 +228,7 @@
 )
 
 <span class='co'># S3 method for brmsfit</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
+<span class='fu'>get_parameters</span>(
   <span class='kw'>x</span>,
   effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>),
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>, <span class='st'>"simplex"</span>,
@@ -239,7 +239,7 @@
 )
 
 <span class='co'># S3 method for stanreg</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
+<span class='fu'>get_parameters</span>(
   <span class='kw'>x</span>,
   effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>),
   parameters = <span class='kw'>NULL</span>,
@@ -248,7 +248,7 @@
 )
 
 <span class='co'># S3 method for sim.merMod</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(
+<span class='fu'>get_parameters</span>(
   <span class='kw'>x</span>,
   effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span>),
   parameters = <span class='kw'>NULL</span>,
@@ -322,7 +322,7 @@ should be returned.</p></td>
 random) or "components" (conditional, zero-inflated, ...), the arguments
 <code>effects</code> and <code>component</code> can be used.
 <br /> <br />
-<code><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters()</a></code> is comparable to <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code>, however, the coefficients
+<code>get_parameters()</code> is comparable to <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code>, however, the coefficients
 are returned as data frame (with columns for names and point estimates of
 coefficients). For Bayesian models, the posterior samples of parameters are
 returned.</p>
@@ -330,7 +330,7 @@ returned.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>vs</span>, data = <span class='kw'>mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_parameters.html'>get_parameters</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt;     Parameter   Estimate
+<span class='fu'>get_parameters</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt;     Parameter   Estimate
 #&gt; 1 (Intercept) 38.7460642
 #&gt; 2          wt -3.2463673
 #&gt; 3         cyl -1.3641033

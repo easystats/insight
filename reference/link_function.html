@@ -131,19 +131,19 @@
     <p>Returns the link-function from a model object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/link_function.html'>link_function</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>link_function</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for betamfx</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/link_function.html'>link_function</a></span>(<span class='kw'>x</span>, what = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)
+<span class='fu'>link_function</span>(<span class='kw'>x</span>, what = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for gamlss</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/link_function.html'>link_function</a></span>(<span class='kw'>x</span>, what = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mu"</span>, <span class='st'>"sigma"</span>, <span class='st'>"nu"</span>, <span class='st'>"tau"</span>), <span class='kw'>...</span>)
+<span class='fu'>link_function</span>(<span class='kw'>x</span>, what = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mu"</span>, <span class='st'>"sigma"</span>, <span class='st'>"nu"</span>, <span class='st'>"tau"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for betareg</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/link_function.html'>link_function</a></span>(<span class='kw'>x</span>, what = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)
+<span class='fu'>link_function</span>(<span class='kw'>x</span>, what = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for DirichletRegModel</span>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/link_function.html'>link_function</a></span>(<span class='kw'>x</span>, what = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)</pre>
+<span class='fu'>link_function</span>(<span class='kw'>x</span>, what = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>, <span class='st'>"precision"</span>), <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,7 +176,7 @@ or <code>DirichletRegModel</code>, can be <code>"mean"</code> or <code>"precisio
 <span class='kw'>treatment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>counts</span> <span class='op'>~</span> <span class='kw'>outcome</span> <span class='op'>+</span> <span class='kw'>treatment</span>, family = <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>poisson</a></span>())
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/link_function.html'>link_function</a></span>(<span class='kw'>m</span>)(<span class='fl'>.3</span>)</div><div class='output co'>#&gt; [1] -1.203973</div><div class='input'><span class='co'># same as</span>
+<span class='fu'>link_function</span>(<span class='kw'>m</span>)(<span class='fl'>.3</span>)</div><div class='output co'>#&gt; [1] -1.203973</div><div class='input'><span class='co'># same as</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>.3</span>)</div><div class='output co'>#&gt; [1] -1.203973</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

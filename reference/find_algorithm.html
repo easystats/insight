@@ -135,7 +135,7 @@
   chains, iterations and warmup-samples.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_algorithm.html'>find_algorithm</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>find_algorithm</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,7 +172,7 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/lme4/lme4'>lme4</a></span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sleepstudy</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Subject</span>), data = <span class='kw'>sleepstudy</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_algorithm.html'>find_algorithm</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; $algorithm
+<span class='fu'>find_algorithm</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; $algorithm
 #&gt; [1] "REML"
 #&gt; 
 #&gt; $optimizer
@@ -180,7 +180,7 @@
 #&gt; </div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://mc-stan.org/rstanarm'>rstanarm</a></span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_lmer</a></span>(<span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Subject</span>), data = <span class='kw'>sleepstudy</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_algorithm.html'>find_algorithm</a></span>(<span class='kw'>m</span>)
+<span class='fu'>find_algorithm</span>(<span class='kw'>m</span>)
 }
 </div></pre>
   </div>

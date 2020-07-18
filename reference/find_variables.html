@@ -133,7 +133,7 @@
   response value and random effects.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables</a></span>(
+    <pre class="usage"><span class='fu'>find_variables</span>(
   <span class='kw'>x</span>,
   effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>),
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span>,
@@ -185,8 +185,8 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The difference to <code><a href='https://rdrr.io/pkg/insight/man/find_terms.html'>find_terms</a></code> is that <code><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables()</a></code>
-  returns each variable name only once, while <code><a href='https://rdrr.io/pkg/insight/man/find_terms.html'>find_terms()</a></code> may return a
+    <p>The difference to <code><a href='find_terms.html'>find_terms</a></code> is that <code>find_variables()</code>
+  returns each variable name only once, while <code><a href='find_terms.html'>find_terms()</a></code> may return a
   variable multiple times in case of transformations or when arithmetic expressions
   were used in the formula.</p>
 
@@ -209,7 +209,7 @@ as character vector, not as list. Duplicated values are removed.</p></td>
   data = <span class='kw'>cbpp</span>,
   family = <span class='kw'>binomial</span>
 )
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables</a></span>(<span class='kw'>m1</span>)</div><div class='output co'>#&gt; $response
+<span class='fu'>find_variables</span>(<span class='kw'>m1</span>)</div><div class='output co'>#&gt; $response
 #&gt; [1] "incidence" "size"     
 #&gt; 
 #&gt; $conditional
@@ -221,7 +221,7 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 <span class='kw'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(
   <span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>mygrp</span> <span class='op'>/</span> <span class='kw'>mysubgrp</span>) <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Subject</span>),
   data = <span class='kw'>sleepstudy</span>
-)</div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables</a></span>(<span class='kw'>m2</span>)</div><div class='output co'>#&gt; $response
+)</div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='input'><span class='fu'>find_variables</span>(<span class='kw'>m2</span>)</div><div class='output co'>#&gt; $response
 #&gt; [1] "Reaction"
 #&gt; 
 #&gt; $conditional
@@ -229,7 +229,7 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 #&gt; 
 #&gt; $random
 #&gt; [1] "mysubgrp" "mygrp"    "Subject" 
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables</a></span>(<span class='kw'>m2</span>, flatten = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Reaction" "Days"     "mysubgrp" "mygrp"    "Subject" </div></pre>
+#&gt; </div><div class='input'><span class='fu'>find_variables</span>(<span class='kw'>m2</span>, flatten = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Reaction" "Days"     "mysubgrp" "mygrp"    "Subject" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

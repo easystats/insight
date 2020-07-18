@@ -131,7 +131,7 @@
     <p>Returns the data from all random effects terms.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_random.html'>get_random</a></span>(<span class='kw'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>get_random</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,7 +163,7 @@
   <span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>mygrp</span> <span class='op'>/</span> <span class='kw'>mysubgrp</span>) <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Subject</span>),
   data = <span class='kw'>sleepstudy</span>
 )</div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_random.html'>get_random</a></span>(<span class='kw'>m</span>))</div><div class='output co'>#&gt;   mysubgrp mygrp Subject
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'>get_random</span>(<span class='kw'>m</span>))</div><div class='output co'>#&gt;   mysubgrp mygrp Subject
 #&gt; 1        6     3     308
 #&gt; 2       10     1     308
 #&gt; 3       26     2     308

@@ -146,10 +146,10 @@ The main purpose of this function is to easily filter and select model parameter
 in particular of - but not limited to - posterior samples from Stan models,
 depending on certain characteristics. This might be useful when only selective
 results should be reported or results from all parameters should be filtered
-to return only certain results (see <code><a href='https://rdrr.io/pkg/insight/man/print_parameters.html'>print_parameters</a></code>).</p>
+to return only certain results (see <code><a href='print_parameters.html'>print_parameters</a></code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/clean_parameters.html'>clean_parameters</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>clean_parameters</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -187,8 +187,8 @@ or for specific terms like smooth- or spline-terms).</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/paul-buerkner/brms'>brms</a></span>)
-<span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/insight/man/download_model.html'>download_model</a></span>(<span class='st'>"brms_zi_2"</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/clean_parameters.html'>clean_parameters</a></span>(<span class='kw'>model</span>)
+<span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='download_model.html'>download_model</a></span>(<span class='st'>"brms_zi_2"</span>)
+<span class='fu'>clean_parameters</span>(<span class='kw'>model</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

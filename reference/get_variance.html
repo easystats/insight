@@ -133,11 +133,11 @@
     <div class="ref-description">
     <p>This function extracts the different variance components of a
   mixed model and returns the result as list. Functions like
-  <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_residual(x)</a></code> or <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_fixed(x)</a></code> are shortcuts
-  for <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance(x, component = "residual")</a></code> etc.</p>
+  <code>get_variance_residual(x)</code> or <code>get_variance_fixed(x)</code> are shortcuts
+  for <code>get_variance(x, component = "residual")</code> etc.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance</a></span>(
+    <pre class="usage"><span class='fu'>get_variance</span>(
   <span class='kw'>x</span>,
   component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"residual"</span>, <span class='st'>"distribution"</span>, <span class='st'>"dispersion"</span>,
     <span class='st'>"intercept"</span>, <span class='st'>"slope"</span>, <span class='st'>"rho01"</span>),
@@ -145,21 +145,21 @@
   <span class='kw'>...</span>
 )
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_residual</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>get_variance_residual</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_fixed</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>get_variance_fixed</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_random</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>get_variance_random</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_distribution</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>get_variance_distribution</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_dispersion</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>get_variance_dispersion</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_intercept</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>get_variance_intercept</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_slope</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>get_variance_slope</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_correlation_slope_intercept</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'>get_correlation_slope_intercept</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -271,9 +271,9 @@ take a few seconds to calculate.</p></td>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sleepstudy</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>+</span> <span class='kw'>Days</span> <span class='op'>|</span> <span class='kw'>Subject</span>), data = <span class='kw'>sleepstudy</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance</a></span>(<span class='kw'>m</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_fixed</a></span>(<span class='kw'>m</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance_residual</a></span>(<span class='kw'>m</span>)
+<span class='fu'>get_variance</span>(<span class='kw'>m</span>)
+<span class='fu'>get_variance_fixed</span>(<span class='kw'>m</span>)
+<span class='fu'>get_variance_residual</span>(<span class='kw'>m</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

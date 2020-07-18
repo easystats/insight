@@ -131,7 +131,7 @@
     <p>Return the name of the grouping factors from mixed effects models.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_random.html'>find_random</a></span>(<span class='kw'>x</span>, split_nested = <span class='fl'>FALSE</span>, flatten = <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>find_random</span>(<span class='kw'>x</span>, split_nested = <span class='fl'>FALSE</span>, flatten = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,9 +178,9 @@ as character vector, not as list. Duplicated values are removed.</p></td>
   <span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>mygrp</span> <span class='op'>/</span> <span class='kw'>mysubgrp</span>) <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Subject</span>),
   data = <span class='kw'>sleepstudy</span>
 )</div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_random.html'>find_random</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; $random
+<span class='fu'>find_random</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; $random
 #&gt; [1] "mysubgrp:mygrp" "mygrp"          "Subject"       
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_random.html'>find_random</a></span>(<span class='kw'>m</span>, split_nested = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $random
+#&gt; </div><div class='input'><span class='fu'>find_random</span>(<span class='kw'>m</span>, split_nested = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $random
 #&gt; [1] "mysubgrp" "mygrp"    "Subject" 
 #&gt; </div></pre>
   </div>

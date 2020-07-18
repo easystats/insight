@@ -137,7 +137,7 @@ Small helper that checks if a model is a regression model
   object and return the statistic used.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_statistic.html'>find_statistic</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>find_statistic</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,7 +161,7 @@ Small helper that checks if a model is a regression model
     <pre class="examples"><div class='input'><span class='co'># regression model object</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>vs</span>, data = <span class='kw'>mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_statistic.html'>find_statistic</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] "t-statistic"</div></pre>
+<span class='fu'>find_statistic</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] "t-statistic"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

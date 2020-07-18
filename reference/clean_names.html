@@ -135,7 +135,7 @@
   <code><a href='https://rdrr.io/r/base/factor.html'>as.factor()</a></code> etc.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/clean_names.html'>clean_names</a></span>(<span class='kw'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>clean_names</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,11 +155,11 @@
 
     <p>Typically, this method is intended to work on character vectors,
   in order to remove patterns that obscure the variable names. For
-  convenience reasons it is also possible to call <code><a href='https://rdrr.io/pkg/insight/man/clean_names.html'>clean_names()</a></code>
+  convenience reasons it is also possible to call <code>clean_names()</code>
   also on a model object. If <code>x</code> is a regression model, this
-  function is (almost) equal to calling <code><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables()</a></code>. The
-  main difference is that <code><a href='https://rdrr.io/pkg/insight/man/clean_names.html'>clean_names()</a></code> always returns a character
-  vector, while <code><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables()</a></code> returns a list of character
+  function is (almost) equal to calling <code><a href='find_variables.html'>find_variables()</a></code>. The
+  main difference is that <code>clean_names()</code> always returns a character
+  vector, while <code><a href='find_variables.html'>find_variables()</a></code> returns a list of character
   vectors, unless <code>flatten = TRUE</code>. See 'Examples'.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -168,7 +168,7 @@
 <span class='kw'>outcome</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>9</span>))
 <span class='kw'>treatment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>counts</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='kw'>outcome</span>) <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='kw'>treatment</span>), family = <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>poisson</a></span>())
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/clean_names.html'>clean_names</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] "counts"    "outcome"   "treatment"</div><div class='input'>
+<span class='fu'>clean_names</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] "counts"    "outcome"   "treatment"</div><div class='input'>
 <span class='co'># difference "clean_names()" and "find_variables()"</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/lme4/lme4'>lme4</a></span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(
@@ -177,7 +177,7 @@
   family = <span class='kw'>binomial</span>
 )
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/clean_names.html'>clean_names</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] "incidence" "size"      "period"    "herd"     </div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; $response
+<span class='fu'>clean_names</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] "incidence" "size"      "period"    "herd"     </div><div class='input'><span class='fu'><a href='find_variables.html'>find_variables</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; $response
 #&gt; [1] "incidence" "size"     
 #&gt; 
 #&gt; $conditional
@@ -185,7 +185,7 @@
 #&gt; 
 #&gt; $random
 #&gt; [1] "herd"
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/insight/man/find_variables.html'>find_variables</a></span>(<span class='kw'>m</span>, flatten = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "incidence" "size"      "period"    "herd"     </div></pre>
+#&gt; </div><div class='input'><span class='fu'><a href='find_variables.html'>find_variables</a></span>(<span class='kw'>m</span>, flatten = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "incidence" "size"      "period"    "herd"     </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

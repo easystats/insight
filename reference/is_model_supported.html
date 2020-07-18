@@ -134,13 +134,13 @@
 
     <div class="ref-description">
     <p>Small helper that checks if a model is a <em>supported</em>
- (regression) model object. <code><a href='https://rdrr.io/pkg/insight/man/is_model_supported.html'>supported_models()</a></code> prints a list
+ (regression) model object. <code>supported_models()</code> prints a list
  of currently supported model classes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/insight/man/is_model_supported.html'>is_model_supported</a></span>(<span class='kw'>x</span>)
+    <pre class="usage"><span class='fu'>is_model_supported</span>(<span class='kw'>x</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/is_model_supported.html'>supported_models</a></span>()</pre>
+<span class='fu'>supported_models</span>()</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,7 +164,7 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>vs</span>, data = <span class='kw'>mtcars</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/insight/man/is_model_supported.html'>is_model_supported</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/insight/man/is_model_supported.html'>is_model_supported</a></span>(<span class='kw'>mtcars</span>)</div><div class='output co'>#&gt; [1] FALSE</div></pre>
+<span class='fu'>is_model_supported</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>is_model_supported</span>(<span class='kw'>mtcars</span>)</div><div class='output co'>#&gt; [1] FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
