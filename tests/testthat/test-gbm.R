@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest || Sys.getenv("USER") == "travis") {
+if (.runThisTest) {
   if (require("testthat") && require("insight") && require("gbm")) {
     set.seed(102) # for reproducibility
     m1 <- gbm(
@@ -93,14 +93,12 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
     })
 
     test_that("find_parameters", {
-      skip_on_travis()
-
       expect_equal(
         find_parameters(m1),
-        list(conditional = c("wt", "gear", "cyl"))
+        list(conditional = c("wt", "cyl", "gear"))
       )
       expect_equal(nrow(get_parameters(m1)), 3)
-      expect_equal(get_parameters(m1)$Parameter, c("wt", "gear", "cyl"))
+      expect_equal(get_parameters(m1)$Parameter, c("wt", "cyl", "gear"))
     })
 
     test_that("find_terms", {
