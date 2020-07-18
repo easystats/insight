@@ -96,6 +96,7 @@ supported_models <- function() {
     "geeglm",
     "glht",
     "glimML",
+    "glmm",
     "glm",
     "glmmadmb",
     "glmmPQL",

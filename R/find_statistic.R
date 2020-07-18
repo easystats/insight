@@ -120,6 +120,7 @@ find_statistic <- function(x, ...) {
       "flexsurvreg",
       "gee",
       "glimML",
+      "glmm",
       "glmmadmb",
       "glmmLasso",
       "glmmTMB",

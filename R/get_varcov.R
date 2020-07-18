@@ -558,6 +558,10 @@ get_varcov.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_varcov.glmm <- get_varcov.mixor
+
+
+#' @export
 get_varcov.gamm <- function(x, ...) {
   vc <- stats::vcov(x$gam)
 

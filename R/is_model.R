@@ -110,6 +110,7 @@ is_model <- function(x) {
       "glmdisc",
       "glmerMod",
       "glmlep",
+      "glmm",
       "glmmadmb",
       "glmmEP",
       "glmmfields",

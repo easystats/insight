@@ -698,6 +698,23 @@ find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatte
 
 
 
+#' @export
+find_parameters.glmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  effects <- match.arg(effects)
+  s <- summary(x)
+  fe_params <- rownames(s$coefmat)
+  re_params <- rownames(s$nucoefmat)
+
+  l <- .compact_list(list(
+    conditional = fe_params,
+    random = re_params
+  ))
+
+  .filter_parameters(l, effects = effects, flatten = flatten)
+}
+
+
+
 
 
 

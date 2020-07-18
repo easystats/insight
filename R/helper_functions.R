@@ -150,7 +150,7 @@
     model,
     c(
       "MCMCglmm", "gee", "LORgee", "mixor", "clmm2", "felm", "feis", "bife",
-      "BFBayesFactor", "BBmm", "glimML", "MANOVA", "RM", "cglm"
+      "BFBayesFactor", "BBmm", "glimML", "MANOVA", "RM", "cglm", "glmm"
     )
   )
 

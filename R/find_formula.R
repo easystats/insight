@@ -991,7 +991,8 @@ find_formula.mmclogit <- function(x, ...) {
 find_formula.glmm <- function(x, ...) {
   f.cond <- stats::as.formula(x$fixedcall)
   f.random <- lapply(x$randcall, function(.x) {
-    stats::as.formula(.x)
+    av <- all.vars(.x)
+    stats::as.formula(paste0("~1|", av[length(av)]))
   })
 
   if (length(f.random) == 1) {

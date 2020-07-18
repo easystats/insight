@@ -218,6 +218,7 @@ get_parameters.betamfx <- function(x, component = c("all", "conditional", "preci
 }
 
 
+
 #' @export
 get_parameters.betaor <- function(x, component = c("all", "conditional", "precision"), ...) {
   component <- match.arg(component)
@@ -694,7 +695,31 @@ get_parameters.clm2 <- function(x, component = c("all", "conditional", "scale"),
 
 
 #' @export
+get_parameters.glmm <- function(x, effects = c("all", "fixed", "random"),  ...) {
+  effects <- match.arg(effects)
+
+  params <- data.frame(
+    Parameter = names(c(x$beta, x$nu)),
+    Estimate = unname(c(x$beta, x$nu)),
+    Effects = c(rep("fixed", times = length(x$beta)), rep("random", times = length(x$nu))),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (effects != "all") {
+    params <- params[params$Effects == effects, , drop = FALSE]
+    params$Effects <- NULL
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+
+#' @export
 get_parameters.clmm2 <- get_parameters.clm2
+
+
 
 #' @rdname get_parameters
 #' @export

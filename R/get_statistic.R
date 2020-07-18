@@ -533,6 +533,24 @@ get_statistic.clmm2 <- get_statistic.clm2
 
 
 #' @export
+get_statistic.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  s <- summary(x)
+
+  out <- get_parameters(x, effects = "all")
+  out$Statistic <- c(s$coefmat[, 3], s$nucoefmat[, 3])
+
+  if (effects != "all") {
+    out <- out[out$Effects == effects, , drop = FALSE]
+    out$Effects <- NULL
+  }
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
   stats <- x$Model[, "z value"]
   effects <- match.arg(effects)
