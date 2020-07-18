@@ -174,6 +174,9 @@
 <span class='co'># S3 method for betamfx</span>
 <span class='fu'>get_varcov</span>(<span class='kw'>x</span>, component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conditional"</span>, <span class='st'>"precision"</span>, <span class='st'>"all"</span>), <span class='kw'>...</span>)
 
+<span class='co'># S3 method for aov</span>
+<span class='fu'>get_varcov</span>(<span class='kw'>x</span>, complete = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
+
 <span class='co'># S3 method for mixor</span>
 <span class='fu'>get_varcov</span>(<span class='kw'>x</span>, effects = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span>), <span class='kw'>...</span>)</pre>
 
@@ -200,15 +203,15 @@ Note that the <em>conditional</em> component is also called <em>count</em> or
 <em>mean</em> component, depending on the model.</p></td>
     </tr>
     <tr>
+      <th>complete</th>
+      <td><p>Logical, if <code>TRUE</code>, for <code>aov</code>, returns the full
+variance-covariance matrix.</p></td>
+    </tr>
+    <tr>
       <th>effects</th>
       <td><p>Should the complete variance-covariance matrix of the model
 be returned, or only for specific model parameters only? Currently only
 applies to models of class <code>mixor</code>.</p></td>
-    </tr>
-    <tr>
-      <th>complete</th>
-      <td><p>Logical, if <code>TRUE</code>, for <code>aov</code>, returns the full
-variance-covariance matrix.</p></td>
     </tr>
     </table>
 
