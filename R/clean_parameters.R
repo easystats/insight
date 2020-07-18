@@ -196,6 +196,29 @@ clean_parameters.wbgee <- clean_parameters.wbm
 
 
 #' @export
+clean_parameters.glmm <- function(x, ...) {
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+
+  l <- lapply(names(pars), function(i) {
+    data.frame(
+      Parameter = pars[[i]],
+      Effects = i,
+      Component = "",
+      Group = "",
+      Function = "",
+      Cleaned_Parameter = clean_names(pars[[i]]),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  })
+
+  out <- .remove_backticks_from_parameter_names(do.call(rbind, l))
+  .remove_empty_columns_from_pars(out)
+}
+
+
+
+#' @export
 clean_parameters.lavaan <- function(x, ...) {
   params <- get_parameters(x)
 
