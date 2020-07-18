@@ -416,6 +416,7 @@ get_varcov.negbinirr <- get_varcov.logitmfx
 # Other models with special handling -----------------------------------------
 
 
+#' @rdname get_varcov
 #' @export
 get_varcov.aov <- function(x, complete = FALSE, ...) {
   vc <- suppressWarnings(stats::vcov(x, complete = complete))
