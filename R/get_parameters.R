@@ -1497,7 +1497,7 @@ get_parameters.BGGM <- function(x, component = c("correlation", "conditional", "
 
 #' @rdname get_parameters
 #' @export
-get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), summary = FALSE, ...) {
+get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), summary = TRUE, ...) {
   effects <- match.arg(effects)
 
   nF <- x$Fixed$nfl
