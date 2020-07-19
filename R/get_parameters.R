@@ -1495,6 +1495,8 @@ get_parameters.BGGM <- function(x, component = c("correlation", "conditional", "
 }
 
 
+## TODO change to "summary = FALSE" once bayestestR 0.7.1 or higher on CRAN
+
 #' @rdname get_parameters
 #' @export
 get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), summary = TRUE, ...) {
