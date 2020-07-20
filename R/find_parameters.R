@@ -922,7 +922,9 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
       }
 
       if (.obj_has_name(l, "random")) {
-        random <- l$random[grepl(sprintf("__\\Q%s\\E\\.", i), l$random)]
+        random <- l$random[grepl(sprintf("__\\Q%s\\E\\.", i), l$random) |
+                             grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
+                             grepl("^cor_", l$random)]
       } else {
         random <- NULL
       }
@@ -934,7 +936,9 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
       }
 
       if (.obj_has_name(l, "zero_inflated_random")) {
-        zero_inflated_random <- l$zero_inflated_random[grepl(sprintf("__zi_\\Q%s\\E\\.", i), l$zero_inflated_random)]
+        zero_inflated_random <- l$zero_inflated_random[grepl(sprintf("__zi_\\Q%s\\E\\.", i), l$zero_inflated_random) |
+                                                         grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$zero_inflated_random) |
+                                                         grepl("^cor_", l$zero_inflated_random)]
       } else {
         zero_inflated_random <- NULL
       }
