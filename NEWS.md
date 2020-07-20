@@ -1,3 +1,9 @@
+# insight 0.9.1
+
+## Bug fixes
+
+* Fixed issue with correctly detecting sigma-parameters in `find_parameters()` for multiple-response `brmsfit`-models.
+
 # insight 0.9.0
 
 ## New supported model classes

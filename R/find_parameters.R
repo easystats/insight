@@ -946,7 +946,7 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
       }
 
       if (.obj_has_name(l, "sigma")) {
-        sigma <- l$sigma[grepl(sprintf("^sigma_\\Q%s\\E", i), l$sigma)]
+        sigma <- l$sigma[grepl(sprintf("^sigma_\\Q%s\\E$", i), l$sigma)]
       } else {
         sigma <- NULL
       }
