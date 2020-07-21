@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest || Sys.getenv("USER") == "travis") {
+if (.runThisTest) {
   if (suppressWarnings(require("testthat") &&
     require("insight") &&
     require("BayesFactor") &&
@@ -63,26 +63,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         c(NA, 2.555042),
         tolerance = 1e-3
       )
-      expect_equal(
-        get_priors(m4)$Adjusted_Scale,
-        c(
-          25.5992021152256,
-          7.67976063456768,
-          2.55992021152256,
-          5.11984042304512
-        ),
-        tolerance = 1e-3
-      )
-      expect_equal(
-        get_priors(m5)$Adjusted_Scale,
-        c(
-          25.5992021152256,
-          2.55992021152256,
-          5.11984042304512,
-          7.67976063456768
-        ),
-        tolerance = 1e-3
-      )
+      expect_equal(get_priors(m4)$Adjusted_Scale, c(6.399801, NA, NA, NA), tolerance = 1e-3)
+      expect_equal(get_priors(m5)$Adjusted_Scale, c(6.399801, NA, NA, NA), tolerance = 1e-3)
       expect_equal(
         get_priors(m6),
         data.frame(

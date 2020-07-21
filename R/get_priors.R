@@ -41,9 +41,20 @@ get_priors.stanreg <- function(x, ...) {
         .x$scale <- 0
         .x$adjusted_scale <- 0
       }
-      do.call(cbind, .x)
+      .x <- do.call(cbind, .x)
+      as.data.frame(.x)
     }
   }))
+
+  # find all column names, add missing columns manually, so merge() works
+  cn <- unique(unlist(lapply(l, colnames)))
+  l <- lapply(l, function(.x) {
+    missing <- setdiff(cn, colnames(.x))
+    if (length(missing)) {
+      .x[missing] <- NA
+    }
+    .x
+  })
 
   if (length(l) > 1) {
     prior_info <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), l)

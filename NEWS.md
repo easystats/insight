@@ -3,6 +3,7 @@
 ## Bug fixes
 
 * Fixed issue with correctly detecting sigma-parameters in `find_parameters()` for multiple-response `brmsfit`-models.
+* Fixed issues with `get_priors()` for _stanreg_-models, caused by the latest update to *rstanarm 2.21.2*.
 
 # insight 0.9.0
 
