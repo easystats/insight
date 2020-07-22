@@ -1081,6 +1081,7 @@ get_statistic.rq <- function(x, ...) {
 #' @export
 get_statistic.crq <- function(x, ...) {
   sc <- summary(x)
+  params <- get_parameters(x)
 
   if (all(unlist(lapply(sc, is.list)))) {
     list_sc <- lapply(sc, function(i) {
@@ -1089,23 +1090,24 @@ get_statistic.crq <- function(x, ...) {
       .x
     })
     out <- do.call(rbind, list_sc)
-    params <- data.frame(
-      Parameter = out$Parameter,
+    out <- data.frame(
+      Parameter = params$Parameter,
       Statistic = out$coefficients.T.Value,
-      Component = sprintf("tau (%g)", out$tau),
+      Component = params$Component,
       stringsAsFactors = FALSE,
       row.names = NULL
     )
   } else {
-    params <- data.frame(
-      Parameter = names(sc$coefficients[, 5]),
-      Estimate = unname(sc$coefficients[, 5]),
+    out <- data.frame(
+      Parameter = params$Parameter,
+      Statistic = unname(sc$coefficients[, 5]),
       stringsAsFactors = FALSE,
       row.names = NULL
     )
   }
 
-  .remove_backticks_from_parameter_names(params)
+  attr(out, "statistic") <- find_statistic(x)
+  out
 }
 
 #' @export
