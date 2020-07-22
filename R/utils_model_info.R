@@ -82,7 +82,7 @@
   # and check if we have truncated or censored brms-regression
 
   is.trial <- FALSE
-  is.censored <- FALSE
+  is.censored <- inherits(x, c("crq", "crqs"))
   is.truncated <- FALSE
 
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {

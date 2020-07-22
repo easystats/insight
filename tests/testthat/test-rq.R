@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("quantreg")) {
-  context("insight, model_info")
 
   data(stackloss)
   m1 <-

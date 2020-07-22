@@ -54,7 +54,7 @@ find_terms <- function(x, flatten = FALSE, ...) {
 
 
 .get_variables_list <- function(f) {
-  f$response <- .safe_deparse(f$conditional[[2L]])
+  f$response <- sub("(.*)::(.*)", "\\2", .safe_deparse(f$conditional[[2L]]))
   f$conditional <- .safe_deparse(f$conditional[[3L]])
 
   f <- lapply(f, function(.x) {

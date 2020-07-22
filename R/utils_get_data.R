@@ -126,7 +126,7 @@
         }
       }
 
-      if (inherits(x, c("coxph", "coxme"))) {
+      if (inherits(x, c("coxph", "coxme")) || any(grepl("^Surv\\(", spline.term))) {
         mf <- md
       } else {
         needed.vars <- .compact_character(unique(clean_names(needed.vars)))
