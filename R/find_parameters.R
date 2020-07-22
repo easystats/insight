@@ -1538,7 +1538,7 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
 find_parameters.crq <- function(x, flatten = FALSE, ...) {
   sc <- summary(x)
 
-  if (all(lapply(sc, is.list))) {
+  if (all(unlist(lapply(sc, is.list)))) {
     pars <- list(conditional = rownames(sc[[1]]$coefficients))
   } else {
     pars <- list(conditional = rownames(sc$coefficients))

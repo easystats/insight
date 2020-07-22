@@ -119,7 +119,7 @@ get_parameters.aareg <- function(x, ...) {
 get_parameters.crq <- function(x, ...) {
   sc <- summary(x)
 
-  if (all(lapply(sc, is.list))) {
+  if (all(unlist(lapply(sc, is.list)))) {
     list_sc <- lapply(sc, function(i) {
       .x <- as.data.frame(i)
       .x$Parameter <- rownames(.x)
