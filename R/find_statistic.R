@@ -45,6 +45,7 @@ find_statistic <- function(x, ...) {
       "cpglm",
       "cpglmm",
       "crq",
+      "crqs",
       "drc",
       "emmGrid",
       "feis",

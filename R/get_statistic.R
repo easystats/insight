@@ -1079,7 +1079,37 @@ get_statistic.rq <- function(x, ...) {
 }
 
 #' @export
-get_statistic.crq <- get_statistic.rq
+get_statistic.crq <- function(x, ...) {
+  sc <- summary(x)
+
+  if (all(unlist(lapply(sc, is.list)))) {
+    list_sc <- lapply(sc, function(i) {
+      .x <- as.data.frame(i)
+      .x$Parameter <- rownames(.x)
+      .x
+    })
+    out <- do.call(rbind, list_sc)
+    params <- data.frame(
+      Parameter = out$Parameter,
+      Statistic = out$coefficients.T.Value,
+      Component = sprintf("tau (%g)", out$tau),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    params <- data.frame(
+      Parameter = names(sc$coefficients[, 5]),
+      Estimate = unname(sc$coefficients[, 5]),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+#' @export
+get_statistic.crqs <- get_statistic.crq
 
 #' @export
 get_statistic.nlrq <- get_statistic.rq
