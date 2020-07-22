@@ -57,7 +57,7 @@ get_priors.stanreg <- function(x, ...) {
   })
 
   if (length(l) > 1) {
-    prior_info <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), l)
+    prior_info <- do.call(rbind, l)
   } else {
     cn <- colnames(l[[1]])
     prior_info <- as.data.frame(l)
