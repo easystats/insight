@@ -1,10 +1,9 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest || Sys.getenv("USER") == "travis") {
+if (.runThisTest) {
   if (suppressWarnings(require("testthat") &&
     require("insight") &&
     require("brms"))) {
-    context("insight, brms-find_response")
 
     # Model fitting -----------------------------------------------------------
 
@@ -385,6 +384,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
           "r_persons__count.2.Intercept.",
           "r_persons__count.3.Intercept.",
           "r_persons__count.4.Intercept.",
+          "sd_persons__count_Intercept",
           "r_persons__count2.1.Intercept.",
           "r_persons__count2.2.Intercept.",
           "r_persons__count2.3.Intercept.",
