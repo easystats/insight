@@ -325,9 +325,9 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         structure(list(
           count = list(
             conditional = c("b_count_Intercept", "b_count_child", "b_count_camper"),
-            random = sprintf("r_persons__count.%i.Intercept.", 1:4),
+            random = c(sprintf("r_persons__count.%i.Intercept.", 1:4), "sd_persons__count_Intercept"),
             zero_inflated = c("b_zi_count_Intercept", "b_zi_count_camper"),
-            zero_inflated_random = sprintf("r_persons__zi_count.%i.Intercept.", 1:4)
+            zero_inflated_random = c(sprintf("r_persons__zi_count.%i.Intercept.", 1:4), "sd_persons__zi_count_Intercept")
           ),
           count2 = list(
             conditional = c(
@@ -335,9 +335,9 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "b_count2_child",
               "b_count2_livebait"
             ),
-            random = sprintf("r_persons__count2.%i.Intercept.", 1:4),
+            random = c(sprintf("r_persons__count2.%i.Intercept.", 1:4), "sd_persons__count2_Intercept"),
             zero_inflated = c("b_zi_count2_Intercept", "b_zi_count2_child"),
-            zero_inflated_random = sprintf("r_persons__zi_count2.%i.Intercept.", 1:4)
+            zero_inflated_random = c(sprintf("r_persons__zi_count2.%i.Intercept.", 1:4), "sd_persons__zi_count2_Intercept")
           )
         ),
         "is_mv" = "1"
@@ -388,40 +388,26 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
           "r_persons__count2.1.Intercept.",
           "r_persons__count2.2.Intercept.",
           "r_persons__count2.3.Intercept.",
-          "r_persons__count2.4.Intercept."
+          "r_persons__count2.4.Intercept.",
+          "sd_persons__count2_Intercept"
         )
       )
 
       expect_equal(
         colnames(get_parameters(m5, effects = "all", component = "all")),
-        c(
-          "b_count_Intercept",
-          "b_count_child",
-          "b_count_camper",
-          "r_persons__count.1.Intercept.",
-          "r_persons__count.2.Intercept.",
-          "r_persons__count.3.Intercept.",
-          "r_persons__count.4.Intercept.",
-          "b_zi_count_Intercept",
-          "b_zi_count_camper",
-          "r_persons__zi_count.1.Intercept.",
-          "r_persons__zi_count.2.Intercept.",
-          "r_persons__zi_count.3.Intercept.",
-          "r_persons__zi_count.4.Intercept.",
-          "b_count2_Intercept",
-          "b_count2_child",
-          "b_count2_livebait",
-          "r_persons__count2.1.Intercept.",
-          "r_persons__count2.2.Intercept.",
-          "r_persons__count2.3.Intercept.",
-          "r_persons__count2.4.Intercept.",
-          "b_zi_count2_Intercept",
-          "b_zi_count2_child",
-          "r_persons__zi_count2.1.Intercept.",
-          "r_persons__zi_count2.2.Intercept.",
-          "r_persons__zi_count2.3.Intercept.",
-          "r_persons__zi_count2.4.Intercept."
-        )
+        c("b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count.1.Intercept.",
+          "r_persons__count.2.Intercept.", "r_persons__count.3.Intercept.",
+          "r_persons__count.4.Intercept.", "sd_persons__count_Intercept",
+          "b_zi_count_Intercept", "b_zi_count_camper", "r_persons__zi_count.1.Intercept.",
+          "r_persons__zi_count.2.Intercept.", "r_persons__zi_count.3.Intercept.",
+          "r_persons__zi_count.4.Intercept.", "sd_persons__zi_count_Intercept",
+          "b_count2_Intercept", "b_count2_child", "b_count2_livebait",
+          "r_persons__count2.1.Intercept.", "r_persons__count2.2.Intercept.",
+          "r_persons__count2.3.Intercept.", "r_persons__count2.4.Intercept.",
+          "sd_persons__count2_Intercept", "b_zi_count2_Intercept", "b_zi_count2_child",
+          "r_persons__zi_count2.1.Intercept.", "r_persons__zi_count2.2.Intercept.",
+          "r_persons__zi_count2.3.Intercept.", "r_persons__zi_count2.4.Intercept.",
+          "sd_persons__zi_count2_Intercept")
       )
     })
 
@@ -622,10 +608,12 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "r_persons__count.2.Intercept.",
               "r_persons__count.3.Intercept.",
               "r_persons__count.4.Intercept.",
+              "sd_persons__count_Intercept",
               "r_persons__count2.1.Intercept.",
               "r_persons__count2.2.Intercept.",
               "r_persons__count2.3.Intercept.",
               "r_persons__count2.4.Intercept.",
+              "sd_persons__count2_Intercept",
               "b_zi_count_Intercept",
               "b_zi_count_camper",
               "b_zi_count2_Intercept",
@@ -634,10 +622,12 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "r_persons__zi_count.2.Intercept.",
               "r_persons__zi_count.3.Intercept.",
               "r_persons__zi_count.4.Intercept.",
+              "sd_persons__zi_count_Intercept",
               "r_persons__zi_count2.1.Intercept.",
               "r_persons__zi_count2.2.Intercept.",
               "r_persons__zi_count2.3.Intercept.",
-              "r_persons__zi_count2.4.Intercept."
+              "r_persons__zi_count2.4.Intercept.",
+              "sd_persons__zi_count2_Intercept"
             ),
             Effects = c(
               "fixed",
@@ -654,10 +644,14 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "random",
               "random",
               "random",
+              "random",
+              "random",
               "fixed",
               "fixed",
               "fixed",
               "fixed",
+              "random",
+              "random",
               "random",
               "random",
               "random",
@@ -682,6 +676,10 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "conditional",
               "conditional",
               "conditional",
+              "conditional",
+              "conditional",
+              "zero_inflated",
+              "zero_inflated",
               "zero_inflated",
               "zero_inflated",
               "zero_inflated",
@@ -706,10 +704,12 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "Intercept: persons",
               "Intercept: persons",
               "Intercept: persons",
+              "SD/Cor: persons",
               "Intercept: persons2",
               "Intercept: persons2",
               "Intercept: persons2",
               "Intercept: persons2",
+              "SD/Cor: persons",
               "",
               "",
               "",
@@ -718,10 +718,12 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "Intercept: persons",
               "Intercept: persons",
               "Intercept: persons",
+              "SD/Cor: persons",
               "Intercept: persons2",
               "Intercept: persons2",
               "Intercept: persons2",
-              "Intercept: persons2"
+              "Intercept: persons2",
+              "SD/Cor: persons"
             ),
             Response = c(
               "count",
@@ -734,6 +736,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "count",
               "count",
               "count",
+              "count",
+              "count2",
               "count2",
               "count2",
               "count2",
@@ -746,6 +750,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "count",
               "count",
               "count",
+              "count",
+              "count2",
               "count2",
               "count2",
               "count2",
@@ -762,10 +768,12 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "persons.2",
               "persons.3",
               "persons.4",
+              "count_Intercept",
               "persons2.1",
               "persons2.2",
               "persons2.3",
               "persons2.4",
+              "count2_Intercept",
               "(Intercept)",
               "camper",
               "(Intercept)",
@@ -774,17 +782,16 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
               "persons.2",
               "persons.3",
               "persons.4",
+              "zi_count_Intercept",
               "persons2.1",
               "persons2.2",
               "persons2.3",
-              "persons2.4"
+              "persons2.4",
+              "zi_count2_Intercept"
             )
           ),
-          class = c(
-            "clean_parameters",
-            "data.frame"
-          ),
-          row.names = c(NA, -26L)
+          class = c("clean_parameters", "data.frame"),
+          row.names = c(NA, -30L)
         )
       )
     })
