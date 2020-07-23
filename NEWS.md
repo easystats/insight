@@ -19,7 +19,7 @@
 
 ## Changes to functions
 
-* `get_variance()` now also returns the corrlation among random slopes.
+* `get_variance()` now also returns the correlation among random slopes.
 * `get_variance()` now also (partially) supports `brmsfit` models.
 * `get_parameters()` for models that return (posterior or simulated) samples of model parameters gains a `summary`-argument, which - if `TRUE` - returns a point-estimate (mean of samples) instead of the full samples.
 * `format_p()` returns `"> .999"` for p-values equal to or greater than 0.999.
