@@ -84,7 +84,7 @@ if (require("testthat") &&
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
-      list(conditional = c("(Intercept)", "x", "Water.Temp"))
+      list(conditional = c("(Intercept)", "x"))
     )
     expect_equal(nrow(get_parameters(m1)), 8)
     expect_equal(
