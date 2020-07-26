@@ -198,12 +198,21 @@
 
     # brms
   } else if (inherits(x, "brmsfit")) {
-    comp_x <- as.matrix(cbind(`(Intercept)` = 1, get_predictors(x)))
+    # comp_x <- as.matrix(cbind(`(Intercept)` = 1, get_predictors(x)))
+    formula_rhs <- .safe_deparse(find_formula(x)$conditional[[3]])
+    formula_rhs <- stats::as.formula(paste0("~", formula_rhs))
+    comp_x <- stats::model.matrix(formula_rhs, data = get_data(x))
     rownames(comp_x) <- 1:nrow(comp_x)
     vc <- lapply(names(lme4::VarCorr(x)), function(i) {
       element <- lme4::VarCorr(x)[[i]]
       if (i != "residual__") {
-        out <- drop(element$cov[, 1, ])
+        if (!is.null(element$cov)) {
+          out <- as.matrix(drop(element$cov[, 1, ]))
+          colnames(out) <- rownames(out) <- gsub("Intercept", "(Intercept)", rownames(element$cov), fixed = TRUE)
+        } else {
+          out <- as.matrix(drop(element$sd[, 1]) ^ 2)
+          colnames(out) <- rownames(out) <- gsub("Intercept", "(Intercept)", rownames(element$sd), fixed = TRUE)
+        }
         attr(out, "sttdev") <- element$sd[, 1]
       } else {
         out <- NULL
@@ -217,8 +226,13 @@
       beta = lme4::fixef(x)[, 1],
       X = comp_x,
       vc = vc,
-      re = lapply(lme4::ranef(x), function(re) drop(re[, 1, ]))
+      re = lapply(lme4::ranef(x), function(re) {
+        reval <- as.data.frame(drop(re[, 1, ]))
+        colnames(reval) <- gsub("Intercept", "(Intercept)", dimnames(re)[[3]], fixed = TRUE)
+        reval
+      })
     )
+    colnames(vals$beta) <- gsub("Intercept", "(Intercept)", colnames(vals$beta), fixed = TRUE)
 
     # cpglmm
   } else if (inherits(x, "cpglmm")) {
