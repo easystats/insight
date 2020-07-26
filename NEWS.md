@@ -4,7 +4,8 @@
 
 * Fixed issue with correctly detecting sigma-parameters in `find_parameters()` for multiple-response `brmsfit`-models.
 * Fixed issues with `find_terms()` when response variable included a namespace, like `survival::Surv()`.
-* Fixed issues with `get_priors()` for _stanreg_-models, probably caused by the latest update to *rstanarm 2.21.2*.
+* Fixed issues with `get_priors()` for _stanreg_ models, probably caused by the latest update to *rstanarm 2.21.2*.
+* Fixed issues in `get_variance()` for *brmsfit* models.
 * Fixed some issues around `crq` objects (package *quantreg*).
 
 # insight 0.9.0
