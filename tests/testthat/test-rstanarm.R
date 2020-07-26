@@ -43,26 +43,9 @@ if (.runThisTest) {
           "Adjusted_Scale"
         )
       )
-      expect_equal(get_priors(m1)$Scale,
-        c(10.0, 2.5, 2.5, 2.5, 2.5),
-        tolerance = 1e-3
-      )
-      expect_equal(
-        get_priors(m2)$Adjusted_Scale,
-        c(
-          4.35866284936698,
-          1.08966571234175,
-          1.08966571234175,
-          0.617270040728345,
-          0.536028320794122,
-          0.411970489526739
-        ),
-        tolerance = 1e-3
-      )
-      expect_equal(get_priors(m3)$Adjusted_Scale,
-        c(NA, 2.555042),
-        tolerance = 1e-3
-      )
+      expect_equal(get_priors(m1)$Scale, c(2.5, 2.5, 2.5, 2.5, 2.5), tolerance = 1e-3)
+      expect_equal(get_priors(m2)$Adjusted_Scale, c(1.08967, 2.30381, 2.30381, 0.61727, 0.53603, 0.41197), tolerance = 1e-3)
+      expect_equal(get_priors(m3)$Adjusted_Scale, c(NA, 2.555042), tolerance = 1e-3)
       expect_equal(get_priors(m4)$Adjusted_Scale, c(6.399801, NA, NA, NA), tolerance = 1e-3)
       expect_equal(get_priors(m5)$Adjusted_Scale, c(6.399801, NA, NA, NA), tolerance = 1e-3)
       expect_equal(
@@ -70,9 +53,9 @@ if (.runThisTest) {
         data.frame(
           Parameter = "(Intercept)",
           Distribution = "normal",
-          Location = 0,
-          Scale = 10,
-          Adjusted_Scale = 4.35866284936698,
+          Location = 3.057333,
+          Scale = 2.5,
+          Adjusted_Scale = 1.089666,
           stringsAsFactors = FALSE,
           row.names = NULL
         ),
@@ -240,22 +223,22 @@ if (.runThisTest) {
       expect_equal(
         get_variance(m1),
         list(
-          var.fixed = 0.3710157,
-          var.random = 0.6113405,
+          var.fixed = 0.3627389,
+          var.random = 0.5988885,
           var.residual = 3.289868,
           var.distribution = 3.289868,
           var.dispersion = 0,
-          var.intercept = c(herd = 0.6113405)
+          var.intercept = c(herd = 0.5988885)
         ),
         tolerance = 1e-4
       )
 
       expect_equal(get_variance_fixed(m1),
-        c(var.fixed = 0.3710157),
+        c(var.fixed = 0.3627389),
         tolerance = 1e-4
       )
       expect_equal(get_variance_random(m1),
-        c(var.random = 0.6113405),
+        c(var.random = 0.5988885),
         tolerance = 1e-4
       )
       expect_equal(get_variance_residual(m1),
