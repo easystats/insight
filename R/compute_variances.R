@@ -232,7 +232,7 @@
         reval
       })
     )
-    colnames(vals$beta) <- gsub("Intercept", "(Intercept)", colnames(vals$beta), fixed = TRUE)
+    names(vals$beta) <- gsub("Intercept", "(Intercept)", names(vals$beta), fixed = TRUE)
 
     # cpglmm
   } else if (inherits(x, "cpglmm")) {
