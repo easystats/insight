@@ -1,5 +1,9 @@
 # insight 0.9.1
 
+## Changes to functions
+
+* `model_info()` returns $`is_meta = TRUE` for brms-meta-analysis models.
+
 ## Bug fixes
 
 * Fixed issue with correctly detecting sigma-parameters in `find_parameters()` for multiple-response `brmsfit`-models.

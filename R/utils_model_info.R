@@ -1,12 +1,21 @@
 .make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity", dispersion = FALSE, ...) {
   # create logical for family
+
+  # binomial family --------
+
   binom_fam <-
     fitfam %in% c("bernoulli", "binomial", "quasibinomial", "binomialff") |
       grepl("\\Qbinomial\\E", fitfam, ignore.case = TRUE)
 
+
+  # poisson family --------
+
   poisson_fam <-
     fitfam %in% c("poisson", "quasipoisson", "genpois", "ziplss") |
       grepl("\\Qpoisson\\E", fitfam, ignore.case = TRUE)
+
+
+  # negative binomial family --------
 
   neg_bin_fam <-
     grepl("\\Qnegative binomial\\E", fitfam, ignore.case = TRUE) |
@@ -17,6 +26,9 @@
       grepl("\\Qnegbinomial\\E", fitfam, ignore.case = TRUE) |
       grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE) |
       fitfam %in% c("ztnbinom", "nbinom")
+
+
+  # beta family --------
 
   beta_fam <-
     inherits(x, c("betareg", "betamfx")) |
@@ -30,20 +42,34 @@
         "Beta Inflated one"
       )
 
-  betabin_fam <- inherits(x, "BBreg") | fitfam %in% "betabinomial"
 
+  # special families (beta-binomial, dirichlet) --------
+
+  betabin_fam <- inherits(x, "BBreg") | fitfam %in% "betabinomial"
   dirichlet_fam <- inherits(x, "DirichletRegModel") | fitfam %in% "dirichlet"
 
   ## TODO beta-binomial = binomial?
   if (betabin_fam) binom_fam <- TRUE
 
+
+  # exponential family --------
+
   exponential_fam <- fitfam %in% c("Gamma", "gamma", "weibull")
+
+
+  # gaussian family --------
 
   linear_model <- (!binom_fam & !exponential_fam & !poisson_fam & !neg_bin_fam & !logit.link) ||
     fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian") || grepl("(\\st)$", fitfam)
 
+
+  # tweedie family --------
+
   tweedie_fam <- grepl("^(tweedie|Tweedie)", fitfam) | grepl("^(tweedie|Tweedie)", link.fun)
   tweedie_model <- (linear_model && tweedie_fam) || inherits(x, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
+
+
+  # zero-inflated or hurdle component --------
 
   zero.inf <- zero.inf | fitfam == "ziplss" |
     grepl("\\Qzero_inflated\\E", fitfam, ignore.case = TRUE) |
@@ -53,6 +79,9 @@
     grepl("^(zt|zi|za|hu)", fitfam, perl = TRUE) |
     grepl("^truncated", fitfam, perl = TRUE)
 
+
+  # only hurdle component --------
+
   hurdle <- hurdle |
     grepl("\\Qhurdle\\E", fitfam, ignore.case = TRUE) |
     grepl("^hu", fitfam, perl = TRUE) |
@@ -60,15 +89,27 @@
     fitfam == "ztnbinom" |
     fitfam %in% c("truncpoiss", "truncnbinom", "truncnbinom1", "truncpoisson")
 
+
+  # ordinal family --------
+
   is.ordinal <-
     inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "mixor", "LORgee")) |
       fitfam %in% c("cumulative", "ordinal")
+
+
+  # multinomial family --------
 
   is.multinomial <-
     inherits(x, c("gmnl", "mlogit", "DirichletRegModel", "multinom", "brmultinom")) |
       fitfam %in% c("cratio", "sratio", "acat", "multinomial", "multinomial2", "dirichlet")
 
+
+  # categorical family --------
+
   is.categorical <- fitfam == "categorical"
+
+
+  # Bayesian model --------
 
   is.bayes <- inherits(x, c(
     "brmsfit", "stanfit", "MCMCglmm", "stanreg",
@@ -76,10 +117,16 @@
     "bayesx", "mcmc", "bcplm", "bayesQR", "BGGM"
   ))
 
+
+  # survival model --------
+
   is.survival <- inherits(x, c("aareg", "survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph", "coxme"))
 
   # check if we have binomial models with trials instead of binary outcome
   # and check if we have truncated or censored brms-regression
+
+
+  # censored or truncated response --------
 
   is.trial <- FALSE
   is.censored <- inherits(x, c("crq", "crqs"))
@@ -115,6 +162,8 @@
   }
 
 
+  # save model terms --------
+
   dots <- list(...)
   if (.obj_has_name(dots, "no_terms") && isTRUE(dots$no_terms)) {
     model_terms <- NULL
@@ -133,6 +182,9 @@
     }
   }
 
+
+  # significance tests --------
+
   if (inherits(x, "htest")) {
     if (grepl("t-test", x$method)) {
       is_ttest <- TRUE
@@ -150,8 +202,9 @@
   }
 
 
-  is_meta <- FALSE
+  # Bayesfactors terms --------
 
+  is_meta <- FALSE
   if (inherits(x, "BFBayesFactor")) {
     is_ttest <- FALSE
     is_correlation <- FALSE
@@ -168,8 +221,16 @@
   }
 
 
+  # meta analysis
+
   is_meta <- inherits(x, c("rma", "metaplus"))
 
+  if (inherits(x, "brmsfit")) {
+    is_meta <- grepl("(.*)\\|(.*)se\\((.*)\\)", .safe_deparse(find_formula(x)$conditional[[2]]))
+  }
+
+
+  # return...
 
   list(
     is_binomial = binom_fam & !neg_bin_fam,
