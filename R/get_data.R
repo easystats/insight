@@ -418,6 +418,29 @@ get_data.mixed <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 
+#' @export
+get_data.sem <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  mf <- tryCatch(
+    {
+      dat <- .get_data_from_env(x)
+      switch(
+        effects,
+        all = dat[, find_variables(x, flatten = TRUE), drop = FALSE],
+        fixed = dat[, find_variables(x, effects = "fixed", flatten = TRUE), drop = FALSE],
+        random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
+      )
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, stats::na.omit(mf), effects)
+}
+
+
+
 #' @rdname get_data
 #' @export
 get_data.lme <- function(x, effects = c("all", "fixed", "random"), ...) {

@@ -296,13 +296,13 @@ supported_models()
 #> [109] "probitmfx"         "psm"               "rlm"              
 #> [112] "rlmerMod"          "RM"                "rma"              
 #> [115] "rma.uni"           "robmixglm"         "rq"               
-#> [118] "rqss"              "speedglm"          "speedlm"          
-#> [121] "stanmvreg"         "stanreg"           "survfit"          
-#> [124] "survreg"           "svyglm"            "svyolr"           
-#> [127] "tobit"             "truncreg"          "vgam"             
-#> [130] "vglm"              "wbgee"             "wblm"             
-#> [133] "wbm"               "zcpglm"            "zeroinfl"         
-#> [136] "zerotrunc"
+#> [118] "rqss"              "sem"               "speedglm"         
+#> [121] "speedlm"           "stanmvreg"         "stanreg"          
+#> [124] "survfit"           "survreg"           "svyglm"           
+#> [127] "svyolr"            "tobit"             "truncreg"         
+#> [130] "vgam"              "vglm"              "wbgee"            
+#> [133] "wblm"              "wbm"               "zcpglm"           
+#> [136] "zeroinfl"          "zerotrunc"
 ```
 
   - **Didn’t find a model?** [File an

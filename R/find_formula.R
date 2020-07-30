@@ -895,6 +895,30 @@ find_formula.cgamm <- find_formula.merMod
 find_formula.coxme <- find_formula.merMod
 
 
+#' @export
+find_formula.sem <- function(x, ...) {
+  if (!.is_semLme(x)) {
+    return(NULL)
+  }
+
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  f.cond <- x$formula
+  f.random <- lapply(lme4::findbars(f.cond), function(.x) {
+    f <- .safe_deparse(.x)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1) {
+    f.random <- f.random[[1]]
+  }
+
+  f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
+  .compact_list(list(conditional = f.cond, random = f.random))
+}
+
 
 #' @export
 find_formula.lme <- function(x, ...) {

@@ -155,6 +155,7 @@ supported_models <- function() {
     "robmixglm",
     "rq",
     "rqss",
+    "sem",
     "speedlm",
     "speedglm",
     "stanmvreg",

@@ -95,6 +95,16 @@ n_obs.lmRob <- function(x, ...) {
 
 
 #' @export
+n_obs.sem <- function(x, ...) {
+  if (!.is_semLme(x)) {
+    return(NULL)
+  }
+  length(x$original.y)
+}
+
+
+
+#' @export
 n_obs.LORgee <- function(x, ...) {
   x$nobs
 }

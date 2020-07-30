@@ -129,7 +129,7 @@
   # censored or truncated response --------
 
   is.trial <- FALSE
-  is.censored <- inherits(x, c("crq", "crqs"))
+  is.censored <- inherits(x, c("crq", "crqs")) | all(inherits(x, c("sem", "lme")))
   is.truncated <- FALSE
 
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {
@@ -336,4 +336,10 @@
 
 .is_mixed_model <- function(x) {
   !is.null(find_random(x))
+}
+
+
+
+.is_semLme <- function(x) {
+  all(inherits(x, c("sem", "lme")))
 }

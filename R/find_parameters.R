@@ -600,6 +600,24 @@ find_parameters.glmmadmb <- find_parameters.merMod
 
 
 #' @export
+find_parameters.sem <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  if (!.is_semLme(x)) {
+    return(NULL)
+  }
+
+  effects <- match.arg(effects)
+
+  l <- .compact_list(list(
+    conditional = names(x$coef),
+    random = colnames(x$ranef)
+  ))
+
+  .filter_parameters(l, effects = effects, flatten = flatten)
+}
+
+
+
+#' @export
 find_parameters.cpglmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   if (!requireNamespace("cplm", quietly = TRUE)) {
     stop("Package 'cplm' required for this function to work. Please install it.")

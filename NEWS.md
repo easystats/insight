@@ -1,5 +1,9 @@
 # insight 0.9.1
 
+## New supported model classes
+
+* Preliminary support for `semLME` (*smicd*)
+
 ## Changes to functions
 
 * `model_info()` returns $`is_meta = TRUE` for brms-meta-analysis models.

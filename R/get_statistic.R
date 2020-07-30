@@ -956,6 +956,31 @@ get_statistic.cpglmm <- function(x, ...) {
 }
 
 
+#' @export
+get_statistic.sem <- function(x, ...) {
+  if (!.is_semLme(x)) {
+    return(NULL)
+  }
+
+  params <- get_parameters(x, effects = "fixed")
+
+  if (is.null(x$se)) {
+    warning("Model has no standard errors. Please fit model again with bootstrapped standard errors.", call. = FALSE)
+    return(NULL)
+  }
+
+  out <- data.frame(
+    Parameter = params$Parameter,
+    Statistic = as.vector(x$coef / x$se),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
 #' @importFrom utils capture.output
 #' @export
 get_statistic.cpglm <- function(x, ...) {
