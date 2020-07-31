@@ -176,6 +176,16 @@ n_obs.glimML <- function(x, ...) {
 
 
 #' @export
+n_obs.mle2 <- function(x, ...) {
+  nrow(get_data(x))
+}
+
+#' @export
+n_obs.mle <- n_obs.mle2
+
+
+
+#' @export
 n_obs.glmRob <- function(x, ...) {
   length(x$fitted.values)
 }

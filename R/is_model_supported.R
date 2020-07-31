@@ -133,6 +133,8 @@ supported_models <- function() {
     "mixed",
     "mixor",
     "MixMod",
+    "mle",
+    "mle2",
     "mlm",
     "mclogit",
     "mlogit",

@@ -579,6 +579,26 @@ get_varcov.cglm <- function(x, ...) {
 
 
 
+#' @export
+get_varcov.mle2 <- function(x, ...) {
+  vc <- as.matrix(x@vcov)
+
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+
+  # fix possible missings due to rank deficient model matrix
+  vc <- .fix_rank_deficiency(vc)
+
+  .remove_backticks_from_matrix_names(as.matrix(vc))
+}
+
+
+#' @export
+get_varcov.mle <- get_varcov.mle2
+
+
+
 #' @rdname get_varcov
 #' @export
 get_varcov.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {

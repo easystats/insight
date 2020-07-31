@@ -1358,6 +1358,22 @@ find_parameters.wbgee <- find_parameters.wbm
 
 
 #' @export
+find_parameters.mle2 <- function(x, flatten = FALSE, ...) {
+  s <- summary(x)
+  out <- list(conditional = rownames(s@coef))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+#' @export
+find_parameters.mle <- find_parameters.mle2
+
+
+#' @export
 find_parameters.glht <- function(x, flatten = FALSE, ...) {
   s <- summary(x)
   alt <- switch(

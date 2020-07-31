@@ -138,6 +138,7 @@ find_statistic <- function(x, ...) {
       "mixor",
       "MixMod",
       "mjoint",
+      "mle",
       "mle2",
       "mlogit",
       "mclogit",

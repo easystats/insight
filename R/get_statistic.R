@@ -751,6 +751,24 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.mle2 <- function(x, ...) {
+  s <- summary(x)
+
+  params <- data.frame(
+    Parameter = names(s@coef[, 3]),
+    Statistic = unname(s@coef[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+#' @export
+get_statistic.mle <- get_statistic.mle2
+
+
+#' @export
 get_statistic.glht <- function(x, ...) {
   s <- summary(x)
   alt <- switch(

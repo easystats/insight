@@ -165,6 +165,7 @@ is_model <- function(x) {
       "mixor",
       "MixMod",
       "mjoint",
+      "mle",
       "mle2",
       "mlm",
       "mlogit",

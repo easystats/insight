@@ -915,6 +915,16 @@ get_data.negbinmfx <- get_data.betamfx
 
 
 #' @export
+get_data.mle2 <- function(x, ...) {
+  as.data.frame(do.call(cbind, x@data))
+}
+
+#' @export
+get_data.mle <- get_data.mle2
+
+
+
+#' @export
 get_data.glht <- function(x, ...) {
   get_data(x$model, ...)
 }

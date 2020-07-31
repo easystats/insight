@@ -316,6 +316,25 @@ get_parameters.emmGrid <- function(x, ...) {
 }
 
 
+#' @export
+get_parameters.mle2 <- function(x, ...) {
+  s <- summary(x)
+
+  params <- data.frame(
+    Parameter = names(s@coef[, 1]),
+    Estimate = unname(s@coef[, 1]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+#' @export
+get_parameters.mle <- get_parameters.mle2
+
+
+
 #' @rdname get_parameters
 #' @export
 get_parameters.averaging <- function(x, component = c("conditional", "full"), ...) {
