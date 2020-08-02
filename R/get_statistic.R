@@ -752,8 +752,8 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 #' @export
 get_statistic.mle2 <- function(x, ...) {
-  if (!requireNamespace("bblme", quietly = TRUE)) {
-    stop("Package `bblme` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  if (!requireNamespace("bbmle", quietly = TRUE)) {
+    stop("Package `bbmle` needs to be installed to extract test statistic.", call. = FALSE)
   }
   s <- bbmle::summary(x)
 
@@ -764,7 +764,9 @@ get_statistic.mle2 <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  out <- .remove_backticks_from_parameter_names(params)
+  attr(out, "statistic") <- find_statistic(x)
+  out
 }
 
 #' @export
