@@ -1359,7 +1359,10 @@ find_parameters.wbgee <- find_parameters.wbm
 
 #' @export
 find_parameters.mle2 <- function(x, flatten = FALSE, ...) {
-  s <- summary(x)
+  if (!requireNamespace("bblme", quietly = TRUE)) {
+    stop("Package `bblme` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  }
+  s <- bbmle::summary(x)
   out <- list(conditional = rownames(s@coef))
 
   if (flatten) {

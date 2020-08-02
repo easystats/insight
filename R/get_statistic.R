@@ -752,7 +752,10 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 #' @export
 get_statistic.mle2 <- function(x, ...) {
-  s <- summary(x)
+  if (!requireNamespace("bblme", quietly = TRUE)) {
+    stop("Package `bblme` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  }
+  s <- bbmle::summary(x)
 
   params <- data.frame(
     Parameter = names(s@coef[, 3]),

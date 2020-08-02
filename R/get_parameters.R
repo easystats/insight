@@ -318,7 +318,10 @@ get_parameters.emmGrid <- function(x, ...) {
 
 #' @export
 get_parameters.mle2 <- function(x, ...) {
-  s <- summary(x)
+  if (!requireNamespace("bblme", quietly = TRUE)) {
+    stop("Package `bblme` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  }
+  s <- bbmle::summary(x)
 
   params <- data.frame(
     Parameter = names(s@coef[, 1]),
