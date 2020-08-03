@@ -283,6 +283,17 @@ get_parameters.negbinirr <- get_parameters.logitor
 
 
 #' @export
+get_parameters.mipo <- function(x, ...) {
+  out <- data.frame(
+    Parameter = as.vector(summary(x)$term),
+    Estimate = as.vector(summary(x)$estimate),
+    stringsAsFactors = FALSE
+  )
+  .remove_backticks_from_parameter_names(out)
+}
+
+
+#' @export
 get_parameters.glht <- function(x, ...) {
   s <- summary(x)
   alt <- switch(

@@ -1065,6 +1065,12 @@ model_info.gamlss <- function(x, ...) {
 }
 
 
+#' @export
+model_info.mipo <- function(x, ...) {
+  models <- eval(x$call$object)
+  model_info(models$analyses[[1]])
+}
+
 
 
 

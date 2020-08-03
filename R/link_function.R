@@ -338,6 +338,13 @@ link_function.logitor <- link_function.logitmfx
 
 
 #' @export
+link_function.mipo <- function(x, ...) {
+  models <- eval(x$call$object)
+  link_function(models$analyses[[1]])
+}
+
+
+#' @export
 link_function.robmixglm <- function(x, ...) {
   switch(
     tolower(x$family),

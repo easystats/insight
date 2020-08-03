@@ -1674,6 +1674,21 @@ find_parameters.metaplus <- function(x, flatten = FALSE, ...) {
 
 
 
+#' @export
+find_parameters.mipo <- function(x, flatten = FALSE, ...) {
+  pars <- list(conditional = as.vector(summary(x)$term))
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+
+
+
 
 
 

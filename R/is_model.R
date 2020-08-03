@@ -161,6 +161,7 @@ is_model <- function(x) {
       "meta_random",
       "meta_ordered",
       "metaplus",
+      "mipo",
       "mixed",
       "mixor",
       "MixMod",

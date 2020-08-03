@@ -27,6 +27,11 @@ find_statistic <- function(x, ...) {
     stop(message("The entered object is not a model object."), call. = FALSE)
   }
 
+  if (inherits(x, "mipo")) {
+    models <- eval(x$call$object)
+    x <- models$analyses[[1]]
+  }
+
   # t-value objects ----------------------------------------------------------
 
   t.mods <-

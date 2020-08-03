@@ -663,6 +663,12 @@ link_inverse.gam <- function(x, ...) {
 }
 
 
+#' @export
+link_inverse.mipo <- function(x, ...) {
+  models <- eval(x$call$object)
+  link_inverse(models$analyses[[1]])
+}
+
 
 
 

@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* Preliminary support for `semLME` (*smicd*), `mle` (*stats4*) and `mle2` (*bbmle*).
+* Support for `mipo` (*mice*). Preliminary support for `semLME` (*smicd*), `mle` (*stats4*) and `mle2` (*bbmle*).
 
 ## Changes to functions
 

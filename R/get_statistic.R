@@ -751,6 +751,20 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.mipo <- function(x, ...) {
+  params <- data.frame(
+    Parameter = as.vector(summary(x)$term),
+    Statistic = as.vector(summary(x)$statistic),
+    stringsAsFactors = FALSE
+  )
+
+  out <- .remove_backticks_from_parameter_names(params)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.mle2 <- function(x, ...) {
   if (!requireNamespace("bbmle", quietly = TRUE)) {
     stop("Package `bbmle` needs to be installed to extract test statistic.", call. = FALSE)
