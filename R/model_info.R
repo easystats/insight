@@ -1072,6 +1072,13 @@ model_info.mipo <- function(x, ...) {
 }
 
 
+#' @export
+model_info.mira <- function(x, ...) {
+  model_info(x$analyses[[1]])
+}
+
+
+
 
 
 # mfx models -------------------------------
