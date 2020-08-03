@@ -1202,5 +1202,5 @@ get_data.metaplus <- get_data.rma
 #' @export
 get_data.mipo <- function(x, ...) {
   models <- eval(x$call$object)
-  get_data(models$analyses[[1]])
+  get_data(models$analyses[[1]], ...)
 }

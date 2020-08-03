@@ -1689,7 +1689,7 @@ find_parameters.mipo <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.mira <- function(x, flatten = FALSE, ...) {
-  find_parameters(x$analyses[[1]])
+  find_parameters(x$analyses[[1]], flatten = flatten, ...)
 }
 
 

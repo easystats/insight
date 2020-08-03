@@ -1068,13 +1068,13 @@ model_info.gamlss <- function(x, ...) {
 #' @export
 model_info.mipo <- function(x, ...) {
   models <- eval(x$call$object)
-  model_info(models$analyses[[1]])
+  model_info(models$analyses[[1]], ...)
 }
 
 
 #' @export
 model_info.mira <- function(x, ...) {
-  model_info(x$analyses[[1]])
+  model_info(x$analyses[[1]], ...)
 }
 
 
