@@ -204,6 +204,7 @@ find_statistic <- function(x, ...) {
   # which statistic to use will be decided based on the family used
   g.mods <-
     c(
+      "bam",
       "bigglm",
       "cgam",
       "cgamm",

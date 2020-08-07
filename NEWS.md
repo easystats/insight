@@ -6,7 +6,8 @@
 
 ## Changes to functions
 
-* `model_info()` returns $`is_meta = TRUE` for brms-meta-analysis models.
+* `model_info()` returns `$is_meta = TRUE` for *brms*-meta-analysis models.
+* Make `find_statistic()` work with `mgcv::bam()`.
 
 ## Bug fixes
 
