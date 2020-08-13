@@ -843,6 +843,16 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", ...) {
     }
     stat <- s[[x@misc$estName]] / se
 
+    # 2nd try
+    if (.is_empty_object(stat)) {
+      stat <- s[["t.ratio"]]
+    }
+
+    # quit
+    if (.is_empty_object(stat)) {
+      return(NULL)
+    }
+
     out <- data.frame(
       s[, 1:(estimate_pos - 1), drop = FALSE],
       Statistic = as.vector(stat),
