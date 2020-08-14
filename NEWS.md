@@ -8,6 +8,7 @@
 
 * `model_info()` returns `$is_meta = TRUE` for *brms*-meta-analysis models.
 * Make `find_statistic()` work with `mgcv::bam()`.
+* `get_variance()` now also support `truncated_nbinom2()` family from *glmmTMB*.
 
 ## Bug fixes
 

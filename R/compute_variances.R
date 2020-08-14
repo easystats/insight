@@ -10,7 +10,7 @@
 
   faminfo <- model_info(x)
 
-  if (faminfo$family %in% c("truncated_nbinom1", "truncated_nbinom2")) {
+  if (faminfo$family %in% c("truncated_nbinom1")) {
     if (verbose) {
       warning(sprintf("Truncated negative binomial families are currently not supported by `%s`.", name_fun), call. = F)
     }
@@ -470,24 +470,31 @@
     {
       vv <- switch(
         faminfo$family,
-        # (zero-inflated) poisson
+
+        # (zero-inflated) poisson ----
         `zero-inflated poisson` = ,
         poisson = .variance_family_poisson(x, mu, faminfo),
-        # hurdle-poisson
+
+        # hurdle-poisson ----
         `hurdle poisson` = ,
         truncated_poisson = stats::family(x)$variance(sig),
-        # Gamma, exponential
+
+        # Gamma, exponential ----
         Gamma = stats::family(x)$variance(sig),
-        # (zero-inflated) negative binomial
+
+        # (zero-inflated) negative binomial ----
         `zero-inflated negative binomial` = ,
         `negative binomial` = ,
         genpois = ,
         nbinom1 = ,
         nbinom2 = .variance_family_nbinom(x, mu, sig, faminfo),
-        # other distributions
+        truncated_nbinom2 = stats::family(x)$variance(mu, sig),
+
+        # other distributions ----
         tweedie = .variance_family_tweedie(x, mu, sig),
         beta = .variance_family_beta(x, mu, sig),
-        # default variance for non-captured distributions
+
+        # default variance for non-captured distributions ----
         .variance_family_default(x, mu, verbose)
       )
 
