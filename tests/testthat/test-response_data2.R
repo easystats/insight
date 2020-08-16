@@ -1,7 +1,6 @@
 if (suppressWarnings(require("testthat") &&
   require("insight") &&
   require("lme4"))) {
-
   data(cbpp)
   cbpp$trials <- cbpp$size - cbpp$incidence
 

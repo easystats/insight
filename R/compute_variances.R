@@ -210,7 +210,7 @@
           out <- as.matrix(drop(element$cov[, 1, ]))
           colnames(out) <- rownames(out) <- gsub("Intercept", "(Intercept)", rownames(element$cov), fixed = TRUE)
         } else {
-          out <- as.matrix(drop(element$sd[, 1]) ^ 2)
+          out <- as.matrix(drop(element$sd[, 1])^2)
           colnames(out) <- rownames(out) <- gsub("Intercept", "(Intercept)", rownames(element$sd), fixed = TRUE)
         }
         attr(out, "sttdev") <- element$sd[, 1]
@@ -776,7 +776,9 @@
         }
       })
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      NULL
+    }
   )
 
   unlist(rho01)

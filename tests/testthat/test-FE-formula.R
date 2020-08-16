@@ -2,7 +2,6 @@ if (require("testthat") && require("insight")) {
   gfe <- insight:::.get_fixed_effects
 
   test_that(".get_fixed_effects", {
-
     f <- "am ~ disp:wt + (1|gear) + wt + (1+wt|carb)"
     expect_equal(
       gfe(stats::as.formula(f)),
