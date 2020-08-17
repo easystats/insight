@@ -298,8 +298,11 @@
 
 
 
-# Get fixed effects variance
-#
+
+
+
+# fixed effects variance ----
+
 #' @importFrom stats var
 .compute_variance_fixed <- function(vals) {
   with(vals, stats::var(as.vector(beta %*% t(X))))
@@ -309,8 +312,10 @@
 
 
 
-# Compute variance associated with a random-effects term (Johnson 2014)
-#
+
+
+# variance associated with a random-effects term (Johnson 2014) ----
+
 #' @importFrom stats nobs
 .compute_variance_random <- function(terms, x, vals) {
   if (is.null(terms)) {
@@ -342,7 +347,10 @@
 
 
 
-# Calculate Distribution-specific variance (Nakagawa et al. 2017)
+
+
+# distribution-specific variance (Nakagawa et al. 2017) ----
+
 .compute_variance_distribution <- function(x, var.cor, faminfo, name, verbose = TRUE) {
   if (inherits(x, "lme")) {
     sig <- x$sigma
@@ -358,7 +366,16 @@
   if (faminfo$is_linear && !faminfo$is_tweedie) {
     dist.variance <- sig^2
   } else {
-    if (faminfo$is_binomial) {
+    if (faminfo$is_betabinomial) {
+      dist.variance <- switch(
+        faminfo$link_function,
+        logit = ,
+        probit = ,
+        cloglog = ,
+        clogloglink = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+      )
+    } else if (faminfo$is_binomial) {
       dist.variance <- switch(
         faminfo$link_function,
         logit = pi^2 / 3,
@@ -407,7 +424,9 @@
 
 
 
-# Get dispersion-specific variance
+
+# dispersion-specific variance ----
+
 .compute_variance_dispersion <- function(x, vals, faminfo, obs.terms) {
   if (faminfo$is_linear) {
     0
@@ -419,6 +438,8 @@
     }
   }
 }
+
+
 
 
 
@@ -493,6 +514,8 @@
         # other distributions ----
         tweedie = .variance_family_tweedie(x, mu, sig),
         beta = .variance_family_beta(x, mu, sig),
+        # betabinomial = stats::family(x)$variance(mu, sig),
+        # betabinomial = .variance_family_betabinom(x, mu, sig),
 
         # default variance for non-captured distributions ----
         .variance_family_default(x, mu, verbose)
@@ -544,8 +567,20 @@
 
 
 
+# Get distributional variance for beta-family
+.variance_family_betabinom <- function(x, mu, phi) {
+  if (inherits(x, "MixMod")) {
+    stats::family(x)$variance(mu)
+  } else {
+    n <- n_obs(x)
+    mu * (1 - mu) * (n * (phi + n) / (1 + phi))
+  }
+}
+
+
+
+
 # Get distributional variance for tweedie-family
-#
 #' @importFrom stats plogis
 .variance_family_tweedie <- function(x, mu, phi) {
   p <- unname(stats::plogis(x$fit$par["thetaf"]) + 1)
@@ -652,6 +687,13 @@
         mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
       } else if (inherits(x, "MixMod")) {
         stats::family(x)$variance(mu)
+      } else if (inherits(x, "glmmTMB")) {
+        if (is.null(x$theta)) {
+          theta <- lme4::getME(x, "theta")
+        } else {
+          theta <- x$theta
+        }
+        mu * (1 + mu / theta)
       } else {
         mu * (1 + mu / x$theta)
       }
