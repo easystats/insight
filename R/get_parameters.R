@@ -231,7 +231,7 @@ get_parameters.betaor <- function(x, component = c("all", "conditional", "precis
 #' @export
 get_parameters.logitmfx <- function(x, component = c("all", "conditional", "marginal"), ...) {
   params <- get_parameters.default(x$fit, ...)
-  params$Component = "conditional"
+  params$Component <- "conditional"
   mfx <- x$mfxest
 
   params <- rbind(
@@ -728,7 +728,7 @@ get_parameters.clm2 <- function(x, component = c("all", "conditional", "scale"),
 
 
 #' @export
-get_parameters.glmm <- function(x, effects = c("all", "fixed", "random"),  ...) {
+get_parameters.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
 
   params <- data.frame(

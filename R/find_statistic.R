@@ -139,6 +139,7 @@ find_statistic <- function(x, ...) {
       "logitor",
       "LORgee",
       "lrm",
+      "margins",
       "metaplus",
       "mixor",
       "MixMod",

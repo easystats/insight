@@ -2,7 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("stats") &&
   require("BayesFactor")) {
-
   .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
   x <- correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)

@@ -52,7 +52,7 @@ format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing =
           ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"),
             ifelse(p > 0.999, "> .999",
               paste0("= ", format_value(p, digits))
-           )
+            )
           )
         )
       )

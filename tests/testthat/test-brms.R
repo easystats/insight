@@ -395,7 +395,8 @@ if (.runThisTest) {
 
       expect_equal(
         colnames(get_parameters(m5, effects = "all", component = "all")),
-        c("b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count.1.Intercept.",
+        c(
+          "b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count.1.Intercept.",
           "r_persons__count.2.Intercept.", "r_persons__count.3.Intercept.",
           "r_persons__count.4.Intercept.", "sd_persons__count_Intercept",
           "b_zi_count_Intercept", "b_zi_count_camper", "r_persons__zi_count.1.Intercept.",
@@ -407,7 +408,8 @@ if (.runThisTest) {
           "sd_persons__count2_Intercept", "b_zi_count2_Intercept", "b_zi_count2_child",
           "r_persons__zi_count2.1.Intercept.", "r_persons__zi_count2.2.Intercept.",
           "r_persons__zi_count2.3.Intercept.", "r_persons__zi_count2.4.Intercept.",
-          "sd_persons__zi_count2_Intercept")
+          "sd_persons__zi_count2_Intercept"
+        )
       )
     })
 

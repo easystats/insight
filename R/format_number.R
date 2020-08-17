@@ -69,24 +69,21 @@ format_number <- function(x, textual = TRUE, ...) {
 
   if (nDigits == 1) {
     as.vector(ones[digits])
-
   } else if (nDigits == 2) {
     if (x <= 19) {
       as.vector(teens[digits[1]])
     } else {
       .trim_ws_and(paste(tens[digits[2]], Recall(as.numeric(digits[1]))))
     }
-
   } else if (nDigits == 3) {
     .trim_ws_and(paste(ones[digits[3]], "hundred and", Recall(.make_number(digits[2:1]))))
-
   } else {
     nSuffix <- ((nDigits + 2) %/% 3) - 1
     if (nSuffix > length(suffixes)) {
       stop(paste(x, "is too large!"))
     }
     .trim_ws_and(paste(
-      Recall(.make_number(digits[ nDigits:(3 * nSuffix + 1)])),
+      Recall(.make_number(digits[nDigits:(3 * nSuffix + 1)])),
       suffixes[nSuffix], ",",
       Recall(.make_number(digits[(3 * nSuffix):1]))
     ))

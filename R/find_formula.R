@@ -192,8 +192,10 @@ find_formula.betareg <- function(x, ...) {
 
   if (grepl("|", fs, fixed = TRUE)) {
     fs <- trimws(unlist(strsplit(fs, "|", fixed = TRUE)))
-    list(conditional = stats::as.formula(fs[1]),
-         precision = stats::as.formula(paste0("~", fs[2])))
+    list(
+      conditional = stats::as.formula(fs[1]),
+      precision = stats::as.formula(paste0("~", fs[2]))
+    )
   } else {
     list(conditional = f)
   }

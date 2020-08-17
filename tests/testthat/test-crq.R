@@ -1,7 +1,6 @@
 if (require("testthat") &&
-    require("insight") &&
-    require("quantreg")) {
-
+  require("insight") &&
+  require("quantreg")) {
   set.seed(123)
   n <- 200
   x <- rnorm(n)
@@ -12,7 +11,7 @@ if (require("testthat") &&
   dat <- data.frame(y, x, c, d)
 
   # model
-  m1 <- crq(survival::Surv(pmax(y,c), d, type = "left") ~ x, method = "Portnoy", data = dat)
+  m1 <- crq(survival::Surv(pmax(y, c), d, type = "left") ~ x, method = "Portnoy", data = dat)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
