@@ -72,6 +72,7 @@ is_model <- function(x) {
       "confusionMatrix",
       "coxme",
       "coxph",
+      "coxph.penal",
       "cpglm",
       "cpglmm",
       "crch",
