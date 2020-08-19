@@ -636,6 +636,36 @@ get_varcov.gamm <- function(x, ...) {
 }
 
 
+#' @importFrom stats cov
+#' @export
+get_varcov.lqmm <- function(x, ...) {
+  sc <- summary(x, covariance = TRUE)
+  np <- length(find_parameters(x, flatten = TRUE))
+
+  if (length(dim(sc$Cov)) == 3) {
+    vc <- lapply(1:length(x$tau), function(i) {
+      .x <- sc$Cov[, , i][1:np, 1:np]
+      if (.is_negativ_matrix(.x)) {
+        .x <- .fix_negative_matrix(.x)
+      }
+      .x
+    })
+    names(vc) <- sprintf("tau (%g)", x$tau)
+  } else {
+    vc <- as.matrix(sc$Cov)[1:np, 1:np]
+    if (.is_negativ_matrix(vc)) {
+      vc <- .fix_negative_matrix(vc)
+    }
+    vc <- .remove_backticks_from_matrix_names(as.matrix(vc))
+  }
+
+  vc
+}
+
+#' @export
+get_varcov.lqm <- get_varcov.lqmm
+
+
 #' @export
 get_varcov.list <- function(x, ...) {
   if ("gam" %in% names(x)) {

@@ -751,6 +751,27 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.lqmm <- function(x, ...) {
+  cs <- summary(x, ...)
+  params <- get_parameters(x)
+
+  if (is.list(cs$tTable)) {
+    stats <- do.call(rbind, cs$tTable)
+    params$Statistic <- params$Estimate / stats[, 2]
+    params <- params[c("Parameter", "Statistic", "Component")]
+  } else {
+    params$Statistic <- params$Estimate / cs$tTable[, 2]
+    params <- params[c("Parameter", "Statistic")]
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+#' @export
+get_statistic.lqm <- get_statistic.lqmm
+
+
+#' @export
 get_statistic.mipo <- function(x, ...) {
   params <- data.frame(
     Parameter = as.vector(summary(x)$term),
