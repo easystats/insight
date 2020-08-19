@@ -483,7 +483,7 @@
   }
   else if (mu < 6) {
     if (verbose) {
-      warning(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.\n", mu, name), call. = FALSE)
+      warning(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name), call. = FALSE)
     }
   }
 
@@ -521,6 +521,9 @@
         .variance_family_default(x, mu, verbose)
       )
 
+      if (vv < 0 && isTRUE(verbose)) {
+        warning("Model's distribution-specific variance is negative. Results are not reliable.", call. = F)
+      }
       vv / mu^2
     },
     error = function(x) {
