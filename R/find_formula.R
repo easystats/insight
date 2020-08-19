@@ -944,6 +944,20 @@ find_formula.lme <- function(x, ...) {
 
 
 #' @export
+find_formula.lqmm <- function(x, ...) {
+  fm <- eval(x$call$fixed)
+  fmr <- .safe_deparse(x$call$random)
+  fmg <- .safe_deparse(x$call$group)
+
+  .compact_list(list(
+    conditional = fm,
+    random = stats::as.formula(paste0(fmr, "|", fmg))
+  ))
+}
+
+
+
+#' @export
 find_formula.mixor <- function(x, ...) {
   fm <- x$call$formula
 

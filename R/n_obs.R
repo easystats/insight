@@ -95,6 +95,17 @@ n_obs.lmRob <- function(x, ...) {
 
 
 #' @export
+n_obs.lqmm <- function(x, ...) {
+  x$nobs
+}
+
+#' @export
+n_obs.lqm <- n_obs.lqmm
+
+
+
+
+#' @export
 n_obs.sem <- function(x, ...) {
   if (!.is_semLme(x)) {
     return(NULL)

@@ -157,6 +157,24 @@ get_data.nlrq <- get_data.gls
 get_data.robmixglm <- get_data.gls
 
 
+#' @export
+get_data.lqmm <- function(x, ...) {
+  mf <- tryCatch(
+    {
+      x$mfArgs$data
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, stats::na.omit(mf))
+}
+
+
+
+
+
 
 
 

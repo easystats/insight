@@ -149,6 +149,34 @@ get_parameters.crq <- function(x, ...) {
 get_parameters.crqs <- get_parameters.crq
 
 
+#' @importFrom stats coef
+#' @export
+get_parameters.lqmm <- function(x, ...) {
+  cs <- stats::coef(x)
+
+  if (is.matrix(cs)) {
+    params <- .gather(as.data.frame(cs), names_to = "Component", values_to = "Estimate")
+    params$Component <- sprintf("tau (%s)", params$Component)
+    params$Parameter <- rep(rownames(cs), length.out = nrow(params))
+    params <- params[c("Parameter", "Estimate", "Component")]
+    row.names(params) <- NULL
+  } else {
+    params <- data.frame(
+      Parameter = names(cs),
+      Estimate = unname(cs),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+#' @export
+get_parameters.lqm <- get_parameters.lqmm
+
+
+
 #' @importFrom stats setNames
 #' @export
 get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {

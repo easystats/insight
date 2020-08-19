@@ -70,6 +70,8 @@ find_statistic <- function(x, ...) {
       "lmerModLmerTest",
       "lmRob",
       "lmrob",
+      "lqm",
+      "lqmm",
       "maxLik",
       "mixed",
       "mlm",

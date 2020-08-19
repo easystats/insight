@@ -1593,6 +1593,30 @@ find_parameters.crqs <- find_parameters.crq
 
 
 
+#' @importFrom stats coef
+#' @export
+find_parameters.lqmm <- function(x, flatten = FALSE, ...) {
+  cs <- stats::coef(x)
+
+  if (is.matrix(cs)) {
+    pars <- list(conditional = rownames(cs))
+  } else {
+    pars <- list(conditional = names(cs))
+  }
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
+
+#' @export
+find_parameters.lqm <- find_parameters.lqmm
+
+
+
 #' @export
 find_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
   sc <- summary(x)

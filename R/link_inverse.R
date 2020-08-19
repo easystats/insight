@@ -132,6 +132,12 @@ link_inverse.lm <- function(x, ...) {
 link_inverse.bayesx <- link_inverse.lm
 
 #' @export
+link_inverse.lqmm <- link_inverse.lm
+
+#' @export
+link_inverse.lqm <- link_inverse.lm
+
+#' @export
 link_inverse.biglm <- link_inverse.lm
 
 #' @export
