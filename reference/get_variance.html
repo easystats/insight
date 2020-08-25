@@ -203,10 +203,10 @@ take a few seconds to calculate.</p></td>
 
     <p>This function returns different variance components from mixed models,
   which are needed, for instance, to calculate r-squared measures or the
-  intraclass-correlation coefficient (ICC).</p><h3>Fixed effects variance</h3>
+  intraclass-correlation coefficient (ICC).</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Fixed effects variance</h3>
 <p>The fixed effects variance, &sigma;<sup>2</sup><sub>f</sub>,
    is the variance of the matrix-multiplication &beta;&lowast;X
-   (parameter vector by model matrix).</p><p></p><h3>Random effects variance</h3>
+   (parameter vector by model matrix).</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Random effects variance</h3>
 <p>The random effect variance, &sigma;<sup>2</sup><sub>i</sub>,
    represents the <em>mean</em> random effect variance of the model. Since
    this variance reflect the "average" random effects variance for mixed
@@ -214,7 +214,7 @@ take a few seconds to calculate.</p></td>
    effects structures, like random slopes or nested random effects.
    Details can be found in <cite>Johnson 2014</cite>, in particular equation 10.
    For simple random-intercept models, the random effects variance equals
-   the random-intercept variance.</p><p></p><h3>Distribution-specific variance</h3>
+   the random-intercept variance.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Distribution-specific variance</h3>
 <p>The distribution-specific variance,
    &sigma;<sup>2</sup><sub>d</sub>,
    depends on the model family. For Gaussian models, it is
@@ -225,23 +225,23 @@ take a few seconds to calculate.</p></td>
    from <code>family$variance()</code>). For all other models, the distribution-specific
    variance is based on lognormal approximation, \(log(1 + var(x) / \mu^2)\)
    (see <cite>Nakagawa et al. 2017</cite>). The expected variance of a zero-inflated
-   model is computed according to <cite>Zuur et al. 2012, p277</cite>.</p><p></p><h3>Variance for the additive overdispersion term</h3>
+   model is computed according to <cite>Zuur et al. 2012, p277</cite>.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Variance for the additive overdispersion term</h3>
 <p>The variance for the additive overdispersion term,
    &sigma;<sup>2</sup><sub><em>e</em></sub>,
    represents &#8220;the excess variation relative to what is expected
    from a certain distribution&#8221; (Nakagawa et al. 2017). In (most? many?)
-   cases, this will be <code>0</code>.</p><p></p><h3>Residual variance</h3>
+   cases, this will be <code>0</code>.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Residual variance</h3>
 <p>The residual variance, &sigma;<sup>2</sup><sub>&epsilon;</sub>,
-    is simply &sigma;<sup>2</sup><sub>d</sub> + &sigma;<sup>2</sup><sub><em>e</em></sub>.</p><p></p><h3>Random intercept variance</h3>
+    is simply &sigma;<sup>2</sup><sub>d</sub> + &sigma;<sup>2</sup><sub><em>e</em></sub>.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Random intercept variance</h3>
 <p>The random intercept variance, or <em>between-subject</em> variance
     (&tau;<sub>00</sub>),
     is obtained from <code><a href='https://rdrr.io/pkg/lme4/man/VarCorr.html'>VarCorr()</a></code>. It indicates how much groups
     or subjects differ from each other, while the residual variance
     &sigma;<sup>2</sup><sub>&epsilon;</sub>
-    indicates the <em>within-subject variance</em>.</p><p></p><h3>Random slope variance</h3>
+    indicates the <em>within-subject variance</em>.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Random slope variance</h3>
 <p>The random slope variance (&tau;<sub>11</sub>)
     is obtained from <code><a href='https://rdrr.io/pkg/lme4/man/VarCorr.html'>VarCorr()</a></code>. This measure is only available
-    for mixed models with random slopes.</p><p></p><h3>Random slope-intercept correlation</h3>
+    for mixed models with random slopes.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Random slope-intercept correlation</h3>
 <p>The random slope-intercept correlation
     (&rho;<sub>01</sub>)
     is obtained from <code><a href='https://rdrr.io/pkg/lme4/man/VarCorr.html'>VarCorr()</a></code>. This measure is only available
