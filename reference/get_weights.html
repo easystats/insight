@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -154,7 +154,8 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)
 <span class='kw'>mtcars</span><span class='op'>$</span><span class='kw'>weight</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='kw'>mtcars</span>), <span class='fl'>1</span>, <span class='fl'>.3</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>vs</span>, data = <span class='kw'>mtcars</span>, weights = <span class='kw'>weight</span>)
-<span class='fu'>get_weights</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt;  [1] 1.1230106 0.9773388 1.3888184 1.2598007 0.8051784 0.7024147 0.9763270
+<span class='fu'>get_weights</span>(<span class='kw'>m</span>)
+</div><div class='output co'>#&gt;  [1] 1.1230106 0.9773388 1.3888184 1.2598007 0.8051784 0.7024147 0.9763270
 #&gt;  [8] 1.1794164 1.0908066 1.2194089 0.7416601 0.7965473 0.9296078 1.2028284
 #&gt; [15] 0.9799443 0.6049479 0.9128178 1.0146980 1.2861313 1.4414014 1.2348297
 #&gt; [22] 0.8911475 1.1776153 1.3389269 0.8882864 0.8866594 1.3988366 0.7685924

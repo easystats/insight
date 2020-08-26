@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -241,7 +241,8 @@ component, depending on the model.</p></td>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>cbpp</span>, package = <span class='st'>"lme4"</span>)
 <span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>trials</span> <span class='op'>&lt;-</span> <span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>size</span> <span class='op'>-</span> <span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>incidence</span>
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>incidence</span>, <span class='kw'>trials</span>) <span class='op'>~</span> <span class='kw'>period</span>, data = <span class='kw'>cbpp</span>, family = <span class='kw'>binomial</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'>get_data</span>(<span class='kw'>m</span>))</div><div class='output co'>#&gt;   cbind(incidence, trials).incidence cbind(incidence, trials).trials period
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'>get_data</span>(<span class='kw'>m</span>))
+</div><div class='output co'>#&gt;   cbind(incidence, trials).incidence cbind(incidence, trials).trials period
 #&gt; 1                                  2                              12      1
 #&gt; 2                                  3                               9      2
 #&gt; 3                                  4                               5      3

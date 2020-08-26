@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -168,7 +168,8 @@
 <span class='kw'>outcome</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>9</span>))
 <span class='kw'>treatment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>counts</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='kw'>outcome</span>) <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='kw'>treatment</span>), family = <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>poisson</a></span>())
-<span class='fu'>clean_names</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] "counts"    "outcome"   "treatment"</div><div class='input'>
+<span class='fu'>clean_names</span>(<span class='kw'>m</span>)
+</div><div class='output co'>#&gt; [1] "counts"    "outcome"   "treatment"</div><div class='input'>
 <span class='co'># difference "clean_names()" and "find_variables()"</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/lme4/lme4'>lme4</a></span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(
@@ -177,7 +178,9 @@
   family = <span class='kw'>binomial</span>
 )
 
-<span class='fu'>clean_names</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] "incidence" "size"      "period"    "herd"     </div><div class='input'><span class='fu'><a href='find_variables.html'>find_variables</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; $response
+<span class='fu'>clean_names</span>(<span class='kw'>m</span>)
+</div><div class='output co'>#&gt; [1] "incidence" "size"      "period"    "herd"     </div><div class='input'><span class='fu'><a href='find_variables.html'>find_variables</a></span>(<span class='kw'>m</span>)
+</div><div class='output co'>#&gt; $response
 #&gt; [1] "incidence" "size"     
 #&gt; 
 #&gt; $conditional
@@ -185,7 +188,8 @@
 #&gt; 
 #&gt; $random
 #&gt; [1] "herd"
-#&gt; </div><div class='input'><span class='fu'><a href='find_variables.html'>find_variables</a></span>(<span class='kw'>m</span>, flatten = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "incidence" "size"      "period"    "herd"     </div></pre>
+#&gt; </div><div class='input'><span class='fu'><a href='find_variables.html'>find_variables</a></span>(<span class='kw'>m</span>, flatten = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; [1] "incidence" "size"      "period"    "herd"     </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

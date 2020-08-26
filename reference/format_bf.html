@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -159,7 +159,10 @@
     <p>A formatted string.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>format_bf</span>(<span class='fl'>1.20</span>)</div><div class='output co'>#&gt; [1] "BF = 1.20"</div><div class='input'><span class='fu'>format_bf</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.20</span>, <span class='fl'>1557</span>, <span class='fl'>3.5</span>, <span class='fl'>12</span>), stars = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "BF = 1.20"    "BF &gt; 999***"  "BF = 3.50*"   "BF = 12.00**"</div><div class='input'><span class='fu'>format_bf</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.20</span>, <span class='fl'>1557</span>, <span class='fl'>3.5</span>, <span class='fl'>12</span>), name = <span class='kw'>NULL</span>)</div><div class='output co'>#&gt; [1] "1.20"  "&gt; 999" "3.50"  "12.00"</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>format_bf</span>(<span class='fl'>1.20</span>)
+</div><div class='output co'>#&gt; [1] "BF = 1.20"</div><div class='input'><span class='fu'>format_bf</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.20</span>, <span class='fl'>1557</span>, <span class='fl'>3.5</span>, <span class='fl'>12</span>), stars = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; [1] "BF = 1.20"    "BF &gt; 999***"  "BF = 3.50*"   "BF = 12.00**"</div><div class='input'><span class='fu'>format_bf</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.20</span>, <span class='fl'>1557</span>, <span class='fl'>3.5</span>, <span class='fl'>12</span>), name = <span class='kw'>NULL</span>)
+</div><div class='output co'>#&gt; [1] "1.20"  "&gt; 999" "3.50"  "12.00"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

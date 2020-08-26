@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -209,7 +209,8 @@ as character vector, not as list. Duplicated values are removed.</p></td>
   data = <span class='kw'>cbpp</span>,
   family = <span class='kw'>binomial</span>
 )
-<span class='fu'>find_variables</span>(<span class='kw'>m1</span>)</div><div class='output co'>#&gt; $response
+<span class='fu'>find_variables</span>(<span class='kw'>m1</span>)
+</div><div class='output co'>#&gt; $response
 #&gt; [1] "incidence" "size"     
 #&gt; 
 #&gt; $conditional
@@ -221,7 +222,9 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 <span class='kw'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(
   <span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>mygrp</span> <span class='op'>/</span> <span class='kw'>mysubgrp</span>) <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Subject</span>),
   data = <span class='kw'>sleepstudy</span>
-)</div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='input'><span class='fu'>find_variables</span>(<span class='kw'>m2</span>)</div><div class='output co'>#&gt; $response
+)
+</div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='input'><span class='fu'>find_variables</span>(<span class='kw'>m2</span>)
+</div><div class='output co'>#&gt; $response
 #&gt; [1] "Reaction"
 #&gt; 
 #&gt; $conditional
@@ -229,7 +232,8 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 #&gt; 
 #&gt; $random
 #&gt; [1] "mysubgrp" "mygrp"    "Subject" 
-#&gt; </div><div class='input'><span class='fu'>find_variables</span>(<span class='kw'>m2</span>, flatten = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Reaction" "Days"     "mysubgrp" "mygrp"    "Subject" </div></pre>
+#&gt; </div><div class='input'><span class='fu'>find_variables</span>(<span class='kw'>m2</span>, flatten = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; [1] "Reaction" "Days"     "mysubgrp" "mygrp"    "Subject" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
