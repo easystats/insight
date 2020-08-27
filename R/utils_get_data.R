@@ -560,6 +560,7 @@
     {
       mf <- .backtransform_helper(mf, "scale\\(log")
       mf <- .backtransform_helper(mf, "exp\\(scale")
+      mf <- .backtransform_helper(mf, "log\\(log")
       mf <- .backtransform_helper(mf, "log")
       mf <- .backtransform_helper(mf, "log1p")
       mf <- .backtransform_helper(mf, "log10")
