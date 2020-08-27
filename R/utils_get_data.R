@@ -568,7 +568,7 @@
 
 
 .backtransform_helper <- function(mf, type) {
-  cn <- .get_log_columnnames(mf, type)
+  cn <- .get_transformed_names(mf, type)
   if (!.is_empty_string(cn)) {
     for (i in cn) {
       if (type == "log") {
@@ -586,17 +586,17 @@
       } else if (type == "expm1") {
         mf[[i]] <- log1p(mf[[i]])
       }
-      colnames(mf)[colnames(mf) == i] <- .get_log_terms(i, type)
+      colnames(mf)[colnames(mf) == i] <- .get_transformed_terms(i, type)
     }
   }
   mf
 }
 
 
-# find log terms, to convert back as raw data --------------------------------
+# find transformed terms, to convert back as raw data --------------------------------
 
-# Find log-terms inside model formula, and return "clean" term names
-.get_log_terms <- function(model, type = "all") {
+# Find transformed terms inside model formula, and return "clean" term names
+.get_transformed_terms <- function(model, type = "all") {
   if (is.character(model)) {
     x <- model
   } else {
@@ -605,32 +605,18 @@
   log_pattern <- switch(
     type,
     "all" = "(exp|expm1|sqrt|log|log1|log10|log1p|log2)\\(([^,)]*).*",
-    "log" = "(log)\\(([^,)]*).*",
-    "log1p" = "(log1p)\\(([^,)]*).*",
-    "log10" = "(log10)\\(([^,)]*).*",
-    "log2" = "(log2)\\(([^,)]*).*",
-    "sqrt" = "(sqrt)\\(([^,)]*).*",
-    "exp" = "(exp)\\(([^,)]*).*",
-    "expm1" = "(expm1)\\(([^,)]*).*",
-    "(exp|expm1|sqrt|log|log1|log10|log1p|log2)\\(([^,)]*).*"
+    sprintf("(%s)\\(([^,)]*).*", type)
   )
   gsub(log_pattern, "\\2", x[grepl(log_pattern, x)])
 }
 
 
-# get column name of log-terms
-.get_log_columnnames <- function(mf, type = "all") {
+# get column names of transformed terms
+.get_transformed_names <- function(mf, type = "all") {
   log_pattern <- switch(
     type,
     "all" = "(exp|expm1|sqrt|log|log1|log10|log1p|log2)\\(([^,)]*).*",
-    "log" = "log\\(.*",
-    "log1p" = "log1p\\(.*",
-    "log10" = "log10\\(.*",
-    "log2" = "log2\\(.*",
-    "sqrt" = "sqrt\\(.*",
-    "exp" = "exp\\(.*",
-    "expm1" = "expm1\\(.*",
-    "(exp|expm1|sqrt|log|log1|log10|log1p|log2)\\(([^,)]*).*"
+    sprintf("%s\\(.*", type)
   )
   colnames(mf)[grepl(log_pattern, colnames(mf))]
 }
