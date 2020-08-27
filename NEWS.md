@@ -1,3 +1,9 @@
+# insight 0.9.2
+
+## Breaking changes
+
+* `get_data()` did not always "back-transform" log-transformed or scaled variables to return the original values. Now this bug has been fixed, and `get_data()` should return all variables on the original scale (as if these variables were not transformed), as stated in the docs.
+
 # insight 0.9.1
 
 ## New supported model classes

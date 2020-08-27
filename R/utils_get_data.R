@@ -583,6 +583,8 @@
         mf[[i]] <- exp(.unscale(mf[[i]]))
       } else if (type == "exp\\(scale") {
         mf[[i]] <- .unscale(log(mf[[i]]))
+      } else if (type == "log\\(log") {
+        mf[[i]] <- exp(exp(mf[[i]]))
       } else if (type == "log") {
         mf[[i]] <- exp(mf[[i]])
       } else if (type == "log1p") {
