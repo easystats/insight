@@ -48,7 +48,7 @@ if (require("testthat") &&
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), log(CigarettesSW$packs[CigarettesSW$year == "1995"]))
+    expect_equal(get_response(m1), CigarettesSW$packs[CigarettesSW$year == "1995"])
   })
 
   test_that("get_predictors", {

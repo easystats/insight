@@ -33,7 +33,7 @@ if (require("testthat") &&
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), sqrt(RainIbk$rain))
+    expect_equal(get_response(m1), RainIbk$rain)
   })
 
   test_that("get_predictors", {
