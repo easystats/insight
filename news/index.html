@@ -125,6 +125,27 @@
       <small>Source: <a href='https://github.com/easystats/insight/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="insight-092" class="section level1">
+<h1 class="page-header" data-toc-text="0.9.2">
+<a href="#insight-092" class="anchor"></a>insight 0.9.2<small> Unreleased </small>
+</h1>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<ul>
+<li>
+<code><a href="../reference/get_data.html">get_data()</a></code> did not always “back-transform” log-transformed or scaled variables to return the original values. Now this bug has been fixed, and <code><a href="../reference/get_data.html">get_data()</a></code> should return all variables on the original scale (as if these variables were not transformed), as stated in the docs.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>
+<code><a href="../reference/get_data.html">get_data()</a></code> now returns the correct original data for “empty” polynomials (i.e. <code><a href="https://rdrr.io/r/stats/poly.html">poly(x, 1)</a></code>).</li>
+</ul>
+</div>
+</div>
     <div id="insight-091" class="section level1">
 <h1 class="page-header" data-toc-text="0.9.1">
 <a href="#insight-091" class="anchor"></a>insight 0.9.1<small> 2020-08-26 </small>
@@ -147,9 +168,9 @@
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now also support <code><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html">truncated_nbinom2()</a></code> family from <em>glmmTMB</em>.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue with correctly detecting sigma-parameters in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for multiple-response <code>brmsfit</code>-models.</li>
 <li>Fixed issue with <code><a href="../reference/find_formula.html">find_formula()</a></code> for models from <code><a href="https://mc-stan.org/rstanarm/reference/stan_nlmer.html">stan_nlmer()</a></code>.</li>
@@ -193,9 +214,9 @@
 <code><a href="../reference/format_p.html">format_p()</a></code> returns <code>"&gt; .999"</code> for p-values equal to or greater than 0.999.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> that did not properly work for models with random effects in formula (in <em>lme4</em> notation), when random effects were in between fixed effects parts.</li>
 <li>
@@ -262,9 +283,9 @@
 <li>Improved support for <code>afex_aov</code> and <code>aovlist</code> (i.e. Anova with error term).</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed some issues with deparsings <code>NULL</code> strings under R 4.0.0.</li>
 <li>Fixed accuracy in <code><a href="../reference/get_variance.html">get_variance()</a></code> for models from Gamma family.</li>
@@ -302,9 +323,9 @@
 <li>Improve support for <em>bayesx</em> and <em>BBmm</em> models.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <em>brmsfit</em> models with specific variable name patterns.</li>
 <li>Fixed issue in <code><a href="../reference/format_ci.html">format_ci()</a></code> when confidence interval only contained <code>NA</code>s and <code>width</code> was set to <code>"auto"</code>.</li>
@@ -318,9 +339,9 @@
 <h1 class="page-header" data-toc-text="0.8.2">
 <a href="#insight-082" class="anchor"></a>insight 0.8.2<small> 2020-03-06 </small>
 </h1>
-<div id="breaking-changes" class="section level2">
+<div id="breaking-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>
 <code><a href="../reference/model_info.html">model_info()</a></code> now only returns <code>TRUE</code> for <code>$is_ordinal</code>, when model is an ordinal or cumulative link model. In past versions, <code>$is_ordinal</code> was also <code>TRUE</code> for multinomial models.</li>
@@ -341,9 +362,9 @@
 <li>Improved support for <code>clogit</code>-models.</li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/find_weights.html">find_weights()</a></code> for <code>merMod</code> models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with weights, when weights also contained missing data.</li>
@@ -384,9 +405,9 @@
 <code><a href="../reference/format_value.html">format_value()</a></code> gets an <code>as_percent</code> argument to format values as percentages.</li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>clmm2</em>-models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models that used the <code>lspline()</code>-function.</li>
@@ -438,9 +459,9 @@
 <li>Other minor improvements.</li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Better detect Tweedie-models in <code><a href="../reference/model_info.html">model_info()</a></code>.</li>
 <li>Fixed issue in <code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code> for <em>panelr</em>-models with multiple random-effect parts.</li>
@@ -464,9 +485,9 @@
 <code>complmrob</code> (<em>complmrob</em>), <code>fixest</code> (<em>fixest</em>), <code>mclogit</code> and <code>mmclogit</code> (<em>mclogit</em>).</li>
 </ul>
 </div>
-<div id="bug-fixes-7" class="section level2">
+<div id="bug-fixes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed bug in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models, when random effects are written before any fixed effects terms (like <code>social ~ (1|school) + open + extro</code>).</li>
 <li>Fixed bug in <code><a href="../reference/model_info.html">model_info()</a></code> for <em>VGAM</em> models, where logit-link was not always correctly identified.</li>
@@ -479,9 +500,9 @@
 <h1 class="page-header" data-toc-text="0.7.0">
 <a href="#insight-070" class="anchor"></a>insight 0.7.0<small> 2019-11-14 </small>
 </h1>
-<div id="breaking-changes-1" class="section level2">
+<div id="breaking-changes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h2>
+<a href="#breaking-changes-2" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>In order to unify column names across easystats-packages, <code><a href="../reference/get_parameters.html">get_parameters()</a></code> and <code><a href="../reference/get_priors.html">get_priors()</a></code> now return column names according to our naming conventions (i.e. capitalized column names).</li>
 <li>
@@ -507,9 +528,9 @@
 <code><a href="../reference/link_inverse.html">link_inverse()</a></code> gets a <code>what</code>-argument, to return the link-inverse function for specific distribution parameters from <strong>gamls</strong> models.</li>
 </ul>
 </div>
-<div id="bug-fixes-8" class="section level2">
+<div id="bug-fixes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed edge case for <code><a href="../reference/find_weights.html">find_weights()</a></code>.</li>
 <li>Fixed bug in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>glmmTMB</em> models that won’t return any data.</li>
@@ -555,9 +576,9 @@
 <li>Better support for nonlinear mixed models (<code><a href="https://rdrr.io/pkg/lme4/man/nlmer.html">lme4::nlmer()</a></code>). Note that model-specification requires the random term to be written in parentheses, i.e. <code>(slope | group)</code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-9" class="section level2">
+<div id="bug-fixes-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-10" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issues in <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>gamlss</em> models.</li>
 <li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>plm</em> models, where the <code>index</code>-argument was used in the <code>plm()</code>-function call.</li>
@@ -575,9 +596,9 @@
 <h1 class="page-header" data-toc-text="0.5.0">
 <a href="#insight-050" class="anchor"></a>insight 0.5.0<small> 2019-09-07 </small>
 </h1>
-<div id="breaking-changes-2" class="section level2">
+<div id="breaking-changes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes-2" class="anchor"></a>Breaking Changes</h2>
+<a href="#breaking-changes-3" class="anchor"></a>Breaking Changes</h2>
 <ul>
 <li>The previous <code><a href="../reference/is_model.html">is_model()</a></code> function has been renamed to <code><a href="../reference/is_model_supported.html">is_model_supported()</a></code> since it was unclear if the function checked the entered object was a model or a supported model in <em>insight</em>. The new <code><a href="../reference/is_model.html">is_model()</a></code> function checks if the entered object is a model object, while <code><a href="../reference/is_model_supported.html">is_model_supported()</a></code> checks if a supported model object.</li>
 </ul>
@@ -613,9 +634,9 @@
 <code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> now include the Euclidean distance matrix for spatial models from <em>glmmTMB</em> (returned as random effects element, or more precise, as random slope).</li>
 </ul>
 </div>
-<div id="bug-fixes-10" class="section level2">
+<div id="bug-fixes-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-10" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-11" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/find_formula.html">find_formula()</a></code> now extracts group factors of random effects for <em>gamlss</em> models.</li>
@@ -649,9 +670,9 @@
 <code><a href="../reference/get_weights.html">get_weights()</a></code> and <code><a href="../reference/find_weights.html">find_weights()</a></code> now work for <em>brms</em>-models.</li>
 </ul>
 </div>
-<div id="bug-fixes-11" class="section level2">
+<div id="bug-fixes-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-11" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-12" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix CRAN-check issues due to recent update from the <em>panelr</em>-package.</li>
 </ul>
