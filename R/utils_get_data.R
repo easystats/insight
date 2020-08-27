@@ -10,6 +10,9 @@
     return(NULL)
   }
 
+  # save for later use
+  original_model_frame <- mf
+
   # we may store model weights here later
   mw <- NULL
 
@@ -18,6 +21,8 @@
     offcol <- which(colnames(mf) == "(offset)")
     colnames(mf)[offcol] <- clean_names(.safe_deparse(x$call$offset))
   }
+
+  mf <- .backtransform(mf)
 
   # clean 1-dimensional matrices
   mf[] <- lapply(mf, function(.x) {
@@ -542,4 +547,90 @@
       NULL
     }
   )
+}
+
+
+
+
+
+# backtransform variables -------------------------------
+
+.backtransform <- function(mf) {
+  mf <- .backtransform_helper(mf, "log")
+  mf <- .backtransform_helper(mf, "log1p")
+  mf <- .backtransform_helper(mf, "log10")
+  mf <- .backtransform_helper(mf, "log2")
+  mf <- .backtransform_helper(mf, "sqrt")
+  mf <- .backtransform_helper(mf, "exp")
+  mf <- .backtransform_helper(mf, "expm1")
+  mf
+}
+
+
+.backtransform_helper <- function(mf, type) {
+  cn <- .get_log_columnnames(mf, type)
+  if (!.is_empty_string(cn)) {
+    for (i in cn) {
+      if (type == "log") {
+        mf[[i]] <- exp(mf[[i]])
+      } else if (type == "log1p") {
+        mf[[i]] <- expm1(mf[[i]])
+      } else if (type == "log10") {
+        mf[[i]] <- 10^(mf[[i]])
+      } else if (type == "log2") {
+        mf[[i]] <- 2^(mf[[i]])
+      } else if (type == "sqrt") {
+        mf[[i]] <- (mf[[i]])^2
+      } else if (type == "exp") {
+        mf[[i]] <- log(mf[[i]])
+      } else if (type == "expm1") {
+        mf[[i]] <- log1p(mf[[i]])
+      }
+      colnames(mf)[colnames(mf) == i] <- .get_log_terms(i, type)
+    }
+  }
+  mf
+}
+
+
+# find log terms, to convert back as raw data --------------------------------
+
+# Find log-terms inside model formula, and return "clean" term names
+.get_log_terms <- function(model, type = "all") {
+  if (is.character(model)) {
+    x <- model
+  } else {
+    x <- find_terms(model, flatten = TRUE)
+  }
+  log_pattern <- switch(
+    type,
+    "all" = "(exp|expm1|sqrt|log|log1|log10|log1p|log2)\\(([^,)]*).*",
+    "log" = "(log)\\(([^,)]*).*",
+    "log1p" = "(log1p)\\(([^,)]*).*",
+    "log10" = "(log10)\\(([^,)]*).*",
+    "log2" = "(log2)\\(([^,)]*).*",
+    "sqrt" = "(sqrt)\\(([^,)]*).*",
+    "exp" = "(exp)\\(([^,)]*).*",
+    "expm1" = "(expm1)\\(([^,)]*).*",
+    "(exp|expm1|sqrt|log|log1|log10|log1p|log2)\\(([^,)]*).*"
+  )
+  gsub(log_pattern, "\\2", x[grepl(log_pattern, x)])
+}
+
+
+# get column name of log-terms
+.get_log_columnnames <- function(mf, type = "all") {
+  log_pattern <- switch(
+    type,
+    "all" = "(exp|expm1|sqrt|log|log1|log10|log1p|log2)\\(([^,)]*).*",
+    "log" = "log\\(.*",
+    "log1p" = "log1p\\(.*",
+    "log10" = "log10\\(.*",
+    "log2" = "log2\\(.*",
+    "sqrt" = "sqrt\\(.*",
+    "exp" = "exp\\(.*",
+    "expm1" = "expm1\\(.*",
+    "(exp|expm1|sqrt|log|log1|log10|log1p|log2)\\(([^,)]*).*"
+  )
+  colnames(mf)[grepl(log_pattern, colnames(mf))]
 }

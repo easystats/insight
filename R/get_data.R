@@ -5,7 +5,7 @@
 #'   model and returns it as data frame.
 #'
 #' @param effects Should model data for fixed effects, random effects
-#'    or both be returned? Only applies to mixed models.
+#'   or both be returned? Only applies to mixed models.
 #'
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
@@ -15,7 +15,9 @@
 #' @note Unlike \code{model.frame()}, which may contain transformed variables
 #'   (e.g. if \code{poly()} or \code{scale()} was used inside the formula to
 #'   specify the model), \code{get_data()} aims at returning the "original",
-#'   untransformed data.
+#'   untransformed data (if possible). Consequently, column names are changed
+#'   accordingly, i.e. \code{"log(x)"} will become \code{"x"} etc. for all data
+#'   columns with transformed values.
 #'
 #' @examples
 #' data(cbpp, package = "lme4")

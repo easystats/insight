@@ -97,7 +97,9 @@ This functions tries to get the data that was used to fit the
 Unlike \code{model.frame()}, which may contain transformed variables
   (e.g. if \code{poly()} or \code{scale()} was used inside the formula to
   specify the model), \code{get_data()} aims at returning the "original",
-  untransformed data.
+  untransformed data (if possible). Consequently, column names are changed
+  accordingly, i.e. \code{"log(x)"} will become \code{"x"} etc. for all data
+  columns with transformed values.
 }
 \examples{
 data(cbpp, package = "lme4")
