@@ -235,7 +235,9 @@ component, depending on the model.</p></td>
     <p>Unlike <code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame()</a></code>, which may contain transformed variables
   (e.g. if <code><a href='https://rdrr.io/r/stats/poly.html'>poly()</a></code> or <code><a href='https://rdrr.io/r/base/scale.html'>scale()</a></code> was used inside the formula to
   specify the model), <code>get_data()</code> aims at returning the "original",
-  untransformed data.</p>
+  untransformed data (if possible). Consequently, column names are changed
+  accordingly, i.e. <code>"log(x)"</code> will become <code>"x"</code> etc. for all data
+  columns with transformed values.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>cbpp</span>, package = <span class='st'>"lme4"</span>)
