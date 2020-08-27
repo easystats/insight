@@ -4,6 +4,10 @@
 
 * `get_data()` did not always "back-transform" log-transformed or scaled variables to return the original values. Now this bug has been fixed, and `get_data()` should return all variables on the original scale (as if these variables were not transformed), as stated in the docs.
 
+## Bug fixes
+
+* `get_data()` now returns the correct original data for "empty" polynomials (i.e. `poly(x, 1)`).
+
 # insight 0.9.1
 
 ## New supported model classes
