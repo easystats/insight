@@ -556,6 +556,8 @@
 # backtransform variables -------------------------------
 
 .backtransform <- function(mf) {
+  mf <- .backtransform_helper(mf, "scale\\(log")
+  mf <- .backtransform_helper(mf, "exp\\(scale")
   mf <- .backtransform_helper(mf, "log")
   mf <- .backtransform_helper(mf, "log1p")
   mf <- .backtransform_helper(mf, "log10")
@@ -563,15 +565,20 @@
   mf <- .backtransform_helper(mf, "sqrt")
   mf <- .backtransform_helper(mf, "exp")
   mf <- .backtransform_helper(mf, "expm1")
+  mf <- .backtransform_helper(mf, "scale")
   mf
 }
 
 
 .backtransform_helper <- function(mf, type) {
-  cn <- .get_transformed_names(mf, type)
+  cn <- .get_transformed_names(colnames(mf), type)
   if (!.is_empty_string(cn)) {
     for (i in cn) {
-      if (type == "log") {
+      if (type == "scale\\(log") {
+        mf[[i]] <- exp(.unscale(mf[[i]]))
+      } else if (type == "exp\\(scale") {
+        mf[[i]] <- .unscale(log(mf[[i]]))
+      } else if (type == "log") {
         mf[[i]] <- exp(mf[[i]])
       } else if (type == "log1p") {
         mf[[i]] <- expm1(mf[[i]])
@@ -585,12 +592,27 @@
         mf[[i]] <- log(mf[[i]])
       } else if (type == "expm1") {
         mf[[i]] <- log1p(mf[[i]])
+      } else if (type == "scale") {
+        mf[[i]] <- .unscale(mf[[i]])
       }
       colnames(mf)[colnames(mf) == i] <- .get_transformed_terms(i, type)
     }
   }
   mf
 }
+
+
+
+.unscale <- function(x) {
+  m <- attr(x, "scaled:center")
+  s <- attr(x, "scaled:scale")
+
+  if (is.null(m)) m <- 0
+  if (is.null(s)) s <- 1
+
+  s * x + m
+}
+
 
 
 # find transformed terms, to convert back as raw data --------------------------------
@@ -602,21 +624,13 @@
   } else {
     x <- find_terms(model, flatten = TRUE)
   }
-  log_pattern <- switch(
-    type,
-    "all" = "(exp|expm1|sqrt|log|log1|log10|log1p|log2)\\(([^,)]*).*",
-    sprintf("(%s)\\(([^,)]*).*", type)
-  )
-  gsub(log_pattern, "\\2", x[grepl(log_pattern, x)])
+  pattern <- sprintf("%s\\(([^,)]*).*", type)
+  gsub(pattern, "\\1", x[grepl(pattern, x)])
 }
 
 
 # get column names of transformed terms
-.get_transformed_names <- function(mf, type = "all") {
-  log_pattern <- switch(
-    type,
-    "all" = "(exp|expm1|sqrt|log|log1|log10|log1p|log2)\\(([^,)]*).*",
-    sprintf("%s\\(.*", type)
-  )
-  colnames(mf)[grepl(log_pattern, colnames(mf))]
+.get_transformed_names <- function(x, type = "all") {
+  pattern <- sprintf("%s\\(([^,)]*).*", type)
+  x[grepl(pattern, x)]
 }
