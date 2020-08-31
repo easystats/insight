@@ -225,7 +225,7 @@
 
   is_meta <- inherits(x, c("rma", "metaplus"))
 
-  if (inherits(x, "brmsfit")) {
+  if (inherits(x, "brmsfit") && !is_multivariate(x)) {
     is_meta <- grepl("(.*)\\|(.*)se\\((.*)\\)", .safe_deparse(find_formula(x)$conditional[[2]]))
   }
 
