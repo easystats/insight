@@ -159,7 +159,7 @@
 <p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>.</p>
 <p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://easystats.github.io/insight">insight</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://easystats.github.io/insight/">insight</a></span>)
 <span class="kw">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Species</span> <span class="op">+</span> <span class="kw">Petal.Width</span> <span class="op">+</span> <span class="kw">Sepal.Width</span>, data = <span class="kw">iris</span>)
 
 <span class="kw">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_data.html">get_data</a></span>(<span class="kw">m</span>)
@@ -177,8 +177,7 @@
 <span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span>
 <span class="co">#&gt; 1     setosa         1.2         3.1         5.1</span>
 <span class="co">#&gt; 2 versicolor         1.2         3.1         6.1</span>
-<span class="co">#&gt; 3  virginica         1.2         3.1         6.3</span>
-</pre></div>
+<span class="co">#&gt; 3  virginica         1.2         3.1         6.3</span></pre></div>
 </div>
 <div id="printing-model-coefficients" class="section level4">
 <h4 class="hasAnchor">
@@ -198,8 +197,7 @@
 <span class="co"># obviously, something is missing in the output</span>
 <span class="kw">m2</span> <span class="op">&lt;-</span> <span class="kw">mgcv</span>::<span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Petal.Width</span> <span class="op">+</span> <span class="fu">s</span>(<span class="kw">Petal.Length</span>), data = <span class="kw">iris</span>)
 <span class="fu">print_params</span>(<span class="kw">m2</span>)
-<span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span>
-</pre></div>
+<span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></pre></div>
 <p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="kw">print_params</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">model</span>) {
@@ -213,8 +211,7 @@
 
 <span class="kw">m2</span> <span class="op">&lt;-</span> <span class="kw">mgcv</span>::<span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Petal.Width</span> <span class="op">+</span> <span class="fu">s</span>(<span class="kw">Petal.Length</span>), data = <span class="kw">iris</span>)
 <span class="fu">print_params</span>(<span class="kw">m2</span>)
-<span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span>
-</pre></div>
+<span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></pre></div>
 </div>
 </div>
 <div id="installation" class="section level2">
@@ -223,12 +220,10 @@
 <p>Run the following to install the latest GitHub-version of <strong>insight</strong>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)
-<span class="kw">devtools</span>::<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"easystats/insight"</span>)
-</pre></div>
+<span class="kw">devtools</span>::<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"easystats/insight"</span>)</pre></div>
 <p>Or install the latest stable release from CRAN:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"insight"</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"insight"</span>)</pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
@@ -292,8 +287,7 @@
 <span class="co">#&gt; [133] "svyolr"            "tobit"             "truncreg"         </span>
 <span class="co">#&gt; [136] "vgam"              "vglm"              "wbgee"            </span>
 <span class="co">#&gt; [139] "wblm"              "wbm"               "zcpglm"           </span>
-<span class="co">#&gt; [142] "zeroinfl"          "zerotrunc"</span>
-</pre></div>
+<span class="co">#&gt; [142] "zeroinfl"          "zerotrunc"</span></pre></div>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues">File an issue</a> and request additional model-support in <em>insight</em>!</li>

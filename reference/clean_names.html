@@ -171,7 +171,7 @@
 <span class='fu'>clean_names</span>(<span class='kw'>m</span>)
 </div><div class='output co'>#&gt; [1] "counts"    "outcome"   "treatment"</div><div class='input'>
 <span class='co'># difference "clean_names()" and "find_variables()"</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/lme4/lme4'>lme4</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/lme4/lme4/'>lme4</a></span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(
   <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>incidence</span>, <span class='kw'>size</span> <span class='op'>-</span> <span class='kw'>incidence</span>) <span class='op'>~</span> <span class='kw'>period</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>herd</span>),
   data = <span class='kw'>cbpp</span>,
