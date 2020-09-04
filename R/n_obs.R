@@ -378,6 +378,13 @@ n_obs.stanmvreg <- function(x, select = NULL, ...) {
 
 
 #' @export
+n_obs.blrm <- function(x, ...) {
+  x$N
+}
+
+
+
+#' @export
 n_obs.mlogit <- function(x, ...) {
   nrow(x$model)
 }

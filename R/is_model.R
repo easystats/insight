@@ -47,6 +47,7 @@ is_model <- function(x) {
       "bife",
       "biglm",
       "bigglm",
+      "blrm",
       "blavaan",
       "blmerMod",
       "boot_test_mediation",

@@ -59,6 +59,7 @@ supported_models <- function() {
     "biglm",
     "bigglm",
     "blavaan",
+    "blrm",
     "bracl",
     "brglm",
     "brmsfit",
