@@ -7,6 +7,7 @@
 ## Bug fixes
 
 * `get_data()` now returns the correct original data for "empty" polynomials (i.e. `poly(x, 1)`).
+* Fix CRAN check issues due to latest _estimatr_ update.
 
 # insight 0.9.1
 
