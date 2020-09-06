@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("estimatr")) {
-  context("insight, model_info")
 
   data(mtcars)
   m1 <- iv_robust(mpg ~ gear + cyl | carb + wt, data = mtcars)

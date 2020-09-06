@@ -404,23 +404,7 @@ find_formula.ivreg <- function(x, ...) {
 
 
 #' @export
-find_formula.iv_robust <- function(x, ...) {
-  tryCatch(
-    {
-      f <- .safe_deparse(stats::formula(x))
-      cond <- .trim(gsub("(.*)\\+(\\s)*\\((.*)\\)", "\\1", f))
-      instr <- .trim(gsub("(.*)\\((.*)\\)", "\\2", f))
-
-      list(
-        conditional = stats::as.formula(cond),
-        instruments = stats::as.formula(paste0("~", instr))
-      )
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-}
+find_formula.iv_robust <- find_formula.ivreg
 
 
 
