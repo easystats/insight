@@ -1,4 +1,4 @@
-# insight 0.9.2
+# insight 0.9.5
 
 ## Breaking changes
 
