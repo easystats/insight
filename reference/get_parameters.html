@@ -326,6 +326,16 @@ random) or "components" (conditional, zero-inflated, ...), the arguments
 are returned as data frame (with columns for names and point estimates of
 coefficients). For Bayesian models, the posterior samples of parameters are
 returned.</p>
+    <h2 class="hasAnchor" id="bfbayesfactor-models"><a class="anchor" href="#bfbayesfactor-models"></a>BFBayesFactor Models</h2>
+
+    
+
+<p>Note that for <code>BFBayesFactor</code> models (from the <span class="pkg">BayesFactor</span>
+package), posteriors are only extracted from the first numerator model (i.e.,
+<code>model[1]</code>). If you want to apply some function <code>foo()</code> to another
+model stored in the <code>BFBayesFactor</code> object, index it directly, e.g.
+<code>foo(model[2])</code>, <code>foo(1/model[5])</code>, etc.
+See also <code><a href='https://rdrr.io/pkg/bayestestR/man/weighted_posteriors.html'>weighted_posteriors</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)

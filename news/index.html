@@ -125,6 +125,21 @@
       <small>Source: <a href='https://github.com/easystats/insight/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="insight-096" class="section level1">
+<h1 class="page-header" data-toc-text="0.9.6">
+<a href="#insight-096" class="anchor"></a>insight 0.9.6<small> Unreleased </small>
+</h1>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>
+<code><a href="../reference/get_data.html">get_data()</a></code> now works for models from <code>afex_aov()</code>.</li>
+<li>
+<code><a href="../reference/get_parameters.html">get_parameters()</a></code> returns a more informative message for <code>BFBayesFactor</code> objects when not the first model is indexed.</li>
+</ul>
+</div>
+</div>
     <div id="insight-095" class="section level1">
 <h1 class="page-header" data-toc-text="0.9.5">
 <a href="#insight-095" class="anchor"></a>insight 0.9.5<small> 2020-09-07 </small>
@@ -158,9 +173,9 @@
 <li>Support for <code>mipo</code> (<em>mice</em>), <code>lqmm</code> and <code>lqm</code> (<em>lqmm</em>). Preliminary support for <code>semLME</code> (<em>smicd</em>), <code>mle</code> (<em>stats4</em>) and <code>mle2</code> (<em>bbmle</em>).</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_meta = TRUE</code> for <em>brms</em>-meta-analysis models.</li>
@@ -201,9 +216,9 @@
 <li>Value formatting functions <code><a href="../reference/format_bf.html">format_bf()</a></code>, <code><a href="../reference/format_pd.html">format_pd()</a></code>, <code><a href="../reference/format_p.html">format_p()</a></code>, <code><a href="../reference/format_rope.html">format_rope()</a></code> and <code><a href="../reference/format_number.html">format_number()</a></code> were moved from package <em>parameters</em> to <em>insight</em>.</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now also returns the correlation among random slopes.</li>
@@ -241,9 +256,9 @@
 <code>robmixglm</code> (<em>robmixglm</em>), <code>betamfx</code>, <code>logitmfx</code>, <code>poissonmfx</code>, <code>probitmfx</code>, <code>negbinmfx</code>, <code>betaor</code>, <code>logitor</code>, <code>poissonirr</code>, <code>negbinirr</code> (<em>mfx</em>), partial support for <em>emmGrid</em>, <em>stanfit</em> and <em>bayesQR</em>.</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_varcov.html">get_varcov.glmmTMB()</a></code> now also returns the variance-covariance matrix for the dispersion model.</li>
@@ -273,9 +288,9 @@
 <li>Better support for dispersion models in <em>glmmTMB</em>.</li>
 </ul>
 </div>
-<div id="changes-to-functions-3" class="section level2">
+<div id="changes-to-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/null_model.html">null_model()</a></code> now also works for non-mixed models.</li>
@@ -315,9 +330,9 @@
 <code>arima</code> (<em>stats</em>), <code>averaging</code> (<em>MuMIn</em>)</li>
 </ul>
 </div>
-<div id="changes-to-functions-4" class="section level2">
+<div id="changes-to-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>Improve family detection in <code><a href="../reference/model_info.html">model_info()</a></code>, <code><a href="../reference/link_inverse.html">link_inverse()</a></code> and <code><a href="../reference/link_function.html">link_function()</a></code> for <em>MCMCglmm</em>.</li>
 <li>Minor revisions to meet changes in <em>mlogit</em> package.</li>
@@ -396,9 +411,9 @@
 <li>Improved efficiency of <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for mixed models with large samples and many random effects, and only fixed effects where requested.</li>
 </ul>
 </div>
-<div id="changes-to-functions-5" class="section level2">
+<div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_multinomial</code> for multinomial (but not ordinal or cumulative) link models.</li>
@@ -445,9 +460,9 @@
 <code><a href="../reference/format_ci.html">format_ci()</a></code> (re-implemented and slightly enhanced from <em>parameters</em>), to format confidence/credible intervals.</li>
 </ul>
 </div>
-<div id="changes-to-functions-6" class="section level2">
+<div id="changes-to-functions-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> now also works for <code>BFBayesFactor</code> objects.</li>
@@ -519,9 +534,9 @@
 <li>Preliminary support for <code>rma</code> models (<em>metafor</em>).</li>
 </ul>
 </div>
-<div id="changes-to-functions-7" class="section level2">
+<div id="changes-to-functions-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-8" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_statistic.html">get_statistic()</a></code> supports <code>multinom</code> models (<em>nnet</em>).</li>
@@ -563,9 +578,9 @@
 <code><a href="../reference/is_model_supported.html">supported_models()</a></code> to print a list of supported models.</li>
 </ul>
 </div>
-<div id="changes-to-functions-8" class="section level2">
+<div id="changes-to-functions-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-8" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-9" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_survival</code> for survival models.</li>
@@ -623,9 +638,9 @@
 <li>Make extraction of model family information more stable for gam-objects.</li>
 </ul>
 </div>
-<div id="changes-to-functions-9" class="section level2">
+<div id="changes-to-functions-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-9" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-10" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also support objects of class <code>sim</code> and <code>sim.merMod</code> (from <code>arm::sim()</code>).</li>
@@ -661,9 +676,9 @@
 <h1 class="page-header" data-toc-text="0.4.1">
 <a href="#insight-041" class="anchor"></a>insight 0.4.1<small> 2019-07-24 </small>
 </h1>
-<div id="changes-to-functions-10" class="section level2">
+<div id="changes-to-functions-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-10" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-11" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/get_variance.html">get_variance()</a></code> now supports models with Gamma-family.</li>
