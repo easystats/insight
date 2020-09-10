@@ -439,6 +439,13 @@ get_data.mixed <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
+get_data.afex_aov <- function(x, ...) {
+  .get_data_from_modelframe(x, x$data$long, "all")
+}
+
+
+
+#' @export
 get_data.sem <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   mf <- tryCatch(
