@@ -179,6 +179,16 @@ are returned as data frame (with columns for names and point estimates of
 coefficients). For Bayesian models, the posterior samples of parameters are
 returned.
 }
+\section{BFBayesFactor Models}{
+
+Note that for \code{BFBayesFactor} models (from the \pkg{BayesFactor}
+package), posteriors are only extracted from the first numerator model (i.e.,
+\code{model[1]}). If you want to apply some function \code{foo()} to another
+model stored in the \code{BFBayesFactor} object, index it directly, e.g.
+\code{foo(model[2])}, \code{foo(1/model[5])}, etc.
+See also \code{\link[bayestestR]{weighted_posteriors}}.
+}
+
 \examples{
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)

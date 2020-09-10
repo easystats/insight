@@ -32,6 +32,14 @@
 #' coefficients). For Bayesian models, the posterior samples of parameters are
 #' returned.
 #'
+#' @section BFBayesFactor Models:
+#' Note that for \code{BFBayesFactor} models (from the \pkg{BayesFactor}
+#' package), posteriors are only extracted from the first numerator model (i.e.,
+#' \code{model[1]}). If you want to apply some function \code{foo()} to another
+#' model stored in the \code{BFBayesFactor} object, index it directly, e.g.
+#' \code{foo(model[2])}, \code{foo(1/model[5])}, etc.
+#' See also \code{\link[bayestestR]{weighted_posteriors}}.
+#'
 #' @examples
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
@@ -1625,6 +1633,18 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
   effects <- match.arg(effects)
   component <- match.arg(component)
   bf_type <- .classify_BFBayesFactor(x)
+
+  # check if valid model was indexed...
+
+  if (length(x@numerator) > 1 ||
+      !xor(x@denominator@shortName == "Intercept only",
+           grepl("^(Null|Indep)", x@denominator@shortName))) {
+    message(
+      "Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.\n",
+      'See help("get_parameters", package = "insight").'
+    )
+  }
+
 
   params <- find_parameters(x, effects = effects, component = component, flatten = TRUE)
 
