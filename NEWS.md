@@ -5,6 +5,7 @@
 * `get_data()` now works for models from `afex_aov()`.
 * `get_parameters()` returns a more informative message for `BFBayesFactor` objects when not the first model is indexed.
 * `clean_names()` now also removes `exp()`-pattern.
+* `clean_names()` for character-objects now works with "interaction patterns" (like `clean_names("scale(a):scale(b)")`).
 
 # insight 0.9.5
 
