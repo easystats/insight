@@ -71,7 +71,7 @@ clean_names.character <- function(x) {
     "log2", "log-log", "scale-log", "log", "lag", "diff", "lspline",
     "pspline", "scale-poly", "poly", "catg", "asis", "matrx", "pol", "strata",
     "strat", "scale", "scored", "interaction", "sqrt", "sin", "cos", "tan",
-    "acos", "asin", "atan", "atan2", "lsp", "rcs", "pb", "lo",
+    "acos", "asin", "atan", "atan2", "exp", "lsp", "rcs", "pb", "lo",
     "bs", "ns", "t2", "te", "ti", "tt", # need to be fixed first "mmc", "mm",
     "mi", "mo", "gp", "s", "I"
   )
