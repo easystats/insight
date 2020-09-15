@@ -6,6 +6,9 @@
 #'   \code{as.factor()} etc.
 #'
 #' @param x A fitted model, or a character vector.
+#' @param include_names Logical, if \code{TRUE}, returns a named vector where
+#'   names are the original values of \code{x}.
+#' @param ... Currently not used.
 #'
 #' @return The "cleaned" variable names as character vector, i.e. pattern
 #'   like \code{s()} for splines or \code{log()} are removed from
@@ -40,29 +43,33 @@
 #' find_variables(m)
 #' find_variables(m, flatten = TRUE)
 #' @export
-clean_names <- function(x) {
+clean_names <- function(x, ...) {
   UseMethod("clean_names")
 }
 
 
 #' @export
-clean_names.default <- function(x) {
+clean_names.default <- function(x, ...) {
   cleaned <- unname(find_variables(x, flatten = TRUE))
   .remove_values(cleaned, c("1", "0"))
 }
 
 
 #' @export
-clean_names.character <- function(x) {
-  sapply(x, function(.x) {
+clean_names.character <- function(x, include_names = FALSE, ...) {
+  out <- sapply(x, function(.x) {
     if (grepl(":", .x, fixed = TRUE)) {
       paste(sapply(strsplit(.x, ":", fixed = TRUE), .remove_pattern_from_names), collapse = ":")
-    } else if (grepl("*", .x, fixed = TRUE)) {
-      paste(sapply(strsplit(.x, "*", fixed = TRUE), .remove_pattern_from_names), collapse = "*")
     } else {
       .remove_pattern_from_names(.x)
     }
   })
+
+  if (isTRUE(include_names)) {
+    out
+  } else {
+    unname(out)
+  }
 }
 
 

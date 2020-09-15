@@ -4,10 +4,15 @@
 \alias{clean_names}
 \title{Get clean names of model terms}
 \usage{
-clean_names(x)
+clean_names(x, ...)
 }
 \arguments{
 \item{x}{A fitted model, or a character vector.}
+
+\item{...}{Currently not used.}
+
+\item{include_names}{Logical, if \code{TRUE}, returns a named vector where
+names are the original values of \code{x}.}
 }
 \value{
 The "cleaned" variable names as character vector, i.e. pattern

@@ -59,5 +59,10 @@ if (require("testthat") && require("insight")) {
     expect_equal(clean_names("~ 1 | Sepal.Length"), "Sepal.Length")
     expect_equal(clean_names("~1|Sepal.Length"), "Sepal.Length")
     expect_equal(clean_names("1 | Sepal.Length"), "Sepal.Length")
+    expect_equal(clean_names(c("scale(a)", "scale(b)", "scale(a):scale(b)")), c("a", "b", "a:b"))
+    expect_equal(
+      clean_names(c("scale(a)", "scale(b)", "scale(a):scale(b)"), include_names = TRUE),
+      c(`scale(a)` = "a", `scale(b)` = "b", `scale(a):scale(b)` = "a:b")
+    )
   })
 }
