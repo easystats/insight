@@ -239,18 +239,31 @@ get_priors.bcplm <- function(x, ...) {
 get_priors.BFBayesFactor <- function(x, ...) {
   prior <- .compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
 
-  switch(
+  prior_names <- switch(
     .classify_BFBayesFactor(x),
-    "correlation" = names(prior) <- "rho",
-    "ttest" = names(prior) <- "Difference",
-    "meta" = names(prior) <- "Effect"
+    "correlation" = "rho",
+    "ttest" = "Difference",
+    "meta" = "Effect",
+    names(prior)
   )
 
+  prior_scale <- unlist(prior)
+
+  if (length(prior_names) != length(prior_scale)) {
+    prior_names <- unlist(lapply(prior_names, function(i) {
+      if (!is.null(names(prior[[i]]))) {
+        names(prior[[i]])
+      } else {
+        rep(i, times = length(prior[[i]]))
+      }
+    }))
+  }
+
   data.frame(
-    Parameter = names(prior),
+    Parameter = prior_names,
     Distribution = "cauchy",
     Location = 0,
-    Scale = unlist(prior),
+    Scale = prior_scale,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
