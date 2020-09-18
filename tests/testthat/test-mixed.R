@@ -7,7 +7,7 @@ if (require("testthat") &&
   data(sleepstudy)
 
   set.seed(123)
-  sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+  sleepstudy$mygrp <- sample(1:5, size = nrow(sleepstudy), replace = TRUE)
   sleepstudy$mysubgrp <- NA
   for (i in 1:5) {
     filter_group <- sleepstudy$mygrp == i
