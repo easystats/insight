@@ -58,7 +58,7 @@ clean_names.default <- function(x, ...) {
 #' @export
 clean_names.character <- function(x, include_names = FALSE, ...) {
   out <- sapply(x, function(.x) {
-    if (grepl(":", .x, fixed = TRUE)) {
+    if (grepl(":", .x, fixed = TRUE) && !grepl("::", .x, fixed = TRUE)) {
       paste(sapply(strsplit(.x, ":", fixed = TRUE), .remove_pattern_from_names), collapse = ":")
     } else {
       .remove_pattern_from_names(.x)
