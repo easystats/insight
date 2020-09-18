@@ -15,6 +15,12 @@ if (require("testthat") &&
       sample(1:30, size = sum(filter_group), replace = TRUE)
   }
 
+  cat("\n")
+  cat(nrow(sleepstudy))
+  cat("\n")
+
+  print(nrow(sleepstudy))
+
   m1 <- mixed(Reaction ~ Days + (1 + Days | Subject),
     data = sleepstudy
   )
