@@ -55,6 +55,7 @@ clean_names.default <- function(x, ...) {
 }
 
 
+#' @rdname clean_names
 #' @export
 clean_names.character <- function(x, include_names = FALSE, ...) {
   out <- sapply(x, function(.x) {
