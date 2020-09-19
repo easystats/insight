@@ -4,7 +4,13 @@
 \alias{format_bf}
 \title{Bayes Factor formatting}
 \usage{
-format_bf(bf, stars = FALSE, stars_only = FALSE, name = "BF")
+format_bf(
+  bf,
+  stars = FALSE,
+  stars_only = FALSE,
+  name = "BF",
+  protect_ratio = FALSE
+)
 }
 \arguments{
 \item{bf}{Bayes Factor.}
@@ -14,6 +20,8 @@ format_bf(bf, stars = FALSE, stars_only = FALSE, name = "BF")
 \item{stars_only}{Return only significance stars.}
 
 \item{name}{Name prefixing the text. Can be \code{NULL}.}
+
+\item{protect_ratio}{Should values smaller than 1 be represented as ratios?}
 }
 \value{
 A formatted string.
