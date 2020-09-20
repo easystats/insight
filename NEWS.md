@@ -6,9 +6,11 @@
 * `get_parameters()` returns a more informative message for `BFBayesFactor` objects when not the first model is indexed.
 * `clean_names()` now also removes `exp()`-pattern.
 * `clean_names()` for character-objects now works with "interaction patterns" (like `clean_names("scale(a):scale(b)")`).
+* `format_bf()` gains a `protect_ratio` argument, to print numbers smaller than 1 as ratios.
 
 ## Bug fixes
 
+* Fix issues in CRAN checks.
 * `get_priors()` now works for more complex `BFBayesFactor` objects that have multiple custom priors.
 
 # insight 0.9.5
