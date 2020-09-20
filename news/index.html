@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.6</span>
       </span>
     </div>
 
@@ -141,12 +141,15 @@
 <code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes <code><a href="https://rdrr.io/r/base/Log.html">exp()</a></code>-pattern.</li>
 <li>
 <code><a href="../reference/clean_names.html">clean_names()</a></code> for character-objects now works with “interaction patterns” (like <code><a href="../reference/clean_names.html">clean_names("scale(a):scale(b)")</a></code>).</li>
+<li>
+<code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>protect_ratio</code> argument, to print numbers smaller than 1 as ratios.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
 <ul>
+<li>Fix issues in CRAN checks.</li>
 <li>
 <code><a href="../reference/get_priors.html">get_priors()</a></code> now works for more complex <code>BFBayesFactor</code> objects that have multiple custom priors.</li>
 </ul>
