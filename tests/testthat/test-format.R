@@ -9,5 +9,6 @@ if (require("testthat") && require("insight")) {
     expect_equal(format_value(1234565789101112, protect_integers = TRUE), "1234565789101112")
     expect_equal(format_value(0.0000000123), "1.23e-08")
     expect_equal(format_value(0.0000000123, digits = 8), "0.00000001")
+    expect_equal(format_value(0.95, as_percent = TRUE), "95.00%")
   })
 }
