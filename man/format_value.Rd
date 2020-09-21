@@ -11,6 +11,7 @@ format_value(
   missing = "",
   width = NULL,
   as_percent = FALSE,
+  zap_small = FALSE,
   ...
 )
 }
@@ -26,6 +27,8 @@ format_value(
 \item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
 
 \item{as_percent}{Logical, if \code{TRUE}, value is formatted as percentage value.}
+
+\item{zap_small}{Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.}
 
 \item{...}{Arguments passed to or from other methods.}
 }

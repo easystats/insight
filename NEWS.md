@@ -2,6 +2,16 @@
 
 ## Changes to functions
 
+* `format_value()` gains a `zap_small` argument, to prevent scientific printing of numbers if these have more decimal places than indicated by `digits`.
+
+## Bug fixes
+
+* Fix issue in `format_value()` that printed `"100%"` as `"1e+02%"`.
+
+# insight 0.9.6
+
+## Changes to functions
+
 * `get_data()` now works for models from `afex_aov()`.
 * `get_parameters()` returns a more informative message for `BFBayesFactor` objects when not the first model is indexed.
 * `clean_names()` now also removes `exp()`-pattern.
