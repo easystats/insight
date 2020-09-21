@@ -10,4 +10,11 @@ if (require("testthat") && require("insight")) {
     expect_equal(format_value(0.0000000123), "1.23e-08")
     expect_equal(format_value(0.0000000123, digits = 8), "0.00000001")
   })
+
+  test_that("format_value", {
+    expect_equal(format_value(0.0045), "0.00")
+    expect_equal(format_value(0.00045), "4.50e-04")
+    expect_equal(format_value(0.00045, digits = 3), "4.50e-04")
+    expect_equal(format_value(0.00045, digits = 4), "0.0004")
+  })
 }
