@@ -93,10 +93,14 @@ format_value.logical <- format_value.numeric
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
       need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits) & log10(abs(100 * x)) < -3) & x != 0
-      x <- ifelse(is.na(x), .missing, ifelse(need_sci, sprintf("%.*e%%", digits, 100 * x), sprintf("%.*f%%", digits, 100 * x)))
+      x <- ifelse(is.na(x), .missing,
+                  ifelse(need_sci, sprintf("%.*e%%", digits, 100 * x),
+                         sprintf("%.*f%%", digits, 100 * x)))
     } else {
       need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits)  & log10(abs(x)) < -3) & x != 0
-      x <- ifelse(is.na(x), .missing, ifelse(need_sci, sprintf("%.*e", digits, x), sprintf("%.*f", digits, x)))
+      x <- ifelse(is.na(x), .missing,
+                  ifelse(need_sci, sprintf("%.*e", digits, x),
+                         sprintf("%.*f", digits, x)))
     }
   } else if (anyNA(x)) {
     x <- .convert_missing(x, .missing)
