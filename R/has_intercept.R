@@ -30,5 +30,5 @@ has_intercept <- function(x) {
 }
 
 .check_for_intercept <- function(vars) {
-  !("0" %in% vars[["conditional"]])
+  !any(c("0", "-1") %in% vars[["conditional"]])
 }

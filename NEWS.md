@@ -9,6 +9,8 @@
 
 * Fix issue in `format_value()` that printed `"100%"` as `"1e+02%"`.
 * Removed unnecessary white-spaces in `format_ci()` when upper or lower interval was larger than 1e+5.
+* `has_intercept()` did not work correctly when intercept was removed from formula using `-1`.
+* `find_terms()` now shows removal of intercept formula using `-1` as term `"-1"`.
 
 # insight 0.9.6
 

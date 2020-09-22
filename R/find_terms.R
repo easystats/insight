@@ -66,10 +66,13 @@ find_terms <- function(x, flatten = FALSE, ...) {
     .x
   })
 
+  # protect "-1"
+  f$conditional <- gsub("(-1|- 1)(?![^(]*\\))", "#1", f$conditional, perl = TRUE)
+
   f <- lapply(f, function(.x) {
     f_parts <- gsub("~", "", .trim(unlist(strsplit(split = "[\\*\\+\\:\\-\\|](?![^(]*\\))", x = .x, perl = TRUE))))
     # if user has used namespace in formula-functions, these are returned
-    # as empty elements. rempove those here
+    # as empty elements. remove those here
     if (any(nchar(f_parts) == 0)) {
       f_parts <- f_parts[-which(nchar(f_parts) == 0)]
     }
@@ -89,6 +92,15 @@ find_terms <- function(x, flatten = FALSE, ...) {
     if (length(pos)) f$zero_inflated_random <- f$zero_inflated_random[-pos]
   }
 
+  # restore -1
+  need_split <- grepl("#1$", f$conditional)
+  if (any(need_split)) {
+    f$conditional <- c(
+      f$conditional[!need_split],
+      .trim(unlist(strsplit(f$conditional[need_split], " ", fixed = TRUE)))
+    )
+  }
+  f$conditional <- gsub("#1", "-1", f$conditional, fixed = TRUE)
 
   # reorder, so response is first
   .compact_list(f[c(length(f), 1:(length(f) - 1))])
