@@ -35,7 +35,7 @@ format_ci <- function(CI_low, CI_high, ci = 0.95, digits = 2, brackets = TRUE, w
     } else {
       width_low <- max(unlist(lapply(stats::na.omit(CI_low), function(.i) {
         if (.i > 1e+5) {
-          6
+          6 + digits
         } else {
           nchar(as.character(.i))
         }
@@ -46,7 +46,7 @@ format_ci <- function(CI_low, CI_high, ci = 0.95, digits = 2, brackets = TRUE, w
     } else {
       width_high <- max(unlist(lapply(stats::na.omit(CI_high), function(.i) {
         if (.i > 1e+5) {
-          6
+          6 + digits
         } else {
           nchar(as.character(.i))
         }
