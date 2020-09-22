@@ -12,7 +12,7 @@ get_weights(x, ...)
 \item{...}{Currently not used.}
 }
 \value{
-The weighting variable, or \code{NULL} if no weights were specified.
+The weighting variable, or \code{NULL} if no weights were specified (or if all weights were 1).
 }
 \description{
 Returns weighting variable of a model.

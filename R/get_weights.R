@@ -6,7 +6,7 @@
 #' @param x A fitted model.
 #' @param ... Currently not used.
 #'
-#' @return The weighting variable, or \code{NULL} if no weights were specified.
+#' @return The weighting variable, or \code{NULL} if no weights were specified (or if all weights were 1).
 #'
 #' @examples
 #' data(mtcars)
@@ -71,6 +71,11 @@ get_weights.default <- function(x, ...) {
     )
   }
 
+  # if all weights are 1, set return value to NULL
+  if (!is.null(w) && all(w == 1L)) {
+    w <- NULL
+  }
+
   w
 }
 
@@ -80,6 +85,12 @@ get_weights.brmsfit <- function(x, ...) {
   w <- find_weights(x)
 
   if (!is.null(w)) {
-    get_data(x)[[w]]
+    w <- get_data(x)[[w]]
   }
+
+  if (!is.null(w) && all(w == 1L)) {
+    w <- NULL
+  }
+
+  w
 }
