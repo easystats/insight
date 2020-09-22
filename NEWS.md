@@ -7,6 +7,7 @@
 ## Bug fixes
 
 * Fix issue in `format_value()` that printed `"100%"` as `"1e+02%"`.
+* Removed unnecessary white-spaces in `format_ci()` when upper or lower interval was larger than 1e+5.
 
 # insight 0.9.6
 

@@ -22,4 +22,11 @@ if (require("testthat") && require("insight")) {
     expect_equal(format_value(0.00045, digits = 3), "4.500e-04")
     expect_equal(format_value(0.00045, digits = 4), "0.0004")
   })
+
+  test_that("format_ci", {
+    expect_equal(
+      format_ci(c(123, 123, 123, 123), c(123, 12345, 123456, 123456789012), width = "auto"),
+      c("95% CI [123.00,   123.00]", "95% CI [123.00, 12345.00]", "95% CI [123.00, 1.23e+05]", "95% CI [123.00, 1.23e+11]")
+    )
+  })
 }
