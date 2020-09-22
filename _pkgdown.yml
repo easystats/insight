@@ -99,3 +99,9 @@ reference:
   - download_model
   - null_model
   - print_parameters
+
+- title: "Example Datasets"
+  desc: >
+    Used in examples or for testing
+  contents:
+  - fish
