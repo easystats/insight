@@ -1,4 +1,4 @@
-# insight 0.9.6
+# insight 0.9.7
 
 ## Changes to functions
 
