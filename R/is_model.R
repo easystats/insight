@@ -211,6 +211,8 @@ is_model <- function(x) {
       "slm",
       "speedlm",
       "speedglm",
+      "splmm",
+      "spml",
       "stanmvreg",
       "stanreg",
       "survfit",

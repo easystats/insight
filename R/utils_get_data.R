@@ -558,14 +558,18 @@
 .backtransform <- function(mf) {
   tryCatch(
     {
-      patterns <- c("scale\\(log", "exp\\(scale", "log\\(log", "log", "log1p",
-                    "log10", "log2", "sqrt", "exp", "expm1", "scale")
+      patterns <- c(
+        "scale\\(log", "exp\\(scale", "log\\(log", "log", "log1p",
+        "log10", "log2", "sqrt", "exp", "expm1", "scale"
+      )
       for (i in patterns) {
         mf <- .backtransform_helper(mf, i)
       }
       mf
     },
-    error = function(e) { mf }
+    error = function(e) {
+      mf
+    }
   )
 }
 

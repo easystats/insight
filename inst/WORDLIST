@@ -11,6 +11,7 @@ bayesx
 BayesX
 bbmle
 BBmm
+BFBayesFactor
 BGGM
 bife
 blavaan
@@ -33,6 +34,7 @@ doi
 DOI
 easystats
 emmGrid
+estimatr
 et
 fixest
 flexsurv
@@ -58,6 +60,7 @@ lavaan
 lme
 lmerModLmerTest
 logloss
+lqmm
 mclogit
 MCMCglmm
 MCSE

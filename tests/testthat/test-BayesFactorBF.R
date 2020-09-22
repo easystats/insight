@@ -245,23 +245,29 @@ if (require("testthat") &&
 
 
   corr_BF1 <- correlationBF(iris$Sepal.Length, iris$Sepal.Width, progress = FALSE)
-  corr_BFk <- correlationBF(iris$Sepal.Length, iris$Sepal.Width, progress = FALSE,
-                            nullInterval = c(-1,0))
+  corr_BFk <- correlationBF(iris$Sepal.Length, iris$Sepal.Width,
+    progress = FALSE,
+    nullInterval = c(-1, 0)
+  )
 
   data(raceDolls)
   xtab_BF1 <- contingencyTableBF(raceDolls, sampleType = "indepMulti", fixedMargin = "cols")
 
-  ttest_BF1 <- ttestBF(sleep$extra[sleep$group==1], sleep$extra[sleep$group==2], progress = FALSE)
-  ttest_BFk <- ttestBF(sleep$extra[sleep$group==1], sleep$extra[sleep$group==2], progress = FALSE,
-                       nullInterval = c(-3,0))
+  ttest_BF1 <- ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2], progress = FALSE)
+  ttest_BFk <- ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2],
+    progress = FALSE,
+    nullInterval = c(-3, 0)
+  )
 
   prop_BF1 <- proportionBF(y = 15, N = 25, p = .5, progress = FALSE)
-  prop_BFk <- proportionBF(y = 15, N = 25, p = .5, progress = FALSE,
-                           nullInterval = c(0,0.3))
+  prop_BFk <- proportionBF(
+    y = 15, N = 25, p = .5, progress = FALSE,
+    nullInterval = c(0, 0.3)
+  )
 
 
   lm_BFk <- generalTestBF(Sepal.Width ~ Sepal.Length + Species, data = iris, progress = FALSE)
-  lm_BFd <- lm_BFk[3]/lm_BFk[2]
+  lm_BFd <- lm_BFk[3] / lm_BFk[2]
   lm_BF1 <- lm_BFk[2]
 
   test_that("BFBayesFactor index model", {

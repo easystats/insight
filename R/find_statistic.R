@@ -88,6 +88,7 @@ find_statistic <- function(x, ...) {
       "rq",
       "rqss",
       "speedlm",
+      "spml",
       "svyglm",
       "svyolr",
       "truncreg",
@@ -241,8 +242,7 @@ find_statistic <- function(x, ...) {
 
   # pattern finding ----------------------------------------------------------
 
-  unclear.mods <-
-    c("plm")
+  unclear.mods <- c("plm")
 
   if (inherits(x, "glht")) {
     if (x$df == 0) {
@@ -264,6 +264,7 @@ find_statistic <- function(x, ...) {
       "list",
       "MCMCglmm",
       "bcplm",
+      "splmm",
       "survfit"
     )
 
