@@ -45,12 +45,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/insight.html">Get started</a>
 </li>
 <li>
@@ -156,48 +150,48 @@
 <p>In some cases, yes. But not in all cases, and sometimes it is useful to have the “bare” variable names (terms), but sometimes it is also useful to have the information about a possible transformation of variables. That is the main reason for having functions that cover similar aspects of a model object (like <code><a href="../reference/find_terms.html">find_terms()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> or <code><a href="../reference/find_variables.html">find_variables()</a></code>).</p>
 <p>Here are some examples that demonstrate the differences of each function:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://easystats.github.io/insight/">insight</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/lme4/lme4/">lme4</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="kw">sleepstudy</span>)
-<span class="kw">sleepstudy</span><span class="op">$</span><span class="kw">mygrp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, size = <span class="fl">180</span>, replace = <span class="fl">TRUE</span>)
-<span class="kw">sleepstudy</span><span class="op">$</span><span class="kw">mysubgrp</span> <span class="op">&lt;-</span> <span class="fl">NA</span>
-<span class="kw">sleepstudy</span><span class="op">$</span><span class="kw">Weeks</span> <span class="op">&lt;-</span> <span class="kw">sleepstudy</span><span class="op">$</span><span class="kw">Days</span> <span class="op">/</span> <span class="fl">7</span>
-<span class="kw">sleepstudy</span><span class="op">$</span><span class="kw">cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="kw">letters</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">4</span>], <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">sleepstudy</span>), replace = <span class="fl">TRUE</span>))
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/">insight</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/">lme4</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span>
+<span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, size <span class="op">=</span> <span class="fl">180</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+<span class="va">sleepstudy</span><span class="op">$</span><span class="va">Weeks</span> <span class="op">&lt;-</span> <span class="va">sleepstudy</span><span class="op">$</span><span class="va">Days</span> <span class="op">/</span> <span class="fl">7</span>
+<span class="va">sleepstudy</span><span class="op">$</span><span class="va">cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 
-<span class="co">for</span> (<span class="kw">i</span> <span class="co">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>) {
-  <span class="kw">filter_group</span> <span class="op">&lt;-</span> <span class="kw">sleepstudy</span><span class="op">$</span><span class="kw">mygrp</span> <span class="op">==</span> <span class="kw">i</span>
-  <span class="kw">sleepstudy</span><span class="op">$</span><span class="kw">mysubgrp</span>[<span class="kw">filter_group</span>] <span class="op">&lt;-</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, size = <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw">filter_group</span>), replace = <span class="fl">TRUE</span>)
-}
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">filter_group</span> <span class="op">&lt;-</span> <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">==</span> <span class="va">i</span>
+  <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span><span class="op">[</span><span class="va">filter_group</span><span class="op">]</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">filter_group</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="op">}</span>
 
-<span class="kw">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span>(
-  <span class="kw">Reaction</span> <span class="op">~</span> <span class="kw">Days</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span>(<span class="kw">Days</span><span class="op">^</span><span class="fl">2</span>) <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log1p</a></span>(<span class="kw">Weeks</span>) <span class="op">+</span> <span class="kw">cat</span> <span class="op">+</span>
-    (<span class="fl">1</span> <span class="op">|</span> <span class="kw">mygrp</span> <span class="op">/</span> <span class="kw">mysubgrp</span>) <span class="op">+</span> 
-    (<span class="fl">1</span> <span class="op">+</span> <span class="kw">Days</span> <span class="op">|</span> <span class="kw">Subject</span>),
-  data = <span class="kw">sleepstudy</span>
-)</pre></div>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span>
+  <span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">Days</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log1p</a></span><span class="op">(</span><span class="va">Weeks</span><span class="op">)</span> <span class="op">+</span> <span class="va">cat</span> <span class="op">+</span>
+    <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">mygrp</span> <span class="op">/</span> <span class="va">mysubgrp</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>,
+  data <span class="op">=</span> <span class="va">sleepstudy</span>
+<span class="op">)</span></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="co"># find the response variable</span>
-<span class="fu"><a href="../reference/find_response.html">find_response</a></span>(<span class="kw">model</span>)
+<span class="fu"><a href="../reference/find_response.html">find_response</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Reaction"</span>
 
 <span class="co"># find all predictors, fixed part by default</span>
-<span class="fu"><a href="../reference/find_predictors.html">find_predictors</a></span>(<span class="kw">model</span>)
+<span class="fu"><a href="../reference/find_predictors.html">find_predictors</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $conditional</span>
 <span class="co">#&gt; [1] "Days"  "Weeks" "cat"</span>
 
 <span class="co"># find random effects, grouping factors only</span>
-<span class="fu"><a href="../reference/find_random.html">find_random</a></span>(<span class="kw">model</span>)
+<span class="fu"><a href="../reference/find_random.html">find_random</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $random</span>
 <span class="co">#&gt; [1] "mysubgrp:mygrp" "mygrp"          "Subject"</span>
 
 <span class="co"># find random slopes</span>
-<span class="fu"><a href="../reference/find_random_slopes.html">find_random_slopes</a></span>(<span class="kw">model</span>)
+<span class="fu"><a href="../reference/find_random_slopes.html">find_random_slopes</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $random</span>
 <span class="co">#&gt; [1] "Days"</span>
 
 <span class="co"># find all predictors, including random effects</span>
-<span class="fu"><a href="../reference/find_predictors.html">find_predictors</a></span>(<span class="kw">model</span>, effects = <span class="st">"all"</span>, component = <span class="st">"all"</span>)
+<span class="fu"><a href="../reference/find_predictors.html">find_predictors</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"all"</span>, component <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>
 <span class="co">#&gt; $conditional</span>
 <span class="co">#&gt; [1] "Days"  "Weeks" "cat"  </span>
 <span class="co">#&gt; </span>
@@ -206,7 +200,7 @@
 
 <span class="co"># find all terms, including response and random effects</span>
 <span class="co"># this is essentially the same as the previous example plus response</span>
-<span class="fu"><a href="../reference/find_terms.html">find_terms</a></span>(<span class="kw">model</span>)
+<span class="fu"><a href="../reference/find_terms.html">find_terms</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $response</span>
 <span class="co">#&gt; [1] "Reaction"</span>
 <span class="co">#&gt; </span>
@@ -217,7 +211,7 @@
 <span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Days"     "Subject"</span>
 
 <span class="co"># find all variables, i.e. also quadratic or log-transformed predictors</span>
-<span class="fu"><a href="../reference/find_variables.html">find_variables</a></span>(<span class="kw">model</span>)
+<span class="fu"><a href="../reference/find_variables.html">find_variables</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $response</span>
 <span class="co">#&gt; [1] "Reaction"</span>
 <span class="co">#&gt; </span>
@@ -229,7 +223,7 @@
 <p>Finally, there is <code><a href="../reference/find_parameters.html">find_parameters()</a></code>. Parameters are also known as <em>coefficients</em>, and <code><a href="../reference/find_parameters.html">find_parameters()</a></code> does exactly that: returns the model coefficients.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="co"># find model parameters, i.e. coefficients</span>
-<span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span>(<span class="kw">model</span>)
+<span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $conditional</span>
 <span class="co">#&gt; [1] "(Intercept)"  "Days"         "I(Days^2)"    "log1p(Weeks)" "catb"        </span>
 <span class="co">#&gt; [6] "catc"         "catd"        </span>
@@ -254,26 +248,26 @@
 <p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="../reference/get_data.html">get_data()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>.</p>
 <p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://easystats.github.io/insight/">insight</a></span>)
-<span class="kw">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(
-  <span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Species</span> <span class="op">+</span> <span class="kw">Petal.Width</span> <span class="op">+</span> <span class="kw">Sepal.Width</span>, 
-  data = <span class="kw">iris</span>
-)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/">insight</a></span><span class="op">)</span>
+<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>
+  <span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="va">Sepal.Width</span>, 
+  data <span class="op">=</span> <span class="va">iris</span>
+<span class="op">)</span>
 
-<span class="kw">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_data.html">get_data</a></span>(<span class="kw">m</span>)
-<span class="kw">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_predictors.html">find_predictors</a></span>(<span class="kw">m</span>, flatten = <span class="fl">TRUE</span>)
+<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_data.html">get_data</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
+<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_predictors.html">find_predictors</a></span><span class="op">(</span><span class="va">m</span>, flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="kw">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">pred</span>, <span class="fu">function</span>(<span class="kw">x</span>) {
-  <span class="co">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span>(<span class="kw">dat</span>[[<span class="kw">x</span>]]))
-    <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="kw">dat</span>[[<span class="kw">x</span>]])
-  <span class="co">else</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">dat</span>[[<span class="kw">x</span>]])
-})
+<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">pred</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span><span class="op">(</span><span class="va">dat</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">dat</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+  <span class="kw">else</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">dat</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">l</span>) <span class="op">&lt;-</span> <span class="kw">pred</span>
-<span class="kw">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="kw">l</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">l</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pred</span>
+<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">l</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="kw">l</span>, predictions = <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="kw">m</span>, newdata = <span class="kw">l</span>))
+<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">l</span>, predictions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">l</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span>
 <span class="co">#&gt; 1     setosa    1.199333    3.057333    5.101427</span>
 <span class="co">#&gt; 2 versicolor    1.199333    3.057333    6.089557</span>
@@ -285,38 +279,38 @@
 <p>The next example should emphasize the possibilities to generalize functions to many different model objects using <strong>insight</strong>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
 <p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">print_params</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">model</span>){
-  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(
+<span class="va">print_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span>
     <span class="st">"My parameters are "</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="kw">model</span>)<span class="op">$</span><span class="kw">coefficients</span>),  collapse = <span class="st">", "</span>),
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">)</span>,  collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span>,
     <span class="st">", thank you for your attention!"</span>
-  )
-}
+  <span class="op">)</span>
+<span class="op">}</span>
 
-<span class="kw">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Petal.Width</span>, data = <span class="kw">iris</span>)
-<span class="fu">print_params</span>(<span class="kw">m1</span>)
+<span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="fu">print_params</span><span class="op">(</span><span class="va">m1</span><span class="op">)</span>
 <span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span>
 
 <span class="co"># obviously, something is missing in the output</span>
-<span class="kw">m2</span> <span class="op">&lt;-</span> <span class="kw">mgcv</span>::<span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Petal.Width</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/s.html">s</a></span>(<span class="kw">Petal.Length</span>), data = <span class="kw">iris</span>)
-<span class="fu">print_params</span>(<span class="kw">m2</span>)
+<span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/s.html">s</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="fu">print_params</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span>
 <span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></pre></div>
 <p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">print_params</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">model</span>){
-  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(
+<span class="va">print_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span>
     <span class="st">"My parameters are "</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw">insight</span>::<span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span>(<span class="kw">model</span>, flatten = <span class="fl">TRUE</span>),  collapse = <span class="st">", "</span>),
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">model</span>, flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,  collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span>,
     <span class="st">", thank you for your attention!"</span>
-  )
-}
+  <span class="op">)</span>
+<span class="op">}</span>
 
-<span class="kw">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Petal.Width</span>, data = <span class="kw">iris</span>)
-<span class="fu">print_params</span>(<span class="kw">m1</span>)
+<span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="fu">print_params</span><span class="op">(</span><span class="va">m1</span><span class="op">)</span>
 <span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span>
 
-<span class="kw">m2</span> <span class="op">&lt;-</span> <span class="kw">mgcv</span>::<span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="kw">Sepal.Length</span> <span class="op">~</span> <span class="kw">Petal.Width</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/s.html">s</a></span>(<span class="kw">Petal.Length</span>), data = <span class="kw">iris</span>)
-<span class="fu">print_params</span>(<span class="kw">m2</span>)
+<span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/s.html">s</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="fu">print_params</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span>
 <span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></pre></div>
 </div>
 </div>
