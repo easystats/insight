@@ -13,7 +13,8 @@ Version: 0.9.6.1
 Authors@R: c(person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206")),
              person("Dominique", "Makowski", role = c("aut", "ctb"), email = "dom.makowski@gmail.com", comment = c(ORCID = "0000-0001-5375-9967")),
              person("Indrajeet", "Patil", role = c("aut", "ctb"), email = "patilindrajeet.science@gmail.com", comment = c(ORCID = "0000-0003-1995-6531")),
-             person("Philip", "Waggoner", role = c("aut", "ctb"), email = "philip.waggoner@gmail.com", comment = c(ORCID = "0000-0002-7825-7573")))
+             person("Philip", "Waggoner", role = c("aut", "ctb"), email = "philip.waggoner@gmail.com", comment = c(ORCID = "0000-0002-7825-7573")),
+             person("Mattan S.", "Ben-Shachar", role = c("aut", "ctb"), email = "matanshm@post.bgu.ac.il", comment = c(ORCID = "0000-0002-4287-4801")),)
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 License: GPL-3
 URL: https://easystats.github.io/insight/
