@@ -213,7 +213,7 @@
 
     if (obj_type == "correlation") {
       is_correlation <- TRUE
-    } else if (obj_type == "ttest") {
+    } else if (obj_type %in% c("ttest1", "ttest2")) {
       is_ttest <- TRUE
     } else if (obj_type == "meta") {
       is_meta <- TRUE
@@ -321,8 +321,10 @@
 
   if (any(class(x@denominator) %in% c("BFcorrelation"))) {
     "correlation"
-  } else if (any(class(x@denominator) %in% c("BFoneSample", "BFindepSample"))) {
-    "ttest"
+  } else if (any(class(x@denominator) %in% c("BFoneSample"))) {
+    "ttest1"
+  } else if (any(class(x@denominator) %in% c("BFindepSample"))) {
+    "ttest2"
   } else if (any(class(x@denominator) %in% c("BFmetat"))) {
     "meta"
   } else if (any(class(x@denominator) %in% c("BFlinearModel"))) {

@@ -15,6 +15,7 @@
 
 ## Bug fixes
 
+* Fix issues with one-sample Bayesian t-tests ( https://github.com/easystats/parameters/issues/297 ).
 * Fix issue in `format_value()` that printed `"100%"` as `"1e+02%"`.
 * Removed unnecessary white-spaces in `format_ci()` when upper or lower interval was larger than 1e+5.
 * `has_intercept()` did not work correctly when intercept was removed from formula using `-1`.

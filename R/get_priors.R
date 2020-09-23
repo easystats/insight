@@ -242,7 +242,8 @@ get_priors.BFBayesFactor <- function(x, ...) {
   prior_names <- switch(
     .classify_BFBayesFactor(x),
     "correlation" = "rho",
-    "ttest" = "Difference",
+    "ttest1" = ,
+    "ttest2" = "Difference",
     "meta" = "Effect",
     names(prior)
   )

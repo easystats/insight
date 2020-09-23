@@ -821,7 +821,7 @@ find_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random
 
   if (.classify_BFBayesFactor(x) == "correlation") {
     conditional <- "rho"
-  } else if (.classify_BFBayesFactor(x) == "ttest") {
+  } else if (.classify_BFBayesFactor(x) %in% c("ttest1", "ttest2")) {
     conditional <- "Difference"
   } else if (.classify_BFBayesFactor(x) == "meta") {
     conditional <- "Effect"

@@ -1637,10 +1637,10 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
   # check if valid model was indexed...
 
   if (length(x@numerator) > 1 ||
-    !xor(
-      x@denominator@shortName == "Intercept only",
-      grepl("^(Null|Indep)", x@denominator@shortName)
-    )) {
+      !xor(
+        x@denominator@shortName == "Intercept only",
+        grepl("^(Null|Indep)", x@denominator@shortName)
+      )) {
     message(
       "Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.\n",
       'See help("get_parameters", package = "insight").'
@@ -1650,7 +1650,7 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
 
   params <- find_parameters(x, effects = effects, component = component, flatten = TRUE)
 
-  if (bf_type %in% c("correlation", "ttest", "meta", "linear")) {
+  if (bf_type %in% c("correlation", "ttest1", "ttest2", "meta", "linear")) {
     posteriors <-
       as.data.frame(suppressMessages(
         BayesFactor::posterior(x, iterations = iterations, progress = progress, index = 1, ...)
@@ -1659,8 +1659,9 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
     switch(
       bf_type,
       "correlation" = data.frame("rho" = as.numeric(posteriors$rho)),
-      "ttest" = data.frame("Difference" = as.numeric(posteriors[, 2])),
-      "meta" = data.frame("Effect" = as.numeric(posteriors$delta)),
+      "ttest1" = data.frame("Difference" = x@numerator[[1]]@prior$mu - as.numeric(posteriors[, 1])),
+      "ttest2" = data.frame("Difference" = x@numerator[[1]]@prior$mu - as.numeric(posteriors[, 2])),
+      "meta" = data.frame("Effect" = as.numeric(posteriors$ delta)),
       "linear" = .get_bf_posteriors(posteriors, params),
       NULL
     )
