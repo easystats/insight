@@ -13,7 +13,7 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_sigma(m)
-#' @importFrom stats deviance
+#' @importFrom stats deviance sigma
 #' @export
 get_sigma <- function(x) {
   s <- tryCatch(
