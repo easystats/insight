@@ -16,8 +16,8 @@
 #'   standard deviation indicates the accuracy for a model to predict scores,
 #'   thus it can be thought of as \dQuote{a measure of the average distance
 #'   each observation falls from its prediction from the model}
-#'   (\cite{Gelman, Hill & Vehtari 2020, p.168}). Thus, \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}}
-#'   can be thought of as a measure of the unexplained variation in the data,
+#'   (\cite{Gelman, Hill & Vehtari 2020, p.168}). \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}}
+#'   can be considered as a measure of the unexplained variation in the data,
 #'   or of the precision of inferences about regression coefficients.
 #'
 #' @references Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.
