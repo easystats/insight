@@ -7,7 +7,7 @@
 #'
 #' @param x A model.
 #'
-#' @return The residual standard deviation (sigma)
+#' @return The residual standard deviation (sigma), or \code{NULL} if this information could not be accessed.
 #'
 #' @examples
 #' data(mtcars)
@@ -36,7 +36,12 @@ get_sigma <- function(x) {
   if (.is_empty_object(s)) {
     info <- model_info(x)
     if (info$is_mixed) {
-      s <- sqrt(get_variance_residual(x, verbose = FALSE))
+      s <- tryCatch(
+        {
+          sqrt(get_variance_residual(x, verbose = FALSE))
+        },
+        error = function(e) { NULL }
+      )
     }
   }
 
@@ -49,5 +54,8 @@ get_sigma <- function(x) {
     )
   }
 
+  if (.is_empty_object(s)) {
+    return(NULL)
+  }
   s
 }

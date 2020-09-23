@@ -10,7 +10,7 @@ get_sigma(x)
 \item{x}{A model.}
 }
 \value{
-The residual standard deviation (sigma)
+The residual standard deviation (sigma), or \code{NULL} if this information could not be accessed.
 }
 \description{
 Returns the residual standard deviation from classical
