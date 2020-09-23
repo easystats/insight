@@ -278,11 +278,12 @@ if (.runThisTest) {
               "Speciesvirginica",
               "Petal.Length",
               "Speciesversicolor:Petal.Length",
-              "Speciesvirginica:Petal.Length"
+              "Speciesvirginica:Petal.Length",
+              "sigma"
             ),
             Effects = c(
               "fixed", "fixed",
-              "fixed", "fixed", "fixed", "fixed"
+              "fixed", "fixed", "fixed", "fixed", "fixed"
             ),
             Component = c(
               "conditional",
@@ -290,7 +291,7 @@ if (.runThisTest) {
               "conditional",
               "conditional",
               "conditional",
-              "conditional"
+              "conditional", "sigma"
             ),
             Cleaned_Parameter = c(
               "(Intercept)",
@@ -298,11 +299,12 @@ if (.runThisTest) {
               "Speciesvirginica",
               "Petal.Length",
               "Speciesversicolor:Petal.Length",
-              "Speciesvirginica:Petal.Length"
+              "Speciesvirginica:Petal.Length",
+              "sigma"
             )
           ),
           class = c("clean_parameters", "data.frame"),
-          row.names = c(NA, -6L)
+          row.names = c(NA, -7L)
         )
       )
     })
