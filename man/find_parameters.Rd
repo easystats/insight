@@ -84,7 +84,7 @@ find_parameters(x, ...)
 \method{find_parameters}{stanreg}(
   x,
   effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "smooth_terms"),
+  component = c("all", "conditional", "smooth_terms", "sigma"),
   flatten = FALSE,
   parameters = NULL,
   ...
