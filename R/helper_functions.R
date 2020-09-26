@@ -4,12 +4,12 @@
 
 
 # remove NULL elements from lists
-.compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i) || (!is.data.frame(i) && any(i == "NULL")) || (is.data.frame(i) && nrow(i) == 0))]
+.compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i) || (!is.data.frame(i) && any(i == "NULL", na.rm = TRUE)) || (is.data.frame(i) && nrow(i) == 0))]
 
 
 
 # remove empty string from character
-.compact_character <- function(x) x[!sapply(x, function(i) nchar(i) == 0 || is.null(i) || any(i == "NULL"))]
+.compact_character <- function(x) x[!sapply(x, function(i) nchar(i) == 0 || is.null(i) || any(i == "NULL", na.rm = TRUE))]
 
 
 
