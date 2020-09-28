@@ -33,7 +33,9 @@ get_sigma <- function(x) {
     {
       stats::sigma(x)
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      NULL
+    }
   )
 
   if (.is_empty_object(s)) {
@@ -42,7 +44,9 @@ get_sigma <- function(x) {
         estimates <- get_parameters(x)$Estimate
         sqrt(stats::deviance(x) / (n_obs(x) - sum(!is.na(estimates))))
       },
-      error = function(e) { NULL }
+      error = function(e) {
+        NULL
+      }
     )
   }
 
@@ -53,7 +57,9 @@ get_sigma <- function(x) {
         {
           sqrt(get_variance_residual(x, verbose = FALSE))
         },
-        error = function(e) { NULL }
+        error = function(e) {
+          NULL
+        }
       )
     }
   }
@@ -69,7 +75,9 @@ get_sigma <- function(x) {
           NULL
         }
       },
-      error = function(e) { NULL }
+      error = function(e) {
+        NULL
+      }
     )
   }
 

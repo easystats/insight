@@ -187,6 +187,7 @@ is_model <- function(x) {
       "objectiveML",
       "ols",
       "orcutt",
+      "pairwise.htest",
       "plm",
       "plmm",
       "poissonmfx",

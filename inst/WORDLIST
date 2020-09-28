@@ -41,6 +41,7 @@ flexsurv
 gam
 gamls
 gamlss
+Gelman
 ggeffects
 github
 glmm
@@ -99,6 +100,7 @@ tweedie
 Tweedie
 untransformed
 variates
+Vehtari
 VGAM
 warmup
 warmups

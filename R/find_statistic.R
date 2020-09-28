@@ -256,15 +256,16 @@ find_statistic <- function(x, ...) {
 
   unsupported.mods <-
     c(
+      "bcplm",
       "BFBayesFactor",
       "brmsfit",
-      "stanreg",
-      "stanmvreg",
       "gbm",
       "list",
       "MCMCglmm",
-      "bcplm",
+      "pairwise.htest",
       "splmm",
+      "stanreg",
+      "stanmvreg",
       "survfit"
     )
 
