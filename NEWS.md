@@ -1,9 +1,5 @@
 # insight 0.9.7
 
-## Breaking changes
-
-* `find_parameters()` and `get_parameters()` now include the sigma-parameter for non-mixed models from *rstanarm* and *brms* .
-
 ## New function
 
 * `get_sigma()` to return the residual standard deviation.
