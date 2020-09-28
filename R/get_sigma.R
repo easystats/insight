@@ -70,12 +70,12 @@ get_sigma <- function(x) {
   if (.is_empty_object(s)) {
     return(NULL)
   }
-  class(s) <- c("insight_sigma", class(s))
+  class(s) <- c("insight_aux", class(s))
   s
 }
 
 
 #' @export
-as.numeric.insight_sigma <- function(x, ...) {
+as.numeric.insight_aux <- function(x, ...) {
   mean(x, na.rm = TRUE)
 }
