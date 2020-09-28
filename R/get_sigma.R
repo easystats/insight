@@ -61,7 +61,13 @@ get_sigma <- function(x) {
   if (.is_empty_object(s) && inherits(x, "brmsfit")) {
     s <- tryCatch(
       {
-        mean(get_parameters(x, component = "sigma")[["sigma"]])
+        dat <- as.data.frame(x)
+        sigma_column <- grep("sigma", colnames(dat), fixed = TRUE)
+        if (length(sigma_column)) {
+          mean(dat[[sigma_column]][1])
+        } else {
+          NULL
+        }
       },
       error = function(e) { NULL }
     )
@@ -77,5 +83,9 @@ get_sigma <- function(x) {
 
 #' @export
 as.numeric.insight_aux <- function(x, ...) {
-  mean(x, na.rm = TRUE)
+  if (is.null(x) || is.na(x) || is.infinite(x)) {
+    return(NULL)
+  } else {
+    mean(x, na.rm = TRUE)
+  }
 }

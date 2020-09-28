@@ -907,7 +907,7 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
   simo <- fe[grepl(pattern = "^simo_", fe, perl = TRUE)]
   smooth_terms <- fe[grepl(pattern = "^sds_", fe, perl = TRUE)]
   priors <- fe[grepl(pattern = "^prior_", fe, perl = TRUE)]
-  sigma <- fe[grepl(pattern = "^sigma_", fe, perl = TRUE) | grepl(pattern = "sigma", fe, fixed = TRUE)]
+  sigma <- fe[grepl(pattern = "^sigma_", fe, perl = TRUE)]
   rand_sd <- fe[grepl(pattern = "(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
   randzi_sd <- fe[grepl(pattern = "^sd_(.*_zi)", fe, perl = TRUE)]
   rand_cor <- fe[grepl(pattern = "(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
@@ -1045,20 +1045,19 @@ find_parameters.bayesx <- function(x, component = c("all", "conditional", "smoot
 
 #' @rdname find_parameters
 #' @export
-find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "smooth_terms", "sigma"), flatten = FALSE, parameters = NULL, ...) {
+find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
   rand_sd <- fe[grepl(pattern = "^Sigma\\[", fe, perl = TRUE)]
   smooth_terms <- fe[grepl(pattern = "^smooth_sd", fe, perl = TRUE)]
-  sigma <- fe[grepl(pattern = "sigma", fe, fixed = TRUE)]
+  # sigma <- fe[grepl(pattern = "sigma", fe, fixed = TRUE)]
 
   l <- .compact_list(list(
     conditional = cond,
     random = c(rand, rand_sd),
-    smooth_terms = smooth_terms,
-    sigma = sigma
+    smooth_terms = smooth_terms
   ))
 
   l <- .filter_pars(l, parameters)
