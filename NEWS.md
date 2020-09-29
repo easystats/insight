@@ -8,6 +8,7 @@
 
 * `format_value()` gains a `zap_small` argument, to prevent scientific printing of numbers if these have more decimal places than indicated by `digits`.
 * `get_weights()` now also return `NULL` when all weights were 1.
+* `get_parameters()` for *BFBayesFactor* objects gets a `verbose` argument.
 
 ## Bug fixes
 

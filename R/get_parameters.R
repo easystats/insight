@@ -10,6 +10,7 @@
 #'   (\code{summary = FALSE})) or the summarized centrality indices of
 #'   the posterior samples (\code{summary = TRUE})) should be returned as
 #'   estimates.
+#' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #'
 #' @inheritParams find_parameters
@@ -1625,7 +1626,7 @@ get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), su
 
 #' @rdname get_parameters
 #' @export
-get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"), component = c("all", "extra"), iterations = 4000, progress = FALSE, ...) {
+get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"), component = c("all", "extra"), iterations = 4000, progress = FALSE, verbose = TRUE, ...) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("This function requires package `BayesFactor` to work. Please install it.")
   }
@@ -1641,10 +1642,12 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
       x@denominator@shortName == "Intercept only",
       grepl("^(Null|Indep)", x@denominator@shortName)
     )) {
-    message(
-      "Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.\n",
-      'See help("get_parameters", package = "insight").'
-    )
+    if (verbose) {
+      message(
+        "Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.\n",
+        'See help("get_parameters", package = "insight").'
+      )
+    }
   }
 
 
@@ -1661,7 +1664,7 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
       "correlation" = data.frame("rho" = as.numeric(posteriors$rho)),
       "ttest1" = data.frame("Difference" = x@numerator[[1]]@prior$mu - as.numeric(posteriors[, 1])),
       "ttest2" = data.frame("Difference" = x@numerator[[1]]@prior$mu - as.numeric(posteriors[, 2])),
-      "meta" = data.frame("Effect" = as.numeric(posteriors$ delta)),
+      "meta" = data.frame("Effect" = as.numeric(posteriors$delta)),
       "linear" = .get_bf_posteriors(posteriors, params),
       NULL
     )

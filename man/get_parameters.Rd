@@ -90,6 +90,7 @@ get_parameters(x, ...)
   component = c("all", "extra"),
   iterations = 4000,
   progress = FALSE,
+  verbose = TRUE,
   ...
 )
 
@@ -152,6 +153,8 @@ estimates.}
 \item{iterations}{Number of posterior draws.}
 
 \item{progress}{Display progress.}
+
+\item{verbose}{Toggle messages and warnings.}
 
 \item{parameters}{Regular expression pattern that describes the parameters that
 should be returned.}
