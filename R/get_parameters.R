@@ -365,6 +365,17 @@ get_parameters.emmGrid <- function(x, ...) {
 
 
 #' @export
+get_parameters.emm_list <- function(x, ...) {
+  do.call(rbind, lapply(names(x), function(i) {
+    out <- get_parameters(x[[i]])
+    out$Component <- i
+    colnames(out)[1] <- "Parameter"
+    out
+  }))
+}
+
+
+#' @export
 get_parameters.mle2 <- function(x, ...) {
   if (!requireNamespace("bbmle", quietly = TRUE)) {
     stop("Package `bbmle` needs to be installed to extract parameters.", call. = FALSE)

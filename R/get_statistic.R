@@ -832,6 +832,12 @@ get_statistic.glht <- function(x, ...) {
 #' @export
 get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", ...) {
   s <- summary(x, level = ci, adjust = adjust)
+
+  # check if DF exist
+  if (is.null(s$df)) {
+    return(NULL)
+  }
+
   estimate_pos <- which(colnames(s) == x@misc$estName)
 
   if (length(estimate_pos)) {
@@ -888,6 +894,34 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", ...) {
     return(NULL)
   }
 }
+
+
+#' @export
+get_statistic.emm_list <- function(x, ci = .95, adjust = "none", ...) {
+  params <- get_parameters(x)
+  s <- summary(x, level = ci, adjust = adjust)
+  se <- unlist(lapply(s, function(i) {
+    if (is.null(i$SE)) {
+      NA
+    } else {
+      i$SE
+    }
+  }))
+
+  stat <- params$Estimate / se
+
+  out <- data.frame(
+    Parameter = params$Parameter,
+    Statistic = as.vector(stat),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
 
 
 #' @export

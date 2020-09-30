@@ -1410,6 +1410,20 @@ find_parameters.emmGrid <- function(x, flatten = TRUE, ...) {
 }
 
 
+#' @export
+find_parameters.emm_list <- function(x, flatten = TRUE, ...) {
+  s <- summary(x)[[1]]
+  estimate_pos <- which(colnames(s) == x[[1]]@misc$estName)
+  out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
 #' @importFrom stats na.omit coef
 #' @export
 find_parameters.manova <- function(x, flatten = FALSE, ...) {

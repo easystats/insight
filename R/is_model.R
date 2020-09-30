@@ -82,6 +82,7 @@ is_model <- function(x) {
       "DirichletRegModel",
       "drc",
       "emmGrid",
+      "emm_list",
       "epi.2by2",
       "ergm",
       "feglm",

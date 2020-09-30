@@ -53,6 +53,7 @@ find_statistic <- function(x, ...) {
       "crqs",
       "drc",
       "emmGrid",
+      "emm_list",
       "feis",
       "felm",
       "gamlss",
