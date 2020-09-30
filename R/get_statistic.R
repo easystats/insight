@@ -902,7 +902,7 @@ get_statistic.emm_list <- function(x, ci = .95, adjust = "none", ...) {
   s <- summary(x, level = ci, adjust = adjust)
   se <- unlist(lapply(s, function(i) {
     if (is.null(i$SE)) {
-      NA
+      rep(NA, nrow(i))
     } else {
       i$SE
     }
