@@ -450,3 +450,9 @@ n_obs.logitor <- n_obs.betamfx
 n_obs.mipo <- function(x, ...) {
   x$glanced$nobs
 }
+
+
+#' @export
+n_obs.emm_list <- function(x, ...) {
+  NULL
+}
