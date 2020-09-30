@@ -913,6 +913,7 @@ get_statistic.emm_list <- function(x, ci = .95, adjust = "none", ...) {
   out <- data.frame(
     Parameter = params$Parameter,
     Statistic = as.vector(stat),
+    Component = params$Component,
     stringsAsFactors = FALSE,
     row.names = NULL
   )

@@ -52,7 +52,7 @@ get_sigma <- function(x) {
 
   if (.is_empty_object(s)) {
     info <- model_info(x)
-    if (info$is_mixed) {
+    if (!is.null(info) && info$is_mixed) {
       s <- tryCatch(
         {
           sqrt(get_variance_residual(x, verbose = FALSE))
