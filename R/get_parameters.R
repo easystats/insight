@@ -368,6 +368,16 @@ get_parameters.emmGrid <- function(x, ...) {
 get_parameters.emm_list <- function(x, ...) {
   do.call(rbind, lapply(names(x), function(i) {
     out <- get_parameters(x[[i]])
+    if (ncol(out) > 2) {
+      est <- out$Estimate
+      out$Estimate <- NULL
+      r <- apply(out, 1, function(i) paste0(colnames(out), " [", i, "]"))
+      out <- data.frame(
+        Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),
+        Estimate = unname(est),
+        stringsAsFactors = FALSE
+      )
+    }
     out$Component <- i
     colnames(out)[1] <- "Parameter"
     out
