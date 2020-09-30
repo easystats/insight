@@ -82,7 +82,7 @@ get_parameters(x, ...)
   ...
 )
 
-\method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random", "all"), summary = TRUE, ...)
+\method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random", "all"), summary = FALSE, ...)
 
 \method{get_parameters}{BFBayesFactor}(
   x,

@@ -349,39 +349,50 @@ get_parameters.glht <- function(x, ...) {
 
 
 #' @export
-get_parameters.emmGrid <- function(x, ...) {
-  s <- summary(x)
-  estimate_pos <- which(colnames(s) == x@misc$estName)
+get_parameters.emmGrid <- function(x, summary = FALSE, ...) {
+  # check if we have a Bayesian model here
+  if (!.is_baysian_emmeans(x) || isTRUE(summary)) {
+    s <- summary(x)
+    estimate_pos <- which(colnames(s) == x@misc$estName)
 
-  params <- data.frame(
-    s[, 1:(estimate_pos - 1), drop = FALSE],
-    Estimate = s[[estimate_pos]],
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
+    params <- data.frame(
+      s[, 1:(estimate_pos - 1), drop = FALSE],
+      Estimate = s[[estimate_pos]],
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
 
-  .remove_backticks_from_parameter_names(params)
+    .remove_backticks_from_parameter_names(params)
+  } else {
+    .clean_emmeans_draws(x)
+  }
 }
 
 
 #' @export
-get_parameters.emm_list <- function(x, ...) {
-  do.call(rbind, lapply(names(x), function(i) {
-    out <- get_parameters(x[[i]])
-    if (ncol(out) > 2) {
-      est <- out$Estimate
-      out$Estimate <- NULL
-      r <- apply(out, 1, function(i) paste0(colnames(out), " [", i, "]"))
-      out <- data.frame(
-        Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),
-        Estimate = unname(est),
-        stringsAsFactors = FALSE
-      )
-    }
-    out$Component <- i
-    colnames(out)[1] <- "Parameter"
-    out
-  }))
+get_parameters.emm_list <- function(x, summary = FALSE, ...) {
+  if (!.is_baysian_emmeans(x) || isTRUE(summary)) {
+    do.call(rbind, lapply(names(x), function(i) {
+      out <- get_parameters(x[[i]], summary = summary)
+      if (ncol(out) > 2) {
+        est <- out$Estimate
+        out$Estimate <- NULL
+        r <- apply(out, 1, function(i) paste0(colnames(out), " [", i, "]"))
+        out <- data.frame(
+          Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),
+          Estimate = unname(est),
+          stringsAsFactors = FALSE
+        )
+      }
+      out$Component <- i
+      colnames(out)[1] <- "Parameter"
+      out
+    }))
+  } else {
+    do.call(cbind, lapply(names(x), function(i) {
+      .clean_emmeans_draws(x[[i]])
+    }))
+  }
 }
 
 
@@ -1618,11 +1629,9 @@ get_parameters.BGGM <- function(x, component = c("correlation", "conditional", "
 }
 
 
-## TODO change to "summary = FALSE" once bayestestR 0.7.1 or higher on CRAN
-
 #' @rdname get_parameters
 #' @export
-get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), summary = TRUE, ...) {
+get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), summary = FALSE, ...) {
   effects <- match.arg(effects)
 
   nF <- x$Fixed$nfl
@@ -2021,4 +2030,25 @@ get_parameters.bayesQR <- function(x, parameters = NULL, summary = FALSE, ...) {
     Estimate = unname(s),
     stringsAsFactors = FALSE
   )
+}
+
+
+.clean_emmeans_draws <- function(x, ...) {
+  if (!requireNamespace("emmeans")) {
+    stop("Package 'emmeans' required for this function to work.\n",
+         "Please install it by running `install.packages('emmeans')`.")
+  }
+
+  if (!is.null(attributes(x)$misc$predict.type) && attributes(x)$misc$predict.type != "none") {
+    x <- emmeans::regrid(x, transform = attributes(x)$misc$predict.type, ...)
+  }
+
+  draws <- emmeans::as.mcmc.emmGrid(
+    x,
+    names = FALSE,
+    sep.chains = FALSE,
+    NE.include = TRUE,
+    ...
+  )
+  data.frame(draws, check.names = FALSE)
 }

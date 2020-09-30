@@ -9,6 +9,7 @@
 * `format_value()` gains a `zap_small` argument, to prevent scientific printing of numbers if these have more decimal places than indicated by `digits`.
 * `get_weights()` now also return `NULL` when all weights were 1.
 * `get_parameters()` for *BFBayesFactor* objects gets a `verbose` argument.
+* `get_parameters()` for *emmGrid* and *emm_list* objects gets a `summary` argument, to either return the full posterior samples or the summarized centrality indices for Bayesian models.
 
 ## Bug fixes
 
