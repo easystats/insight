@@ -882,7 +882,7 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters
     }
 
     if (isTRUE(merge_parameters)) {
-      params <- get_parameters(x, merge_parameters = TRUE)$Parameter
+      params <- get_parameters(x, merge_parameters = TRUE)["Parameter"]
     } else {
       params <- s[, 1:(estimate_pos - 1), drop = FALSE]
     }

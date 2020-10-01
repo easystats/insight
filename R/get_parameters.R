@@ -364,7 +364,7 @@ get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE,
       r <- apply(params, 1, function(i) paste0(colnames(params), " [", i, "]"))
       out <- data.frame(
         Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),
-        SE = unname(s$SE),
+        Estimate = s[[estimate_pos]],
         stringsAsFactors = FALSE,
         row.names = NULL
       )
