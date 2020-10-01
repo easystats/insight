@@ -139,6 +139,9 @@
 <span class='co'># S3 method for logitmfx</span>
 <span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"marginal"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
+<span class='co'># S3 method for emmGrid</span>
+<span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>x</span>, summary <span class='op'>=</span> <span class='cn'>FALSE</span>, merge_parameters <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='co'># S3 method for averaging</span>
 <span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"conditional"</span>, <span class='st'>"full"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -274,16 +277,23 @@
 component, depending on the model.</p></td>
     </tr>
     <tr>
-      <th>effects</th>
-      <td><p>Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
-    </tr>
-    <tr>
       <th>summary</th>
       <td><p>Logical, indicates whether the full posterior samples
 (<code>summary = FALSE</code>)) or the summarized centrality indices of
 the posterior samples (<code>summary = TRUE</code>)) should be returned as
 estimates.</p></td>
+    </tr>
+    <tr>
+      <th>merge_parameters</th>
+      <td><p>Logical, if <code>TRUE</code> and <code>x</code> has multiple
+columns for parameter names (like <code>emmGrid</code> objects may have), these
+are merged into a single parameter column, with parameters names and values
+as values.</p></td>
+    </tr>
+    <tr>
+      <th>effects</th>
+      <td><p>Should parameters for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
     </tr>
     <tr>
       <th>iterations</th>
