@@ -11,6 +11,10 @@
 #'   the posterior samples (\code{summary = TRUE})) should be returned as
 #'   estimates.
 #' @param verbose Toggle messages and warnings.
+#' @param merge_parameters Logical, if \code{TRUE} and \code{x} has multiple
+#'   columns for parameter names (like \code{emmGrid} objects may have), these
+#'   are merged into a single parameter column, with parameters names and values
+#'   as values.
 #' @param ... Currently not used.
 #'
 #' @inheritParams find_parameters
@@ -348,21 +352,31 @@ get_parameters.glht <- function(x, ...) {
 }
 
 
+#' @rdname get_parameters
 #' @export
-get_parameters.emmGrid <- function(x, summary = FALSE, ...) {
+get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE, ...) {
   # check if we have a Bayesian model here
   if (!.is_baysian_emmeans(x) || isTRUE(summary)) {
     s <- summary(x)
     estimate_pos <- which(colnames(s) == x@misc$estName)
-
-    params <- data.frame(
-      s[, 1:(estimate_pos - 1), drop = FALSE],
-      Estimate = s[[estimate_pos]],
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
-
-    .remove_backticks_from_parameter_names(params)
+    params <- s[, 1:(estimate_pos - 1), drop = FALSE]
+    if (isTRUE(merge_parameters) && ncol(params) > 1) {
+      r <- apply(params, 1, function(i) paste0(colnames(params), " [", i, "]"))
+      out <- data.frame(
+        Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),
+        SE = unname(s$SE),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    } else {
+      out <- data.frame(
+        params,
+        Estimate = s[[estimate_pos]],
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    }
+    .remove_backticks_from_parameter_names(out)
   } else {
     .clean_emmeans_draws(x)
   }

@@ -4,6 +4,7 @@
 \alias{get_parameters}
 \alias{get_parameters.betamfx}
 \alias{get_parameters.logitmfx}
+\alias{get_parameters.emmGrid}
 \alias{get_parameters.averaging}
 \alias{get_parameters.betareg}
 \alias{get_parameters.DirichletRegModel}
@@ -35,6 +36,8 @@ get_parameters(x, ...)
 )
 
 \method{get_parameters}{logitmfx}(x, component = c("all", "conditional", "marginal"), ...)
+
+\method{get_parameters}{emmGrid}(x, summary = FALSE, merge_parameters = FALSE, ...)
 
 \method{get_parameters}{averaging}(x, component = c("conditional", "full"), ...)
 
@@ -142,13 +145,18 @@ get_parameters(x, ...)
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
 
-\item{effects}{Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.}
-
 \item{summary}{Logical, indicates whether the full posterior samples
 (\code{summary = FALSE})) or the summarized centrality indices of
 the posterior samples (\code{summary = TRUE})) should be returned as
 estimates.}
+
+\item{merge_parameters}{Logical, if \code{TRUE} and \code{x} has multiple
+columns for parameter names (like \code{emmGrid} objects may have), these
+are merged into a single parameter column, with parameters names and values
+as values.}
+
+\item{effects}{Should parameters for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{iterations}{Number of posterior draws.}
 
