@@ -375,6 +375,9 @@ get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE,
         stringsAsFactors = FALSE,
         row.names = NULL
       )
+      if (isTRUE(merge_parameters)) {
+        colnames(out)[1] <- "Parameter"
+      }
     }
     .remove_backticks_from_parameter_names(out)
   } else {
