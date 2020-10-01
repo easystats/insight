@@ -33,7 +33,7 @@ get_statistic(x, ...)
 
 \method{get_statistic}{logitmfx}(x, component = c("all", "conditional", "marginal"), ...)
 
-\method{get_statistic}{emmGrid}(x, ci = 0.95, adjust = "none", ...)
+\method{get_statistic}{emmGrid}(x, ci = 0.95, adjust = "none", merge_parameters = FALSE, ...)
 
 \method{get_statistic}{gee}(x, robust = FALSE, ...)
 
@@ -64,6 +64,11 @@ on the model.}
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%). Currently only applies to objects of class \code{emmGrid}.}
 
 \item{adjust}{Character value naming the method used to adjust p-values or confidence intervals. See \code{?emmeans::summary.emmGrid} for details.}
+
+\item{merge_parameters}{Logical, if \code{TRUE} and \code{x} has multiple
+columns for parameter names (like \code{emmGrid} objects may have), these
+are merged into a single parameter column, with parameters names and values
+as values.}
 
 \item{robust}{Logical, if \code{TRUE}, test statistic based on robust standard
 errors is returned.}

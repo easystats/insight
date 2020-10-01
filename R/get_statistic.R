@@ -22,6 +22,7 @@
 #' @param adjust Character value naming the method used to adjust p-values or confidence intervals. See \code{?emmeans::summary.emmGrid} for details.
 #' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%). Currently only applies to objects of class \code{emmGrid}.
 #' @param ... Currently not used.
+#' @inheritParams get_parameters
 #'
 #' @return A data frame with the model's parameter names and the related test statistic.
 #'
@@ -830,7 +831,7 @@ get_statistic.glht <- function(x, ...) {
 
 #' @rdname get_statistic
 #' @export
-get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", ...) {
+get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters = FALSE, ...) {
   s <- summary(x, level = ci, adjust = adjust)
 
   # check if DF exist
@@ -880,8 +881,14 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", ...) {
       return(NULL)
     }
 
+    if (isTRUE(merge_parameters)) {
+      params <- get_parameters(x, merge_parameters = TRUE)$Parameter
+    } else {
+      params <- s[, 1:(estimate_pos - 1), drop = FALSE]
+    }
+
     out <- data.frame(
-      s[, 1:(estimate_pos - 1), drop = FALSE],
+      params,
       Statistic = as.vector(stat),
       stringsAsFactors = FALSE,
       row.names = NULL
