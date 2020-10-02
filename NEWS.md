@@ -4,6 +4,10 @@
 
 * `get_sigma()` to return the residual standard deviation.
 
+## New supported model classes
+
+* Preliminary support for `margins` (*margins*).
+
 ## Changes to functions
 
 * `format_value()` gains a `zap_small` argument, to prevent scientific printing of numbers if these have more decimal places than indicated by `digits`.

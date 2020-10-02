@@ -752,6 +752,19 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.margins <- function(x, ...) {
+  out <- data.frame(
+    Parameter = as.vector(summary(x)$factor),
+    Statistic = as.vector(summary(x)$z),
+    stringsAsFactors = FALSE
+  )
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.lqmm <- function(x, ...) {
   cs <- summary(x, ...)
   params <- get_parameters(x)
@@ -765,7 +778,9 @@ get_statistic.lqmm <- function(x, ...) {
     params <- params[c("Parameter", "Statistic")]
   }
 
-  .remove_backticks_from_parameter_names(params)
+  out <- .remove_backticks_from_parameter_names(params)
+  attr(out, "statistic") <- find_statistic(x)
+  out
 }
 
 #' @export

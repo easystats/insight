@@ -335,6 +335,17 @@ get_parameters.mipo <- function(x, ...) {
 
 
 #' @export
+get_parameters.margins <- function(x, ...) {
+  out <- data.frame(
+    Parameter = as.vector(summary(x)$factor),
+    Estimate = as.vector(summary(x)$AME),
+    stringsAsFactors = FALSE
+  )
+  .remove_backticks_from_parameter_names(out)
+}
+
+
+#' @export
 get_parameters.glht <- function(x, ...) {
   s <- summary(x)
   alt <- switch(

@@ -129,6 +129,7 @@ supported_models <- function() {
     "lrm",
     "manova",
     "MANOVA",
+    "margins",
     "maxLik",
     "mcmc",
     "MCMCglmm",
