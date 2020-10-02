@@ -322,6 +322,30 @@ clean_parameters.afex_aov <- function(x, ...) {
 }
 
 
+#' @export
+clean_parameters.mlm <- function(x, ...) {
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+
+  l <- lapply(names(pars), function(i) {
+    eff <- "fixed"
+    com <- "conditional"
+    data.frame(
+      Parameter = pars[[i]]$conditional,
+      Effects = eff,
+      Component = com,
+      Response = i,
+      Cleaned_Parameter = pars[[i]]$conditional,
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  })
+
+  out <- .remove_backticks_from_parameter_names(do.call(rbind, l))
+  out <- .remove_empty_columns_from_pars(out)
+  .fix_random_effect_smooth(x, out)
+}
+
+
 
 
 
