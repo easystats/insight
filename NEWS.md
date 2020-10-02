@@ -8,6 +8,10 @@
 
 * Preliminary support for `margins` (*margins*).
 
+## General
+
+* Better support for (weighted) multivariate response models of class `mlm` for functions like `get_varcov()` or `clean_parameters()`.
+
 ## Changes to functions
 
 * `format_value()` gains a `zap_small` argument, to prevent scientific printing of numbers if these have more decimal places than indicated by `digits`.
