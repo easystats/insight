@@ -61,6 +61,21 @@ get_varcov.maxLik <- get_varcov.default
 
 
 
+# mlm ---------------------------------------------
+
+#' @export
+get_varcov.mlm <- function(x, ...) {
+  if (!is.null(x$weights)) {
+    x$weights <- NULL
+    warning("Weights are not taken into account when calculating variance-covariance matrix.", call. = FALSE)
+    get_varcov.default(x)
+  } else {
+    get_varcov.default(x)
+  }
+}
+
+
+
 # models with special components ---------------------------------------------
 
 
