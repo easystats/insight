@@ -180,6 +180,27 @@ find_formula.gamm <- function(x, ...) {
 
 
 #' @export
+find_formula.averaging <- function(x, ...) {
+  f_random <- tryCatch(
+    {
+      models <- attributes(x)$modelList
+      find_formula(models[[1]])
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  f <- find_formula.default(x)
+  if (!.obj_has_name(f, "random") && .obj_has_name(f_random, "random")) {
+    f$random <- f_random$random
+  }
+
+  f
+}
+
+
+#' @export
 find_formula.glht <- function(x, ...) {
   list(conditional = stats::formula(x$model))
 }
