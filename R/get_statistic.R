@@ -754,7 +754,7 @@ get_statistic.negbinirr <- get_statistic.logitor
 #' @export
 get_statistic.margins <- function(x, ...) {
   out <- data.frame(
-    Parameter = as.vector(summary(x)$factor),
+    Parameter = get_parameters(x)$Parameter,
     Statistic = as.vector(summary(x)$z),
     stringsAsFactors = FALSE
   )

@@ -336,8 +336,18 @@ get_parameters.mipo <- function(x, ...) {
 
 #' @export
 get_parameters.margins <- function(x, ...) {
+  s <- summary(x)
+  param <- as.vector(s$factor)
+  estimate_pos <- which(colnames(s) == "AME")
+
+  if (estimate_pos > 2) {
+    out <- s[1:(estimate_pos - 1)]
+    r <- apply(out, 1, function(i) paste0(colnames(out), " [", i, "]"))
+    param <- unname(sapply(as.data.frame(r), paste, collapse = ", "))
+  }
+
   out <- data.frame(
-    Parameter = as.vector(summary(x)$factor),
+    Parameter = param,
     Estimate = as.vector(summary(x)$AME),
     stringsAsFactors = FALSE
   )
