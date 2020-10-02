@@ -125,7 +125,7 @@
     <p>Returns weighting variable of a model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,6 +133,10 @@
     <tr>
       <th>x</th>
       <td><p>A fitted model.</p></td>
+    </tr>
+    <tr>
+      <th>na_rm</th>
+      <td><p>Logical, if <code>TRUE</code>, removes possible missing values.</p></td>
     </tr>
     <tr>
       <th>...</th>
