@@ -66,9 +66,8 @@ get_varcov.maxLik <- get_varcov.default
 #' @export
 get_varcov.mlm <- function(x, ...) {
   if (!is.null(x$weights)) {
-    x$weights <- NULL
-    warning("Weights are not taken into account when calculating variance-covariance matrix.", call. = FALSE)
-    get_varcov.default(x)
+    s <- summary(x)[[1L]]
+    .get_weighted_varcov(x, s$cov.unscaled)
   } else {
     get_varcov.default(x)
   }
@@ -896,4 +895,41 @@ get_varcov.LORgee <- get_varcov.gee
     m <- m[!is.na]
   }
   m
+}
+
+
+
+#' @importFrom stats residuals estVar sd
+.get_weighted_varcov <- function(x, cov_unscaled) {
+  ssd <- .weighted_crossprod(stats::residuals(x), w = x$weights)
+  df <- sum(x$weights)
+  out <- structure(list(SSD = ssd, call = x$call, df = df), class = "SSD")
+  kronecker(stats::estVar(out), cov_unscaled, make.dimnames = TRUE)
+}
+
+
+.weighted_crossprod <- function(x, w) {
+  if (is.vector(x)) {
+    x <- as.matrix(x)
+  }
+
+  if (missing(w)) {
+    return(crossprod(x))
+  }
+
+  if (length(w) == 1 || (is.vector(w) && stats::sd(w) < sqrt(.Machine$double.eps))) {
+    return(w[1] * crossprod(x))
+  } else {
+    if (is.vector(w)) {
+      if (length(w) != nrow(x)) {
+        stop("w is the wrong length")
+      }
+      return(crossprod(x, w * x))
+    } else {
+      if (nrow(w) != ncol(w) || nrow(w) != nrow(x)) {
+        stop("w is the wrong dimension")
+      }
+      return(crossprod(x, w %*% x))
+    }
+  }
 }
