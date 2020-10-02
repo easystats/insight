@@ -11,6 +11,7 @@
 * `get_parameters()` for *BFBayesFactor* objects gets a `verbose` argument.
 * `get_parameters()` for *emmGrid* and *emm_list* objects gets a `summary` argument, to either return the full posterior samples or the summarized centrality indices for Bayesian models.
 * `find_formula()` for `MuMIn::model.avg()` now tries to retrieve the random effects part of a formula, when present.
+* `get_weights()` gains a `na_rm` argument to remove possible missing values.
 
 ## Bug fixes
 

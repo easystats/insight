@@ -4,10 +4,12 @@
 \alias{get_weights}
 \title{Get the values from model weights}
 \usage{
-get_weights(x, ...)
+get_weights(x, na_rm = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{na_rm}{Logical, if \code{TRUE}, removes possible missing values.}
 
 \item{...}{Currently not used.}
 }
