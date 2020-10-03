@@ -2072,7 +2072,7 @@ get_parameters.bayesQR <- function(x, parameters = NULL, summary = FALSE, ...) {
 
 
 .clean_emmeans_draws <- function(x, ...) {
-  if (!requireNamespace("emmeans")) {
+  if (!requireNamespace("emmeans", quietly = TRUE)) {
     stop("Package 'emmeans' required for this function to work.\n",
          "Please install it by running `install.packages('emmeans')`.")
   }
