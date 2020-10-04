@@ -28,6 +28,7 @@
 * Removed unnecessary white-spaces in `format_ci()` when upper or lower interval was larger than 1e+5.
 * `has_intercept()` did not work correctly when intercept was removed from formula using `-1`.
 * `find_terms()` now shows removal of intercept formula using `-1` as term `"-1"`.
+* Fix issues with `get_statistic()` for *vgam* models.
 
 # insight 0.9.6
 
