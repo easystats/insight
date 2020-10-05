@@ -33,9 +33,9 @@ if (require("testthat") &&
     expect_true(is.data.frame(get_data(t2d)))
   })
   test_that("find_formula", {
-    expect_null(find_formula(t1))
-    expect_null(find_formula(t2))
-    expect_null(find_formula(t2d))
+    expect_equal(find_formula(t1), list(conditional = y ~ 1))
+    expect_equal(find_formula(t2), list(conditional = y ~ group))
+    expect_equal(find_formula(t2d), list(conditional = y ~ 1))
   })
   test_that("get_parameters", {
     expect_equal(nrow(get_parameters(t1)), 4000)
