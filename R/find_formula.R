@@ -1142,7 +1142,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
       f.random <- NULL
       f.cond <- stats::as.formula(fcond)
     }
-  } else if (.classify_BFBayesFactor(x) == "ttest2") {
+  } else if (.classify_BFBayesFactor(x) %in% c("ttest1", "ttest2")) {
     f.cond <- tryCatch(
       {
         stats::as.formula(x@numerator[[1]]@identifier$formula)
