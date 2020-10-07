@@ -15,6 +15,7 @@
 
 ## Changes to functions
 
+* `format_bf()` gains a `na_reference` argument, to set the "reference" for Bayes factor values that are `NA`.
 * `format_value()` gains a `zap_small` argument, to prevent scientific printing of numbers if these have more decimal places than indicated by `digits`.
 * `get_weights()` now also return `NULL` when all weights were 1.
 * `get_parameters()` for *BFBayesFactor* objects gets a `verbose` argument.

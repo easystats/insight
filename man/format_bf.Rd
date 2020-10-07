@@ -9,7 +9,8 @@ format_bf(
   stars = FALSE,
   stars_only = FALSE,
   name = "BF",
-  protect_ratio = FALSE
+  protect_ratio = FALSE,
+  na_reference = NA
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ format_bf(
 \item{name}{Name prefixing the text. Can be \code{NULL}.}
 
 \item{protect_ratio}{Should values smaller than 1 be represented as ratios?}
+
+\item{na_refrence}{How to format missing values (\code{NA}). By default, \code{NA} values are formatted as \code{"BF = 1"}.}
 }
 \value{
 A formatted string.
@@ -33,4 +36,6 @@ Bayes Factor formatting
 format_bf(1.20)
 format_bf(c(1.20, 1557, 3.5, 12), stars = TRUE)
 format_bf(c(1.20, 1557, 3.5, 12), name = NULL)
+format_bf(c(NA, 3.45, 345))
+format_bf(c(NA, 3.45, 345), na_reference = 1)
 }
