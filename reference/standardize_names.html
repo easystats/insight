@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find model formula — find_formula • insight</title>
+<title>Standardize column names — standardize_names • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,10 @@
 
 
 
-<meta property="og:title" content="Find model formula — find_formula" />
-<meta property="og:description" content="Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...)." />
+<meta property="og:title" content="Standardize column names — standardize_names" />
+<meta property="og:description" content="Standardize column names from data frames, in particular objects returned from
+model_parameters(), so column names are
+consistent and the same for any model object." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -117,62 +118,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find model formula</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_formula.R'><code>R/find_formula.R</code></a></small>
-    <div class="hidden name"><code>find_formula.Rd</code></div>
+    <h1>Standardize column names</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/standardize_names.R'><code>R/standardize_names.R</code></a></small>
+    <div class="hidden name"><code>standardize_names.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...).</p>
+    <p>Standardize column names from data frames, in particular objects returned from
+<code>model_parameters()</code>, so column names are
+consistent and the same for any model object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>standardize_names</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for parameters_model</span>
+<span class='fu'>standardize_names</span><span class='op'>(</span><span class='va'>data</span>, style <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"easystats"</span>, <span class='st'>"broom"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A fitted model.</p></td>
+      <th>data</th>
+      <td><p>A data frame. In particular, objects from <em>easystats</em> package functions like <code>model_parameters()</code> or <code>effectsize()</code> are accepted.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
     </tr>
+    <tr>
+      <th>style</th>
+      <td><p>Standardization can either be based on the naming conventions from the easystats project, or on <span class="pkg">broom</span>'s naming scheme.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of formulas that describe the model. For simple models,
-   only one list-element, <code>conditional</code>, is returned. For more complex
-   models, the returned list may have following elements:</p><ul>
-<li><p><code>conditional</code>, the "fixed effects" part from the model. One exception are <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>, which has two or three components, depending on <code>model</code>.</p></li>
-<li><p><code>random</code>, the "random effects" part from the model (or the <code>id</code> for gee-models and similar)</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>dispersion</code>, the dispersion formula</p></li>
-<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
-<li><p><code>cluster</code>, for fixed-effects regressions like <code>felm</code>, the cluster specification</p></li>
-<li><p><code>correlation</code>, for models with correlation-component like <code>gls</code>, the formula that describes the correlation structure</p></li>
-<li><p><code>slopes</code>, for fixed-effects individual-slope models like <code>feis</code>, the formula for the slope parameters</p></li>
-<li><p><code>precision</code>, for <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>, when parametrization (i.e. <code>model</code>) is <code>"alternative"</code>.</p></li>
-</ul>
+    <p>A data frame, with standardized column names.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>For models of class <code>lme</code> or <code>gls</code> the correlation-component
-  is only returned, when it is explicitly defined as named argument
-  (<code>form</code>), e.g. <code>corAR1(form = ~1 | Mare)</code></p>
+    <p>This method is in particular useful for package developers or users
+  who use, e.g., <code>model_parameters()</code> in their own
+  code or functions to retrieve model parameters for further processing. As
+  <code>model_parameters()</code> returns a data frame with varying column names
+  (depending on the input), accessing the required information is probably
+  not quite straightforward. In such cases, <code>standardize_names()</code> can
+  be used to get consistent, i.e. always the same column names, no matter
+  what kind of model was used in <code>model_parameters()</code>.
+  <br /> <br />
+  For <code>style = "broom"</code>, column names are renamed to match <span class="pkg">broom</span>'s
+  naming scheme, i.e. <code>Parameter</code> is renamed to <code>term</code>, <code>Coefficient</code>
+  becomes <code>estimate</code> and so on.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $conditional
-#&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x7ff5500a0f98&gt;
-#&gt; </div></pre>
+    <pre class="examples"><div class='input'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='va'>mp</span> <span class='op'>&lt;-</span> <span class='fu'>model_parameters</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in model_parameters(model): could not find function "model_parameters"</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>mp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in as.data.frame(mp): object 'mp' not found</span></div><div class='input'><span class='fu'>standardize_names</span><span class='op'>(</span><span class='va'>mp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in standardize_names(mp): object 'mp' not found</span></div><div class='input'><span class='fu'>standardize_names</span><span class='op'>(</span><span class='va'>mp</span>, style <span class='op'>=</span> <span class='st'>"broom"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in standardize_names(mp, style = "broom"): object 'mp' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
