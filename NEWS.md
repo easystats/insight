@@ -3,6 +3,7 @@
 ## New function
 
 * `get_sigma()` to return the residual standard deviation.
+* `standardize_names()`, which was moved from package *parameters* to *insight*.
 
 ## New supported model classes
 
