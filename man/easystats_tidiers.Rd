@@ -2,9 +2,12 @@
 % Please edit documentation in R/standardize_names.R
 \name{tidy.parameters_model}
 \alias{tidy.parameters_model}
+\alias{tidy.effectsize_table}
 \title{Tidy methods for easystats-objects}
 \usage{
 tidy.parameters_model(x, ...)
+
+tidy.effectsize_table(x, ...)
 }
 \arguments{
 \item{x}{A data frame of class \code{parameters_model}, as returned by \code{\link[parameters:model_parameters]{model_parameters()}}.}

@@ -126,17 +126,14 @@ standardize_names.parameters_model <- function(data, style = c("easystats", "bro
 #' @rawNamespace
 #' if (getRversion() >= "3.6.0") {
 #'   S3method(generics::tidy, parameters_model)
+#'   S3method(generics::tidy, effectsize_table)
 #' } else {
 #'   export(tidy.parameters_model)
+#'   export(tidy.effectsize_table)
 #' }
 tidy.parameters_model <- function(x, ...) {
   standardize_names(x, style = "broom")
 }
 
-#' @rawNamespace
-#' if (getRversion() >= "3.6.0") {
-#'   S3method(generics::tidy, effectsize_table)
-#' } else {
-#'   export(tidy.effectsize_table)
-#' }
+#' @rdname easystats_tidiers
 tidy.effectsize_table <- tidy.parameters_model

@@ -2,15 +2,11 @@
 
 
 if (getRversion() >= "3.6.0") {
+  S3method(generics::tidy, parameters_model)
   S3method(generics::tidy, effectsize_table)
 } else {
-  export(tidy.effectsize_table)
-}
-
-if (getRversion() >= "3.6.0") {
-  S3method(generics::tidy, parameters_model)
-} else {
   export(tidy.parameters_model)
+  export(tidy.effectsize_table)
 }
 S3method(as.numeric,insight_aux)
 S3method(clean_names,character)
