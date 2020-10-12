@@ -61,8 +61,8 @@ standardize_names.effectsize_table <- standardize_names.parameters_model
   cn <- colnames(data)
 
   if (style == "easystats") {
-    cn[cn %in% c("t", "z", "F", "chisq", "chi-sq", "t / F", "z / Chisq")] <- "Statistic"
-    cn[cn %in% c("Median", "Mean", "MAP")] <- "Coefficient"
+    cn[cn %in% c("t", "z", "F", "chisq", "Chisq", "chi-sq", "t / F", "z / Chisq")] <- "Statistic"
+    cn[cn %in% c("Median", "Mean", "MAP", "rho", "r", "tau")] <- "Coefficient"
     cn[cn %in% c("df_residual", "df_error")] <- "df"
   } else {
     # easy replacements
@@ -80,9 +80,11 @@ standardize_names.effectsize_table <- standardize_names.parameters_model
     # anova
     cn[cn == "Sum_Squares"] <- "sumsq"
     cn[cn == "Mean_Square"] <- "meansq"
-    # more sophisticated replacements
+    # name of coefficient column for (Bayesian) models
     cn[cn %in% c("Coefficient", "Std_Coefficient", "Median", "Mean", "MAP")] <- "estimate"
-    cn[cn %in% c("t", "z", "F", "chisq", "chi-sq", "t / F", "z / Chisq")] <- "statistic"
+    # name of coefficient column htest
+    cn[cn %in% c("rho", "r", "tau")] <- "estimate"
+    cn[cn %in% c("t", "z", "F", "chisq", "chi-sq", "Chisq", "t / F", "z / Chisq")] <- "statistic"
     # fancy regex replacements
     cn <- gsub("^CI_low", "conf.low", cn)
     cn <- gsub("^CI_high", "conf.high", cn)
