@@ -118,6 +118,12 @@ standardize_names.effectsize_table <- standardize_names.parameters_model
 #'
 #' @return \code{x}, with "standardized" column names (see \code{\link{standardize_names}}).
 #'
+#' @note Due to possible namespace conflicts with other packages that define
+#'   a generic \code{tidy()}-method, the lifecycle of this function is still
+#'   experimental, and there might be a chance that it will become defunct and
+#'   removed in a future update. If possible, the preferred and stable alternative
+#'   to \code{tidy()} for \emph{easystats}-objects is \code{\link{standardize_names}}.
+#'
 #' @examples
 #' if (require("parameters")) {
 #'   model <- lm(mpg ~ wt + cyl, data = mtcars)
