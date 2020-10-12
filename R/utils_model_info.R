@@ -223,7 +223,9 @@
 
   # meta analysis
 
-  is_meta <- inherits(x, c("rma", "metaplus"))
+  if (!is_meta) {
+    is_meta <- inherits(x, c("rma", "metaplus"))
+  }
 
   if (inherits(x, "brmsfit") && !is_multivariate(x)) {
     is_meta <- grepl("(.*)\\|(.*)se\\((.*)\\)", .safe_deparse(find_formula(x)$conditional[[2]]))
@@ -329,6 +331,8 @@
     "meta"
   } else if (any(class(x@denominator) %in% c("BFlinearModel"))) {
     "linear"
+  } else if (any(class(x@denominator) %in% c("BFcontingencyTable"))) {
+    "xtable"
   } else {
     class(x@denominator)
   }
