@@ -43,6 +43,7 @@ Suggests:
     coxme,
     cplm,
     crch,
+    effectsize,
     emmeans,
     estimatr,
     feisr,

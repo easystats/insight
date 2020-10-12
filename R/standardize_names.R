@@ -68,15 +68,26 @@ standardize_names.parameters_model <- function(data, style = c("easystats", "bro
     cn[cn == "p"] <- "p.value"
     cn[cn == "BF"] <- "bayes.factor"
     cn[cn == "Component"] <- "component"
-    cn[cn == "Effects"] <- "effects"
+    cn[cn == "Effects"] <- "effect"
     cn[cn == "Response"] <- "response"
+    # anova
+    cn[cn == "Sum_Squares"] <- "sumsq"
+    cn[cn == "Mean_Square"] <- "meansq"
     # more sophisticated replacements
-    cn[cn %in% c("df_residual", "df_error")] <- "df.error"
+    cn[cn == "df_error"] <- "den.df"
+    cn[cn == "df_residual"] <- "res.df"
     cn[cn %in% c("Coefficient", "Std_Coefficient", "Median", "Mean", "MAP")] <- "estimate"
     cn[cn %in% c("t", "z", "F", "chisq", "chi-sq", "t / F", "z / Chisq")] <- "statistic"
     # fancy regex replacements
     cn <- gsub("^CI_low", "conf.low", cn)
     cn <- gsub("^CI_high", "conf.high", cn)
+    # from package effectisze
+    if (requireNamespace("effectsize", quietly = TRUE)) {
+      effectsize_names <- effectsize::is_effectsize_name(cn)
+      if (any(effectsize_names)) {
+        cn[effectsize_names] <- "estimate"
+      }
+    }
     # lowercase for everything
     cn <- tolower(cn)
   }
