@@ -2,7 +2,7 @@
 #'
 #' @param bf Bayes Factor.
 #' @param protect_ratio Should values smaller than 1 be represented as ratios?
-#' @param na_refrence How to format missing values (\code{NA}). By default, \code{NA} values are formatted as \code{"BF = 1"}.
+#' @param na_reference How to format missing values (\code{NA}). By default, \code{NA} values are formatted as \code{"BF = 1"}.
 #' @inheritParams format_p
 #'
 #' @return A formatted string.

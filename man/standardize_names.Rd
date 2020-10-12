@@ -26,7 +26,7 @@ consistent and the same for any model object.
 }
 \details{
 This method is in particular useful for package developers or users
-  who use, e.g., \code{\link[=model_parameters]{model_parameters()}} in their own
+  who use, e.g., \code{\link[parameters:model_parameters]{model_parameters()}} in their own
   code or functions to retrieve model parameters for further processing. As
   \code{model_parameters()} returns a data frame with varying column names
   (depending on the input), accessing the required information is probably

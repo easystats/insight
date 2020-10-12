@@ -24,7 +24,7 @@ format_bf(
 
 \item{protect_ratio}{Should values smaller than 1 be represented as ratios?}
 
-\item{na_refrence}{How to format missing values (\code{NA}). By default, \code{NA} values are formatted as \code{"BF = 1"}.}
+\item{na_reference}{How to format missing values (\code{NA}). By default, \code{NA} values are formatted as \code{"BF = 1"}.}
 }
 \value{
 A formatted string.
