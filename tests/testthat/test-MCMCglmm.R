@@ -1,6 +1,18 @@
+osx <- tryCatch(
+  {
+    si <- Sys.info()
+    if (!is.null(si["sysname"])) {
+      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+    } else {
+      FALSE
+    }
+  }
+)
+
+
 if (require("testthat") &&
   require("insight") &&
-  require("MCMCglmm")) {
+  require("MCMCglmm") && !isTRUE(osx)) {
   data(PlodiaPO)
   m1 <- MCMCglmm(
     PO ~ plate,
