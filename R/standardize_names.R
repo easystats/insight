@@ -51,6 +51,8 @@ standardize_names.parameters_model <- function(data, style = c("easystats", "bro
   .standardize_names(data, style, ...)
 }
 
+#' @export
+standardize_names.effectsize_table <- standardize_names.parameters_model
 
 
 
@@ -72,12 +74,13 @@ standardize_names.parameters_model <- function(data, style = c("easystats", "bro
     cn[cn == "Component"] <- "component"
     cn[cn == "Effects"] <- "effect"
     cn[cn == "Response"] <- "response"
+    cn[cn == "CI"] <- "ci.width"
+    cn[cn == "df_error"] <- "den.df"
+    cn[cn == "df_residual"] <- "res.df"
     # anova
     cn[cn == "Sum_Squares"] <- "sumsq"
     cn[cn == "Mean_Square"] <- "meansq"
     # more sophisticated replacements
-    cn[cn == "df_error"] <- "den.df"
-    cn[cn == "df_residual"] <- "res.df"
     cn[cn %in% c("Coefficient", "Std_Coefficient", "Median", "Mean", "MAP")] <- "estimate"
     cn[cn %in% c("t", "z", "F", "chisq", "chi-sq", "t / F", "z / Chisq")] <- "statistic"
     # fancy regex replacements
@@ -102,38 +105,34 @@ standardize_names.parameters_model <- function(data, style = c("easystats", "bro
 
 
 #' @title Tidy methods for easystats-objects
+#' @name tidy
 #'
 #' @description Tidy methods for easystats-objects. \code{tidy()} usually returns
 #'   the same data frame that was used as input, however, with broom-alike
 #'   column names.
 #'
-#' @rdname easystats_tidiers
-#'
-#' @param x A data frame of class \code{parameters_model}, as returned by \code{\link[parameters:model_parameters]{model_parameters()}}.
+#' @param x A data frame, as returned by \code{\link[parameters:model_parameters]{model_parameters()}} or \code{\link[effectsize:effectsize]{effectsize()}}.
 #' @param ... Currently not used.
 #'
-#' @seealso \code{\link{standardize_names}}
+#' @return \code{x}, with "standardized" column names (see \code{\link{standardize_names}}).
 #'
 #' @examples
-#' if (require("parameters") && require("generics")) {
+#' if (require("parameters")) {
 #'   model <- lm(mpg ~ wt + cyl, data = mtcars)
 #'   mp <- model_parameters(model)
 #'
 #'   as.data.frame(mp)
 #'   tidy(mp)
 #' }
-#'
-#' @rawNamespace
-#' if (getRversion() >= "3.6.0") {
-#'   S3method(generics::tidy, parameters_model)
-#'   S3method(generics::tidy, effectsize_table)
-#' } else {
-#'   export(tidy.parameters_model)
-#'   export(tidy.effectsize_table)
-#' }
+#' @export
+tidy <- function(x, ...) {
+  UseMethod("tidy")
+}
+
+#' @export
 tidy.parameters_model <- function(x, ...) {
   standardize_names(x, style = "broom")
 }
 
-#' @rdname easystats_tidiers
+#' @export
 tidy.effectsize_table <- tidy.parameters_model
