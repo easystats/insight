@@ -113,7 +113,7 @@ standardize_names.effectsize_table <- standardize_names.parameters_model
 #'   the same data frame that was used as input, however, with broom-alike
 #'   column names.
 #'
-#' @param x A data frame, as returned by \code{\link[parameters:model_parameters]{model_parameters()}} or \code{\link[effectsize:effectsize]{effectsize()}}.
+#' @param x A data frame, as returned by functions from easystats-packages like \code{\link[parameters:model_parameters]{model_parameters()}} or \code{\link[effectsize:effectsize]{effectsize()}}.
 #' @param ... Currently not used.
 #'
 #' @return \code{x}, with "standardized" column names (see \code{\link{standardize_names}}).

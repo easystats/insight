@@ -7,7 +7,7 @@
 tidy(x, ...)
 }
 \arguments{
-\item{x}{A data frame, as returned by \code{\link[parameters:model_parameters]{model_parameters()}} or \code{\link[effectsize:effectsize]{effectsize()}}.}
+\item{x}{A data frame, as returned by functions from easystats-packages like \code{\link[parameters:model_parameters]{model_parameters()}} or \code{\link[effectsize:effectsize]{effectsize()}}.}
 
 \item{...}{Currently not used.}
 }
