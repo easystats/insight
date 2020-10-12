@@ -39,10 +39,12 @@ This method is in particular useful for package developers or users
   becomes \code{estimate} and so on.
 }
 \examples{
-model <- lm(mpg ~ wt + cyl, data = mtcars)
-mp <- model_parameters(model)
+if (require("parameters")) {
+  model <- lm(mpg ~ wt + cyl, data = mtcars)
+  mp <- model_parameters(model)
 
-as.data.frame(mp)
-standardize_names(mp)
-standardize_names(mp, style = "broom")
+  as.data.frame(mp)
+  standardize_names(mp)
+  standardize_names(mp, style = "broom")
+}
 }

@@ -24,12 +24,14 @@
 #'   becomes \code{estimate} and so on.
 #'
 #' @examples
-#' model <- lm(mpg ~ wt + cyl, data = mtcars)
-#' mp <- model_parameters(model)
+#' if (require("parameters")) {
+#'   model <- lm(mpg ~ wt + cyl, data = mtcars)
+#'   mp <- model_parameters(model)
 #'
-#' as.data.frame(mp)
-#' standardize_names(mp)
-#' standardize_names(mp, style = "broom")
+#'   as.data.frame(mp)
+#'   standardize_names(mp)
+#'   standardize_names(mp, style = "broom")
+#' }
 #' @export
 standardize_names <- function(data, ...) {
   UseMethod("standardize_names")
@@ -95,3 +97,46 @@ standardize_names.parameters_model <- function(data, style = c("easystats", "bro
   colnames(data) <- cn
   as.data.frame(data)
 }
+
+
+
+
+#' @title Tidy methods for easystats-objects
+#'
+#' @description Tidy methods for easystats-objects. \code{tidy()} usually returns
+#'   the same data frame that was used as input, however, with broom-alike
+#'   column names.
+#'
+#' @rdname easystats_tidiers
+#'
+#' @param x A data frame of class \code{parameters_model}, as returned by \code{\link[parameters:model_parameters]{model_parameters()}}.
+#' @param ... Currently not used.
+#'
+#' @seealso \code{\link{standardize_names}}
+#'
+#' @examples
+#' if (require("parameters") && require("generics")) {
+#'   model <- lm(mpg ~ wt + cyl, data = mtcars)
+#'   mp <- model_parameters(model)
+#'
+#'   as.data.frame(mp)
+#'   tidy(mp)
+#' }
+#'
+#' @rawNamespace
+#' if (getRversion() >= "3.6.0") {
+#'   S3method(generics::tidy, parameters_model)
+#' } else {
+#'   export(tidy.parameters_model)
+#' }
+tidy.parameters_model <- function(x, ...) {
+  standardize_names(x, style = "broom")
+}
+
+#' @rawNamespace
+#' if (getRversion() >= "3.6.0") {
+#'   S3method(generics::tidy, effectsize_table)
+#' } else {
+#'   export(tidy.effectsize_table)
+#' }
+tidy.effectsize_table <- tidy.parameters_model
