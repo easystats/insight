@@ -1137,6 +1137,10 @@ find_formula.BFBayesFactor <- function(x, ...) {
       f.random <- stats::as.formula(paste0("~", frand))
       fcond <- sub(frand, "", fcond, fixed = TRUE)
       fcond <- gsub("(.*)\\+$", "\\1", .trim(fcond))
+      # random effects only?
+      if (grepl("~$", fcond)) {
+        fcond <- paste(fcond, "1")
+      }
       f.cond <- stats::as.formula(.trim(fcond))
     } else {
       f.random <- NULL
