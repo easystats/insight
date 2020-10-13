@@ -89,6 +89,8 @@ standardize_names.effectsize_table <- standardize_names.parameters_model
     # fancy regex replacements
     cn <- gsub("^CI_low", "conf.low", cn)
     cn <- gsub("^CI_high", "conf.high", cn)
+    cn <- gsub("(.*)CI_low$", "\\1conf.low", cn)
+    cn <- gsub("(.*)CI_high$", "\\1conf.low", cn)
     # from package effectisze
     if (requireNamespace("effectsize", quietly = TRUE)) {
       effectsize_names <- effectsize::is_effectsize_name(cn)
