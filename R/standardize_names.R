@@ -77,7 +77,7 @@ standardize_names.effectsize_table <- standardize_names.parameters_model
     cn[cn == "CI"] <- "ci.width"
     cn[cn == "df_error"] <- "den.df"
     cn[cn == "df_residual"] <- "res.df"
-    cn[cn == "n_obs"] <- "n.obs"
+    cn[cn == "n_Obs"] <- "n.obs"
     # anova
     cn[cn == "Sum_Squares"] <- "sumsq"
     cn[cn == "Mean_Square"] <- "meansq"
@@ -97,7 +97,7 @@ standardize_names.effectsize_table <- standardize_names.parameters_model
       }
     }
     # lowercase for everything
-    cn <- tolower(cn)
+    cn <- gsub(tolower(cn), pattern = "_", replacement = ".", fixed = TRUE)
   }
 
   colnames(data) <- cn
