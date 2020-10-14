@@ -77,6 +77,11 @@ find_formula.aovlist <- function(x, ...) {
 
 
 
+#' @export
+find_formula.anova <- function(x, ...) {
+  stop("Formulas cannot be retrieved from anova() objects.")
+}
+
 
 
 
