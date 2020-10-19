@@ -4,7 +4,6 @@
 
 * `get_sigma()` to return the residual standard deviation.
 * `standardize_names()`, which was moved from package *parameters* to *insight*.
-* `tidy()`, as a convenient wrapper for `standardize_names(style = "broom")`.
 
 ## New supported model classes
 
