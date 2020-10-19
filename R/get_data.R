@@ -341,6 +341,8 @@ get_data.cpglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
   .prepare_get_data(x, mf, effects)
 }
 
+#' @export
+get_data.HLfit <- get_data.cpglmm
 
 
 #' @export
