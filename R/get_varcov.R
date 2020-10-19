@@ -58,6 +58,9 @@ get_varcov.default <- function(x, ...) {
 #' @export
 get_varcov.maxLik <- get_varcov.default
 
+#' @export
+get_varcov.HLfit <- get_varcov.default
+
 
 
 

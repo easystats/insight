@@ -754,6 +754,25 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.HLfit <- function(x, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  utils::capture.output(s <- summary(x))
+
+  out <- data.frame(
+    Parameter = rownames(s$beta_table),
+    Statistic = as.vector(s$beta_table[, "t-value"]),
+    stringsAsFactors = FALSE
+  )
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.margins <- function(x, ...) {
   out <- data.frame(
     Parameter = get_parameters(x)$Parameter,

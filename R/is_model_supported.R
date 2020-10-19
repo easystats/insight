@@ -108,6 +108,7 @@ supported_models <- function() {
     "glmx",
     "gls",
     "gmnl",
+    "HLfit",
     "htest",
     "hurdle",
     "iv_robust",

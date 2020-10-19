@@ -906,6 +906,9 @@ find_formula.cgamm <- find_formula.merMod
 #' @export
 find_formula.coxme <- find_formula.merMod
 
+#' @export
+find_formula.HLfit <- find_formula.merMod
+
 
 #' @export
 find_formula.sem <- function(x, ...) {

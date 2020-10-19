@@ -596,6 +596,32 @@ find_parameters.rlmerMod <- find_parameters.merMod
 #' @export
 find_parameters.glmmadmb <- find_parameters.merMod
 
+#' @export
+find_parameters.HLfit <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  effects <- match.arg(effects)
+
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package 'lme4' required for this function to work. Please install it.")
+  }
+
+  # we extract random effects only when really necessary, to save
+  # computational time. In particular model with large sample and
+  # many random effects groups may take some time to return random effects
+
+  if (effects == "fixed") {
+    l <- list(conditional = names(lme4::fixef(x)))
+  } else {
+    utils::capture.output(s <- summary(x))
+    l <- .compact_list(list(
+      conditional = names(lme4::fixef(x)),
+      random = s$lambda_table$Term
+    ))
+  }
+
+  .filter_parameters(l, effects = effects, flatten = flatten)
+}
+
+
 
 
 #' @export

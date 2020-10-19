@@ -128,6 +128,7 @@ is_model <- function(x) {
       "gls",
       "gmnl",
       "gmm",
+      "HLfit",
       "htest",
       "hurdle",
       "iv_robust",

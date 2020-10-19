@@ -1033,6 +1033,37 @@ get_parameters.glmmadmb <- get_parameters.merMod
 #' @export
 get_parameters.lme <- get_parameters.merMod
 
+#' @export
+get_parameters.HLfit <- function(x, effects = c("fixed", "random"), ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("To use this function, please install package 'lme4'.")
+  }
+
+  effects <- match.arg(effects)
+
+  if (effects == "fixed") {
+    l <- list(conditional = lme4::fixef(x))
+  } else {
+    utils::capture.output(s <- summary(x))
+    l <- .compact_list(list(
+      conditional = lme4::fixef(x),
+      random = lme4::ranef(x)
+    ))
+  }
+
+  fixed <- data.frame(
+    Parameter = names(l$conditional),
+    Estimate = unname(l$conditional),
+    stringsAsFactors = FALSE
+  )
+
+  if (effects == "fixed") {
+    .remove_backticks_from_parameter_names(fixed)
+  } else {
+    l$random
+  }
+}
+
 
 
 #' @export
