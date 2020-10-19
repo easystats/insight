@@ -18,7 +18,7 @@
 
 * `format_bf()` gains a `na_reference` argument, to set the "reference" for Bayes factor values that are `NA`.
 * `format_value()` gains a `zap_small` argument, to prevent scientific printing of numbers if these have more decimal places than indicated by `digits`.
-* `get_weights()` now also return `NULL` when all weights were 1.
+* `get_weights()` now also returns `NULL` when all weights were 1.
 * `get_parameters()` for *BFBayesFactor* objects gets a `verbose` argument.
 * `get_parameters()` for *emmGrid* and *emm_list* objects gets a `summary` argument, to either return the full posterior samples or the summarized centrality indices for Bayesian models.
 * `find_formula()` for `MuMIn::model.avg()` now tries to retrieve the random effects part of a formula, when present.
