@@ -174,7 +174,7 @@
 #&gt; [1] "nloptwrap"
 #&gt; </div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://mc-stan.org/rstanarm/'>rstanarm</a></span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Subject</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sleepstudy</span><span class='op'>)</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/rstanarm/man/stan_glmer.html'>stan_lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Subject</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sleepstudy</span><span class='op'>)</span>
 <span class='fu'>find_algorithm</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 <span class='op'>}</span>
 
