@@ -5,7 +5,8 @@
 if (require("testthat") &&
   require("insight") &&
   require("lme4") &&
-  require("afex")) {
+  require("afex") &&
+  FALSE) {
   data(sleepstudy)
 
   set.seed(123)
