@@ -7,7 +7,12 @@
 \usage{
 standardize_names(data, ...)
 
-\method{standardize_names}{parameters_model}(data, style = c("easystats", "broom"), ...)
+\method{standardize_names}{parameters_model}(
+  data,
+  style = c("easystats", "broom"),
+  ignore_estimate = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{A data frame. In particular, objects from \emph{easystats} package functions like \code{\link[parameters:model_parameters]{model_parameters()}} or \code{\link[effectsize:effectsize]{effectsize()}} are accepted.}
@@ -15,6 +20,8 @@ standardize_names(data, ...)
 \item{...}{Currently not used.}
 
 \item{style}{Standardization can either be based on the naming conventions from the easystats project, or on \pkg{broom}'s naming scheme.}
+
+\item{ignore_estimate}{Logical, if \code{TRUE}, column names like \code{"mean"} or \code{"median"} will \emph{not} be converted to \code{"Coefficient"} resp. \code{"estimate"}.}
 }
 \value{
 A data frame, with standardized column names.
