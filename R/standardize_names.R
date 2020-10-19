@@ -54,6 +54,9 @@ standardize_names.parameters_model <- function(data, style = c("easystats", "bro
 #' @export
 standardize_names.effectsize_table <- standardize_names.parameters_model
 
+#' @export
+standardize_names.data.frame <- standardize_names.parameters_model
+
 
 
 
