@@ -1616,6 +1616,10 @@ get_parameters.manova <- function(x, ...) {
   .remove_backticks_from_parameter_names(out)
 }
 
+#' @export
+get_parameters.maov <- get_parameters.manova
+
+
 
 #' @export
 get_parameters.afex_aov <- function(x, ...) {

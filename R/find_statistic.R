@@ -189,7 +189,8 @@ find_statistic <- function(x, ...) {
       "aovlist",
       "anova",
       "Gam",
-      "manova"
+      "manova",
+      "maov"
     )
 
   # chi-squared value objects ------------------------------------------------

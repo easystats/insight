@@ -1436,6 +1436,10 @@ find_parameters.manova <- function(x, flatten = FALSE, ...) {
   }
 }
 
+#' @export
+find_parameters.maov <- find_parameters.manova
+
+
 
 #' @rdname find_parameters
 #' @export

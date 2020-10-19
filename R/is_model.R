@@ -151,6 +151,7 @@ is_model <- function(x) {
       "lqm",
       "lqmm",
       "lrm",
+      "maov",
       "manova",
       "MANOVA",
       "margins",

@@ -7,7 +7,7 @@
 
 ## New supported model classes
 
-* Preliminary support for `margins` (*margins*).
+* Preliminary support for `margins` (*margins*), `maov` (*stats*).
 
 ## General
 

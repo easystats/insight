@@ -1185,6 +1185,27 @@ get_statistic.manova <- function(x, ...) {
 
 
 #' @export
+get_statistic.maov <- function(x, ...) {
+  s <- summary(x)
+  out <- do.call(rbind, lapply(names(s), function(i) {
+    stats <- s[[i]]
+    missing <- is.na(stats[["F value"]])
+    data.frame(
+      Parameter = rownames(stats)[!missing],
+      Statistic = as.vector(stats[["F value"]][!missing]),
+      Response = gsub("\\s*Response ", "", i),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }))
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+#' @export
 get_statistic.MANOVA <- function(x, ...) {
   stats <- as.data.frame(x$WTS)
 
