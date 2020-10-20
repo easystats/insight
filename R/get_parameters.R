@@ -1754,7 +1754,7 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
   }
 
 
-  params <- find_parameters(x, effects = effects, component = component, flatten = TRUE)
+  params <- find_parameters(x, effects = effects, component = component, flatten = TRUE, ...)
 
   if (bf_type %in% c("correlation", "ttest1", "ttest2", "meta", "linear")) {
     posteriors <-
