@@ -89,6 +89,19 @@ get_statistic.lme <- function(x, ...) {
 get_statistic.lmerModLmerTest <- get_statistic.lme
 
 
+#' @export
+get_statistic.merModList <- function(x, ...) {
+  s <- suppressWarnings(summary(x))
+  out <- data.frame(
+    Parameter = s$fe$term,
+    Statistic = s$fe$statistic,
+    stringsAsFactors = FALSE
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
 
 
 #' @export

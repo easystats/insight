@@ -378,6 +378,12 @@ link_inverse.negbinirr <- link_inverse.logitmfx
 
 
 #' @export
+link_inverse.merModList <- function(x, ...) {
+  link_inverse.default(x[[1]], ...)
+}
+
+
+#' @export
 link_inverse.robmixglm <- function(x, ...) {
   switch(
     tolower(x$family),

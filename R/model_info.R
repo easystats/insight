@@ -726,6 +726,12 @@ model_info.averaging <- function(x, ...) {
 
 
 #' @export
+model_info.merModList <- function(x, ...) {
+  model_info.default(x[[1]], ...)
+}
+
+
+#' @export
 model_info.cglm <- function(x, ...) {
   link <- parse(text = .safe_deparse(x$call))[[1]]$link
   method <- parse(text = .safe_deparse(x$call))[[1]]$method

@@ -29,6 +29,14 @@
 #' @importFrom stats deviance sigma
 #' @export
 get_sigma <- function(x) {
+
+  # special handling ---------------
+  if (inherits(x, "merModList")) {
+    s <- suppressWarnings(summary(x))
+    return(s$residError)
+  }
+
+  # default sigma ---------------
   s <- tryCatch(
     {
       stats::sigma(x)
@@ -38,6 +46,7 @@ get_sigma <- function(x) {
     }
   )
 
+  # compute sigma manually ---------------
   if (.is_empty_object(s)) {
     s <- tryCatch(
       {

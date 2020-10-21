@@ -291,6 +291,12 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
   .prepare_get_data(x, mf, effects)
 }
 
+#' @export
+get_data.merModList <- function(x, effects = c("all", "fixed", "random"), ...) {
+  warning("Can't access data for 'merModList' objects.", call. = FALSE)
+  return(NULL)
+}
+
 
 
 #' @export

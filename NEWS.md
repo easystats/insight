@@ -7,7 +7,7 @@
 
 ## New supported model classes
 
-* Support for `maov` (*stats*), `HLfit` (*spaMM*), preliminary support for `margins` (*margins*).
+* Support for `maov` (*stats*), `HLfit` (*spaMM*), preliminary support for `margins` (*margins*), `merModList` (*merTools*).
 
 ## General
 

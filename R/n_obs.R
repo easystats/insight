@@ -67,6 +67,13 @@ n_obs.gamm <- function(x, ...) {
 
 
 #' @export
+n_obs.merModList <- function(x, ...) {
+  stats::nobs(x[[1]])
+}
+
+
+
+#' @export
 n_obs.bayesx <- function(x, ...) {
   length(x$response)
 }

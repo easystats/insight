@@ -597,6 +597,12 @@ find_parameters.rlmerMod <- find_parameters.merMod
 find_parameters.glmmadmb <- find_parameters.merMod
 
 #' @export
+find_parameters.merModList <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  effects <- match.arg(effects)
+  find_parameters(x[[1]], effects = effects, flatten = flatten, ...)
+}
+
+#' @export
 find_parameters.HLfit <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   effects <- match.arg(effects)
 

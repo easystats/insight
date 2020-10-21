@@ -136,6 +136,7 @@ supported_models <- function() {
     "MCMCglmm",
     "metaplus",
     "merMod",
+    "merModList",
     "mipo",
     "mixed",
     "mixor",

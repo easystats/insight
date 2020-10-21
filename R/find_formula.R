@@ -909,6 +909,12 @@ find_formula.coxme <- find_formula.merMod
 #' @export
 find_formula.HLfit <- find_formula.merMod
 
+#' @export
+find_formula.merModList <- function(x, ...) {
+  find_formula(x[[1]], ...)
+}
+
+
 
 #' @export
 find_formula.sem <- function(x, ...) {

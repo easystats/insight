@@ -165,6 +165,7 @@ is_model <- function(x) {
       "MCMCglmm",
       "mediate",
       "merMod",
+      "merModList",
       "meta_fixed",
       "meta_random",
       "meta_ordered",

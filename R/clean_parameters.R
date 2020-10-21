@@ -194,6 +194,11 @@ clean_parameters.wbm <- function(x, ...) {
 clean_parameters.wbgee <- clean_parameters.wbm
 
 
+#' @export
+clean_parameters.merModList <- function(x, ...) {
+  clean_parameters.default(x[[1]], ...)
+}
+
 
 #' @export
 clean_parameters.glmm <- function(x, ...) {

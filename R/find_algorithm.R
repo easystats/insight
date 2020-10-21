@@ -226,6 +226,11 @@ find_algorithm.merMod <- function(x, ...) {
 #' @export
 find_algorithm.rlmerMod <- find_algorithm.merMod
 
+#' @export
+find_algorithm.merModList <- function(x, ...) {
+  find_algorithm(x[[1]], ...)
+}
+
 
 #' @export
 find_algorithm.mixed <- function(x, ...) {

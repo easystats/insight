@@ -1034,6 +1034,18 @@ get_parameters.glmmadmb <- get_parameters.merMod
 get_parameters.lme <- get_parameters.merMod
 
 #' @export
+get_parameters.merModList <- function(x, ...) {
+  s <- suppressWarnings(summary(x))
+  fixed <- data.frame(
+    Parameter = s$fe$term,
+    Estimate = s$fe$estimate,
+    stringsAsFactors = FALSE
+  )
+
+  .remove_backticks_from_parameter_names(fixed)
+}
+
+#' @export
 get_parameters.HLfit <- function(x, effects = c("fixed", "random"), ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")

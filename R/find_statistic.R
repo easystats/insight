@@ -32,6 +32,11 @@ find_statistic <- function(x, ...) {
     x <- models$analyses[[1]]
   }
 
+  if (inherits(x, "merModList")) {
+    x <- x[[1]]
+  }
+
+
   # t-value objects ----------------------------------------------------------
 
   t.mods <-

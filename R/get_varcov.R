@@ -433,6 +433,13 @@ get_varcov.negbinirr <- get_varcov.logitmfx
 # Other models with special handling -----------------------------------------
 
 
+#' @export
+get_varcov.merModList <- function(x, ...) {
+  warning("Can't access variance-covariance matrix for 'merModList' objects.", call. = FALSE)
+  return(NULL)
+}
+
+
 #' @rdname get_varcov
 #' @export
 get_varcov.aov <- function(x, complete = FALSE, ...) {

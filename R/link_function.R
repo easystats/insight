@@ -344,6 +344,12 @@ link_function.logitor <- link_function.logitmfx
 
 
 #' @export
+link_function.merModList <- function(x, ...) {
+  link_function.default(x[[1]], ...)
+}
+
+
+#' @export
 link_function.mipo <- function(x, ...) {
   models <- eval(x$call$object)
   link_function(models$analyses[[1]])
