@@ -682,6 +682,15 @@ link_inverse.mipo <- function(x, ...) {
 }
 
 
+#' @export
+link_inverse.mira <- function(x, ...) {
+  if (!requireNamespace("mice", quietly = TRUE)) {
+    stop("Package `mice` required. Please install it.", call. = FALSE)
+  }
+  link_inverse(mice::pool(x), ...)
+}
+
+
 
 
 

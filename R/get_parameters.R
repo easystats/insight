@@ -335,6 +335,15 @@ get_parameters.mipo <- function(x, ...) {
 
 
 #' @export
+get_parameters.mira <- function(x, ...) {
+  if (!requireNamespace("mice", quietly = TRUE)) {
+    stop("Package `mice` required. Please install it.", call. = FALSE)
+  }
+  get_parameters(mice::pool(x), ...)
+}
+
+
+#' @export
 get_parameters.margins <- function(x, ...) {
   s <- summary(x)
   param <- as.vector(s$factor)

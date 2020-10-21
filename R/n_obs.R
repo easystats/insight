@@ -460,6 +460,15 @@ n_obs.mipo <- function(x, ...) {
 
 
 #' @export
+n_obs.mira <- function(x, ...) {
+  if (!requireNamespace("mice", quietly = TRUE)) {
+    stop("Package `mice` required. Please install it.", call. = FALSE)
+  }
+  n_obs(mice::pool(x), ...)
+}
+
+
+#' @export
 n_obs.emm_list <- function(x, ...) {
   NULL
 }

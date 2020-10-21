@@ -836,6 +836,15 @@ get_statistic.mipo <- function(x, ...) {
 
 
 #' @export
+get_statistic.mira <- function(x, ...) {
+  if (!requireNamespace("mice", quietly = TRUE)) {
+    stop("Package `mice` required. Please install it.", call. = FALSE)
+  }
+  get_statistic(mice::pool(x), ...)
+}
+
+
+#' @export
 get_statistic.mle2 <- function(x, ...) {
   if (!requireNamespace("bbmle", quietly = TRUE)) {
     stop("Package `bbmle` needs to be installed to extract test statistic.", call. = FALSE)
