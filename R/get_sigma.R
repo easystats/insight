@@ -36,6 +36,11 @@ get_sigma <- function(x) {
     return(s$residError)
   }
 
+  if (inherits(x, c("mipo", "mira"))) {
+    return(NULL)
+  }
+
+
   # default sigma ---------------
   s <- tryCatch(
     {

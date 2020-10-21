@@ -50,7 +50,6 @@ find_statistic <- function(x, ...) {
 
   # check if model object is accessible; if not, quit early
   if (is.null(x)) {
-    warning("Can't access model object.", call. = FALSE)
     return(NULL)
   }
 
