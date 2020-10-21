@@ -10,7 +10,8 @@ format_bf(
   stars_only = FALSE,
   name = "BF",
   protect_ratio = FALSE,
-  na_reference = NA
+  na_reference = NA,
+  exact = FALSE
 )
 }
 \arguments{
@@ -24,7 +25,11 @@ format_bf(
 
 \item{protect_ratio}{Should values smaller than 1 be represented as ratios?}
 
-\item{na_reference}{How to format missing values (\code{NA}). By default, \code{NA} values are formatted as \code{"BF = 1"}.}
+\item{na_reference}{How to format missing values (\code{NA}).}
+
+\item{exact}{Should very large or very small values be reported with a
+scientific format (e.g., 4.24e5), or as truncated values (as "> 1000" and
+"< 1/1000").}
 }
 \value{
 A formatted string.
@@ -33,9 +38,11 @@ A formatted string.
 Bayes Factor formatting
 }
 \examples{
-format_bf(1.20)
-format_bf(c(1.20, 1557, 3.5, 12), stars = TRUE)
-format_bf(c(1.20, 1557, 3.5, 12), name = NULL)
-format_bf(c(NA, 3.45, 345))
-format_bf(c(NA, 3.45, 345), na_reference = 1)
+format_bf(bfs <- c(0.000045, 0.033, NA, 1557, 3.54))
+format_bf(bfs, exact = TRUE, name = NULL)
+format_bf(bfs, stars = TRUE)
+format_bf(bfs, protect_ratio = TRUE)
+format_bf(bfs, protect_ratio = TRUE, exact = TRUE)
+format_bf(bfs, na_reference = 1)
+
 }
