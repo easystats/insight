@@ -837,10 +837,7 @@ get_statistic.mipo <- function(x, ...) {
 
 #' @export
 get_statistic.mira <- function(x, ...) {
-  if (!requireNamespace("mice", quietly = TRUE)) {
-    stop("Package `mice` required. Please install it.", call. = FALSE)
-  }
-  get_statistic(mice::pool(x), ...)
+  get_statistic(x$analyses[[1]], ...)
 }
 
 

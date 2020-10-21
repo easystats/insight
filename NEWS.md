@@ -13,6 +13,7 @@
 
 * Better support for (weighted) multivariate response models of class `mlm` for functions like `get_varcov()` or `clean_parameters()`.
 * Make `find_formula()` work with t-tests from *BayesFactor*.
+* Improved handling for *mira* objects.
 
 ## Changes to functions
 

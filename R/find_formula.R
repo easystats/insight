@@ -249,6 +249,12 @@ find_formula.afex_aov <- function(x, ...) {
 
 
 #' @export
+find_formula.mira <- function(x, ...) {
+  find_formula(x$analyses[[1]])
+}
+
+
+#' @export
 find_formula.gee <- function(x, ...) {
   tryCatch(
     {

@@ -32,6 +32,10 @@ find_statistic <- function(x, ...) {
     x <- models$analyses[[1]]
   }
 
+  if (inherits(x, "mira")) {
+    x <- x$analyses[[1]]
+  }
+
   if (inherits(x, "merModList")) {
     x <- x[[1]]
   }

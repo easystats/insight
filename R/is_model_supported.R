@@ -138,6 +138,7 @@ supported_models <- function() {
     "merMod",
     "merModList",
     "mipo",
+    "mira",
     "mixed",
     "mixor",
     "MixMod",
