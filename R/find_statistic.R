@@ -22,14 +22,21 @@ find_statistic <- function(x, ...) {
 
   # model object check --------------------------------------------------------
 
-  # check if the object is a model object; if so, quit early
+  # check if the object is a model object; if not, quit early
   if (!isTRUE(is_model(x))) {
-    stop(message("The entered object is not a model object."), call. = FALSE)
+    stop("The entered object is not a model object.", call. = FALSE)
   }
 
   if (inherits(x, "mipo")) {
-    models <- eval(x$call$object)
-    x <- models$analyses[[1]]
+    x <- tryCatch(
+      {
+        models <- eval(x$call$object)
+        x <- models$analyses[[1]]
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
   if (inherits(x, "mira")) {
@@ -38,6 +45,13 @@ find_statistic <- function(x, ...) {
 
   if (inherits(x, "merModList")) {
     x <- x[[1]]
+  }
+
+
+  # check if model object is accessible; if not, quit early
+  if (is.null(x)) {
+    warning("Can't access model object.", call. = FALSE)
+    return(NULL)
   }
 
 

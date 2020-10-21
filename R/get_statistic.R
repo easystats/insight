@@ -829,13 +829,7 @@ get_statistic.mipo <- function(x, ...) {
     stringsAsFactors = FALSE
   )
   out <- .remove_backticks_from_parameter_names(params)
-
-  arg_names <- match.call(expand.dots = FALSE)$`...`
-  if (!is.null(arg_names$model_name)) {
-    attr(out, "statistic") <- find_statistic(get(arg_names$model_name, envir = parent.frame()))
-  } else {
-    attr(out, "statistic") <- find_statistic(x)
-  }
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
 
