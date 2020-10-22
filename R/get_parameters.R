@@ -2129,8 +2129,10 @@ get_parameters.bayesQR <- function(x, parameters = NULL, summary = FALSE, ...) {
 
 .clean_emmeans_draws <- function(x, ...) {
   if (!requireNamespace("emmeans", quietly = TRUE)) {
-    stop("Package 'emmeans' required for this function to work.\n",
-         "Please install it by running `install.packages('emmeans')`.")
+    stop(
+      "Package 'emmeans' required for this function to work.\n",
+      "Please install it by running `install.packages('emmeans')`."
+    )
   }
 
   if (!is.null(attributes(x)$misc$predict.type) && attributes(x)$misc$predict.type != "none") {
