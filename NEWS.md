@@ -1,4 +1,4 @@
-# insight 0.9.7
+# insight 0.10.0
 
 ## New function
 
