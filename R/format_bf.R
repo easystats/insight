@@ -17,7 +17,6 @@
 #' format_bf(bfs, protect_ratio = TRUE)
 #' format_bf(bfs, protect_ratio = TRUE, exact = TRUE)
 #' format_bf(bfs, na_reference = 1)
-#'
 #' @export
 format_bf <- function(bf, stars = FALSE, stars_only = FALSE, name = "BF",
                       protect_ratio = FALSE, na_reference = NA, exact = FALSE) {
@@ -49,20 +48,25 @@ format_bf <- function(bf, stars = FALSE, stars_only = FALSE, name = "BF",
   if (any(is_extreme)) {
     if (exact) {
       text[is_extreme] <- ifelse(bf_orig[is_extreme] > 1000,
-                                 sprintf("= %.2e", bf_orig[is_extreme]),
-                                 text[is_extreme])
+        sprintf("= %.2e", bf_orig[is_extreme]),
+        text[is_extreme]
+      )
       text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
-                                 ifelse(is_small[is_extreme],
-                                        sprintf("= 1/%.2e", bf[is_extreme]),
-                                        sprintf("= %.2e", bf_orig[is_extreme])),
-                                 text[is_extreme])
+        ifelse(is_small[is_extreme],
+          sprintf("= 1/%.2e", bf[is_extreme]),
+          sprintf("= %.2e", bf_orig[is_extreme])
+        ),
+        text[is_extreme]
+      )
     } else {
       text[is_extreme] <- ifelse(bf_orig[is_extreme] > 1000,
-                                 "> 1000",
-                                 text[is_extreme])
+        "> 1000",
+        text[is_extreme]
+      )
       text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
-                                 ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"),
-                                 text[is_extreme])
+        ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"),
+        text[is_extreme]
+      )
     }
   }
 

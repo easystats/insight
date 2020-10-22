@@ -62,7 +62,7 @@ standardize_names.data.frame <- standardize_names.parameters_model
 #' @export
 standardize_names.parameters_distribution <- function(data, style = c("easystats", "broom"), ...) {
   style <- match.arg(style)
-  .standardize_names(data, style, ignore_estimate = TRUE,...)
+  .standardize_names(data, style, ignore_estimate = TRUE, ...)
 }
 
 
@@ -81,6 +81,9 @@ standardize_names.parameters_distribution <- function(data, style = c("easystats
     }
     cn[cn %in% c("df_residual", "df_error")] <- "df"
   } else {
+    # TO DO: currently `htest` object output naming differs from `broom`
+    # needs further discussion
+
     # easy replacements
     cn[cn == "Parameter"] <- "term"
     cn[cn == "SE"] <- "std.error"
@@ -91,8 +94,8 @@ standardize_names.parameters_distribution <- function(data, style = c("easystats
     cn[cn == "Effects"] <- "effect"
     cn[cn == "Response"] <- "response"
     cn[cn == "CI"] <- "ci.width"
-    cn[cn == "df_error"] <- "den.df"
-    cn[cn == "df_residual"] <- "res.df"
+    cn[cn == "df_error"] <- "df.error"
+    cn[cn == "df_residual"] <- "df.residual"
     cn[cn == "n_Obs"] <- "n.obs"
     # anova
     cn[cn == "Sum_Squares"] <- "sumsq"

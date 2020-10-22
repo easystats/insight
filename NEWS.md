@@ -1,3 +1,10 @@
+# insight 0.10.1
+
+## Changes to functions
+
+* `standardize_names()` tries to be as loyal to the `broom`-naming conventions
+as possible.
+
 # insight 0.10.0
 
 ## New function
