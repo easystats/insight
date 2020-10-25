@@ -181,6 +181,28 @@ find_formula.gamm <- function(x, ...) {
 
 
 
+# Meta-Analysis -----------------------
+
+
+#' @export
+find_formula.rma <- function(x, ...) {
+  NULL
+}
+
+#' @export
+find_formula.metaplus <- find_formula.rma
+
+#' @export
+find_formula.meta_random <- find_formula.rma
+
+#' @export
+find_formula.meta_fixed <- find_formula.rma
+
+
+
+
+
+
 # Other models ----------------------------------------------
 
 
@@ -226,16 +248,6 @@ find_formula.betareg <- function(x, ...) {
     list(conditional = f)
   }
 }
-
-
-#' @export
-find_formula.rma <- function(x, ...) {
-  NULL
-}
-
-#' @export
-find_formula.metaplus <- find_formula.rma
-
 
 
 #' @export

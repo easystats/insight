@@ -234,6 +234,47 @@ get_priors.bcplm <- function(x, ...) {
 
 
 
+#' @export
+get_priors.meta_random <- function(x, ...) {
+  params <- rownames(x$estimates)
+  params[params == "d"] <- "(Intercept)"
+
+  prior_info1 <- attr(x$prior_d, "param")
+  prior_info2 <- attr(x$prior_tau, "param")
+
+  fam1 <- attr(x$prior_d, "family")
+  fam2 <- attr(x$prior_tau, "family")
+
+  data.frame(
+    Parameter = params,
+    Distribution = c(fam1, fam2),
+    Location = c(prior_info1["mean"], prior_info2["shape"]),
+    Scale = c(prior_info1["sd"], prior_info2["scale"]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}
+
+
+#' @export
+get_priors.meta_fixed <- function(x, ...) {
+  params <- rownames(x$estimates)
+  params[params == "d"] <- "(Intercept)"
+
+  prior_info <- attr(x$prior_d, "param")
+  fam <- attr(x$prior_d, "family")
+
+  data.frame(
+    Parameter = params,
+    Distribution = fam,
+    Location = prior_info["mean"],
+    Scale = prior_info["sd"],
+    stringsAsFactors = FALSE
+  )
+}
+
+
+
 #' @importFrom utils tail
 #' @export
 get_priors.BFBayesFactor <- function(x, ...) {

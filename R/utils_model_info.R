@@ -224,7 +224,7 @@
   # meta analysis
 
   if (!is_meta) {
-    is_meta <- inherits(x, c("rma", "metaplus"))
+    is_meta <- inherits(x, c("rma", "metaplus", "meta_random", "meta_fixed"))
   }
 
   if (inherits(x, "brmsfit") && !is_multivariate(x)) {

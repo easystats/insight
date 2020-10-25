@@ -1233,6 +1233,24 @@ get_data.rma <- function(x, ...) {
 get_data.metaplus <- get_data.rma
 
 
+#' @export
+get_data.meta_random <- function(x, ...) {
+  mf <- tryCatch(
+    {
+      x$data$data
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, stats::na.omit(mf))
+}
+
+
+#' @export
+get_data.meta_fixed <- get_data.meta_random
+
 
 #' @export
 get_data.mipo <- function(x, ...) {

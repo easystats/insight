@@ -708,6 +708,33 @@ get_parameters.rma <- function(x, ...) {
 
 
 #' @export
+get_parameters.meta_random <- function(x, ...) {
+  tryCatch(
+    {
+      cf <- x$estimates
+
+      params <- data.frame(
+        Parameter = rownames(cf),
+        Estimate = unname(cf[, 1]),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+
+      params$Parameter[grepl("d", params$Parameter)] <- "(Intercept)"
+      .remove_backticks_from_parameter_names(params)
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+}
+
+
+#' @export
+get_parameters.meta_fixed <- get_parameters.meta_random
+
+
+#' @export
 get_parameters.metaplus <- function(x, ...) {
   params <- data.frame(
     Parameter = rownames(x$results),

@@ -1738,6 +1738,31 @@ find_parameters.rma <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.meta_random <- function(x, flatten = FALSE, ...) {
+  tryCatch(
+    {
+      cf <- x$estimates
+      pars <- list(conditional = rownames(cf))
+      pars$conditional[pars$conditional == "d"] <- "(Intercept)"
+
+      if (flatten) {
+        unique(unlist(pars))
+      } else {
+        pars
+      }
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+}
+
+
+#' @export
+find_parameters.meta_fixed <- find_parameters.meta_random
+
+
+#' @export
 find_parameters.metaplus <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = rownames(x$results))
   pars$conditional[grepl("muhat", pars$conditional)] <- "(Intercept)"
