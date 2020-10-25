@@ -1,8 +1,12 @@
 # insight 0.10.1
 
+## New supported model classes
+
+* Support for `scam` (*scam*)
+
 ## Changes to functions
 
-* `standardize_names()` tries to be as loyal to the `broom`-naming conventions
+* `standardize_names()` tries to be as loyal to the *broom*-naming conventions
 as possible.
 
 # insight 0.10.0

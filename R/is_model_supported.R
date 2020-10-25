@@ -166,6 +166,7 @@ supported_models <- function() {
     "robmixglm",
     "rq",
     "rqss",
+    "scam",
     "sem",
     "speedlm",
     "speedglm",

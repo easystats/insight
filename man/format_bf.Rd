@@ -44,5 +44,4 @@ format_bf(bfs, stars = TRUE)
 format_bf(bfs, protect_ratio = TRUE)
 format_bf(bfs, protect_ratio = TRUE, exact = TRUE)
 format_bf(bfs, na_reference = 1)
-
 }

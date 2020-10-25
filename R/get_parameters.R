@@ -1499,6 +1499,10 @@ get_parameters.gam <- function(x, component = c("all", "conditional", "smooth_te
 }
 
 
+#' @export
+get_parameters.scam <- get_parameters.gam
+
+
 
 #' @export
 get_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {

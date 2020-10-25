@@ -393,6 +393,10 @@ find_parameters.gam <- function(x, component = c("all", "conditional", "smooth_t
 }
 
 
+#' @export
+find_parameters.scam <- find_parameters.gam
+
+
 
 #' @export
 find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {

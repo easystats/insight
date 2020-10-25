@@ -134,6 +134,9 @@ find_algorithm.gam <- function(x, ...) {
   )
 }
 
+#' @export
+find_algorithm.scam <- find_algorithm.gam
+
 
 #' @export
 find_algorithm.lm <- function(x, ...) {

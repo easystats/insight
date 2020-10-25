@@ -293,6 +293,10 @@ get_statistic.gam <- function(x, ...) {
   out
 }
 
+#' @export
+get_statistic.scam <- get_statistic.gam
+
+
 
 #' @export
 get_statistic.gamm <- function(x, ...) {
