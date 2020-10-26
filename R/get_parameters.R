@@ -733,6 +733,9 @@ get_parameters.meta_random <- function(x, ...) {
 #' @export
 get_parameters.meta_fixed <- get_parameters.meta_random
 
+#' @export
+get_parameters.meta_bma <- get_parameters.meta_random
+
 
 #' @export
 get_parameters.metaplus <- function(x, ...) {

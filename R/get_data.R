@@ -1249,6 +1249,21 @@ get_data.meta_random <- function(x, ...) {
 
 
 #' @export
+get_data.meta_bma <- function(x, ...) {
+  mf <- tryCatch(
+    {
+      x$meta$fixed$data$data
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, stats::na.omit(mf))
+}
+
+
+#' @export
 get_data.meta_fixed <- get_data.meta_random
 
 

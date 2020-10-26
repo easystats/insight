@@ -198,6 +198,10 @@ find_formula.meta_random <- find_formula.rma
 #' @export
 find_formula.meta_fixed <- find_formula.rma
 
+#' @export
+find_formula.meta_bma <- find_formula.rma
+
+
 
 
 

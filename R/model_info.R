@@ -241,6 +241,9 @@ model_info.rma <- model_info.mmclogit
 model_info.meta_random <- model_info.mmclogit
 
 #' @export
+model_info.meta_bma <- model_info.mmclogit
+
+#' @export
 model_info.meta_fixed <- model_info.mmclogit
 
 #' @export

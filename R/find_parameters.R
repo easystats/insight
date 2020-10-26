@@ -1761,6 +1761,10 @@ find_parameters.meta_random <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.meta_fixed <- find_parameters.meta_random
 
+#' @export
+find_parameters.meta_bma <- find_parameters.meta_random
+
+
 
 #' @export
 find_parameters.metaplus <- function(x, flatten = FALSE, ...) {
