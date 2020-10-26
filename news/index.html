@@ -123,12 +123,19 @@
 <h1 class="page-header" data-toc-text="0.10.1">
 <a href="#insight-0101" class="anchor"></a>insight 0.10.1<small> Unreleased </small>
 </h1>
+<div id="new-supported-model-classes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
+<ul>
+<li>Support for <code>scam</code> (<em>scam</em>), <code>meta_random</code> and <code>meta_fixed</code> (<em>metaBMA</em>)</li>
+</ul>
+</div>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
-<code><a href="../reference/standardize_names.html">standardize_names()</a></code> tries to be as loyal to the <code>broom</code>-naming conventions as possible.</li>
+<code><a href="../reference/standardize_names.html">standardize_names()</a></code> tries to be as loyal to the <em>broom</em>-naming conventions as possible.</li>
 </ul>
 </div>
 </div>
@@ -146,9 +153,9 @@
 <code><a href="../reference/standardize_names.html">standardize_names()</a></code>, which was moved from package <em>parameters</em> to <em>insight</em>.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes" class="section level2">
+<div id="new-supported-model-classes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-1" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>Support for <code>maov</code> (<em>stats</em>), <code>HLfit</code> (<em>spaMM</em>), preliminary support for <code>margins</code> (<em>margins</em>), <code>merModList</code> (<em>merTools</em>).</li>
 </ul>
@@ -253,9 +260,9 @@
 <h1 class="page-header" data-toc-text="0.9.1">
 <a href="#insight-091" class="anchor"></a>insight 0.9.1<small> 2020-08-26 </small>
 </h1>
-<div id="new-supported-model-classes-1" class="section level2">
+<div id="new-supported-model-classes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-1" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-2" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>Support for <code>mipo</code> (<em>mice</em>), <code>lqmm</code> and <code>lqm</code> (<em>lqmm</em>). Preliminary support for <code>semLME</code> (<em>smicd</em>), <code>mle</code> (<em>stats4</em>) and <code>mle2</code> (<em>bbmle</em>).</li>
 </ul>
@@ -288,9 +295,9 @@
 <h1 class="page-header" data-toc-text="0.9.0">
 <a href="#insight-090" class="anchor"></a>insight 0.9.0<small> 2020-07-20 </small>
 </h1>
-<div id="new-supported-model-classes-2" class="section level2">
+<div id="new-supported-model-classes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-2" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-3" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>BGGM</code> (<em>BGGM</em>), <code>metaplus</code> (<em>metaplus</em>), <code>glht</code> (<em>multcomp</em>), <code>glmm</code> (<em>glmm</em>), improved support for <code>manova</code> (<em>stats</em>)</li>
@@ -335,9 +342,9 @@
 <h1 class="page-header" data-toc-text="0.8.5">
 <a href="#insight-085" class="anchor"></a>insight 0.8.5<small> 2020-06-08 </small>
 </h1>
-<div id="new-supported-model-classes-3" class="section level2">
+<div id="new-supported-model-classes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-3" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-4" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>robmixglm</code> (<em>robmixglm</em>), <code>betamfx</code>, <code>logitmfx</code>, <code>poissonmfx</code>, <code>probitmfx</code>, <code>negbinmfx</code>, <code>betaor</code>, <code>logitor</code>, <code>poissonirr</code>, <code>negbinirr</code> (<em>mfx</em>), partial support for <em>emmGrid</em>, <em>stanfit</em> and <em>bayesQR</em>.</li>
@@ -409,9 +416,9 @@
 <li>The function to calculate null-models for mixed effects models is now exported (<code><a href="../reference/null_model.html">null_model()</a></code>.)</li>
 </ul>
 </div>
-<div id="new-supported-model-classes-4" class="section level2">
+<div id="new-supported-model-classes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-4" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-5" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>arima</code> (<em>stats</em>), <code>averaging</code> (<em>MuMIn</em>)</li>
@@ -450,9 +457,9 @@
 <code><a href="../reference/model_info.html">model_info()</a></code> now only returns <code>TRUE</code> for <code>$is_ordinal</code>, when model is an ordinal or cumulative link model. In past versions, <code>$is_ordinal</code> was also <code>TRUE</code> for multinomial models.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes-5" class="section level2">
+<div id="new-supported-model-classes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-5" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-6" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>bife</code> (<em>bife</em>), <code>bcplm</code> and <code>zcpglm</code> (<em>cplm</em>)</li>
@@ -483,9 +490,9 @@
 <h1 class="page-header" data-toc-text="0.8.1">
 <a href="#insight-081" class="anchor"></a>insight 0.8.1<small> 2020-02-02 </small>
 </h1>
-<div id="new-supported-model-classes-6" class="section level2">
+<div id="new-supported-model-classes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-6" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-7" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>cglm</code> (<em>cglm</em>), <code>DirichletRegModel</code> (<em>DirichletReg</em>).</li>
@@ -524,9 +531,9 @@
 <h1 class="page-header" data-toc-text="0.8.0">
 <a href="#insight-080" class="anchor"></a>insight 0.8.0<small> 2020-01-14 </small>
 </h1>
-<div id="new-supported-model-classes-7" class="section level2">
+<div id="new-supported-model-classes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-7" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-8" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>brglm</code> (<em>brglm</em>), <code>cgam</code>, <code>cgamm</code> (<em>cgam</em>), <code>cpglm</code>, <code>cpglmm</code> (<em>cplm</em>), <code>feglm</code> (<em>apaca</em>), <code>glmmadmb</code> (<em>glmmADMB</em>), <code>glmx</code> (<em>glmx</em>), partial support for <code>mcmc</code> (<em>coda</em>), <code>mixor</code> (<em>mixor</em>), <code>MANOVA</code>, <code>RM</code> (<em>MANOVA.RM</em>).</li>
@@ -580,9 +587,9 @@
 <h1 class="page-header" data-toc-text="0.7.1">
 <a href="#insight-071" class="anchor"></a>insight 0.7.1<small> 2019-11-28 </small>
 </h1>
-<div id="new-supported-model-classes-8" class="section level2">
+<div id="new-supported-model-classes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-8" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-9" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>complmrob</code> (<em>complmrob</em>), <code>fixest</code> (<em>fixest</em>), <code>mclogit</code> and <code>mmclogit</code> (<em>mclogit</em>).</li>
@@ -612,9 +619,9 @@
 <code><a href="../reference/model_info.html">model_info()</a></code> returned both <code>$is_zeroinf</code> and <code>$is_zero_inflated</code> for zero-inflated models. Now <code>$is_zeroinf</code> is softly deprecated, so <code><a href="../reference/model_info.html">model_info()</a></code> will return <code>$is_zero_inflated</code> only in future updates.</li>
 </ul>
 </div>
-<div id="new-supported-model-classes-9" class="section level2">
+<div id="new-supported-model-classes-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-9" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-10" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>aareg</code> (<em>survival</em>), <code>brmultinom</code> and <code>bracl</code> (<em>brglm2</em>), and <code>wbgee</code> (<em>panelr</em>). Furthermore, for different model-types from <em>panelr</em> models (within-between, between, etc.) are now also supported.</li>
@@ -644,9 +651,9 @@
 <h1 class="page-header" data-toc-text="0.6.0">
 <a href="#insight-060" class="anchor"></a>insight 0.6.0<small> 2019-10-17 </small>
 </h1>
-<div id="new-supported-model-classes-10" class="section level2">
+<div id="new-supported-model-classes-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-supported-model-classes-10" class="anchor"></a>New supported model classes</h2>
+<a href="#new-supported-model-classes-11" class="anchor"></a>New supported model classes</h2>
 <ul>
 <li>
 <code>bayesx</code> (<em>R2BayesX</em>), <code>bamlss</code> (<em>bamlss</em>) and <code>flexsurvreg</code> (<em>flexsurv</em>). Note that support for these models is still somewhat experimental.</li>
