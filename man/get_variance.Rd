@@ -20,21 +20,21 @@ get_variance(
   ...
 )
 
-get_variance_residual(x, ...)
+get_variance_residual(x, verbose = TRUE, ...)
 
-get_variance_fixed(x, ...)
+get_variance_fixed(x, verbose = TRUE, ...)
 
-get_variance_random(x, ...)
+get_variance_random(x, verbose = TRUE, ...)
 
-get_variance_distribution(x, ...)
+get_variance_distribution(x, verbose = TRUE, ...)
 
-get_variance_dispersion(x, ...)
+get_variance_dispersion(x, verbose = TRUE, ...)
 
-get_variance_intercept(x, ...)
+get_variance_intercept(x, verbose = TRUE, ...)
 
-get_variance_slope(x, ...)
+get_variance_slope(x, verbose = TRUE, ...)
 
-get_correlation_slope_intercept(x, ...)
+get_correlation_slope_intercept(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A mixed effects model.}

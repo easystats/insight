@@ -120,7 +120,9 @@ get_variance <- function(x, component = c("all", "fixed", "random", "residual", 
 
 #' @export
 get_variance.default <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
-  warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
+  if (isTRUE(verbose)) {
+    warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
+  }
   NULL
 }
 
@@ -183,48 +185,48 @@ get_variance.mixed <- function(x, component = c("all", "fixed", "random", "resid
 
 #' @rdname get_variance
 #' @export
-get_variance_residual <- function(x, ...) {
-  unlist(get_variance(x, component = "residual", ...))
+get_variance_residual <- function(x, verbose = TRUE, ...) {
+  unlist(get_variance(x, component = "residual", verbose = verbose, ...))
 }
 
 #' @rdname get_variance
 #' @export
-get_variance_fixed <- function(x, ...) {
-  unlist(get_variance(x, component = "fixed", ...))
+get_variance_fixed <- function(x, verbose = TRUE, ...) {
+  unlist(get_variance(x, component = "fixed", verbose = verbose, ...))
 }
 
 #' @rdname get_variance
 #' @export
-get_variance_random <- function(x, ...) {
-  unlist(get_variance(x, component = "random", ...))
+get_variance_random <- function(x, verbose = TRUE, ...) {
+  unlist(get_variance(x, component = "random", verbose = verbose, ...))
 }
 
 #' @rdname get_variance
 #' @export
-get_variance_distribution <- function(x, ...) {
-  unlist(get_variance(x, component = "distribution", ...))
+get_variance_distribution <- function(x, verbose = TRUE, ...) {
+  unlist(get_variance(x, component = "distribution", verbose = verbose, ...))
 }
 
 #' @rdname get_variance
 #' @export
-get_variance_dispersion <- function(x, ...) {
-  unlist(get_variance(x, component = "dispersion", ...))
+get_variance_dispersion <- function(x, verbose = TRUE, ...) {
+  unlist(get_variance(x, component = "dispersion", verbose = verbose, ...))
 }
 
 #' @rdname get_variance
 #' @export
-get_variance_intercept <- function(x, ...) {
-  unlist(get_variance(x, component = "intercept", ...))
+get_variance_intercept <- function(x, verbose = TRUE, ...) {
+  unlist(get_variance(x, component = "intercept", verbose = verbose, ...))
 }
 
 #' @rdname get_variance
 #' @export
-get_variance_slope <- function(x, ...) {
-  unlist(get_variance(x, component = "slope", ...))
+get_variance_slope <- function(x, verbose = TRUE, ...) {
+  unlist(get_variance(x, component = "slope", verbose = verbose, ...))
 }
 
 #' @rdname get_variance
 #' @export
-get_correlation_slope_intercept <- function(x, ...) {
-  unlist(get_variance(x, component = "rho01", ...))
+get_correlation_slope_intercept <- function(x, verbose = TRUE, ...) {
+  unlist(get_variance(x, component = "rho01", verbose = verbose, ...))
 }
