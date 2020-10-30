@@ -125,7 +125,22 @@
     <p>Numeric Values Formatting</p>
     </div>
 
-    <pre class="usage"><span class='fu'>format_value</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>format_value</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for data.frame</span>
+<span class='fu'>format_value</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  digits <span class='op'>=</span> <span class='fl'>2</span>,
+  protect_integers <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  missing <span class='op'>=</span> <span class='st'>""</span>,
+  width <span class='op'>=</span> <span class='cn'>NULL</span>,
+  as_percent <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='co'># S3 method for numeric</span>
+<span class='fu'>format_value</span><span class='op'>(</span>
   <span class='va'>x</span>,
   digits <span class='op'>=</span> <span class='fl'>2</span>,
   protect_integers <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -142,6 +157,10 @@
     <tr>
       <th>x</th>
       <td><p>Numeric value.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Arguments passed to or from other methods.</p></td>
     </tr>
     <tr>
       <th>digits</th>
@@ -166,10 +185,6 @@
     <tr>
       <th>zap_small</th>
       <td><p>Logical, if <code>TRUE</code>, small values are rounded after <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal places than <code>digits</code> are printed in scientific notation.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
     </tr>
     </table>
 
