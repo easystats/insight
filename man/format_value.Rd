@@ -2,9 +2,24 @@
 % Please edit documentation in R/format_value.R
 \name{format_value}
 \alias{format_value}
+\alias{format_value.data.frame}
+\alias{format_value.numeric}
 \title{Numeric Values Formatting}
 \usage{
-format_value(
+format_value(x, ...)
+
+\method{format_value}{data.frame}(
+  x,
+  digits = 2,
+  protect_integers = FALSE,
+  missing = "",
+  width = NULL,
+  as_percent = FALSE,
+  zap_small = FALSE,
+  ...
+)
+
+\method{format_value}{numeric}(
   x,
   digits = 2,
   protect_integers = FALSE,
@@ -18,6 +33,8 @@ format_value(
 \arguments{
 \item{x}{Numeric value.}
 
+\item{...}{Arguments passed to or from other methods.}
+
 \item{digits}{Number of significant digits.}
 
 \item{protect_integers}{Should integers be kept as integers (i.e., without decimals)?}
@@ -29,8 +46,6 @@ format_value(
 \item{as_percent}{Logical, if \code{TRUE}, value is formatted as percentage value.}
 
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.}
-
-\item{...}{Arguments passed to or from other methods.}
 }
 \value{
 A formatted string.

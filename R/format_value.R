@@ -28,17 +28,19 @@
 #'
 #' format_value(iris)
 #' @export
-format_value <- function(x, digits = 2, protect_integers = FALSE, missing = "", width = NULL, as_percent = FALSE, zap_small = FALSE, ...) {
+format_value <- function(x, ...) {
   UseMethod("format_value")
 }
 
 
+#' @rdname format_value
 #' @export
 format_value.data.frame <- function(x, digits = 2, protect_integers = FALSE, missing = "", width = NULL, as_percent = FALSE, zap_small = FALSE, ...) {
   as.data.frame(sapply(x, format_value, digits = digits, protect_integers = protect_integers, missing = missing, width = width, as_percent = as_percent, zap_small = zap_small, simplify = FALSE))
 }
 
 
+#' @rdname format_value
 #' @export
 format_value.numeric <- function(x, digits = 2, protect_integers = FALSE, missing = "", width = NULL, as_percent = FALSE, zap_small = FALSE, ...) {
   if (protect_integers) {
