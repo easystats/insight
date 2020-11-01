@@ -9,6 +9,10 @@
 * `standardize_names()` tries to be as loyal to the *broom*-naming conventions
 as possible.
 
+## Bug fixes
+
+* Fixed issue in `get_data()` for `MixMod` objects, which were caused due to internal changes in *GLMMadaptive*.
+
 # insight 0.10.0
 
 ## New function

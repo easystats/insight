@@ -494,6 +494,7 @@ get_data.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 
+#' @importFrom stats model.frame
 #' @rdname get_data
 #' @export
 get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
@@ -502,15 +503,23 @@ get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component 
 
   tryCatch(
     {
-      fitfram <- x$model_frames$mfX
-      if (!.is_empty_object(x$model_frames$mfZ)) {
-        fitfram <- .merge_dataframes(x$model_frames$mfZ, fitfram, replace = TRUE)
+      fitfram <- stats::model.frame(x, type = "fixed")
+      fitfram_re <- stats::model.frame(x, type = "random")
+      fitfram_zi <- stats::model.frame(x, type = "zi_fixed")
+      fitfram_zi_re <- stats::model.frame(x, type = "zi_random")
+
+      if (!.is_empty_object(fitfram_re)) {
+        for (i in 1:length(fitfram_re)) {
+          fitfram <- .merge_dataframes(fitfram_re[[i]], fitfram, replace = TRUE)
+        }
       }
-      if (!.is_empty_object(x$model_frames$mfX_zi)) {
-        fitfram <- .merge_dataframes(x$model_frames$mfX_zi, fitfram, replace = TRUE)
+      if (!.is_empty_object(fitfram_zi)) {
+        fitfram <- .merge_dataframes(fitfram_zi, fitfram, replace = TRUE)
       }
-      if (!.is_empty_object(x$model_frames$mfZ_zi)) {
-        fitfram <- .merge_dataframes(x$model_frames$mfZ_zi, fitfram, replace = TRUE)
+      if (!.is_empty_object(fitfram_zi_re)) {
+        for (i in 1:length(fitfram_zi_re)) {
+          fitfram <- .merge_dataframes(fitfram_zi_re[[i]], fitfram, replace = TRUE)
+        }
       }
 
       fitfram$grp__id <- unlist(x$id)
