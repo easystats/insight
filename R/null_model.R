@@ -33,10 +33,6 @@ null_model <- function(model, verbose = TRUE, ...) {
 
 
 .null_model_mixed <- function(model, verbose = TRUE) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
-
   if (inherits(model, "MixMod")) {
     nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
     null.model <- stats::update(model, fixed = nullform)
@@ -46,7 +42,7 @@ null_model <- function(model, verbose = TRUE, ...) {
   } else {
     f <- stats::formula(model)
     resp <- find_response(model)
-    re.terms <- paste0("(", sapply(lme4::findbars(f), .safe_deparse), ")")
+    re.terms <- paste0("(", sapply(.findbars(f), .safe_deparse), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
     null.model <- tryCatch(
       {
