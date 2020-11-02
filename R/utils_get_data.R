@@ -432,6 +432,10 @@
 # here we have a model frame with many variables, so just extract the important ones...
 #
 .get_data_from_modelframe <- function(x, dat, effects) {
+  if (.is_empty_object(dat)) {
+    warning("Could not get model data.", call. = F)
+    return(NULL)
+  }
   cn <- clean_names(colnames(dat))
 
   ft <- switch(
