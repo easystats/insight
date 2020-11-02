@@ -853,10 +853,6 @@ find_formula.glmmTMB <- function(x, ...) {
 
 #' @export
 find_formula.nlmerMod <- function(x, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
-
   f.random <- lapply(.findbars(stats::formula(x)), function(.x) {
     f <- .safe_deparse(.x)
     stats::as.formula(paste0("~", f))
@@ -866,7 +862,7 @@ find_formula.nlmerMod <- function(x, ...) {
     f.random <- f.random[[1]]
   }
 
-  f.cond <- lme4::nobars(stats::as.formula(gsub("(.*)(~)(.*)~(.*)", "\\1\\2\\4", .safe_deparse(stats::formula(x)))))
+  f.cond <- .nobars(stats::as.formula(gsub("(.*)(~)(.*)~(.*)", "\\1\\2\\4", .safe_deparse(stats::formula(x)))))
   f.nonlin <- stats::as.formula(paste0("~", .trim(gsub("(.*)~(.*)~(.*)", "\\2", .safe_deparse(stats::formula(x))))))
 
   .compact_list(list(

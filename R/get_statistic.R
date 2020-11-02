@@ -772,10 +772,6 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 #' @export
 get_statistic.HLfit <- function(x, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
-
   utils::capture.output(s <- summary(x))
 
   out <- data.frame(

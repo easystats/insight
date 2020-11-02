@@ -123,12 +123,9 @@
 
 # removes random effects from a formula that is in lmer-notation
 .get_fixed_effects <- function(f) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' required. Please install it.", call. = FALSE)
-  }
   # remove random effects from RHS
   fl <- length(f)
-  f[[fl]] <- lme4::nobars(f[[fl]])
+  f[[fl]] <- .nobars(f[[fl]])
   f
 }
 
@@ -649,4 +646,80 @@
       term
     })
   expandSlash(fb(modterm))
+}
+
+
+
+
+## copied from lme4::nobars() -----------------------
+
+
+#' @importFrom stats reformulate
+.nobars <- function(term) {
+  nb <- .nobars_(term)
+  if (is(term, "formula") && length(term) == 3 && is.symbol(nb)) {
+    nb <- stats::reformulate("1", response = deparse(nb))
+  }
+  if (is.null(nb)) {
+    nb <- if (is(term, "formula"))
+      ~ 1
+    else
+      1
+  }
+  nb
+}
+
+
+
+.nobars_ <- function(term) {
+  if (!(any(c("|", "||") %in% all.names(term)))) {
+    return(term)
+  }
+  if (.isBar(term)) {
+    return(NULL)
+  }
+  if (.isAnyArgBar(term)) {
+    return(NULL)
+  }
+  if (length(term) == 2) {
+    nb <- .nobars_(term[[2]])
+    if (is.null(nb)) {
+      return(NULL)
+    }
+    term[[2]] <- nb
+    return(term)
+  }
+  nb2 <- .nobars_(term[[2]])
+  nb3 <- .nobars_(term[[3]])
+  if (is.null(nb2)) {
+    return(nb3)
+  }
+  if (is.null(nb3)) {
+    return(nb2)
+  }
+  term[[2]] <- nb2
+  term[[3]] <- nb3
+  term
+}
+
+
+
+.isBar <- function(term) {
+  if (is.call(term)) {
+    if ((term[[1]] == as.name("|")) || (term[[1]] == as.name("||"))) {
+      return(TRUE)
+    }
+  }
+  FALSE
+}
+
+
+.isAnyArgBar <- function(term) {
+  if ((term[[1]] != as.name("~")) && (term[[1]] != as.name("("))) {
+    for (i in seq_along(term)) {
+      if (.isBar(term[[i]]))
+        return(TRUE)
+    }
+  }
+  FALSE
 }
