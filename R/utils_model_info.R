@@ -59,7 +59,7 @@
 
   # gaussian family --------
 
-  linear_model <- (!binom_fam & !exponential_fam & !poisson_fam & !neg_bin_fam & !logit.link) ||
+  linear_model <- (!binom_fam & !exponential_fam & !poisson_fam & !neg_bin_fam & !logit.link & !dirichlet_fam) ||
     fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian") || grepl("(\\st)$", fitfam)
 
 
@@ -230,6 +230,11 @@
   if (inherits(x, "brmsfit") && !is_multivariate(x)) {
     is_meta <- grepl("(.*)\\|(.*)se\\((.*)\\)", .safe_deparse(find_formula(x)$conditional[[2]]))
   }
+
+
+  # final check
+
+  if (isTRUE(is.ordinal || zero.inf || is.censored || is.survival || hurdle || is.categorical || is.multinomial)) linear_model <- FALSE
 
 
   # return...
