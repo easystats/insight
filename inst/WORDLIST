@@ -9,6 +9,7 @@ Coloured
 DOI
 DirichletReg
 GLMM
+GLMMadaptive
 Gelman
 HDI
 HRQoL
@@ -77,6 +78,7 @@ logloss
 lqmm
 mclogit
 merTools
+metaBMA
 metafor
 metaplus
 mfx

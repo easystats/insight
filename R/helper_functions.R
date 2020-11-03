@@ -555,7 +555,7 @@
 
 
 .expandDoubleVert <- function(term) {
-  frml <- stats::formula(substitute( ~ x, list(x = term[[2]])))
+  frml <- stats::formula(substitute(~x, list(x = term[[2]])))
   newtrms <- paste0("0+", attr(terms(frml), "term.labels"))
   if (attr(terms(frml), "intercept") != 0) {
     newtrms <- c("1", newtrms)
@@ -641,10 +641,10 @@
     }
   }
   modterm <- .expandDoubleVerts(if (is(term, "formula")) {
-      term[[length(term)]]
-    } else {
-      term
-    })
+    term[[length(term)]]
+  } else {
+    term
+  })
   expandSlash(fb(modterm))
 }
 
@@ -661,10 +661,11 @@
     nb <- stats::reformulate("1", response = deparse(nb))
   }
   if (is.null(nb)) {
-    nb <- if (is(term, "formula"))
-      ~ 1
-    else
+    nb <- if (is(term, "formula")) {
+      ~1
+    } else {
       1
+    }
   }
   nb
 }
@@ -717,8 +718,9 @@
 .isAnyArgBar <- function(term) {
   if ((term[[1]] != as.name("~")) && (term[[1]] != as.name("("))) {
     for (i in seq_along(term)) {
-      if (.isBar(term[[i]]))
+      if (.isBar(term[[i]])) {
         return(TRUE)
+      }
     }
   }
   FALSE
