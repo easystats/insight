@@ -209,7 +209,7 @@
   }
 
 
-  # meta analysis
+  # meta analysis --------
 
   if (!is_meta) {
     is_meta <- inherits(x, c("rma", "metaplus", "meta_random", "meta_fixed", "meta_bma"))
