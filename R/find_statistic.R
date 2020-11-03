@@ -192,6 +192,7 @@ find_statistic <- function(x, ...) {
       "rma.mv",
       "rma.uni",
       "rrvglm",
+      "sarlm",
       "sem",
       "slm",
       "survreg",
