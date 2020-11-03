@@ -57,18 +57,6 @@
   exponential_fam <- fitfam %in% c("Gamma", "gamma", "weibull")
 
 
-  # gaussian family --------
-
-  linear_model <- (!binom_fam & !exponential_fam & !poisson_fam & !neg_bin_fam & !logit.link & !dirichlet_fam) ||
-    fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian") || grepl("(\\st)$", fitfam)
-
-
-  # tweedie family --------
-
-  tweedie_fam <- grepl("^(tweedie|Tweedie)", fitfam) | grepl("^(tweedie|Tweedie)", link.fun)
-  tweedie_model <- (linear_model && tweedie_fam) || inherits(x, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
-
-
   # zero-inflated or hurdle component --------
 
   zero.inf <- zero.inf | fitfam == "ziplss" |
@@ -232,9 +220,17 @@
   }
 
 
-  # final check
+  # gaussian family --------
 
-  if (isTRUE(is.ordinal || zero.inf || is.censored || is.survival || hurdle || is.categorical || is.multinomial)) linear_model <- FALSE
+  linear_model <- (!binom_fam & !exponential_fam & !poisson_fam & !neg_bin_fam & !logit.link & !dirichlet_fam
+                   & !is.ordinal & !zero.inf & !is.censored & !is.survival & !is.categorical & !hurdle & !is.multinomial) ||
+    fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian") || grepl("(\\st)$", fitfam)
+
+
+  # tweedie family --------
+
+  tweedie_fam <- grepl("^(tweedie|Tweedie)", fitfam) | grepl("^(tweedie|Tweedie)", link.fun)
+  tweedie_model <- (linear_model && tweedie_fam) || inherits(x, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
 
 
   # return...
