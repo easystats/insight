@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("survival")) {
-  context("insight, coxph")
 
   data("lung")
   lung <- subset(lung, subset = ph.ecog %in% 0:2)
@@ -103,4 +102,13 @@ if (require("testthat") &&
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "z-statistic")
   })
+
+  if (require("JM")) {
+    data("aids", package = "JM")
+    m <- coxph(Surv(start, stop, event) ~ CD4, data = aids)
+    test_that("coxph triple response", {
+      expect_equal(colnames(get_data(m)), c("start", "stop", "event", "Surv(start, stop, event)", "CD4"))
+      expect_equivalent(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
+    })
+  }
 }

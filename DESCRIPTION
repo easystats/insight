@@ -58,6 +58,7 @@ Suggests:
     glmmTMB,
     gmnl,
     httr,
+    JM,
     lavaan,
     lfe,
     logistf,
