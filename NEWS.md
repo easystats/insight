@@ -4,6 +4,10 @@
 
 * Support for `scam` (*scam*), `meta_random` and `meta_fixed` (*metaBMA*)
 
+## New function
+
+* `find_offset()`, to find the name of offset-terms.
+
 ## Changes to functions
 
 * `standardize_names()` tries to be as loyal to the *broom*-naming conventions
@@ -12,6 +16,7 @@ as possible.
 ## Bug fixes
 
 * Fixed issue in `get_data()` for `MixMod` objects, which were caused due to internal changes in *GLMMadaptive*.
+* `get_data()` for zero-inflated models from *pscl* did not include the offset-term in cases where the offset was defined as argument, not inside the model formula.
 
 # insight 0.10.0
 

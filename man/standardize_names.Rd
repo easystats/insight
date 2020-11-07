@@ -15,13 +15,19 @@ standardize_names(data, ...)
 )
 }
 \arguments{
-\item{data}{A data frame. In particular, objects from \emph{easystats} package functions like \code{\link[parameters:model_parameters]{model_parameters()}} or \code{\link[effectsize:effectsize]{effectsize()}} are accepted.}
+\item{data}{A data frame. In particular, objects from \emph{easystats}
+package functions like
+\code{\link[parameters:model_parameters]{model_parameters()}} or
+\code{\link[effectsize:effectsize]{effectsize()}} are accepted.}
 
 \item{...}{Currently not used.}
 
-\item{style}{Standardization can either be based on the naming conventions from the easystats project, or on \pkg{broom}'s naming scheme.}
+\item{style}{Standardization can either be based on the naming conventions
+from the easystats project, or on \pkg{broom}'s naming scheme.}
 
-\item{ignore_estimate}{Logical, if \code{TRUE}, column names like \code{"mean"} or \code{"median"} will \emph{not} be converted to \code{"Coefficient"} resp. \code{"estimate"}.}
+\item{ignore_estimate}{Logical, if \code{TRUE}, column names like
+\code{"mean"} or \code{"median"} will \emph{not} be converted to
+\code{"Coefficient"} resp. \code{"estimate"}.}
 }
 \value{
 A data frame, with standardized column names.
@@ -33,13 +39,14 @@ consistent and the same for any model object.
 }
 \details{
 This method is in particular useful for package developers or users
-  who use, e.g., \code{\link[parameters:model_parameters]{model_parameters()}} in their own
+  who use, e.g.,
+  \code{\link[parameters:model_parameters]{model_parameters()}} in their own
   code or functions to retrieve model parameters for further processing. As
   \code{model_parameters()} returns a data frame with varying column names
   (depending on the input), accessing the required information is probably
-  not quite straightforward. In such cases, \code{standardize_names()} can
-  be used to get consistent, i.e. always the same column names, no matter
-  what kind of model was used in \code{model_parameters()}.
+  not quite straightforward. In such cases, \code{standardize_names()} can be
+  used to get consistent, i.e. always the same column names, no matter what
+  kind of model was used in \code{model_parameters()}.
   \cr \cr
   For \code{style = "broom"}, column names are renamed to match \pkg{broom}'s
   naming scheme, i.e. \code{Parameter} is renamed to \code{term}, \code{Coefficient}

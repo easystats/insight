@@ -17,8 +17,8 @@
   mw <- NULL
 
   # do we have an offset, not specified in the formula?
-  if ("(offset)" %in% colnames(mf) && .obj_has_name(x, "call") && .obj_has_name(x$call, "offset")) {
-    offcol <- which(colnames(mf) == "(offset)")
+  offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
+  if (length(offcol) && .obj_has_name(x, "call") && .obj_has_name(x$call, "offset")) {
     colnames(mf)[offcol] <- clean_names(.safe_deparse(x$call$offset))
   }
 
@@ -399,6 +399,7 @@
 
 .return_zeroinf_data <- function(x, component) {
   model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE)
+  model.terms$offset <- find_offset(x)
 
   mf <- tryCatch(
     {
@@ -415,8 +416,8 @@
 
   fixed.data <- switch(
     component,
-    all = c(model.terms$conditional, model.terms$zero_inflated),
-    conditional = model.terms$conditional,
+    all = c(model.terms$conditional, model.terms$zero_inflated, model.terms$offset),
+    conditional = c(model.terms$conditional, model.terms$offset),
     zi = ,
     zero_inflated = model.terms$zero_inflated
   )

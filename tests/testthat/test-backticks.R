@@ -1,5 +1,4 @@
 if (require("testthat") && require("insight")) {
-  context("insight, all_models_equal")
 
   data(iris)
   iris$`a m` <- iris$Species

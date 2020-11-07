@@ -53,30 +53,31 @@ The difference to \code{\link{find_terms}} is that \code{find_variables()}
   were used in the formula.
 }
 \examples{
-library(lme4)
-data(cbpp)
-data(sleepstudy)
-# some data preparation...
-cbpp$trials <- cbpp$size - cbpp$incidence
-sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
-sleepstudy$mysubgrp <- NA
-for (i in 1:5) {
-  filter_group <- sleepstudy$mygrp == i
-  sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+if (require("lme4")) {
+  data(cbpp)
+  data(sleepstudy)
+  # some data preparation...
+  cbpp$trials <- cbpp$size - cbpp$incidence
+  sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+  sleepstudy$mysubgrp <- NA
+  for (i in 1:5) {
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <-
+      sample(1:30, size = sum(filter_group), replace = TRUE)
+  }
+
+  m1 <- glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    data = cbpp,
+    family = binomial
+  )
+  find_variables(m1)
+
+  m2 <- lmer(
+    Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+    data = sleepstudy
+  )
+  find_variables(m2)
+  find_variables(m2, flatten = TRUE)
 }
-
-m1 <- glmer(
-  cbind(incidence, size - incidence) ~ period + (1 | herd),
-  data = cbpp,
-  family = binomial
-)
-find_variables(m1)
-
-m2 <- lmer(
-  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
-)
-find_variables(m2)
-find_variables(m2, flatten = TRUE)
 }

@@ -25,6 +25,7 @@ reference:
   - find_algorithm
   - find_formula
   - find_interactions
+  - find_offset
   - find_random_slopes
   - find_terms
   - find_variables
