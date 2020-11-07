@@ -126,8 +126,8 @@ into several parts, depending on the model. See details below." />
 
     <div class="ref-description">
     <p>This function takes a data frame, typically a data frame with
-information on summaries of model parameters like <code><a href='https://rdrr.io/pkg/bayestestR/man/hdi.html'>hdi</a></code>
-or <code><a href='https://rdrr.io/pkg/bayestestR/man/equivalence_test.html'>equivalence_test</a></code>, as input and splits this information
+information on summaries of model parameters like <code><a href='https://easystats.github.io/bayestestR/reference/hdi.html'>hdi</a></code>
+or <code><a href='https://easystats.github.io/bayestestR/reference/equivalence_test.html'>equivalence_test</a></code>, as input and splits this information
 into several parts, depending on the model. See details below.</p>
     </div>
 
@@ -183,7 +183,7 @@ are associated.
 Then, <code>...</code> take one or more data frames that also contain information
 about parameters from the same model, but also have additional information
 provided by other methods. For instance, a data frame in <code>...</code> might
-be the result of <code><a href='https://rdrr.io/pkg/bayestestR/man/hdi.html'>hdi</a></code>, where we
+be the result of <code><a href='https://easystats.github.io/bayestestR/reference/hdi.html'>hdi</a></code>, where we
 have a) a <code>Parameters</code> column and b) columns with the HDI values.
 <br /> <br />
 Now we have a data frame with model parameters and information about the
@@ -199,7 +199,7 @@ names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://easystats.github.io/bayestestR/'>bayestestR</a></span><span class='op'>)</span>
 <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='download_model.html'>download_model</a></span><span class='op'>(</span><span class='st'>"brms_zi_2"</span><span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/bayestestR/man/hdi.html'>hdi</a></span><span class='op'>(</span><span class='va'>model</span>, effects <span class='op'>=</span> <span class='st'>"all"</span>, component <span class='op'>=</span> <span class='st'>"all"</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://easystats.github.io/bayestestR/reference/hdi.html'>hdi</a></span><span class='op'>(</span><span class='va'>model</span>, effects <span class='op'>=</span> <span class='st'>"all"</span>, component <span class='op'>=</span> <span class='st'>"all"</span><span class='op'>)</span>
 
 <span class='co'># hdi() returns a data frame; here we use only the informaton on</span>
 <span class='co'># parameter names and HDI values</span>

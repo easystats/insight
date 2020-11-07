@@ -71,8 +71,7 @@
 
       
 
-      </header><script src="insight_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="insight_files/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet">
-<script src="insight_files/anchor-sections-1.0.1/anchor-sections.js"></script><div class="row">
+      </header><script src="insight_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting Started with Accessing Model Information</h1>
@@ -150,8 +149,8 @@
 <p><em>Aren’t the predictors, terms, and parameters the same thing?</em></p>
 <p>In some cases, yes. But not in all cases, and sometimes it is useful to have the “bare” variable names (terms), but sometimes it is also useful to have the information about a possible transformation of variables. That is the main reason for having functions that cover similar aspects of a model object (like <code><a href="../reference/find_terms.html">find_terms()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> or <code><a href="../reference/find_variables.html">find_variables()</a></code>).</p>
 <p>Here are some examples that demonstrate the differences of each function:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/">insight</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/">insight</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/">lme4</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span>
 <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, size <span class="op">=</span> <span class="fl">180</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -170,9 +169,9 @@
     <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">mygrp</span> <span class="op">/</span> <span class="va">mysubgrp</span><span class="op">)</span> <span class="op">+</span> 
     <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>,
   data <span class="op">=</span> <span class="va">sleepstudy</span>
-<span class="op">)</span></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># find the response variable</span>
+<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># find the response variable</span>
 <span class="fu"><a href="../reference/find_response.html">find_response</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Reaction"</span>
 
@@ -220,10 +219,10 @@
 <span class="co">#&gt; [1] "Days"  "Weeks" "cat"  </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $random</span>
-<span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Subject"</span></pre></div>
+<span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Subject"</span></code></pre></div>
 <p>Finally, there is <code><a href="../reference/find_parameters.html">find_parameters()</a></code>. Parameters are also known as <em>coefficients</em>, and <code><a href="../reference/find_parameters.html">find_parameters()</a></code> does exactly that: returns the model coefficients.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co"># find model parameters, i.e. coefficients</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># find model parameters, i.e. coefficients</span>
 <span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $conditional</span>
 <span class="co">#&gt; [1] "(Intercept)"  "Days"         "I(Days^2)"    "log1p(Weeks)" "catb"        </span>
@@ -237,7 +236,7 @@
 <span class="co">#&gt; [1] "(Intercept)" "Days"       </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $random$mygrp</span>
-<span class="co">#&gt; [1] "(Intercept)"</span></pre></div>
+<span class="co">#&gt; [1] "(Intercept)"</span></code></pre></div>
 </div>
 <div id="examples-of-use-cases-in-r" class="section level2">
 <h2 class="hasAnchor">
@@ -248,8 +247,8 @@
 <a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor"></a>Making Predictions at Specific Values of a Term of Interest</h3>
 <p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="../reference/get_data.html">get_data()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>.</p>
 <p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/">insight</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/">insight</a></span><span class="op">)</span>
 <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>
   <span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="va">Sepal.Width</span>, 
   data <span class="op">=</span> <span class="va">iris</span>
@@ -272,15 +271,15 @@
 <span class="co">#&gt;      Species Petal.Width Sepal.Width predictions</span>
 <span class="co">#&gt; 1     setosa    1.199333    3.057333    5.101427</span>
 <span class="co">#&gt; 2 versicolor    1.199333    3.057333    6.089557</span>
-<span class="co">#&gt; 3  virginica    1.199333    3.057333    6.339015</span></pre></div>
+<span class="co">#&gt; 3  virginica    1.199333    3.057333    6.339015</span></code></pre></div>
 </div>
 <div id="printing-model-coefficients" class="section level3">
 <h3 class="hasAnchor">
 <a href="#printing-model-coefficients" class="anchor"></a>Printing Model Coefficients</h3>
 <p>The next example should emphasize the possibilities to generalize functions to many different model objects using <strong>insight</strong>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
 <p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">print_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">{</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">print_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span>
     <span class="st">"My parameters are "</span>,
     <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">)</span>,  collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span>,
@@ -295,10 +294,10 @@
 <span class="co"># obviously, something is missing in the output</span>
 <span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/s.html">s</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="fu">print_params</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span>
-<span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></pre></div>
+<span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></code></pre></div>
 <p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">print_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">{</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">print_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span>
     <span class="st">"My parameters are "</span>,
     <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">model</span>, flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,  collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span>,
@@ -312,7 +311,7 @@
 
 <span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/s.html">s</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="fu">print_params</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span>
-<span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></pre></div>
+<span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></code></pre></div>
 </div>
 </div>
 <div id="examples-of-use-cases-in-r-packages" class="section level2">

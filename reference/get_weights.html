@@ -153,11 +153,11 @@
 <span class='va'>mtcars</span><span class='op'>$</span><span class='va'>weight</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>, <span class='fl'>1</span>, <span class='fl'>.3</span><span class='op'>)</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span><span class='op'>)</span>
 <span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 1.1230106 0.9773388 1.3888184 1.2598007 0.8051784 0.7024147 0.9763270
-#&gt;  [8] 1.1794164 1.0908066 1.2194089 0.7416601 0.7965473 0.9296078 1.2028284
-#&gt; [15] 0.9799443 0.6049479 0.9128178 1.0146980 1.2861313 1.4414014 1.2348297
-#&gt; [22] 0.8911475 1.1776153 1.3389269 0.8882864 0.8866594 1.3988366 0.7685924
-#&gt; [29] 1.1556436 1.0319730 1.1745181 0.5000778</div></pre>
+</div><div class='output co'>#&gt;  [1] 1.1605414 0.8884165 0.6923373 0.8252795 1.1028665 0.8647196 1.1542690
+#&gt;  [8] 0.8996986 0.9683320 0.7808471 1.5715131 1.0997865 1.0691901 0.4924413
+#&gt; [15] 1.1979376 0.6929129 0.7325435 1.2755024 0.8641898 0.4754883 1.5309712
+#&gt; [22] 0.2867779 1.1718435 1.3051748 0.8107096 1.1332861 1.1317391 1.3121869
+#&gt; [29] 1.1452298 0.9265349 1.2747976 1.2401867</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
