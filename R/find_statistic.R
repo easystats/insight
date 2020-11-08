@@ -242,6 +242,7 @@ find_statistic <- function(x, ...) {
       "cgamm",
       "gam",
       "glm",
+      "Glm",
       "glmc",
       "glmerMod",
       "glmRob",

@@ -100,6 +100,7 @@ supported_models <- function() {
     "glimML",
     "glmm",
     "glm",
+    "Glm",
     "glmmadmb",
     "glmmPQL",
     "glmmTMB",

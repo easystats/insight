@@ -390,11 +390,14 @@ n_obs.blrm <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.mlogit <- function(x, ...) {
   nrow(x$model)
 }
+
+
+#' @export
+n_obs.Glm <- n_obs.mlogit
 
 
 #' @export

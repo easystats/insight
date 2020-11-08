@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* Support for `scam` (*scam*), `meta_random` and `meta_fixed` (*metaBMA*)
+* Support for `scam` (*scam*), `meta_random` and `meta_fixed` (*metaBMA*), `Glm` (*rms*).
 
 ## New function
 
