@@ -80,9 +80,9 @@ if (require("testthat") &&
       find_formula(m2),
       list(
         conditional = as.formula("Surv(time, status) ~ ph.ecog + age"),
-        random = list(as.formula("~1 | inst"), as.formula("~1 | inst2")),
-        ignore_attr = TRUE
-      )
+        random = list(as.formula("~1 | inst"), as.formula("~1 | inst2"))
+      ),
+      ignore_attr = TRUE
     )
   })
 
