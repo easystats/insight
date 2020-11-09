@@ -77,7 +77,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         list(
           conditional = as.formula("calcium ~ elevation + region"),
           random = as.formula("~pos + 0 | ID")
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
 

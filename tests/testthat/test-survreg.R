@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("survival")) {
-  context("insight, model_info")
-
   data("ovarian")
   m1 <-
     survreg(Surv(futime, fustat) ~ ecog.ps + rx,
@@ -57,7 +55,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("Surv(futime, fustat) ~ ecog.ps + rx"))
+      list(conditional = as.formula("Surv(futime, fustat) ~ ecog.ps + rx")),
+      ignore_attr = TRUE
     )
   })
 

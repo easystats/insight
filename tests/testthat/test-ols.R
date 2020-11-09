@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("rms")) {
-  context("insight, model_info")
-
   data(mtcars)
   m1 <- ols(mpg ~ rcs(hp, 3) * cyl + wt, data = mtcars)
 
@@ -45,7 +43,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("mpg ~ rcs(hp, 3) * cyl + wt"))
+      list(conditional = as.formula("mpg ~ rcs(hp, 3) * cyl + wt")),
+      ignore_attr = TRUE
     )
   })
 

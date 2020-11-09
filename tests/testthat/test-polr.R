@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("MASS")) {
-  context("insight, polr")
-
   data(housing, package = "MASS")
 
   m1 <- polr(Sat ~ Infl + Type + Cont, data = housing, weights = Freq)
@@ -41,7 +39,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("Sat ~ Infl + Type + Cont"))
+      list(conditional = as.formula("Sat ~ Infl + Type + Cont")),
+      ignore_attr = TRUE
     )
   })
 

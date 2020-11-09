@@ -84,7 +84,8 @@ if (require("testthat") &&
         conditional = as.formula("y ~ x + x2"),
         random = as.formula("~id + firm"),
         instruments = as.formula("~(Q | W ~ x3 + factor(x4))")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

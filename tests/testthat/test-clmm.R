@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("ordinal")) {
-  context("insight, model_info")
 
   data(wine, package = "ordinal")
   data(soup)
@@ -96,7 +95,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("rating ~ temp + contact"),
         random = as.formula("~1 | judge")
-      )
+      ),
+      ignore_attr = TRUE
     )
     expect_length(find_formula(m2), 2)
     expect_equal(
@@ -104,7 +104,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("SURENESS ~ PROD"),
         random = list(as.formula("~1 | RESP"), as.formula("~1 | RESP:PROD"))
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

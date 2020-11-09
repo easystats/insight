@@ -352,9 +352,10 @@ if (require("testthat") &&
         zero_inflated = as.formula("~child + livebait"),
         zero_inflated_random = as.formula("~1 | ID"),
         dispersion = as.formula("~xb")
-      )
+      ),
+      ignore_attr = TRUE
     )
-    expect_equal(find_formula(m6), list(conditional = as.formula("count ~ 1")))
+    expect_equal(find_formula(m6), list(conditional = as.formula("count ~ 1")), ignore_attr = TRUE)
   })
 
   test_that("find_predictors", {

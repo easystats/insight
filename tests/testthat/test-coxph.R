@@ -48,7 +48,8 @@ if (require("testthat") &&
       find_formula(m1),
       list(conditional = as.formula(
         "Surv(time, status) ~ sex + age + ph.ecog"
-      ))
+      )),
+      ignore_attr = TRUE
     )
   })
 
@@ -108,7 +109,7 @@ if (require("testthat") &&
     m <- coxph(Surv(start, stop, event) ~ CD4, data = aids)
     test_that("coxph triple response", {
       expect_equal(colnames(get_data(m)), c("start", "stop", "event", "Surv(start, stop, event)", "CD4"))
-      expect_equivalent(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
+      expect_equal(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
     })
   }
 }

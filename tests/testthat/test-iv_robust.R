@@ -62,7 +62,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("mpg ~ gear + cyl"),
         instruments = as.formula("~carb + wt")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

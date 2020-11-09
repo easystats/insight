@@ -2,8 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("quantreg") &&
   require("tripack")) {
-  context("insight, model_info")
-
   data("CobarOre")
   set.seed(123)
   CobarOre$w <- rnorm(nrow(CobarOre))
@@ -44,7 +42,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("z ~ w + qss(cbind(x, y), lambda = 0.08)"))
+      list(conditional = as.formula("z ~ w + qss(cbind(x, y), lambda = 0.08)")),
+      ignore_attr = TRUE
     )
   })
 

@@ -2,8 +2,6 @@
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
   if (require("testthat") && require("insight") && require("plm")) {
-    context("insight, model_info")
-
     data(Crime)
     m1 <- plm(lcrmrte ~ lprbarr + factor(year) | . - lprbarr + lmix, data = Crime, model = "random")
 
@@ -82,7 +80,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         list(
           conditional = as.formula("lcrmrte ~ lprbarr + factor(year)"),
           instruments = as.formula("~-lprbarr + lmix")
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
 

@@ -124,7 +124,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("Reaction ~ Days"),
         random = as.formula("~1 + Days | Subject")
-      )
+      ),
+      ignore_attr = TRUE
     )
     expect_equal(
       find_formula(m2, component = "conditional"),
@@ -135,7 +136,8 @@ if (require("testthat") &&
           as.formula("~1 | mygrp"),
           as.formula("~1 | Subject")
         )
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 
@@ -311,9 +313,9 @@ if (require("testthat") &&
       tolerance = 1e-1
     )
 
-    if (.runThisTest || Sys.getenv("USER") == "travis") {
-      expect_warning(expect_equal(
-        get_variance(m2),
+    if (.runThisTest) {
+      expect_equal(
+        suppressWarnings(get_variance(m2)),
         list(
           var.fixed = 889.3301,
           var.residual = 941.8135,
@@ -326,7 +328,7 @@ if (require("testthat") &&
           )
         ),
         tolerance = 1e-1,
-      ))
+      )
     }
   })
 
@@ -367,7 +369,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("Reaction ~ 1"),
         random = as.formula("~1 + Days | Subject")
-      )
+      ),
+      ignore_attr = TRUE
     )
 
     expect_equal(
@@ -375,7 +378,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("Reaction ~ 1"),
         random = as.formula("~1 + Days | Subject")
-      )
+      ),
+      ignore_attr = TRUE
     )
 
     expect_equal(
@@ -387,7 +391,8 @@ if (require("testthat") &&
           as.formula("~1 | mygrp"),
           as.formula("~1 | Subject")
         )
-      )
+      ),
+      ignore_attr = TRUE
     )
 
     expect_equal(
@@ -399,7 +404,8 @@ if (require("testthat") &&
           as.formula("~1 | mygrp"),
           as.formula("~1 | Subject")
         )
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

@@ -18,7 +18,6 @@ if (require("testthat") &&
 
 
   # ---------------------------
-  context("BF t.test one/two/paired samples")
   set.seed(123)
   x <- rnorm(1000, 0, 1)
   y <- rnorm(1000, 0, 1)
@@ -33,18 +32,18 @@ if (require("testthat") &&
     expect_true(is.data.frame(get_data(t2d)))
   })
   test_that("find_formula", {
-    expect_equal(find_formula(t1), list(conditional = y ~ 1))
-    expect_equal(find_formula(t2), list(conditional = y ~ group))
-    expect_equal(find_formula(t2d), list(conditional = y ~ 1))
+    expect_equal(find_formula(t1), list(conditional = y ~ 1), ignore_attr = TRUE)
+    expect_equal(find_formula(t2), list(conditional = y ~ group), ignore_attr = TRUE)
+    expect_equal(find_formula(t2d), list(conditional = y ~ 1), ignore_attr = TRUE)
   })
   test_that("get_parameters", {
     expect_equal(nrow(get_parameters(t1)), 4000)
     expect_equal(nrow(get_parameters(t2)), 4000)
     expect_equal(nrow(get_parameters(t2d)), 4000)
 
-    expect_equal(median(get_parameters(t1)[["Difference"]]), 60, tol = 0.05)
-    expect_equal(median(get_parameters(t2)[["Difference"]]), 0, tol = 0.05)
-    expect_equal(median(get_parameters(t2d)[["Difference"]]), 60, tol = 0.05)
+    expect_equal(median(get_parameters(t1)[["Difference"]]), 60, tolerance = 0.05)
+    expect_equal(median(get_parameters(t2)[["Difference"]]), 0, tolerance = 0.05)
+    expect_equal(median(get_parameters(t2d)[["Difference"]]), 60, tolerance = 0.05)
   })
   test_that("model_info", {
     expect_true(model_info(t1)$is_ttest)
@@ -95,7 +94,7 @@ if (require("testthat") &&
     })
 
     test_that("find_formula", {
-      expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose + supp:dose")))
+      expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose + supp:dose")), ignore_attr = TRUE)
     })
 
     test_that("get_parameters", {
@@ -117,7 +116,8 @@ if (require("testthat") &&
         list(
           conditional = as.formula("RT ~ shape + color + shape:color"),
           random = as.formula("~ID")
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
 
@@ -204,7 +204,7 @@ if (require("testthat") &&
       expect_true(is.data.frame(get_data(x)))
     })
     test_that("find_formula", {
-      expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")))
+      expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")), ignore_attr = TRUE)
     })
     test_that("get_parameters", {
       expect_equal(
@@ -224,7 +224,7 @@ if (require("testthat") &&
       expect_true(is.data.frame(get_data(x)))
     })
     test_that("find_formula", {
-      expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")))
+      expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")), ignore_attr = TRUE)
     })
     test_that("get_parameters", {
       expect_equal(

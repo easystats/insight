@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("logistf")) {
-  context("insight, model_info")
-
   data(sex2)
   m1 <- logistf(case ~ age + oc + vic + vicl + vis + dia, data = sex2)
 
@@ -61,7 +59,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("case ~ age + oc + vic + vicl + vis + dia"))
+      list(conditional = as.formula("case ~ age + oc + vic + vicl + vis + dia")),
+      ignore_attr = TRUE
     )
   })
 

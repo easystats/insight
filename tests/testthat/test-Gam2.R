@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("gam")) {
-  context("insight, gam")
-
   data(kyphosis)
   m1 <- gam::gam(
     Kyphosis ~ s(Age, 4) + Number,
@@ -38,7 +36,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("Kyphosis ~ s(Age, 4) + Number"))
+      list(conditional = as.formula("Kyphosis ~ s(Age, 4) + Number")),
+      ignore_attr = TRUE
     )
   })
 

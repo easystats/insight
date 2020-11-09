@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("multgee")) {
-  context("insight, multgee")
-
   data(arthritis)
   m1 <- ordLORgee(
     y ~ factor(time) + factor(trt) + factor(baseline),
@@ -70,7 +68,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("y ~ factor(time) + factor(trt) + factor(baseline)"),
         random = as.formula("~id")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

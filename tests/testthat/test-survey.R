@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("survey")) {
-  context("insight, svyglm")
-
   data(api)
   dstrat <-
     svydesign(
@@ -48,7 +46,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("api00 ~ ell + meals + mobility"))
+      list(conditional = as.formula("api00 ~ ell + meals + mobility")),
+      ignore_attr = TRUE
     )
   })
 

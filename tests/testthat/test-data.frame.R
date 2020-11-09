@@ -1,6 +1,4 @@
 if (require("testthat") && require("insight")) {
-  context("insight, data.frame")
-
   data(iris)
 
   test_that("find_parameters", {

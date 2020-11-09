@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("geepack")) {
-  context("insight, model_info")
-
   data(warpbreaks)
   m1 <-
     geeglm(
@@ -67,7 +65,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("breaks ~ tension"),
         random = as.formula("~wool")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

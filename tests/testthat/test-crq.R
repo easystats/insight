@@ -50,7 +50,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("survival::Surv(pmax(y, c), d, type = \"left\") ~ x"))
+      list(conditional = as.formula("survival::Surv(pmax(y, c), d, type = \"left\") ~ x")),
+      ignore_attr = TRUE
     )
   })
 

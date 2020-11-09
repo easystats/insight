@@ -40,7 +40,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time)"),
         correlation = as.formula("~1 | Mare")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

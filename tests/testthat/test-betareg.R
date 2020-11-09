@@ -46,11 +46,13 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("yield ~ batch + temp"))
+      list(conditional = as.formula("yield ~ batch + temp")),
+      ignore_attr = TRUE
     )
     expect_equal(
       find_formula(m2),
-      list(conditional = as.formula("I(food/income) ~ income + persons"))
+      list(conditional = as.formula("I(food/income) ~ income + persons")),
+      ignore_attr = TRUE
     )
   })
 

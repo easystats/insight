@@ -67,7 +67,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("log(packs) ~ log(rprice) + log(rincome)"),
         instruments = as.formula("~salestax + log(rincome)")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

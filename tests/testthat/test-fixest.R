@@ -37,7 +37,7 @@ if (require("testthat") &&
   })
 
   test_that("get_random", {
-    expect_null(expect_warning(get_random(m1)))
+    expect_warning(expect_null(get_random(m1)))
   })
 
   test_that("find_response", {
@@ -84,7 +84,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("Euros ~ log(dist_km)"),
         cluster = as.formula("~Origin + Destination + Product")
-      )
+      ),
+      ignore_attr = TRUE
     )
     expect_length(find_formula(m2), 2)
     expect_equal(
@@ -92,7 +93,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("log1p(Euros) ~ log(dist_km)"),
         cluster = as.formula("~Origin + Destination + Product")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

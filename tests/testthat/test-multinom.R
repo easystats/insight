@@ -2,8 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("nnet") &&
   require("MASS")) {
-  context("insight, model_info")
-
   data("birthwt")
   m1 <- multinom(low ~ age + lwt + race + smoke, data = birthwt)
 
@@ -40,7 +38,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("low ~ age + lwt + race + smoke"))
+      list(conditional = as.formula("low ~ age + lwt + race + smoke")),
+      ignore_attr = TRUE
     )
   })
 

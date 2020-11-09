@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("estimatr")) {
-  context("insight, model_info")
-
   data(mtcars)
   m1 <- lm_robust(mpg ~ gear + wt + cyl, data = mtcars)
 
@@ -49,7 +47,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("mpg ~ gear + wt + cyl"))
+      list(conditional = as.formula("mpg ~ gear + wt + cyl")),
+      ignore_attr = TRUE
     )
   })
 

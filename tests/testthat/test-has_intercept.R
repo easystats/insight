@@ -1,6 +1,4 @@
 if (require("testthat") && require("insight")) {
-  context("insight, has_intercept")
-
   library(lme4)
   data(mtcars)
   data(sleepstudy)

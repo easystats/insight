@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("pscl")) {
-  context("insight, model_info")
-
   data("bioChemists")
 
   m1 <- hurdle(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)
@@ -54,7 +52,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("art ~ fem + mar + kid5 + ment"),
         zero_inflated = as.formula("~kid5 + phd")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("ordinal")) {
-  context("insight, model_info")
 
   data(wine, package = "ordinal")
   m1 <- clm(rating ~ temp * contact, data = wine)
@@ -50,7 +49,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("rating ~ temp * contact"))
+      list(conditional = as.formula("rating ~ temp * contact")),
+      ignore_attr = TRUE
     )
   })
 

@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("glmmTMB")) {
-  context("insight, model_info")
-
   data(Salamanders)
   Salamanders$cover <- abs(Salamanders$cover)
 
@@ -67,7 +65,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("count ~ mined + log(cover) + sample"))
+      list(conditional = as.formula("count ~ mined + log(cover) + sample")),
+      ignore_attr = TRUE
     )
   })
 
@@ -126,6 +125,6 @@ if (require("testthat") &&
   })
 
   test_that("get_statistic", {
-    expect_equal(get_statistic(m1)$Statistic, c(-10.7066515607315, 18.1533878215937, -1.68918157150882, 2.23541768590273), tolernce = 1e-4)
+    expect_equal(get_statistic(m1)$Statistic, c(-10.7066515607315, 18.1533878215937, -1.68918157150882, 2.23541768590273), tolerance = 1e-4)
   })
 }

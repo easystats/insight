@@ -2,8 +2,6 @@
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
   if (require("testthat") && require("insight") && require("VGAM")) {
-    context("insight, model_info")
-
     data("hunua")
     m1 <- download_model("vgam_1")
     m2 <- download_model("vgam_2")
@@ -78,14 +76,16 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       expect_length(find_formula(m1), 1)
       expect_equal(
         find_formula(m1),
-        list(conditional = as.formula("agaaus ~ vitluc + s(altitude, df = 2)"))
+        list(conditional = as.formula("agaaus ~ vitluc + s(altitude, df = 2)")),
+        ignore_attr = TRUE
       )
       expect_length(find_formula(m2), 1)
       expect_equal(
         find_formula(m2),
         list(
           conditional = as.formula("cbind(agaaus, kniexc) ~ vitluc + s(altitude, df = c(2, 3))")
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
 

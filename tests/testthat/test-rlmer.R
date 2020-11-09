@@ -3,8 +3,6 @@
 if (.runThisTest) {
   if (require("testthat") &&
     require("insight") && require("lme4") && require("robustlmm")) {
-    context("insight, find_predictors")
-
     data(sleepstudy)
 
     set.seed(123)
@@ -139,7 +137,8 @@ if (.runThisTest) {
         list(
           conditional = as.formula("Reaction ~ Days"),
           random = as.formula("~Days | Subject")
-        )
+        ),
+        ignore_attr = TRUE
       )
       expect_equal(
         find_formula(m2, component = "conditional"),
@@ -150,7 +149,8 @@ if (.runThisTest) {
             as.formula("~1 | mygrp"),
             as.formula("~1 | Subject")
           )
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
 

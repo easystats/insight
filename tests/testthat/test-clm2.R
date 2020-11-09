@@ -2,7 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("ordinal") &&
   require("MASS")) {
-  context("insight, model_info")
 
   data(housing, package = "MASS")
   m1 <- clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
@@ -65,7 +64,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("Sat ~ Infl + Type + Cont"))
+      list(conditional = as.formula("Sat ~ Infl + Type + Cont")),
+      ignore_attr = TRUE
     )
   })
 

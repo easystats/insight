@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("crch")) {
-  context("insight, model_info")
 
   data("RainIbk")
   RainIbk$sqrtensmean <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
@@ -53,7 +52,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("sqrt(rain) ~ sqrtensmean"))
+      list(conditional = as.formula("sqrt(rain) ~ sqrtensmean")),
+      ignore_attr = TRUE
     )
   })
 

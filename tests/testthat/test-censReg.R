@@ -2,7 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("censReg") &&
   require("AER")) {
-  context("insight, censReg")
 
   data("Affairs", package = "AER")
   m1 <-
@@ -94,7 +93,8 @@ if (require("testthat") &&
         conditional = as.formula(
           "affairs ~ age + yearsmarried + religiousness + occupation + rating"
         )
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

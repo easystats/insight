@@ -2,8 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("truncreg") &&
   require("survival")) {
-  context("insight, truncreg")
-
   data("tobin", package = "survival")
   m1 <- truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
 
@@ -34,7 +32,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("durable ~ age + quant"))
+      list(conditional = as.formula("durable ~ age + quant")),
+      ignore_attr = TRUE
     )
   })
 

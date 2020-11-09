@@ -1,8 +1,6 @@
 unloadNamespace("gam")
 
 if (require("testthat") && require("insight") && require("VGAM")) {
-  context("insight, model_info")
-
   d.AD <- data.frame(
     treatment = gl(3, 3),
     outcome = gl(3, 1, 9),
@@ -66,7 +64,8 @@ if (require("testthat") && require("insight") && require("VGAM")) {
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("counts ~ outcome + treatment"))
+      list(conditional = as.formula("counts ~ outcome + treatment")),
+      ignore_attr = TRUE
     )
   })
 

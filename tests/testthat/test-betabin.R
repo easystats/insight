@@ -62,7 +62,8 @@ if (require("testthat") && require("insight") && require("aod")) {
       list(
         conditional = as.formula("cbind(y, n - y) ~ group * trisk"),
         random = as.formula("~village")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 
