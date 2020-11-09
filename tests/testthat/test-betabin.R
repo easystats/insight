@@ -1,8 +1,6 @@
 if (require("testthat") && require("insight") && require("aod")) {
-  context("insight, betabin")
-
   data(dja)
-  m1 <- betabin(cbind(y, n - y) ~ group * trisk, ~village, data = dja)
+  m1 <- suppressWarnings(betabin(cbind(y, n - y) ~ group * trisk, ~village, data = dja))
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_binomial)

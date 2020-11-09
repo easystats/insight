@@ -35,13 +35,13 @@ if (require("testthat") &&
     family = truncated_poisson()
   )
 
-  m7 <- glmmTMB(
+  m7 <- suppressWarnings(glmmTMB(
     count ~ child + camper + (1 + xb | persons),
     ziformula = ~ child + livebait + (1 + zg + nofish | ID),
     dispformula = ~xb,
     data = fish,
     family = truncated_poisson()
-  )
+  ))
 
   data(Salamanders)
   m5 <- glmmTMB(

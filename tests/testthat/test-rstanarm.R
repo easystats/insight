@@ -16,7 +16,8 @@ if (.runThisTest) {
         data = puzzles,
         prior = rstanarm::cauchy(0, c(3, 1, 2)),
         iter = 500,
-        chains = 2
+        chains = 2,
+        refresh = 0
       )
     m5 <-
       stan_glm(
@@ -24,7 +25,8 @@ if (.runThisTest) {
         data = puzzles,
         prior = rstanarm::cauchy(0, c(1, 2, 3)),
         iter = 500,
-        chains = 2
+        chains = 2,
+        refresh = 0
       )
     m6 <- insight::download_model("stanreg_gamm4_1")
 
@@ -320,7 +322,8 @@ if (.runThisTest) {
       disp ~ carb,
       data = mtcars,
       priors = NULL,
-      prior_intercept = NULL
+      prior_intercept = NULL,
+      refresh = 0
     )
 
     test_that("flat_priors", {

@@ -16,11 +16,11 @@ if (require("testthat") &&
     cov.prior = NULL
   )
 
-  m2 <- blmer(
+  m2 <- suppressWarnings(blmer(
     Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
     data = sleepstudy,
     cov.prior = wishart
-  )
+  ))
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)

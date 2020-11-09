@@ -1,6 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
-  require("ivreg")) {
+  require("AER")) {
 
   data(CigarettesSW)
   CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
@@ -9,7 +9,7 @@ if (require("testthat") &&
   CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax) / cpi)
 
   m1 <-
-    ivreg::ivreg(
+    AER::ivreg(
       log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi),
       data = CigarettesSW,
       subset = year == "1995"

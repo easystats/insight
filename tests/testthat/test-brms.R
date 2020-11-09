@@ -584,7 +584,7 @@ if (.runThisTest) {
               "persons.2",
               "persons.3",
               "persons.4",
-              "zi_Intercept"
+              "(Intercept)"
             )
           ),
           class = c("clean_parameters", "data.frame"),
@@ -592,7 +592,8 @@ if (.runThisTest) {
             NA,
             -16L
           )
-        )
+        ),
+        ignore_attr = TRUE
       )
 
       expect_equal(
@@ -794,7 +795,8 @@ if (.runThisTest) {
           ),
           class = c("clean_parameters", "data.frame"),
           row.names = c(NA, -30L)
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
   }
