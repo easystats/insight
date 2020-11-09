@@ -23,14 +23,14 @@ if (require("testthat") &&
   m3 <- zeroinfl(y ~ x | 1, data = dat, dist = 'poisson')
 
   test_that("offset in get_data()", {
-    expect_equivalent(colnames(get_data(m1)), c("y", "logOff", "x"))
-    expect_equivalent(colnames(get_data(m2)), c("y", "x", "logOff"))
-    expect_equivalent(colnames(get_data(m3)), c("y", "x"))
+    expect_equal(colnames(get_data(m1)), c("y", "logOff", "x"))
+    expect_equal(colnames(get_data(m2)), c("y", "x", "logOff"))
+    expect_equal(colnames(get_data(m3)), c("y", "x"))
   })
 
   test_that("offset in get_data()", {
-    expect_equivalent(find_offset(m1), "logOff")
-    expect_equivalent(find_offset(m2), "logOff")
+    expect_equal(find_offset(m1), "logOff")
+    expect_equal(find_offset(m2), "logOff")
     expect_null(find_offset(m3))
   })
 }
