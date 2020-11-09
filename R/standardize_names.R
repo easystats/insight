@@ -121,7 +121,7 @@ standardize_names.parameters_distribution <- function(data, style = c("easystats
     cn <- gsub("^CI_low", "conf.low", cn)
     cn <- gsub("^CI_high", "conf.high", cn)
     cn <- gsub("(.*)CI_low$", "\\1conf.low", cn)
-    cn <- gsub("(.*)CI_high$", "\\1conf.low", cn)
+    cn <- gsub("(.*)CI_high$", "\\1conf.high", cn)
     # from package effectisze
     if (requireNamespace("effectsize", quietly = TRUE)) {
       effectsize_names <- effectsize::is_effectsize_name(cn)
