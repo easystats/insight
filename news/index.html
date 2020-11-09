@@ -150,12 +150,11 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <code>MixMod</code> objects, which were caused due to internal changes in <em>GLMMadaptive</em>.</li>
-<li>
-<code><a href="../reference/get_data.html">get_data()</a></code> for zero-inflated models from <em>pscl</em> did not include the offset-term in cases where the offset was defined as argument, not inside the model formula.</li>
-<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <code>coxph</code> models with survival-objects with <code>event</code>-argument as response.</li>
-<li>Fixed edge case in <code><a href="../reference/get_data.html">get_data()</a></code> for column name of response values that were log-transformed using <code><a href="https://rdrr.io/r/base/Log.html">log(x+1)</a></code>.</li>
-<li>Fixed warning in CRAN checks for forthcoming R-devel.</li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <code>MixMod</code> objects, which were caused due to internal changes in <em>GLMMadaptive</em>.</p></li>
+<li><p><code><a href="../reference/get_data.html">get_data()</a></code> for zero-inflated models from <em>pscl</em> did not include the offset-term in cases where the offset was defined as argument, not inside the model formula.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <code>coxph</code> models with survival-objects with <code>event</code>-argument as response.</p></li>
+<li><p>Fixed edge case in <code><a href="../reference/get_data.html">get_data()</a></code> for column name of response values that were log-transformed using <code><a href="https://rdrr.io/r/base/Log.html">log(x+1)</a></code>.</p></li>
+<li><p>Fixed warning in CRAN checks for forthcoming R-devel.</p></li>
 </ul>
 </div>
 </div>
@@ -167,10 +166,8 @@
 <h2 class="hasAnchor">
 <a href="#new-function-1" class="anchor"></a>New function</h2>
 <ul>
-<li>
-<code><a href="../reference/get_sigma.html">get_sigma()</a></code> to return the residual standard deviation.</li>
-<li>
-<code><a href="../reference/standardize_names.html">standardize_names()</a></code>, which was moved from package <em>parameters</em> to <em>insight</em>.</li>
+<li><p><code><a href="../reference/get_sigma.html">get_sigma()</a></code> to return the residual standard deviation.</p></li>
+<li><p><code><a href="../reference/standardize_names.html">standardize_names()</a></code>, which was moved from package <em>parameters</em> to <em>insight</em>.</p></li>
 </ul>
 </div>
 <div id="new-supported-model-classes-1" class="section level2">
@@ -184,43 +181,34 @@
 <h2 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h2>
 <ul>
-<li>Better support for (weighted) multivariate response models of class <code>mlm</code> for functions like <code><a href="../reference/get_varcov.html">get_varcov()</a></code> or <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>.</li>
-<li>Make <code><a href="../reference/find_formula.html">find_formula()</a></code> work with t-tests from <em>BayesFactor</em>.</li>
-<li>Improved handling for <em>mira</em> objects.</li>
+<li><p>Better support for (weighted) multivariate response models of class <code>mlm</code> for functions like <code><a href="../reference/get_varcov.html">get_varcov()</a></code> or <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>.</p></li>
+<li><p>Make <code><a href="../reference/find_formula.html">find_formula()</a></code> work with t-tests from <em>BayesFactor</em>.</p></li>
+<li><p>Improved handling for <em>mira</em> objects.</p></li>
 </ul>
 </div>
 <div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>na_reference</code> argument, to set the “reference” for Bayes factor values that are <code>NA</code>, and an <code>exact</code> argument for returning scientific formatted extreme values.</li>
-<li>
-<code><a href="../reference/format_value.html">format_value()</a></code> gains a <code>zap_small</code> argument, to prevent scientific printing of numbers if these have more decimal places than indicated by <code>digits</code>.</li>
-<li>
-<code><a href="../reference/get_weights.html">get_weights()</a></code> now also returns <code>NULL</code> when all weights were 1.</li>
-<li>
-<code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>BFBayesFactor</em> objects gets a <code>verbose</code> argument.</li>
-<li>
-<code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>emmGrid</em> and <em>emm_list</em> objects gets a <code>summary</code> argument, to either return the full posterior samples or the summarized centrality indices for Bayesian models.</li>
-<li>
-<code><a href="../reference/find_formula.html">find_formula()</a></code> for <code>MuMIn::model.avg()</code> now tries to retrieve the random effects part of a formula, when present.</li>
-<li>
-<code><a href="../reference/get_weights.html">get_weights()</a></code> gains a <code>na_rm</code> argument to remove possible missing values.</li>
+<li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>na_reference</code> argument, to set the “reference” for Bayes factor values that are <code>NA</code>, and an <code>exact</code> argument for returning scientific formatted extreme values.</p></li>
+<li><p><code><a href="../reference/format_value.html">format_value()</a></code> gains a <code>zap_small</code> argument, to prevent scientific printing of numbers if these have more decimal places than indicated by <code>digits</code>.</p></li>
+<li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> now also returns <code>NULL</code> when all weights were 1.</p></li>
+<li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>BFBayesFactor</em> objects gets a <code>verbose</code> argument.</p></li>
+<li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>emmGrid</em> and <em>emm_list</em> objects gets a <code>summary</code> argument, to either return the full posterior samples or the summarized centrality indices for Bayesian models.</p></li>
+<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code>MuMIn::model.avg()</code> now tries to retrieve the random effects part of a formula, when present.</p></li>
+<li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> gains a <code>na_rm</code> argument to remove possible missing values.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fix issues with one-sample Bayesian t-tests ( <a href="https://github.com/easystats/parameters/issues/297" class="uri">https://github.com/easystats/parameters/issues/297</a> ).</li>
-<li>Fix issue in <code><a href="../reference/format_value.html">format_value()</a></code> that printed <code>"100%"</code> as <code>"1e+02%"</code>.</li>
-<li>Removed unnecessary white-spaces in <code><a href="../reference/format_ci.html">format_ci()</a></code> when upper or lower interval was larger than 1e+5.</li>
-<li>
-<code><a href="../reference/has_intercept.html">has_intercept()</a></code> did not work correctly when intercept was removed from formula using <code>-1</code>.</li>
-<li>
-<code><a href="../reference/find_terms.html">find_terms()</a></code> now shows removal of intercept formula using <code>-1</code> as term <code>"-1"</code>.</li>
-<li>Fix issues with <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>vgam</em> models.</li>
+<li><p>Fix issues with one-sample Bayesian t-tests ( <a href="https://github.com/easystats/parameters/issues/297" class="uri">https://github.com/easystats/parameters/issues/297</a> ).</p></li>
+<li><p>Fix issue in <code><a href="../reference/format_value.html">format_value()</a></code> that printed <code>"100%"</code> as <code>"1e+02%"</code>.</p></li>
+<li><p>Removed unnecessary white-spaces in <code><a href="../reference/format_ci.html">format_ci()</a></code> when upper or lower interval was larger than 1e+5.</p></li>
+<li><p><code><a href="../reference/has_intercept.html">has_intercept()</a></code> did not work correctly when intercept was removed from formula using <code>-1</code>.</p></li>
+<li><p><code><a href="../reference/find_terms.html">find_terms()</a></code> now shows removal of intercept formula using <code>-1</code> as term <code>"-1"</code>.</p></li>
+<li><p>Fix issues with <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>vgam</em> models.</p></li>
 </ul>
 </div>
 </div>
@@ -232,25 +220,19 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/get_data.html">get_data()</a></code> now works for models from <code>afex_aov()</code>.</li>
-<li>
-<code><a href="../reference/get_parameters.html">get_parameters()</a></code> returns a more informative message for <code>BFBayesFactor</code> objects when not the first model is indexed.</li>
-<li>
-<code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes <code><a href="https://rdrr.io/r/base/Log.html">exp()</a></code>-pattern.</li>
-<li>
-<code><a href="../reference/clean_names.html">clean_names()</a></code> for character-objects now works with “interaction patterns” (like <code><a href="../reference/clean_names.html">clean_names("scale(a):scale(b)")</a></code>).</li>
-<li>
-<code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>protect_ratio</code> argument, to print numbers smaller than 1 as ratios.</li>
+<li><p><code><a href="../reference/get_data.html">get_data()</a></code> now works for models from <code>afex_aov()</code>.</p></li>
+<li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> returns a more informative message for <code>BFBayesFactor</code> objects when not the first model is indexed.</p></li>
+<li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes <code><a href="https://rdrr.io/r/base/Log.html">exp()</a></code>-pattern.</p></li>
+<li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> for character-objects now works with “interaction patterns” (like <code><a href="../reference/clean_names.html">clean_names("scale(a):scale(b)")</a></code>).</p></li>
+<li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>protect_ratio</code> argument, to print numbers smaller than 1 as ratios.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fix issues in CRAN checks.</li>
-<li>
-<code><a href="../reference/get_priors.html">get_priors()</a></code> now works for more complex <code>BFBayesFactor</code> objects that have multiple custom priors.</li>
+<li><p>Fix issues in CRAN checks.</p></li>
+<li><p><code><a href="../reference/get_priors.html">get_priors()</a></code> now works for more complex <code>BFBayesFactor</code> objects that have multiple custom priors.</p></li>
 </ul>
 </div>
 </div>
@@ -270,9 +252,8 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>
-<code><a href="../reference/get_data.html">get_data()</a></code> now returns the correct original data for “empty” polynomials (i.e. <code><a href="https://rdrr.io/r/stats/poly.html">poly(x, 1)</a></code>).</li>
-<li>Fix CRAN check issues due to latest <em>estimatr</em> update.</li>
+<li><p><code><a href="../reference/get_data.html">get_data()</a></code> now returns the correct original data for “empty” polynomials (i.e. <code><a href="https://rdrr.io/r/stats/poly.html">poly(x, 1)</a></code>).</p></li>
+<li><p>Fix CRAN check issues due to latest <em>estimatr</em> update.</p></li>
 </ul>
 </div>
 </div>
@@ -291,23 +272,21 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_meta = TRUE</code> for <em>brms</em>-meta-analysis models.</li>
-<li>Make <code><a href="../reference/find_statistic.html">find_statistic()</a></code> work with <code><a href="https://rdrr.io/pkg/mgcv/man/bam.html">mgcv::bam()</a></code>.</li>
-<li>
-<code><a href="../reference/get_variance.html">get_variance()</a></code> now also support <code><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html">truncated_nbinom2()</a></code> family from <em>glmmTMB</em>.</li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_meta = TRUE</code> for <em>brms</em>-meta-analysis models.</p></li>
+<li><p>Make <code><a href="../reference/find_statistic.html">find_statistic()</a></code> work with <code><a href="https://rdrr.io/pkg/mgcv/man/bam.html">mgcv::bam()</a></code>.</p></li>
+<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also support <code><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html">truncated_nbinom2()</a></code> family from <em>glmmTMB</em>.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue with correctly detecting sigma-parameters in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for multiple-response <code>brmsfit</code>-models.</li>
-<li>Fixed issue with <code><a href="../reference/find_formula.html">find_formula()</a></code> for models from <code><a href="https://mc-stan.org/rstanarm/reference/stan_nlmer.html">stan_nlmer()</a></code>.</li>
-<li>Fixed issues with <code><a href="../reference/find_terms.html">find_terms()</a></code> when response variable included a namespace, like <code><a href="https://rdrr.io/pkg/survival/man/Surv.html">survival::Surv()</a></code>.</li>
-<li>Fixed issues with <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>stanreg</em> models, probably caused by the latest update to <em>rstanarm 2.21.2</em>.</li>
-<li>Fixed issues in <code><a href="../reference/get_variance.html">get_variance()</a></code> for <em>brmsfit</em> models.</li>
-<li>Fixed some issues around <code>crq</code> objects (package <em>quantreg</em>).</li>
+<li><p>Fixed issue with correctly detecting sigma-parameters in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for multiple-response <code>brmsfit</code>-models.</p></li>
+<li><p>Fixed issue with <code><a href="../reference/find_formula.html">find_formula()</a></code> for models from <code><a href="https://mc-stan.org/rstanarm/reference/stan_nlmer.html">stan_nlmer()</a></code>.</p></li>
+<li><p>Fixed issues with <code><a href="../reference/find_terms.html">find_terms()</a></code> when response variable included a namespace, like <code><a href="https://rdrr.io/pkg/survival/man/Surv.html">survival::Surv()</a></code>.</p></li>
+<li><p>Fixed issues with <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>stanreg</em> models, probably caused by the latest update to <em>rstanarm 2.21.2</em>.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/get_variance.html">get_variance()</a></code> for <em>brmsfit</em> models.</p></li>
+<li><p>Fixed some issues around <code>crq</code> objects (package <em>quantreg</em>).</p></li>
 </ul>
 </div>
 </div>
@@ -334,27 +313,22 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/get_variance.html">get_variance()</a></code> now also returns the correlation among random slopes.</li>
-<li>
-<code><a href="../reference/get_variance.html">get_variance()</a></code> now also (partially) supports <code>brmsfit</code> models.</li>
-<li>
-<code><a href="../reference/get_parameters.html">get_parameters()</a></code> for models that return (posterior or simulated) samples of model parameters gains a <code>summary</code>-argument, which - if <code>TRUE</code> - returns a point-estimate (mean of samples) instead of the full samples.</li>
-<li>
-<code><a href="../reference/format_p.html">format_p()</a></code> returns <code>"&gt; .999"</code> for p-values equal to or greater than 0.999.</li>
+<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also returns the correlation among random slopes.</p></li>
+<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also (partially) supports <code>brmsfit</code> models.</p></li>
+<li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for models that return (posterior or simulated) samples of model parameters gains a <code>summary</code>-argument, which - if <code>TRUE</code> - returns a point-estimate (mean of samples) instead of the full samples.</p></li>
+<li><p><code><a href="../reference/format_p.html">format_p()</a></code> returns <code>"&gt; .999"</code> for p-values equal to or greater than 0.999.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> that did not properly work for models with random effects in formula (in <em>lme4</em> notation), when random effects were in between fixed effects parts.</li>
-<li>
-<code><a href="../reference/get_variance.html">get_variance()</a></code> did not return variance components for random effects for null-models with random slopes.</li>
-<li>Fixed issue with <code><a href="../reference/get_variance.html">get_variance()</a></code> for <code>lme</code>-models with categorical random slope.</li>
-<li>Fixed issue that occurred since R 4.0.0 in <code><a href="../reference/find_weights.html">find_weights()</a></code> when function call had no <code>weights</code>-argument.</li>
-<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with <code><a href="https://rdrr.io/r/base/cbind.html">cbind()</a></code>-response variables and matrix-like variables in the model frame (e.g. when using <code><a href="https://rdrr.io/r/stats/poly.html">poly()</a></code>).</li>
-<li>Fixed issues with <code>PROreg::BBmm()</code>, due to changes in latest package update.</li>
+<li><p>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> that did not properly work for models with random effects in formula (in <em>lme4</em> notation), when random effects were in between fixed effects parts.</p></li>
+<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> did not return variance components for random effects for null-models with random slopes.</p></li>
+<li><p>Fixed issue with <code><a href="../reference/get_variance.html">get_variance()</a></code> for <code>lme</code>-models with categorical random slope.</p></li>
+<li><p>Fixed issue that occurred since R 4.0.0 in <code><a href="../reference/find_weights.html">find_weights()</a></code> when function call had no <code>weights</code>-argument.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with <code><a href="https://rdrr.io/r/base/cbind.html">cbind()</a></code>-response variables and matrix-like variables in the model frame (e.g. when using <code><a href="https://rdrr.io/r/stats/poly.html">poly()</a></code>).</p></li>
+<li><p>Fixed issues with <code>PROreg::BBmm()</code>, due to changes in latest package update.</p></li>
 </ul>
 </div>
 </div>
@@ -374,18 +348,12 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/get_varcov.html">get_varcov.glmmTMB()</a></code> now also returns the variance-covariance matrix for the dispersion model.</li>
-<li>
-<code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_dispersion = TRUE</code> for <em>glmmTMB</em> objects with dispersion model.</li>
-<li>
-<code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes mathematical operations (like <code>100 * log(x)</code>, which will return <code>"x"</code>).</li>
-<li>
-<code><a href="../reference/format_ci.html">format_ci()</a></code> gains a <code>missing</code> argument, as option how to print missing values.</li>
-<li>
-<code><a href="../reference/format_value.html">format_value()</a></code> now uses <code>NA_character_</code> as missing if <code>missing = NA</code>.</li>
-<li>
-<code><a href="../reference/format_value.html">format_value()</a></code> also converts small numbers with many decimals into scientific notation.</li>
+<li><p><code><a href="../reference/get_varcov.html">get_varcov.glmmTMB()</a></code> now also returns the variance-covariance matrix for the dispersion model.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_dispersion = TRUE</code> for <em>glmmTMB</em> objects with dispersion model.</p></li>
+<li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes mathematical operations (like <code>100 * log(x)</code>, which will return <code>"x"</code>).</p></li>
+<li><p><code><a href="../reference/format_ci.html">format_ci()</a></code> gains a <code>missing</code> argument, as option how to print missing values.</p></li>
+<li><p><code><a href="../reference/format_value.html">format_value()</a></code> now uses <code>NA_character_</code> as missing if <code>missing = NA</code>.</p></li>
+<li><p><code><a href="../reference/format_value.html">format_value()</a></code> also converts small numbers with many decimals into scientific notation.</p></li>
 </ul>
 </div>
 </div>
@@ -397,31 +365,28 @@
 <h2 class="hasAnchor">
 <a href="#general-1" class="anchor"></a>General</h2>
 <ul>
-<li>
-<em>HRQoL</em> was removed from suggested packages, as it was removed from CRAN.</li>
-<li>Better support for dispersion models in <em>glmmTMB</em>.</li>
+<li><p><em>HRQoL</em> was removed from suggested packages, as it was removed from CRAN.</p></li>
+<li><p>Better support for dispersion models in <em>glmmTMB</em>.</p></li>
 </ul>
 </div>
 <div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/null_model.html">null_model()</a></code> now also works for non-mixed models.</li>
-<li>
-<code><a href="../reference/get_variance.html">get_variance()</a></code> now also computes variance components for models (from mixed models packages) without random effects.</li>
-<li>Improved support for <code>afex_aov</code> and <code>aovlist</code> (i.e. Anova with error term).</li>
+<li><p><code><a href="../reference/null_model.html">null_model()</a></code> now also works for non-mixed models.</p></li>
+<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also computes variance components for models (from mixed models packages) without random effects.</p></li>
+<li><p>Improved support for <code>afex_aov</code> and <code>aovlist</code> (i.e. Anova with error term).</p></li>
 </ul>
 </div>
 <div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed some issues with deparsings <code>NULL</code> strings under R 4.0.0.</li>
-<li>Fixed accuracy in <code><a href="../reference/get_variance.html">get_variance()</a></code> for models from Gamma family.</li>
-<li>Fixed edge case in <code><a href="../reference/clean_names.html">clean_names()</a></code>.</li>
-<li>Fixed issues with <code>find_formula.lme()</code> under R 4.0.0.</li>
-<li>Fixed issues with examples from <code><a href="../reference/clean_names.html">clean_names()</a></code> under R-devel.</li>
+<li><p>Fixed some issues with deparsings <code>NULL</code> strings under R 4.0.0.</p></li>
+<li><p>Fixed accuracy in <code><a href="../reference/get_variance.html">get_variance()</a></code> for models from Gamma family.</p></li>
+<li><p>Fixed edge case in <code><a href="../reference/clean_names.html">clean_names()</a></code>.</p></li>
+<li><p>Fixed issues with <code>find_formula.lme()</code> under R 4.0.0.</p></li>
+<li><p>Fixed issues with examples from <code><a href="../reference/clean_names.html">clean_names()</a></code> under R-devel.</p></li>
 </ul>
 </div>
 </div>
@@ -448,20 +413,20 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>Improve family detection in <code><a href="../reference/model_info.html">model_info()</a></code>, <code><a href="../reference/link_inverse.html">link_inverse()</a></code> and <code><a href="../reference/link_function.html">link_function()</a></code> for <em>MCMCglmm</em>.</li>
-<li>Minor revisions to meet changes in <em>mlogit</em> package.</li>
-<li>Improve support for <em>bayesx</em> and <em>BBmm</em> models.</li>
+<li><p>Improve family detection in <code><a href="../reference/model_info.html">model_info()</a></code>, <code><a href="../reference/link_inverse.html">link_inverse()</a></code> and <code><a href="../reference/link_function.html">link_function()</a></code> for <em>MCMCglmm</em>.</p></li>
+<li><p>Minor revisions to meet changes in <em>mlogit</em> package.</p></li>
+<li><p>Improve support for <em>bayesx</em> and <em>BBmm</em> models.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <em>brmsfit</em> models with specific variable name patterns.</li>
-<li>Fixed issue in <code><a href="../reference/format_ci.html">format_ci()</a></code> when confidence interval only contained <code>NA</code>s and <code>width</code> was set to <code>"auto"</code>.</li>
-<li>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models when formula contained parentheses in the non-random parts, around a certain set of predictors.</li>
-<li>Fixed issue in <code>get_priors.BFBayesFactor()</code> for <code>BFMetat</code> class.</li>
-<li>Fixed issue in <code>clean_parameters.BFBayesFactor()</code> when model contained interaction terms and these were assigned to the “extra” component.</li>
+<li><p>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <em>brmsfit</em> models with specific variable name patterns.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/format_ci.html">format_ci()</a></code> when confidence interval only contained <code>NA</code>s and <code>width</code> was set to <code>"auto"</code>.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models when formula contained parentheses in the non-random parts, around a certain set of predictors.</p></li>
+<li><p>Fixed issue in <code>get_priors.BFBayesFactor()</code> for <code>BFMetat</code> class.</p></li>
+<li><p>Fixed issue in <code>clean_parameters.BFBayesFactor()</code> when model contained interaction terms and these were assigned to the “extra” component.</p></li>
 </ul>
 </div>
 </div>
@@ -496,13 +461,13 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue in <code><a href="../reference/find_weights.html">find_weights()</a></code> for <code>merMod</code> models.</li>
-<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with weights, when weights also contained missing data.</li>
-<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for mixed models with complex offset-terms.</li>
-<li>Fixed issue in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>zeroinfl</em> models with theta-coefficients.</li>
-<li>Fixed issue in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>lmerModLmerTest</em> models with.</li>
-<li>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for <em>brmsfit</em> models for rare situations where a specific pattern of variables names, when used as random effects, did not properly separate fixed from random effects in the return value.</li>
-<li>Fixed issue related to CRAN checks.</li>
+<li><p>Fixed issue in <code><a href="../reference/find_weights.html">find_weights()</a></code> for <code>merMod</code> models.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with weights, when weights also contained missing data.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for mixed models with complex offset-terms.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>zeroinfl</em> models with theta-coefficients.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>lmerModLmerTest</em> models with.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for <em>brmsfit</em> models for rare situations where a specific pattern of variables names, when used as random effects, did not properly separate fixed from random effects in the return value.</p></li>
+<li><p>Fixed issue related to CRAN checks.</p></li>
 </ul>
 </div>
 </div>
@@ -529,21 +494,19 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-8" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_multinomial</code> for multinomial (but not ordinal or cumulative) link models.</li>
-<li>
-<code><a href="../reference/format_value.html">format_value()</a></code> gets an <code>as_percent</code> argument to format values as percentages.</li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_multinomial</code> for multinomial (but not ordinal or cumulative) link models.</p></li>
+<li><p><code><a href="../reference/format_value.html">format_value()</a></code> gets an <code>as_percent</code> argument to format values as percentages.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-9" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>clmm2</em>-models.</li>
-<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models that used the <code>lspline()</code>-function.</li>
-<li>Fixed issue in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>multinom</em> models.</li>
-<li>Fixed issue in <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>stanreg</em> models with flat intercept priors.</li>
-<li>Fixed tests that failed due to latest <strong>fixest</strong> update.</li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>clmm2</em>-models.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models that used the <code>lspline()</code>-function.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>multinom</em> models.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>stanreg</em> models with flat intercept priors.</p></li>
+<li><p>Fixed tests that failed due to latest <strong>fixest</strong> update.</p></li>
 </ul>
 </div>
 </div>
@@ -578,28 +541,25 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-9" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/find_parameters.html">find_parameters()</a></code> now also works for <code>BFBayesFactor</code> objects.</li>
-<li>Suppress non-informative warning in <code><a href="../reference/get_data.html">get_data()</a></code> for model data with weights.</li>
-<li>
-<code><a href="../reference/format_value.html">format_value()</a></code> automatically uses scientific notation for <em>very</em> large numbers (&gt; 1e+5). Furthermore, the check for integer values was made more robust, to avoid warnings when checking <em>very</em> large numbers for integer type.</li>
-<li>Improved <code><a href="../reference/find_parameters.html">find_parameters()</a></code>, <code><a href="../reference/get_parameters.html">get_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <code>BFBayesFactor</code>-objects.</li>
-<li>
-<code><a href="../reference/get_priors.html">get_priors()</a></code> now works for <code>stanmvreg</code> objects.</li>
-<li>Other minor improvements.</li>
+<li><p><code><a href="../reference/find_parameters.html">find_parameters()</a></code> now also works for <code>BFBayesFactor</code> objects.</p></li>
+<li><p>Suppress non-informative warning in <code><a href="../reference/get_data.html">get_data()</a></code> for model data with weights.</p></li>
+<li><p><code><a href="../reference/format_value.html">format_value()</a></code> automatically uses scientific notation for <em>very</em> large numbers (&gt; 1e+5). Furthermore, the check for integer values was made more robust, to avoid warnings when checking <em>very</em> large numbers for integer type.</p></li>
+<li><p>Improved <code><a href="../reference/find_parameters.html">find_parameters()</a></code>, <code><a href="../reference/get_parameters.html">get_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <code>BFBayesFactor</code>-objects.</p></li>
+<li><p><code><a href="../reference/get_priors.html">get_priors()</a></code> now works for <code>stanmvreg</code> objects.</p></li>
+<li><p>Other minor improvements.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-10" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-10" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Better detect Tweedie-models in <code><a href="../reference/model_info.html">model_info()</a></code>.</li>
-<li>Fixed issue in <code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code> for <em>panelr</em>-models with multiple random-effect parts.</li>
-<li>Fixed issues with <code>zerotrunc</code> models.</li>
-<li>Fixed issues with <code>brmsfit</code> models with correlated random effects.</li>
-<li>Fixed issue with edge-cases in <code><a href="../reference/clean_names.html">clean_names()</a></code>.</li>
-<li>Fixed issue with breaking changes with latest <em>brms</em>-update.</li>
-<li>Further minor bug fixes.</li>
+<li><p>Better detect Tweedie-models in <code><a href="../reference/model_info.html">model_info()</a></code>.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code> for <em>panelr</em>-models with multiple random-effect parts.</p></li>
+<li><p>Fixed issues with <code>zerotrunc</code> models.</p></li>
+<li><p>Fixed issues with <code>brmsfit</code> models with correlated random effects.</p></li>
+<li><p>Fixed issue with edge-cases in <code><a href="../reference/clean_names.html">clean_names()</a></code>.</p></li>
+<li><p>Fixed issue with breaking changes with latest <em>brms</em>-update.</p></li>
+<li><p>Further minor bug fixes.</p></li>
 </ul>
 </div>
 </div>
@@ -619,10 +579,10 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes-11" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed bug in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models, when random effects are written before any fixed effects terms (like <code>social ~ (1|school) + open + extro</code>).</li>
-<li>Fixed bug in <code><a href="../reference/model_info.html">model_info()</a></code> for <em>VGAM</em> models, where logit-link was not always correctly identified.</li>
-<li>Fixed issue in <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>brmsfit</em> models, where parameters of conditional and zero-inflated model components had identical names. This caused errors in <code><a href="https://easystats.github.io/bayestestR/reference/simulate_prior.html">bayestestR::simulate_prior()</a></code>.</li>
-<li>Fixed CRAN check issue.</li>
+<li><p>Fixed bug in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models, when random effects are written before any fixed effects terms (like <code>social ~ (1|school) + open + extro</code>).</p></li>
+<li><p>Fixed bug in <code><a href="../reference/model_info.html">model_info()</a></code> for <em>VGAM</em> models, where logit-link was not always correctly identified.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>brmsfit</em> models, where parameters of conditional and zero-inflated model components had identical names. This caused errors in <code><a href="https://easystats.github.io/bayestestR/reference/simulate_prior.html">bayestestR::simulate_prior()</a></code>.</p></li>
+<li><p>Fixed CRAN check issue.</p></li>
 </ul>
 </div>
 </div>
@@ -634,36 +594,32 @@
 <h2 class="hasAnchor">
 <a href="#breaking-changes-2" class="anchor"></a>Breaking changes</h2>
 <ul>
-<li>In order to unify column names across easystats-packages, <code><a href="../reference/get_parameters.html">get_parameters()</a></code> and <code><a href="../reference/get_priors.html">get_priors()</a></code> now return column names according to our naming conventions (i.e. capitalized column names).</li>
-<li>
-<code><a href="../reference/model_info.html">model_info()</a></code> returned both <code>$is_zeroinf</code> and <code>$is_zero_inflated</code> for zero-inflated models. Now <code>$is_zeroinf</code> is softly deprecated, so <code><a href="../reference/model_info.html">model_info()</a></code> will return <code>$is_zero_inflated</code> only in future updates.</li>
+<li><p>In order to unify column names across easystats-packages, <code><a href="../reference/get_parameters.html">get_parameters()</a></code> and <code><a href="../reference/get_priors.html">get_priors()</a></code> now return column names according to our naming conventions (i.e. capitalized column names).</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> returned both <code>$is_zeroinf</code> and <code>$is_zero_inflated</code> for zero-inflated models. Now <code>$is_zeroinf</code> is softly deprecated, so <code><a href="../reference/model_info.html">model_info()</a></code> will return <code>$is_zero_inflated</code> only in future updates.</p></li>
 </ul>
 </div>
 <div id="new-supported-model-classes-10" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-supported-model-classes-10" class="anchor"></a>New supported model classes</h2>
 <ul>
-<li>
-<code>aareg</code> (<em>survival</em>), <code>brmultinom</code> and <code>bracl</code> (<em>brglm2</em>), and <code>wbgee</code> (<em>panelr</em>). Furthermore, for different model-types from <em>panelr</em> models (within-between, between, etc.) are now also supported.</li>
-<li>Preliminary support for <code>rma</code> models (<em>metafor</em>).</li>
+<li><p><code>aareg</code> (<em>survival</em>), <code>brmultinom</code> and <code>bracl</code> (<em>brglm2</em>), and <code>wbgee</code> (<em>panelr</em>). Furthermore, for different model-types from <em>panelr</em> models (within-between, between, etc.) are now also supported.</p></li>
+<li><p>Preliminary support for <code>rma</code> models (<em>metafor</em>).</p></li>
 </ul>
 </div>
 <div id="changes-to-functions-10" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-10" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/get_statistic.html">get_statistic()</a></code> supports <code>multinom</code> models (<em>nnet</em>).</li>
-<li>
-<code><a href="../reference/link_inverse.html">link_inverse()</a></code> gets a <code>what</code>-argument, to return the link-inverse function for specific distribution parameters from <strong>gamls</strong> models.</li>
+<li><p><code><a href="../reference/get_statistic.html">get_statistic()</a></code> supports <code>multinom</code> models (<em>nnet</em>).</p></li>
+<li><p><code><a href="../reference/link_inverse.html">link_inverse()</a></code> gets a <code>what</code>-argument, to return the link-inverse function for specific distribution parameters from <strong>gamls</strong> models.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-12" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-12" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed edge case for <code><a href="../reference/find_weights.html">find_weights()</a></code>.</li>
-<li>Fixed bug in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>glmmTMB</em> models that won’t return any data.</li>
+<li><p>Fixed edge case for <code><a href="../reference/find_weights.html">find_weights()</a></code>.</p></li>
+<li><p>Fixed bug in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>glmmTMB</em> models that won’t return any data.</p></li>
 </ul>
 </div>
 </div>
@@ -675,50 +631,41 @@
 <h2 class="hasAnchor">
 <a href="#new-supported-model-classes-11" class="anchor"></a>New supported model classes</h2>
 <ul>
-<li>
-<code>bayesx</code> (<em>R2BayesX</em>), <code>bamlss</code> (<em>bamlss</em>) and <code>flexsurvreg</code> (<em>flexsurv</em>). Note that support for these models is still somewhat experimental.</li>
-<li>Support for <em>lavaan</em> and <em>blavaan</em> was added, but only applies to some of the functions: <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/get_parameters.html">get_parameters()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code>, <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>, <code><a href="../reference/find_algorithm.html">find_algorithm()</a></code> and <code><a href="../reference/get_priors.html">get_priors()</a></code> (the two latter only for <em>blavaan</em>).</li>
+<li><p><code>bayesx</code> (<em>R2BayesX</em>), <code>bamlss</code> (<em>bamlss</em>) and <code>flexsurvreg</code> (<em>flexsurv</em>). Note that support for these models is still somewhat experimental.</p></li>
+<li><p>Support for <em>lavaan</em> and <em>blavaan</em> was added, but only applies to some of the functions: <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/get_parameters.html">get_parameters()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code>, <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>, <code><a href="../reference/find_algorithm.html">find_algorithm()</a></code> and <code><a href="../reference/get_priors.html">get_priors()</a></code> (the two latter only for <em>blavaan</em>).</p></li>
 </ul>
 </div>
 <div id="new-functions-2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-functions-2" class="anchor"></a>New functions</h2>
 <ul>
-<li>
-<code><a href="../reference/get_statistic.html">get_statistic()</a></code> to return the test statistic of model estimates.</li>
-<li>
-<code><a href="../reference/get_varcov.html">get_varcov()</a></code> to return the variance-covariance matrix for models.</li>
-<li>
-<code><a href="../reference/is_model_supported.html">supported_models()</a></code> to print a list of supported models.</li>
+<li><p><code><a href="../reference/get_statistic.html">get_statistic()</a></code> to return the test statistic of model estimates.</p></li>
+<li><p><code><a href="../reference/get_varcov.html">get_varcov()</a></code> to return the variance-covariance matrix for models.</p></li>
+<li><p><code><a href="../reference/is_model_supported.html">supported_models()</a></code> to print a list of supported models.</p></li>
 </ul>
 </div>
 <div id="changes-to-functions-11" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-11" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_survival</code> for survival models.</li>
-<li>
-<code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_truncated</code> for truncated regression, or <em>brmsfit</em> models with <code><a href="https://rdrr.io/r/base/Round.html">trunc()</a></code> as additional response part.</li>
-<li>
-<code><a href="../reference/model_info.html">model_info()</a></code> now recognizes beta and beta inflated families from package <em>gamlss</em>.</li>
-<li>Better support for nonlinear quantile regression (<code><a href="https://rdrr.io/pkg/quantreg/man/nlrq.html">quantreg::nlrq()</a></code>).</li>
-<li>Better support for nonlinear mixed models (<code><a href="https://rdrr.io/pkg/lme4/man/nlmer.html">lme4::nlmer()</a></code>). Note that model-specification requires the random term to be written in parentheses, i.e. <code>(slope | group)</code>.</li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_survival</code> for survival models.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_truncated</code> for truncated regression, or <em>brmsfit</em> models with <code><a href="https://rdrr.io/r/base/Round.html">trunc()</a></code> as additional response part.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now recognizes beta and beta inflated families from package <em>gamlss</em>.</p></li>
+<li><p>Better support for nonlinear quantile regression (<code><a href="https://rdrr.io/pkg/quantreg/man/nlrq.html">quantreg::nlrq()</a></code>).</p></li>
+<li><p>Better support for nonlinear mixed models (<code><a href="https://rdrr.io/pkg/lme4/man/nlmer.html">lme4::nlmer()</a></code>). Note that model-specification requires the random term to be written in parentheses, i.e. <code>(slope | group)</code>.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-13" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-13" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issues in <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>gamlss</em> models.</li>
-<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>plm</em> models, where the <code>index</code>-argument was used in the <code>plm()</code>-function call.</li>
-<li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> for <em>brmsfit</em> multi-membership-models.</li>
-<li>
-<code><a href="../reference/is_model.html">is_model()</a></code> did not recognize objects of class <code>anova</code> and <code>manova</code>.</li>
-<li>
-<code><a href="../reference/model_info.html">model_info()</a></code> now correctly recognizes censored regression models from <em>brmsfit</em>.</li>
-<li>Fixed issues in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> with <em>multinom</em> models.</li>
-<li>Fixed issues in <code><a href="../reference/clean_names.html">clean_names()</a></code> for cases where variable transformations where made in specific patterns, like <code><a href="https://rdrr.io/r/base/Log.html">log(test/10)</a></code>.</li>
+<li><p>Fixed issues in <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>gamlss</em> models.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>plm</em> models, where the <code>index</code>-argument was used in the <code>plm()</code>-function call.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> for <em>brmsfit</em> multi-membership-models.</p></li>
+<li><p><code><a href="../reference/is_model.html">is_model()</a></code> did not recognize objects of class <code>anova</code> and <code>manova</code>.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now correctly recognizes censored regression models from <em>brmsfit</em>.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> with <em>multinom</em> models.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/clean_names.html">clean_names()</a></code> for cases where variable transformations where made in specific patterns, like <code><a href="https://rdrr.io/r/base/Log.html">log(test/10)</a></code>.</p></li>
 </ul>
 </div>
 </div>
@@ -737,12 +684,9 @@
 <h2 class="hasAnchor">
 <a href="#new-functions-3" class="anchor"></a>New functions</h2>
 <ul>
-<li>
-<code><a href="../reference/find_statistic.html">find_statistic()</a></code> to return the test statistic of a regression model.</li>
-<li>
-<code><a href="../reference/format_value.html">format_value()</a></code> and <code><a href="../reference/format_table.html">format_table()</a></code> as utility-functions to format (model) output, especially for tabular output.</li>
-<li>
-<code><a href="../reference/color_if.html">color_if()</a></code> as utility-function to add color formatting to values, depending on certain conditions.</li>
+<li><p><code><a href="../reference/find_statistic.html">find_statistic()</a></code> to return the test statistic of a regression model.</p></li>
+<li><p><code><a href="../reference/format_value.html">format_value()</a></code> and <code><a href="../reference/format_table.html">format_table()</a></code> as utility-functions to format (model) output, especially for tabular output.</p></li>
+<li><p><code><a href="../reference/color_if.html">color_if()</a></code> as utility-function to add color formatting to values, depending on certain conditions.</p></li>
 </ul>
 </div>
 <div id="general-6" class="section level2">
@@ -756,33 +700,23 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-12" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also support objects of class <code>sim</code> and <code>sim.merMod</code> (from <code>arm::sim()</code>).</li>
-<li>
-<code><a href="../reference/get_variance.html">get_variance()</a></code> now also supports models of class <em>clmm</em>.</li>
-<li>
-<code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> now include the Euclidean distance matrix for spatial models from <em>glmmTMB</em> (returned as random effects element, or more precise, as random slope).</li>
+<li><p><code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also support objects of class <code>sim</code> and <code>sim.merMod</code> (from <code>arm::sim()</code>).</p></li>
+<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also supports models of class <em>clmm</em>.</p></li>
+<li><p><code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> now include the Euclidean distance matrix for spatial models from <em>glmmTMB</em> (returned as random effects element, or more precise, as random slope).</p></li>
 </ul>
 </div>
 <div id="bug-fixes-14" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-14" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>
-<code><a href="../reference/find_formula.html">find_formula()</a></code> now extracts group factors of random effects for <em>gamlss</em> models.</li>
-<li>
-<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> no longer show <code>NA</code> coefficients from group factors of random effects for <em>gamlss</em> models.</li>
-<li>
-<code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not work for multivariate response models of class <em>brmsfit</em> when argument <code>parameters</code> was specified.</li>
-<li>
-<code><a href="../reference/get_data.html">get_data()</a></code> dropped value and variable label attributes, when model frame contained matrix variables (like splines).</li>
-<li>
-<code><a href="../reference/get_priors.html">get_priors()</a></code> swapped column names <code>location</code> and <code>scale</code> for <em>brmsfit</em> -objects.</li>
-<li>
-<code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not work for <em>glmmTMB</em> models without zero-inflation component.</li>
-<li>
-<code><a href="../reference/find_predictors.html">find_predictors()</a></code> did not remove parentheses from terms in multiple nested random effects.</li>
-<li>Better support for <em>gam</em> models (package <em>mgcv</em>) with <code>ziplss</code> or <code>mvn</code> families.</li>
+<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> now extracts group factors of random effects for <em>gamlss</em> models.</p></li>
+<li><p><code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> no longer show <code>NA</code> coefficients from group factors of random effects for <em>gamlss</em> models.</p></li>
+<li><p><code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not work for multivariate response models of class <em>brmsfit</em> when argument <code>parameters</code> was specified.</p></li>
+<li><p><code><a href="../reference/get_data.html">get_data()</a></code> dropped value and variable label attributes, when model frame contained matrix variables (like splines).</p></li>
+<li><p><code><a href="../reference/get_priors.html">get_priors()</a></code> swapped column names <code>location</code> and <code>scale</code> for <em>brmsfit</em> -objects.</p></li>
+<li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> did not work for <em>glmmTMB</em> models without zero-inflation component.</p></li>
+<li><p><code><a href="../reference/find_predictors.html">find_predictors()</a></code> did not remove parentheses from terms in multiple nested random effects.</p></li>
+<li><p>Better support for <em>gam</em> models (package <em>mgcv</em>) with <code>ziplss</code> or <code>mvn</code> families.</p></li>
 </ul>
 </div>
 </div>
@@ -794,10 +728,8 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-13" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/get_variance.html">get_variance()</a></code> now supports models with Gamma-family.</li>
-<li>
-<code><a href="../reference/get_weights.html">get_weights()</a></code> and <code><a href="../reference/find_weights.html">find_weights()</a></code> now work for <em>brms</em>-models.</li>
+<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now supports models with Gamma-family.</p></li>
+<li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> and <code><a href="../reference/find_weights.html">find_weights()</a></code> now work for <em>brms</em>-models.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-15" class="section level2">
