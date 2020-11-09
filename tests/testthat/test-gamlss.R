@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("gamlss")) {
-  context("insight, model_info")
-
   data(abdom)
   m1 <-
     gamlss(

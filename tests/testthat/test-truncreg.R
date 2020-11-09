@@ -2,8 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("truncreg") &&
   require("survival")) {
-  context("insight, truncreg")
-
   data("tobin", package = "survival")
   m1 <- truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
 

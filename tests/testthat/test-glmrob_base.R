@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("robustbase")) {
-  context("insight, model_info")
-
   data(carrots)
 
   m1 <- glmrob(

@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("feisr")) {
-  context("insight, feisr")
-
   data(mwp)
   m1 <- feis(
     lnw ~ marry + enrol + as.factor(yeargr) | exp + I(exp^2),

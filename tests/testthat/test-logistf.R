@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("logistf")) {
-  context("insight, model_info")
-
   data(sex2)
   m1 <- logistf(case ~ age + oc + vic + vicl + vis + dia, data = sex2)
 

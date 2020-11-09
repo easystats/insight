@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("glmmTMB")) {
-  context("insight, model_info")
-
   data(Salamanders)
   Salamanders$cover <- abs(Salamanders$cover)
 

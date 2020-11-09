@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("gee")) {
-  context("insight, model_info")
-
   data(warpbreaks)
   m1 <- gee(breaks ~ tension, id = wool, data = warpbreaks)
 

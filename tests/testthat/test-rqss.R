@@ -2,8 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("quantreg") &&
   require("tripack")) {
-  context("insight, model_info")
-
   data("CobarOre")
   set.seed(123)
   CobarOre$w <- rnorm(nrow(CobarOre))

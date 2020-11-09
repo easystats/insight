@@ -2,8 +2,6 @@
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
   if (require("testthat") && require("insight") && require("aod")) {
-    context("insight, negbin")
-
     data(dja)
     m1 <-
       suppressWarnings(aod::negbin(y ~ group + offset(log(trisk)),

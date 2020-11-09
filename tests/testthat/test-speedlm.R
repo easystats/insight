@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("speedglm")) {
-  context("insight, model_info")
-
   data(iris)
   data(mtcars)
 

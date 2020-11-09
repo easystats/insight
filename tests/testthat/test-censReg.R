@@ -2,7 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("censReg") &&
   require("AER")) {
-  context("insight, censReg")
 
   data("Affairs", package = "AER")
   m1 <-

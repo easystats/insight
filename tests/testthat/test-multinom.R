@@ -2,8 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("nnet") &&
   require("MASS")) {
-  context("insight, model_info")
-
   data("birthwt")
   m1 <- multinom(low ~ age + lwt + race + smoke, data = birthwt)
 

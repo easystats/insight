@@ -18,7 +18,6 @@ if (require("testthat") &&
 
 
   # ---------------------------
-  context("BF t.test one/two/paired samples")
   set.seed(123)
   x <- rnorm(1000, 0, 1)
   y <- rnorm(1000, 0, 1)

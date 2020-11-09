@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("rms")) {
-  context("insight, model_info")
-
   data(mtcars)
   m1 <- lrm(am ~ mpg + gear, data = mtcars)
 

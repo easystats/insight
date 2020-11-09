@@ -2,8 +2,6 @@
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
   if (require("testthat") && require("insight") && require("VGAM")) {
-    context("insight, model_info")
-
     data("hunua")
     m1 <- download_model("vgam_1")
     m2 <- download_model("vgam_2")

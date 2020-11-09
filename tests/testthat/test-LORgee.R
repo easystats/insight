@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("multgee")) {
-  context("insight, multgee")
-
   data(arthritis)
   m1 <- ordLORgee(
     y ~ factor(time) + factor(trt) + factor(baseline),

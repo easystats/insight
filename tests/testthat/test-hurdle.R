@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("pscl")) {
-  context("insight, model_info")
-
   data("bioChemists")
 
   m1 <- hurdle(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)

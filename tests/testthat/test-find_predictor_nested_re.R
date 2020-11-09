@@ -1,6 +1,4 @@
 if (require("testthat") && require("insight") && require("lme4")) {
-  context("insight, find_predictors")
-
   set.seed(1984)
   dat <- data.frame(
     y = rnorm(1000 * 5, sd = 1 - .20),

@@ -2,8 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("nlme") &&
   require("lme4")) {
-  context("insight, model_info")
-
   data("sleepstudy")
   data(Orthodont)
   m1 <- lme(Reaction ~ Days,

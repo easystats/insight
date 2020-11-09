@@ -1,5 +1,4 @@
 if (require("testthat") && require("insight")) {
-  context("insight, clean_names")
 
   test_that("clean_names", {
     expect_equal(clean_names(""), "")

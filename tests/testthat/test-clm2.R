@@ -2,7 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("ordinal") &&
   require("MASS")) {
-  context("insight, model_info")
 
   data(housing, package = "MASS")
   m1 <- clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)

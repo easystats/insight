@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("stats")) {
-  context("insight, lm")
-
   data(iris)
   data(mtcars)
 

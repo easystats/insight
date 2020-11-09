@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("crch")) {
-  context("insight, model_info")
 
   data("RainIbk")
   RainIbk$sqrtensmean <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)

@@ -2,7 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("survival") &&
   require("coxme")) {
-  context("insight, model_info")
 
   data(lung)
   set.seed(1234)

@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("ordinal")) {
-  context("insight, model_info")
 
   data(wine, package = "ordinal")
   data(soup)

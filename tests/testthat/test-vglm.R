@@ -1,8 +1,6 @@
 unloadNamespace("gam")
 
 if (require("testthat") && require("insight") && require("VGAM")) {
-  context("insight, model_info")
-
   d.AD <- data.frame(
     treatment = gl(3, 3),
     outcome = gl(3, 1, 9),

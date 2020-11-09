@@ -3,8 +3,6 @@
 if (.runThisTest) {
   if (require("testthat") &&
     require("insight") && require("lme4") && require("robustlmm")) {
-    context("insight, find_predictors")
-
     data(sleepstudy)
 
     set.seed(123)

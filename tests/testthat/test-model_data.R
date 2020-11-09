@@ -2,8 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("splines") &&
   require("glmmTMB")) {
-  context("insight, get_data")
-
   data(iris)
 
   m1 <- lm(Sepal.Length ~ Species + ns(Petal.Width), data = iris)

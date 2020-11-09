@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("geepack")) {
-  context("insight, model_info")
-
   data(warpbreaks)
   m1 <-
     geeglm(

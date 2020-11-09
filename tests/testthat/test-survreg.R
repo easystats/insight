@@ -1,8 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("survival")) {
-  context("insight, model_info")
-
   data("ovarian")
   m1 <-
     survreg(Surv(futime, fustat) ~ ecog.ps + rx,

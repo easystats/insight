@@ -4,8 +4,6 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
   if (suppressWarnings(require("testthat") &&
     require("insight") &&
     require("rstanarm"))) {
-    context("insight, mv-rstanarm")
-
     data("pbcLong")
     m1 <- download_model("stanmvreg_1")
 
