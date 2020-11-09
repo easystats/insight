@@ -66,7 +66,7 @@ if (require("testthat") &&
       find_formula(m1),
       list(
         conditional = as.formula("log(packs) ~ log(rprice) + log(rincome)"),
-        instruments = as.formula("~log(rincome) + tdiff + I(tax/cpi)")
+        instruments = as.formula("~salestax + log(rincome)")
       ),
       ignore_attr = TRUE
     )
