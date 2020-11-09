@@ -313,9 +313,9 @@ if (require("testthat") &&
       tolerance = 1e-1
     )
 
-    if (.runThisTest || Sys.getenv("USER") == "travis") {
-      expect_warning(expect_equal(
-        get_variance(m2),
+    if (.runThisTest) {
+      expect_equal(
+        suppressWarnings(get_variance(m2)),
         list(
           var.fixed = 889.3301,
           var.residual = 941.8135,
@@ -328,7 +328,7 @@ if (require("testthat") &&
           )
         ),
         tolerance = 1e-1,
-      ))
+      )
     }
   })
 
