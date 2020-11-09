@@ -217,7 +217,8 @@ if (.runThisTest) {
         list(
           conditional = as.formula("cbind(incidence, size - incidence) ~ size + period"),
           random = as.formula("~1 | herd")
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
 

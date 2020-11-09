@@ -48,7 +48,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("am ~ mpg + gear"))
+      list(conditional = as.formula("am ~ mpg + gear")),
+      ignore_attr = TRUE
     )
   })
 

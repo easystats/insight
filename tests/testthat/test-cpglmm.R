@@ -62,7 +62,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("RLD ~ Stock + Spacing"),
         random = as.formula("~1 | Plant")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

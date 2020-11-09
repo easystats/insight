@@ -48,7 +48,8 @@ if (require("testthat") &&
       find_formula(m1),
       list(conditional = as.formula(
         "Surv(time, status) ~ sex + age + ph.ecog"
-      ))
+      )),
+      ignore_attr = TRUE
     )
   })
 

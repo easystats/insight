@@ -57,12 +57,14 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("yield ~ N * P * K + Error(block)"))
+      list(conditional = as.formula("yield ~ N * P * K + Error(block)")),
+      ignore_attr = TRUE
     )
     expect_length(find_formula(m2), 1)
     expect_equal(
       find_formula(m2),
-      list(conditional = as.formula("yield ~ N * P * K"))
+      list(conditional = as.formula("yield ~ N * P * K")),
+      ignore_attr = TRUE
     )
   })
 

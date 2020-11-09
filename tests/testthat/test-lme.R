@@ -103,7 +103,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("Reaction ~ Days"),
         random = as.formula("~1 + Days | Subject")
-      )
+      ),
+      ignore_attr = TRUE
     )
     expect_length(find_formula(m2), 2)
     expect_equal(
@@ -111,7 +112,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("distance ~ age + Sex"),
         random = as.formula("~1")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

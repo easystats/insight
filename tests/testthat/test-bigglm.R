@@ -78,7 +78,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_length(find_formula(m1), 1)
       expect_equal(
         find_formula(m1),
-        list(conditional = as.formula("count ~ mined + log(cover) + sample"))
+        list(conditional = as.formula("count ~ mined + log(cover) + sample")),
+        ignore_attr = TRUE
       )
     })
 

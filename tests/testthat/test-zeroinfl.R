@@ -48,7 +48,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("art ~ fem + mar + kid5 + ment"),
         zero_inflated = as.formula("~kid5 + phd")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

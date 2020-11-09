@@ -68,7 +68,8 @@ if (require("testthat") &&
         conditional = as.formula("lnw ~ marry + enrol + as.factor(yeargr)"),
         slopes = as.formula("~exp + I(exp^2)"),
         random = as.formula("~id")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

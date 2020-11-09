@@ -71,7 +71,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
         list(
           conditional = as.formula("y ~ group + offset(log(trisk))"),
           random = as.formula("~village")
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
 

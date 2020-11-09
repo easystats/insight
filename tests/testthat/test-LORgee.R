@@ -68,7 +68,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("y ~ factor(time) + factor(trt) + factor(baseline)"),
         random = as.formula("~id")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

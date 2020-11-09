@@ -69,7 +69,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
       expect_length(find_formula(m1), 1)
       expect_equal(
         find_formula(m1),
-        list(conditional = as.formula("y ~ s(x0) + s(x1) + s(x2) + s(x3)"))
+        list(conditional = as.formula("y ~ s(x0) + s(x1) + s(x2) + s(x3)")),
+        ignore_attr = TRUE
       )
       expect_length(find_formula(m2), 2)
       expect_equal(
@@ -77,7 +78,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         list(
           conditional = as.formula("y ~ s(x2) + s(x3)"),
           zero_inflated = as.formula("~s(x0) + s(x1)")
-        )
+        ),
+        ignore_attr = TRUE
       )
       expect_length(find_formula(m3), 2)
       expect_equal(
@@ -87,7 +89,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
           y1 = list(conditional = as.formula("y1 ~ s(x2) + s(x3)"))
         ),
         is_mv = "1"
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
 

@@ -80,7 +80,8 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         list(
           conditional = as.formula("lcrmrte ~ lprbarr + factor(year)"),
           instruments = as.formula("~-lprbarr + lmix")
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
 

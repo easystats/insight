@@ -55,7 +55,8 @@ if (require("testthat") &&
         sigma = as.formula("~pb(x)"),
         nu = as.formula("~1"),
         tau = as.formula("~1")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

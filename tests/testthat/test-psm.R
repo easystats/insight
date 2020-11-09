@@ -68,7 +68,8 @@ if (require("testthat") &&
       find_formula(m1),
       list(conditional = as.formula(
         "Surv(d.time, death) ~ sex * pol(age, 2)"
-      ))
+      )),
+      ignore_attr = TRUE
     )
   })
 

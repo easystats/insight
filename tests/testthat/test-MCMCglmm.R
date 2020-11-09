@@ -71,7 +71,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("PO ~ plate"),
         random = as.formula("~FSfamily")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

@@ -71,7 +71,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("Surv(time, status) ~ ph.ecog + age"),
         random = as.formula("~1 | inst")
-      )
+      ),
+      ignore_attr = TRUE
     )
 
     expect_length(find_formula(m2), 2)
@@ -79,7 +80,8 @@ if (require("testthat") &&
       find_formula(m2),
       list(
         conditional = as.formula("Surv(time, status) ~ ph.ecog + age"),
-        random = list(as.formula("~1 | inst"), as.formula("~1 | inst2"))
+        random = list(as.formula("~1 | inst"), as.formula("~1 | inst2")),
+        ignore_attr = TRUE
       )
     )
   })

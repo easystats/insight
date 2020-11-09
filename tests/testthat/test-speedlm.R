@@ -64,7 +64,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("Sepal.Length ~ Petal.Width + Species"))
+      list(conditional = as.formula("Sepal.Length ~ Petal.Width + Species")),
+      ignore_attr = TRUE
     )
     expect_equal(
       find_formula(m2),
@@ -72,7 +73,8 @@ if (require("testthat") &&
         conditional = as.formula(
           "log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE)"
         )
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

@@ -57,7 +57,8 @@ if (require("testthat") &&
       list(
         conditional = as.formula("breaks ~ tension"),
         random = as.formula("~wool")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

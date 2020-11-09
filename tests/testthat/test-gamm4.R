@@ -62,7 +62,8 @@ if (require("testthat") && require("insight") && require("gamm4")) {
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("y ~ s(x0) + x1 + s(x2)"))
+      list(conditional = as.formula("y ~ s(x0) + x1 + s(x2)")),
+      ignore_attr = TRUE
     )
   })
 

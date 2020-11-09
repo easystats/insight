@@ -93,7 +93,8 @@ if (require("testthat") &&
         conditional = as.formula(
           "affairs ~ age + yearsmarried + religiousness + occupation + rating"
         )
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 

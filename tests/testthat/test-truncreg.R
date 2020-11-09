@@ -32,7 +32,8 @@ if (require("testthat") &&
     expect_length(find_formula(m1), 1)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("durable ~ age + quant"))
+      list(conditional = as.formula("durable ~ age + quant")),
+      ignore_attr = TRUE
     )
   })
 

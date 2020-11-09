@@ -141,7 +141,8 @@ if (.runThisTest) {
           "random",
           "zero_inflated",
           "zero_inflated_random"
-        )
+        ),
+        ignore_attr = TRUE
       )
     })
 
