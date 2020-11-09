@@ -18,6 +18,7 @@ as possible.
 * Fixed issue in `get_data()` for `MixMod` objects, which were caused due to internal changes in *GLMMadaptive*.
 * `get_data()` for zero-inflated models from *pscl* did not include the offset-term in cases where the offset was defined as argument, not inside the model formula.
 * Fixed issue in `get_data()` for `coxph` models with survival-objects with `event`-argument as response.
+* Fixed edge case in `get_data()` for column name of response values that were log-transformed using `log(x+1)`.
 
 # insight 0.10.0
 

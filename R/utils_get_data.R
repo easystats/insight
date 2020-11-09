@@ -636,8 +636,8 @@
   } else {
     x <- find_terms(model, flatten = TRUE)
   }
-  pattern <- sprintf("%s\\(([^,)]*).*", type)
-  gsub(pattern, "\\1", x[grepl(pattern, x)])
+  pattern <- sprintf("%s\\(([^,\\+)]*).*", type)
+  .trim(gsub(pattern, "\\1", x[grepl(pattern, x)]))
 }
 
 
