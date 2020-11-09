@@ -125,6 +125,6 @@ if (require("testthat") &&
   })
 
   test_that("get_statistic", {
-    expect_equal(get_statistic(m1)$Statistic, c(-10.7066515607315, 18.1533878215937, -1.68918157150882, 2.23541768590273), tolernce = 1e-4)
+    expect_equal(get_statistic(m1)$Statistic, c(-10.7066515607315, 18.1533878215937, -1.68918157150882, 2.23541768590273), tolerance = 1e-4)
   })
 }
