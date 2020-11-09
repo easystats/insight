@@ -489,7 +489,7 @@ clean_parameters.mlm <- function(x, ...) {
 
   # fix intercept names
 
-  intercepts <- which(out$Cleaned_Parameter == "Intercept")
+  intercepts <- which(out$Cleaned_Parameter %in% c("Intercept", "zi_Intercept"))
   if (!.is_empty_object(intercepts)) {
     out$Cleaned_Parameter[intercepts] <- "(Intercept)"
   }
