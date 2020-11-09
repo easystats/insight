@@ -19,6 +19,7 @@ as possible.
 * `get_data()` for zero-inflated models from *pscl* did not include the offset-term in cases where the offset was defined as argument, not inside the model formula.
 * Fixed issue in `get_data()` for `coxph` models with survival-objects with `event`-argument as response.
 * Fixed edge case in `get_data()` for column name of response values that were log-transformed using `log(x+1)`.
+* Fixed warning in CRAN checks for forthcoming R-devel.
 
 # insight 0.10.0
 
