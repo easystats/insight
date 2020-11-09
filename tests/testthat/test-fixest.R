@@ -37,7 +37,7 @@ if (require("testthat") &&
   })
 
   test_that("get_random", {
-    expect_null(expect_warning(get_random(m1)))
+    expect_warning(expect_null(get_random(m1)))
   })
 
   test_that("find_response", {
