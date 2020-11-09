@@ -405,22 +405,22 @@ clean_parameters.mlm <- function(x, ...) {
   if (is_mv) {
     resp <- unique(out$Response)
 
-    resp_pattern <- sprintf("_%s_(.*)", resp, resp)
+    resp_pattern <- sprintf("_%s_(.*)", resp)
     for (i in resp_pattern) {
       out$Cleaned_Parameter <- gsub(pattern = i, "_\\1", out$Cleaned_Parameter, perl = TRUE)
     }
 
-    resp_pattern <- sprintf("__%s(.*)", resp, resp)
+    resp_pattern <- sprintf("__%s(.*)", resp)
     for (i in resp_pattern) {
       out$Cleaned_Parameter <- gsub(pattern = i, "\\1", out$Cleaned_Parameter, perl = TRUE)
     }
 
-    resp_pattern <- sprintf("__zi_%s(.*)", resp, resp)
+    resp_pattern <- sprintf("__zi_%s(.*)", resp)
     for (i in resp_pattern) {
       out$Cleaned_Parameter <- gsub(pattern = i, "\\1", out$Cleaned_Parameter, perl = TRUE)
     }
 
-    resp_pattern <- sprintf("(sigma)(_%s)", resp, resp)
+    resp_pattern <- sprintf("(sigma)(_%s)", resp)
     for (i in resp_pattern) {
       out$Cleaned_Parameter <- gsub(pattern = i, "\\1", out$Cleaned_Parameter, perl = TRUE)
     }
