@@ -2,18 +2,9 @@ if (require("testthat") &&
   require("insight") &&
   require("ivreg")) {
 
-  data(CigarettesSW)
-  CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
-  CigarettesSW$rincome <-
-    with(CigarettesSW, income / population / cpi)
-  CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax) / cpi)
-
-  m1 <-
-    ivreg::ivreg(
-      log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi),
-      data = CigarettesSW,
-      subset = year == "1995"
-    )
+  data("CigaretteDemand")
+  m1 <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
+                     data = CigaretteDemand)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -24,12 +15,12 @@ if (require("testthat") &&
       find_predictors(m1),
       list(
         conditional = c("rprice", "rincome"),
-        instruments = c("rincome", "tdiff", "tax", "cpi")
+        instruments = c("salestax", "rincome")
       )
     )
     expect_identical(
       find_predictors(m1, flatten = TRUE),
-      c("rprice", "rincome", "tdiff", "tax", "cpi")
+      c("rprice", "rincome", "salestax")
     )
     expect_null(find_predictors(m1, effects = "random"))
   })
@@ -47,13 +38,13 @@ if (require("testthat") &&
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), CigarettesSW$packs[CigarettesSW$year == "1995"])
+    expect_equal(get_response(m1), CigaretteDemand$packs)
   })
 
   test_that("get_predictors", {
     expect_equal(
       colnames(get_predictors(m1)),
-      c("rprice", "rincome", "tdiff", "tax", "cpi")
+      c("rprice", "rincome", "salestax")
     )
   })
 
@@ -65,7 +56,7 @@ if (require("testthat") &&
     expect_equal(nrow(get_data(m1)), 48)
     expect_equal(
       colnames(get_data(m1)),
-      c("packs", "rprice", "rincome", "tdiff", "tax", "cpi")
+      c("packs", "rprice", "rincome", "salestax")
     )
   })
 
@@ -87,12 +78,12 @@ if (require("testthat") &&
       list(
         response = "packs",
         conditional = c("rprice", "rincome"),
-        instruments = c("rincome", "tdiff", "tax", "cpi")
+        instruments = c("salestax", "rincome")
       )
     )
     expect_equal(
       find_variables(m1, flatten = TRUE),
-      c("packs", "rprice", "rincome", "tdiff", "tax", "cpi")
+      c("packs", "rprice", "rincome", "salestax")
     )
   })
 
@@ -128,7 +119,7 @@ if (require("testthat") &&
       list(
         response = "log(packs)",
         conditional = c("log(rprice)", "log(rincome)"),
-        instruments = c("log(rincome)", "tdiff", "I(tax/cpi)")
+        instruments = c("salestax", "log(rincome)")
       )
     )
     expect_equal(nrow(get_parameters(m1)), 3)
