@@ -41,9 +41,9 @@ if (require("testthat") &&
     expect_equal(nrow(get_parameters(t2)), 4000)
     expect_equal(nrow(get_parameters(t2d)), 4000)
 
-    expect_equal(median(get_parameters(t1)[["Difference"]]), 60, tol = 0.05)
-    expect_equal(median(get_parameters(t2)[["Difference"]]), 0, tol = 0.05)
-    expect_equal(median(get_parameters(t2d)[["Difference"]]), 60, tol = 0.05)
+    expect_equal(median(get_parameters(t1)[["Difference"]]), 60, tolerance = 0.05)
+    expect_equal(median(get_parameters(t2)[["Difference"]]), 0, tolerance = 0.05)
+    expect_equal(median(get_parameters(t2d)[["Difference"]]), 60, tolerance = 0.05)
   })
   test_that("model_info", {
     expect_true(model_info(t1)$is_ttest)
