@@ -355,7 +355,7 @@ if (require("testthat") &&
       ),
       ignore_attr = TRUE
     )
-    expect_equal(find_formula(m6), list(conditional = as.formula("count ~ 1")))
+    expect_equal(find_formula(m6), list(conditional = as.formula("count ~ 1")), ignore_attr = TRUE)
   })
 
   test_that("find_predictors", {
