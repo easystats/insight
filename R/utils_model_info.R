@@ -173,20 +173,20 @@
 
   # significance tests --------
 
+  is_ttest <- FALSE
+  is_correlation <- FALSE
+  is_oneway <- FALSE
+
   if (inherits(x, "htest")) {
     if (grepl("t-test", x$method)) {
       is_ttest <- TRUE
-      is_correlation <- FALSE
+    } else if (grepl("^One-way", x$method)) {
+      is_oneway <- TRUE
     } else {
-      is_ttest <- FALSE
       is_correlation <- TRUE
     }
   } else if (inherits(x, "BGGM")) {
-    is_ttest <- FALSE
     is_correlation <- TRUE
-  } else {
-    is_ttest <- FALSE
-    is_correlation <- FALSE
   }
 
 
@@ -196,6 +196,7 @@
   if (inherits(x, "BFBayesFactor")) {
     is_ttest <- FALSE
     is_correlation <- FALSE
+    is_oneway <- FALSE
 
     obj_type <- .classify_BFBayesFactor(x)
 
@@ -267,6 +268,7 @@
     is_timeseries = inherits(x, c("Arima")),
     is_ttest = is_ttest,
     is_correlation = is_correlation,
+    is_oneway = is_oneway,
     is_meta = is_meta,
     link_function = link.fun,
     family = fitfam,
