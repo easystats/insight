@@ -102,7 +102,8 @@
   is.bayes <- inherits(x, c(
     "brmsfit", "stanfit", "MCMCglmm", "stanreg",
     "stanmvreg", "bmerMod", "BFBayesFactor", "bamlss",
-    "bayesx", "mcmc", "bcplm", "bayesQR", "BGGM"
+    "bayesx", "mcmc", "bcplm", "bayesQR", "BGGM",
+    "meta_random", "meta_fixed", "meta_bma", "blavaan"
   ))
 
 
@@ -117,7 +118,7 @@
   # censored or truncated response --------
 
   is.trial <- FALSE
-  is.censored <- inherits(x, c("crq", "crqs")) | all(inherits(x, c("sem", "lme")))
+  is.censored <- inherits(x, c("crq", "crqs")) | (inherits(x, "sem") && inherits(x, "lme"))
   is.truncated <- FALSE
 
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {
@@ -176,12 +177,16 @@
   is_ttest <- FALSE
   is_correlation <- FALSE
   is_oneway <- FALSE
+  is_proptest <- FALSE
 
   if (inherits(x, "htest")) {
     if (grepl("t-test", x$method)) {
       is_ttest <- TRUE
     } else if (grepl("^One-way", x$method)) {
       is_oneway <- TRUE
+    } else if (grepl("\\d+-sample(.*)proportions(.*)", x$method)) {
+      binom_fam <- TRUE
+      is_proptest <- TRUE
     } else {
       is_correlation <- TRUE
     }
@@ -197,6 +202,7 @@
     is_ttest <- FALSE
     is_correlation <- FALSE
     is_oneway <- FALSE
+    is_proptest <- FALSE
 
     obj_type <- .classify_BFBayesFactor(x)
 
@@ -206,6 +212,9 @@
       is_ttest <- TRUE
     } else if (obj_type == "meta") {
       is_meta <- TRUE
+    } else if (obj_type == "proptest") {
+      binom_fam <- TRUE
+      is_proptest <- TRUE
     }
   }
 
@@ -223,9 +232,18 @@
 
   # gaussian family --------
 
-  linear_model <- (!binom_fam & !exponential_fam & !poisson_fam & !neg_bin_fam & !logit.link & !dirichlet_fam
-                   & !is.ordinal & !zero.inf & !is.censored & !is.survival & !is.categorical & !hurdle & !is.multinomial) ||
-    fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian") || grepl("(\\st)$", fitfam)
+  linear_model <- TRUE
+  if (binom_fam | exponential_fam | poisson_fam | neg_bin_fam | logit.link |
+      dirichlet_fam | is.ordinal | zero.inf | is.censored | is.survival |
+      is.categorical | hurdle | is.multinomial) {
+    linear_model <- FALSE
+  }
+  if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian"))) {
+    linear_model <- FALSE
+  }
+  if (!grepl("(\\st)$", fitfam)) {
+    linear_model <- FALSE
+  }
 
 
   # tweedie family --------
@@ -269,6 +287,7 @@
     is_ttest = is_ttest,
     is_correlation = is_correlation,
     is_oneway = is_oneway,
+    is_proptest = is_proptest,
     is_meta = is_meta,
     link_function = link.fun,
     family = fitfam,
@@ -336,6 +355,8 @@
     "linear"
   } else if (any(class(x@denominator) %in% c("BFcontingencyTable"))) {
     "xtable"
+  } else if (any(class(x@denominator) %in% c("BFproportion"))) {
+    "proptest"
   } else {
     class(x@denominator)
   }

@@ -13,7 +13,8 @@
 
 * `standardize_names()` tries to be as loyal to the *broom*-naming conventions
   as possible.
-* `model_info()` now also detects models from `oneway.test()`.
+* `model_info()` now also detects models from `oneway.test()` and `prop.test()`.
+  Furthermore, `model_info
 
 ## Bug fixes
 

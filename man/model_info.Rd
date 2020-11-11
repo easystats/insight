@@ -58,6 +58,7 @@ Retrieve information from model objects.
      \item \code{is_ttest}: model is an an object of class \code{htest}, returned by \code{t.test()}
      \item \code{is_correlation}: model is an an object of class \code{htest}, returned by \code{cor.test()}
      \item \code{is_oneway}: model is an an object of class \code{htest}, returned by \code{oneway.test()}
+     \item \code{is_proptest}: model is an an object of class \code{htest}, returned by \code{prop.test()}
      \item \code{link_function}: the link-function
      \item \code{family}: the family-object
      \item \code{n_obs}: number of observations
