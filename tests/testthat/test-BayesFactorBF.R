@@ -14,6 +14,13 @@ if (require("testthat") &&
   test_that("get_parameters", {
     expect_equal(nrow(get_parameters(x)), 4000)
   })
+  mi <- insight::model_info(x)
+  test_that("model_info-BF", {
+    expect_false(mi$is_binomial)
+    expect_false(mi$is_linear)
+    expect_true(mi$is_correlation)
+    expect_false(mi$is_ttest)
+  })
 
 
 

@@ -238,10 +238,7 @@
       is.categorical | hurdle | is.multinomial) {
     linear_model <- FALSE
   }
-  if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian"))) {
-    linear_model <- FALSE
-  }
-  if (!grepl("(\\st)$", fitfam)) {
+  if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian")) && !grepl("(\\st)$", fitfam)) {
     linear_model <- FALSE
   }
 

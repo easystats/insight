@@ -6,6 +6,7 @@ if (require("testthat") && require("insight") && require("aod")) {
     expect_true(model_info(m1)$is_binomial)
     expect_true(model_info(m1)$is_betabinomial)
     expect_true(model_info(m1)$is_mixed)
+    expect_false(model_info(m1)$is_linear)
   })
 
   test_that("find_predictors", {
