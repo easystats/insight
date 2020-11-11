@@ -1,5 +1,11 @@
 # insight 0.10.1
 
+## Breaking changes
+
+* `model_info()` now also detects models from `oneway.test()` and `prop.test()`.
+  Furthermore, `model_info()` better deals with objects from `BFBayesFactor`,
+  and censored regression models no longer return `TRUE` for `$is_linear`.
+
 ## New supported model classes
 
 * Support for `scam` (*scam*), `meta_random` and `meta_fixed` (*metaBMA*), `Glm`
@@ -13,8 +19,6 @@
 
 * `standardize_names()` tries to be as loyal to the *broom*-naming conventions
   as possible.
-* `model_info()` now also detects models from `oneway.test()` and `prop.test()`.
-  Furthermore, `model_info
 
 ## Bug fixes
 
@@ -32,6 +36,7 @@
   log-transformed using `log(x+1)`.
 
 * Fixed warning in CRAN checks for forthcoming R-devel.
+
 
 # insight 0.10.0
 
@@ -95,6 +100,7 @@
   `"-1"`.
 
 * Fix issues with `get_statistic()` for *vgam* models.
+
 
 # insight 0.9.6
 
