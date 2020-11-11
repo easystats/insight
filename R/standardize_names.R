@@ -115,7 +115,10 @@ standardize_names.parameters_distribution <- function(data, style = c("easystats
       cn[cn %in% c("Coefficient", "Std_Coefficient", "Median", "Mean", "MAP")] <- "estimate"
     }
     # name of coefficient column htest
-    cn[cn %in% c("rho", "r", "tau", "Difference")] <- "estimate"
+    cn[cn %in% c("rho", "r", "tau")] <- "estimate"
+    if (("Difference" %in% cn) && !("estimate" %in% cn)) {
+      cn[cn == "Difference"] <- "estimate"
+    }
     cn[cn %in% c("S", "t", "z", "F", "Chi2", "chisq", "chi-sq", "Chisq", "t / F", "z / Chisq", "z / Chi2")] <- "statistic"
     # fancy regex replacements
     cn <- gsub("^CI_low", "conf.low", cn)
