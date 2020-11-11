@@ -104,6 +104,7 @@ standardize_names.parameters_distribution <- function(data, style = c("easystats
     cn[cn == "Effects"] <- "effect"
     cn[cn == "Response"] <- "response"
     cn[cn == "CI"] <- "ci.width"
+    cn[cn == "df"] <- "parameter"
     cn[cn == "df_error"] <- "df.error"
     cn[cn == "df_residual"] <- "df.residual"
     cn[cn == "n_Obs"] <- "n.obs"

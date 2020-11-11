@@ -25,7 +25,7 @@ if (require("testthat") &&
 
     expect_equal(
       names(standardize_names(y, style = "broom")),
-      c("term", "sumsq", "df", "meansq", "statistic", "p.value")
+      c("term", "sumsq", "parameter", "meansq", "statistic", "p.value")
     )
   })
 
@@ -38,7 +38,7 @@ if (require("testthat") &&
     names(standardize_names(z, style = "broom")),
     c(
       "parameter1", "parameter2", "mean.parameter1", "mean.parameter2",
-      "estimate", "statistic", "df", "p.value", "conf.low", "conf.high",
+      "estimate", "statistic", "parameter", "p.value", "conf.low", "conf.high",
       "method"
     )
   )
@@ -48,6 +48,6 @@ if (require("testthat") &&
 
   expect_equal(
     names(standardize_names(t, style = "broom")),
-    c("parameter1", "parameter2", "statistic", "df", "p.value", "method")
+    c("parameter1", "parameter2", "statistic", "parameter", "p.value", "method")
   )
 }
