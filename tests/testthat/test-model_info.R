@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("BFBayesFactor")) {
+if (require("testthat") && require("insight") && require("BayesFactor")) {
   model <- BayesFactor::proportionBF(15, 25, p = 0.5)
   mi <- insight::model_info(model)
   test_that("model_info-BF-proptest", {

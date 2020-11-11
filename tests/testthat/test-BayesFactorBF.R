@@ -1,7 +1,4 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("stats") &&
-  require("BayesFactor")) {
+if (require("testthat") && require("insight") && require("stats") && require("BayesFactor")) {
   .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
   x <- correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
@@ -17,7 +14,7 @@ if (require("testthat") &&
   mi <- insight::model_info(x)
   test_that("model_info-BF", {
     expect_false(mi$is_binomial)
-    expect_false(mi$is_linear)
+    expect_true(mi$is_linear)
     expect_true(mi$is_correlation)
     expect_false(mi$is_ttest)
   })
