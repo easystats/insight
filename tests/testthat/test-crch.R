@@ -9,7 +9,7 @@ if (require("testthat") &&
   m1 <- crch(sqrt(rain) ~ sqrtensmean, data = RainIbk, dist = "gaussian")
 
   test_that("model_info", {
-    expect_true(model_info(m1)$is_linear)
+    expect_false(model_info(m1)$is_linear)
     expect_true(model_info(m1)$is_censored)
   })
 
