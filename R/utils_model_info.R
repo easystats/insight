@@ -118,7 +118,7 @@
   # censored or truncated response --------
 
   is.trial <- FALSE
-  is.censored <- inherits(x, c("crq", "crqs")) | (inherits(x, "sem") && inherits(x, "lme"))
+  is.censored <- inherits(x, c("tobit", "crch", "censReg", "crq", "crqs")) | (inherits(x, "sem") && inherits(x, "lme"))
   is.truncated <- FALSE
 
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {
@@ -261,7 +261,7 @@
     is_exponential = exponential_fam,
     is_logit = logit.link,
     is_probit = isTRUE(link.fun == "probit"),
-    is_censored = inherits(x, c("tobit", "crch", "censReg")) | is.censored | is.survival,
+    is_censored = is.censored | is.survival,
     is_truncated = inherits(x, "truncreg") | is.truncated,
     is_survival = is.survival,
     is_linear = linear_model,
