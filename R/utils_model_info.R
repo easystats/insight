@@ -178,12 +178,16 @@
   is_correlation <- FALSE
   is_oneway <- FALSE
   is_proptest <- FALSE
+  is_binomtest <- FALSE
 
   if (inherits(x, "htest")) {
     if (grepl("t-test", x$method)) {
       is_ttest <- TRUE
     } else if (grepl("^One-way", x$method)) {
       is_oneway <- TRUE
+    } else if (x$method == "Exact binomial test") {
+      binom_fam <- TRUE
+      is_binomtest <- TRUE
     } else if (grepl("\\d+-sample(.*)proportions(.*)", x$method)) {
       binom_fam <- TRUE
       is_proptest <- TRUE
@@ -282,8 +286,9 @@
     is_timeseries = inherits(x, c("Arima")),
     is_ttest = is_ttest,
     is_correlation = is_correlation,
-    is_oneway = is_oneway,
+    is_onewaytest = is_oneway,
     is_proptest = is_proptest,
+    is_binomtest = is_binomtest,
     is_meta = is_meta,
     link_function = link.fun,
     family = fitfam,

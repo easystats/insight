@@ -2,9 +2,10 @@
 
 ## Breaking changes
 
-* `model_info()` now also detects models from `oneway.test()` and `prop.test()`.
-  Furthermore, `model_info()` better deals with objects from `BFBayesFactor`,
-  and censored regression models no longer return `TRUE` for `$is_linear`.
+* `model_info()` now also detects models from `oneway.test()`, `binom.test()` 
+  and `prop.test()`. Furthermore, `model_info()` better deals with objects 
+  from `BFBayesFactor`, and censored regression models no longer return `TRUE` 
+  for `$is_linear`.
 
 ## New supported model classes
 
