@@ -5,6 +5,13 @@ if (require("testthat") &&
   data(cubic, package = "cgam")
   m <- cgam(y ~ incr.conv(x), data = cubic)
 
+  mi <- insight::model_info(m)
+  test_that("model_info", {
+    expect_false(mi$is_binomial)
+    expect_true(mi$is_linear)
+    expect_false(mi$is_censored)
+  })
+
   test_that("n_obs", {
     expect_equal(n_obs(m), 50)
   })

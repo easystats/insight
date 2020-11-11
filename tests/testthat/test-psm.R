@@ -1,6 +1,4 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("rms")) {
+if (require("testthat") && require("insight") && require("rms")) {
   n <- 400
   set.seed(1)
   age <- rnorm(n, 50, 12)

@@ -16,6 +16,7 @@ if (require("testthat") &&
     expect_true(model_info(m1)$is_count)
     expect_false(model_info(m1)$is_negbin)
     expect_false(model_info(m1)$is_binomial)
+    expect_false(model_info(m1)$is_linear)
   })
 
   test_that("find_predictors", {
