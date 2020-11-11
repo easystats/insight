@@ -17,6 +17,7 @@ if (require("testthat") &&
     expect_false(model_info(m2)$is_ordinal)
     expect_true(model_info(m1)$is_multinomial)
     expect_true(model_info(m2)$is_multinomial)
+    expect_false(model_info(m1)$is_linear)
   })
 
   test_that("find_predictors", {

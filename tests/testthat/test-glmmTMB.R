@@ -73,6 +73,7 @@ if (require("testthat") &&
     expect_true(model_info(m3)$is_pois)
     expect_false(model_info(m3)$is_negbin)
     expect_true(model_info(m6)$is_count)
+    expect_false(model_info(m1)$is_linear)
   })
 
   test_that("clean_names", {

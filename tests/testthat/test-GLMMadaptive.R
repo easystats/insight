@@ -18,6 +18,7 @@ if (.runThisTest) {
       expect_true(model_info(m)$is_count)
       expect_true(model_info(m)$is_pois)
       expect_false(model_info(m)$is_negbin)
+      expect_false(model_info(m)$is_linear)
     })
 
     test_that("find_predictors", {

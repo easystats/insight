@@ -24,6 +24,7 @@ if (require("testthat") &&
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_mixed)
+    expect_true(model_info(m1)$is_linear)
   })
 
   test_that("find_predictors", {

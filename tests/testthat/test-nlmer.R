@@ -1,6 +1,4 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("lme4")) {
+if (require("testthat") && require("insight") && require("lme4")) {
   set.seed(123)
   startvec <- c(Asym = 200, xmid = 725, scal = 350)
   nm1 <-
@@ -9,6 +7,10 @@ if (require("testthat") &&
       data = Orange,
       start = startvec
     )
+
+  test_that("model_info", {
+    expect_true(model_info(nm1)$is_linear)
+  })
 
   test_that("find_statistic", {
     expect_identical(find_statistic(nm1), "t-statistic")
