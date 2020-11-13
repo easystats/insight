@@ -1394,6 +1394,19 @@ find_parameters.wbgee <- find_parameters.wbm
 
 
 #' @export
+find_parameters.survreg <- function(x, flatten = FALSE, ...) {
+  s <- summary(x)
+  out <- list(conditional = rownames(s$table))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
+#' @export
 find_parameters.mle2 <- function(x, flatten = FALSE, ...) {
   if (!requireNamespace("bbmle", quietly = TRUE)) {
     stop("Package `bbmle` needs to be installed to extract parameter names.", call. = FALSE)

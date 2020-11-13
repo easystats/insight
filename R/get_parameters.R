@@ -324,6 +324,18 @@ get_parameters.negbinirr <- get_parameters.logitor
 
 
 #' @export
+get_parameters.survreg <- function(x, ...) {
+  s <- summary(x)
+  out <- data.frame(
+    Parameter = rownames(s$table),
+    Estimate = as.vector(s$table[, 1]),
+    stringsAsFactors = FALSE
+  )
+  .remove_backticks_from_parameter_names(out)
+}
+
+
+#' @export
 get_parameters.mipo <- function(x, ...) {
   out <- data.frame(
     Parameter = as.vector(summary(x)$term),

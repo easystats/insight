@@ -2,21 +2,25 @@ if (require("testthat") &&
   require("insight") &&
   require("survival")) {
   data("ovarian")
-  m1 <-
-    survreg(Surv(futime, fustat) ~ ecog.ps + rx,
-      data = ovarian,
-      dist = "exponential"
-    )
+  data("lung")
+  m1 <- survreg(Surv(futime, fustat) ~ ecog.ps + rx,
+    data = ovarian,
+    dist = "exponential"
+  )
+  m2 <- survreg(Surv(time, status) ~ ph.ecog + age + strata(sex), data = lung)
 
   test_that("model_info", {
     expect_false(model_info(m1)$is_linear)
     expect_true(model_info(m1)$is_exponential)
+    expect_true(model_info(m2)$is_survival)
+    expect_false(model_info(m2)$is_linear)
   })
 
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = c("ecog.ps", "rx")))
     expect_identical(find_predictors(m1, flatten = TRUE), c("ecog.ps", "rx"))
     expect_null(find_predictors(m1, effects = "random"))
+    expect_identical(find_predictors(m2), list(conditional = c("ph.ecog", "age", "sex")))
   })
 
   test_that("find_random", {
@@ -84,11 +88,24 @@ if (require("testthat") &&
       find_parameters(m1),
       list(conditional = c("(Intercept)", "ecog.ps", "rx"))
     )
-    expect_equal(nrow(get_parameters(m1)), 3)
     expect_equal(
-      get_parameters(m1)$Parameter,
-      c("(Intercept)", "ecog.ps", "rx")
+      find_parameters(m2),
+      list(conditional = c("(Intercept)", "ph.ecog", "age", "sex=1", "sex=2"))
     )
+  })
+
+  test_that("get_parameters", {
+    expect_equal(nrow(get_parameters(m1)), 3)
+    expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "ecog.ps", "rx"))
+    expect_equal(get_parameters(m1)$Estimate, c(6.96184, -0.43313, 0.5815), tolerance = 1e-3)
+    expect_equal(nrow(get_parameters(m2)), 5)
+    expect_equal(get_parameters(m2)$Parameter, c("(Intercept)", "ph.ecog", "age", "sex=1", "sex=2"))
+    expect_equal(get_parameters(m2)$Estimate, c(6.73235, -0.32443, -0.00581, -0.24408, -0.42345), tolerance = 1e-3)
+  })
+
+  test_that("get_statistic", {
+    expect_equal(nrow(get_statistic(m1)), 3)
+    expect_equal(nrow(get_statistic(m2)), 5)
   })
 
   test_that("is_multivariate", {
