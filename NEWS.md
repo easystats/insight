@@ -23,6 +23,8 @@
 
 ## Bug fixes
 
+### `get_data()`
+
 * Fixed issue in `get_data()` for `MixMod` objects, which were caused due to
   internal changes in *GLMMadaptive*.
 
@@ -35,6 +37,10 @@
 
 * Fixed edge case in `get_data()` for column name of response values that were
   log-transformed using `log(x+1)`.
+
+### Other bug fixes
+
+* Fixed issue with `survreg` models that included `strata()` in their formula.
 
 * Fixed warning in CRAN checks for forthcoming R-devel.
 
