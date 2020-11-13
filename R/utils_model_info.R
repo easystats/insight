@@ -179,6 +179,7 @@
   is_oneway <- FALSE
   is_proptest <- FALSE
   is_binomtest <- FALSE
+  is_chi2test <- FALSE
 
   if (inherits(x, "htest")) {
     if (grepl("t-test", x$method)) {
@@ -191,6 +192,8 @@
     } else if (grepl("\\d+-sample(.*)proportions(.*)", x$method)) {
       binom_fam <- TRUE
       is_proptest <- TRUE
+    } else if (grepl("Chi-squared", x$method)) {
+      is_chi2test <- TRUE
     } else {
       is_correlation <- TRUE
     }
@@ -287,6 +290,7 @@
     is_ttest = is_ttest,
     is_correlation = is_correlation,
     is_onewaytest = is_oneway,
+    is_chi2test = is_chi2test,
     is_proptest = is_proptest,
     is_binomtest = is_binomtest,
     is_meta = is_meta,

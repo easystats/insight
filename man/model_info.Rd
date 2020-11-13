@@ -60,6 +60,7 @@ Retrieve information from model objects.
      \item \code{is_onewaytest}: model is an an object of class \code{htest}, returned by \code{oneway.test()}
      \item \code{is_proptest}: model is an an object of class \code{htest}, returned by \code{prop.test()}
      \item \code{is_binomtest}: model is an an object of class \code{htest}, returned by \code{binom.test()}
+     \item \code{is_chi2test}: model is an an object of class \code{htest}, returned by \code{chisq.test()}
      \item \code{link_function}: the link-function
      \item \code{family}: the family-object
      \item \code{n_obs}: number of observations
