@@ -29,7 +29,6 @@ if (require("testthat") &&
     )
   })
 
-  # TO DO: these need to be re-examined and tests need to be changed if necessary
 
   # t-test (this is yet to be finalized)
   z <- as.data.frame(parameters::model_parameters(t.test(1:10, y = c(7:20))))
@@ -44,10 +43,12 @@ if (require("testthat") &&
   )
 
   # chi-square test
-  t <- as.data.frame(parameters::model_parameters(chisq.test(matrix(c(12, 5, 7, 7), ncol = 2))))
+  if (packageVersion("parameters") > "0.9.0") {
+    chi <- as.data.frame(parameters::model_parameters(chisq.test(matrix(c(12, 5, 7, 7), ncol = 2))))
 
-  expect_equal(
-    names(standardize_names(t, style = "broom")),
-    c("statistic", "df", "p.value", "method")
-  )
+    expect_equal(
+      names(standardize_names(chi, style = "broom")),
+      c("statistic", "df", "p.value", "method")
+    )
+  }
 }
