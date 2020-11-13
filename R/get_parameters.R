@@ -324,6 +324,14 @@ get_parameters.negbinirr <- get_parameters.logitor
 
 
 #' @export
+get_parameters.rms <- get_parameters.default
+
+
+#' @export
+get_parameters.tobit <- get_parameters.default
+
+
+#' @export
 get_parameters.survreg <- function(x, ...) {
   s <- summary(x)
   out <- data.frame(

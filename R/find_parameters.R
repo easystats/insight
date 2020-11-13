@@ -1394,6 +1394,14 @@ find_parameters.wbgee <- find_parameters.wbm
 
 
 #' @export
+find_parameters.rms <- find_parameters.default
+
+
+#' @export
+find_parameters.tobit <- find_parameters.default
+
+
+#' @export
 find_parameters.survreg <- function(x, flatten = FALSE, ...) {
   s <- summary(x)
   out <- list(conditional = rownames(s$table))

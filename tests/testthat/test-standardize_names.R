@@ -9,7 +9,7 @@ if (require("testthat") &&
 
     # lm object
     lm_mod <- lm(wt ~ mpg, mtcars)
-    (x <- as.data.frame(parameters::model_parameters(lm_mod)))
+    x <- as.data.frame(parameters::model_parameters(lm_mod))
 
     expect_equal(
       names(standardize_names(x, style = "broom")),
@@ -21,7 +21,7 @@ if (require("testthat") &&
 
     # aov object
     aov_mod <- aov(wt ~ mpg, mtcars)
-    (y <- as.data.frame(parameters::model_parameters(aov_mod)))
+    y <- as.data.frame(parameters::model_parameters(aov_mod))
 
     expect_equal(
       names(standardize_names(y, style = "broom")),
@@ -48,6 +48,6 @@ if (require("testthat") &&
 
   expect_equal(
     names(standardize_names(t, style = "broom")),
-    c("parameter1", "parameter2", "statistic", "df", "p.value", "method")
+    c("statistic", "df", "p.value", "method")
   )
 }
