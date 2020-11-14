@@ -281,7 +281,7 @@ get_priors.meta_fixed <- function(x, ...) {
 
 #' @importFrom utils tail
 #' @export
-get_priors.BFBayesFactor <- function(x, ..) {
+get_priors.BFBayesFactor <- function(x, ...) {
   prior <- .compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
   bf_type <- .classify_BFBayesFactor(x)
 

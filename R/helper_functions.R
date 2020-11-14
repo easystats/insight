@@ -654,14 +654,15 @@
 ## copied from lme4::nobars() -----------------------
 
 
+#' @importFrom methods is
 #' @importFrom stats reformulate
 .nobars <- function(term) {
   nb <- .nobars_(term)
-  if (is(term, "formula") && length(term) == 3 && is.symbol(nb)) {
+  if (methods::is(term, "formula") && length(term) == 3 && is.symbol(nb)) {
     nb <- stats::reformulate("1", response = deparse(nb))
   }
   if (is.null(nb)) {
-    nb <- if (is(term, "formula")) {
+    nb <- if (methods::is(term, "formula")) {
       ~1
     } else {
       1
