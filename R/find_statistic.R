@@ -291,6 +291,7 @@ find_statistic <- function(x, ...) {
       "list",
       "MCMCglmm",
       "pairwise.htest",
+      "ridgelm",
       "splmm",
       "stanreg",
       "stanmvreg",

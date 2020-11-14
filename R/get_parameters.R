@@ -332,6 +332,17 @@ get_parameters.tobit <- get_parameters.default
 
 
 #' @export
+get_parameters.ridgelm <- function(x, ...) {
+  out <- data.frame(
+    Parameter = names(x$coef),
+    Estimate = as.vector(x$coef),
+    stringsAsFactors = FALSE
+  )
+  .remove_backticks_from_parameter_names(out)
+}
+
+
+#' @export
 get_parameters.survreg <- function(x, ...) {
   s <- summary(x)
   out <- data.frame(

@@ -771,6 +771,12 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.ridgelm <- function(x, ...) {
+  NULL
+}
+
+
+#' @export
 get_statistic.HLfit <- function(x, ...) {
   utils::capture.output(s <- summary(x))
 

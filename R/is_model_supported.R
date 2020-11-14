@@ -162,6 +162,7 @@ supported_models <- function() {
     "polr",
     "psm",
     "probitmfx",
+    "ridgelm",
     "rlm",
     "rlmerMod",
     "RM",

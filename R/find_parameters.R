@@ -1402,6 +1402,18 @@ find_parameters.tobit <- find_parameters.default
 
 
 #' @export
+find_parameters.ridgelm <- function(x, flatten = FALSE, ...) {
+  out <- list(conditional = names(x$coef))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
+#' @export
 find_parameters.survreg <- function(x, flatten = FALSE, ...) {
   s <- summary(x)
   out <- list(conditional = rownames(s$table))

@@ -26,6 +26,8 @@ A list with (depending on the model) following elements (character
      \item \code{dispersion}, the name of the dispersion terms
      \item \code{instruments}, the names of instrumental variables
    }
+   Returns \code{NULL} if no terms could be found (for instance, due to
+   problems in accessing the formula).
 }
 \description{
 Returns a list with the names of all terms, including

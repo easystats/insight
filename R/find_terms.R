@@ -20,6 +20,8 @@
 #'      \item \code{dispersion}, the name of the dispersion terms
 #'      \item \code{instruments}, the names of instrumental variables
 #'    }
+#'    Returns \code{NULL} if no terms could be found (for instance, due to
+#'    problems in accessing the formula).
 #'
 #' @note The difference to \code{\link{find_variables}} is that \code{find_terms()}
 #'   may return a variable multiple times in case of multiple transformations
@@ -38,6 +40,11 @@
 #' @export
 find_terms <- function(x, flatten = FALSE, ...) {
   f <- find_formula(x)
+
+  if (is.null(f)) {
+    return(NULL)
+  }
+
   if (is_multivariate(f)) {
     l <- lapply(f, .get_variables_list)
   } else {
