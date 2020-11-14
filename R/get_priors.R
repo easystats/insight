@@ -5,6 +5,7 @@
 #'   for the parameters in a given model.
 #'
 #' @param x A Bayesian model.
+#' @param verbose Toggle warnings and messages.
 #' @param ... Currently not used.
 #'
 #' @return A data frame with a summary of the prior distributions used
@@ -151,8 +152,9 @@ get_priors.stanmvreg <- function(x, ...) {
 }
 
 
+#' @rdname get_priors
 #' @export
-get_priors.brmsfit <- function(x, ...) {
+get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   ## TODO needs testing for edge cases - check if "coef"-column is
   # always empty for intercept-class
   x$prior$coef[x$prior$class == "Intercept"] <- "(Intercept)"
@@ -202,7 +204,9 @@ get_priors.brmsfit <- function(x, ...) {
   }), stringsAsFactors = FALSE)
 
   if (.is_empty_string(pinfo$Distribution)) {
-    print_color("Model was fitted with uninformative (flat) priors!\n", "red")
+    if (verbose) {
+      print_color("Model was fitted with uninformative (flat) priors!\n", "red")
+    }
     pinfo$Distribution <- "uniform"
     pinfo$Location <- 0
     pinfo$Scale <- NA
@@ -277,8 +281,9 @@ get_priors.meta_fixed <- function(x, ...) {
 
 #' @importFrom utils tail
 #' @export
-get_priors.BFBayesFactor <- function(x, ...) {
+get_priors.BFBayesFactor <- function(x, ..) {
   prior <- .compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
+  bf_type <- .classify_BFBayesFactor(x)
 
   prior_names <- switch(
     .classify_BFBayesFactor(x),
@@ -286,6 +291,8 @@ get_priors.BFBayesFactor <- function(x, ...) {
     "ttest1" = ,
     "ttest2" = "Difference",
     "meta" = "Effect",
+    "proptest" = "Proportion",
+    "xtable" = "Ratio",
     names(prior)
   )
 

@@ -2,14 +2,19 @@
 % Please edit documentation in R/get_priors.R
 \name{get_priors}
 \alias{get_priors}
+\alias{get_priors.brmsfit}
 \title{Get summary of priors used for a model}
 \usage{
 get_priors(x, ...)
+
+\method{get_priors}{brmsfit}(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A Bayesian model.}
 
 \item{...}{Currently not used.}
+
+\item{verbose}{Toggle warnings and messages.}
 }
 \value{
 A data frame with a summary of the prior distributions used
