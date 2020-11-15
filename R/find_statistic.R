@@ -290,6 +290,7 @@ find_statistic <- function(x, ...) {
       "gbm",
       "list",
       "MCMCglmm",
+      "mediate",
       "pairwise.htest",
       "ridgelm",
       "splmm",

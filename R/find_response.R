@@ -30,7 +30,9 @@ find_response <- function(x, combine = TRUE) {
 
   # this is for multivariate response models, where
   # we have a list of formulas
-  if (is_multivariate(f)) {
+  if (inherits(x, "mediate")) {
+    resp <- c(.safe_deparse(f$mediator$conditional[[2L]]), .safe_deparse(f$outcome$conditional[[2L]]))
+  } else if (is_multivariate(f)) {
     resp <- unlist(lapply(f, function(i) .safe_deparse(i$conditional[[2L]])))
   } else {
     resp <- .safe_deparse(f$conditional[[2L]])

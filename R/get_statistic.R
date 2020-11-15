@@ -1735,3 +1735,9 @@ get_statistic.bife <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
+
+
+#' @export
+get_statistic.mediate <- function(x, ...) {
+  NULL
+}

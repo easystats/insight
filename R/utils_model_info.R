@@ -247,6 +247,9 @@
   } else if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian")) && !grepl("(\\st)$", fitfam)) {
     linear_model <- FALSE
   }
+  if (!linear_model && is.survival && fitfam == "gaussian") {
+    linear_model <- TRUE
+  }
 
 
   # tweedie family --------

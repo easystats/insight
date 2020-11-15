@@ -959,6 +959,14 @@ get_data.negbinmfx <- get_data.betamfx
 
 
 #' @export
+get_data.mediate <- function(x, ...) {
+  d1 <- get_data(x$model.m)
+  d2 <- get_data(x$model.y)
+  merge(d1, d2, sort = FALSE, all = TRUE)
+}
+
+
+#' @export
 get_data.mle2 <- function(x, ...) {
   as.data.frame(do.call(cbind, x@data))
 }

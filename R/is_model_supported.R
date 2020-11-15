@@ -135,6 +135,7 @@ supported_models <- function() {
     "maxLik",
     "mcmc",
     "MCMCglmm",
+    "mediate",
     "metaplus",
     "merMod",
     "merModList",

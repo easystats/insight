@@ -440,6 +440,13 @@ get_varcov.merModList <- function(x, ...) {
 }
 
 
+#' @export
+get_varcov.mediate <- function(x, ...) {
+  warning("Can't access variance-covariance matrix for 'mediate' objects.", call. = FALSE)
+  return(NULL)
+}
+
+
 #' @rdname get_varcov
 #' @export
 get_varcov.aov <- function(x, complete = FALSE, ...) {

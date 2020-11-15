@@ -208,6 +208,15 @@ find_formula.meta_bma <- find_formula.rma
 
 
 #' @export
+find_formula.mediate <- function(x, ...) {
+  list(
+    mediator = find_formula(x$model.m),
+    outcome = find_formula(x$model.y)
+  )
+}
+
+
+#' @export
 find_formula.averaging <- function(x, ...) {
   f_random <- tryCatch(
     {

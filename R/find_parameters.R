@@ -1402,6 +1402,36 @@ find_parameters.tobit <- find_parameters.default
 
 
 #' @export
+find_parameters.mediate <- function(x, flatten = FALSE, ...) {
+  info <- model_info(x$model.y)
+  if (info$is_linear && !x$INT) {
+    out <-
+      list(conditional = c("ACME", "ADE", "Total Effect", "Prop. Mediated"))
+  } else {
+    out <- list(
+      conditional = c(
+        "ACME (control)",
+        "ACME (treated)",
+        "ADE (control)",
+        "ADE (treated)",
+        "Total Effect",
+        "Prop. Mediated (control)",
+        "Prop. Mediated (treated)",
+        "ACME (average)",
+        "ADE (average)",
+        "Prop. Mediated (average)"
+      )
+    )
+  }
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
+#' @export
 find_parameters.ridgelm <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = names(x$coef))
 
