@@ -3,14 +3,14 @@
 ## Breaking changes
 
 * `model_info()` now also detects models from `oneway.test()`, `binom.test()` 
-  `chisq.test()`and `prop.test()`. Furthermore, `model_info()` better deals 
-  with objects from `BFBayesFactor`, and censored regression models no longer 
-  return `TRUE` for `$is_linear`.
+  `chisq.test()`, `mcnemar.test()` and `prop.test()`. Furthermore, `model_info()` 
+  better deals with objects from `BFBayesFactor`, and censored regression models 
+  no longer return `TRUE` for `$is_linear`.
 
 ## New supported model classes
 
 * Support for `scam` (*scam*), `meta_random` and `meta_fixed` (*metaBMA*), `Glm`
-  (*rms*), `ridgelm` (*MASS*), `nediate` (*mediation*).
+  (*rms*), `ridgelm` (*MASS*), `mediate` (*mediation*).
 
 ## New function
 
