@@ -11,7 +11,8 @@ format_table(
   digits = 2,
   protect_integers = TRUE,
   missing = "",
-  width = NULL
+  width = NULL,
+  style = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ format_table(
 \item{missing}{Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.}
 
 \item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
+
+\item{style}{Name of format-style, as character. If \code{NULL}, returned output is used for basic printing. Maybe \code{"markdown"}.}
 }
 \value{
 A data frame in character format.

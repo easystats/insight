@@ -3,6 +3,7 @@
 #' @param x A data frame.
 #' @param sep Column separator.
 #' @param header Header separator. Can be \code{NULL}.
+#' @param style Name of format-style, as character. If \code{NULL}, returned output is used for basic printing. Maybe \code{"markdown"}.
 #' @inheritParams format_value
 #'
 #' @return A data frame in character format.
@@ -10,7 +11,7 @@
 #' cat(format_table(iris))
 #' cat(format_table(iris, sep = " ", header = "*", digits = 1))
 #' @export
-format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL) {
+format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, style = NULL) {
   df <- x
 
   # round all numerics
@@ -18,8 +19,7 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
   df <- as.data.frame(sapply(df, function(i) {
     if (is.numeric(i)) {
       format_value(i, digits = digits, protect_integers = protect_integers, missing = missing, width = width)
-    }
-    else {
+    } else {
       i
     }
   }, simplify = FALSE), stringsAsFactors = FALSE)
@@ -36,7 +36,7 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
   # Align
   aligned <- format(df, justify = "right")
 
-  # Centre first row
+  # Center first row
   first_row <- as.character(aligned[1, ])
   for (i in 1:length(first_row)) {
     aligned[1, i] <- format(trimws(first_row[i]), width = nchar(first_row[i]), justify = "right")
@@ -49,6 +49,19 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
     final[, 1] <- format(trimws(final[, 1]), justify = "left")
   }
 
+  if (is.null(style)) {
+    .format_basic_table(final, header, sep)
+  } else if (style == "markdown") {
+    .format_markdown_table(final, x)
+  }
+}
+
+
+
+
+
+
+.format_basic_table <- function(final, header, sep) {
   # Transform to character
   rows <- c()
   for (row in 1:nrow(final)) {
@@ -62,5 +75,42 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
       }
     }
   }
+  rows
+}
+
+
+
+
+.format_markdown_table <- function(final, x) {
+  column_width <- nchar(final[1, ])
+  n_columns <- ncol(final)
+
+  header <- "|"
+  for (i in 1:n_columns) {
+    line <- paste0(rep_len("-", column_width[i]), collapse = "")
+    if (i != 1) {
+      ## TODO detect column alignment based on whether column in "final" starts or ends with whitespace
+      line <- paste0(line, ":")
+      final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
+    } else {
+      line <- paste0(":", line)
+      final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
+    }
+    header <- paste0(header, line, "|")
+  }
+
+  # Transform to character
+  rows <- c()
+  for (row in 1:nrow(final)) {
+    final_row <- paste0("|", paste0(final[row, ], collapse = "|"), "|", collapse = "")
+    rows <- c(rows, final_row)
+
+    # First row separation
+    if (row == 1) {
+      rows <- c(rows, header)
+    }
+  }
+  attr(rows, "format") <- "pipe"
+  class(rows) <- c("knitr_kable", "character")
   rows
 }
