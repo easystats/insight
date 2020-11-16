@@ -132,7 +132,8 @@
   digits <span class='op'>=</span> <span class='fl'>2</span>,
   protect_integers <span class='op'>=</span> <span class='cn'>TRUE</span>,
   missing <span class='op'>=</span> <span class='st'>""</span>,
-  width <span class='op'>=</span> <span class='cn'>NULL</span>
+  width <span class='op'>=</span> <span class='cn'>NULL</span>,
+  style <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -165,6 +166,10 @@
     <tr>
       <th>width</th>
       <td><p>Minimum width of the returned string. If not <code>NULL</code> and <code>width</code> is larger than the string's length, leading whitespaces are added to the string.</p></td>
+    </tr>
+    <tr>
+      <th>style</th>
+      <td><p>Name of format-style, as character. If <code>NULL</code>, returned output is used for basic printing. Maybe <code>"markdown"</code>.</p></td>
     </tr>
     </table>
 
