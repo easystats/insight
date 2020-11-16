@@ -116,6 +116,7 @@ standardize_names.parameters_distribution <- function(data, style = c("easystats
   cn[cn == "component"] <- "Component"
   cn[cn == "effect"] <- "Effects"
   cn[cn == "response"] <- "Response"
+  cn[cn == "statistic"] <- "Statistic"
   cn[cn == "conf.low"] <- "CI_low"
   cn[cn == "conf.high"] <- "CI_high"
   cn[cn == "ci.width"] <- "CI"
