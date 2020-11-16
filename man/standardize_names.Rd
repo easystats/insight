@@ -18,12 +18,14 @@ standardize_names(data, ...)
 \item{data}{A data frame. In particular, objects from \emph{easystats}
 package functions like
 \code{\link[parameters:model_parameters]{model_parameters()}} or
-\code{\link[effectsize:effectsize]{effectsize()}} are accepted.}
+\code{\link[effectsize:effectsize]{effectsize()}} are accepted, but also
+data frames returned by \code{broom::tidy()} are valid objects.}
 
 \item{...}{Currently not used.}
 
 \item{style}{Standardization can either be based on the naming conventions
-from the easystats project, or on \pkg{broom}'s naming scheme.}
+from the \href{https://easystats.github.io/easystats}{easystats-project},
+or on \pkg{broom}'s naming scheme.}
 
 \item{ignore_estimate}{Logical, if \code{TRUE}, column names like
 \code{"mean"} or \code{"median"} will \emph{not} be converted to
@@ -51,6 +53,9 @@ This method is in particular useful for package developers or users
   For \code{style = "broom"}, column names are renamed to match \pkg{broom}'s
   naming scheme, i.e. \code{Parameter} is renamed to \code{term}, \code{Coefficient}
   becomes \code{estimate} and so on.
+  \cr \cr
+  For \code{style = "easystats"}, when \code{data} is an object from \code{broom::tidy()},
+  column names are converted from "broom"-style into "easystats"-style.
 }
 \examples{
 if (require("parameters")) {
