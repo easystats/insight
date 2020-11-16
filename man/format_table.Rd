@@ -2,7 +2,7 @@
 % Please edit documentation in R/format_table.R
 \name{format_table}
 \alias{format_table}
-\title{Dataframe and Tables Pretty Formatting}
+\title{Data frame and Tables Pretty Formatting}
 \usage{
 format_table(
   x,
@@ -12,7 +12,8 @@ format_table(
   protect_integers = TRUE,
   missing = "",
   width = NULL,
-  style = NULL
+  style = NULL,
+  caption = NULL
 )
 }
 \arguments{
@@ -31,12 +32,14 @@ format_table(
 \item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
 
 \item{style}{Name of format-style, as character. If \code{NULL}, returned output is used for basic printing. Maybe \code{"markdown"}.}
+
+\item{caption}{Table caption. Only applies to markdown-styled tables.}
 }
 \value{
 A data frame in character format.
 }
 \description{
-Dataframe and Tables Pretty Formatting
+Data frame and Tables Pretty Formatting
 }
 \examples{
 cat(format_table(iris))

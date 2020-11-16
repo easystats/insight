@@ -1,9 +1,10 @@
-#' Dataframe and Tables Pretty Formatting
+#' Data frame and Tables Pretty Formatting
 #'
 #' @param x A data frame.
 #' @param sep Column separator.
 #' @param header Header separator. Can be \code{NULL}.
 #' @param style Name of format-style, as character. If \code{NULL}, returned output is used for basic printing. Maybe \code{"markdown"}.
+#' @param caption Table caption. Only applies to markdown-styled tables.
 #' @inheritParams format_value
 #'
 #' @return A data frame in character format.
@@ -11,7 +12,7 @@
 #' cat(format_table(iris))
 #' cat(format_table(iris, sep = " ", header = "*", digits = 1))
 #' @export
-format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, style = NULL) {
+format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, style = NULL, caption = NULL) {
   df <- x
 
   # round all numerics
@@ -52,7 +53,7 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
   if (is.null(style)) {
     .format_basic_table(final, header, sep)
   } else if (style == "markdown") {
-    .format_markdown_table(final, x)
+    .format_markdown_table(final, x, caption = caption)
   }
 }
 
@@ -81,15 +82,14 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
 
 
 
-.format_markdown_table <- function(final, x) {
+.format_markdown_table <- function(final, x, caption = NULL) {
   column_width <- nchar(final[1, ])
   n_columns <- ncol(final)
 
   header <- "|"
   for (i in 1:n_columns) {
     line <- paste0(rep_len("-", column_width[i]), collapse = "")
-    if (i != 1) {
-      ## TODO detect column alignment based on whether column in "final" starts or ends with whitespace
+    if (grepl("^\\s", final[2, i])) {
       line <- paste0(line, ":")
       final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
     } else {
@@ -110,6 +110,11 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
       rows <- c(rows, header)
     }
   }
+
+  if (!is.null(caption)) {
+    rows <- c(paste0("Table: ", caption), "", rows)
+  }
+
   attr(rows, "format") <- "pipe"
   class(rows) <- c("knitr_kable", "character")
   rows
