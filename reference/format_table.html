@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dataframe and Tables Pretty Formatting — format_table • insight</title>
+<title>Data frame and Tables Pretty Formatting — format_table • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Dataframe and Tables Pretty Formatting — format_table" />
-<meta property="og:description" content="Dataframe and Tables Pretty Formatting" />
+<meta property="og:title" content="Data frame and Tables Pretty Formatting — format_table" />
+<meta property="og:description" content="Data frame and Tables Pretty Formatting" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -116,13 +116,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Dataframe and Tables Pretty Formatting</h1>
+    <h1>Data frame and Tables Pretty Formatting</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/format_table.R'><code>R/format_table.R</code></a></small>
     <div class="hidden name"><code>format_table.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Dataframe and Tables Pretty Formatting</p>
+    <p>Data frame and Tables Pretty Formatting</p>
     </div>
 
     <pre class="usage"><span class='fu'>format_table</span><span class='op'>(</span>
@@ -133,7 +133,8 @@
   protect_integers <span class='op'>=</span> <span class='cn'>TRUE</span>,
   missing <span class='op'>=</span> <span class='st'>""</span>,
   width <span class='op'>=</span> <span class='cn'>NULL</span>,
-  style <span class='op'>=</span> <span class='cn'>NULL</span>
+  style <span class='op'>=</span> <span class='cn'>NULL</span>,
+  caption <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -170,6 +171,10 @@
     <tr>
       <th>style</th>
       <td><p>Name of format-style, as character. If <code>NULL</code>, returned output is used for basic printing. Maybe <code>"markdown"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>caption</th>
+      <td><p>Table caption. Only applies to markdown-styled tables.</p></td>
     </tr>
     </table>
 
