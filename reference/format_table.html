@@ -133,8 +133,9 @@
   protect_integers <span class='op'>=</span> <span class='cn'>TRUE</span>,
   missing <span class='op'>=</span> <span class='st'>""</span>,
   width <span class='op'>=</span> <span class='cn'>NULL</span>,
-  style <span class='op'>=</span> <span class='cn'>NULL</span>,
-  caption <span class='op'>=</span> <span class='cn'>NULL</span>
+  format <span class='op'>=</span> <span class='cn'>NULL</span>,
+  caption <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -169,12 +170,16 @@
       <td><p>Minimum width of the returned string. If not <code>NULL</code> and <code>width</code> is larger than the string's length, leading whitespaces are added to the string.</p></td>
     </tr>
     <tr>
-      <th>style</th>
-      <td><p>Name of format-style, as character. If <code>NULL</code>, returned output is used for basic printing. Maybe <code>"markdown"</code>.</p></td>
+      <th>format</th>
+      <td><p>Name of outpu-format, as string. If <code>NULL</code>, returned output is used for basic printing. Maybe <code>"markdown"</code>.</p></td>
     </tr>
     <tr>
       <th>caption</th>
-      <td><p>Table caption. Only applies to markdown-styled tables.</p></td>
+      <td><p>Table caption. Only applies to markdown-formatted tables.</p></td>
+    </tr>
+    <tr>
+      <th>align</th>
+      <td><p>Column alignment. Only applies to markdown-formatted tables. By default <code>align=NULL</code>, numeric columns are right-aligned, and other columns are left-aligned. May be <code>"left"</code>, <code>"right"</code> or <code>"center"</code>.</p></td>
     </tr>
     </table>
 
