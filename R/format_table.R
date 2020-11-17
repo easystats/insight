@@ -3,8 +3,9 @@
 #' @param x A data frame.
 #' @param sep Column separator.
 #' @param header Header separator. Can be \code{NULL}.
-#' @param style Name of format-style, as character. If \code{NULL}, returned output is used for basic printing. Maybe \code{"markdown"}.
-#' @param caption Table caption. Only applies to markdown-styled tables.
+#' @param format Name of outpu-format, as string. If \code{NULL}, returned output is used for basic printing. Maybe \code{"markdown"}.
+#' @param caption Table caption. Only applies to markdown-formatted tables.
+#' @param align Column alignment. Only applies to markdown-formatted tables. By default \code{align=NULL}, numeric columns are right-aligned, and other columns are left-aligned. May be \code{"left"}, \code{"right"} or \code{"center"}.
 #' @inheritParams format_value
 #'
 #' @return A data frame in character format.
@@ -12,7 +13,7 @@
 #' cat(format_table(iris))
 #' cat(format_table(iris, sep = " ", header = "*", digits = 1))
 #' @export
-format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, style = NULL, caption = NULL) {
+format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, align = NULL) {
   df <- x
 
   # round all numerics
@@ -50,10 +51,10 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
     final[, 1] <- format(trimws(final[, 1]), justify = "left")
   }
 
-  if (is.null(style)) {
+  if (is.null(format)) {
     .format_basic_table(final, header, sep)
-  } else if (style == "markdown") {
-    .format_markdown_table(final, x, caption = caption)
+  } else if (format == "markdown") {
+    .format_markdown_table(final, x, caption = caption, align = align)
   }
 }
 
@@ -82,19 +83,30 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
 
 
 
-.format_markdown_table <- function(final, x, caption = NULL) {
+.format_markdown_table <- function(final, x, caption = NULL, align = NULL) {
   column_width <- nchar(final[1, ])
   n_columns <- ncol(final)
 
   header <- "|"
   for (i in 1:n_columns) {
     line <- paste0(rep_len("-", column_width[i]), collapse = "")
-    if (grepl("^\\s", final[2, i])) {
+    if (is.null(align)) {
+      if (grepl("^\\s", final[2, i])) {
+        line <- paste0(line, ":")
+        final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
+      } else {
+        line <- paste0(":", line)
+        final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
+      }
+    } else if (align == "left") {
       line <- paste0(line, ":")
       final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
-    } else {
+    } else if (align == "right") {
       line <- paste0(":", line)
       final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
+    } else {
+      line <- paste0(":", line, ":")
+      final[, i] <- format(final[, i], width = column_width[i] + 2, justify = "centre")
     }
     header <- paste0(header, line, "|")
   }

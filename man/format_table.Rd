@@ -12,8 +12,9 @@ format_table(
   protect_integers = TRUE,
   missing = "",
   width = NULL,
-  style = NULL,
-  caption = NULL
+  format = NULL,
+  caption = NULL,
+  align = NULL
 )
 }
 \arguments{
@@ -31,9 +32,11 @@ format_table(
 
 \item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
 
-\item{style}{Name of format-style, as character. If \code{NULL}, returned output is used for basic printing. Maybe \code{"markdown"}.}
+\item{format}{Name of outpu-format, as string. If \code{NULL}, returned output is used for basic printing. Maybe \code{"markdown"}.}
 
-\item{caption}{Table caption. Only applies to markdown-styled tables.}
+\item{caption}{Table caption. Only applies to markdown-formatted tables.}
+
+\item{align}{Column alignment. Only applies to markdown-formatted tables. By default \code{align=NULL}, numeric columns are right-aligned, and other columns are left-aligned. May be \code{"left"}, \code{"right"} or \code{"center"}.}
 }
 \value{
 A data frame in character format.
