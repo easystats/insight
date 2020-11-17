@@ -48,7 +48,7 @@ if (require("testthat") &&
 
     expect_equal(
       names(standardize_names(chi, style = "broom")),
-      c("statistic", "df", "p.value", "method")
+      c("statistic", "df", "p.value")
     )
   }
 }
