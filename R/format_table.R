@@ -99,11 +99,31 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
   n_columns <- ncol(final)
   first_row_leftalign <- (!is.null(align) && align == "firstleft")
 
+  ## create header line for markdown table -----
   header <- "|"
+
+  # go through all columns of the data frame
   for (i in 1:n_columns) {
+
+    # create separater line for current column
     line <- paste0(rep_len("-", column_width[i]), collapse = "")
-    align_char <- substr(align, i, i)
+
+    # check if user-defined alignment is requested, and if so, extract
+    # alignment direction and save to "align_char"
+    align_char <- ""
+    if (!is.null(align)) {
+      if (align %in% c("left", "right", "center", "firstleft")) {
+        align_char <- ""
+      } else {
+        align_char <- substr(align, i, i)
+      }
+    }
+
+    # auto-alignment?
     if (is.null(align)) {
+
+      # if so, check if string in column starts with
+      # whitespace (indicating right-alignment) or not.
       if (grepl("^\\s", final[2, i])) {
         line <- paste0(line, ":")
         final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
@@ -111,16 +131,24 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
         line <- paste0(":", line)
         final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
       }
+
+      # left alignment, or at least first line only left?
     } else if (align == "left" || (first_row_leftalign && i == 1) || align_char == "l") {
       line <- paste0(line, ":")
       final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
-    } else if (align == "right" || (first_row_leftalign && i == 1) || align_char == "r") {
+
+      # right-alignment
+    } else if (align == "right" || align_char == "r") {
       line <- paste0(":", line)
       final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
+
+      # else, center
     } else {
       line <- paste0(":", line, ":")
       final[, i] <- format(final[, i], width = column_width[i] + 2, justify = "centre")
     }
+
+    # finally, we have our header-line that indicates column alignments
     header <- paste0(header, line, "|")
   }
 
