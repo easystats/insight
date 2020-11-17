@@ -113,10 +113,10 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
       }
     } else if (align == "left" || (first_row_leftalign && i == 1) || align_char == "l") {
       line <- paste0(line, ":")
-      final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
+      final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
     } else if (align == "right" || (first_row_leftalign && i == 1) || align_char == "r") {
       line <- paste0(":", line)
-      final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
+      final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
     } else {
       line <- paste0(":", line, ":")
       final[, i] <- format(final[, i], width = column_width[i] + 2, justify = "centre")
