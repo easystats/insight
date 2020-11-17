@@ -20,6 +20,13 @@
 
 * `standardize_names()` tries to be as loyal to the *broom*-naming conventions
   as possible.
+  
+* The function of the `brackets`-argument in `format_ci()` was changed. It is 
+  now also possible to provide a length-two character vector, to define own
+  brackets that encompass the CI-values.
+
+* `format_table()` gains several new arguments that allows to create tables
+  in markdown-format.
 
 ## Bug fixes
 

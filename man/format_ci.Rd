@@ -25,7 +25,7 @@ format_ci(
 
 \item{digits}{Number of significant digits.}
 
-\item{brackets}{Logical, if \code{TRUE} (default), values are encompassed in square brackets.}
+\item{brackets}{Either a logical, and if \code{TRUE} (default), values are encompassed in square brackets. If \code{FALSE} or \code{NULL}, no brackets are used. Else, a character vector of length two, indicating the opening and closing brackets.}
 
 \item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string. If \code{width="auto"}, width will be set to the length of the longest string.}
 
@@ -43,6 +43,7 @@ Confidence/Credible Interval (CI) Formatting
 format_ci(1.20, 3.57, ci = 0.90)
 format_ci(1.20, 3.57, ci = NULL)
 format_ci(1.20, 3.57, ci = NULL, brackets = FALSE)
+format_ci(1.20, 3.57, ci = NULL, brackets = c("(", ")"))
 format_ci(c(1.205645, 23.4), c(3.57, -1.35), ci = 0.90)
 format_ci(c(1.20, NA, NA), c(3.57, -1.35, NA), ci = 0.90)
 
