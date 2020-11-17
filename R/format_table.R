@@ -3,9 +3,20 @@
 #' @param x A data frame.
 #' @param sep Column separator.
 #' @param header Header separator. Can be \code{NULL}.
-#' @param format Name of outpu-format, as string. If \code{NULL}, returned output is used for basic printing. Maybe \code{"markdown"}.
+#' @param format Name of output-format, as string. If \code{NULL}, returned
+#'   output is used for basic printing. Currently, only \code{"markdown"} is
+#'   supported, or \code{NULL} (the default) for plain text.
 #' @param caption Table caption. Only applies to markdown-formatted tables.
-#' @param align Column alignment. Only applies to markdown-formatted tables. By default \code{align=NULL}, numeric columns are right-aligned, and other columns are left-aligned. May be \code{"left"}, \code{"right"} or \code{"center"}.
+#' @param align Column alignment. Only applies to markdown-formatted tables.
+#'   By default \code{align = NULL}, numeric columns are right-aligned,
+#'   and other columns are left-aligned. May be a string to indicate alignment
+#'   rules for the complete table, like \code{"left"}, \code{"right"},
+#'   \code{"center"} or \code{"firstleft"} (to left-align first column,
+#'   center remaining); or maybe a string with abbreviated alignment characters,
+#'   where the length of the string must equal the number of columns, for
+#'   instance, \code{align = "lccrl"} would left-align the first column, center
+#'   the second and third, right-align column four and left-align the fifth
+#'   column.
 #' @inheritParams format_value
 #'
 #' @return A data frame in character format.
@@ -86,10 +97,12 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
 .format_markdown_table <- function(final, x, caption = NULL, align = NULL) {
   column_width <- nchar(final[1, ])
   n_columns <- ncol(final)
+  first_row_leftalign <- if (!is.null(align) && align == "firstleft")
 
   header <- "|"
   for (i in 1:n_columns) {
     line <- paste0(rep_len("-", column_width[i]), collapse = "")
+    align_char <- substr(align, i, i)
     if (is.null(align)) {
       if (grepl("^\\s", final[2, i])) {
         line <- paste0(line, ":")
@@ -98,10 +111,10 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
         line <- paste0(":", line)
         final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
       }
-    } else if (align == "left") {
+    } else if (align == "left" || (first_row_leftalign && i == 1) || align_char == "l") {
       line <- paste0(line, ":")
       final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
-    } else if (align == "right") {
+    } else if (align == "right" || (first_row_leftalign && i == 1) || align_char == "r") {
       line <- paste0(":", line)
       final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
     } else {

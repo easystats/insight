@@ -32,11 +32,22 @@ format_table(
 
 \item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
 
-\item{format}{Name of outpu-format, as string. If \code{NULL}, returned output is used for basic printing. Maybe \code{"markdown"}.}
+\item{format}{Name of output-format, as string. If \code{NULL}, returned
+output is used for basic printing. Currently, only \code{"markdown"} is
+supported, or \code{NULL} (the default) for plain text.}
 
 \item{caption}{Table caption. Only applies to markdown-formatted tables.}
 
-\item{align}{Column alignment. Only applies to markdown-formatted tables. By default \code{align=NULL}, numeric columns are right-aligned, and other columns are left-aligned. May be \code{"left"}, \code{"right"} or \code{"center"}.}
+\item{align}{Column alignment. Only applies to markdown-formatted tables.
+By default \code{align = NULL}, numeric columns are right-aligned,
+and other columns are left-aligned. May be a string to indicate alignment
+rules for the complete table, like \code{"left"}, \code{"right"},
+\code{"center"} or \code{"firstleft"} (to left-align first column,
+center remaining); or maybe a string with abbreviated alignment characters,
+where the length of the string must equal the number of columns, for
+instance, \code{align = "lccrl"} would left-align the first column, center
+the second and third, right-align column four and left-align the fifth
+column.}
 }
 \value{
 A data frame in character format.
