@@ -15,9 +15,6 @@ to_table(x, ...)
 A data frame.
 }
 \description{
-Generic export of data frames into tables
-}
-\details{
 This is a generic function to export data frames into various
 table formats (like plain text, markdown, ...). See the documentation
 for the specific objects' classes.
