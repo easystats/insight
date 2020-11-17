@@ -104,7 +104,7 @@ reference:
   - null_model
   - print_parameters
   - standardize_names
-  - tidy
+  - to_table
 
 - title: "Example Datasets"
   desc: >
