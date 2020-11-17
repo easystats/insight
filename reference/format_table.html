@@ -171,7 +171,9 @@
     </tr>
     <tr>
       <th>format</th>
-      <td><p>Name of outpu-format, as string. If <code>NULL</code>, returned output is used for basic printing. Maybe <code>"markdown"</code>.</p></td>
+      <td><p>Name of output-format, as string. If <code>NULL</code>, returned
+output is used for basic printing. Currently, only <code>"markdown"</code> is
+supported, or <code>NULL</code> (the default) for plain text.</p></td>
     </tr>
     <tr>
       <th>caption</th>
@@ -179,7 +181,16 @@
     </tr>
     <tr>
       <th>align</th>
-      <td><p>Column alignment. Only applies to markdown-formatted tables. By default <code>align=NULL</code>, numeric columns are right-aligned, and other columns are left-aligned. May be <code>"left"</code>, <code>"right"</code> or <code>"center"</code>.</p></td>
+      <td><p>Column alignment. Only applies to markdown-formatted tables.
+By default <code>align = NULL</code>, numeric columns are right-aligned,
+and other columns are left-aligned. May be a string to indicate alignment
+rules for the complete table, like <code>"left"</code>, <code>"right"</code>,
+<code>"center"</code> or <code>"firstleft"</code> (to left-align first column,
+center remaining); or maybe a string with abbreviated alignment characters,
+where the length of the string must equal the number of columns, for
+instance, <code>align = "lccrl"</code> would left-align the first column, center
+the second and third, right-align column four and left-align the fifth
+column.</p></td>
     </tr>
     </table>
 
