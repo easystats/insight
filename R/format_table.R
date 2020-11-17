@@ -97,7 +97,7 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
 .format_markdown_table <- function(final, x, caption = NULL, align = NULL) {
   column_width <- nchar(final[1, ])
   n_columns <- ncol(final)
-  first_row_leftalign <- if (!is.null(align) && align == "firstleft")
+  first_row_leftalign <- (!is.null(align) && align == "firstleft")
 
   header <- "|"
   for (i in 1:n_columns) {
