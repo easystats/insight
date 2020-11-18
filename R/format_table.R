@@ -6,7 +6,10 @@
 #' @param format Name of output-format, as string. If \code{NULL}, returned
 #'   output is used for basic printing. Currently, only \code{"markdown"} is
 #'   supported, or \code{NULL} (the default) for plain text.
-#' @param caption Table caption. Only applies to markdown-formatted tables.
+#' @param caption Table caption, as string. Only applies to markdown-formatted tables.
+#' @param footer Table footer, as string. Only applies to markdown-formatted tables.
+#'   Note that table footers, due to the limitation in markdown rendering, are
+#'   actually just a new text line under the table.
 #' @param align Column alignment. Only applies to markdown-formatted tables.
 #'   By default \code{align = NULL}, numeric columns are right-aligned,
 #'   and other columns are left-aligned. May be a string to indicate alignment
@@ -24,7 +27,7 @@
 #' cat(format_table(iris))
 #' cat(format_table(iris, sep = " ", header = "*", digits = 1))
 #' @export
-format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, align = NULL) {
+format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, align = NULL, footer = NULL) {
   df <- x
 
   # round all numerics
@@ -65,7 +68,7 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
   if (is.null(format)) {
     .format_basic_table(final, header, sep)
   } else if (format == "markdown") {
-    .format_markdown_table(final, x, caption = caption, align = align)
+    .format_markdown_table(final, x, caption = caption, align = align, footer = footer)
   }
 }
 
@@ -94,7 +97,7 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
 
 
 
-.format_markdown_table <- function(final, x, caption = NULL, align = NULL) {
+.format_markdown_table <- function(final, x, caption = NULL, align = NULL, footer = NULL) {
   column_width <- nchar(final[1, ])
   n_columns <- ncol(final)
   first_row_leftalign <- (!is.null(align) && align == "firstleft")
@@ -166,6 +169,10 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
 
   if (!is.null(caption)) {
     rows <- c(paste0("Table: ", caption), "", rows)
+  }
+
+  if (!is.null(footer)) {
+    rows <- c(rows, footer)
   }
 
   attr(rows, "format") <- "pipe"
