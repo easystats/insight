@@ -135,7 +135,8 @@
   width <span class='op'>=</span> <span class='cn'>NULL</span>,
   format <span class='op'>=</span> <span class='cn'>NULL</span>,
   caption <span class='op'>=</span> <span class='cn'>NULL</span>,
-  align <span class='op'>=</span> <span class='cn'>NULL</span>
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  footer <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -177,7 +178,7 @@ supported, or <code>NULL</code> (the default) for plain text.</p></td>
     </tr>
     <tr>
       <th>caption</th>
-      <td><p>Table caption. Only applies to markdown-formatted tables.</p></td>
+      <td><p>Table caption, as string. Only applies to markdown-formatted tables.</p></td>
     </tr>
     <tr>
       <th>align</th>
@@ -191,6 +192,12 @@ where the length of the string must equal the number of columns, for
 instance, <code>align = "lccrl"</code> would left-align the first column, center
 the second and third, right-align column four and left-align the fifth
 column.</p></td>
+    </tr>
+    <tr>
+      <th>footer</th>
+      <td><p>Table footer, as string. Only applies to markdown-formatted tables.
+Note that table footers, due to the limitation in markdown rendering, are
+actually just a new text line under the table.</p></td>
     </tr>
     </table>
 
