@@ -13,3 +13,10 @@
 to_table <- function(x, ...) {
   UseMethod("to_table")
 }
+
+
+#' @rdname to_table
+#' @export
+table_to_markdown <- function(x, ...) {
+  UseMethod("table_to_markdown")
+}

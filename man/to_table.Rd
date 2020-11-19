@@ -2,9 +2,12 @@
 % Please edit documentation in R/to_table.R
 \name{to_table}
 \alias{to_table}
+\alias{table_to_markdown}
 \title{Generic export of data frames into tables}
 \usage{
 to_table(x, ...)
+
+table_to_markdown(x, ...)
 }
 \arguments{
 \item{x}{A data frame.}

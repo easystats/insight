@@ -16,6 +16,10 @@
 
 * `find_offset()`, to find the name of offset-terms.
 
+* Added generics for `to_table()` (and its alias, `table_to_markdown()`), to 
+  allow other packages to create tables in other formats when not printing
+  the output to console.
+
 ## Changes to functions
 
 * `standardize_names()` tries to be as loyal to the *broom*-naming conventions
