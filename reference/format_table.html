@@ -136,7 +136,8 @@
   format <span class='op'>=</span> <span class='cn'>NULL</span>,
   caption <span class='op'>=</span> <span class='cn'>NULL</span>,
   align <span class='op'>=</span> <span class='cn'>NULL</span>,
-  footer <span class='op'>=</span> <span class='cn'>NULL</span>
+  footer <span class='op'>=</span> <span class='cn'>NULL</span>,
+  zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span>
 
 <span class='fu'>export_table</span><span class='op'>(</span>
@@ -150,7 +151,8 @@
   format <span class='op'>=</span> <span class='cn'>NULL</span>,
   caption <span class='op'>=</span> <span class='cn'>NULL</span>,
   align <span class='op'>=</span> <span class='cn'>NULL</span>,
-  footer <span class='op'>=</span> <span class='cn'>NULL</span>
+  footer <span class='op'>=</span> <span class='cn'>NULL</span>,
+  zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -212,6 +214,10 @@ column.</p></td>
       <td><p>Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a
 new text line under the table.</p></td>
+    </tr>
+    <tr>
+      <th>zap_small</th>
+      <td><p>Logical, if <code>TRUE</code>, small values are rounded after <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal places than <code>digits</code> are printed in scientific notation.</p></td>
     </tr>
     </table>
 
