@@ -7,6 +7,9 @@
   better deals with objects from `BFBayesFactor`, and censored regression models 
   no longer return `TRUE` for `$is_linear`.
 
+* `format_table()` is going to be renamed in a future update. Please use its
+  alias `export_table()`.
+
 ## New supported model classes
 
 * Support for `scam` (*scam*), `meta_random` and `meta_fixed` (*metaBMA*), `Glm`
