@@ -42,6 +42,16 @@ format_table <- function(x,
                          align = NULL,
                          footer = NULL) {
 
+  # check args
+  if (is.null(format)) {
+    format <- "text"
+  }
+
+  if (format == "md") {
+    format <- "markdown"
+  }
+
+  # single data frame
   if (is.data.frame(x)) {
     out <- .export_table(
       x = x,
@@ -57,6 +67,7 @@ format_table <- function(x,
       footer = footer
     )
   } else if (is.list(x)) {
+    # list of data frames
     tmp <- lapply(x, function(i) {
       .export_table(
         x = i,
@@ -73,15 +84,20 @@ format_table <- function(x,
       )
     })
     out <- c()
+    sep <- switch(
+      format,
+      "markdown" = "",
+      "\n\n"
+    )
     for (i in 1:length(tmp)) {
-      out <- c(out, tmp[[i]], "")
+      out <- c(out, tmp[[i]], sep)
     }
     out <- out[1:(length(out) - 1)]
   } else {
     return(NULL)
   }
 
-  if (!is.null(format) && format %in% c("markdown", "md")) {
+  if (format == "markdown") {
     attr(out, "format") <- "pipe"
     class(out) <- c("knitr_kable", "character")
   }
@@ -135,7 +151,7 @@ export_table <- format_table
     final[, 1] <- format(trimws(final[, 1]), justify = "left")
   }
 
-  if (is.null(format)) {
+  if (format == "text") {
     out <- .format_basic_table(final, header, sep, caption = caption, footer = footer)
   } else if (format == "markdown") {
     out <- .format_markdown_table(final, x, caption = caption, align = align, footer = footer)
