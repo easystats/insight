@@ -1,186 +1,365 @@
-#' Data frame and Tables Pretty Formatting
+#' @title Parameter table formatting
+#' @name parameters_table
 #'
-#' @param x A data frame.
-#' @param sep Column separator.
-#' @param header Header separator. Can be \code{NULL}.
-#' @param format Name of output-format, as string. If \code{NULL} (or \code{"text"}),
-#'   returned output is used for basic printing. Currently, only \code{"markdown"} is
-#'   supported, or \code{NULL} (the default) resp. \code{"text"} for plain text.
-#' @param caption Table caption, as string. Only applies to markdown-formatted tables.
-#' @param footer Table footer, as string. Only applies to markdown-formatted tables.
-#'   Note that table footers, due to the limitation in markdown rendering, are
-#'   actually just a new text line under the table.
-#' @param align Column alignment. Only applies to markdown-formatted tables.
-#'   By default \code{align = NULL}, numeric columns are right-aligned,
-#'   and other columns are left-aligned. May be a string to indicate alignment
-#'   rules for the complete table, like \code{"left"}, \code{"right"},
-#'   \code{"center"} or \code{"firstleft"} (to left-align first column,
-#'   center remaining); or maybe a string with abbreviated alignment characters,
-#'   where the length of the string must equal the number of columns, for
-#'   instance, \code{align = "lccrl"} would left-align the first column, center
-#'   the second and third, right-align column four and left-align the fifth
-#'   column.
-#' @inheritParams format_value
+#' @description This functions takes a data frame with model parameters as input
+#'   and formats certain columns into a more readable layout (like collapsing
+#'   separate columns for lower and upper confidence interval values). Furthermore,
+#'   column names are formatted as well.
 #'
-#' @note This function is going to be renamed in a future update. Please use its
-#' alias \code{export_table()}.
+#' @param x A data frame of model's parameters, as returned by various functions of the \strong{easystats}-packages. May also be a result from \code{broom::tidy()}.
+#' @param pretty_names Return "pretty" (i.e. more human readable) parameter names.
+#' @param digits Number of decimal places for numeric values (except confidence intervals and p-values).
+#' @param ci_width Minimum width of the returned string for confidence intervals. If not \code{NULL} and width is larger than the string's length, leading whitespaces are added to the string. If \code{width="auto"}, width will be set to the length of the longest string.
+#' @param ci_brackets Logical, if \code{TRUE} (default), CI-values are encompassed in square brackets (else in parantheses).
+#' @param ci_digits Number of decimal places for confidence intervals.
+#' @param p_digits Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.
+#' @inheritParams format_p
+#' @param ... Arguments passed to or from other methods.
 #'
-#' @return A data frame in character format.
 #' @examples
-#' cat(export_table(iris))
-#' cat(export_table(iris, sep = " ", header = "*", digits = 1))
+#' if (require("parameters")) {
+#'   x <- model_parameters(lm(Sepal.Length ~ Species * Sepal.Width, data = iris))
+#'   as.data.frame(parameters_table(x))
+#'   as.data.frame(parameters_table(x, p_digits = "scientific"))
+#' }
+#' \donttest{
+#' if (require("rstanarm") && require("parameters")) {
+#'   model <- stan_glm(Sepal.Length ~ Species, data = iris, refresh = 0, seed = 123)
+#'   x <- model_parameters(model, ci = c(0.69, 0.89, 0.95))
+#'   as.data.frame(parameters_table(x))
+#' }}
+#' @return A data frame.
 #' @export
-format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, align = NULL, footer = NULL) {
-  df <- x
+parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, ...) {
 
-  # round all numerics
-  col_names <- names(df)
-  df <- as.data.frame(sapply(df, function(i) {
-    if (is.numeric(i)) {
-      format_value(i, digits = digits, protect_integers = protect_integers, missing = missing, width = width)
-    } else {
-      i
-    }
-  }, simplify = FALSE), stringsAsFactors = FALSE)
+  # check if user supplied digits attributes
+  if (missing(digits)) digits <- .additional_arguments(x, "digits", 2)
+  if (missing(ci_digits)) ci_digits <- .additional_arguments(x, "ci_digits", 2)
+  if (missing(p_digits)) p_digits <- .additional_arguments(x, "p_digits", 3)
+
+  att <- attributes(x)
+  x <- as.data.frame(x)
 
 
-  # Convert to character
-  df <- as.data.frame(sapply(df, as.character, simplify = FALSE), stringsAsFactors = FALSE)
-  names(df) <- col_names
-  df[is.na(df)] <- as.character(missing)
-
-  # Add colnames as row
-  df <- rbind(colnames(df), df)
-
-  # Align
-  aligned <- format(df, justify = "right")
-
-  # Center first row
-  first_row <- as.character(aligned[1, ])
-  for (i in 1:length(first_row)) {
-    aligned[1, i] <- format(trimws(first_row[i]), width = nchar(first_row[i]), justify = "right")
+  # Format parameters names ----
+  if (pretty_names & !is.null(att$pretty_names)) {
+    x$Parameter <- att$pretty_names[x$Parameter]
   }
 
-  final <- as.matrix(aligned)
 
-  # left-align first column (if a character or a factor)
-  if (!is.numeric(x[, 1])) {
-    final[, 1] <- format(trimws(final[, 1]), justify = "left")
+  # Format specific columns ----
+  if ("n_Obs" %in% names(x)) x$n_Obs <- format_value(x$n_Obs, protect_integers = TRUE)
+  if ("n_Missing" %in% names(x)) x$n_Missing <- format_value(x$n_Missing, protect_integers = TRUE)
+
+
+  # Format df columns ----
+  x <- .format_df_columns(x)
+
+
+  # Format frequentist stats ----
+  x <- .format_freq_stats(x)
+
+
+  # P values ----
+  if ("p" %in% names(x)) {
+    x$p <- format_p(x$p, stars = stars, name = NULL, missing = "", digits = p_digits)
+    x$p <- format(x$p, justify = "left")
+  }
+  if ("p.value" %in% names(x)) {
+    x$p.value <- format_p(x$p.value, stars = stars, name = NULL, missing = "", digits = p_digits)
+    x$p.value <- format(x$p.value, justify = "left")
   }
 
-  if (is.null(format)) {
-    .format_basic_table(final, header, sep)
-  } else if (format == "markdown") {
-    .format_markdown_table(final, x, caption = caption, align = align, footer = footer)
+
+  # Main CI ----
+  x <- .format_main_ci_columns(x, att, ci_digits, ci_width, ci_brackets)
+  x <- .format_broom_ci_columns(x, ci_digits, ci_width, ci_brackets)
+
+
+  # Other CIs ----
+  out <- .format_other_ci_columns(x, att, ci_digits, ci_width, ci_brackets)
+  x <- out$x
+  other_ci_colname <- out$other_ci_colname
+
+
+  # Misc / Effect Sizes
+  names(x)[names(x) == "Cohens_d"] <- "Cohen's d"
+  names(x)[names(x) == "Cramers_v"] <- "Cramer's V"
+  names(x)[names(x) == "phi_adjusted"] <- "phi (adj.)"
+  names(x)[names(x) == "Cramers_v_adjusted"] <- "Cramer's V (adj.)"
+
+
+  # Standardized ----
+  x <- .format_std_columns(x, other_ci_colname, digits)
+
+
+  # Partial ----
+  x[names(x)[grepl("_partial$", names(x))]] <- format_value(x[names(x)[grepl("_partial$", names(x))]])
+  names(x)[grepl("_partial$", names(x))] <- paste0(gsub("_partial$", "", names(x)[grepl("_partial$", names(x))]), " (partial)")
+
+
+  # metafor ----
+  if ("Weight" %in% names(x)) x$Weight <- format_value(x$Weight, protect_integers = TRUE)
+
+
+  # Bayesian ---
+  x <- .format_bayes_columns(x, stars)
+
+  # ROPE %
+  if ("ROPE_Percentage" %in% names(x)) {
+    x$ROPE_Percentage <- format_value(x$ROPE_Percentage, digits = digits, as_percent = TRUE)
+    names(x)[names(x) == "ROPE_Percentage"] <- "% in ROPE"
   }
+
+  # Format remaining columns
+  other_cols <- names(x)[sapply(x, is.numeric)]
+  x[other_cols[other_cols %in% names(x)]] <- format_value(x[other_cols[other_cols %in% names(x)]], digits = digits)
+
+  # SEM links
+  if (all(c("To", "Operator", "From") %in% names(x))) {
+    x$Link <- paste(x$To, x$Operator, x$From)
+
+    col_position <- which(names(x) == "To")
+    x <- x[c(names(x)[0:(col_position - 1)], "Link", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
+    x$To <- x$Operator <- x$From <- NULL
+  }
+
+  x
 }
 
-#' @rdname format_table
-#' @export
-export_table <- format_table
 
 
 
 
-.format_basic_table <- function(final, header, sep) {
-  # Transform to character
-  rows <- c()
-  for (row in 1:nrow(final)) {
-    final_row <- paste0(final[row, ], collapse = sep)
-    rows <- paste0(rows, final_row, sep = "\n")
 
-    # First row separation
-    if (row == 1) {
-      if (!is.null(header)) {
-        rows <- paste0(rows, paste0(rep_len(header, nchar(final_row)), collapse = ""), sep = "\n")
+
+# sub-routines ---------------
+
+
+.format_df_columns <- function(x) {
+  # generic df
+  if ("df" %in% names(x)) x$df <- format_value(x$df, protect_integers = TRUE)
+  # residual df
+  if ("df_residual" %in% names(x)) x$df_residual <- format_value(x$df_residual, protect_integers = TRUE)
+  names(x)[names(x) == "df_residual"] <- "df"
+  # df for errors
+  if ("df_error" %in% names(x)) x$df_error <- format_value(x$df_error, protect_integers = TRUE)
+  if (!("df" %in% names(x))) names(x)[names(x) == "df_error"] <- "df"
+  # denominator and numerator df
+  if ("df_num" %in% names(x)) x$df_num <- format_value(x$df_num, protect_integers = TRUE)
+  if ("df_denom" %in% names(x)) x$df_denom <- format_value(x$df_denom, protect_integers = TRUE)
+  x
+}
+
+
+
+#' @importFrom stats na.omit
+.format_freq_stats <- function(x) {
+  for (stats in c("t", "Chi2")) {
+    if (stats %in% names(x) && "df" %in% names(x)) {
+      df <- stats::na.omit(unique(x$df))
+      if (length(df) == 1 && !all(is.infinite(df))) {
+        names(x)[names(x) == stats] <- paste0(stats, "(", df, ")")
+        x$df <- NULL
       }
     }
   }
-  rows
+
+  if ("Success" %in% names(x)) x$Success <- format_value(x$Success, protect_integers = TRUE)
+  if ("Trials" %in% names(x)) x$Trials <- format_value(x$Trials, protect_integers = TRUE)
+
+  x
+}
+
+
+
+#' @importFrom stats na.omit
+.format_main_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE) {
+  # Main CI
+  ci_low <- names(x)[grep("^CI_low", names(x))]
+  ci_high <- names(x)[grep("^CI_high", names(x))]
+  if (length(ci_low) >= 1 & length(ci_low) == length(ci_high)) {
+    if (!is.null(att$ci)) {
+      if (length(unique(stats::na.omit(att$ci))) > 1) {
+        ci_colname <- "?% CI"
+      } else {
+        ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(att$ci))[1] * 100)
+      }
+    } else if (!is.null(x$CI)) {
+      ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(x$CI))[1] * 100)
+      x$CI <- NULL
+    } else {
+      ci_colname <- "CI"
+    }
+
+    # Get characters to align the CI
+    for (i in 1:length(ci_colname)) {
+      x[ci_colname[i]] <- format_ci(x[[ci_low[i]]], x[[ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets)
+    }
+    # Replace at initial position
+    ci_position <- which(names(x) == ci_low[1])
+    x <- x[c(names(x)[0:(ci_position - 1)][!names(x)[0:(ci_position - 1)] %in% ci_colname], ci_colname, names(x)[ci_position:(length(names(x)) - 1)][!names(x)[ci_position:(length(names(x)) - 1)] %in% ci_colname])]
+    x <- x[!names(x) %in% c(ci_low, ci_high)]
+  }
+
+  x
+}
+
+
+
+#' @importFrom stats na.omit
+.format_other_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE) {
+  other_ci_low <- names(x)[grep("_CI_low$", names(x))]
+  other_ci_high <- names(x)[grep("_CI_high$", names(x))]
+  if (length(other_ci_low) >= 1 & length(other_ci_low) == length(other_ci_high)) {
+    other <- unlist(strsplit(other_ci_low, "_CI_low$"))
+
+    # CI percentage
+    if (length(other) == 1 && !is.null(att[[paste0("ci_", other)]])) {
+      other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(att[[paste0("ci_", other)]])) * 100)
+    } else if (!is.null(att$ci)) {
+      other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(att$ci)) * 100)
+    } else {
+      other_ci_colname <- paste(other, "CI")
+    }
+
+    # Get characters to align the CI
+    for (i in 1:length(other_ci_colname)) {
+      x[[other_ci_low[i]]] <- format_ci(x[[other_ci_low[i]]], x[[other_ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets)
+      # rename lower CI into final CI column
+      other_ci_position <- which(names(x) == other_ci_low[i])
+      colnames(x)[other_ci_position] <- other_ci_colname[i]
+      # remove upper CI column
+      other_ci_position <- which(names(x) == other_ci_high[i])
+      x[[other_ci_position]] <- NULL
+    }
+  } else {
+    other_ci_colname <- c()
+  }
+
+  list(x = x, other_ci_colname = other_ci_colname)
+}
+
+
+
+.format_broom_ci_columns <- function(x, ci_digits, ci_width = "auto", ci_brackets = TRUE) {
+  if (!any(grepl("conf.low", names(x), fixed = TRUE))) {
+    return(x)
+  }
+  if (!any(grepl("conf.high", names(x), fixed = TRUE))) {
+    return(x)
+  }
+  tryCatch(
+    {
+      ci_low <- names(x)[which(names(x) == "conf.low")]
+      ci_high <- names(x)[which(names(x) == "conf.high")]
+      x$conf.int <- format_ci(x[[ci_low]], x[[ci_high]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets)
+      x$conf.low <- NULL
+      x$conf.high <- NULL
+      x
+    },
+    error = function(e) {
+      x
+    }
+  )
+}
+
+
+
+.format_std_columns <- function(x, other_ci_colname, digits) {
+  std_cols <- names(x)[grepl("Std_", names(x))]
+  if (length(std_cols) == 0) {
+    return(x)
+  }
+
+  std_cis <- NULL
+
+  if (!is.null(other_ci_colname)) {
+    std_cis <- std_cols[std_cols %in% other_ci_colname]
+    std_cols <- std_cols[!std_cols %in% other_ci_colname]
+  }
+
+  x[std_cols] <- format_value(x[std_cols], digits = digits)
+  names(x)[names(x) == std_cols] <- .replace_words(std_cols, "Std_Coefficient", "Std. Coef.")
+  names(x)[names(x) == std_cols] <- .replace_words(std_cols, "Std_Median", "Std. Median")
+  names(x)[names(x) == std_cols] <- .replace_words(std_cols, "Std_Mean", "Std. Mean")
+  names(x)[names(x) == std_cols] <- .replace_words(std_cols, "Std_MAP", "Std. MAP")
+
+  if (!is.null(std_cis) && length(std_cis)) {
+    # std_cis_replacement <- .replace_words(std_cis, "^Std_", "Std. ")
+    std_cis_replacement <- gsub("^Std_Coefficient(.*)", "Std. Coef.\\1", std_cis)
+    names(x)[names(x) == std_cis] <- std_cis_replacement
+  }
+
+  x
+}
+
+
+
+.format_bayes_columns <- function(x, stars) {
+  # Indices
+  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars)
+  if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = stars)
+  if ("ROPE_Percentage" %in% names(x)) x$ROPE_Percentage <- format_rope(x$ROPE_Percentage, name = NULL)
+  names(x)[names(x) == "ROPE_Percentage"] <- "% in ROPE"
+  if ("Rhat" %in% names(x)) x$Rhat <- format_value(x$Rhat, digits = 3)
+  if ("ESS" %in% names(x)) x$ESS <- format_value(x$ESS, protect_integers = TRUE)
+
+  # Priors
+  if ("Prior_Location" %in% names(x)) x$Prior_Location <- format_value(x$Prior_Location, protect_integers = TRUE)
+  if ("Prior_Scale" %in% names(x)) x$Prior_Scale <- format_value(x$Prior_Scale, protect_integers = TRUE)
+  if ("Prior_Distribution" %in% names(x)) x$Prior_Distribution <- ifelse(is.na(x$Prior_Distribution), "", x$Prior_Distribution)
+  if (all(c("Prior_Distribution", "Prior_Location", "Prior_Scale") %in% names(x))) {
+    x$Prior <- paste0(
+      .capitalize(x$Prior_Distribution),
+      " (",
+      x$Prior_Location,
+      " +- ",
+      x$Prior_Scale,
+      ")"
+    )
+    x$Prior <- ifelse(x$Prior == " ( +- )", "", x$Prior) # Remove empty
+
+    col_position <- which(names(x) == "Prior_Distribution")
+    x <- x[c(names(x)[0:(col_position - 1)], "Prior", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
+    x$Prior_Distribution <- x$Prior_Location <- x$Prior_Scale <- NULL
+  }
+
+
+
+  x
 }
 
 
 
 
-.format_markdown_table <- function(final, x, caption = NULL, align = NULL, footer = NULL) {
-  column_width <- nchar(final[1, ])
-  n_columns <- ncol(final)
-  first_row_leftalign <- (!is.null(align) && align == "firstleft")
 
-  ## create header line for markdown table -----
-  header <- "|"
+# helper ---------------------
 
-  # go through all columns of the data frame
-  for (i in 1:n_columns) {
 
-    # create separater line for current column
-    line <- paste0(rep_len("-", column_width[i]), collapse = "")
-
-    # check if user-defined alignment is requested, and if so, extract
-    # alignment direction and save to "align_char"
-    align_char <- ""
-    if (!is.null(align)) {
-      if (align %in% c("left", "right", "center", "firstleft")) {
-        align_char <- ""
-      } else {
-        align_char <- substr(align, i, i)
-      }
-    }
-
-    # auto-alignment?
-    if (is.null(align)) {
-
-      # if so, check if string in column starts with
-      # whitespace (indicating right-alignment) or not.
-      if (grepl("^\\s", final[2, i])) {
-        line <- paste0(line, ":")
-        final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
-      } else {
-        line <- paste0(":", line)
-        final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
-      }
-
-      # left alignment, or at least first line only left?
-    } else if (align == "left" || (first_row_leftalign && i == 1) || align_char == "l") {
-      line <- paste0(":", line)
-      final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
-
-      # right-alignment
-    } else if (align == "right" || align_char == "r") {
-      line <- paste0(line, ":")
-      final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
-
-      # else, center
-    } else {
-      line <- paste0(":", line, ":")
-      final[, i] <- format(final[, i], width = column_width[i] + 2, justify = "centre")
-    }
-
-    # finally, we have our header-line that indicates column alignments
-    header <- paste0(header, line, "|")
-  }
-
-  # Transform to character
-  rows <- c()
-  for (row in 1:nrow(final)) {
-    final_row <- paste0("|", paste0(final[row, ], collapse = "|"), "|", collapse = "")
-    rows <- c(rows, final_row)
-
-    # First row separation
-    if (row == 1) {
-      rows <- c(rows, header)
+.replace_words <- function(x, target, replacement) {
+  for (i in 1:length(x)) {
+    if (grepl(target, x[i], fixed = TRUE)) {
+      x[i] <- gsub(target, replacement, x[i])
     }
   }
+  x
+}
 
-  if (!is.null(caption)) {
-    rows <- c(paste0("Table: ", caption), "", rows)
+
+
+.additional_arguments <- function(x, value, default) {
+  args <- attributes(x)$additional_arguments
+
+  if (length(args) > 0 && value %in% names(args)) {
+    out <- args[[value]]
+  } else {
+    out <- attributes(x)[[value]]
   }
 
-  if (!is.null(footer)) {
-    rows <- c(rows, footer)
+  if (is.null(out)) {
+    out <- default
   }
 
-  attr(rows, "format") <- "pipe"
-  class(rows) <- c("knitr_kable", "character")
-  rows
+  out
 }

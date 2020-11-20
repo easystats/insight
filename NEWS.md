@@ -17,6 +17,10 @@
 
 ## New function
 
+* `parameters_table()`, which was moved from package *parameters* to
+  *insight*. Note that this function is going to be renamed into `format_table()`
+  in a future update.
+
 * `find_offset()`, to find the name of offset-terms.
 
 * Added generics for `to_table()` (and its alias, `table_to_markdown()`), to 
