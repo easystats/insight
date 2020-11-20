@@ -290,11 +290,11 @@ export_table <- format_table
   }
 
   if (!is.null(caption)) {
-    rows <- c(paste0("Table: ", caption), "", rows)
+    rows <- c(paste0("Table: ", caption[1]), "", rows)
   }
 
   if (!is.null(footer)) {
-    rows <- c(rows, footer)
+    rows <- c(rows, footer[1])
   }
 
   rows
