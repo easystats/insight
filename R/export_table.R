@@ -6,10 +6,10 @@
 #' @param format Name of output-format, as string. If \code{NULL} (or \code{"text"}),
 #'   returned output is used for basic printing. Currently, only \code{"markdown"} is
 #'   supported, or \code{NULL} (the default) resp. \code{"text"} for plain text.
-#' @param caption Table caption, as string. Only applies to markdown-formatted tables.
-#' @param footer Table footer, as string. Only applies to markdown-formatted tables.
-#'   Note that table footers, due to the limitation in markdown rendering, are
-#'   actually just a new text line under the table.
+#' @param caption Table caption, as string.
+#' @param footer Table footer, as string. For markdown-formatted tables, table
+#'   footers, due to the limitation in markdown rendering, are actually just a
+#'   new text line under the table.
 #' @param align Column alignment. Only applies to markdown-formatted tables.
 #'   By default \code{align = NULL}, numeric columns are right-aligned,
 #'   and other columns are left-aligned. May be a string to indicate alignment
@@ -57,7 +57,7 @@ format_table <- function(x,
       footer = footer
     )
   } else if (is.list(x)) {
-    out <- do.call(c, lapply(x, function(i) {
+    tmp <- lapply(x, function(i) {
       .export_table(
         x = i,
         sep = sep,
@@ -67,16 +67,21 @@ format_table <- function(x,
         missing = missing,
         width = width,
         format = format,
-        caption = attributes(i)$caption,
+        caption = attributes(i)$table_caption,
         align = align,
-        footer = attributes(i)$footer
+        footer = attributes(i)$table_footer
       )
-    }))
+    })
+    out <- c()
+    for (i in 1:length(tmp)) {
+      out <- c(out, tmp[[i]], "")
+    }
+    out <- out[1:(length(out) - 1)]
   } else {
     return(NULL)
   }
 
-  if (format %in% c("markdown", "md")) {
+  if (!is.null(format) && format %in% c("markdown", "md")) {
     attr(out, "format") <- "pipe"
     class(out) <- c("knitr_kable", "character")
   }
@@ -131,7 +136,7 @@ export_table <- format_table
   }
 
   if (is.null(format)) {
-    out <- .format_basic_table(final, header, sep)
+    out <- .format_basic_table(final, header, sep, caption = caption, footer = footer)
   } else if (format == "markdown") {
     out <- .format_markdown_table(final, x, caption = caption, align = align, footer = footer)
   }
@@ -142,7 +147,12 @@ export_table <- format_table
 
 
 
-.format_basic_table <- function(final, header, sep) {
+
+
+# plain text formatting ------------------------
+
+
+.format_basic_table <- function(final, header, sep, caption = NULL, footer = NULL) {
   # Transform to character
   rows <- c()
   for (row in 1:nrow(final)) {
@@ -156,10 +166,30 @@ export_table <- format_table
       }
     }
   }
+
+  if (!is.null(caption)) {
+    if (length(caption) == 2 && .is_valid_colour(caption[2])) {
+      caption <- .colour(caption[2], caption[1])
+    }
+    rows <- paste0(caption[1], "\n\n", rows)
+  }
+
+  if (!is.null(footer)) {
+    if (length(footer) == 2 && .is_valid_colour(footer[2])) {
+      footer <- .colour(footer[2], footer[1])
+    }
+    rows <- paste0(rows, "\n", footer[1])
+  }
+
   rows
 }
 
 
+
+
+
+
+# markdown formatting -------------------
 
 
 .format_markdown_table <- function(final, x, caption = NULL, align = NULL, footer = NULL) {

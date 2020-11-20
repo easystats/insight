@@ -52,7 +52,7 @@ export_table(
 returned output is used for basic printing. Currently, only \code{"markdown"} is
 supported, or \code{NULL} (the default) resp. \code{"text"} for plain text.}
 
-\item{caption}{Table caption, as string. Only applies to markdown-formatted tables.}
+\item{caption}{Table caption, as string.}
 
 \item{align}{Column alignment. Only applies to markdown-formatted tables.
 By default \code{align = NULL}, numeric columns are right-aligned,
@@ -65,9 +65,9 @@ instance, \code{align = "lccrl"} would left-align the first column, center
 the second and third, right-align column four and left-align the fifth
 column.}
 
-\item{footer}{Table footer, as string. Only applies to markdown-formatted tables.
-Note that table footers, due to the limitation in markdown rendering, are
-actually just a new text line under the table.}
+\item{footer}{Table footer, as string. For markdown-formatted tables, table
+footers, due to the limitation in markdown rendering, are actually just a
+new text line under the table.}
 }
 \value{
 A data frame in character format.

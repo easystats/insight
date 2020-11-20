@@ -123,3 +123,8 @@
     warning(paste0("`color` ", colour, " not yet supported."))
   )
 }
+
+
+.is_valid_colour <- function(colour) {
+  colour %in% c("red", "yellow", "green", "blue", "violet", "cyan", "grey", "bold", "italic")
+}
