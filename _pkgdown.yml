@@ -89,8 +89,8 @@ reference:
   - format_p
   - format_pd
   - format_rope
-  - format_table
   - format_value
+  - parameters_table
   - print_color
 
 - title: "Utilities"
@@ -101,6 +101,7 @@ reference:
   - clean_names
   - clean_parameters
   - download_model
+  - export_table
   - null_model
   - print_parameters
   - standardize_names
