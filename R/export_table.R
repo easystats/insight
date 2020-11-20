@@ -40,7 +40,8 @@ format_table <- function(x,
                          format = NULL,
                          caption = NULL,
                          align = NULL,
-                         footer = NULL) {
+                         footer = NULL,
+                         zap_small = FALSE) {
 
   # check args
   if (is.null(format)) {
@@ -64,7 +65,8 @@ format_table <- function(x,
       format = format,
       caption = caption,
       align = align,
-      footer = footer
+      footer = footer,
+      zap_small = zap_small
     )
   } else if (is.list(x)) {
     # list of data frames
@@ -80,7 +82,8 @@ format_table <- function(x,
         format = format,
         caption = attributes(i)$table_caption,
         align = align,
-        footer = attributes(i)$table_footer
+        footer = attributes(i)$table_footer,
+        zap_small = zap_small
       )
     })
     out <- c()
@@ -115,14 +118,20 @@ export_table <- format_table
 
 
 
-.export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, align = NULL, footer = NULL) {
+
+
+
+# create matrix of raw table layout --------------------
+
+
+.export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, align = NULL, footer = NULL, zap_small = FALSE) {
   df <- x
 
   # round all numerics
   col_names <- names(df)
   df <- as.data.frame(sapply(df, function(i) {
     if (is.numeric(i)) {
-      format_value(i, digits = digits, protect_integers = protect_integers, missing = missing, width = width)
+      format_value(i, digits = digits, protect_integers = protect_integers, missing = missing, width = width, zap_small = zap_small)
     } else {
       i
     }

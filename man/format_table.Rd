@@ -16,7 +16,8 @@ format_table(
   format = NULL,
   caption = NULL,
   align = NULL,
-  footer = NULL
+  footer = NULL,
+  zap_small = FALSE
 )
 
 export_table(
@@ -30,7 +31,8 @@ export_table(
   format = NULL,
   caption = NULL,
   align = NULL,
-  footer = NULL
+  footer = NULL,
+  zap_small = FALSE
 )
 }
 \arguments{
@@ -68,6 +70,8 @@ column.}
 \item{footer}{Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a
 new text line under the table.}
+
+\item{zap_small}{Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.}
 }
 \value{
 A data frame in character format.
