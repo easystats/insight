@@ -30,7 +30,69 @@
 #' cat(export_table(iris))
 #' cat(export_table(iris, sep = " ", header = "*", digits = 1))
 #' @export
-format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, align = NULL, footer = NULL) {
+format_table <- function(x,
+                         sep = " | ",
+                         header = "-",
+                         digits = 2,
+                         protect_integers = TRUE,
+                         missing = "",
+                         width = NULL,
+                         format = NULL,
+                         caption = NULL,
+                         align = NULL,
+                         footer = NULL) {
+
+  if (is.data.frame(x)) {
+    out <- .export_table(
+      x = x,
+      sep = sep,
+      header = header,
+      digits = digits,
+      protect_integers = protect_integers,
+      missing = missing,
+      width = width,
+      format = format,
+      caption = caption,
+      align = align,
+      footer = footer
+    )
+  } else if (is.list(x)) {
+    out <- do.call(c, lapply(x, function(i) {
+      .export_table(
+        x = i,
+        sep = sep,
+        header = header,
+        digits = digits,
+        protect_integers = protect_integers,
+        missing = missing,
+        width = width,
+        format = format,
+        caption = attributes(i)$caption,
+        align = align,
+        footer = attributes(i)$footer
+      )
+    }))
+  } else {
+    return(NULL)
+  }
+
+  if (format %in% c("markdown", "md")) {
+    attr(out, "format") <- "pipe"
+    class(out) <- c("knitr_kable", "character")
+  }
+  out
+}
+
+
+#' @rdname format_table
+#' @export
+export_table <- format_table
+
+
+
+
+
+.export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, align = NULL, footer = NULL) {
   df <- x
 
   # round all numerics
@@ -69,15 +131,13 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
   }
 
   if (is.null(format)) {
-    .format_basic_table(final, header, sep)
+    out <- .format_basic_table(final, header, sep)
   } else if (format == "markdown") {
-    .format_markdown_table(final, x, caption = caption, align = align, footer = footer)
+    out <- .format_markdown_table(final, x, caption = caption, align = align, footer = footer)
   }
-}
 
-#' @rdname format_table
-#' @export
-export_table <- format_table
+  out
+}
 
 
 
@@ -180,7 +240,5 @@ export_table <- format_table
     rows <- c(rows, footer)
   }
 
-  attr(rows, "format") <- "pipe"
-  class(rows) <- c("knitr_kable", "character")
   rows
 }
