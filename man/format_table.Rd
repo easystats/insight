@@ -2,9 +2,24 @@
 % Please edit documentation in R/format_table.R
 \name{format_table}
 \alias{format_table}
+\alias{export_table}
 \title{Data frame and Tables Pretty Formatting}
 \usage{
 format_table(
+  x,
+  sep = " | ",
+  header = "-",
+  digits = 2,
+  protect_integers = TRUE,
+  missing = "",
+  width = NULL,
+  format = NULL,
+  caption = NULL,
+  align = NULL,
+  footer = NULL
+)
+
+export_table(
   x,
   sep = " | ",
   header = "-",
@@ -33,9 +48,9 @@ format_table(
 
 \item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
 
-\item{format}{Name of output-format, as string. If \code{NULL}, returned
-output is used for basic printing. Currently, only \code{"markdown"} is
-supported, or \code{NULL} (the default) for plain text.}
+\item{format}{Name of output-format, as string. If \code{NULL} (or \code{"text"}),
+returned output is used for basic printing. Currently, only \code{"markdown"} is
+supported, or \code{NULL} (the default) resp. \code{"text"} for plain text.}
 
 \item{caption}{Table caption, as string. Only applies to markdown-formatted tables.}
 
@@ -60,7 +75,11 @@ A data frame in character format.
 \description{
 Data frame and Tables Pretty Formatting
 }
+\note{
+This function is going to be renamed in a future update. Please use its
+alias \code{export_table()}.
+}
 \examples{
-cat(format_table(iris))
-cat(format_table(iris, sep = " ", header = "*", digits = 1))
+cat(export_table(iris))
+cat(export_table(iris, sep = " ", header = "*", digits = 1))
 }

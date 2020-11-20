@@ -3,9 +3,9 @@
 #' @param x A data frame.
 #' @param sep Column separator.
 #' @param header Header separator. Can be \code{NULL}.
-#' @param format Name of output-format, as string. If \code{NULL}, returned
-#'   output is used for basic printing. Currently, only \code{"markdown"} is
-#'   supported, or \code{NULL} (the default) for plain text.
+#' @param format Name of output-format, as string. If \code{NULL} (or \code{"text"}),
+#'   returned output is used for basic printing. Currently, only \code{"markdown"} is
+#'   supported, or \code{NULL} (the default) resp. \code{"text"} for plain text.
 #' @param caption Table caption, as string. Only applies to markdown-formatted tables.
 #' @param footer Table footer, as string. Only applies to markdown-formatted tables.
 #'   Note that table footers, due to the limitation in markdown rendering, are
@@ -22,10 +22,13 @@
 #'   column.
 #' @inheritParams format_value
 #'
+#' @note This function is going to be renamed in a future update. Please use its
+#' alias \code{export_table()}.
+#'
 #' @return A data frame in character format.
 #' @examples
-#' cat(format_table(iris))
-#' cat(format_table(iris, sep = " ", header = "*", digits = 1))
+#' cat(export_table(iris))
+#' cat(export_table(iris, sep = " ", header = "*", digits = 1))
 #' @export
 format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, align = NULL, footer = NULL) {
   df <- x
@@ -72,7 +75,9 @@ format_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integ
   }
 }
 
-
+#' @rdname format_table
+#' @export
+export_table <- format_table
 
 
 
