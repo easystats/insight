@@ -84,15 +84,17 @@ format_table <- function(x,
       )
     })
     out <- c()
-    sep <- switch(
-      format,
-      "markdown" = "",
-      "\n\n"
-    )
-    for (i in 1:length(tmp)) {
-      out <- c(out, tmp[[i]], sep)
+    if (format == "text") {
+      for (i in 1:length(tmp)) {
+        out <- paste0(out, tmp[[i]], "\n\n")
+      }
+      out <- substr(out, 1, nchar(out) - 1)
+    } else if (format == "markdown") {
+      for (i in 1:length(tmp)) {
+        out <- c(out, tmp[[i]], "")
+      }
+      out <- out[1:(length(out) - 1)]
     }
-    out <- out[1:(length(out) - 1)]
   } else {
     return(NULL)
   }
@@ -194,7 +196,7 @@ export_table <- format_table
     if (length(footer) == 2 && .is_valid_colour(footer[2])) {
       footer <- .colour(footer[2], footer[1])
     }
-    rows <- paste0(rows, "\n", footer[1])
+    rows <- paste0(rows, footer[1])
   }
 
   rows
