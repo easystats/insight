@@ -135,6 +135,7 @@
   width <span class='op'>=</span> <span class='cn'>NULL</span>,
   format <span class='op'>=</span> <span class='cn'>NULL</span>,
   caption <span class='op'>=</span> <span class='cn'>NULL</span>,
+  subtitle <span class='op'>=</span> <span class='cn'>NULL</span>,
   align <span class='op'>=</span> <span class='cn'>NULL</span>,
   footer <span class='op'>=</span> <span class='cn'>NULL</span>,
   zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>
@@ -150,6 +151,7 @@
   width <span class='op'>=</span> <span class='cn'>NULL</span>,
   format <span class='op'>=</span> <span class='cn'>NULL</span>,
   caption <span class='op'>=</span> <span class='cn'>NULL</span>,
+  subtitle <span class='op'>=</span> <span class='cn'>NULL</span>,
   align <span class='op'>=</span> <span class='cn'>NULL</span>,
   footer <span class='op'>=</span> <span class='cn'>NULL</span>,
   zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>
@@ -193,8 +195,9 @@ returned output is used for basic printing. Currently, only <code>"markdown"</co
 supported, or <code>NULL</code> (the default) resp. <code>"text"</code> for plain text.</p></td>
     </tr>
     <tr>
-      <th>caption</th>
-      <td><p>Table caption, as string.</p></td>
+      <th>caption, subtitle</th>
+      <td><p>Table caption and subtitle, as string. If <code>NULL</code>,
+no caption or subtitle is printed.</p></td>
     </tr>
     <tr>
       <th>align</th>
