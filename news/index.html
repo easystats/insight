@@ -128,7 +128,7 @@
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> now also detects models from <code><a href="https://rdrr.io/r/stats/oneway.test.html">oneway.test()</a></code>, <code><a href="https://rdrr.io/r/stats/binom.test.html">binom.test()</a></code> <code><a href="https://rdrr.io/r/stats/chisq.test.html">chisq.test()</a></code>, <code><a href="https://rdrr.io/r/stats/mcnemar.test.html">mcnemar.test()</a></code> and <code><a href="https://rdrr.io/r/stats/prop.test.html">prop.test()</a></code>. Furthermore, <code><a href="../reference/model_info.html">model_info()</a></code> better deals with objects from <code>BFBayesFactor</code>, and censored regression models no longer return <code>TRUE</code> for <code>$is_linear</code>.</p></li>
-<li><p><code><a href="../reference/format_table.html">format_table()</a></code> is going to be renamed in a future update. Please use its alias <code><a href="../reference/format_table.html">export_table()</a></code>.</p></li>
+<li><p><code><a href="../reference/export_table.html">format_table()</a></code> is going to be renamed in a future update. Please use its alias <code><a href="../reference/export_table.html">export_table()</a></code>.</p></li>
 </ul>
 </div>
 <div id="new-supported-model-classes" class="section level2">
@@ -142,7 +142,7 @@
 <h2 class="hasAnchor">
 <a href="#new-function" class="anchor"></a>New function</h2>
 <ul>
-<li><p><code><a href="../reference/parameters_table.html">parameters_table()</a></code>, which was moved from package <em>parameters</em> to <em>insight</em>. Note that this function is going to be renamed into <code><a href="../reference/format_table.html">format_table()</a></code> in a future update.</p></li>
+<li><p><code><a href="../reference/parameters_table.html">parameters_table()</a></code>, which was moved from package <em>parameters</em> to <em>insight</em>. Note that this function is going to be renamed into <code><a href="../reference/export_table.html">format_table()</a></code> in a future update.</p></li>
 <li><p><code><a href="../reference/find_offset.html">find_offset()</a></code>, to find the name of offset-terms.</p></li>
 <li><p>Added generics for <code><a href="../reference/display.html">display()</a></code> and <code><a href="../reference/display.html">print_md()</a></code>), to allow other packages to create tables in other formats when not printing the output to console.</p></li>
 </ul>
@@ -153,7 +153,7 @@
 <ul>
 <li><p><code><a href="../reference/standardize_names.html">standardize_names()</a></code> tries to be as loyal to the <em>broom</em>-naming conventions as possible.</p></li>
 <li><p>The function of the <code>brackets</code>-argument in <code><a href="../reference/format_ci.html">format_ci()</a></code> was changed. It is now also possible to provide a length-two character vector, to define own brackets that encompass the CI-values.</p></li>
-<li><p><code><a href="../reference/format_table.html">format_table()</a></code> gains several new arguments that allows to create tables in markdown-format.</p></li>
+<li><p><code><a href="../reference/export_table.html">format_table()</a></code> gains several new arguments that allows to create tables in markdown-format.</p></li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
@@ -707,7 +707,7 @@
 <a href="#new-functions-3" class="anchor"></a>New functions</h2>
 <ul>
 <li><p><code><a href="../reference/find_statistic.html">find_statistic()</a></code> to return the test statistic of a regression model.</p></li>
-<li><p><code><a href="../reference/format_value.html">format_value()</a></code> and <code><a href="../reference/format_table.html">format_table()</a></code> as utility-functions to format (model) output, especially for tabular output.</p></li>
+<li><p><code><a href="../reference/format_value.html">format_value()</a></code> and <code><a href="../reference/export_table.html">format_table()</a></code> as utility-functions to format (model) output, especially for tabular output.</p></li>
 <li><p><code><a href="../reference/color_if.html">color_if()</a></code> as utility-function to add color formatting to values, depending on certain conditions.</p></li>
 </ul>
 </div>
