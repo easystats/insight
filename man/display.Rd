@@ -10,9 +10,9 @@ display(object, ...)
 print_md(x, ...)
 }
 \arguments{
-\item{...}{Arguments passed to other methods.}
+\item{object, x}{A data frame.}
 
-\item{x}{A data frame.}
+\item{...}{Arguments passed to other methods.}
 }
 \value{
 A data frame.
