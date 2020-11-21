@@ -100,12 +100,12 @@ reference:
   contents:
   - clean_names
   - clean_parameters
+  - display
   - download_model
   - export_table
   - null_model
   - print_parameters
   - standardize_names
-  - to_table
 
 - title: "Example Datasets"
   desc: >
