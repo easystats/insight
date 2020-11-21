@@ -43,7 +43,11 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
   # Format parameters names ----
   if (pretty_names & !is.null(att$pretty_names)) {
-    x$Parameter <- att$pretty_names[x$Parameter]
+    if (length(pretty_names) != length(x$Parameter)) {
+      x$Parameter[stats::na.omit(match(names(att$pretty_names), x$Parameter))] <- att$pretty_names
+    } else {
+      x$Parameter <- att$pretty_names[x$Parameter]
+    }
   }
 
 
