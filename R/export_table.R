@@ -6,7 +6,8 @@
 #' @param format Name of output-format, as string. If \code{NULL} (or \code{"text"}),
 #'   returned output is used for basic printing. Currently, only \code{"markdown"} is
 #'   supported, or \code{NULL} (the default) resp. \code{"text"} for plain text.
-#' @param caption Table caption, as string.
+#' @param caption,subtitle Table caption and subtitle, as string. If \code{NULL},
+#'   no caption or subtitle is printed.
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
 #'   new text line under the table.
@@ -39,6 +40,7 @@ export_table <- function(x,
                          width = NULL,
                          format = NULL,
                          caption = NULL,
+                         subtitle = NULL,
                          align = NULL,
                          footer = NULL,
                          zap_small = FALSE) {
@@ -64,6 +66,7 @@ export_table <- function(x,
       width = width,
       format = format,
       caption = caption,
+      subtitle = subtitle,
       align = align,
       footer = footer,
       zap_small = zap_small
@@ -81,6 +84,7 @@ export_table <- function(x,
         width = width,
         format = format,
         caption = attributes(i)$table_caption,
+        subtitle = attributes(i)$table_subtitle,
         align = align,
         footer = attributes(i)$table_footer,
         zap_small = zap_small
@@ -124,7 +128,7 @@ format_table <- export_table
 # create matrix of raw table layout --------------------
 
 
-.export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, align = NULL, footer = NULL, zap_small = FALSE) {
+.export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, subtitle = NULL, align = NULL, footer = NULL, zap_small = FALSE) {
   df <- x
 
   # round all numerics
@@ -163,9 +167,9 @@ format_table <- export_table
   }
 
   if (format == "text") {
-    out <- .format_basic_table(final, header, sep, caption = caption, footer = footer)
+    out <- .format_basic_table(final, header, sep, caption = caption, subtitle = subtitle, footer = footer)
   } else if (format == "markdown") {
-    out <- .format_markdown_table(final, x, caption = caption, align = align, footer = footer)
+    out <- .format_markdown_table(final, x, caption = caption, subtitle = subtitle, footer = footer, align = align)
   }
 
   out
@@ -179,7 +183,7 @@ format_table <- export_table
 # plain text formatting ------------------------
 
 
-.format_basic_table <- function(final, header, sep, caption = NULL, footer = NULL) {
+.format_basic_table <- function(final, header, sep, caption = NULL, subtitle = NULL, footer = NULL) {
   # Transform to character
   rows <- c()
   for (row in 1:nrow(final)) {
@@ -198,7 +202,14 @@ format_table <- export_table
     if (length(caption) == 2 && .is_valid_colour(caption[2])) {
       caption <- .colour(caption[2], caption[1])
     }
-    rows <- paste0(caption[1], "\n\n", rows)
+    if (!is.null(subtitle)) {
+      if (length(subtitle) == 2 && .is_valid_colour(subtitle[2])) {
+        subtitle <- .colour(subtitle[2], subtitle[1])
+      }
+    } else {
+      subtitle <- ""
+    }
+    rows <- paste0(caption[1], " ", subtitle[1], "\n\n", rows)
   }
 
   if (!is.null(footer)) {
@@ -219,7 +230,7 @@ format_table <- export_table
 # markdown formatting -------------------
 
 
-.format_markdown_table <- function(final, x, caption = NULL, align = NULL, footer = NULL) {
+.format_markdown_table <- function(final, x, caption = NULL, subtitle = NULL, footer = NULL, align = NULL) {
   column_width <- nchar(final[1, ])
   n_columns <- ncol(final)
   first_row_leftalign <- (!is.null(align) && align == "firstleft")
@@ -290,6 +301,9 @@ format_table <- export_table
   }
 
   if (!is.null(caption)) {
+    if (!is.null(subtitle)) {
+      caption[1] <- paste0(caption[1], " ", subtitle[1])
+    }
     rows <- c(paste0("Table: ", caption[1]), "", rows)
   }
 

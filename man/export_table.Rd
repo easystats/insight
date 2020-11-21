@@ -15,6 +15,7 @@ export_table(
   width = NULL,
   format = NULL,
   caption = NULL,
+  subtitle = NULL,
   align = NULL,
   footer = NULL,
   zap_small = FALSE
@@ -30,6 +31,7 @@ format_table(
   width = NULL,
   format = NULL,
   caption = NULL,
+  subtitle = NULL,
   align = NULL,
   footer = NULL,
   zap_small = FALSE
@@ -54,7 +56,8 @@ format_table(
 returned output is used for basic printing. Currently, only \code{"markdown"} is
 supported, or \code{NULL} (the default) resp. \code{"text"} for plain text.}
 
-\item{caption}{Table caption, as string.}
+\item{caption, subtitle}{Table caption and subtitle, as string. If \code{NULL},
+no caption or subtitle is printed.}
 
 \item{align}{Column alignment. Only applies to markdown-formatted tables.
 By default \code{align = NULL}, numeric columns are right-aligned,
