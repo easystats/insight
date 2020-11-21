@@ -30,7 +30,7 @@
 #' cat(export_table(iris))
 #' cat(export_table(iris, sep = " ", header = "*", digits = 1))
 #' @export
-format_table <- function(x,
+export_table <- function(x,
                          sep = " | ",
                          header = "-",
                          digits = 2,
@@ -70,7 +70,7 @@ format_table <- function(x,
     )
   } else if (is.list(x)) {
     # list of data frames
-    tmp <- lapply(x, function(i) {
+    tmp <- lapply(.compact_list(x), function(i) {
       .export_table(
         x = i,
         sep = sep,
@@ -89,7 +89,7 @@ format_table <- function(x,
     out <- c()
     if (format == "text") {
       for (i in 1:length(tmp)) {
-        out <- paste0(out, tmp[[i]], "\n\n")
+        out <- paste0(out, tmp[[i]], "\n")
       }
       out <- substr(out, 1, nchar(out) - 1)
     } else if (format == "markdown") {
@@ -110,9 +110,9 @@ format_table <- function(x,
 }
 
 
-#' @rdname format_table
+#' @rdname export_table
 #' @export
-export_table <- format_table
+format_table <- export_table
 
 
 
