@@ -7,7 +7,9 @@
 print_parameters(
   x,
   ...,
-  split_by = c("Effects", "Component", "Group", "Response")
+  split_by = c("Effects", "Component", "Group", "Response"),
+  format = "text",
+  keep_parameter_column = TRUE
 )
 }
 \arguments{
@@ -24,6 +26,17 @@ by \code{\link{clean_parameters}}, which is used to extract the information
 from which the group or component model parameters belong. If \code{NULL}, the
 merged data frame is returned. Else, the data frame is split into a list,
 split by the values from those columns defined in \code{split_by}.}
+
+\item{format}{Name of output-format, as string. If \code{NULL} (or \code{"text"}),
+assumed use for output is basic printing. If \code{"markdown"}, markdown-format
+is assumed. This only affects the style of title- and table-caption attributes,
+which are used in \code{\link{export_table}}.}
+
+\item{keep_parameter_column}{Logical, if \code{TRUE}, the data frames in the
+returned list have both a \code{"Cleaned_Parameter"} and \code{"Parameter"}
+column. If \code{FALSE}, the (unformatted) \code{"Parameter"} is removed,
+and the column with cleaned parameter names (\code{"Cleaned_Parameter"}) is
+renamed into \code{"Parameter"}.}
 }
 \value{
 A data frame or a list of data frames (if \code{split_by} is not \code{NULL}).
