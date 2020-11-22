@@ -100,19 +100,12 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
   }
   cn1 <- colnames(cp)
 
-  obj <- lapply(obj, function(i) {
-    # make sure we have a Parameter column
-    if (!"Parameter" %in% colnames(i)) colnames(i)[1] <- "Parameter"
-    # remove all other common columns that might produce duplicates
-    cn2 <- colnames(i)
-    dupes <- stats::na.omit(match(cn1, cn2)[-1])
-    if (length(dupes) > 0) i <- i[, -dupes, drop = FALSE]
-    i
-  })
-
   # merge all objects together
   obj <- Reduce(
-    function(x, y) merge(x, y, all.x = FALSE, by = "Parameter", sort = FALSE),
+    function(x, y) {
+      merge_by <- unique(c("Parameter", intersect(colnames(y), intersect(c("Effects", "Component", "Group", "Response"), colnames(x)))))
+      merge(x, y, all.x = FALSE, by = merge_by, sort = FALSE)
+    },
     c(list(cp), obj)
   )
 
@@ -164,6 +157,7 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
           parts[j],
           "fixed" = "Fixed effects",
           "random" = "Random effects",
+          "dispersion" = "Dispersion",
           "conditional" = "(conditional)",
           "zero_inflated" = "(zero-inflated)"
         )
