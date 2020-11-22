@@ -13,6 +13,7 @@
 #' @param ci_brackets Logical, if \code{TRUE} (default), CI-values are encompassed in square brackets (else in parantheses).
 #' @param ci_digits Number of decimal places for confidence intervals.
 #' @param p_digits Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.
+#' @param preserve_attributes Logical, if \code{TRUE}, preserves all attributes from the input data frame.
 #' @inheritParams format_p
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -30,7 +31,7 @@
 #' }}
 #' @return A data frame.
 #' @export
-parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, ...) {
+parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, preserve_attributes = FALSE, ...) {
 
   # check if user supplied digits attributes
   if (missing(digits)) digits <- .additional_arguments(x, "digits", 2)
@@ -127,6 +128,11 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
     col_position <- which(names(x) == "To")
     x <- x[c(names(x)[0:(col_position - 1)], "Link", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
     x$To <- x$Operator <- x$From <- NULL
+  }
+
+  # restore attributes
+  if (isTRUE(preserve_attributes)) {
+    attributes(x) <- utils::modifyList(att, attributes(x))
   }
 
   x

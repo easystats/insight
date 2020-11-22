@@ -13,6 +13,7 @@ parameters_table(
   ci_brackets = TRUE,
   ci_digits = 2,
   p_digits = 3,
+  preserve_attributes = FALSE,
   ...
 )
 }
@@ -32,6 +33,8 @@ parameters_table(
 \item{ci_digits}{Number of decimal places for confidence intervals.}
 
 \item{p_digits}{Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.}
+
+\item{preserve_attributes}{Logical, if \code{TRUE}, preserves all attributes from the input data frame.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
