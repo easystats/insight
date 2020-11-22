@@ -6,7 +6,7 @@
 #' usually is a convenient wrapper for \code{display(format = "markdown")}. See
 #' the documentation for the specific objects' classes.
 #'
-#' @param x A data frame.
+#' @param object,x A data frame.
 #' @param ... Arguments passed to other methods.
 #'
 #' @return A data frame.
