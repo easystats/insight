@@ -140,7 +140,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 # sub-routines ---------------
 
 
-.format_p_values <- function(x) {
+.format_p_values <- function(x, stars, p_digits) {
   if ("p" %in% names(x)) {
     x$p <- format_p(x$p, stars = stars, name = NULL, missing = "", digits = p_digits)
     x$p <- format(x$p, justify = "left")
