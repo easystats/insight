@@ -96,7 +96,9 @@ panelr
 plm
 poisson
 pre
+pscl
 quantreg
+rms
 robmixglm
 rstanarm
 sjPlot
@@ -107,6 +109,7 @@ stanfit
 stanreg
 tranformations
 tweedie
+unformatted
 untransformed
 variates
 vgam
