@@ -67,7 +67,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
 
   # P values ----
-  x <- .format_p_values(x)
+  x <- .format_p_values(x, stars = stars, p_digits = p_digits)
 
 
   # Main CI ----
