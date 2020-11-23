@@ -44,8 +44,8 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
   # Format parameters names ----
   if (pretty_names & !is.null(att$pretty_names)) {
-    if (length(pretty_names) != length(x$Parameter)) {
-      match_pretty_names <- stats::na.omit(match(names(att$pretty_names), x$Parameter))
+    if (length(att$pretty_names) != length(x$Parameter)) {
+      match_pretty_names <- stats::na.omit(match(x$Parameter, names(att$pretty_names)))
       x$Parameter[x$Parameter == names(att$pretty_names[match_pretty_names])] <- att$pretty_names[match_pretty_names]
     } else {
       x$Parameter <- att$pretty_names[x$Parameter]

@@ -209,7 +209,8 @@ format_table <- export_table
     } else {
       subtitle <- ""
     }
-    rows <- paste0(caption[1], " ", subtitle[1], "\n\n", rows)
+    title_line <- .trim(paste0(caption[1], " ", subtitle[1]))
+    rows <- paste0(title_line, "\n\n", rows)
   }
 
   if (!is.null(footer)) {
@@ -304,7 +305,7 @@ format_table <- export_table
     if (!is.null(subtitle)) {
       caption[1] <- paste0(caption[1], " ", subtitle[1])
     }
-    rows <- c(paste0("Table: ", caption[1]), "", rows)
+    rows <- c(paste0("Table: ", .trim(caption[1])), "", rows)
   }
 
   if (!is.null(footer)) {
