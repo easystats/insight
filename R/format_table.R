@@ -67,14 +67,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
 
   # P values ----
-  if ("p" %in% names(x)) {
-    x$p <- format_p(x$p, stars = stars, name = NULL, missing = "", digits = p_digits)
-    x$p <- format(x$p, justify = "left")
-  }
-  if ("p.value" %in% names(x)) {
-    x$p.value <- format_p(x$p.value, stars = stars, name = NULL, missing = "", digits = p_digits)
-    x$p.value <- format(x$p.value, justify = "left")
-  }
+  x <- .format_p_values(x)
 
 
   # Main CI ----
@@ -147,6 +140,28 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 # sub-routines ---------------
 
 
+.format_p_values <- function(x) {
+  if ("p" %in% names(x)) {
+    x$p <- format_p(x$p, stars = stars, name = NULL, missing = "", digits = p_digits)
+    x$p <- format(x$p, justify = "left")
+  }
+  if ("p.value" %in% names(x)) {
+    x$p.value <- format_p(x$p.value, stars = stars, name = NULL, missing = "", digits = p_digits)
+    x$p.value <- format(x$p.value, justify = "left")
+  }
+
+  for (stats in c("p_CochransQ", "p_Omnibus", "Chi2_p", "Baseline_p", "RMSEA_p")) {
+    if (stats %in% names(x)) {
+      x[[stats]] <- format_p(x[[stats]], stars = stars, name = NULL, missing = "", digits = p_digits)
+      x[[stats]] <- format(x[[stats]], justify = "left")
+      p_name <- gsub("(.*)_p$", "\\1", gsub("^p_(.*)", "\\1", stats))
+      names(x)[names(x) == stats] <- paste0("p (", p_name, ")")
+    }
+  }
+  x
+}
+
+
 .format_df_columns <- function(x) {
   # generic df
   if ("df" %in% names(x)) x$df <- format_value(x$df, protect_integers = TRUE)
@@ -172,6 +187,17 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
       if (length(df) == 1 && !all(is.infinite(df))) {
         names(x)[names(x) == stats] <- paste0(stats, "(", df, ")")
         x$df <- NULL
+      }
+    }
+  }
+
+  for (stats in c("Baseline", "Chi2")) {
+    df_col <- paste0(stats, "_df")
+    if (stats %in% names(x) && df_col %in% names(x)) {
+      df <- stats::na.omit(unique(x[[df_col]]))
+      if (length(df) == 1 && !all(is.infinite(df))) {
+        names(x)[names(x) == stats] <- paste0(stats, "(", df, ")")
+        x[[df_col]] <- NULL
       }
     }
   }
