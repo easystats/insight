@@ -40,4 +40,22 @@ if (require("testthat") && require("insight")) {
       c("95% CI [123,    123]", "95% CI [123,  12345]", "95% CI [123,  1e+05]", "95% CI [123,  1e+11]")
     )
   })
+
+  test_that("format others", {
+    testthat::expect_true(is.character(insight::format_pd(0.02)))
+    testthat::expect_equal(nchar(format_bf(4)), 9)
+    testthat::expect_true(is.character(format_rope(0.02)))
+  })
+
+  test_that("format_number", {
+    testthat::expect_equal(format_number(2), "two")
+    testthat::expect_equal(format_number(45), "forty five")
+    testthat::expect_equal(format_number(2), "two")
+  })
+
+  test_that("format_p", {
+    testthat::expect_equal(nchar(format_p(0.02)), 9)
+    testthat::expect_equal(nchar(format_p(0.02, stars = TRUE)), 10)
+    testthat::expect_equal(nchar(format_p(0.02, stars_only = TRUE)), 1)
+  })
 }
