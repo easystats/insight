@@ -10,7 +10,7 @@
 #' @param pretty_names Return "pretty" (i.e. more human readable) parameter names.
 #' @param digits Number of decimal places for numeric values (except confidence intervals and p-values).
 #' @param ci_width Minimum width of the returned string for confidence intervals. If not \code{NULL} and width is larger than the string's length, leading whitespaces are added to the string. If \code{width="auto"}, width will be set to the length of the longest string.
-#' @param ci_brackets Logical, if \code{TRUE} (default), CI-values are encompassed in square brackets (else in parantheses).
+#' @param ci_brackets Logical, if \code{TRUE} (default), CI-values are encompassed in square brackets (else in parentheses).
 #' @param ci_digits Number of decimal places for confidence intervals.
 #' @param p_digits Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.
 #' @param preserve_attributes Logical, if \code{TRUE}, preserves all attributes from the input data frame.

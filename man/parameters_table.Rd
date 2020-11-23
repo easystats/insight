@@ -28,7 +28,7 @@ parameters_table(
 
 \item{ci_width}{Minimum width of the returned string for confidence intervals. If not \code{NULL} and width is larger than the string's length, leading whitespaces are added to the string. If \code{width="auto"}, width will be set to the length of the longest string.}
 
-\item{ci_brackets}{Logical, if \code{TRUE} (default), CI-values are encompassed in square brackets (else in parantheses).}
+\item{ci_brackets}{Logical, if \code{TRUE} (default), CI-values are encompassed in square brackets (else in parentheses).}
 
 \item{ci_digits}{Number of decimal places for confidence intervals.}
 
