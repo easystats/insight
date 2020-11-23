@@ -286,7 +286,7 @@ get_priors.BFBayesFactor <- function(x, ...) {
   bf_type <- .classify_BFBayesFactor(x)
 
   prior_names <- switch(
-    .classify_BFBayesFactor(x),
+    bf_type,
     "correlation" = "rho",
     "ttest1" = ,
     "ttest2" = "Difference",
@@ -308,9 +308,15 @@ get_priors.BFBayesFactor <- function(x, ...) {
     }))
   }
 
+  if (bf_type == "xtable") {
+    Distribution <- x@denominator@type[[1]]
+  } else {
+    Distribution <- "cauchy"
+  }
+
   data.frame(
     Parameter = prior_names,
-    Distribution = "cauchy",
+    Distribution = Distribution,
     Location = 0,
     Scale = prior_scale,
     stringsAsFactors = FALSE,

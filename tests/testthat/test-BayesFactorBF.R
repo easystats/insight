@@ -98,7 +98,10 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     })
 
     test_that("find_formula", {
-      expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose + supp:dose")), ignore_attr = TRUE)
+      expect_equal(find_formula(x),
+        list(conditional = as.formula("len ~ supp + dose + supp:dose")),
+        ignore_attr = TRUE
+      )
     })
 
     test_that("get_parameters", {
@@ -268,7 +271,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   )
 
   data(raceDolls)
-  xtab_BF1 <- contingencyTableBF(raceDolls, sampleType = "indepMulti", fixedMargin = "cols")
+  xtab_BF1 <- contingencyTableBF(raceDolls, sampleType = "indepMulti", fixedMargin = "cols", priorConcentration = 2)
 
   ttest_BF1 <- ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2], progress = FALSE)
   ttest_BFk <- ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2],
@@ -299,5 +302,51 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_message(get_parameters(ttest_BF1), regexp = NA)
     expect_message(get_parameters(prop_BF1), regexp = NA)
     expect_message(get_parameters(lm_BF1), regexp = NA)
+  })
+
+  test_that("get_priors for xtable", {
+    expect_equal(
+      get_priors(xtab_BF1),
+      structure(list(
+        Parameter = "Ratio",
+        Distribution = "independent multinomial",
+        Location = 0,
+        Scale = 2
+      ),
+      class = "data.frame",
+      row.names = c(NA, -1L)
+      ),
+      tolerance = 1e-5
+    )
+  })
+
+  test_that("get_priors for correlation", {
+    expect_equal(
+      get_priors(corr_BF1),
+      structure(list(
+        Parameter = "rho", Distribution = "cauchy", Location = 0,
+        Scale = 0.333333333333333
+      ), class = "data.frame", row.names = c(
+        NA,
+        -1L
+      )),
+      tolerance = 1e-5
+    )
+  })
+
+  test_that("get_priors for t-test", {
+    expect_equal(
+      get_priors(ttest_BF1),
+      structure(list(
+        Parameter = "Difference",
+        Distribution = "cauchy",
+        Location = 0,
+        Scale = 0.707106781186548
+      ),
+      class = "data.frame",
+      row.names = c(NA, -1L)
+      ),
+      tolerance = 1e-5
+    )
   })
 }
