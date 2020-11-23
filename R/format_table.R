@@ -104,6 +104,11 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
   # Bayesian ---
   x <- .format_bayes_columns(x, stars)
 
+
+  # rename performance columns
+  x <- .format_performance_columns(x)
+
+
   # ROPE %
   if ("ROPE_Percentage" %in% names(x)) {
     x$ROPE_Percentage <- format_value(x$ROPE_Percentage, digits = digits, as_percent = TRUE)
@@ -364,6 +369,18 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
 
 
+  x
+}
+
+
+
+.format_performance_columns <- function(x) {
+  if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R2 (adj.)"
+  if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R2 (cond.)"
+  if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R2 (marg.)"
+  if ("R2_Tjur" %in% names(x)) names(x)[names(x) == "R2_Tjur"] <- "Tjur's R2"
+  if ("R2_Nagelkerke" %in% names(x)) names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R2"
+  if ("Performance_Score" %in% names(x)) names(x)[names(x) == "Performance_Score"] <- "Performance-Score"
   x
 }
 
