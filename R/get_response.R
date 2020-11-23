@@ -28,6 +28,10 @@
 get_response <- function(x, select = NULL) {
   rn <- find_response(x, combine = FALSE)
 
+  if (is.null(rn)) {
+    return(NULL)
+  }
+
   # exceptions
   if (inherits(x, "DirichletRegModel")) {
     rv <- x$Y

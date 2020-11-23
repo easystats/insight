@@ -41,6 +41,10 @@
   rn <- find_response(x, combine = TRUE)
   rn_not_combined <- find_response(x, combine = FALSE)
 
+  # make sure rn is not NULL, but empty string
+  if (is.null(rn)) rn <- ""
+  if (is.null(rn_not_combined)) rn_not_combined <- ""
+
   trials.data <- NULL
 
   if (mc[1] && rn == colnames(mf)[1]) {
