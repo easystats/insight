@@ -155,7 +155,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
     x$p.value <- format(x$p.value, justify = "left")
   }
 
-  for (stats in c("p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline_p", "p_RMSEA")) {
+  for (stats in c("p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA")) {
     if (stats %in% names(x)) {
       x[[stats]] <- format_p(x[[stats]], stars = stars, name = NULL, missing = "", digits = p_digits)
       x[[stats]] <- format(x[[stats]], justify = "left")
