@@ -1,4 +1,4 @@
-# insight 0.10.1
+# insight 0.11.0
 
 ## Breaking changes
 
@@ -24,7 +24,7 @@
 
 * `find_offset()`, to find the name of offset-terms.
 
-* Added generics for `display()` and `print_md()`), to allow other packages 
+* Added generics for `display()` and `print_md()`, to allow other packages 
   to create tables in other formats when not printing the output to console.
 
 ## Changes to functions
@@ -36,8 +36,17 @@
   now also possible to provide a length-two character vector, to define own
   brackets that encompass the CI-values.
 
-* `format_table()` gains several new arguments that allows to create tables
+* Related to the change in `format_ci()`, the function of the `brackets`-argument
+  in `parameters_table()` was changed accordingly. Furthermore, `parameters_table()` 
+  gains a `preserve_attributes`-argument, to preserve any attributes from the
+  input data frame.
+
+* `export_table()` gains several new arguments that allows to create tables
   in markdown-format.
+
+* `print_parameters()` gains a `keep_parameter_column`-argument, to keep
+  (default) both the `"Cleaned_Parameter"` and `"Parameter"` columns, or - if
+  `FALSE` - use `"Cleaned_Parameter"` as new `"Parameter"` column.
 
 ## Bug fixes
 
