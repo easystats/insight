@@ -119,9 +119,9 @@
       <small>Source: <a href='https://github.com/easystats/insight/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="insight-0101" class="section level1">
-<h1 class="page-header" data-toc-text="0.10.1">
-<a href="#insight-0101" class="anchor"></a>insight 0.10.1<small> Unreleased </small>
+    <div id="insight-0110" class="section level1">
+<h1 class="page-header" data-toc-text="0.11.0">
+<a href="#insight-0110" class="anchor"></a>insight 0.11.0<small> Unreleased </small>
 </h1>
 <div id="breaking-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -144,7 +144,7 @@
 <ul>
 <li><p><code><a href="../reference/parameters_table.html">parameters_table()</a></code>, which was moved from package <em>parameters</em> to <em>insight</em>. Note that this function is going to be renamed into <code><a href="../reference/export_table.html">format_table()</a></code> in a future update.</p></li>
 <li><p><code><a href="../reference/find_offset.html">find_offset()</a></code>, to find the name of offset-terms.</p></li>
-<li><p>Added generics for <code><a href="../reference/display.html">display()</a></code> and <code><a href="../reference/display.html">print_md()</a></code>), to allow other packages to create tables in other formats when not printing the output to console.</p></li>
+<li><p>Added generics for <code><a href="../reference/display.html">display()</a></code> and <code><a href="../reference/display.html">print_md()</a></code>, to allow other packages to create tables in other formats when not printing the output to console.</p></li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
@@ -153,7 +153,9 @@
 <ul>
 <li><p><code><a href="../reference/standardize_names.html">standardize_names()</a></code> tries to be as loyal to the <em>broom</em>-naming conventions as possible.</p></li>
 <li><p>The function of the <code>brackets</code>-argument in <code><a href="../reference/format_ci.html">format_ci()</a></code> was changed. It is now also possible to provide a length-two character vector, to define own brackets that encompass the CI-values.</p></li>
-<li><p><code><a href="../reference/export_table.html">format_table()</a></code> gains several new arguments that allows to create tables in markdown-format.</p></li>
+<li><p>Related to the change in <code><a href="../reference/format_ci.html">format_ci()</a></code>, the function of the <code>brackets</code>-argument in <code><a href="../reference/parameters_table.html">parameters_table()</a></code> was changed accordingly. Furthermore, <code><a href="../reference/parameters_table.html">parameters_table()</a></code> gains a <code>preserve_attributes</code>-argument, to preserve any attributes from the input data frame.</p></li>
+<li><p><code><a href="../reference/export_table.html">export_table()</a></code> gains several new arguments that allows to create tables in markdown-format.</p></li>
+<li><p><code><a href="../reference/print_parameters.html">print_parameters()</a></code> gains a <code>keep_parameter_column</code>-argument, to keep (default) both the <code>"Cleaned_Parameter"</code> and <code>"Parameter"</code> columns, or - if <code>FALSE</code> - use <code>"Cleaned_Parameter"</code> as new <code>"Parameter"</code> column.</p></li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
