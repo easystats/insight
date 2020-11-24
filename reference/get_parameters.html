@@ -199,11 +199,18 @@
   <span class='va'>x</span>,
   component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"correlation"</span>, <span class='st'>"conditional"</span>, <span class='st'>"intercept"</span>, <span class='st'>"all"</span><span class='op'>)</span>,
   summary <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  centrality <span class='op'>=</span> <span class='st'>"mean"</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
 <span class='co'># S3 method for MCMCglmm</span>
-<span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>x</span>, effects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span><span class='op'>)</span>, summary <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>get_parameters</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  effects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span><span class='op'>)</span>,
+  summary <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  centrality <span class='op'>=</span> <span class='st'>"mean"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for BFBayesFactor</span>
 <span class='fu'>get_parameters</span><span class='op'>(</span>
@@ -222,6 +229,7 @@
   effects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span><span class='op'>)</span>,
   parameters <span class='op'>=</span> <span class='cn'>NULL</span>,
   summary <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  centrality <span class='op'>=</span> <span class='st'>"mean"</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -233,6 +241,7 @@
     <span class='st'>"sigma"</span>, <span class='st'>"smooth_terms"</span><span class='op'>)</span>,
   parameters <span class='op'>=</span> <span class='cn'>NULL</span>,
   summary <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  centrality <span class='op'>=</span> <span class='st'>"mean"</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -242,6 +251,7 @@
   effects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span><span class='op'>)</span>,
   parameters <span class='op'>=</span> <span class='cn'>NULL</span>,
   summary <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  centrality <span class='op'>=</span> <span class='st'>"mean"</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -251,6 +261,7 @@
   effects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fixed"</span>, <span class='st'>"random"</span>, <span class='st'>"all"</span><span class='op'>)</span>,
   parameters <span class='op'>=</span> <span class='cn'>NULL</span>,
   summary <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  centrality <span class='op'>=</span> <span class='st'>"mean"</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -294,6 +305,14 @@ as values.</p></td>
       <th>effects</th>
       <td><p>Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
+    </tr>
+    <tr>
+      <th>centrality</th>
+      <td><p>Only for models with posterior samples, and when
+<code>summary = TRUE</code>. In this case, <code>centrality = "mean"</code> would
+calculate means of posterior samples for each parameter, while
+<code>centrality = "median"</code> would use the more robust median value as
+measure of central tendency.</p></td>
     </tr>
     <tr>
       <th>iterations</th>
