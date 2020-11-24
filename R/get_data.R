@@ -1049,6 +1049,12 @@ get_data.BGGM <- function(x, ...) {
 
 
 #' @export
+get_data.mcmc.list <- function(x, ...) {
+  NULL
+}
+
+
+#' @export
 get_data.DirichletRegModel <- function(x, ...) {
   mf <- x$data
   resp <- sapply(x$data, inherits, "DirichletRegData")

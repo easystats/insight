@@ -82,10 +82,17 @@ get_parameters(x, ...)
   x,
   component = c("correlation", "conditional", "intercept", "all"),
   summary = FALSE,
+  centrality = "mean",
   ...
 )
 
-\method{get_parameters}{MCMCglmm}(x, effects = c("fixed", "random", "all"), summary = FALSE, ...)
+\method{get_parameters}{MCMCglmm}(
+  x,
+  effects = c("fixed", "random", "all"),
+  summary = FALSE,
+  centrality = "mean",
+  ...
+)
 
 \method{get_parameters}{BFBayesFactor}(
   x,
@@ -102,6 +109,7 @@ get_parameters(x, ...)
   effects = c("fixed", "random", "all"),
   parameters = NULL,
   summary = FALSE,
+  centrality = "mean",
   ...
 )
 
@@ -112,6 +120,7 @@ get_parameters(x, ...)
     "sigma", "smooth_terms"),
   parameters = NULL,
   summary = FALSE,
+  centrality = "mean",
   ...
 )
 
@@ -120,6 +129,7 @@ get_parameters(x, ...)
   effects = c("fixed", "random", "all"),
   parameters = NULL,
   summary = FALSE,
+  centrality = "mean",
   ...
 )
 
@@ -128,6 +138,7 @@ get_parameters(x, ...)
   effects = c("fixed", "random", "all"),
   parameters = NULL,
   summary = FALSE,
+  centrality = "mean",
   ...
 )
 }
@@ -157,6 +168,12 @@ as values.}
 
 \item{effects}{Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
+
+\item{centrality}{Only for models with posterior samples, and when
+\code{summary = TRUE}. In this case, \code{centrality = "mean"} would
+calculate means of posterior samples for each parameter, while
+\code{centrality = "median"} would use the more robust median value as
+measure of central tendency.}
 
 \item{iterations}{Number of posterior draws.}
 

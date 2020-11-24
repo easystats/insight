@@ -13,7 +13,8 @@
 ## New supported model classes
 
 * Support for `scam` (*scam*), `meta_random` and `meta_fixed` (*metaBMA*), `Glm`
-  (*rms*), `ridgelm` (*MASS*), `mediate` (*mediation*).
+  (*rms*), `ridgelm` (*MASS*), `mediate` (*mediation*). Partial support for
+  `mcmc.list` (e.g. *bayesGARCH*)
 
 ## New function
 

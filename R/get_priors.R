@@ -364,6 +364,12 @@ get_priors.blavaan <- function(x, ...) {
 
 
 
+#' @export
+get_priors.mcmc.list <- function(x, ...) {
+  NULL
+}
+
+
 #' @importFrom stats na.omit
 .is_numeric_character <- function(x) {
   (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x))))) ||

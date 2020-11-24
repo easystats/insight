@@ -148,6 +148,7 @@ supported_models <- function() {
     "mle2",
     "mlm",
     "mclogit",
+    "mcmc.list",
     "meta_bma",
     "meta_fixed",
     "meta_random",

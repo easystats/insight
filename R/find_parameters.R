@@ -928,6 +928,17 @@ find_parameters.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), f
 }
 
 
+#' @export
+find_parameters.mcmc.list <- function(x, flatten = FALSE, ...) {
+  l <- list(conditional = colnames(x[[1]]))
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
 
 #' @rdname find_parameters
 #' @export

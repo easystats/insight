@@ -1088,6 +1088,13 @@ find_formula.BGGM <- function(x, ...) {
 
 
 #' @export
+find_formula.mcmc.list <- function(x, ...) {
+  NULL
+}
+
+
+
+#' @export
 find_formula.stanreg <- function(x, ...) {
   if (inherits(x, "nlmerMod")) {
     find_formula.nlmerMod(x, ...)
