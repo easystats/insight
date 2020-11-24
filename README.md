@@ -255,6 +255,8 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
+Currently, 156 model classes are supported.
+
 ``` r
 supported_models()
 #>   [1] "aareg"             "afex_aov"          "aov"              

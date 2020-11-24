@@ -178,6 +178,8 @@ In case you want to file an issue or contribute in another way to the package, p
 
 ## List of Supported Models by Class
 
+Currently, `r length(supported_models())` model classes are supported.
+
 ```{r, warning=FALSE, message=FALSE, eval=TRUE}
 supported_models()
 ```
