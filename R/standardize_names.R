@@ -10,7 +10,7 @@
 #'   \code{\link[effectsize:effectsize]{effectsize()}} are accepted, but also
 #'   data frames returned by \code{broom::tidy()} are valid objects.
 #' @param style Standardization can either be based on the naming conventions
-#'   from the \href{https://easystats.github.io/easystats}{easystats-project},
+#'   from the \href{https://easystats.github.io/easystats/}{easystats-project},
 #'   or on \pkg{broom}'s naming scheme.
 #' @param ignore_estimate Logical, if \code{TRUE}, column names like
 #'   \code{"mean"} or \code{"median"} will \emph{not} be converted to

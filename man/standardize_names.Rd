@@ -24,7 +24,7 @@ data frames returned by \code{broom::tidy()} are valid objects.}
 \item{...}{Currently not used.}
 
 \item{style}{Standardization can either be based on the naming conventions
-from the \href{https://easystats.github.io/easystats}{easystats-project},
+from the \href{https://easystats.github.io/easystats/}{easystats-project},
 or on \pkg{broom}'s naming scheme.}
 
 \item{ignore_estimate}{Logical, if \code{TRUE}, column names like
