@@ -1,10 +1,10 @@
 if (require("testthat") &&
   require("insight") &&
   require("ivreg")) {
-
   data("CigaretteDemand")
   m1 <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
-                     data = CigaretteDemand)
+    data = CigaretteDemand
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)

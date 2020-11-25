@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("cgam")) {
-
   data(cubic, package = "cgam")
   m <- cgam(y ~ incr.conv(x), data = cubic)
 

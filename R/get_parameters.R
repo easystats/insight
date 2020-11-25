@@ -347,10 +347,12 @@ get_parameters.mediate <- function(x, ...) {
     )
   } else {
     out <- data.frame(
-      Parameter = c("ACME (control)", "ACME (treated)", "ADE (control)",
-                    "ADE (treated)", "Total Effect", "Prop. Mediated (control)",
-                    "Prop. Mediated (treated)", "ACME (average)", "ADE (average)",
-                    "Prop. Mediated (average)"),
+      Parameter = c(
+        "ACME (control)", "ACME (treated)", "ADE (control)",
+        "ADE (treated)", "Total Effect", "Prop. Mediated (control)",
+        "Prop. Mediated (treated)", "ACME (average)", "ADE (average)",
+        "Prop. Mediated (average)"
+      ),
       Estimate = c(x$d0, x$d1, x$z0, x$z1, x$tau.coef, x$n0, x$n1, x$d.avg, x$z.avg, x$n.avg),
       stringsAsFactors = FALSE
     )

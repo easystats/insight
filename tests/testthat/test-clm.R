@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("ordinal")) {
-
   data(wine, package = "ordinal")
   m1 <- clm(rating ~ temp * contact, data = wine)
 

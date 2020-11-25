@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("AER")) {
-
   data(CigarettesSW)
   CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
   CigarettesSW$rincome <-
