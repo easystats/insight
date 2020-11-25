@@ -16,7 +16,7 @@
 #' @param tolerance Tolerance for singularity check of random effects, to decide
 #'   whether to compute random effect variances or not. Indicates up to which
 #'   value the convergence result is accepted. The larger tolerance is, the
-#'   stricter the test will be. See \code{\link[performance:is_singular]{is_singular()}}.
+#'   stricter the test will be. See \code{\link[performance:check_singularity]{check_singularity()}}.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:
