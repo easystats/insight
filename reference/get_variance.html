@@ -143,7 +143,7 @@
 
 <span class='fu'>get_variance_fixed</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>get_variance_random</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>get_variance_random</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, tolerance <span class='op'>=</span> <span class='fl'>1e-05</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>get_variance_distribution</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -177,6 +177,13 @@ take a few seconds to calculate.</p></td>
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>tolerance</th>
+      <td><p>Tolerance for singularity check of random effect, to decide
+whether to compute random effect variances or not. Indicates up to which
+value the convergence result is accepted. The larger tolerance is, the
+stricter the test will be. See <code>is_singular()</code>.</p></td>
     </tr>
     </table>
 
