@@ -563,8 +563,7 @@
 
 * Better support for nonlinear mixed models (`lme4::nlmer()`). Note that
   model-specification requires the random term to be written in parentheses,
-
-i.e. `(slope | group)`.
+  i.e. `(slope | group)`.
 
 ## Bug fixes
 
