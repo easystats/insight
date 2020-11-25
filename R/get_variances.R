@@ -13,7 +13,7 @@
 #'   variance are the most computational intensive components, and hence may
 #'   take a few seconds to calculate.
 #' @param verbose Toggle off warnings.
-#' @param tolerance Tolerance for singularity check of random effect, to decide
+#' @param tolerance Tolerance for singularity check of random effects, to decide
 #'   whether to compute random effect variances or not. Indicates up to which
 #'   value the convergence result is accepted. The larger tolerance is, the
 #'   stricter the test will be. See \code{\link[performance:is_singular]{is_singular()}}.
