@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("crch")) {
-
   data("RainIbk")
   RainIbk$sqrtensmean <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
   RainIbk$sqrtenssd <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, sd)
