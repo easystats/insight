@@ -1,3 +1,11 @@
+# insight 0.11.1
+
+## Changes to functions
+
+* `get_variance()` and `get_variance_random()` gain a `tolerance`-argument, to
+  set the tolerance level for singularity checks when computing random effect
+  variances.
+
 # insight 0.11.0
 
 ## Breaking changes

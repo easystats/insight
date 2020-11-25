@@ -24,7 +24,7 @@ get_variance_residual(x, verbose = TRUE, ...)
 
 get_variance_fixed(x, verbose = TRUE, ...)
 
-get_variance_random(x, verbose = TRUE, ...)
+get_variance_random(x, verbose = TRUE, tolerance = 1e-05, ...)
 
 get_variance_distribution(x, verbose = TRUE, ...)
 
@@ -48,6 +48,11 @@ take a few seconds to calculate.}
 \item{verbose}{Toggle off warnings.}
 
 \item{...}{Currently not used.}
+
+\item{tolerance}{Tolerance for singularity check of random effect, to decide
+whether to compute random effect variances or not. Indicates up to which
+value the convergence result is accepted. The larger tolerance is, the
+stricter the test will be. See \code{\link[performance:is_singular]{is_singular()}}.}
 }
 \value{
 A list with following elements:

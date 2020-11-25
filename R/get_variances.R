@@ -13,6 +13,10 @@
 #'   variance are the most computational intensive components, and hence may
 #'   take a few seconds to calculate.
 #' @param verbose Toggle off warnings.
+#' @param tolerance Tolerance for singularity check of random effect, to decide
+#'   whether to compute random effect variances or not. Indicates up to which
+#'   value the convergence result is accepted. The larger tolerance is, the
+#'   stricter the test will be. See \code{\link[performance:is_singular]{is_singular()}}.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:
@@ -128,11 +132,11 @@ get_variance.default <- function(x, component = c("all", "fixed", "random", "res
 
 
 #' @export
-get_variance.merMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
+get_variance.merMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, tolerance = 1e-5, ...) {
   component <- match.arg(component)
   tryCatch(
     {
-      .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
+      .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose, tolerance = tolerance)
     },
     error = function(e) {
       NULL
@@ -177,9 +181,9 @@ get_variance.brmsfit <- get_variance.merMod
 
 
 #' @export
-get_variance.mixed <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
+get_variance.mixed <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, tolerance = 1e-5, ...) {
   component <- match.arg(component)
-  .compute_variances(x$full_model, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose)
+  .compute_variances(x$full_model, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose, tolerance = tolerance)
 }
 
 
@@ -197,8 +201,8 @@ get_variance_fixed <- function(x, verbose = TRUE, ...) {
 
 #' @rdname get_variance
 #' @export
-get_variance_random <- function(x, verbose = TRUE, ...) {
-  unlist(get_variance(x, component = "random", verbose = verbose, ...))
+get_variance_random <- function(x, verbose = TRUE, tolerance = 1e-5, ...) {
+  unlist(get_variance(x, component = "random", verbose = verbose, tolerance = tolerance, ...))
 }
 
 #' @rdname get_variance

@@ -1,5 +1,5 @@
 #' @importFrom stats nobs
-.compute_variances <- function(x, component, name_fun = NULL, name_full = NULL, verbose = TRUE) {
+.compute_variances <- function(x, component, name_fun = NULL, name_full = NULL, verbose = TRUE, tolerance = 1e-5) {
 
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
@@ -23,7 +23,7 @@
 
   # Test for non-zero random effects ((near) singularity)
   no_random_variance <- FALSE
-  if (.is_singular(x, vals) && !(component %in% c("slope", "intercept"))) {
+  if (.is_singular(x, vals, tolerance = tolerance) && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
       warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", name_full), call. = F)
     }
