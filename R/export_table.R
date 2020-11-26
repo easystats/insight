@@ -114,11 +114,6 @@ export_table <- function(x,
 }
 
 
-#' @rdname export_table
-#' @export
-format_table <- export_table
-
-
 
 
 

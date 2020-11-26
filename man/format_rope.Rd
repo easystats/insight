@@ -4,12 +4,14 @@
 \alias{format_rope}
 \title{Percentage in ROPE formatting}
 \usage{
-format_rope(rope_percentage, name = "in ROPE")
+format_rope(rope_percentage, name = "in ROPE", digits = 2)
 }
 \arguments{
 \item{rope_percentage}{Value or vector of percentages in ROPE.}
 
 \item{name}{Name prefixing the text. Can be \code{NULL}.}
+
+\item{digits}{Number of significant digits. May also be \code{"scientific"} to return exact p-values in scientific notation, or \code{"apa"} to use an APA-style for p-values.}
 }
 \value{
 A formatted string.

@@ -1,10 +1,19 @@
 # insight 0.11.1
 
+## Breaking changes
+
+* `format_table()` was renamed in to `export_table()`.
+
+* `parameters_table()` was renamed in to `format_table()`.
+
 ## Changes to functions
 
 * `get_variance()` and `get_variance_random()` gain a `tolerance`-argument, to
   set the tolerance level for singularity checks when computing random effect
   variances.
+
+* `format_table()` (former `parameters_table()`) formats more objects from
+  the *easystats* packages, like ROPE-range or `p_rope()`.
 
 # insight 0.11.0
 
