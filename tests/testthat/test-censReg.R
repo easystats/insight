@@ -2,7 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("censReg") &&
   require("AER")) {
-
   data("Affairs", package = "AER")
   m1 <-
     censReg(affairs ~ age + yearsmarried + religiousness + occupation + rating,

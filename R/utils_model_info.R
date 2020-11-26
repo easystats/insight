@@ -241,8 +241,8 @@
 
   linear_model <- TRUE
   if (binom_fam | exponential_fam | poisson_fam | neg_bin_fam | logit.link |
-      dirichlet_fam | is.ordinal | zero.inf | is.censored | is.survival |
-      is.categorical | hurdle | is.multinomial) {
+    dirichlet_fam | is.ordinal | zero.inf | is.censored | is.survival |
+    is.categorical | hurdle | is.multinomial) {
     linear_model <- FALSE
   } else if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian")) && !grepl("(\\st)$", fitfam)) {
     linear_model <- FALSE

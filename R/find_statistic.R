@@ -53,7 +53,6 @@ find_statistic <- function(x, ...) {
     return(NULL)
   }
 
-
   # t-value objects ----------------------------------------------------------
 
   t.mods <-
@@ -226,6 +225,7 @@ find_statistic <- function(x, ...) {
       "geeglm",
       "logistf",
       "MANOVA",
+      "nparLD",
       "RM",
       "vgam"
     )

@@ -2,7 +2,6 @@ if (require("testthat") &&
   require("insight") &&
   require("survival") &&
   require("coxme")) {
-
   data(lung)
   set.seed(1234)
   lung$inst2 <- sample(1:10, size = nrow(lung), replace = T)

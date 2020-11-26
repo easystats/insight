@@ -3,7 +3,6 @@
 if (.runThisTest || Sys.getenv("USER") == "travis") {
   if (require("testthat") &&
     require("insight") && require("glmmTMB") && require("biglm")) {
-
     data(Salamanders)
     Salamanders$cover <- abs(Salamanders$cover)
 
