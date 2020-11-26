@@ -144,6 +144,7 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
   x
 }
 
+#' @rdname format_table
 #' @export
 parameters_table <- format_table
 
