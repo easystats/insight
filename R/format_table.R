@@ -56,6 +56,11 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
       match_pretty_names <- att$pretty_names[x$Parameter]
       if (!anyNA(match_pretty_names)) {
         x$Parameter <- att$pretty_names[x$Parameter]
+      } else {
+        match_pretty_names <- stats::na.omit(match(names(att$pretty_names), x$Parameter))
+        if (length(match_pretty_names)) {
+          x$Parameter[match_pretty_names] <- att$pretty_names[x$Parameter[match_pretty_names]]
+        }
       }
     }
   }
