@@ -338,7 +338,7 @@ should be returned.</p></td>
     
 <ul>
 <li><p>for non-Bayesian models and if <code>effects = "fixed"</code>, a data frame with two columns: the parameter names and the related point estimates</p></li>
-<li><p>if <code>effects = "random"</code>, a list of data frames with the random effects (as returned by <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>ranef()</a></code>), unless the random effects have the same simplified structure as fixed effects (e.g. for models from <span class="pkg">MCMCglmm</span>)</p></li>
+<li><p>if <code>effects = "random"</code>, a list of data frames with the random effects (as returned by <code><a href='https://mc-stan.org/rstanarm/reference/stanreg-methods.html'>ranef()</a></code>), unless the random effects have the same simplified structure as fixed effects (e.g. for models from <span class="pkg">MCMCglmm</span>)</p></li>
 <li><p>for Bayesian models, the posterior samples from the requested parameters as data frame</p></li>
 <li><p>for Anova (<code><a href='https://rdrr.io/r/stats/aov.html'>aov()</a></code>) with error term, a list of parameters for the conditional and the random effects parameters</p></li>
 <li><p>for models with smooth terms or zero-inflation component, a data frame with three columns: the parameter names, the related point estimates and the component</p></li>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Data frame and Tables Pretty Formatting — format_table • insight</title>
+<title>Parameter table formatting — format_table • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,11 @@
 
 
 
-<meta property="og:title" content="Data frame and Tables Pretty Formatting — format_table" />
-<meta property="og:description" content="Data frame and Tables Pretty Formatting" />
+<meta property="og:title" content="Parameter table formatting — format_table" />
+<meta property="og:description" content="This functions takes a data frame with model parameters as input
+  and formats certain columns into a more readable layout (like collapsing
+  separate columns for lower and upper confidence interval values). Furthermore,
+  column names are formatted as well." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -80,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.0.1</span>
       </span>
     </div>
 
@@ -116,43 +119,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Data frame and Tables Pretty Formatting</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/export_table.R'><code>R/export_table.R</code></a></small>
+    <h1>Parameter table formatting</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/format_table.R'><code>R/format_table.R</code></a></small>
     <div class="hidden name"><code>format_table.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Data frame and Tables Pretty Formatting</p>
+    <p>This functions takes a data frame with model parameters as input
+  and formats certain columns into a more readable layout (like collapsing
+  separate columns for lower and upper confidence interval values). Furthermore,
+  column names are formatted as well.</p>
     </div>
 
     <pre class="usage"><span class='fu'>format_table</span><span class='op'>(</span>
   <span class='va'>x</span>,
-  sep <span class='op'>=</span> <span class='st'>" | "</span>,
-  header <span class='op'>=</span> <span class='st'>"-"</span>,
+  pretty_names <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  stars <span class='op'>=</span> <span class='cn'>FALSE</span>,
   digits <span class='op'>=</span> <span class='fl'>2</span>,
-  protect_integers <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  missing <span class='op'>=</span> <span class='st'>""</span>,
-  width <span class='op'>=</span> <span class='cn'>NULL</span>,
-  format <span class='op'>=</span> <span class='cn'>NULL</span>,
-  caption <span class='op'>=</span> <span class='cn'>NULL</span>,
-  align <span class='op'>=</span> <span class='cn'>NULL</span>,
-  footer <span class='op'>=</span> <span class='cn'>NULL</span>,
-  zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>
+  ci_width <span class='op'>=</span> <span class='st'>"auto"</span>,
+  ci_brackets <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  ci_digits <span class='op'>=</span> <span class='fl'>2</span>,
+  p_digits <span class='op'>=</span> <span class='fl'>3</span>,
+  rope_digits <span class='op'>=</span> <span class='fl'>2</span>,
+  preserve_attributes <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span>
 
-<span class='fu'>export_table</span><span class='op'>(</span>
+<span class='fu'>parameters_table</span><span class='op'>(</span>
   <span class='va'>x</span>,
-  sep <span class='op'>=</span> <span class='st'>" | "</span>,
-  header <span class='op'>=</span> <span class='st'>"-"</span>,
+  pretty_names <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  stars <span class='op'>=</span> <span class='cn'>FALSE</span>,
   digits <span class='op'>=</span> <span class='fl'>2</span>,
-  protect_integers <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  missing <span class='op'>=</span> <span class='st'>""</span>,
-  width <span class='op'>=</span> <span class='cn'>NULL</span>,
-  format <span class='op'>=</span> <span class='cn'>NULL</span>,
-  caption <span class='op'>=</span> <span class='cn'>NULL</span>,
-  align <span class='op'>=</span> <span class='cn'>NULL</span>,
-  footer <span class='op'>=</span> <span class='cn'>NULL</span>,
-  zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>
+  ci_width <span class='op'>=</span> <span class='st'>"auto"</span>,
+  ci_brackets <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  ci_digits <span class='op'>=</span> <span class='fl'>2</span>,
+  p_digits <span class='op'>=</span> <span class='fl'>3</span>,
+  rope_digits <span class='op'>=</span> <span class='fl'>2</span>,
+  preserve_attributes <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -160,381 +164,90 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A data frame.</p></td>
+      <td><p>A data frame of model's parameters, as returned by various functions of the <strong>easystats</strong>-packages. May also be a result from <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>sep</th>
-      <td><p>Column separator.</p></td>
+      <th>pretty_names</th>
+      <td><p>Return "pretty" (i.e. more human readable) parameter names.</p></td>
     </tr>
     <tr>
-      <th>header</th>
-      <td><p>Header separator. Can be <code>NULL</code>.</p></td>
+      <th>stars</th>
+      <td><p>Add significance stars (e.g., p &lt; .001***).</p></td>
     </tr>
     <tr>
       <th>digits</th>
-      <td><p>Number of significant digits.</p></td>
+      <td><p>Number of decimal places for numeric values (except confidence intervals and p-values).</p></td>
     </tr>
     <tr>
-      <th>protect_integers</th>
-      <td><p>Should integers be kept as integers (i.e., without decimals)?</p></td>
+      <th>ci_width</th>
+      <td><p>Minimum width of the returned string for confidence intervals. If not <code>NULL</code> and width is larger than the string's length, leading whitespaces are added to the string. If <code>width="auto"</code>, width will be set to the length of the longest string.</p></td>
     </tr>
     <tr>
-      <th>missing</th>
-      <td><p>Value by which <code>NA</code> values are replaced. By default, an empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p></td>
+      <th>ci_brackets</th>
+      <td><p>Logical, if <code>TRUE</code> (default), CI-values are encompassed in square brackets (else in parentheses).</p></td>
     </tr>
     <tr>
-      <th>width</th>
-      <td><p>Minimum width of the returned string. If not <code>NULL</code> and <code>width</code> is larger than the string's length, leading whitespaces are added to the string.</p></td>
+      <th>ci_digits</th>
+      <td><p>Number of decimal places for confidence intervals.</p></td>
     </tr>
     <tr>
-      <th>format</th>
-      <td><p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
-returned output is used for basic printing. Currently, only <code>"markdown"</code> is
-supported, or <code>NULL</code> (the default) resp. <code>"text"</code> for plain text.</p></td>
+      <th>p_digits</th>
+      <td><p>Number of decimal places for p-values. May also be <code>"scientific"</code> for scientific notation of p-values.</p></td>
     </tr>
     <tr>
-      <th>caption</th>
-      <td><p>Table caption, as string.</p></td>
+      <th>rope_digits</th>
+      <td><p>Number of decimal places for the ROPE percentage values.</p></td>
     </tr>
     <tr>
-      <th>align</th>
-      <td><p>Column alignment. Only applies to markdown-formatted tables.
-By default <code>align = NULL</code>, numeric columns are right-aligned,
-and other columns are left-aligned. May be a string to indicate alignment
-rules for the complete table, like <code>"left"</code>, <code>"right"</code>,
-<code>"center"</code> or <code>"firstleft"</code> (to left-align first column,
-center remaining); or maybe a string with abbreviated alignment characters,
-where the length of the string must equal the number of columns, for
-instance, <code>align = "lccrl"</code> would left-align the first column, center
-the second and third, right-align column four and left-align the fifth
-column.</p></td>
+      <th>preserve_attributes</th>
+      <td><p>Logical, if <code>TRUE</code>, preserves all attributes from the input data frame.</p></td>
     </tr>
     <tr>
-      <th>footer</th>
-      <td><p>Table footer, as string. For markdown-formatted tables, table
-footers, due to the limitation in markdown rendering, are actually just a
-new text line under the table.</p></td>
-    </tr>
-    <tr>
-      <th>zap_small</th>
-      <td><p>Logical, if <code>TRUE</code>, small values are rounded after <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal places than <code>digits</code> are printed in scientific notation.</p></td>
+      <th>...</th>
+      <td><p>Arguments passed to or from other methods.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame in character format.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>This function is going to be renamed in a future update. Please use its
-alias <code>export_table()</code>.</p>
+    <p>A data frame.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>export_table</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Sepal.Length | Sepal.Width | Petal.Length | Petal.Width |    Species
-#&gt; --------------------------------------------------------------------
-#&gt;         5.10 |        3.50 |         1.40 |        0.20 |     setosa
-#&gt;         4.90 |        3.00 |         1.40 |        0.20 |     setosa
-#&gt;         4.70 |        3.20 |         1.30 |        0.20 |     setosa
-#&gt;         4.60 |        3.10 |         1.50 |        0.20 |     setosa
-#&gt;         5.00 |        3.60 |         1.40 |        0.20 |     setosa
-#&gt;         5.40 |        3.90 |         1.70 |        0.40 |     setosa
-#&gt;         4.60 |        3.40 |         1.40 |        0.30 |     setosa
-#&gt;         5.00 |        3.40 |         1.50 |        0.20 |     setosa
-#&gt;         4.40 |        2.90 |         1.40 |        0.20 |     setosa
-#&gt;         4.90 |        3.10 |         1.50 |        0.10 |     setosa
-#&gt;         5.40 |        3.70 |         1.50 |        0.20 |     setosa
-#&gt;         4.80 |        3.40 |         1.60 |        0.20 |     setosa
-#&gt;         4.80 |        3.00 |         1.40 |        0.10 |     setosa
-#&gt;         4.30 |        3.00 |         1.10 |        0.10 |     setosa
-#&gt;         5.80 |        4.00 |         1.20 |        0.20 |     setosa
-#&gt;         5.70 |        4.40 |         1.50 |        0.40 |     setosa
-#&gt;         5.40 |        3.90 |         1.30 |        0.40 |     setosa
-#&gt;         5.10 |        3.50 |         1.40 |        0.30 |     setosa
-#&gt;         5.70 |        3.80 |         1.70 |        0.30 |     setosa
-#&gt;         5.10 |        3.80 |         1.50 |        0.30 |     setosa
-#&gt;         5.40 |        3.40 |         1.70 |        0.20 |     setosa
-#&gt;         5.10 |        3.70 |         1.50 |        0.40 |     setosa
-#&gt;         4.60 |        3.60 |         1.00 |        0.20 |     setosa
-#&gt;         5.10 |        3.30 |         1.70 |        0.50 |     setosa
-#&gt;         4.80 |        3.40 |         1.90 |        0.20 |     setosa
-#&gt;         5.00 |        3.00 |         1.60 |        0.20 |     setosa
-#&gt;         5.00 |        3.40 |         1.60 |        0.40 |     setosa
-#&gt;         5.20 |        3.50 |         1.50 |        0.20 |     setosa
-#&gt;         5.20 |        3.40 |         1.40 |        0.20 |     setosa
-#&gt;         4.70 |        3.20 |         1.60 |        0.20 |     setosa
-#&gt;         4.80 |        3.10 |         1.60 |        0.20 |     setosa
-#&gt;         5.40 |        3.40 |         1.50 |        0.40 |     setosa
-#&gt;         5.20 |        4.10 |         1.50 |        0.10 |     setosa
-#&gt;         5.50 |        4.20 |         1.40 |        0.20 |     setosa
-#&gt;         4.90 |        3.10 |         1.50 |        0.20 |     setosa
-#&gt;         5.00 |        3.20 |         1.20 |        0.20 |     setosa
-#&gt;         5.50 |        3.50 |         1.30 |        0.20 |     setosa
-#&gt;         4.90 |        3.60 |         1.40 |        0.10 |     setosa
-#&gt;         4.40 |        3.00 |         1.30 |        0.20 |     setosa
-#&gt;         5.10 |        3.40 |         1.50 |        0.20 |     setosa
-#&gt;         5.00 |        3.50 |         1.30 |        0.30 |     setosa
-#&gt;         4.50 |        2.30 |         1.30 |        0.30 |     setosa
-#&gt;         4.40 |        3.20 |         1.30 |        0.20 |     setosa
-#&gt;         5.00 |        3.50 |         1.60 |        0.60 |     setosa
-#&gt;         5.10 |        3.80 |         1.90 |        0.40 |     setosa
-#&gt;         4.80 |        3.00 |         1.40 |        0.30 |     setosa
-#&gt;         5.10 |        3.80 |         1.60 |        0.20 |     setosa
-#&gt;         4.60 |        3.20 |         1.40 |        0.20 |     setosa
-#&gt;         5.30 |        3.70 |         1.50 |        0.20 |     setosa
-#&gt;         5.00 |        3.30 |         1.40 |        0.20 |     setosa
-#&gt;         7.00 |        3.20 |         4.70 |        1.40 | versicolor
-#&gt;         6.40 |        3.20 |         4.50 |        1.50 | versicolor
-#&gt;         6.90 |        3.10 |         4.90 |        1.50 | versicolor
-#&gt;         5.50 |        2.30 |         4.00 |        1.30 | versicolor
-#&gt;         6.50 |        2.80 |         4.60 |        1.50 | versicolor
-#&gt;         5.70 |        2.80 |         4.50 |        1.30 | versicolor
-#&gt;         6.30 |        3.30 |         4.70 |        1.60 | versicolor
-#&gt;         4.90 |        2.40 |         3.30 |        1.00 | versicolor
-#&gt;         6.60 |        2.90 |         4.60 |        1.30 | versicolor
-#&gt;         5.20 |        2.70 |         3.90 |        1.40 | versicolor
-#&gt;         5.00 |        2.00 |         3.50 |        1.00 | versicolor
-#&gt;         5.90 |        3.00 |         4.20 |        1.50 | versicolor
-#&gt;         6.00 |        2.20 |         4.00 |        1.00 | versicolor
-#&gt;         6.10 |        2.90 |         4.70 |        1.40 | versicolor
-#&gt;         5.60 |        2.90 |         3.60 |        1.30 | versicolor
-#&gt;         6.70 |        3.10 |         4.40 |        1.40 | versicolor
-#&gt;         5.60 |        3.00 |         4.50 |        1.50 | versicolor
-#&gt;         5.80 |        2.70 |         4.10 |        1.00 | versicolor
-#&gt;         6.20 |        2.20 |         4.50 |        1.50 | versicolor
-#&gt;         5.60 |        2.50 |         3.90 |        1.10 | versicolor
-#&gt;         5.90 |        3.20 |         4.80 |        1.80 | versicolor
-#&gt;         6.10 |        2.80 |         4.00 |        1.30 | versicolor
-#&gt;         6.30 |        2.50 |         4.90 |        1.50 | versicolor
-#&gt;         6.10 |        2.80 |         4.70 |        1.20 | versicolor
-#&gt;         6.40 |        2.90 |         4.30 |        1.30 | versicolor
-#&gt;         6.60 |        3.00 |         4.40 |        1.40 | versicolor
-#&gt;         6.80 |        2.80 |         4.80 |        1.40 | versicolor
-#&gt;         6.70 |        3.00 |         5.00 |        1.70 | versicolor
-#&gt;         6.00 |        2.90 |         4.50 |        1.50 | versicolor
-#&gt;         5.70 |        2.60 |         3.50 |        1.00 | versicolor
-#&gt;         5.50 |        2.40 |         3.80 |        1.10 | versicolor
-#&gt;         5.50 |        2.40 |         3.70 |        1.00 | versicolor
-#&gt;         5.80 |        2.70 |         3.90 |        1.20 | versicolor
-#&gt;         6.00 |        2.70 |         5.10 |        1.60 | versicolor
-#&gt;         5.40 |        3.00 |         4.50 |        1.50 | versicolor
-#&gt;         6.00 |        3.40 |         4.50 |        1.60 | versicolor
-#&gt;         6.70 |        3.10 |         4.70 |        1.50 | versicolor
-#&gt;         6.30 |        2.30 |         4.40 |        1.30 | versicolor
-#&gt;         5.60 |        3.00 |         4.10 |        1.30 | versicolor
-#&gt;         5.50 |        2.50 |         4.00 |        1.30 | versicolor
-#&gt;         5.50 |        2.60 |         4.40 |        1.20 | versicolor
-#&gt;         6.10 |        3.00 |         4.60 |        1.40 | versicolor
-#&gt;         5.80 |        2.60 |         4.00 |        1.20 | versicolor
-#&gt;         5.00 |        2.30 |         3.30 |        1.00 | versicolor
-#&gt;         5.60 |        2.70 |         4.20 |        1.30 | versicolor
-#&gt;         5.70 |        3.00 |         4.20 |        1.20 | versicolor
-#&gt;         5.70 |        2.90 |         4.20 |        1.30 | versicolor
-#&gt;         6.20 |        2.90 |         4.30 |        1.30 | versicolor
-#&gt;         5.10 |        2.50 |         3.00 |        1.10 | versicolor
-#&gt;         5.70 |        2.80 |         4.10 |        1.30 | versicolor
-#&gt;         6.30 |        3.30 |         6.00 |        2.50 |  virginica
-#&gt;         5.80 |        2.70 |         5.10 |        1.90 |  virginica
-#&gt;         7.10 |        3.00 |         5.90 |        2.10 |  virginica
-#&gt;         6.30 |        2.90 |         5.60 |        1.80 |  virginica
-#&gt;         6.50 |        3.00 |         5.80 |        2.20 |  virginica
-#&gt;         7.60 |        3.00 |         6.60 |        2.10 |  virginica
-#&gt;         4.90 |        2.50 |         4.50 |        1.70 |  virginica
-#&gt;         7.30 |        2.90 |         6.30 |        1.80 |  virginica
-#&gt;         6.70 |        2.50 |         5.80 |        1.80 |  virginica
-#&gt;         7.20 |        3.60 |         6.10 |        2.50 |  virginica
-#&gt;         6.50 |        3.20 |         5.10 |        2.00 |  virginica
-#&gt;         6.40 |        2.70 |         5.30 |        1.90 |  virginica
-#&gt;         6.80 |        3.00 |         5.50 |        2.10 |  virginica
-#&gt;         5.70 |        2.50 |         5.00 |        2.00 |  virginica
-#&gt;         5.80 |        2.80 |         5.10 |        2.40 |  virginica
-#&gt;         6.40 |        3.20 |         5.30 |        2.30 |  virginica
-#&gt;         6.50 |        3.00 |         5.50 |        1.80 |  virginica
-#&gt;         7.70 |        3.80 |         6.70 |        2.20 |  virginica
-#&gt;         7.70 |        2.60 |         6.90 |        2.30 |  virginica
-#&gt;         6.00 |        2.20 |         5.00 |        1.50 |  virginica
-#&gt;         6.90 |        3.20 |         5.70 |        2.30 |  virginica
-#&gt;         5.60 |        2.80 |         4.90 |        2.00 |  virginica
-#&gt;         7.70 |        2.80 |         6.70 |        2.00 |  virginica
-#&gt;         6.30 |        2.70 |         4.90 |        1.80 |  virginica
-#&gt;         6.70 |        3.30 |         5.70 |        2.10 |  virginica
-#&gt;         7.20 |        3.20 |         6.00 |        1.80 |  virginica
-#&gt;         6.20 |        2.80 |         4.80 |        1.80 |  virginica
-#&gt;         6.10 |        3.00 |         4.90 |        1.80 |  virginica
-#&gt;         6.40 |        2.80 |         5.60 |        2.10 |  virginica
-#&gt;         7.20 |        3.00 |         5.80 |        1.60 |  virginica
-#&gt;         7.40 |        2.80 |         6.10 |        1.90 |  virginica
-#&gt;         7.90 |        3.80 |         6.40 |        2.00 |  virginica
-#&gt;         6.40 |        2.80 |         5.60 |        2.20 |  virginica
-#&gt;         6.30 |        2.80 |         5.10 |        1.50 |  virginica
-#&gt;         6.10 |        2.60 |         5.60 |        1.40 |  virginica
-#&gt;         7.70 |        3.00 |         6.10 |        2.30 |  virginica
-#&gt;         6.30 |        3.40 |         5.60 |        2.40 |  virginica
-#&gt;         6.40 |        3.10 |         5.50 |        1.80 |  virginica
-#&gt;         6.00 |        3.00 |         4.80 |        1.80 |  virginica
-#&gt;         6.90 |        3.10 |         5.40 |        2.10 |  virginica
-#&gt;         6.70 |        3.10 |         5.60 |        2.40 |  virginica
-#&gt;         6.90 |        3.10 |         5.10 |        2.30 |  virginica
-#&gt;         5.80 |        2.70 |         5.10 |        1.90 |  virginica
-#&gt;         6.80 |        3.20 |         5.90 |        2.30 |  virginica
-#&gt;         6.70 |        3.30 |         5.70 |        2.50 |  virginica
-#&gt;         6.70 |        3.00 |         5.20 |        2.30 |  virginica
-#&gt;         6.30 |        2.50 |         5.00 |        1.90 |  virginica
-#&gt;         6.50 |        3.00 |         5.20 |        2.00 |  virginica
-#&gt;         6.20 |        3.40 |         5.40 |        2.30 |  virginica
-#&gt;         5.90 |        3.00 |         5.10 |        1.80 |  virginica</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>export_table</span><span class='op'>(</span><span class='va'>iris</span>, sep <span class='op'>=</span> <span class='st'>" "</span>, header <span class='op'>=</span> <span class='st'>"*"</span>, digits <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-#&gt; ************************************************************
-#&gt;          5.1         3.5          1.4         0.2     setosa
-#&gt;          4.9         3.0          1.4         0.2     setosa
-#&gt;          4.7         3.2          1.3         0.2     setosa
-#&gt;          4.6         3.1          1.5         0.2     setosa
-#&gt;          5.0         3.6          1.4         0.2     setosa
-#&gt;          5.4         3.9          1.7         0.4     setosa
-#&gt;          4.6         3.4          1.4         0.3     setosa
-#&gt;          5.0         3.4          1.5         0.2     setosa
-#&gt;          4.4         2.9          1.4         0.2     setosa
-#&gt;          4.9         3.1          1.5         0.1     setosa
-#&gt;          5.4         3.7          1.5         0.2     setosa
-#&gt;          4.8         3.4          1.6         0.2     setosa
-#&gt;          4.8         3.0          1.4         0.1     setosa
-#&gt;          4.3         3.0          1.1         0.1     setosa
-#&gt;          5.8         4.0          1.2         0.2     setosa
-#&gt;          5.7         4.4          1.5         0.4     setosa
-#&gt;          5.4         3.9          1.3         0.4     setosa
-#&gt;          5.1         3.5          1.4         0.3     setosa
-#&gt;          5.7         3.8          1.7         0.3     setosa
-#&gt;          5.1         3.8          1.5         0.3     setosa
-#&gt;          5.4         3.4          1.7         0.2     setosa
-#&gt;          5.1         3.7          1.5         0.4     setosa
-#&gt;          4.6         3.6          1.0         0.2     setosa
-#&gt;          5.1         3.3          1.7         0.5     setosa
-#&gt;          4.8         3.4          1.9         0.2     setosa
-#&gt;          5.0         3.0          1.6         0.2     setosa
-#&gt;          5.0         3.4          1.6         0.4     setosa
-#&gt;          5.2         3.5          1.5         0.2     setosa
-#&gt;          5.2         3.4          1.4         0.2     setosa
-#&gt;          4.7         3.2          1.6         0.2     setosa
-#&gt;          4.8         3.1          1.6         0.2     setosa
-#&gt;          5.4         3.4          1.5         0.4     setosa
-#&gt;          5.2         4.1          1.5         0.1     setosa
-#&gt;          5.5         4.2          1.4         0.2     setosa
-#&gt;          4.9         3.1          1.5         0.2     setosa
-#&gt;          5.0         3.2          1.2         0.2     setosa
-#&gt;          5.5         3.5          1.3         0.2     setosa
-#&gt;          4.9         3.6          1.4         0.1     setosa
-#&gt;          4.4         3.0          1.3         0.2     setosa
-#&gt;          5.1         3.4          1.5         0.2     setosa
-#&gt;          5.0         3.5          1.3         0.3     setosa
-#&gt;          4.5         2.3          1.3         0.3     setosa
-#&gt;          4.4         3.2          1.3         0.2     setosa
-#&gt;          5.0         3.5          1.6         0.6     setosa
-#&gt;          5.1         3.8          1.9         0.4     setosa
-#&gt;          4.8         3.0          1.4         0.3     setosa
-#&gt;          5.1         3.8          1.6         0.2     setosa
-#&gt;          4.6         3.2          1.4         0.2     setosa
-#&gt;          5.3         3.7          1.5         0.2     setosa
-#&gt;          5.0         3.3          1.4         0.2     setosa
-#&gt;          7.0         3.2          4.7         1.4 versicolor
-#&gt;          6.4         3.2          4.5         1.5 versicolor
-#&gt;          6.9         3.1          4.9         1.5 versicolor
-#&gt;          5.5         2.3          4.0         1.3 versicolor
-#&gt;          6.5         2.8          4.6         1.5 versicolor
-#&gt;          5.7         2.8          4.5         1.3 versicolor
-#&gt;          6.3         3.3          4.7         1.6 versicolor
-#&gt;          4.9         2.4          3.3         1.0 versicolor
-#&gt;          6.6         2.9          4.6         1.3 versicolor
-#&gt;          5.2         2.7          3.9         1.4 versicolor
-#&gt;          5.0         2.0          3.5         1.0 versicolor
-#&gt;          5.9         3.0          4.2         1.5 versicolor
-#&gt;          6.0         2.2          4.0         1.0 versicolor
-#&gt;          6.1         2.9          4.7         1.4 versicolor
-#&gt;          5.6         2.9          3.6         1.3 versicolor
-#&gt;          6.7         3.1          4.4         1.4 versicolor
-#&gt;          5.6         3.0          4.5         1.5 versicolor
-#&gt;          5.8         2.7          4.1         1.0 versicolor
-#&gt;          6.2         2.2          4.5         1.5 versicolor
-#&gt;          5.6         2.5          3.9         1.1 versicolor
-#&gt;          5.9         3.2          4.8         1.8 versicolor
-#&gt;          6.1         2.8          4.0         1.3 versicolor
-#&gt;          6.3         2.5          4.9         1.5 versicolor
-#&gt;          6.1         2.8          4.7         1.2 versicolor
-#&gt;          6.4         2.9          4.3         1.3 versicolor
-#&gt;          6.6         3.0          4.4         1.4 versicolor
-#&gt;          6.8         2.8          4.8         1.4 versicolor
-#&gt;          6.7         3.0          5.0         1.7 versicolor
-#&gt;          6.0         2.9          4.5         1.5 versicolor
-#&gt;          5.7         2.6          3.5         1.0 versicolor
-#&gt;          5.5         2.4          3.8         1.1 versicolor
-#&gt;          5.5         2.4          3.7         1.0 versicolor
-#&gt;          5.8         2.7          3.9         1.2 versicolor
-#&gt;          6.0         2.7          5.1         1.6 versicolor
-#&gt;          5.4         3.0          4.5         1.5 versicolor
-#&gt;          6.0         3.4          4.5         1.6 versicolor
-#&gt;          6.7         3.1          4.7         1.5 versicolor
-#&gt;          6.3         2.3          4.4         1.3 versicolor
-#&gt;          5.6         3.0          4.1         1.3 versicolor
-#&gt;          5.5         2.5          4.0         1.3 versicolor
-#&gt;          5.5         2.6          4.4         1.2 versicolor
-#&gt;          6.1         3.0          4.6         1.4 versicolor
-#&gt;          5.8         2.6          4.0         1.2 versicolor
-#&gt;          5.0         2.3          3.3         1.0 versicolor
-#&gt;          5.6         2.7          4.2         1.3 versicolor
-#&gt;          5.7         3.0          4.2         1.2 versicolor
-#&gt;          5.7         2.9          4.2         1.3 versicolor
-#&gt;          6.2         2.9          4.3         1.3 versicolor
-#&gt;          5.1         2.5          3.0         1.1 versicolor
-#&gt;          5.7         2.8          4.1         1.3 versicolor
-#&gt;          6.3         3.3          6.0         2.5  virginica
-#&gt;          5.8         2.7          5.1         1.9  virginica
-#&gt;          7.1         3.0          5.9         2.1  virginica
-#&gt;          6.3         2.9          5.6         1.8  virginica
-#&gt;          6.5         3.0          5.8         2.2  virginica
-#&gt;          7.6         3.0          6.6         2.1  virginica
-#&gt;          4.9         2.5          4.5         1.7  virginica
-#&gt;          7.3         2.9          6.3         1.8  virginica
-#&gt;          6.7         2.5          5.8         1.8  virginica
-#&gt;          7.2         3.6          6.1         2.5  virginica
-#&gt;          6.5         3.2          5.1         2.0  virginica
-#&gt;          6.4         2.7          5.3         1.9  virginica
-#&gt;          6.8         3.0          5.5         2.1  virginica
-#&gt;          5.7         2.5          5.0         2.0  virginica
-#&gt;          5.8         2.8          5.1         2.4  virginica
-#&gt;          6.4         3.2          5.3         2.3  virginica
-#&gt;          6.5         3.0          5.5         1.8  virginica
-#&gt;          7.7         3.8          6.7         2.2  virginica
-#&gt;          7.7         2.6          6.9         2.3  virginica
-#&gt;          6.0         2.2          5.0         1.5  virginica
-#&gt;          6.9         3.2          5.7         2.3  virginica
-#&gt;          5.6         2.8          4.9         2.0  virginica
-#&gt;          7.7         2.8          6.7         2.0  virginica
-#&gt;          6.3         2.7          4.9         1.8  virginica
-#&gt;          6.7         3.3          5.7         2.1  virginica
-#&gt;          7.2         3.2          6.0         1.8  virginica
-#&gt;          6.2         2.8          4.8         1.8  virginica
-#&gt;          6.1         3.0          4.9         1.8  virginica
-#&gt;          6.4         2.8          5.6         2.1  virginica
-#&gt;          7.2         3.0          5.8         1.6  virginica
-#&gt;          7.4         2.8          6.1         1.9  virginica
-#&gt;          7.9         3.8          6.4         2.0  virginica
-#&gt;          6.4         2.8          5.6         2.2  virginica
-#&gt;          6.3         2.8          5.1         1.5  virginica
-#&gt;          6.1         2.6          5.6         1.4  virginica
-#&gt;          7.7         3.0          6.1         2.3  virginica
-#&gt;          6.3         3.4          5.6         2.4  virginica
-#&gt;          6.4         3.1          5.5         1.8  virginica
-#&gt;          6.0         3.0          4.8         1.8  virginica
-#&gt;          6.9         3.1          5.4         2.1  virginica
-#&gt;          6.7         3.1          5.6         2.4  virginica
-#&gt;          6.9         3.1          5.1         2.3  virginica
-#&gt;          5.8         2.7          5.1         1.9  virginica
-#&gt;          6.8         3.2          5.9         2.3  virginica
-#&gt;          6.7         3.3          5.7         2.5  virginica
-#&gt;          6.7         3.0          5.2         2.3  virginica
-#&gt;          6.3         2.5          5.0         1.9  virginica
-#&gt;          6.5         3.0          5.2         2.0  virginica
-#&gt;          6.2         3.4          5.4         2.3  virginica
-#&gt;          5.9         3.0          5.1         1.8  virginica</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/parameters/'>"parameters"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>model_parameters</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Sepal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>format_table</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>format_table</span><span class='op'>(</span><span class='va'>x</span>, p_digits <span class='op'>=</span> <span class='st'>"scientific"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: parameters</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘parameters’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:insight’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    parameters_table</span></div><div class='output co'>#&gt;                            Parameter Coefficient   SE        95% CI t(144)
+#&gt; 1                        (Intercept)        2.64 0.57 [ 1.51, 3.77]   4.62
+#&gt; 2               Species [versicolor]        0.90 0.80 [-0.68, 2.48]   1.13
+#&gt; 3                Species [virginica]        1.27 0.82 [-0.35, 2.88]   1.55
+#&gt; 4                        Sepal.Width        0.69 0.17 [ 0.36, 1.02]   4.17
+#&gt; 5 Species [versicolor] * Sepal.Width        0.17 0.26 [-0.34, 0.69]   0.67
+#&gt; 6  Species [virginica] * Sepal.Width        0.21 0.26 [-0.29, 0.72]   0.83
+#&gt;             p
+#&gt; 1 8.52612e-06
+#&gt; 2 2.61332e-01
+#&gt; 3 1.22515e-01
+#&gt; 4 5.31104e-05
+#&gt; 5 5.02805e-01
+#&gt; 6 4.10634e-01</div><div class='input'><span class='co'># \donttest{</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/parameters/'>"parameters"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span>, refresh <span class='op'>=</span> <span class='fl'>0</span>, seed <span class='op'>=</span> <span class='fl'>123</span><span class='op'>)</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>model_parameters</a></span><span class='op'>(</span><span class='va'>model</span>, ci <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.69</span>, <span class='fl'>0.89</span>, <span class='fl'>0.95</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>format_table</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span><span class='co'># }</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>This is rstanarm version 2.21.1</span></div><div class='output co'>#&gt; <span class='message'>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span></div><div class='output co'>#&gt; <span class='message'>- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>  options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt;              Parameter Median        ?% CI   pd % in ROPE  Rhat     ESS
+#&gt; 1          (Intercept)   5.01 [4.94, 5.09] 100%        0% 1.000 3279.02
+#&gt; 2 Species [versicolor]   0.93 [0.82, 1.03] 100%        0% 1.000 3458.46
+#&gt; 3  Species [virginica]   1.58 [1.48, 1.69] 100%        0% 1.000 3201.26
+#&gt;                   Prior
+#&gt; 1 Normal (5.84 +- 2.07)
+#&gt; 2 Normal (0.00 +- 4.38)
+#&gt; 3 Normal (0.00 +- 4.38)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
