@@ -13,6 +13,7 @@
 #' @param ci_brackets Logical, if \code{TRUE} (default), CI-values are encompassed in square brackets (else in parentheses).
 #' @param ci_digits Number of decimal places for confidence intervals.
 #' @param p_digits Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.
+#' @param rope_digits Number of decimal places for the ROPE percentage values.
 #' @param preserve_attributes Logical, if \code{TRUE}, preserves all attributes from the input data frame.
 #' @inheritParams format_p
 #' @param ... Arguments passed to or from other methods.
@@ -115,7 +116,7 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
 
 
   # Bayesian ---
-  x <- .format_bayes_columns(x, stars)
+  x <- .format_bayes_columns(x, stars, rope_digits = rope_digits)
 
 
   # rename performance columns

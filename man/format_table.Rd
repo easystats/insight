@@ -35,6 +35,8 @@ format_table(
 
 \item{p_digits}{Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.}
 
+\item{rope_digits}{Number of decimal places for the ROPE percentage values.}
+
 \item{preserve_attributes}{Logical, if \code{TRUE}, preserves all attributes from the input data frame.}
 
 \item{...}{Arguments passed to or from other methods.}

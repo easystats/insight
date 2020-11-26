@@ -76,6 +76,7 @@ Suggests:
     nlme,
     ordinal,
     parameters,
+    performance,
     plm,
     pscl,
     quantreg,
