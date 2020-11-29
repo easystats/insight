@@ -248,6 +248,7 @@ find_statistic <- function(x, ...) {
       "glmRob",
       "glmrob",
       "pseudoglm",
+      "scam",
       "speedglm"
     )
 
