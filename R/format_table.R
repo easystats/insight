@@ -1,5 +1,5 @@
 #' @title Parameter table formatting
-#' @name format_table
+#' @name parameters_table
 #'
 #' @description This functions takes a data frame with model parameters as input
 #'   and formats certain columns into a more readable layout (like collapsing
@@ -21,18 +21,18 @@
 #' @examples
 #' if (require("parameters")) {
 #'   x <- model_parameters(lm(Sepal.Length ~ Species * Sepal.Width, data = iris))
-#'   as.data.frame(format_table(x))
-#'   as.data.frame(format_table(x, p_digits = "scientific"))
+#'   as.data.frame(parameters_table(x))
+#'   as.data.frame(parameters_table(x, p_digits = "scientific"))
 #' }
 #' \donttest{
 #' if (require("rstanarm") && require("parameters")) {
 #'   model <- stan_glm(Sepal.Length ~ Species, data = iris, refresh = 0, seed = 123)
 #'   x <- model_parameters(model, ci = c(0.69, 0.89, 0.95))
-#'   as.data.frame(format_table(x))
+#'   as.data.frame(parameters_table(x))
 #' }}
 #' @return A data frame.
 #' @export
-format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, rope_digits = 2, preserve_attributes = FALSE, ...) {
+parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, rope_digits = 2, preserve_attributes = FALSE, ...) {
 
   # check if user supplied digits attributes
   if (missing(digits)) digits <- .additional_arguments(x, "digits", 2)
@@ -144,9 +144,7 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
   x
 }
 
-#' @rdname format_table
-#' @export
-parameters_table <- format_table
+
 
 
 

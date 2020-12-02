@@ -2,9 +2,26 @@
 % Please edit documentation in R/export_table.R
 \name{export_table}
 \alias{export_table}
+\alias{format_table}
 \title{Data frame and Tables Pretty Formatting}
 \usage{
 export_table(
+  x,
+  sep = " | ",
+  header = "-",
+  digits = 2,
+  protect_integers = TRUE,
+  missing = "",
+  width = NULL,
+  format = NULL,
+  caption = NULL,
+  subtitle = NULL,
+  align = NULL,
+  footer = NULL,
+  zap_small = FALSE
+)
+
+format_table(
   x,
   sep = " | ",
   header = "-",
