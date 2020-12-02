@@ -6,6 +6,7 @@
 #'
 #' @param effects Should model data for fixed effects, random effects
 #'   or both be returned? Only applies to mixed models.
+#' @param verbose Toggle messages and warnings.
 #'
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
@@ -35,7 +36,7 @@ get_data <- function(x, ...) {
 
 
 #' @export
-get_data.default <- function(x, ...) {
+get_data.default <- function(x, verbose = TRUE, ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
@@ -65,7 +66,7 @@ get_data.default <- function(x, ...) {
     )
   }
 
-  .prepare_get_data(x, mf)
+  .prepare_get_data(x, mf, verbose = verbose)
 }
 
 
@@ -84,7 +85,7 @@ get_data.data.frame <- function(x, ...) {
 
 #' @rdname get_data
 #' @export
-get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.gee <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
   mf <- tryCatch(
     {
@@ -101,14 +102,14 @@ get_data.gee <- function(x, effects = c("all", "fixed", "random"), ...) {
     }
   )
 
-  .prepare_get_data(x, stats::na.omit(mf), effects = effects)
+  .prepare_get_data(x, stats::na.omit(mf), effects = effects, verbose = verbose)
 }
 
 
 
 #' @rdname get_data
 #' @export
-get_data.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+get_data.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), verbose = TRUE, ...) {
   component <- match.arg(component)
   mf <- tryCatch(
     {
@@ -120,7 +121,7 @@ get_data.rqss <- function(x, component = c("all", "conditional", "smooth_terms")
     }
   )
 
-  .prepare_get_data(x, stats::na.omit(mf))
+  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
 
@@ -128,7 +129,7 @@ get_data.rqss <- function(x, component = c("all", "conditional", "smooth_terms")
 
 
 #' @export
-get_data.gls <- function(x, ...) {
+get_data.gls <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       dat <- .get_data_from_env(x)
@@ -140,7 +141,7 @@ get_data.gls <- function(x, ...) {
     }
   )
 
-  .prepare_get_data(x, stats::na.omit(mf))
+  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
 #' @export
@@ -160,7 +161,7 @@ get_data.robmixglm <- get_data.gls
 
 
 #' @export
-get_data.lqmm <- function(x, ...) {
+get_data.lqmm <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       x$mfArgs$data
@@ -170,7 +171,7 @@ get_data.lqmm <- function(x, ...) {
     }
   )
 
-  .prepare_get_data(x, stats::na.omit(mf))
+  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
 
@@ -187,9 +188,9 @@ get_data.lqmm <- function(x, ...) {
 
 #' @rdname get_data
 #' @export
-get_data.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+get_data.hurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), verbose = TRUE, ...) {
   component <- match.arg(component)
-  .return_zeroinf_data(x, component)
+  .return_zeroinf_data(x, component, verbose = verbose)
 }
 
 #' @export
@@ -201,7 +202,7 @@ get_data.zerotrunc <- get_data.hurdle
 
 #' @rdname get_data
 #' @export
-get_data.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+get_data.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), verbose = TRUE, ...) {
   component <- match.arg(component)
 
   mf <- stats::model.frame(x)
@@ -226,7 +227,7 @@ get_data.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_i
     "zero_inflated" = mf_zero
   )
 
-  .prepare_get_data(x, stats::na.omit(mf))
+  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
 
@@ -242,7 +243,7 @@ get_data.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_i
 
 #' @rdname get_data
 #' @export
-get_data.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+get_data.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -257,21 +258,21 @@ get_data.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component
     }
   )
 
-  mf <- .prepare_get_data(x, mf, effects)
+  mf <- .prepare_get_data(x, mf, effects, verbose = verbose)
 
   # add variables from other model components
   mf <- .add_zeroinf_data(x, mf, model.terms$dispersion)
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated_random)
 
-  .return_data(x, mf, effects, component, model.terms)
+  .return_data(x, mf, effects, component, model.terms, verbose = verbose)
 }
 
 
 
 #' @rdname get_data
 #' @export
-get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.merMod <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
 
   mf <- tryCatch(
@@ -288,7 +289,7 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), ...) {
     }
   )
 
-  .prepare_get_data(x, mf, effects)
+  .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
 #' @export
@@ -300,7 +301,7 @@ get_data.merModList <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
-get_data.MANOVA <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.MANOVA <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
 
   mf <- tryCatch(
@@ -317,7 +318,7 @@ get_data.MANOVA <- function(x, effects = c("all", "fixed", "random"), ...) {
     }
   )
 
-  .prepare_get_data(x, mf, effects)
+  .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
 #' @export
@@ -326,7 +327,7 @@ get_data.RM <- get_data.MANOVA
 
 
 #' @export
-get_data.cpglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.cpglmm <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
   dat <- stats::model.frame(x)
 
@@ -344,7 +345,7 @@ get_data.cpglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
     }
   )
 
-  .prepare_get_data(x, mf, effects)
+  .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
 #' @export
@@ -352,9 +353,9 @@ get_data.HLfit <- get_data.cpglmm
 
 
 #' @export
-get_data.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.glmm <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
-  dat <- get_data.default(x)
+  dat <- get_data.default(x, verbose = verbose)
 
   mf <- tryCatch(
     {
@@ -374,7 +375,7 @@ get_data.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
-get_data.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.mixor <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
 
   mf <- tryCatch(
@@ -394,7 +395,7 @@ get_data.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
   fix_cn <- which(colnames(mf) %in% c("x.id", "x$id"))
   colnames(mf)[fix_cn] <- deparse(x$call$id)
 
-  .prepare_get_data(x, mf, effects)
+  .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
 
@@ -497,7 +498,7 @@ get_data.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @importFrom stats model.frame
 #' @rdname get_data
 #' @export
-get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -529,7 +530,7 @@ get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component 
       fitfram <- .prepare_get_data(x, fitfram, effects)
 
       model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE)
-      .return_data(x, mf = fitfram, effects, component, model.terms)
+      .return_data(x, mf = fitfram, effects, component, model.terms, verbose = verbose)
     },
     error = function(x) {
       NULL
@@ -808,7 +809,7 @@ get_data.bife <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 #' @rdname get_data
 #' @export
-get_data.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+get_data.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -827,7 +828,8 @@ get_data.brmsfit <- function(x, effects = c("all", "fixed", "random"), component
     effects,
     component,
     model.terms,
-    is_mv = is_multivariate(x)
+    is_mv = is_multivariate(x),
+    verbose = verbose
   )
 }
 
@@ -835,7 +837,7 @@ get_data.brmsfit <- function(x, effects = c("all", "fixed", "random"), component
 
 #' @rdname get_data
 #' @export
-get_data.stanreg <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.stanreg <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
 
   model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE)
@@ -843,11 +845,12 @@ get_data.stanreg <- function(x, effects = c("all", "fixed", "random"), ...) {
 
   .return_data(
     x,
-    .prepare_get_data(x, mf, effects = effects),
+    .prepare_get_data(x, mf, effects = effects, verbose = verbose),
     effects,
     component = "all",
     model.terms,
-    is_mv = is_multivariate(x)
+    is_mv = is_multivariate(x),
+    verbose = verbose
   )
 }
 

@@ -1,5 +1,10 @@
 # insight 0.11.1
 
+## General
+
+* Warnings that formerly were printed using `print_color()` now use `warning()`,
+  to better suppress warning messages if required.
+
 ## Changes to functions
 
 * `get_variance()` and `get_variance_random()` gain a `tolerance`-argument, to

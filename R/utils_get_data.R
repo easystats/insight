@@ -4,8 +4,8 @@
 # variables transformed during model fitting are not included in this data frame
 #
 #' @importFrom stats getCall formula na.omit
-.prepare_get_data <- function(x, mf, effects = "fixed") {
-  if (.is_empty_object(mf)) {
+.prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
+  if (.is_empty_object(mf) && isTRUE(verbose)) {
     warning("Could not get model data.", call. = F)
     return(NULL)
   }
@@ -171,7 +171,7 @@
       }
     )
 
-    if (!is.null(pv) && !all(pv %in% colnames(mf))) {
+    if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
       warning("Some model terms could not be found in model data. You probably need to load the data into the environment.", call. = FALSE)
     }
   }
@@ -267,7 +267,7 @@
 # This helper functions ensures that data from different model components
 # are included in the returned data frame
 #
-.return_data <- function(x, mf, effects, component, model.terms, is_mv = FALSE) {
+.return_data <- function(x, mf, effects, component, model.terms, is_mv = FALSE, verbose = TRUE) {
   response <- unlist(model.terms$response)
 
   if (is_mv) {
@@ -344,13 +344,13 @@
   vars <- intersect(vars, colnames(mf))
   dat <- mf[, vars, drop = FALSE]
 
-  if (.is_empty_object(dat)) {
-    print_color(sprintf("Warning: Data frame is empty, probably component '%s' does not exist in the %s-part of the model?\n", component, effects), "red")
+  if (.is_empty_object(dat) && isTRUE(verbose)) {
+    warning(sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects), call. = FALSE)
     return(NULL)
   }
 
-  if (length(still_missing)) {
-    print_color(sprintf("Warning: Following potential variables could not be found in the data: %s\n", paste0(still_missing, collapse = " ,")), "red")
+  if (length(still_missing) && isTRUE(verbose)) {
+    warning(sprintf("Warning: Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,")), call. = FALSE)
   }
 
   if ("(offset)" %in% colnames(mf) && !("(offset)" %in% colnames(dat))) {
@@ -402,7 +402,7 @@
 
 # combine data from count and zi-component -----------------------------------
 
-.return_zeroinf_data <- function(x, component) {
+.return_zeroinf_data <- function(x, component, verbose = TRUE) {
   model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE)
   model.terms$offset <- find_offset(x)
 
@@ -415,7 +415,7 @@
     }
   )
 
-  mf <- .prepare_get_data(x, mf)
+  mf <- .prepare_get_data(x, mf, verbose = verbose)
   # add variables from other model components
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
 

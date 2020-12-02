@@ -66,7 +66,7 @@ get_parameters <- function(x, ...) {
 
 
 #' @export
-get_parameters.default <- function(x, ...) {
+get_parameters.default <- function(x, verbose = TRUE, ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
@@ -87,8 +87,10 @@ get_parameters.default <- function(x, ...) {
       .remove_backticks_from_parameter_names(params)
     },
     error = function(x) {
-      print_color(sprintf("Parameters can't be retrieved for objects of class '%s'.\n", class(x)[1]), "red")
-      NULL
+      if (isTRUE(verbose)) {
+        warning(sprintf("Parameters can't be retrieved for objects of class '%s'.", class(x)[1]), call. = FALSE)
+      }
+      return(NULL)
     }
   )
 }

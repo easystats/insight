@@ -122,6 +122,8 @@ or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{parameters}{Regular expression pattern that describes the parameters that
 should be returned.}
+
+\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,

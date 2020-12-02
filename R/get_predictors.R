@@ -3,6 +3,7 @@
 #'
 #' @description Returns the data from all predictor variables (fixed effects).
 #'
+#' @param verbose Toggle messages and warnings.
 #' @inheritParams find_predictors
 #'
 #' @return The data from all predictor variables, as data frame.
@@ -11,7 +12,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' head(get_predictors(m))
 #' @export
-get_predictors <- function(x) {
+get_predictors <- function(x, verbose = TRUE) {
   vars <- if (inherits(x, "wbm")) {
     unlist(.compact_list(find_terms(x, flatten = FALSE)[c("conditional", "instruments")]))
   } else {
@@ -22,7 +23,9 @@ get_predictors <- function(x) {
   dat <- dat[, intersect(vars, colnames(dat)), drop = FALSE]
 
   if (.is_empty_object(dat)) {
-    print_color("Warning: Data frame is empty, probably you have an intercept-only model?\n", "red")
+    if (isTRUE(verbose)) {
+      warning("Data frame is empty, probably you have an intercept-only model?", call. = FALSE)
+    }
     return(NULL)
   }
 

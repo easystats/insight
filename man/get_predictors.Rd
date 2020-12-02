@@ -4,10 +4,12 @@
 \alias{get_predictors}
 \title{Get the data from model predictors}
 \usage{
-get_predictors(x)
+get_predictors(x, verbose = TRUE)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 The data from all predictor variables, as data frame.

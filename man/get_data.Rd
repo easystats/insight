@@ -21,26 +21,38 @@
 \usage{
 get_data(x, ...)
 
-\method{get_data}{gee}(x, effects = c("all", "fixed", "random"), ...)
+\method{get_data}{gee}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 
-\method{get_data}{rqss}(x, component = c("all", "conditional", "smooth_terms"), ...)
+\method{get_data}{rqss}(
+  x,
+  component = c("all", "conditional", "smooth_terms"),
+  verbose = TRUE,
+  ...
+)
 
 \method{get_data}{hurdle}(
   x,
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  verbose = TRUE,
   ...
 )
 
-\method{get_data}{zcpglm}(x, component = c("all", "conditional", "zi", "zero_inflated"), ...)
+\method{get_data}{zcpglm}(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated"),
+  verbose = TRUE,
+  ...
+)
 
 \method{get_data}{glmmTMB}(
   x,
   effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  verbose = TRUE,
   ...
 )
 
-\method{get_data}{merMod}(x, effects = c("all", "fixed", "random"), ...)
+\method{get_data}{merMod}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 
 \method{get_data}{glmmadmb}(x, effects = c("all", "fixed", "random"), ...)
 
@@ -56,6 +68,7 @@ get_data(x, ...)
   x,
   effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  verbose = TRUE,
   ...
 )
 
@@ -63,10 +76,11 @@ get_data(x, ...)
   x,
   effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated"),
+  verbose = TRUE,
   ...
 )
 
-\method{get_data}{stanreg}(x, effects = c("all", "fixed", "random"), ...)
+\method{get_data}{stanreg}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 
 \method{get_data}{MCMCglmm}(x, effects = c("all", "fixed", "random"), ...)
 }
@@ -77,6 +91,8 @@ get_data(x, ...)
 
 \item{effects}{Should model data for fixed effects, random effects
 or both be returned? Only applies to mixed models.}
+
+\item{verbose}{Toggle messages and warnings.}
 
 \item{component}{Should all predictor variables, predictor variables for the
  conditional model, the zero-inflated part of the model, the dispersion

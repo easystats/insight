@@ -18,6 +18,7 @@
 #'    with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 #'   \emph{conditional} component is also called \emph{count} or \emph{mean}
 #'   component, depending on the model.
+#' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -56,7 +57,7 @@ find_parameters <- function(x, ...) {
 
 
 #' @export
-find_parameters.default <- function(x, flatten = FALSE, ...) {
+find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
@@ -75,7 +76,9 @@ find_parameters.default <- function(x, flatten = FALSE, ...) {
 
 
   if (is.null(pars$conditional) || is.null(pars)) {
-    print_color(sprintf("Parameters can't be retrieved for objects of class '%s'.\n", class(x)[1]), "red")
+    if (isTRUE(verbose)) {
+      warning(sprintf("Parameters can't be retrieved for objects of class '%s'.", class(x)[1]), call. = FALSE)
+    }
     return(NULL)
   }
 
