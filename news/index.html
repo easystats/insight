@@ -123,16 +123,20 @@
 <h1 class="page-header" data-toc-text="0.11.1">
 <a href="#insight-0111" class="anchor"></a>insight 0.11.1<small> Unreleased </small>
 </h1>
-<ul>
-<li>Fix CRAN check issues.</li>
-</ul>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> and <code><a href="../reference/get_variance.html">get_variance_random()</a></code> gain a <code>tolerance</code>-argument, to set the tolerance level for singularity checks when computing random effect variances.</p></li>
-<li><p><code><a href="../reference/export_table.html">format_table()</a></code> (former <code><a href="../reference/parameters_table.html">parameters_table()</a></code>) formats more objects from the <em>easystats</em> packages, like ROPE-range or <code><a href="https://easystats.github.io/bayestestR/reference/p_rope.html">p_rope()</a></code>.</p></li>
+<li><p><code><a href="../reference/parameters_table.html">parameters_table()</a></code> formats more objects from the <em>easystats</em> packages, like ROPE-range or <code><a href="https://easystats.github.io/bayestestR/reference/p_rope.html">p_rope()</a></code>.</p></li>
 <li><p><code><a href="../reference/find_statistic.html">find_statistic()</a></code> now supports models of class <em>scam</em>.</p></li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fix CRAN check issues.</li>
 </ul>
 </div>
 </div>
@@ -175,9 +179,9 @@
 <li><p><code><a href="../reference/print_parameters.html">print_parameters()</a></code> gains a <code>keep_parameter_column</code>-argument, to keep (default) both the <code>"Cleaned_Parameter"</code> and <code>"Parameter"</code> columns, or - if <code>FALSE</code> - use <code>"Cleaned_Parameter"</code> as new <code>"Parameter"</code> column.</p></li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <div id="get_data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#get_data" class="anchor"></a><code>get_data()</code>
@@ -240,9 +244,9 @@
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> gains a <code>na_rm</code> argument to remove possible missing values.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fix issues with one-sample Bayesian t-tests ( <a href="https://github.com/easystats/parameters/issues/297" class="uri">https://github.com/easystats/parameters/issues/297</a> ).</p></li>
 <li><p>Fix issue in <code><a href="../reference/format_value.html">format_value()</a></code> that printed <code>"100%"</code> as <code>"1e+02%"</code>.</p></li>
@@ -268,9 +272,9 @@
 <li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>protect_ratio</code> argument, to print numbers smaller than 1 as ratios.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fix issues in CRAN checks.</p></li>
 <li><p><code><a href="../reference/get_priors.html">get_priors()</a></code> now works for more complex <code>BFBayesFactor</code> objects that have multiple custom priors.</p></li>
@@ -289,9 +293,9 @@
 <code><a href="../reference/get_data.html">get_data()</a></code> did not always “back-transform” log-transformed or scaled variables to return the original values. Now this bug has been fixed, and <code><a href="../reference/get_data.html">get_data()</a></code> should return all variables on the original scale (as if these variables were not transformed), as stated in the docs.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p><code><a href="../reference/get_data.html">get_data()</a></code> now returns the correct original data for “empty” polynomials (i.e. <code><a href="https://rdrr.io/r/stats/poly.html">poly(x, 1)</a></code>).</p></li>
 <li><p>Fix CRAN check issues due to latest <em>estimatr</em> update.</p></li>
@@ -318,9 +322,9 @@
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also support <code><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html">truncated_nbinom2()</a></code> family from <em>glmmTMB</em>.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue with correctly detecting sigma-parameters in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for multiple-response <code>brmsfit</code>-models.</p></li>
 <li><p>Fixed issue with <code><a href="../reference/find_formula.html">find_formula()</a></code> for models from <code><a href="https://mc-stan.org/rstanarm/reference/stan_nlmer.html">stan_nlmer()</a></code>.</p></li>
@@ -360,9 +364,9 @@
 <li><p><code><a href="../reference/format_p.html">format_p()</a></code> returns <code>"&gt; .999"</code> for p-values equal to or greater than 0.999.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> that did not properly work for models with random effects in formula (in <em>lme4</em> notation), when random effects were in between fixed effects parts.</p></li>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> did not return variance components for random effects for null-models with random slopes.</p></li>
@@ -419,9 +423,9 @@
 <li><p>Improved support for <code>afex_aov</code> and <code>aovlist</code> (i.e. Anova with error term).</p></li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed some issues with deparsings <code>NULL</code> strings under R 4.0.0.</p></li>
 <li><p>Fixed accuracy in <code><a href="../reference/get_variance.html">get_variance()</a></code> for models from Gamma family.</p></li>
@@ -459,9 +463,9 @@
 <li><p>Improve support for <em>bayesx</em> and <em>BBmm</em> models.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-7" class="section level2">
+<div id="bug-fixes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <em>brmsfit</em> models with specific variable name patterns.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/format_ci.html">format_ci()</a></code> when confidence interval only contained <code>NA</code>s and <code>width</code> was set to <code>"auto"</code>.</p></li>
@@ -498,9 +502,9 @@
 <li>Improved support for <code>clogit</code>-models.</li>
 </ul>
 </div>
-<div id="bug-fixes-8" class="section level2">
+<div id="bug-fixes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue in <code><a href="../reference/find_weights.html">find_weights()</a></code> for <code>merMod</code> models.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with weights, when weights also contained missing data.</p></li>
@@ -539,9 +543,9 @@
 <li><p><code><a href="../reference/format_value.html">format_value()</a></code> gets an <code>as_percent</code> argument to format values as percentages.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-9" class="section level2">
+<div id="bug-fixes-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-10" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>clmm2</em>-models.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models that used the <code>lspline()</code>-function.</p></li>
@@ -590,9 +594,9 @@
 <li><p>Other minor improvements.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-10" class="section level2">
+<div id="bug-fixes-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-10" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-11" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Better detect Tweedie-models in <code><a href="../reference/model_info.html">model_info()</a></code>.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code> for <em>panelr</em>-models with multiple random-effect parts.</p></li>
@@ -616,9 +620,9 @@
 <code>complmrob</code> (<em>complmrob</em>), <code>fixest</code> (<em>fixest</em>), <code>mclogit</code> and <code>mmclogit</code> (<em>mclogit</em>).</li>
 </ul>
 </div>
-<div id="bug-fixes-11" class="section level2">
+<div id="bug-fixes-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-11" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-12" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed bug in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models, when random effects are written before any fixed effects terms (like <code>social ~ (1|school) + open + extro</code>).</p></li>
 <li><p>Fixed bug in <code><a href="../reference/model_info.html">model_info()</a></code> for <em>VGAM</em> models, where logit-link was not always correctly identified.</p></li>
@@ -655,9 +659,9 @@
 <li><p><code><a href="../reference/link_inverse.html">link_inverse()</a></code> gets a <code>what</code>-argument, to return the link-inverse function for specific distribution parameters from <strong>gamls</strong> models.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-12" class="section level2">
+<div id="bug-fixes-13" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-12" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-13" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed edge case for <code><a href="../reference/find_weights.html">find_weights()</a></code>.</p></li>
 <li><p>Fixed bug in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>glmmTMB</em> models that won’t return any data.</p></li>
@@ -696,9 +700,9 @@
 <li><p>Better support for nonlinear mixed models (<code><a href="https://rdrr.io/pkg/lme4/man/nlmer.html">lme4::nlmer()</a></code>). Note that model-specification requires the random term to be written in parentheses, i.e. <code>(slope | group)</code>.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-13" class="section level2">
+<div id="bug-fixes-14" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-13" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-14" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issues in <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>gamlss</em> models.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>plm</em> models, where the <code>index</code>-argument was used in the <code>plm()</code>-function call.</p></li>
@@ -746,9 +750,9 @@
 <li><p><code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> now include the Euclidean distance matrix for spatial models from <em>glmmTMB</em> (returned as random effects element, or more precise, as random slope).</p></li>
 </ul>
 </div>
-<div id="bug-fixes-14" class="section level2">
+<div id="bug-fixes-15" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-14" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-15" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> now extracts group factors of random effects for <em>gamlss</em> models.</p></li>
 <li><p><code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> no longer show <code>NA</code> coefficients from group factors of random effects for <em>gamlss</em> models.</p></li>
@@ -773,9 +777,9 @@
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> and <code><a href="../reference/find_weights.html">find_weights()</a></code> now work for <em>brms</em>-models.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-15" class="section level2">
+<div id="bug-fixes-16" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-15" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-16" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix CRAN-check issues due to recent update from the <em>panelr</em>-package.</li>
 </ul>
