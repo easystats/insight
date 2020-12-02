@@ -56,6 +56,7 @@ find_parameters <- function(x, ...) {
 # Default methods -------------------------------------------
 
 
+#' @rdname find_parameters
 #' @export
 find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
