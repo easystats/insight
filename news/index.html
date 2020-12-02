@@ -123,6 +123,13 @@
 <h1 class="page-header" data-toc-text="0.11.1">
 <a href="#insight-0111" class="anchor"></a>insight 0.11.1<small> Unreleased </small>
 </h1>
+<div id="general" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general" class="anchor"></a>General</h2>
+<ul>
+<li>Warnings that formerly were printed using <code><a href="../reference/print_color.html">print_color()</a></code> now use <code><a href="https://rdrr.io/r/base/warning.html">warning()</a></code>, to better suppress warning messages if required.</li>
+</ul>
+</div>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
@@ -222,9 +229,9 @@
 <li>Support for <code>maov</code> (<em>stats</em>), <code>HLfit</code> (<em>spaMM</em>), preliminary support for <code>margins</code> (<em>margins</em>), <code>merModList</code> (<em>merTools</em>).</li>
 </ul>
 </div>
-<div id="general" class="section level2">
+<div id="general-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general" class="anchor"></a>General</h2>
+<a href="#general-1" class="anchor"></a>General</h2>
 <ul>
 <li><p>Better support for (weighted) multivariate response models of class <code>mlm</code> for functions like <code><a href="../reference/get_varcov.html">get_varcov()</a></code> or <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>.</p></li>
 <li><p>Make <code><a href="../reference/find_formula.html">find_formula()</a></code> work with t-tests from <em>BayesFactor</em>.</p></li>
@@ -406,9 +413,9 @@
 <h1 class="page-header" data-toc-text="0.8.4">
 <a href="#insight-084" class="anchor"></a>insight 0.8.4<small> 2020-05-13 </small>
 </h1>
-<div id="general-1" class="section level2">
+<div id="general-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-1" class="anchor"></a>General</h2>
+<a href="#general-2" class="anchor"></a>General</h2>
 <ul>
 <li><p><em>HRQoL</em> was removed from suggested packages, as it was removed from CRAN.</p></li>
 <li><p>Better support for dispersion models in <em>glmmTMB</em>.</p></li>
@@ -439,9 +446,9 @@
 <h1 class="page-header" data-toc-text="0.8.3">
 <a href="#insight-083" class="anchor"></a>insight 0.8.3<small> 2020-04-20 </small>
 </h1>
-<div id="general-2" class="section level2">
+<div id="general-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-2" class="anchor"></a>General</h2>
+<a href="#general-3" class="anchor"></a>General</h2>
 <ul>
 <li>The function to calculate null-models for mixed effects models is now exported (<code><a href="../reference/null_model.html">null_model()</a></code>.)</li>
 </ul>
@@ -495,9 +502,9 @@
 <code>bife</code> (<em>bife</em>), <code>bcplm</code> and <code>zcpglm</code> (<em>cplm</em>)</li>
 </ul>
 </div>
-<div id="general-3" class="section level2">
+<div id="general-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-3" class="anchor"></a>General</h2>
+<a href="#general-4" class="anchor"></a>General</h2>
 <ul>
 <li>Improved support for <code>clogit</code>-models.</li>
 </ul>
@@ -528,9 +535,9 @@
 <code>cglm</code> (<em>cglm</em>), <code>DirichletRegModel</code> (<em>DirichletReg</em>).</li>
 </ul>
 </div>
-<div id="general-4" class="section level2">
+<div id="general-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-4" class="anchor"></a>General</h2>
+<a href="#general-5" class="anchor"></a>General</h2>
 <ul>
 <li>Improved efficiency of <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for mixed models with large samples and many random effects, and only fixed effects where requested.</li>
 </ul>
@@ -567,9 +574,9 @@
 <code>brglm</code> (<em>brglm</em>), <code>cgam</code>, <code>cgamm</code> (<em>cgam</em>), <code>cpglm</code>, <code>cpglmm</code> (<em>cplm</em>), <code>feglm</code> (<em>apaca</em>), <code>glmmadmb</code> (<em>glmmADMB</em>), <code>glmx</code> (<em>glmx</em>), partial support for <code>mcmc</code> (<em>coda</em>), <code>mixor</code> (<em>mixor</em>), <code>MANOVA</code>, <code>RM</code> (<em>MANOVA.RM</em>).</li>
 </ul>
 </div>
-<div id="general-5" class="section level2">
+<div id="general-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-5" class="anchor"></a>General</h2>
+<a href="#general-6" class="anchor"></a>General</h2>
 <ul>
 <li>Better handling of <code>clm2</code>, <code>clmm2</code> and <code>rqss</code> models.</li>
 </ul>
@@ -734,9 +741,9 @@
 <li><p><code><a href="../reference/color_if.html">color_if()</a></code> as utility-function to add color formatting to values, depending on certain conditions.</p></li>
 </ul>
 </div>
-<div id="general-6" class="section level2">
+<div id="general-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-6" class="anchor"></a>General</h2>
+<a href="#general-7" class="anchor"></a>General</h2>
 <ul>
 <li>Make extraction of model family information more stable for gam-objects.</li>
 </ul>
