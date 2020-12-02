@@ -195,10 +195,10 @@ if (require("testthat") &&
       colnames(get_data(m2, effects = "all")),
       c("count", "child", "camper", "persons")
     )
-    expect_equal(colnames(get_data(m2, effects = "random")), "persons")
+    expect_equal(colnames(get_data(m2, effects = "random", verbose = FALSE)), "persons")
     get_data(m3)
-    expect_equal(colnames(get_data(m6)), "count")
-    expect_null(get_data(m6, effects = "random"))
+    expect_equal(colnames(get_data(m6, verbose = FALSE)), "count")
+    expect_null(get_data(m6, effects = "random", verbose = FALSE))
   })
 
   test_that("find_predictors", {
@@ -530,7 +530,7 @@ if (require("testthat") &&
       colnames(get_predictors(m4)),
       c("child", "camper", "livebait", "xb")
     )
-    expect_null(get_predictors(m6))
+    expect_null(get_predictors(m6, verbose = FALSE))
   })
 
   test_that("get_random", {
@@ -582,7 +582,7 @@ if (require("testthat") &&
       m4,
       component = "disp", effects = "fixed"
     )), c("count", "xb"))
-    expect_null(get_data(m4, component = "disp", effects = "random"))
+    expect_null(get_data(m4, component = "disp", effects = "random", verbose = FALSE))
   })
 
   test_that("find_paramaters", {

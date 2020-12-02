@@ -5,8 +5,10 @@
 #
 #' @importFrom stats getCall formula na.omit
 .prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
-  if (.is_empty_object(mf) && isTRUE(verbose)) {
-    warning("Could not get model data.", call. = F)
+  if (.is_empty_object(mf)) {
+    if (isTRUE(verbose)) {
+      warning("Could not get model data.", call. = F)
+    }
     return(NULL)
   }
 
@@ -344,8 +346,10 @@
   vars <- intersect(vars, colnames(mf))
   dat <- mf[, vars, drop = FALSE]
 
-  if (.is_empty_object(dat) && isTRUE(verbose)) {
-    warning(sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects), call. = FALSE)
+  if (.is_empty_object(dat)) {
+    if (isTRUE(verbose)) {
+      warning(sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects), call. = FALSE)
+    }
     return(NULL)
   }
 
