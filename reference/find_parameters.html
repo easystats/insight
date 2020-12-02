@@ -133,6 +133,9 @@
 
     <pre class="usage"><span class='fu'>find_parameters</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
+<span class='co'># S3 method for default</span>
+<span class='fu'>find_parameters</span><span class='op'>(</span><span class='va'>x</span>, flatten <span class='op'>=</span> <span class='cn'>FALSE</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='co'># S3 method for betamfx</span>
 <span class='fu'>find_parameters</span><span class='op'>(</span>
   <span class='va'>x</span>,
@@ -239,6 +242,15 @@
       <td><p>Currently not used.</p></td>
     </tr>
     <tr>
+      <th>flatten</th>
+      <td><p>Logical, if <code>TRUE</code>, the values are returned
+as character vector, not as list. Duplicated values are removed.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle messages and warnings.</p></td>
+    </tr>
+    <tr>
       <th>component</th>
       <td><p>Should all parameters, parameters for the
  conditional model, the zero-inflated part of the model, the dispersion
@@ -250,11 +262,6 @@
 component, depending on the model.</p></td>
     </tr>
     <tr>
-      <th>flatten</th>
-      <td><p>Logical, if <code>TRUE</code>, the values are returned
-as character vector, not as list. Duplicated values are removed.</p></td>
-    </tr>
-    <tr>
       <th>effects</th>
       <td><p>Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
@@ -263,10 +270,6 @@ or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
       <th>parameters</th>
       <td><p>Regular expression pattern that describes the parameters that
 should be returned.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Toggle messages and warnings.</p></td>
     </tr>
     </table>
 
