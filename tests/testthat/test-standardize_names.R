@@ -37,18 +37,16 @@ if (require("testthat") &&
     names(standardize_names(z, style = "broom")),
     c(
       "parameter1", "parameter2", "mean.parameter1", "mean.parameter2",
-      "estimate", "statistic", "df", "p.value", "conf.low", "conf.high",
+      "estimate", "statistic", "df.error", "p.value", "conf.low", "conf.high",
       "method"
     )
   )
 
   # chi-square test
-  if (packageVersion("parameters") > "0.9.0") {
-    chi <- as.data.frame(parameters::model_parameters(chisq.test(matrix(c(12, 5, 7, 7), ncol = 2))))
+  chi <- as.data.frame(parameters::model_parameters(chisq.test(matrix(c(12, 5, 7, 7), ncol = 2))))
 
-    expect_equal(
-      names(standardize_names(chi, style = "broom")),
-      c("statistic", "df", "p.value")
-    )
-  }
+  expect_equal(
+    names(standardize_names(chi, style = "broom")),
+    c("statistic", "df", "p.value", "method")
+  )
 }
