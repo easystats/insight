@@ -1,10 +1,6 @@
 # insight 0.11.1
 
-## Breaking changes
-
-* `format_table()` was renamed in to `export_table()`.
-
-* `parameters_table()` was renamed in to `format_table()`.
+* Fix CRAN check issues.
 
 ## Changes to functions
 
