@@ -900,6 +900,7 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters
   }
 
   estimate_pos <- which(colnames(s) == x@misc$estName)
+  ci_level <- .95
 
   if (length(estimate_pos)) {
     msg <- attributes(s)$mesg
@@ -917,8 +918,6 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters
             .95
           }
         )
-      } else {
-        ci_level <- .95
       }
     }
 
