@@ -16,6 +16,8 @@
 
 * `find_statistic()` now supports models of class *scam*.
 
+* `get_data()` now also supports `htest`-object, where possible.
+
 ## Bug fixes
 
 * Fix CRAN check issues.

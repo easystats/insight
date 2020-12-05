@@ -1305,3 +1305,33 @@ get_data.mipo <- function(x, ...) {
     }
   )
 }
+
+
+#' @export
+get_data.htest <- function(x, ...) {
+  out <- NULL
+  if (!is.null(x$data.name)) {
+    out <- tryCatch(
+      {
+        data_name <- unlist(strsplit(x$data.name, " (and|by) "))
+        data_call <- lapply(data_name, str2lang)
+        columns <- lapply(data_call, eval)
+        max_len <- max(sapply(columns, length))
+        for (i in 1:length(columns)) {
+          columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
+        }
+        d <- as.data.frame(columns)
+        if (ncol(d) == 2) {
+          colnames(d) <- c("x", "y")
+        } else {
+          colnames(d) <- "x"
+        }
+        d
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
+  out
+}
