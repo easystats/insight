@@ -83,10 +83,35 @@ A data frame in character format.
 Data frame and Tables Pretty Formatting
 }
 \note{
-This function is going to be renamed in a future update. Please use its
-alias \code{export_table()}.
+The values for \code{caption}, \code{subtitle} and \code{footer}
+  can also be provided as attributes of \code{x}, e.g. if \code{caption = NULL}
+  and \code{x} has attribute \code{table_caption}, the value for this
+  attribute will be used as table caption. \code{table_subtitle} is the
+  attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
 }
 \examples{
 cat(export_table(iris))
 cat(export_table(iris, sep = " ", header = "*", digits = 1))
+
+\dontrun{
+# colored footers
+data(iris)
+x <- as.data.frame(iris[1:5, ])
+attr(x, "table_footer") <- c("This is a yellow footer line.", "yellow")
+cat(export_table(x))
+
+attr(x, "table_footer") <- list(
+  c("\nA yellow line", "yellow"),
+  c("\nAnd a red line", "red"),
+  c("\nAnd a blue line", "blue")
+)
+cat(export_table(x))
+
+attr(x, "table_footer") <- list(
+  c("Without the ", "yellow"),
+  c("new-line character ", "red"),
+  c("we can have multiple colors per line.", "blue")
+)
+cat(export_table(x))
+}
 }

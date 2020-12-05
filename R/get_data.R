@@ -1316,12 +1316,20 @@ get_data.htest <- function(x, ...) {
         data_name <- unlist(strsplit(x$data.name, " (and|by) "))
         data_call <- lapply(data_name, str2lang)
         columns <- lapply(data_call, eval)
-        max_len <- max(sapply(columns, length))
-        for (i in 1:length(columns)) {
-          columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
+
+        if (!grepl(" (and|by) ", x$data.name) && grepl("^McNemar", x$method)) {
+          d <- as.data.frame(cbind(columns[[1]]))
+        } else {
+          max_len <- max(sapply(columns, length))
+          for (i in 1:length(columns)) {
+            columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
+          }
+          d <- as.data.frame(columns)
         }
-        d <- as.data.frame(columns)
-        if (ncol(d) == 2) {
+
+        if (ncol(d) > 2) {
+          colnames(d) <- paste0("x", 1:ncol(d))
+        } else if (ncol(d) == 2) {
           colnames(d) <- c("x", "y")
         } else {
           colnames(d) <- "x"
