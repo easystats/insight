@@ -228,7 +228,7 @@ format_table <- export_table
         rows <- .paste_footers(i, rows)
       }
     } else {
-      rows <- .paste_footers(i, rows)
+      rows <- .paste_footers(footer, rows)
     }
   }
 
