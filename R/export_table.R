@@ -223,13 +223,26 @@ format_table <- export_table
   }
 
   if (!is.null(footer)) {
-    if (length(footer) == 2 && .is_valid_colour(footer[2])) {
-      footer <- .colour(footer[2], footer[1])
+    if (is.list(footer)) {
+      for (i in footer) {
+        rows <- .paste_footers(i, rows)
+      }
+    } else {
+      rows <- .paste_footers(i, rows)
     }
-    rows <- paste0(rows, footer[1])
   }
 
   rows
+}
+
+
+# helper ----------------
+
+.paste_footers <- function(footer, rows) {
+  if (length(footer) == 2 && .is_valid_colour(footer[2])) {
+    footer <- .colour(footer[2], footer[1])
+  }
+  paste0(rows, footer[1])
 }
 
 
