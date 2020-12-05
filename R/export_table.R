@@ -56,6 +56,15 @@ export_table <- function(x,
 
   # single data frame
   if (is.data.frame(x)) {
+    if (is.null(caption)) {
+      caption <- attributes(x)$table_caption
+    }
+    if (is.null(subtitle)) {
+      subtitle <- attributes(x)$table_subtitle
+    }
+    if (is.null(footer)) {
+      footer <- attributes(x)$table_footer
+    }
     out <- .export_table(
       x = x,
       sep = sep,
