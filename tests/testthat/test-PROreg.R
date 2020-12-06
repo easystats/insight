@@ -1,11 +1,5 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-print(Sys.getenv("GITHUB_ACTOR"))
-cat(Sys.getenv("GITHUB_ACTOR"))
-
-print(Sys.getenv("CI"))
-cat(Sys.getenv("CI"))
-
 if (.runThisTest && require("testthat") && require("insight") && require("PROreg")) {
   set.seed(123)
 
@@ -112,7 +106,7 @@ if (.runThisTest && require("testthat") && require("insight") && require("PROreg
         random = "z"
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 4)
+    expect_equal(nrow(get_parameters(m1)), 2)
     expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "x"))
   })
 

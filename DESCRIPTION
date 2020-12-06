@@ -78,6 +78,7 @@ Suggests:
     parameters,
     performance,
     plm,
+    PROreg,
     pscl,
     quantreg,
     rms,
