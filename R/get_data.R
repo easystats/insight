@@ -1318,7 +1318,8 @@ get_data.htest <- function(x, ...) {
         columns <- lapply(data_call, eval)
 
         if (!grepl(" (and|by) ", x$data.name) && grepl("^McNemar", x$method)) {
-          d <- as.data.frame(cbind(columns[[1]]))
+          # preserve table data for McNemar
+          return(as.table(columns[[1]]))
         } else {
           max_len <- max(sapply(columns, length))
           for (i in 1:length(columns)) {
