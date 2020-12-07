@@ -146,13 +146,6 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
 
 
-#' @rdname parameters_table
-#' @export
-format_table <- parameters_table
-
-
-
-
 
 
 # sub-routines ---------------

@@ -147,7 +147,9 @@ export_table <- function(x,
   out
 }
 
-
+#' @rdname export_table
+#' @export
+format_table <- export_table
 
 
 
