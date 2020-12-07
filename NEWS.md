@@ -1,5 +1,11 @@
 # insight 0.11.1
 
+## Breaking changes
+
+* The alias `format_table()` was removed from `export_table()`.
+
+* `parameters_table()` gets the alias `format_table()`.
+
 ## General
 
 * Warnings that formerly were printed using `print_color()` now use `warning()`,

@@ -2,9 +2,24 @@
 % Please edit documentation in R/format_table.R
 \name{parameters_table}
 \alias{parameters_table}
+\alias{format_table}
 \title{Parameter table formatting}
 \usage{
 parameters_table(
+  x,
+  pretty_names = TRUE,
+  stars = FALSE,
+  digits = 2,
+  ci_width = "auto",
+  ci_brackets = TRUE,
+  ci_digits = 2,
+  p_digits = 3,
+  rope_digits = 2,
+  preserve_attributes = FALSE,
+  ...
+)
+
+format_table(
   x,
   pretty_names = TRUE,
   stars = FALSE,
