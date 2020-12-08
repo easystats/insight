@@ -1,4 +1,13 @@
-if (require("testthat") && require("insight") && require("mgcv") && require("gamm4") && require("rstanarm")) {
+osx <- tryCatch({
+  si <- Sys.info()
+  if (!is.null(si["sysname"])) {
+    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+  } else {
+    FALSE
+  }
+})
+
+if (require("testthat") && require("insight") && require("mgcv") && require("gamm4") && require("rstanarm") && !osx) {
   set.seed(2) ## simulate some data...
   dat <- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
 
