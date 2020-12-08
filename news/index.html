@@ -130,6 +130,14 @@
 <li>Warnings that formerly were printed using <code><a href="../reference/print_color.html">print_color()</a></code> now use <code><a href="https://rdrr.io/r/base/warning.html">warning()</a></code>, to better suppress warning messages if required.</li>
 </ul>
 </div>
+<div id="new-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-functions" class="anchor"></a>New functions</h2>
+<ul>
+<li>
+<code><a href="../reference/find_smooth.html">find_smooth()</a></code>, to return in particular smooth terms used in a model.</li>
+</ul>
+</div>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
@@ -356,9 +364,9 @@
 <code>BGGM</code> (<em>BGGM</em>), <code>metaplus</code> (<em>metaplus</em>), <code>glht</code> (<em>multcomp</em>), <code>glmm</code> (<em>glmm</em>), improved support for <code>manova</code> (<em>stats</em>)</li>
 </ul>
 </div>
-<div id="new-functions" class="section level2">
+<div id="new-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions" class="anchor"></a>New functions</h2>
+<a href="#new-functions-1" class="anchor"></a>New functions</h2>
 <ul>
 <li>Value formatting functions <code><a href="../reference/format_bf.html">format_bf()</a></code>, <code><a href="../reference/format_pd.html">format_pd()</a></code>, <code><a href="../reference/format_p.html">format_p()</a></code>, <code><a href="../reference/format_rope.html">format_rope()</a></code> and <code><a href="../reference/format_number.html">format_number()</a></code> were moved from package <em>parameters</em> to <em>insight</em>.</li>
 </ul>
@@ -583,9 +591,9 @@
 <li>Better handling of <code>clm2</code>, <code>clmm2</code> and <code>rqss</code> models.</li>
 </ul>
 </div>
-<div id="new-functions-1" class="section level2">
+<div id="new-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-1" class="anchor"></a>New functions</h2>
+<a href="#new-functions-2" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/format_ci.html">format_ci()</a></code> (re-implemented and slightly enhanced from <em>parameters</em>), to format confidence/credible intervals.</li>
@@ -689,9 +697,9 @@
 <li><p>Support for <em>lavaan</em> and <em>blavaan</em> was added, but only applies to some of the functions: <code><a href="../reference/get_data.html">get_data()</a></code>, <code><a href="../reference/get_parameters.html">get_parameters()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code>, <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>, <code><a href="../reference/find_algorithm.html">find_algorithm()</a></code> and <code><a href="../reference/get_priors.html">get_priors()</a></code> (the two latter only for <em>blavaan</em>).</p></li>
 </ul>
 </div>
-<div id="new-functions-2" class="section level2">
+<div id="new-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-2" class="anchor"></a>New functions</h2>
+<a href="#new-functions-3" class="anchor"></a>New functions</h2>
 <ul>
 <li><p><code><a href="../reference/get_statistic.html">get_statistic()</a></code> to return the test statistic of model estimates.</p></li>
 <li><p><code><a href="../reference/get_varcov.html">get_varcov()</a></code> to return the variance-covariance matrix for models.</p></li>
@@ -734,9 +742,9 @@
 <li>The previous <code><a href="../reference/is_model.html">is_model()</a></code> function has been renamed to <code><a href="../reference/is_model_supported.html">is_model_supported()</a></code> since it was unclear if the function checked the entered object was a model or a supported model in <em>insight</em>. The new <code><a href="../reference/is_model.html">is_model()</a></code> function checks if the entered object is a model object, while <code><a href="../reference/is_model_supported.html">is_model_supported()</a></code> checks if a supported model object.</li>
 </ul>
 </div>
-<div id="new-functions-3" class="section level2">
+<div id="new-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-3" class="anchor"></a>New functions</h2>
+<a href="#new-functions-4" class="anchor"></a>New functions</h2>
 <ul>
 <li><p><code><a href="../reference/find_statistic.html">find_statistic()</a></code> to return the test statistic of a regression model.</p></li>
 <li><p><code><a href="../reference/format_value.html">format_value()</a></code> and <code><a href="../reference/export_table.html">format_table()</a></code> as utility-functions to format (model) output, especially for tabular output.</p></li>

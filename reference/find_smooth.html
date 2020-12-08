@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find names of random effects — find_random • insight</title>
+<title>Find smooth terms from a model object — find_smooth • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Find names of random effects — find_random" />
-<meta property="og:description" content="Return the name of the grouping factors from mixed effects models." />
+<meta property="og:title" content="Find smooth terms from a model object — find_smooth" />
+<meta property="og:description" content="Return the names of smooth terms from a model object." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -116,29 +116,23 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find names of random effects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_random.R'><code>R/find_random.R</code></a></small>
-    <div class="hidden name"><code>find_random.Rd</code></div>
+    <h1>Find smooth terms from a model object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_smooth.R'><code>R/find_smooth.R</code></a></small>
+    <div class="hidden name"><code>find_smooth.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return the name of the grouping factors from mixed effects models.</p>
+    <p>Return the names of smooth terms from a model object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_random</span><span class='op'>(</span><span class='va'>x</span>, split_nested <span class='op'>=</span> <span class='cn'>FALSE</span>, flatten <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>find_smooth</span><span class='op'>(</span><span class='va'>x</span>, flatten <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted mixed model.</p></td>
-    </tr>
-    <tr>
-      <th>split_nested</th>
-      <td><p>Logical, if <code>TRUE</code>, terms from nested random
-effects will be returned as separated elements, not as single string
-with colon. See 'Examples'.</p></td>
+      <td><p>A (gam) model.</p></td>
     </tr>
     <tr>
       <th>flatten</th>
@@ -149,35 +143,19 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of character vectors that represent the name(s) of the
-   random effects (grouping factors). Depending on the model, the
-   returned list has following elements:</p><ul>
-<li><p><code>random</code>, the "random effects" terms from the conditional part of model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" terms from the zero-inflation component of the model</p></li>
-</ul>
-
+    <p>A character vector with the name(s) of the smooth terms.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sleepstudy</span><span class='op'>)</span>
-  <span class='va'>sleepstudy</span><span class='op'>$</span><span class='va'>mygrp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, size <span class='op'>=</span> <span class='fl'>180</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-  <span class='va'>sleepstudy</span><span class='op'>$</span><span class='va'>mysubgrp</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
-  <span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='va'>filter_group</span> <span class='op'>&lt;-</span> <span class='va'>sleepstudy</span><span class='op'>$</span><span class='va'>mygrp</span> <span class='op'>==</span> <span class='va'>i</span>
-    <span class='va'>sleepstudy</span><span class='op'>$</span><span class='va'>mysubgrp</span><span class='op'>[</span><span class='va'>filter_group</span><span class='op'>]</span> <span class='op'>&lt;-</span>
-      <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>, size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>filter_group</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-  <span class='op'>}</span>
-
-  <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span>
-    <span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>mygrp</span> <span class='op'>/</span> <span class='va'>mysubgrp</span><span class='op'>)</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Subject</span><span class='op'>)</span>,
-    data <span class='op'>=</span> <span class='va'>sleepstudy</span>
-  <span class='op'>)</span>
-
-  <span class='fu'>find_random</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-  <span class='fu'>find_random</span><span class='op'>(</span><span class='va'>m</span>, split_nested <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"mgcv"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>gam</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+  <span class='fu'>find_smooth</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='output co'>#&gt; $random
-#&gt; [1] "mysubgrp" "mygrp"    "Subject" 
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: mgcv</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: nlme</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘nlme’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:lme4’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    lmList</span></div><div class='output co'>#&gt; <span class='message'>This is mgcv 1.8-33. For overview type 'help("mgcv-package")'.</span></div><div class='output co'>#&gt; $conditional
+#&gt; [1] "s(Sepal.Length)"
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
