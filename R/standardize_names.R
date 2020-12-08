@@ -109,7 +109,7 @@ standardize_names.parameters_distribution <- function(data, style = c("easystats
   if (!isTRUE(ignore_estimate)) {
     cn[cn %in% c("Median", "Mean", "MAP", "rho", "r", "tau", "Difference")] <- "Coefficient"
   }
-  cn[cn %in% c("df_residual", "df_error")] <- "df"
+  cn[cn %in% c("df_residual", "df.residual", "df.error", "df_error")] <- "df"
 
   # convert broom-style to easystats
   cn[cn == "term"] <- "Parameter"
@@ -125,8 +125,6 @@ standardize_names.parameters_distribution <- function(data, style = c("easystats
   cn[cn == "conf.low"] <- "CI_low"
   cn[cn == "conf.high"] <- "CI_high"
   cn[cn == "ci.width"] <- "CI"
-  cn[cn == "df.error"] <- "df_error"
-  cn[cn == "df.residual"] <- "df_residual"
   cn[cn == "n.obs"] <- "n_Obs"
   # anova
   cn[cn == "sumsq"] <- "Sum_Squares"
