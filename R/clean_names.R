@@ -32,16 +32,17 @@
 #' clean_names(m)
 #'
 #' # difference "clean_names()" and "find_variables()"
-#' library(lme4)
-#' m <- glmer(
-#'   cbind(incidence, size - incidence) ~ period + (1 | herd),
-#'   data = cbpp,
-#'   family = binomial
-#' )
+#' if (require("lme4")) {
+#'   m <- glmer(
+#'     cbind(incidence, size - incidence) ~ period + (1 | herd),
+#'     data = cbpp,
+#'     family = binomial
+#'   )
 #'
-#' clean_names(m)
-#' find_variables(m)
-#' find_variables(m, flatten = TRUE)
+#'   clean_names(m)
+#'   find_variables(m)
+#'   find_variables(m, flatten = TRUE)
+#' }
 #' @export
 clean_names <- function(x, ...) {
   UseMethod("clean_names")
