@@ -11,19 +11,20 @@
 #'   of same class.
 #'
 #' @examples
-#' library(lme4)
-#' data(mtcars)
-#' data(sleepstudy)
+#' if (require("lme4")) {
+#'   data(mtcars)
+#'   data(sleepstudy)
 #'
-#' m1 <- lm(mpg ~ wt + cyl + vs, data = mtcars)
-#' m2 <- lm(mpg ~ wt + cyl, data = mtcars)
-#' m3 <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-#' m4 <- glm(formula = vs ~ wt, family = binomial(), data = mtcars)
+#'   m1 <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+#'   m2 <- lm(mpg ~ wt + cyl, data = mtcars)
+#'   m3 <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+#'   m4 <- glm(formula = vs ~ wt, family = binomial(), data = mtcars)
 #'
-#' all_models_same_class(m1, m2)
-#' all_models_same_class(m1, m2, m3)
-#' all_models_same_class(m1, m4, m2, m3, verbose = TRUE)
-#' all_models_same_class(m1, m4, mtcars, m2, m3, verbose = TRUE)
+#'   all_models_same_class(m1, m2)
+#'   all_models_same_class(m1, m2, m3)
+#'   all_models_same_class(m1, m4, m2, m3, verbose = TRUE)
+#'   all_models_same_class(m1, m4, mtcars, m2, m3, verbose = TRUE)
+#' }
 #' @export
 all_models_equal <- function(..., verbose = FALSE) {
   objects <- list(...)
