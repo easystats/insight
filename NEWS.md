@@ -22,6 +22,8 @@
 
 * Fix CRAN check issues.
 
+* `find_formula()` for `stan_gamm4()` now correctly includes random effects.
+
 # insight 0.11.0
 
 ## Breaking changes
