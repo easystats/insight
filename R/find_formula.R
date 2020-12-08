@@ -1100,17 +1100,31 @@ find_formula.stanreg <- function(x, ...) {
     find_formula.nlmerMod(x, ...)
   } else {
     f.cond <- stats::formula(x)
-    f.random <- lapply(.findbars(f.cond), function(.x) {
-      f <- .safe_deparse(.x)
-      stats::as.formula(paste0("~", f))
-    })
+    # special handling for stan_gamm4
+    if (inherits(x, "gamm4")) {
+      f.random <- tryCatch(
+        {
+          lapply(.findbars(stats::formula(x$glmod)), function(.x) {
+            f <- .safe_deparse(.x)
+            stats::as.formula(paste0("~", f))
+          })
+        },
+        error = function(e) {
+          NULL
+        }
+      )
+    } else {
+      f.random <- lapply(.findbars(f.cond), function(.x) {
+        f <- .safe_deparse(.x)
+        stats::as.formula(paste0("~", f))
+      })
+    }
 
     if (length(f.random) == 1) {
       f.random <- f.random[[1]]
     }
 
     f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
-
     .compact_list(list(conditional = f.cond, random = f.random))
   }
 }
