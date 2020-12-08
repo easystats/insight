@@ -5,6 +5,10 @@
 * Warnings that formerly were printed using `print_color()` now use `warning()`,
   to better suppress warning messages if required.
 
+## New functions
+
+* `find_smooth()`, to return in particular smooth terms used in a model.
+
 ## Changes to functions
 
 * `get_variance()` and `get_variance_random()` gain a `tolerance`-argument, to

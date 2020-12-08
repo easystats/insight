@@ -360,6 +360,7 @@
     grepl("^(VGAM::s\\()", x, perl = TRUE) |
     grepl("^(mgcv::s\\()", x, perl = TRUE) |
     grepl("^(mgcv::ti\\()", x, perl = TRUE) |
+    grepl("^(mgcv::t2\\()", x, perl = TRUE) |
     grepl("^(mgcv::te\\()", x, perl = TRUE) |
     grepl("^(brms::s\\()", x, perl = TRUE) |
     grepl("^(brms::t2\\()", x, perl = TRUE) |
