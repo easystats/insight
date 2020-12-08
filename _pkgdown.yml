@@ -27,6 +27,7 @@ reference:
   - find_interactions
   - find_offset
   - find_random_slopes
+  - find_smooth
   - find_terms
   - find_variables
 
