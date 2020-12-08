@@ -40,6 +40,14 @@
 #' }
 #' @export
 find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
+
+  # Deal with GAMM objects
+  if(inherits(x, "gamm")){
+    x <- x$lme
+  } else if(inherits(x, "list") && "mer" %in% names(x)){
+    x <- x$mer
+  }
+
   f <- find_formula(x)
 
   if (is_multivariate(x)) {
