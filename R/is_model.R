@@ -75,6 +75,7 @@ is_model <- function(x) {
       "coxme",
       "coxph",
       "coxph.penal",
+      "coxr",
       "cpglm",
       "cpglmm",
       "crch",

@@ -420,6 +420,24 @@ get_statistic.coxph <- function(x, ...) {
 }
 
 
+#' @export
+get_statistic.coxr <- function(x, ...) {
+  parms <- get_parameters(x)
+  vc <- get_varcov(x)
+  se <- sqrt(diag(vc))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = parms$Estimate / se,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
 #' @importFrom stats vcov
 #' @export
 get_statistic.coxme <- function(x, ...) {

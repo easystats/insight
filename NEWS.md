@@ -1,5 +1,9 @@
 # insight 0.11.2
 
+## New supported model classes
+
+* Support for `coxr` (*coxrobust*).
+
 ## Changes to functions
 
 * `find_formula()`, `find_predictor()`, `find_random()` and related functions 

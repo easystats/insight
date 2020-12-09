@@ -77,6 +77,7 @@ supported_models <- function() {
     "coxme",
     "coxph",
     "coxph.penal",
+    "coxr",
     "cpglm",
     "cpglmm",
     "crch",

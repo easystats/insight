@@ -51,7 +51,7 @@
 
   if (mc[1] && rn == colnames(mf)[1]) {
     mc[1] <- FALSE
-    if (inherits(x, c("coxph", "flexsurvreg", "coxme", "survreg", "survfit", "crq", "psm"))) {
+    if (inherits(x, c("coxph", "flexsurvreg", "coxme", "survreg", "survfit", "crq", "psm", "coxr"))) {
       n_of_responses <- ncol(mf[[1]])
       mf <- cbind(as.data.frame(as.matrix(mf[[1]])), mf)
       colnames(mf)[1:n_of_responses] <- rn_not_combined
@@ -138,7 +138,7 @@
         }
       }
 
-      if (inherits(x, c("coxph", "coxme")) || any(grepl("^Surv\\(", spline.term))) {
+      if (inherits(x, c("coxph", "coxme", "coxr")) || any(grepl("^Surv\\(", spline.term))) {
         mf <- md
       } else {
         needed.vars <- .compact_character(unique(clean_names(needed.vars)))

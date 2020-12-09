@@ -216,6 +216,9 @@ link_function.mlogit <- link_function.multinom
 link_function.coxph <- link_function.multinom
 
 #' @export
+link_function.coxr <- link_function.multinom
+
+#' @export
 link_function.survfit <- link_function.multinom
 
 #' @export

@@ -260,6 +260,9 @@ link_inverse.BBmm <- link_inverse.gmnl
 link_inverse.coxph <- link_inverse.gmnl
 
 #' @export
+link_inverse.coxr <- link_inverse.gmnl
+
+#' @export
 link_inverse.survfit <- link_inverse.gmnl
 
 #' @export

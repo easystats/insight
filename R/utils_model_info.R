@@ -109,7 +109,7 @@
 
   # survival model --------
 
-  is.survival <- inherits(x, c("aareg", "survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph", "coxme"))
+  is.survival <- inherits(x, c("aareg", "survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph", "coxme", "coxr"))
 
   # check if we have binomial models with trials instead of binary outcome
   # and check if we have truncated or censored brms-regression

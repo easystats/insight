@@ -325,6 +325,11 @@ n_obs.coxph <- n_obs.aareg
 n_obs.coxme <- n_obs.aareg
 
 
+#' @export
+n_obs.coxr <- function(x, ...) {
+  nrow(x$y)
+}
+
 
 #' @export
 n_obs.felm <- function(x, ...) {

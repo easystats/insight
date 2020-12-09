@@ -523,6 +523,9 @@ model_info.coxph <- function(x, ...) {
 }
 
 #' @export
+model_info.coxr <- model_info.coxph
+
+#' @export
 model_info.aareg <- model_info.coxph
 
 #' @export
