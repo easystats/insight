@@ -43,9 +43,9 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
 
   # Deal with GAMM objects
   is_gam <- TRUE  # Flag to later remove dummy random
-  if(inherits(x, "gamm")){
+  if (inherits(x, "gamm")) {
     l <- list("random" = names(x$lme$groups))
-  } else if(inherits(x, "list") && "mer" %in% names(x)){
+  } else if (inherits(x, "list") && "mer" %in% names(x)) {
     x <- x$mer
     l <- .find_random(x, split_nested)
   # Deal with all other models
@@ -60,8 +60,8 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 
   # Clean output from GAMMs (https://github.com/easystats/insight/issues/42)
-  if(is_gam){
-    if(any(c("Xr.0", "g.0") %in% l$random)){
+  if (is_gam) {
+    if (any(c("Xr.0", "g.0") %in% l$random)) {
       l$random <- l$random[!l$random %in% c("Xr.0", "g.0")]
     } else{
       l$random <- l$random[!l$random %in% c("Xr", "g")]
