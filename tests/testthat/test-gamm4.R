@@ -16,13 +16,13 @@ if (require("testthat") && require("insight") && require("gamm4")) {
   })
 
   test_that("clean_names", {
-    expect_equal(clean_names(m1), c("y", "x0", "x1", "x2"))
+    expect_equal(clean_names(m1), c("y", "x0", "x1", "x2", "fac"))
   })
 
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = c("x0", "x1", "x2")))
     expect_identical(find_predictors(m1, flatten = TRUE), c("x0", "x1", "x2"))
-    expect_null(find_predictors(m1, effects = "random"))
+    expect_identical(find_predictors(m1, effects = "random"), list(random = "fac"))
   })
 
   test_that("find_response", {
@@ -59,10 +59,11 @@ if (require("testthat") && require("insight") && require("gamm4")) {
   })
 
   test_that("find_formula", {
-    expect_length(find_formula(m1), 1)
+    expect_length(find_formula(m1), 2)
     expect_equal(
       find_formula(m1),
-      list(conditional = as.formula("y ~ s(x0) + x1 + s(x2)")),
+      list(conditional = as.formula("y ~ s(x0) + x1 + s(x2)"),
+           random = as.formula("~1 | fac")),
       ignore_attr = TRUE
     )
   })
@@ -70,20 +71,22 @@ if (require("testthat") && require("insight") && require("gamm4")) {
   test_that("find_terms", {
     expect_equal(find_terms(m1), list(
       response = "y",
-      conditional = c("s(x0)", "x1", "s(x2)")
+      conditional = c("s(x0)", "x1", "s(x2)"),
+      random = "fac"
     ))
     expect_equal(
       find_terms(m1, flatten = TRUE),
-      c("y", "s(x0)", "x1", "s(x2)")
+      c("y", "s(x0)", "x1", "s(x2)", "fac")
     )
   })
 
   test_that("find_variables", {
     expect_equal(find_variables(m1), list(
       response = "y",
-      conditional = c("x0", "x1", "x2")
+      conditional = c("x0", "x1", "x2"),
+      random = "fac"
     ))
-    expect_equal(find_variables(m1, flatten = TRUE), c("y", "x0", "x1", "x2"))
+    expect_equal(find_variables(m1, flatten = TRUE), c("y", "x0", "x1", "x2", "fac"))
   })
 
   test_that("n_obs", {
