@@ -1,3 +1,10 @@
+# insight 0.11.2
+
+## Changes to functions
+
+* `find_random()` now also returns names of random effects from generalized 
+  additive mixed models (`gamm`. `gamm4`, `stan_gamm4`).
+
 # insight 0.11.1
 
 ## General
