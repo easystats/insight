@@ -9,15 +9,29 @@ osx <- tryCatch({
 
 if (require("testthat") && require("insight") && require("mgcv") && require("gamm4") && require("rstanarm") && !osx) {
 
-  # test_that("find_smooth - mgcv::gamm", {
-  #   model <- mgcv::gamm(Petal.Length ~ Petal.Width + s(Sepal.Length), random = list(Species = ~1), data = iris)
-  #   expect_equal(insight::find_random(model, flatten = TRUE), "Species")
-  # })
 
-  # test_that("find_smooth - gamm4::gamm4", {
-  #   model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~(1|Species), data = iris)
-  #   expect_equal(insight::find_random(model, flatten = TRUE), "Species")
-  # })
+  data <- iris
+  data$g <- data$Species
+  data$Xr <- data$Species
+
+
+  test_that("find_smooth - mgcv::gamm", {
+    model <- mgcv::gamm(Petal.Length ~ Petal.Width + s(Sepal.Length), random = list(Species = ~1), data = iris)
+    expect_equal(insight::find_random(model, flatten = TRUE), "Species")
+
+    model <- mgcv::gamm(Petal.Length ~ Petal.Width + s(Sepal.Length), random = list(g = ~1), data = data)
+    expect_equal(insight::find_random(model, flatten = TRUE), "g")
+  })
+
+
+  test_that("find_smooth - gamm4::gamm4", {
+    model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~(1|Species), data = iris)
+    expect_equal(insight::find_random(model, flatten = TRUE), "Species")
+
+    model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~(1|Xr), data = data)
+    expect_equal(insight::find_random(model, flatten = TRUE), "Xr")
+  })
+
 
   test_that("find_smooth - rstanarm::gamm4", {
     model <-

@@ -42,12 +42,45 @@
 find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
 
   # Deal with GAMM objects
+  is_gam <- TRUE  # Flag to later remove dummy random
   if(inherits(x, "gamm")){
-    x <- x$lme
+    l <- list("random" = names(x$lme$groups))
   } else if(inherits(x, "list") && "mer" %in% names(x)){
     x <- x$mer
+    l <- .find_random(x, split_nested)
+  # Deal with all other models
+  } else {
+    is_gam <- FALSE
+    l <- .find_random(x, split_nested)
   }
 
+  # Sanitize empty return
+  if (.is_empty_object(l)) {
+    return(NULL)
+  }
+
+  # Clean output from GAMMs (https://github.com/easystats/insight/issues/42)
+  if(is_gam){
+    if(any(c("Xr.0", "g.0") %in% l$random)){
+      l$random <- l$random[!l$random %in% c("Xr.0", "g.0")]
+    } else{
+      l$random <- l$random[!l$random %in% c("Xr", "g")]
+    }
+  }
+
+  # Prepare output
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
+
+
+.find_random <- function(x, split_nested = FALSE) {
   f <- find_formula(x)
 
   if (is_multivariate(x)) {
@@ -58,18 +91,14 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   } else {
     l <- .find_random_effects(x, f, split_nested)
   }
-
-
-  if (.is_empty_object(l)) {
-    return(NULL)
-  }
-
-  if (flatten) {
-    unique(unlist(l))
-  } else {
-    l
-  }
+  l
 }
+
+
+
+
+
+
 
 
 .find_random_effects <- function(x, f, split_nested) {
