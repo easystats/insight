@@ -97,5 +97,87 @@ if (.runThisTest) {
     test_that("is_multivariate", {
       expect_false(is_multivariate(m1))
     })
+
+
+
+    # test formula random effects -----------------------
+
+    n <- 200
+    sig <- 2
+    set.seed(0)
+    n.g <- 10
+    n <- n.g * 10 * 4
+    dat <- gamSim(1, n = n, scale = 2)
+    f <- dat$f
+    ## simulate nested random effects....
+    fa <- as.factor(rep(1:10, rep(4 * n.g, 10)))
+    ra <- rep(rnorm(10), rep(4 * n.g, 10))
+    fb <- as.factor(rep(rep(1:4, rep(n.g, 4)), 10))
+    rb <- rep(rnorm(4), rep(n.g, 4))
+    for (i in 1:9)
+      rb <- c(rb, rep(rnorm(4), rep(n.g, 4)))
+    ## simulate auto-correlated errors within groups
+    e <- array(0, 0)
+    for (i in 1:40) {
+      eg <- rnorm(n.g, 0, sig)
+      for (j in 2:n.g)
+        eg[j] <- eg[j - 1] * 0.6 + eg[j]
+      e <- c(e, eg)
+    }
+    dat$y <- f + ra + rb + e
+    dat$fa <- fa
+    dat$fb <- fb
+
+    ## fit model ....
+    m1 <- gamm(
+      y ~ s(x0, bs = "cr") + s(x1, bs = "cr"),
+      data = dat,
+      random = list(fa =  ~ 1, fb =  ~ 1),
+      correlation = corAR1()
+    )
+
+    set.seed(0)
+    dat <- gamSim(6, n = 200, scale = .2, dist = "poisson")
+
+    m2 <- gamm(
+      y ~ s(x0) + s(x1) + s(x2),
+      family = poisson,
+      data = dat
+    )
+
+    dat$g <- dat$fac
+    m3 <- gamm(
+      y ~ s(x0) + s(x1) + s(x2),
+      family = poisson,
+      data = dat,
+      random = list(g = ~1)
+    )
+
+    test_that("find_formula-gamm-1", {
+      expect_equal(
+        find_formula(m1),
+        list(conditional = as.formula("y ~ s(x0, bs = \"cr\") + s(x1, bs = \"cr\")"),
+             random = list(as.formula("~1 | fa"), as.formula("~1 | fb"))),
+        ignore_attr = TRUE
+      )
+    })
+
+    test_that("find_formula-gamm-2", {
+      expect_equal(
+        find_formula(m2),
+        list(conditional = as.formula("y ~ s(x0) + s(x1) + s(x2)")),
+        ignore_attr = TRUE
+      )
+    })
+
+    test_that("find_formula-gamm-3", {
+      expect_equal(
+        find_formula(m3),
+        list(conditional = as.formula("y ~ s(x0) + s(x1) + s(x2)"),
+             random = as.formula("~1 | g")),
+        ignore_attr = TRUE
+      )
+    })
+
   }
 }
