@@ -10,6 +10,11 @@
   now also return names of random effects from generalized  additive mixed 
   models (`gamm`, `gamm4`, `stan_gamm4`).
 
+## Bug fixes
+
+* Fixed issue in `find_statistic()` for *fixest* models, which did not 
+  return the correct value `"t-statistic"` for `feols()`.
+
 # insight 0.11.1
 
 ## General
