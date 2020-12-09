@@ -44,11 +44,6 @@ find_formula <- function(x, ...) {
 
 #' @export
 find_formula.default <- function(x, ...) {
-  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
-    x <- x$gam
-    class(x) <- c(class(x), c("glm", "lm"))
-  }
-
   tryCatch(
     {
       list(conditional = stats::formula(x))
@@ -57,6 +52,25 @@ find_formula.default <- function(x, ...) {
       NULL
     }
   )
+}
+
+
+
+#' @export
+find_formula.list <- function(x, ...) {
+  if (.obj_has_name(x, "gam")) {
+    if ("mer" %in% names(x)) {
+      f.random <- .fix_gamm4_random_effect(find_formula(x$mer)$random)
+      if (length(f.random) == 1) {
+        f.random <- f.random[[1]]
+      }
+    }
+    x <- x$gam
+    class(x) <- c(class(x), c("glm", "lm"))
+    list(conditional = stats::formula(x), random = f.random)
+  } else {
+    NULL
+  }
 }
 
 
@@ -168,9 +182,18 @@ find_formula.bamlss <- function(x, ...) {
 
 #' @export
 find_formula.gamm <- function(x, ...) {
-  x <- x$gam
-  class(x) <- c(class(x), c("glm", "lm"))
-  NextMethod()
+  f <- .compact_list(find_formula(x$gam))
+  random <- .fix_gamm_random_effect(names(x$lme$groups))
+
+  if (length(random) == 0) {
+    f.random <- NULL
+  } else if (length(random) > 1) {
+    f.random <- lapply(random, function(r) stats::as.formula(paste0("~1|", r)))
+  } else {
+    f.random <- stats::as.formula(paste0("~1|", random))
+  }
+
+  .compact_list(c(f, list(random = f.random)))
 }
 
 
@@ -1348,4 +1371,30 @@ find_formula.BFBayesFactor <- function(x, ...) {
       f
     }
   )
+}
+
+
+.fix_gamm_random_effect <- function(x) {
+  g_in_terms <- any(x == "g")
+  x <- x[!(grepl("(Xr\\.\\d|g\\.\\d)", x) | x %in% c("Xr", "g"))]
+  # exceptions, if random effect is named g
+  if (!length(x) && isTRUE(g_in_terms)) {
+    x <- "g"
+  }
+  x
+}
+
+
+.fix_gamm4_random_effect <- function(f) {
+  len <- length(f)
+  keep <- sapply(f, function(i) {
+    i <- gsub("(~1| | \\|)", "", deparse(i))
+    !any(grepl("(Xr\\.\\d|g\\.\\d)", i) | i %in% c("Xr", "g"))
+  })
+  f <- .compact_list(f[keep])
+  # exceptions, if random effect is named Xr
+  if (!length(f) && len > 0) {
+    f <- list(stats::as.formula("~1 | Xr"))
+  }
+  f
 }
