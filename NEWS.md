@@ -4,7 +4,7 @@
 
 * `find_formula()`, `find_predictor()`, `find_random()` and related functions 
   now also return names of random effects from generalized  additive mixed 
-  models (`gamm`. `gamm4`, `stan_gamm4`).
+  models (`gamm`, `gamm4`, `stan_gamm4`).
 
 # insight 0.11.1
 
