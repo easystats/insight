@@ -63,13 +63,15 @@ find_formula.list <- function(x, ...) {
       f.random <- .fix_gamm4_random_effect(find_formula(x$mer)$random)
       if (length(f.random) == 1) {
         f.random <- f.random[[1]]
+      } else if (length(f.random) == 0) {
+        f.random <- NULL
       }
     }
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
-    list(conditional = stats::formula(x), random = f.random)
+    .compact_list(list(conditional = stats::formula(x), random = f.random))
   } else {
-    NULL
+    find_formula.default(x, ...)
   }
 }
 
@@ -228,6 +230,16 @@ find_formula.meta_bma <- find_formula.rma
 
 
 # Other models ----------------------------------------------
+
+
+#' @export
+find_formula.censReg <- find_formula.default
+
+#' @export
+find_formula.maxLik <- find_formula.default
+
+#' @export
+find_formula.maxim <- find_formula.default
 
 
 #' @export
