@@ -620,7 +620,7 @@ get_varcov.glmRob <- get_varcov.lmRob
 
 #' @export
 get_varcov.coxr <- function(x, ...) {
-  vc <- x$var.ple
+  vc <- x$var
   .process_vcov(vc)
 }
 
