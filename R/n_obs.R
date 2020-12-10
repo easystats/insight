@@ -102,6 +102,13 @@ n_obs.bamlss <- function(x, ...) {
 
 
 #' @export
+n_obs.coeftest <- function(x, ...) {
+  attributes(x)$nobs
+}
+
+
+
+#' @export
 n_obs.lmRob <- function(x, ...) {
   length(x$fitted.values)
 }

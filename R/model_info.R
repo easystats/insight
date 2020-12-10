@@ -684,6 +684,12 @@ model_info.glht <- function(x, ...) {
 
 
 #' @export
+model_info.coeftest <- function(x, ...) {
+  NULL
+}
+
+
+#' @export
 model_info.glmm <- function(x, ...) {
   f <- switch(
     tolower(x$family.glmm$family.glmm),

@@ -2,7 +2,7 @@
 
 ## New supported model classes
 
-* Support for `coxr` (*coxrobust*).
+* Support for `coxr` (*coxrobust*), `coeftest` (*lmtest*).
 
 ## Changes to functions
 
