@@ -865,6 +865,8 @@ find_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random
     conditional <- "Difference"
   } else if (.classify_BFBayesFactor(x) == "meta") {
     conditional <- "Effect"
+  } else if (.classify_BFBayesFactor(x) == "proptest") {
+    conditional <- "p"
   } else if (.classify_BFBayesFactor(x) == "linear") {
     posteriors <- as.data.frame(suppressMessages(
       BayesFactor::posterior(x, iterations = 20, progress = FALSE, index = 1, ...)

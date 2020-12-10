@@ -101,6 +101,8 @@ get_parameters(x, ...)
   iterations = 4000,
   progress = FALSE,
   verbose = TRUE,
+  summary = FALSE,
+  centrality = "mean",
   ...
 )
 

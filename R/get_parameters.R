@@ -1847,7 +1847,7 @@ get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), su
 
 #' @rdname get_parameters
 #' @export
-get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"), component = c("all", "extra"), iterations = 4000, progress = FALSE, verbose = TRUE, ...) {
+get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"), component = c("all", "extra"), iterations = 4000, progress = FALSE, verbose = TRUE, summary = FALSE, centrality = "mean", ...) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("This function requires package `BayesFactor` to work. Please install it.")
   }
@@ -1880,7 +1880,7 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
         BayesFactor::posterior(x, iterations = iterations, progress = progress, index = 1, ...)
       ))
 
-    switch(
+    out <- switch(
       bf_type,
       "correlation" = data.frame("rho" = as.numeric(posteriors$rho)),
       "ttest1" = data.frame("Difference" = x@numerator[[1]]@prior$mu - as.numeric(posteriors[, 1])),
@@ -1889,9 +1889,21 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
       "linear" = .get_bf_posteriors(posteriors, params),
       NULL
     )
+  } else if (bf_type == "proptest") {
+    posteriors <- as.data.frame(as.matrix(suppressMessages(
+      BayesFactor::posterior(x, iterations = iterations, progress = progress)
+    )[, "p"]))
+    colnames(posteriors) <- "p"
+    out <- posteriors
   } else {
-    NULL
+    out <- NULL
   }
+
+  if (isTRUE(summary) && !is.null(out)) {
+    out <- .summary_of_posteriors(out, centrality = centrality)
+  }
+
+  out
 }
 
 

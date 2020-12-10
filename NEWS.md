@@ -10,6 +10,8 @@
   now also return names of random effects from generalized  additive mixed 
   models (`gamm`, `gamm4`, `stan_gamm4`).
 
+* Added support for more BFBayesFactor objects.
+
 ## Bug fixes
 
 * Fixed issue in `find_statistic()` for *fixest* models, which did not 
