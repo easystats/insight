@@ -61,6 +61,7 @@ Suggests:
     ivreg,
     JM,
     lavaan,
+    lmtest,
     logistf,
     MASS,
     Matrix,
