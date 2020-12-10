@@ -180,7 +180,7 @@ if (require("testthat") &&
 
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "z-statistic")
-    expect_identical(find_statistic(m2), "z-statistic")
+    expect_identical(find_statistic(m2), "t-statistic")
   })
 
   test_that("get_statistic", {
