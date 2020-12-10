@@ -229,6 +229,18 @@ link_function.coxme <- link_function.multinom
 
 
 
+# Probit link ------------------------
+
+
+#' @export
+link_function.ivprobit <- function(x, ...) {
+  stats::make.link(link = "probit")$linkfun
+}
+
+
+
+
+
 # Log links ------------------------
 
 

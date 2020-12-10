@@ -289,6 +289,18 @@ link_inverse.multinom <- link_inverse.gmnl
 
 
 
+# Probit link ------------------------
+
+
+#' @export
+link_inverse.ivprobit <- function(x, ...) {
+  stats::make.link(link = "probit")$linkinv
+}
+
+
+
+
+
 # Log-links ---------------------------------------
 
 

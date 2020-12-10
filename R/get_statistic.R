@@ -795,6 +795,19 @@ get_statistic.ridgelm <- function(x, ...) {
 
 
 #' @export
+get_statistic.ivprobit <- function(x, ...) {
+  out <- data.frame(
+    Parameter = x$names,
+    Statistic = as.vector(x$tval),
+    stringsAsFactors = FALSE
+  )
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.HLfit <- function(x, ...) {
   utils::capture.output(s <- summary(x))
 

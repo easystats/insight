@@ -678,6 +678,18 @@ model_info.BGGM <- function(x, ...) {
 
 
 #' @export
+model_info.ivprobit <- function(x, ...) {
+  .make_family(
+    x = x,
+    fitfam = "binomial",
+    logit.link = FALSE,
+    link.fun = "probit",
+    ...
+  )
+}
+
+
+#' @export
 model_info.glht <- function(x, ...) {
   model_info(x$model, ...)
 }

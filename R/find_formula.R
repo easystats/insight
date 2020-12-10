@@ -667,6 +667,13 @@ find_formula.bife <- function(x, ...) {
 
 
 
+#' @export
+find_formula.ivprobit <- function(x, ...) {
+  NULL
+}
+
+
+
 #' @importFrom stats formula as.formula
 #' @export
 find_formula.wbm <- function(x, ...) {

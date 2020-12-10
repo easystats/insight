@@ -95,6 +95,13 @@ n_obs.flexsurvreg <- function(x, ...) {
 
 
 #' @export
+n_obs.ivprobit <- function(x, ...) {
+  nrow(x$mr1)
+}
+
+
+
+#' @export
 n_obs.bamlss <- function(x, ...) {
   nrow(x$model.frame)
 }

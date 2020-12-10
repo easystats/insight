@@ -116,6 +116,7 @@ supported_models <- function() {
     "hurdle",
     "iv_robust",
     "ivreg",
+    "ivprobit",
     "lavaan",
     "lm",
     "lm_robust",

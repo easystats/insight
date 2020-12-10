@@ -1419,6 +1419,18 @@ find_parameters.tobit <- find_parameters.default
 
 
 #' @export
+find_parameters.ivprobit <- function(x, flatten = FALSE, ...) {
+  out <- list(conditional = x$names)
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
+#' @export
 find_parameters.mediate <- function(x, flatten = FALSE, ...) {
   info <- model_info(x$model.y)
   if (info$is_linear && !x$INT) {

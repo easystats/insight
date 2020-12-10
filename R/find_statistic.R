@@ -83,6 +83,7 @@ find_statistic <- function(x, ...) {
       "HLfit",
       "ivreg",
       "iv_robust",
+      "ivprobit",
       "lm",
       "lm_robust",
       "lm.beta",

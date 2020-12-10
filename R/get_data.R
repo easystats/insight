@@ -581,6 +581,7 @@ get_data.glimML <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 
+
 # sem models -------------------------------------
 
 #' @export
@@ -780,6 +781,12 @@ get_data.ivreg <- function(x, ...) {
 
 #' @export
 get_data.iv_robust <- get_data.ivreg
+
+
+#' @export
+get_data.ivprobit <- function(x, ...) {
+  .prepare_get_data(x, stats::na.omit(as.data.frame(x$mr1)))
+}
 
 
 #' @export

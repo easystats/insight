@@ -138,6 +138,7 @@ is_model <- function(x) {
       "hurdle",
       "iv_robust",
       "ivreg",
+      "ivprobit",
       "lavaan",
       "lm",
       "lm_robust",
