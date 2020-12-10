@@ -1891,7 +1891,7 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
     )
   } else if (bf_type == "proptest") {
     posteriors <- as.data.frame(as.matrix(suppressMessages(
-      BayesFactor::posterior(x, iterations = iterations, progress = progress)
+      BayesFactor::posterior(x, iterations = iterations, progress = progress, index = 1)
     )[, "p"]))
     colnames(posteriors) <- "p"
     out <- posteriors
