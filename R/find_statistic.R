@@ -65,7 +65,6 @@ find_statistic <- function(x, ...) {
       "blmerMod",
       "cch",
       "censReg",
-      "coeftest",
       "complmrob",
       "cpglm",
       "cpglmm",
@@ -273,6 +272,14 @@ find_statistic <- function(x, ...) {
       z.mods <- c(z.mods, "glht")
     } else {
       t.mods <- c(t.mods, "glht")
+    }
+  }
+
+  if (inherits(x, "coeftest")) {
+    if ("z value" %in% dimnames(x)[[2]]) {
+      z.mods <- c(z.mods, "coeftest")
+    } else {
+      t.mods <- c(t.mods, "coeftest")
     }
   }
 
