@@ -2,7 +2,8 @@
 
 ## New supported model classes
 
-* Support for `coxr` (*coxrobust*), `coeftest` (*lmtest*), `ivprobit` (*ivProbit*).
+* Support for `coxr` (*coxrobust*), `coeftest` (*lmtest*), `ivFixed` (*ivFixed*),
+  `ivprobit` (*ivprobit*).
 
 ## Changes to functions
 

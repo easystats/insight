@@ -269,7 +269,8 @@ n_obs.rq <- function(x, ...) {
   length(x$fitted.values)
 }
 
-
+#' @export
+n_obs.ivFixed <- n_obs.rq
 
 #' @export
 n_obs.BBreg <- function(x, ...) {

@@ -1301,6 +1301,10 @@ get_data.meta_fixed <- get_data.meta_random
 
 
 #' @export
+get_data.ivFixed <- get_data.rma
+
+
+#' @export
 get_data.mipo <- function(x, ...) {
   tryCatch(
     {

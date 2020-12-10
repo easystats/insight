@@ -136,6 +136,7 @@ is_model <- function(x) {
       "HLfit",
       "htest",
       "hurdle",
+      "ivFixed",
       "iv_robust",
       "ivreg",
       "ivprobit",

@@ -114,6 +114,7 @@ supported_models <- function() {
     "HLfit",
     "htest",
     "hurdle",
+    "ivFixed",
     "iv_robust",
     "ivreg",
     "ivprobit",

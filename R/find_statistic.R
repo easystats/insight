@@ -82,6 +82,7 @@ find_statistic <- function(x, ...) {
       "gmm",
       "HLfit",
       "ivreg",
+      "ivFixed",
       "iv_robust",
       "ivprobit",
       "lm",

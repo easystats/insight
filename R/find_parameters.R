@@ -1419,6 +1419,18 @@ find_parameters.tobit <- find_parameters.default
 
 
 #' @export
+find_parameters.ivFixed <- function(x, flatten = FALSE, ...) {
+  out <- list(conditional = rownames(x$coefficients))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
+#' @export
 find_parameters.ivprobit <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = x$names)
 

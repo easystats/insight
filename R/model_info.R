@@ -238,6 +238,9 @@ model_info.feis <- model_info.mmclogit
 model_info.ivreg <- model_info.mmclogit
 
 #' @export
+model_info.ivFixed <- model_info.mmclogit
+
+#' @export
 model_info.aovlist <- model_info.mmclogit
 
 #' @export

@@ -147,6 +147,9 @@ link_inverse.aovlist <- link_inverse.lm
 link_inverse.ivreg <- link_inverse.lm
 
 #' @export
+link_inverse.ivFixed <- link_inverse.lm
+
+#' @export
 link_inverse.iv_robust <- link_inverse.lm
 
 #' @export

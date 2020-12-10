@@ -143,6 +143,9 @@ link_function.feis <- link_function.lm
 link_function.ivreg <- link_function.lm
 
 #' @export
+link_function.ivFixed <- link_function.lm
+
+#' @export
 link_function.plm <- link_function.lm
 
 #' @export

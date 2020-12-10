@@ -795,6 +795,10 @@ get_statistic.ridgelm <- function(x, ...) {
 
 
 #' @export
+get_statistic.ivFixed <- get_statistic.coxr
+
+
+  #' @export
 get_statistic.ivprobit <- function(x, ...) {
   out <- data.frame(
     Parameter = x$names,

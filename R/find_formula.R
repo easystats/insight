@@ -491,10 +491,12 @@ find_formula.ivreg <- function(x, ...) {
 }
 
 
-
 #' @export
 find_formula.iv_robust <- find_formula.ivreg
 
+
+#' @export
+find_formula.ivFixed <- find_formula.ivreg
 
 
 #' @export

@@ -375,6 +375,17 @@ get_parameters.ridgelm <- function(x, ...) {
 
 
 #' @export
+get_parameters.ivFixed <- function(x, ...) {
+  out <- data.frame(
+    Parameter = rownames(x$coefficients),
+    Estimate = as.vector(x$coefficients),
+    stringsAsFactors = FALSE
+  )
+  .remove_backticks_from_parameter_names(out)
+}
+
+
+#' @export
 get_parameters.ivprobit <- function(x, ...) {
   out <- data.frame(
     Parameter = x$names,

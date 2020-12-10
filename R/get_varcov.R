@@ -367,6 +367,11 @@ get_varcov.aov <- function(x, complete = FALSE, ...) {
 }
 
 
+#' @export
+get_varcov.ivFixed <- function(x, ...) {
+  .process_vcov(x$vcov)
+}
+
 
 #' @export
 get_varcov.averaging <- function(x, ...) {
