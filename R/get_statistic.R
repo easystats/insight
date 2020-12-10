@@ -1758,3 +1758,16 @@ get_statistic.bife <- function(x, ...) {
 get_statistic.mediate <- function(x, ...) {
   NULL
 }
+
+
+#' @export
+get_statistic.coeftest <- function(x, ...) {
+  out <- data.frame(
+    Parameter = row.names(x),
+    Statistic = x[, 3],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+  attr(out, "statistic") <- insight::find_statistic(x)
+  out
+}
