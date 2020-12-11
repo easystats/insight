@@ -49,8 +49,9 @@
 <meta property="og:title" content="Generic export of data frames into formatted tables — display" />
 <meta property="og:description" content="display() is a generic function to export data frames
 into various table formats (like plain text, markdown, ...). print_md()
-usually is a convenient wrapper for display(format = &quot;markdown&quot;). See
-the documentation for the specific objects' classes." />
+usually is a convenient wrapper for display(format = &quot;markdown&quot;).
+Similar, print_html() is a shortcut for display(format = &quot;html&quot;).
+See the documentation for the specific objects' classes." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -127,13 +128,16 @@ the documentation for the specific objects' classes." />
     <div class="ref-description">
     <p><code>display()</code> is a generic function to export data frames
 into various table formats (like plain text, markdown, ...). <code>print_md()</code>
-usually is a convenient wrapper for <code>display(format = "markdown")</code>. See
-the documentation for the specific objects' classes.</p>
+usually is a convenient wrapper for <code>display(format = "markdown")</code>.
+Similar, <code>print_html()</code> is a shortcut for <code>display(format = "html")</code>.
+See the documentation for the specific objects' classes.</p>
     </div>
 
     <pre class="usage"><span class='fu'>display</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>print_md</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>print_md</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>print_html</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
