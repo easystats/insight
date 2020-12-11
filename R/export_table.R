@@ -351,7 +351,13 @@ format_table <- export_table
   }
 
   if (!is.null(footer)) {
-    rows <- c(rows, footer[1])
+    if (is.list(footer)) {
+      for (i in footer) {
+        rows <- c(rows, i[1])
+      }
+    } else {
+      rows <- c(rows, footer[1])
+    }
   }
 
   rows
