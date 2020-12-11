@@ -3,11 +3,14 @@
 \name{display}
 \alias{display}
 \alias{print_md}
+\alias{print_html}
 \title{Generic export of data frames into formatted tables}
 \usage{
 display(object, ...)
 
 print_md(x, ...)
+
+print_html(x, ...)
 }
 \arguments{
 \item{object, x}{A data frame.}
@@ -20,6 +23,7 @@ A data frame.
 \description{
 \code{display()} is a generic function to export data frames
 into various table formats (like plain text, markdown, ...). \code{print_md()}
-usually is a convenient wrapper for \code{display(format = "markdown")}. See
-the documentation for the specific objects' classes.
+usually is a convenient wrapper for \code{display(format = "markdown")}.
+Similar, \code{print_html()} is a shortcut for \code{display(format = "html")}.
+See the documentation for the specific objects' classes.
 }
