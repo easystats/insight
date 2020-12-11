@@ -178,7 +178,7 @@ format_table <- export_table
   df[is.na(df)] <- as.character(missing)
 
   if (identical(format, "html")) {
-    out <- .format_html_table(df, caption = caption, subtitle = subtitle, footer = footer)
+    out <- .format_html_table(df, caption = caption, subtitle = subtitle, footer = footer, align = align)
   } else {
     # Add colnames as row
     df <- rbind(colnames(df), df)
@@ -379,7 +379,7 @@ format_table <- export_table
 
 # html formatting ---------------------------
 
-.format_html_table <- function(final, caption = NULL, subtitle = NULL, footer = NULL) {
+.format_html_table <- function(final, caption = NULL, subtitle = NULL, footer = NULL, align = "center") {
   if (!requireNamespace("gt", quietly = TRUE)) {
     stop("Package 'gt' required to create HTML tables. Please install it.", call. = FALSE)
   }
@@ -391,5 +391,6 @@ format_table <- export_table
 
   tab <- gt::gt(final, groupname_col = group_by)
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
-  gt::tab_source_note(header, source_note = footer)
+  footer <- gt::tab_source_note(header, source_note = footer)
+  gt::cols_align(footer, align = align)
 }
