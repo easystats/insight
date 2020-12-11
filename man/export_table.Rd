@@ -53,8 +53,9 @@ format_table(
 \item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
 
 \item{format}{Name of output-format, as string. If \code{NULL} (or \code{"text"}),
-returned output is used for basic printing. Currently, only \code{"markdown"} is
-supported, or \code{NULL} (the default) resp. \code{"text"} for plain text.}
+returned output is used for basic printing. Can be one of \code{NULL} (the
+default) resp. \code{"text"} for plain text, \code{"markdown"} (or
+\code{"md"}) for markdown and \code{"html"} for HTML output.}
 
 \item{caption, subtitle}{Table caption and subtitle, as string. If \code{NULL},
 no caption or subtitle is printed.}

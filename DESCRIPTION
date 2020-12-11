@@ -57,6 +57,7 @@ Suggests:
     GLMMadaptive,
     glmmTMB,
     gmnl,
+    gt,
     httr,
     ivreg,
     JM,

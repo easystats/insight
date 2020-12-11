@@ -4,8 +4,9 @@
 #' @param sep Column separator.
 #' @param header Header separator. Can be \code{NULL}.
 #' @param format Name of output-format, as string. If \code{NULL} (or \code{"text"}),
-#'   returned output is used for basic printing. Currently, only \code{"markdown"} is
-#'   supported, or \code{NULL} (the default) resp. \code{"text"} for plain text.
+#'   returned output is used for basic printing. Can be one of \code{NULL} (the
+#'   default) resp. \code{"text"} for plain text, \code{"markdown"} (or
+#'   \code{"md"}) for markdown and \code{"html"} for HTML output.
 #' @param caption,subtitle Table caption and subtitle, as string. If \code{NULL},
 #'   no caption or subtitle is printed.
 #' @param footer Table footer, as string. For markdown-formatted tables, table
@@ -176,29 +177,33 @@ format_table <- export_table
   names(df) <- col_names
   df[is.na(df)] <- as.character(missing)
 
-  # Add colnames as row
-  df <- rbind(colnames(df), df)
+  if (identical(format, "html")) {
+    out <- .format_html_table(df, caption = caption, subtitle = subtitle, footer = footer)
+  } else {
+    # Add colnames as row
+    df <- rbind(colnames(df), df)
 
-  # Align
-  aligned <- format(df, justify = "right")
+    # Align
+    aligned <- format(df, justify = "right")
 
-  # Center first row
-  first_row <- as.character(aligned[1, ])
-  for (i in 1:length(first_row)) {
-    aligned[1, i] <- format(trimws(first_row[i]), width = nchar(first_row[i]), justify = "right")
-  }
+    # Center first row
+    first_row <- as.character(aligned[1, ])
+    for (i in 1:length(first_row)) {
+      aligned[1, i] <- format(trimws(first_row[i]), width = nchar(first_row[i]), justify = "right")
+    }
 
-  final <- as.matrix(aligned)
+    final <- as.matrix(aligned)
 
-  # left-align first column (if a character or a factor)
-  if (!is.numeric(x[, 1])) {
-    final[, 1] <- format(trimws(final[, 1]), justify = "left")
-  }
+    # left-align first column (if a character or a factor)
+    if (!is.numeric(x[, 1])) {
+      final[, 1] <- format(trimws(final[, 1]), justify = "left")
+    }
 
-  if (format == "text") {
-    out <- .format_basic_table(final, header, sep, caption = caption, subtitle = subtitle, footer = footer)
-  } else if (format == "markdown") {
-    out <- .format_markdown_table(final, x, caption = caption, subtitle = subtitle, footer = footer, align = align)
+    if (format == "text") {
+      out <- .format_basic_table(final, header, sep, caption = caption, subtitle = subtitle, footer = footer)
+    } else if (format == "markdown") {
+      out <- .format_markdown_table(final, x, caption = caption, subtitle = subtitle, footer = footer, align = align)
+    }
   }
 
   out
@@ -259,6 +264,9 @@ format_table <- export_table
 # helper ----------------
 
 .paste_footers <- function(footer, rows) {
+  if (.is_empty_string(footer)) {
+    return(rows)
+  }
   if (length(footer) == 2 && .is_valid_colour(footer[2])) {
     footer <- .colour(footer[2], footer[1])
   }
@@ -353,12 +361,30 @@ format_table <- export_table
   if (!is.null(footer)) {
     if (is.list(footer)) {
       for (i in footer) {
-        rows <- c(rows, i[1])
+        if (!.is_empty_string(i)) {
+          rows <- c(rows, i[1])
+        }
       }
-    } else {
+    } else if (!.is_empty_string(footer)) {
       rows <- c(rows, footer[1])
     }
   }
 
   rows
+}
+
+
+
+
+
+# html formatting ---------------------------
+
+.format_html_table <- function(final, caption = NULL, subtitle = NULL, footer = NULL) {
+  if (!requireNamespace("gt", quietly = TRUE)) {
+    stop("Package 'gt' required to create HTML tables. Please install it.", call. = FALSE)
+  }
+
+  tab <- gt::gt(final, groupname_col = c("Response", "Effects", "Component"))
+  header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
+  gt::tab_source_note(header)
 }
