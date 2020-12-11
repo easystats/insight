@@ -1917,6 +1917,19 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
     )[, "p"]))
     colnames(posteriors) <- "p"
     out <- posteriors
+  } else if (bf_type == "xtable") {
+    data <- get_data(x)
+    N <- sum(data)
+    cells <- prod(dim(data))
+    posts <- as.data.frame(as.matrix(suppressMessages(
+      BayesFactor::posterior(x, iterations = iterations, progress = progress)
+    )))
+    posts <- posts[, seq_len(cells)]
+    if (sum(posts[1, ]) == 1) {
+      posts <- posts * N
+    }
+    colnames(posts) <- gsub("(pi|lambda)", "cell", colnames(posts))
+    out <- posts
   } else {
     out <- NULL
   }
