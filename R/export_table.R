@@ -384,7 +384,12 @@ format_table <- export_table
     stop("Package 'gt' required to create HTML tables. Please install it.", call. = FALSE)
   }
 
-  tab <- gt::gt(final, groupname_col = c("Response", "Effects", "Component"))
+  group_by <- intersect(c("Response", "Effects", "Component"), names(final))
+  if (!length(group_by)) {
+    group_by <- NULL
+  }
+
+  tab <- gt::gt(final, groupname_col = group_by)
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
-  gt::tab_source_note(header)
+  gt::tab_source_note(header, source_note = footer)
 }
