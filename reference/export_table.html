@@ -202,16 +202,17 @@ no caption or subtitle is printed.</p></td>
     </tr>
     <tr>
       <th>align</th>
-      <td><p>Column alignment. Only applies to markdown-formatted tables.
-By default <code>align = NULL</code>, numeric columns are right-aligned,
-and other columns are left-aligned. May be a string to indicate alignment
+      <td><p>Column alignment. For markdown-formatted tables, the default
+<code>align = NULL</code> will right-align numeric columns, while all other
+columns will be left-aligned. May be a string to indicate alignment
 rules for the complete table, like <code>"left"</code>, <code>"right"</code>,
 <code>"center"</code> or <code>"firstleft"</code> (to left-align first column,
 center remaining); or maybe a string with abbreviated alignment characters,
 where the length of the string must equal the number of columns, for
 instance, <code>align = "lccrl"</code> would left-align the first column, center
 the second and third, right-align column four and left-align the fifth
-column.</p></td>
+column. For HTML-tables, may be one of <code>"center"</code>, <code>"left"</code> or
+<code>"right"</code>.</p></td>
     </tr>
     <tr>
       <th>footer</th>
