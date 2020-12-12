@@ -60,16 +60,17 @@ default) resp. \code{"text"} for plain text, \code{"markdown"} (or
 \item{caption, subtitle}{Table caption and subtitle, as string. If \code{NULL},
 no caption or subtitle is printed.}
 
-\item{align}{Column alignment. Only applies to markdown-formatted tables.
-By default \code{align = NULL}, numeric columns are right-aligned,
-and other columns are left-aligned. May be a string to indicate alignment
+\item{align}{Column alignment. For markdown-formatted tables, the default
+\code{align = NULL} will right-align numeric columns, while all other
+columns will be left-aligned. May be a string to indicate alignment
 rules for the complete table, like \code{"left"}, \code{"right"},
 \code{"center"} or \code{"firstleft"} (to left-align first column,
 center remaining); or maybe a string with abbreviated alignment characters,
 where the length of the string must equal the number of columns, for
 instance, \code{align = "lccrl"} would left-align the first column, center
 the second and third, right-align column four and left-align the fifth
-column.}
+column. For HTML-tables, may be one of \code{"center"}, \code{"left"} or
+\code{"right"}.}
 
 \item{footer}{Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a

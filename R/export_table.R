@@ -12,16 +12,17 @@
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
 #'   new text line under the table.
-#' @param align Column alignment. Only applies to markdown-formatted tables.
-#'   By default \code{align = NULL}, numeric columns are right-aligned,
-#'   and other columns are left-aligned. May be a string to indicate alignment
+#' @param align Column alignment. For markdown-formatted tables, the default
+#'   \code{align = NULL} will right-align numeric columns, while all other
+#'   columns will be left-aligned. May be a string to indicate alignment
 #'   rules for the complete table, like \code{"left"}, \code{"right"},
 #'   \code{"center"} or \code{"firstleft"} (to left-align first column,
 #'   center remaining); or maybe a string with abbreviated alignment characters,
 #'   where the length of the string must equal the number of columns, for
 #'   instance, \code{align = "lccrl"} would left-align the first column, center
 #'   the second and third, right-align column four and left-align the fifth
-#'   column.
+#'   column. For HTML-tables, may be one of \code{"center"}, \code{"left"} or
+#'   \code{"right"}.
 #' @inheritParams format_value
 #'
 #' @note The values for \code{caption}, \code{subtitle} and \code{footer}
@@ -382,6 +383,10 @@ format_table <- export_table
 .format_html_table <- function(final, caption = NULL, subtitle = NULL, footer = NULL, align = "center") {
   if (!requireNamespace("gt", quietly = TRUE)) {
     stop("Package 'gt' required to create HTML tables. Please install it.", call. = FALSE)
+  }
+
+  if (is.null(align)) {
+    align <- "center"
   }
 
   group_by <- intersect(c("Response", "Effects", "Component"), names(final))
