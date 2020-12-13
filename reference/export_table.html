@@ -136,8 +136,9 @@
   format <span class='op'>=</span> <span class='cn'>NULL</span>,
   caption <span class='op'>=</span> <span class='cn'>NULL</span>,
   subtitle <span class='op'>=</span> <span class='cn'>NULL</span>,
-  align <span class='op'>=</span> <span class='cn'>NULL</span>,
   footer <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  group_by <span class='op'>=</span> <span class='cn'>NULL</span>,
   zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span>
 
@@ -152,8 +153,9 @@
   format <span class='op'>=</span> <span class='cn'>NULL</span>,
   caption <span class='op'>=</span> <span class='cn'>NULL</span>,
   subtitle <span class='op'>=</span> <span class='cn'>NULL</span>,
-  align <span class='op'>=</span> <span class='cn'>NULL</span>,
   footer <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  group_by <span class='op'>=</span> <span class='cn'>NULL</span>,
   zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
@@ -201,24 +203,31 @@ default) resp. <code>"text"</code> for plain text, <code>"markdown"</code> (or
 no caption or subtitle is printed.</p></td>
     </tr>
     <tr>
+      <th>footer</th>
+      <td><p>Table footer, as string. For markdown-formatted tables, table
+footers, due to the limitation in markdown rendering, are actually just a
+new text line under the table.</p></td>
+    </tr>
+    <tr>
       <th>align</th>
       <td><p>Column alignment. For markdown-formatted tables, the default
 <code>align = NULL</code> will right-align numeric columns, while all other
-columns will be left-aligned. May be a string to indicate alignment
-rules for the complete table, like <code>"left"</code>, <code>"right"</code>,
-<code>"center"</code> or <code>"firstleft"</code> (to left-align first column,
-center remaining); or maybe a string with abbreviated alignment characters,
-where the length of the string must equal the number of columns, for
-instance, <code>align = "lccrl"</code> would left-align the first column, center
+columns will be left-aligned. If <code>format = "html"</code>, the default is
+left-align first column and center all remaining. May be a string to
+indicate alignment rules for the complete table, like <code>"left"</code>,
+<code>"right"</code>, <code>"center"</code> or <code>"firstleft"</code> (to left-align first
+column, center remaining); or maybe a string with abbreviated alignment
+characters, where the length of the string must equal the number of columns,
+for instance, <code>align = "lccrl"</code> would left-align the first column, center
 the second and third, right-align column four and left-align the fifth
 column. For HTML-tables, may be one of <code>"center"</code>, <code>"left"</code> or
 <code>"right"</code>.</p></td>
     </tr>
     <tr>
-      <th>footer</th>
-      <td><p>Table footer, as string. For markdown-formatted tables, table
-footers, due to the limitation in markdown rendering, are actually just a
-new text line under the table.</p></td>
+      <th>group_by</th>
+      <td><p>Name of column in <code>x</code> that indicates grouping for tables.
+Only applies when <code>format = "html"</code>. <code>group_by</code> is passed down
+to <code><a href='https://rdrr.io/pkg/gt/man/gt.html'>gt::gt(groupname_col = group_by)</a></code>.</p></td>
     </tr>
     <tr>
       <th>zap_small</th>
