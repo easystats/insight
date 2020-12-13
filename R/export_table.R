@@ -167,7 +167,7 @@ format_table <- export_table
 
 
 .export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, subtitle = NULL, footer = NULL, align = NULL, group_by = NULL, zap_small = FALSE) {
-  df <- x
+  df <- as.data.frame(x)
 
   # round all numerics
   col_names <- names(df)
