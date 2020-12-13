@@ -14,15 +14,19 @@
 #'   new text line under the table.
 #' @param align Column alignment. For markdown-formatted tables, the default
 #'   \code{align = NULL} will right-align numeric columns, while all other
-#'   columns will be left-aligned. May be a string to indicate alignment
-#'   rules for the complete table, like \code{"left"}, \code{"right"},
-#'   \code{"center"} or \code{"firstleft"} (to left-align first column,
-#'   center remaining); or maybe a string with abbreviated alignment characters,
-#'   where the length of the string must equal the number of columns, for
-#'   instance, \code{align = "lccrl"} would left-align the first column, center
+#'   columns will be left-aligned. If \code{format = "html"}, the default is
+#'   left-align first column and center all remaining. May be a string to
+#'   indicate alignment rules for the complete table, like \code{"left"},
+#'   \code{"right"}, \code{"center"} or \code{"firstleft"} (to left-align first
+#'   column, center remaining); or maybe a string with abbreviated alignment
+#'   characters, where the length of the string must equal the number of columns,
+#'   for instance, \code{align = "lccrl"} would left-align the first column, center
 #'   the second and third, right-align column four and left-align the fifth
 #'   column. For HTML-tables, may be one of \code{"center"}, \code{"left"} or
 #'   \code{"right"}.
+#' @param group_by Name of column in \code{x} that indicates grouping for tables.
+#'   Only applies when \code{format = "html"}. \code{group_by} is passed down
+#'   to \code{gt::gt(groupname_col = group_by)}.
 #' @inheritParams format_value
 #'
 #' @note The values for \code{caption}, \code{subtitle} and \code{footer}
@@ -68,8 +72,9 @@ export_table <- function(x,
                          format = NULL,
                          caption = NULL,
                          subtitle = NULL,
-                         align = NULL,
                          footer = NULL,
+                         align = NULL,
+                         group_by = NULL,
                          zap_small = FALSE) {
 
   # check args
@@ -103,8 +108,9 @@ export_table <- function(x,
       format = format,
       caption = caption,
       subtitle = subtitle,
-      align = align,
       footer = footer,
+      align = align,
+      group_by = group_by,
       zap_small = zap_small
     )
   } else if (is.list(x)) {
@@ -121,8 +127,9 @@ export_table <- function(x,
         format = format,
         caption = attributes(i)$table_caption,
         subtitle = attributes(i)$table_subtitle,
-        align = align,
         footer = attributes(i)$table_footer,
+        align = align,
+        group_by = group_by,
         zap_small = zap_small
       )
     })
@@ -159,7 +166,7 @@ format_table <- export_table
 # create matrix of raw table layout --------------------
 
 
-.export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, subtitle = NULL, align = NULL, footer = NULL, zap_small = FALSE) {
+.export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, subtitle = NULL, footer = NULL, align = NULL, group_by = NULL, zap_small = FALSE) {
   df <- x
 
   # round all numerics
@@ -179,7 +186,7 @@ format_table <- export_table
   df[is.na(df)] <- as.character(missing)
 
   if (identical(format, "html")) {
-    out <- .format_html_table(df, caption = caption, subtitle = subtitle, footer = footer, align = align)
+    out <- .format_html_table(df, caption = caption, subtitle = subtitle, footer = footer, align = align, group_by = group_by)
   } else {
     # Add colnames as row
     df <- rbind(colnames(df), df)
@@ -380,22 +387,40 @@ format_table <- export_table
 
 # html formatting ---------------------------
 
-.format_html_table <- function(final, caption = NULL, subtitle = NULL, footer = NULL, align = "center") {
+.format_html_table <- function(final, caption = NULL, subtitle = NULL, footer = NULL, align = "center", group_by = NULL) {
   if (!requireNamespace("gt", quietly = TRUE)) {
     stop("Package 'gt' required to create HTML tables. Please install it.", call. = FALSE)
   }
 
   if (is.null(align)) {
-    align <- "center"
+    align <- "firstleft"
   }
 
-  group_by <- intersect(c("Response", "Effects", "Component"), names(final))
-  if (!length(group_by)) {
-    group_by <- NULL
+  group_by_columns <- c(intersect(c("Group", "Response", "Effects", "Component"), names(final)), group_by)
+  if (!length(group_by_columns)) {
+    group_by_columns <- NULL
   }
 
-  tab <- gt::gt(final, groupname_col = group_by)
+  tab <- gt::gt(final, groupname_col = group_by_columns)
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
   footer <- gt::tab_source_note(header, source_note = footer)
-  gt::cols_align(footer, align = align)
+  out <- gt::cols_align(footer, align = "center")
+
+  # align columns
+  if (!is.null(out[["_boxhead"]]) && !is.null(out[["_boxhead"]]$column_align)) {
+    if (align == "firstleft") {
+      out[["_boxhead"]]$column_align[1] <- "left"
+    } else {
+      col_align <- c()
+      for (i in 1:nchar(align)) {
+        col_align <- c(col_align, switch(substr(align, i, i),
+                                         "l" = "left",
+                                         "r" = "right",
+                                         "center"))
+      }
+      out[["_boxhead"]]$column_align[1] <- col_align
+    }
+  }
+
+  out
 }
