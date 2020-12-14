@@ -408,6 +408,20 @@ get_parameters.survreg <- function(x, ...) {
 }
 
 
+#' @importFrom utils capture.output
+#' @importFrom stats coef
+#' @export
+get_parameters.riskRegression <- function(x, ...) {
+  junk <- utils::capture.output(cs <- stats::coef(x))
+  out <- data.frame(
+    Parameter = as.vector(cs[, 1]),
+    Estimate = as.numeric(cs[, 2]),
+    stringsAsFactors = FALSE
+  )
+  .remove_backticks_from_parameter_names(out)
+}
+
+
 #' @export
 get_parameters.mipo <- function(x, ...) {
   out <- data.frame(

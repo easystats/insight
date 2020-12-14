@@ -3,7 +3,12 @@
 ## New supported model classes
 
 * Support for `coxr` (*coxrobust*), `coeftest` (*lmtest*), `ivFixed` (*ivFixed*),
-  `ivprobit` (*ivprobit*).
+  `ivprobit` (*ivprobit*), `riskRegression` (*riskRegression*).
+
+## New functions
+
+* Added generic `print_html()`, to allow other packages to create tables in 
+  HTML format (via `export_table()`) when not printing the output to console.
 
 ## Changes to functions
 

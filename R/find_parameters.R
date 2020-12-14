@@ -1418,6 +1418,21 @@ find_parameters.rms <- find_parameters.default
 find_parameters.tobit <- find_parameters.default
 
 
+#' @importFrom utils capture.output
+#' @importFrom stats coef
+#' @export
+find_parameters.riskRegression <- function(x, flatten = FALSE, ...) {
+  junk <- utils::capture.output(cs <- stats::coef(x))
+  out <- list(conditional = as.vector(cs[, 1]))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
 #' @export
 find_parameters.ivFixed <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = rownames(x$coefficients))

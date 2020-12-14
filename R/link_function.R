@@ -227,6 +227,12 @@ link_function.survfit <- link_function.multinom
 #' @export
 link_function.coxme <- link_function.multinom
 
+#' @export
+link_function.riskRegression <- link_function.multinom
+
+#' @export
+link_function.comprisk <- link_function.multinom
+
 
 
 

@@ -462,6 +462,23 @@ get_statistic.coxme <- function(x, ...) {
 
 
 #' @export
+get_statistic.coxr <- function(x, ...) {
+  junk <- utils::capture.output(cs <- stats::coef(x))
+
+  out <- data.frame(
+    Parameter = as.vector(cs[, 1]),
+    Statistic = as.numeric(cs[, "z"]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.survreg <- function(x, ...) {
   parms <- get_parameters(x)
   s <- summary(x)

@@ -263,6 +263,12 @@ link_inverse.BBmm <- link_inverse.gmnl
 link_inverse.coxph <- link_inverse.gmnl
 
 #' @export
+link_inverse.riskRegression <- link_inverse.gmnl
+
+#' @export
+link_inverse.comprisk <- link_inverse.gmnl
+
+#' @export
 link_inverse.coxr <- link_inverse.gmnl
 
 #' @export

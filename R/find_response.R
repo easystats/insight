@@ -50,6 +50,10 @@ check_cbind <- function(resp, combine, model) {
     resp <- .extract_combined_response(resp, "cbind")
   } else if (!combine && any(grepl("Surv\\((.*)\\)", resp))) {
     resp <- .extract_combined_response(resp, "Surv")
+  } else if (!combine && any(grepl("Hist\\((.*)\\)", resp))) {
+    resp <- .extract_combined_response(resp, "Hist")
+  } else if (!combine && any(grepl("Event\\((.*)\\)", resp))) {
+    resp <- .extract_combined_response(resp, "Event")
   } else if (!combine && any(grepl("Curv\\((.*)\\)", resp))) {
     resp <- .extract_combined_response(resp, "Curv")
   } else if (!combine && any(grepl("/", resp, fixed = TRUE))) {

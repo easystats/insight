@@ -296,6 +296,18 @@ n_obs.crqs <- n_obs.crq
 
 
 #' @export
+n_obs.comprisk <- function(x, ...) {
+  x$n
+}
+
+
+#' @export
+n_obs.riskRegression <- function(x, ...) {
+  nrow(x$response)
+}
+
+
+#' @export
 n_obs.MANOVA <- function(x, ...) {
   nrow(x$input$data)
 }

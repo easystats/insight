@@ -187,6 +187,7 @@ find_statistic <- function(x, ...) {
       "poissonirr",
       "psm",
       "probitmfx",
+      "riskRegression",
       "robmixglm",
       "rma",
       "rma.mv",

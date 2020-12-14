@@ -537,6 +537,12 @@ model_info.survfit <- model_info.coxph
 #' @export
 model_info.coxme <- model_info.coxph
 
+#' @export
+model_info.riskRegression <- model_info.coxph
+
+#' @export
+model_info.comprisk <- model_info.coxph
+
 
 
 

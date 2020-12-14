@@ -169,6 +169,7 @@ supported_models <- function() {
     "psm",
     "probitmfx",
     "ridgelm",
+    "riskRegression",
     "rlm",
     "rlmerMod",
     "RM",
