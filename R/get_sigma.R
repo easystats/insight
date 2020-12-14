@@ -36,7 +36,7 @@ get_sigma <- function(x) {
     return(s$residError)
   }
 
-  if (inherits(x, c("mipo", "mira"))) {
+  if (inherits(x, c("mipo", "mira", "riskRegression"))) {
     return(NULL)
   }
 
