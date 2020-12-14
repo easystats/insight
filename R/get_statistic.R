@@ -462,7 +462,7 @@ get_statistic.coxme <- function(x, ...) {
 
 
 #' @export
-get_statistic.coxr <- function(x, ...) {
+get_statistic.riskRegression <- function(x, ...) {
   junk <- utils::capture.output(cs <- stats::coef(x))
 
   out <- data.frame(
