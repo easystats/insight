@@ -88,6 +88,7 @@ supported_models <- function() {
     "feis",
     "felm",
     "feglm",
+    "fitdistr",
     "fixest",
     "flexsurvreg",
     "gam",
