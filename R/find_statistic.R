@@ -227,6 +227,7 @@ find_statistic <- function(x, ...) {
       "geeglm",
       "logistf",
       "MANOVA",
+      "mlma",
       "nparLD",
       "RM",
       "vgam"
