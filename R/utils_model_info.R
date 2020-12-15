@@ -180,6 +180,7 @@
   is_proptest <- FALSE
   is_binomtest <- FALSE
   is_chi2test <- FALSE
+  is_xtab <- FALSE
 
   if (inherits(x, "htest")) {
     if (grepl("t-test", x$method)) {
@@ -189,11 +190,14 @@
     } else if (x$method == "Exact binomial test") {
       binom_fam <- TRUE
       is_binomtest <- TRUE
+      fitfam <- "binomial"
     } else if (grepl("\\d+-sample(.*)proportions(.*)", x$method)) {
       binom_fam <- TRUE
       is_proptest <- TRUE
+      fitfam <- "binomial"
     } else if (grepl("Chi-squared", x$method)) {
       is_chi2test <- TRUE
+      fitfam <- "Chi2"
     } else {
       is_correlation <- TRUE
     }
@@ -210,6 +214,7 @@
     is_correlation <- FALSE
     is_oneway <- FALSE
     is_proptest <- FALSE
+    is_xtab <- FALSE
 
     obj_type <- .classify_BFBayesFactor(x)
 
@@ -222,6 +227,10 @@
     } else if (obj_type == "proptest") {
       binom_fam <- TRUE
       is_proptest <- TRUE
+      fitfam <- "binomial"
+    } else if (obj_type == "xtable") {
+      is_xtab <- TRUE
+      fitfam <- "Chi2"
     }
   }
 
@@ -241,8 +250,8 @@
 
   linear_model <- TRUE
   if (binom_fam | exponential_fam | poisson_fam | neg_bin_fam | logit.link |
-    dirichlet_fam | is.ordinal | zero.inf | is.censored | is.survival |
-    is.categorical | hurdle | is.multinomial) {
+    dirichlet_fam | is.ordinal | zero.inf | is.censored | is.survival | is_binomtest |
+    is.categorical | hurdle | is.multinomial | is_chi2test | is_proptest | is_xtab) {
     linear_model <- FALSE
   } else if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian")) && !grepl("(\\st)$", fitfam)) {
     linear_model <- FALSE
@@ -294,6 +303,7 @@
     is_correlation = is_correlation,
     is_onewaytest = is_oneway,
     is_chi2test = is_chi2test,
+    is_xtab = is_xtab,
     is_proptest = is_proptest,
     is_binomtest = is_binomtest,
     is_meta = is_meta,
