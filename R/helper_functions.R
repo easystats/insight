@@ -151,8 +151,7 @@
     )
   )
 
-  if (identical(.safe_deparse(f), "~0") ||
-    identical(.safe_deparse(f), "~1")) {
+  if (identical(.safe_deparse(f), "~0") || identical(.safe_deparse(f), "~1")) {
     return(NULL)
   }
 
