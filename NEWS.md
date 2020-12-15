@@ -21,6 +21,10 @@
 
 * Added support for more BFBayesFactor objects.
 
+* `model_info()` now returns `$is_xtab` for `chisq.test()` and 
+  `BayesFactor::contingencyTableBF()`. Furthermore, the `$family` element for
+  those objects is set to `"categorical"`.
+
 ## Bug fixes
 
 * Fixed issue in `find_statistic()` for *fixest* models, which did not 
