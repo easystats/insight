@@ -197,6 +197,7 @@
       fitfam <- "binomial"
     } else if (grepl("Chi-squared", x$method)) {
       is_chi2test <- TRUE
+      is_xtab <- TRUE
       fitfam <- "Chi2"
     } else {
       is_correlation <- TRUE
