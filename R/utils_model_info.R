@@ -198,7 +198,7 @@
     } else if (grepl("Chi-squared", x$method)) {
       is_chi2test <- TRUE
       is_xtab <- TRUE
-      fitfam <- "Chi2"
+      fitfam <- "categorical"
     } else {
       is_correlation <- TRUE
     }
@@ -231,7 +231,7 @@
       fitfam <- "binomial"
     } else if (obj_type == "xtable") {
       is_xtab <- TRUE
-      fitfam <- "Chi2"
+      fitfam <- "categorical"
     }
   }
 
