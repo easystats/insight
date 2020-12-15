@@ -284,7 +284,7 @@
     is_cumulative = is.ordinal,
     is_multinomial = is.multinomial | is.categorical,
     is_categorical = is.categorical,
-    is_mixed = .is_mixed_model(x),
+    is_mixed = is_mixed_model(x),
     is_multivariate = multi.var,
     is_trial = is.trial,
     is_bayesian = is.bayes,
@@ -368,12 +368,6 @@
   } else {
     class(x@denominator)
   }
-}
-
-
-
-.is_mixed_model <- function(x) {
-  !is.null(find_random(x))
 }
 
 

@@ -10,6 +10,9 @@
 * Added generic `print_html()`, to allow other packages to create tables in 
   HTML format (via `export_table()`) when not printing the output to console.
 
+* `is_mixed_model()`, to safely check if a model is a mixed effects model. This
+  function also works for multivariate response models.
+
 ## Changes to functions
 
 * `find_formula()`, `find_predictor()`, `find_random()` and related functions 

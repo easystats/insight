@@ -20,7 +20,7 @@
 #' @importFrom stats as.formula update reformulate
 #' @export
 null_model <- function(model, verbose = TRUE, ...) {
-  if (.is_mixed_model(model)) {
+  if (is_mixed_model(model)) {
     .null_model_mixed(model, verbose)
   } else if (inherits(model, "clm2")) {
     stats::update(model, location = ~1, scale = ~1)
