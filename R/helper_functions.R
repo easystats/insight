@@ -237,7 +237,11 @@
 # to reduce redundant code, I extract this part which is used several
 # times accross this package
 .get_elements <- function(effects, component) {
-  elements <- c("conditional", "conditional2", "conditional3", "precision", "nonlinear", "random", "zero_inflated", "zero_inflated_random", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale", "marginal")
+  elements <- c("conditional", "conditional2", "conditional3", "precision",
+                "nonlinear", "random", "zero_inflated", "zero_inflated_random",
+                "dispersion", "instruments", "interactions", "simplex",
+                "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes",
+                "cluster", "extra", "scale", "marginal")
 
   elements <- switch(
     effects,
