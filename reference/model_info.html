@@ -189,6 +189,7 @@
 <li><p><code>is_proptest</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/prop.test.html'>prop.test()</a></code></p></li>
 <li><p><code>is_binomtest</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/binom.test.html'>binom.test()</a></code></p></li>
 <li><p><code>is_chi2test</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test()</a></code></p></li>
+<li><p><code>is_xtab</code>: model is an an object of class <code>htest</code> or <code>BFBayesFactor</code>, and test-statistic stems from a contingency table (i.e. <code><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test()</a></code> or <code><a href='https://rdrr.io/pkg/BayesFactor/man/contingencyTableBF.html'>BayesFactor::contingencyTableBF()</a></code>).</p></li>
 <li><p><code>link_function</code>: the link-function</p></li>
 <li><p><code>family</code>: the family-object</p></li>
 <li><p><code>n_obs</code>: number of observations</p></li>
@@ -302,6 +303,9 @@
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_chi2test
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $is_xtab
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_proptest
@@ -439,6 +443,9 @@
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_chi2test
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $is_xtab
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_proptest
