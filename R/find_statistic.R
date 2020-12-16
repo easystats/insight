@@ -104,6 +104,8 @@ find_statistic <- function(x, ...) {
       "nls",
       "ols",
       "orcutt",
+      "pb1",
+      "pb2",
       "polr",
       "rlm",
       "rms",
@@ -116,7 +118,8 @@ find_statistic <- function(x, ...) {
       "svyolr",
       "truncreg",
       "wbm",
-      "wblm"
+      "wblm",
+      "yuen"
     )
 
   # z-value objects ----------------------------------------------------------
@@ -216,7 +219,8 @@ find_statistic <- function(x, ...) {
       "anova",
       "Gam",
       "manova",
-      "maov"
+      "maov",
+      "t1way"
     )
 
   # chi-squared value objects ------------------------------------------------
