@@ -159,7 +159,7 @@ standardize_names.parameters_distribution <- function(data, style = c("easystats
   cn[cn == "Mean_Square"] <- "meansq"
   # name of coefficient column for (Bayesian) models
   if (!isTRUE(ignore_estimate)) {
-    cn[cn %in% c("Coefficient", "Std_Coefficient", "Median", "Mean", "MAP")] <- "estimate"
+    cn[cn %in% c("Coefficient", "Std_Coefficient", "Median", "Mean", "MAP", "Trimmed_Mean")] <- "estimate"
   }
   # name of coefficient column htest
   cn[cn %in% c("rho", "r", "tau")] <- "estimate"
