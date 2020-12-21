@@ -1,5 +1,10 @@
 #' @importFrom stats nobs
-.compute_variances <- function(x, component, name_fun = NULL, name_full = NULL, verbose = TRUE, tolerance = 1e-5) {
+.compute_variances <- function(x,
+                               component,
+                               name_fun = NULL,
+                               name_full = NULL,
+                               verbose = TRUE,
+                               tolerance = 1e-5) {
 
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
@@ -65,11 +70,22 @@
   # additive dispersion and the distribution-specific variance (Johnson et al. 2014)
 
   if (component %in% c("residual", "distribution", "all")) {
-    var.distribution <- .compute_variance_distribution(x, var.cor = vals$vc, faminfo, name = name_full, verbose = verbose)
+    var.distribution <- .compute_variance_distribution(
+      x = x,
+      var.cor = vals$vc,
+      faminfo,
+      name = name_full,
+      verbose = verbose
+    )
   }
 
   if (component %in% c("residual", "dispersion", "all")) {
-    var.dispersion <- .compute_variance_dispersion(x = x, vals = vals, faminfo = faminfo, obs.terms = obs.terms)
+    var.dispersion <- .compute_variance_dispersion(
+      x = x,
+      vals = vals,
+      faminfo = faminfo,
+      obs.terms = obs.terms
+    )
   }
 
   if (component %in% c("residual", "all")) {

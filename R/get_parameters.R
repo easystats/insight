@@ -1313,7 +1313,9 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
 
 
 #' @export
-get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+get_parameters.MixMod <- function(x,
+                                  effects = c("fixed", "random"),
+                                  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -1391,7 +1393,9 @@ get_parameters.MixMod <- function(x, effects = c("fixed", "random"), component =
 
 #' @rdname get_parameters
 #' @export
-get_parameters.glmmTMB <- function(x, effects = c("fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+get_parameters.glmmTMB <- function(x,
+                                   effects = c("fixed", "random"),
+                                   component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("To use this function, please install package 'lme4'.")
   }
@@ -1831,7 +1835,10 @@ get_parameters.afex_aov <- function(x, ...) {
 
 #' @rdname get_parameters
 #' @export
-get_parameters.BGGM <- function(x, component = c("correlation", "conditional", "intercept", "all"), summary = FALSE, centrality = "mean", ...) {
+get_parameters.BGGM <- function(x,
+                                component = c("correlation", "conditional", "intercept", "all"),
+                                summary = FALSE, centrality = "mean",
+                                ...) {
   if (!requireNamespace("BGGM", quietly = TRUE)) {
     stop("Package 'BGGM' required for this function to work. Please install it.")
   }
@@ -1858,7 +1865,11 @@ get_parameters.BGGM <- function(x, component = c("correlation", "conditional", "
 
 #' @rdname get_parameters
 #' @export
-get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), summary = FALSE, centrality = "mean", ...) {
+get_parameters.MCMCglmm <- function(x,
+                                    effects = c("fixed", "random", "all"),
+                                    summary = FALSE,
+                                    centrality = "mean",
+                                    ...) {
   effects <- match.arg(effects)
 
   nF <- x$Fixed$nfl
@@ -1883,7 +1894,15 @@ get_parameters.MCMCglmm <- function(x, effects = c("fixed", "random", "all"), su
 
 #' @rdname get_parameters
 #' @export
-get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"), component = c("all", "extra"), iterations = 4000, progress = FALSE, verbose = TRUE, summary = FALSE, centrality = "mean", ...) {
+get_parameters.BFBayesFactor <- function(x,
+                                         effects = c("all", "fixed", "random"),
+                                         component = c("all", "extra"),
+                                         iterations = 4000,
+                                         progress = FALSE,
+                                         verbose = TRUE,
+                                         summary = FALSE,
+                                         centrality = "mean",
+                                         ...) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("This function requires package `BayesFactor` to work. Please install it.")
   }
@@ -1959,7 +1978,12 @@ get_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random"
 
 #' @rdname get_parameters
 #' @export
-get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, summary = FALSE, centrality = "mean", ...) {
+get_parameters.stanmvreg <- function(x,
+                                     effects = c("fixed", "random", "all"),
+                                     parameters = NULL,
+                                     summary = FALSE,
+                                     centrality = "mean",
+                                     ...) {
   effects <- match.arg(effects)
   elements <- .get_elements(effects, "all")
   parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
@@ -1986,7 +2010,13 @@ get_parameters.stanmvreg <- function(x, effects = c("fixed", "random", "all"), p
 
 #' @rdname get_parameters
 #' @export
-get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), parameters = NULL, summary = FALSE, centrality = "mean", ...) {
+get_parameters.brmsfit <- function(x,
+                                   effects = c("fixed", "random", "all"),
+                                   component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
+                                   parameters = NULL,
+                                   summary = FALSE,
+                                   centrality = "mean",
+                                   ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -2010,7 +2040,12 @@ get_parameters.brmsfit <- function(x, effects = c("fixed", "random", "all"), com
 
 #' @rdname get_parameters
 #' @export
-get_parameters.stanreg <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, summary = FALSE, centrality = "mean", ...) {
+get_parameters.stanreg <- function(x,
+                                   effects = c("fixed", "random", "all"),
+                                   parameters = NULL,
+                                   summary = FALSE,
+                                   centrality = "mean",
+                                   ...) {
   effects <- match.arg(effects)
   out <- as.data.frame(x)[.get_parms_data(x, effects, "all", parameters)]
 
@@ -2025,7 +2060,11 @@ get_parameters.stanfit <- get_parameters.stanreg
 
 
 #' @export
-get_parameters.bcplm <- function(x, parameters = NULL, summary = FALSE, centrality = "mean", ...) {
+get_parameters.bcplm <- function(x,
+                                 parameters = NULL,
+                                 summary = FALSE,
+                                 centrality = "mean",
+                                 ...) {
   out <- as.data.frame(do.call(rbind, x$sims.list))
   if (!is.null(parameters)) {
     out <- out[grepl(pattern = parameters, x = colnames(out), perl = TRUE)]
@@ -2038,7 +2077,11 @@ get_parameters.bcplm <- function(x, parameters = NULL, summary = FALSE, centrali
 
 
 #' @export
-get_parameters.bayesx <- function(x, component = c("conditional", "smooth_terms", "all"), summary = FALSE, centrality = "mean", ...) {
+get_parameters.bayesx <- function(x,
+                                  component = c("conditional", "smooth_terms", "all"),
+                                  summary = FALSE,
+                                  centrality = "mean",
+                                  ...) {
   component <- match.arg(component)
 
   smooth_dat <- data.frame(
@@ -2073,7 +2116,11 @@ get_parameters.bayesx <- function(x, component = c("conditional", "smooth_terms"
 
 
 #' @export
-get_parameters.mcmc.list <- function(x, parameters = NULL, summary = FALSE, centrality = "mean", ...) {
+get_parameters.mcmc.list <- function(x,
+                                     parameters = NULL,
+                                     summary = FALSE,
+                                     centrality = "mean",
+                                     ...) {
   out <- as.data.frame(do.call(rbind, x))
   if (!is.null(parameters)) {
     out <- out[grepl(pattern = parameters, x = colnames(out), perl = TRUE)]
@@ -2097,7 +2144,12 @@ get_parameters.mcmc.list <- function(x, parameters = NULL, summary = FALSE, cent
 
 #' @rdname get_parameters
 #' @export
-get_parameters.sim.merMod <- function(x, effects = c("fixed", "random", "all"), parameters = NULL, summary = FALSE, centrality = "mean", ...) {
+get_parameters.sim.merMod <- function(x,
+                                      effects = c("fixed", "random", "all"),
+                                      parameters = NULL,
+                                      summary = FALSE,
+                                      centrality = "mean",
+                                      ...) {
   effects <- match.arg(effects)
   fe <- re <- NULL
   if (effects %in% c("fixed", "all")) fe <- .get_armsim_fixef_parms(x)
@@ -2116,7 +2168,11 @@ get_parameters.sim.merMod <- function(x, effects = c("fixed", "random", "all"), 
 
 
 #' @export
-get_parameters.sim <- function(x, parameters = NULL, summary = FALSE, centrality = "mean", ...) {
+get_parameters.sim <- function(x,
+                               parameters = NULL,
+                               summary = FALSE,
+                               centrality = "mean",
+                               ...) {
   dat <- .get_armsim_fixef_parms(x)
   out <- as.data.frame(dat)[.get_parms_data(x, "all", "all", parameters)]
 
@@ -2128,7 +2184,11 @@ get_parameters.sim <- function(x, parameters = NULL, summary = FALSE, centrality
 
 
 #' @export
-get_parameters.mcmc <- function(x, parameters = NULL, summary = FALSE, centrality = "mean", ...) {
+get_parameters.mcmc <- function(x,
+                                parameters = NULL,
+                                summary = FALSE,
+                                centrality = "mean",
+                                ...) {
   out <- as.data.frame(x)[.get_parms_data(x, "all", "all", parameters)]
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality)
@@ -2138,7 +2198,11 @@ get_parameters.mcmc <- function(x, parameters = NULL, summary = FALSE, centralit
 
 
 #' @export
-get_parameters.bayesQR <- function(x, parameters = NULL, summary = FALSE, centrality = "mean", ...) {
+get_parameters.bayesQR <- function(x,
+                                   parameters = NULL,
+                                   summary = FALSE,
+                                   centrality = "mean",
+                                   ...) {
   out <- as.data.frame(x[[1]]$betadraw)
   names(out) <- x[[1]]$names
   out <- out[.get_parms_data(x, "all", "all", parameters)]

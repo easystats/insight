@@ -213,6 +213,7 @@ find_statistic <- function(x, ...) {
 
   f.mods <-
     c(
+      "afex_aov",
       "Anova.mlm",
       "aov",
       "aovlist",
