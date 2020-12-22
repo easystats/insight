@@ -75,10 +75,7 @@ standardize_names.effectsize_table <- standardize_names.parameters_model
 standardize_names.data.frame <- standardize_names.parameters_model
 
 #' @export
-standardize_names.parameters_distribution <- function(data, style = c("easystats", "broom"), ...) {
-  style <- match.arg(style)
-  .standardize_names(data, style, ignore_estimate = TRUE, ...)
-}
+standardize_names.parameters_distribution <- standardize_names.parameters_model
 
 
 
