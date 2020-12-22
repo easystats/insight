@@ -246,7 +246,7 @@
                 "cluster", "extra", "scale", "marginal", "beta")
 
   # auxiliary parameters
-  auxiliary_parameters <- c("sigma", "beta", "dispersion", "precision", "nu", "tau")
+  auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape", "phi", "ndt", "hu", "xi", "coi", "zoi")
 
   # location parameters
   location_parameters <- setdiff(elements, auxiliary_parameters)

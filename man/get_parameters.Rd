@@ -118,8 +118,8 @@ get_parameters(x, ...)
 \method{get_parameters}{brmsfit}(
   x,
   effects = c("fixed", "random", "all"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex",
-    "sigma", "smooth_terms"),
+  component = c("all", "conditional", "location", "distributional", "zi",
+    "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
   parameters = NULL,
   summary = FALSE,
   centrality = "mean",
@@ -156,7 +156,12 @@ get_parameters(x, ...)
  instrumental variables (so called fixed-effects regressions), or models
  with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model.}
+component, depending on the model. There are two convenient shortcuts:
+If \code{component = "location"}, location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
+For \code{component = "distributional"} (or \code{"auxiliary"}), components
+like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
+other auxiliary parameters) are returned.}
 
 \item{summary}{Logical, indicates whether the full posterior samples
 (\code{summary = FALSE})) or the summarized centrality indices of

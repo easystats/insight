@@ -69,8 +69,8 @@ find_parameters(x, ...)
 \method{find_parameters}{brmsfit}(
   x,
   effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex",
-    "sigma", "smooth_terms"),
+  component = c("all", "conditional", "location", "distributional", "auxiliary", "zi",
+    "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
   flatten = FALSE,
   parameters = NULL,
   ...
@@ -120,7 +120,12 @@ as character vector, not as list. Duplicated values are removed.}
  instrumental variables (so called fixed-effects regressions), or models
  with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model.}
+component, depending on the model. There are two convenient shortcuts:
+If \code{component = "location"}, location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
+For \code{component = "distributional"} (or \code{"auxiliary"}), components
+like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
+other auxiliary parameters) are returned.}
 
 \item{effects}{Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
@@ -137,10 +142,12 @@ A list of parameter names. For simple models, only one list-element,
      \item \code{random}, the "random effects" part from the model
      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
-     \item \code{dispersion}, the dispersion parameters
      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
      \item \code{smooth_terms}, the smooth parameters
      \item \code{marginal}, the marginal effects (for models from \pkg{mfx})
+     \item \code{sigma}, the residual standard deviation (auxiliary parameter)
+     \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
+     \item \code{beta}, the beta parameter (auxiliary parameter)
    }
 }
 \description{

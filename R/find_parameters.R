@@ -20,8 +20,9 @@
 #'   component, depending on the model. There are two convenient shortcuts:
 #'   If \code{component = "location"}, location parameters such as \code{conditional},
 #'   \code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
-#'   For \code{component = "distributional"}, components like \code{sigma},
-#'   \code{dispersion}, \code{beta} or \code{precision} are returned.
+#'   For \code{component = "distributional"} (or \code{"auxiliary"}), components
+#'   like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
+#'   other auxiliary parameters) are returned.
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
@@ -954,7 +955,7 @@ find_parameters.mcmc.list <- function(x, flatten = FALSE, ...) {
 
 #' @rdname find_parameters
 #' @export
-find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "location", "distributional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
+find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "location", "distributional", "auxiliary", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
   ## TODO remove "optional = FALSE" in a future update?
   fe <- colnames(as.data.frame(x, optional = FALSE))
   is_mv <- NULL
