@@ -1,5 +1,10 @@
 # insight 0.11.2
 
+## Breaking changes
+
+* `format_table()` is an alias for `parameters_table()`, and is no longer 
+  referring to `export_table()`.
+
 ## New supported model classes
 
 * Support for `coxr` (*coxrobust*), `coeftest` (*lmtest*), `ivFixed` (*ivFixed*),

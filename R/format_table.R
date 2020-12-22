@@ -1,5 +1,5 @@
 #' @title Parameter table formatting
-#' @name parameters_table
+#' @name format_table
 #'
 #' @description This functions takes a data frame with model parameters as input
 #'   and formats certain columns into a more readable layout (like collapsing
@@ -21,18 +21,18 @@
 #' @examples
 #' if (require("parameters")) {
 #'   x <- model_parameters(lm(Sepal.Length ~ Species * Sepal.Width, data = iris))
-#'   as.data.frame(parameters_table(x))
-#'   as.data.frame(parameters_table(x, p_digits = "scientific"))
+#'   as.data.frame(format_table(x))
+#'   as.data.frame(format_table(x, p_digits = "scientific"))
 #' }
 #' \donttest{
 #' if (require("rstanarm") && require("parameters")) {
 #'   model <- stan_glm(Sepal.Length ~ Species, data = iris, refresh = 0, seed = 123)
 #'   x <- model_parameters(model, ci = c(0.69, 0.89, 0.95))
-#'   as.data.frame(parameters_table(x))
+#'   as.data.frame(format_table(x))
 #' }}
 #' @return A data frame.
 #' @export
-parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, rope_digits = 2, preserve_attributes = FALSE, ...) {
+format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, rope_digits = 2, preserve_attributes = FALSE, ...) {
 
   # check if user supplied digits attributes
   if (missing(digits)) digits <- .additional_arguments(x, "digits", 2)
@@ -147,6 +147,12 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
 
 
+#' @rdname format_table
+#' @export
+parameters_table <- format_table
+
+
+
 
 # sub-routines ---------------
 
@@ -173,6 +179,8 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 }
 
 
+
+
 .format_df_columns <- function(x) {
   # generic df
   if ("df" %in% names(x)) x$df <- format_value(x$df, protect_integers = TRUE)
@@ -187,6 +195,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
   if ("df_denom" %in% names(x)) x$df_denom <- format_value(x$df_denom, protect_integers = TRUE)
   x
 }
+
 
 
 
@@ -221,6 +230,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
 
 
+
 #' @importFrom stats na.omit
 .format_main_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE) {
   # Main CI
@@ -252,6 +262,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
   x
 }
+
 
 
 
@@ -290,6 +301,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
 
 
+
 .format_broom_ci_columns <- function(x, ci_digits, ci_width = "auto", ci_brackets = TRUE) {
   if (!any(grepl("conf.low", names(x), fixed = TRUE))) {
     return(x)
@@ -314,6 +326,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
 
 
+
 .format_rope_columns <- function(x, ci_width = "auto", ci_brackets = TRUE) {
   if (all(c("ROPE_low", "ROPE_high") %in% names(x))) {
     x$ROPE_low <- format_ci(x$ROPE_low, x$ROPE_high, ci = NULL, width = ci_width, brackets = ci_brackets)
@@ -322,6 +335,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
   }
   x
 }
+
 
 
 
@@ -352,6 +366,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
   x
 }
+
 
 
 
@@ -396,6 +411,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
 
 
+
 .format_performance_columns <- function(x) {
   if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R2 (adj.)"
   if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R2 (cond.)"
@@ -411,7 +427,6 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
 
 
 
-
 # helper ---------------------
 
 
@@ -423,6 +438,7 @@ parameters_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, 
   }
   x
 }
+
 
 
 
