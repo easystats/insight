@@ -188,11 +188,23 @@ parameters_table <- format_table
   if ("df_residual" %in% names(x)) x$df_residual <- format_value(x$df_residual, protect_integers = TRUE)
   names(x)[names(x) == "df_residual"] <- "df"
   # df for errors
-  if ("df_error" %in% names(x)) x$df_error <- format_value(x$df_error, protect_integers = TRUE)
-  if (!("df" %in% names(x))) names(x)[names(x) == "df_error"] <- "df"
+  if ("df_error" %in% names(x)) {
+    x$df_error <- format_value(x$df_error, protect_integers = TRUE)
+    if (!("df" %in% names(x))) {
+      names(x)[names(x) == "df_error"] <- "df"
+    } else {
+      names(x)[names(x) == "df_error"] <- "df (error)"
+    }
+  }
   # denominator and numerator df
-  if ("df_num" %in% names(x)) x$df_num <- format_value(x$df_num, protect_integers = TRUE)
-  if ("df_denom" %in% names(x)) x$df_denom <- format_value(x$df_denom, protect_integers = TRUE)
+  if ("df_num" %in% names(x)) {
+    x$df_num <- format_value(x$df_num, protect_integers = TRUE)
+    names(x)[names(x) == "df_num"] <- "df (num.)"
+  }
+  if ("df_denom" %in% names(x)) {
+    x$df_denom <- format_value(x$df_denom, protect_integers = TRUE)
+    names(x)[names(x) == "df_denom"] <- "df (denom.)"
+  }
   x
 }
 
