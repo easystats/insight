@@ -136,6 +136,32 @@ get_parameters.aareg <- function(x, ...) {
 
 
 #' @export
+get_parameters.rqs <- function(x, ...) {
+  sc <- summary(x)
+
+  if (all(unlist(lapply(sc, is.list)))) {
+    list_sc <- lapply(sc, function(i) {
+      .x <- as.data.frame(stats::coef(i))
+      .x$Parameter <- rownames(.x)
+      .x$tau <- i$tau
+      .x
+    })
+    out <- do.call(rbind, list_sc)
+    params <- data.frame(
+      Parameter = out$Parameter,
+      Estimate = out$coefficients,
+      Component = sprintf("tau (%g)", out$tau),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    get_parameters.default(x, ...)
+  }
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+#' @export
 get_parameters.crq <- function(x, ...) {
   sc <- summary(x)
 
@@ -212,6 +238,7 @@ get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_t
     component = component
   )
 }
+
 
 
 #' @importFrom stats setNames
@@ -2012,7 +2039,7 @@ get_parameters.stanmvreg <- function(x,
 #' @export
 get_parameters.brmsfit <- function(x,
                                    effects = c("fixed", "random", "all"),
-                                   component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
+                                   component = c("all", "conditional", "location", "distributional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
                                    parameters = NULL,
                                    summary = FALSE,
                                    centrality = "mean",

@@ -235,6 +235,7 @@ is_model <- function(x) {
       "robmixglm",
       "robtab",
       "rq",
+      "rqs",
       "rqss",
       "sarlm",
       "scam",

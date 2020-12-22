@@ -178,6 +178,7 @@ supported_models <- function() {
     "rma.uni",
     "robmixglm",
     "rq",
+    "rqs",
     "rqss",
     "scam",
     "sem",

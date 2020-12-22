@@ -235,18 +235,37 @@
 
 
 # to reduce redundant code, I extract this part which is used several
-# times accross this package
+# times across this package
 .get_elements <- function(effects, component) {
+
+  # all elements of a model
   elements <- c("conditional", "conditional2", "conditional3", "precision",
                 "nonlinear", "random", "zero_inflated", "zero_inflated_random",
                 "dispersion", "instruments", "interactions", "simplex",
                 "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes",
-                "cluster", "extra", "scale", "marginal")
+                "cluster", "extra", "scale", "marginal", "beta")
+
+  # auxiliary parameters
+  auxiliary_parameters <- c("sigma", "beta", "dispersion", "precision", "nu", "tau")
+
+  # location parameters
+  location_parameters <- setdiff(elements, auxiliary_parameters)
+
+  # fixed pattern?
+  if (all(component == "location")) {
+    return(location_parameters)
+  }
+
+  # fixed pattern?
+  if (all(component %in% c("distributional", "auxiliary"))) {
+    return(auxiliary_parameters)
+  }
+
 
   elements <- switch(
     effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale", "marginal")],
+    fixed = elements[elements %in% c("conditional", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale", "marginal", "beta")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
@@ -261,6 +280,7 @@
     interactions = elements[elements == "interactions"],
     simplex = elements[elements == "simplex"],
     sigma = elements[elements == "sigma"],
+    beta = elements[elements == "beta"],
     smooth_terms = elements[elements == "smooth_terms"],
     correlation = elements[elements == "correlation"],
     cluster = elements[elements == "cluster"],

@@ -17,7 +17,11 @@
 #'    instrumental variables (so called fixed-effects regressions), or models
 #'    with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 #'   \emph{conditional} component is also called \emph{count} or \emph{mean}
-#'   component, depending on the model.
+#'   component, depending on the model. There are two convenient shortcuts:
+#'   If \code{component = "location"}, location parameters such as \code{conditional},
+#'   \code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
+#'   For \code{component = "distributional"}, components like \code{sigma},
+#'   \code{dispersion}, \code{beta} or \code{precision} are returned.
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
@@ -30,10 +34,12 @@
 #'      \item \code{random}, the "random effects" part from the model
 #'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
-#'      \item \code{dispersion}, the dispersion parameters
 #'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
 #'      \item \code{smooth_terms}, the smooth parameters
 #'      \item \code{marginal}, the marginal effects (for models from \pkg{mfx})
+#'      \item \code{sigma}, the residual standard deviation (auxiliary parameter)
+#'      \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
+#'      \item \code{beta}, the beta parameter (auxiliary parameter)
 #'    }
 #'
 #' @details In most cases when models either return different "effects" (fixed,
@@ -948,7 +954,7 @@ find_parameters.mcmc.list <- function(x, flatten = FALSE, ...) {
 
 #' @rdname find_parameters
 #' @export
-find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
+find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "location", "distributional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
   ## TODO remove "optional = FALSE" in a future update?
   fe <- colnames(as.data.frame(x, optional = FALSE))
   is_mv <- NULL
@@ -961,6 +967,7 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
   smooth_terms <- fe[grepl(pattern = "^sds_", fe, perl = TRUE)]
   priors <- fe[grepl(pattern = "^prior_", fe, perl = TRUE)]
   sigma <- fe[grepl(pattern = "^sigma_", fe, perl = TRUE)]
+  beta <- fe[grepl(pattern = "^beta_", fe, perl = TRUE)]
   rand_sd <- fe[grepl(pattern = "(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
   randzi_sd <- fe[grepl(pattern = "^sd_(.*_zi)", fe, perl = TRUE)]
   rand_cor <- fe[grepl(pattern = "(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
@@ -974,6 +981,7 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
     simplex = simo,
     smooth_terms = smooth_terms,
     sigma = sigma,
+    beta = beta,
     priors = priors
   ))
 
@@ -1025,6 +1033,12 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
         sigma <- NULL
       }
 
+      if (.obj_has_name(l, "beta")) {
+        beta <- l$beta[grepl(sprintf("^beta_\\Q%s\\E$", i), l$sigma)]
+      } else {
+        beta <- NULL
+      }
+
       if (.obj_has_name(l, "smooth_terms")) {
         smooth_terms <- l$smooth_terms
       } else {
@@ -1045,6 +1059,7 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
         simplex = simplex,
         smooth_terms = smooth_terms,
         sigma = sigma,
+        beta = beta,
         priors = priors
       ))
 
@@ -1742,6 +1757,25 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
   }
 }
 
+
+
+#' @export
+find_parameters.rqs <- function(x, flatten = FALSE, ...) {
+  sc <- summary(x)
+
+  if (all(unlist(lapply(sc, is.list)))) {
+    pars <- list(conditional = rownames(stats::coef(summary(x)[[1]])))
+  } else {
+    return(find_parameters.default(x, flatten = flatten, ...))
+  }
+  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
 
 
 #' @export
