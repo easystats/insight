@@ -1,6 +1,7 @@
 if (require("testthat") &&
   require("insight") &&
   require("survival") &&
+  require("lme4") &&
   require("coxme")) {
   data(lung)
   set.seed(1234)
