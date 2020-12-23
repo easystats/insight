@@ -23,7 +23,7 @@ find_statistic <- function(x, ...) {
   # model object check --------------------------------------------------------
 
   # check if the object is a model object; if not, quit early
-  if (!isTRUE(is_model(x))) {
+  if (isFALSE(is_model(x))) {
     stop("The entered object is not a model object.", call. = FALSE)
   }
 

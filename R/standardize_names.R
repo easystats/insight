@@ -103,7 +103,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
 
 .names_to_easystats <- function(cn, ignore_estimate) {
   cn[cn %in% c("t", "z", "F", "Chi2", "chisq", "Chisq", "chi-sq", "t / F", "z / Chisq", "z / Chi2")] <- "Statistic"
-  if (!isTRUE(ignore_estimate)) {
+  if (isFALSE(ignore_estimate)) {
     cn[cn %in% c("Median", "Mean", "MAP", "rho", "r", "tau", "Difference")] <- "Coefficient"
   }
   cn[cn %in% c("df_residual", "df.residual", "df.error", "df_error")] <- "df"
@@ -155,7 +155,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "Sum_Squares"] <- "sumsq"
   cn[cn == "Mean_Square"] <- "meansq"
   # name of coefficient column for (Bayesian) models
-  if (!isTRUE(ignore_estimate)) {
+  if (isFALSE(ignore_estimate)) {
     cn[cn %in% c("Coefficient", "Std_Coefficient", "Median", "Mean", "MAP", "Trimmed_Mean")] <- "estimate"
   }
   # name of coefficient column htest

@@ -62,7 +62,7 @@
   obs.terms <- names(nr[nr == n_obs(x)])
 
   # Variance of random effects
-  if (component %in% c("random", "all") && !isTRUE(no_random_variance)) {
+  if (component %in% c("random", "all") && isFALSE(no_random_variance)) {
     var.random <- .compute_variance_random(not.obs.terms, x = x, vals = vals)
   }
 

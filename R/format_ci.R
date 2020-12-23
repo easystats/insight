@@ -29,7 +29,7 @@ format_ci <- function(CI_low, CI_high, ci = 0.95, digits = 2, brackets = TRUE, w
   # check proper defaults
   if (isTRUE(brackets)) {
     ci_brackets <- c("[", "]")
-  } else if (is.null(brackets) || .is_false(brackets)) {
+  } else if (is.null(brackets) || isFALSE(brackets)) {
     ci_brackets <- c("", "")
   } else {
     ci_brackets <- brackets
@@ -82,9 +82,4 @@ format_ci <- function(CI_low, CI_high, ci = 0.95, digits = 2, brackets = TRUE, w
     format_value(CI_high, digits = digits, missing = missing, width = width_high),
     ci_brackets[2]
   )
-}
-
-
-.is_false <- function(x) {
-  is.logical(x) && length(x) == 1L && !is.na(x) && !x
 }
