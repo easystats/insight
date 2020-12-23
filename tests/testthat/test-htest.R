@@ -4,11 +4,11 @@ if (require("testthat") && require("insight")) {
     expect_equal(get_data(x)$x, c(1, 2, 3, NA))
   })
 
-  d <<- matrix(c(794, 86, 150, 570),
-               nrow = 2,
-               dimnames = list("1st Survey" = c("Approve", "Disapprove"),
-                               "2nd Survey" = c("Approve", "Disapprove")))
-  m <<- mcnemar.test(d)
+  dat <<- matrix(c(794, 86, 150, 570),
+                 nrow = 2,
+                 dimnames = list("1st Survey" = c("Approve", "Disapprove"),
+                                 "2nd Survey" = c("Approve", "Disapprove")))
+  m <- mcnemar.test(dat)
   test_that("get_data.mcnemar", {
     expect_equal(
       get_data(m),
