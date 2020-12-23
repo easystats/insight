@@ -1,5 +1,4 @@
-if (require("testthat") && require("insight")) {
-  library(lme4)
+if (require("testthat") && require("insight") && require("lme4")) {
   data(mtcars)
   data(sleepstudy)
 
