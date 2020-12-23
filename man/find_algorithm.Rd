@@ -38,14 +38,14 @@ Returns information on the sampling or estimation algorithm
   chains, iterations and warmup-samples.
 }
 \examples{
-library(lme4)
-data(sleepstudy)
-m <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-find_algorithm(m)
+if (require("lme4")) {
+  data(sleepstudy)
+  m <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+  find_algorithm(m)
+}
 \dontrun{
 library(rstanarm)
 m <- stan_lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
 find_algorithm(m)
 }
-
 }

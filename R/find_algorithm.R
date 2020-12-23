@@ -27,18 +27,17 @@
 #'      \item \code{warmup}, number of warmups per chain
 #'    }
 #'
-#'
 #' @examples
-#' library(lme4)
-#' data(sleepstudy)
-#' m <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-#' find_algorithm(m)
+#' if (require("lme4")) {
+#'   data(sleepstudy)
+#'   m <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+#'   find_algorithm(m)
+#' }
 #' \dontrun{
 #' library(rstanarm)
 #' m <- stan_lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
 #' find_algorithm(m)
 #' }
-#'
 #' @export
 find_algorithm <- function(x, ...) {
   UseMethod("find_algorithm")
