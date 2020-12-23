@@ -151,24 +151,30 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "df_error"] <- "df.error"
   cn[cn == "df_residual"] <- "df.residual"
   cn[cn == "n_Obs"] <- "n.obs"
+
   # anova
   cn[cn == "Sum_Squares"] <- "sumsq"
   cn[cn == "Mean_Square"] <- "meansq"
+
   # name of coefficient column for (Bayesian) models
   if (isFALSE(ignore_estimate)) {
-    cn[cn %in% c("Coefficient", "Std_Coefficient", "Median", "Mean", "MAP", "Trimmed_Mean")] <- "estimate"
+    cn[cn %in% c("Coefficient", "Std_Coefficient", "Median", "Mean", "MAP", "Psihat", "Trimmed_Mean")] <- "estimate"
   }
+
   # name of coefficient column htest
   cn[cn %in% c("rho", "r", "tau")] <- "estimate"
   if (("Difference" %in% cn) && !("estimate" %in% cn)) {
     cn[cn == "Difference"] <- "estimate"
   }
+
   cn[cn %in% c("S", "t", "z", "F", "Chi2", "chisq", "chi-sq", "Chisq", "t / F", "z / Chisq", "z / Chi2")] <- "statistic"
+
   # fancy regex replacements
   cn <- gsub("^CI_low", "conf.low", cn)
   cn <- gsub("^CI_high", "conf.high", cn)
   cn <- gsub("(.*)CI_low$", "\\1conf.low", cn)
   cn <- gsub("(.*)CI_high$", "\\1conf.high", cn)
+
   # from package effectisze
   if (requireNamespace("effectsize", quietly = TRUE)) {
     effectsize_names <- effectsize::is_effectsize_name(cn)
@@ -176,7 +182,9 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
       cn[effectsize_names] <- "estimate"
     }
   }
+
   # lowercase for everything
   cn <- gsub(tolower(cn), pattern = "_", replacement = ".", fixed = TRUE)
+
   cn
 }
