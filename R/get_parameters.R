@@ -2039,7 +2039,7 @@ get_parameters.stanmvreg <- function(x,
 #' @export
 get_parameters.brmsfit <- function(x,
                                    effects = c("fixed", "random", "all"),
-                                   component = c("all", "conditional", "location", "distributional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
+                                   component = c("all", "conditional", "location", "distributional", "auxiliary", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
                                    parameters = NULL,
                                    summary = FALSE,
                                    centrality = "mean",

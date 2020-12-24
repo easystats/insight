@@ -960,19 +960,19 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
   fe <- colnames(as.data.frame(x, optional = FALSE))
   is_mv <- NULL
 
-  cond <- fe[grepl(pattern = "^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
-  zi <- fe[grepl(pattern = "^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
-  rand <- fe[grepl(pattern = "(?!.*__zi)(?=.*^r_)", fe, perl = TRUE) & !grepl(pattern = "^prior_", fe, perl = TRUE)]
-  randzi <- fe[grepl(pattern = "^r_(.*__zi)", fe, perl = TRUE)]
-  simo <- fe[grepl(pattern = "^simo_", fe, perl = TRUE)]
-  smooth_terms <- fe[grepl(pattern = "^sds_", fe, perl = TRUE)]
-  priors <- fe[grepl(pattern = "^prior_", fe, perl = TRUE)]
-  sigma <- fe[grepl(pattern = "^sigma_", fe, perl = TRUE)]
-  beta <- fe[grepl(pattern = "^beta_", fe, perl = TRUE)]
-  rand_sd <- fe[grepl(pattern = "(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
-  randzi_sd <- fe[grepl(pattern = "^sd_(.*_zi)", fe, perl = TRUE)]
-  rand_cor <- fe[grepl(pattern = "(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
-  randzi_cor <- fe[grepl(pattern = "^cor_(.*_zi)", fe, perl = TRUE)]
+  cond <- fe[grepl("^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
+  zi <- fe[grepl("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
+  rand <- fe[grepl("(?!.*__zi)(?=.*^r_)", fe, perl = TRUE) & !grepl("^prior_", fe, perl = TRUE)]
+  randzi <- fe[grepl("^r_(.*__zi)", fe, perl = TRUE)]
+  simo <- fe[grepl("^simo_", fe, perl = TRUE)]
+  smooth_terms <- fe[grepl("^sds_", fe, perl = TRUE)]
+  priors <- fe[grepl("^prior_", fe, perl = TRUE)]
+  sigma <- fe[grepl("^sigma_", fe, perl = TRUE)]
+  beta <- fe[grepl("beta", fe, fixed = TRUE)]
+  rand_sd <- fe[grepl("(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
+  randzi_sd <- fe[grepl("^sd_(.*_zi)", fe, perl = TRUE)]
+  rand_cor <- fe[grepl("(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
+  randzi_cor <- fe[grepl("^cor_(.*_zi)", fe, perl = TRUE)]
 
   l <- .compact_list(list(
     conditional = cond,
@@ -1117,11 +1117,11 @@ find_parameters.bayesx <- function(x, component = c("all", "conditional", "smoot
 find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
-  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
-  rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
-  rand_sd <- fe[grepl(pattern = "^Sigma\\[", fe, perl = TRUE)]
-  smooth_terms <- fe[grepl(pattern = "^smooth_sd", fe, perl = TRUE)]
-  # sigma <- fe[grepl(pattern = "sigma", fe, fixed = TRUE)]
+  cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
+  rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
+  rand_sd <- fe[grepl("^Sigma\\[", fe, perl = TRUE)]
+  smooth_terms <- fe[grepl("^smooth_sd", fe, perl = TRUE)]
+  # sigma <- fe[grepl("sigma", fe, fixed = TRUE)]
 
   l <- .compact_list(list(
     conditional = cond,
@@ -1162,9 +1162,9 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
   fe <- colnames(as.data.frame(x))
   rn <- names(find_response(x))
 
-  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !grepl(pattern = "\\|sigma$", fe, perl = TRUE)]
-  rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
-  sigma <- fe[grepl(pattern = "\\|sigma$", fe, perl = TRUE) & .grep_non_smoothers(fe)]
+  cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !grepl("\\|sigma$", fe, perl = TRUE)]
+  rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
+  sigma <- fe[grepl("\\|sigma$", fe, perl = TRUE) & .grep_non_smoothers(fe)]
 
   l <- .compact_list(list(
     conditional = cond,
@@ -1174,8 +1174,8 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
 
 
   if (.obj_has_name(l, "conditional")) {
-    x1 <- sub(pattern = "(.*)(\\|)(.*)", "\\1", l$conditional)
-    x2 <- sub(pattern = "(.*)(\\|)(.*)", "\\3", l$conditional)
+    x1 <- sub("(.*)(\\|)(.*)", "\\1", l$conditional)
+    x2 <- sub("(.*)(\\|)(.*)", "\\3", l$conditional)
 
     l.cond <- lapply(rn, function(i) {
       list(conditional = x2[which(x1 == i)])
@@ -1187,8 +1187,8 @@ find_parameters.stanmvreg <- function(x, effects = c("all", "fixed", "random"), 
 
 
   if (.obj_has_name(l, "random")) {
-    x1 <- sub(pattern = "b\\[(.*)(\\|)(.*)", "\\1", l$random)
-    x2 <- sub(pattern = "(b\\[).*(.*)(\\|)(.*)", "\\1\\4", l$random)
+    x1 <- sub("b\\[(.*)(\\|)(.*)", "\\1", l$random)
+    x2 <- sub("(b\\[).*(.*)(\\|)(.*)", "\\1\\4", l$random)
 
     l.random <- lapply(rn, function(i) {
       list(random = x2[which(x1 == i)])
@@ -1303,8 +1303,8 @@ find_parameters.bayesQR <- function(x, flatten = FALSE, parameters = NULL, ...) 
 find_parameters.stanfit <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, parameters = NULL, ...) {
   fe <- colnames(as.data.frame(x))
 
-  cond <- fe[grepl(pattern = "^(?!(b\\[|sigma|Sigma|lp__))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
-  rand <- fe[grepl(pattern = "^b\\[", fe, perl = TRUE)]
+  cond <- fe[grepl("^(?!(b\\[|sigma|Sigma|lp__))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
+  rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
 
   l <- .compact_list(list(
     conditional = cond,

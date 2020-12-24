@@ -18,6 +18,8 @@
 * `is_mixed_model()`, to safely check if a model is a mixed effects model. This
   function also works for multivariate response models.
 
+* `get_residuals()` to extract model residuals.
+
 ## Changes to functions
 
 * `find_formula()`, `find_predictor()`, `find_random()` and related functions 

@@ -118,7 +118,7 @@ get_parameters(x, ...)
 \method{get_parameters}{brmsfit}(
   x,
   effects = c("fixed", "random", "all"),
-  component = c("all", "conditional", "location", "distributional", "zi",
+  component = c("all", "conditional", "location", "distributional", "auxiliary", "zi",
     "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
   parameters = NULL,
   summary = FALSE,

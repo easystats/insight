@@ -574,6 +574,48 @@
 
 
 
+# safe conversion from factor to numeric
+#' @importFrom stats na.omit
+.factor_to_numeric <- function(x, lowest = NULL) {
+  if (is.data.frame(x)) {
+    as.data.frame(lapply(x, .factor_to_numeric_helper, lowest = lowest))
+  } else {
+    .factor_to_numeric_helper(x, lowest = lowest)
+  }
+}
+
+
+#' @importFrom stats na.omit
+.factor_to_numeric_helper <- function(x, lowest = NULL) {
+  if (is.numeric(x)) {
+    return(x)
+  }
+
+  if (is.logical(x)) {
+    return(as.numeric(x))
+  }
+
+  if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
+    if (is.character(x)) {
+      x <- as.factor(x)
+    }
+    x <- droplevels(x)
+    levels(x) <- 1:nlevels(x)
+  }
+
+  out <- as.numeric(as.character(x))
+
+  if (!is.null(lowest)) {
+    difference <- min(out) - lowest
+    out <- out - difference
+  }
+
+  out
+}
+
+
+
+
 
 ## copied from lme4::findbars() -----------------------
 
