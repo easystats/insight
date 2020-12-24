@@ -5,14 +5,27 @@ if (require("testthat") &&
   data(mtcars)
 
   m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
-  m2 <-
-    lm(log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE),
-      data = mtcars
-    )
+  m2 <- lm(log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE),
+    data = mtcars
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
     expect_false(model_info(m1)$is_bayesian)
+  })
+
+  test_that("get_residuals", {
+    expect_equal(
+      head(get_residuals(m2)),
+      c(`Mazda RX4` = 17.91041, `Mazda RX4 Wag` = 17.95668, `Datsun 710` = 19.57092,
+        `Hornet 4 Drive` = 18.4171, `Hornet Sportabout` = 15.87447, Valiant = 15.14937),
+      tolerance = 1e-3,
+      ignore_attr = TRUE
+    )
+  })
+
+  test_that("get_sigma", {
+    expect_equal(get_sigma(m1), 0.4810113, tolerance = 1e-3, ignore_attr = TRUE)
   })
 
   test_that("find_predictors", {
