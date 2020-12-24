@@ -49,8 +49,10 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
 
   if (is.null(res) || all(is.na(res))) {
     if (verbose) warning("Can't extract residuals from model.")
-    return(NULL)
+    res <- NULL
   }
+
+  res
 }
 
 
@@ -67,4 +69,27 @@ get_residuals.vglm <- get_residuals.vgam
 #' @export
 get_residuals.coxph <- function(x, ...) {
   stats::residuals(x)
+}
+
+
+#' @importFrom utils capture.output
+#' @export
+get_residuals.slm <- function(x, verbose = TRUE, ...) {
+  res <- tryCatch(
+    {
+      junk <- utils::capture.output(pred <- stats::predict(x, type = "response"))
+      observed <- .factor_to_numeric(get_response(x))
+      observed - pred
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(res) || all(is.na(res))) {
+    if (verbose) warning("Can't extract residuals from model.")
+    res <- NULL
+  }
+
+  res
 }
