@@ -21,7 +21,7 @@ get_residuals <- function(x, ...) {
 }
 
 
-
+#' @rdname get_residuals
 #' @importFrom stats predict residuals
 #' @export
 get_residuals.default <- function(x, verbose = TRUE, ...) {

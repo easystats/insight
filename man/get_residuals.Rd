@@ -2,9 +2,12 @@
 % Please edit documentation in R/get_residuals.R
 \name{get_residuals}
 \alias{get_residuals}
+\alias{get_residuals.default}
 \title{Extract model residuals}
 \usage{
 get_residuals(x, ...)
+
+\method{get_residuals}{default}(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}
