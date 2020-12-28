@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find model formula — find_formula • insight</title>
+<title>Extract model residuals — get_residuals • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,8 @@
 
 
 
-<meta property="og:title" content="Find model formula — find_formula" />
-<meta property="og:description" content="Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...)." />
+<meta property="og:title" content="Extract model residuals — get_residuals" />
+<meta property="og:description" content="Returns the residuals from regression models." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -117,62 +116,61 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find model formula</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_formula.R'><code>R/find_formula.R</code></a></small>
-    <div class="hidden name"><code>find_formula.Rd</code></div>
+    <h1>Extract model residuals</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_residuals.R'><code>R/get_residuals.R</code></a></small>
+    <div class="hidden name"><code>get_residuals.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...).</p>
+    <p>Returns the residuals from regression models.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_residuals</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>get_residuals</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted model.</p></td>
+      <td><p>A model.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Currently not used.</p></td>
+      <td><p>Not used.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle warnings and messages.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of formulas that describe the model. For simple models,
-   only one list-element, <code>conditional</code>, is returned. For more complex
-   models, the returned list may have following elements:</p><ul>
-<li><p><code>conditional</code>, the "fixed effects" part from the model. One exception are <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>, which has two or three components, depending on <code>model</code>.</p></li>
-<li><p><code>random</code>, the "random effects" part from the model (or the <code>id</code> for gee-models and similar)</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>dispersion</code>, the dispersion formula</p></li>
-<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
-<li><p><code>cluster</code>, for fixed-effects regressions like <code>felm</code>, the cluster specification</p></li>
-<li><p><code>correlation</code>, for models with correlation-component like <code>gls</code>, the formula that describes the correlation structure</p></li>
-<li><p><code>slopes</code>, for fixed-effects individual-slope models like <code>feis</code>, the formula for the slope parameters</p></li>
-<li><p><code>precision</code>, for <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>, when parametrization (i.e. <code>model</code>) is <code>"alternative"</code>.</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>For models of class <code>lme</code> or <code>gls</code> the correlation-component
-  is only returned, when it is explicitly defined as named argument
-  (<code>form</code>), e.g. <code>corAR1(form = ~1 | Mare)</code></p>
+    <p>The residuals, or <code>NULL</code> if this information could not be accessed.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $conditional
-#&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x7fba8badad10&gt;
-#&gt; </div></pre>
+<span class='fu'>get_residuals</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
+#&gt;          -1.0559619          -0.2281383          -3.4822509           0.7514545 
+#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
+#&gt;           2.0342659          -1.7531855          -1.9437064           0.9420887 
+#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE 
+#&gt;          -0.7877660          -0.7181129          -2.1181129           1.7794773 
+#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental 
+#&gt;           1.5757124          -0.3619692          -0.3898093           0.1750587 
+#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla 
+#&gt;           4.2185956           5.7281850           1.8290601           6.0432610 
+#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 
+#&gt;          -4.3115276          -0.9060247          -1.4819660          -2.0671872 
+#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa 
+#&gt;           3.8490446          -0.2321023          -0.3424249           1.4979307 
+#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E 
+#&gt;          -1.7422533          -1.8690068          -1.2437064          -3.3889219 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
