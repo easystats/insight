@@ -38,6 +38,7 @@ reference:
   contents:
   - get_data
   - get_priors
+  - get_residuals
   - get_sigma
   - get_variance
   - get_varcov
