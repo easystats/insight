@@ -434,6 +434,9 @@ get_varcov.crq <- function(x, ...) {
 #' @export
 get_varcov.nlrq <- get_varcov.rq
 
+#' @export
+get_varcov.rqs <- get_varcov.rq
+
 
 #' @export
 get_varcov.flexsurvreg <- function(x, ...) {

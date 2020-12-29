@@ -111,6 +111,7 @@ find_statistic <- function(x, ...) {
       "rms",
       "rlmerMod",
       "rq",
+      "rqs",
       "rqss",
       "speedlm",
       "spml",

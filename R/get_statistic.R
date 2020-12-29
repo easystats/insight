@@ -1362,6 +1362,34 @@ get_statistic.rq <- function(x, ...) {
   out
 }
 
+
+#' @export
+get_statistic.rqs <- function(x, ...) {
+  stat <- tryCatch(
+    {
+      s <- summary(x, covariance = TRUE)
+      cs <- do.call(rbind, lapply(s, stats::coef))
+      cs[, "t value"]
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  params <- get_parameters(x)
+
+  out <- data.frame(
+    Parameter = params$Parameter,
+    Statistic = stat,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
 #' @export
 get_statistic.crq <- function(x, ...) {
   sc <- summary(x)
