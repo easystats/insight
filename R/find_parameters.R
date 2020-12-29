@@ -1774,10 +1774,10 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.rqs <- function(x, flatten = FALSE, ...) {
-  sc <- summary(x)
+  sc <- suppressWarnings(summary(x))
 
   if (all(unlist(lapply(sc, is.list)))) {
-    pars <- list(conditional = rownames(stats::coef(summary(x)[[1]])))
+    pars <- list(conditional = rownames(stats::coef(sc[[1]])))
   } else {
     return(find_parameters.default(x, flatten = flatten, ...))
   }
@@ -1793,7 +1793,7 @@ find_parameters.rqs <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.crq <- function(x, flatten = FALSE, ...) {
-  sc <- summary(x)
+  sc <- suppressWarnings(summary(x))
 
   if (all(unlist(lapply(sc, is.list)))) {
     pars <- list(conditional = rownames(sc[[1]]$coefficients))
