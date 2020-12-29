@@ -1381,6 +1381,7 @@ get_statistic.rqs <- function(x, ...) {
   out <- data.frame(
     Parameter = params$Parameter,
     Statistic = stat,
+    Component = params$Component,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
