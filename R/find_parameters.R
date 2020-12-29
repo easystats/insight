@@ -107,6 +107,18 @@ find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
 
 
 
+#' @export
+find_parameters.summary.lm <- function(x, flatten = FALSE, ...) {
+  cf <- stats::coef(x)
+  l <- list(conditional = .remove_backticks_from_string(rownames(cf)))
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
 
 
 

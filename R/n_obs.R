@@ -74,6 +74,13 @@ n_obs.merModList <- function(x, ...) {
 
 
 #' @export
+n_obs.summary.lm <- function(x, ...) {
+  length(x$residuals)
+}
+
+
+
+#' @export
 n_obs.mediate <- function(x, ...) {
   x$nobs
 }

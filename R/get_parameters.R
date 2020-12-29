@@ -97,6 +97,21 @@ get_parameters.default <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+get_parameters.summary.lm <- function(x, ...) {
+  cf <- stats::coef(x)
+
+  params <- data.frame(
+    Parameter = names(cf[, 1]),
+    Estimate = unname(cf[, 1]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+#' @export
 get_parameters.data.frame <- function(x, ...) {
   stop("A data frame is no valid object for this function")
 }

@@ -59,6 +59,23 @@ get_statistic.default <- function(x, column_index = 3, ...) {
 
 
 #' @export
+get_statistic.summary.lm <- function(x, ...) {
+  cs <- stats::coef(x)
+
+  out <- data.frame(
+    Parameter = rownames(cs),
+    Statistic = as.vector(cs[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.mlm <- function(x, ...) {
   cs <- stats::coef(summary(x))
 

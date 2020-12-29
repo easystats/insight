@@ -247,6 +247,7 @@ is_model <- function(x) {
       "spml",
       "stanmvreg",
       "stanreg",
+      "summary.lm",
       "survfit",
       "survreg",
       "survPresmooth",

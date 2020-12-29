@@ -114,6 +114,7 @@ find_statistic <- function(x, ...) {
       "rqss",
       "speedlm",
       "spml",
+      "summary.lm",
       "svyglm",
       "svyolr",
       "truncreg",
