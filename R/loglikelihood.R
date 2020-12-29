@@ -9,11 +9,11 @@
 #' @examples
 #' x <- lm(Sepal.Length ~ Petal.Width + Species, data=iris)
 #'
-#' loglikelihood(x, estimator = "OLS")
-#' loglikelihood(x, estimator = "ML")  # Equivalent to stats::logLik(x)
+#' get_loglikelihood(x, estimator = "OLS")
+#' get_loglikelihood(x, estimator = "ML")  # Equivalent to stats::logLik(x)
 #' @importFrom stats df.residual dnorm
 #' @export
-loglikelihood <- function(x, estimator = "OLS", summarize = TRUE, ...) {
+get_loglikelihood <- function(x, estimator = "OLS", summarize = TRUE, ...) {
 
   if (tolower(estimator) == "ols") {
     # TODO: Replace df.residual by a more robust function
@@ -34,6 +34,11 @@ loglikelihood <- function(x, estimator = "OLS", summarize = TRUE, ...) {
   class(out) <- c("logLik", class(x))  # The class returned by stats::logLik(x)
   out
 }
+
+
+#' @rdname get_loglikelihood
+#' @export
+loglikelihood <- get_loglikelihood
 
 # TODO: See what they do https://github.com/cran/nonnest2/blob/master/R/llcont.R
 # As there seems to be different stuff going on depending on the model's family

@@ -37,6 +37,8 @@ reference:
     have no `find_*()`-counterpart.
   contents:
   - get_data
+  - get_loglikelihood
+  - get_predicted
   - get_priors
   - get_residuals
   - get_sigma
@@ -105,6 +107,7 @@ reference:
   - clean_parameters
   - display
   - download_model
+  - ellipsis_info
   - export_table
   - null_model
   - print_parameters
