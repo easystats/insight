@@ -12,6 +12,10 @@
 
 ## New functions
 
+* Added `get_predicted()` as a robust alternative to `stats::fitted()`
+
+* Added `loglikelihood()` function as a robust alternative to `stats::logLik()`.
+
 * Added `ellipsis_info()` to specify the nature of ellipsis (`...`) inputs.
 
 * Added generic `print_html()`, to allow other packages to create tables in
