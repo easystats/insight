@@ -152,7 +152,7 @@ get_parameters.aareg <- function(x, ...) {
 
 #' @export
 get_parameters.rqs <- function(x, ...) {
-  sc <- summary(x)
+  sc <- suppressWarnings(summary(x))
 
   if (all(unlist(lapply(sc, is.list)))) {
     list_sc <- lapply(sc, function(i) {

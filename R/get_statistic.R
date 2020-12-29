@@ -1367,7 +1367,7 @@ get_statistic.rq <- function(x, ...) {
 get_statistic.rqs <- function(x, ...) {
   stat <- tryCatch(
     {
-      s <- summary(x, covariance = TRUE)
+      s <- suppressWarnings(summary(x, covariance = TRUE))
       cs <- do.call(rbind, lapply(s, stats::coef))
       cs[, "t value"]
     },
