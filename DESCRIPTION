@@ -31,6 +31,7 @@ Suggests:
     aod,
     BayesFactor,
     bayestestR,
+    bdsmatrix,
     betareg,
     BGGM,
     biglm,

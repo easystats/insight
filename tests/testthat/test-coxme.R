@@ -2,13 +2,14 @@ if (require("testthat") &&
   require("insight") &&
   require("survival") &&
   require("lme4") &&
+  require("nlme") &&
+  require("bdsmatrix") &&
   require("coxme")) {
   data(lung)
   set.seed(1234)
   lung$inst2 <- sample(1:10, size = nrow(lung), replace = T)
   lung <- subset(lung, subset = ph.ecog %in% 0:2)
-  lung$ph.ecog <-
-    factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
+  lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
 
   m1 <- coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), lung)
   m2 <- coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst) + (1 | inst2), lung)
