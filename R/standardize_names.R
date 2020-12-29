@@ -156,6 +156,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   # anova
   cn[cn == "Sum_Squares"] <- "sumsq"
   cn[cn == "Mean_Square"] <- "meansq"
+  cn[cn == "Deviance_error"] <- "Resid..Dev"
 
   # name of coefficient column for (Bayesian) models
   if (isFALSE(ignore_estimate)) {
