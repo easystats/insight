@@ -76,6 +76,20 @@ get_data.data.frame <- function(x, ...) {
 }
 
 
+#' @export
+get_data.summary.lm <- function(x, ...) {
+  mf <- tryCatch(
+    {
+      .get_data_from_env(x)[, all.vars(x$terms), drop = FALSE]
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+  .prepare_get_data(x, mf)
+}
+
+
 
 
 
