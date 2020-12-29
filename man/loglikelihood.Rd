@@ -11,6 +11,8 @@ loglikelihood(x, estimator = "OLS", summarize = TRUE, ...)
 
 \item{estimator}{Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="OLS"} (default), it returns the unbiased OLS estimator (scaling by the degrees of freedom, i.e., \code{n−k ()}). If \code{estimator="ML"}, the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.}
 
+\item{summarize}{Currently not used.}
+
 \item{...}{Not used.}
 }
 \description{
@@ -19,6 +21,6 @@ A robust function to compute the log-likelihood of a model.
 \examples{
 x <- lm(Sepal.Length ~ Petal.Width + Species, data=iris)
 
-loglikelihood(x, estimator="OLS")
-loglikelihood(x, estimator="ML")  # Equivalent to stats::logLik(x)
+loglikelihood(x, estimator = "OLS")
+loglikelihood(x, estimator = "ML")  # Equivalent to stats::logLik(x)
 }

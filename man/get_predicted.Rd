@@ -16,6 +16,5 @@ Returns values predicted by a model (i.e., fitted values).
 }
 \examples{
 x <- lm(Sepal.Length ~ Petal.Width * Species, data=iris)
-
 get_predicted(x)
 }
