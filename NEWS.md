@@ -2,7 +2,7 @@
 
 ## Breaking changes
 
-* `format_table()` is an alias for `parameters_table()`, and is no longer 
+* `format_table()` is an alias for `parameters_table()`, and is no longer
   referring to `export_table()`.
 
 ## New supported model classes
@@ -12,7 +12,9 @@
 
 ## New functions
 
-* Added generic `print_html()`, to allow other packages to create tables in 
+* Added `ellipsis_info()` to specify the nature of ellipsis (`...`) inputs.
+
+* Added generic `print_html()`, to allow other packages to create tables in
   HTML format (via `export_table()`) when not printing the output to console.
 
 * `is_mixed_model()`, to safely check if a model is a mixed effects model. This
@@ -22,19 +24,19 @@
 
 ## Changes to functions
 
-* `find_formula()`, `find_predictor()`, `find_random()` and related functions 
-  now also return names of random effects from generalized  additive mixed 
+* `find_formula()`, `find_predictor()`, `find_random()` and related functions
+  now also return names of random effects from generalized  additive mixed
   models (`gamm`, `gamm4`, `stan_gamm4`).
 
 * Added support for more BFBayesFactor objects.
 
-* `model_info()` now returns `$is_xtab` for `chisq.test()` and 
+* `model_info()` now returns `$is_xtab` for `chisq.test()` and
   `BayesFactor::contingencyTableBF()`. Furthermore, the `$family` element for
   those objects is set to `"categorical"`.
 
 ## Bug fixes
 
-* Fixed issue in `find_statistic()` for *fixest* models, which did not 
+* Fixed issue in `find_statistic()` for *fixest* models, which did not
   return the correct value `"t-statistic"` for `feols()`.
 
 # insight 0.11.1
@@ -54,7 +56,7 @@
   set the tolerance level for singularity checks when computing random effect
   variances.
 
-* `parameters_table()` formats more objects from the *easystats* packages, 
+* `parameters_table()` formats more objects from the *easystats* packages,
   like ROPE-range or `p_rope()`.
 
 * `find_statistic()` now supports models of class *scam*.
