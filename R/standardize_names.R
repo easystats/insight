@@ -106,7 +106,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   if (isFALSE(ignore_estimate)) {
     cn[cn %in% c("Median", "Mean", "MAP", "rho", "r", "tau", "Difference")] <- "Coefficient"
   }
-  cn[cn %in% c("df_residual", "df.residual", "df.error", "df_error")] <- "df"
+  cn[cn %in% c("df_residual", "df.residual", "Resid..Df", "df.error", "df_error")] <- "df"
 
   # convert broom-style to easystats
   cn[cn == "term"] <- "Parameter"
@@ -126,6 +126,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   # anova
   cn[cn == "sumsq"] <- "Sum_Squares"
   cn[cn == "meansq"] <- "Mean_Square"
+  cn[cn == "Resid..Dev"] <- "Deviance_error"
 
   cn
 }
