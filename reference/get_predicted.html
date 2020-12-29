@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find model formula — find_formula • insight</title>
+<title>Predicted values — get_predicted • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,8 @@
 
 
 
-<meta property="og:title" content="Find model formula — find_formula" />
-<meta property="og:description" content="Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...)." />
+<meta property="og:title" content="Predicted values — get_predicted" />
+<meta property="og:description" content="Returns values predicted by a model (i.e., fitted values)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -117,62 +116,72 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find model formula</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_formula.R'><code>R/find_formula.R</code></a></small>
-    <div class="hidden name"><code>find_formula.Rd</code></div>
+    <h1>Predicted values</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_predicted.R'><code>R/get_predicted.R</code></a></small>
+    <div class="hidden name"><code>get_predicted.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...).</p>
+    <p>Returns values predicted by a model (i.e., fitted values).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted model.</p></td>
+      <td><p>A model.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Currently not used.</p></td>
+      <td><p>Not used.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A list of formulas that describe the model. For simple models,
-   only one list-element, <code>conditional</code>, is returned. For more complex
-   models, the returned list may have following elements:</p><ul>
-<li><p><code>conditional</code>, the "fixed effects" part from the model. One exception are <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>, which has two or three components, depending on <code>model</code>.</p></li>
-<li><p><code>random</code>, the "random effects" part from the model (or the <code>id</code> for gee-models and similar)</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>dispersion</code>, the dispersion formula</p></li>
-<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
-<li><p><code>cluster</code>, for fixed-effects regressions like <code>felm</code>, the cluster specification</p></li>
-<li><p><code>correlation</code>, for models with correlation-component like <code>gls</code>, the formula that describes the correlation structure</p></li>
-<li><p><code>slopes</code>, for fixed-effects individual-slope models like <code>feis</code>, the formula for the slope parameters</p></li>
-<li><p><code>precision</code>, for <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>, when parametrization (i.e. <code>model</code>) is <code>"alternative"</code>.</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>For models of class <code>lme</code> or <code>gls</code> the correlation-component
-  is only returned, when it is explicitly defined as named argument
-  (<code>form</code>), e.g. <code>corAR1(form = ~1 | Mare)</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $conditional
-#&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x7fe8101cef98&gt;
-#&gt; </div></pre>
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>*</span> <span class='va'>Species</span>, data<span class='op'>=</span><span class='va'>iris</span><span class='op'>)</span>
+<span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;        1        2        3        4        5        6        7        8 
+#&gt; 4.963212 4.963212 4.963212 4.963212 4.963212 5.149247 5.056229 4.963212 
+#&gt;        9       10       11       12       13       14       15       16 
+#&gt; 4.963212 4.870195 4.963212 4.963212 4.870195 4.870195 4.963212 5.149247 
+#&gt;       17       18       19       20       21       22       23       24 
+#&gt; 5.149247 5.056229 5.056229 5.056229 4.963212 5.149247 4.963212 5.242264 
+#&gt;       25       26       27       28       29       30       31       32 
+#&gt; 4.963212 4.963212 5.149247 4.963212 4.963212 4.963212 4.963212 5.149247 
+#&gt;       33       34       35       36       37       38       39       40 
+#&gt; 4.870195 4.963212 4.963212 4.963212 4.963212 4.870195 4.963212 4.963212 
+#&gt;       41       42       43       44       45       46       47       48 
+#&gt; 5.056229 5.056229 4.963212 5.335281 5.149247 5.056229 4.963212 4.963212 
+#&gt;       49       50       51       52       53       54       55       56 
+#&gt; 4.963212 4.963212 6.041551 6.184187 6.184187 5.898915 6.184187 5.898915 
+#&gt;       57       58       59       60       61       62       63       64 
+#&gt; 6.326824 5.471005 5.898915 6.041551 5.471005 6.184187 5.471005 6.041551 
+#&gt;       65       66       67       68       69       70       71       72 
+#&gt; 5.898915 6.041551 6.184187 5.471005 6.184187 5.613642 6.612097 5.898915 
+#&gt;       73       74       75       76       77       78       79       80 
+#&gt; 6.184187 5.756278 5.898915 6.041551 6.041551 6.469460 6.184187 5.471005 
+#&gt;       81       82       83       84       85       86       87       88 
+#&gt; 5.613642 5.471005 5.756278 6.326824 6.184187 6.326824 6.184187 5.898915 
+#&gt;       89       90       91       92       93       94       95       96 
+#&gt; 5.898915 5.898915 5.756278 6.041551 5.756278 5.471005 5.898915 5.756278 
+#&gt;       97       98       99      100      101      102      103      104 
+#&gt; 5.898915 5.898915 5.613642 5.898915 6.896494 6.505995 6.636161 6.440912 
+#&gt;      105      106      107      108      109      110      111      112 
+#&gt; 6.701245 6.636161 6.375829 6.440912 6.440912 6.896494 6.571078 6.505995 
+#&gt;      113      114      115      116      117      118      119      120 
+#&gt; 6.636161 6.571078 6.831411 6.766328 6.440912 6.701245 6.766328 6.245663 
+#&gt;      121      122      123      124      125      126      127      128 
+#&gt; 6.766328 6.571078 6.571078 6.440912 6.636161 6.440912 6.440912 6.440912 
+#&gt;      129      130      131      132      133      134      135      136 
+#&gt; 6.636161 6.310746 6.505995 6.571078 6.701245 6.245663 6.180580 6.766328 
+#&gt;      137      138      139      140      141      142      143      144 
+#&gt; 6.831411 6.440912 6.440912 6.636161 6.831411 6.766328 6.505995 6.766328 
+#&gt;      145      146      147      148      149      150 
+#&gt; 6.896494 6.766328 6.505995 6.571078 6.766328 6.440912 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
