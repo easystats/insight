@@ -76,6 +76,10 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
   x <- .format_df_columns(x)
 
 
+  # Format special anova columns ----
+  x <- .format_aov_columns(x)
+
+
   # Format frequentist stats ----
   x <- .format_freq_stats(x)
 
@@ -204,6 +208,17 @@ parameters_table <- format_table
   if ("df_denom" %in% names(x)) {
     x$df_denom <- format_value(x$df_denom, protect_integers = TRUE)
     names(x)[names(x) == "df_denom"] <- "df (denom.)"
+  }
+  x
+}
+
+
+
+
+.format_aov_columns <- function(x) {
+  if ("Deviance_error" %in% names(x)) {
+    x$Deviance_error <- format_value(x$Deviance_error, protect_integers = TRUE)
+    names(x)[names(x) == "Deviance_error"] <- "Deviance (error)"
   }
   x
 }
