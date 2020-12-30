@@ -113,7 +113,7 @@ as character vector, not as list. Duplicated values are removed.}
 
 \item{verbose}{Toggle messages and warnings.}
 
-\item{component}{Should all parameters, parameters for the
+\item{component}{Which type of parameters to return, such as parameters for the
  conditional model, the zero-inflated part of the model, the dispersion
  term, the instrumental variables or marginal effects be returned? Applies
  to models with zero-inflated and/or dispersion formula, or to models with

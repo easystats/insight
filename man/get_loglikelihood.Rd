@@ -5,25 +5,25 @@
 \alias{loglikelihood}
 \title{Log-Likelihood}
 \usage{
-get_loglikelihood(x, estimator = "OLS", summarize = TRUE, ...)
+get_loglikelihood(x, estimator = "ML", summarize = TRUE, ...)
 
-loglikelihood(x, estimator = "OLS", summarize = TRUE, ...)
+loglikelihood(x, estimator = "ML", summarize = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}
 
-\item{estimator}{Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="OLS"} (default), it returns the unbiased OLS estimator (scaling by the degrees of freedom, i.e., \code{n−k ()}). If \code{estimator="ML"}, the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.}
+\item{estimator}{Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator (scaling by the degrees of freedom, i.e., \code{n−k}). In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors. See also \href{https://stats.stackexchange.com/questions/155474/why-does-lrtest-not-match-anovatest-lrt}{this thread} about a concrete application of these variants.}
 
 \item{summarize}{Currently not used.}
 
 \item{...}{Not used.}
 }
 \description{
-A robust function to compute the log-likelihood of a model.
+A robust function to compute the log-likelihood of a model. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results when \code{estimator = "ML"} is specified).
 }
 \examples{
 x <- lm(Sepal.Length ~ Petal.Width + Species, data=iris)
 
-get_loglikelihood(x, estimator = "OLS")
 get_loglikelihood(x, estimator = "ML")  # Equivalent to stats::logLik(x)
+get_loglikelihood(x, estimator = "OLS")
 }
