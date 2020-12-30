@@ -72,6 +72,7 @@ Suggests:
     mice,
     mlogit,
     multgee,
+    nonnest2,
     lme4,
     mgcv,
     nnet,
