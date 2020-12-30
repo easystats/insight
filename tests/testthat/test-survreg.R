@@ -1,8 +1,8 @@
 if (require("testthat") &&
   require("insight") &&
   require("survival")) {
-  data("ovarian")
-  data("lung")
+  data("ovarian", package = "survival")
+  data("lung", package = "survival")
   m1 <- survreg(Surv(futime, fustat) ~ ecog.ps + rx,
     data = ovarian,
     dist = "exponential"
