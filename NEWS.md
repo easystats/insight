@@ -37,6 +37,9 @@
 * `model_info()` now returns `$is_xtab` for `chisq.test()` and
   `BayesFactor::contingencyTableBF()`. Furthermore, the `$family` element for
   those objects is set to `"categorical"`.
+  
+* `n_obs()` now handles number of observations from models with binomial family
+  correctly when these have matrix-columns as response variable.
 
 ## Bug fixes
 

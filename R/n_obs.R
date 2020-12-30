@@ -16,7 +16,7 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' n_obs(m)
-#' @importFrom stats model.frame nobs
+#' @importFrom stats model.frame nobs family
 #' @export
 n_obs <- function(x, ...) {
   UseMethod("n_obs")
@@ -30,6 +30,20 @@ n_obs.default <- function(x, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
+  is_binomial <- tryCatch(
+    {
+      fam <- stats::family(x)
+      fam$family == "binomial"
+    },
+    error = function(e) {
+      FALSE
+    }
+  )
+
+  if (isTRUE(is_binomial)) {
+    return(n_obs.glm(x, ...))
+  }
+
   tryCatch(
     {
       stats::nobs(x)
@@ -40,6 +54,36 @@ n_obs.default <- function(x, ...) {
   )
 }
 
+
+#' @importFrom stats nobs formula
+#' @export
+n_obs.glm <- function(x, ...) {
+  is_binomial <- tryCatch(
+    {
+      fam <- stats::family(x)
+      fam$family == "binomial"
+    },
+    error = function(e) {
+      FALSE
+    }
+  )
+  .nobs <- stats::nobs(x)
+
+  if (isTRUE(is_binomial)) {
+    resp <- deparse(stats::formula(x)[[2]])
+    if (grepl("^cbind\\(", resp)) {
+      trials <- trimws(sub("cbind\\((.*),(.*)\\)", "\\2", resp))
+      resp_data <- get_response(x)
+      if (grepl("-", trials, fixed = TRUE)) {
+        .nobs <- sum(resp_data[[2]])
+      } else {
+        .nobs <- sum(resp_data)
+      }
+    }
+  }
+
+  .nobs
+}
 
 #' @export
 n_obs.censReg <- n_obs.default
