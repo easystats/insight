@@ -157,6 +157,7 @@
 <li><p><code><a href="../reference/find_formula.html">find_formula()</a></code>, <code>find_predictor()</code>, <code><a href="../reference/find_random.html">find_random()</a></code> and related functions now also return names of random effects from generalized additive mixed models (<code>gamm</code>, <code>gamm4</code>, <code>stan_gamm4</code>).</p></li>
 <li><p>Added support for more BFBayesFactor objects.</p></li>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_xtab</code> for <code><a href="https://rdrr.io/r/stats/chisq.test.html">chisq.test()</a></code> and <code><a href="https://rdrr.io/pkg/BayesFactor/man/contingencyTableBF.html">BayesFactor::contingencyTableBF()</a></code>. Furthermore, the <code>$family</code> element for those objects is set to <code>"categorical"</code>.</p></li>
+<li><p><code><a href="../reference/n_obs.html">n_obs()</a></code> now handles number of observations from models with binomial family correctly when these have matrix-columns as response variable.</p></li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
