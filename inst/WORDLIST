@@ -80,6 +80,7 @@ lme
 lmerModLmerTest
 lmtest
 logloss
+logLik
 lqmm
 mclogit
 merTools
