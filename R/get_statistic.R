@@ -829,6 +829,12 @@ get_statistic.ridgelm <- function(x, ...) {
 
 
 #' @export
+get_statistic.lmodel2 <- function(x, ...) {
+  NULL
+}
+
+
+#' @export
 get_statistic.ivFixed <- get_statistic.coxr
 
 

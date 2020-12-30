@@ -255,7 +255,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 165 model classes are supported.
+Currently, 166 model classes are supported.
 
 ``` r
 supported_models()
@@ -288,32 +288,33 @@ supported_models()
 #>  [79] "hurdle"            "iv_robust"         "ivFixed"          
 #>  [82] "ivprobit"          "ivreg"             "lavaan"           
 #>  [85] "lm"                "lm_robust"         "lme"              
-#>  [88] "lmerMod"           "lmerModLmerTest"   "lmrob"            
-#>  [91] "lmRob"             "logistf"           "logitmfx"         
-#>  [94] "logitor"           "LORgee"            "lqm"              
-#>  [97] "lqmm"              "lrm"               "manova"           
-#> [100] "MANOVA"            "margins"           "maxLik"           
-#> [103] "mclogit"           "mcmc"              "mcmc.list"        
-#> [106] "MCMCglmm"          "mediate"           "merMod"           
-#> [109] "merModList"        "meta_bma"          "meta_fixed"       
-#> [112] "meta_random"       "metaplus"          "mipo"             
-#> [115] "mira"              "mixed"             "MixMod"           
-#> [118] "mixor"             "mle"               "mle2"             
-#> [121] "mlm"               "mlogit"            "mmlogit"          
-#> [124] "multinom"          "negbinirr"         "negbinmfx"        
-#> [127] "ols"               "plm"               "poissonirr"       
-#> [130] "poissonmfx"        "polr"              "probitmfx"        
-#> [133] "psm"               "ridgelm"           "riskRegression"   
-#> [136] "rlm"               "rlmerMod"          "RM"               
-#> [139] "rma"               "rma.uni"           "robmixglm"        
-#> [142] "rq"                "rqs"               "rqss"             
-#> [145] "scam"              "sem"               "speedglm"         
-#> [148] "speedlm"           "stanmvreg"         "stanreg"          
-#> [151] "summary.lm"        "survfit"           "survreg"          
-#> [154] "svyglm"            "svyolr"            "tobit"            
-#> [157] "truncreg"          "vgam"              "vglm"             
-#> [160] "wbgee"             "wblm"              "wbm"              
-#> [163] "zcpglm"            "zeroinfl"          "zerotrunc"
+#>  [88] "lmerMod"           "lmerModLmerTest"   "lmodel2"          
+#>  [91] "lmrob"             "lmRob"             "logistf"          
+#>  [94] "logitmfx"          "logitor"           "LORgee"           
+#>  [97] "lqm"               "lqmm"              "lrm"              
+#> [100] "manova"            "MANOVA"            "margins"          
+#> [103] "maxLik"            "mclogit"           "mcmc"             
+#> [106] "mcmc.list"         "MCMCglmm"          "mediate"          
+#> [109] "merMod"            "merModList"        "meta_bma"         
+#> [112] "meta_fixed"        "meta_random"       "metaplus"         
+#> [115] "mipo"              "mira"              "mixed"            
+#> [118] "MixMod"            "mixor"             "mle"              
+#> [121] "mle2"              "mlm"               "mlogit"           
+#> [124] "mmlogit"           "multinom"          "negbinirr"        
+#> [127] "negbinmfx"         "ols"               "plm"              
+#> [130] "poissonirr"        "poissonmfx"        "polr"             
+#> [133] "probitmfx"         "psm"               "ridgelm"          
+#> [136] "riskRegression"    "rlm"               "rlmerMod"         
+#> [139] "RM"                "rma"               "rma.uni"          
+#> [142] "robmixglm"         "rq"                "rqs"              
+#> [145] "rqss"              "scam"              "sem"              
+#> [148] "speedglm"          "speedlm"           "stanmvreg"        
+#> [151] "stanreg"           "summary.lm"        "survfit"          
+#> [154] "survreg"           "svyglm"            "svyolr"           
+#> [157] "tobit"             "truncreg"          "vgam"             
+#> [160] "vglm"              "wbgee"             "wblm"             
+#> [163] "wbm"               "zcpglm"            "zeroinfl"         
+#> [166] "zerotrunc"
 ```
 
   - **Didn’t find a model?** [File an

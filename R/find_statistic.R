@@ -91,6 +91,7 @@ find_statistic <- function(x, ...) {
       "lme",
       "lmerMod",
       "lmerModLmerTest",
+      "lmodel2",
       "lmRob",
       "lmrob",
       "lqm",

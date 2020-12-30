@@ -8,7 +8,8 @@
 ## New supported model classes
 
 * Support for `coxr` (*coxrobust*), `coeftest` (*lmtest*), `ivFixed` (*ivFixed*),
-  `ivprobit` (*ivprobit*), `riskRegression` (*riskRegression*). `summary.lm`.
+  `ivprobit` (*ivprobit*), `riskRegression` (*riskRegression*). `summary.lm`,
+  `lmodel2` (*lmodel2*).
 
 ## New functions
 

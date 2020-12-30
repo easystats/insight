@@ -150,6 +150,16 @@ get_parameters.aareg <- function(x, ...) {
 }
 
 
+#' @importFrom utils stack
+#' @export
+get_parameters.lmodel2 <- function(x, ...) {
+  res <- x$regression.results
+  out <- as.data.frame(cbind(Method = rep(res$Method, 2), utils::stack(res, select = 2:3)))
+  colnames(out) <- c("Component", "Estimate", "Parameter")
+  out[c("Parameter", "Estimate", "Component")]
+}
+
+
 #' @export
 get_parameters.rqs <- function(x, ...) {
   sc <- suppressWarnings(summary(x))

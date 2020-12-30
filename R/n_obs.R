@@ -304,6 +304,13 @@ n_obs.cpglmm <- function(x, ...) {
 
 
 #' @export
+n_obs.lmodel2 <- function(x, ...) {
+  nrow(get_data(x))
+}
+
+
+
+#' @export
 n_obs.cpglm <- function(x, ...) {
   nrow(x$model.frame)
 }

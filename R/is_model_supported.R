@@ -128,6 +128,7 @@ supported_models <- function() {
     "lmRob",
     "lmerMod",
     "lmerModLmerTest",
+    "lmodel2",
     "logitmfx",
     "logitor",
     "logistf",

@@ -1462,6 +1462,18 @@ find_parameters.riskRegression <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.lmodel2 <- function(x, flatten = FALSE, ...) {
+  out <- list(conditional = c("Intercept", "Slope"))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
+#' @export
 find_parameters.ivFixed <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = rownames(x$coefficients))
 
