@@ -70,6 +70,7 @@ reference:
   - link_function
   - link_inverse
   - n_obs
+  - n_parameters
 
 - title: "Test Model Properties"
   desc: >
