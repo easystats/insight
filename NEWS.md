@@ -12,6 +12,8 @@
 
 ## New functions
 
+* `n_parameters()` was moved from *parameters* to *insight*.
+
 * Added `get_predicted()` as a robust alternative to `stats::fitted()`
 
 * Added `get_loglikelihood()` (and its alias `loglikelihood()`) function as a 
