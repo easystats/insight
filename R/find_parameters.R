@@ -393,7 +393,7 @@ find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
 
 #' @rdname find_parameters
 #' @export
-find_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
+find_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms", "location"), flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
   pars$conditional <- .remove_backticks_from_string(pars$conditional)
 
@@ -422,7 +422,7 @@ find_parameters.scam <- find_parameters.gam
 
 
 #' @export
-find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
+find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms", "location"), flatten = FALSE, ...) {
   pars <- names(stats::coef(x))
   component <- match.arg(component)
 

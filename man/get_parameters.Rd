@@ -64,7 +64,11 @@ get_parameters(x, ...)
 
 \method{get_parameters}{glimML}(x, effects = c("fixed", "random", "all"), ...)
 
-\method{get_parameters}{gam}(x, component = c("all", "conditional", "smooth_terms"), ...)
+\method{get_parameters}{gam}(
+  x,
+  component = c("all", "conditional", "smooth_terms", "location"),
+  ...
+)
 
 \method{get_parameters}{zeroinfl}(
   x,

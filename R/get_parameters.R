@@ -1643,7 +1643,7 @@ get_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_t
 
 
 #' @export
-get_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+get_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms", "location"), ...) {
   component <- match.arg(component)
   pars <- stats::coef(x)
 
@@ -1658,7 +1658,7 @@ get_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_te
 
 #' @rdname get_parameters
 #' @export
-get_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+get_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms", "location"), ...) {
   component <- match.arg(component)
   pars <- stats::coef(x)
 
@@ -1680,7 +1680,7 @@ get_parameters.scam <- get_parameters.gam
 
 
 #' @export
-get_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+get_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_terms", "location"), ...) {
   component <- match.arg(component)
   pars <- stats::coef(x)
 
@@ -2333,12 +2333,13 @@ get_parameters.bayesQR <- function(x,
 
   pars <- switch(
     component,
-    all = rbind(cond, smooth),
+    all = ,
+    location = rbind(cond, smooth),
     conditional = cond,
     smooth_terms = smooth
   )
 
-  if (component != "all") {
+  if (!component %in% c("all", "location")) {
     pars <- .remove_column(pars, "Component")
   }
 

@@ -37,7 +37,7 @@ find_parameters(x, ...)
 
 \method{find_parameters}{gam}(
   x,
-  component = c("all", "conditional", "smooth_terms"),
+  component = c("all", "conditional", "smooth_terms", "location"),
   flatten = FALSE,
   ...
 )
