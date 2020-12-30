@@ -1,4 +1,4 @@
-# insight 0.11.2
+# insight 0.12.0
 
 ## Breaking changes
 
@@ -14,17 +14,18 @@
 
 * Added `get_predicted()` as a robust alternative to `stats::fitted()`
 
-* Added `loglikelihood()` function as a robust alternative to `stats::logLik()`.
+* Added `get_loglikelihood()` (and its alias `loglikelihood()`) function as a 
+  robust alternative to `stats::logLik()`.
+
+* Added `get_residuals()` as a robust alternative extract model residuals.
 
 * Added `ellipsis_info()` to specify the nature of ellipsis (`...`) inputs.
 
 * Added generic `print_html()`, to allow other packages to create tables in
   HTML format (via `export_table()`) when not printing the output to console.
 
-* `is_mixed_model()`, to safely check if a model is a mixed effects model. This
-  function also works for multivariate response models.
-
-* `get_residuals()` to extract model residuals.
+* Added `is_mixed_model()`, to safely check if a model is a mixed effects model.
+  This function also works for multivariate response models.
 
 ## Changes to functions
 
