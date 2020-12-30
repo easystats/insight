@@ -123,9 +123,9 @@ get_loglikelihood.glmer <- get_loglikelihood.glm
   attr(out, "df") <- tryCatch({
     attributes(stats::logLik(x))$df
   }, warning = function(warning_condition) {
-    length(find_parameters(x, effects = "all", component = "all", flatten = TRUE))
+    n_parameters(x)
   }, error = function(error_condition) {
-    length(find_parameters(x, effects = "all", component = "all", flatten = TRUE))
+    n_parameters(x)
   })
 
 
