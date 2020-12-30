@@ -150,7 +150,7 @@ if (.runThisTest) {
     })
 
     test_that("n_obs", {
-      expect_equal(n_obs(m1), 56)
+      expect_equal(n_obs(m1), 842)
     })
 
     test_that("find_paramaters", {
@@ -226,14 +226,14 @@ if (.runThisTest) {
       expect_equal(
         get_variance(m1),
         list(
-          var.fixed = 0.3627389,
-          var.random = 0.5988885,
-          var.residual = 3.289868,
-          var.distribution = 3.289868,
+          var.fixed = 0.36274,
+          var.random = 0.03983,
+          var.residual = 3.28987,
+          var.distribution = 3.28987,
           var.dispersion = 0,
-          var.intercept = c(herd = 0.5988885)
+          var.intercept = c(herd = 0.59889 )
         ),
-        tolerance = 1e-4
+        tolerance = 1e-3
       )
 
       expect_equal(get_variance_fixed(m1),
@@ -241,7 +241,7 @@ if (.runThisTest) {
         tolerance = 1e-4
       )
       expect_equal(get_variance_random(m1),
-        c(var.random = 0.5988885),
+        c(var.random = 0.03983106),
         tolerance = 1e-4
       )
       expect_equal(get_variance_residual(m1),

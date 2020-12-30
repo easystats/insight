@@ -441,7 +441,7 @@ find_parameters.vgam <- find_parameters.Gam
 
 
 #' @export
-find_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_terms"), flatten = FALSE, ...) {
+find_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_terms", "location"), flatten = FALSE, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
   component <- match.arg(component)

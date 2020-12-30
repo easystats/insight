@@ -1634,7 +1634,7 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
 
 
 #' @export
-get_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+get_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_terms", "location"), ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
   get_parameters.gam(x, component, ...)
