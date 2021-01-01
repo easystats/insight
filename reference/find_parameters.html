@@ -52,7 +52,6 @@
     names equal the column names of the posterior samples after coercion
     from as.data.frame(). See the documentation for your object's class:
 Bayesian models (rstanarm, brms, MCMCglmm, ...)
-Estimated marginal means (emmeans)
 Generalized additive models (mgcv, VGAM, ...)
 Marginal effects models (mfx)
 Mixed models (lme4, glmmTMB, GLMMadaptive, ...)
@@ -129,7 +128,7 @@ Models with special components (betareg, MuMIn, ...)
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find names of model parameters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_parameters.R'><code>R/find_parameters.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_parameters.R'><code>R/find_parameters.R</code></a>, <a href='https://github.com/easystats/insight/blob/master/R/find_parameters_gam.R'><code>R/find_parameters_gam.R</code></a></small>
     <div class="hidden name"><code>find_parameters.Rd</code></div>
     </div>
 
@@ -139,12 +138,11 @@ Models with special components (betareg, MuMIn, ...)
     names equal the column names of the posterior samples after coercion
     from <code><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame()</a></code>. See the documentation for your object's class:</p><ul>
 <li><p><a href='find_parameters.BGGM.html'>Bayesian models</a> (<span class="pkg">rstanarm</span>, <span class="pkg">brms</span>, <span class="pkg">MCMCglmm</span>, ...)</p></li>
-<li><p><a href='get_parameters.emmGrid.html'>Estimated marginal means</a> (<span class="pkg">emmeans</span>)</p></li>
-<li><p><a href='get_parameters.gamm.html'>Generalized additive models</a> (<span class="pkg">mgcv</span>, <span class="pkg">VGAM</span>, ...)</p></li>
+<li><p><a href='find_parameters.gamlss.html'>Generalized additive models</a> (<span class="pkg">mgcv</span>, <span class="pkg">VGAM</span>, ...)</p></li>
 <li><p><a href='find_parameters.betamfx.html'>Marginal effects models</a> (<span class="pkg">mfx</span>)</p></li>
 <li><p><a href='find_parameters.glmmTMB.html'>Mixed models</a> (<span class="pkg">lme4</span>, <span class="pkg">glmmTMB</span>, <span class="pkg">GLMMadaptive</span>, ...)</p></li>
-<li><p><a href='get_parameters.zeroinfl.html'>Zero-inflated and hurdle models</a> (<span class="pkg">pscl</span>, ...)</p></li>
-<li><p><a href='get_parameters.betareg.html'>Models with special components</a> (<span class="pkg">betareg</span>, <span class="pkg">MuMIn</span>, ...)</p></li>
+<li><p><a href='find_parameters.zeroinfl.html'>Zero-inflated and hurdle models</a> (<span class="pkg">pscl</span>, ...)</p></li>
+<li><p><a href='find_parameters.averaging.html'>Models with special components</a> (<span class="pkg">betareg</span>, <span class="pkg">MuMIn</span>, ...)</p></li>
 </ul>
 
     </div>
@@ -160,18 +158,7 @@ Models with special components (betareg, MuMIn, ...)
   component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>, <span class='st'>"location"</span><span class='op'>)</span>,
   flatten <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='co'># S3 method for zeroinfl</span>
-<span class='fu'>find_parameters</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span><span class='op'>)</span>,
-  flatten <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='co'># S3 method for averaging</span>
-<span class='fu'>find_parameters</span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"conditional"</span>, <span class='st'>"full"</span><span class='op'>)</span>, flatten <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -195,44 +182,20 @@ as character vector, not as list. Duplicated values are removed.</p></td>
     </tr>
     <tr>
       <th>component</th>
-      <td><p>Which type of parameters to return, such as parameters for the
+      <td><p>Should all predictor variables, predictor variables for the
  conditional model, the zero-inflated part of the model, the dispersion
- term, the instrumental variables or marginal effects be returned? Applies
- to models with zero-inflated and/or dispersion formula, or to models with
- instrumental variables (so called fixed-effects regressions), or models
- with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
+ term or the instrumental variables be returned? Applies to models
+ with zero-inflated and/or dispersion formula, or to models with instrumental
+ variable (so called fixed-effects regressions). May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model. There are two convenient shortcuts:
-If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
-<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned.
-For <code>component = "distributional"</code> (or <code>"auxiliary"</code>), components
-like <code>sigma</code>, <code>dispersion</code>, <code>beta</code> or <code>precision</code> (and
-other auxiliary parameters) are returned.</p></td>
-    </tr>
-    <tr>
-      <th>parameters</th>
-      <td><p>Regular expression pattern that describes the parameters that
-should be returned.</p></td>
+component, depending on the model.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of parameter names. For simple models, only one list-element,
-   <code>conditional</code>, is returned. For more complex models, the returned
-   list may have following elements:</p><ul>
-<li><p><code>conditional</code>, the "fixed effects" part from the model</p></li>
-<li><p><code>random</code>, the "random effects" part from the model</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>simplex</code>, simplex parameters of monotonic effects (<span class="pkg">brms</span> only)</p></li>
-<li><p><code>smooth_terms</code>, the smooth parameters</p></li>
-<li><p><code>marginal</code>, the marginal effects (for models from <span class="pkg">mfx</span>)</p></li>
-<li><p><code>sigma</code>, the residual standard deviation (auxiliary parameter)</p></li>
-<li><p><code>dispersion</code>, the dispersion parameters (auxiliary parameter)</p></li>
-<li><p><code>beta</code>, the beta parameter (auxiliary parameter)</p></li>
-</ul>
-
+   <code>conditional</code>, is returned.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
