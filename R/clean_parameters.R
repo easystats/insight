@@ -292,6 +292,17 @@ clean_parameters.stanreg <- function(x, ...) {
 
 
 #' @export
+clean_parameters.bamlss <- function(x, ...) {
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  l <- .get_stan_params(pars)
+
+  out <- do.call(rbind, l)
+  .remove_empty_columns_from_pars(.clean_bamlss_params(out))
+}
+
+
+
+#' @export
 clean_parameters.stanmvreg <- function(x, ...) {
   pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
 
@@ -371,6 +382,10 @@ clean_parameters.mlm <- function(x, ...) {
       "sigma"
     } else if (grepl("priors", i, fixed = TRUE)) {
       "priors"
+    } else if (grepl("alpha", i, fixed = TRUE)) {
+      "distributional"
+    } else if (grepl("beta", i, fixed = TRUE)) {
+      "distributional"
     } else {
       "conditional"
     }
@@ -565,6 +580,19 @@ clean_parameters.mlm <- function(x, ...) {
     out$Function[smooth] <- "smooth"
   }
 
+  out
+}
+
+
+
+
+.clean_bamlss_params <- function(out) {
+  out$Cleaned_Parameter <- out$Parameter
+  out$Cleaned_Parameter <- gsub("^(mu\\.p\\.|pi\\.p\\.)(.*)", "\\2", out$Cleaned_Parameter)
+  out$Cleaned_Parameter <- gsub("^sigma\\.p\\.(.*)", "sigma (\\2)", out$Cleaned_Parameter)
+  out$Cleaned_Parameter <- gsub("(\\.$)", "", out$Cleaned_Parameter)
+  out$Cleaned_Parameter <- gsub("..", ".", out$Cleaned_Parameter, fixed = TRUE)
+  out$Cleaned_Parameter <- gsub(".Intercept.", "Intercept", out$Cleaned_Parameter, fixed = TRUE)
   out
 }
 
