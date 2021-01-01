@@ -203,6 +203,13 @@ on the model.</p></td>
       <td><p>Character value naming the method used to adjust p-values or confidence intervals. See <code><a href='https://rdrr.io/pkg/emmeans/man/summary.emmGrid.html'>?emmeans::summary.emmGrid</a></code> for details.</p></td>
     </tr>
     <tr>
+      <th>merge_parameters</th>
+      <td><p>Logical, if <code>TRUE</code> and <code>x</code> has multiple
+columns for parameter names (like <code>emmGrid</code> objects may have), these
+are merged into a single parameter column, with parameters names and values
+as values.</p></td>
+    </tr>
+    <tr>
       <th>robust</th>
       <td><p>Logical, if <code>TRUE</code>, test statistic based on robust standard
 errors is returned.</p></td>
