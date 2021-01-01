@@ -80,7 +80,8 @@
 
 \method{get_parameters}{bamlss}(
   x,
-  component = c("all", "conditional", "location", "distributional", "auxiliary"),
+  component = c("all", "conditional", "smooth_terms", "location", "distributional",
+    "auxiliary"),
   parameters = NULL,
   summary = FALSE,
   centrality = "mean",
@@ -101,13 +102,19 @@
 \arguments{
 \item{x}{A fitted model.}
 
-\item{component}{Should all predictor variables, predictor variables for the
+\item{component}{Which type of parameters to return, such as parameters for the
  conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+ term, the instrumental variables or marginal effects be returned? Applies
+ to models with zero-inflated and/or dispersion formula, or to models with
+ instrumental variables (so called fixed-effects regressions), or models
+ with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model.}
+component, depending on the model. There are two convenient shortcuts:
+If \code{component = "location"}, location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
+For \code{component = "distributional"} (or \code{"auxiliary"}), components
+like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
+other auxiliary parameters) are returned.}
 
 \item{summary}{Logical, indicates whether the full posterior samples
 (\code{summary = FALSE})) or the summarized centrality indices of
@@ -122,7 +129,7 @@ measure of central tendency.}
 
 \item{...}{Currently not used.}
 
-\item{effects}{Should variables for fixed effects, random effects
+\item{effects}{Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{iterations}{Number of posterior draws.}
@@ -130,6 +137,9 @@ or both be returned? Only applies to mixed models. May be abbreviated.}
 \item{progress}{Display progress.}
 
 \item{verbose}{Toggle messages and warnings.}
+
+\item{parameters}{Regular expression pattern that describes the parameters that
+should be returned.}
 }
 \value{
 The posterior samples from the requested parameters as data frame.

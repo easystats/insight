@@ -18,6 +18,7 @@
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #'
+#' @inheritParams find_parameters.BGGM
 #' @inheritParams find_parameters
 #' @inheritParams find_predictors
 #'

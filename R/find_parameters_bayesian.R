@@ -10,7 +10,6 @@
 #'   should be returned.
 #' @param effects Should parameters for fixed effects, random effects
 #'    or both be returned? Only applies to mixed models. May be abbreviated.
-#' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
 #' @inheritParams find_parameters.betamfx
