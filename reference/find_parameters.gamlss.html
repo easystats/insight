@@ -128,7 +128,15 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for gamlss</span>
-<span class='fu'><a href='find_parameters.html'>find_parameters</a></span><span class='op'>(</span><span class='va'>x</span>, flatten <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'><a href='find_parameters.html'>find_parameters</a></span><span class='op'>(</span><span class='va'>x</span>, flatten <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for gam</span>
+<span class='fu'><a href='find_parameters.html'>find_parameters</a></span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"smooth_terms"</span>, <span class='st'>"location"</span><span class='op'>)</span>,
+  flatten <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,6 +153,22 @@ as character vector, not as list. Duplicated values are removed.</p></td>
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>component</th>
+      <td><p>Which type of parameters to return, such as parameters for the
+ conditional model, the zero-inflated part of the model, the dispersion
+ term, the instrumental variables or marginal effects be returned? Applies
+ to models with zero-inflated and/or dispersion formula, or to models with
+ instrumental variables (so called fixed-effects regressions), or models
+ with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
+<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
+component, depending on the model. There are two convenient shortcuts:
+If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
+<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned.
+For <code>component = "distributional"</code> (or <code>"auxiliary"</code>), components
+like <code>sigma</code>, <code>dispersion</code>, <code>beta</code> or <code>precision</code> (and
+other auxiliary parameters) are returned.</p></td>
     </tr>
     </table>
 
