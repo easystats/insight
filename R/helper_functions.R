@@ -243,7 +243,7 @@
                 "nonlinear", "random", "zero_inflated", "zero_inflated_random",
                 "dispersion", "instruments", "interactions", "simplex",
                 "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes",
-                "cluster", "extra", "scale", "marginal", "beta")
+                "cluster", "extra", "scale", "marginal", "alpha", "beta")
 
   # auxiliary parameters
   auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape", "phi", "ndt", "hu", "xi", "coi", "zoi")
@@ -281,6 +281,7 @@
     simplex = elements[elements == "simplex"],
     sigma = elements[elements == "sigma"],
     beta = elements[elements == "beta"],
+    alpha = elements[elements == "alpha"],
     smooth_terms = elements[elements == "smooth_terms"],
     correlation = elements[elements == "correlation"],
     cluster = elements[elements == "cluster"],

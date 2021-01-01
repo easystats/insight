@@ -965,6 +965,33 @@ find_parameters.mcmc.list <- function(x, flatten = FALSE, ...) {
 
 
 
+#' @export
+find_parameters.bamlss <- function(x,
+                                   flatten = FALSE,
+                                   component = c("all", "conditional", "location", "distributional", "auxiliary"),
+                                   parameters = NULL,
+                                   ...) {
+  component <- match.arg(component)
+  cn <- colnames(as.data.frame(unclass(x$samples)))
+
+  ignore <- grepl("(\\.alpha|logLik|\\.accepted|\\.edf)$", cn)
+  cond <- cn[grepl("^(mu\\.p\\.|pi\\.p\\.)", cn) & !ignore]
+  sigma <- cn[grepl("^sigma\\.p\\.", cn) & !ignore]
+  alpha <- cn[cn %in% c("mu.p.alpha", "pi.p.alpha", "sigma.p.alpha")]
+
+  elements <- .get_elements(effects = "all", component = component)
+  l <- .compact_list(list(conditional = cond, sigma = sigma, alpha = alpha)[elements])
+  l <- .filter_pars(l, parameters)
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
 #' @rdname find_parameters
 #' @export
 find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "location", "distributional", "auxiliary", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {

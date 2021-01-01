@@ -174,9 +174,21 @@ find_formula.gamlss <- function(x, ...) {
 find_formula.bamlss <- function(x, ...) {
   f <- stats::formula(x)
 
+  if (!is.null(f$mu)) {
+    f.cond <- f$mu$formula
+  } else if (!is.null(f$pi)) {
+    f.cond <- f$pi$formula
+  }
+
+  if (!is.null(f$sigma)) {
+    f.sigma <- stats::as.formula(paste0("~", as.character(f$sigma$formula)[3]))
+  } else if (!is.null(f$pi)) {
+    f.sigma <- NULL
+  }
+
   .compact_list(list(
-    conditional = stats::as.formula(.safe_deparse(f$mu$formula)),
-    sigma = stats::as.formula(paste0("~", as.character(f$sigma$formula)[3]))
+    conditional = stats::as.formula(.safe_deparse(f.cond)),
+    sigma = f.sigma
   ))
 }
 
