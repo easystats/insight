@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_parameters_mfx.R
 \name{get_parameters.betamfx}
 \alias{get_parameters.betamfx}
+\alias{get_parameters.logitmfx}
 \title{Get model parameters from marginal effects models}
 \usage{
 \method{get_parameters}{betamfx}(
@@ -9,6 +10,8 @@
   component = c("all", "conditional", "precision", "marginal"),
   ...
 )
+
+\method{get_parameters}{logitmfx}(x, component = c("all", "conditional", "marginal"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}

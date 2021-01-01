@@ -41,7 +41,7 @@ get_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_te
 
 
 
-#' @rdname get_parameters
+#' @rdname get_parameters.gamm
 #' @export
 get_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms", "location"), ...) {
   component <- match.arg(component)
@@ -115,6 +115,7 @@ get_parameters.gamlss <- function(x, ...) {
 }
 
 
+#' @rdname get_parameters.gamm
 #' @importFrom stats setNames
 #' @export
 get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {

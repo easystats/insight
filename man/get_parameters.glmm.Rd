@@ -2,9 +2,26 @@
 % Please edit documentation in R/get_parameters_mixed.R
 \name{get_parameters.glmm}
 \alias{get_parameters.glmm}
+\alias{get_parameters.coxme}
+\alias{get_parameters.merMod}
+\alias{get_parameters.glmmTMB}
+\alias{get_parameters.glimML}
 \title{Get model parameters from mixed models}
 \usage{
 \method{get_parameters}{glmm}(x, effects = c("all", "fixed", "random"), ...)
+
+\method{get_parameters}{coxme}(x, effects = c("fixed", "random"), ...)
+
+\method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
+
+\method{get_parameters}{glmmTMB}(
+  x,
+  effects = c("fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  ...
+)
+
+\method{get_parameters}{glimML}(x, effects = c("fixed", "random", "all"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -13,6 +30,20 @@
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{...}{Currently not used.}
+
+\item{component}{Which type of parameters to return, such as parameters for the
+ conditional model, the zero-inflated part of the model, the dispersion
+ term, the instrumental variables or marginal effects be returned? Applies
+ to models with zero-inflated and/or dispersion formula, or to models with
+ instrumental variables (so called fixed-effects regressions), or models
+ with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
+\emph{conditional} component is also called \emph{count} or \emph{mean}
+component, depending on the model. There are two convenient shortcuts:
+If \code{component = "location"}, location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
+For \code{component = "distributional"} (or \code{"auxiliary"}), components
+like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
+other auxiliary parameters) are returned.}
 
 \item{verbose}{Toggle messages and warnings.}
 }

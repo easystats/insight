@@ -49,7 +49,7 @@ get_parameters.betaor <- function(x, component = c("all", "conditional", "precis
 
 
 
-#' @rdname get_parameters
+#' @rdname get_parameters.betamfx
 #' @export
 get_parameters.logitmfx <- function(x, component = c("all", "conditional", "marginal"), ...) {
   params <- get_parameters.default(x$fit, ...)

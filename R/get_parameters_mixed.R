@@ -46,7 +46,7 @@ get_parameters.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 
-#' @rdname get_parameters
+#' @rdname get_parameters.glmm
 #' @export
 get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -178,7 +178,7 @@ get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
 
 
 
-#' @rdname get_parameters
+#' @rdname get_parameters.glmm
 #' @export
 get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -326,7 +326,7 @@ get_parameters.cpglmm <- function(x, effects = c("fixed", "random"), ...) {
 }
 
 
-#' @rdname get_parameters
+
 #' @export
 get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -438,7 +438,7 @@ get_parameters.MixMod <- function(x,
 
 
 
-#' @rdname get_parameters
+#' @rdname get_parameters.glmm
 #' @export
 get_parameters.glmmTMB <- function(x,
                                    effects = c("fixed", "random"),
@@ -561,7 +561,6 @@ get_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), ...) 
 
 
 
-#' @rdname get_parameters
 #' @export
 get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
   effects <- match.arg(effects)
@@ -586,7 +585,8 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
 }
 
 
-#' @rdname get_parameters
+
+#' @rdname get_parameters.glmm
 #' @export
 get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
@@ -627,10 +627,3 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
     all
   }
 }
-
-
-
-
-
-
-

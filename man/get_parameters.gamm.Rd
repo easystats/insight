@@ -2,6 +2,8 @@
 % Please edit documentation in R/get_parameters_gam.R
 \name{get_parameters.gamm}
 \alias{get_parameters.gamm}
+\alias{get_parameters.gam}
+\alias{get_parameters.rqss}
 \title{Get model parameters from generalized additive models}
 \usage{
 \method{get_parameters}{gamm}(
@@ -9,6 +11,14 @@
   component = c("all", "conditional", "smooth_terms", "location"),
   ...
 )
+
+\method{get_parameters}{gam}(
+  x,
+  component = c("all", "conditional", "smooth_terms", "location"),
+  ...
+)
+
+\method{get_parameters}{rqss}(x, component = c("all", "conditional", "smooth_terms"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}
