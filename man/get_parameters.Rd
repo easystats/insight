@@ -2,9 +2,12 @@
 % Please edit documentation in R/get_parameters.R
 \name{get_parameters}
 \alias{get_parameters}
+\alias{get_parameters.default}
 \title{Get model parameters}
 \usage{
 get_parameters(x, ...)
+
+\method{get_parameters}{default}(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}

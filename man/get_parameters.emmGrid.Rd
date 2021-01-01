@@ -23,8 +23,6 @@ are merged into a single parameter column, with parameters names and values
 as values.}
 
 \item{...}{Currently not used.}
-
-\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 A data frame with two columns: the parameter names and the related

@@ -23,6 +23,7 @@
 #' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%). Currently only applies to objects of class \code{emmGrid}.
 #' @param ... Currently not used.
 #' @inheritParams get_parameters
+#' @inheritParams get_parameters.emmGrid
 #'
 #' @return A data frame with the model's parameter names and the related test statistic.
 #'

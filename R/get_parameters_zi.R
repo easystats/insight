@@ -3,7 +3,6 @@
 #'
 #' @description Returns the coefficients from a model.
 #'
-#' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #'
 #' @inheritParams find_parameters

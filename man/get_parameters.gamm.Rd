@@ -38,8 +38,6 @@ like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
 other auxiliary parameters) are returned.}
 
 \item{...}{Currently not used.}
-
-\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 For models with smooth terms or zero-inflation component, a data

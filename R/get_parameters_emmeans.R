@@ -7,7 +7,6 @@
 #'   columns for parameter names (like \code{emmGrid} objects may have), these
 #'   are merged into a single parameter column, with parameters names and values
 #'   as values.
-#' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #'
 #' @inheritParams find_parameters

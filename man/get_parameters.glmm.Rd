@@ -44,8 +44,6 @@ If \code{component = "location"}, location parameters such as \code{conditional}
 For \code{component = "distributional"} (or \code{"auxiliary"}), components
 like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
 other auxiliary parameters) are returned.}
-
-\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 If \code{effects = "fixed"}, a data frame with two columns: the

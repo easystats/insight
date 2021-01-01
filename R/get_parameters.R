@@ -48,6 +48,7 @@ get_parameters <- function(x, ...) {
 # Default models ---------------------------------------------
 
 
+#' @rdname get_parameters
 #' @export
 get_parameters.default <- function(x, verbose = TRUE, ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
