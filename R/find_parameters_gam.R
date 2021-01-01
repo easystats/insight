@@ -41,7 +41,7 @@ find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
 
 
 
-#' @rdname find_parameters
+#' @rdname find_parameters.gamlss
 #' @export
 find_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms", "location"), flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))

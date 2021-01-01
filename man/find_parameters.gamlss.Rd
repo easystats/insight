@@ -2,9 +2,17 @@
 % Please edit documentation in R/find_parameters_gam.R
 \name{find_parameters.gamlss}
 \alias{find_parameters.gamlss}
+\alias{find_parameters.gam}
 \title{Find names of model parameters from generalized additive models}
 \usage{
 \method{find_parameters}{gamlss}(x, flatten = FALSE, ...)
+
+\method{find_parameters}{gam}(
+  x,
+  component = c("all", "conditional", "smooth_terms", "location"),
+  flatten = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -13,6 +21,20 @@
 as character vector, not as list. Duplicated values are removed.}
 
 \item{...}{Currently not used.}
+
+\item{component}{Which type of parameters to return, such as parameters for the
+ conditional model, the zero-inflated part of the model, the dispersion
+ term, the instrumental variables or marginal effects be returned? Applies
+ to models with zero-inflated and/or dispersion formula, or to models with
+ instrumental variables (so called fixed-effects regressions), or models
+ with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
+\emph{conditional} component is also called \emph{count} or \emph{mean}
+component, depending on the model. There are two convenient shortcuts:
+If \code{component = "location"}, location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
+For \code{component = "distributional"} (or \code{"auxiliary"}), components
+like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
+other auxiliary parameters) are returned.}
 }
 \value{
 A list of parameter names. The returned list may have following
