@@ -1339,6 +1339,7 @@ get_data.htest <- function(x, ...) {
     out <- tryCatch(
       {
         data_name <- unlist(strsplit(x$data.name, " (and|by) "))
+        # columns <- get(data_name, envir = parent.frame())
         data_call <- lapply(data_name, str2lang)
         columns <- lapply(data_call, eval)
 
