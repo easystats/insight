@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get statistic associated with estimates — get_statistic • insight</title>
+<title>Get model parameters from marginal effects models — get_parameters.betamfx • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,8 @@
 
 
 
-<meta property="og:title" content="Get statistic associated with estimates — get_statistic" />
-<meta property="og:description" content="Returns the statistic (t, z, ...) for model estimates.
-  In most cases, this is the related column from coef(summary())." />
+<meta property="og:title" content="Get model parameters from marginal effects models — get_parameters.betamfx" />
+<meta property="og:description" content="Returns the coefficients from a model." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -117,111 +116,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get statistic associated with estimates</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_statistic.R'><code>R/get_statistic.R</code></a></small>
-    <div class="hidden name"><code>get_statistic.Rd</code></div>
+    <h1>Get model parameters from marginal effects models</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_parameters_mfx.R'><code>R/get_parameters_mfx.R</code></a></small>
+    <div class="hidden name"><code>get_parameters.betamfx.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the statistic (<em>t</em>, <code>z</code>, ...) for model estimates.
-  In most cases, this is the related column from <code><a href='https://rdrr.io/r/stats/coef.html'>coef(summary())</a></code>.</p>
+    <p>Returns the coefficients from a model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>x</span>, column_index <span class='op'>=</span> <span class='fl'>3</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for glmmTMB</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span><span class='op'>)</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='co'># S3 method for clm2</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"scale"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for betamfx</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span>
+    <pre class="usage"><span class='co'># S3 method for betamfx</span>
+<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span>
   <span class='va'>x</span>,
   component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span>, <span class='st'>"marginal"</span><span class='op'>)</span>,
   <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='co'># S3 method for logitmfx</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"marginal"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for emmGrid</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>x</span>, ci <span class='op'>=</span> <span class='fl'>0.95</span>, adjust <span class='op'>=</span> <span class='st'>"none"</span>, merge_parameters <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for gee</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>x</span>, robust <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for betareg</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for DirichletRegModel</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A model.</p></td>
+      <td><p>A fitted model.</p></td>
+    </tr>
+    <tr>
+      <th>component</th>
+      <td><p>Which type of parameters to return, such as parameters for the
+ conditional model, the zero-inflated part of the model, the dispersion
+ term, the instrumental variables or marginal effects be returned? Applies
+ to models with zero-inflated and/or dispersion formula, or to models with
+ instrumental variables (so called fixed-effects regressions), or models
+ with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
+<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
+component, depending on the model. There are two convenient shortcuts:
+If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
+<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned.
+For <code>component = "distributional"</code> (or <code>"auxiliary"</code>), components
+like <code>sigma</code>, <code>dispersion</code>, <code>beta</code> or <code>precision</code> (and
+other auxiliary parameters) are returned.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
     </tr>
-    <tr>
-      <th>column_index</th>
-      <td><p>For model objects that have no defined <code>get_statistic()</code>
-method yet, the default method is called. This method tries to extract the
-statistic column from <code><a href='https://rdrr.io/r/stats/coef.html'>coef(summary())</a></code>, where the index of the column
-that is being pulled is <code>column_index</code>. Defaults to 3, which is the
-default statistic column for most models' summary-output.</p></td>
-    </tr>
-    <tr>
-      <th>component</th>
-      <td><p>Should all parameters, parameters for the conditional model,
-or for the zero-inflated part of the model be returned? Applies to models
-with zero-inflated component. <code>component</code> may be one of
-<code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code> or <code>"all"</code>
-(default). For models with smooth terms, <code>component = "smooth_terms"</code>
-is also possible. May be abbreviated. Note that the <em>conditional</em>
-component is also called <em>count</em> or <em>mean</em> component, depending
-on the model.</p></td>
-    </tr>
-    <tr>
-      <th>ci</th>
-      <td><p>Confidence Interval (CI) level. Default to 0.95 (95%). Currently only applies to objects of class <code>emmGrid</code>.</p></td>
-    </tr>
-    <tr>
-      <th>adjust</th>
-      <td><p>Character value naming the method used to adjust p-values or confidence intervals. See <code><a href='https://rdrr.io/pkg/emmeans/man/summary.emmGrid.html'>?emmeans::summary.emmGrid</a></code> for details.</p></td>
-    </tr>
-    <tr>
-      <th>robust</th>
-      <td><p>Logical, if <code>TRUE</code>, test statistic based on robust standard
-errors is returned.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame with the model's parameter names and the related test statistic.</p>
+    <p>A data frame with three columns: the parameter names, the related
+  point estimates and the component.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     Parameter  Statistic
-#&gt; 1 (Intercept) 11.3994647
-#&gt; 2          wt -4.1204121
-#&gt; 3         cyl -2.2234114
-#&gt; 4          vs  0.3221477</div></pre>
+<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     Parameter   Estimate
+#&gt; 1 (Intercept) 38.7460642
+#&gt; 2          wt -3.2463673
+#&gt; 3         cyl -1.3641033
+#&gt; 4          vs  0.5241721</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

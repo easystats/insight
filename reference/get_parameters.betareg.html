@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find model formula — find_formula • insight</title>
+<title>Get model parameters from models with special components — get_parameters.betareg • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,8 @@
 
 
 
-<meta property="og:title" content="Find model formula — find_formula" />
-<meta property="og:description" content="Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...)." />
+<meta property="og:title" content="Get model parameters from models with special components — get_parameters.betareg" />
+<meta property="og:description" content="Returns the coefficients from a model." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -117,17 +116,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find model formula</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_formula.R'><code>R/find_formula.R</code></a></small>
-    <div class="hidden name"><code>find_formula.Rd</code></div>
+    <h1>Get model parameters from models with special components</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_parameters_others.R'><code>R/get_parameters_others.R</code></a></small>
+    <div class="hidden name"><code>get_parameters.betareg.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...).</p>
+    <p>Returns the coefficients from a model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for betareg</span>
+<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for DirichletRegModel</span>
+<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"precision"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for averaging</span>
+<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"conditional"</span>, <span class='st'>"full"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for glmx</span>
+<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"extra"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for clm2</span>
+<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span><span class='va'>x</span>, component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"scale"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,6 +148,22 @@
       <td><p>A fitted model.</p></td>
     </tr>
     <tr>
+      <th>component</th>
+      <td><p>Which type of parameters to return, such as parameters for the
+ conditional model, the zero-inflated part of the model, the dispersion
+ term, the instrumental variables or marginal effects be returned? Applies
+ to models with zero-inflated and/or dispersion formula, or to models with
+ instrumental variables (so called fixed-effects regressions), or models
+ with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
+<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
+component, depending on the model. There are two convenient shortcuts:
+If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
+<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned.
+For <code>component = "distributional"</code> (or <code>"auxiliary"</code>), components
+like <code>sigma</code>, <code>dispersion</code>, <code>beta</code> or <code>precision</code> (and
+other auxiliary parameters) are returned.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
     </tr>
@@ -144,35 +171,18 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of formulas that describe the model. For simple models,
-   only one list-element, <code>conditional</code>, is returned. For more complex
-   models, the returned list may have following elements:</p><ul>
-<li><p><code>conditional</code>, the "fixed effects" part from the model. One exception are <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>, which has two or three components, depending on <code>model</code>.</p></li>
-<li><p><code>random</code>, the "random effects" part from the model (or the <code>id</code> for gee-models and similar)</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
-<li><p><code>dispersion</code>, the dispersion formula</p></li>
-<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
-<li><p><code>cluster</code>, for fixed-effects regressions like <code>felm</code>, the cluster specification</p></li>
-<li><p><code>correlation</code>, for models with correlation-component like <code>gls</code>, the formula that describes the correlation structure</p></li>
-<li><p><code>slopes</code>, for fixed-effects individual-slope models like <code>feis</code>, the formula for the slope parameters</p></li>
-<li><p><code>precision</code>, for <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>, when parametrization (i.e. <code>model</code>) is <code>"alternative"</code>.</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>For models of class <code>lme</code> or <code>gls</code> the correlation-component
-  is only returned, when it is explicitly defined as named argument
-  (<code>form</code>), e.g. <code>corAR1(form = ~1 | Mare)</code></p>
+    <p>A data frame with three columns: the parameter names, the related
+  point estimates and the component.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $conditional
-#&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x7fc2cf4e18c8&gt;
-#&gt; </div></pre>
+<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     Parameter   Estimate
+#&gt; 1 (Intercept) 38.7460642
+#&gt; 2          wt -3.2463673
+#&gt; 3         cyl -1.3641033
+#&gt; 4          vs  0.5241721</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
