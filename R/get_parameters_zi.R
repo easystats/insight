@@ -30,7 +30,8 @@ get_parameters.hurdle <- get_parameters.zeroinfl
 #' @export
 get_parameters.zerotrunc <- get_parameters.default
 
-#' @rdname get_parameters
+
+#' @rdname get_parameters.zeroinfl
 #' @export
 get_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
   component <- match.arg(component)

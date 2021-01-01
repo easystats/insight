@@ -2,9 +2,16 @@
 % Please edit documentation in R/get_parameters_zi.R
 \name{get_parameters.zeroinfl}
 \alias{get_parameters.zeroinfl}
+\alias{get_parameters.zcpglm}
 \title{Get model parameters from zero-inflated and hurdle models}
 \usage{
 \method{get_parameters}{zeroinfl}(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated"),
+  ...
+)
+
+\method{get_parameters}{zcpglm}(
   x,
   component = c("all", "conditional", "zi", "zero_inflated"),
   ...
