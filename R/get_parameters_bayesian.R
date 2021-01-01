@@ -251,12 +251,14 @@ get_parameters.brmsfit <- function(x,
 #' @export
 get_parameters.stanreg <- function(x,
                                    effects = c("fixed", "random", "all"),
+                                   component = c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary"),
                                    parameters = NULL,
                                    summary = FALSE,
                                    centrality = "mean",
                                    ...) {
   effects <- match.arg(effects)
-  out <- as.data.frame(x)[.get_parms_data(x, effects, "all", parameters)]
+  component <- match.arg(component)
+  out <- as.data.frame(x)[.get_parms_data(x, effects, component, parameters)]
 
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality)
@@ -472,6 +474,6 @@ get_parameters.sim <- function(x,
 
 .get_parms_data <- function(x, effects, component, parameters = NULL) {
   elements <- .get_elements(effects, component)
-  unlist(find_parameters(x, flatten = FALSE, parameters = parameters)[elements])
+  unlist(find_parameters(x, effects = "all", component = "all", flatten = FALSE, parameters = parameters)[elements])
 }
 

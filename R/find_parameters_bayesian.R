@@ -354,19 +354,25 @@ find_parameters.bayesx <- function(x, component = c("all", "conditional", "smoot
 
 #' @rdname find_parameters.BGGM
 #' @export
-find_parameters.stanreg <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
+find_parameters.stanreg <- function(x,
+                                    effects = c("all", "fixed", "random"),
+                                    component = c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary"),
+                                    flatten = FALSE,
+                                    parameters = NULL,
+                                    ...) {
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
   rand_sd <- fe[grepl("^Sigma\\[", fe, perl = TRUE)]
   smooth_terms <- fe[grepl("^smooth_sd", fe, perl = TRUE)]
-  # sigma <- fe[grepl("sigma", fe, fixed = TRUE)]
+  sigma <- fe[grepl("sigma", fe, fixed = TRUE)]
 
   l <- .compact_list(list(
     conditional = cond,
     random = c(rand, rand_sd),
-    smooth_terms = smooth_terms
+    smooth_terms = smooth_terms,
+    sigma = sigma
   ))
 
   l <- .filter_pars(l, parameters)

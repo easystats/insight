@@ -64,6 +64,8 @@
 \method{get_parameters}{stanreg}(
   x,
   effects = c("fixed", "random", "all"),
+  component = c("location", "all", "conditional", "smooth_terms", "sigma",
+    "distributional", "auxiliary"),
   parameters = NULL,
   summary = FALSE,
   centrality = "mean",
