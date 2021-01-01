@@ -323,3 +323,46 @@ find_parameters.glmm <- function(x, effects = c("all", "fixed", "random"), flatt
 
   .filter_parameters(l, effects = effects, flatten = flatten)
 }
+
+
+
+#' @export
+find_parameters.BBmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  l <- .compact_list(list(
+    conditional = names(x$fixed.coef),
+    random = x$namesRand
+  ))
+
+  effects <- match.arg(effects)
+  .filter_parameters(l, effects = effects, flatten = flatten, recursive = FALSE)
+}
+
+
+
+#' @export
+find_parameters.glimML <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  l <- .compact_list(list(
+    conditional = names(x@fixed.param),
+    random = names(x@random.param)
+  ))
+
+  effects <- match.arg(effects)
+  .filter_parameters(l, effects = effects, flatten = flatten, recursive = FALSE)
+}
+
+
+
+#' @export
+find_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+  effects <- match.arg(effects)
+  coefs <- x$Model
+  random_start <- grep("(\\(Intercept\\) \\(Intercept\\)|Random\\.\\(Intercept\\))", rownames(coefs))
+  thresholds <- grep("Threshold\\d", rownames(coefs))
+
+  l <- list(
+    conditional = rownames(coefs)[c(1, thresholds, 2:(random_start - 1))],
+    random = rownames(coefs)[random_start:(thresholds[1] - 1)]
+  )
+
+  .filter_parameters(l, effects = effects, flatten = flatten)
+}

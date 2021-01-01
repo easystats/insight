@@ -8,32 +8,41 @@
 \alias{get_parameters.clm2}
 \title{Get model parameters from models with special components}
 \usage{
-\method{get_parameters}{betareg}(x, component = c("all", "conditional", "precision"), ...)
+\method{get_parameters}{betareg}(
+  x,
+  component = c("all", "conditional", "precision", "location", "distributional",
+    "auxiliary"),
+  ...
+)
 
-\method{get_parameters}{DirichletRegModel}(x, component = c("all", "conditional", "precision"), ...)
+\method{get_parameters}{DirichletRegModel}(
+  x,
+  component = c("all", "conditional", "precision", "location", "distributional",
+    "auxiliary"),
+  ...
+)
 
 \method{get_parameters}{averaging}(x, component = c("conditional", "full"), ...)
 
-\method{get_parameters}{glmx}(x, component = c("all", "conditional", "extra"), ...)
+\method{get_parameters}{glmx}(
+  x,
+  component = c("all", "conditional", "extra", "location", "distributional",
+    "auxiliary"),
+  ...
+)
 
 \method{get_parameters}{clm2}(x, component = c("all", "conditional", "scale"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
-\item{component}{Which type of parameters to return, such as parameters for the
+\item{component}{Should all predictor variables, predictor variables for the
  conditional model, the zero-inflated part of the model, the dispersion
- term, the instrumental variables or marginal effects be returned? Applies
- to models with zero-inflated and/or dispersion formula, or to models with
- instrumental variables (so called fixed-effects regressions), or models
- with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
+ term or the instrumental variables be returned? Applies to models
+ with zero-inflated and/or dispersion formula, or to models with instrumental
+ variable (so called fixed-effects regressions). May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model. There are two convenient shortcuts:
-If \code{component = "location"}, location parameters such as \code{conditional},
-\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
-For \code{component = "distributional"} (or \code{"auxiliary"}), components
-like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
-other auxiliary parameters) are returned.}
+component, depending on the model.}
 
 \item{...}{Currently not used.}
 }

@@ -123,8 +123,11 @@ reference:
 - title: "Documentation of Specific Class Objects"
   contents:
   - find_parameters.BGGM
+  - find_parameters.gamlss
   - find_parameters.betamfx
   - find_parameters.glmmTMB
+  - find_parameters.zeroinfl
+  - find_parameters.averaging
   - get_parameters.BGGM
   - get_parameters.emmGrid
   - get_parameters.gamm

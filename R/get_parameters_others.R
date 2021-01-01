@@ -16,7 +16,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
 #' @export
-get_parameters.betareg <- function(x, component = c("all", "conditional", "precision"), ...) {
+get_parameters.betareg <- function(x, component = c("all", "conditional", "precision", "location", "distributional", "auxiliary"), ...) {
   component <- match.arg(component)
   cf <- stats::coef(x)
 
@@ -39,7 +39,7 @@ get_parameters.betareg <- function(x, component = c("all", "conditional", "preci
 
 #' @rdname get_parameters.betareg
 #' @export
-get_parameters.DirichletRegModel <- function(x, component = c("all", "conditional", "precision"), ...) {
+get_parameters.DirichletRegModel <- function(x, component = c("all", "conditional", "precision", "location", "distributional", "auxiliary"), ...) {
   component <- match.arg(component)
   cf <- stats::coef(x)
 
@@ -94,7 +94,7 @@ get_parameters.averaging <- function(x, component = c("conditional", "full"), ..
 
 #' @rdname get_parameters.betareg
 #' @export
-get_parameters.glmx <- function(x, component = c("all", "conditional", "extra"), ...) {
+get_parameters.glmx <- function(x, component = c("all", "conditional", "extra", "location", "distributional", "auxiliary"), ...) {
   component <- match.arg(component)
   cf <- stats::coef(summary(x))
 
