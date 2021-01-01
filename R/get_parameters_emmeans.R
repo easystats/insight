@@ -1,4 +1,4 @@
-#' @title Get model parameters estimated marginal means objects
+#' @title Get model parameters from estimated marginal means objects
 #' @name get_parameters.emmGrid
 #'
 #' @description Returns the coefficients from a model.

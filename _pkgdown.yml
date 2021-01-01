@@ -63,16 +63,6 @@ reference:
   - find_weights
   - get_weights
 
-- title: "Documentation of Specific Models"
-  contents:
-  - get_parameters.BGGM
-  - get_parameters.emmGrid
-  - get_parameters.gamm
-  - get_parameters.betamfx
-  - get_parameters.glmm
-  - get_parameters.zeroinfl
-  - get_parameters.betareg
-
 - title: "Access Further Information from Model Objects"
   desc: >
     Functions to access specific information from model objects.
@@ -129,3 +119,16 @@ reference:
     Used in examples or for testing
   contents:
   - fish
+
+- title: "Documentation of Specific Class Objects"
+  contents:
+  - find_parameters.BGGM
+  - find_parameters.betamfx
+  - find_parameters.glmmTMB
+  - get_parameters.BGGM
+  - get_parameters.emmGrid
+  - get_parameters.gamm
+  - get_parameters.betamfx
+  - get_parameters.glmm
+  - get_parameters.zeroinfl
+  - get_parameters.betareg

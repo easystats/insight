@@ -26,7 +26,7 @@
 \arguments{
 \item{x}{A fitted model.}
 
-\item{effects}{Should parameters for fixed effects, random effects
+\item{effects}{Should variables for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{...}{Currently not used.}

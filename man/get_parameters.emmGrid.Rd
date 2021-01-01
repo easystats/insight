@@ -3,7 +3,7 @@
 \name{get_parameters.emmGrid}
 \alias{get_parameters.emmGrid}
 \alias{get_parameters.emm_list}
-\title{Get model parameters estimated marginal means objects}
+\title{Get model parameters from estimated marginal means objects}
 \usage{
 \method{get_parameters}{emmGrid}(x, summary = FALSE, merge_parameters = FALSE, ...)
 
