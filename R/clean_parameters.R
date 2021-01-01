@@ -384,6 +384,8 @@ clean_parameters.mlm <- function(x, ...) {
       "sigma"
     } else if (grepl("priors", i, fixed = TRUE)) {
       "priors"
+    } else if (grepl("smooth_terms", i, fixed = TRUE)) {
+      "smooth_terms"
     } else if (grepl("alpha", i, fixed = TRUE)) {
       "distributional"
     } else if (grepl("beta", i, fixed = TRUE)) {
@@ -591,8 +593,11 @@ clean_parameters.mlm <- function(x, ...) {
 .clean_bamlss_params <- function(out) {
   out$Cleaned_Parameter <- out$Parameter
   out$Cleaned_Parameter <- gsub("^(mu\\.p\\.|pi\\.p\\.)(.*)", "\\2", out$Cleaned_Parameter)
-  out$Cleaned_Parameter <- gsub("^sigma\\.p\\.(.*)", "sigma (\\2)", out$Cleaned_Parameter)
+  out$Cleaned_Parameter <- gsub("^(mu\\.s\\.|pi\\.s\\.)(.*)", "s\\(\\2\\)", out$Cleaned_Parameter)
+  out$Cleaned_Parameter <- gsub("^sigma\\.p\\.(.*)", "sigma \\(\\1\\)", out$Cleaned_Parameter)
   out$Cleaned_Parameter <- gsub("..", ".", out$Cleaned_Parameter, fixed = TRUE)
+  out$Cleaned_Parameter <- gsub(".)", ")", out$Cleaned_Parameter, fixed = TRUE)
+  out$Cleaned_Parameter <- gsub("(.", "(", out$Cleaned_Parameter, fixed = TRUE)
   out$Cleaned_Parameter <- gsub(".Intercept.", "Intercept", out$Cleaned_Parameter, fixed = TRUE)
   out$Cleaned_Parameter <- gsub("(\\.$)", "", out$Cleaned_Parameter)
   out

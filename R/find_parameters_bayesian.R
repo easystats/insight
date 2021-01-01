@@ -173,10 +173,16 @@ find_parameters.bamlss <- function(x,
   ignore <- grepl("(\\.alpha|logLik|\\.accepted|\\.edf)$", cn)
   cond <- cn[grepl("^(mu\\.p\\.|pi\\.p\\.)", cn) & !ignore]
   sigma <- cn[grepl("^sigma\\.p\\.", cn) & !ignore]
-  alpha <- cn[cn %in% c("mu.p.alpha", "pi.p.alpha", "sigma.p.alpha")]
+  smooth_terms <- cn[grepl("^mu\\.s\\.(.*)(\\.tau\\d+|\\.edf)$", cn)]
+  alpha <- cn[grepl("\\.alpha$", cn)]
 
   elements <- .get_elements(effects = "all", component = component)
-  l <- .compact_list(list(conditional = cond, sigma = sigma, alpha = alpha)[elements])
+  l <- .compact_list(list(
+    conditional = cond,
+    smooth_terms = smooth_terms,
+    sigma = sigma,
+    alpha = alpha)[elements])
+
   l <- .filter_pars(l, parameters)
 
   if (flatten) {

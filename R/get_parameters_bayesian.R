@@ -348,7 +348,7 @@ get_parameters.mcmc.list <- function(x,
 #' @rdname get_parameters.BGGM
 #' @export
 get_parameters.bamlss <- function(x,
-                                  component = c("all", "conditional", "location", "distributional", "auxiliary"),
+                                  component = c("all", "conditional", "smooth_terms", "location", "distributional", "auxiliary"),
                                   parameters = NULL,
                                   summary = FALSE,
                                   centrality = "mean",
