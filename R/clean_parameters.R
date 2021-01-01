@@ -297,7 +297,9 @@ clean_parameters.bamlss <- function(x, ...) {
   l <- .get_stan_params(pars)
 
   out <- do.call(rbind, l)
-  .remove_empty_columns_from_pars(.clean_bamlss_params(out))
+  out <- .remove_empty_columns_from_pars(.clean_bamlss_params(out))
+  class(out) <- c("clean_parameters", class(out))
+  out
 }
 
 
@@ -590,9 +592,9 @@ clean_parameters.mlm <- function(x, ...) {
   out$Cleaned_Parameter <- out$Parameter
   out$Cleaned_Parameter <- gsub("^(mu\\.p\\.|pi\\.p\\.)(.*)", "\\2", out$Cleaned_Parameter)
   out$Cleaned_Parameter <- gsub("^sigma\\.p\\.(.*)", "sigma (\\2)", out$Cleaned_Parameter)
-  out$Cleaned_Parameter <- gsub("(\\.$)", "", out$Cleaned_Parameter)
   out$Cleaned_Parameter <- gsub("..", ".", out$Cleaned_Parameter, fixed = TRUE)
   out$Cleaned_Parameter <- gsub(".Intercept.", "Intercept", out$Cleaned_Parameter, fixed = TRUE)
+  out$Cleaned_Parameter <- gsub("(\\.$)", "", out$Cleaned_Parameter)
   out
 }
 
