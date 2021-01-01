@@ -9,7 +9,7 @@
 
 * Support for `coxr` (*coxrobust*), `coeftest` (*lmtest*), `ivFixed` (*ivFixed*),
   `ivprobit` (*ivprobit*), `riskRegression` (*riskRegression*). `summary.lm`,
-  `lmodel2` (*lmodel2*).
+  `lmodel2` (*lmodel2*), improved support for `bamlss` (*bamlss*).
 
 ## New functions
 
