@@ -248,8 +248,15 @@
   # auxiliary parameters
   auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape", "phi", "ndt", "hu", "xi", "coi", "zoi")
 
+  # random parameters
+  random_parameters <- c("random", "zero_inflated_random")
+
   # location parameters
-  location_parameters <- setdiff(elements, auxiliary_parameters)
+  location_parameters <- if (effects == "fixed") {
+    setdiff(elements, c(auxiliary_parameters, random_parameters))
+  } else {
+    setdiff(elements, auxiliary_parameters)
+  }
 
   # fixed pattern?
   if (all(component == "location")) {
