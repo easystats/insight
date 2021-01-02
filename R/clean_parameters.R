@@ -589,16 +589,38 @@ clean_parameters.mlm <- function(x, ...) {
 
 
 
+#' @importFrom stats na.omit
 .clean_bfbayesfactor_params <- function(out) {
-  pars <- do.call(rbind, strsplit(out$Parameter, "-", 2L))
+  pars <- do.call(rbind, strsplit(out$Parameter, "-", TRUE))
 
   if (ncol(pars) == 1) {
     return(out)
   }
 
-  # change dots into spaces for aesthetic purposes
-  pars[, 2L] <- gsub(".&.", " & ", pars[, 2L], fixed = TRUE)
-  # colnames(out) <- c("Term", "Parameter")
+  out$Cleaned_Parameter <- tryCatch(
+    {
+      apply(pars, 1, function(i) {
+        if (i[1] == i[2]) {
+          i[2] <- ""
+        } else if (i[1] != i[2] && !grepl(":", i[1], fixed = TRUE)) {
+          i[1] <- paste0(i[1], " [", i[2], "]")
+          i[2] <- ""
+        } else if (grepl(":", i[1], fixed = TRUE)) {
+          f <- unlist(strsplit(i[1], ":", fixed = TRUE))
+          l <- unlist(strsplit(i[2], ".&.", fixed = TRUE))
+
+          matches <- stats::na.omit(match(f, l))
+          l[matches] <- ""
+          l[-matches] <- paste0("[", l[-matches], "]")
+          i[1] <- paste0(f, l, collapse = " * ")
+        }
+        as.vector(i[1])
+      })
+    },
+    error = function(e) {
+      out$Cleaned_Parameter
+    }
+  )
 
   out
 }
