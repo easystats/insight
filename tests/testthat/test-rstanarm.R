@@ -308,8 +308,9 @@ if (.runThisTest) {
             )
           ),
           class = c("clean_parameters", "data.frame"),
-          row.names = c(NA, -6L)
-        )
+          row.names = c(NA, -7L)
+        ),
+        ignore_attr = TRUE
       )
     })
 
