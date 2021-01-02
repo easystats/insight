@@ -1367,6 +1367,20 @@ get_data.htest <- function(x, ...) {
         NULL
       }
     )
+
+    # 2nd try
+    if (is.null(out)) {
+      out <- tryCatch(
+        {
+          data_name <- unlist(strsplit(x$data.name, " (and|by) "))
+          as.table(get(data_name, envir = parent.frame()))
+        },
+        error = function(e) {
+          NULL
+        }
+      )
+    }
   }
+
   out
 }
