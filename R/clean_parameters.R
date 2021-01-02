@@ -147,7 +147,7 @@ clean_parameters.BFBayesFactor <- function(x, ...) {
   })
 
   out <- .remove_backticks_from_parameter_names(do.call(rbind, l))
-  out <- .remove_empty_columns_from_pars(out)
+  out <- .remove_empty_columns_from_pars(.clean_bfbayesfactor_params(out))
   .fix_random_effect_smooth(x, out)
 }
 
@@ -587,6 +587,21 @@ clean_parameters.mlm <- function(x, ...) {
   out
 }
 
+
+
+.clean_bfbayesfactor_params <- function(out) {
+  pars <- do.call(rbind, strsplit(out$Parameter, "-", 2L))
+
+  if (ncol(pars) == 1) {
+    return(out)
+  }
+
+  # change dots into spaces for aesthetic purposes
+  pars[, 2L] <- gsub(".&.", " & ", pars[, 2L], fixed = TRUE)
+  # colnames(out) <- c("Term", "Parameter")
+
+  out
+}
 
 
 
