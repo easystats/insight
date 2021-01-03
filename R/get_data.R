@@ -1338,7 +1338,7 @@ get_data.htest <- function(x, ...) {
   if (!is.null(x$data.name)) {
     out <- tryCatch(
       {
-        data_name <- unlist(strsplit(x$data.name, " (and|by) "))
+        data_name <- trimws(unlist(strsplit(x$data.name, "(and|,|by)")))
         # columns <- get(data_name, envir = parent.frame())
         data_call <- lapply(data_name, str2lang)
         columns <- lapply(data_call, eval)
@@ -1354,7 +1354,9 @@ get_data.htest <- function(x, ...) {
           d <- as.data.frame(columns)
         }
 
-        if (ncol(d) > 2) {
+        if (all(grepl("(.*)\\$(.*)", data_name)) && length(data_name) == length(colnames(d))) {
+          colnames(d) <- gsub("(.*)\\$(.*)", "\\2", data_name)
+        } else if (ncol(d) > 2) {
           colnames(d) <- paste0("x", 1:ncol(d))
         } else if (ncol(d) == 2) {
           colnames(d) <- c("x", "y")
