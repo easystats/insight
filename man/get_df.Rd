@@ -5,16 +5,16 @@
 \alias{get_df.default}
 \title{Extract degrees of freedom}
 \usage{
-get_df(model, ...)
+get_df(x, ...)
 
-\method{get_df}{default}(model, method = "any", ...)
+\method{get_df}{default}(x, method = "any", ...)
 }
 \arguments{
+\item{x}{A statistical model.}
+
 \item{...}{Currently not used.}
 
 \item{method}{Can be \code{"residual"}, in which case they are directly taken from the model if available (for Bayesian models, the goal (looking for help to make it happen) would be to refit the model as a frequentist one before extracting the degrees of freedom), \code{"analytical"} (degrees of freedom are estimated based on the model type), or \code{"any"}, which tries to extract degrees of freedom by any of those methods, whichever succeeds.}
-
-\item{x}{A statistical model.}
 }
 \description{
 Estimate or extract (residual) degrees of freedom from regression models.

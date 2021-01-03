@@ -21,26 +21,26 @@
 #' model <- glm(vs ~ mpg * cyl, data = mtcars, family = "binomial")
 #' get_df(model)
 #' @export
-get_df <- function(model, ...) {
+get_df <- function(x, ...) {
   UseMethod("get_df")
 }
 
 
 #' @rdname get_df
 #' @export
-get_df.default <- function(model, method = "any", ...) {
+get_df.default <- function(x, method = "any", ...) {
   method <- tolower(method)
   method <- match.arg(method, c("analytical", "any", "residual"))
 
   if (method == "any") {
-    dof <- .degrees_of_freedom_fit(model, verbose = FALSE)
+    dof <- .degrees_of_freedom_fit(x, verbose = FALSE)
     if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
-      dof <- .degrees_of_freedom_analytical(model)
+      dof <- .degrees_of_freedom_analytical(x)
     }
   } else if (method == "analytical") {
-    dof <- .degrees_of_freedom_analytical(model)
+    dof <- .degrees_of_freedom_analytical(x)
   } else {
-    dof <- .degrees_of_freedom_fit(model)
+    dof <- .degrees_of_freedom_fit(x)
   }
 
   if (!is.null(dof) && length(dof) > 0 && all(dof == 0)) {
@@ -77,7 +77,7 @@ get_df.coeftest <- function(x, ...) {
 
 #' @export
 get_df.lqmm <- function(x, ...) {
-  cs <- summary(model)
+  cs <- summary(x)
   tryCatch(
     {
       if (!is.null(cs$rdf)) {
