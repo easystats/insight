@@ -125,14 +125,18 @@
     <p>Estimate or extract (residual) degrees of freedom from regression models.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_df</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>get_df</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>get_df</span><span class='op'>(</span><span class='va'>model</span>, method <span class='op'>=</span> <span class='st'>"any"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>get_df</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"any"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A statistical model.</p></td>
+    </tr>
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
@@ -140,10 +144,6 @@
     <tr>
       <th>method</th>
       <td><p>Can be <code>"residual"</code>, in which case they are directly taken from the model if available (for Bayesian models, the goal (looking for help to make it happen) would be to refit the model as a frequentist one before extracting the degrees of freedom), <code>"analytical"</code> (degrees of freedom are estimated based on the model type), or <code>"any"</code>, which tries to extract degrees of freedom by any of those methods, whichever succeeds.</p></td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td><p>A statistical model.</p></td>
     </tr>
     </table>
 
