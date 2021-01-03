@@ -314,14 +314,42 @@ get_priors.BFBayesFactor <- function(x, ...) {
     Distribution <- "cauchy"
   }
 
-  data.frame(
-    Parameter = prior_names,
-    Distribution = Distribution,
-    Location = 0,
-    Scale = prior_scale,
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
+  if (bf_type == "linear") {
+    # find data types, to match priors
+    data_types <- x@numerator[[1]]@dataTypes
+    params <- find_parameters(x)
+
+    # create data frame of parameter names and components
+    out <- as.data.frame(utils::stack(params), stringsAsFactors = FALSE)
+    colnames(out) <- c("Parameter", "Component")
+    out$Distribution <- Distribution
+    out$Location <- 0
+    out$Scale <- NA
+
+    # find parameter names pattern to match data types
+    find_types <- do.call(rbind, strsplit(out$Parameter, "-", TRUE))[, 1, drop = TRUE]
+    interactions <- grepl(":", find_types, fixed = TRUE)
+    find_types[interactions] <- gsub("(.*):(.*)", "\\2", find_types[interactions])
+    cont_types <- data_types == "continuous"
+    data_types[cont_types] <- paste0(data_types[cont_types], ".", names(data_types[cont_types]))
+    for (i in 1:length(data_types)) {
+      out$Scale[find_types == names(data_types)[i]] <- prior_scale[data_types[i]]
+    }
+
+    # missing information to NA
+    out$Distribution[is.na(out$Scale)] <- NA
+    out$Location[is.na(out$Scale)] <- NA
+    out[c("Parameter", "Distribution", "Location", "Scale")]
+  } else {
+    data.frame(
+      Parameter = prior_names,
+      Distribution = Distribution,
+      Location = 0,
+      Scale = prior_scale,
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
 }
 
 

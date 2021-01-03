@@ -55,6 +55,8 @@
 * Fixed issue in `find_statistic()` for *fixest* models, which did not
   return the correct value `"t-statistic"` for `feols()`.
 
+* Fixes inconsistencies in `get_priors()` for (linear) `BFBayesFactor` models.
+
 # insight 0.11.1
 
 ## General
