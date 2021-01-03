@@ -13,7 +13,8 @@
 
 ## New functions
 
-* `get_intercept()` was added as a helper function to easily retrieve the value at the intercept.
+* `get_intercept()` was added as a helper function to easily retrieve the 
+  value at the intercept.
 
 * `n_parameters()` was moved from *parameters* to *insight*.
 

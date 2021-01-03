@@ -4,10 +4,12 @@
 \alias{get_intercept}
 \title{Get the value at the intercept}
 \usage{
-get_intercept(x)
+get_intercept(x, ...)
 }
 \arguments{
 \item{x}{A model.}
+
+\item{...}{Not used.}
 }
 \value{
 The value of the intercept.

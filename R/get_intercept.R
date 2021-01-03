@@ -21,13 +21,13 @@
 #'   get_intercept(gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data = iris))
 #' }
 #' @export
-get_intercept <- function(x) {
+get_intercept <- function(x, ...) {
   UseMethod("get_intercept")
 }
 
 #' @export
-get_intercept.default <- function(x) {
-  params <- insight::get_parameters(x)
+get_intercept.default <- function(x, ...) {
+  params <- get_parameters(x)
   intercept <- params[params$Parameter == "(Intercept)", 2]
   if (length(intercept) == 0) {
     intercept <- NA
@@ -36,8 +36,8 @@ get_intercept.default <- function(x) {
 }
 
 #' @export
-get_intercept.stanreg <- function(x) {
-  params <- insight::get_parameters(x)
+get_intercept.stanreg <- function(x, ...) {
+  params <- get_parameters(x)
   if ("(Intercept)" %in% names(params)) {
     params[["(Intercept)"]]
   } else {

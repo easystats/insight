@@ -50,9 +50,7 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
   if (is.null(res)) {
     res <- tryCatch(
       {
-        pred <- stats::predict(x, type = "response")
-        observed <- .factor_to_numeric(get_response(x))
-        observed - pred
+        stats::residuals(x, type = "response")
       },
       error = function(e) {
         NULL
@@ -63,7 +61,9 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
   if (is.null(res)) {
     res <- tryCatch(
       {
-        stats::residuals(x, type = "response")
+        pred <- stats::predict(x, type = "response")
+        observed <- .factor_to_numeric(get_response(x))
+        observed - pred
       },
       error = function(e) {
         NULL

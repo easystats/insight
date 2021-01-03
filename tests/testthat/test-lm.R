@@ -17,8 +17,7 @@ if (require("testthat") &&
   test_that("get_residuals", {
     expect_equal(
       head(get_residuals(m2)),
-      c(`Mazda RX4` = 17.91041, `Mazda RX4 Wag` = 17.95668, `Datsun 710` = 19.57092,
-        `Hornet 4 Drive` = 18.4171, `Hornet Sportabout` = 15.87447, Valiant = 15.14937),
+      head(stats::residuals(m2)),
       tolerance = 1e-3,
       ignore_attr = TRUE
     )
@@ -59,6 +58,11 @@ if (require("testthat") &&
     )
     expect_equal(nrow(get_data(m2)), 32)
     expect_equal(colnames(get_data(m2)), c("mpg", "hp", "cyl", "wt"))
+  })
+
+  test_that("get_intercept", {
+    expect_equal(get_intercept(m1), as.vector(stats::coef(m1)[1]), ignore_attr = TRUE)
+    expect_equal(get_intercept(m2), as.vector(stats::coef(m2)[1]), ignore_attr = TRUE)
   })
 
   test_that("find_formula", {
