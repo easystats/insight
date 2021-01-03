@@ -13,11 +13,13 @@
 
 ## New functions
 
+* `get_intercept()` was added as a helper function to easily retrieve the value at the intercept.
+
 * `n_parameters()` was moved from *parameters* to *insight*.
 
 * Added `get_predicted()` as a robust alternative to `stats::fitted()`
 
-* Added `get_loglikelihood()` (and its alias `loglikelihood()`) function as a 
+* Added `get_loglikelihood()` (and its alias `loglikelihood()`) function as a
   robust alternative to `stats::logLik()`.
 
 * Added `get_residuals()` as a robust alternative extract model residuals.
@@ -41,7 +43,7 @@
 * `model_info()` now returns `$is_xtab` for `chisq.test()` and
   `BayesFactor::contingencyTableBF()`. Furthermore, the `$family` element for
   those objects is set to `"categorical"`.
-  
+
 * `n_obs()` now handles number of observations from models with binomial family
   correctly when these have matrix-columns as response variable.
 
