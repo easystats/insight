@@ -13,12 +13,12 @@
 
 ## New functions
 
-* `get_intercept()` was added as a helper function to easily retrieve the 
-  value at the intercept.
+* Added `get_intercept()` as a helper function to easily retrieve the  value 
+  at the intercept.
 
-* `n_parameters()` was moved from *parameters* to *insight*.
+* Added `get_df()` as a robust alternative to `stats::df.rediuals()`.
 
-* Added `get_predicted()` as a robust alternative to `stats::fitted()`
+* Added `get_predicted()` as a robust alternative to `stats::fitted()`.
 
 * Added `get_loglikelihood()` (and its alias `loglikelihood()`) function as a
   robust alternative to `stats::logLik()`.
@@ -32,6 +32,8 @@
 
 * Added `is_mixed_model()`, to safely check if a model is a mixed effects model.
   This function also works for multivariate response models.
+
+* `n_parameters()` was moved from *parameters* to *insight*.
 
 ## Changes to functions
 

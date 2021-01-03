@@ -37,6 +37,7 @@ reference:
     have no `find_*()`-counterpart.
   contents:
   - get_data
+  - get_df
   - get_intercept
   - get_loglikelihood
   - get_predicted
