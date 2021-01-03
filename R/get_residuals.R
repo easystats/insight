@@ -25,16 +25,40 @@ get_residuals <- function(x, ...) {
 #' @importFrom stats predict residuals
 #' @export
 get_residuals.default <- function(x, verbose = TRUE, ...) {
+
   res <- tryCatch(
     {
-      pred <- stats::predict(x, type = "response")
-      observed <- .factor_to_numeric(get_response(x))
-      observed - pred
+      x$residuals
     },
     error = function(e) {
       NULL
     }
   )
+
+  # For gamm4 objects
+  if (is.null(res)) {
+    res <- tryCatch(
+      {
+        x$gam$residuals
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
+
+  if (is.null(res)) {
+    res <- tryCatch(
+      {
+        pred <- stats::predict(x, type = "response")
+        observed <- .factor_to_numeric(get_response(x))
+        observed - pred
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
 
   if (is.null(res)) {
     res <- tryCatch(
