@@ -26,7 +26,7 @@ loglikelihood <- get_loglikelihood
 
 #' @importFrom stats logLik
 #' @export
-get_loglikelihood.default <- function(x, ...){
+get_loglikelihood.default <- function(x, ...) {
   stats::logLik(x, ...)
 }
 
@@ -48,7 +48,7 @@ get_loglikelihood.lm <- function(x, estimator = "ML", ...) {
   w <- get_weights(x, null_as_ones = TRUE)
 
   # Get individual lls
-  lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x)^2)/s2))
+  lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x)^2) / s2))
 
   .loglikelihood_prep_output(x, lls)
 }

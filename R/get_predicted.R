@@ -2,13 +2,14 @@
 #'
 #' Returns values predicted by a model (i.e., fitted values).
 #'
+#' @param ... Not used.
 #' @inheritParams get_residuals
 #'
 #' @examples
 #' x <- lm(Sepal.Length ~ Petal.Width * Species, data=iris)
 #' get_predicted(x)
 #' @export
-get_predicted <- function(x, ...){
+get_predicted <- function(x, ...) {
   UseMethod("get_predicted")
 }
 
