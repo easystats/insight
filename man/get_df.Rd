@@ -7,14 +7,14 @@
 \usage{
 get_df(x, ...)
 
-\method{get_df}{default}(x, method = "residual", verbose = TRUE, ...)
+\method{get_df}{default}(x, type = "residual", verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A statistical model.}
 
 \item{...}{Currently not used.}
 
-\item{method}{Can be \code{"residual"} or \code{"model"}. \code{"residual"}
+\item{type}{Can be \code{"residual"} or \code{"model"}. \code{"residual"}
 tries to extract residual degrees of freedoms. If residual degrees of freedom
 could not be extracted, returns \code{n-k} (number of observations minus
 number of parameters). \code{"model"} returns model-based degrees of freedom,

@@ -4,7 +4,7 @@
 #' @description Estimate or extract residual or model-based degrees of freedom from regression models.
 #'
 #' @param x A statistical model.
-#' @param method Can be \code{"residual"} or \code{"model"}. \code{"residual"}
+#' @param type Can be \code{"residual"} or \code{"model"}. \code{"residual"}
 #' tries to extract residual degrees of freedoms. If residual degrees of freedom
 #' could not be extracted, returns \code{n-k} (number of observations minus
 #' number of parameters). \code{"model"} returns model-based degrees of freedom,
@@ -26,10 +26,10 @@ get_df <- function(x, ...) {
 
 #' @rdname get_df
 #' @export
-get_df.default <- function(x, method = "residual", verbose = TRUE, ...) {
-  method <- match.arg(tolower(method), choices = c("residual", "model"))
+get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
 
-  if (method == "residual") {
+  if (type == "residual") {
     dof <- .degrees_of_freedom_fit(x, verbose = verbose)
     if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
       dof <- .degrees_of_freedom_analytical(x)
@@ -51,9 +51,9 @@ get_df.default <- function(x, method = "residual", verbose = TRUE, ...) {
 
 
 #' @export
-get_df.ivFixed <- function(x, method = "residual", ...) {
-  method <- match.arg(tolower(method), choices = c("residual", "model"))
-  if (method == "model") {
+get_df.ivFixed <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "model") {
     .model_df(x)
   } else {
     as.vector(x$df)
@@ -62,9 +62,9 @@ get_df.ivFixed <- function(x, method = "residual", ...) {
 
 
 #' @export
-get_df.summary.lm <- function(x, method = "residual", ...) {
-  method <- match.arg(tolower(method), choices = c("residual", "model"))
-  if (method == "model") {
+get_df.summary.lm <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "model") {
     .model_df(x)
   } else {
     x$fstatistic[3]
@@ -85,9 +85,9 @@ get_df.coeftest <- function(x, ...) {
 
 
 #' @export
-get_df.lqmm <- function(x, method = "residual", ...) {
-  method <- match.arg(tolower(method), choices = c("residual", "model"))
-  if (method == "model") {
+get_df.lqmm <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "model") {
     .model_df(x)
   } else {
     cs <- summary(x)
@@ -112,9 +112,9 @@ get_df.lqm <- get_df.lqmm
 
 
 #' @export
-get_df.glht <- function(x, method = "residual", ...) {
-  method <- match.arg(tolower(method), choices = c("residual", "model"))
-  if (method == "model") {
+get_df.glht <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "model") {
     .model_df(x)
   } else {
     x$df
@@ -123,9 +123,9 @@ get_df.glht <- function(x, method = "residual", ...) {
 
 
 #' @export
-get_df.logitor <- function(x, method = "residual", ...) {
-  method <- match.arg(tolower(method), choices = c("residual", "model"))
-  if (method == "model") {
+get_df.logitor <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "model") {
     .model_df(x)
   } else {
     get_df.default(x$fit, ...)
