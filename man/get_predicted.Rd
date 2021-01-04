@@ -9,7 +9,7 @@ get_predicted(x, ...)
 \arguments{
 \item{x}{A model.}
 
-\item{...}{Not used.}
+\item{...}{Passed down to \code{residuals()}, if possible.}
 }
 \description{
 Returns values predicted by a model (i.e., fitted values).

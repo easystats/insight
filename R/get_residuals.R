@@ -6,7 +6,7 @@
 #'
 #' @param x A model.
 #' @param verbose Toggle warnings and messages.
-#' @param ... Not used.
+#' @param ... Passed down to \code{residuals()}, if possible.
 #'
 #' @return The residuals, or \code{NULL} if this information could not be accessed.
 #'
@@ -15,6 +15,10 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_residuals(m)
+#'
+#' m <- glm(vs ~ wt + cyl + mpg, data = mtcars, family = binomial())
+#' get_residuals(m) # type = "deviance" by default
+#' get_residuals(m, type = "response")
 #' @export
 get_residuals <- function(x, ...) {
   UseMethod("get_residuals")
@@ -50,7 +54,7 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
   if (is.null(res)) {
     res <- tryCatch(
       {
-        stats::residuals(x, type = "response")
+        stats::residuals(x, ...)
       },
       error = function(e) {
         NULL
@@ -92,7 +96,7 @@ get_residuals.vglm <- get_residuals.vgam
 
 #' @export
 get_residuals.coxph <- function(x, ...) {
-  stats::residuals(x)
+  stats::residuals(x, ...)
 }
 
 

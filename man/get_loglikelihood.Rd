@@ -18,7 +18,7 @@ loglikelihood(x, ...)
 \arguments{
 \item{x}{A model.}
 
-\item{...}{Not used.}
+\item{...}{Passed down to \code{logLik()}, if possible.}
 
 \item{estimator}{Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator (scaling by the degrees of freedom, i.e., \code{n-k}). In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors. See also \href{https://stats.stackexchange.com/questions/155474/why-does-lrtest-not-match-anovatest-lrt}{this thread} about a concrete application of these variants.}
 }

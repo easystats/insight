@@ -3,6 +3,7 @@
 #' A robust function to compute the log-likelihood of a model. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results when \code{estimator = "ML"} is specified).
 #'
 #' @param estimator Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator (scaling by the degrees of freedom, i.e., \code{n-k}). In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors. See also \href{https://stats.stackexchange.com/questions/155474/why-does-lrtest-not-match-anovatest-lrt}{this thread} about a concrete application of these variants.
+#' @param ... Passed down to \code{logLik()}, if possible.
 #' @inheritParams get_residuals
 #'
 #' @return An object of class "logLik", also containing the log-likelihoods for each observation as a "per_observation" attribute  (\code{attributes(get_loglikelihood(x))$per_observation}) when possible. The code was partly inspired from the \href{https://CRAN.R-project.org/package=nonnest2}{\code{nonnest2}} package.

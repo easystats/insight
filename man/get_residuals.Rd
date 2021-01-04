@@ -12,7 +12,7 @@ get_residuals(x, ...)
 \arguments{
 \item{x}{A model.}
 
-\item{...}{Not used.}
+\item{...}{Passed down to \code{residuals()}, if possible.}
 
 \item{verbose}{Toggle warnings and messages.}
 }
@@ -26,4 +26,8 @@ Returns the residuals from regression models.
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 get_residuals(m)
+
+m <- glm(vs ~ wt + cyl + mpg, data = mtcars, family = binomial())
+get_residuals(m) # type = "deviance" by default
+get_residuals(m, type = "response")
 }
