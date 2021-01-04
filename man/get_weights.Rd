@@ -4,12 +4,16 @@
 \alias{get_weights}
 \title{Get the values from model weights}
 \usage{
-get_weights(x, na_rm = FALSE, ...)
+get_weights(x, na_rm = FALSE, null_as_ones = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{na_rm}{Logical, if \code{TRUE}, removes possible missing values.}
+
+\item{null_as_ones}{Logical, if \code{TRUE}, will return a vector of \code{1}
+if no weights were specified in the model (as if the weights were all set
+to 1).}
 
 \item{...}{Currently not used.}
 }
@@ -24,4 +28,6 @@ data(mtcars)
 mtcars$weight <- rnorm(nrow(mtcars), 1, .3)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars, weights = weight)
 get_weights(m)
+
+get_weights(lm(mpg ~ wt, data = mtcars), null_as_ones=TRUE)
 }

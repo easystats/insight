@@ -15,7 +15,8 @@
 #'   get_intercept(lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))
 #' }
 #' if (require("rstanarm")) {
-#'   get_intercept(rstanarm::stan_glm(Sepal.Length ~ Petal.Width, data = iris, refresh = 0, iter = 200))
+#'   get_intercept(rstanarm::stan_glm(Sepal.Length ~ Petal.Width,
+#'   data = iris, refresh = 0, iter = 200))
 #' }
 #' if (require("gamm4")) {
 #'   get_intercept(gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data = iris))

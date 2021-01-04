@@ -5,6 +5,9 @@
 #'
 #' @param x A fitted model.
 #' @param na_rm Logical, if \code{TRUE}, removes possible missing values.
+#' @param null_as_ones Logical, if \code{TRUE}, will return a vector of \code{1}
+#'   if no weights were specified in the model (as if the weights were all set
+#'   to 1).
 #' @param ... Currently not used.
 #'
 #' @return The weighting variable, or \code{NULL} if no weights were specified (or if all weights were 1).
@@ -14,15 +17,17 @@
 #' mtcars$weight <- rnorm(nrow(mtcars), 1, .3)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars, weights = weight)
 #' get_weights(m)
+#'
+#' get_weights(lm(mpg ~ wt, data = mtcars), null_as_ones=TRUE)
 #' @importFrom stats na.omit
 #' @export
-get_weights <- function(x, na_rm = FALSE, ...) {
+get_weights <- function(x, na_rm = FALSE, null_as_ones=FALSE, ...) {
   UseMethod("get_weights")
 }
 
 
 #' @export
-get_weights.default <- function(x, na_rm = FALSE, ...) {
+get_weights.default <- function(x, na_rm = FALSE, null_as_ones=FALSE, ...) {
   w <- NULL
   tryCatch(
     {
@@ -82,12 +87,16 @@ get_weights.default <- function(x, na_rm = FALSE, ...) {
     w <- stats::na.omit(w)
   }
 
+  if(is.null(w) && null_as_ones){
+    w <- rep.int(1, n_obs(x))
+  }
+
   w
 }
 
 
 #' @export
-get_weights.brmsfit <- function(x, na_rm = FALSE, ...) {
+get_weights.brmsfit <- function(x, na_rm = FALSE, null_as_ones=FALSE, ...) {
   w <- find_weights(x)
 
   if (!is.null(w)) {
@@ -100,6 +109,10 @@ get_weights.brmsfit <- function(x, na_rm = FALSE, ...) {
 
   if (!is.null(w) && anyNA(w) && isTRUE(na_rm)) {
     w <- stats::na.omit(w)
+  }
+
+  if(is.null(w) && null_as_ones){
+    w <- rep.int(1, n_obs(x))
   }
 
   w
