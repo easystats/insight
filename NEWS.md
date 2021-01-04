@@ -13,7 +13,8 @@
 
 ## New functions
 
-* Added `null_as_ones=TRUE` argument to `get_weights()` to return vector of 1s instead of `NULL`.
+* Added `null_as_ones = TRUE` argument to `get_weights()` to return vector of 
+  1s instead of `NULL`.
 
 * Added `get_intercept()` as a helper function to easily retrieve the  value 
   at the intercept.

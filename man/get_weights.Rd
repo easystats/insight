@@ -29,5 +29,5 @@ mtcars$weight <- rnorm(nrow(mtcars), 1, .3)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars, weights = weight)
 get_weights(m)
 
-get_weights(lm(mpg ~ wt, data = mtcars), null_as_ones=TRUE)
+get_weights(lm(mpg ~ wt, data = mtcars), null_as_ones = TRUE)
 }

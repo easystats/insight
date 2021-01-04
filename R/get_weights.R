@@ -18,16 +18,16 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars, weights = weight)
 #' get_weights(m)
 #'
-#' get_weights(lm(mpg ~ wt, data = mtcars), null_as_ones=TRUE)
+#' get_weights(lm(mpg ~ wt, data = mtcars), null_as_ones = TRUE)
 #' @importFrom stats na.omit
 #' @export
-get_weights <- function(x, na_rm = FALSE, null_as_ones=FALSE, ...) {
+get_weights <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   UseMethod("get_weights")
 }
 
 
 #' @export
-get_weights.default <- function(x, na_rm = FALSE, null_as_ones=FALSE, ...) {
+get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   w <- NULL
   tryCatch(
     {
@@ -87,7 +87,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones=FALSE, ...) {
     w <- stats::na.omit(w)
   }
 
-  if(is.null(w) && null_as_ones){
+  if (is.null(w) && isTRUE(null_as_ones)) {
     w <- rep.int(1, n_obs(x))
   }
 
@@ -96,7 +96,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones=FALSE, ...) {
 
 
 #' @export
-get_weights.brmsfit <- function(x, na_rm = FALSE, null_as_ones=FALSE, ...) {
+get_weights.brmsfit <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   w <- find_weights(x)
 
   if (!is.null(w)) {
