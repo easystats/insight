@@ -147,7 +147,7 @@
 tries to extract residual degrees of freedoms. If residual degrees of freedom
 could not be extracted, returns <code>n-k</code> (number of observations minus
 number of parameters). <code>"model"</code> returns model-based degrees of freedom,
-i.e. the number of parameters (+1 for linear models for the sigma-parameter).</p></td>
+i.e. the number of (estimated) parameters.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -158,11 +158,9 @@ i.e. the number of parameters (+1 for linear models for the sigma-parameter).</p
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Length</span> <span class='op'>*</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
-<span class='fu'>get_df</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 144</div><div class='input'>
-<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>mpg</span> <span class='op'>*</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
-<span class='fu'>get_df</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 28</div></pre>
+<span class='fu'>get_df</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span> <span class='co'># same as df.residual(model)</span>
+</div><div class='output co'>#&gt; [1] 144</div><div class='input'><span class='fu'>get_df</span><span class='op'>(</span><span class='va'>model</span>, type <span class='op'>=</span> <span class='st'>"model"</span><span class='op'>)</span> <span class='co'># same as attr(logLik(model), "df")</span>
+</div><div class='output co'>#&gt; [1] 7</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
