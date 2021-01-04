@@ -180,10 +180,13 @@
   is_proptest <- FALSE
   is_binomtest <- FALSE
   is_chi2test <- FALSE
+  is_ranktest <- FALSE
   is_xtab <- FALSE
 
   if (inherits(x, "htest")) {
-    if (grepl("t-test", x$method)) {
+    if (grepl("kruskal-wallis", tolower(x$method), fixed = TRUE) || grepl("wilcoxon", tolower(x$method), fixed = TRUE)) {
+      is_ranktest <- TRUE
+    } else if (grepl("t-test", x$method)) {
       is_ttest <- TRUE
     } else if (grepl("^One-way", x$method)) {
       is_oneway <- TRUE
@@ -202,6 +205,9 @@
       fitfam <- "categorical"
     } else {
       is_correlation <- TRUE
+      if (grepl("Spearman's rank", x$method, fixed = TRUE)) {
+        is_ranktest <- TRUE
+      }
     }
   } else if (inherits(x, "BGGM")) {
     is_correlation <- TRUE
