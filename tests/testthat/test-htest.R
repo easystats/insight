@@ -33,4 +33,25 @@ if (require("testthat") && require("insight")) {
                                  Truth = c("Milk", "Tea")), class = "table")
     )
   })
+
+
+  wb <<- aggregate(warpbreaks$breaks,
+                  by = list(w = warpbreaks$wool,
+                            t = warpbreaks$tension),
+                  FUN = mean)
+  m <- friedman.test(wb$x, wb$w, wb$t)
+  test_that("get_data.freedman", {
+    expect_equal(
+      get_data(m),
+      data.frame(
+        x = c(44.5555555555556, 28.2222222222222, 24,
+              28.7777777777778, 24.5555555555556, 18.7777777777778),
+        w = c(1L, 2L, 1L, 2L, 1L, 2L),
+        t = c(1L, 1L, 2L, 2L, 3L, 3L)
+      ),
+      tolerance = 1e-3,
+      ignore_attr = TRUE
+    )
+  })
+
 }

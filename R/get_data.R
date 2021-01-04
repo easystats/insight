@@ -1338,7 +1338,21 @@ get_data.htest <- function(x, ...) {
   if (!is.null(x$data.name)) {
     out <- tryCatch(
       {
-        data_name <- trimws(unlist(strsplit(x$data.name, "(and|,|by)")))
+        # split by "and" and "by". E.g., for t.test(1:3, c(1,1:3)), we have
+        # x$data.name = "1:3 and c(1, 1:3)"
+        data_name <- trimws(unlist(strsplit(x$data.name, "(and|by)")))
+
+        # now we may have exceptions, e.g. for friedman.test(wb$x, wb$w, wb$t)
+        # x$data.name is "wb$x, wb$w and wb$t" and we now have "wb$x, wb$w" and
+        # "wb$t", so we need to split at comma as well. However, the above t-test
+        # example returns "1:3" and "c(1, 1:3)", so we only must split at comma
+        # when it is not inside parentheses.
+        data_comma <- unlist(strsplit(data_name, "(\\([^)]*\\))"))
+
+        # any comma not inside parentheses?
+        if (any(grepl(",", data_comma, fixed = TRUE))) {
+          data_name <- trimws(unlist(strsplit(data_comma, ", ", fixed = TRUE)))
+        }
 
         # exeception: list for kruskal-wallis
         if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && grepl("^list\\(", data_name)) {
