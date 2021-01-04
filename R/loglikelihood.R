@@ -124,15 +124,7 @@ get_loglikelihood.glmer <- get_loglikelihood.glm
   attr(out, "nall") <- attr(out, "nobs") <- n_obs(x)
 
   # See https://stats.stackexchange.com/questions/393016/what-does-the-degree-of-freedom-df-mean-in-the-results-of-log-likelihood-logl
-  attr(out, "df") <- tryCatch({
-    attributes(stats::logLik(x))$df
-  }, warning = function(warning_condition) {
-    n_parameters(x)
-  }, error = function(error_condition) {
-    n_parameters(x)
-  })
-
-
+  attr(out, "df") <- get_df(x, type = "model")
   class(out) <- c("logLik", class(x)) # The class returned by stats::logLik(x)
   out
 }

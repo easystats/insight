@@ -18,7 +18,7 @@ get_df(x, ...)
 tries to extract residual degrees of freedoms. If residual degrees of freedom
 could not be extracted, returns \code{n-k} (number of observations minus
 number of parameters). \code{"model"} returns model-based degrees of freedom,
-i.e. the number of parameters (+1 for linear models for the sigma-parameter).}
+i.e. the number of (estimated) parameters.}
 
 \item{verbose}{Toggle warnings.}
 }
@@ -27,8 +27,6 @@ Estimate or extract residual or model-based degrees of freedom from regression m
 }
 \examples{
 model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
-get_df(model)
-
-model <- glm(vs ~ mpg * cyl, data = mtcars, family = "binomial")
-get_df(model)
+get_df(model) # same as df.residual(model)
+get_df(model, type = "model") # same as attr(logLik(model), "df")
 }
