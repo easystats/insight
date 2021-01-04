@@ -1364,9 +1364,14 @@ get_data.htest <- function(x, ...) {
         data_call <- lapply(data_name, str2lang)
         columns <- lapply(data_call, eval)
 
+        # preserve table data for McNemar
         if (!grepl(" (and|by) ", x$data.name) && (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
-          # preserve table data for McNemar
           return(as.table(columns[[1]]))
+          # check if data is a list for kruskal-wallis
+        } else if (grepl("^Kruskal-Wallis", x$method) && length(columns) == 1 && is.list(columns[[1]])) {
+          l <- columns[[1]]
+          names(l) <- paste0("x", 1:length(l))
+          return(l)
         } else {
           max_len <- max(sapply(columns, length))
           for (i in 1:length(columns)) {
