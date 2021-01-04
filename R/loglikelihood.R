@@ -35,17 +35,20 @@ get_loglikelihood.default <- function(x, ...){
 #' @rdname get_loglikelihood
 #' @export
 get_loglikelihood.lm <- function(x, estimator = "ML", ...) {
-  if (is.character(estimator)) {
-    if (tolower(estimator) == "ols") {
-      # TODO: Replace df.residual by a more robust function
-      estim <- function(x) sqrt(sum(get_residuals(x)^2) / stats::df.residual(x))
-    } else {
-      # In which case this is equivalent to `stats::logLik(x, ...)`
-      estim <- function(x) sqrt(mean(get_residuals(x)^2))
-    }
-    estimator <- estim(x)
+
+  # Calculate s2
+  s <- as.numeric(get_sigma(x))
+  if (tolower(estimator) == "ols") {
+    s2 <- s^2  # OLS
+  } else{
+    s2 <- (s * sqrt(get_df(x) / n_obs(x)))^2  # ML
   }
-  lls <- stats::dnorm(get_response(x), mean = get_predicted(x), sd = estimator, log = TRUE)
+
+  # Get weights
+  w <- get_weights(x, null_as_ones=TRUE)
+
+  # Get individual lls
+  lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x)^2)/s2))
 
   .loglikelihood_prep_output(x, lls)
 }
