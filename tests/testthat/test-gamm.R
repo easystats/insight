@@ -54,7 +54,7 @@ if (.runThisTest) {
 
     test_that("find_formula", {
       expect_length(find_formula(m1), 2)
-      expect_equal(
+      expect_equivalent(
         find_formula(m1),
         list(
           conditional = as.formula("y ~ s(x0) + s(x1) + s(x2)"),
@@ -154,7 +154,7 @@ if (.runThisTest) {
     )
 
     test_that("find_formula-gamm-1", {
-      expect_equal(
+      expect_equivalent(
         find_formula(m1),
         list(conditional = as.formula("y ~ s(x0, bs = \"cr\") + s(x1, bs = \"cr\")"),
              random = list(as.formula("~1 | fa"), as.formula("~1 | fb"))),
@@ -163,7 +163,7 @@ if (.runThisTest) {
     })
 
     test_that("find_formula-gamm-2", {
-      expect_equal(
+      expect_equivalent(
         find_formula(m2),
         list(conditional = as.formula("y ~ s(x0) + s(x1) + s(x2)")),
         ignore_attr = TRUE
@@ -171,7 +171,7 @@ if (.runThisTest) {
     })
 
     test_that("find_formula-gamm-3", {
-      expect_equal(
+      expect_equivalent(
         find_formula(m3),
         list(conditional = as.formula("y ~ s(x0) + s(x1) + s(x2)"),
              random = as.formula("~1 | g")),

@@ -67,7 +67,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
     test_that("find_formula", {
       expect_length(find_formula(m1), 2)
-      expect_equal(
+      expect_equivalent(
         find_formula(m1),
         list(
           conditional = as.formula("y ~ group + offset(log(trisk))"),

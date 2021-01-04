@@ -124,7 +124,7 @@ if (require("testthat") &&
   test_that("find_formula", {
     expect_length(find_formula(m1), 2)
     expect_length(find_formula(m2), 2)
-    expect_equal(
+    expect_equivalent(
       find_formula(m1, component = "conditional"),
       list(
         conditional = as.formula("Reaction ~ Days"),
@@ -132,7 +132,7 @@ if (require("testthat") &&
       ),
       ignore_attr = TRUE
     )
-    expect_equal(
+    expect_equivalent(
       find_formula(m2, component = "conditional"),
       list(
         conditional = as.formula("Reaction ~ Days"),

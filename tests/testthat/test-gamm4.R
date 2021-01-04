@@ -60,7 +60,7 @@ if (require("testthat") && require("insight") && require("gamm4")) {
 
   test_that("find_formula", {
     expect_length(find_formula(m1), 2)
-    expect_equal(
+    expect_equivalent(
       find_formula(m1),
       list(conditional = as.formula("y ~ s(x0) + x1 + s(x2)"),
            random = as.formula("~1 | fac")),

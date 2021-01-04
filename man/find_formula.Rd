@@ -41,4 +41,9 @@ For models of class \code{lme} or \code{gls} the correlation-component
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 find_formula(m)
+
+if (require("lme4")) {
+  m <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
+  find_formula(m)
+}
 }

@@ -17,7 +17,7 @@ if (require("testthat") &&
 
   test_that("find_formula", {
     expect_length(find_formula(m), 1)
-    expect_equal(
+    expect_equivalent(
       find_formula(m),
       list(conditional = as.formula("y ~ incr.conv(x)")),
       ignore_attr = TRUE

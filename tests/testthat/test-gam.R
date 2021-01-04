@@ -67,13 +67,13 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
 
     test_that("find_formula", {
       expect_length(find_formula(m1), 1)
-      expect_equal(
+      expect_equivalent(
         find_formula(m1),
         list(conditional = as.formula("y ~ s(x0) + s(x1) + s(x2) + s(x3)")),
         ignore_attr = TRUE
       )
       expect_length(find_formula(m2), 2)
-      expect_equal(
+      expect_equivalent(
         find_formula(m2),
         list(
           conditional = as.formula("y ~ s(x2) + s(x3)"),
@@ -82,7 +82,7 @@ if (.runThisTest || Sys.getenv("USER") == "travis") {
         ignore_attr = TRUE
       )
       expect_length(find_formula(m3), 2)
-      expect_equal(
+      expect_equivalent(
         find_formula(m3),
         structure(list(
           y0 = list(conditional = as.formula("y0 ~ s(x0) + s(x1)")),

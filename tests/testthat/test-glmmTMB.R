@@ -345,7 +345,7 @@ if (require("testthat") &&
 
   test_that("find_formula", {
     expect_length(find_formula(m4), 5)
-    expect_equal(
+    expect_equivalent(
       find_formula(m4),
       list(
         conditional = as.formula("count ~ child + camper"),
@@ -356,7 +356,7 @@ if (require("testthat") &&
       ),
       ignore_attr = TRUE
     )
-    expect_equal(find_formula(m6), list(conditional = as.formula("count ~ 1")), ignore_attr = TRUE)
+    expect_equivalent(find_formula(m6), list(conditional = as.formula("count ~ 1")))
   })
 
   test_that("find_predictors", {

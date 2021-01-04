@@ -44,7 +44,7 @@ if (require("testthat") &&
 
   test_that("find_formula", {
     expect_length(find_formula(m1), 1)
-    expect_equal(
+    expect_equivalent(
       find_formula(m1),
       list(conditional = as.formula(
         "Surv(time, status) ~ sex + age + ph.ecog"

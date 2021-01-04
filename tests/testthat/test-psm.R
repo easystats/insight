@@ -62,7 +62,7 @@ if (require("testthat") && require("insight") && require("rms")) {
 
   test_that("find_formula", {
     expect_length(find_formula(m1), 1)
-    expect_equal(
+    expect_equivalent(
       find_formula(m1),
       list(conditional = as.formula(
         "Surv(d.time, death) ~ sex * pol(age, 2)"

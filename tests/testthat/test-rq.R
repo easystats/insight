@@ -54,7 +54,7 @@ if (require("testthat") &&
 
   test_that("find_formula", {
     expect_length(find_formula(m1), 1)
-    expect_equal(
+    expect_equivalent(
       find_formula(m1),
       list(conditional = as.formula("stack.loss ~ Air.Flow + Water.Temp")),
       ignore_attr = TRUE

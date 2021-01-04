@@ -36,9 +36,9 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_true(is.data.frame(get_data(t2d)))
   })
   test_that("find_formula", {
-    expect_equal(find_formula(t1), list(conditional = y ~ 1), ignore_attr = TRUE)
-    expect_equal(find_formula(t2), list(conditional = y ~ group), ignore_attr = TRUE)
-    expect_equal(find_formula(t2d), list(conditional = y ~ 1), ignore_attr = TRUE)
+    expect_equivalent(find_formula(t1), list(conditional = y ~ 1))
+    expect_equivalent(find_formula(t2), list(conditional = y ~ group))
+    expect_equivalent(find_formula(t2d), list(conditional = y ~ 1))
   })
   test_that("get_parameters", {
     expect_equal(nrow(get_parameters(t1)), 4000)
@@ -98,9 +98,8 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     })
 
     test_that("find_formula", {
-      expect_equal(find_formula(x),
-        list(conditional = as.formula("len ~ supp + dose + supp:dose")),
-        ignore_attr = TRUE
+      expect_equivalent(find_formula(x),
+        list(conditional = as.formula("len ~ supp + dose + supp:dose"))
       )
     })
 
@@ -118,13 +117,12 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     })
 
     test_that("find_formula", {
-      expect_equal(
+      expect_equivalent(
         find_formula(x),
         list(
           conditional = as.formula("RT ~ shape + color + shape:color"),
           random = as.formula("~ID")
-        ),
-        ignore_attr = TRUE
+        )
       )
     })
 
@@ -219,7 +217,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
       expect_true(is.data.frame(get_data(x)))
     })
     test_that("find_formula", {
-      expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")), ignore_attr = TRUE)
+      expect_equivalent(find_formula(x), list(conditional = as.formula("len ~ supp + dose")), ignore_attr = TRUE)
     })
     test_that("get_parameters", {
       expect_equal(
@@ -239,7 +237,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
       expect_true(is.data.frame(get_data(x)))
     })
     test_that("find_formula", {
-      expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")), ignore_attr = TRUE)
+      expect_equivalent(find_formula(x), list(conditional = as.formula("len ~ supp + dose")), ignore_attr = TRUE)
     })
     test_that("get_parameters", {
       expect_equal(

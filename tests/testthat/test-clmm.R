@@ -90,7 +90,7 @@ if (require("testthat") &&
 
   test_that("find_formula", {
     expect_length(find_formula(m1), 2)
-    expect_equal(
+    expect_equivalent(
       find_formula(m1),
       list(
         conditional = as.formula("rating ~ temp + contact"),
@@ -99,7 +99,7 @@ if (require("testthat") &&
       ignore_attr = TRUE
     )
     expect_length(find_formula(m2), 2)
-    expect_equal(
+    expect_equivalent(
       find_formula(m2),
       list(
         conditional = as.formula("SURENESS ~ PROD"),
