@@ -311,6 +311,7 @@
     is_correlation = is_correlation,
     is_onewaytest = is_oneway,
     is_chi2test = is_chi2test,
+    is_ranktest = is_ranktest,
     is_xtab = is_xtab,
     is_proptest = is_proptest,
     is_binomtest = is_binomtest,
