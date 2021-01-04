@@ -195,7 +195,8 @@
       binom_fam <- TRUE
       is_proptest <- TRUE
       fitfam <- "binomial"
-    } else if (grepl("Chi-squared", x$method)) {
+    } else if (any(grepl("chi-squared", c(tolower(x$method), tolower(attributes(x$statistic)$names)), fixed = TRUE)) ||
+               grepl("Fisher's Exact Test", x$method, fixed = TRUE)) {
       is_chi2test <- TRUE
       is_xtab <- TRUE
       fitfam <- "categorical"

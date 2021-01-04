@@ -17,4 +17,20 @@ if (require("testthat") && require("insight")) {
                                   `2nd Survey` = c("Approve", "Disapprove")), class = "table")
     )
   })
+
+
+  TeaTasting <<-
+    matrix(c(3, 1, 1, 3),
+           nrow = 2,
+           dimnames = list(Guess = c("Milk", "Tea"),
+                           Truth = c("Milk", "Tea")))
+  m <- fisher.test(TeaTasting, alternative = "greater")
+  test_that("get_data.fisher", {
+    expect_equal(
+      get_data(m),
+      structure(c(3, 1, 1, 3), .Dim = c(2L, 2L),
+                .Dimnames = list(Guess = c("Milk", "Tea"),
+                                 Truth = c("Milk", "Tea")), class = "table")
+    )
+  })
 }

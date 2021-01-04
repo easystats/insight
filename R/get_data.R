@@ -1339,11 +1339,18 @@ get_data.htest <- function(x, ...) {
     out <- tryCatch(
       {
         data_name <- trimws(unlist(strsplit(x$data.name, "(and|,|by)")))
-        # columns <- get(data_name, envir = parent.frame())
+
+        # exeception: list for kruskal-wallis
+        if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && grepl("^list\\(", data_name)) {
+          l <- eval(str2lang(x$data.name), envir = parent.frame())
+          names(l) <- paste0("x", 1:length(l))
+          return(l)
+        }
+
         data_call <- lapply(data_name, str2lang)
         columns <- lapply(data_call, eval)
 
-        if (!grepl(" (and|by) ", x$data.name) && grepl("^McNemar", x$method)) {
+        if (!grepl(" (and|by) ", x$data.name) && (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           # preserve table data for McNemar
           return(as.table(columns[[1]]))
         } else {
@@ -1374,7 +1381,7 @@ get_data.htest <- function(x, ...) {
     if (is.null(out)) {
       out <- tryCatch(
         {
-          data_name <- unlist(strsplit(x$data.name, " (and|by) "))
+          data_name <- trimws(unlist(strsplit(x$data.name, "(and|,|by)")))
           as.table(get(data_name, envir = parent.frame()))
         },
         error = function(e) {
