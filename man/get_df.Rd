@@ -7,25 +7,23 @@
 \usage{
 get_df(x, ...)
 
-\method{get_df}{default}(x, method = "any", ...)
+\method{get_df}{default}(x, method = "residual", verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A statistical model.}
 
 \item{...}{Currently not used.}
 
-\item{method}{Can be \code{"residual"}, in which case they are directly taken from the model if available (for Bayesian models, the goal (looking for help to make it happen) would be to refit the model as a frequentist one before extracting the degrees of freedom), \code{"analytical"} (degrees of freedom are estimated based on the model type), or \code{"any"}, which tries to extract degrees of freedom by any of those methods, whichever succeeds.}
+\item{method}{Can be \code{"residual"} or \code{"model"}. \code{"residual"}
+tries to extract residual degrees of freedoms. If residual degrees of freedom
+could not be extracted, returns \code{n-k} (number of observations minus
+number of parameters). \code{"model"} returns model-based degrees of freedom,
+i.e. the number of parameters (+1 for linear models for the sigma-parameter).}
+
+\item{verbose}{Toggle warnings.}
 }
 \description{
-Estimate or extract (residual) degrees of freedom from regression models.
-}
-\details{
-Methods for calculating degrees of freedom:
-\itemize{
-\item \code{"residual"} tries to extract residual degrees of freedoms, and returns \code{Inf} if residual degrees of freedom could not be extracted.
-\item \code{"analytical"} degrees of freedom are \code{n-k} (number of observations minus number of parameters).
-\item \code{"any"} first tries to extract residual degrees of freedom, and if these are not available, extracts analytical degrees of freedom.
-}
+Estimate or extract residual or model-based degrees of freedom from regression models.
 }
 \examples{
 model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)

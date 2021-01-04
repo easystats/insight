@@ -31,7 +31,6 @@ get_loglikelihood.default <- function(x, ...){
 
 
 
-#' @importFrom stats df.residual dnorm
 #' @rdname get_loglikelihood
 #' @export
 get_loglikelihood.lm <- function(x, estimator = "ML", ...) {
@@ -45,7 +44,7 @@ get_loglikelihood.lm <- function(x, estimator = "ML", ...) {
   }
 
   # Get weights
-  w <- get_weights(x, null_as_ones=TRUE)
+  w <- get_weights(x, null_as_ones = TRUE)
 
   # Get individual lls
   lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x)^2)/s2))
@@ -113,6 +112,8 @@ get_loglikelihood.glm <- function(x, ...) {
 
 #' @export
 get_loglikelihood.glmer <- get_loglikelihood.glm
+
+
 
 # Helpers -----------------------------------------------------------------
 

@@ -1,18 +1,16 @@
 #' @title Extract degrees of freedom
 #' @name get_df
 #'
-#' @description Estimate or extract (residual) degrees of freedom from regression models.
+#' @description Estimate or extract residual or model-based degrees of freedom from regression models.
 #'
 #' @param x A statistical model.
-#' @param method Can be \code{"residual"}, in which case they are directly taken from the model if available (for Bayesian models, the goal (looking for help to make it happen) would be to refit the model as a frequentist one before extracting the degrees of freedom), \code{"analytical"} (degrees of freedom are estimated based on the model type), or \code{"any"}, which tries to extract degrees of freedom by any of those methods, whichever succeeds.
+#' @param method Can be \code{"residual"} or \code{"model"}. \code{"residual"}
+#' tries to extract residual degrees of freedoms. If residual degrees of freedom
+#' could not be extracted, returns \code{n-k} (number of observations minus
+#' number of parameters). \code{"model"} returns model-based degrees of freedom,
+#' i.e. the number of parameters (+1 for linear models for the sigma-parameter).
+#' @param verbose Toggle warnings.
 #' @param ... Currently not used.
-#'
-#' @details Methods for calculating degrees of freedom:
-#' \itemize{
-#' \item \code{"residual"} tries to extract residual degrees of freedoms, and returns \code{Inf} if residual degrees of freedom could not be extracted.
-#' \item \code{"analytical"} degrees of freedom are \code{n-k} (number of observations minus number of parameters).
-#' \item \code{"any"} first tries to extract residual degrees of freedom, and if these are not available, extracts analytical degrees of freedom.
-#' }
 #'
 #' @examples
 #' model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
@@ -28,23 +26,24 @@ get_df <- function(x, ...) {
 
 #' @rdname get_df
 #' @export
-get_df.default <- function(x, method = "any", ...) {
-  method <- tolower(method)
-  method <- match.arg(method, c("analytical", "any", "residual"))
+get_df.default <- function(x, method = "residual", verbose = TRUE, ...) {
+  method <- match.arg(tolower(method), choices = c("residual", "model"))
 
-  if (method == "any") {
-    dof <- .degrees_of_freedom_fit(x, verbose = FALSE)
+  if (method == "residual") {
+    dof <- .degrees_of_freedom_fit(x, verbose = verbose)
     if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
       dof <- .degrees_of_freedom_analytical(x)
     }
-  } else if (method == "analytical") {
-    dof <- .degrees_of_freedom_analytical(x)
   } else {
-    dof <- .degrees_of_freedom_fit(x)
+    dof <- .model_df(x)
   }
 
-  if (!is.null(dof) && length(dof) > 0 && all(dof == 0)) {
+  if (!is.null(dof) && length(dof) > 0 && all(dof == 0) && isTRUE(verbose)) {
     warning("Model has zero degrees of freedom!", call. = FALSE)
+  }
+
+  if (is.null(dof) && isTRUE(verbose)) {
+    warning("Could not extract degrees of freedom.", call. = FALSE)
   }
 
   dof
@@ -52,14 +51,24 @@ get_df.default <- function(x, method = "any", ...) {
 
 
 #' @export
-get_df.ivFixed <- function(x, ...) {
-  as.vector(x$df)
+get_df.ivFixed <- function(x, method = "residual", ...) {
+  method <- match.arg(tolower(method), choices = c("residual", "model"))
+  if (method == "model") {
+    .model_df(x)
+  } else {
+    as.vector(x$df)
+  }
 }
 
 
 #' @export
-get_df.summary.lm <- function(x, ...) {
-  x$fstatistic[3]
+get_df.summary.lm <- function(x, method = "residual", ...) {
+  method <- match.arg(tolower(method), choices = c("residual", "model"))
+  if (method == "model") {
+    .model_df(x)
+  } else {
+    x$fstatistic[3]
+  }
 }
 
 
@@ -76,20 +85,25 @@ get_df.coeftest <- function(x, ...) {
 
 
 #' @export
-get_df.lqmm <- function(x, ...) {
-  cs <- summary(x)
-  tryCatch(
-    {
-      if (!is.null(cs$rdf)) {
-        cs$rdf
-      } else {
-        attr(cs$B, "R") - 1
+get_df.lqmm <- function(x, method = "residual", ...) {
+  method <- match.arg(tolower(method), choices = c("residual", "model"))
+  if (method == "model") {
+    .model_df(x)
+  } else {
+    cs <- summary(x)
+    tryCatch(
+      {
+        if (!is.null(cs$rdf)) {
+          cs$rdf
+        } else {
+          attr(cs$B, "R") - 1
+        }
+      },
+      error = function(e) {
+        NULL
       }
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+    )
+  }
 }
 
 
@@ -98,14 +112,24 @@ get_df.lqm <- get_df.lqmm
 
 
 #' @export
-get_df.glht <- function(x, ...) {
-  x$df
+get_df.glht <- function(x, method = "residual", ...) {
+  method <- match.arg(tolower(method), choices = c("residual", "model"))
+  if (method == "model") {
+    .model_df(x)
+  } else {
+    x$df
+  }
 }
 
 
 #' @export
-get_df.logitor <- function(x, ...) {
-  get_df.default(x$fit, ...)
+get_df.logitor <- function(x, method = "residual", ...) {
+  method <- match.arg(tolower(method), choices = c("residual", "model"))
+  if (method == "model") {
+    .model_df(x)
+  } else {
+    get_df.default(x$fit, ...)
+  }
 }
 
 
@@ -194,13 +218,30 @@ get_df.betamfx <- get_df.logitor
   }
 
   # last try
-  if (inherits(dof, "try-error") || is.null(dof)) {
-    dof <- Inf
-    if (verbose) {
-      warning("Could not extract degrees of freedom.", call. = FALSE)
-    }
+  if (inherits(dof, "try-error")) {
+    dof <- NULL
   }
 
+  dof
+}
+
+
+
+#' @importFrom stats logLik
+.model_df <- function(x) {
+  dof <- tryCatch(
+    {
+      attr(stats::logLik(x), "df")
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(dof) || all(is.infinite(dof)) || all(is.na(dof))) {
+    n <- n_parameters(x)
+    dof <- ifelse(model_info(x)$is_linear, n + 1, n)
+  }
 
   dof
 }
