@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Extract degrees of freedom — get_df" />
-<meta property="og:description" content="Estimate or extract (residual) degrees of freedom from regression models." />
+<meta property="og:description" content="Estimate or extract residual or model-based degrees of freedom from regression models." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -122,13 +122,13 @@
     </div>
 
     <div class="ref-description">
-    <p>Estimate or extract (residual) degrees of freedom from regression models.</p>
+    <p>Estimate or extract residual or model-based degrees of freedom from regression models.</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_df</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>get_df</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"any"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>get_df</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"residual"</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,17 +143,17 @@
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Can be <code>"residual"</code>, in which case they are directly taken from the model if available (for Bayesian models, the goal (looking for help to make it happen) would be to refit the model as a frequentist one before extracting the degrees of freedom), <code>"analytical"</code> (degrees of freedom are estimated based on the model type), or <code>"any"</code>, which tries to extract degrees of freedom by any of those methods, whichever succeeds.</p></td>
+      <td><p>Can be <code>"residual"</code> or <code>"model"</code>. <code>"residual"</code>
+tries to extract residual degrees of freedoms. If residual degrees of freedom
+could not be extracted, returns <code>n-k</code> (number of observations minus
+number of parameters). <code>"model"</code> returns model-based degrees of freedom,
+i.e. the number of parameters (+1 for linear models for the sigma-parameter).</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle warnings.</p></td>
     </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Methods for calculating degrees of freedom:</p><ul>
-<li><p><code>"residual"</code> tries to extract residual degrees of freedoms, and returns <code>Inf</code> if residual degrees of freedom could not be extracted.</p></li>
-<li><p><code>"analytical"</code> degrees of freedom are <code>n-k</code> (number of observations minus number of parameters).</p></li>
-<li><p><code>"any"</code> first tries to extract residual degrees of freedom, and if these are not available, extracts analytical degrees of freedom.</p></li>
-</ul>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
