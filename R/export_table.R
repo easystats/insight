@@ -224,16 +224,14 @@ export_table <- function(x,
 .format_basic_table <- function(final, header, sep, caption = NULL, subtitle = NULL, footer = NULL, align = NULL) {
 
   # align table, if requested
-  if (!is.null(align)) {
+  if (!is.null(align) && length(align) == 1) {
 
     for (i in 1:ncol(final)) {
       align_char <- ""
-      if (!is.null(align)) {
-        if (align %in% c("left", "right", "center", "firstleft")) {
-          align_char <- ""
-        } else {
-          align_char <- substr(align, i, i)
-        }
+      if (align %in% c("left", "right", "center", "firstleft")) {
+        align_char <- ""
+      } else {
+        align_char <- substr(align, i, i)
       }
 
       # left alignment, or at least first line only left?
