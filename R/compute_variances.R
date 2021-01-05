@@ -17,7 +17,7 @@
 
   if (faminfo$family %in% c("truncated_nbinom1")) {
     if (verbose) {
-      warning(sprintf("Truncated negative binomial families are currently not supported by `%s`.", name_fun), call. = F)
+      warning(sprintf("Truncated negative binomial families are currently not supported by `%s`.", name_fun), call. = FALSE)
     }
     return(NA)
   }
@@ -30,7 +30,7 @@
   no_random_variance <- FALSE
   if (.is_singular(x, vals, tolerance = tolerance) && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
-      warning(sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singulariy.\n  Solution: Respecify random structure!\n  You may also decrease the 'tolerance' level to enforce the calculation of random effect variances.", name_full), call. = F)
+      warning(sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singulariy.\n  Solution: Respecify random structure!\n  You may also decrease the 'tolerance' level to enforce the calculation of random effect variances.", name_full), call. = FALSE)
     }
     no_random_variance <- TRUE
   }
@@ -493,7 +493,7 @@
 
   if (is.na(mu)) {
     if (verbose) {
-      warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = F)
+      warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = FALSE)
     }
     return(0)
   }
@@ -538,13 +538,13 @@
       )
 
       if (vv < 0 && isTRUE(verbose)) {
-        warning("Model's distribution-specific variance is negative. Results are not reliable.", call. = F)
+        warning("Model's distribution-specific variance is negative. Results are not reliable.", call. = FALSE)
       }
       vv / mu^2
     },
     error = function(x) {
       if (verbose) {
-        warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = F)
+        warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = FALSE)
       }
       0
     }
@@ -719,7 +719,7 @@
     },
     error = function(x) {
       if (verbose) {
-        warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = F)
+        warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = FALSE)
       }
       0
     }

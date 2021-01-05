@@ -7,7 +7,7 @@
 .prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
   if (.is_empty_object(mf)) {
     if (isTRUE(verbose)) {
-      warning("Could not get model data.", call. = F)
+      warning("Could not get model data.", call. = FALSE)
     }
     return(NULL)
   }
@@ -443,7 +443,7 @@
 #
 .get_data_from_modelframe <- function(x, dat, effects) {
   if (.is_empty_object(dat)) {
-    warning("Could not get model data.", call. = F)
+    warning("Could not get model data.", call. = FALSE)
     return(NULL)
   }
   cn <- clean_names(colnames(dat))

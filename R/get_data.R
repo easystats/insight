@@ -901,7 +901,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
         dat <- get(mf)
         switch(
           effects,
-          fixed = dat[, setdiff(colnames(dat), find_random(x, flatten = T)), drop = FALSE],
+          fixed = dat[, setdiff(colnames(dat), find_random(x, flatten = TRUE)), drop = FALSE],
           all = dat,
           random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
         )
