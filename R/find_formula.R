@@ -1454,10 +1454,14 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 .fix_gamm_random_effect <- function(x) {
   g_in_terms <- length(x) > 1 && x[length(x)] == "g"
+  xr_in_terms <- length(x) > 1 && x[length(x)] == "Xr"
   x <- x[!(grepl("(Xr\\.\\d|g\\.\\d)", x) | x %in% c("Xr", "g"))]
   # exceptions, if random effect is named g
   if (!length(x) && isTRUE(g_in_terms)) {
     x <- "g"
+  }
+  if (!length(x) && isTRUE(xr_in_terms)) {
+    x <- "Xr"
   }
   x
 }
