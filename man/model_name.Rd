@@ -37,7 +37,4 @@ if (require("rstanarm")) {
   model_name(stan_glm(Sepal.Length ~ Petal.Width,
   data = iris, refresh = 0, iter = 200))
 }
-# if (require("gamm4")) {
-#   model_name(gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data = iris))
-#}
 }
