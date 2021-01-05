@@ -22,6 +22,12 @@ The residuals, or \code{NULL} if this information could not be accessed.
 \description{
 Returns the residuals from regression models.
 }
+\note{
+This function returns the default type of residuals, i.e. for the
+response from linear models, the deviance residuals for models of class
+\code{glm} etc. To access different types, pass down the \code{type} argument
+(see 'Examples').
+}
 \examples{
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
