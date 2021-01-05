@@ -26,7 +26,7 @@ loglikelihood(x, ...)
 An object of class "logLik", also containing the log-likelihoods for each observation as a "per_observation" attribute  (\code{attributes(get_loglikelihood(x))$per_observation}) when possible. The code was partly inspired from the \href{https://CRAN.R-project.org/package=nonnest2}{\code{nonnest2}} package.
 }
 \description{
-A robust function to compute the log-likelihood of a model. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results when \code{estimator = "ML"} is specified).
+A robust function to compute the log-likelihood of a model, as as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results when \code{estimator = "ML"} is specified).
 }
 \examples{
 x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)

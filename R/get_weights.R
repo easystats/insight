@@ -15,10 +15,18 @@
 #' @examples
 #' data(mtcars)
 #' mtcars$weight <- rnorm(nrow(mtcars), 1, .3)
+#'
+#' # LMs
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars, weights = weight)
 #' get_weights(m)
 #'
 #' get_weights(lm(mpg ~ wt, data = mtcars), null_as_ones = TRUE)
+#'
+#' # GLMs
+#' m <- glm(vs ~ disp + mpg, data = mtcars, weights = weight, family=quasibinomial)
+#' get_weights(m)
+#' m <- glm(cbind(cyl, gear) ~ mpg, data = mtcars, weights = weight, family = binomial)
+#' get_weights(m)
 #' @importFrom stats na.omit
 #' @export
 get_weights <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
