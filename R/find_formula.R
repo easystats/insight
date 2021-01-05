@@ -1491,21 +1491,21 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 
 #' @export
-format.insight_formula <- function(x, what=c("conditional", "random"), ...){
+format.insight_formula <- function(x, what = c("conditional", "random"), ...) {
   # The purpose of this function is to flatten the formula
 
   # Start by first part (conditional by default)
-  t <- format(x[[1]])
+  ft <- format(x[[1]])
 
   # Wrap random in brackets
-  if("random" %in% names(x)){
+  if ("random" %in% names(x)) {
     x[["random"]] <- paste0("(", format(x[["random"]]), ")")
   }
 
   # Add all the components
-  for(part in what[-1]){
-    t <- paste0(t, " + ", format(x[[part]]))
+  for (part in what[-1]) {
+    ft <- paste0(ft, " + ", format(x[[part]]))
   }
 
-  t
+  ft
 }
