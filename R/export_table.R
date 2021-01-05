@@ -204,7 +204,7 @@ export_table <- function(x,
     }
 
     if (format == "text") {
-      out <- .format_basic_table(final, header, sep, caption = caption, subtitle = subtitle, footer = footer)
+      out <- .format_basic_table(final, header, sep, caption = caption, subtitle = subtitle, footer = footer, align = align)
     } else if (format == "markdown") {
       out <- .format_markdown_table(final, x, caption = caption, subtitle = subtitle, footer = footer, align = align)
     }
@@ -221,7 +221,36 @@ export_table <- function(x,
 # plain text formatting ------------------------
 
 
-.format_basic_table <- function(final, header, sep, caption = NULL, subtitle = NULL, footer = NULL) {
+.format_basic_table <- function(final, header, sep, caption = NULL, subtitle = NULL, footer = NULL, align = NULL) {
+
+  # align table, if requested
+  if (!is.null(align)) {
+
+    for (i in 1:ncol(final)) {
+      align_char <- ""
+      if (!is.null(align)) {
+        if (align %in% c("left", "right", "center", "firstleft")) {
+          align_char <- ""
+        } else {
+          align_char <- substr(align, i, i)
+        }
+      }
+
+      # left alignment, or at least first line only left?
+      if (align == "left" || (align == "firstleft" && i == 1) || align_char == "l") {
+        final[, i] <- format(trimws(final[, i]), justify = "left")
+
+        # right-alignment
+      } else if (align == "right" || align_char == "r") {
+        final[, i] <- format(trimws(final[, i]), justify = "right")
+
+        # else, center
+      } else {
+        final[, i] <- format(trimws(final[, i]), justify = "center")
+      }
+    }
+  }
+
   # Transform to character
   rows <- c()
   for (row in 1:nrow(final)) {
