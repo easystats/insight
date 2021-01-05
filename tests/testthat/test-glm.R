@@ -62,6 +62,10 @@ if (require("testthat") &&
     )
   })
 
+  test_that("get_call", {
+    expect_equal(class(get_call(m1)), "call")
+  })
+
   test_that("find_formula", {
     expect_length(find_formula(m1), 1)
     expect_equal(

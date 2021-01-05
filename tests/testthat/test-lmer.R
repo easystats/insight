@@ -413,4 +413,9 @@ if (require("testthat") &&
     expect_identical(find_statistic(m1), "t-statistic")
     expect_identical(find_statistic(m2), "t-statistic")
   })
+
+  test_that("get_call", {
+    expect_equal(class(get_call(m1)), "call")
+    expect_equal(class(get_call(m2)), "call")
+  })
 }
