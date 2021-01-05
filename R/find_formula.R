@@ -1504,7 +1504,9 @@ format.insight_formula <- function(x, what = c("conditional", "random"), ...) {
 
   # Add all the components
   for (part in what[-1]) {
-    ft <- paste0(ft, " + ", format(x[[part]]))
+    if(part %in% names(x)){
+      ft <- paste0(ft, " + ", format(x[[part]]))
+    }
   }
 
   ft

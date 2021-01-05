@@ -43,6 +43,18 @@ get_call.default <- function(x) {
       }
     )
   }
+
+  # For GAMM4
+  if (is.null(cl) && "gam" %in% names(x)) {
+    cl <- tryCatch(
+      {
+        x$gam$formula # Where's the call here?
+      },
+      error = function(x) {
+        NULL
+      }
+    )
+  }
   cl
 }
 
