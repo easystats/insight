@@ -57,7 +57,13 @@ variable (so called fixed-effects regressions). May be abbreviated.}
 The number of parameters in the model.
 }
 \description{
-Returns the number of parameters of a model.
+Returns the number of parameters (coefficients) of a model.
+}
+\note{
+This function returns the number of parameters for the fixed effects
+by default, as returned by \code{find_parameters(x, effects = "fixed")}.
+It does not include \emph{all} estimated model parameters, i.e. auxiliary
+prameters like sigma or dispersion are not counted.
 }
 \examples{
 data(iris)

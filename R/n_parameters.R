@@ -1,6 +1,6 @@
 #' Count number of parameters in a model
 #'
-#' Returns the number of parameters of a model.
+#' Returns the number of parameters (coefficients) of a model.
 #'
 #' @param x A statistical model.
 #' @param effects Should number of parameters for fixed effects, random effects
@@ -13,6 +13,11 @@
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return The number of parameters in the model.
+#'
+#' @note This function returns the number of parameters for the fixed effects
+#' by default, as returned by \code{find_parameters(x, effects = "fixed")}.
+#' It does not include \emph{all} estimated model parameters, i.e. auxiliary
+#' prameters like sigma or dispersion are not counted.
 #'
 #' @examples
 #' data(iris)

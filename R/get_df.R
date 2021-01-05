@@ -238,7 +238,14 @@ get_df.betamfx <- get_df.logitor
 
   if (is.null(dof) || all(is.infinite(dof)) || all(is.na(dof))) {
     n <- n_parameters(x)
-    dof <- ifelse(model_info(x)$is_linear, n + 1, n)
+    extra <- 0
+    mi <- model_info(x)
+
+    if (mi$is_linear || mi$is_negbin) {
+      extra <- extra + 1
+    }
+
+    dof <- n + extra
   }
 
   dof
