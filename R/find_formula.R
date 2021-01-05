@@ -34,7 +34,9 @@
 #'
 #' if (require("lme4")) {
 #'   m <- lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
-#'   find_formula(m)
+#'   f <- find_formula(m)
+#'   f
+#'   format(f)
 #' }
 #' @importFrom stats formula terms as.formula
 #' @export
@@ -1484,4 +1486,26 @@ find_formula.BFBayesFactor <- function(x, ...) {
   if (is.null(f)) return(NULL)
   class(f) <- c("insight_formula", class(f))
   f
+}
+
+
+
+#' @export
+format.insight_formula <- function(x, what=c("conditional", "random"), ...){
+  # The purpose of this function is to flatten the formula
+
+  # Start by first part (conditional by default)
+  t <- format(x[[1]])
+
+  # Wrap random in brackets
+  if("random" %in% names(x)){
+    x[["random"]] <- paste0("(", format(x[["random"]]), ")")
+  }
+
+  # Add all the components
+  for(part in what[-1]){
+    t <- paste0(t, " + ", format(x[[part]]))
+  }
+
+  t
 }

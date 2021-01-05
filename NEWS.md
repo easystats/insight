@@ -13,10 +13,12 @@
 
 ## New functions
 
-* Added `null_as_ones = TRUE` argument to `get_weights()` to return vector of 
+* Added `format()` method for `find_formula()` output to flatten it.
+
+* Added `null_as_ones = TRUE` argument to `get_weights()` to return vector of
   1s instead of `NULL`.
 
-* Added `get_intercept()` as a helper function to easily retrieve the  value 
+* Added `get_intercept()` as a helper function to easily retrieve the  value
   at the intercept.
 
 * Added `get_df()` as a robust alternative to `stats::df.rediuals()`.

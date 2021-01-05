@@ -44,6 +44,8 @@ find_formula(m)
 
 if (require("lme4")) {
   m <- lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
-  find_formula(m)
+  f <- find_formula(m)
+  f
+  format(f)
 }
 }
