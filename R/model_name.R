@@ -3,6 +3,7 @@
 #'
 #' @description Returns the value at the intercept (i.e., the intercept parameter), and \code{NA} if there isn't one.
 #'
+#' @param ... Currently not used.
 #' @inheritParams get_residuals
 #'
 #' @return The value of the intercept.
@@ -26,13 +27,13 @@ model_name <- function(x, ...) {
 }
 
 #' @export
-model_name.default <- function(x, include_formula=TRUE, include_call=FALSE, ...) {
-  if(include_call){
+model_name.default <- function(x, include_formula = TRUE, include_call = FALSE, ...) {
+  if (include_call) {
     return(format(get_call(x)))
   }
 
   name <- class(x)[[1]]
-  if(include_formula){
+  if (include_formula) {
     f <- format(find_formula(x))
     name <- paste0(name, "(", f, ")")
   }

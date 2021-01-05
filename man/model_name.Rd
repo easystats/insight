@@ -9,7 +9,7 @@ model_name(x, ...)
 \arguments{
 \item{x}{A model.}
 
-\item{...}{Passed down to \code{residuals()}, if possible.}
+\item{...}{Currently not used.}
 }
 \value{
 The value of the intercept.
