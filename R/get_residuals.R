@@ -36,18 +36,17 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
 
   res <- tryCatch(
     {
-      x$residuals
+      stats::residuals(x, ...)
     },
     error = function(e) {
       NULL
     }
   )
 
-  # For gamm4 objects
   if (is.null(res)) {
     res <- tryCatch(
       {
-        x$gam$residuals
+        x$residuals
       },
       error = function(e) {
         NULL
@@ -55,10 +54,11 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
     )
   }
 
+  # For gamm4 objects
   if (is.null(res)) {
     res <- tryCatch(
       {
-        stats::residuals(x, ...)
+        x$gam$residuals
       },
       error = function(e) {
         NULL
