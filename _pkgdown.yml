@@ -69,8 +69,10 @@ reference:
   desc: >
     Functions to access specific information from model objects.
   contents:
+  - get_call
   - link_function
   - link_inverse
+  - model_name
   - n_obs
   - n_parameters
 
