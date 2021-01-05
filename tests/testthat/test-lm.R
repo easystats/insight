@@ -50,6 +50,18 @@ if (require("testthat") &&
     expect_identical(link_inverse(m2)(.2), .2)
   })
 
+  test_that("loglik", {
+    expect_equal(get_loglikelihood(m1), logLik(m1), ignore_attr = TRUE)
+    expect_equal(get_loglikelihood(m2), logLik(m2), ignore_attr = TRUE)
+  })
+
+  test_that("get_df", {
+    expect_equal(get_df(m1), df.residual(m1), ignore_attr = TRUE)
+    expect_equal(get_df(m2), df.residual(m2), ignore_attr = TRUE)
+    expect_equal(get_df(m1, type = "model"), attr(logLik(m1), "df"), ignore_attr = TRUE)
+    expect_equal(get_df(m2, type = "model"), attr(logLik(m2), "df"), ignore_attr = TRUE)
+  })
+
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 150)
     expect_equal(
