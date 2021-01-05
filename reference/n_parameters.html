@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Count number of parameters in a model — n_parameters" />
-<meta property="og:description" content="Returns the number of parameters of a model." />
+<meta property="og:description" content="Returns the number of parameters (coefficients) of a model." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -122,7 +122,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Returns the number of parameters of a model.</p>
+    <p>Returns the number of parameters (coefficients) of a model.</p>
     </div>
 
     <pre class="usage"><span class='fu'>n_parameters</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -189,6 +189,13 @@ variable (so called fixed-effects regressions). May be abbreviated.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The number of parameters in the model.</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>This function returns the number of parameters for the fixed effects
+by default, as returned by <code><a href='find_parameters.html'>find_parameters(x, effects = "fixed")</a></code>.
+It does not include <em>all</em> estimated model parameters, i.e. auxiliary
+parameters like sigma or dispersion are not counted. To get the number of
+<em>all estimated</em> parameters, use <code><a href='get_df.html'>get_df(x, type = "model")</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
