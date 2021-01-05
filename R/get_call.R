@@ -24,7 +24,7 @@ get_call <- function(x) {
 
 #' @export
 get_call.default <- function(x) {
-  c <- tryCatch(
+  cl <- tryCatch(
     {
       x$call
     },
@@ -33,8 +33,8 @@ get_call.default <- function(x) {
     }
   )
 
-  if (is.null(c)) {
-    c <- tryCatch(
+  if (is.null(cl)) {
+    cl <- tryCatch(
       {
         x@call
       },
@@ -43,7 +43,7 @@ get_call.default <- function(x) {
       }
     )
   }
-  c
+  cl
 }
 
 
