@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest || Sys.getenv("USER") == "travis") {
+if (.runThisTest) {
   if (require("testthat") && require("insight") && require("mgcv")) {
     set.seed(123)
     dat <- gamSim(1, n = 400, dist = "normal", scale = 2)
