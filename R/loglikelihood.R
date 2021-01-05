@@ -73,7 +73,7 @@ get_loglikelihood.glm <- function(x, ...) {
   predicted <- get_predicted(x)
 
   # Make adjustment for binomial models with matrix as input
-  if(fam == "binomial"){
+  if (fam == "binomial") {
     if (!is.null(ncol(resp))) {
       n <- apply(resp, 1, sum)
       resp <- ifelse(n == 0, 0, resp[, 1] / n)
@@ -120,11 +120,128 @@ get_loglikelihood.glmer <- get_loglikelihood.glm
 
 
 
+
+#' @export
+get_loglikelihood.ivreg <- function(x, ...) {
+  res <- x$residuals
+  p <- x$rank
+  w <- x$weights
+
+  N <- length(res)
+
+  if (is.null(w)) {
+    w <- rep.int(1, N)
+  } else {
+    excl <- w == 0
+    if (any(excl)) {
+      res <- res[!excl]
+      N <- length(res)
+      w <- w[!excl]
+    }
+  }
+  N0 <- N
+
+  val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
+
+  attr(val, "nall") <- N0
+  attr(val, "nobs") <- N
+  attr(val, "df") <- p + 1
+  class(val) <- "logLik"
+
+  val
+}
+
+
+
+#' @export
+get_loglikelihood.plm <- function(x, ...) {
+  res <- x$residuals
+  w <- x$weights
+
+  N <- length(res)
+
+  if (is.null(w)) {
+    w <- rep.int(1, N)
+  } else {
+    excl <- w == 0
+    if (any(excl)) {
+      res <- res[!excl]
+      N <- length(res)
+      w <- w[!excl]
+    }
+  }
+  N0 <- N
+
+  val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
+
+  attr(val, "nall") <- N0
+  attr(val, "nobs") <- N
+  attr(val, "df") <- get_df(x, type = "model")
+  class(val) <- "logLik"
+
+  val
+}
+
+#' @export
+get_loglikelihood.cpglm <- get_loglikelihood.plm
+
+
+
+
+#' @export
+get_loglikelihood.iv_robust <- function(x, ...) {
+  res <- get_residuals(x)
+  p <- x$rank
+  w <- x$weights
+
+  N <- length(res)
+
+  if (is.null(w)) {
+    w <- rep.int(1, N)
+  } else {
+    excl <- w == 0
+    if (any(excl)) {
+      res <- res[!excl]
+      N <- length(res)
+      w <- w[!excl]
+    }
+  }
+  N0 <- N
+
+  val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
+
+  attr(val, "nall") <- N0
+  attr(val, "nobs") <- N
+  attr(val, "df") <- p + 1
+  class(val) <- "logLik"
+
+  val
+}
+
+
+
+
+#' @export
+get_loglikelihood.svycoxph <- function(x, ...) {
+  val <- x$ll[2]
+  attr(val, "nall") <- n_obs(x)
+  attr(val, "nobs") <- n_obs(x)
+  attr(val, "df") <- x$degf.resid
+  class(val) <- "logLik"
+
+  val
+}
+
+
+
+
+
+
 # Helpers -----------------------------------------------------------------
 
 .loglikelihood_prep_output <- function(x, lls=NA, ...) {
   # Prepare output
-  if(all(is.na(lls))){
+  if (all(is.na(lls))) {
     out <- stats::logLik(x, ...)
     attr(out, "per_obs") <- NA
   } else{
