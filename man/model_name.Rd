@@ -4,21 +4,27 @@
 \alias{model_name}
 \title{Name the model}
 \usage{
-model_name(x, ...)
+model_name(x, include_formula = TRUE, include_call = FALSE, ...)
 }
 \arguments{
 \item{x}{A model.}
 
+\item{include_formula}{Should the name include the model's formula.}
+
+\item{include_call}{If \code{TRUE}, will return the function call as a name.}
+
 \item{...}{Currently not used.}
 }
 \value{
-The value of the intercept.
+A character string of a name.
 }
 \description{
 Returns the value at the intercept (i.e., the intercept parameter), and \code{NA} if there isn't one.
 }
 \examples{
-model_name(lm(Sepal.Length ~ Petal.Width, data = iris))
+m <- lm(Sepal.Length ~ Petal.Width, data = iris)
+model_name(m)
+model_name(m, include_call=TRUE)
 
 if (require("lme4")) {
   model_name(lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))

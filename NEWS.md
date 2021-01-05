@@ -13,6 +13,8 @@
 
 ## New functions
 
+* Added `model_name()` function that returns the model's "name".
+
 * Added `format()` method for `find_formula()` output to flatten it.
 
 * Added `null_as_ones = TRUE` argument to `get_weights()` to return vector of
