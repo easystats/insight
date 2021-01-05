@@ -1464,6 +1464,9 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 
 .fix_gamm4_random_effect <- function(f) {
+  if (inherits(f, "formula")) {
+    f <- list(f)
+  }
   len <- length(f)
   keep <- sapply(f, function(i) {
     i <- gsub("(~1| | \\|)", "", deparse(i))
@@ -1471,7 +1474,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
   })
   f <- .compact_list(f[keep])
   # exceptions, if random effect is named Xr
-  if (!length(f) && len > 0) {
+  if (!length(f) && len > 1) {
     f <- list(stats::as.formula("~1 | Xr"))
   }
   f
