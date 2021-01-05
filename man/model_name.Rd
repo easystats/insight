@@ -2,35 +2,39 @@
 % Please edit documentation in R/model_name.R
 \name{model_name}
 \alias{model_name}
+\alias{model_name.default}
 \title{Name the model}
 \usage{
-model_name(x, include_formula = TRUE, include_call = FALSE, ...)
+model_name(x, ...)
+
+\method{model_name}{default}(x, include_formula = FALSE, include_call = FALSE, ...)
 }
 \arguments{
 \item{x}{A model.}
 
+\item{...}{Currently not used.}
+
 \item{include_formula}{Should the name include the model's formula.}
 
 \item{include_call}{If \code{TRUE}, will return the function call as a name.}
-
-\item{...}{Currently not used.}
 }
 \value{
-A character string of a name.
+A character string of a name (which usually equals the model's class attribute).
 }
 \description{
-Returns the value at the intercept (i.e., the intercept parameter), and \code{NA} if there isn't one.
+Returns the "name" (class attribute) of a model, possibly including further information.
 }
 \examples{
 m <- lm(Sepal.Length ~ Petal.Width, data = iris)
 model_name(m)
-model_name(m, include_call=TRUE)
+model_name(m, include_formula = TRUE)
+model_name(m, include_call = TRUE)
 
 if (require("lme4")) {
-  model_name(lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))
+  model_name(lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))
 }
 if (require("rstanarm")) {
-  model_name(rstanarm::stan_glm(Sepal.Length ~ Petal.Width,
+  model_name(stan_glm(Sepal.Length ~ Petal.Width,
   data = iris, refresh = 0, iter = 200))
 }
 # if (require("gamm4")) {
