@@ -246,7 +246,7 @@ export_table <- function(x,
 
         # else, center
       } else {
-        final[, i] <- format(trimws(final[, i]), justify = "center")
+        final[, i] <- format(trimws(final[, i]), justify = "centre")
       }
     }
   }
