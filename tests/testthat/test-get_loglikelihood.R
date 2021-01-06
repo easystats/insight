@@ -10,6 +10,11 @@ if (require("testthat") && require("insight") && require("nonnest2")) {
     testthat::expect_equal(attributes(ll)$df, attributes(ll2)$df)
     testthat::expect_equal(sum(attributes(ll)$per_obs - nonnest2::llcont(x)), 0)
 
+    # REML
+    ll <- loglikelihood(x, estimator = "REML")
+    ll2 <- stats::logLik(x, REML=TRUE)
+    testthat::expect_equal(as.numeric(ll), as.numeric(ll2))
+
     # With weights
     x <- lm(Sepal.Length ~ Petal.Width + Species, data=iris, weights=Petal.Length)
     ll <- loglikelihood(x, estimator = "ML")

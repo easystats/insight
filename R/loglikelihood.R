@@ -2,7 +2,8 @@
 #'
 #' A robust function to compute the log-likelihood of a model, as as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results when \code{estimator = "ML"} is specified).
 #'
-#' @param estimator Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator (scaling by the degrees of freedom, i.e., \code{n-k}). In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors. See also \href{https://stats.stackexchange.com/questions/155474/why-does-lrtest-not-match-anovatest-lrt}{this thread} about a concrete application of these variants.
+#' @param estimator Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator.
+#' @param REML This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.
 #' @param ... Passed down to \code{logLik()}, if possible.
 #' @inheritParams get_residuals
 #'
@@ -12,6 +13,7 @@
 #' x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
 #'
 #' get_loglikelihood(x, estimator = "ML") # Equivalent to stats::logLik(x)
+#' get_loglikelihood(x, estimator = "REML") # Equivalent to stats::logLik(x, REML=TRUE)
 #' get_loglikelihood(x, estimator = "OLS")
 #' @export
 get_loglikelihood <- function(x, ...) {
@@ -27,25 +29,43 @@ loglikelihood <- get_loglikelihood
 #' @importFrom stats logLik
 #' @export
 get_loglikelihood.default <- function(x, ...) {
-  .loglikelihood_prep_output(x, lls=NA, ...)
+  .loglikelihood_prep_output(x, lls = NA, ...)
 }
 
 
 
 #' @rdname get_loglikelihood
 #' @export
-get_loglikelihood.lm <- function(x, estimator = "ML", ...) {
+get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
 
-  # Calculate s2
-  s <- as.numeric(get_sigma(x))
-  if (tolower(estimator) == "ols") {
-    s2 <- s^2  # OLS
-  } else{
-    s2 <- (s * sqrt(get_df(x) / n_obs(x)))^2  # ML
-  }
+  # Replace arg if compatibility base R is activated
+  if (REML) estimator <- "REML"
 
   # Get weights
   w <- get_weights(x, null_as_ones = TRUE)
+
+  # Calculate s2 (if possible, return model's ll otherwise - for REML)
+  if (is.character(estimator)) {
+    estimator <- tolower(estimator)
+
+    s <- as.numeric(get_sigma(x))
+    if (estimator == "ols") {
+      s2 <- s^2 # OLS
+
+    } else if (estimator == "ml") {
+      s2 <- (s * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
+
+    } else if (estimator == "reml") {
+      N <- get_df(x, type = "residual")  # n_obs - p
+      val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x)^2))))
+      p <- x$rank  # Can we replace this by n_parameters?
+      ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
+      return(.loglikelihood_prep_output(x, ll))
+
+    } else {
+      stop("'estimator' should be one of 'ML', 'REML' or 'OLS'.")
+    }
+  }
 
   # Get individual log-likelihoods
   lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x)^2) / s2))
@@ -239,14 +259,16 @@ get_loglikelihood.svycoxph <- function(x, ...) {
 
 # Helpers -----------------------------------------------------------------
 
-.loglikelihood_prep_output <- function(x, lls=NA, ...) {
+.loglikelihood_prep_output <- function(x, lls = NA, ...) {
   # Prepare output
   if (all(is.na(lls))) {
     out <- stats::logLik(x, ...)
     attr(out, "per_obs") <- NA
-  } else{
+  } else if (length(lls) == 1) {
+    out <- lls
+  } else {
     out <- sum(lls)
-    attr(out, "per_obs") <- lls  # This is useful for some models comparison tests
+    attr(out, "per_obs") <- lls # This is useful for some models comparison tests
   }
 
   # Some attributes present in stats::logLik (not sure what nall does)
@@ -254,6 +276,6 @@ get_loglikelihood.svycoxph <- function(x, ...) {
 
   # See https://stats.stackexchange.com/questions/393016/what-does-the-degree-of-freedom-df-mean-in-the-results-of-log-likelihood-logl
   attr(out, "df") <- get_df(x, type = "model")
-  class(out) <- c("logLik", class(x))  # The class returned by stats::logLik(x)
+  class(out) <- c("logLik", class(x)) # The class returned by stats::logLik(x)
   out
 }
