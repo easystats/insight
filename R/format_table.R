@@ -230,10 +230,22 @@ parameters_table <- format_table
 .format_freq_stats <- function(x) {
   for (stats in c("t", "Chi2")) {
     if (stats %in% names(x) && "df" %in% names(x)) {
+      if (is.character(x$df)) {
+        x$df[x$df == ""] <- NA_character_
+      }
       df <- stats::na.omit(unique(x$df))
       if (length(df) == 1 && !all(is.infinite(df))) {
         names(x)[names(x) == stats] <- paste0(stats, "(", df, ")")
         x$df <- NULL
+      }
+    } else if (stats %in% names(x) && "df_error" %in% names(x)) {
+      if (is.character(x$df_error)) {
+        x$df_error[x$df_error == ""] <- NA_character_
+      }
+      df <- stats::na.omit(unique(x$df_error))
+      if (length(df) == 1 && !all(is.infinite(df))) {
+        names(x)[names(x) == stats] <- paste0(stats, "(", df, ")")
+        x$df_error <- NULL
       }
     }
   }
