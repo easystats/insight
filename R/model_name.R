@@ -42,3 +42,8 @@ model_name.default <- function(x, include_formula = FALSE, include_call = FALSE,
   }
   name
 }
+
+#' @export
+model_name.list <- function(x, include_formula = FALSE, include_call = FALSE, ...) {
+  sapply(x, model_name, include_formula=include_formula, include_call=include_call, ...)
+}
