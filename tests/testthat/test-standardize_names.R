@@ -30,16 +30,20 @@ if (require("testthat") &&
   })
 
 
-  # t-test (this is yet to be finalized)
-  z <- as.data.frame(parameters::model_parameters(t.test(1:10, y = c(7:20))))
+  ## TODO remove once on CRAN
 
-  expect_equal(
-    names(standardize_names(z, style = "broom")),
-    c(
-      "parameter1", "parameter2", "mean.parameter1", "mean.parameter2",
-      "estimate", "conf.low", "conf.high", "statistic", "df.error", "p.value", "method"
+  # t-test (this is yet to be finalized)
+  if (packageVersion("effectsize") > "0.4.1") {
+    z <- as.data.frame(parameters::model_parameters(t.test(1:10, y = c(7:20))))
+
+    expect_equal(
+      names(standardize_names(z, style = "broom")),
+      c(
+        "parameter1", "parameter2", "mean.parameter1", "mean.parameter2",
+        "estimate", "conf.low", "conf.high", "statistic", "df.error", "p.value", "method"
+      )
     )
-  )
+  }
 
   # chi-square test
   chi <- as.data.frame(parameters::model_parameters(chisq.test(matrix(c(12, 5, 7, 7), ncol = 2))))
