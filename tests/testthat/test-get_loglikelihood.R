@@ -55,4 +55,35 @@ if (require("testthat") && require("insight") && require("nonnest2")) {
       testthat::expect_equal(attributes(ll)$df, attributes(ll2)$df)
     }
   })
+
+  test_that("get_loglikelihood - ivreg", {
+    if(require("ivreg")){
+      data("CigaretteDemand", package = "ivreg")
+      x <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome), data = CigaretteDemand)
+
+      ll <- loglikelihood(x)
+      testthat::expect_equal(as.numeric(ll), 13.26255, tol=.0001)
+    }
+  })
+
+  test_that("get_loglikelihood - plm", {
+    if(require("plm")){
+      data("Produc", package = "plm")
+      x <- plm::plm(log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp,
+                data = Produc, index = c("state","year"))
+
+      ll <- loglikelihood(x)
+      testthat::expect_equal(as.numeric(ll), 1534.532, tol=.0001)
+    }
+  })
+
+  test_that("get_loglikelihood - iv_robust", {
+    if(require("estimatr")){
+      data(mtcars)
+      x <- estimatr::iv_robust(mpg ~ gear + cyl | carb + wt, data = mtcars)
+
+      # ll <- loglikelihood(x)  # Doesn't work because of extract residuals
+      # testthat::expect_equal(as.numeric(ll), 1534.532, tol=.0001)
+    }
+  })
 }

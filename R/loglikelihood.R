@@ -73,6 +73,27 @@ get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
   .loglikelihood_prep_output(x, lls)
 }
 
+#' @export
+get_loglikelihood.ivreg <- get_loglikelihood.lm
+
+
+
+
+#' @export
+get_loglikelihood.plm <- function(x, ...) {
+  res <- get_residuals(x)
+  w <- get_weights(x, null_as_ones = TRUE)
+  N <- n_obs(x)
+  N0 <- N
+
+  ll <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
+
+  .loglikelihood_prep_output(x, lls = ll, df = get_df(x, type = "model"))
+}
+
+
+#' @export
+get_loglikelihood.cpglm <- get_loglikelihood.plm
 
 
 
@@ -141,76 +162,13 @@ get_loglikelihood.glmer <- get_loglikelihood.glm
 
 
 
-#' @export
-get_loglikelihood.ivreg <- function(x, ...) {
-  res <- x$residuals
-  p <- x$rank
-  w <- x$weights
-
-  N <- length(res)
-
-  if (is.null(w)) {
-    w <- rep.int(1, N)
-  } else {
-    excl <- w == 0
-    if (any(excl)) {
-      res <- res[!excl]
-      N <- length(res)
-      w <- w[!excl]
-    }
-  }
-  N0 <- N
-
-  val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
-
-  attr(val, "nall") <- N0
-  attr(val, "nobs") <- N
-  attr(val, "df") <- p + 1
-  class(val) <- "logLik"
-
-  val
-}
-
-
-
-#' @export
-get_loglikelihood.plm <- function(x, ...) {
-  res <- x$residuals
-  w <- x$weights
-
-  N <- length(res)
-
-  if (is.null(w)) {
-    w <- rep.int(1, N)
-  } else {
-    excl <- w == 0
-    if (any(excl)) {
-      res <- res[!excl]
-      N <- length(res)
-      w <- w[!excl]
-    }
-  }
-  N0 <- N
-
-  val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
-
-  attr(val, "nall") <- N0
-  attr(val, "nobs") <- N
-  attr(val, "df") <- get_df(x, type = "model")
-  class(val) <- "logLik"
-
-  val
-}
-
-#' @export
-get_loglikelihood.cpglm <- get_loglikelihood.plm
 
 
 
 
 #' @export
 get_loglikelihood.iv_robust <- function(x, ...) {
-  res <- get_residuals(x)
+  res <- get_residuals(x)  # This doesn't work
   p <- x$rank
   w <- x$weights
 
@@ -243,13 +201,7 @@ get_loglikelihood.iv_robust <- function(x, ...) {
 
 #' @export
 get_loglikelihood.svycoxph <- function(x, ...) {
-  val <- x$ll[2]
-  attr(val, "nall") <- n_obs(x)
-  attr(val, "nobs") <- n_obs(x)
-  attr(val, "df") <- x$degf.resid
-  class(val) <- "logLik"
-
-  val
+  .loglikelihood_prep_output(x, lls = x$ll[2], df = x$degf.resid)
 }
 
 
@@ -259,7 +211,7 @@ get_loglikelihood.svycoxph <- function(x, ...) {
 
 # Helpers -----------------------------------------------------------------
 
-.loglikelihood_prep_output <- function(x, lls = NA, ...) {
+.loglikelihood_prep_output <- function(x, lls = NA, df = NULL, ...) {
   # Prepare output
   if (all(is.na(lls))) {
     out <- stats::logLik(x, ...)
@@ -275,7 +227,10 @@ get_loglikelihood.svycoxph <- function(x, ...) {
   attr(out, "nall") <- attr(out, "nobs") <- n_obs(x)
 
   # See https://stats.stackexchange.com/questions/393016/what-does-the-degree-of-freedom-df-mean-in-the-results-of-log-likelihood-logl
-  attr(out, "df") <- get_df(x, type = "model")
-  class(out) <- c("logLik", class(x)) # The class returned by stats::logLik(x)
+  if(is.null(df)) df <- get_df(x, type = "model")
+  attr(out, "df") <- df
+
+  # Make of same class as returned by stats::logLik(x)
+  class(out) <- c("logLik", class(x))
   out
 }
