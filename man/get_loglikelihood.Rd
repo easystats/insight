@@ -22,7 +22,7 @@ loglikelihood(x, ...)
 
 \item{estimator}{Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator.}
 
-\item{REML}{This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.}
+\item{REML}{This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwrite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.}
 }
 \value{
 An object of class "logLik", also containing the log-likelihoods for each observation as a "per_observation" attribute  (\code{attributes(get_loglikelihood(x))$per_observation}) when possible. The code was partly inspired from the \href{https://CRAN.R-project.org/package=nonnest2}{\code{nonnest2}} package.

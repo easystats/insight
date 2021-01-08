@@ -30,7 +30,7 @@ get_residuals <- function(x, ...) {
 
 
 #' @rdname get_residuals
-#' @importFrom stats predict residuals
+#' @importFrom stats predict residuals fitted
 #' @export
 get_residuals.default <- function(x, verbose = TRUE, ...) {
 
@@ -70,6 +70,19 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
     res <- tryCatch(
       {
         pred <- stats::predict(x, type = "response")
+        observed <- .factor_to_numeric(get_response(x))
+        observed - pred
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
+
+  if (is.null(res)) {
+    res <- tryCatch(
+      {
+        pred <- stats::fitted(x)
         observed <- .factor_to_numeric(get_response(x))
         observed - pred
       },

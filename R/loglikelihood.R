@@ -3,7 +3,7 @@
 #' A robust function to compute the log-likelihood of a model, as as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results when \code{estimator = "ML"} is specified).
 #'
 #' @param estimator Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator.
-#' @param REML This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.
+#' @param REML This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwrite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.
 #' @param ... Passed down to \code{logLik()}, if possible.
 #' @inheritParams get_residuals
 #'
