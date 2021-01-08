@@ -37,8 +37,7 @@ if (require("testthat") &&
     names(standardize_names(z, style = "broom")),
     c(
       "parameter1", "parameter2", "mean.parameter1", "mean.parameter2",
-      "estimate", "statistic", "df.error", "p.value", "conf.low", "conf.high",
-      "method"
+      "estimate", "conf.low", "conf.high", "statistic", "df.error", "p.value", "method"
     )
   )
 
