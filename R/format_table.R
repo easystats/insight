@@ -220,6 +220,9 @@ parameters_table <- format_table
     x$Deviance_error <- format_value(x$Deviance_error, protect_integers = TRUE)
     names(x)[names(x) == "Deviance_error"] <- "Deviance (error)"
   }
+  if ("Power" %in% names(x)) {
+    x$Power <- format_value(x$Power, as_percent = TRUE, digits = 1)
+  }
   x
 }
 
