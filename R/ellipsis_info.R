@@ -5,13 +5,14 @@
 #' assigning different classes to the list of objects.
 #'
 #' @param objects,... Arbitrary number of objects.
+#' @param only_models Only keep supported models (default to \code{TRUE}).
 #'
 #' @examples
-#' m1 <- lm(Sepal.Length ~ Petal.Width + Species, data=iris)
-#' m2 <- lm(Sepal.Length ~ Species, data=iris)
-#' m3 <- lm(Sepal.Length ~ Petal.Width, data=iris)
-#' m4 <- lm(Sepal.Length ~ 1, data=iris)
-#' m5 <- lm(Petal.Width ~ 1, data=iris)
+#' m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
+#' m2 <- lm(Sepal.Length ~ Species, data = iris)
+#' m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+#' m4 <- lm(Sepal.Length ~ 1, data = iris)
+#' m5 <- lm(Petal.Width ~ 1, data = iris)
 #'
 #' objects <- ellipsis_info(m1, m2, m3, m4)
 #' class(objects)
@@ -21,12 +22,36 @@
 #'
 #' objects <- ellipsis_info(m1, m2, m5)
 #' attributes(objects)$same_response
+#'
+#' # Lavaan Models
+#' if (require("lavaan")) {
+#'   structure <- " visual  =~ x1 + x2 + x3
+#'                  textual =~ x4 + x5 + x6
+#'                  speed   =~ x7 + x8 + x9
+#'
+#'                   visual ~~ textual + speed "
+#'   m1 <- lavaan::sem(structure, data = HolzingerSwineford1939)
+#'
+#'   structure <- " visual  =~ x1 + x2 + x3
+#'                  textual =~ x4 + x5 + x6
+#'                  speed   =~ x7 + x8 + x9
+#'
+#'                   visual ~~ 0 * textual + speed "
+#'   m2 <- lavaan::sem(structure, data = HolzingerSwineford1939)
+#'
+#'   structure <- " x1  =~ mpg + cyl
+#'                  x2 =~ gear + am "
+#'
+#'   m3 <- lavaan::sem(structure, data = mtcars)
+#'
+#'   ellipsis_info(m1, m2, m3)
+#' }
 #' @export
 ellipsis_info <- function(objects, ...) {
   UseMethod("ellipsis_info")
 }
 
-
+#' @rdname ellipsis_info
 #' @export
 ellipsis_info.default <- function(..., only_models = TRUE) {
   # Create list with names
@@ -36,19 +61,23 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
 
   # Check whether all are models
   is_model <- sapply(objects, insight::is_model)
-  class(objects) <- c("ListModels", class(objects))
 
-  if (sum(is_model == FALSE) > 1) {
-    if (only_models) {
-      warning(paste(paste0(object_names[is_model == TRUE], collapse = ", "),
-                    "are not supported models and have been dropped."))
-      objects <- objects[is_model]
-      object_names <- object_names[is_model]
-    } else{
-      class(objects) <- c("ListObjects", class(objects))
-    }
+  # Drop non-models if need be
+  if (only_models && any(is_model == FALSE)) {
+    warning(paste(
+      paste0(object_names[is_model == TRUE], collapse = ", "),
+      "are not supported models and have been dropped."
+    ))
+    objects <- objects[is_model]
+    object_names <- object_names[is_model]
   }
-  attr(objects, "is_model") <- is_model
+
+  # Add class
+  if (all(is_model)) {
+    class(objects) <- c("ListModels", class(objects))
+  } else {
+    class(objects) <- c("ListObjects", class(objects))
+  }
 
   # Now objects is of class ListObjects or ListModels, so dispatching on the appropriate method
   ellipsis_info(objects)
@@ -61,32 +90,31 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
 # ListObjects and ListModels ----------------------------------------------
 
 
-#' @rdname ellipsis_info
+
 #' @export
-ellipsis_info.ListObjects <- function(objects, ...){
+ellipsis_info.ListObjects <- function(objects, ...) {
   # Do nothing
   objects
 }
 
 
-#' @rdname ellipsis_info
+
 #' @export
-ellipsis_info.ListModels <- function(objects, ...){
-  # Regressions
-  # TODO: model_info(x)$is_regression is not yet implemented
-  # is_regression <- sapply(objects, function(x) insight::model_info(x)$is_regression)
-  is_regression <- rep(TRUE, length(objects))
-  all_regressions <- all(is_regression)
+ellipsis_info.ListModels <- function(objects, ...) {
 
-  if (all_regressions) {
+  # Lavaan
+  if (all(sapply(objects, inherits, what = "lavaan"))) {
+    class(objects) <- c("ListLavaan", class(objects))
+
+    # Regressions
+    # TODO: model_info(x)$is_regression is not yet implemented
+    # is_regression <- sapply(objects, function(x) insight::model_info(x)$is_regression)
+  } else if (all(rep(TRUE, length(objects)))) {
     class(objects) <- c("ListRegressions", class(objects))
-  }
 
-  # SEM
-  # TODO: Add model_info(x)$is_sem or something?
-
-  if (all_regressions == FALSE) {  # Later add '& all_sem == FALSE & all_whatnot == FALSE' etc.
-    class(objects) <- c("ListVariousModels", class(objects))
+    # Mixed bag
+  } else {
+    class(objects) <- c("ListVarious", class(objects))
   }
 
   # Dispatch on the next appropriate method
@@ -96,17 +124,26 @@ ellipsis_info.ListModels <- function(objects, ...){
 
 # ListRegressions ---------------------------------------------------------
 
-#' @rdname ellipsis_info
+
+
+
 #' @export
-ellipsis_info.ListVariousModels <- function(objects, ...){
-  # Do nothing for now, but later there could be specific methods
-  # For instance to check the nesting of SEM models or such
+ellipsis_info.ListVarious <- function(objects, ...) {
+  # Do nothing (for now?)
   objects
 }
 
-#' @rdname ellipsis_info
+
 #' @export
-ellipsis_info.ListRegressions <- function(objects, ...){
+ellipsis_info.ListLavaan <- function(objects, ...) {
+  # TODO: check the nesting
+  objects
+}
+
+
+
+#' @export
+ellipsis_info.ListRegressions <- function(objects, ...) {
   object_names <- names(objects)
 
   # Check if same outcome
@@ -132,7 +169,7 @@ ellipsis_info.ListRegressions <- function(objects, ...){
   if (all(same_response) & all(is_nested)) {
     class(objects) <- c("ListNestedRegressions", class(objects))
     attr(objects, "is_nested") <- TRUE
-  } else{
+  } else {
     class(objects) <- c("ListNonNestedRegressions", class(objects))
     attr(objects, "is_nested") <- FALSE
   }
