@@ -44,29 +44,28 @@ get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
   # Get weights
   w <- get_weights(x, null_as_ones = TRUE)
 
-  # Calculate s2 (if possible, return model's ll otherwise - for REML)
-  if (is.character(estimator)) {
-    estimator <- tolower(estimator)
+  # Get LogLikelihood
+  estimator <- tolower(estimator)
 
-    s <- as.numeric(get_sigma(x))
-    if (estimator == "ols") {
-      s2 <- s^2 # OLS
-
-    } else if (estimator == "ml") {
-      s2 <- (s * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
-
-    } else if (estimator == "reml") {
-      N <- get_df(x, type = "residual")  # n_obs - p
-      val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x)^2))))
-      p <- x$rank  # Can we replace this by n_parameters?
-      ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
-      return(.loglikelihood_prep_output(x, ll))
-
-    } else {
-      stop("'estimator' should be one of 'ML', 'REML' or 'OLS'.")
-    }
+  # REML (directly returned)
+  # TODO: Find a way of reversing this formula to pull the sums out and get individual lls
+  if (estimator == "reml") {
+    N <- get_df(x, type = "residual") # n_obs - p
+    val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x)^2))))
+    p <- x$rank # Can we replace this by n_parameters?
+    ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
+    return(.loglikelihood_prep_output(x, ll))
   }
 
+  # Get S2
+  s <- as.numeric(get_sigma(x))
+  if (estimator == "ols") {
+    s2 <- s^2
+  } else if (estimator == "ml") {
+    s2 <- (s * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
+  } else {
+    stop("'estimator' should be one of 'ML', 'REML' or 'OLS'.")
+  }
   # Get individual log-likelihoods
   lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x)^2) / s2))
 
@@ -168,7 +167,7 @@ get_loglikelihood.glmer <- get_loglikelihood.glm
 
 #' @export
 get_loglikelihood.iv_robust <- function(x, ...) {
-  res <- get_residuals(x)  # This doesn't work
+  res <- get_residuals(x) # This doesn't work
   p <- x$rank
   w <- x$weights
 
@@ -227,7 +226,7 @@ get_loglikelihood.svycoxph <- function(x, ...) {
   attr(out, "nall") <- attr(out, "nobs") <- n_obs(x)
 
   # See https://stats.stackexchange.com/questions/393016/what-does-the-degree-of-freedom-df-mean-in-the-results-of-log-likelihood-logl
-  if(is.null(df)) df <- get_df(x, type = "model")
+  if (is.null(df)) df <- get_df(x, type = "model")
   attr(out, "df") <- df
 
   # Make of same class as returned by stats::logLik(x)
