@@ -34,6 +34,16 @@ get_residuals <- function(x, ...) {
 #' @export
 get_residuals.default <- function(x, verbose = TRUE, ...) {
 
+  # setup, check if user requested specific type of residuals
+  # later, we can only catch response residuals, in such cases, give warning
+  # when type is not "response"...
+
+  dot_args <- list(...)
+  no_response_resid <- !is.null(dot_args[["type"]]) && dot_args[["type"]] != "response"
+  res_type <- dot_args[["type"]]
+  yield_warning <- FALSE
+
+
   res <- tryCatch(
     {
       stats::residuals(x, ...)
@@ -69,6 +79,7 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
   if (is.null(res)) {
     res <- tryCatch(
       {
+        yield_warning <- no_response_resid && verbose
         pred <- stats::predict(x, type = "response")
         observed <- .factor_to_numeric(get_response(x))
         observed - pred
@@ -82,6 +93,7 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
   if (is.null(res)) {
     res <- tryCatch(
       {
+        yield_warning <- no_response_resid && verbose
         pred <- stats::fitted(x)
         observed <- .factor_to_numeric(get_response(x))
         observed - pred
@@ -95,7 +107,10 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
   if (is.null(res) || all(is.na(res))) {
     if (verbose) warning("Can't extract residuals from model.")
     res <- NULL
+  } else if (yield_warning) {
+    warning(paste0("Can't extract '", res_type, "' residuals. Returning response residuals."), call. = FALSE)
   }
+
 
   res
 }

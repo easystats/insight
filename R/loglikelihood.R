@@ -167,7 +167,7 @@ get_loglikelihood.glmer <- get_loglikelihood.glm
 
 #' @export
 get_loglikelihood.iv_robust <- function(x, ...) {
-  res <- get_residuals(x) # This doesn't work
+  res <- get_residuals(x)
   p <- x$rank
   w <- x$weights
 
