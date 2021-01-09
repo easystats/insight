@@ -151,7 +151,7 @@ get_varcov.glmx <- function(x, component = c("all", "conditional", "extra"), ...
   vc <- stats::vcov(object = x)
 
   if (component != "all") {
-    keep <- match(insight::find_parameters(x)[[component]], rownames(vc))
+    keep <- match(find_parameters(x)[[component]], rownames(vc))
     vc <- vc[keep, keep, drop = FALSE]
   }
   .process_vcov(vc)

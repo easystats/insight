@@ -108,7 +108,7 @@ ellipsis_info.ListModels <- function(objects, ...) {
 
     # Regressions
     # TODO: model_info(x)$is_regression is not yet implemented
-    # is_regression <- sapply(objects, function(x) insight::model_info(x)$is_regression)
+    # is_regression <- sapply(objects, function(x) model_info(x)$is_regression)
   } else if (all(rep(TRUE, length(objects)))) {
     class(objects) <- c("ListRegressions", class(objects))
 
@@ -148,10 +148,10 @@ ellipsis_info.ListRegressions <- function(objects, ...) {
 
   # Check if same outcome
   same_response <- c()
-  outcome <- insight::get_response(objects[[1]])
+  outcome <- get_response(objects[[1]])
   for (i in 2:length(object_names)) {
     rez <- FALSE
-    new_outcome <- insight::get_response(objects[[i]])
+    new_outcome <- get_response(objects[[i]])
     if (length(outcome) == length(new_outcome)) {
       if (sum(outcome - new_outcome) == 0) {
         rez <- TRUE
@@ -162,13 +162,19 @@ ellipsis_info.ListRegressions <- function(objects, ...) {
   attr(objects, "same_response") <- all(same_response)
 
   # Check if nested
-  is_nested <- c()
-  for (i in 2:length(object_names)) {
-    is_nested <- c(is_nested, .nested_regressions(objects[[i - 1]], objects[[i]]))
+  is_nested_increasing <- is_nested_decreasing <- c()
+  len <- length(objects)
+  for (i in 2:len) {
+    is_nested_decreasing <- c(is_nested_decreasing, .nested_regressions(objects[[i - 1]], objects[[i]]))
+    is_nested_increasing <- c(is_nested_increasing, .nested_regressions(objects[[len + 2 - i]], objects[[len + 1 - i]]))
   }
-  if (all(same_response) & all(is_nested)) {
+  is_nested <- all(is_nested_decreasing) || all(is_nested_increasing)
+
+  if (all(same_response) & is_nested) {
     class(objects) <- c("ListNestedRegressions", class(objects))
     attr(objects, "is_nested") <- TRUE
+    attr(objects, "is_nested_increasing") <- all(is_nested_increasing)
+    attr(objects, "is_nested_decreasing") <- all(is_nested_decreasing)
   } else {
     class(objects) <- c("ListNonNestedRegressions", class(objects))
     attr(objects, "is_nested") <- FALSE

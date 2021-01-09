@@ -1855,6 +1855,6 @@ get_statistic.coeftest <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
-  attr(out, "statistic") <- insight::find_statistic(x)
+  attr(out, "statistic") <- find_statistic(x)
   out
 }
