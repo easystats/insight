@@ -2,24 +2,17 @@
 % Please edit documentation in R/ellipsis_info.R
 \name{ellipsis_info}
 \alias{ellipsis_info}
-\alias{ellipsis_info.ListObjects}
-\alias{ellipsis_info.ListModels}
-\alias{ellipsis_info.ListVariousModels}
-\alias{ellipsis_info.ListRegressions}
+\alias{ellipsis_info.default}
 \title{Gather information about objects in ellipsis (dot dot dot)}
 \usage{
 ellipsis_info(objects, ...)
 
-\method{ellipsis_info}{ListObjects}(objects, ...)
-
-\method{ellipsis_info}{ListModels}(objects, ...)
-
-\method{ellipsis_info}{ListVariousModels}(objects, ...)
-
-\method{ellipsis_info}{ListRegressions}(objects, ...)
+\method{ellipsis_info}{default}(..., only_models = TRUE)
 }
 \arguments{
 \item{objects, ...}{Arbitrary number of objects.}
+
+\item{only_models}{Only keep supported models (default to \code{TRUE}).}
 }
 \description{
 Provides information regarding the models entered in an ellipsis.
@@ -27,11 +20,11 @@ It detects whether all are models, regressions, nested regressions etc.,
 assigning different classes to the list of objects.
 }
 \examples{
-m1 <- lm(Sepal.Length ~ Petal.Width + Species, data=iris)
-m2 <- lm(Sepal.Length ~ Species, data=iris)
-m3 <- lm(Sepal.Length ~ Petal.Width, data=iris)
-m4 <- lm(Sepal.Length ~ 1, data=iris)
-m5 <- lm(Petal.Width ~ 1, data=iris)
+m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
+m2 <- lm(Sepal.Length ~ Species, data = iris)
+m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+m4 <- lm(Sepal.Length ~ 1, data = iris)
+m5 <- lm(Petal.Width ~ 1, data = iris)
 
 objects <- ellipsis_info(m1, m2, m3, m4)
 class(objects)
@@ -41,4 +34,28 @@ attributes(objects)$is_nested
 
 objects <- ellipsis_info(m1, m2, m5)
 attributes(objects)$same_response
+
+# Lavaan Models
+if (require("lavaan")) {
+  structure <- " visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9
+
+                  visual ~~ textual + speed "
+  m1 <- lavaan::sem(structure, data = HolzingerSwineford1939)
+
+  structure <- " visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9
+
+                  visual ~~ 0 * textual + speed "
+  m2 <- lavaan::sem(structure, data = HolzingerSwineford1939)
+
+  structure <- " x1  =~ mpg + cyl
+                 x2 =~ gear + am "
+
+  m3 <- lavaan::sem(structure, data = mtcars)
+
+  ellipsis_info(m1, m2, m3)
+}
 }
