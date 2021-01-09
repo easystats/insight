@@ -249,11 +249,17 @@ get_priors.meta_random <- function(x, ...) {
   fam1 <- attr(x$prior_d, "family")
   fam2 <- attr(x$prior_tau, "family")
 
+  loc1 <- which(names(prior_info1) %in% c("mean", "location", "shape"))[1]
+  loc2 <- which(names(prior_info2) %in% c("mean", "location", "shape"))[1]
+
+  scale1 <- which(names(prior_info1) %in% c("scale", "sd"))[1]
+  scale2 <- which(names(prior_info2) %in% c("scale", "sd"))[1]
+
   data.frame(
     Parameter = params,
     Distribution = c(fam1, fam2),
-    Location = c(prior_info1["mean"], prior_info2["shape"]),
-    Scale = c(prior_info1["sd"], prior_info2["scale"]),
+    Location = c(prior_info1[loc1], prior_info2[loc2]),
+    Scale = c(prior_info1[scale1], prior_info2[scale2]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -268,11 +274,14 @@ get_priors.meta_fixed <- function(x, ...) {
   prior_info <- attr(x$prior_d, "param")
   fam <- attr(x$prior_d, "family")
 
+  loc <- which(names(prior_info) %in% c("mean", "location", "shape"))[1]
+  scale <- which(names(prior_info) %in% c("scale", "sd"))[1]
+
   data.frame(
     Parameter = params,
     Distribution = fam,
-    Location = prior_info["mean"],
-    Scale = prior_info["sd"],
+    Location = prior_info[loc],
+    Scale = prior_info[scale],
     stringsAsFactors = FALSE
   )
 }
