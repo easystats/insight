@@ -432,7 +432,7 @@ parameters_table <- format_table
   if ("Prior_Distribution" %in% names(x)) x$Prior_Distribution <- ifelse(is.na(x$Prior_Distribution), "", x$Prior_Distribution)
   if (all(c("Prior_Distribution", "Prior_Location", "Prior_Scale") %in% names(x))) {
     x$Prior <- paste0(
-      .capitalize(x$Prior_Distribution, min_length = 2),
+      .capitalize(x$Prior_Distribution),
       " (",
       x$Prior_Location,
       " +- ",

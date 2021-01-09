@@ -510,9 +510,8 @@
 
 
 # capitalizes the first letter in a string
-.capitalize <- function(x, min_length = 0) {
+.capitalize <- function(x) {
   capped <- grep("^[A-Z]", x, invert = TRUE)
-  capped <- capped[nchar(x) >= min_length]
   substr(x[capped], 1, 1) <- toupper(substr(x[capped], 1, 1))
   x
 }
