@@ -14,6 +14,11 @@ ellipsis_info(objects, ...)
 
 \item{only_models}{Only keep supported models (default to \code{TRUE}).}
 }
+\value{
+The list with objects that were passed to the function, including
+additional information as attributes (e.g. if models have same response or
+are nested).
+}
 \description{
 Provides information regarding the models entered in an ellipsis.
 It detects whether all are models, regressions, nested regressions etc.,

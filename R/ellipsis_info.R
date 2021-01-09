@@ -7,6 +7,10 @@
 #' @param objects,... Arbitrary number of objects.
 #' @param only_models Only keep supported models (default to \code{TRUE}).
 #'
+#' @return The list with objects that were passed to the function, including
+#' additional information as attributes (e.g. if models have same response or
+#' are nested).
+#'
 #' @examples
 #' m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
 #' m2 <- lm(Sepal.Length ~ Species, data = iris)
