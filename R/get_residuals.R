@@ -14,6 +14,10 @@
 #' response from linear models, the deviance residuals for models of class
 #' \code{glm} etc. To access different types, pass down the \code{type} argument
 #' (see 'Examples').
+#' \cr \cr
+#' This function is a robust alternative to \code{residuals()}, as it works
+#' for some special model objects that otherwise do not respond properly to
+#' calling \code{residuals()}.
 #'
 #' @examples
 #' data(mtcars)
