@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Log-Likelihood — get_loglikelihood" />
-<meta property="og:description" content="A robust function to compute the log-likelihood of a model, as as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for stats::logLik() out of the box, as the returned object is of the same class (and it gives the same results when estimator = &quot;ML&quot; is specified)." />
+<meta property="og:description" content="A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for stats::logLik() out of the box, as the returned object is of the same class (and it gives the same results when estimator = &quot;ML&quot; is specified)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -124,7 +124,7 @@
     </div>
 
     <div class="ref-description">
-    <p>A robust function to compute the log-likelihood of a model, as as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for <code><a href='https://rdrr.io/r/stats/logLik.html'>stats::logLik()</a></code> out of the box, as the returned object is of the same class (and it gives the same results when <code>estimator = "ML"</code> is specified).</p>
+    <p>A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for <code><a href='https://rdrr.io/r/stats/logLik.html'>stats::logLik()</a></code> out of the box, as the returned object is of the same class (and it gives the same results when <code>estimator = "ML"</code> is specified).</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_loglikelihood</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -160,7 +160,7 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class "logLik", also containing the log-likelihoods for each observation as a "per_observation" attribute  (<code>attributes(get_loglikelihood(x))$per_observation</code>) when possible. The code was partly inspired from the <a href='https://CRAN.R-project.org/package=nonnest2'><code>nonnest2</code></a> package.</p>
+    <p>An object of class <code>"logLik"</code>, also containing the log-likelihoods for each observation as a <code>per_observation</code> attribute  (<code>attributes(get_loglikelihood(x))$per_observation</code>) when possible. The code was partly inspired from the <a href='https://CRAN.R-project.org/package=nonnest2'><span class="pkg">nonnest2</span></a> package.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
