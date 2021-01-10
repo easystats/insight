@@ -142,6 +142,14 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The fitted values (i.e. predictions for the response).</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>Currently, this function just calls <code><a href='https://rdrr.io/r/stats/fitted.values.html'>stats::fitted()</a></code>, but will
+be extended to other objects that don't work with <code><a href='https://rdrr.io/r/stats/fitted.values.html'>stats::fitted()</a></code> in
+future updates.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>*</span> <span class='va'>Species</span>, data<span class='op'>=</span><span class='va'>iris</span><span class='op'>)</span>
