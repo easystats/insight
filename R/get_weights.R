@@ -10,7 +10,10 @@
 #'   to 1).
 #' @param ... Currently not used.
 #'
-#' @return The weighting variable, or \code{NULL} if no weights were specified (or if all weights were 1).
+#' @return The weighting variable, or \code{NULL} if no weights were specified
+#' or if weights were 1. If the weighting variable should also be returned
+#' (instead of \code{NULL}), when all weights are set to 1 (i.e. no weighting),
+#' set \code{null_as_ones = TRUE}.
 #'
 #' @examples
 #' data(mtcars)
