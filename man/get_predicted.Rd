@@ -11,8 +11,16 @@ get_predicted(x, ...)
 
 \item{...}{Not used.}
 }
+\value{
+The fitted values (i.e. predictions for the response).
+}
 \description{
 Returns values predicted by a model (i.e., fitted values).
+}
+\note{
+Currently, this function just calls \code{stats::fitted()}, but will
+be extended to other objects that don't work with \code{stats::fitted()} in
+future updates.
 }
 \examples{
 x <- lm(Sepal.Length ~ Petal.Width * Species, data=iris)

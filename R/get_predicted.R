@@ -5,6 +5,12 @@
 #' @param ... Not used.
 #' @inheritParams get_residuals
 #'
+#' @return The fitted values (i.e. predictions for the response).
+#'
+#' @note Currently, this function just calls \code{stats::fitted()}, but will
+#' be extended to other objects that don't work with \code{stats::fitted()} in
+#' future updates.
+#'
 #' @examples
 #' x <- lm(Sepal.Length ~ Petal.Width * Species, data=iris)
 #' get_predicted(x)
