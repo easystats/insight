@@ -12,7 +12,8 @@
 #' future updates.
 #'
 #' @examples
-#' x <- lm(Sepal.Length ~ Petal.Width * Species, data=iris)
+#' data(mtcars)
+#' x <- lm(mpg ~ cyl + hp, data = mtcars)
 #' get_predicted(x)
 #' @export
 get_predicted <- function(x, ...) {

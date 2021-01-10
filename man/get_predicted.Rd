@@ -23,6 +23,7 @@ be extended to other objects that don't work with \code{stats::fitted()} in
 future updates.
 }
 \examples{
-x <- lm(Sepal.Length ~ Petal.Width * Species, data=iris)
+data(mtcars)
+x <- lm(mpg ~ cyl + hp, data = mtcars)
 get_predicted(x)
 }
