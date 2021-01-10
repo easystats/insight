@@ -152,46 +152,25 @@ be extended to other objects that don't work with <code><a href='https://rdrr.io
 future updates.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>*</span> <span class='va'>Species</span>, data<span class='op'>=</span><span class='va'>iris</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        1        2        3        4        5        6        7        8 
-#&gt; 4.963212 4.963212 4.963212 4.963212 4.963212 5.149247 5.056229 4.963212 
-#&gt;        9       10       11       12       13       14       15       16 
-#&gt; 4.963212 4.870195 4.963212 4.963212 4.870195 4.870195 4.963212 5.149247 
-#&gt;       17       18       19       20       21       22       23       24 
-#&gt; 5.149247 5.056229 5.056229 5.056229 4.963212 5.149247 4.963212 5.242264 
-#&gt;       25       26       27       28       29       30       31       32 
-#&gt; 4.963212 4.963212 5.149247 4.963212 4.963212 4.963212 4.963212 5.149247 
-#&gt;       33       34       35       36       37       38       39       40 
-#&gt; 4.870195 4.963212 4.963212 4.963212 4.963212 4.870195 4.963212 4.963212 
-#&gt;       41       42       43       44       45       46       47       48 
-#&gt; 5.056229 5.056229 4.963212 5.335281 5.149247 5.056229 4.963212 4.963212 
-#&gt;       49       50       51       52       53       54       55       56 
-#&gt; 4.963212 4.963212 6.041551 6.184187 6.184187 5.898915 6.184187 5.898915 
-#&gt;       57       58       59       60       61       62       63       64 
-#&gt; 6.326824 5.471005 5.898915 6.041551 5.471005 6.184187 5.471005 6.041551 
-#&gt;       65       66       67       68       69       70       71       72 
-#&gt; 5.898915 6.041551 6.184187 5.471005 6.184187 5.613642 6.612097 5.898915 
-#&gt;       73       74       75       76       77       78       79       80 
-#&gt; 6.184187 5.756278 5.898915 6.041551 6.041551 6.469460 6.184187 5.471005 
-#&gt;       81       82       83       84       85       86       87       88 
-#&gt; 5.613642 5.471005 5.756278 6.326824 6.184187 6.326824 6.184187 5.898915 
-#&gt;       89       90       91       92       93       94       95       96 
-#&gt; 5.898915 5.898915 5.756278 6.041551 5.756278 5.471005 5.898915 5.756278 
-#&gt;       97       98       99      100      101      102      103      104 
-#&gt; 5.898915 5.898915 5.613642 5.898915 6.896494 6.505995 6.636161 6.440912 
-#&gt;      105      106      107      108      109      110      111      112 
-#&gt; 6.701245 6.636161 6.375829 6.440912 6.440912 6.896494 6.571078 6.505995 
-#&gt;      113      114      115      116      117      118      119      120 
-#&gt; 6.636161 6.571078 6.831411 6.766328 6.440912 6.701245 6.766328 6.245663 
-#&gt;      121      122      123      124      125      126      127      128 
-#&gt; 6.766328 6.571078 6.571078 6.440912 6.636161 6.440912 6.440912 6.440912 
-#&gt;      129      130      131      132      133      134      135      136 
-#&gt; 6.636161 6.310746 6.505995 6.571078 6.701245 6.245663 6.180580 6.766328 
-#&gt;      137      138      139      140      141      142      143      144 
-#&gt; 6.831411 6.440912 6.440912 6.636161 6.831411 6.766328 6.505995 6.766328 
-#&gt;      145      146      147      148      149      150 
-#&gt; 6.896494 6.766328 6.505995 6.571078 6.766328 6.440912 </div></pre>
+</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
+#&gt;            21.21678            21.21678            26.07124            21.21678 
+#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
+#&gt;            15.44448            21.31239            14.10597            26.66401 
+#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE 
+#&gt;            26.03299            20.96820            20.96820            15.34888 
+#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental 
+#&gt;            15.34888            15.34888            14.87083            14.67962 
+#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla 
+#&gt;            14.39279            26.58752            26.85523            26.60665 
+#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 
+#&gt;            25.99475            15.92253            15.92253            14.10597 
+#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa 
+#&gt;            15.44448            26.58752            26.10948            25.68880 
+#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E 
+#&gt;            13.74265            19.97387            12.38501            25.76529 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
