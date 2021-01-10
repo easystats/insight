@@ -181,7 +181,7 @@ ellipsis_info.ListRegressions <- function(objects, ...) {
     # order of df from models
     model_df <- sapply(objects, n_parameters)
 
-    if ((all(is_nested_increasing) || all(is_nested_decreasing)) && any(duplicated(model_df)) && length(unique(sapply(objects, model_name, include_formula = FALSE))) == 1) {
+    if (is_nested && any(duplicated(model_df)) && length(unique(sapply(objects, model_name, include_formula = FALSE))) == 1) {
       message("Some of the nested models seem to be identical.")
     }
 
