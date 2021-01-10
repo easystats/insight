@@ -109,6 +109,11 @@ n_obs.gamm <- function(x, ...) {
 }
 
 
+#' @export
+n_obs.lavaan <- function(x, ...) {
+  x@SampleStats@ntotal
+}
+
 
 #' @export
 n_obs.merModList <- function(x, ...) {
