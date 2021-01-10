@@ -111,9 +111,7 @@ ellipsis_info.ListModels <- function(objects, ...) {
     class(objects) <- c("ListLavaan", class(objects))
 
     # Regressions
-    # TODO: model_info(x)$is_regression is not yet implemented
-    # is_regression <- sapply(objects, function(x) model_info(x)$is_regression)
-  } else if (all(rep(TRUE, length(objects)))) {
+  } else if (all(sapply(objects, is_regression_model))) {
     class(objects) <- c("ListRegressions", class(objects))
 
     # Mixed bag
@@ -147,7 +145,7 @@ ellipsis_info.ListLavaan <- function(objects, ...) {
 
 
 #' @export
-ellipsis_info.ListRegressions <- function(objects, ...) {
+ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   object_names <- names(objects)
 
   # Check if same outcome
@@ -181,7 +179,7 @@ ellipsis_info.ListRegressions <- function(objects, ...) {
     # order of df from models
     model_df <- sapply(objects, n_parameters)
 
-    if (is_nested && any(duplicated(model_df)) && length(unique(sapply(objects, model_name, include_formula = FALSE))) == 1) {
+    if (is_nested && any(duplicated(model_df)) && length(unique(sapply(objects, model_name, include_formula = FALSE))) == 1 && verbose) {
       message("Some of the nested models seem to be identical.")
     }
 

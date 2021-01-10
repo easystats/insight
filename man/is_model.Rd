@@ -2,9 +2,12 @@
 % Please edit documentation in R/is_model.R
 \name{is_model}
 \alias{is_model}
-\title{Checks if an object is a regression model object}
+\alias{is_regression_model}
+\title{Checks if an object is a regression model or statistical test object}
 \usage{
 is_model(x)
+
+is_regression_model(x)
 }
 \arguments{
 \item{x}{An object.}
@@ -13,8 +16,10 @@ is_model(x)
 A logical, \code{TRUE} if \code{x} is a (supported) model object.
 }
 \description{
-Small helper that checks if a model is a regression model
-  object.
+Small helper that checks if a model is a regression model or
+  a statistical object. \code{is_regression_model()} is stricter and only
+  returns \code{TRUE} for regression models, but not for, e.g., \code{htest}
+  objects.
 }
 \details{
 This function returns \code{TRUE} if \code{x} is a model object.
@@ -25,4 +30,8 @@ m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 
 is_model(m)
 is_model(mtcars)
+
+test <- t.test(1:10, y = c(7:20))
+is_model(test)
+is_regression_model(test)
 }

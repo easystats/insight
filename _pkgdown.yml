@@ -86,6 +86,7 @@ reference:
   - is_model
   - is_model_supported
   - is_multivariate
+  - is_nested_models
   - is_nullmodel
 
 - title: "Value Formatting"

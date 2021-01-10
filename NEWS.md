@@ -34,6 +34,9 @@
 
 * Added `ellipsis_info()` to specify the nature of ellipsis (`...`) inputs.
 
+* Added `is_nested_models()` to check if multiple regression models are
+  nested (decreasing or increasing).
+
 * Added generic `print_html()`, to allow other packages to create tables in
   HTML format (via `export_table()`) when not printing the output to console.
 
