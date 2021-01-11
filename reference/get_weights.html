@@ -165,50 +165,16 @@ set <code>null_as_ones = TRUE</code>.</p>
 
 <span class='co'># LMs</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span><span class='op'>)</span>
-<span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 1.1856588 1.0305780 0.8983399 0.9594662 0.8835298 0.4229393 0.5809255
-#&gt;  [8] 1.2154194 1.1912607 1.8176345 0.5527630 0.8832922 0.9884347 1.1691851
-#&gt; [15] 0.6833751 1.0654327 0.7619022 1.0007476 0.5238288 0.7285948 0.7711802
-#&gt; [22] 1.1196169 1.3485833 0.7331707 0.7279675 0.9834736 0.8918233 1.0123316
-#&gt; [29] 0.8219752 0.8506929 0.8465789 0.9516581</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='error'>Error in lm.wfit(x, y, w, offset = offset, singular.ok = singular.ok,     ...): missing or negative weights not allowed</span></div><div class='input'><span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in get_weights(m): object 'm' not found</span></div><div class='input'>
 <span class='fu'>get_weights</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>, null_as_ones <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</div><div class='input'>
 <span class='co'># GLMs</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>disp</span> <span class='op'>+</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span>, family<span class='op'>=</span><span class='va'>quasibinomial</span><span class='op'>)</span>
-<span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
-#&gt;           1.1856588           1.0305780           0.8983399           0.9594662 
-#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
-#&gt;           0.8835298           0.4229393           0.5809255           1.2154194 
-#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE 
-#&gt;           1.1912607           1.8176345           0.5527630           0.8832922 
-#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental 
-#&gt;           0.9884347           1.1691851           0.6833751           1.0654327 
-#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla 
-#&gt;           0.7619022           1.0007476           0.5238288           0.7285948 
-#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 
-#&gt;           0.7711802           1.1196169           1.3485833           0.7331707 
-#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa 
-#&gt;           0.7279675           0.9834736           0.8918233           1.0123316 
-#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E 
-#&gt;           0.8219752           0.8506929           0.8465789           0.9516581 </div><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>cyl</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span>, family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span>
-<span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
-#&gt;           11.856588           10.305780            7.186719            8.635196 
-#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
-#&gt;            9.718828            3.806454            6.390181            9.723355 
-#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE 
-#&gt;            9.530085           18.176345            5.527630            9.716214 
-#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental 
-#&gt;           10.872782           12.861036            7.517126           11.719760 
-#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla 
-#&gt;            8.380924            8.005981            4.190630            5.828759 
-#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 
-#&gt;            5.398261           12.315786           14.834416            8.064877 
-#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa 
-#&gt;            8.007643            7.867789            8.026410            9.110985 
-#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E 
-#&gt;           10.685678            9.357622           11.005525            7.613265 </div></pre>
+</div><div class='output co'>#&gt; <span class='error'>Error in glm(vs ~ disp + mpg, data = mtcars, weights = weight, family = quasibinomial): negative weights not allowed</span></div><div class='input'><span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in get_weights(m): object 'm' not found</span></div><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>cyl</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span>, family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in glm(cbind(cyl, gear) ~ mpg, data = mtcars, weights = weight,     family = binomial): negative weights not allowed</span></div><div class='input'><span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in get_weights(m): object 'm' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
