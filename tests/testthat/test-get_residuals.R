@@ -9,8 +9,19 @@ if (require("testthat") && require("insight") && require("lme4")) {
 
   test_that("get_residuals - lm", {
     m <- lm(am ~ cyl, weights = w, data = mtcars)
-    get_residuals(m, weighted = FALSE, type = "response")
-    get_residuals(m, weighted = FALSE, type = "deviance")
+    expect_equal(
+      as.vector(get_residuals(m, weighted = FALSE)),
+      as.vector(residuals(m))
+    )
+    expect_equal(
+      as.vector(get_residuals(m, weighted = FALSE, type = "deviance")),
+      as.vector(residuals(m, type = "deviance"))
+    )
+    expect_equal(
+      get_weights(m),
+      weights(m)
+    )
+
     expect_equal(
       as.vector(insight::get_residuals(m)),
       as.vector(residuals(m))
@@ -23,8 +34,18 @@ if (require("testthat") && require("insight") && require("lme4")) {
 
   test_that("get_residuals - glm", {
     m <- suppressWarnings(glm(am ~ cyl, weights = w, data = mtcars, family = binomial))
-    get_residuals(m, weighted = FALSE, type = "response")
-    get_residuals(m, weighted = FALSE, type = "deviance")
+    expect_equal(
+      as.vector(get_residuals(m, weighted = FALSE, type = "response")),
+      as.vector(residuals(m, type = "response"))
+    )
+    expect_equal(
+      as.vector(get_residuals(m, weighted = FALSE)),
+      as.vector(residuals(m))
+    )
+    expect_equal(
+      get_weights(m),
+      weights(m)
+    )
     expect_equal(
       as.vector(insight::get_residuals(m)),
       as.vector(residuals(m))
@@ -37,8 +58,18 @@ if (require("testthat") && require("insight") && require("lme4")) {
 
   test_that("get_residuals - lmer", {
     m <- lmer(Reaction ~ Days + (Days | Subject), weights = w, data = sleepstudy)
-    get_residuals(m, weighted = FALSE, type = "response")
-    get_residuals(m, weighted = FALSE, type = "deviance")
+    expect_equal(
+      as.vector(get_residuals(m, weighted = FALSE)),
+      as.vector(residuals(m))
+    )
+    expect_equal(
+      as.vector(get_residuals(m, weighted = FALSE, type = "deviance")),
+      as.vector(residuals(m, type = "deviance"))
+    )
+    expect_equal(
+      get_weights(m),
+      weights(m)
+    )
     expect_equal(
       as.vector(insight::get_residuals(m)),
       as.vector(residuals(m))
@@ -51,8 +82,18 @@ if (require("testthat") && require("insight") && require("lme4")) {
 
   test_that("get_residuals - glmer", {
     m <- glmer(cbind(incidence, size - incidence) ~ period + (1 | herd), weights = w, data = cbpp, family = binomial, nAGQ = 0)
-    get_residuals(m, weighted = FALSE, type = "response")
-    get_residuals(m, weighted = FALSE, type = "deviance")
+    expect_equal(
+      as.vector(get_residuals(m, weighted = FALSE, type = "response")),
+      as.vector(residuals(m, type = "response"))
+    )
+    expect_equal(
+      as.vector(get_residuals(m, weighted = FALSE)),
+      as.vector(residuals(m))
+    )
+    expect_equal(
+      get_weights(m),
+      weights(m)
+    )
     expect_equal(
       as.vector(insight::get_residuals(m)),
       as.vector(residuals(m))
