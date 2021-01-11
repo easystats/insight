@@ -176,12 +176,23 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
 .weighted_residuals <- function(x, verbose = TRUE) {
   w <- get_weights(x)
-  res <- get_residuals(x, weighted = FALSE, type = "response")
-  if (!is.null(w) && !is.null(res)) {
-    res <- res * w^0.5
-    res <- res[!is.na(w) & w != 0]
-  } else if (verbose) {
-    warning("Can't calculate weighted residuals from model.", call. = FALSE)
-  }
-  res
+  tryCatch(
+    {
+      res_resp <- as.vector(get_residuals(x, weighted = FALSE, type = "response"))
+      res_dev <- as.vector(get_residuals(x, weighted = FALSE, type = "deviance"))
+
+      if (!is.null(w) && !is.null(res_dev)) {
+        if (!is.null(res_resp) && res_resp == res_dev) {
+          res_dev <- res_dev * w^0.5
+        }
+        res_dev <- res_dev[!is.na(w) & w != 0]
+      } else if (verbose) {
+        warning("Can't calculate weighted residuals from model.", call. = FALSE)
+      }
+      res_dev
+    },
+    error = function(e) {
+      NULL
+    }
+  )
 }
