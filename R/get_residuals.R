@@ -187,7 +187,11 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
         }
         res_dev <- res_dev[!is.na(w) & w != 0]
       } else if (verbose) {
-        warning("Can't calculate weighted residuals from model.", call. = FALSE)
+        if (is.null(w)) {
+          warning("Can't calculate weighted residuals from model. Model doesn't seem to have weights.", call. = FALSE)
+        } else if (is.null(res_dev)) {
+          warning("Can't calculate weighted residuals from model. Could not extract deviance-residuals.", call. = FALSE)
+        }
       }
       res_dev
     },
