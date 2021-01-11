@@ -7,12 +7,14 @@
 \usage{
 get_residuals(x, ...)
 
-\method{get_residuals}{default}(x, verbose = TRUE, ...)
+\method{get_residuals}{default}(x, weighted = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}
 
 \item{...}{Passed down to \code{residuals()}, if possible.}
+
+\item{weighted}{Logical, if \code{TRUE}, returns weighted residuals.}
 
 \item{verbose}{Toggle warnings and messages.}
 }

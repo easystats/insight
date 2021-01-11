@@ -5,6 +5,7 @@
 #' @name get_residuals
 #'
 #' @param x A model.
+#' @param weighted Logical, if \code{TRUE}, returns weighted residuals.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Passed down to \code{residuals()}, if possible.
 #'
@@ -36,7 +37,7 @@ get_residuals <- function(x, ...) {
 #' @rdname get_residuals
 #' @importFrom stats predict residuals fitted
 #' @export
-get_residuals.default <- function(x, verbose = TRUE, ...) {
+get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
   # setup, check if user requested specific type of residuals
   # later, we can only catch response residuals, in such cases, give warning
@@ -115,14 +116,21 @@ get_residuals.default <- function(x, verbose = TRUE, ...) {
     warning(paste0("Can't extract '", res_type, "' residuals. Returning response residuals."), call. = FALSE)
   }
 
+  if (!is.null(res) && isTRUE(weighted)) {
+    res <- .weight_residuals(x, res)
+  }
 
   res
 }
 
 
 #' @export
-get_residuals.vgam <- function(x, ...) {
-  x@residuals
+get_residuals.vgam <- function(x, weighted = FALSE, ...) {
+  res <- x@residuals
+  if (!is.null(res) && isTRUE(weighted)) {
+    res <- .weight_residuals(x, res)
+  }
+  res
 }
 
 
@@ -131,14 +139,18 @@ get_residuals.vglm <- get_residuals.vgam
 
 
 #' @export
-get_residuals.coxph <- function(x, ...) {
-  stats::residuals(x, ...)
+get_residuals.coxph <- function(x, weighted = FALSE, ...) {
+  res <- stats::residuals(x, ...)
+  if (!is.null(res) && isTRUE(weighted)) {
+    res <- .weight_residuals(x, res)
+  }
+  res
 }
 
 
 #' @importFrom utils capture.output
 #' @export
-get_residuals.slm <- function(x, verbose = TRUE, ...) {
+get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   res <- tryCatch(
     {
       junk <- utils::capture.output(pred <- stats::predict(x, type = "response"))
@@ -155,5 +167,20 @@ get_residuals.slm <- function(x, verbose = TRUE, ...) {
     res <- NULL
   }
 
+  if (!is.null(res) && isTRUE(weighted)) {
+    res <- .weight_residuals(x, res)
+  }
+
+  res
+}
+
+
+
+
+.weight_residuals <- function(x, res) {
+  w <- get_weights(x)
+  if (!is.null(w)) {
+    res <- res[!is.na(w) & w != 0]
+  }
   res
 }
