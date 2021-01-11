@@ -34,6 +34,15 @@ get_loglikelihood.default <- function(x, ...) {
 
 
 
+
+
+
+# Methods WITH individual LLs ---------------------------------------------
+
+# TODO: Complete for other families with https://github.com/cran/nonnest2/blob/master/R/llcont.R
+# https://stats.stackexchange.com/questions/322038/input-format-for-response-in-binomial-glm-in-r
+
+
 #' @rdname get_loglikelihood
 #' @export
 get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
@@ -76,29 +85,6 @@ get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
 get_loglikelihood.ivreg <- get_loglikelihood.lm
 
 
-
-
-#' @export
-get_loglikelihood.plm <- function(x, ...) {
-  res <- get_residuals(x)
-  w <- get_weights(x, null_as_ones = TRUE)
-  N <- n_obs(x)
-  N0 <- N
-
-  ll <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
-
-  .loglikelihood_prep_output(x, lls = ll, df = get_df(x, type = "model"))
-}
-
-
-#' @export
-get_loglikelihood.cpglm <- get_loglikelihood.plm
-
-
-
-
-# TODO: Complete for other families with https://github.com/cran/nonnest2/blob/master/R/llcont.R
-# https://stats.stackexchange.com/questions/322038/input-format-for-response-in-binomial-glm-in-r
 
 
 #' @importFrom stats weights deviance dbinom dpois dgamma
@@ -160,9 +146,22 @@ get_loglikelihood.glmer <- get_loglikelihood.glm
 
 
 
+#' @export
+get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
+  if (!requireNamespace("rstanarm", quietly = TRUE)) {
+    stop("Package 'rstanarm' required. Please install it by running `install.packages('rstanarm')`.")
+  }
+
+  # Get posterior distribution of logliks
+  mat <- rstanarm::log_lik(x)
+  # Point estimate using the function passed as the centrality argument
+  lls <- sapply(as.data.frame(mat), centrality)
+
+  .loglikelihood_prep_output(x, lls)
+}
 
 
-
+# Methods WITHOUT individual LLs ---------------------------------------------
 
 
 #' @export
@@ -206,6 +205,21 @@ get_loglikelihood.svycoxph <- function(x, ...) {
 
 
 
+#' @export
+get_loglikelihood.plm <- function(x, ...) {
+  res <- get_residuals(x)
+  w <- get_weights(x, null_as_ones = TRUE)
+  N <- n_obs(x)
+  N0 <- N
+
+  ll <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
+
+  .loglikelihood_prep_output(x, lls = ll, df = get_df(x, type = "model"))
+}
+
+
+#' @export
+get_loglikelihood.cpglm <- get_loglikelihood.plm
 
 
 # Helpers -----------------------------------------------------------------

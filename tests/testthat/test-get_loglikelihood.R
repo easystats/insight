@@ -56,6 +56,17 @@ if (require("testthat") && require("insight") && require("nonnest2")) {
     }
   })
 
+  test_that("get_loglikelihood - stanreg", {
+    if (require("rstanarm")) {
+      x <- rstanarm::stan_glm(Sepal.Length ~ Petal.Width, data = iris)
+      ref <- lm(Sepal.Length ~ Petal.Width, data = iris)
+      ll <- loglikelihood(x)
+      ll2 <- loglikelihood(ref)
+      expect_equal(as.numeric(ll), as.numeric(ll2), tolerance=2)
+      expect_equal(mean(abs(attributes(ll)$per_obs - attributes(ll2)$per_obs)), 0,  tolerance=0.1)
+    }
+  })
+
   test_that("get_loglikelihood - ivreg", {
     if (require("ivreg")) {
       data("CigaretteDemand", package = "ivreg")
