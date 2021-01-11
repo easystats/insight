@@ -201,10 +201,10 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
       res_dev
     },
     error = function(e) {
-      warning(e$message, call. = TRUE)
       if (verbose) {
         warning("Can't calculate weighted residuals from model.", call. = FALSE)
       }
+      warning(e$message, call. = TRUE)
       NULL
     }
   )
