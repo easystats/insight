@@ -47,16 +47,25 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   no_response_resid <- !is.null(dot_args[["type"]]) && dot_args[["type"]] != "response"
   res_type <- dot_args[["type"]]
   yield_warning <- FALSE
+  res <- NULL
 
-
-  res <- tryCatch(
-    {
-      stats::residuals(x, ...)
-    },
-    error = function(e) {
-      NULL
+  if (isTRUE(weighted)) {
+    res <- .weight_residuals(x)
+    if (is.null(res) && verbose) {
+      warning("Can't calculate weighted residuals.", call. = FALSE)
     }
-  )
+  }
+
+  if (is.null(res)) {
+    res <- tryCatch(
+      {
+        stats::residuals(x, ...)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
 
   if (is.null(res)) {
     res <- tryCatch(
@@ -116,21 +125,14 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
     warning(paste0("Can't extract '", res_type, "' residuals. Returning response residuals."), call. = FALSE)
   }
 
-  if (!is.null(res) && isTRUE(weighted)) {
-    res <- .weight_residuals(x, res)
-  }
-
   res
 }
 
 
 #' @export
 get_residuals.vgam <- function(x, weighted = FALSE, ...) {
-  res <- x@residuals
-  if (!is.null(res) && isTRUE(weighted)) {
-    res <- .weight_residuals(x, res)
-  }
-  res
+  ## TODO implement weighted
+  x@residuals
 }
 
 
@@ -139,10 +141,16 @@ get_residuals.vglm <- get_residuals.vgam
 
 
 #' @export
-get_residuals.coxph <- function(x, weighted = FALSE, ...) {
-  res <- stats::residuals(x, ...)
-  if (!is.null(res) && isTRUE(weighted)) {
-    res <- .weight_residuals(x, res)
+get_residuals.coxph <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  res <- NULL
+  if (isTRUE(weighted)) {
+    res <- .weight_residuals(x)
+    if (is.null(res) && verbose) {
+      warning("Can't calculate weighted residuals.", call. = FALSE)
+    }
+  }
+  if (is.null(res)) {
+    res <- stats::residuals(x, ...)
   }
   res
 }
@@ -167,9 +175,7 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
     res <- NULL
   }
 
-  if (!is.null(res) && isTRUE(weighted)) {
-    res <- .weight_residuals(x, res)
-  }
+  ## TODO implement weighted
 
   res
 }
@@ -179,8 +185,19 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
 .weight_residuals <- function(x, res) {
   w <- get_weights(x)
+  res <- NULL
   if (!is.null(w)) {
-    res <- res[!is.na(w) & w != 0]
+    res <- tryCatch(
+      {
+        stats::residuals(x, type = "deviance")
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+    if (!is.null(res)) {
+      res <- res[!is.na(w) & w != 0]
+    }
   }
   res
 }
