@@ -52,11 +52,21 @@ get_deviance.default <- function(x, ...) {
 get_deviance.stanreg <- function(x, ...) {
 
   info <- model_info(x)
-  # That's the formula for stats::deviance.lm
-  # sum(weighted.residuals(x)^2, na.rm=TRUE)
+  
   if (info$is_linear) {
     res <- get_residuals(x, weighted = TRUE)
     dev <- sum(res^2, na.rm = TRUE)
+
+  } else if(info$is_binomial){
+    w <- get_weights(x, null_as_ones=TRUE)
+    n <- n_obs(x)
+    y <- get_response(x)
+    mu <- get_predicted(x)  # Alternatively, x$family$linkinv(x$linear.predictors)
+
+    dev_resids_fun <- x$family$dev.resids
+
+    dev <- sum(dev_resids_fun(y, mu, w))
+
   } else{
     stop("Could not compute deviance for this type of model")
   }
