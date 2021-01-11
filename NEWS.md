@@ -13,6 +13,9 @@
 
 ## New functions
 
+* Added `get_deviance()` function that returns the model deviance as a
+  robust alternative to `stats::deviance()`.
+
 * Added `model_name()` function that returns the model's "name".
 
 * Added `format()` method for `find_formula()` output to flatten it.
@@ -23,7 +26,7 @@
 * Added `get_intercept()` as a helper function to easily retrieve the  value
   at the intercept.
 
-* Added `get_df()` as a robust alternative to `stats::df.rediuals()`.
+* Added `get_df()` as a robust alternative to `stats::df.residuals()`.
 
 * Added `get_predicted()` as a robust alternative to `stats::fitted()`.
 
