@@ -54,7 +54,7 @@ get_deviance.stanreg <- function(x, ...) {
   info <- model_info(x)
   # That's the formula for stats::deviance.lm
   # sum(weighted.residuals(x)^2, na.rm=TRUE)
-  if(info$is_linear){
+  if (info$is_linear) {
     res <- get_residuals(x, weighted = TRUE) # TODO: currently this arg doesn't do anything, but should
     dev <- sum(res^2, na.rm = TRUE)
   } else{
