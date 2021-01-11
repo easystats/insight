@@ -88,13 +88,13 @@ if (require("testthat") && require("insight") && require("nonnest2")) {
     }
   })
 
-  test_that("get_loglikelihood - iv_robust", {
-    if (require("estimatr")) {
+  if (require("estimatr")) {
+    test_that("get_loglikelihood - iv_robust", {
       data(mtcars)
       x <- estimatr::iv_robust(mpg ~ gear + cyl | carb + wt, data = mtcars)
 
       ll <- loglikelihood(x)
       expect_equal(as.numeric(ll), -84.60057, tolerance = 1e-3)
-    }
-  })
+    })
+  }
 }
