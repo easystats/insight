@@ -46,6 +46,7 @@ reference:
   - get_sigma
   - get_variance
   - get_varcov
+  - get_deviance
 
 - title: "Find Information or Get Data from Model Objects"
   desc: >
