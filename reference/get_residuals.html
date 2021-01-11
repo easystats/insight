@@ -130,7 +130,7 @@
     <pre class="usage"><span class='fu'>get_residuals</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>get_residuals</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>get_residuals</span><span class='op'>(</span><span class='va'>x</span>, weighted <span class='op'>=</span> <span class='cn'>FALSE</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,6 +142,10 @@
     <tr>
       <th>...</th>
       <td><p>Passed down to <code><a href='https://rdrr.io/r/stats/residuals.html'>residuals()</a></code>, if possible.</p></td>
+    </tr>
+    <tr>
+      <th>weighted</th>
+      <td><p>Logical, if <code>TRUE</code>, returns weighted residuals.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
