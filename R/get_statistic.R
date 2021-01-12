@@ -43,8 +43,15 @@ get_statistic <- function(x, ...) {
 
 #' @rdname get_statistic
 #' @export
-get_statistic.default <- function(x, column_index = 3, ...) {
+get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
   cs <- stats::coef(summary(x))
+
+  if (column_index > ncol(cs)) {
+    if (isTRUE(verbose)) {
+      warning("Could not access test statistic of model parameters.", call. = FALSE)
+    }
+    return(NULL)
+  }
 
   out <- data.frame(
     Parameter = rownames(cs),
