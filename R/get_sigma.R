@@ -26,7 +26,7 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_sigma(m)
-#' @importFrom stats deviance sigma
+#' @importFrom stats sigma
 #' @export
 get_sigma <- function(x) {
 
@@ -60,7 +60,7 @@ get_sigma <- function(x) {
     s <- tryCatch(
       {
         estimates <- get_parameters(x)$Estimate
-        sqrt(stats::deviance(x) / (n_obs(x) - sum(!is.na(estimates))))
+        sqrt(get_deviance(x) / (n_obs(x) - sum(!is.na(estimates))))
       },
       error = function(e) {
         NULL
