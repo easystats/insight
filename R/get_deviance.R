@@ -87,3 +87,10 @@ get_deviance.stanreg <- function(x, ...) {
   # extracts it via x@deviance
   dev
 }
+
+
+
+#' @export
+get_deviance.lmerMod <- function(x, ...) {
+  stats::deviance(x, REML = FALSE, ...)
+}

@@ -182,7 +182,7 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
       res_dev <- as.vector(get_residuals(x, weighted = FALSE, type = "deviance"))
 
       if (!is.null(w) && !is.null(res_dev)) {
-        if (!is.null(res_resp) && res_resp == res_dev) {
+        if (!is.null(res_resp) && identical(res_resp, res_dev)) {
           res_dev <- res_dev * w^0.5
         }
         res_dev <- res_dev[!is.na(w) & w != 0]
