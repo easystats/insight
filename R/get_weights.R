@@ -44,19 +44,13 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
     {
       w <- stats::weights(x)
     },
-    error = function(x) {
-      ## TODO remove
-      warning(x$message, call. = TRUE)
+    error = function(e) {
       NULL
     },
-    warning = function(x) {
-      ## TODO remove
-      warning(x$message, call. = TRUE)
+    warning = function(e) {
       NULL
     },
-    finally = function(x) {
-      ## TODO remove
-      warning(x$message, call. = TRUE)
+    finally = function(e) {
       NULL
     }
   )
@@ -66,19 +60,13 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
       {
         w <- stats::model.frame(x)[["(weights)"]]
       },
-      error = function(x) {
-        ## TODO remove
-        warning(x$message, call. = TRUE)
+      error = function(e) {
         NULL
       },
-      warning = function(x) {
-        ## TODO remove
-        warning(x$message, call. = TRUE)
+      warning = function(e) {
         NULL
       },
-      finally = function(x) {
-        ## TODO remove
-        warning(x$message, call. = TRUE)
+      finally = function(e) {
         NULL
       }
     )
@@ -89,19 +77,13 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
       {
         w <- .get_data_from_env(x)[[find_weights(x)]]
       },
-      error = function(x) {
-        ## TODO remove
-        warning(x$message, call. = TRUE)
+      error = function(e) {
         NULL
       },
-      warning = function(x) {
-        ## TODO remove
-        warning(x$message, call. = TRUE)
+      warning = function(e) {
         NULL
       },
-      finally = function(x) {
-        ## TODO remove
-        warning(x$message, call. = TRUE)
+      finally = function(e) {
         NULL
       }
     )
@@ -140,7 +122,7 @@ get_weights.brmsfit <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
     w <- stats::na.omit(w)
   }
 
-  if (is.null(w) && null_as_ones){
+  if (is.null(w) && null_as_ones) {
     w <- rep.int(1, n_obs(x))
   }
 

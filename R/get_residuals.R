@@ -57,8 +57,6 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
       stats::residuals(x, ...)
     },
     error = function(e) {
-      ## TODO remove
-      warning(e$message, call. = TRUE)
       NULL
     }
   )
@@ -69,8 +67,6 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
         x$residuals
       },
       error = function(e) {
-        ## TODO remove
-        warning(e$message, call. = TRUE)
         NULL
       }
     )
@@ -83,8 +79,6 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
         x$gam$residuals
       },
       error = function(e) {
-        ## TODO remove
-        warning(e$message, call. = TRUE)
         NULL
       }
     )
@@ -99,8 +93,6 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
         observed - pred
       },
       error = function(e) {
-        ## TODO remove
-        warning(e$message, call. = TRUE)
         NULL
       }
     )
@@ -115,8 +107,6 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
         observed - pred
       },
       error = function(e) {
-        ## TODO remove
-        warning(e$message, call. = TRUE)
         NULL
       }
     )
@@ -209,8 +199,6 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
       if (verbose) {
         warning("Can't calculate weighted residuals from model.", call. = FALSE)
       }
-      ## TODO remove
-      warning(e$message, call. = TRUE)
       NULL
     }
   )

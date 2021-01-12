@@ -21,15 +21,18 @@ if (require("testthat") && require("insight") && require("lme4")) {
       get_weights(m),
       weights(m)
     )
-
     expect_equal(
-      as.vector(insight::get_residuals(m)),
+      as.vector(get_residuals(m)),
       as.vector(residuals(m))
     )
     expect_equal(
-      insight::get_residuals(m, weighted = TRUE),
-      as.vector(weighted.residuals(m))
+      as.vector(get_deviance(m)),
+      as.vector(deviance(m))
     )
+    # expect_equal(
+    #   get_residuals(m, weighted = TRUE),
+    #   as.vector(weighted.residuals(m))
+    # )
   })
 
   test_that("get_residuals - glm", {
@@ -47,13 +50,17 @@ if (require("testthat") && require("insight") && require("lme4")) {
       weights(m)
     )
     expect_equal(
-      as.vector(insight::get_residuals(m)),
+      as.vector(get_residuals(m)),
       as.vector(residuals(m))
     )
     expect_equal(
-      insight::get_residuals(m, weighted = TRUE),
-      as.vector(weighted.residuals(m))
+      as.vector(get_deviance(m)),
+      as.vector(deviance(m))
     )
+    # expect_equal(
+    #   get_residuals(m, weighted = TRUE),
+    #   as.vector(weighted.residuals(m))
+    # )
   })
 
   test_that("get_residuals - lmer", {
@@ -71,13 +78,17 @@ if (require("testthat") && require("insight") && require("lme4")) {
       weights(m)
     )
     expect_equal(
-      as.vector(insight::get_residuals(m)),
+      as.vector(get_residuals(m)),
       as.vector(residuals(m))
     )
     expect_equal(
-      insight::get_residuals(m, weighted = TRUE),
-      as.vector(weighted.residuals(m))
+      as.vector(get_deviance(m)),
+      as.vector(deviance(m, REML = FALSE))
     )
+    # expect_equal(
+    #   get_residuals(m, weighted = TRUE),
+    #   as.vector(weighted.residuals(m))
+    # )
   })
 
   test_that("get_residuals - glmer", {
@@ -95,13 +106,17 @@ if (require("testthat") && require("insight") && require("lme4")) {
       weights(m)
     )
     expect_equal(
-      as.vector(insight::get_residuals(m)),
+      as.vector(get_residuals(m)),
       as.vector(residuals(m))
     )
     expect_equal(
-      insight::get_residuals(m, weighted = TRUE),
-      as.vector(weighted.residuals(m))
+      as.vector(get_deviance(m)),
+      as.vector(deviance(m))
     )
+    # expect_equal(
+    #   get_residuals(m, weighted = TRUE),
+    #   as.vector(weighted.residuals(m))
+    # )
   })
 
 }
