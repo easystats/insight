@@ -42,7 +42,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   w <- NULL
   tryCatch(
     {
-      w <- stats::weights(x)
+      w <- stats::weights(x, ...)
     },
     error = function(e) {
       NULL
