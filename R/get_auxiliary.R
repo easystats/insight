@@ -54,8 +54,8 @@ get_dispersion.glm <- function(x, ...) {
     disp <- 1
   } else {
     working_weights <- get_weights(x, type = "working")
-    working_res <- sum(as.vector(get_residuals(x, type = "working"))^2 * working_weights)
-    disp <- working_res[working_weights > 0] / get_df(x, type = "residual")
+    working_res <- as.vector(get_residuals(x, type = "working"))^2 * working_weights
+    disp <- sum(working_res[working_weights > 0]) / get_df(x, type = "residual")
   }
   disp
 }
