@@ -14,7 +14,10 @@
 #' could not be accessed.
 #'
 #' @details Currently, only sigma and the dispersion parameter are returned, and
-#' only for a limited set of models.
+#' only for a limited set of models. For mixed models of class \code{glmer},
+#' the dispersion parameter is also called phi, and is the ratio of the sum
+#' of the squared pearson-residuals and the residual degrees of freedom. For
+#' models of class \code{glmmTMB}, dispersion is sigma^2.
 #'
 #' @examples
 #' # from ?glm
@@ -49,6 +52,7 @@ get_dispersion <- function(x, ...) {
 }
 
 
+
 get_dispersion.glm <- function(x, ...) {
   info <- model_info(x)
   disp <- NULL
@@ -59,6 +63,40 @@ get_dispersion.glm <- function(x, ...) {
     working_weights <- get_weights(x, type = "working")
     working_res <- as.vector(get_residuals(x, type = "working"))^2 * working_weights
     disp <- sum(working_res[working_weights > 0]) / get_df(x, type = "residual")
+  }
+  disp
+}
+
+
+
+get_dispersion.glmer <- function(x, ...) {
+  info <- model_info(x)
+  disp <- NULL
+
+  if (info$is_poisson || info$is_binomial || info$is_negbin) {
+    disp <- 1
+  } else {
+    # see http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#fitting-models-with-overdispersion
+    # phi is the dispersion factor, and phi is usually "sigma^2"
+    # (https://stat.ethz.ch/pipermail/r-sig-mixed-models/2017q4/026168.html)
+    # or the following ratio:
+    res_df <- get_df(x, type = "residual")
+    p_res <- get_residuals(x, type = "pearson")
+    disp <- sum(p_res^2) / res_df
+  }
+  disp
+}
+
+
+
+get_dispersion.glmmTMB <- function(x, ...) {
+  info <- model_info(x)
+  disp <- NULL
+
+  if (info$is_poisson || info$is_binomial || info$is_negbin) {
+    disp <- 1
+  } else {
+    disp <- as.numeric(get_sigma(x))^2
   }
   disp
 }

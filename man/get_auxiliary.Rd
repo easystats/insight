@@ -25,7 +25,10 @@ dispersion, sigma, or beta...
 }
 \details{
 Currently, only sigma and the dispersion parameter are returned, and
-only for a limited set of models.
+only for a limited set of models. For mixed models of class \code{glmer},
+the dispersion parameter is also called phi, and is the ratio of the sum
+of the squared pearson-residuals and the residual degrees of freedom. For
+models of class \code{glmmTMB}, dispersion is sigma^2.
 }
 \examples{
 # from ?glm
