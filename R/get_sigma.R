@@ -59,8 +59,7 @@ get_sigma <- function(x) {
   if (.is_empty_object(s)) {
     s <- tryCatch(
       {
-        estimates <- get_parameters(x)$Estimate
-        sqrt(get_deviance(x) / (n_obs(x) - sum(!is.na(estimates))))
+        sqrt(get_deviance(x) / get_df(x, type = "residual"))
       },
       error = function(e) {
         NULL
