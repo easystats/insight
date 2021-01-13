@@ -140,7 +140,10 @@ dispersion, sigma, or beta...</p>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>The name of the auxiliary parameter that should be retrieved.</p></td>
+      <td><p>The name of the auxiliary parameter that should be retrieved.
+<code>"sigma"</code> is available for most models, <code>"dispersion"</code> for models
+of class <code>glm</code>, <code>glmerMod</code> or <code>glmmTMB</code> as well as <code>brmsfit</code>.
+<code>"beta"</code> is currently only returned for <code>brmsfit</code> models.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -168,9 +171,9 @@ be considered as variance-to-mean ratio for generalized (linear) mixed
 models. Exceptions are models of class <code>glmmTMB</code> and <code>brmsfit</code>,
 where the dispersion equals &sigma;<sup>2</sup>.
 In detail, the computation of the dispersion parameter for generalized linear
-models, is the ratio of the sum of the squared working-residuals and the
+models is the ratio of the sum of the squared working-residuals and the
 residual degrees of freedom. For mixed models of class <code>glmer</code>, the
-dispersion parameter is also called &phi;,
+dispersion parameter is also called &phi;
 and is the ratio of the sum of the squared pearson-residuals and the residual
 degrees of freedom. For models of class <code>glmmTMB</code>, dispersion is
 &sigma;<sup>2</sup>.</p>
