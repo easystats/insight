@@ -129,7 +129,7 @@ dispersion, sigma, or beta..." />
 dispersion, sigma, or beta...</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_auxiliary</span><span class='op'>(</span><span class='va'>x</span>, type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"sigma"</span>, <span class='st'>"dispersion"</span><span class='op'>)</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_auxiliary</span><span class='op'>(</span><span class='va'>x</span>, type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"sigma"</span>, <span class='st'>"dispersion"</span>, <span class='st'>"beta"</span><span class='op'>)</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,10 +159,22 @@ could not be accessed.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Currently, only sigma and the dispersion parameter are returned, and
-only for a limited set of models. For mixed models of class <code>glmer</code>,
-the dispersion parameter is also called phi, and is the ratio of the sum
-of the squared pearson-residuals and the residual degrees of freedom. For
-models of class <code>glmmTMB</code>, dispersion is sigma^2.</p>
+only for a limited set of models.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Sigma Parameter</h3>
+<p>See <code><a href='get_sigma.html'>get_sigma</a></code>.</p>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Dispersion Parameter</h3>
+<p>There are many different definitions of "dispersion", depending on the context.
+<code>get_auxiliary()</code> returns the dispersion parameters that usually can
+be considered as variance-to-mean ratio for generalized (linear) mixed
+models. Exceptions are models of class <code>glmmTMB</code> and <code>brmsfit</code>,
+where the dispersion equals &sigma;<sup>2</sup>.
+In detail, the computation of the dispersion parameter for generalized linear
+models, is the ratio of the sum of the squared working-residuals and the
+residual degrees of freedom. For mixed models of class <code>glmer</code>, the
+dispersion parameter is also called &phi;,
+and is the ratio of the sum of the squared pearson-residuals and the residual
+degrees of freedom. For models of class <code>glmmTMB</code>, dispersion is
+&sigma;<sup>2</sup>.</p>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># from ?glm</span>
