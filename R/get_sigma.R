@@ -9,7 +9,9 @@
 #'
 #' @return The residual standard deviation (sigma), or \code{NULL} if this information could not be accessed.
 #'
-#' @details The residual standard deviation, \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}},
+#' @details
+#'   \subsection{Interpretation of Sigma}{
+#'   The residual standard deviation, \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}},
 #'   indicates that the predicted outcome will be within +/- \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}}
 #'   units of the linear predictor for approximately 68\% of the data points
 #'   (\cite{Gelman, Hill & Vehtari 2020, p.84}). In other words, the residual
@@ -19,6 +21,15 @@
 #'   (\cite{Gelman, Hill & Vehtari 2020, p.168}). \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}}
 #'   can be considered as a measure of the unexplained variation in the data,
 #'   or of the precision of inferences about regression coefficients.
+#'   }
+#'   \subsection{Calculation of Sigma}{
+#'   By default, \code{get_sigma()} tries to extract sigma by calling
+#'   \code{stats::sigma()}. If the model-object has no \code{sigma()} method,
+#'   the next step is calculating sigma as square-root of the model-deviance
+#'   divided by the residual degrees of freedom. Finally, if even this approach
+#'   fails, and \code{x} is a mixed model, the residual standard deviation is
+#'   accessed using the square-root from \code{get_variance_residual()}.
+#'   }
 #'
 #' @references Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.
 #'
