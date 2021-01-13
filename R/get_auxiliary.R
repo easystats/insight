@@ -6,6 +6,9 @@
 #' @name get_auxiliary
 #'
 #' @param x A model.
+#' @param type The name of the auxiliary parameter that should be retrieved.
+#' @param verbose Toggle warnings.
+#' @param ... Currently not used.
 #'
 #' @return The requested auxiliary parameter, or \code{NULL} if this information
 #' could not be accessed.
@@ -21,7 +24,7 @@
 #'   lot2 = c(69, 35, 26, 21, 18, 16, 13, 12, 12)
 #' )
 #' model <- glm(lot1 ~ log(u), data = clotting, family = Gamma())
-#' get_auxiliary(model) # same as summary(model)$dispersion
+#' get_auxiliary(model, type = "dispersion") # same as summary(model)$dispersion
 #' @importFrom stats sigma
 #' @export
 get_auxiliary <- function(x, type = c("sigma", "dispersion"), verbose = TRUE, ...) {

@@ -36,6 +36,7 @@ reference:
     Functions to get values or data from model objects. These functions
     have no `find_*()`-counterpart.
   contents:
+  - get_auxiliary
   - get_data
   - get_df
   - get_intercept

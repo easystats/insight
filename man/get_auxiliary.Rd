@@ -8,6 +8,12 @@ get_auxiliary(x, type = c("sigma", "dispersion"), verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}
+
+\item{type}{The name of the auxiliary parameter that should be retrieved.}
+
+\item{verbose}{Toggle warnings.}
+
+\item{...}{Currently not used.}
 }
 \value{
 The requested auxiliary parameter, or \code{NULL} if this information
@@ -29,5 +35,5 @@ clotting <- data.frame(
   lot2 = c(69, 35, 26, 21, 18, 16, 13, 12, 12)
 )
 model <- glm(lot1 ~ log(u), data = clotting, family = Gamma())
-get_auxiliary(model) # same as summary(model)$dispersion
+get_auxiliary(model, type = "dispersion") # same as summary(model)$dispersion
 }
