@@ -159,7 +159,10 @@ could not be accessed.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Currently, only sigma and the dispersion parameter are returned, and
-only for a limited set of models.</p>
+only for a limited set of models. For mixed models of class <code>glmer</code>,
+the dispersion parameter is also called phi, and is the ratio of the sum
+of the squared pearson-residuals and the residual degrees of freedom. For
+models of class <code>glmmTMB</code>, dispersion is sigma^2.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># from ?glm</span>
