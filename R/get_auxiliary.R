@@ -14,10 +14,24 @@
 #' could not be accessed.
 #'
 #' @details Currently, only sigma and the dispersion parameter are returned, and
-#' only for a limited set of models. For mixed models of class \code{glmer},
-#' the dispersion parameter is also called phi, and is the ratio of the sum
-#' of the squared pearson-residuals and the residual degrees of freedom. For
-#' models of class \code{glmmTMB}, dispersion is sigma^2.
+#' only for a limited set of models.
+#' \subsection{Sigma Parameter}{
+#' See \code{\link{get_sigma}}.
+#' }
+#' \subsection{Dispersion Parameter}{
+#' There are many different definitions of "dispersion", depending on the context.
+#' \code{get_auxiliary()} returns the dispersion parameters that usually can
+#' be considered as variance-to-mean ratio for generalized (linear) mixed
+#' models. Exceptions are models of class \code{glmmTMB} and \code{brmsfit},
+#' where the dispersion equals \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
+#' In detail, the computation of the dispersion parameter for generalized linear
+#' models, is the ratio of the sum of the squared working-residuals and the
+#' residual degrees of freedom. For mixed models of class \code{glmer}, the
+#' dispersion parameter is also called \ifelse{html}{\out{&phi;}}{\eqn{\phi}},
+#' and is the ratio of the sum of the squared pearson-residuals and the residual
+#' degrees of freedom. For models of class \code{glmmTMB}, dispersion is
+#' \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
+#' }
 #'
 #' @examples
 #' # from ?glm
@@ -30,13 +44,15 @@
 #' get_auxiliary(model, type = "dispersion") # same as summary(model)$dispersion
 #' @importFrom stats sigma
 #' @export
-get_auxiliary <- function(x, type = c("sigma", "dispersion"), verbose = TRUE, ...) {
+get_auxiliary <- function(x, type = c("sigma", "dispersion", "beta"), verbose = TRUE, ...) {
   type <- match.arg(type)
 
   if (type == "sigma") {
     return(as.numeric(get_sigma(x)))
   } else if (type == "dispersion") {
     return(get_dispersion(x))
+  } else if (type == "beta") {
+    return(.get_beta(x))
   }
 }
 
@@ -52,7 +68,6 @@ get_dispersion <- function(x, ...) {
 }
 
 
-
 get_dispersion.glm <- function(x, ...) {
   info <- model_info(x)
   disp <- NULL
@@ -66,7 +81,6 @@ get_dispersion.glm <- function(x, ...) {
   }
   disp
 }
-
 
 
 get_dispersion.glmer <- function(x, ...) {
@@ -88,7 +102,6 @@ get_dispersion.glmer <- function(x, ...) {
 }
 
 
-
 get_dispersion.glmmTMB <- function(x, ...) {
   info <- model_info(x)
   disp <- NULL
@@ -99,4 +112,20 @@ get_dispersion.glmmTMB <- function(x, ...) {
     disp <- as.numeric(get_sigma(x))^2
   }
   disp
+}
+
+
+get_dispersion.brmsfit <- get_dispersion.glmmTMB
+
+
+
+# beta ------------------
+
+
+.get_beta <- function(x, ...) {
+  beta <- NULL
+  if (inherits(x, "brmsfir")) {
+    beta <- mean(as.data.frame(x)[["beta"]], na.rm = TRUE)
+  }
+  beta
 }

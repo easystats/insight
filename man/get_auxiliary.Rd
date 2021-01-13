@@ -4,7 +4,7 @@
 \alias{get_auxiliary}
 \title{Get auxiliary parameters from models}
 \usage{
-get_auxiliary(x, type = c("sigma", "dispersion"), verbose = TRUE, ...)
+get_auxiliary(x, type = c("sigma", "dispersion", "beta"), verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}
@@ -25,10 +25,24 @@ dispersion, sigma, or beta...
 }
 \details{
 Currently, only sigma and the dispersion parameter are returned, and
-only for a limited set of models. For mixed models of class \code{glmer},
-the dispersion parameter is also called phi, and is the ratio of the sum
-of the squared pearson-residuals and the residual degrees of freedom. For
-models of class \code{glmmTMB}, dispersion is sigma^2.
+only for a limited set of models.
+\subsection{Sigma Parameter}{
+See \code{\link{get_sigma}}.
+}
+\subsection{Dispersion Parameter}{
+There are many different definitions of "dispersion", depending on the context.
+\code{get_auxiliary()} returns the dispersion parameters that usually can
+be considered as variance-to-mean ratio for generalized (linear) mixed
+models. Exceptions are models of class \code{glmmTMB} and \code{brmsfit},
+where the dispersion equals \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
+In detail, the computation of the dispersion parameter for generalized linear
+models, is the ratio of the sum of the squared working-residuals and the
+residual degrees of freedom. For mixed models of class \code{glmer}, the
+dispersion parameter is also called \ifelse{html}{\out{&phi;}}{\eqn{\phi}},
+and is the ratio of the sum of the squared pearson-residuals and the residual
+degrees of freedom. For models of class \code{glmmTMB}, dispersion is
+\ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
+}
 }
 \examples{
 # from ?glm
