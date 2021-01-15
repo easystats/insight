@@ -1,3 +1,9 @@
+# insight 0.12.1
+
+## Bug fixes
+
+* `get_varcov()` did not properly remove `NA` from rank-deficient models.
+
 # insight 0.12.0
 
 ## Breaking changes
