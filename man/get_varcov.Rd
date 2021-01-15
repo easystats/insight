@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_varcov.R
 \name{get_varcov}
 \alias{get_varcov}
+\alias{get_varcov.default}
 \alias{get_varcov.betareg}
 \alias{get_varcov.DirichletRegModel}
 \alias{get_varcov.clm2}
@@ -19,9 +20,21 @@
 \usage{
 get_varcov(x, ...)
 
-\method{get_varcov}{betareg}(x, component = c("conditional", "precision", "all"), ...)
+\method{get_varcov}{default}(x, verbose = TRUE, ...)
 
-\method{get_varcov}{DirichletRegModel}(x, component = c("conditional", "precision", "all"), ...)
+\method{get_varcov}{betareg}(
+  x,
+  component = c("conditional", "precision", "all"),
+  verbose = TRUE,
+  ...
+)
+
+\method{get_varcov}{DirichletRegModel}(
+  x,
+  component = c("conditional", "precision", "all"),
+  verbose = TRUE,
+  ...
+)
 
 \method{get_varcov}{clm2}(x, component = c("all", "conditional", "scale"), ...)
 
@@ -53,6 +66,8 @@ get_varcov(x, ...)
 \item{x}{A model.}
 
 \item{...}{Currently not used.}
+
+\item{verbose}{Toggle warnings.}
 
 \item{component}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model components only (like count or

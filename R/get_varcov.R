@@ -19,6 +19,7 @@
 #'   applies to models of class \code{mixor}.
 #' @param complete Logical, if \code{TRUE}, for \code{aov}, returns the full
 #'   variance-covariance matrix.
+#' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
 #' @note \code{get_varcov()} tries to return the nearest positive definite matrix
@@ -40,10 +41,11 @@ get_varcov <- function(x, ...) {
 # Default models ----------------------------------------------------
 
 
+#' @rdname get_varcov
 #' @export
-get_varcov.default <- function(x, ...) {
+get_varcov.default <- function(x, verbose = TRUE, ...) {
   vc <- suppressWarnings(stats::vcov(x))
-  .process_vcov(vc)
+  .process_vcov(vc, verbose)
 }
 
 
@@ -75,7 +77,7 @@ get_varcov.mlm <- function(x, ...) {
 
 #' @rdname get_varcov
 #' @export
-get_varcov.betareg <- function(x, component = c("conditional", "precision", "all"), ...) {
+get_varcov.betareg <- function(x, component = c("conditional", "precision", "all"), verbose = TRUE, ...) {
   component <- match.arg(component)
 
   vc <- switch(
@@ -84,13 +86,13 @@ get_varcov.betareg <- function(x, component = c("conditional", "precision", "all
     "precision" = stats::vcov(object = x, model = "precision"),
     stats::vcov(object = x)
   )
-  .process_vcov(vc)
+  .process_vcov(vc, verbose)
 }
 
 
 #' @rdname get_varcov
 #' @export
-get_varcov.DirichletRegModel <- function(x, component = c("conditional", "precision", "all"), ...) {
+get_varcov.DirichletRegModel <- function(x, component = c("conditional", "precision", "all"), verbose = TRUE, ...) {
   component <- match.arg(component)
   if (x$parametrization == "common") {
     vc <- stats::vcov(x)
@@ -107,7 +109,7 @@ get_varcov.DirichletRegModel <- function(x, component = c("conditional", "precis
       vc <- stats::vcov(x)
     }
   }
-  .process_vcov(vc)
+  .process_vcov(vc, verbose)
 }
 
 
@@ -652,12 +654,12 @@ get_varcov.LORgee <- get_varcov.gee
 # helper-functions -----------------------------------------------------
 
 
-.process_vcov <- function(vc) {
+.process_vcov <- function(vc, verbose = TRUE) {
   if (.is_negativ_matrix(vc)) {
     vc <- .fix_negative_matrix(vc)
   }
   # fix possible missings due to rank deficient model matrix
-  vc <- .fix_rank_deficiency(vc)
+  vc <- .fix_rank_deficiency(vc, verbose)
   .remove_backticks_from_matrix_names(as.matrix(vc))
 }
 
@@ -691,15 +693,20 @@ get_varcov.LORgee <- get_varcov.gee
 }
 
 
-.fix_rank_deficiency <- function(m) {
+.fix_rank_deficiency <- function(m, verbose = TRUE) {
   if (anyNA(m)) {
-    warning("Model matrix is rank deficient. Some variance-covariance parameters are missing.", call. = FALSE)
+    if (isTRUE(verbose)) {
+      warning("Model matrix is rank deficient. Some variance-covariance parameters are missing.", call. = FALSE)
+    }
     mm <- m[!is.na(m)]
     if (!is.matrix(mm)) {
       mm <- matrix(mm, nrow = sqrt(length(mm)))
-      na_cols <- apply(m, 2, function(i) !all(is.na(i)))
-      rownames(mm) <- rownames(m)[na_cols]
-      colnames(mm) <- rownames(m)[na_cols]
+      na_cols <- apply(m, 2, function(i) all(is.na(i)))
+      rownames(mm) <- rownames(m)[!na_cols]
+      colnames(mm) <- rownames(m)[!na_cols]
+      attr(mm, "na_columns_name") <- na_cols[na_cols]
+      attr(mm, "na_columns_index") <- which(na_cols)
+      attr(mm, "rank_deficient") <- TRUE
     }
     m <- mm
   }
