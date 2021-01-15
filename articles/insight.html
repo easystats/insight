@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0.1</span>
       </span>
     </div>
 
@@ -92,7 +92,6 @@
 <a href="#overview-of-core-functions" class="anchor"></a>Overview of Core Functions</h2>
 <p>A statistical model is an object describing the relationship between variables. Although there are a lot of <em>different types</em> of models, each with their specificities, most of them also share some <em>common components</em>. The goal of <strong>insight</strong> is to help you retrieve these components.</p>
 <p>The <code>get_*</code> prefix extracts <em>values</em> (or <em>data</em>) associated with model-specific objects (e.g., parameters or variables), while the <code>find_*</code> prefix <em>lists</em> model-specific objects (e.g., priors or predictors). These are powerful families of functions allowing for great flexibility in use, whether at a high, descriptive level (<code>find_*</code>) or narrower level of statistical inspection and reporting (<code>get_*</code>). We point users to the package documentation or the complementary package website, <a href="https://easystats.github.io/insight/" class="uri">https://easystats.github.io/insight/</a>, for a detailed list of the arguments associated with each function as well as the returned values from each function.</p>
-<p><img src="insight_design_1.png" width="100%"></p>
 </div>
 <div id="definition-of-model-components" class="section level2">
 <h2 class="hasAnchor">
@@ -117,19 +116,16 @@
 <li>
 <strong>predictor</strong>: independent variables of (the <em>fixed</em> part of) a regression model. For mixed models, variables that are only in the <em>random effects</em> part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are “unique”. As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.</li>
 </ul>
-<p><img src="figure3a.png" width="65%"></p>
 </div>
 <div id="variables" class="section level3">
 <h3 class="hasAnchor">
 <a href="#variables" class="anchor"></a>Variables</h3>
 <p>Any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A “variable” only relates to the unique occurrence of a term, or the term name. For instance, the expression <code>x + poly(x, 2)</code> has only the variable <code>x</code>.</p>
-<p><img src="figure3b.png" width="80%"></p>
 </div>
 <div id="terms" class="section level3">
 <h3 class="hasAnchor">
 <a href="#terms" class="anchor"></a>Terms</h3>
 <p>Terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://rdrr.io/r/stats/poly.html">poly(x, 2)</a></code>.</p>
-<p><img src="figure3c.png" width="80%"></p>
 </div>
 <div id="random-effects" class="section level3">
 <h3 class="hasAnchor">
@@ -140,7 +136,6 @@
 <li>
 <strong>random or grouping factors</strong>: variables that are specified as grouping variables in a mixed effects model.</li>
 </ul>
-<p><img src="figure3d.png" width="65%"></p>
 </div>
 </div>
 <div id="examples" class="section level2">
@@ -173,70 +168,29 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># find the response variable</span>
 <span class="fu"><a href="../reference/find_response.html">find_response</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="co">#&gt; [1] "Reaction"</span>
 
 <span class="co"># find all predictors, fixed part by default</span>
 <span class="fu"><a href="../reference/find_predictors.html">find_predictors</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="co">#&gt; $conditional</span>
-<span class="co">#&gt; [1] "Days"  "Weeks" "cat"</span>
 
 <span class="co"># find random effects, grouping factors only</span>
 <span class="fu"><a href="../reference/find_random.html">find_random</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="co">#&gt; $random</span>
-<span class="co">#&gt; [1] "mysubgrp:mygrp" "mygrp"          "Subject"</span>
 
 <span class="co"># find random slopes</span>
 <span class="fu"><a href="../reference/find_random_slopes.html">find_random_slopes</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="co">#&gt; $random</span>
-<span class="co">#&gt; [1] "Days"</span>
 
 <span class="co"># find all predictors, including random effects</span>
 <span class="fu"><a href="../reference/find_predictors.html">find_predictors</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"all"</span>, component <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>
-<span class="co">#&gt; $conditional</span>
-<span class="co">#&gt; [1] "Days"  "Weeks" "cat"  </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $random</span>
-<span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Subject"</span>
 
 <span class="co"># find all terms, including response and random effects</span>
 <span class="co"># this is essentially the same as the previous example plus response</span>
 <span class="fu"><a href="../reference/find_terms.html">find_terms</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="co">#&gt; $response</span>
-<span class="co">#&gt; [1] "Reaction"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $conditional</span>
-<span class="co">#&gt; [1] "Days"         "I(Days^2)"    "log1p(Weeks)" "cat"         </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $random</span>
-<span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Days"     "Subject"</span>
 
 <span class="co"># find all variables, i.e. also quadratic or log-transformed predictors</span>
-<span class="fu"><a href="../reference/find_variables.html">find_variables</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="co">#&gt; $response</span>
-<span class="co">#&gt; [1] "Reaction"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $conditional</span>
-<span class="co">#&gt; [1] "Days"  "Weeks" "cat"  </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $random</span>
-<span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Subject"</span></code></pre></div>
+<span class="fu"><a href="../reference/find_variables.html">find_variables</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <p>Finally, there is <code><a href="../reference/find_parameters.html">find_parameters()</a></code>. Parameters are also known as <em>coefficients</em>, and <code><a href="../reference/find_parameters.html">find_parameters()</a></code> does exactly that: returns the model coefficients.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># find model parameters, i.e. coefficients</span>
-<span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="co">#&gt; $conditional</span>
-<span class="co">#&gt; [1] "(Intercept)"  "Days"         "I(Days^2)"    "log1p(Weeks)" "catb"        </span>
-<span class="co">#&gt; [6] "catc"         "catd"        </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $random</span>
-<span class="co">#&gt; $random$`mysubgrp:mygrp`</span>
-<span class="co">#&gt; [1] "(Intercept)"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $random$Subject</span>
-<span class="co">#&gt; [1] "(Intercept)" "Days"       </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $random$mygrp</span>
-<span class="co">#&gt; [1] "(Intercept)"</span></code></pre></div>
+<span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="examples-of-use-cases-in-r" class="section level2">
 <h2 class="hasAnchor">

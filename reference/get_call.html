@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0.1</span>
       </span>
     </div>
 
@@ -151,7 +151,11 @@
   <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
   <span class='fu'>get_call</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; lmer(formula = Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)</div></pre>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: lme4</span></div><div class='output co'>#&gt; <span class='message'>Error: package or namespace load failed for ‘lme4’ in dyn.load(file, DLLpath = DLLpath, ...):</span>
+#&gt; <span class='message'> unable to load shared object '/Users/runner/work/_temp/Library/statmod/libs/statmod.so':</span>
+#&gt; <span class='message'>  dlopen(/Users/runner/work/_temp/Library/statmod/libs/statmod.so, 6): Library not loaded: /usr/local/gfortran/lib/libgfortran.5.dylib</span>
+#&gt; <span class='message'>  Referenced from: /Users/runner/work/_temp/Library/statmod/libs/statmod.so</span>
+#&gt; <span class='message'>  Reason: image not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

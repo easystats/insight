@@ -83,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0.1</span>
       </span>
     </div>
 
@@ -159,26 +159,11 @@
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>null_model</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; Linear mixed model fit by REML ['lmerMod']
-#&gt; Formula: Reaction ~ (1 + Days | Subject)
-#&gt;    Data: sleepstudy
-#&gt; 
-#&gt; REML criterion at convergence: 1769.8
-#&gt; 
-#&gt; Scaled residuals: 
-#&gt;     Min      1Q  Median      3Q     Max 
-#&gt; -4.0449 -0.4486  0.0089  0.4819  5.2186 
-#&gt; 
-#&gt; Random effects:
-#&gt;  Groups   Name        Variance Std.Dev. Corr 
-#&gt;  Subject  (Intercept) 651.6    25.53         
-#&gt;           Days        142.2    11.93    -0.18
-#&gt;  Residual             654.9    25.59         
-#&gt; Number of obs: 180, groups:  Subject, 18
-#&gt; 
-#&gt; Fixed effects:
-#&gt;             Estimate Std. Error t value
-#&gt; (Intercept)   257.76       6.76   38.13</div></pre>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: lme4</span></div><div class='output co'>#&gt; <span class='message'>Error: package or namespace load failed for ‘lme4’ in dyn.load(file, DLLpath = DLLpath, ...):</span>
+#&gt; <span class='message'> unable to load shared object '/Users/runner/work/_temp/Library/statmod/libs/statmod.so':</span>
+#&gt; <span class='message'>  dlopen(/Users/runner/work/_temp/Library/statmod/libs/statmod.so, 6): Library not loaded: /usr/local/gfortran/lib/libgfortran.5.dylib</span>
+#&gt; <span class='message'>  Referenced from: /Users/runner/work/_temp/Library/statmod/libs/statmod.so</span>
+#&gt; <span class='message'>  Reason: image not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

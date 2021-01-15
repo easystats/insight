@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0.1</span>
       </span>
     </div>
 
@@ -220,10 +220,7 @@
   <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>format_table</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>format_table</span><span class='op'>(</span><span class='va'>x</span>, p_digits <span class='op'>=</span> <span class='st'>"scientific"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: parameters</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘parameters’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:insight’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    n_parameters</span></div><div class='output co'>#&gt;                            Parameter Coefficient   SE        95% CI t(144)
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: parameters</span></div><div class='output co'>#&gt;                            Parameter Coefficient   SE        95% CI t(144)
 #&gt; 1                        (Intercept)        2.64 0.57 [ 1.51, 3.77]   4.62
 #&gt; 2               Species [versicolor]        0.90 0.80 [-0.68, 2.48]   1.13
 #&gt; 3                Species [virginica]        1.27 0.82 [-0.35, 2.88]   1.55
@@ -242,14 +239,11 @@
   <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>model_parameters</a></span><span class='op'>(</span><span class='va'>model</span>, ci <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.69</span>, <span class='fl'>0.89</span>, <span class='fl'>0.95</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>format_table</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span><span class='co'># }</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>This is rstanarm version 2.21.1</span></div><div class='output co'>#&gt; <span class='message'>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span></div><div class='output co'>#&gt; <span class='message'>- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>  options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt;           Parameter Median        ?% CI   pd % in ROPE  Rhat     ESS
-#&gt; 1       (Intercept)   5.01 [4.94, 5.09] 100%        0% 1.000 3279.02
-#&gt; 2 Speciesversicolor   0.93 [0.82, 1.03] 100%        0% 1.000 3458.46
-#&gt; 3  Speciesvirginica   1.58 [1.48, 1.69] 100%        0% 1.000 3201.26
-#&gt;                   Prior
-#&gt; 1 Normal (5.84 +- 2.07)
-#&gt; 2 Normal (0.00 +- 4.38)
-#&gt; 3 Normal (0.00 +- 4.38)</div></pre>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>Error: package or namespace load failed for ‘rstanarm’ in dyn.load(file, DLLpath = DLLpath, ...):</span>
+#&gt; <span class='message'> unable to load shared object '/Users/runner/work/_temp/Library/igraph/libs/igraph.so':</span>
+#&gt; <span class='message'>  dlopen(/Users/runner/work/_temp/Library/igraph/libs/igraph.so, 6): Library not loaded: /usr/local/gfortran/lib/libgfortran.5.dylib</span>
+#&gt; <span class='message'>  Referenced from: /Users/runner/work/_temp/Library/igraph/libs/igraph.so</span>
+#&gt; <span class='message'>  Reason: image not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
