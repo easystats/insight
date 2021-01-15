@@ -695,10 +695,12 @@ get_varcov.LORgee <- get_varcov.gee
   if (anyNA(m)) {
     warning("Model matrix is rank deficient. Some variance-covariance parameters are missing.", call. = FALSE)
     mm <- m[!is.na(m)]
-    mm <- matrix(mm, nrow = sqrt(length(mm)))
-    na_cols <- apply(m, 2, function(i) !all(is.na(i)))
-    rownames(mm) <- rownames(m)[na_cols]
-    colnames(mm) <- rownames(m)[na_cols]
+    if (!is.matrix(mm)) {
+      mm <- matrix(mm, nrow = sqrt(length(mm)))
+      na_cols <- apply(m, 2, function(i) !all(is.na(i)))
+      rownames(mm) <- rownames(m)[na_cols]
+      colnames(mm) <- rownames(m)[na_cols]
+    }
     m <- mm
   }
   m
