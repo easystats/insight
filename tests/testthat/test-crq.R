@@ -101,15 +101,17 @@ if (require("testthat") &&
     expect_identical(find_statistic(m1), "t-statistic")
   })
 
-  test_that("get_statistic", {
-    expect_equal(
-      get_statistic(m1)$Parameter,
-      c("(Intercept)", "x", "(Intercept)", "x", "(Intercept)", "x", "(Intercept)", "x")
-    )
-    expect_equal(
-      get_statistic(m1)$Statistic,
-      c(67.64633, 5.88482, 56.8453, 10.05249, 76.86565, 9.78366, 53.05556, 12.83912),
-      tolerance = 1e-3
-    )
-  })
+  if (getRversion() >= "3.6.0") {
+    test_that("get_statistic", {
+      expect_equal(
+        get_statistic(m1)$Parameter,
+        c("(Intercept)", "x", "(Intercept)", "x", "(Intercept)", "x", "(Intercept)", "x")
+      )
+      expect_equal(
+        get_statistic(m1)$Statistic,
+        c(67.64633, 5.88482, 56.8453, 10.05249, 76.86565, 9.78366, 53.05556, 12.83912),
+        tolerance = 1e-3
+      )
+    })
+  }
 }
