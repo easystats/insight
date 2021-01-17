@@ -42,7 +42,7 @@ In detail, the computation of the dispersion parameter for generalized linear
 models is the ratio of the sum of the squared working-residuals and the
 residual degrees of freedom. For mixed models of class \code{glmer}, the
 dispersion parameter is also called \ifelse{html}{\out{&phi;}}{\eqn{\phi}}
-and is the ratio of the sum of the squared pearson-residuals and the residual
+and is the ratio of the sum of the squared Pearson-residuals and the residual
 degrees of freedom. For models of class \code{glmmTMB}, dispersion is
 \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
 }
