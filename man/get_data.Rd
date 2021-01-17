@@ -118,8 +118,10 @@ Unlike \code{model.frame()}, which may contain transformed variables
   columns with transformed values.
 }
 \examples{
-data(cbpp, package = "lme4")
-cbpp$trials <- cbpp$size - cbpp$incidence
-m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
-head(get_data(m))
+if (require("lme4")) {
+  data(cbpp, package = "lme4")
+  cbpp$trials <- cbpp$size - cbpp$incidence
+  m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+  head(get_data(m))
+}
 }

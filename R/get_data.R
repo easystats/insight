@@ -21,10 +21,12 @@
 #'   columns with transformed values.
 #'
 #' @examples
-#' data(cbpp, package = "lme4")
-#' cbpp$trials <- cbpp$size - cbpp$incidence
-#' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
-#' head(get_data(m))
+#' if (require("lme4")) {
+#'   data(cbpp, package = "lme4")
+#'   cbpp$trials <- cbpp$size - cbpp$incidence
+#'   m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+#'   head(get_data(m))
+#' }
 #' @importFrom stats model.frame na.omit
 #' @export
 get_data <- function(x, ...) {
