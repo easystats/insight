@@ -22,10 +22,11 @@ has_intercept(model)
 model <- lm(mpg ~ gear, data = mtcars)
 has_intercept(model)
 
-library(lme4)
-model <- lmer(Reaction ~ 0 + Days + (Days | Subject), data = sleepstudy)
-has_intercept(model)
+if (require("lme4")) {
+  model <- lmer(Reaction ~ 0 + Days + (Days | Subject), data = sleepstudy)
+  has_intercept(model)
 
-model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
-has_intercept(model)
+  model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+  has_intercept(model)
+}
 }
