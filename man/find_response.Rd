@@ -22,11 +22,12 @@ The name(s) of the response variable(s) from \code{x} as character
 Returns the name(s) of the response variable(s) from a model object.
 }
 \examples{
-library(lme4)
-data(cbpp)
-cbpp$trials <- cbpp$size - cbpp$incidence
-m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+if (require("lme4")) {
+  data(cbpp)
+  cbpp$trials <- cbpp$size - cbpp$incidence
+  m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 
-find_response(m, combine = TRUE)
-find_response(m, combine = FALSE)
+  find_response(m, combine = TRUE)
+  find_response(m, combine = FALSE)
+}
 }
