@@ -15,12 +15,13 @@
 #' model <- lm(mpg ~ gear, data = mtcars)
 #' is_nullmodel(model)
 #'
-#' library(lme4)
-#' model <- lmer(Reaction ~ 1 + (Days | Subject), data = sleepstudy)
-#' is_nullmodel(model)
+#' if (require("lme4")) {
+#'   model <- lmer(Reaction ~ 1 + (Days | Subject), data = sleepstudy)
+#'   is_nullmodel(model)
 #'
-#' model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
-#' is_nullmodel(model)
+#'   model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+#'   is_nullmodel(model)
+#' }
 #' @export
 is_nullmodel <- function(x) {
   if (is_multivariate(x)) {
