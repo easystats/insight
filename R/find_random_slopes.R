@@ -14,11 +14,11 @@
 #'    }
 #'
 #' @examples
-#' library(lme4)
-#' data(sleepstudy)
-#'
-#' m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-#' find_random_slopes(m)
+#' if (require("lme4")) {
+#'   data(sleepstudy)
+#'   m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+#'   find_random_slopes(m)
+#' }
 #' @export
 find_random_slopes <- function(x) {
   random_slopes <- vector(mode = "list")

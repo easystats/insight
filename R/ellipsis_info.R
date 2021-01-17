@@ -64,7 +64,7 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
   names(objects) <- object_names
 
   # If only one objects was provided
-  if(length(objects) == 1){
+  if (length(objects) == 1) {
     return(objects[[1]])
   }
 
