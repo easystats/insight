@@ -63,6 +63,11 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
   object_names <- match.call(expand.dots = FALSE)$`...`
   names(objects) <- object_names
 
+  # If only one objects was provided
+  if(length(objects) == 1){
+    return(objects[[1]])
+  }
+
   # Check whether all are models
   is_model <- sapply(objects, insight::is_model)
 

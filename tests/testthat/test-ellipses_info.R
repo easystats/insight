@@ -23,4 +23,9 @@ if (require("testthat") && require("insight")) {
     expect_equal(attributes(info)$is_nested_decreasing, FALSE)
     expect_equal(attributes(info)$is_nested_increasing, TRUE)
   })
+
+  test_that("ellipses_info - single model", {
+    out <- ellipsis_info(m1)
+    expect_equal(out, m1)
+  })
 }
