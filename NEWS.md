@@ -1,5 +1,9 @@
 # insight 0.12.1
 
+## General
+
+* Roll-back R dependency to R >= 3.3.
+
 ## Bug fixes
 
 * `get_varcov()` did not properly remove `NA` from rank-deficient models.
