@@ -677,12 +677,12 @@
 
       # exeception: list for kruskal-wallis
       if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && grepl("^list\\(", data_name)) {
-        l <- eval(str2lang(x$data.name), envir = parent.frame(n = parent_level))
+        l <- eval(.str2lang(x$data.name), envir = parent.frame(n = parent_level))
         names(l) <- paste0("x", 1:length(l))
         return(l)
       }
 
-      data_call <- lapply(data_name, str2lang)
+      data_call <- lapply(data_name, .str2lang)
       columns <- lapply(data_call, eval, envir = parent.frame(n = parent_level))
 
       # preserve table data for McNemar
