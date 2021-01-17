@@ -20,3 +20,14 @@ isTRUE <- function(x) {
 isFALSE <- function(x) {
   is.logical(x) && length(x) == 1L && !is.na(x) && !x
 }
+
+
+
+#' @keywords internal
+#' @rawNamespace if (getRversion() < "4.0.0") export(deparse1)
+deparse1 <- function(expr, collapse = " ", width.cutoff = 500L, ...) {
+  if (is.null(expr)) {
+    return(NULL)
+  }
+  paste0(sapply(deparse(expr, width.cutoff = width.cutoff), trimws, simplify = TRUE), collapse = collapse)
+}
