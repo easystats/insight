@@ -2,16 +2,10 @@
 # insight <img src='man/figures/logo.png' align="right" height="139" />
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.01412/status.svg)](https://doi.org/10.21105/joss.01412)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
-[![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/)
-[![Features](https://img.shields.io/badge/features-insight-orange.svg?colorB=2196F3)](https://easystats.github.io/insight/reference/index.html)
-[![R
-check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
 [![downloads](https://cranlogs.r-pkg.org/badges/insight)](https://cranlogs.r-pkg.org/)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/insight)](https://cranlogs.r-pkg.org/)
-[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
 
-**Gain insight into your models\!**
+**Gain insight into your models!**
 
 When fitting any statistical model, there are many useful pieces of
 information that are simultaneously calculated and stored beyond
@@ -29,6 +23,32 @@ model objects. These tools aid applied research in virtually any field
 who fit, diagnose, and present statistical models by streamlining access
 to every aspect of many model objects via consistent syntax and output.
 
+## Installation
+
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
+[![R
+check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
+
+Run the following to install the stable release of **insight** from
+CRAN:
+
+``` r
+install.packages("insight")
+```
+
+Or this one to install the latest development version:
+
+``` r
+install.packages("remotes")
+remotes::install_github("easystats/insight")
+```
+
+## Documentation
+
+[![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-insight-orange.svg?colorB=2196F3)](https://easystats.github.io/insight/reference/index.html)
+
 Built with non-programmers in mind, **insight** offers a broad toolbox
 for making model and data information easily accessible. While
 **insight** offers many useful functions for working with and
@@ -38,9 +58,10 @@ overview of model objects (e.g., functional form of the model, the model
 family, link function, number of observations, variables included in the
 specification, etc.). With a clear understanding of the model
 introduced, users are able to adapt other functions for more nuanced
-exploration of and interaction with virtually any model object.
+exploration of and interaction with virtually any model object.Please
+visit <https://easystats.github.io/insight/> for documentation.
 
-## Definition of Model Components
+### Definition of Model Components
 
 The functions from **insight** address different components of a model.
 In an effort to avoid confusion about specific “targets” of each
@@ -59,9 +80,9 @@ as *coefficients*.
 
 #### Response and Predictors
 
-  - **response**: the outcome or response variable (dependent variable)
+-   **response**: the outcome or response variable (dependent variable)
     of a regression model.
-  - **predictor**: independent variables of (the *fixed* part of) a
+-   **predictor**: independent variables of (the *fixed* part of) a
     regression model. For mixed models, variables that are only in the
     *random effects* part (i.e. grouping factors) of the model are not
     returned as predictors by default. However, these can be included
@@ -85,9 +106,9 @@ and `poly(x, 2)`.
 
 #### Random Effects
 
-  - **random slopes**: variables that are specified as random slopes in
+-   **random slopes**: variables that are specified as random slopes in
     a mixed effects model.
-  - **random or grouping factors**: variables that are specified as
+-   **random or grouping factors**: variables that are specified as
     grouping variables in a mixed effects model.
 
 *Aren’t the predictors, terms and parameters the same thing?*
@@ -96,7 +117,7 @@ In some cases, yes. But not in all cases. Find out more by [**clicking
 here to access the
 documentation**](https://easystats.github.io/insight/articles/insight.html).
 
-## Functions
+### Functions
 
 The package revolves around two key prefixes: `get_*` and `find_*`. The
 `get_*` prefix extracts *values* (or *data*) associated with
@@ -137,7 +158,7 @@ or the complementary package website,
 arguments associated with each function as well as the returned values
 from each function.
 
-## Examples of Use Cases in R
+### Examples of Use Cases in R
 
 We now would like to provide examples of use cases of the **insight**
 package. These examples probably do not cover typical real-world
@@ -229,25 +250,6 @@ print_params(m2)
 #> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"
 ```
 
-## Installation
-
-Run the following to install the latest GitHub-version of **insight**:
-
-``` r
-install.packages("devtools")
-devtools::install_github("easystats/insight")
-```
-
-Or install the latest stable release from CRAN:
-
-``` r
-install.packages("insight")
-```
-
-## Documentation
-
-Please visit <https://easystats.github.io/insight/> for documentation.
-
 ## Contributing and Support
 
 In case you want to file an issue or contribute in another way to the
@@ -320,9 +322,9 @@ supported_models()
 #> [166] "zerotrunc"
 ```
 
-  - **Didn’t find a model?** [File an
+-   **Didn’t find a model?** [File an
     issue](https://github.com/easystats/insight/issues) and request
-    additional model-support in *insight*\!
+    additional model-support in *insight*!
 
 ## Credits
 

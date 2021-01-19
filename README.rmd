@@ -27,17 +27,43 @@ options(knitr.kable.NA = '', digits = 2, width = 80)
 
 # insight <img src='man/figures/logo.png' align="right" height="139" />
 
-[![DOI](https://joss.theoj.org/papers/10.21105/joss.01412/status.svg)](https://doi.org/10.21105/joss.01412) [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight) [![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/) [![Features](https://img.shields.io/badge/features-insight-orange.svg?colorB=2196F3)](https://easystats.github.io/insight/reference/index.html) [![R check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions) [![downloads](https://cranlogs.r-pkg.org/badges/insight)](https://cranlogs.r-pkg.org/) [![total](https://cranlogs.r-pkg.org/badges/grand-total/insight)](https://cranlogs.r-pkg.org/) [![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.01412/status.svg)](https://doi.org/10.21105/joss.01412)
+[![downloads](https://cranlogs.r-pkg.org/badges/insight)](https://cranlogs.r-pkg.org/) [![total](https://cranlogs.r-pkg.org/badges/grand-total/insight)](https://cranlogs.r-pkg.org/) 
 
 **Gain insight into your models!**
 
-When fitting any statistical model, there are many useful pieces of information that are simultaneously calculated and stored beyond coefficient estimates and general model fit statistics. Although there exist some generic functions to obtain model information and data, many package-specific modeling functions do not provide such methods to allow users to access such valuable information. 
+When fitting any statistical model, there are many useful pieces of information that are simultaneously calculated and stored beyond coefficient estimates and general model fit statistics. Although there exist some generic functions to obtain model information and data, many package-specific modeling functions do not provide such methods to allow users to access such valuable information.
 
 **insight** is an R-package that fills this important gap by providing a suite of functions to support almost any model (see a list of the many models supported below in the **List of Supported Packages and Models** section). The goal of **insight**, then, is to provide tools to provide *easy*, *intuitive*, and *consistent* access to information contained in model objects. These tools aid applied research in virtually any field who fit, diagnose, and present statistical models by streamlining access to every aspect of many model objects via consistent syntax and output.
 
-Built with non-programmers in mind, **insight** offers a broad toolbox for making model and data information easily accessible. While **insight** offers many useful functions for working with and understanding model objects (discussed below), we suggest users start with `model_info()`, as this function provides a clean and consistent overview of model objects (e.g., functional form of the model, the model family, link function, number of observations, variables included in the specification, etc.). With a clear understanding of the model introduced, users are able to adapt other functions for more nuanced exploration of and interaction with virtually any model object. 
+## Installation
 
-## Definition of Model Components
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
+[![R check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
+
+Run the following to install the stable release of **insight** from CRAN:
+
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
+install.packages("insight")
+```
+
+Or this one to install the latest development version:
+
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
+install.packages("remotes")
+remotes::install_github("easystats/insight")
+```
+
+
+## Documentation
+
+[![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-insight-orange.svg?colorB=2196F3)](https://easystats.github.io/insight/reference/index.html)
+
+Built with non-programmers in mind, **insight** offers a broad toolbox for making model and data information easily accessible. While **insight** offers many useful functions for working with and understanding model objects (discussed below), we suggest users start with `model_info()`, as this function provides a clean and consistent overview of model objects (e.g., functional form of the model, the model family, link function, number of observations, variables included in the specification, etc.). With a clear understanding of the model introduced, users are able to adapt other functions for more nuanced exploration of and interaction with virtually any model object.Please visit [https://easystats.github.io/insight/](https://easystats.github.io/insight/) for documentation.
+
+### Definition of Model Components
 
 The functions from **insight** address different components of a model. In an effort to avoid confusion about specific "targets" of each function, in this section we provide a short explanation of **insight**'s definitions of regression model components.
 
@@ -71,7 +97,7 @@ Terms themselves consist of variable and factor names separated by operators, or
 
 In some cases, yes. But not in all cases. Find out more by [**clicking here to access the documentation**](https://easystats.github.io/insight/articles/insight.html).
 
-## Functions
+### Functions
 
 The package revolves around two key prefixes: `get_*` and `find_*`. The `get_*` prefix extracts *values* (or *data*) associated with model-specific objects (e.g., parameters or variables), while the `find_*` prefix *lists* model-specific objects (e.g., priors or predictors). These are powerful families of functions allowing for great flexibility in use, whether at a high, descriptive level (`find_*`) or narrower level of statistical inspection and reporting (`get_*`).
 
@@ -79,7 +105,7 @@ The package revolves around two key prefixes: `get_*` and `find_*`. The `get_*` 
 
 In total, the **insight** package includes 16 core functions: [get_data()](https://easystats.github.io/insight/reference/get_data.html), [get_priors()](https://easystats.github.io/insight/reference/get_priors.html), [get_variance()](https://easystats.github.io/insight/reference/get_variance.html), [get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html), [get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html), [get_random()](https://easystats.github.io/insight/reference/get_random.html), [get_response()](https://easystats.github.io/insight/reference/get_response.html), [find_algorithm()](https://easystats.github.io/insight/reference/find_algorithm.html), [find_formula()](https://easystats.github.io/insight/reference/find_formula.html), [find_variables()](https://easystats.github.io/insight/reference/find_variables.html), [find_terms()](https://easystats.github.io/insight/reference/find_terms.html), [find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html), [find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html), [find_random()](https://easystats.github.io/insight/reference/find_random.html), [find_response()](https://easystats.github.io/insight/reference/find_response.html), and [model_info()](https://easystats.github.io/insight/reference/model_info.html). In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the `find_terms()` function's `effects` argument allows for the extraction of "fixed effects" terms, "random effects" terms, or by default, "all" terms in the model object. We point users to the package documentation or the complementary package website, https://easystats.github.io/insight/, for a detailed list of the arguments associated with each function as well as the returned values from each function.
 
-## Examples of Use Cases in R
+### Examples of Use Cases in R
 
 We now would like to provide examples of use cases of the **insight** package. These examples probably do not cover typical real-world problems, but serve as illustration of the core idea of this package: The unified interface to access model information. **insight** should help both users and package developers in order to reduce the hassle with the many exceptions from various modelling packages when accessing model information.
 
@@ -153,24 +179,7 @@ m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
 print_params(m2)
 ```
 
-## Installation
 
-Run the following to install the latest GitHub-version of **insight**:
-
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
-install.packages("devtools")
-devtools::install_github("easystats/insight")
-```
-
-Or install the latest stable release from CRAN:
-
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
-install.packages("insight")
-```
-
-## Documentation
-
-Please visit [https://easystats.github.io/insight/](https://easystats.github.io/insight/) for documentation. 
 
 ## Contributing and Support
 
