@@ -1,3 +1,12 @@
+osx <- tryCatch({
+  si <- Sys.info()
+  if (!is.null(si["sysname"])) {
+    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+  } else {
+    FALSE
+  }
+})
+
 if (require("testthat") &&
   require("insight") &&
   require("ordinal")) {
@@ -164,7 +173,7 @@ if (require("testthat") &&
     expect_false(is_multivariate(m2))
   })
 
-  if (getRversion() >= "3.6.0") {
+  if (getRversion() >= "3.6.0" && !isTRUE(osx)) {
     test_that("get_variance", {
       expect_equal(
         get_variance(m1),
