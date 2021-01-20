@@ -127,6 +127,13 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "sumsq"] <- "Sum_Squares"
   cn[cn == "meansq"] <- "Mean_Square"
   cn[cn == "Resid..Dev"] <- "Deviance_error"
+  # convert classic summary
+  cn[cn == "Estimate"] <- "Coefficient"
+  cn[cn == "Std. Error"] <- "SE"
+  cn[cn == "t value"] <- "Statistic"
+  cn[cn == "z value"] <- "Statistic"
+  cn[cn == "Pr(>|t|)"] <- "p"
+  cn[cn == "Pr(>|z|)"] <- "p"
 
   cn
 }
@@ -184,6 +191,13 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
       cn[effectsize_names] <- "estimate"
     }
   }
+
+  # convert classic summary
+  cn[cn == "Std. Error"] <- "std.error"
+  cn[cn == "t value"] <- "statistic"
+  cn[cn == "z value"] <- "statistic"
+  cn[cn == "Pr(>|t|)"] <- "p.value"
+  cn[cn == "Pr(>|z|)"] <- "p.value"
 
   # lowercase for everything
   cn <- gsub(tolower(cn), pattern = "_", replacement = ".", fixed = TRUE)
