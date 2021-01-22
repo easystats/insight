@@ -4,6 +4,10 @@
 
 * Roll-back R dependency to R >= 3.4.
 
+## Changes to functions
+
+* Slightly improved handling of different CI-columns in `format_table()`.
+
 ## Bug fixes
 
 * `get_varcov()` did not properly remove `NA` from rank-deficient models.

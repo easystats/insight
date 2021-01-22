@@ -42,20 +42,37 @@ if (require("testthat") && require("insight")) {
   })
 
   test_that("format others", {
-    testthat::expect_true(is.character(insight::format_pd(0.02)))
-    testthat::expect_equal(nchar(format_bf(4)), 9)
-    testthat::expect_true(is.character(format_rope(0.02)))
+    expect_true(is.character(insight::format_pd(0.02)))
+    expect_equal(nchar(format_bf(4)), 9)
+    expect_true(is.character(format_rope(0.02)))
   })
 
   test_that("format_number", {
-    testthat::expect_equal(format_number(2), "two")
-    testthat::expect_equal(format_number(45), "forty five")
-    testthat::expect_equal(format_number(2), "two")
+    expect_equal(format_number(2), "two")
+    expect_equal(format_number(45), "forty five")
+    expect_equal(format_number(2), "two")
   })
 
   test_that("format_p", {
-    testthat::expect_equal(nchar(format_p(0.02)), 9)
-    testthat::expect_equal(nchar(format_p(0.02, stars = TRUE)), 10)
-    testthat::expect_equal(nchar(format_p(0.02, stars_only = TRUE)), 1)
+    expect_equal(nchar(format_p(0.02)), 9)
+    expect_equal(nchar(format_p(0.02, stars = TRUE)), 10)
+    expect_equal(nchar(format_p(0.02, stars_only = TRUE)), 1)
+  })
+
+  test_that("format_table, other CI columns", {
+    x <- data.frame(test_CI = .9, test_CI_low = .1, test_CI_high = 1.3)
+    test <- utils::capture.output(format_table(x))
+    expect_equal(test, c("   test 90% CI", "1 [0.10, 1.30]"))
+
+    x <- data.frame(CI = .8, CI_low = 2.43, CI_high = 5.453,
+                    test_CI = .9, test_CI_low = .1, test_CI_high = 1.3)
+    test <- utils::capture.output(format_table(x))
+    expect_equal(test, c("        80% CI  test 90% CI", "1 [2.43, 5.45] [0.10, 1.30]"))
+
+    x <- data.frame(CI_low = 2.43, CI_high = 5.453, test_CI_low = .1, test_CI_high = 1.3)
+    attr(x, "ci") <- .8
+    attr(x, "ci_test") <- .9
+    test <- utils::capture.output(format_table(x))
+    expect_equal(test, c("        80% CI  test 90% CI", "1 [2.43, 5.45] [0.10, 1.30]"))
   })
 }

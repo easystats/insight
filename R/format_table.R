@@ -45,7 +45,7 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
 
 
   # Format parameters names ----
-  if (pretty_names & !is.null(att$pretty_names)) {
+  if (pretty_names && !is.null(att$pretty_names)) {
     # remove strings with NA names
     att$pretty_names <- att$pretty_names[!is.na(names(att$pretty_names))]
     if (length(att$pretty_names) != length(x$Parameter)) {
@@ -278,7 +278,7 @@ parameters_table <- format_table
   # Main CI
   ci_low <- names(x)[grep("^CI_low", names(x))]
   ci_high <- names(x)[grep("^CI_high", names(x))]
-  if (length(ci_low) >= 1 & length(ci_low) == length(ci_high)) {
+  if (length(ci_low) >= 1 && length(ci_low) == length(ci_high)) {
     if (!is.null(att$ci)) {
       if (length(unique(stats::na.omit(att$ci))) > 1) {
         ci_colname <- "?% CI"
@@ -312,7 +312,7 @@ parameters_table <- format_table
 .format_other_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE) {
   other_ci_low <- names(x)[grep("_CI_low$", names(x))]
   other_ci_high <- names(x)[grep("_CI_high$", names(x))]
-  if (length(other_ci_low) >= 1 & length(other_ci_low) == length(other_ci_high)) {
+  if (length(other_ci_low) >= 1 && length(other_ci_low) == length(other_ci_high)) {
     other <- unlist(strsplit(other_ci_low, "_CI_low$"))
 
     # CI percentage
@@ -320,8 +320,10 @@ parameters_table <- format_table
       other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(att[[paste0("ci_", other)]])) * 100)
     } else if (!is.null(att$ci)) {
       other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(att$ci)) * 100)
+    } else if (length(other == 1) && paste0(other, "_CI") %in% colnames(x)) {
+      other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(x[[paste0(other, "_CI")]])) * 100)
     } else {
-      other_ci_colname <- paste(other, "CI")
+      other_ci_colname <- paste(other, " CI")
     }
 
     # Get characters to align the CI
@@ -334,6 +336,8 @@ parameters_table <- format_table
       other_ci_position <- which(names(x) == other_ci_high[i])
       x[[other_ci_position]] <- NULL
     }
+    x[[paste0(other, "_CI")]] <- NULL
+
   } else {
     other_ci_colname <- c()
   }
