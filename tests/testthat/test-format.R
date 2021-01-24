@@ -107,5 +107,27 @@ if (require("testthat") && require("insight")) {
         "3         cyl       -1.51 0.41 [-2.05, -0.96] [-2.21, -0.80] -3.64"
       )
     )
+
+    d <- data.frame(
+      Parameter = c("(Intercept)", "wt", "cyl"),
+      Coefficient = c(39.69, -3.19, -1.51),
+      SE = c(1.71, 0.76, 0.41),
+      CI_low_0.8 = c(37.44, -4.18, -2.05),
+      CI_high_0.8 = c(41.94, -2.2, -0.96),
+      CI_low_0.9 = c(36.77, -4.48, -2.21),
+      CI_high_0.9 = c(42.6, -1.9, -0.8),
+      t = c(23.14, -4.22, -3.64),
+      df_error = c(29, 29, 29),
+      stringsAsFactors = FALSE
+    )
+    test <- utils::capture.output(format_table(d))
+    expect_equal(
+      test,
+      c("    Parameter Coefficient   SE         80% CI         90% CI t(29)",
+        "1 (Intercept)       39.69 1.71 [37.44, 41.94] [36.77, 42.60] 23.14",
+        "2          wt       -3.19 0.76 [-4.18, -2.20] [-4.48, -1.90] -4.22",
+        "3         cyl       -1.51 0.41 [-2.05, -0.96] [-2.21, -0.80] -3.64"
+      )
+    )
   })
 }
