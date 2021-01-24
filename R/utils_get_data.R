@@ -656,7 +656,7 @@
 }
 
 
-.retrieve_htest_data <- function(x, parent_level) {
+.retrieve_htest_data <- function(x) {
   out <- tryCatch(
     {
       # split by "and" and "by". E.g., for t.test(1:3, c(1,1:3)), we have
@@ -677,13 +677,13 @@
 
       # exeception: list for kruskal-wallis
       if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && grepl("^list\\(", data_name)) {
-        l <- eval(.str2lang(x$data.name), envir = parent.frame(n = parent_level))
+        l <- eval(.str2lang(x$data.name))
         names(l) <- paste0("x", 1:length(l))
         return(l)
       }
 
       data_call <- lapply(data_name, .str2lang)
-      columns <- lapply(data_call, eval, envir = parent.frame(n = parent_level))
+      columns <- lapply(data_call, eval)
 
       # preserve table data for McNemar
       if (!grepl(" (and|by) ", x$data.name) && (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
@@ -719,15 +719,18 @@
 
   # 2nd try
   if (is.null(out)) {
-    out <- tryCatch(
-      {
-        data_name <- trimws(unlist(strsplit(x$data.name, "(and|,|by)")))
-        as.table(get(data_name, envir = parent.frame(n = parent_level)))
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    for (parent_level in 1:5) {
+      out <- tryCatch(
+        {
+          data_name <- trimws(unlist(strsplit(x$data.name, "(and|,|by)")))
+          as.table(get(data_name, envir = parent.frame(n = parent_level)))
+        },
+        error = function(e) {
+          NULL
+        }
+      )
+      if (!is.null(out)) break
+    }
   }
 
   out

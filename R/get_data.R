@@ -1338,10 +1338,7 @@ get_data.mipo <- function(x, ...) {
 get_data.htest <- function(x, ...) {
   out <- NULL
   if (!is.null(x$data.name)) {
-    for (parent_level in 1:5) {
-      out <- .retrieve_htest_data(x, parent_level)
-      if (!is.null(out)) break
-    }
+    out <- .retrieve_htest_data(x)
   }
   out
 }
