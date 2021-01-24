@@ -90,7 +90,7 @@ export_table <- function(x,
   # data frame now...
   if (identical(format, "html") && !is.data.frame(x) && is.list(x)) {
     x <- do.call(rbind, lapply(x, function(i) {
-      i$Component <- attr(i, "table_caption")
+      i$Component <- attr(i, "table_caption")[1]
       i
     }))
   }
