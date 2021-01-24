@@ -220,29 +220,29 @@
   <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>format_table</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>format_table</span><span class='op'>(</span><span class='va'>x</span>, p_digits <span class='op'>=</span> <span class='st'>"scientific"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: parameters</span></div><div class='output co'>#&gt;                            Parameter Coefficient   SE    CI        95% CI
-#&gt; 1                        (Intercept)        2.64 0.57 95.00 [ 1.51, 3.77]
-#&gt; 2               Species [versicolor]        0.90 0.80 95.00 [-0.68, 2.48]
-#&gt; 3                Species [virginica]        1.27 0.82 95.00 [-0.35, 2.88]
-#&gt; 4                        Sepal.Width        0.69 0.17 95.00 [ 0.36, 1.02]
-#&gt; 5 Species [versicolor] * Sepal.Width        0.17 0.26 95.00 [-0.34, 0.69]
-#&gt; 6  Species [virginica] * Sepal.Width        0.21 0.26 95.00 [-0.29, 0.72]
-#&gt;   t(144)           p
-#&gt; 1   4.62 8.52612e-06
-#&gt; 2   1.13 2.61332e-01
-#&gt; 3   1.55 1.22515e-01
-#&gt; 4   4.17 5.31104e-05
-#&gt; 5   0.67 5.02805e-01
-#&gt; 6   0.83 4.10634e-01</div><div class='input'><span class='co'># \donttest{</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: parameters</span></div><div class='output co'>#&gt;                            Parameter Coefficient   SE   CI        95% CI t(144)
+#&gt; 1                        (Intercept)        2.64 0.57 0.95 [ 1.51, 3.77]   4.62
+#&gt; 2               Species [versicolor]        0.90 0.80 0.95 [-0.68, 2.48]   1.13
+#&gt; 3                Species [virginica]        1.27 0.82 0.95 [-0.35, 2.88]   1.55
+#&gt; 4                        Sepal.Width        0.69 0.17 0.95 [ 0.36, 1.02]   4.17
+#&gt; 5 Species [versicolor] * Sepal.Width        0.17 0.26 0.95 [-0.34, 0.69]   0.67
+#&gt; 6  Species [virginica] * Sepal.Width        0.21 0.26 0.95 [-0.29, 0.72]   0.83
+#&gt;             p
+#&gt; 1 8.52612e-06
+#&gt; 2 2.61332e-01
+#&gt; 3 1.22515e-01
+#&gt; 4 5.31104e-05
+#&gt; 5 5.02805e-01
+#&gt; 6 4.10634e-01</div><div class='input'><span class='co'># \donttest{</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/parameters/'>"parameters"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span>, refresh <span class='op'>=</span> <span class='fl'>0</span>, seed <span class='op'>=</span> <span class='fl'>123</span><span class='op'>)</span>
   <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>model_parameters</a></span><span class='op'>(</span><span class='va'>model</span>, ci <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.69</span>, <span class='fl'>0.89</span>, <span class='fl'>0.95</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>format_table</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span><span class='co'># }</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>This is rstanarm version 2.21.1</span></div><div class='output co'>#&gt; <span class='message'>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span></div><div class='output co'>#&gt; <span class='message'>- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>  options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='warning'>Warning: numerical expression has 3 elements: only the first used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: numerical expression has 3 elements: only the first used</span></div><div class='output co'>#&gt;           Parameter Median    CI       69% CI       89% CI       95% CI   pd
-#&gt; 1       (Intercept)   5.01 69.00 [4.94, 5.09] [4.88, 5.11] [4.86, 5.14] 100%
-#&gt; 2 Speciesversicolor   0.93 89.00 [0.82, 1.03] [0.76, 1.10] [0.74, 1.14] 100%
-#&gt; 3  Speciesvirginica   1.58 95.00 [1.48, 1.69] [1.41, 1.75] [1.38, 1.78] 100%
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>This is rstanarm version 2.21.1</span></div><div class='output co'>#&gt; <span class='message'>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span></div><div class='output co'>#&gt; <span class='message'>- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>  options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt;           Parameter Median       69% CI       89% CI       95% CI   pd
+#&gt; 1       (Intercept)   5.01 [4.94, 5.09] [4.88, 5.11] [4.86, 5.14] 100%
+#&gt; 2 Speciesversicolor   0.93 [0.82, 1.03] [0.76, 1.10] [0.74, 1.14] 100%
+#&gt; 3  Speciesvirginica   1.58 [1.48, 1.69] [1.41, 1.75] [1.38, 1.78] 100%
 #&gt;   % in ROPE  Rhat     ESS                 Prior
 #&gt; 1        0% 1.000 3279.02 Normal (5.84 +- 2.07)
 #&gt; 2        0% 1.000 3458.46 Normal (0.00 +- 4.38)
