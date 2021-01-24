@@ -281,7 +281,7 @@ parameters_table <- format_table
   if (length(ci_low) >= 1 && length(ci_low) == length(ci_high)) {
     if (!is.null(att$ci)) {
       if (length(unique(stats::na.omit(att$ci))) > 1) {
-        ci_colname <- "?% CI"
+        ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(att$ci)) * 100)
       } else {
         ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(att$ci))[1] * 100)
       }
