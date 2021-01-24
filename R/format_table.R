@@ -336,7 +336,10 @@ parameters_table <- format_table
       other_ci_position <- which(names(x) == other_ci_high[i])
       x[[other_ci_position]] <- NULL
     }
-    x[[paste0(other, "_CI")]] <- NULL
+    # remove columns with CI level
+    for (i in other) {
+      x[[paste0(i, "_CI")]] <- NULL
+    }
 
   } else {
     other_ci_colname <- c()
