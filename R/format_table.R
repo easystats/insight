@@ -289,6 +289,9 @@ parameters_table <- format_table
       ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(x$CI))[1] * 100)
       x$CI <- NULL
     } else {
+      # all these edge cases... for some objects in "parameters::model_parameters()",
+      # when we have multiple ci-levels, column names can be "CI_low_0.8" or
+      # "CI_low_0.95" etc. - this is handled here, if we have no ci-attribute
       if (grepl("CI_low_(\\d)\\.(\\d)", ci_low) && grepl("CI_high_(\\d)\\.(\\d)", ci_high)) {
         ci_levels <- as.numeric(gsub("CI_low_(\\d)\\.(\\d)", "\\1.\\2", ci_low))
         ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(ci_levels)) * 100)
