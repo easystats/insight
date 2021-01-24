@@ -12,6 +12,9 @@
 
 * `get_varcov()` did not properly remove `NA` from rank-deficient models.
 
+* Fixed issue/warning in `get_data()` for some *htest* objects, where the 
+  environment was not properly evaluated.
+
 # insight 0.12.0
 
 ## Breaking changes
