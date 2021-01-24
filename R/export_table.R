@@ -86,6 +86,16 @@ export_table <- function(x,
     format <- "markdown"
   }
 
+  # if we have a list of data frame and HTML format, create a single
+  # data frame now...
+  if (identical(format, "html") && !is.data.frame(x) && is.list(x)) {
+    x <- do.call(rbind, lapply(x, function(i) {
+      i$Component <- attr(i, "table_caption")
+      i
+    }))
+  }
+
+
   # single data frame
   if (is.data.frame(x)) {
     if (is.null(caption)) {
