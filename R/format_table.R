@@ -306,8 +306,12 @@ parameters_table <- format_table
     }
     # Replace at initial position
     ci_position <- which(names(x) == ci_low[1])
-    x <- x[c(names(x)[0:(ci_position - 1)][!names(x)[0:(ci_position - 1)] %in% ci_colname], ci_colname, names(x)[ci_position:(length(names(x)) - 1)][!names(x)[ci_position:(length(names(x)) - 1)] %in% ci_colname])]
-    x <- x[!names(x) %in% c(ci_low, ci_high)]
+    # remove old columns
+    x[ci_low] <- NULL
+    x[ci_high] <- NULL
+    # reorder
+    new_ci_position <- which(names(x) == ci_colname[1])
+    x <- x[c(1:(ci_position - 1), new_ci_position:(new_ci_position + length(ci_colname) - 1), ci_position:(new_ci_position - 1))]
   }
 
   x
