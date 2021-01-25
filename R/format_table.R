@@ -285,6 +285,7 @@ parameters_table <- format_table
       } else {
         ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(att$ci))[1] * 100)
       }
+      x$CI <- NULL
     } else if (!is.null(x$CI)) {
       ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(x$CI))[1] * 100)
       x$CI <- NULL
@@ -295,6 +296,7 @@ parameters_table <- format_table
       if (grepl("CI_low_(\\d)\\.(\\d)", ci_low) && grepl("CI_high_(\\d)\\.(\\d)", ci_high)) {
         ci_levels <- as.numeric(gsub("CI_low_(\\d)\\.(\\d)", "\\1.\\2", ci_low))
         ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(ci_levels)) * 100)
+        x$CI <- NULL
       } else {
         ci_colname <- "CI"
       }
