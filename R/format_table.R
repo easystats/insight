@@ -302,16 +302,14 @@ parameters_table <- format_table
 
     # Get characters to align the CI
     for (i in 1:length(ci_colname)) {
-      x[ci_colname[i]] <- format_ci(x[[ci_low[i]]], x[[ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets)
+      x[[ci_low[i]]] <- format_ci(x[[ci_low[i]]], x[[ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets)
+      # rename lower CI into final CI column
+      ci_position <- which(names(x) == ci_low[i])
+      colnames(x)[ci_position] <- ci_colname[i]
+      # remove upper CI column
+      ci_position <- which(names(x) == ci_high[i])
+      x[[ci_position]] <- NULL
     }
-    # Replace at initial position
-    ci_position <- which(names(x) == ci_low[1])
-    # remove old columns
-    x[ci_low] <- NULL
-    x[ci_high] <- NULL
-    # reorder
-    new_ci_position <- which(names(x) == ci_colname[1])
-    x <- x[c(1:(ci_position - 1), new_ci_position:(new_ci_position + length(ci_colname) - 1), ci_position:(new_ci_position - 1))]
   }
 
   x
