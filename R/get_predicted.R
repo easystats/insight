@@ -35,10 +35,10 @@ get_predicted.default <- function(x, newdata = NULL, ...) {
 #' @export
 get_predicted.data.frame <- function(x, newdata = NULL, ...) {
   # This makes it pipe friendly; data %>% get_predicted(model)
-  if(is.null(newdata)){
+  if (is.null(newdata)) {
     stop("Please provide a model to base the estimations on.")
-  } else{
-    get_predicted(newdata, x, ...)
+  } else {
+    get_predicted(x = newdata, newdata = x, ...)
   }
 }
 
