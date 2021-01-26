@@ -122,6 +122,7 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidenc
 
 
 
+#' @importFrom stats predict terms model.matrix qnorm
 #' @export
 get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", re.form = NULL, ...) {
 
@@ -136,9 +137,9 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
 
     # Using merTools
     # See https://cran.r-project.org/web/packages/merTools/vignettes/Using_predictInterval.html for a comparison of methods
-    if (!requireNamespace("merTools", quietly = TRUE)) {
-      stop("This function needs `merTools` to be installed. Please install it by running `install.packages('merTools')`.")
-    }
+    # if (!requireNamespace("merTools", quietly = TRUE)) {
+    #   stop("This function needs `merTools` to be installed. Please install it by running `install.packages('merTools')`.")
+    # }
 
     if (transform == "response" && !insight::model_info(x)$is_linear) {
       type <- "probability"
@@ -148,10 +149,18 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
 
     if (is.null(newdata)) newdata <- get_data(x)
 
-    pred <- merTools::predictInterval(x, newdata = newdata, level = ci, stat = "median", type = type, include.resid.var = TRUE, ...)
-    ci_low <- pred$lwr
-    ci_high <- pred$upr
-    se <- rep(NA, length(out))
+    mm <- stats::model.matrix(stats::terms(x), newdata)
+    var_matrix <- mm %*% get_varcov(x) %*% t(mm)
+    se <- sqrt(diag(var_matrix) + get_variance_residual(x))
+    fac <- stats::qnorm((1 + ci) / 2)
+
+    ci_low <- out - fac * se
+    ci_high <- out + fac * se
+
+    # pred <- merTools::predictInterval(x, newdata = newdata, level = ci, stat = "median", type = type, include.resid.var = TRUE, ...)
+    # ci_low <- pred$lwr
+    # ci_high <- pred$upr
+    # se <- rep(NA, length(out))
 
     # Using emmeans
     # refgrid <- emmeans::ref_grid(x, at = as.list(newdata), data = newdata)
