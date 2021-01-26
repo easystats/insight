@@ -29,4 +29,5 @@ future updates.
 data(mtcars)
 x <- lm(mpg ~ cyl + hp, data = mtcars)
 get_predicted(x)
+
 }
