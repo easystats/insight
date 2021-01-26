@@ -145,7 +145,12 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
     attributes(x) <- utils::modifyList(att, attributes(x))
   }
 
-  data.frame(lapply(x, as.character), stringsAsFactors = FALSE)
+  data.frame(
+    lapply(x, as.character),
+    stringsAsFactors = FALSE,
+    check.names = FALSE,
+    fix.empty.names = FALSE
+  )
 }
 
 
