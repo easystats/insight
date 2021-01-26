@@ -25,7 +25,7 @@ get_predicted <- function(x, newdata = NULL, ...) {
 #' @importFrom stats fitted
 #' @export
 get_predicted.default <- function(x, newdata = NULL, ...) {
-  if(is.null(newdata)){
+  if (is.null(newdata)){
     stats::fitted(x)
   } else{
     stats::predict(x, newdata = newdata, ...)
