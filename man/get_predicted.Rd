@@ -2,9 +2,33 @@
 % Please edit documentation in R/get_predicted.R
 \name{get_predicted}
 \alias{get_predicted}
+\alias{get_predicted.lm}
+\alias{get_predicted.glm}
+\alias{get_predicted.merMod}
 \title{Predicted values}
 \usage{
 get_predicted(x, newdata = NULL, ...)
+
+\method{get_predicted}{lm}(x, newdata = NULL, ci = 0.95, ci_type = "confidence", ...)
+
+\method{get_predicted}{glm}(
+  x,
+  newdata = NULL,
+  ci = 0.95,
+  ci_type = "confidence",
+  transform = "response",
+  ...
+)
+
+\method{get_predicted}{merMod}(
+  x,
+  newdata = NULL,
+  ci = 0.95,
+  ci_type = "confidence",
+  transform = "response",
+  re.form = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{A model.}
@@ -14,11 +38,13 @@ get_predicted(x, newdata = NULL, ...)
 
 \item{...}{Not used.}
 
-\item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This doesn't apply for GLMs, for which prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).}
-
 \item{ci}{The interval level (default \code{0.95}, i.e., 95\% CI).}
 
-\item{transform}{Either \code{"response"} (default) or \code{"link"}. If "link", no transformation is applied and the values are on the scale of the linear predictors. If "response", the output is on the scale of the response variable. Thus for a default binomial model, "response" gives the predicted probabilities, and "link" makes predictions of log-odds (probabilities on logit scale).}
+\item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This doesn't apply for GLMs, for which prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).}
+
+\item{transform}{Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).}
+
+\item{re.form}{Formula to specify which random effects to condition on when predicting. If \code{NULL}, include all random effects; if \code{NA} or \code{~0}, include no random effects.}
 }
 \value{
 The fitted values (i.e. predictions for the response).

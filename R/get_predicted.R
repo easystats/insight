@@ -7,7 +7,8 @@
 #' @param ... Not used.
 #' @param ci_type Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This doesn't apply for GLMs, for which prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
-#' @param transform Either \code{"response"} (default) or \code{"link"}. If "link", no transformation is applied and the values are on the scale of the linear predictors. If "response", the output is on the scale of the response variable. Thus for a default binomial model, "response" gives the predicted probabilities, and "link" makes predictions of log-odds (probabilities on logit scale).
+#' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
+#' @param re.form Formula to specify which random effects to condition on when predicting. If \code{NULL}, include all random effects; if \code{NA} or \code{~0}, include no random effects.
 #' @inheritParams get_residuals
 #' @inheritParams stats::predict.lm
 #'
@@ -68,6 +69,8 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 }
 
 
+
+#' @rdname get_predicted
 #' @importFrom stats predict qnorm qt
 #' @export
 get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", ...) {
@@ -85,6 +88,7 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
 
 
 
+#' @rdname get_predicted
 #' @export
 get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", ...) {
   rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, type = "link", level = ci, ...)
@@ -124,6 +128,7 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidenc
 
 
 
+#' @rdname get_predicted
 #' @importFrom stats predict terms model.matrix qnorm
 #' @export
 get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", re.form = NULL, ...) {
