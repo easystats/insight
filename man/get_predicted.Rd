@@ -37,6 +37,7 @@ future updates.
 data(mtcars)
 x <- lm(mpg ~ cyl + hp, data = mtcars)
 predicted <- get_predicted(x)
+predicted
 
 # Get CI
 attributes(predicted)$CI_low # Or CI_high

@@ -68,7 +68,7 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 }
 
 
-#' @importFrom stats predict
+#' @importFrom stats predict qnorm qt
 #' @export
 get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", ...) {
   rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, interval = ci_type, level = ci, ...)
@@ -120,13 +120,71 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidenc
   out
 }
 
-# See options of:
+
+
+#' @export
+get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", re.form = NULL, ...) {
+
+  # Get prediction of point-estimate
+  transform <- ifelse(transform == TRUE, "response", ifelse(transform == FALSE, "link", transform))
+  out <- stats::predict(x, newdata = newdata, re.form = re.form, type = transform, ...)
+  ci_low <- ci_high <- se <- rep(NA, length(out))
+
+
+  # CI
+  if (!is.null(ci)) {
+
+    # Using merTools
+    # See https://cran.r-project.org/web/packages/merTools/vignettes/Using_predictInterval.html for a comparison of methods
+    if (!requireNamespace("merTools", quietly = TRUE)) {
+      stop("This function needs `merTools` to be installed. Please install it by running `install.packages('merTools')`.")
+    }
+
+    if (transform == "response" && !insight::model_info(x)$is_linear) {
+      type <- "probability"
+    } else {
+      type <- "linear.prediction"
+    }
+
+    if(is.null(newdata)) newdata <- get_data(x)
+
+    pred <- merTools::predictInterval(x, newdata = newdata, level = ci, stat = "median", type = type, include.resid.var = TRUE, ...)
+    ci_low <- pred$lwr
+    ci_high <- pred$upr
+    se <- rep(NA, length(out))
+
+    # Using emmeans
+    # refgrid <- emmeans::ref_grid(x, at = as.list(newdata), data = newdata)
+    # prediction <- as.data.frame(predict(refgrid, transform = transform, ci = ci, interval = ci_type))
+    # prediction[names(newdata)] <- NULL
+    # prediction$Predicted <- prediction[, 1]
+    # prediction$CI_low <- prediction[, grepl("lower.|LCL", names(prediction))]
+    # prediction$CI_high <- prediction[, grepl("upper.|UCL", names(prediction))]
+    # prediction[!names(prediction) %in% c("Predicted", "CI_low", "CI_high")] <- NULL
+
+  }
+
+  attr(out, "SE") <- se
+  attr(out, "ci") <- ci
+  attr(out, "CI_low") <- ci_low
+  attr(out, "CI_high") <- ci_high
+  class(out) <- c("get_predicted", class(out))
+  out
+}
+
+
+
+# See:
 # predict.lm
 # predict.glm
 # lme4::predict.merMod
 # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
 
 # Also, https://github.com/jthaman/ciTools will be of help here
+
+
+
+
 
 # Methods -----------------------------------------------------------------
 

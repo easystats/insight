@@ -42,6 +42,7 @@ if (require("testthat") && require("insight") && require("lme4")) {
 
     expect_equal(max(abs(rez - stats::fitted(x))), 0)
     expect_equal(max(abs(rez - stats::predict(x))), 0)
+    expect_equal(nrow(as.data.frame(rez)), 32)
   })
 
   test_that("get_predicted - merMod", {
@@ -51,5 +52,6 @@ if (require("testthat") && require("insight") && require("lme4")) {
 
     expect_equal(max(abs(rez - stats::fitted(x))), 0)
     expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
+    expect_equal(nrow(as.data.frame(rez)), 32)
   })
 }
