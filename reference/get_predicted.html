@@ -127,7 +127,7 @@
     <p>Returns values predicted by a model (i.e., fitted values).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,6 +135,11 @@
     <tr>
       <th>x</th>
       <td><p>A model.</p></td>
+    </tr>
+    <tr>
+      <th>newdata</th>
+      <td><p>An optional data frame in which to look for variables with
+    which to predict.  If omitted, the fitted values are used.</p></td>
     </tr>
     <tr>
       <th>...</th>
