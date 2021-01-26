@@ -4,10 +4,13 @@
 \alias{get_predicted}
 \title{Predicted values}
 \usage{
-get_predicted(x, ...)
+get_predicted(x, newdata = NULL, ...)
 }
 \arguments{
 \item{x}{A model.}
+
+\item{newdata}{An optional data frame in which to look for variables with
+    which to predict.  If omitted, the fitted values are used.}
 
 \item{...}{Not used.}
 }
