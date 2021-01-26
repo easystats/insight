@@ -41,7 +41,7 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
   if (missing(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", 2)
 
   att <- attributes(x)
-  x <- as.data.frame(x)
+  x <- as.data.frame(x, stringsAsFactors = FALSE)
 
 
   # Format parameters names ----
