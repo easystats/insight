@@ -146,7 +146,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
       type <- "linear.prediction"
     }
 
-    if(is.null(newdata)) newdata <- get_data(x)
+    if (is.null(newdata)) newdata <- get_data(x)
 
     pred <- merTools::predictInterval(x, newdata = newdata, level = ci, stat = "median", type = type, include.resid.var = TRUE, ...)
     ci_low <- pred$lwr
