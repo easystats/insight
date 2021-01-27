@@ -96,13 +96,9 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
   out <- rez$fit
 
   # Confidence CI (see https://fromthebottomoftheheap.net/2018/12/10/confidence-intervals-for-glms/)
-  if (x$family$family %in% c("binomial", "poisson")) {
-    crit_val <- stats::qnorm(p = 1 - ((1 - ci) / 2))
-  } else {
-    crit_val <- stats::qt(p = 1 - ((1 - ci) / 2), df = get_df(x, type = "residual"))
-  }
-  ci_low <- out + (crit_val * rez$se.fit)
-  ci_high <- out - (crit_val * rez$se.fit)
+  ci_vals <- .get_predicted_se_to_ci(x, pred = out, se = rez$se.fit, ci = ci, family = x$family$family)
+  ci_low <- ci_vals$ci_low
+  ci_high <- ci_vals$ci_high
 
   # Prediction CI
   # Seems to be debated: see https://stat.ethz.ch/pipermail/r-help/2003-May/033165.html
@@ -166,9 +162,9 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
       se <- sqrt(diag(var_matrix))
     }
 
-    fac <- stats::qnorm((1 + ci) / 2)
-    ci_low <- out - fac * se
-    ci_high <- out + fac * se
+    ci_vals <- .get_predicted_se_to_ci(x, pred = out, se = se, ci = ci, family = stats::family(x)$family)
+    ci_low <- ci_vals$ci_low
+    ci_high <- ci_vals$ci_high
 
     # Using emmeans
     # refgrid <- emmeans::ref_grid(x, at = as.list(newdata), data = newdata)
@@ -207,8 +203,9 @@ get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "res
   out <- rez$fit
 
   # CI
-  ci_low <- out - (rez$se.fit * stats::qnorm((1 + ci) / 2))
-  ci_high <- out + (rez$se.fit * stats::qnorm((1 + ci) / 2))
+  ci_vals <- .get_predicted_se_to_ci(x, pred = out, se = rez$se.fit, ci = ci, family = stats::family(x)$family)
+  ci_low <- ci_vals$ci_low
+  ci_high <- ci_vals$ci_high
 
   # TODO: check if we need linkinverse
   if (transform != "zprob" && transform != "disp") {
@@ -224,6 +221,28 @@ get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "res
 }
 
 
+
+# get_predicted.gamm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", re.form = NULL, ...) {
+#
+#   pr <- stats::predict(x$gam,
+#                        newdata = newdata,
+#                        re.form = re.form,
+#                        type = transform,
+#                        se.fit = TRUE
+#   )
+#
+#
+#   prediction <- data.frame(
+#     Predicted = pr$fit,
+#     CI_low = pr$fit - (pr$se.fit * stats::qnorm((1 + ci) / 2)),
+#     CI_high = pr$fit + (pr$se.fit * stats::qnorm((1 + ci) / 2))
+#   )
+#
+#   prediction
+# }
+
+
+# predict_wrapper.list <- predict_wrapper.gamm  # gamm4
 
 # See:
 # predict.lm
@@ -257,4 +276,31 @@ as.data.frame.get_predicted <- function(x, ...) {
     out$CI_high <- attributes(x)$CI_high
   }
   out
+}
+
+
+
+
+# Helpers -----------------------------------------------------------------
+
+
+
+.get_predicted_se_to_ci <- function(x, pred, se = NULL, ci = 0.95, family = "gaussian") {
+  # Return NA
+  if(is.null(se)){
+    ci_low <- ci_high <- rep(NA, length(pred))
+
+  # Get CI
+  } else{
+    if (family %in% c("gaussian", "binomial", "poisson")) {
+      crit_val <- stats::qnorm(p = (1 + ci) / 2)
+    } else {
+      crit_val <- stats::qt(p = (1 + ci) / 2, df = get_df(x, type = "residual"))
+    }
+
+    ci_low <- pred - (se * crit_val)
+    ci_high <- pred + (se * crit_val)
+  }
+
+  list(ci_low = ci_low, ci_high = ci_high)
 }
