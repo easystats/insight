@@ -5,7 +5,7 @@
 #' \code{as.data.frame()} (see examples below).
 #'
 #' @param ... Not used.
-#' @param ci_type Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This doesn't apply for GLMs, for which prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
+#' @param ci_type Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This applies mostly for "simple" linear models (like \code{lm}), as for other models (e.g., \code{glm}), prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
 #' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
 #' @param re.form Formula to specify which random effects to condition on when predicting. If \code{NULL}, include all random effects; if \code{NA} or \code{~0}, include no random effects.
@@ -70,6 +70,9 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 
 
 
+# LM, GLMs ----------------------------------------------------------------
+
+
 #' @rdname get_predicted
 #' @importFrom stats predict qnorm qt
 #' @export
@@ -89,6 +92,7 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
 
 
 #' @rdname get_predicted
+#' @importFrom stats family
 #' @export
 get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "response", ...) {
   rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, type = "link", level = ci, ...)
@@ -96,7 +100,7 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
   out <- rez$fit
 
   # Confidence CI (see https://fromthebottomoftheheap.net/2018/12/10/confidence-intervals-for-glms/)
-  ci_vals <- .get_predicted_se_to_ci(x, pred = out, se = rez$se.fit, ci = ci, family = x$family$family)
+  ci_vals <- .get_predicted_se_to_ci(x, pred = out, se = rez$se.fit, ci = ci, family = stats::family(x)$family)
   ci_low <- ci_vals$ci_low
   ci_high <- ci_vals$ci_high
 
@@ -122,6 +126,10 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
   class(out) <- c("get_predicted", class(out))
   out
 }
+
+
+
+# lme4, glmmTMB -----------------------------------------------------------
 
 
 
@@ -166,7 +174,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
     ci_low <- ci_vals$ci_low
     ci_high <- ci_vals$ci_high
 
-    # Using emmeans
+    # Using emmeans (not sure what it does)
     # refgrid <- emmeans::ref_grid(x, at = as.list(newdata), data = newdata)
     # prediction <- as.data.frame(predict(refgrid, transform = transform, ci = ci, interval = ci_type))
     # prediction[names(newdata)] <- NULL
@@ -222,33 +230,43 @@ get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "res
 
 
 
-# get_predicted.gamm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", re.form = NULL, ...) {
-#
-#   pr <- stats::predict(x$gam,
-#                        newdata = newdata,
-#                        re.form = re.form,
-#                        type = transform,
-#                        se.fit = TRUE
-#   )
-#
-#
-#   prediction <- data.frame(
-#     Predicted = pr$fit,
-#     CI_low = pr$fit - (pr$se.fit * stats::qnorm((1 + ci) / 2)),
-#     CI_high = pr$fit + (pr$se.fit * stats::qnorm((1 + ci) / 2))
-#   )
-#
-#   prediction
-# }
+# GAMs --------------------------------------------------------------------
 
 
-# predict_wrapper.list <- predict_wrapper.gamm  # gamm4
+#' @export
+get_predicted.gam <- function(x, newdata = NULL, ci = 0.95, transform = "response", re.form = NULL, ...) {
+
+  # Sanitize input
+  if(is.null(newdata)) newdata <- get_data(x)
+  if(inherits(x, c("gamm", "list"))) x <- x$gam
+
+  # Get prediction
+  rez <- as.data.frame(stats::predict(x, newdata = newdata, re.form = re.form, type = transform, se.fit = TRUE))
+  out <- rez$fit
+
+
+  # CI
+  ci_vals <- .get_predicted_se_to_ci(x, pred = out, se = rez$se.fit, ci = ci, family = x$family$family)
+  ci_low <- ci_vals$ci_low
+  ci_high <- ci_vals$ci_high
+
+  attr(out, "SE") <- rez$se.fit
+  attr(out, "ci") <- ci
+  attr(out, "CI_low") <- ci_low
+  attr(out, "CI_high") <- ci_high
+  class(out) <- c("get_predicted", class(out))
+  out
+}
+
+#' @export
+get_predicted.gamm <- get_predicted.gam
+#' @export
+get_predicted.list <- get_predicted.gam  # gamm4
+
+
+
 
 # See:
-# predict.lm
-# predict.glm
-# lme4::predict.merMod
-# glmmTMB::predict.glmmTMB
 # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
 
 # Also, https://github.com/jthaman/ciTools will be of help here
