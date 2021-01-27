@@ -90,7 +90,7 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
 
 #' @rdname get_predicted
 #' @export
-get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", ...) {
+get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "response", ...) {
   rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, type = "link", level = ci, ...)
 
   out <- rez$fit
@@ -113,9 +113,10 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidenc
 
   # Transform
   if (transform == "response" || transform == TRUE) {
-    out <- x$family$linkinv(out)
-    ci_low <- x$family$linkinv(ci_low)
-    ci_high <- x$family$linkinv(ci_high)
+    transform_function <- link_inverse(x)
+    out <- transform_function(out)
+    ci_low <- transform_function(ci_low)
+    ci_high <- transform_function(ci_high)
   }
 
   attr(out, "SE") <- rez$se.fit
@@ -189,11 +190,46 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
 }
 
 
+#' @export
+get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "response", re.form = NULL, ...) {
+
+  # Sanitize data
+  if(is.null(newdata)) {
+    newdata <- get_data(x)
+  }
+
+  if (!is.null(re.form)) {
+    newdata[find_variables(x, effects = "random")$random] <- NA
+  }
+
+  # Get prediction
+  rez <- as.data.frame(stats::predict(x, newdata = newdata, re.form = re.form, type = transform, se.fit = TRUE))
+  out <- rez$fit
+
+  # CI
+  ci_low <- out - (rez$se.fit * stats::qnorm((1 + ci) / 2))
+  ci_high <- out + (rez$se.fit * stats::qnorm((1 + ci) / 2))
+
+  # TODO: check if we need linkinverse
+  if (transform != "zprob" && transform != "disp") {
+    linkinverse <- insight::link_inverse(x)
+  }
+
+  attr(out, "SE") <- rez$se.fit
+  attr(out, "ci") <- ci
+  attr(out, "CI_low") <- ci_low
+  attr(out, "CI_high") <- ci_high
+  class(out) <- c("get_predicted", class(out))
+  out
+}
+
+
 
 # See:
 # predict.lm
 # predict.glm
 # lme4::predict.merMod
+# glmmTMB::predict.glmmTMB
 # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
 
 # Also, https://github.com/jthaman/ciTools will be of help here

@@ -11,14 +11,7 @@ get_predicted(x, newdata = NULL, ...)
 
 \method{get_predicted}{lm}(x, newdata = NULL, ci = 0.95, ci_type = "confidence", ...)
 
-\method{get_predicted}{glm}(
-  x,
-  newdata = NULL,
-  ci = 0.95,
-  ci_type = "confidence",
-  transform = "response",
-  ...
-)
+\method{get_predicted}{glm}(x, newdata = NULL, ci = 0.95, transform = "response", ...)
 
 \method{get_predicted}{merMod}(
   x,
