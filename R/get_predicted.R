@@ -134,7 +134,7 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 
 
 #' @rdname get_predicted
-#' @importFrom stats predict terms model.matrix qnorm
+#' @importFrom stats predict terms model.matrix family
 #' @export
 get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", re.form = NULL, ...) {
 
@@ -258,6 +258,7 @@ get_predicted.gam <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 
 #' @export
 get_predicted.gamm <- get_predicted.gam
+
 #' @export
 get_predicted.list <- get_predicted.gam # gamm4
 
@@ -308,10 +309,12 @@ get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confi
 
 # Methods -----------------------------------------------------------------
 
+
 #' @export
 print.get_predicted <- function(x, ...) {
   print(as.numeric(x))
 }
+
 
 #' @export
 as.data.frame.get_predicted <- function(x, ...) {
@@ -342,6 +345,7 @@ as.data.frame.get_predicted <- function(x, ...) {
 
 
 
+#' @importFrom stats qnorm qt
 .get_predicted_se_to_ci <- function(x, pred, se = NULL, ci = 0.95, family = "gaussian") {
   # Return NA
   if (is.null(se)) {
