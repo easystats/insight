@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4")) {
+if (require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm")) {
   data(mtcars)
 
 
@@ -98,5 +98,21 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
     expect_equal(max(abs(rez - stats::fitted(x$gam))), 0)
     expect_equal(max(abs(rez - stats::predict(x$gam, type = "response"))), 0)
     expect_equal(nrow(as.data.frame(rez)), 32)
+  })
+
+  test_that("get_predicted - rstanarm (lm)", {
+    x <- rstanarm::stan_glm(mpg ~ am, data = mtcars, iter=200, refresh=0, seed=333)
+    rez <- insight::get_predicted(x)
+    expect_equal(nrow(rez), 32)
+
+    df <- as.data.frame(rez)
+    expect_equal(nrow(df), 32)
+
+    # TODO: Not sure what fitted.stanreg and predict.stanreg do as they return different point-estimates
+
+    # sapply(as.data.frame(t(df)), median)
+    # expect_equal(max(abs(rowMeans(rez) - stats::fitted(x))), 0)
+    # expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
+
   })
 }

@@ -146,8 +146,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
 
   # CI
   if (!is.null(ci)) {
-
-    if (transform == "response" && !insight::model_info(x)$is_linear) {
+    if (transform == "response" && !model_info(x)$is_linear) {
       type <- "probability"
     } else {
       type <- "linear.prediction"
@@ -182,7 +181,6 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
     # prediction$CI_low <- prediction[, grepl("lower.|LCL", names(prediction))]
     # prediction$CI_high <- prediction[, grepl("upper.|UCL", names(prediction))]
     # prediction[!names(prediction) %in% c("Predicted", "CI_low", "CI_high")] <- NULL
-
   }
 
   attr(out, "SE") <- se
@@ -198,7 +196,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
 get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "response", re.form = NULL, ...) {
 
   # Sanitize data
-  if(is.null(newdata)) {
+  if (is.null(newdata)) {
     newdata <- get_data(x)
   }
 
@@ -217,7 +215,7 @@ get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "res
 
   # TODO: check if we need linkinverse
   if (transform != "zprob" && transform != "disp") {
-    linkinverse <- insight::link_inverse(x)
+    linkinverse <- link_inverse(x)
   }
 
   attr(out, "SE") <- rez$se.fit
@@ -237,8 +235,8 @@ get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "res
 get_predicted.gam <- function(x, newdata = NULL, ci = 0.95, transform = "response", re.form = NULL, ...) {
 
   # Sanitize input
-  if(is.null(newdata)) newdata <- get_data(x)
-  if(inherits(x, c("gamm", "list"))) x <- x$gam
+  if (is.null(newdata)) newdata <- get_data(x)
+  if (inherits(x, c("gamm", "list"))) x <- x$gam
 
   # Get prediction
   rez <- as.data.frame(stats::predict(x, newdata = newdata, re.form = re.form, type = transform, se.fit = TRUE))
@@ -261,13 +259,46 @@ get_predicted.gam <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 #' @export
 get_predicted.gamm <- get_predicted.gam
 #' @export
-get_predicted.list <- get_predicted.gam  # gamm4
+get_predicted.list <- get_predicted.gam # gamm4
 
 
 
+# Bayesian ----------------------------------------------------------------
 
-# See:
-# rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
+
+#' @export
+get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", re.form = NULL, ...) {
+
+  # See:
+  # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
+
+  if (!requireNamespace("rstanarm", quietly = TRUE)) {
+    stop("Package `rstanarm` needed for this function to work. Please install it.")
+  }
+
+  transform <- ifelse(transform == "response", TRUE, ifelse(transform == "link", FALSE, transform))
+
+
+  if (ci_type == "confidence") {
+    if (transform == TRUE) {
+      out <- rstanarm::posterior_epred(x, newdata = newdata, re.form = re.form, ...)
+    } else {
+      out <- rstanarm::posterior_linpred(x, newdata = newdata, transform = FALSE, re.form = re.form, ...)
+    }
+  } else {
+    out <- rstanarm::posterior_predict(x, newdata = newdata, transform = transform, re.form = re.form, ...)
+  }
+  out <- t(out)
+
+  attr(out, "SE") <- NA
+  attr(out, "ci") <- ci
+  attr(out, "CI_low") <- NA
+  attr(out, "CI_high") <- NA
+  class(out) <- c("get_predicted", class(out))
+  out
+}
+
+
 
 # Also, https://github.com/jthaman/ciTools will be of help here
 
@@ -284,6 +315,14 @@ print.get_predicted <- function(x, ...) {
 
 #' @export
 as.data.frame.get_predicted <- function(x, ...) {
+
+  # In the case of multiple draws
+  if (!is.null(ncol(x)) && ncol(x) > 1) {
+    out <- as.data.frame.matrix(x)
+    names(out) <- paste0("iter_", 1:ncol(out))
+    return(out)
+  }
+
   out <- data.frame("Predicted" = as.numeric(x))
   if (all(c("SE") %in% names(attributes(x)))) {
     out$SE <- attributes(x)$SE
@@ -305,11 +344,11 @@ as.data.frame.get_predicted <- function(x, ...) {
 
 .get_predicted_se_to_ci <- function(x, pred, se = NULL, ci = 0.95, family = "gaussian") {
   # Return NA
-  if(is.null(se)){
+  if (is.null(se)) {
     ci_low <- ci_high <- rep(NA, length(pred))
 
-  # Get CI
-  } else{
+    # Get CI
+  } else {
     if (family %in% c("gaussian", "binomial", "poisson")) {
       crit_val <- stats::qnorm(p = (1 + ci) / 2)
     } else {
