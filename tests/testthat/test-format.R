@@ -139,4 +139,14 @@ if (require("testthat") && require("insight")) {
     #   ignore_attr = TRUE
     # )
   })
+
+
+  test_that("format_table, preserve attributes", {
+    d <- mtcars[1:3, 1:3]
+    attr(d, "table_footer") <- "This is a footer"
+    attr(d, "table_caption") <- "And the caption"
+    d2 <- insight::format_table(d, digits = 3, preserve_attributes = TRUE)
+    expect_equal(names(attributes(d2)), c("names", "row.names", "class", "table_footer", "table_caption"))
+    expect_equal(attributes(d2)$table_caption, "And the caption")
+  })
 }

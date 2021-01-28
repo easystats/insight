@@ -140,17 +140,13 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
     x$To <- x$Operator <- x$From <- NULL
   }
 
+  x[] <- lapply(x, as.character)
+
   # restore attributes
   if (isTRUE(preserve_attributes)) {
     attributes(x) <- utils::modifyList(att, attributes(x))
   }
-
-  data.frame(
-    lapply(x, as.character),
-    stringsAsFactors = FALSE,
-    check.names = FALSE,
-    fix.empty.names = FALSE
-  )
+  x
 }
 
 
