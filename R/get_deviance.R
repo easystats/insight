@@ -21,9 +21,11 @@ get_deviance <- function(x, ...) {
   UseMethod("get_deviance")
 }
 
+
+#' @rdname get_deviance
 #' @importFrom stats deviance
 #' @export
-get_deviance.default <- function(x, ...) {
+get_deviance.default <- function(x, verbose = TRUE, ...) {
   dev <- tryCatch(
     {
       stats::deviance(x, ...)
@@ -47,7 +49,7 @@ get_deviance.default <- function(x, ...) {
   if (is.null(dev)) {
     dev <- tryCatch(
       {
-        sum(get_residuals(x, weighted = TRUE)^2, na.rm = TRUE)
+        sum(get_residuals(x, weighted = TRUE, verbose = verbose)^2, na.rm = TRUE)
       },
       error = function(e) {
         NULL
@@ -61,23 +63,23 @@ get_deviance.default <- function(x, ...) {
 
 
 #' @export
-get_deviance.stanreg <- function(x, ...) {
+get_deviance.stanreg <- function(x, verbose = TRUE, ...) {
 
   info <- model_info(x)
 
   if (info$is_linear) {
-    res <- get_residuals(x, weighted = TRUE)
+    res <- get_residuals(x, weighted = TRUE, verbose = verbose)
     dev <- sum(res^2, na.rm = TRUE)
 
   } else if (info$is_binomial) {
-    w <- get_weights(x, null_as_ones = TRUE)
+    w <- get_weights(x, null_as_ones = TRUE, verbose = verbose)
     n <- n_obs(x)
     y <- get_response(x)
     mu <- get_predicted(x)  # Alternatively, x$family$linkinv(x$linear.predictors)
 
     dev_resids_fun <- x$family$dev.resids
 
-    dev <- sum(dev_resids_fun(y, mu, w))
+    dev <- sum(dev_resids_fun(y, rowMeans(mu), w))
 
   } else{
     stop("Could not compute deviance for this type of model")

@@ -2,14 +2,19 @@
 % Please edit documentation in R/get_deviance.R
 \name{get_deviance}
 \alias{get_deviance}
+\alias{get_deviance.default}
 \title{Model Deviance}
 \usage{
 get_deviance(x, ...)
+
+\method{get_deviance}{default}(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}
 
 \item{...}{Not used.}
+
+\item{verbose}{Toggle warnings and messages.}
 }
 \value{
 The model deviance.
