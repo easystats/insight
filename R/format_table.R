@@ -144,7 +144,7 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
 
   # restore attributes
   if (isTRUE(preserve_attributes)) {
-    mostattributes(x) <- att
+    attributes(x) <- utils::modifyList(att, attributes(x))
   }
   x
 }
