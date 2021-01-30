@@ -463,6 +463,10 @@ get_statistic.coxr <- function(x, ...) {
 }
 
 
+#' @export
+get_statistic.crr <- get_statistic.coxr
+
+
 #' @importFrom stats vcov
 #' @export
 get_statistic.coxme <- function(x, ...) {

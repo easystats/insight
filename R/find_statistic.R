@@ -153,6 +153,7 @@ find_statistic <- function(x, ...) {
       "coxph",
       "coxr",
       "crch",
+      "crr",
       "DirichletRegModel",
       "ergm",
       "feglm",
