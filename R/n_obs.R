@@ -207,6 +207,13 @@ n_obs.LORgee <- function(x, ...) {
 
 
 #' @export
+n_obs.crr <- function(x, ...) {
+  x$n
+}
+
+
+
+#' @export
 n_obs.mcmc <- function(x, ...) {
   nrow(as.data.frame(x))
 }

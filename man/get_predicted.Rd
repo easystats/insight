@@ -2,12 +2,15 @@
 % Please edit documentation in R/get_predicted.R
 \name{get_predicted}
 \alias{get_predicted}
+\alias{get_predicted.default}
 \alias{get_predicted.lm}
 \alias{get_predicted.glm}
 \alias{get_predicted.merMod}
 \title{Predicted values}
 \usage{
-get_predicted(x, newdata = NULL, ...)
+get_predicted(x, ...)
+
+\method{get_predicted}{default}(x, newdata = NULL, ...)
 
 \method{get_predicted}{lm}(x, newdata = NULL, ci = 0.95, ci_type = "confidence", ...)
 
@@ -26,10 +29,10 @@ get_predicted(x, newdata = NULL, ...)
 \arguments{
 \item{x}{A model.}
 
+\item{...}{Not used.}
+
 \item{newdata}{An optional data frame in which to look for variables with
     which to predict.  If omitted, the fitted values are used.}
-
-\item{...}{Not used.}
 
 \item{ci}{The interval level (default \code{0.95}, i.e., 95\% CI).}
 

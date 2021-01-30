@@ -100,6 +100,7 @@ is_regression_model <- function(x) {
     "crch",
     "crq",
     "crqs",
+    "crr",
     "dglm",
     "DirichletRegModel",
     "drc",

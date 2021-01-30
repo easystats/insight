@@ -136,6 +136,7 @@ get_residuals.vgam <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 get_residuals.vglm <- get_residuals.vgam
 
 
+
 #' @export
 get_residuals.coxph <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   if (isTRUE(weighted)) {
@@ -143,6 +144,17 @@ get_residuals.coxph <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   }
   stats::residuals(x, ...)
 }
+
+
+
+#' @export
+get_residuals.crr <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  if (isTRUE(weighted) && isTRUE(verbose)) {
+    warning("Weighted residuals are not supported for 'crr' models.", call. = FALSE)
+  }
+  x$res
+}
+
 
 
 #' @importFrom utils capture.output

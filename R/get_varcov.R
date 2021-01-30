@@ -410,6 +410,15 @@ get_varcov.rq <- function(x, ...) {
 
 
 #' @export
+get_varcov.crr <- function(x, ...) {
+  vc <- as.matrix(x$var)
+  params <- find_parameters(x, flatten = TRUE)
+  dimnames(vc) <- list(params, params)
+  .process_vcov(vc)
+}
+
+
+#' @export
 get_varcov.crq <- function(x, ...) {
   sc <- summary(x, covariance = TRUE)
 

@@ -4,6 +4,10 @@
 
 * Roll-back R dependency to R >= 3.4.
 
+## New supported model classes
+
+* Support for `crr` (*cmprsk*)
+
 ## Changes to functions
 
 * Slightly improved handling of different CI-columns in `format_table()`.

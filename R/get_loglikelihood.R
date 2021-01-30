@@ -206,6 +206,14 @@ get_loglikelihood.svycoxph <- function(x, ...) {
 
 
 #' @export
+get_loglikelihood.crr <- function(x, ...) {
+  x$loglik
+}
+
+
+
+
+#' @export
 get_loglikelihood.plm <- function(x, ...) {
   res <- get_residuals(x)
   w <- get_weights(x, null_as_ones = TRUE)

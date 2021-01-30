@@ -28,11 +28,12 @@
 #' attributes(predicted)$CI_low # Or CI_high
 #' as.data.frame(predicted)
 #' @export
-get_predicted <- function(x, newdata = NULL, ...) {
+get_predicted <- function(x, ...) {
   UseMethod("get_predicted")
 }
 
 
+#' @rdname get_predicted
 #' @importFrom stats fitted predict
 #' @export
 get_predicted.default <- function(x, newdata = NULL, ...) {
@@ -303,7 +304,14 @@ get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confi
 
 # Also, https://github.com/jthaman/ciTools will be of help here
 
+# Other ----------------------------------------------------------------
 
+#' @export
+get_predicted.crr <- function(x, ...) {
+  out <- as.data.frame(unclass(stats::predict(x, ...)))
+  class(out) <- c("get_predicted", class(out))
+  out
+}
 
 
 
