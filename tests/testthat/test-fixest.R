@@ -1,6 +1,7 @@
 if (require("testthat") &&
   require("insight") &&
-  require("fixest")) {
+  require("fixest") &&
+  getRversion() >= "3.6.0") {
   data(trade)
   m1 <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
   m2 <- femlm(log1p(Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")

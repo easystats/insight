@@ -42,20 +42,111 @@ if (require("testthat") && require("insight")) {
   })
 
   test_that("format others", {
-    testthat::expect_true(is.character(insight::format_pd(0.02)))
-    testthat::expect_equal(nchar(format_bf(4)), 9)
-    testthat::expect_true(is.character(format_rope(0.02)))
+    expect_true(is.character(insight::format_pd(0.02)))
+    expect_equal(nchar(format_bf(4)), 9)
+    expect_true(is.character(format_rope(0.02)))
   })
 
   test_that("format_number", {
-    testthat::expect_equal(format_number(2), "two")
-    testthat::expect_equal(format_number(45), "forty five")
-    testthat::expect_equal(format_number(2), "two")
+    expect_equal(format_number(2), "two")
+    expect_equal(format_number(45), "forty five")
+    expect_equal(format_number(2), "two")
   })
 
   test_that("format_p", {
-    testthat::expect_equal(nchar(format_p(0.02)), 9)
-    testthat::expect_equal(nchar(format_p(0.02, stars = TRUE)), 10)
-    testthat::expect_equal(nchar(format_p(0.02, stars_only = TRUE)), 1)
+    expect_equal(nchar(format_p(0.02)), 9)
+    expect_equal(nchar(format_p(0.02, stars = TRUE)), 10)
+    expect_equal(nchar(format_p(0.02, stars_only = TRUE)), 1)
+  })
+
+  test_that("format_table, other CI columns", {
+    x <- data.frame(test_CI = .9, test_CI_low = .1, test_CI_high = 1.3)
+    test <- utils::capture.output(format_table(x))
+    expect_equal(test, c("   test 90% CI", "1 [0.10, 1.30]"))
+
+    x <- data.frame(CI = .8, CI_low = 2.43, CI_high = 5.453,
+                    test_CI = .9, test_CI_low = .1, test_CI_high = 1.3)
+    test <- utils::capture.output(format_table(x))
+    expect_equal(test, c("        80% CI  test 90% CI", "1 [2.43, 5.45] [0.10, 1.30]"))
+
+    x <- data.frame(CI_low = 2.43, CI_high = 5.453, test_CI_low = .1, test_CI_high = 1.3)
+    attr(x, "ci") <- .8
+    attr(x, "ci_test") <- .9
+    test <- utils::capture.output(format_table(x))
+    expect_equal(test, c("        80% CI  test 90% CI", "1 [2.43, 5.45] [0.10, 1.30]"))
+
+    x <- data.frame(CI_low = 2.43, CI_high = 5.453, test_CI_low = .1, test_CI_high = 1.3,
+                    other_CI_low = .12, other_CI_high = 1.4)
+    attr(x, "ci") <- .8
+    attr(x, "ci_test") <- .9
+    test <- utils::capture.output(format_table(x))
+    expect_equal(test, c("        80% CI  test 80% CI other 80% CI", "1 [2.43, 5.45] [0.10, 1.30] [0.12, 1.40]"))
+  })
+
+
+  test_that("format_table, multiple CI columns", {
+    d <- data.frame(
+      Parameter = c("(Intercept)", "wt", "cyl"),
+      Coefficient = c(39.69, -3.19, -1.51),
+      SE = c(1.71, 0.76, 0.41),
+      CI_low_0.8 = c(37.44, -4.18, -2.05),
+      CI_high_0.8 = c(41.94, -2.2, -0.96),
+      CI_low_0.9 = c(36.77, -4.48, -2.21),
+      CI_high_0.9 = c(42.6, -1.9, -0.8),
+      t = c(23.14, -4.22, -3.64),
+      df_error = c(29, 29, 29),
+      stringsAsFactors = FALSE
+    )
+    attr(d, "ci") <- c(.8, .9)
+    expect_equal(
+      format_table(d),
+      data.frame(
+        Parameter = c("(Intercept)", "wt", "cyl"),
+        Coefficient = c("39.69", "-3.19", "-1.51"),
+        SE = c("1.71", "0.76", "0.41"),
+        `80% CI` = c("[37.44, 41.94]", "[-4.18, -2.20]", "[-2.05, -0.96]"),
+        `90% CI` = c("[36.77, 42.60]", "[-4.48, -1.90]", "[-2.21, -0.80]"),
+        `t(29)` = c("23.14", "-4.22", "-3.64"),
+        stringsAsFactors = FALSE
+      ),
+      ignore_attr = TRUE
+    )
+
+
+    # d <- data.frame(
+    #   Parameter = c("(Intercept)", "wt", "cyl"),
+    #   Coefficient = c(39.69, -3.19, -1.51),
+    #   SE = c(1.71, 0.76, 0.41),
+    #   CI_low_0.8 = c(37.44, -4.18, -2.05),
+    #   CI_high_0.8 = c(41.94, -2.2, -0.96),
+    #   CI_low_0.9 = c(36.77, -4.48, -2.21),
+    #   CI_high_0.9 = c(42.6, -1.9, -0.8),
+    #   t = c(23.14, -4.22, -3.64),
+    #   df_error = c(29, 29, 29),
+    #   stringsAsFactors = FALSE
+    # )
+    # expect_equal(
+    #   format_table(d),
+    #   data.frame(
+    #     Parameter = c("(Intercept)", "wt", "cyl"),
+    #     Coefficient = c("39.69", "-3.19", "-1.51"),
+    #     SE = c("1.71", "0.76", "0.41"),
+    #     `80% CI` = c("[37.44, 41.94]", "[-4.18, -2.20]", "[-2.05, -0.96]"),
+    #     `90% CI` = c("[36.77, 42.60]", "[-4.48, -1.90]", "[-2.21, -0.80]"),
+    #     `t(29)` = c("23.14", "-4.22", "-3.64"),
+    #     stringsAsFactors = FALSE
+    #   ),
+    #   ignore_attr = TRUE
+    # )
+  })
+
+
+  test_that("format_table, preserve attributes", {
+    d <- mtcars[1:3, 1:3]
+    attr(d, "table_footer") <- "This is a footer"
+    attr(d, "table_caption") <- "And the caption"
+    d2 <- insight::format_table(d, digits = 3, preserve_attributes = TRUE)
+    expect_equal(names(attributes(d2)), c("names", "row.names", "class", "table_footer", "table_caption"))
+    expect_equal(attributes(d2)$table_caption, "And the caption")
   })
 }

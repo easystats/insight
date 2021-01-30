@@ -23,9 +23,6 @@
 #'   model_name(stan_glm(Sepal.Length ~ Petal.Width,
 #'   data = iris, refresh = 0, iter = 200))
 #' }
-#' # if (require("gamm4")) {
-#' #   model_name(gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data = iris))
-#' #}
 #' @export
 model_name <- function(x, ...) {
   UseMethod("model_name")
@@ -44,4 +41,9 @@ model_name.default <- function(x, include_formula = FALSE, include_call = FALSE,
     name <- paste0(name, "(", f, ")")
   }
   name
+}
+
+#' @export
+model_name.list <- function(x, include_formula = FALSE, include_call = FALSE, ...) {
+  sapply(x, model_name, include_formula = include_formula, include_call = include_call, ...)
 }

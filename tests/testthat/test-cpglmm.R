@@ -1,6 +1,7 @@
 if (require("testthat") &&
   require("insight") &&
   require("cplm")) {
+
   data("FineRoot")
   m1 <- cpglmm(RLD ~ Stock + Spacing + (1 | Plant), data = FineRoot)
 
@@ -136,22 +137,23 @@ if (require("testthat") &&
     expect_false(is_multivariate(m1))
   })
 
-  test_that("get_variance", {
-    skip_on_cran()
-
-    expect_equal(
-      suppressWarnings(get_variance(m1)),
-      list(
-        var.fixed = 0.1687617,
-        var.random = 0.0002706301,
-        var.residual = 2.763129,
-        var.distribution = 2.763129,
-        var.dispersion = 0,
-        var.intercept = c(Plant = 0.0002706301)
-      ),
-      tolerance = 1e-3
-    )
-  })
+  if (getRversion() >= "3.6.0") {
+    test_that("get_variance", {
+      skip_on_cran()
+      expect_equal(
+        suppressWarnings(get_variance(m1)),
+        list(
+          var.fixed = 0.1687617,
+          var.random = 0.0002706301,
+          var.residual = 2.763129,
+          var.distribution = 2.763129,
+          var.dispersion = 0,
+          var.intercept = c(Plant = 0.0002706301)
+        ),
+        tolerance = 1e-3
+      )
+    })
+  }
 
   test_that("find_random_slopes", {
     expect_null(find_random_slopes(m1))

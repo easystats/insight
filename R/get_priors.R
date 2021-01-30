@@ -249,14 +249,22 @@ get_priors.meta_random <- function(x, ...) {
   fam1 <- attr(x$prior_d, "family")
   fam2 <- attr(x$prior_tau, "family")
 
-  data.frame(
+  loc1 <- which(names(prior_info1) %in% c("mean", "location", "shape"))[1]
+  loc2 <- which(names(prior_info2) %in% c("mean", "location", "shape"))[1]
+
+  scale1 <- which(names(prior_info1) %in% c("scale", "sd"))[1]
+  scale2 <- which(names(prior_info2) %in% c("scale", "sd"))[1]
+
+  out <- data.frame(
     Parameter = params,
     Distribution = c(fam1, fam2),
-    Location = c(prior_info1["mean"], prior_info2["shape"]),
-    Scale = c(prior_info1["sd"], prior_info2["scale"]),
+    Location = c(prior_info1[loc1], prior_info2[loc2]),
+    Scale = c(prior_info1[scale1], prior_info2[scale2]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  .fix_metabma_priorname(out)
 }
 
 
@@ -268,13 +276,18 @@ get_priors.meta_fixed <- function(x, ...) {
   prior_info <- attr(x$prior_d, "param")
   fam <- attr(x$prior_d, "family")
 
-  data.frame(
+  loc <- which(names(prior_info) %in% c("mean", "location", "shape"))[1]
+  scale <- which(names(prior_info) %in% c("scale", "sd"))[1]
+
+  out <- data.frame(
     Parameter = params,
     Distribution = fam,
-    Location = prior_info["mean"],
-    Scale = prior_info["sd"],
+    Location = prior_info[loc],
+    Scale = prior_info[scale],
     stringsAsFactors = FALSE
   )
+
+  .fix_metabma_priorname(out)
 }
 
 
@@ -402,4 +415,13 @@ get_priors.mcmc.list <- function(x, ...) {
 .is_numeric_character <- function(x) {
   (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x))))) ||
     (is.factor(x) && !anyNA(suppressWarnings(as.numeric(levels(x)))))
+}
+
+
+
+.fix_metabma_priorname <- function(x) {
+  x$Distribution <- gsub("t", "Student's t", x$Distribution, fixed = TRUE)
+  x$Distribution <- gsub("norm", "Normal", x$Distribution, fixed = TRUE)
+  x$Distribution <- gsub("invgamma", "Inverse gamma", x$Distribution, fixed = TRUE)
+  x
 }

@@ -15,7 +15,7 @@
 \usage{
 get_statistic(x, ...)
 
-\method{get_statistic}{default}(x, column_index = 3, ...)
+\method{get_statistic}{default}(x, column_index = 3, verbose = TRUE, ...)
 
 \method{get_statistic}{glmmTMB}(
   x,
@@ -51,6 +51,8 @@ method yet, the default method is called. This method tries to extract the
 statistic column from \code{coef(summary())}, where the index of the column
 that is being pulled is \code{column_index}. Defaults to 3, which is the
 default statistic column for most models' summary-output.}
+
+\item{verbose}{Toggle messages and warnings.}
 
 \item{component}{Should all parameters, parameters for the conditional model,
 or for the zero-inflated part of the model be returned? Applies to models

@@ -1,3 +1,12 @@
+osx <- tryCatch({
+  si <- Sys.info()
+  if (!is.null(si["sysname"])) {
+    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+  } else {
+    FALSE
+  }
+})
+
 if (require("testthat") &&
   require("insight") &&
   require("ordinal")) {
@@ -164,32 +173,34 @@ if (require("testthat") &&
     expect_false(is_multivariate(m2))
   })
 
-  test_that("get_variance", {
-    expect_equal(
-      get_variance(m1),
-      list(
-        var.fixed = 3.23207765938872,
-        var.random = 1.27946088209319,
-        var.residual = 3.28986813369645,
-        var.distribution = 3.28986813369645,
-        var.dispersion = 0,
-        var.intercept = c(judge = 1.27946088209319)
-      ),
-      tolerance = 1e-4
-    )
-    expect_equal(
-      get_variance(m2),
-      list(
-        var.fixed = 0.132313576370902,
-        var.random = 0.193186321588604,
-        var.residual = 1,
-        var.distribution = 1,
-        var.dispersion = 0,
-        var.intercept = c(`RESP:PROD` = 0.148265480396059, RESP = 0.0449208411925493)
-      ),
-      tolerance = 1e-4
-    )
-  })
+  if (getRversion() >= "3.6.0" && !isTRUE(osx)) {
+    test_that("get_variance", {
+      expect_equal(
+        get_variance(m1),
+        list(
+          var.fixed = 3.23207765938872,
+          var.random = 1.27946088209319,
+          var.residual = 3.28986813369645,
+          var.distribution = 3.28986813369645,
+          var.dispersion = 0,
+          var.intercept = c(judge = 1.27946088209319)
+        ),
+        tolerance = 1e-4
+      )
+      expect_equal(
+        get_variance(m2),
+        list(
+          var.fixed = 0.132313576370902,
+          var.random = 0.193186321588604,
+          var.residual = 1,
+          var.distribution = 1,
+          var.dispersion = 0,
+          var.intercept = c(`RESP:PROD` = 0.148265480396059, RESP = 0.0449208411925493)
+        ),
+        tolerance = 1e-4
+      )
+    })
+  }
 
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "z-statistic")

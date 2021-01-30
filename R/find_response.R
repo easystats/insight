@@ -13,13 +13,14 @@
 #'   vector, or \code{NULL} if response variable could not be found.
 #'
 #' @examples
-#' library(lme4)
-#' data(cbpp)
-#' cbpp$trials <- cbpp$size - cbpp$incidence
-#' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+#' if (require("lme4")) {
+#'   data(cbpp)
+#'   cbpp$trials <- cbpp$size - cbpp$incidence
+#'   m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #'
-#' find_response(m, combine = TRUE)
-#' find_response(m, combine = FALSE)
+#'   find_response(m, combine = TRUE)
+#'   find_response(m, combine = FALSE)
+#' }
 #' @export
 find_response <- function(x, combine = TRUE) {
   f <- find_formula(x)

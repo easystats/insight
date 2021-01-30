@@ -86,6 +86,16 @@ export_table <- function(x,
     format <- "markdown"
   }
 
+  # if we have a list of data frame and HTML format, create a single
+  # data frame now...
+  if (identical(format, "html") && !is.data.frame(x) && is.list(x)) {
+    x <- do.call(rbind, lapply(x, function(i) {
+      i$Component <- attr(i, "table_caption")[1]
+      i
+    }))
+  }
+
+
   # single data frame
   if (is.data.frame(x)) {
     if (is.null(caption)) {
@@ -224,16 +234,14 @@ export_table <- function(x,
 .format_basic_table <- function(final, header, sep, caption = NULL, subtitle = NULL, footer = NULL, align = NULL) {
 
   # align table, if requested
-  if (!is.null(align)) {
+  if (!is.null(align) && length(align) == 1) {
 
     for (i in 1:ncol(final)) {
       align_char <- ""
-      if (!is.null(align)) {
-        if (align %in% c("left", "right", "center", "firstleft")) {
-          align_char <- ""
-        } else {
-          align_char <- substr(align, i, i)
-        }
+      if (align %in% c("left", "right", "center", "firstleft")) {
+        align_char <- ""
+      } else {
+        align_char <- substr(align, i, i)
       }
 
       # left alignment, or at least first line only left?
@@ -246,7 +254,7 @@ export_table <- function(x,
 
         # else, center
       } else {
-        final[, i] <- format(trimws(final[, i]), justify = "center")
+        final[, i] <- format(trimws(final[, i]), justify = "centre")
       }
     }
   }

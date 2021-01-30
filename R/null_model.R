@@ -52,9 +52,9 @@ null_model <- function(model, verbose = TRUE, ...) {
         msg <- e$message
         if (verbose) {
           if (grepl("(^object)(.*)(not found$)", msg)) {
-            insight::print_color("Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n", "red")
+            print_color("Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n", "red")
           } else if (grepl("^could not find function", msg)) {
-            insight::print_color("Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n", "red")
+            print_color("Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n", "red")
           }
         }
         return(NULL)

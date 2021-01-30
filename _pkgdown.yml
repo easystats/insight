@@ -36,6 +36,7 @@ reference:
     Functions to get values or data from model objects. These functions
     have no `find_*()`-counterpart.
   contents:
+  - get_auxiliary
   - get_data
   - get_df
   - get_intercept
@@ -46,6 +47,7 @@ reference:
   - get_sigma
   - get_variance
   - get_varcov
+  - get_deviance
 
 - title: "Find Information or Get Data from Model Objects"
   desc: >
@@ -86,6 +88,7 @@ reference:
   - is_model
   - is_model_supported
   - is_multivariate
+  - is_nested_models
   - is_nullmodel
 
 - title: "Value Formatting"

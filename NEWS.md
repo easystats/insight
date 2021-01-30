@@ -1,3 +1,24 @@
+# insight 0.12.1
+
+## General
+
+* Roll-back R dependency to R >= 3.4.
+
+## New supported model classes
+
+* Support for `crr` (*cmprsk*)
+
+## Changes to functions
+
+* Slightly improved handling of different CI-columns in `format_table()`.
+
+## Bug fixes
+
+* `get_varcov()` did not properly remove `NA` from rank-deficient models.
+
+* Fixed issue/warning in `get_data()` for some *htest* objects, where the 
+  environment was not properly evaluated.
+
 # insight 0.12.0
 
 ## Breaking changes
@@ -13,6 +34,9 @@
 
 ## New functions
 
+* Added `get_deviance()` function that returns the model deviance as a
+  robust alternative to `stats::deviance()`.
+
 * Added `model_name()` function that returns the model's "name".
 
 * Added `format()` method for `find_formula()` output to flatten it.
@@ -23,7 +47,7 @@
 * Added `get_intercept()` as a helper function to easily retrieve the  value
   at the intercept.
 
-* Added `get_df()` as a robust alternative to `stats::df.rediuals()`.
+* Added `get_df()` as a robust alternative to `stats::df.residuals()`.
 
 * Added `get_predicted()` as a robust alternative to `stats::fitted()`.
 
@@ -33,6 +57,9 @@
 * Added `get_residuals()` as a robust alternative extract model residuals.
 
 * Added `ellipsis_info()` to specify the nature of ellipsis (`...`) inputs.
+
+* Added `is_nested_models()` to check if multiple regression models are
+  nested (decreasing or increasing).
 
 * Added generic `print_html()`, to allow other packages to create tables in
   HTML format (via `export_table()`) when not printing the output to console.

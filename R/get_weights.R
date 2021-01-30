@@ -10,7 +10,10 @@
 #'   to 1).
 #' @param ... Currently not used.
 #'
-#' @return The weighting variable, or \code{NULL} if no weights were specified (or if all weights were 1).
+#' @return The weighting variable, or \code{NULL} if no weights were specified
+#' or if weights were 1. If the weighting variable should also be returned
+#' (instead of \code{NULL}), when all weights are set to 1 (i.e. no weighting),
+#' set \code{null_as_ones = TRUE}.
 #'
 #' @examples
 #' data(mtcars)
@@ -39,15 +42,15 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   w <- NULL
   tryCatch(
     {
-      w <- stats::weights(x)
+      w <- stats::weights(x, ...)
     },
-    error = function(x) {
+    error = function(e) {
       NULL
     },
-    warning = function(x) {
+    warning = function(e) {
       NULL
     },
-    finally = function(x) {
+    finally = function(e) {
       NULL
     }
   )
@@ -57,13 +60,13 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
       {
         w <- stats::model.frame(x)[["(weights)"]]
       },
-      error = function(x) {
+      error = function(e) {
         NULL
       },
-      warning = function(x) {
+      warning = function(e) {
         NULL
       },
-      finally = function(x) {
+      finally = function(e) {
         NULL
       }
     )
@@ -74,13 +77,13 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
       {
         w <- .get_data_from_env(x)[[find_weights(x)]]
       },
-      error = function(x) {
+      error = function(e) {
         NULL
       },
-      warning = function(x) {
+      warning = function(e) {
         NULL
       },
-      finally = function(x) {
+      finally = function(e) {
         NULL
       }
     )
@@ -119,7 +122,7 @@ get_weights.brmsfit <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
     w <- stats::na.omit(w)
   }
 
-  if(is.null(w) && null_as_ones){
+  if (is.null(w) && null_as_ones) {
     w <- rep.int(1, n_obs(x))
   }
 

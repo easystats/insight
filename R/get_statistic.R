@@ -43,8 +43,15 @@ get_statistic <- function(x, ...) {
 
 #' @rdname get_statistic
 #' @export
-get_statistic.default <- function(x, column_index = 3, ...) {
+get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
   cs <- stats::coef(summary(x))
+
+  if (column_index > ncol(cs)) {
+    if (isTRUE(verbose)) {
+      warning("Could not access test statistic of model parameters.", call. = FALSE)
+    }
+    return(NULL)
+  }
 
   out <- data.frame(
     Parameter = rownames(cs),
@@ -454,6 +461,10 @@ get_statistic.coxr <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
+
+
+#' @export
+get_statistic.crr <- get_statistic.coxr
 
 
 #' @importFrom stats vcov
@@ -1855,6 +1866,6 @@ get_statistic.coeftest <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
-  attr(out, "statistic") <- insight::find_statistic(x)
+  attr(out, "statistic") <- find_statistic(x)
   out
 }

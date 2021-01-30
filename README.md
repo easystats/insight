@@ -1,10 +1,7 @@
 
 # insight <img src='man/figures/logo.png' align="right" height="139" />
 
-[![DOI](http://joss.theoj.org/papers/10.21105/joss.01412/status.svg)](https://doi.org/10.21105/joss.01412)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
-[![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/)
-![R-check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.01412/status.svg)](https://doi.org/10.21105/joss.01412)
 [![downloads](https://cranlogs.r-pkg.org/badges/insight)](https://cranlogs.r-pkg.org/)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/insight)](https://cranlogs.r-pkg.org/)
 
@@ -26,6 +23,32 @@ model objects. These tools aid applied research in virtually any field
 who fit, diagnose, and present statistical models by streamlining access
 to every aspect of many model objects via consistent syntax and output.
 
+## Installation
+
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
+[![R
+check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
+
+Run the following to install the stable release of **insight** from
+CRAN:
+
+``` r
+install.packages("insight")
+```
+
+Or this one to install the latest development version:
+
+``` r
+install.packages("remotes")
+remotes::install_github("easystats/insight")
+```
+
+## Documentation
+
+[![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-insight-orange.svg?colorB=2196F3)](https://easystats.github.io/insight/reference/index.html)
+
 Built with non-programmers in mind, **insight** offers a broad toolbox
 for making model and data information easily accessible. While
 **insight** offers many useful functions for working with and
@@ -35,9 +58,10 @@ overview of model objects (e.g., functional form of the model, the model
 family, link function, number of observations, variables included in the
 specification, etc.). With a clear understanding of the model
 introduced, users are able to adapt other functions for more nuanced
-exploration of and interaction with virtually any model object.
+exploration of and interaction with virtually any model object.Please
+visit <https://easystats.github.io/insight/> for documentation.
 
-## Definition of Model Components
+### Definition of Model Components
 
 The functions from **insight** address different components of a model.
 In an effort to avoid confusion about specific “targets” of each
@@ -93,7 +117,7 @@ In some cases, yes. But not in all cases. Find out more by [**clicking
 here to access the
 documentation**](https://easystats.github.io/insight/articles/insight.html).
 
-## Functions
+### Functions
 
 The package revolves around two key prefixes: `get_*` and `find_*`. The
 `get_*` prefix extracts *values* (or *data*) associated with
@@ -134,7 +158,7 @@ or the complementary package website,
 arguments associated with each function as well as the returned values
 from each function.
 
-## Examples of Use Cases in R
+### Examples of Use Cases in R
 
 We now would like to provide examples of use cases of the **insight**
 package. These examples probably do not cover typical real-world
@@ -226,25 +250,6 @@ print_params(m2)
 #> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"
 ```
 
-## Installation
-
-Run the following to install the latest GitHub-version of **insight**:
-
-``` r
-install.packages("devtools")
-devtools::install_github("easystats/insight")
-```
-
-Or install the latest stable release from CRAN:
-
-``` r
-install.packages("insight")
-```
-
-## Documentation
-
-Please visit <https://easystats.github.io/insight/> for documentation.
-
 ## Contributing and Support
 
 In case you want to file an issue or contribute in another way to the
@@ -255,7 +260,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 166 model classes are supported.
+Currently, 167 model classes are supported.
 
 ``` r
 supported_models()
@@ -275,46 +280,46 @@ supported_models()
 #>  [40] "coxme"             "coxph"             "coxph.penal"      
 #>  [43] "coxr"              "cpglm"             "cpglmm"           
 #>  [46] "crch"              "crq"               "crqs"             
-#>  [49] "DirichletRegModel" "feglm"             "feis"             
-#>  [52] "felm"              "fitdistr"          "fixest"           
-#>  [55] "flexsurvreg"       "gam"               "Gam"              
-#>  [58] "gamlss"            "gamm"              "gamm4"            
-#>  [61] "gbm"               "gee"               "geeglm"           
-#>  [64] "glht"              "glimML"            "glm"              
-#>  [67] "Glm"               "glmm"              "glmmadmb"         
-#>  [70] "glmmPQL"           "glmmTMB"           "glmrob"           
-#>  [73] "glmRob"            "glmx"              "gls"              
-#>  [76] "gmnl"              "HLfit"             "htest"            
-#>  [79] "hurdle"            "iv_robust"         "ivFixed"          
-#>  [82] "ivprobit"          "ivreg"             "lavaan"           
-#>  [85] "lm"                "lm_robust"         "lme"              
-#>  [88] "lmerMod"           "lmerModLmerTest"   "lmodel2"          
-#>  [91] "lmrob"             "lmRob"             "logistf"          
-#>  [94] "logitmfx"          "logitor"           "LORgee"           
-#>  [97] "lqm"               "lqmm"              "lrm"              
-#> [100] "manova"            "MANOVA"            "margins"          
-#> [103] "maxLik"            "mclogit"           "mcmc"             
-#> [106] "mcmc.list"         "MCMCglmm"          "mediate"          
-#> [109] "merMod"            "merModList"        "meta_bma"         
-#> [112] "meta_fixed"        "meta_random"       "metaplus"         
-#> [115] "mipo"              "mira"              "mixed"            
-#> [118] "MixMod"            "mixor"             "mle"              
-#> [121] "mle2"              "mlm"               "mlogit"           
-#> [124] "mmlogit"           "multinom"          "negbinirr"        
-#> [127] "negbinmfx"         "ols"               "plm"              
-#> [130] "poissonirr"        "poissonmfx"        "polr"             
-#> [133] "probitmfx"         "psm"               "ridgelm"          
-#> [136] "riskRegression"    "rlm"               "rlmerMod"         
-#> [139] "RM"                "rma"               "rma.uni"          
-#> [142] "robmixglm"         "rq"                "rqs"              
-#> [145] "rqss"              "scam"              "sem"              
-#> [148] "speedglm"          "speedlm"           "stanmvreg"        
-#> [151] "stanreg"           "summary.lm"        "survfit"          
-#> [154] "survreg"           "svyglm"            "svyolr"           
-#> [157] "tobit"             "truncreg"          "vgam"             
-#> [160] "vglm"              "wbgee"             "wblm"             
-#> [163] "wbm"               "zcpglm"            "zeroinfl"         
-#> [166] "zerotrunc"
+#>  [49] "crr"               "DirichletRegModel" "feglm"            
+#>  [52] "feis"              "felm"              "fitdistr"         
+#>  [55] "fixest"            "flexsurvreg"       "gam"              
+#>  [58] "Gam"               "gamlss"            "gamm"             
+#>  [61] "gamm4"             "gbm"               "gee"              
+#>  [64] "geeglm"            "glht"              "glimML"           
+#>  [67] "glm"               "Glm"               "glmm"             
+#>  [70] "glmmadmb"          "glmmPQL"           "glmmTMB"          
+#>  [73] "glmrob"            "glmRob"            "glmx"             
+#>  [76] "gls"               "gmnl"              "HLfit"            
+#>  [79] "htest"             "hurdle"            "iv_robust"        
+#>  [82] "ivFixed"           "ivprobit"          "ivreg"            
+#>  [85] "lavaan"            "lm"                "lm_robust"        
+#>  [88] "lme"               "lmerMod"           "lmerModLmerTest"  
+#>  [91] "lmodel2"           "lmrob"             "lmRob"            
+#>  [94] "logistf"           "logitmfx"          "logitor"          
+#>  [97] "LORgee"            "lqm"               "lqmm"             
+#> [100] "lrm"               "manova"            "MANOVA"           
+#> [103] "margins"           "maxLik"            "mclogit"          
+#> [106] "mcmc"              "mcmc.list"         "MCMCglmm"         
+#> [109] "mediate"           "merMod"            "merModList"       
+#> [112] "meta_bma"          "meta_fixed"        "meta_random"      
+#> [115] "metaplus"          "mipo"              "mira"             
+#> [118] "mixed"             "MixMod"            "mixor"            
+#> [121] "mle"               "mle2"              "mlm"              
+#> [124] "mlogit"            "mmlogit"           "multinom"         
+#> [127] "negbinirr"         "negbinmfx"         "ols"              
+#> [130] "plm"               "poissonirr"        "poissonmfx"       
+#> [133] "polr"              "probitmfx"         "psm"              
+#> [136] "ridgelm"           "riskRegression"    "rlm"              
+#> [139] "rlmerMod"          "RM"                "rma"              
+#> [142] "rma.uni"           "robmixglm"         "rq"               
+#> [145] "rqs"               "rqss"              "scam"             
+#> [148] "sem"               "speedglm"          "speedlm"          
+#> [151] "stanmvreg"         "stanreg"           "summary.lm"       
+#> [154] "survfit"           "survreg"           "svyglm"           
+#> [157] "svyolr"            "tobit"             "truncreg"         
+#> [160] "vgam"              "vglm"              "wbgee"            
+#> [163] "wblm"              "wbm"               "zcpglm"           
+#> [166] "zeroinfl"          "zerotrunc"
 ```
 
   - **Didn’t find a model?** [File an

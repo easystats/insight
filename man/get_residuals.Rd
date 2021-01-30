@@ -7,12 +7,14 @@
 \usage{
 get_residuals(x, ...)
 
-\method{get_residuals}{default}(x, verbose = TRUE, ...)
+\method{get_residuals}{default}(x, weighted = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}
 
 \item{...}{Passed down to \code{residuals()}, if possible.}
+
+\item{weighted}{Logical, if \code{TRUE}, returns weighted residuals.}
 
 \item{verbose}{Toggle warnings and messages.}
 }
@@ -27,6 +29,10 @@ This function returns the default type of residuals, i.e. for the
 response from linear models, the deviance residuals for models of class
 \code{glm} etc. To access different types, pass down the \code{type} argument
 (see 'Examples').
+\cr \cr
+This function is a robust alternative to \code{residuals()}, as it works
+for some special model objects that otherwise do not respond properly to
+calling \code{residuals()}.
 }
 \examples{
 data(mtcars)

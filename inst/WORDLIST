@@ -78,6 +78,7 @@ joss
 lavaan
 lme
 lmerModLmerTest
+lmodel
 lmtest
 logloss
 logLik

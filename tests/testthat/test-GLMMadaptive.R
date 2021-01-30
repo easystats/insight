@@ -226,7 +226,7 @@ if (.runThisTest) {
         component = "cond", effects = "random"
       )), "persons")
       expect_identical(colnames(get_data(m, component = "dispersion")), "count")
-      expect_null(get_data(m, component = "dispersion", effects = "random"))
+      expect_null(suppressWarnings(get_data(m, component = "dispersion", effects = "random")))
       expect_identical(
         colnames(get_data(m3)),
         c("incidence", "size", "period", "herd")

@@ -21,10 +21,12 @@
 #'   columns with transformed values.
 #'
 #' @examples
-#' data(cbpp, package = "lme4")
-#' cbpp$trials <- cbpp$size - cbpp$incidence
-#' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
-#' head(get_data(m))
+#' if (require("lme4")) {
+#'   data(cbpp, package = "lme4")
+#'   cbpp$trials <- cbpp$size - cbpp$incidence
+#'   m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+#'   head(get_data(m))
+#' }
 #' @importFrom stats model.frame na.omit
 #' @export
 get_data <- function(x, ...) {
@@ -1336,79 +1338,7 @@ get_data.mipo <- function(x, ...) {
 get_data.htest <- function(x, ...) {
   out <- NULL
   if (!is.null(x$data.name)) {
-    out <- tryCatch(
-      {
-        # split by "and" and "by". E.g., for t.test(1:3, c(1,1:3)), we have
-        # x$data.name = "1:3 and c(1, 1:3)"
-        data_name <- trimws(unlist(strsplit(x$data.name, "(and|by)")))
-
-        # now we may have exceptions, e.g. for friedman.test(wb$x, wb$w, wb$t)
-        # x$data.name is "wb$x, wb$w and wb$t" and we now have "wb$x, wb$w" and
-        # "wb$t", so we need to split at comma as well. However, the above t-test
-        # example returns "1:3" and "c(1, 1:3)", so we only must split at comma
-        # when it is not inside parentheses.
-        data_comma <- unlist(strsplit(data_name, "(\\([^)]*\\))"))
-
-        # any comma not inside parentheses?
-        if (any(grepl(",", data_comma, fixed = TRUE))) {
-          data_name <- trimws(unlist(strsplit(data_comma, ", ", fixed = TRUE)))
-        }
-
-        # exeception: list for kruskal-wallis
-        if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && grepl("^list\\(", data_name)) {
-          l <- eval(str2lang(x$data.name), envir = parent.frame())
-          names(l) <- paste0("x", 1:length(l))
-          return(l)
-        }
-
-        data_call <- lapply(data_name, str2lang)
-        columns <- lapply(data_call, eval)
-
-        # preserve table data for McNemar
-        if (!grepl(" (and|by) ", x$data.name) && (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
-          return(as.table(columns[[1]]))
-          # check if data is a list for kruskal-wallis
-        } else if (grepl("^Kruskal-Wallis", x$method) && length(columns) == 1 && is.list(columns[[1]])) {
-          l <- columns[[1]]
-          names(l) <- paste0("x", 1:length(l))
-          return(l)
-        } else {
-          max_len <- max(sapply(columns, length))
-          for (i in 1:length(columns)) {
-            columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
-          }
-          d <- as.data.frame(columns)
-        }
-
-        if (all(grepl("(.*)\\$(.*)", data_name)) && length(data_name) == length(colnames(d))) {
-          colnames(d) <- gsub("(.*)\\$(.*)", "\\2", data_name)
-        } else if (ncol(d) > 2) {
-          colnames(d) <- paste0("x", 1:ncol(d))
-        } else if (ncol(d) == 2) {
-          colnames(d) <- c("x", "y")
-        } else {
-          colnames(d) <- "x"
-        }
-        d
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-
-    # 2nd try
-    if (is.null(out)) {
-      out <- tryCatch(
-        {
-          data_name <- trimws(unlist(strsplit(x$data.name, "(and|,|by)")))
-          as.table(get(data_name, envir = parent.frame()))
-        },
-        error = function(e) {
-          NULL
-        }
-      )
-    }
+    out <- .retrieve_htest_data(x)
   }
-
   out
 }

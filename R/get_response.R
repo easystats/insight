@@ -13,15 +13,16 @@
 #'   \code{x} has more than one defined response variable.
 #'
 #' @examples
-#' library(lme4)
-#' data(cbpp)
+#' if (require("lme4")) {
+#'   data(cbpp)
+#'   cbpp$trials <- cbpp$size - cbpp$incidence
+#'
+#'   m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+#'   head(get_response(m))
+#'   get_response(m, select = "incidence")
+#' }
+#'
 #' data(mtcars)
-#' cbpp$trials <- cbpp$size - cbpp$incidence
-#'
-#' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
-#' head(get_response(m))
-#' get_response(m, select = "incidence")
-#'
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_response(m)
 #' @export
