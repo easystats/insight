@@ -12,6 +12,9 @@
 
 * Slightly improved handling of different CI-columns in `format_table()`.
 
+* `model_info()` now returns `$is_leventest` if model is an object returned
+  by `car::leveneTest()`.
+
 ## Bug fixes
 
 * `get_varcov()` did not properly remove `NA` from rank-deficient models.

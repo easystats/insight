@@ -182,6 +182,7 @@
   is_chi2test <- FALSE
   is_ranktest <- FALSE
   is_xtab <- FALSE
+  is_levenetest <- FALSE
 
   if (inherits(x, "htest")) {
     if (grepl("kruskal-wallis", tolower(x$method), fixed = TRUE) || grepl("wilcoxon", tolower(x$method), fixed = TRUE)) {
@@ -213,6 +214,10 @@
     is_correlation <- TRUE
   }
 
+  # exceptions: car::leveneTest
+  if (inherits(x, "anova") && !is.null(attributes(x)$heading) && grepl("^Levene's Test", attributes(x)$heading)) {
+    is_levenetest <- TRUE
+  }
 
   # Bayesfactors terms --------
 
@@ -312,6 +317,7 @@
     is_onewaytest = is_oneway,
     is_chi2test = is_chi2test,
     is_ranktest = is_ranktest,
+    is_levenetest = is_levenetest,
     is_xtab = is_xtab,
     is_proptest = is_proptest,
     is_binomtest = is_binomtest,
