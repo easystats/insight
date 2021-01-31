@@ -309,6 +309,16 @@ get_priors.BFBayesFactor <- function(x, ...) {
     names(prior)
   )
 
+  # Distribution
+  if (bf_type == "xtable") {
+    Distribution <- x@denominator@type[[1]]
+  } else if(bf_type == "correlation") {
+    Distribution <- "beta"
+  } else {
+    Distribution <- "cauchy"
+  }
+
+  # Prior
   prior_scale <- unlist(prior)
 
   if (length(prior_names) != length(prior_scale)) {
@@ -321,12 +331,20 @@ get_priors.BFBayesFactor <- function(x, ...) {
     }))
   }
 
-  if (bf_type == "xtable") {
-    Distribution <- x@denominator@type[[1]]
-  } else {
-    Distribution <- "cauchy"
+  if(bf_type == "correlation") {
+    # "A shifted, scaled beta(1/rscale,1/rscale) prior distribution is assumed for rho"
+    prior_scale <- 1 / prior_scale
   }
 
+  # Location
+  if(bf_type == "correlation") {
+    location <- prior_scale
+  } else {
+    location <- 0
+  }
+
+
+  # Prepare output
   if (bf_type == "linear") {
     # find data types, to match priors
     data_types <- x@numerator[[1]]@dataTypes
@@ -336,7 +354,7 @@ get_priors.BFBayesFactor <- function(x, ...) {
     out <- as.data.frame(utils::stack(params), stringsAsFactors = FALSE)
     colnames(out) <- c("Parameter", "Component")
     out$Distribution <- Distribution
-    out$Location <- 0
+    out$Location <- location
     out$Scale <- NA
 
     # find parameter names pattern to match data types
@@ -357,7 +375,7 @@ get_priors.BFBayesFactor <- function(x, ...) {
     data.frame(
       Parameter = prior_names,
       Distribution = Distribution,
-      Location = 0,
+      Location = location,
       Scale = prior_scale,
       stringsAsFactors = FALSE,
       row.names = NULL
