@@ -333,8 +333,8 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
     expect_equal(
       get_priors(corr_BF1),
       structure(list(
-        Parameter = "rho", Distribution = "cauchy", Location = 0,
-        Scale = 0.333333333333333
+        Parameter = "rho", Distribution = "beta", Location = 3,
+        Scale = 3
       ), class = "data.frame", row.names = c(
         NA,
         -1L
