@@ -93,7 +93,12 @@ model_info <- function(x, ...) {
 
 #' @export
 model_info.data.frame <- function(x, ...) {
-  stop("A data frame is no valid object for this function")
+  if (inherits(x, "anova") && !is.null(attributes(x)$heading) &&
+      grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
+    .make_family(x)
+  } else {
+    stop("A data frame is no valid object for this function.", call. = FALSE)
+  }
 }
 
 
