@@ -93,12 +93,7 @@ model_info <- function(x, ...) {
 
 #' @export
 model_info.data.frame <- function(x, ...) {
-  if (inherits(x, "anova") && !is.null(attributes(x)$heading) &&
-      grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
-    .make_family(x)
-  } else {
-    stop("A data frame is no valid object for this function.", call. = FALSE)
-  }
+  stop("A data frame is no valid object for this function.", call. = FALSE)
 }
 
 
@@ -145,6 +140,16 @@ model_info.default <- function(x, verbose = TRUE, ...) {
 
 
 # Models with general handling, Gaussian ----------------------------------
+
+
+#' @export
+model_info.anova <- function(x, ...) {
+  if (!is.null(attributes(x)$heading) && grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
+    .make_family(x)
+  } else {
+    NULL
+  }
+}
 
 
 #' @export
