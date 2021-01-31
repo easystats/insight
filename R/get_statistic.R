@@ -835,6 +835,12 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.ergm <- function(x, verbose = TRUE, ...) {
+  get_statistic.default(x = x, column_index = 4, verbose = verbose, ...)
+}
+
+
+#' @export
 get_statistic.ridgelm <- function(x, ...) {
   NULL
 }

@@ -58,6 +58,7 @@ Retrieve information from model objects.
      \item \code{is_ttest}: model is an an object of class \code{htest}, returned by \code{t.test()}
      \item \code{is_correlation}: model is an an object of class \code{htest}, returned by \code{cor.test()}
      \item \code{is_ranktest}: model is an an object of class \code{htest}, returned by \code{cor.test()} (if Spearman's rank correlation), \code{wilcox.text()} or \code{kruskal.test()}.
+     \item \code{is_levenetest}: model is an an object of class \code{anova}, returned by \code{car::leveneTest()}.
      \item \code{is_onewaytest}: model is an an object of class \code{htest}, returned by \code{oneway.test()}
      \item \code{is_proptest}: model is an an object of class \code{htest}, returned by \code{prop.test()}
      \item \code{is_binomtest}: model is an an object of class \code{htest}, returned by \code{binom.test()}

@@ -87,6 +87,7 @@ supported_models <- function() {
     "crqs",
     "crr",
     "DirichletRegModel",
+    "ergm",
     "feis",
     "felm",
     "feglm",

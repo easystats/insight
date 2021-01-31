@@ -6,7 +6,7 @@
 
 ## New supported model classes
 
-* Support for `crr` (*cmprsk*)
+* Support for `crr` (*cmprsk*), `ergm` (*ergm*)
 
 ## Changes to functions
 
