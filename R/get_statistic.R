@@ -856,6 +856,21 @@ get_statistic.Rchoice <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+get_statistic.garch <- function(x, verbose = TRUE, ...) {
+  cs <- summary(x)$coef
+  out <- data.frame(
+    Parameter = find_parameters(x, flatten = TRUE),
+    Statistic = as.vector(cs[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.ergm <- function(x, verbose = TRUE, ...) {
   get_statistic.default(x = x, column_index = 4, verbose = verbose, ...)
 }

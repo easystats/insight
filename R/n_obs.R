@@ -137,6 +137,13 @@ n_obs.mediate <- function(x, ...) {
 
 
 #' @export
+n_obs.garch <- function(x, ...) {
+  x$n.used
+}
+
+
+
+#' @export
 n_obs.bayesx <- function(x, ...) {
   length(x$response)
 }

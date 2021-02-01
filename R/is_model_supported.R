@@ -100,6 +100,7 @@ supported_models <- function() {
     "gamlss",
     "gamm",
     "gamm4",
+    "garch",
     "gbm",
     "gee",
     "geeglm",

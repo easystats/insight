@@ -700,6 +700,15 @@ model_info.BGGM <- function(x, ...) {
 
 
 #' @export
+model_info.garch <- function(x, ...) {
+  .make_family(
+    x = x,
+    ...
+  )
+}
+
+
+#' @export
 model_info.Rchoice <- function(x, ...) {
   .make_family(
     x = x,

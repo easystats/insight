@@ -260,7 +260,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 169 model classes are supported.
+Currently, 170 model classes are supported.
 
 ``` r
 supported_models()
@@ -309,18 +309,18 @@ supported_models()
 #> [127] "mmlogit"           "multinom"          "negbinirr"        
 #> [130] "negbinmfx"         "ols"               "plm"              
 #> [133] "poissonirr"        "poissonmfx"        "polr"             
-#> [136] "probitmfx"         "psm"               "ridgelm"          
-#> [139] "riskRegression"    "rlm"               "rlmerMod"         
-#> [142] "RM"                "rma"               "rma.uni"          
-#> [145] "robmixglm"         "rq"                "rqs"              
-#> [148] "rqss"              "scam"              "sem"              
-#> [151] "speedglm"          "speedlm"           "stanmvreg"        
-#> [154] "stanreg"           "summary.lm"        "survfit"          
-#> [157] "survreg"           "svyglm"            "svyolr"           
-#> [160] "tobit"             "truncreg"          "vgam"             
-#> [163] "vglm"              "wbgee"             "wblm"             
-#> [166] "wbm"               "zcpglm"            "zeroinfl"         
-#> [169] "zerotrunc"
+#> [136] "probitmfx"         "psm"               "Rchoice"          
+#> [139] "ridgelm"           "riskRegression"    "rlm"              
+#> [142] "rlmerMod"          "RM"                "rma"              
+#> [145] "rma.uni"           "robmixglm"         "rq"               
+#> [148] "rqs"               "rqss"              "scam"             
+#> [151] "sem"               "speedglm"          "speedlm"          
+#> [154] "stanmvreg"         "stanreg"           "summary.lm"       
+#> [157] "survfit"           "survreg"           "svyglm"           
+#> [160] "svyolr"            "tobit"             "truncreg"         
+#> [163] "vgam"              "vglm"              "wbgee"            
+#> [166] "wblm"              "wbm"               "zcpglm"           
+#> [169] "zeroinfl"          "zerotrunc"
 ```
 
   - **Didn’t find a model?** [File an
