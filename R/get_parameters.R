@@ -119,6 +119,19 @@ get_parameters.tobit <- get_parameters.default
 
 
 #' @export
+get_parameters.btergm <- function(x, ...) {
+  cf <- x@coef
+  params <- data.frame(
+    Parameter = names(cf),
+    Estimate = as.vector(cf),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+#' @export
 get_parameters.mediate <- function(x, ...) {
   info <- model_info(x$model.y)
   if (info$is_linear && !x$INT) {

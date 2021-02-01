@@ -143,6 +143,7 @@ find_statistic <- function(x, ...) {
       "brglm",
       "brglmFit",
       "brmultinom",
+      "btergm",
       "cglm",
       "cph",
       "clm",

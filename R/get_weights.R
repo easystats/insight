@@ -32,11 +32,12 @@
 #' get_weights(m)
 #' @importFrom stats na.omit
 #' @export
-get_weights <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
+get_weights <- function(x, na_rm = FALSE, ...) {
   UseMethod("get_weights")
 }
 
 
+#' @rdname get_weights
 #' @export
 get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   w <- NULL
@@ -127,4 +128,11 @@ get_weights.brmsfit <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   }
 
   w
+}
+
+
+
+#' @export
+get_weights.btergm <- function(x, null_as_ones = FALSE, ...) {
+  x@weights
 }

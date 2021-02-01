@@ -847,6 +847,30 @@ get_statistic.ergm <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+get_statistic.btergm <- function(x, verbose = TRUE, ...) {
+  params <- x@coef
+  bootstraps <- x@boot$t
+
+  # standard error
+  sdev <- sapply(1:ncol(bootstraps), function(i) {
+    cur <- (bootstraps[, i] - params[i])^2
+    sqrt(sum(cur)/length(cur))
+  })
+  stat <- (0 - colMeans(bootstraps)) / sdev
+
+  out <- data.frame(
+    Parameter = names(stat),
+    Statistic = stat,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.ridgelm <- function(x, ...) {
   NULL
 }

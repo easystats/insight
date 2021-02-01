@@ -290,6 +290,19 @@ find_parameters.tobit <- find_parameters.default
 
 
 #' @export
+find_parameters.btergm <- function(x, flatten = FALSE, ...) {
+  cf <- x@coef
+  out <- list(conditional = names(cf))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
+#' @export
 find_parameters.crr <- function(x, flatten = FALSE, ...) {
   cs <- x$coef
   out <- list(conditional = names(cs))

@@ -65,6 +65,7 @@ supported_models <- function() {
     "brglm",
     "brmsfit",
     "brmultinom",
+    "btergm",
     "censReg",
     "cgam",
     "cgamm",
