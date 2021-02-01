@@ -899,12 +899,12 @@ find_formula.glmmTMB <- function(x, ...) {
   f.disp <- stats::formula(x, component = "disp")
 
   if (identical(.safe_deparse(f.zi), "~0") ||
-      identical(.safe_deparse(f.zi), "~1")) {
+    identical(.safe_deparse(f.zi), "~1")) {
     f.zi <- NULL
   }
 
   if (identical(.safe_deparse(f.disp), "~0") ||
-      identical(.safe_deparse(f.disp), "~1")) {
+    identical(.safe_deparse(f.disp), "~1")) {
     f.disp <- NULL
   }
 
@@ -1490,7 +1490,9 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 
 .find_formula_return <- function(f) {
-  if (is.null(f)) return(NULL)
+  if (is.null(f)) {
+    return(NULL)
+  }
   class(f) <- c("insight_formula", class(f))
   f
 }
@@ -1511,7 +1513,7 @@ format.insight_formula <- function(x, what = c("conditional", "random"), ...) {
 
   # Add all the components
   for (part in what[-1]) {
-    if(part %in% names(x)){
+    if (part %in% names(x)) {
       ft <- paste0(ft, " + ", format(x[[part]]))
     }
   }
