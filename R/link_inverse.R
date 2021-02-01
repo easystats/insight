@@ -402,6 +402,12 @@ link_inverse.negbinirr <- link_inverse.logitmfx
 
 
 #' @export
+link_inverse.Rchoice <- function(x, ...) {
+  stats::make.link(link = x$link)$linkinv
+}
+
+
+#' @export
 link_inverse.merModList <- function(x, ...) {
   link_inverse.default(x[[1]], ...)
 }

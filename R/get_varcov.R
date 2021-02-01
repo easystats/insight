@@ -397,6 +397,15 @@ get_varcov.robmixglm <- function(x, ...) {
 
 
 #' @export
+get_varcov.Rchoice <- function(x, ...) {
+  vc <- stats::vcov(x)
+  params <- find_parameters(x, flatten = TRUE)
+  dimnames(vc) <- list(params, params)
+  .process_vcov(vc)
+}
+
+
+#' @export
 get_varcov.rq <- function(x, ...) {
   s <- summary(x, covariance = TRUE)
   vc <- as.matrix(s$cov)

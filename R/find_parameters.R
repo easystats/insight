@@ -290,6 +290,22 @@ find_parameters.tobit <- find_parameters.default
 
 
 #' @export
+find_parameters.Rchoice <- function(x, flatten = FALSE, ...) {
+  cf <- names(stats::coef(x))
+  if (cf[1] == "constant") {
+    cf[1] <- "(Intercept)"
+  }
+  out <- list(conditional = cf)
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
+#' @export
 find_parameters.btergm <- function(x, flatten = FALSE, ...) {
   cf <- x@coef
   out <- list(conditional = names(cf))

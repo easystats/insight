@@ -174,6 +174,7 @@ supported_models <- function() {
     "polr",
     "psm",
     "probitmfx",
+    "Rchoice",
     "ridgelm",
     "riskRegression",
     "rlm",

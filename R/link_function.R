@@ -368,6 +368,12 @@ link_function.logitor <- link_function.logitmfx
 
 
 #' @export
+link_function.Rchoice <- function(x, ...) {
+  stats::make.link(link = x$link)$linkfun
+}
+
+
+#' @export
 link_function.merModList <- function(x, ...) {
   link_function.default(x[[1]], ...)
 }

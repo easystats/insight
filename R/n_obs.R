@@ -526,6 +526,13 @@ n_obs.wbgee <- function(x, ...) {
 }
 
 
+#' @export
+n_obs.Rchoice <- function(x, ...) {
+  nrow(x$mf)
+}
+
+
+
 
 
 # mfx models --------------------------------------

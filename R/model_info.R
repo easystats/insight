@@ -700,6 +700,18 @@ model_info.BGGM <- function(x, ...) {
 
 
 #' @export
+model_info.Rchoice <- function(x, ...) {
+  .make_family(
+    x = x,
+    fitfam = x$family,
+    logit.link = x$link == "logit",
+    link.fun = x$link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.ivprobit <- function(x, ...) {
   .make_family(
     x = x,

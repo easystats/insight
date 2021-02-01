@@ -119,6 +119,19 @@ get_parameters.tobit <- get_parameters.default
 
 
 #' @export
+get_parameters.Rchoice <- function(x, ...) {
+  cf <- stats::coef(x)
+  params <- data.frame(
+    Parameter = find_parameters(x, flatten = TRUE),
+    Estimate = as.vector(cf),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+#' @export
 get_parameters.btergm <- function(x, ...) {
   cf <- x@coef
   params <- data.frame(
