@@ -44,6 +44,7 @@ cgam
 cglm
 clmm
 cloglog
+cmprsk
 colour
 coloured
 comparator
@@ -55,6 +56,7 @@ doi
 easystats
 emm
 emmGrid
+ergm
 estimatr
 et
 fixest
@@ -68,6 +70,7 @@ glmm
 glmmADMB
 glmmTMB
 glmx
+htest
 https
 intra
 intraclass
@@ -81,7 +84,6 @@ lmerModLmerTest
 lmodel
 lmtest
 logloss
-logLik
 lqmm
 mclogit
 merTools

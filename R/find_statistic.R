@@ -120,6 +120,7 @@ find_statistic <- function(x, ...) {
       "svyglm",
       "svyolr",
       "truncreg",
+      "varest",
       "wbm",
       "wblm",
       "yuen"
@@ -194,6 +195,7 @@ find_statistic <- function(x, ...) {
       "poissonirr",
       "psm",
       "probitmfx",
+      "Rchoice",
       "riskRegression",
       "robmixglm",
       "rma",
