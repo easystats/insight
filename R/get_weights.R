@@ -32,7 +32,7 @@
 #' get_weights(m)
 #' @importFrom stats na.omit
 #' @export
-get_weights <- function(x, na_rm = FALSE, ...) {
+get_weights <- function(x, ...) {
   UseMethod("get_weights")
 }
 
