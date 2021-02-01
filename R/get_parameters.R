@@ -60,9 +60,13 @@ get_parameters.default <- function(x, verbose = TRUE, ...) {
   tryCatch(
     {
       cf <- stats::coef(x)
+      params <- names(cf)
+      if (is.null(params)) {
+        params <- paste(1:length(cf))
+      }
 
       params <- data.frame(
-        Parameter = names(cf),
+        Parameter = params,
         Estimate = unname(cf),
         stringsAsFactors = FALSE,
         row.names = NULL
