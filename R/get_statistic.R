@@ -53,8 +53,14 @@ get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
     return(NULL)
   }
 
+  # edge cases: check for NULL
+  params <- rownames(cs)
+  if (is.null(params)) {
+    params <- paste(1:nrow(cs))
+  }
+
   out <- data.frame(
-    Parameter = rownames(cs),
+    Parameter = params,
     Statistic = as.vector(cs[, column_index]),
     stringsAsFactors = FALSE,
     row.names = NULL

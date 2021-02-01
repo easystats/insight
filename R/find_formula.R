@@ -266,6 +266,13 @@ find_formula.maxim <- find_formula.default
 
 
 #' @export
+find_formula.btergm <- function(x, ...) {
+  f <- list(conditional = x@formula)
+  .find_formula_return(f)
+}
+
+
+#' @export
 find_formula.mediate <- function(x, ...) {
   f <- list(
     mediator = find_formula(x$model.m),
