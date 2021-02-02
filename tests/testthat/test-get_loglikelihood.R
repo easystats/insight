@@ -1,4 +1,14 @@
-if (require("testthat") && require("insight") && require("nonnest2")) {
+osx <- tryCatch({
+  si <- Sys.info()
+  if (!is.null(si["sysname"])) {
+    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+  } else {
+    FALSE
+  }
+})
+
+
+if (!osx && require("testthat") && require("insight") && require("nonnest2")) {
   data(iris)
   data(mtcars)
 
@@ -62,8 +72,8 @@ if (require("testthat") && require("insight") && require("nonnest2")) {
       ref <- lm(Sepal.Length ~ Petal.Width, data = iris)
       ll <- loglikelihood(x)
       ll2 <- loglikelihood(ref)
-      expect_equal(as.numeric(ll), as.numeric(ll2), tolerance=2)
-      expect_equal(mean(abs(attributes(ll)$per_obs - attributes(ll2)$per_obs)), 0,  tolerance=0.1)
+      expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 2)
+      expect_equal(mean(abs(attributes(ll)$per_obs - attributes(ll2)$per_obs)), 0,  tolerance = 0.1)
     }
   })
 
