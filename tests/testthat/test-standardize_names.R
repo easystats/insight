@@ -15,7 +15,7 @@ if (require("testthat") &&
       expect_equal(
         names(standardize_names(x, style = "broom")),
         c(
-          "term", "estimate", "std.error", "ci.width", "conf.low", "conf.high",
+          "term", "estimate", "std.error", "conf.level", "conf.low", "conf.high",
           "statistic", "df.error", "p.value"
         )
       )
@@ -42,7 +42,7 @@ if (require("testthat") &&
       names(standardize_names(z, style = "broom")),
       c(
         "parameter1", "parameter2", "mean.parameter1", "mean.parameter2", "estimate",
-        "ci.width", "conf.low", "conf.high", "statistic", "df.error", "p.value", "method"
+        "conf.level", "conf.low", "conf.high", "statistic", "df.error", "p.value", "method"
       )
     )
   }
