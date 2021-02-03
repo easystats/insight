@@ -127,7 +127,10 @@
     <p>Returns weighting variable of a model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>, null_as_ones <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>, null_as_ones <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,6 +138,10 @@
     <tr>
       <th>x</th>
       <td><p>A fitted model.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
     </tr>
     <tr>
       <th>na_rm</th>
@@ -145,10 +152,6 @@
       <td><p>Logical, if <code>TRUE</code>, will return a vector of <code>1</code>
 if no weights were specified in the model (as if the weights were all set
 to 1).</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
     </tr>
     </table>
 

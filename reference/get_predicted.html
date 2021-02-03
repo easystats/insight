@@ -47,7 +47,9 @@
 
 
 <meta property="og:title" content="Predicted values — get_predicted" />
-<meta property="og:description" content="Returns values predicted by a model (i.e., fitted values)." />
+<meta property="og:description" content="Returns values predicted by a model (i.e., fitted values). The Confidence/Credible
+Intervals (CI) are stored as an attribute, which one can easily extract with
+as.data.frame() (see examples below)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -124,10 +126,32 @@
     </div>
 
     <div class="ref-description">
-    <p>Returns values predicted by a model (i.e., fitted values).</p>
+    <p>Returns values predicted by a model (i.e., fitted values). The Confidence/Credible
+Intervals (CI) are stored as an attribute, which one can easily extract with
+<code><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame()</a></code> (see examples below).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for lm</span>
+<span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, ci <span class='op'>=</span> <span class='fl'>0.95</span>, ci_type <span class='op'>=</span> <span class='st'>"confidence"</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for glm</span>
+<span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, ci <span class='op'>=</span> <span class='fl'>0.95</span>, transform <span class='op'>=</span> <span class='st'>"response"</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for merMod</span>
+<span class='fu'>get_predicted</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  newdata <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ci <span class='op'>=</span> <span class='fl'>0.95</span>,
+  ci_type <span class='op'>=</span> <span class='st'>"confidence"</span>,
+  transform <span class='op'>=</span> <span class='st'>"response"</span>,
+  include_random <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,13 +161,29 @@
       <td><p>A model.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Not used.</p></td>
+    </tr>
+    <tr>
       <th>newdata</th>
       <td><p>An optional data frame in which to look for variables with
     which to predict.  If omitted, the fitted values are used.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Not used.</p></td>
+      <th>ci</th>
+      <td><p>The interval level (default <code>0.95</code>, i.e., 95% CI).</p></td>
+    </tr>
+    <tr>
+      <th>ci_type</th>
+      <td><p>Can be <code>"prediction"</code> or <code>"confidence"</code>. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This applies mostly for "simple" linear models (like <code>lm</code>), as for other models (e.g., <code>glm</code>), prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></td>
+    </tr>
+    <tr>
+      <th>transform</th>
+      <td><p>Either <code>"response"</code> (default) or <code>"link"</code>. If <code>"link"</code>, no transformation is applied and the values are on the scale of the linear predictors. If <code>"response"</code>, the output is on the scale of the response variable. Thus for a default binomial model, <code>"response"</code> gives the predicted probabilities, and <code>"link"</code> makes predictions of log-odds (probabilities on logit scale).</p></td>
+    </tr>
+    <tr>
+      <th>include_random</th>
+      <td><p>If <code>TRUE</code> (default), include all random effects in the prediction. If <code>FALSE</code>, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the <code>re.form</code> argument).</p></td>
     </tr>
     </table>
 
@@ -159,24 +199,52 @@ future updates.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
-#&gt;            21.21678            21.21678            26.07124            21.21678 
-#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
-#&gt;            15.44448            21.31239            14.10597            26.66401 
-#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE 
-#&gt;            26.03299            20.96820            20.96820            15.34888 
-#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental 
-#&gt;            15.34888            15.34888            14.87083            14.67962 
-#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla 
-#&gt;            14.39279            26.58752            26.85523            26.60665 
-#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 
-#&gt;            25.99475            15.92253            15.92253            14.10597 
-#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa 
-#&gt;            15.44448            26.58752            26.10948            25.68880 
-#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E 
-#&gt;            13.74265            19.97387            12.38501            25.76529 </div><div class='input'>
-</div></pre>
+<span class='va'>predicted</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+<span class='va'>predicted</span>
+</div><div class='output co'>#&gt;  [1] 21.21678 21.21678 26.07124 21.21678 15.44448 21.31239 14.10597 26.66401
+#&gt;  [9] 26.03299 20.96820 20.96820 15.34888 15.34888 15.34888 14.87083 14.67962
+#&gt; [17] 14.39279 26.58752 26.85523 26.60665 25.99475 15.92253 15.92253 14.10597
+#&gt; [25] 15.44448 26.58752 26.10948 25.68880 13.74265 19.97387 12.38501 25.76529</div><div class='input'>
+<span class='co'># Get CI</span>
+<span class='fu'><a href='https://rdrr.io/r/base/attributes.html'>attributes</a></span><span class='op'>(</span><span class='va'>predicted</span><span class='op'>)</span><span class='op'>$</span><span class='va'>CI_low</span> <span class='co'># Or CI_high</span>
+</div><div class='output co'>#&gt;  [1] 19.727518 19.727518 24.173366 19.727518 13.562810 19.721680 12.044237
+#&gt;  [8] 24.777260 24.118117 19.693139 19.693139 13.536280 13.536280 13.536280
+#&gt; [15] 13.222961 13.001249 12.570146 24.726448 24.872258 24.739874 24.061069
+#&gt; [22] 13.572504 13.572504 12.044237 13.562810 24.726448 24.226768 23.546572
+#&gt; [29] 11.286007 18.412227  8.058613 23.684073</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>predicted</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    Predicted        SE   CI    CI_low  CI_high
+#&gt; 1   21.21678 0.7281647 0.95 19.727518 22.70605
+#&gt; 2   21.21678 0.7281647 0.95 19.727518 22.70605
+#&gt; 3   26.07124 0.9279509 0.95 24.173366 27.96911
+#&gt; 4   21.21678 0.7281647 0.95 19.727518 22.70605
+#&gt; 5   15.44448 0.9200310 0.95 13.562810 17.32616
+#&gt; 6   21.31239 0.7777664 0.95 19.721680 22.90310
+#&gt; 7   14.10597 1.0080670 0.95 12.044237 16.16769
+#&gt; 8   26.66401 0.9225132 0.95 24.777260 28.55076
+#&gt; 9   26.03299 0.9362657 0.95 24.118117 27.94787
+#&gt; 10  20.96820 0.6234320 0.95 19.693139 22.24326
+#&gt; 11  20.96820 0.6234320 0.95 19.693139 22.24326
+#&gt; 12  15.34888 0.8862558 0.95 13.536280 17.16147
+#&gt; 13  15.34888 0.8862558 0.95 13.536280 17.16147
+#&gt; 14  15.34888 0.8862558 0.95 13.536280 17.16147
+#&gt; 15  14.87083 0.8057154 0.95 13.222961 16.51871
+#&gt; 16  14.67962 0.8206255 0.95 13.001249 16.35798
+#&gt; 17  14.39279 0.8911693 0.95 12.570146 16.21544
+#&gt; 18  26.58752 0.9099596 0.95 24.726448 28.44860
+#&gt; 19  26.85523 0.9695585 0.95 24.872258 28.83820
+#&gt; 20  26.60665 0.9127445 0.95 24.739874 28.47342
+#&gt; 21  25.99475 0.9454598 0.95 24.061069 27.92843
+#&gt; 22  15.92253 1.1490264 0.95 13.572504 18.27255
+#&gt; 23  15.92253 1.1490264 0.95 13.572504 18.27255
+#&gt; 24  14.10597 1.0080670 0.95 12.044237 16.16769
+#&gt; 25  15.44448 0.9200310 0.95 13.562810 17.32616
+#&gt; 26  26.58752 0.9099596 0.95 24.726448 28.44860
+#&gt; 27  26.10948 0.9205392 0.95 24.226768 27.99220
+#&gt; 28  25.68880 1.0474287 0.95 23.546572 27.83104
+#&gt; 29  13.74265 1.2011595 0.95 11.286007 16.19930
+#&gt; 30  19.97387 0.7635547 0.95 18.412227 21.53552
+#&gt; 31  12.38501 2.1153615 0.95  8.058613 16.71141
+#&gt; 32  25.76529 1.0175965 0.95 23.684073 27.84651</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

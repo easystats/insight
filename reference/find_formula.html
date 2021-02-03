@@ -154,10 +154,10 @@
 <li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model</p></li>
 <li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model</p></li>
 <li><p><code>dispersion</code>, the dispersion formula</p></li>
-<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
-<li><p><code>cluster</code>, for fixed-effects regressions like <code>felm</code>, the cluster specification</p></li>
-<li><p><code>correlation</code>, for models with correlation-component like <code>gls</code>, the formula that describes the correlation structure</p></li>
-<li><p><code>slopes</code>, for fixed-effects individual-slope models like <code>feis</code>, the formula for the slope parameters</p></li>
+<li><p><code>instruments</code>, for fixed-effects regressions like <code><a href='https://john-d-fox.github.io/ivreg//reference/ivreg.html'>ivreg::ivreg()</a></code>, <code>lfe::felm()</code> or <code><a href='https://rdrr.io/pkg/plm/man/plm.html'>plm::plm()</a></code>, the instrumental variables</p></li>
+<li><p><code>cluster</code>, for fixed-effects regressions like <code>lfe::felm()</code>, the cluster specification</p></li>
+<li><p><code>correlation</code>, for models with correlation-component like <code><a href='https://rdrr.io/pkg/nlme/man/gls.html'>nlme::gls()</a></code>, the formula that describes the correlation structure</p></li>
+<li><p><code>slopes</code>, for fixed-effects individual-slope models like <code><a href='https://rdrr.io/pkg/feisr/man/feis.html'>feisr::feis()</a></code>, the formula for the slope parameters</p></li>
 <li><p><code>precision</code>, for <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>, when parametrization (i.e. <code>model</code>) is <code>"alternative"</code>.</p></li>
 </ul>
 
@@ -173,7 +173,7 @@
 <span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $conditional
 #&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x7fc5484d7e70&gt;
+#&gt; &lt;environment: 0x7ffcf9640000&gt;
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "insight_formula" "list"           </div><div class='input'>
