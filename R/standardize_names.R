@@ -121,7 +121,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "statistic"] <- "Statistic"
   cn[cn == "conf.low"] <- "CI_low"
   cn[cn == "conf.high"] <- "CI_high"
-  cn[cn == "ci.width"] <- "CI"
+  cn[cn == "conf.level"] <- "CI"
   cn[cn == "n.obs"] <- "n_Obs"
   # anova
   cn[cn == "sumsq"] <- "Sum_Squares"
@@ -155,7 +155,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "Component"] <- "component"
   cn[cn == "Effects"] <- "effect"
   cn[cn == "Response"] <- "response"
-  cn[cn == "CI"] <- "ci.width"
+  cn[cn == "CI"] <- "conf.level"
   cn[cn == "df_error"] <- "df.error"
   cn[cn == "df_residual"] <- "df.residual"
   cn[cn == "n_Obs"] <- "n.obs"
