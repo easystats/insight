@@ -78,8 +78,17 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 #' @importFrom stats predict qnorm qt
 #' @export
 get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", ...) {
-  rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, interval = ci_type, level = ci, ...)
+
+  # So that predict doesn't fail
+  if(is.null(ci)) {
+    level <- 0
+  } else{
+    level <- ci
+  }
+
+  rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, interval = ci_type, level = level, ...)
   fit <- as.data.frame(rez$fit)
+
 
   out <- fit$fit
   attr(out, "SE") <- rez$se.fit
@@ -96,6 +105,7 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
 #' @importFrom stats family
 #' @export
 get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "response", ...) {
+
   rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, type = "link", level = ci, ...)
 
   out <- rez$fit
@@ -275,6 +285,8 @@ get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confi
   # See:
   # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
 
+  if(is.null(ci)) ci <- 0  # So that predict doesn't fail
+
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
     stop("Package `rstanarm` needed for this function to work. Please install it.")
   }
@@ -321,7 +333,9 @@ get_predicted.crr <- function(x, ...) {
 
 #' @export
 print.get_predicted <- function(x, ...) {
+  insight::print_colour("Predicted values:\n\n", "blue")
   print(as.numeric(x))
+  insight::print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.", "yellow")
 }
 
 
@@ -329,7 +343,7 @@ print.get_predicted <- function(x, ...) {
 as.data.frame.get_predicted <- function(x, ...) {
 
   # In the case of multiple draws
-  if (!is.null(ncol(x)) && ncol(x) > 1) {
+  if (!is.null(ncol(x)) && !is.na(ncol(x)) && ncol(x) > 1) {
     out <- as.data.frame.matrix(x)
     names(out) <- paste0("iter_", 1:ncol(out))
     return(out)
@@ -368,6 +382,9 @@ as.data.frame.get_predicted <- function(x, ...) {
 
 #' @importFrom stats qnorm qt
 .get_predicted_se_to_ci <- function(x, pred, se = NULL, ci = 0.95, family = "gaussian") {
+
+  if(is.null(ci)) return(list(ci_low = pred, ci_high = pred))  # Same as predicted
+
   # Return NA
   if (is.null(se)) {
     ci_low <- ci_high <- rep(NA, length(pred))
