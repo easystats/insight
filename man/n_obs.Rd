@@ -24,11 +24,11 @@ Can be used in case of regression models with multiple response variables.}
 }
 \value{
 The number of observations used to fit the model, or \code{NULL} if
-  this information is not available.
+this information is not available.
 }
 \description{
 This method returns the number of observation that were used
-  to fit the model, as numeric value.
+to fit the model, as numeric value.
 }
 \examples{
 data(mtcars)

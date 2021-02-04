@@ -3,8 +3,8 @@
 #' Convert number to words. The code has been adapted from here https://github.com/ateucher/useful_code/blob/master/R/numbers2words.r
 #'
 #' @param x Number.
-#' @param textual Return words. If \code{FALSE}, will run \code{\link{format_value}}.
-#' @param ... Arguments to be passed to \code{\link{format_value}} if \code{textual} is \code{FALSE}.
+#' @param textual Return words. If `FALSE`, will run [format_value()].
+#' @param ... Arguments to be passed to [format_value()] if `textual` is `FALSE`.
 #'
 #'
 #' @return A formatted string.

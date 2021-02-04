@@ -19,10 +19,10 @@ find_variables(
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{component}{Should all predictor variables, predictor variables for the
- conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
 
@@ -31,26 +31,26 @@ as character vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list with (depending on the model) following elements (character
-   vectors):
-   \itemize{
-     \item \code{response}, the name of the response variable
-     \item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
-     \item \code{random}, the names of the random effects (grouping factors)
-     \item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
-     \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
-     \item \code{dispersion}, the name of the dispersion terms
-     \item \code{instruments}, the names of instrumental variables
-   }
+vectors):
+\itemize{
+\item \code{response}, the name of the response variable
+\item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
+\item \code{random}, the names of the random effects (grouping factors)
+\item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
+\item \code{zero_inflated_random}, the names of the random effects (grouping factors)
+\item \code{dispersion}, the name of the dispersion terms
+\item \code{instruments}, the names of instrumental variables
+}
 }
 \description{
 Returns a list with the names of all variables, including
-  response value and random effects.
+response value and random effects.
 }
 \note{
-The difference to \code{\link{find_terms}} is that \code{find_variables()}
-  returns each variable name only once, while \code{find_terms()} may return a
-  variable multiple times in case of transformations or when arithmetic expressions
-  were used in the formula.
+The difference to \code{\link[=find_terms]{find_terms()}} is that \code{find_variables()}
+returns each variable name only once, while \code{find_terms()} may return a
+variable multiple times in case of transformations or when arithmetic expressions
+were used in the formula.
 }
 \examples{
 if (require("lme4")) {

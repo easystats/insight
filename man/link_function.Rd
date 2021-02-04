@@ -29,7 +29,7 @@ or \code{DirichletRegModel}, can be \code{"mean"} or \code{"precision"}.}
 }
 \value{
 A function, describing the link-function from a model-object.
-   For multivariate-response models, a list of functions is returned.
+For multivariate-response models, a list of functions is returned.
 }
 \description{
 Returns the link-function from a model object.

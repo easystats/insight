@@ -18,7 +18,7 @@ The null-model of \code{x}
 }
 \description{
 This function computes the null-model (i.e. \code{(y ~ 1)}) of
-  a model. For mixed models, the null-model takes random effects into account.
+a model. For mixed models, the null-model takes random effects into account.
 }
 \examples{
 if (require("lme4")) {

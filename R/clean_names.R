@@ -2,26 +2,26 @@
 #' @name clean_names
 #'
 #' @description This function "cleans" names of model terms (or a character
-#'   vector with such names) by removing patterns like \code{log()} or
-#'   \code{as.factor()} etc.
+#'   vector with such names) by removing patterns like `log()` or
+#'   `as.factor()` etc.
 #'
 #' @param x A fitted model, or a character vector.
-#' @param include_names Logical, if \code{TRUE}, returns a named vector where
-#'   names are the original values of \code{x}.
+#' @param include_names Logical, if `TRUE`, returns a named vector where
+#'   names are the original values of `x`.
 #' @param ... Currently not used.
 #'
 #' @return The "cleaned" variable names as character vector, i.e. pattern
-#'   like \code{s()} for splines or \code{log()} are removed from
+#'   like `s()` for splines or `log()` are removed from
 #'   the model terms.
 #'
 #' @note Typically, this method is intended to work on character vectors,
 #'   in order to remove patterns that obscure the variable names. For
-#'   convenience reasons it is also possible to call \code{clean_names()}
-#'   also on a model object. If \code{x} is a regression model, this
-#'   function is (almost) equal to calling \code{find_variables()}. The
-#'   main difference is that \code{clean_names()} always returns a character
-#'   vector, while \code{find_variables()} returns a list of character
-#'   vectors, unless \code{flatten = TRUE}. See 'Examples'.
+#'   convenience reasons it is also possible to call `clean_names()`
+#'   also on a model object. If `x` is a regression model, this
+#'   function is (almost) equal to calling `find_variables()`. The
+#'   main difference is that `clean_names()` always returns a character
+#'   vector, while `find_variables()` returns a list of character
+#'   vectors, unless `flatten = TRUE`. See 'Examples'.
 #'
 #' @examples
 #' # example from ?stats::glm

@@ -34,21 +34,42 @@ get_predicted(x, ...)
 \item{newdata}{An optional data frame in which to look for variables with
     which to predict.  If omitted, the fitted values are used.}
 
-\item{ci}{The interval level (default \code{0.95}, i.e., 95\% CI).}
+\item{ci}{The interval level (default \code{0.95}, i.e., 95\\% CI).}
 
-\item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This applies mostly for "simple" linear models (like \code{lm}), as for other models (e.g., \code{glm}), prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).}
+\item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals
+show the range that likely contains the value of a new observation (in what
+range it would fall), whereas confidence intervals reflect the uncertainty
+around the estimated parameters (and gives the range of the link; for
+instance of the regression line in a linear regressions). Prediction
+intervals account for both the uncertainty in the model's parameters, plus
+the random variation of the individual values. Thus, prediction intervals
+are always wider than confidence intervals. Moreover, prediction intervals
+will not necessarily become narrower as the sample size increases (as they
+do not reflect only the quality of the fit). This applies mostly for
+"simple" linear models (like \code{lm}), as for other models (e.g., \code{glm}),
+prediction intervals are somewhat useless (for instance, for a binomial
+model for which the dependent variable is a vector of 1s and 0s, the
+prediction interval is... \verb{[0, 1]}).}
 
-\item{transform}{Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).}
+\item{transform}{Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no
+transformation is applied and the values are on the scale of the linear
+predictors. If \code{"response"}, the output is on the scale of the response
+variable. Thus for a default binomial model, \code{"response"} gives the
+predicted probabilities, and \code{"link"} makes predictions of log-odds
+(probabilities on logit scale).}
 
-\item{include_random}{If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument).}
+\item{include_random}{If \code{TRUE} (default), include all random effects in the
+prediction. If \code{FALSE}, don't take them into account. Can also be a formula
+to specify which random effects to condition on when predicting (passed to
+the \code{re.form} argument).}
 }
 \value{
 The fitted values (i.e. predictions for the response).
 }
 \description{
-Returns values predicted by a model (i.e., fitted values). The Confidence/Credible
-Intervals (CI) are stored as an attribute, which one can easily extract with
-\code{as.data.frame()} (see examples below).
+Returns values predicted by a model (i.e., fitted values). The
+Confidence/Credible Intervals (CI) are stored as an attribute, which one can
+easily extract with \code{as.data.frame()} (see examples below).
 }
 \note{
 Currently, this function just calls \code{stats::fitted()}, but will

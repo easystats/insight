@@ -22,11 +22,11 @@ Nothing.
 }
 \description{
 Convenient function that allows coloured output in the console.
- Mainly implemented to reduce package dependencies.
+Mainly implemented to reduce package dependencies.
 }
 \details{
 This function prints \code{text} directly to the console using
-  \code{cat()}, so no string is returned.
+\code{cat()}, so no string is returned.
 }
 \examples{
 print_color("I'm blue dabedi dabedei", "blue")

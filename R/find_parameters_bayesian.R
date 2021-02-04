@@ -2,9 +2,9 @@
 #' @name find_parameters.BGGM
 #'
 #' @description Returns the names of model parameters, like they typically
-#'     appear in the \code{summary()} output. For Bayesian models, the parameter
+#'     appear in the `summary()` output. For Bayesian models, the parameter
 #'     names equal the column names of the posterior samples after coercion
-#'     from \code{as.data.frame()}.
+#'     from `as.data.frame()`.
 #'
 #' @param parameters Regular expression pattern that describes the parameters that
 #'   should be returned.
@@ -16,18 +16,18 @@
 #' @inheritParams find_predictors
 #'
 #' @return A list of parameter names. For simple models, only one list-element,
-#'    \code{conditional}, is returned. For more complex models, the returned
+#'    `conditional`, is returned. For more complex models, the returned
 #'    list may have following elements:
 #'    \itemize{
-#'      \item \code{conditional}, the "fixed effects" part from the model
-#'      \item \code{random}, the "random effects" part from the model
-#'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
-#'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
-#'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
-#'      \item \code{smooth_terms}, the smooth parameters
-#'      \item \code{sigma}, the residual standard deviation (auxiliary parameter)
-#'      \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
-#'      \item \code{beta}, the beta parameter (auxiliary parameter)
+#'      \item `conditional`, the "fixed effects" part from the model
+#'      \item `random`, the "random effects" part from the model
+#'      \item `zero_inflated`, the "fixed effects" part from the zero-inflation component of the model
+#'      \item `zero_inflated_random`, the "random effects" part from the zero-inflation component of the model
+#'      \item `simplex`, simplex parameters of monotonic effects (\pkg{brms} only)
+#'      \item `smooth_terms`, the smooth parameters
+#'      \item `sigma`, the residual standard deviation (auxiliary parameter)
+#'      \item `dispersion`, the dispersion parameters (auxiliary parameter)
+#'      \item `beta`, the beta parameter (auxiliary parameter)
 #'    }
 #'
 #' @examples
@@ -37,8 +37,7 @@
 #' @export
 find_parameters.BGGM <- function(x, component = c("correlation", "conditional", "intercept", "all"), flatten = FALSE, ...) {
   component <- match.arg(component)
-  l <- switch(
-    component,
+  l <- switch(component,
     "correlation" = list(correlation = colnames(get_parameters(x, component = "correlation"))),
     "conditional" = list(conditional = colnames(get_parameters(x, component = "conditional"))),
     "intercept" = list(intercept = colnames(x$Y)),
@@ -180,7 +179,8 @@ find_parameters.bamlss <- function(x,
     conditional = cond,
     smooth_terms = smooth_terms,
     sigma = sigma,
-    alpha = alpha)[elements])
+    alpha = alpha
+  )[elements])
 
   l <- .filter_pars(l, parameters)
 
@@ -242,8 +242,8 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
 
       if (.obj_has_name(l, "random")) {
         random <- l$random[grepl(sprintf("__\\Q%s\\E\\.", i), l$random) |
-                             grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
-                             grepl("^cor_", l$random)]
+          grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
+          grepl("^cor_", l$random)]
       } else {
         random <- NULL
       }
@@ -256,8 +256,8 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
 
       if (.obj_has_name(l, "zero_inflated_random")) {
         zero_inflated_random <- l$zero_inflated_random[grepl(sprintf("__zi_\\Q%s\\E\\.", i), l$zero_inflated_random) |
-                                                         grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$zero_inflated_random) |
-                                                         grepl("^cor_", l$zero_inflated_random)]
+          grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$zero_inflated_random) |
+          grepl("^cor_", l$zero_inflated_random)]
       } else {
         zero_inflated_random <- NULL
       }

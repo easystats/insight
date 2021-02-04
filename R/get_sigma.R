@@ -7,7 +7,7 @@
 #'
 #' @param x A model.
 #'
-#' @return The residual standard deviation (sigma), or \code{NULL} if this information could not be accessed.
+#' @return The residual standard deviation (sigma), or `NULL` if this information could not be accessed.
 #'
 #' @details
 #'   \subsection{Interpretation of Sigma}{
@@ -23,12 +23,12 @@
 #'   or of the precision of inferences about regression coefficients.
 #'   }
 #'   \subsection{Calculation of Sigma}{
-#'   By default, \code{get_sigma()} tries to extract sigma by calling
-#'   \code{stats::sigma()}. If the model-object has no \code{sigma()} method,
+#'   By default, `get_sigma()` tries to extract sigma by calling
+#'   `stats::sigma()`. If the model-object has no `sigma()` method,
 #'   the next step is calculating sigma as square-root of the model-deviance
 #'   divided by the residual degrees of freedom. Finally, if even this approach
-#'   fails, and \code{x} is a mixed model, the residual standard deviation is
-#'   accessed using the square-root from \code{get_variance_residual()}.
+#'   fails, and `x` is a mixed model, the residual standard deviation is
+#'   accessed using the square-root from `get_variance_residual()`.
 #'   }
 #'
 #' @references Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.

@@ -61,9 +61,9 @@ A data frame.
 }
 \description{
 This functions takes a data frame with model parameters as input
-  and formats certain columns into a more readable layout (like collapsing
-  separate columns for lower and upper confidence interval values). Furthermore,
-  column names are formatted as well.
+and formats certain columns into a more readable layout (like collapsing
+separate columns for lower and upper confidence interval values). Furthermore,
+column names are formatted as well.
 }
 \examples{
 if (require("parameters")) {

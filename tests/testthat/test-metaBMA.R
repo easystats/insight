@@ -11,9 +11,11 @@ if (require("testthat") && require("insight") && require("metaBMA")) {
 
 
   set.seed(123)
-  mr <- meta_random(logOR, SE, study, data = towels,
-                    d = prior("cauchy", c(location = 0, scale = 0.707)),
-                    tau = prior("invgamma", c(shape = 1, scale = 0.15)))
+  mr <- meta_random(logOR, SE, study,
+    data = towels,
+    d = prior("cauchy", c(location = 0, scale = 0.707)),
+    tau = prior("invgamma", c(shape = 1, scale = 0.15))
+  )
 
   test_that("get_priors-metaBMA", {
     priors <- get_priors(mr)

@@ -4,10 +4,10 @@
 #' @description Estimate or extract residual or model-based degrees of freedom from regression models.
 #'
 #' @param x A statistical model.
-#' @param type Can be \code{"residual"} or \code{"model"}. \code{"residual"}
+#' @param type Can be `"residual"` or `"model"`. `"residual"`
 #' tries to extract residual degrees of freedoms. If residual degrees of freedom
-#' could not be extracted, returns \code{n-k} (number of observations minus
-#' number of parameters). \code{"model"} returns model-based degrees of freedom,
+#' could not be extracted, returns `n-k` (number of observations minus
+#' number of parameters). `"model"` returns model-based degrees of freedom,
 #' i.e. the number of (estimated) parameters.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.

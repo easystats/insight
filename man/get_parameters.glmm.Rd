@@ -32,19 +32,19 @@ or both be returned? Only applies to mixed models. May be abbreviated.}
 \item{...}{Currently not used.}
 
 \item{component}{Should all predictor variables, predictor variables for the
- conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
 }
 \value{
 If \code{effects = "fixed"}, a data frame with two columns: the
-  parameter names and the related point estimates. If \code{effects = "random"},
-  a list of data frames with the random effects (as returned by \code{ranef()}),
-  unless the random effects have the same simplified structure as fixed effects
-  (e.g. for models from \pkg{MCMCglmm}).
+parameter names and the related point estimates. If \code{effects = "random"},
+a list of data frames with the random effects (as returned by \code{ranef()}),
+unless the random effects have the same simplified structure as fixed effects
+(e.g. for models from \pkg{MCMCglmm}).
 }
 \description{
 Returns the coefficients from a model.

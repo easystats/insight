@@ -1,7 +1,7 @@
 #' @title Get the value at the intercept
 #' @name get_intercept
 #'
-#' @description Returns the value at the intercept (i.e., the intercept parameter), and \code{NA} if there isn't one.
+#' @description Returns the value at the intercept (i.e., the intercept parameter), and `NA` if there isn't one.
 #'
 #' @param ... Not used.
 #' @inheritParams get_residuals
@@ -17,7 +17,8 @@
 #' }
 #' if (require("rstanarm")) {
 #'   get_intercept(rstanarm::stan_glm(Sepal.Length ~ Petal.Width,
-#'   data = iris, refresh = 0, iter = 200))
+#'     data = iris, refresh = 0, iter = 200
+#'   ))
 #' }
 #' if (require("gamm4")) {
 #'   get_intercept(gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data = iris))

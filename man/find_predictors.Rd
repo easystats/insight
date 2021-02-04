@@ -19,10 +19,10 @@ find_predictors(
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{component}{Should all predictor variables, predictor variables for the
- conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
 
@@ -31,25 +31,25 @@ as character vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list of character vectors that represent the name(s) of the
-   predictor variables. Depending on the combination of the arguments
-   \code{effects} and \code{component}, the returned list has following
-   elements:
-   \itemize{
-     \item \code{conditional}, the "fixed effects" terms from the model
-     \item \code{random}, the "random effects" terms from the model
-     \item \code{zero_inflated}, the "fixed effects" terms from the zero-inflation component of the model
-     \item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation component of the model
-     \item \code{dispersion}, the dispersion terms
-     \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
-     \item \code{correlation}, for models with correlation-component like \code{gls}, the variables used to describe the correlation structure
-   }
+predictor variables. Depending on the combination of the arguments
+\code{effects} and \code{component}, the returned list has following
+elements:
+\itemize{
+\item \code{conditional}, the "fixed effects" terms from the model
+\item \code{random}, the "random effects" terms from the model
+\item \code{zero_inflated}, the "fixed effects" terms from the zero-inflation component of the model
+\item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation component of the model
+\item \code{dispersion}, the dispersion terms
+\item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
+\item \code{correlation}, for models with correlation-component like \code{gls}, the variables used to describe the correlation structure
+}
 }
 \description{
 Returns the names of the predictor variables for the
-   different parts of a model (like fixed or random effects, zero-inflated
-   component, ...). Unlike \code{\link{find_parameters}}, the names from
-   \code{find_predictors()} match the original variable names from the data
-   that was used to fit the model.
+different parts of a model (like fixed or random effects, zero-inflated
+component, ...). Unlike \code{\link[=find_parameters]{find_parameters()}}, the names from
+\code{find_predictors()} match the original variable names from the data
+that was used to fit the model.
 }
 \examples{
 data(mtcars)

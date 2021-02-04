@@ -5,8 +5,8 @@
 #' @param p value or vector of p-values.
 #' @param stars Add significance stars (e.g., p < .001***).
 #' @param stars_only Return only significance stars.
-#' @param name Name prefixing the text. Can be \code{NULL}.
-#' @param digits Number of significant digits. May also be \code{"scientific"} to return exact p-values in scientific notation, or \code{"apa"} to use an APA-style for p-values.
+#' @param name Name prefixing the text. Can be `NULL`.
+#' @param digits Number of significant digits. May also be `"scientific"` to return exact p-values in scientific notation, or `"apa"` to use an APA-style for p-values.
 #' @param ... Arguments from other methods.
 #' @inheritParams format_value
 #'
@@ -21,7 +21,6 @@
 #' format_p(p, digits = "scientific")
 #' @export
 format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing = "", digits = 3, ...) {
-
   if (identical(stars, "only")) {
     stars <- TRUE
     stars_only <- TRUE

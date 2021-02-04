@@ -1,26 +1,26 @@
 #' @title Get statistic associated with estimates
-#' @description Returns the statistic (\emph{t}, \code{z}, ...) for model estimates.
-#'   In most cases, this is the related column from \code{coef(summary())}.
+#' @description Returns the statistic (*t*, `z`, ...) for model estimates.
+#'   In most cases, this is the related column from `coef(summary())`.
 #' @name get_statistic
 #'
 #' @param x A model.
-#' @param column_index For model objects that have no defined \code{get_statistic()}
+#' @param column_index For model objects that have no defined `get_statistic()`
 #'   method yet, the default method is called. This method tries to extract the
-#'   statistic column from \code{coef(summary())}, where the index of the column
-#'   that is being pulled is \code{column_index}. Defaults to 3, which is the
+#'   statistic column from `coef(summary())`, where the index of the column
+#'   that is being pulled is `column_index`. Defaults to 3, which is the
 #'   default statistic column for most models' summary-output.
 #' @param component Should all parameters, parameters for the conditional model,
 #'   or for the zero-inflated part of the model be returned? Applies to models
-#'   with zero-inflated component. \code{component} may be one of
-#'   \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"} or \code{"all"}
-#'   (default). For models with smooth terms, \code{component = "smooth_terms"}
-#'   is also possible. May be abbreviated. Note that the \emph{conditional}
-#'   component is also called \emph{count} or \emph{mean} component, depending
+#'   with zero-inflated component. `component` may be one of
+#'   `"conditional"`, `"zi"`, `"zero-inflated"` or `"all"`
+#'   (default). For models with smooth terms, `component = "smooth_terms"`
+#'   is also possible. May be abbreviated. Note that the *conditional*
+#'   component is also called *count* or *mean* component, depending
 #'   on the model.
-#' @param robust Logical, if \code{TRUE}, test statistic based on robust standard
+#' @param robust Logical, if `TRUE`, test statistic based on robust standard
 #'   errors is returned.
-#' @param adjust Character value naming the method used to adjust p-values or confidence intervals. See \code{?emmeans::summary.emmGrid} for details.
-#' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%). Currently only applies to objects of class \code{emmGrid}.
+#' @param adjust Character value naming the method used to adjust p-values or confidence intervals. See `?emmeans::summary.emmGrid` for details.
+#' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%). Currently only applies to objects of class `emmGrid`.
 #' @param ... Currently not used.
 #' @inheritParams get_parameters
 #' @inheritParams get_parameters.emmGrid
@@ -884,7 +884,7 @@ get_statistic.btergm <- function(x, verbose = TRUE, ...) {
   # standard error
   sdev <- sapply(1:ncol(bootstraps), function(i) {
     cur <- (bootstraps[, i] - params[i])^2
-    sqrt(sum(cur)/length(cur))
+    sqrt(sum(cur) / length(cur))
   })
   stat <- (0 - colMeans(bootstraps)) / sdev
 
@@ -916,7 +916,7 @@ get_statistic.lmodel2 <- function(x, ...) {
 get_statistic.ivFixed <- get_statistic.coxr
 
 
-  #' @export
+#' @export
 get_statistic.ivprobit <- function(x, ...) {
   out <- data.frame(
     Parameter = x$names,
@@ -1025,8 +1025,7 @@ get_statistic.mle <- get_statistic.mle2
 #' @export
 get_statistic.glht <- function(x, ...) {
   s <- summary(x)
-  alt <- switch(
-    x$alternative,
+  alt <- switch(x$alternative,
     two.sided = "==",
     less = ">=",
     greater = "<="

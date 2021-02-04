@@ -2,17 +2,17 @@
 #'   \pkg{insight} package.
 #' @name is_model_supported
 #'
-#' @description Small helper that checks if a model is a \emph{supported}
-#'  (regression) model object. \code{supported_models()} prints a list
+#' @description Small helper that checks if a model is a *supported*
+#'  (regression) model object. `supported_models()` prints a list
 #'  of currently supported model classes.
 #'
 #' @inheritParams is_model
 #'
-#' @return A logical, \code{TRUE} if \code{x} is a (supported) model object.
+#' @return A logical, `TRUE` if `x` is a (supported) model object.
 #'
-#' @details This function returns \code{TRUE} if \code{x} is a model object
+#' @details This function returns `TRUE` if `x` is a model object
 #'   that works with the package's functions. A list of supported models can
-#'   also be found here: \url{https://github.com/easystats/insight}.
+#'   also be found here: <https://github.com/easystats/insight>.
 #'
 #' @examples
 #' data(mtcars)

@@ -6,12 +6,12 @@
 #'
 #' @param text The text to print.
 #' @param color,colour Character vector, indicating the colour for printing.
-#'   May be one of \code{"red"}, \code{"yellow"}, \code{"green"}, \code{"blue"},
-#'   \code{"violet"}, \code{"cyan"} or \code{"grey"}. Formatting is also possible
-#'   with \code{"bold"} or \code{"italic"}.
+#'   May be one of `"red"`, `"yellow"`, `"green"`, `"blue"`,
+#'   `"violet"`, `"cyan"` or `"grey"`. Formatting is also possible
+#'   with `"bold"` or `"italic"`.
 #'
-#' @details This function prints \code{text} directly to the console using
-#'   \code{cat()}, so no string is returned.
+#' @details This function prints `text` directly to the console using
+#'   `cat()`, so no string is returned.
 #'
 #' @return Nothing.
 #'

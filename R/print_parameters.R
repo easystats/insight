@@ -2,55 +2,55 @@
 #' @name print_parameters
 #'
 #' @description This function takes a data frame, typically a data frame with
-#' information on summaries of model parameters like \code{\link[bayestestR]{hdi}}
-#' or \code{\link[bayestestR]{equivalence_test}}, as input and splits this information
+#' information on summaries of model parameters like [bayestestR::hdi()]
+#' or [bayestestR::equivalence_test()], as input and splits this information
 #' into several parts, depending on the model. See details below.
 #'
-#' @param x A fitted model, or a data frame returned by \code{\link{clean_parameters}}.
+#' @param x A fitted model, or a data frame returned by [clean_parameters()].
 #' @param ... One or more objects (data frames), which contain information about
 #'   the model parameters and related statistics (like confidence intervals, HDI,
 #'   ROPE, ...).
-#' @param split_by \code{split_by} should be a character vector with one or
-#'   more of the following elements: \code{"Effects"}, \code{"Component"},
-#'   \code{"Response"} and \code{"Group"}. These are the column names returned
-#'   by \code{\link{clean_parameters}}, which is used to extract the information
-#'   from which the group or component model parameters belong. If \code{NULL}, the
+#' @param split_by `split_by` should be a character vector with one or
+#'   more of the following elements: `"Effects"`, `"Component"`,
+#'   `"Response"` and `"Group"`. These are the column names returned
+#'   by [clean_parameters()], which is used to extract the information
+#'   from which the group or component model parameters belong. If `NULL`, the
 #'   merged data frame is returned. Else, the data frame is split into a list,
-#'   split by the values from those columns defined in \code{split_by}.
-#' @param format Name of output-format, as string. If \code{NULL} (or \code{"text"}),
-#'   assumed use for output is basic printing. If \code{"markdown"}, markdown-format
+#'   split by the values from those columns defined in `split_by`.
+#' @param format Name of output-format, as string. If `NULL` (or `"text"`),
+#'   assumed use for output is basic printing. If `"markdown"`, markdown-format
 #'   is assumed. This only affects the style of title- and table-caption attributes,
-#'   which are used in \code{\link{export_table}}.
-#' @param keep_parameter_column Logical, if \code{TRUE}, the data frames in the
-#'   returned list have both a \code{"Cleaned_Parameter"} and \code{"Parameter"}
-#'   column. If \code{FALSE}, the (unformatted) \code{"Parameter"} is removed,
-#'   and the column with cleaned parameter names (\code{"Cleaned_Parameter"}) is
-#'   renamed into \code{"Parameter"}.
+#'   which are used in [export_table()].
+#' @param keep_parameter_column Logical, if `TRUE`, the data frames in the
+#'   returned list have both a `"Cleaned_Parameter"` and `"Parameter"`
+#'   column. If `FALSE`, the (unformatted) `"Parameter"` is removed,
+#'   and the column with cleaned parameter names (`"Cleaned_Parameter"`) is
+#'   renamed into `"Parameter"`.
 #'
-#' @return A data frame or a list of data frames (if \code{split_by} is not \code{NULL}).
+#' @return A data frame or a list of data frames (if `split_by` is not `NULL`).
 #' If a list is returned, the element names reflect the model components where the
-#' extracted information in the data frames belong to, e.g. \code{`random.zero_inflated.Intercept: persons`}.
+#' extracted information in the data frames belong to, e.g. ``random.zero_inflated.Intercept: persons``.
 #' This is the data frame that contains the parameters for the random effects from
 #' group-level "persons" from the zero-inflated model component.
 #'
 #' @details This function prepares data frames that contain information
 #' about model parameters for clear printing.
 #' \cr \cr
-#' First, \code{x} is required, which should either be a model object or a
-#' prepared data frame as returned by \code{\link{clean_parameters}}. If
-#' \code{x} is a model, \code{clean_parameters()} is called on that model
+#' First, `x` is required, which should either be a model object or a
+#' prepared data frame as returned by [clean_parameters()]. If
+#' `x` is a model, `clean_parameters()` is called on that model
 #' object to get information with which model components the parameters
 #' are associated.
 #' \cr \cr
-#' Then, \code{...} take one or more data frames that also contain information
+#' Then, `...` take one or more data frames that also contain information
 #' about parameters from the same model, but also have additional information
-#' provided by other methods. For instance, a data frame in \code{...} might
-#' be the result of \code{\link[bayestestR]{hdi}}, where we
-#' have a) a \code{Parameters} column and b) columns with the HDI values.
+#' provided by other methods. For instance, a data frame in `...` might
+#' be the result of [bayestestR::hdi()], where we
+#' have a) a `Parameters` column and b) columns with the HDI values.
 #' \cr \cr
 #' Now we have a data frame with model parameters and information about the
 #' association to the different model components, a data frame with model
-#' parameters, and some summary statistics. \code{print_parameters()}
+#' parameters, and some summary statistics. `print_parameters()`
 #' then merges these data frames, so the statistic of interest (in our example:
 #' the HDI) is also associated with the different model components. The data
 #' frame is split into a list, so for a clear printing. Users can loop over this
@@ -153,8 +153,7 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
       # "Main title" of a subcomponent (like "Random effects")
       if (parts[j] %in% c("fixed", "random") ||
         (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
-        tmp <- switch(
-          parts[j],
+        tmp <- switch(parts[j],
           "fixed" = "Fixed effects",
           "random" = "Random effects",
           "dispersion" = "Dispersion",
@@ -165,8 +164,7 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
       } else if (!parts[j] %in% c("conditional", "zero_inflated")) {
         # here we have the "subtitles" of a subcomponent
         # (like "Intercept: Group-Level 1")
-        tmp <- switch(
-          parts[j],
+        tmp <- switch(parts[j],
           "simplex" = "(monotonic effects)",
           parts[j]
         )

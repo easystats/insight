@@ -2,16 +2,16 @@
 #' @name find_parameters
 #'
 #' @description Returns the names of model parameters, like they typically
-#'     appear in the \code{summary()} output. For Bayesian models, the parameter
+#'     appear in the `summary()` output. For Bayesian models, the parameter
 #'     names equal the column names of the posterior samples after coercion
-#'     from \code{as.data.frame()}. See the documentation for your object's class:
+#'     from `as.data.frame()`. See the documentation for your object's class:
 #'    \itemize{
-#'      \item{\link[=find_parameters.BGGM]{Bayesian models} (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
-#'      \item{\link[=find_parameters.gamlss]{Generalized additive models} (\pkg{mgcv}, \pkg{VGAM}, ...)}
-#'      \item{\link[=find_parameters.betamfx]{Marginal effects models} (\pkg{mfx})}
-#'      \item{\link[=find_parameters.glmmTMB]{Mixed models} (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
-#'      \item{\link[=find_parameters.zeroinfl]{Zero-inflated and hurdle models} (\pkg{pscl}, ...)}
-#'      \item{\link[=find_parameters.averaging]{Models with special components} (\pkg{betareg}, \pkg{MuMIn}, ...)}
+#'      \item{[Bayesian models][find_parameters.BGGM] (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
+#'      \item{[Generalized additive models][find_parameters.gamlss] (\pkg{mgcv}, \pkg{VGAM}, ...)}
+#'      \item{[Marginal effects models][find_parameters.betamfx] (\pkg{mfx})}
+#'      \item{[Mixed models][find_parameters.glmmTMB] (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
+#'      \item{[Zero-inflated and hurdle models][find_parameters.zeroinfl] (\pkg{pscl}, ...)}
+#'      \item{[Models with special components][find_parameters.averaging] (\pkg{betareg}, \pkg{MuMIn}, ...)}
 #'    }
 #'
 #' @param verbose Toggle messages and warnings.
@@ -19,7 +19,7 @@
 #' @inheritParams find_predictors
 #'
 #' @return A list of parameter names. For simple models, only one list-element,
-#'    \code{conditional}, is returned.
+#'    `conditional`, is returned.
 #'
 #' @examples
 #' data(mtcars)
@@ -459,8 +459,7 @@ find_parameters.mle <- find_parameters.mle2
 #' @export
 find_parameters.glht <- function(x, flatten = FALSE, ...) {
   s <- summary(x)
-  alt <- switch(
-    x$alternative,
+  alt <- switch(x$alternative,
     two.sided = "==",
     less = ">=",
     greater = "<="

@@ -11,20 +11,20 @@
 #'   \cr
 #'   For frequentist models:
 #'    \itemize{
-#'      \item \code{algorithm}, for instance \code{"OLS"} or \code{"ML"}
-#'      \item \code{optimizer}, name of optimizing function, only applies to specific models (like \code{gam})
+#'      \item `algorithm`, for instance `"OLS"` or `"ML"`
+#'      \item `optimizer`, name of optimizing function, only applies to specific models (like `gam`)
 #'    }
 #'   For frequentist mixed models:
 #'    \itemize{
-#'      \item \code{algorithm}, for instance \code{"REML"} or \code{"ML"}
-#'      \item \code{optimizer}, name of optimizing function
+#'      \item `algorithm`, for instance `"REML"` or `"ML"`
+#'      \item `optimizer`, name of optimizing function
 #'    }
 #'   For Bayesian models:
 #'    \itemize{
-#'      \item \code{algorithm}, the algorithm
-#'      \item \code{chains}, number of chains
-#'      \item \code{iterations}, number of iterations per chain
-#'      \item \code{warmup}, number of warmups per chain
+#'      \item `algorithm`, the algorithm
+#'      \item `chains`, number of chains
+#'      \item `iterations`, number of iterations per chain
+#'      \item `warmup`, number of warmups per chain
 #'    }
 #'
 #' @examples

@@ -52,13 +52,13 @@ if (!osx && require("testthat") && require("insight") && require("nonnest2")) {
 
   test_that("get_loglikelihood - (g)lmer", {
     if (require("lme4")) {
-      x <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1|Species), data = iris)
+      x <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
       ll <- loglikelihood(x, estimator = "ML")
       ll2 <- stats::logLik(x)
       expect_equal(as.numeric(ll), as.numeric(ll2))
       expect_equal(attributes(ll)$df, attributes(ll2)$df)
 
-      x <- lme4::glmer(vs ~ mpg + (1|cyl), data = mtcars, family = "binomial")
+      x <- lme4::glmer(vs ~ mpg + (1 | cyl), data = mtcars, family = "binomial")
       ll <- loglikelihood(x, estimator = "ML")
       ll2 <- stats::logLik(x)
       expect_equal(as.numeric(ll), as.numeric(ll2))
@@ -73,7 +73,7 @@ if (!osx && require("testthat") && require("insight") && require("nonnest2")) {
       ll <- loglikelihood(x)
       ll2 <- loglikelihood(ref)
       expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 2)
-      expect_equal(mean(abs(attributes(ll)$per_obs - attributes(ll2)$per_obs)), 0,  tolerance = 0.1)
+      expect_equal(mean(abs(attributes(ll)$per_obs - attributes(ll2)$per_obs)), 0, tolerance = 0.1)
     }
   })
 
@@ -91,7 +91,8 @@ if (!osx && require("testthat") && require("insight") && require("nonnest2")) {
     if (require("plm")) {
       data("Produc", package = "plm")
       x <- plm::plm(log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp,
-                data = Produc, index = c("state","year"))
+        data = Produc, index = c("state", "year")
+      )
 
       ll <- loglikelihood(x)
       expect_equal(as.numeric(ll), 1534.532, tolerance = 1e-3)

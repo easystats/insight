@@ -2,7 +2,7 @@
 #' @name find_parameters.averaging
 #'
 #' @description Returns the names of model parameters, like they typically
-#'     appear in the \code{summary()} output.
+#'     appear in the `summary()` output.
 #'
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
@@ -12,8 +12,8 @@
 #' @return A list of parameter names. The returned list may have following
 #'   elements:
 #'    \itemize{
-#'      \item \code{conditional}, the "fixed effects" part from the model.
-#'      \item \code{full}, parameters from the full model.
+#'      \item `conditional`, the "fixed effects" part from the model.
+#'      \item `full`, parameters from the full model.
 #'    }
 #'
 #' @examples

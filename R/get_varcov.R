@@ -1,31 +1,31 @@
 #' @title Get variance-covariance matrix from models
 #'
 #' @description Returns the variance-covariance, as retrieved by
-#'   \code{stats::vcov()}, but works for more model objects that probably
-#'   don't provide a \code{vcov()}-method.
+#'   `stats::vcov()`, but works for more model objects that probably
+#'   don't provide a `vcov()`-method.
 #' @name get_varcov
 #'
 #' @param x A model.
 #' @param component Should the complete variance-covariance matrix of the model
 #'   be returned, or only for specific model components only (like count or
 #'   zero-inflated model parts)? Applies to models with zero-inflated component,
-#'   or models with precision (e.g. \code{betareg}) component. \code{component}
-#'   may be one of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"},
-#'   \code{"dispersion"}, \code{"precision"}, or \code{"all"}. May be abbreviated.
-#'   Note that the \emph{conditional} component is also called \emph{count} or
-#'   \emph{mean} component, depending on the model.
+#'   or models with precision (e.g. `betareg`) component. `component`
+#'   may be one of `"conditional"`, `"zi"`, `"zero-inflated"`,
+#'   `"dispersion"`, `"precision"`, or `"all"`. May be abbreviated.
+#'   Note that the *conditional* component is also called *count* or
+#'   *mean* component, depending on the model.
 #' @param effects Should the complete variance-covariance matrix of the model
 #'   be returned, or only for specific model parameters only? Currently only
-#'   applies to models of class \code{mixor}.
-#' @param complete Logical, if \code{TRUE}, for \code{aov}, returns the full
+#'   applies to models of class `mixor`.
+#' @param complete Logical, if `TRUE`, for `aov`, returns the full
 #'   variance-covariance matrix.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
-#' @note \code{get_varcov()} tries to return the nearest positive definite matrix
+#' @note `get_varcov()` tries to return the nearest positive definite matrix
 #'   in case of a negative variance-covariance matrix.
 #'
-#' @return The variance-covariance matrix, as \code{matrix}-object.
+#' @return The variance-covariance matrix, as `matrix`-object.
 #'
 #' @examples
 #' data(mtcars)
@@ -80,8 +80,7 @@ get_varcov.mlm <- function(x, ...) {
 get_varcov.betareg <- function(x, component = c("conditional", "precision", "all"), verbose = TRUE, ...) {
   component <- match.arg(component)
 
-  vc <- switch(
-    component,
+  vc <- switch(component,
     "conditional" = stats::vcov(object = x, model = "mean"),
     "precision" = stats::vcov(object = x, model = "precision"),
     stats::vcov(object = x)
@@ -128,8 +127,7 @@ get_varcov.clm2 <- function(x, component = c("all", "conditional", "scale"), ...
     vc <- .fix_negative_matrix(vc)
   }
 
-  range <- switch(
-    component,
+  range <- switch(component,
     "all" = 1:(n_scale + n_intercepts + n_location),
     "conditional" = 1:(n_intercepts + n_location),
     "scale" = (1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)
@@ -199,8 +197,7 @@ get_varcov.gamlss <- function(x, component = c("conditional", "all"), ...) {
 get_varcov.hurdle <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
   component <- match.arg(component)
 
-  vc <- switch(
-    component,
+  vc <- switch(component,
     "conditional" = stats::vcov(object = x, model = "count"),
     "zi" = ,
     "zero_inflated" = stats::vcov(object = x, model = "zero"),
@@ -228,8 +225,7 @@ get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "
   tweedie <- which(grepl("^tw_", rownames(vc)))
   zero <- which(grepl("^zero_", rownames(vc)))
 
-  vc <- switch(
-    component,
+  vc <- switch(component,
     "conditional" = vc[tweedie, tweedie, drop = FALSE],
     "zi" = ,
     "zero_inflated" = vc[zero, zero, drop = FALSE],
@@ -252,8 +248,7 @@ get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "
 get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
   component <- match.arg(component)
 
-  vc <- switch(
-    component,
+  vc <- switch(component,
     "conditional" = stats::vcov(x, parm = "fixed-effects"),
     "zi" = ,
     "zero_inflated" = stats::vcov(x, parm = "zero_part"),
@@ -268,8 +263,7 @@ get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "
 get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", "zi", "dispersion", "all"), ...) {
   component <- match.arg(component)
 
-  vc <- switch(
-    component,
+  vc <- switch(component,
     "conditional" = stats::vcov(x)[["cond"]],
     "zi" = ,
     "zero_inflated" = stats::vcov(x)[["zi"]],

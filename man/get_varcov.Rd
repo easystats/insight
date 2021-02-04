@@ -90,12 +90,12 @@ The variance-covariance matrix, as \code{matrix}-object.
 }
 \description{
 Returns the variance-covariance, as retrieved by
-  \code{stats::vcov()}, but works for more model objects that probably
-  don't provide a \code{vcov()}-method.
+\code{stats::vcov()}, but works for more model objects that probably
+don't provide a \code{vcov()}-method.
 }
 \note{
 \code{get_varcov()} tries to return the nearest positive definite matrix
-  in case of a negative variance-covariance matrix.
+in case of a negative variance-covariance matrix.
 }
 \examples{
 data(mtcars)

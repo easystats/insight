@@ -6,11 +6,11 @@
 #' @param x A fitted mixed model.
 #'
 #' @return A list of character vectors with the name(s) of the random slopes, or
-#'    \code{NULL} if model has no random slopes. Depending on the model, the
+#'    `NULL` if model has no random slopes. Depending on the model, the
 #'    returned list has following elements:
 #'    \itemize{
-#'      \item \code{random}, the random slopes from the conditional part of model
-#'      \item \code{zero_inflated_random}, the random slopes from the zero-inflation component of the model
+#'      \item `random`, the random slopes from the conditional part of model
+#'      \item `zero_inflated_random`, the random slopes from the zero-inflation component of the model
 #'    }
 #'
 #' @examples

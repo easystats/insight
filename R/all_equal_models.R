@@ -1,13 +1,13 @@
 #' @title Checks if all objects are models of same class
 #' @name all_models_equal
 #'
-#' @description Small helper that checks if all objects are \emph{supported}
+#' @description Small helper that checks if all objects are *supported*
 #'  (regression) model objects and of same class.
 #'
 #' @param ... A list of objects.
 #' @inheritParams get_variance
 #'
-#' @return A logical, \code{TRUE} if \code{x} are all supported model objects
+#' @return A logical, `TRUE` if `x` are all supported model objects
 #'   of same class.
 #'
 #' @examples

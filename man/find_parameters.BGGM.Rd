@@ -76,11 +76,11 @@
 \item{x}{A fitted model.}
 
 \item{component}{Which type of parameters to return, such as parameters for the
- conditional model, the zero-inflated part of the model, the dispersion
- term, the instrumental variables or marginal effects be returned? Applies
- to models with zero-inflated and/or dispersion formula, or to models with
- instrumental variables (so called fixed-effects regressions), or models
- with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
+conditional model, the zero-inflated part of the model, the dispersion
+term, the instrumental variables or marginal effects be returned? Applies
+to models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models
+with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model. There are two convenient shortcuts:
 If \code{component = "location"}, location parameters such as \code{conditional},
@@ -102,25 +102,25 @@ should be returned.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,
-   \code{conditional}, is returned. For more complex models, the returned
-   list may have following elements:
-   \itemize{
-     \item \code{conditional}, the "fixed effects" part from the model
-     \item \code{random}, the "random effects" part from the model
-     \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
-     \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
-     \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
-     \item \code{smooth_terms}, the smooth parameters
-     \item \code{sigma}, the residual standard deviation (auxiliary parameter)
-     \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
-     \item \code{beta}, the beta parameter (auxiliary parameter)
-   }
+\code{conditional}, is returned. For more complex models, the returned
+list may have following elements:
+\itemize{
+\item \code{conditional}, the "fixed effects" part from the model
+\item \code{random}, the "random effects" part from the model
+\item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
+\item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
+\item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
+\item \code{smooth_terms}, the smooth parameters
+\item \code{sigma}, the residual standard deviation (auxiliary parameter)
+\item \code{dispersion}, the dispersion parameters (auxiliary parameter)
+\item \code{beta}, the beta parameter (auxiliary parameter)
+}
 }
 \description{
 Returns the names of model parameters, like they typically
-    appear in the \code{summary()} output. For Bayesian models, the parameter
-    names equal the column names of the posterior samples after coercion
-    from \code{as.data.frame()}.
+appear in the \code{summary()} output. For Bayesian models, the parameter
+names equal the column names of the posterior samples after coercion
+from \code{as.data.frame()}.
 }
 \examples{
 data(mtcars)

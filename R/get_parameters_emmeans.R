@@ -3,8 +3,8 @@
 #'
 #' @description Returns the coefficients from a model.
 #'
-#' @param merge_parameters Logical, if \code{TRUE} and \code{x} has multiple
-#'   columns for parameter names (like \code{emmGrid} objects may have), these
+#' @param merge_parameters Logical, if `TRUE` and `x` has multiple
+#'   columns for parameter names (like `emmGrid` objects may have), these
 #'   are merged into a single parameter column, with parameters names and values
 #'   as values.
 #' @param ... Currently not used.

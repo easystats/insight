@@ -1,6 +1,6 @@
 #' @title Find statistic for model
-#' @description Returns the statistic for a regression model (\emph{t}-statistic,
-#'   \emph{z}-statistic, etc.).
+#' @description Returns the statistic for a regression model (*t*-statistic,
+#'   *z*-statistic, etc.).
 #' @name find_statistic
 #'
 #' @description Small helper that checks if a model is a regression model
@@ -10,7 +10,7 @@
 #' @param ... Currently not used.
 #'
 #' @return A character describing the type of statistic. If there is no
-#'   statistic available with a distribution, \code{NULL} will be returned.
+#'   statistic available with a distribution, `NULL` will be returned.
 #'
 #' @examples
 #' # regression model object

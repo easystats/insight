@@ -2,44 +2,43 @@
 #'
 #' @param x A data frame.
 #' @param sep Column separator.
-#' @param header Header separator. Can be \code{NULL}.
-#' @param format Name of output-format, as string. If \code{NULL} (or \code{"text"}),
-#'   returned output is used for basic printing. Can be one of \code{NULL} (the
-#'   default) resp. \code{"text"} for plain text, \code{"markdown"} (or
-#'   \code{"md"}) for markdown and \code{"html"} for HTML output.
-#' @param caption,subtitle Table caption and subtitle, as string. If \code{NULL},
+#' @param header Header separator. Can be `NULL`.
+#' @param format Name of output-format, as string. If `NULL` (or `"text"`),
+#'   returned output is used for basic printing. Can be one of `NULL` (the
+#'   default) resp. `"text"` for plain text, `"markdown"` (or
+#'   `"md"`) for markdown and `"html"` for HTML output.
+#' @param caption,subtitle Table caption and subtitle, as string. If `NULL`,
 #'   no caption or subtitle is printed.
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
 #'   new text line under the table.
 #' @param align Column alignment. For markdown-formatted tables, the default
-#'   \code{align = NULL} will right-align numeric columns, while all other
-#'   columns will be left-aligned. If \code{format = "html"}, the default is
+#'   `align = NULL` will right-align numeric columns, while all other
+#'   columns will be left-aligned. If `format = "html"`, the default is
 #'   left-align first column and center all remaining. May be a string to
-#'   indicate alignment rules for the complete table, like \code{"left"},
-#'   \code{"right"}, \code{"center"} or \code{"firstleft"} (to left-align first
+#'   indicate alignment rules for the complete table, like `"left"`,
+#'   `"right"`, `"center"` or `"firstleft"` (to left-align first
 #'   column, center remaining); or maybe a string with abbreviated alignment
 #'   characters, where the length of the string must equal the number of columns,
-#'   for instance, \code{align = "lccrl"} would left-align the first column, center
+#'   for instance, `align = "lccrl"` would left-align the first column, center
 #'   the second and third, right-align column four and left-align the fifth
-#'   column. For HTML-tables, may be one of \code{"center"}, \code{"left"} or
-#'   \code{"right"}.
-#' @param group_by Name of column in \code{x} that indicates grouping for tables.
-#'   Only applies when \code{format = "html"}. \code{group_by} is passed down
-#'   to \code{gt::gt(groupname_col = group_by)}.
+#'   column. For HTML-tables, may be one of `"center"`, `"left"` or
+#'   `"right"`.
+#' @param group_by Name of column in `x` that indicates grouping for tables.
+#'   Only applies when `format = "html"`. `group_by` is passed down
+#'   to `gt::gt(groupname_col = group_by)`.
 #' @inheritParams format_value
 #'
-#' @note The values for \code{caption}, \code{subtitle} and \code{footer}
-#'   can also be provided as attributes of \code{x}, e.g. if \code{caption = NULL}
-#'   and \code{x} has attribute \code{table_caption}, the value for this
-#'   attribute will be used as table caption. \code{table_subtitle} is the
-#'   attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
+#' @note The values for `caption`, `subtitle` and `footer`
+#'   can also be provided as attributes of `x`, e.g. if `caption = NULL`
+#'   and `x` has attribute `table_caption`, the value for this
+#'   attribute will be used as table caption. `table_subtitle` is the
+#'   attribute for `subtitle`, and `table_footer` for `footer`.
 #'
 #' @return A data frame in character format.
 #' @examples
 #' cat(export_table(iris))
 #' cat(export_table(iris, sep = " ", header = "*", digits = 1))
-#'
 #' \dontrun{
 #' # colored footers
 #' data(iris)
@@ -48,9 +47,9 @@
 #' cat(export_table(x))
 #'
 #' attr(x, "table_footer") <- list(
-#'   c("\nA yellow line", "yellow"),
-#'   c("\nAnd a red line", "red"),
-#'   c("\nAnd a blue line", "blue")
+#'   c("\\nA yellow line", "yellow"),
+#'   c("\\nAnd a red line", "red"),
+#'   c("\\nAnd a blue line", "blue")
 #' )
 #' cat(export_table(x))
 #'
@@ -235,7 +234,6 @@ export_table <- function(x,
 
   # align table, if requested
   if (!is.null(align) && length(align) == 1) {
-
     for (i in 1:ncol(final)) {
       align_char <- ""
       if (align %in% c("left", "right", "center", "firstleft")) {
@@ -447,9 +445,10 @@ export_table <- function(x,
       col_align <- c()
       for (i in 1:nchar(align)) {
         col_align <- c(col_align, switch(substr(align, i, i),
-                                         "l" = "left",
-                                         "r" = "right",
-                                         "center"))
+          "l" = "left",
+          "r" = "right",
+          "center"
+        ))
       }
       out[["_boxhead"]]$column_align[1] <- col_align
     }

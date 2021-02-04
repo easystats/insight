@@ -1,21 +1,42 @@
 #' Predicted values
 #'
-#' Returns values predicted by a model (i.e., fitted values). The Confidence/Credible
-#' Intervals (CI) are stored as an attribute, which one can easily extract with
-#' \code{as.data.frame()} (see examples below).
+#' Returns values predicted by a model (i.e., fitted values). The
+#' Confidence/Credible Intervals (CI) are stored as an attribute, which one can
+#' easily extract with `as.data.frame()` (see examples below).
 #'
 #' @param ... Not used.
-#' @param ci_type Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This applies mostly for "simple" linear models (like \code{lm}), as for other models (e.g., \code{glm}), prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
-#' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
-#' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
-#' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument).
+#' @param ci_type Can be `"prediction"` or `"confidence"`. Prediction intervals
+#'   show the range that likely contains the value of a new observation (in what
+#'   range it would fall), whereas confidence intervals reflect the uncertainty
+#'   around the estimated parameters (and gives the range of the link; for
+#'   instance of the regression line in a linear regressions). Prediction
+#'   intervals account for both the uncertainty in the model's parameters, plus
+#'   the random variation of the individual values. Thus, prediction intervals
+#'   are always wider than confidence intervals. Moreover, prediction intervals
+#'   will not necessarily become narrower as the sample size increases (as they
+#'   do not reflect only the quality of the fit). This applies mostly for
+#'   "simple" linear models (like `lm`), as for other models (e.g., `glm`),
+#'   prediction intervals are somewhat useless (for instance, for a binomial
+#'   model for which the dependent variable is a vector of 1s and 0s, the
+#'   prediction interval is... `[0, 1]`).
+#' @param ci The interval level (default `0.95`, i.e., 95\% CI).
+#' @param transform Either `"response"` (default) or `"link"`. If `"link"`, no
+#'   transformation is applied and the values are on the scale of the linear
+#'   predictors. If `"response"`, the output is on the scale of the response
+#'   variable. Thus for a default binomial model, `"response"` gives the
+#'   predicted probabilities, and `"link"` makes predictions of log-odds
+#'   (probabilities on logit scale).
+#' @param include_random If `TRUE` (default), include all random effects in the
+#'   prediction. If `FALSE`, don't take them into account. Can also be a formula
+#'   to specify which random effects to condition on when predicting (passed to
+#'   the `re.form` argument).
 #' @inheritParams get_residuals
 #' @inheritParams stats::predict.lm
 #'
 #' @return The fitted values (i.e. predictions for the response).
 #'
-#' @note Currently, this function just calls \code{stats::fitted()}, but will
-#' be extended to other objects that don't work with \code{stats::fitted()} in
+#' @note Currently, this function just calls `stats::fitted()`, but will
+#' be extended to other objects that don't work with `stats::fitted()` in
 #' future updates.
 #'
 #' @examples
@@ -80,9 +101,9 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", ...) {
 
   # So that predict doesn't fail
-  if(is.null(ci)) {
+  if (is.null(ci)) {
     level <- 0
-  } else{
+  } else {
     level <- ci
   }
 
@@ -105,7 +126,6 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
 #' @importFrom stats family
 #' @export
 get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "response", ...) {
-
   rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, type = "link", level = ci, ...)
 
   out <- rez$fit
@@ -285,7 +305,7 @@ get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confi
   # See:
   # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
 
-  if(is.null(ci)) ci <- 0  # So that predict doesn't fail
+  if (is.null(ci)) ci <- 0 # So that predict doesn't fail
 
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
     stop("Package `rstanarm` needed for this function to work. Please install it.")
@@ -368,11 +388,11 @@ as.data.frame.get_predicted <- function(x, ...) {
 
 #' @importFrom stats qnorm qt
 .format_reform <- function(include_random = TRUE) {
-  if(is.null(include_random) || is.na(include_random)) {
+  if (is.null(include_random) || is.na(include_random)) {
     re.form <- include_random
-  } else if(include_random == TRUE) {
+  } else if (include_random == TRUE) {
     re.form <- NULL
-  } else if(include_random == FALSE) {
+  } else if (include_random == FALSE) {
     re.form <- NA
   } else {
     re.form <- include_random
@@ -382,8 +402,9 @@ as.data.frame.get_predicted <- function(x, ...) {
 
 #' @importFrom stats qnorm qt
 .get_predicted_se_to_ci <- function(x, pred, se = NULL, ci = 0.95, family = "gaussian") {
-
-  if(is.null(ci)) return(list(ci_low = pred, ci_high = pred))  # Same as predicted
+  if (is.null(ci)) {
+    return(list(ci_low = pred, ci_high = pred))
+  } # Same as predicted
 
   # Return NA
   if (is.null(se)) {

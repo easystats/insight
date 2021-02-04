@@ -19,6 +19,7 @@ MCSE
 MuMIn
 Nakagawa
 Newburgh
+Rchoice
 Savel'ev
 Schielzeth
 Schielzeth’s
@@ -40,8 +41,10 @@ blavaan
 brglm
 brms
 brmsfit
+btergm
 cgam
 cglm
+ci
 clmm
 cloglog
 cmprsk
@@ -51,6 +54,7 @@ comparator
 complmrob
 coxrobust
 cplm
+cyl
 dirichlet
 doi
 easystats
@@ -79,6 +83,7 @@ ivFixed
 ivprobit
 joss
 lavaan
+lm
 lme
 lmerModLmerTest
 lmodel
@@ -96,6 +101,7 @@ mira
 mixor
 mlogit
 modelling
+mtcars
 multcomp
 multinom
 nnet
@@ -118,6 +124,7 @@ specificities
 stanfit
 stanreg
 tranformations
+tseries
 tweedie
 unformatted
 untransformed

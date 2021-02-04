@@ -6,7 +6,7 @@
 #'
 #' @param x A model object.
 #'
-#' @return A logical, \code{TRUE} if \code{x} is a mixed model.
+#' @return A logical, `TRUE` if `x` is a mixed model.
 #'
 #' @examples
 #' data(mtcars)

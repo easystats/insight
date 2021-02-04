@@ -75,10 +75,10 @@ Data frame and Tables Pretty Formatting
 }
 \note{
 The values for \code{caption}, \code{subtitle} and \code{footer}
-  can also be provided as attributes of \code{x}, e.g. if \code{caption = NULL}
-  and \code{x} has attribute \code{table_caption}, the value for this
-  attribute will be used as table caption. \code{table_subtitle} is the
-  attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
+can also be provided as attributes of \code{x}, e.g. if \code{caption = NULL}
+and \code{x} has attribute \code{table_caption}, the value for this
+attribute will be used as table caption. \code{table_subtitle} is the
+attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
 }
 \examples{
 cat(export_table(iris))

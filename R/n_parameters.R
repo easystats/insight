@@ -15,10 +15,10 @@
 #' @return The number of parameters in the model.
 #'
 #' @note This function returns the number of parameters for the fixed effects
-#' by default, as returned by \code{find_parameters(x, effects = "fixed")}.
-#' It does not include \emph{all} estimated model parameters, i.e. auxiliary
+#' by default, as returned by `find_parameters(x, effects = "fixed")`.
+#' It does not include *all* estimated model parameters, i.e. auxiliary
 #' parameters like sigma or dispersion are not counted. To get the number of
-#' \emph{all estimated} parameters, use \code{get_df(x, type = "model")}.
+#' *all estimated* parameters, use `get_df(x, type = "model")`.
 #'
 #' @examples
 #' data(iris)

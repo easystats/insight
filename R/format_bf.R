@@ -2,7 +2,7 @@
 #'
 #' @param bf Bayes Factor.
 #' @param protect_ratio Should values smaller than 1 be represented as ratios?
-#' @param na_reference How to format missing values (\code{NA}).
+#' @param na_reference How to format missing values (`NA`).
 #' @param exact Should very large or very small values be reported with a
 #'   scientific format (e.g., 4.24e5), or as truncated values (as "> 1000" and
 #'   "< 1/1000").

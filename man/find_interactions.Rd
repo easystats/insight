@@ -15,10 +15,10 @@ find_interactions(
 \item{x}{A fitted model.}
 
 \item{component}{Should all predictor variables, predictor variables for the
- conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
 
@@ -27,13 +27,13 @@ as character vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list of character vectors that represent the interaction terms.
- Depending on \code{component}, the returned list has following
- elements (or \code{NULL}, if model has no interaction term):
- \itemize{
-   \item \code{conditional}, interaction terms that belong to the "fixed effects" terms from the model
-   \item \code{zero_inflated}, interaction terms that belong to the "fixed effects" terms from the zero-inflation component of the model
-   \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, interaction terms that belong to the instrumental variables
- }
+Depending on \code{component}, the returned list has following
+elements (or \code{NULL}, if model has no interaction term):
+\itemize{
+\item \code{conditional}, interaction terms that belong to the "fixed effects" terms from the model
+\item \code{zero_inflated}, interaction terms that belong to the "fixed effects" terms from the zero-inflation component of the model
+\item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, interaction terms that belong to the instrumental variables
+}
 }
 \description{
 Returns all lowest to highest order interaction terms from a model.

@@ -95,10 +95,10 @@ or both be returned? Only applies to mixed models.}
 \item{verbose}{Toggle messages and warnings.}
 
 \item{component}{Should all predictor variables, predictor variables for the
- conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
 }
@@ -107,15 +107,15 @@ The data that was used to fit the model.
 }
 \description{
 This functions tries to get the data that was used to fit the
-  model and returns it as data frame.
+model and returns it as data frame.
 }
 \note{
 Unlike \code{model.frame()}, which may contain transformed variables
-  (e.g. if \code{poly()} or \code{scale()} was used inside the formula to
-  specify the model), \code{get_data()} aims at returning the "original",
-  untransformed data (if possible). Consequently, column names are changed
-  accordingly, i.e. \code{"log(x)"} will become \code{"x"} etc. for all data
-  columns with transformed values.
+(e.g. if \code{poly()} or \code{scale()} was used inside the formula to
+specify the model), \code{get_data()} aims at returning the "original",
+untransformed data (if possible). Consequently, column names are changed
+accordingly, i.e. \code{"log(x)"} will become \code{"x"} etc. for all data
+columns with transformed values.
 }
 \examples{
 if (require("lme4")) {

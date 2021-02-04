@@ -6,15 +6,15 @@
 #'   separate columns for lower and upper confidence interval values). Furthermore,
 #'   column names are formatted as well.
 #'
-#' @param x A data frame of model's parameters, as returned by various functions of the \strong{easystats}-packages. May also be a result from \code{broom::tidy()}.
+#' @param x A data frame of model's parameters, as returned by various functions of the **easystats**-packages. May also be a result from `broom::tidy()`.
 #' @param pretty_names Return "pretty" (i.e. more human readable) parameter names.
 #' @param digits Number of decimal places for numeric values (except confidence intervals and p-values).
-#' @param ci_width Minimum width of the returned string for confidence intervals. If not \code{NULL} and width is larger than the string's length, leading whitespaces are added to the string. If \code{width="auto"}, width will be set to the length of the longest string.
-#' @param ci_brackets Logical, if \code{TRUE} (default), CI-values are encompassed in square brackets (else in parentheses).
+#' @param ci_width Minimum width of the returned string for confidence intervals. If not `NULL` and width is larger than the string's length, leading whitespaces are added to the string. If `width="auto"`, width will be set to the length of the longest string.
+#' @param ci_brackets Logical, if `TRUE` (default), CI-values are encompassed in square brackets (else in parentheses).
 #' @param ci_digits Number of decimal places for confidence intervals.
-#' @param p_digits Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.
+#' @param p_digits Number of decimal places for p-values. May also be `"scientific"` for scientific notation of p-values.
 #' @param rope_digits Number of decimal places for the ROPE percentage values.
-#' @param preserve_attributes Logical, if \code{TRUE}, preserves all attributes from the input data frame.
+#' @param preserve_attributes Logical, if `TRUE`, preserves all attributes from the input data frame.
 #' @inheritParams format_p
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -29,7 +29,9 @@
 #'   model <- stan_glm(Sepal.Length ~ Species, data = iris, refresh = 0, seed = 123)
 #'   x <- model_parameters(model, ci = c(0.69, 0.89, 0.95))
 #'   as.data.frame(format_table(x))
-#' }}
+#' }
+#' }
+#'
 #' @return A data frame.
 #' @export
 format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, rope_digits = 2, preserve_attributes = FALSE, ...) {
@@ -353,7 +355,6 @@ parameters_table <- format_table
     for (i in other) {
       x[[paste0(i, "_CI")]] <- NULL
     }
-
   } else {
     other_ci_colname <- c()
   }

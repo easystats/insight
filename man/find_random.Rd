@@ -18,12 +18,12 @@ as character vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list of character vectors that represent the name(s) of the
-   random effects (grouping factors). Depending on the model, the
-   returned list has following elements:
-   \itemize{
-     \item \code{random}, the "random effects" terms from the conditional part of model
-     \item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation component of the model
-   }
+random effects (grouping factors). Depending on the model, the
+returned list has following elements:
+\itemize{
+\item \code{random}, the "random effects" terms from the conditional part of model
+\item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation component of the model
+}
 }
 \description{
 Return the name of the grouping factors from mixed effects models.

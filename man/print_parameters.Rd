@@ -13,7 +13,7 @@ print_parameters(
 )
 }
 \arguments{
-\item{x}{A fitted model, or a data frame returned by \code{\link{clean_parameters}}.}
+\item{x}{A fitted model, or a data frame returned by \code{\link[=clean_parameters]{clean_parameters()}}.}
 
 \item{...}{One or more objects (data frames), which contain information about
 the model parameters and related statistics (like confidence intervals, HDI,
@@ -22,7 +22,7 @@ ROPE, ...).}
 \item{split_by}{\code{split_by} should be a character vector with one or
 more of the following elements: \code{"Effects"}, \code{"Component"},
 \code{"Response"} and \code{"Group"}. These are the column names returned
-by \code{\link{clean_parameters}}, which is used to extract the information
+by \code{\link[=clean_parameters]{clean_parameters()}}, which is used to extract the information
 from which the group or component model parameters belong. If \code{NULL}, the
 merged data frame is returned. Else, the data frame is split into a list,
 split by the values from those columns defined in \code{split_by}.}
@@ -30,7 +30,7 @@ split by the values from those columns defined in \code{split_by}.}
 \item{format}{Name of output-format, as string. If \code{NULL} (or \code{"text"}),
 assumed use for output is basic printing. If \code{"markdown"}, markdown-format
 is assumed. This only affects the style of title- and table-caption attributes,
-which are used in \code{\link{export_table}}.}
+which are used in \code{\link[=export_table]{export_table()}}.}
 
 \item{keep_parameter_column}{Logical, if \code{TRUE}, the data frames in the
 returned list have both a \code{"Cleaned_Parameter"} and \code{"Parameter"}
@@ -41,14 +41,14 @@ renamed into \code{"Parameter"}.}
 \value{
 A data frame or a list of data frames (if \code{split_by} is not \code{NULL}).
 If a list is returned, the element names reflect the model components where the
-extracted information in the data frames belong to, e.g. \code{`random.zero_inflated.Intercept: persons`}.
+extracted information in the data frames belong to, e.g. \code{random.zero_inflated.Intercept: persons}.
 This is the data frame that contains the parameters for the random effects from
 group-level "persons" from the zero-inflated model component.
 }
 \description{
 This function takes a data frame, typically a data frame with
-information on summaries of model parameters like \code{\link[bayestestR]{hdi}}
-or \code{\link[bayestestR]{equivalence_test}}, as input and splits this information
+information on summaries of model parameters like \code{\link[bayestestR:hdi]{bayestestR::hdi()}}
+or \code{\link[bayestestR:equivalence_test]{bayestestR::equivalence_test()}}, as input and splits this information
 into several parts, depending on the model. See details below.
 }
 \details{
@@ -56,7 +56,7 @@ This function prepares data frames that contain information
 about model parameters for clear printing.
 \cr \cr
 First, \code{x} is required, which should either be a model object or a
-prepared data frame as returned by \code{\link{clean_parameters}}. If
+prepared data frame as returned by \code{\link[=clean_parameters]{clean_parameters()}}. If
 \code{x} is a model, \code{clean_parameters()} is called on that model
 object to get information with which model components the parameters
 are associated.
@@ -64,7 +64,7 @@ are associated.
 Then, \code{...} take one or more data frames that also contain information
 about parameters from the same model, but also have additional information
 provided by other methods. For instance, a data frame in \code{...} might
-be the result of \code{\link[bayestestR]{hdi}}, where we
+be the result of \code{\link[bayestestR:hdi]{bayestestR::hdi()}}, where we
 have a) a \code{Parameters} column and b) columns with the HDI values.
 \cr \cr
 Now we have a data frame with model parameters and information about the

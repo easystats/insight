@@ -109,8 +109,7 @@
 
 
 .colour <- function(colour = "red", x) {
-  switch(
-    colour,
+  switch(colour,
     red = .red(x),
     yellow = .yellow(x),
     green = .green(x),

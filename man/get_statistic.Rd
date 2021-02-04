@@ -63,7 +63,7 @@ is also possible. May be abbreviated. Note that the \emph{conditional}
 component is also called \emph{count} or \emph{mean} component, depending
 on the model.}
 
-\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%). Currently only applies to objects of class \code{emmGrid}.}
+\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\\%). Currently only applies to objects of class \code{emmGrid}.}
 
 \item{adjust}{Character value naming the method used to adjust p-values or confidence intervals. See \code{?emmeans::summary.emmGrid} for details.}
 
@@ -80,7 +80,7 @@ A data frame with the model's parameter names and the related test statistic.
 }
 \description{
 Returns the statistic (\emph{t}, \code{z}, ...) for model estimates.
-  In most cases, this is the related column from \code{coef(summary())}.
+In most cases, this is the related column from \code{coef(summary())}.
 }
 \examples{
 data(mtcars)

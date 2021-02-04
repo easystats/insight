@@ -7,13 +7,13 @@
 #' @param iterations Number of posterior draws.
 #' @param progress Display progress.
 #' @param summary Logical, indicates whether the full posterior samples
-#'   (\code{summary = FALSE})) or the summarized centrality indices of
-#'   the posterior samples (\code{summary = TRUE})) should be returned as
+#'   (`summary = FALSE`)) or the summarized centrality indices of
+#'   the posterior samples (`summary = TRUE`)) should be returned as
 #'   estimates.
 #' @param centrality Only for models with posterior samples, and when
-#'   \code{summary = TRUE}. In this case, \code{centrality = "mean"} would
+#'   `summary = TRUE`. In this case, `centrality = "mean"` would
 #'   calculate means of posterior samples for each parameter, while
-#'   \code{centrality = "median"} would use the more robust median value as
+#'   `centrality = "median"` would use the more robust median value as
 #'   measure of central tendency.
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
@@ -23,20 +23,20 @@
 #' @inheritParams find_predictors
 #'
 #' @return The posterior samples from the requested parameters as data frame.
-#'   If \code{summary = TRUE}, returns a data frame with two columns: the
-#'   parameter names and the related point estimates (based on \code{centrality}).
+#'   If `summary = TRUE`, returns a data frame with two columns: the
+#'   parameter names and the related point estimates (based on `centrality`).
 #'
 #' @details In most cases when models either return different "effects" (fixed,
 #' random) or "components" (conditional, zero-inflated, ...), the arguments
-#' \code{effects} and \code{component} can be used.
+#' `effects` and `component` can be used.
 #'
 #' @section BFBayesFactor Models:
-#' Note that for \code{BFBayesFactor} models (from the \pkg{BayesFactor}
+#' Note that for `BFBayesFactor` models (from the \pkg{BayesFactor}
 #' package), posteriors are only extracted from the first numerator model (i.e.,
-#' \code{model[1]}). If you want to apply some function \code{foo()} to another
-#' model stored in the \code{BFBayesFactor} object, index it directly, e.g.
-#' \code{foo(model[2])}, \code{foo(1/model[5])}, etc.
-#' See also \code{\link[bayestestR]{weighted_posteriors}}.
+#' `model[1]`). If you want to apply some function `foo()` to another
+#' model stored in the `BFBayesFactor` object, index it directly, e.g.
+#' `foo(model[2])`, `foo(1/model[5])`, etc.
+#' See also [bayestestR::weighted_posteriors()].
 #'
 #' @examples
 #' data(mtcars)
@@ -57,8 +57,7 @@ get_parameters.BGGM <- function(x,
   conditional <- !intercepts & !correlations
 
   component <- match.arg(component)
-  out <- switch(
-    component,
+  out <- switch(component,
     "conditional" = out[, conditional, drop = FALSE],
     "correlation" = out[, correlations, drop = FALSE],
     "intercept" = out[, intercepts, drop = FALSE],
@@ -122,10 +121,10 @@ get_parameters.BFBayesFactor <- function(x,
   # check if valid model was indexed...
 
   if (length(x@numerator) > 1 ||
-      !xor(
-        x@denominator@shortName == "Intercept only",
-        grepl("^(Null|Indep)", x@denominator@shortName)
-      )) {
+    !xor(
+      x@denominator@shortName == "Intercept only",
+      grepl("^(Null|Indep)", x@denominator@shortName)
+    )) {
     if (verbose) {
       message(
         "Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.\n",
@@ -143,8 +142,7 @@ get_parameters.BFBayesFactor <- function(x,
         BayesFactor::posterior(x, iterations = iterations, progress = progress, index = 1, ...)
       ))
 
-    out <- switch(
-      bf_type,
+    out <- switch(bf_type,
       "correlation" = data.frame("rho" = as.numeric(posteriors$rho)),
       "ttest1" = data.frame("Difference" = x@numerator[[1]]@prior$mu - as.numeric(posteriors[, 1])),
       "ttest2" = data.frame("Difference" = x@numerator[[1]]@prior$mu - as.numeric(posteriors[, 2])),
@@ -313,8 +311,7 @@ get_parameters.bayesx <- function(x,
     stringsAsFactors = FALSE
   )
 
-  params <- switch(
-    component,
+  params <- switch(component,
     "all" = rbind(fixed_dat, smooth_dat),
     "conditional" = fixed_dat,
     "smooth_terms" = smooth_dat
@@ -450,8 +447,7 @@ get_parameters.sim <- function(x,
 
 #' @importFrom stats median
 .summary_of_posteriors <- function(out, centrality = "mean", ...) {
-  s <- switch(
-    centrality,
+  s <- switch(centrality,
     "mean" = sapply(out, mean),
     "median" = sapply(out, stats::median),
     sapply(out, mean)
@@ -476,4 +472,3 @@ get_parameters.sim <- function(x,
   elements <- .get_elements(effects, component)
   unlist(find_parameters(x, effects = "all", component = "all", flatten = FALSE, parameters = parameters)[elements])
 }
-

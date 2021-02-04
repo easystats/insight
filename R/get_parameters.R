@@ -4,13 +4,13 @@
 #' @description Returns the coefficients (or posterior samples for Bayesian
 #'    models) from a model. See the documentation for your object's class:
 #'    \itemize{
-#'      \item{\link[=get_parameters.BGGM]{Bayesian models} (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
-#'      \item{\link[=get_parameters.emmGrid]{Estimated marginal means} (\pkg{emmeans})}
-#'      \item{\link[=get_parameters.gamm]{Generalized additive models} (\pkg{mgcv}, \pkg{VGAM}, ...)}
-#'      \item{\link[=get_parameters.betamfx]{Marginal effects models} (\pkg{mfx})}
-#'      \item{\link[=get_parameters.glmm]{Mixed models} (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
-#'      \item{\link[=get_parameters.zeroinfl]{Zero-inflated and hurdle models} (\pkg{pscl}, ...)}
-#'      \item{\link[=get_parameters.betareg]{Models with special components} (\pkg{betareg}, \pkg{MuMIn}, ...)}
+#'      \item{[Bayesian models][get_parameters.BGGM] (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
+#'      \item{[Estimated marginal means][get_parameters.emmGrid] (\pkg{emmeans})}
+#'      \item{[Generalized additive models][get_parameters.gamm] (\pkg{mgcv}, \pkg{VGAM}, ...)}
+#'      \item{[Marginal effects models][get_parameters.betamfx] (\pkg{mfx})}
+#'      \item{[Mixed models][get_parameters.glmm] (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
+#'      \item{[Zero-inflated and hurdle models][get_parameters.zeroinfl] (\pkg{pscl}, ...)}
+#'      \item{[Models with special components][get_parameters.betareg] (\pkg{betareg}, \pkg{MuMIn}, ...)}
 #'    }
 #'
 #' @param verbose Toggle messages and warnings.
@@ -21,14 +21,14 @@
 #'
 #' @return \itemize{
 #'   \item for non-Bayesian models, a data frame with two columns: the parameter names and the related point estimates.
-#'   \item for Anova (\code{aov()}) with error term, a list of parameters for the conditional and the random effects parameters
+#'   \item for Anova (`aov()`) with error term, a list of parameters for the conditional and the random effects parameters
 #' }
 #'
 #' @details In most cases when models either return different "effects" (fixed,
 #' random) or "components" (conditional, zero-inflated, ...), the arguments
-#' \code{effects} and \code{component} can be used.
+#' `effects` and `component` can be used.
 #' \cr \cr
-#' \code{get_parameters()} is comparable to \code{coef()}, however, the coefficients
+#' `get_parameters()` is comparable to `coef()`, however, the coefficients
 #' are returned as data frame (with columns for names and point estimates of
 #' coefficients). For Bayesian models, the posterior samples of parameters are
 #' returned.
@@ -272,8 +272,7 @@ get_parameters.margins <- function(x, ...) {
 #' @export
 get_parameters.glht <- function(x, ...) {
   s <- summary(x)
-  alt <- switch(
-    x$alternative,
+  alt <- switch(x$alternative,
     two.sided = "==",
     less = ">=",
     greater = "<="

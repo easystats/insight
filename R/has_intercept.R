@@ -5,7 +5,7 @@
 #'
 #' @param x A model object.
 #'
-#' @return \code{TRUE} if \code{x} has an intercept, \code{FALSE} otherwise.
+#' @return `TRUE` if `x` has an intercept, `FALSE` otherwise.
 #'
 #' @examples
 #' model <- lm(mpg ~ 0 + gear, data = mtcars)

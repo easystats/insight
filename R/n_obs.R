@@ -9,7 +9,7 @@
 #' @inheritParams get_response
 #' @inheritParams find_formula
 #'
-#' @return The number of observations used to fit the model, or \code{NULL} if
+#' @return The number of observations used to fit the model, or `NULL` if
 #'   this information is not available.
 #'
 #' @examples

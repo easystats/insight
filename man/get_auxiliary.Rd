@@ -30,7 +30,7 @@ dispersion, sigma, or beta...
 Currently, only sigma and the dispersion parameter are returned, and
 only for a limited set of models.
 \subsection{Sigma Parameter}{
-See \code{\link{get_sigma}}.
+See \code{\link[=get_sigma]{get_sigma()}}.
 }
 \subsection{Dispersion Parameter}{
 There are many different definitions of "dispersion", depending on the context.

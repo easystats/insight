@@ -22,11 +22,11 @@
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{component}{Which type of parameters to return, such as parameters for the
- conditional model, the zero-inflated part of the model, the dispersion
- term, the instrumental variables or marginal effects be returned? Applies
- to models with zero-inflated and/or dispersion formula, or to models with
- instrumental variables (so called fixed-effects regressions), or models
- with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
+conditional model, the zero-inflated part of the model, the dispersion
+term, the instrumental variables or marginal effects be returned? Applies
+to models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models
+with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model. There are two convenient shortcuts:
 If \code{component = "location"}, location parameters such as \code{conditional},
@@ -42,18 +42,18 @@ as character vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list of parameter names. The returned list may have following
-  elements:
-   \itemize{
-     \item \code{conditional}, the "fixed effects" part from the model.
-     \item \code{random}, the "random effects" part from the model.
-     \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model.
-     \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model.
-     \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
-   }
+elements:
+\itemize{
+\item \code{conditional}, the "fixed effects" part from the model.
+\item \code{random}, the "random effects" part from the model.
+\item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model.
+\item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model.
+\item \code{dispersion}, the dispersion parameters (auxiliary parameter)
+}
 }
 \description{
 Returns the names of model parameters, like they typically
-    appear in the \code{summary()} output.
+appear in the \code{summary()} output.
 }
 \examples{
 data(mtcars)

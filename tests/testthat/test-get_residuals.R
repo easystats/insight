@@ -118,5 +118,4 @@ if (require("testthat") && require("insight") && require("lme4")) {
       as.vector(weighted.residuals(m))
     )
   })
-
 }

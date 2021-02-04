@@ -2,7 +2,7 @@
 #' @name find_parameters.betamfx
 #'
 #' @description Returns the names of model parameters, like they typically
-#'     appear in the \code{summary()} output.
+#'     appear in the `summary()` output.
 #'
 #' @param component Which type of parameters to return, such as parameters for the
 #'    conditional model, the zero-inflated part of the model, the dispersion
@@ -10,12 +10,12 @@
 #'    to models with zero-inflated and/or dispersion formula, or to models with
 #'    instrumental variables (so called fixed-effects regressions), or models
 #'    with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
-#'   \emph{conditional} component is also called \emph{count} or \emph{mean}
+#'   *conditional* component is also called *count* or *mean*
 #'   component, depending on the model. There are two convenient shortcuts:
-#'   If \code{component = "location"}, location parameters such as \code{conditional},
-#'   \code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
-#'   For \code{component = "distributional"} (or \code{"auxiliary"}), components
-#'   like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
+#'   If `component = "location"`, location parameters such as `conditional`,
+#'   `zero_inflated`, `smooth_terms`, or `instruments` are returned.
+#'   For `component = "distributional"` (or `"auxiliary"`), components
+#'   like `sigma`, `dispersion`, `beta` or `precision` (and
 #'   other auxiliary parameters) are returned.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
@@ -24,9 +24,9 @@
 #' @return A list of parameter names. The returned list may have following
 #' elements:
 #'    \itemize{
-#'      \item \code{conditional}, the "fixed effects" part from the model.
-#'      \item \code{marginal}, the marginal effects.
-#'      \item \code{precision}, the precision parameter.
+#'      \item `conditional`, the "fixed effects" part from the model.
+#'      \item `marginal`, the marginal effects.
+#'      \item `precision`, the precision parameter.
 #'    }
 #'
 #' @examples

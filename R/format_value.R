@@ -3,10 +3,10 @@
 #' @param x Numeric value.
 #' @param digits Number of significant digits.
 #' @param protect_integers Should integers be kept as integers (i.e., without decimals)?
-#' @param missing Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.
-#' @param width Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.
-#' @param as_percent Logical, if \code{TRUE}, value is formatted as percentage value.
-#' @param zap_small Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.
+#' @param missing Value by which `NA` values are replaced. By default, an empty string (i.e. `""`) is returned for `NA`.
+#' @param width Minimum width of the returned string. If not `NULL` and `width` is larger than the string's length, leading whitespaces are added to the string.
+#' @param as_percent Logical, if `TRUE`, value is formatted as percentage value.
+#' @param zap_small Logical, if `TRUE`, small values are rounded after `digits` decimal places. If `FALSE`, values with more decimal places than `digits` are printed in scientific notation.
 #' @param ... Arguments passed to or from other methods.
 #'
 #'

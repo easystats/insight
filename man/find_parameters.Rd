@@ -21,21 +21,21 @@ as character vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,
-   \code{conditional}, is returned.
+\code{conditional}, is returned.
 }
 \description{
 Returns the names of model parameters, like they typically
-    appear in the \code{summary()} output. For Bayesian models, the parameter
-    names equal the column names of the posterior samples after coercion
-    from \code{as.data.frame()}. See the documentation for your object's class:
-   \itemize{
-     \item{\link[=find_parameters.BGGM]{Bayesian models} (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
-     \item{\link[=find_parameters.gamlss]{Generalized additive models} (\pkg{mgcv}, \pkg{VGAM}, ...)}
-     \item{\link[=find_parameters.betamfx]{Marginal effects models} (\pkg{mfx})}
-     \item{\link[=find_parameters.glmmTMB]{Mixed models} (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
-     \item{\link[=find_parameters.zeroinfl]{Zero-inflated and hurdle models} (\pkg{pscl}, ...)}
-     \item{\link[=find_parameters.averaging]{Models with special components} (\pkg{betareg}, \pkg{MuMIn}, ...)}
-   }
+appear in the \code{summary()} output. For Bayesian models, the parameter
+names equal the column names of the posterior samples after coercion
+from \code{as.data.frame()}. See the documentation for your object's class:
+\itemize{
+\item{\link[=find_parameters.BGGM]{Bayesian models} (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
+\item{\link[=find_parameters.gamlss]{Generalized additive models} (\pkg{mgcv}, \pkg{VGAM}, ...)}
+\item{\link[=find_parameters.betamfx]{Marginal effects models} (\pkg{mfx})}
+\item{\link[=find_parameters.glmmTMB]{Mixed models} (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
+\item{\link[=find_parameters.zeroinfl]{Zero-inflated and hurdle models} (\pkg{pscl}, ...)}
+\item{\link[=find_parameters.averaging]{Models with special components} (\pkg{betareg}, \pkg{MuMIn}, ...)}
+}
 }
 \examples{
 data(mtcars)

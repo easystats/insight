@@ -2,7 +2,7 @@
 #' @name clean_parameters
 #'
 #' @description This function "cleans" names of model parameters by removing
-#' patterns like \code{"r_"} or \code{"b[]"} (mostly applicable to Stan models)
+#' patterns like `"r_"` or `"b[]"` (mostly applicable to Stan models)
 #' and adding columns with information to which group or component parameters
 #' belong (i.e. fixed or random, count or zero-inflated...)
 #' \cr \cr
@@ -10,7 +10,7 @@
 #' in particular of - but not limited to - posterior samples from Stan models,
 #' depending on certain characteristics. This might be useful when only selective
 #' results should be reported or results from all parameters should be filtered
-#' to return only certain results (see \code{\link{print_parameters}}).
+#' to return only certain results (see [print_parameters()]).
 #'
 #' @param x A fitted model.
 #' @inheritParams find_parameters
@@ -18,18 +18,18 @@
 #' @return A data frame with "cleaned" parameter names and information on
 #'   effects, component and group where parameters belong to. To be consistent
 #'   across different models, the returned data frame always has at least four
-#'   columns \code{Parameter}, \code{Effects}, \code{Component} and
-#'   \code{Cleaned_Parameter}. See 'Details'.
+#'   columns `Parameter`, `Effects`, `Component` and
+#'   `Cleaned_Parameter`. See 'Details'.
 #'
-#' @details The \code{Effects} column indicate if a parameter is a \emph{fixed}
-#' or \emph{random} effect. The \code{Component} can either be \emph{conditional}
-#' or \emph{zero_inflated}. For models with random effects, the \code{Group}
+#' @details The `Effects` column indicate if a parameter is a *fixed*
+#' or *random* effect. The `Component` can either be *conditional*
+#' or *zero_inflated*. For models with random effects, the `Group`
 #' column indicates the grouping factor of the random effects. For multivariate
-#' response models from \pkg{brms} or \pkg{rstanarm}, an additional \emph{Response}
+#' response models from \pkg{brms} or \pkg{rstanarm}, an additional *Response*
 #' column is included, to indicate which parameters belong to which response
-#' formula. Furthermore, \emph{Cleaned_Parameter} column is returned that
+#' formula. Furthermore, *Cleaned_Parameter* column is returned that
 #' contains "human readable" parameter names (which are mostly identical to
-#' \code{Parameter}, except for for models from \pkg{brms} or \pkg{rstanarm},
+#' `Parameter`, except for for models from \pkg{brms} or \pkg{rstanarm},
 #' or for specific terms like smooth- or spline-terms).
 #'
 #' @examples

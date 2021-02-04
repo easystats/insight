@@ -5,7 +5,7 @@
 #' assigning different classes to the list of objects.
 #'
 #' @param objects,... Arbitrary number of objects.
-#' @param only_models Only keep supported models (default to \code{TRUE}).
+#' @param only_models Only keep supported models (default to `TRUE`).
 #'
 #' @return The list with objects that were passed to the function, including
 #' additional information as attributes (e.g. if models have same response or

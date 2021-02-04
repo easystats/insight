@@ -4,16 +4,16 @@
 #' @description Returns weighting variable of a model.
 #'
 #' @param x A fitted model.
-#' @param na_rm Logical, if \code{TRUE}, removes possible missing values.
-#' @param null_as_ones Logical, if \code{TRUE}, will return a vector of \code{1}
+#' @param na_rm Logical, if `TRUE`, removes possible missing values.
+#' @param null_as_ones Logical, if `TRUE`, will return a vector of `1`
 #'   if no weights were specified in the model (as if the weights were all set
 #'   to 1).
 #' @param ... Currently not used.
 #'
-#' @return The weighting variable, or \code{NULL} if no weights were specified
+#' @return The weighting variable, or `NULL` if no weights were specified
 #' or if weights were 1. If the weighting variable should also be returned
-#' (instead of \code{NULL}), when all weights are set to 1 (i.e. no weighting),
-#' set \code{null_as_ones = TRUE}.
+#' (instead of `NULL`), when all weights are set to 1 (i.e. no weighting),
+#' set `null_as_ones = TRUE`.
 #'
 #' @examples
 #' data(mtcars)
@@ -26,7 +26,7 @@
 #' get_weights(lm(mpg ~ wt, data = mtcars), null_as_ones = TRUE)
 #'
 #' # GLMs
-#' m <- glm(vs ~ disp + mpg, data = mtcars, weights = weight, family=quasibinomial)
+#' m <- glm(vs ~ disp + mpg, data = mtcars, weights = weight, family = quasibinomial)
 #' get_weights(m)
 #' m <- glm(cbind(cyl, gear) ~ mpg, data = mtcars, weights = weight, family = binomial)
 #' get_weights(m)

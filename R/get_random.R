@@ -5,7 +5,7 @@
 #'
 #' @inheritParams find_random
 #'
-#' @return The data from all random effects terms, as data frame. Or \code{NULL}
+#' @return The data from all random effects terms, as data frame. Or `NULL`
 #'    if model has no random effects.
 #'
 #' @examples
