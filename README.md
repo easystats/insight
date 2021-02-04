@@ -28,6 +28,8 @@ to every aspect of many model objects via consistent syntax and output.
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
 [![R
 check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/easystats/insight/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/insight?branch=master)
 
 Run the following to install the stable release of **insight** from
 CRAN:
@@ -260,7 +262,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 170 model classes are supported.
+Currently, 171 model classes are supported.
 
 ``` r
 supported_models()
@@ -285,42 +287,42 @@ supported_models()
 #>  [55] "felm"              "fitdistr"          "fixest"           
 #>  [58] "flexsurvreg"       "gam"               "Gam"              
 #>  [61] "gamlss"            "gamm"              "gamm4"            
-#>  [64] "gbm"               "gee"               "geeglm"           
-#>  [67] "glht"              "glimML"            "glm"              
-#>  [70] "Glm"               "glmm"              "glmmadmb"         
-#>  [73] "glmmPQL"           "glmmTMB"           "glmrob"           
-#>  [76] "glmRob"            "glmx"              "gls"              
-#>  [79] "gmnl"              "HLfit"             "htest"            
-#>  [82] "hurdle"            "iv_robust"         "ivFixed"          
-#>  [85] "ivprobit"          "ivreg"             "lavaan"           
-#>  [88] "lm"                "lm_robust"         "lme"              
-#>  [91] "lmerMod"           "lmerModLmerTest"   "lmodel2"          
-#>  [94] "lmrob"             "lmRob"             "logistf"          
-#>  [97] "logitmfx"          "logitor"           "LORgee"           
-#> [100] "lqm"               "lqmm"              "lrm"              
-#> [103] "manova"            "MANOVA"            "margins"          
-#> [106] "maxLik"            "mclogit"           "mcmc"             
-#> [109] "mcmc.list"         "MCMCglmm"          "mediate"          
-#> [112] "merMod"            "merModList"        "meta_bma"         
-#> [115] "meta_fixed"        "meta_random"       "metaplus"         
-#> [118] "mipo"              "mira"              "mixed"            
-#> [121] "MixMod"            "mixor"             "mle"              
-#> [124] "mle2"              "mlm"               "mlogit"           
-#> [127] "mmlogit"           "multinom"          "negbinirr"        
-#> [130] "negbinmfx"         "ols"               "plm"              
-#> [133] "poissonirr"        "poissonmfx"        "polr"             
-#> [136] "probitmfx"         "psm"               "Rchoice"          
-#> [139] "ridgelm"           "riskRegression"    "rlm"              
-#> [142] "rlmerMod"          "RM"                "rma"              
-#> [145] "rma.uni"           "robmixglm"         "rq"               
-#> [148] "rqs"               "rqss"              "scam"             
-#> [151] "sem"               "speedglm"          "speedlm"          
-#> [154] "stanmvreg"         "stanreg"           "summary.lm"       
-#> [157] "survfit"           "survreg"           "svyglm"           
-#> [160] "svyolr"            "tobit"             "truncreg"         
-#> [163] "vgam"              "vglm"              "wbgee"            
-#> [166] "wblm"              "wbm"               "zcpglm"           
-#> [169] "zeroinfl"          "zerotrunc"
+#>  [64] "garch"             "gbm"               "gee"              
+#>  [67] "geeglm"            "glht"              "glimML"           
+#>  [70] "glm"               "Glm"               "glmm"             
+#>  [73] "glmmadmb"          "glmmPQL"           "glmmTMB"          
+#>  [76] "glmrob"            "glmRob"            "glmx"             
+#>  [79] "gls"               "gmnl"              "HLfit"            
+#>  [82] "htest"             "hurdle"            "iv_robust"        
+#>  [85] "ivFixed"           "ivprobit"          "ivreg"            
+#>  [88] "lavaan"            "lm"                "lm_robust"        
+#>  [91] "lme"               "lmerMod"           "lmerModLmerTest"  
+#>  [94] "lmodel2"           "lmrob"             "lmRob"            
+#>  [97] "logistf"           "logitmfx"          "logitor"          
+#> [100] "LORgee"            "lqm"               "lqmm"             
+#> [103] "lrm"               "manova"            "MANOVA"           
+#> [106] "margins"           "maxLik"            "mclogit"          
+#> [109] "mcmc"              "mcmc.list"         "MCMCglmm"         
+#> [112] "mediate"           "merMod"            "merModList"       
+#> [115] "meta_bma"          "meta_fixed"        "meta_random"      
+#> [118] "metaplus"          "mipo"              "mira"             
+#> [121] "mixed"             "MixMod"            "mixor"            
+#> [124] "mle"               "mle2"              "mlm"              
+#> [127] "mlogit"            "mmlogit"           "multinom"         
+#> [130] "negbinirr"         "negbinmfx"         "ols"              
+#> [133] "plm"               "poissonirr"        "poissonmfx"       
+#> [136] "polr"              "probitmfx"         "psm"              
+#> [139] "Rchoice"           "ridgelm"           "riskRegression"   
+#> [142] "rlm"               "rlmerMod"          "RM"               
+#> [145] "rma"               "rma.uni"           "robmixglm"        
+#> [148] "rq"                "rqs"               "rqss"             
+#> [151] "scam"              "sem"               "speedglm"         
+#> [154] "speedlm"           "stanmvreg"         "stanreg"          
+#> [157] "summary.lm"        "survfit"           "survreg"          
+#> [160] "svyglm"            "svyolr"            "tobit"            
+#> [163] "truncreg"          "vgam"              "vglm"             
+#> [166] "wbgee"             "wblm"              "wbm"              
+#> [169] "zcpglm"            "zeroinfl"          "zerotrunc"
 ```
 
   - **Didn’t find a model?** [File an

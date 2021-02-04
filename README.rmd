@@ -40,6 +40,8 @@ When fitting any statistical model, there are many useful pieces of information 
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
 [![R check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/easystats/insight/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/insight?branch=master)
 
 Run the following to install the stable release of **insight** from CRAN:
 
