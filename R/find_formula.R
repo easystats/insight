@@ -88,7 +88,7 @@ find_formula.list <- function(x, ...) {
 
 #' @export
 find_formula.data.frame <- function(x, ...) {
-  stop("A data frame is no valid object for this function")
+  stop("A data frame is not a valid object for this function.")
 }
 
 
@@ -1317,6 +1317,13 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 
 
+
+# tidymodels --------------------------------------------------------------
+
+#' @export
+find_formula.model_fit <- function(x, ...) {
+  find_formula(x$fit)
+}
 
 
 
