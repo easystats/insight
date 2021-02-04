@@ -39,7 +39,6 @@
 #' @examples
 #' cat(export_table(iris))
 #' cat(export_table(iris, sep = " ", header = "*", digits = 1))
-#'
 #' \dontrun{
 #' # colored footers
 #' data(iris)
@@ -48,9 +47,9 @@
 #' cat(export_table(x))
 #'
 #' attr(x, "table_footer") <- list(
-#'   c("\nA yellow line", "yellow"),
-#'   c("\nAnd a red line", "red"),
-#'   c("\nAnd a blue line", "blue")
+#'   c("\\nA yellow line", "yellow"),
+#'   c("\\nAnd a red line", "red"),
+#'   c("\\nAnd a blue line", "blue")
 #' )
 #' cat(export_table(x))
 #'
@@ -235,7 +234,6 @@ export_table <- function(x,
 
   # align table, if requested
   if (!is.null(align) && length(align) == 1) {
-
     for (i in 1:ncol(final)) {
       align_char <- ""
       if (align %in% c("left", "right", "center", "firstleft")) {
@@ -447,9 +445,10 @@ export_table <- function(x,
       col_align <- c()
       for (i in 1:nchar(align)) {
         col_align <- c(col_align, switch(substr(align, i, i),
-                                         "l" = "left",
-                                         "r" = "right",
-                                         "center"))
+          "l" = "left",
+          "r" = "right",
+          "center"
+        ))
       }
       out[["_boxhead"]]$column_align[1] <- col_align
     }

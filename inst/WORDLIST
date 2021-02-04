@@ -19,6 +19,7 @@ MCSE
 MuMIn
 Nakagawa
 Newburgh
+Rchoice
 Savel'ev
 Schielzeth
 Schielzeth’s
@@ -40,6 +41,7 @@ blavaan
 brglm
 brms
 brmsfit
+btergm
 cgam
 cglm
 clmm
@@ -118,6 +120,7 @@ specificities
 stanfit
 stanreg
 tranformations
+tseries
 tweedie
 unformatted
 untransformed
