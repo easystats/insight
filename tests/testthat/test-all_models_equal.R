@@ -9,6 +9,8 @@ if (require("testthat") && require("insight") && require("lme4")) {
 
   test_that("all_models_equal", {
     expect_true(all_models_equal(m1, m2))
+    expect_false(all_models_equal(m1, m2, mtcars))
+    expect_message(expect_false(all_models_equal(m1, m2, mtcars, verbose = TRUE)))
     expect_false(all_models_equal(m1, m2, m3))
     expect_message(expect_false(all_models_equal(m1, m4, m2, m3, verbose = TRUE)))
 
