@@ -52,7 +52,8 @@ get_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", "
     row.names = NULL
   )
 
-  pars <- switch(component,
+  pars <- switch(
+    component,
     all = rbind(cond, zi),
     conditional = cond,
     zi = ,
@@ -94,7 +95,8 @@ get_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", "
     row.names = NULL
   )
 
-  pars <- switch(component,
+  pars <- switch(
+    component,
     all = rbind(cond, zi),
     conditional = cond,
     zi = ,

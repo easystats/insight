@@ -273,7 +273,8 @@
   response <- unlist(model.terms$response)
 
   if (is_mv) {
-    fixed.component.data <- switch(component,
+    fixed.component.data <- switch(
+      component,
       all = c(
         sapply(model.terms[-1], function(i) i$conditional),
         sapply(model.terms[-1], function(i) i$zero_inflated),
@@ -285,7 +286,8 @@
       dispersion = sapply(model.terms[-1], function(i) i$dispersion)
     )
 
-    random.component.data <- switch(component,
+    random.component.data <- switch(
+      component,
       all = c(
         sapply(model.terms[-1], function(i) i$random),
         sapply(model.terms[-1], function(i) i$zero_inflated_random)
@@ -298,7 +300,8 @@
     fixed.component.data <- unlist(fixed.component.data)
     random.component.data <- unlist(random.component.data)
   } else {
-    fixed.component.data <- switch(component,
+    fixed.component.data <- switch(
+      component,
       all = c(model.terms$conditional, model.terms$zero_inflated, model.terms$dispersion),
       conditional = model.terms$conditional,
       zi = ,
@@ -306,7 +309,8 @@
       dispersion = model.terms$dispersion
     )
 
-    random.component.data <- switch(component,
+    random.component.data <- switch(
+      component,
       all = c(model.terms$random, model.terms$zero_inflated_random),
       conditional = model.terms$random,
       zi = ,
@@ -331,7 +335,8 @@
   #   weights <- c(weights, "(weights)")
   # }
 
-  vars <- switch(effects,
+  vars <- switch(
+    effects,
     all = unique(c(response, fixed.component.data, random.component.data, weights)),
     fixed = unique(c(response, fixed.component.data, weights)),
     random = unique(random.component.data)
@@ -418,7 +423,8 @@
   # add variables from other model components
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
 
-  fixed.data <- switch(component,
+  fixed.data <- switch(
+    component,
     all = c(model.terms$conditional, model.terms$zero_inflated, model.terms$offset),
     conditional = c(model.terms$conditional, model.terms$offset),
     zi = ,
@@ -442,7 +448,8 @@
   }
   cn <- clean_names(colnames(dat))
 
-  ft <- switch(effects,
+  ft <- switch(
+    effects,
     fixed = find_variables(x, effects = "fixed", flatten = TRUE),
     all = find_variables(x, flatten = TRUE),
     random = find_random(x, split_nested = TRUE, flatten = TRUE)

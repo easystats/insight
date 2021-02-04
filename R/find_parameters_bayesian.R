@@ -37,7 +37,8 @@
 #' @export
 find_parameters.BGGM <- function(x, component = c("correlation", "conditional", "intercept", "all"), flatten = FALSE, ...) {
   component <- match.arg(component)
-  l <- switch(component,
+  l <- switch(
+    component,
     "correlation" = list(correlation = colnames(get_parameters(x, component = "correlation"))),
     "conditional" = list(conditional = colnames(get_parameters(x, component = "conditional"))),
     "intercept" = list(intercept = colnames(x$Y)),
@@ -179,8 +180,7 @@ find_parameters.bamlss <- function(x,
     conditional = cond,
     smooth_terms = smooth_terms,
     sigma = sigma,
-    alpha = alpha
-  )[elements])
+    alpha = alpha)[elements])
 
   l <- .filter_pars(l, parameters)
 
@@ -242,8 +242,8 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
 
       if (.obj_has_name(l, "random")) {
         random <- l$random[grepl(sprintf("__\\Q%s\\E\\.", i), l$random) |
-          grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
-          grepl("^cor_", l$random)]
+                             grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
+                             grepl("^cor_", l$random)]
       } else {
         random <- NULL
       }
@@ -256,8 +256,8 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
 
       if (.obj_has_name(l, "zero_inflated_random")) {
         zero_inflated_random <- l$zero_inflated_random[grepl(sprintf("__zi_\\Q%s\\E\\.", i), l$zero_inflated_random) |
-          grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$zero_inflated_random) |
-          grepl("^cor_", l$zero_inflated_random)]
+                                                         grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$zero_inflated_random) |
+                                                         grepl("^cor_", l$zero_inflated_random)]
       } else {
         zero_inflated_random <- NULL
       }

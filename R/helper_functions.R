@@ -239,13 +239,11 @@
 .get_elements <- function(effects, component) {
 
   # all elements of a model
-  elements <- c(
-    "conditional", "conditional2", "conditional3", "precision",
-    "nonlinear", "random", "zero_inflated", "zero_inflated_random",
-    "dispersion", "instruments", "interactions", "simplex",
-    "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes",
-    "cluster", "extra", "scale", "marginal", "alpha", "beta"
-  )
+  elements <- c("conditional", "conditional2", "conditional3", "precision",
+                "nonlinear", "random", "zero_inflated", "zero_inflated_random",
+                "dispersion", "instruments", "interactions", "simplex",
+                "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes",
+                "cluster", "extra", "scale", "marginal", "alpha", "beta")
 
   # auxiliary parameters
   auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape", "phi", "ndt", "hu", "xi", "coi", "zoi")
@@ -271,13 +269,15 @@
   }
 
 
-  elements <- switch(effects,
+  elements <- switch(
+    effects,
     all = elements,
     fixed = elements[elements %in% c("conditional", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale", "marginal", "beta")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
-  elements <- switch(component,
+  elements <- switch(
+    component,
     all = elements,
     conditional = elements[elements %in% c("conditional", "conditional2", "conditional3", "precision", "nonlinear", "random", "slopes")],
     zi = ,
@@ -494,7 +494,8 @@
 # for models with zero-inflation component, return
 # required component of model-summary
 .filter_component <- function(dat, component) {
-  switch(component,
+  switch(
+    component,
     "cond" = ,
     "conditional" = dat[dat$Component == "conditional", , drop = FALSE],
     "zi" = ,

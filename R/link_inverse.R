@@ -215,7 +215,8 @@ link_inverse.speedlm <- link_inverse.lm
 #' @export
 link_inverse.betareg <- function(x, what = c("mean", "precision"), ...) {
   what <- match.arg(what)
-  switch(what,
+  switch(
+    what,
     "mean" = x$link$mean$linkinv,
     "precision" = x$link$precision$linkinv
   )
@@ -230,7 +231,8 @@ link_inverse.DirichletRegModel <- function(x, what = c("mean", "precision"), ...
   if (x$parametrization == "common") {
     stats::make.link("logit")$linkinv
   } else {
-    switch(what,
+    switch(
+      what,
       "mean" = stats::make.link("logit")$linkinv,
       "precision" = stats::make.link("log")$linkinv
     )
@@ -413,7 +415,8 @@ link_inverse.merModList <- function(x, ...) {
 
 #' @export
 link_inverse.robmixglm <- function(x, ...) {
-  switch(tolower(x$family),
+  switch(
+    tolower(x$family),
     gaussian = stats::make.link(link = "identity")$linkinv,
     binomial = stats::make.link(link = "logit")$linkinv,
     gamma = stats::make.link(link = "inverse")$linkinv,
@@ -462,7 +465,8 @@ link_inverse.fixest <- function(x, ...) {
   } else if (inherits(x$family, "family")) {
     x$family$linkinv
   } else {
-    link <- switch(x$family,
+    link <- switch(
+      x$family,
       "poisson" = ,
       "negbin" = "log",
       "logit" = "logit",
@@ -550,7 +554,8 @@ link_inverse.glmmTMB <- function(x, ...) {
 
 #' @export
 link_inverse.MCMCglmm <- function(x, ...) {
-  switch(x$Residual$original.family,
+  switch(
+    x$Residual$original.family,
     "cengaussian" = ,
     "gaussian" = stats::gaussian(link = "identity")$linkinv,
     "categorical" = ,
@@ -569,7 +574,8 @@ link_inverse.MCMCglmm <- function(x, ...) {
 
 #' @export
 link_inverse.glmm <- function(x, ...) {
-  switch(tolower(x$family.glmm$family.glmm),
+  switch(
+    tolower(x$family.glmm$family.glmm),
     "bernoulli.glmm" = ,
     "binomial.glmm" = stats::make.link("logit")$linkinv,
     "poisson.glmm" = stats::make.link("log")$linkinv,
@@ -595,7 +601,8 @@ link_inverse.stanmvreg <- function(x, ...) {
 
 #' @export
 link_inverse.gbm <- function(x, ...) {
-  switch(x$distribution$name,
+  switch(
+    x$distribution$name,
     laplace = ,
     tdist = ,
     gaussian = stats::gaussian(link = "identity")$linkinv,
@@ -624,7 +631,8 @@ link_inverse.brmsfit <- function(x, ...) {
 link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
   what <- match.arg(what)
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
-  switch(what,
+  switch(
+    what,
     "mu" = faminfo$mu.linkinv,
     "sigma" = faminfo$sigma.linkinv,
     "nu" = faminfo$nu.linkinv,

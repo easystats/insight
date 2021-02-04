@@ -64,10 +64,8 @@ if (require("testthat") && require("insight")) {
     test <- utils::capture.output(format_table(x))
     expect_equal(test, c("   test 90% CI", "1 [0.10, 1.30]"))
 
-    x <- data.frame(
-      CI = .8, CI_low = 2.43, CI_high = 5.453,
-      test_CI = .9, test_CI_low = .1, test_CI_high = 1.3
-    )
+    x <- data.frame(CI = .8, CI_low = 2.43, CI_high = 5.453,
+                    test_CI = .9, test_CI_low = .1, test_CI_high = 1.3)
     test <- utils::capture.output(format_table(x))
     expect_equal(test, c("        80% CI  test 90% CI", "1 [2.43, 5.45] [0.10, 1.30]"))
 
@@ -77,10 +75,8 @@ if (require("testthat") && require("insight")) {
     test <- utils::capture.output(format_table(x))
     expect_equal(test, c("        80% CI  test 90% CI", "1 [2.43, 5.45] [0.10, 1.30]"))
 
-    x <- data.frame(
-      CI_low = 2.43, CI_high = 5.453, test_CI_low = .1, test_CI_high = 1.3,
-      other_CI_low = .12, other_CI_high = 1.4
-    )
+    x <- data.frame(CI_low = 2.43, CI_high = 5.453, test_CI_low = .1, test_CI_high = 1.3,
+                    other_CI_low = .12, other_CI_high = 1.4)
     attr(x, "ci") <- .8
     attr(x, "ci_test") <- .9
     test <- utils::capture.output(format_table(x))

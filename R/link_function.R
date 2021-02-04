@@ -397,7 +397,8 @@ link_function.mira <- function(x, ...) {
 
 #' @export
 link_function.robmixglm <- function(x, ...) {
-  switch(tolower(x$family),
+  switch(
+    tolower(x$family),
     gaussian = stats::make.link(link = "identity")$linkfun,
     binomial = stats::make.link(link = "logit")$linkfun,
     gamma = stats::make.link(link = "inverse")$linkfun,
@@ -410,7 +411,8 @@ link_function.robmixglm <- function(x, ...) {
 
 #' @export
 link_function.MCMCglmm <- function(x, ...) {
-  switch(x$Residual$original.family,
+  switch(
+    x$Residual$original.family,
     "cengaussian" = ,
     "gaussian" = stats::gaussian(link = "identity")$linkfun,
     "categorical" = ,
@@ -449,7 +451,8 @@ link_function.fixest <- function(x, ...) {
   } else if (inherits(x$family, "family")) {
     x$family$linkfun
   } else {
-    link <- switch(x$family,
+    link <- switch(
+      x$family,
       "poisson" = ,
       "negbin" = "log",
       "logit" = "logit",
@@ -547,7 +550,8 @@ link_function.glmmadmb <- function(x, ...) {
 
 #' @export
 link_function.glmm <- function(x, ...) {
-  switch(tolower(x$family.glmm$family.glmm),
+  switch(
+    tolower(x$family.glmm$family.glmm),
     "bernoulli.glmm" = ,
     "binomial.glmm" = stats::make.link("logit")$linkfun,
     "poisson.glmm" = stats::make.link("log")$linkfun,
@@ -562,7 +566,8 @@ link_function.glmm <- function(x, ...) {
 link_function.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
   what <- match.arg(what)
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
-  switch(what,
+  switch(
+    what,
     "mu" = faminfo$mu.linkfun,
     "sigma" = faminfo$sigma.linkfun,
     "nu" = faminfo$nu.linkfun,
@@ -630,7 +635,8 @@ link_function.vglm <- function(x, ...) {
 
 #' @export
 link_function.polr <- function(x, ...) {
-  link <- switch(x$method,
+  link <- switch(
+    x$method,
     logistic = "logit",
     probit = "probit",
     "log"
@@ -642,7 +648,8 @@ link_function.polr <- function(x, ...) {
 
 #' @export
 link_function.svyolr <- function(x, ...) {
-  link <- switch(x$method,
+  link <- switch(
+    x$method,
     logistic = "logit",
     probit = "probit",
     "log"
@@ -657,7 +664,8 @@ link_function.svyolr <- function(x, ...) {
 #' @export
 link_function.betareg <- function(x, what = c("mean", "precision"), ...) {
   what <- match.arg(what)
-  switch(what,
+  switch(
+    what,
     "mean" = x$link$mean$linkfun,
     "precision" = x$link$precision$linkfun
   )
@@ -672,7 +680,8 @@ link_function.DirichletRegModel <- function(x, what = c("mean", "precision"), ..
   if (x$parametrization == "common") {
     stats::make.link("logit")$linkfun
   } else {
-    switch(what,
+    switch(
+      what,
       "mean" = stats::make.link("logit")$linkfun,
       "precision" = stats::make.link("log")$linkfun
     )
@@ -684,7 +693,8 @@ link_function.DirichletRegModel <- function(x, what = c("mean", "precision"), ..
 #' @importFrom stats poisson
 #' @export
 link_function.gbm <- function(x, ...) {
-  switch(x$distribution$name,
+  switch(
+    x$distribution$name,
     laplace = ,
     tdist = ,
     gaussian = stats::gaussian(link = "identity")$linkfun,

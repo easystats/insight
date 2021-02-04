@@ -153,7 +153,8 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
       # "Main title" of a subcomponent (like "Random effects")
       if (parts[j] %in% c("fixed", "random") ||
         (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
-        tmp <- switch(parts[j],
+        tmp <- switch(
+          parts[j],
           "fixed" = "Fixed effects",
           "random" = "Random effects",
           "dispersion" = "Dispersion",
@@ -164,7 +165,8 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
       } else if (!parts[j] %in% c("conditional", "zero_inflated")) {
         # here we have the "subtitles" of a subcomponent
         # (like "Intercept: Group-Level 1")
-        tmp <- switch(parts[j],
+        tmp <- switch(
+          parts[j],
           "simplex" = "(monotonic effects)",
           parts[j]
         )

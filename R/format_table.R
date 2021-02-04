@@ -29,9 +29,7 @@
 #'   model <- stan_glm(Sepal.Length ~ Species, data = iris, refresh = 0, seed = 123)
 #'   x <- model_parameters(model, ci = c(0.69, 0.89, 0.95))
 #'   as.data.frame(format_table(x))
-#' }
-#' }
-#'
+#' }}
 #' @return A data frame.
 #' @export
 format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, rope_digits = 2, preserve_attributes = FALSE, ...) {
@@ -355,6 +353,7 @@ parameters_table <- format_table
     for (i in other) {
       x[[paste0(i, "_CI")]] <- NULL
     }
+
   } else {
     other_ci_colname <- c()
   }
