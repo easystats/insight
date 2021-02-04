@@ -21,7 +21,8 @@
 #' }
 #' if (require("rstanarm")) {
 #'   model_name(stan_glm(Sepal.Length ~ Petal.Width,
-#'   data = iris, refresh = 0, iter = 200))
+#'     data = iris, refresh = 0, iter = 200
+#'   ))
 #' }
 #' @export
 model_name <- function(x, ...) {

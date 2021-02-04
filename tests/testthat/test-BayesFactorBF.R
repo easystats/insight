@@ -191,18 +191,26 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
       expect_equal(
         get_priors(x),
         data.frame(
-          Parameter = c("shape-round", "shape-square", "color-color",
-                        "color-monochromatic", "ID-1", "ID-2", "ID-3", "ID-4", "ID-5",
-                        "ID-6", "ID-7", "ID-8", "ID-9", "ID-10", "ID-11", "ID-12", "mu",
-                        "sig2", "g_shape", "g_ID"),
-          Distribution = c("cauchy", "cauchy",
-                           NA, NA, "cauchy", "cauchy", "cauchy", "cauchy", "cauchy", "cauchy",
-                           "cauchy", "cauchy", "cauchy", "cauchy", "cauchy", "cauchy", NA,
-                           NA, NA, NA),
-          Location = c(0, 0, NA, NA, 0, 0, 0, 0, 0, 0, 0,
-                       0, 0, 0, 0, 0, NA, NA, NA, NA),
-          Scale = c(0.5, 0.5, NA, NA, 1,
-                    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NA, NA, NA, NA),
+          Parameter = c(
+            "shape-round", "shape-square", "color-color",
+            "color-monochromatic", "ID-1", "ID-2", "ID-3", "ID-4", "ID-5",
+            "ID-6", "ID-7", "ID-8", "ID-9", "ID-10", "ID-11", "ID-12", "mu",
+            "sig2", "g_shape", "g_ID"
+          ),
+          Distribution = c(
+            "cauchy", "cauchy",
+            NA, NA, "cauchy", "cauchy", "cauchy", "cauchy", "cauchy", "cauchy",
+            "cauchy", "cauchy", "cauchy", "cauchy", "cauchy", "cauchy", NA,
+            NA, NA, NA
+          ),
+          Location = c(
+            0, 0, NA, NA, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, NA, NA, NA, NA
+          ),
+          Scale = c(
+            0.5, 0.5, NA, NA, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NA, NA, NA, NA
+          ),
           stringsAsFactors = FALSE,
           row.names = NULL
         ),

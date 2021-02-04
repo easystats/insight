@@ -178,8 +178,7 @@ get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_t
     smooth <- NULL
   }
 
-  pars <- switch(
-    component,
+  pars <- switch(component,
     all = ,
     location = rbind(cond, smooth),
     conditional = cond,

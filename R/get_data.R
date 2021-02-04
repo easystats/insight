@@ -106,8 +106,7 @@ get_data.gee <- function(x, effects = c("all", "fixed", "random"), verbose = TRU
   mf <- tryCatch(
     {
       dat <- .get_data_from_env(x)
-      switch(
-        effects,
+      switch(effects,
         all = dat[, find_variables(x, flatten = TRUE), drop = FALSE],
         fixed = dat[, find_variables(x, effects = "fixed", flatten = TRUE), drop = FALSE],
         random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
@@ -235,8 +234,7 @@ get_data.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_i
     mf_zero <- NULL
   }
 
-  mf <- switch(
-    component,
+  mf <- switch(component,
     "all" = do.call(cbind, .compact_list(list(mf_tweedie, mf_zero))),
     "conditional" = mf_tweedie,
     "zi" = ,
@@ -293,8 +291,7 @@ get_data.merMod <- function(x, effects = c("all", "fixed", "random"), verbose = 
 
   mf <- tryCatch(
     {
-      switch(
-        effects,
+      switch(effects,
         fixed = stats::model.frame(x, fixed.only = TRUE),
         all = stats::model.frame(x, fixed.only = FALSE),
         random = stats::model.frame(x, fixed.only = FALSE)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
@@ -322,8 +319,7 @@ get_data.MANOVA <- function(x, effects = c("all", "fixed", "random"), verbose = 
 
   mf <- tryCatch(
     {
-      switch(
-        effects,
+      switch(effects,
         fixed = .remove_column(x$input$data, x$input$subject),
         all = x$input$data,
         random = x$input$data[, x$input$subject, drop = FALSE]
@@ -349,8 +345,7 @@ get_data.cpglmm <- function(x, effects = c("all", "fixed", "random"), verbose = 
 
   mf <- tryCatch(
     {
-      switch(
-        effects,
+      switch(effects,
         fixed = dat[, find_predictors(x, effects = "fixed", flatten = TRUE), drop = FALSE],
         all = dat,
         random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
@@ -375,8 +370,7 @@ get_data.glmm <- function(x, effects = c("all", "fixed", "random"), verbose = TR
 
   mf <- tryCatch(
     {
-      switch(
-        effects,
+      switch(effects,
         fixed = dat[, find_predictors(x, effects = "fixed", flatten = TRUE), drop = FALSE],
         all = dat,
         random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
@@ -396,8 +390,7 @@ get_data.mixor <- function(x, effects = c("all", "fixed", "random"), verbose = T
 
   mf <- tryCatch(
     {
-      switch(
-        effects,
+      switch(effects,
         fixed = stats::model.frame(x),
         all = cbind(stats::model.frame(x), x$id),
         random = data.frame(x$id)
@@ -426,8 +419,7 @@ get_data.glmmadmb <- function(x, effects = c("all", "fixed", "random"), ...) {
 
   mf <- tryCatch(
     {
-      switch(
-        effects,
+      switch(effects,
         fixed = fixed_data,
         all = cbind(fixed_data, random_data),
         random = random_data
@@ -476,8 +468,7 @@ get_data.sem <- function(x, effects = c("all", "fixed", "random"), ...) {
   mf <- tryCatch(
     {
       dat <- .get_data_from_env(x)
-      switch(
-        effects,
+      switch(effects,
         all = dat[, find_variables(x, flatten = TRUE), drop = FALSE],
         fixed = dat[, find_variables(x, effects = "fixed", flatten = TRUE), drop = FALSE],
         random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
@@ -562,8 +553,7 @@ get_data.BBmm <- function(x, effects = c("all", "fixed", "random"), ...) {
   mf <- tryCatch(
     {
       dat <- .get_data_from_env(x)[, find_variables(x, flatten = TRUE), drop = FALSE]
-      switch(
-        effects,
+      switch(effects,
         all = dat[, find_variables(x, flatten = TRUE), drop = FALSE],
         fixed = dat[, find_variables(x, effects = "fixed", flatten = TRUE), drop = FALSE],
         random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
@@ -583,8 +573,7 @@ get_data.BBmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 get_data.glimML <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
   dat <- x@data
-  mf <- switch(
-    effects,
+  mf <- switch(effects,
     all = dat[, find_variables(x, flatten = TRUE), drop = FALSE],
     fixed = dat[, find_variables(x, effects = "fixed", flatten = TRUE), drop = FALSE],
     random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
@@ -901,8 +890,7 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
       mf <- env_dataframes[matchframe][1]
       if (!is.na(mf)) {
         dat <- get(mf)
-        switch(
-          effects,
+        switch(effects,
           fixed = dat[, setdiff(colnames(dat), find_random(x, flatten = TRUE)), drop = FALSE],
           all = dat,
           random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
@@ -1129,8 +1117,7 @@ get_data.LORgee <- function(x, effects = c("all", "fixed", "random"), ...) {
   mf <- tryCatch(
     {
       dat <- .get_data_from_env(x)[, find_variables(x, flatten = TRUE), drop = FALSE]
-      switch(
-        effects,
+      switch(effects,
         all = dat[, find_variables(x, flatten = TRUE), drop = FALSE],
         fixed = dat[, find_variables(x, effects = "fixed", flatten = TRUE), drop = FALSE],
         random = dat[, find_random(x, flatten = TRUE), drop = FALSE]

@@ -57,8 +57,7 @@ get_parameters.BGGM <- function(x,
   conditional <- !intercepts & !correlations
 
   component <- match.arg(component)
-  out <- switch(
-    component,
+  out <- switch(component,
     "conditional" = out[, conditional, drop = FALSE],
     "correlation" = out[, correlations, drop = FALSE],
     "intercept" = out[, intercepts, drop = FALSE],
@@ -122,10 +121,10 @@ get_parameters.BFBayesFactor <- function(x,
   # check if valid model was indexed...
 
   if (length(x@numerator) > 1 ||
-      !xor(
-        x@denominator@shortName == "Intercept only",
-        grepl("^(Null|Indep)", x@denominator@shortName)
-      )) {
+    !xor(
+      x@denominator@shortName == "Intercept only",
+      grepl("^(Null|Indep)", x@denominator@shortName)
+    )) {
     if (verbose) {
       message(
         "Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.\n",
@@ -143,8 +142,7 @@ get_parameters.BFBayesFactor <- function(x,
         BayesFactor::posterior(x, iterations = iterations, progress = progress, index = 1, ...)
       ))
 
-    out <- switch(
-      bf_type,
+    out <- switch(bf_type,
       "correlation" = data.frame("rho" = as.numeric(posteriors$rho)),
       "ttest1" = data.frame("Difference" = x@numerator[[1]]@prior$mu - as.numeric(posteriors[, 1])),
       "ttest2" = data.frame("Difference" = x@numerator[[1]]@prior$mu - as.numeric(posteriors[, 2])),
@@ -313,8 +311,7 @@ get_parameters.bayesx <- function(x,
     stringsAsFactors = FALSE
   )
 
-  params <- switch(
-    component,
+  params <- switch(component,
     "all" = rbind(fixed_dat, smooth_dat),
     "conditional" = fixed_dat,
     "smooth_terms" = smooth_dat
@@ -450,8 +447,7 @@ get_parameters.sim <- function(x,
 
 #' @importFrom stats median
 .summary_of_posteriors <- function(out, centrality = "mean", ...) {
-  s <- switch(
-    centrality,
+  s <- switch(centrality,
     "mean" = sapply(out, mean),
     "median" = sapply(out, stats::median),
     sapply(out, mean)
@@ -476,4 +472,3 @@ get_parameters.sim <- function(x,
   elements <- .get_elements(effects, component)
   unlist(find_parameters(x, effects = "all", component = "all", flatten = FALSE, parameters = parameters)[elements])
 }
-

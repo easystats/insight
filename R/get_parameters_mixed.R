@@ -416,8 +416,7 @@ get_parameters.MixMod <- function(x,
   }
 
   if (effects == "fixed") {
-    params <- switch(
-      component,
+    params <- switch(component,
       all = rbind(fixed, fixedzi),
       conditional = fixed,
       zi = ,
@@ -425,8 +424,7 @@ get_parameters.MixMod <- function(x,
     )
     .remove_backticks_from_parameter_names(params)
   } else if (effects == "random") {
-    switch(
-      component,
+    switch(component,
       all = .compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
       conditional = list(random = l$random),
       zi = ,
@@ -503,8 +501,7 @@ get_parameters.glmmTMB <- function(x,
   # ---- build result
 
   if (effects == "fixed") {
-    out <- switch(
-      component,
+    out <- switch(component,
       all = rbind(fixed, fixedzi, fixeddisp),
       conditional = fixed,
       zi = ,
@@ -513,8 +510,7 @@ get_parameters.glmmTMB <- function(x,
     )
     .remove_backticks_from_parameter_names(out)
   } else if (effects == "random") {
-    switch(
-      component,
+    switch(component,
       all = .compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
       conditional = l$random,
       zi = ,
@@ -550,8 +546,7 @@ get_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), ...) 
     random <- NULL
   }
 
-  switch(
-    effects,
+  switch(effects,
     "all" = rbind(fixed, random),
     "fixed" = fixed,
     "random" = random

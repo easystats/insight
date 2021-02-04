@@ -12,8 +12,9 @@ if (require("testthat") && require("insight") && require("mgcv") && require("gam
   dat <- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
 
   bt <- mgcv::gam(y ~ te(x0, x1, k = 7) + s(x2) + s(x3),
-            data = dat,
-            method = "REML")
+    data = dat,
+    method = "REML"
+  )
 
   test_that("find_smooth - gam", {
     expect_equal(find_smooth(bt), list(conditional = c("te(x0, x1, k = 7)", "s(x2)", "s(x3)")))
@@ -26,7 +27,7 @@ if (require("testthat") && require("insight") && require("mgcv") && require("gam
   })
 
   test_that("find_smooth - gamm4", {
-    model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~(1|Species), data = iris)
+    model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~ (1 | Species), data = iris)
     expect_equal(find_smooth(model, flatten = TRUE), "s(Sepal.Length)")
   })
 
@@ -38,7 +39,8 @@ if (require("testthat") && require("insight") && require("mgcv") && require("gam
         data = iris,
         iter = 100,
         chains = 1,
-        refresh = 0)
+        refresh = 0
+      )
     )
     expect_equal(find_smooth(model, flatten = TRUE), "s(Sepal.Length)")
   })

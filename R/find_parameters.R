@@ -459,8 +459,7 @@ find_parameters.mle <- find_parameters.mle2
 #' @export
 find_parameters.glht <- function(x, flatten = FALSE, ...) {
   s <- summary(x)
-  alt <- switch(
-    x$alternative,
+  alt <- switch(x$alternative,
     two.sided = "==",
     less = ">=",
     greater = "<="

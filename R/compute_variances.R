@@ -383,8 +383,7 @@
     dist.variance <- sig^2
   } else {
     if (faminfo$is_betabinomial) {
-      dist.variance <- switch(
-        faminfo$link_function,
+      dist.variance <- switch(faminfo$link_function,
         logit = ,
         probit = ,
         cloglog = ,
@@ -392,8 +391,7 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_binomial) {
-      dist.variance <- switch(
-        faminfo$link_function,
+      dist.variance <- switch(faminfo$link_function,
         logit = pi^2 / 3,
         probit = 1,
         cloglog = ,
@@ -401,16 +399,14 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_count) {
-      dist.variance <- switch(
-        faminfo$link_function,
+      dist.variance <- switch(faminfo$link_function,
         log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         sqrt = 0.25,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family %in% c("Gamma", "gamma")) {
       ## TODO needs some more checking - should now be in line with other packages
-      dist.variance <- switch(
-        faminfo$link_function,
+      dist.variance <- switch(faminfo$link_function,
         inverse = ,
         identity = ,
         log = stats::family(x)$variance(sig),
@@ -418,14 +414,12 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family == "beta") {
-      dist.variance <- switch(
-        faminfo$link_function,
+      dist.variance <- switch(faminfo$link_function,
         logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_tweedie) {
-      dist.variance <- switch(
-        faminfo$link_function,
+      dist.variance <- switch(faminfo$link_function,
         log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
@@ -505,8 +499,7 @@
 
   cvsquared <- tryCatch(
     {
-      vv <- switch(
-        faminfo$family,
+      vv <- switch(faminfo$family,
 
         # (zero-inflated) poisson ----
         `zero-inflated poisson` = ,
@@ -642,8 +635,7 @@
     mu <- stats::predict(model, type = "conditional")
     # sigma
     betad <- model$fit$par["betad"]
-    k <- switch(
-      faminfo$family,
+    k <- switch(faminfo$family,
       gaussian = exp(0.5 * betad),
       Gamma = exp(-0.5 * betad),
       exp(betad)

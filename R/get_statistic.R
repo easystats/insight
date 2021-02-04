@@ -884,7 +884,7 @@ get_statistic.btergm <- function(x, verbose = TRUE, ...) {
   # standard error
   sdev <- sapply(1:ncol(bootstraps), function(i) {
     cur <- (bootstraps[, i] - params[i])^2
-    sqrt(sum(cur)/length(cur))
+    sqrt(sum(cur) / length(cur))
   })
   stat <- (0 - colMeans(bootstraps)) / sdev
 
@@ -916,7 +916,7 @@ get_statistic.lmodel2 <- function(x, ...) {
 get_statistic.ivFixed <- get_statistic.coxr
 
 
-  #' @export
+#' @export
 get_statistic.ivprobit <- function(x, ...) {
   out <- data.frame(
     Parameter = x$names,
@@ -1025,8 +1025,7 @@ get_statistic.mle <- get_statistic.mle2
 #' @export
 get_statistic.glht <- function(x, ...) {
   s <- summary(x)
-  alt <- switch(
-    x$alternative,
+  alt <- switch(x$alternative,
     two.sided = "==",
     less = ">=",
     greater = "<="

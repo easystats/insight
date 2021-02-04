@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("lme4")  && require("rstanarm")) {
+if (require("testthat") && require("insight") && require("lme4") && require("rstanarm")) {
   data(mtcars)
 
   test_that("get_deviance - Bayesian lm", {

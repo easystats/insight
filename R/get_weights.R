@@ -26,7 +26,7 @@
 #' get_weights(lm(mpg ~ wt, data = mtcars), null_as_ones = TRUE)
 #'
 #' # GLMs
-#' m <- glm(vs ~ disp + mpg, data = mtcars, weights = weight, family=quasibinomial)
+#' m <- glm(vs ~ disp + mpg, data = mtcars, weights = weight, family = quasibinomial)
 #' get_weights(m)
 #' m <- glm(cbind(cyl, gear) ~ mpg, data = mtcars, weights = weight, family = binomial)
 #' get_weights(m)

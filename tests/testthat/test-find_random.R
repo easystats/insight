@@ -8,8 +8,6 @@ osx <- tryCatch({
 })
 
 if (require("testthat") && require("insight") && require("mgcv") && require("gamm4") && require("rstanarm") && !osx) {
-
-
   data <- iris
   data$g <- data$Species
   data$Xr <- data$Species
@@ -25,10 +23,10 @@ if (require("testthat") && require("insight") && require("mgcv") && require("gam
 
 
   test_that("find_random - gamm4::gamm4", {
-    model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~(1|Species), data = iris)
+    model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~ (1 | Species), data = iris)
     expect_equal(insight::find_random(model, flatten = TRUE), "Species")
 
-    model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~(1|Xr), data = data)
+    model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~ (1 | Xr), data = data)
     expect_equal(insight::find_random(model, flatten = TRUE), "Xr")
   })
 

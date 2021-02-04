@@ -80,9 +80,9 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", ...) {
 
   # So that predict doesn't fail
-  if(is.null(ci)) {
+  if (is.null(ci)) {
     level <- 0
-  } else{
+  } else {
     level <- ci
   }
 
@@ -105,7 +105,6 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
 #' @importFrom stats family
 #' @export
 get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "response", ...) {
-
   rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, type = "link", level = ci, ...)
 
   out <- rez$fit
@@ -285,7 +284,7 @@ get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confi
   # See:
   # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
 
-  if(is.null(ci)) ci <- 0  # So that predict doesn't fail
+  if (is.null(ci)) ci <- 0 # So that predict doesn't fail
 
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
     stop("Package `rstanarm` needed for this function to work. Please install it.")
@@ -368,11 +367,11 @@ as.data.frame.get_predicted <- function(x, ...) {
 
 #' @importFrom stats qnorm qt
 .format_reform <- function(include_random = TRUE) {
-  if(is.null(include_random) || is.na(include_random)) {
+  if (is.null(include_random) || is.na(include_random)) {
     re.form <- include_random
-  } else if(include_random == TRUE) {
+  } else if (include_random == TRUE) {
     re.form <- NULL
-  } else if(include_random == FALSE) {
+  } else if (include_random == FALSE) {
     re.form <- NA
   } else {
     re.form <- include_random
@@ -382,8 +381,9 @@ as.data.frame.get_predicted <- function(x, ...) {
 
 #' @importFrom stats qnorm qt
 .get_predicted_se_to_ci <- function(x, pred, se = NULL, ci = 0.95, family = "gaussian") {
-
-  if(is.null(ci)) return(list(ci_low = pred, ci_high = pred))  # Same as predicted
+  if (is.null(ci)) {
+    return(list(ci_low = pred, ci_high = pred))
+  } # Same as predicted
 
   # Return NA
   if (is.null(se)) {
