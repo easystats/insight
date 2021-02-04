@@ -148,11 +148,15 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 #' @export
 get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, ...) {
 
+  # In case include_random is TRUE, but there's actually no random factors in newdata
+  if(!is.null(newdata) && include_random && !all(find_random(x, flatten = TRUE) %in% names(x))) {
+    include_random <- FALSE
+  }
+
   # Get prediction of point-estimate
   transform <- ifelse(transform == TRUE, "response", ifelse(transform == FALSE, "link", transform))
   out <- stats::predict(x, newdata = newdata, re.form = .format_reform(include_random), type = transform, ...)
   ci_low <- ci_high <- se <- rep(NA, length(out))
-
 
   # CI
   if (!is.null(ci)) {
@@ -164,7 +168,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
 
     if (is.null(newdata)) newdata <- get_data(x)
 
-    # matrix-multiply X by the parameter vector B to get the predictions, then
+    # Matrix-multiply X by the parameter vector B to get the predictions, then
     # extract the variance-covariance matrix V of the parameters and compute XVX'
     # to get the variance-covariance matrix of the predictions. The square-root of
     # the diagonal of this matrix represent the standard errors of the predictions,
