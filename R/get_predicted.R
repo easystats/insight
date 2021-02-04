@@ -149,7 +149,7 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, ...) {
 
   # In case include_random is TRUE, but there's actually no random factors in newdata
-  if(!is.null(newdata) && include_random && !all(find_random(x, flatten = TRUE) %in% names(x))) {
+  if (!is.null(newdata) && include_random && !all(find_random(x, flatten = TRUE) %in% names(x))) {
     include_random <- FALSE
   }
 
@@ -173,6 +173,12 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
     # to get the variance-covariance matrix of the predictions. The square-root of
     # the diagonal of this matrix represent the standard errors of the predictions,
     # which are then multiplied by 1.96 for the confidence intervals.
+
+    resp <- find_response(x)
+    # fake response
+    if (!all(resp %in% newdata)) {
+      newdata[resp] <- 0
+    }
 
     mm <- stats::model.matrix(stats::terms(x), newdata)
     var_matrix <- mm %*% get_varcov(x) %*% t(mm)
