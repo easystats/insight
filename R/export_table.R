@@ -47,9 +47,9 @@
 #' cat(export_table(x))
 #'
 #' attr(x, "table_footer") <- list(
-#'   c("\\nA yellow line", "yellow"),
-#'   c("\\nAnd a red line", "red"),
-#'   c("\\nAnd a blue line", "blue")
+#'   c("\nA yellow line", "yellow"),
+#'   c("\nAnd a red line", "red"),
+#'   c("\nAnd a blue line", "blue")
 #' )
 #' cat(export_table(x))
 #'

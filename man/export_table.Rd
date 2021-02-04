@@ -83,7 +83,6 @@ The values for \code{caption}, \code{subtitle} and \code{footer}
 \examples{
 cat(export_table(iris))
 cat(export_table(iris, sep = " ", header = "*", digits = 1))
-
 \dontrun{
 # colored footers
 data(iris)
