@@ -80,8 +80,7 @@ get_varcov.mlm <- function(x, ...) {
 get_varcov.betareg <- function(x, component = c("conditional", "precision", "all"), verbose = TRUE, ...) {
   component <- match.arg(component)
 
-  vc <- switch(
-    component,
+  vc <- switch(component,
     "conditional" = stats::vcov(object = x, model = "mean"),
     "precision" = stats::vcov(object = x, model = "precision"),
     stats::vcov(object = x)
@@ -128,8 +127,7 @@ get_varcov.clm2 <- function(x, component = c("all", "conditional", "scale"), ...
     vc <- .fix_negative_matrix(vc)
   }
 
-  range <- switch(
-    component,
+  range <- switch(component,
     "all" = 1:(n_scale + n_intercepts + n_location),
     "conditional" = 1:(n_intercepts + n_location),
     "scale" = (1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)
@@ -199,8 +197,7 @@ get_varcov.gamlss <- function(x, component = c("conditional", "all"), ...) {
 get_varcov.hurdle <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
   component <- match.arg(component)
 
-  vc <- switch(
-    component,
+  vc <- switch(component,
     "conditional" = stats::vcov(object = x, model = "count"),
     "zi" = ,
     "zero_inflated" = stats::vcov(object = x, model = "zero"),
@@ -228,8 +225,7 @@ get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "
   tweedie <- which(grepl("^tw_", rownames(vc)))
   zero <- which(grepl("^zero_", rownames(vc)))
 
-  vc <- switch(
-    component,
+  vc <- switch(component,
     "conditional" = vc[tweedie, tweedie, drop = FALSE],
     "zi" = ,
     "zero_inflated" = vc[zero, zero, drop = FALSE],
@@ -252,8 +248,7 @@ get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "
 get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
   component <- match.arg(component)
 
-  vc <- switch(
-    component,
+  vc <- switch(component,
     "conditional" = stats::vcov(x, parm = "fixed-effects"),
     "zi" = ,
     "zero_inflated" = stats::vcov(x, parm = "zero_part"),
@@ -268,8 +263,7 @@ get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "
 get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", "zi", "dispersion", "all"), ...) {
   component <- match.arg(component)
 
-  vc <- switch(
-    component,
+  vc <- switch(component,
     "conditional" = stats::vcov(x)[["cond"]],
     "zi" = ,
     "zero_inflated" = stats::vcov(x)[["zi"]],

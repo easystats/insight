@@ -200,7 +200,7 @@
       is_proptest <- TRUE
       fitfam <- "binomial"
     } else if (any(grepl("chi-squared", c(tolower(x$method), tolower(attributes(x$statistic)$names)), fixed = TRUE)) ||
-               grepl("Fisher's Exact Test", x$method, fixed = TRUE)) {
+      grepl("Fisher's Exact Test", x$method, fixed = TRUE)) {
       is_chi2test <- TRUE
       is_xtab <- TRUE
       fitfam <- "categorical"
@@ -330,8 +330,7 @@
 }
 
 .get_ordinal_link <- function(x) {
-  switch(
-    x$link,
+  switch(x$link,
     logistic = "logit",
     cloglog = "log",
     x$link
@@ -348,8 +347,7 @@
       dist <- x$dist
     }
   }
-  f <- switch(
-    dist,
+  f <- switch(dist,
     gaussian = stats::gaussian("identity"),
     logistic = stats::binomial("logit"),
     llogis = ,

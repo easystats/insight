@@ -231,7 +231,7 @@ if (.runThisTest) {
           var.residual = 3.28987,
           var.distribution = 3.28987,
           var.dispersion = 0,
-          var.intercept = c(herd = 0.59889 )
+          var.intercept = c(herd = 0.59889)
         ),
         tolerance = 1e-3
       )

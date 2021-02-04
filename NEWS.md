@@ -6,20 +6,21 @@
 
 ## New supported model classes
 
-* Support for `crr` (*cmprsk*), `ergm` (*ergm*), `btergm` (*btergm*), `Rchoice` (*Rchoice*), `garch` (*tseries*)
+* Support for `crr` (*cmprsk*), `ergm` (*ergm*), `btergm` (*btergm*), `Rchoice`
+  (*Rchoice*), `garch` (*tseries*)
 
 ## Changes to functions
 
 * Slightly improved handling of different CI-columns in `format_table()`.
 
-* `model_info()` now returns `$is_leventest` if model is an object returned
-  by `car::leveneTest()`.
+* `model_info()` now returns `$is_leventest` if model is an object returned by
+  `car::leveneTest()`.
 
 ## Bug fixes
 
 * `get_varcov()` did not properly remove `NA` from rank-deficient models.
 
-* Fixed issue/warning in `get_data()` for some *htest* objects, where the 
+* Fixed issue/warning in `get_data()` for some *htest* objects, where the
   environment was not properly evaluated.
 
 # insight 0.12.0
@@ -31,24 +32,25 @@
 
 ## New supported model classes
 
-* Support for `coxr` (*coxrobust*), `coeftest` (*lmtest*), `ivFixed` (*ivFixed*),
-  `ivprobit` (*ivprobit*), `riskRegression` (*riskRegression*). `summary.lm`,
-  `lmodel2` (*lmodel2*), improved support for `bamlss` (*bamlss*).
+* Support for `coxr` (*coxrobust*), `coeftest` (*lmtest*), `ivFixed`
+  (*ivFixed*), `ivprobit` (*ivprobit*), `riskRegression` (*riskRegression*).
+  `summary.lm`, `lmodel2` (*lmodel2*), improved support for `bamlss`
+  (*bamlss*).
 
 ## New functions
 
-* Added `get_deviance()` function that returns the model deviance as a
-  robust alternative to `stats::deviance()`.
+* Added `get_deviance()` function that returns the model deviance as a robust
+  alternative to `stats::deviance()`.
 
 * Added `model_name()` function that returns the model's "name".
 
 * Added `format()` method for `find_formula()` output to flatten it.
 
-* Added `null_as_ones = TRUE` argument to `get_weights()` to return vector of
-  1s instead of `NULL`.
+* Added `null_as_ones = TRUE` argument to `get_weights()` to return vector of 1s
+  instead of `NULL`.
 
-* Added `get_intercept()` as a helper function to easily retrieve the  value
-  at the intercept.
+* Added `get_intercept()` as a helper function to easily retrieve the value at
+  the intercept.
 
 * Added `get_df()` as a robust alternative to `stats::df.residuals()`.
 
@@ -61,11 +63,11 @@
 
 * Added `ellipsis_info()` to specify the nature of ellipsis (`...`) inputs.
 
-* Added `is_nested_models()` to check if multiple regression models are
-  nested (decreasing or increasing).
+* Added `is_nested_models()` to check if multiple regression models are nested
+  (decreasing or increasing).
 
-* Added generic `print_html()`, to allow other packages to create tables in
-  HTML format (via `export_table()`) when not printing the output to console.
+* Added generic `print_html()`, to allow other packages to create tables in HTML
+  format (via `export_table()`) when not printing the output to console.
 
 * Added `is_mixed_model()`, to safely check if a model is a mixed effects model.
   This function also works for multivariate response models.
@@ -75,8 +77,8 @@
 ## Changes to functions
 
 * `find_formula()`, `find_predictor()`, `find_random()` and related functions
-  now also return names of random effects from generalized  additive mixed
-  models (`gamm`, `gamm4`, `stan_gamm4`).
+  now also return names of random effects from generalized additive mixed models
+  (`gamm`, `gamm4`, `stan_gamm4`).
 
 * Added support for more BFBayesFactor objects.
 
@@ -89,8 +91,8 @@
 
 ## Bug fixes
 
-* Fixed issue in `find_statistic()` for *fixest* models, which did not
-  return the correct value `"t-statistic"` for `feols()`.
+* Fixed issue in `find_statistic()` for *fixest* models, which did not return
+  the correct value `"t-statistic"` for `feols()`.
 
 * Fixes inconsistencies in `get_priors()` for (linear) `BFBayesFactor` models.
 
@@ -111,8 +113,8 @@
   set the tolerance level for singularity checks when computing random effect
   variances.
 
-* `parameters_table()` formats more objects from the *easystats* packages,
-  like ROPE-range or `p_rope()`.
+* `parameters_table()` formats more objects from the *easystats* packages, like
+  ROPE-range or `p_rope()`.
 
 * `find_statistic()` now supports models of class *scam*.
 
@@ -680,7 +682,7 @@
 * Better support for nonlinear quantile regression (`quantreg::nlrq()`).
 
 * Better support for nonlinear mixed models (`lme4::nlmer()`). Note that
-  model-specification requires the random term to be written in parentheses,
+  model-specification requires the random term to be written in parentheses, 
   i.e. `(slope | group)`.
 
 ## Bug fixes

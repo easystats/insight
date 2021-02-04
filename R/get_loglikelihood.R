@@ -111,8 +111,7 @@ get_loglikelihood.glm <- function(x, ...) {
   }
 
   # Calculate Log Likelihoods depending on the family
-  lls <- switch(
-    fam,
+  lls <- switch(fam,
     binomial = {
       stats::dbinom(round(n * resp), round(n), predicted, log = TRUE) * w
     },

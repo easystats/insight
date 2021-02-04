@@ -1,21 +1,43 @@
-Package: insight
 Type: Package
+Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Description: A tool to provide an easy, intuitive and consistent access to 
-   information contained in various R models, like model formulas, model terms, 
-   information about random effects, data that was used to fit the model or 
-   data from response variables. 'insight' mainly revolves around two types 
-   of functions: Functions that find (the names of) information, starting with 
-   'find_', and functions that get the underlying data, starting with 'get_'. 
-   The package has a consistent syntax and works with many different model 
-   objects, where otherwise functions to access these information are missing.
 Version: 0.12.0.1
-Authors@R: c(person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206", Twitter = "@strengejacke")),
-             person("Dominique", "Makowski", role = c("aut", "ctb"), email = "dom.makowski@gmail.com", comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
-             person("Indrajeet", "Patil", role = c("aut", "ctb"), email = "patilindrajeet.science@gmail.com", comment = c(ORCID = "0000-0003-1995-6531")),
-             person("Philip", "Waggoner", role = c("aut", "ctb"), email = "philip.waggoner@gmail.com", comment = c(ORCID = "0000-0002-7825-7573")),
-             person("Mattan S.", "Ben-Shachar", role = c("aut", "ctb"), email = "matanshm@post.bgu.ac.il", comment = c(ORCID = "0000-0002-4287-4801")))
+Authors@R: 
+    c(person(given = "Daniel",
+             family = "Lüdecke",
+             role = c("aut", "cre"),
+             email = "d.luedecke@uke.de",
+             comment = c(ORCID = "0000-0002-8895-3206", Twitter = "@strengejacke")),
+      person(given = "Dominique",
+             family = "Makowski",
+             role = c("aut", "ctb"),
+             email = "dom.makowski@gmail.com",
+             comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
+      person(given = "Indrajeet",
+             family = "Patil",
+             role = c("aut", "ctb"),
+             email = "patilindrajeet.science@gmail.com",
+             comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
+      person(given = "Philip",
+             family = "Waggoner",
+             role = c("aut", "ctb"),
+             email = "philip.waggoner@gmail.com",
+             comment = c(ORCID = "0000-0002-7825-7573")),
+      person(given = "Mattan S.",
+             family = "Ben-Shachar",
+             role = c("aut", "ctb"),
+             email = "matanshm@post.bgu.ac.il",
+             comment = c(ORCID = "0000-0002-4287-4801")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
+Description: A tool to provide an easy, intuitive and consistent
+    access to information contained in various R models, like model
+    formulas, model terms, information about random effects, data that was
+    used to fit the model or data from response variables. 'insight'
+    mainly revolves around two types of functions: Functions that find
+    (the names of) information, starting with 'find_', and functions that
+    get the underlying data, starting with 'get_'.  The package has a
+    consistent syntax and works with many different model objects, where
+    otherwise functions to access these information are missing.
 License: GPL-3
 URL: https://easystats.github.io/insight/
 BugReports: https://github.com/easystats/insight/issues
@@ -31,13 +53,13 @@ Suggests:
     aod,
     BayesFactor,
     bayestestR,
+    bbmle,
     bdsmatrix,
     betareg,
     BGGM,
     biglm,
     blavaan,
     blme,
-    bbmle,
     brms,
     censReg,
     cgam,
@@ -50,8 +72,8 @@ Suggests:
     feisr,
     fixest,
     gam,
-    gamm4,
     gamlss,
+    gamm4,
     gbm,
     gee,
     geepack,
@@ -62,48 +84,53 @@ Suggests:
     httr,
     ivreg,
     JM,
+    knitr,
     lavaan,
+    lme4,
     lmtest,
     logistf,
     MASS,
     Matrix,
     MCMCglmm,
     metaBMA,
+    mgcv,
     mice,
     mlogit,
     multgee,
-    nonnest2,
-    lme4,
-    mgcv,
-    nnet,
     nlme,
+    nnet,
+    nonnest2,
     ordinal,
     parameters,
     performance,
     plm,
     pscl,
     quantreg,
+    rmarkdown,
     rms,
     robustbase,
     robustlmm,
     rstanarm,
     rstudioapi,
     speedglm,
+    spelling,
     splines,
     statmod,
     survey,
     survival,
+    testthat,
     tripack,
     truncreg,
-    testthat,
-    VGAM,
-    knitr,
-    rmarkdown,
-    spelling
+    VGAM
+VignetteBuilder: 
+    knitr
+Remotes: 
+    easystats/bayestestR,
+    easystats/effectsize,
+    easystats/parameters,
+    easystats/performance
 Encoding: UTF-8
-RoxygenNote: 7.1.1
-VignetteBuilder: knitr
 Language: en-US
+RoxygenNote: 7.1.1
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-Remotes: easystats/parameters, easystats/bayestestR, easystats/performance, easystats/effectsize

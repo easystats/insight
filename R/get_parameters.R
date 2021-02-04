@@ -272,8 +272,7 @@ get_parameters.margins <- function(x, ...) {
 #' @export
 get_parameters.glht <- function(x, ...) {
   s <- summary(x)
-  alt <- switch(
-    x$alternative,
+  alt <- switch(x$alternative,
     two.sided = "==",
     less = ">=",
     greater = "<="

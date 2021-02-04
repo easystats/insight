@@ -21,7 +21,6 @@
 #' format_p(p, digits = "scientific")
 #' @export
 format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing = "", digits = 3, ...) {
-
   if (identical(stars, "only")) {
     stars <- TRUE
     stars_only <- TRUE
