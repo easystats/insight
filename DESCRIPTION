@@ -102,6 +102,7 @@ Suggests:
     nonnest2,
     ordinal,
     parameters,
+    parsnip,
     performance,
     plm,
     pscl,
