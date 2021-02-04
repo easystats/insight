@@ -43,6 +43,8 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
     expect_equal(max(abs(rez - stats::fitted(x))), 0)
     expect_equal(max(abs(rez - stats::predict(x))), 0)
     expect_equal(nrow(as.data.frame(rez)), 32)
+
+    # rez <- insight::get_predicted(x, newdata = mtcars[c("am")])
   })
 
   test_that("get_predicted - merMod", {
