@@ -158,7 +158,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
   }
 
   # Make prediction only using random if only random
-  if(all(names(newdata) %in% find_random(x, flatten = TRUE))) {
+  if (all(names(newdata) %in% find_random(x, flatten = TRUE))) {
     random.only <- TRUE
   } else {
     random.only <- FALSE
@@ -170,7 +170,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
 
   # CI
   if (!is.null(ci)) {
-    if(bootstrap == FALSE) {
+    if (bootstrap == FALSE) {
       ci_vals <- .get_predicted_ci_merMod_analytic(x, predicted, newdata, ci, ci_type)
     } else {
       ci_vals <- .get_predicted_ci_merMod_bootmer(x, newdata, ci, ci_type, include_random, ...)
@@ -217,9 +217,9 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needed for this function to work. Please install it.")
   }
-  merBoot <- lme4::bootMer(x, predict, re.form = .format_reform(include_random), use.u=TRUE, nsim = iter, ...)
+  merBoot <- lme4::bootMer(x, predict, re.form = .format_reform(include_random), use.u = TRUE, nsim = iter, ...)
 
-  ci_vals <- apply(merBoot$t, 2, function(x) as.numeric(stats::quantile(x, probs=c(1 - ci, 1 + ci) / 2, na.rm=TRUE)))
+  ci_vals <- apply(merBoot$t, 2, function(x) as.numeric(stats::quantile(x, probs = c(1 - ci, 1 + ci) / 2, na.rm = TRUE)))
 
   list(ci_low = ci_vals[1, ],
        ci_high = ci_vals[2, ],
@@ -363,7 +363,7 @@ get_predicted.crr <- function(x, ...) {
 #' @export
 print.get_predicted <- function(x, ...) {
   insight::print_colour("Predicted values:\n\n", "blue")
-  if(inherits(x, "matrix")) {
+  if (inherits(x, "matrix")) {
     print(head(as.matrix(x)))
   } else {
     print(as.numeric(x))
@@ -380,9 +380,7 @@ as.data.frame.get_predicted <- function(x, ...) {
     out <- as.data.frame.matrix(x)
 
     # If no names (i.e., V1, V2, V3 etc., replace by iter_)
-    if(all(names(out) == paste0("V", 1:ncol(out)))) {
-      names(out) <- paste0("iter_", 1:ncol(out))
-    }
+    names(out) <- gsub("^V(\\d)$", "iter_\\1", names(out))
 
     return(out)
   }
