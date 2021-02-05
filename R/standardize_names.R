@@ -104,7 +104,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
 .names_to_easystats <- function(cn, ignore_estimate) {
   cn[cn %in% c("t", "z", "F", "Chi2", "chisq", "Chisq", "chi-sq", "t / F", "z / Chisq", "z / Chi2", "W")] <- "Statistic"
   if (isFALSE(ignore_estimate)) {
-    cn[cn %in% c("Median", "Mean", "MAP", "rho", "r", "tau", "Difference")] <- "Coefficient"
+    cn[cn %in% c("Median", "Mean", "MAP", "Dxy", "rho", "r", "tau", "Difference")] <- "Coefficient"
   }
   cn[cn %in% c("df_residual", "df.residual", "Resid..Df", "df.error", "df_error")] <- "df"
 
@@ -171,7 +171,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   }
 
   # name of coefficient column htest
-  cn[cn %in% c("rho", "r", "tau")] <- "estimate"
+  cn[cn %in% c("Dxy", "rho", "r", "tau")] <- "estimate"
   if (("Difference" %in% cn) && !("estimate" %in% cn)) {
     cn[cn == "Difference"] <- "estimate"
   }
