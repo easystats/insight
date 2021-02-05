@@ -23,6 +23,7 @@ get_predicted(x, ...)
   ci_type = "confidence",
   transform = "response",
   include_random = TRUE,
+  bootstrap = FALSE,
   ...
 )
 }
@@ -41,6 +42,8 @@ get_predicted(x, ...)
 \item{transform}{Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).}
 
 \item{include_random}{If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.}
+
+\item{bootstrap}{Should confidence intervals (CIs) be computed via bootstrapping rather than analytically. If \code{TRUE}, you can specify the number of iterations by modifying the argument \code{iter = 500} (default).}
 }
 \value{
 The fitted values (i.e. predictions for the response).

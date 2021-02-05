@@ -92,6 +92,7 @@ Suggests:
     MASS,
     Matrix,
     MCMCglmm,
+    merTools,
     metaBMA,
     mgcv,
     mice,

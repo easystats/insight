@@ -9,6 +9,7 @@
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
 #' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
 #' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
+#' @param bootstrap Should confidence intervals (CIs) be computed via bootstrapping rather than analytically. If \code{TRUE}, you can specify the number of iterations by modifying the argument \code{iter = 500} (default).
 #' @inheritParams get_residuals
 #' @inheritParams stats::predict.lm
 #'
@@ -110,7 +111,7 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
   out <- rez$fit
 
   # Confidence CI (see https://fromthebottomoftheheap.net/2018/12/10/confidence-intervals-for-glms/)
-  ci_vals <- .get_predicted_se_to_ci(x, pred = out, se = rez$se.fit, ci = ci, family = stats::family(x)$family)
+  ci_vals <- .get_predicted_se_to_ci(x, predicted = out, se = rez$se.fit, ci = ci, family = stats::family(x)$family)
   ci_low <- ci_vals$ci_low
   ci_high <- ci_vals$ci_high
 
@@ -146,73 +147,97 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 #' @rdname get_predicted
 #' @importFrom stats predict terms model.matrix family
 #' @export
-get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, ...) {
+get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, bootstrap = FALSE, ...) {
+
+  # Get original data
+  if (is.null(newdata)) newdata <- get_data(x)
 
   # In case include_random is TRUE, but there's actually no random factors in newdata
-  if (!is.null(newdata) && include_random && !all(find_random(x, flatten = TRUE) %in% names(x))) {
+  if (include_random && !all(find_random(x, flatten = TRUE) %in% names(newdata))) {
     include_random <- FALSE
+  }
+
+  # Make prediction only using random if only random
+  if(all(names(newdata) %in% find_random(x, flatten = TRUE))) {
+    random.only <- TRUE
+  } else {
+    random.only <- FALSE
   }
 
   # Get prediction of point-estimate
   transform <- ifelse(transform == TRUE, "response", ifelse(transform == FALSE, "link", transform))
-  out <- stats::predict(x, newdata = newdata, re.form = .format_reform(include_random), type = transform, ...)
-  ci_low <- ci_high <- se <- rep(NA, length(out))
+  predicted <- stats::predict(x, newdata = newdata, re.form = .format_reform(include_random), type = transform, allow.new.levels = TRUE, random.only = random.only)
 
   # CI
   if (!is.null(ci)) {
-
-    if (is.null(newdata)) newdata <- get_data(x)
-
-    # Matrix-multiply X by the parameter vector B to get the predictions, then
-    # extract the variance-covariance matrix V of the parameters and compute XVX'
-    # to get the variance-covariance matrix of the predictions. The square-root of
-    # the diagonal of this matrix represent the standard errors of the predictions,
-    # which are then multiplied by 1.96 for the confidence intervals.
-
-    resp <- find_response(x)
-    # fake response
-    if (!all(resp %in% newdata)) {
-      newdata[resp] <- 0
-    }
-
-    mm <- stats::model.matrix(stats::terms(x), newdata)
-    var_matrix <- mm %*% get_varcov(x) %*% t(mm)
-
-    if (ci_type == "prediction") {
-      se <- sqrt(diag(var_matrix) + get_variance_residual(x))
+    if(bootstrap == FALSE) {
+      ci_vals <- .get_predicted_ci_merMod_analytic(x, predicted, newdata, ci, ci_type)
     } else {
-      se <- sqrt(diag(var_matrix))
+      ci_vals <- .get_predicted_ci_merMod_bootmer(x, newdata, ci, ci_type, include_random, ...)
     }
-
-    ci_vals <- .get_predicted_se_to_ci(x, pred = out, se = se, ci = ci, family = stats::family(x)$family)
-    ci_low <- ci_vals$ci_low
-    ci_high <- ci_vals$ci_high
-
-    # Using emmeans (not sure what it does)
-    # refgrid <- emmeans::ref_grid(x, at = as.list(newdata), data = newdata)
-    # prediction <- as.data.frame(predict(refgrid, transform = transform, ci = ci, interval = ci_type))
-    # prediction[names(newdata)] <- NULL
-    # prediction$Predicted <- prediction[, 1]
-    # prediction$CI_low <- prediction[, grepl("lower.|LCL", names(prediction))]
-    # prediction$CI_high <- prediction[, grepl("upper.|UCL", names(prediction))]
-    # prediction[!names(prediction) %in% c("Predicted", "CI_low", "CI_high")] <- NULL
+    attr(predicted, "CI_low") <- ci_vals$ci_low
+    attr(predicted, "CI_high") <- ci_vals$ci_high
+    attr(predicted, "SE") <- ci_vals$se
   }
 
-  attr(out, "SE") <- se
-  attr(out, "ci") <- ci
-  attr(out, "CI_low") <- ci_low
-  attr(out, "CI_high") <- ci_high
-  class(out) <- c("get_predicted", class(out))
-  out
+  attr(predicted, "ci") <- ci
+  class(predicted) <- c("get_predicted", class(predicted))
+  predicted
 }
+
+
+.get_predicted_ci_merMod_analytic <- function(x, predicted, newdata, ci = 0.95, ci_type = "confidence") {
+  # Matrix-multiply X by the parameter vector B to get the predictions, then
+  # extract the variance-covariance matrix V of the parameters and compute XVX'
+  # to get the variance-covariance matrix of the predictions. The square-root of
+  # the diagonal of this matrix represent the standard errors of the predictions,
+  # which are then multiplied by 1.96 for the confidence intervals.
+
+  resp <- find_response(x)
+  # fake response
+  if (!all(resp %in% newdata)) {
+    newdata[resp] <- 0
+  }
+
+  mm <- stats::model.matrix(stats::terms(x), newdata)
+  var_matrix <- mm %*% get_varcov(x) %*% t(mm)
+
+  if (ci_type == "prediction") {
+    se <- sqrt(diag(var_matrix) + get_variance_residual(x))
+  } else {
+    se <- sqrt(diag(var_matrix))
+  }
+
+  .get_predicted_se_to_ci(x, predicted = predicted, se = se, ci = ci, family = stats::family(x)$family)
+}
+
+
+#' @importFrom stats quantile
+.get_predicted_ci_merMod_bootmer <- function(x, newdata, ci = 0.95, ci_type = NULL, include_random = TRUE, iter = 500, ...) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package `lme4` needed for this function to work. Please install it.")
+  }
+  merBoot <- lme4::bootMer(x, predict, re.form = .format_reform(include_random), use.u=TRUE, nsim = iter, ...)
+
+  ci_vals <- apply(merBoot$t, 2, function(x) as.numeric(stats::quantile(x, probs=c(1 - ci, 1 + ci) / 2, na.rm=TRUE)))
+
+  list(ci_low = ci_vals[1, ],
+       ci_high = ci_vals[2, ],
+       se = NA)
+}
+
+
 
 
 #' @export
 get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "response", include_random = TRUE, ...) {
 
-  # Sanitize data
-  if (is.null(newdata)) {
-    newdata <- get_data(x)
+  # Get original data
+  if (is.null(newdata)) newdata <- get_data(x)
+
+  # In case include_random is TRUE, but there's actually no random factors in newdata
+  if (include_random && !all(find_random(x, flatten = TRUE) %in% names(newdata))) {
+    include_random <- FALSE
   }
 
   # TODO: is this needed?
@@ -225,7 +250,7 @@ get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "res
   out <- rez$fit
 
   # CI
-  ci_vals <- .get_predicted_se_to_ci(x, pred = out, se = rez$se.fit, ci = ci, family = stats::family(x)$family)
+  ci_vals <- .get_predicted_se_to_ci(x, predicted = out, se = rez$se.fit, ci = ci, family = stats::family(x)$family)
   ci_low <- ci_vals$ci_low
   ci_high <- ci_vals$ci_high
 
@@ -260,7 +285,7 @@ get_predicted.gam <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 
 
   # CI
-  ci_vals <- .get_predicted_se_to_ci(x, pred = out, se = rez$se.fit, ci = ci, family = x$family$family)
+  ci_vals <- .get_predicted_se_to_ci(x, predicted = out, se = rez$se.fit, ci = ci, family = x$family$family)
   ci_low <- ci_vals$ci_low
   ci_high <- ci_vals$ci_high
 
@@ -385,14 +410,14 @@ as.data.frame.get_predicted <- function(x, ...) {
 }
 
 #' @importFrom stats qnorm qt
-.get_predicted_se_to_ci <- function(x, pred, se = NULL, ci = 0.95, family = "gaussian") {
+.get_predicted_se_to_ci <- function(x, predicted, se = NULL, ci = 0.95, family = "gaussian") {
   if (is.null(ci)) {
-    return(list(ci_low = pred, ci_high = pred))
+    return(list(ci_low = predicted, ci_high = predicted))
   } # Same as predicted
 
   # Return NA
   if (is.null(se)) {
-    ci_low <- ci_high <- rep(NA, length(pred))
+    ci_low <- ci_high <- rep(NA, length(predicted))
 
     # Get CI
   } else {
@@ -402,9 +427,9 @@ as.data.frame.get_predicted <- function(x, ...) {
       crit_val <- stats::qt(p = (1 + ci) / 2, df = get_df(x, type = "residual"))
     }
 
-    ci_low <- pred - (se * crit_val)
-    ci_high <- pred + (se * crit_val)
+    ci_low <- predicted - (se * crit_val)
+    ci_high <- predicted + (se * crit_val)
   }
 
-  list(ci_low = ci_low, ci_high = ci_high)
+  list(ci_low = ci_low, ci_high = ci_high, se = se)
 }
