@@ -363,7 +363,11 @@ get_predicted.crr <- function(x, ...) {
 #' @export
 print.get_predicted <- function(x, ...) {
   insight::print_colour("Predicted values:\n\n", "blue")
-  print(as.numeric(x))
+  if(inherits(x, "matrix")) {
+    print(head(as.matrix(x)))
+  } else {
+    print(as.numeric(x))
+  }
   insight::print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.", "yellow")
 }
 
@@ -371,8 +375,8 @@ print.get_predicted <- function(x, ...) {
 #' @export
 as.data.frame.get_predicted <- function(x, ...) {
 
-  # In the case of multiple draws
-  if (!is.null(ncol(x)) && !is.na(ncol(x)) && ncol(x) > 1) {
+  # In the case of multiple draws (i.e., matrix)
+  if (inherits(x, "matrix") || (!is.null(ncol(x)) && !is.na(ncol(x)) && ncol(x) > 1)) {
     out <- as.data.frame.matrix(x)
     names(out) <- paste0("iter_", 1:ncol(out))
     return(out)
@@ -390,6 +394,11 @@ as.data.frame.get_predicted <- function(x, ...) {
   out
 }
 
+#' @export
+as.matrix.get_predicted <- function(x, ...) {
+  class(x) <- class(x)[class(x) != "get_predicted"]
+  as.matrix(x)
+}
 
 
 

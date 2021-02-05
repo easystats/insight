@@ -57,15 +57,15 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
 
     # Compare to merTools
     rez_merTools <- merTools::predictInterval(x, level = 0.95, seed = 333, n.sims=2000)
-    expect_equal(mean(as.data.frame(rez)$CI_low - rez_merTools$lwr), 0, tol = 0.5)
-    # expect_equal(mean(as.data.frame(rez_boot)$CI_low - rez_merTools$lwr), 0, tol = 0.001)
+    expect_equal(mean(as.data.frame(rez)$CI_low - rez_merTools$lwr), 0, tolerance = 0.5)
+    # expect_equal(mean(as.data.frame(rez_boot)$CI_low - rez_merTools$lwr), 0, tolerance = 0.001)
 
 
     # Compare to emmeans (not sure what it does)
     refgrid <- emmeans::ref_grid(x, at = as.list(get_data(x)), data = get_data(x))
     rez_emmeans <- as.data.frame(predict(refgrid, level = 0.95, interval = "prediction"))
     # This is completely off
-    # expect_equal(mean(as.data.frame(rez)$CI_low - rez_emmeans$lower.PL), 0, tol = 0.5)
+    # expect_equal(mean(as.data.frame(rez)$CI_low - rez_emmeans$lower.PL), 0, tolerance = 0.5)
 
   })
 
@@ -138,6 +138,9 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
     expect_equal(nrow(rez), 32)
 
     df <- as.data.frame(rez)
+    expect_equal(nrow(df), 32)
+
+    df <- as.matrix(rez)
     expect_equal(nrow(df), 32)
 
     # TODO: Not sure what fitted.stanreg and predict.stanreg do as they return different point-estimates
