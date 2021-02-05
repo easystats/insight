@@ -160,11 +160,6 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
 
   # CI
   if (!is.null(ci)) {
-    if (transform == "response" && !model_info(x)$is_linear) {
-      type <- "probability"
-    } else {
-      type <- "linear.prediction"
-    }
 
     if (is.null(newdata)) newdata <- get_data(x)
 
