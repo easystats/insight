@@ -378,7 +378,12 @@ as.data.frame.get_predicted <- function(x, ...) {
   # In the case of multiple draws (i.e., matrix)
   if (inherits(x, "matrix") || (!is.null(ncol(x)) && !is.na(ncol(x)) && ncol(x) > 1)) {
     out <- as.data.frame.matrix(x)
-    names(out) <- paste0("iter_", 1:ncol(out))
+
+    # If no names (i.e., V1, V2, V3 etc., replace by iter_)
+    if(all(names(out) == paste0("V", 1:ncol(out)))) {
+      names(out) <- paste0("iter_", 1:ncol(out))
+    }
+
     return(out)
   }
 
