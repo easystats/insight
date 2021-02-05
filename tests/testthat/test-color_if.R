@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && getRversion() > "3.6.0") {
+if (require("testthat") && require("insight") && require("rstudioapi") && getRversion() > "3.6.0") {
   data(iris)
   x1 <- color_if(iris[1:4, ], columns = "Sepal.Length", predicate = `>`, value = 5)
   x2 <- colour_if(iris[1:4, ], columns = "Sepal.Length", predicate = `>`, value = 5)
