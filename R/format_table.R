@@ -441,11 +441,18 @@ parameters_table <- format_table
   if ("ESS" %in% names(x)) x$ESS <- format_value(x$ESS, protect_integers = TRUE)
 
   # ROPE
+  if ("p_ROPE" %in% names(x)) {
+    x$p_ROPE <- format_value(x$p_ROPE, name = NULL)
+    names(x)[names(x) == "p_ROPE"] <- "p (ROPE)"
+  }
+
+  if ("ROPE_Equivalence" %in% names(x)) names(x)[names(x) == "ROPE_Equivalence"] <- "Equivalence (ROPE)"
   if ("ROPE_Percentage" %in% names(x)) {
     x$ROPE_Percentage <- format_rope(x$ROPE_Percentage, name = NULL, digits = rope_digits)
     names(x)[names(x) == "ROPE_Percentage"] <- "% in ROPE"
   }
   x <- .format_rope_columns(x)
+
 
   # Priors
   if ("Prior_Location" %in% names(x)) x$Prior_Location <- format_value(x$Prior_Location, protect_integers = TRUE)
@@ -466,8 +473,6 @@ parameters_table <- format_table
     x <- x[c(names(x)[0:(col_position - 1)], "Prior", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
     x$Prior_Distribution <- x$Prior_Location <- x$Prior_Scale <- NULL
   }
-
-
 
   x
 }
