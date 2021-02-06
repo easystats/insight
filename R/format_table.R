@@ -179,7 +179,7 @@ parameters_table <- format_table
       x[[stats]] <- format_p(x[[stats]], stars = stars, name = NULL, missing = "", digits = p_digits)
       x[[stats]] <- format(x[[stats]], justify = "left")
       p_name <- gsub("(.*)_p$", "\\1", gsub("^p_(.*)", "\\1", stats))
-      names(x)[names(x) == stats] <- paste0("p(", p_name, ")")
+      names(x)[names(x) == stats] <- paste0("p (", p_name, ")")
     }
   }
   x
@@ -439,12 +439,6 @@ parameters_table <- format_table
   if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = stars)
   if ("Rhat" %in% names(x)) x$Rhat <- format_value(x$Rhat, digits = 3)
   if ("ESS" %in% names(x)) x$ESS <- format_value(x$ESS, protect_integers = TRUE)
-
-  # ROPE
-  if ("p_ROPE" %in% names(x)) {
-    x$p_ROPE <- format_value(x$p_ROPE, name = NULL)
-    names(x)[names(x) == "p_ROPE"] <- "p (ROPE)"
-  }
 
   if ("ROPE_Equivalence" %in% names(x)) names(x)[names(x) == "ROPE_Equivalence"] <- "Equivalence (ROPE)"
   if ("ROPE_Percentage" %in% names(x)) {
