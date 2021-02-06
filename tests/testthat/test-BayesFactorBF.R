@@ -115,7 +115,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
                      "dose [High]", "mu", "sig2", "g_supp"))
       expect_equal(cp$Component,
                    c("conditional", "conditional", "conditional", "conditional",
-                     "conditional", "extra", "extra", "extra")))
+                     "conditional", "extra", "extra", "extra"))
     })
 
 

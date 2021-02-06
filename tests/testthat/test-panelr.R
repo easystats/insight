@@ -69,6 +69,16 @@ if (require("testthat") &&
     expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
   })
 
+  test_that("clean_parameters", {
+    cp <- clean_parameters(m1)
+    expect_equal(cp$Cleaned_Parameter,
+                 c("union", "wks", "(Intercept)", "imean(lag(union))", "imean(wks)",
+                   "blk", "fem", "union:blk"))
+    expect_equal(cp$Component,
+                 c("union", "wks", "(Intercept)", "imean(lag(union))", "imean(wks)",
+                   "blk", "fem", "union:blk"))
+  })
+
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 3570)
     expect_equal(
@@ -110,7 +120,8 @@ if (require("testthat") &&
         conditional = as.formula("lwage ~ lag(union) + wks"),
         instruments = as.formula("~blk + fem"),
         interactions = as.formula("~blk * lag(union)")
-      )
+      ),
+      ignore_attr = TRUE
     )
 
     expect_equal(
@@ -119,7 +130,8 @@ if (require("testthat") &&
         conditional = as.formula("lwage ~ lag(union) + wks"),
         instruments = as.formula("~blk + t"),
         random = as.formula("~t | id")
-      )
+      ),
+      ignore_attr = TRUE
     )
   })
 
