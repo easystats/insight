@@ -42,7 +42,7 @@ if (require("testthat") &&
   })
 
   test_that("get_random", {
-    expect_null(expect_warning(get_random(m1)))
+    expect_warning(expect_null(get_random(m1)))
     expect_equal(get_random(m2)[[1]], model.frame(m2)$id)
   })
 
@@ -75,8 +75,8 @@ if (require("testthat") &&
                  c("union", "wks", "(Intercept)", "imean(lag(union))", "imean(wks)",
                    "blk", "fem", "union:blk"))
     expect_equal(cp$Component,
-                 c("union", "wks", "(Intercept)", "imean(lag(union))", "imean(wks)",
-                   "blk", "fem", "union:blk"))
+                 c("conditional", "conditional", "instruments", "instruments",
+                   "instruments", "instruments", "instruments", "interactions"))
   })
 
   test_that("get_data", {
