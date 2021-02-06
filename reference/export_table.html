@@ -136,7 +136,8 @@
   missing <span class='op'>=</span> <span class='st'>""</span>,
   width <span class='op'>=</span> <span class='cn'>NULL</span>,
   format <span class='op'>=</span> <span class='cn'>NULL</span>,
-  caption <span class='op'>=</span> <span class='cn'>NULL</span>,
+  title <span class='op'>=</span> <span class='cn'>NULL</span>,
+  caption <span class='op'>=</span> <span class='va'>title</span>,
   subtitle <span class='op'>=</span> <span class='cn'>NULL</span>,
   footer <span class='op'>=</span> <span class='cn'>NULL</span>,
   align <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -183,9 +184,10 @@ default) resp. <code>"text"</code> for plain text, <code>"markdown"</code> (or
 <code>"md"</code>) for markdown and <code>"html"</code> for HTML output.</p></td>
     </tr>
     <tr>
-      <th>caption, subtitle</th>
-      <td><p>Table caption and subtitle, as string. If <code>NULL</code>,
-no caption or subtitle is printed.</p></td>
+      <th>title, caption, subtitle</th>
+      <td><p>Table title (same as caption) and subtitle, as strings. If <code>NULL</code>,
+no title or subtitle is printed, unless it is stored as attributes (<code>table_title</code>
+and <code>table_subtitle</code>).</p></td>
     </tr>
     <tr>
       <th>footer</th>
