@@ -48,6 +48,10 @@ if (.runThisTest) {
       expect_identical(find_smooth(m1), list(conditional = c("s(x0)", "s(x1)", "s(x2)", "s(x3)")))
     })
 
+    test_that("get_call", {
+      expect_identical(deparse(get_call(m1)), "mgcv::gam(formula = y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)")
+    })
+
     test_that("get_response", {
       expect_equal(get_response(m1), dat$y)
       expect_equal(length(get_response(m2)), 500)
