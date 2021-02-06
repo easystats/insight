@@ -359,7 +359,7 @@ get_predicted.crr <- function(x, ...) {
 
 # Methods -----------------------------------------------------------------
 
-
+#' @importFrom utils head
 #' @export
 print.get_predicted <- function(x, ...) {
   insight::print_colour("Predicted values:\n\n", "blue")
