@@ -8,8 +8,8 @@
 #'   default) resp. \code{"text"} for plain text, \code{"markdown"} (or
 #'   \code{"md"}) for markdown and \code{"html"} for HTML output.
 #' @param title,caption,subtitle Table title (same as caption) and subtitle, as strings. If \code{NULL},
-#'   no title or subtitle is printed, unless it is stored as attributes (\code{table_title}
-#'   and \code{table_subtitle}).
+#'   no title or subtitle is printed, unless it is stored as attributes (\code{table_title},
+#'   or its alias \code{table_caption}, and \code{table_subtitle}).
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
 #'   new text line under the table.
@@ -91,7 +91,8 @@ export_table <- function(x,
   # data frame now...
   if (identical(format, "html") && !is.data.frame(x) && is.list(x)) {
     x <- do.call(rbind, lapply(x, function(i) {
-      i$Component <- attr(i, "table_caption")[1]
+      attr_name <- .check_caption_attr_name(i)
+      i$Component <- attr(i, attr_name)[1]
       i
     }))
   }
@@ -99,14 +100,12 @@ export_table <- function(x,
 
   # single data frame
   if (is.data.frame(x)) {
-    if (is.null(title)) {
-      caption <- attributes(x)$table_title
-    } else {
+    if (!is.null(title)) {
       caption <- title
     }
-
     if (is.null(caption)) {
-      caption <- attributes(x)$table_caption
+      attr_name <- .check_caption_attr_name(x)
+      caption <- attributes(x)[[attr_name]]
     }
     if (is.null(subtitle)) {
       subtitle <- attributes(x)$table_subtitle
@@ -133,6 +132,7 @@ export_table <- function(x,
   } else if (is.list(x)) {
     # list of data frames
     tmp <- lapply(.compact_list(x), function(i) {
+      attr_name <- .check_caption_attr_name(i)
       .export_table(
         x = i,
         sep = sep,
@@ -142,7 +142,7 @@ export_table <- function(x,
         missing = missing,
         width = width,
         format = format,
-        caption = attributes(i)$table_caption,
+        caption = attributes(i)[[attr_name]],
         subtitle = attributes(i)$table_subtitle,
         footer = attributes(i)$table_footer,
         align = align,
@@ -173,6 +173,16 @@ export_table <- function(x,
   out
 }
 
+
+
+# check whether "table_caption" or its alias "table_title" is used as attribute
+.check_caption_attr_name <- function(x) {
+  attr_name <- "table_caption"
+  if (is.null(attr(x, attr_name, exact = TRUE)) && !is.null(attr(x, "table_title", exact = TRUE))) {
+    attr_name <- "table_title"
+  }
+  attr_name
+}
 
 
 

@@ -43,8 +43,8 @@ default) resp. \code{"text"} for plain text, \code{"markdown"} (or
 \code{"md"}) for markdown and \code{"html"} for HTML output.}
 
 \item{title, caption, subtitle}{Table title (same as caption) and subtitle, as strings. If \code{NULL},
-no title or subtitle is printed, unless it is stored as attributes (\code{table_title}
-and \code{table_subtitle}).}
+no title or subtitle is printed, unless it is stored as attributes (\code{table_title},
+or its alias \code{table_caption}, and \code{table_subtitle}).}
 
 \item{footer}{Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a
