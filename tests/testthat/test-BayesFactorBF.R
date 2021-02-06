@@ -108,6 +108,16 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
       expect_equal(colnames(get_parameters(x)), c("mu", "supp-OJ", "supp-VC", "sig2", "g_supp"))
     })
 
+    test_that("clean_parameters", {
+      cp <- clean_parameters(x)
+      expect_equal(cp$Cleaned_Parameter,
+                   c("supp [OJ]", "supp [VC]", "dose [Low]", "dose [Medium]",
+                     "dose [High]", "mu", "sig2", "g_supp"))
+      expect_equal(cp$Component,
+                   c("conditional", "conditional", "conditional", "conditional",
+                     "conditional", "extra", "extra", "extra")))
+    })
+
 
     # ---------------------------
     data(puzzles)
