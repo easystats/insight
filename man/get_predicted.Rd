@@ -12,7 +12,16 @@ get_predicted(x, ...)
 
 \method{get_predicted}{default}(x, newdata = NULL, ...)
 
-\method{get_predicted}{lm}(x, newdata = NULL, ci = 0.95, ci_type = "confidence", ...)
+\method{get_predicted}{lm}(
+  x,
+  newdata = NULL,
+  ci = 0.95,
+  ci_type = "confidence",
+  vcov_estimation = NULL,
+  vcov_type = NULL,
+  vcov_args = NULL,
+  ...
+)
 
 \method{get_predicted}{glm}(x, newdata = NULL, ci = 0.95, transform = "response", ...)
 
@@ -24,6 +33,9 @@ get_predicted(x, ...)
   transform = "response",
   include_random = TRUE,
   bootstrap = FALSE,
+  vcov_estimation = NULL,
+  vcov_type = NULL,
+  vcov_args = NULL,
   ...
 )
 }
@@ -38,6 +50,20 @@ get_predicted(x, ...)
 \item{ci}{The interval level (default \code{0.95}, i.e., 95\% CI).}
 
 \item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This applies mostly for "simple" linear models (like \code{lm}), as for other models (e.g., \code{glm}), prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).}
+
+\item{vcov_estimation}{String, indicating the suffix of the \code{vcov*()}-function
+from the \pkg{sandwich} or \pkg{clubSandwich} package, e.g. \code{vcov_estimation = "CL"}
+(which calls \code{\link[sandwich]{vcovCL}} to compute clustered covariance matrix
+estimators), or \code{vcov_estimation = "HC"} (which calls
+\code{\link[sandwich:vcovHC]{vcovHC()}} to compute heteroskedasticity-consistent
+covariance matrix estimators).}
+
+\item{vcov_type}{Character vector, specifying the estimation type for the
+robust covariance matrix estimation (see \code{\link[sandwich:vcovHC]{vcovHC()}}
+or \code{clubSandwich::vcovCR()} for details).}
+
+\item{vcov_args}{List of named vectors, used as additional arguments that
+are passed down to the \pkg{sandwich}-function specified in \code{vcov_estimation}.}
 
 \item{transform}{Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).}
 

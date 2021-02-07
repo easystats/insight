@@ -10,6 +10,17 @@
 #' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
 #' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
 #' @param bootstrap Should confidence intervals (CIs) be computed via bootstrapping rather than analytically. If \code{TRUE}, you can specify the number of iterations by modifying the argument \code{iter = 500} (default).
+#' @param vcov_estimation String, indicating the suffix of the \code{vcov*()}-function
+#'   from the \pkg{sandwich} or \pkg{clubSandwich} package, e.g. \code{vcov_estimation = "CL"}
+#'   (which calls \code{\link[sandwich]{vcovCL}} to compute clustered covariance matrix
+#'   estimators), or \code{vcov_estimation = "HC"} (which calls
+#'   \code{\link[sandwich:vcovHC]{vcovHC()}} to compute heteroskedasticity-consistent
+#'   covariance matrix estimators).
+#' @param vcov_type Character vector, specifying the estimation type for the
+#'   robust covariance matrix estimation (see \code{\link[sandwich:vcovHC]{vcovHC()}}
+#'   or \code{clubSandwich::vcovCR()} for details).
+#' @param vcov_args List of named vectors, used as additional arguments that
+#'   are passed down to the \pkg{sandwich}-function specified in \code{vcov_estimation}.
 #' @inheritParams get_residuals
 #' @inheritParams stats::predict.lm
 #'
@@ -78,7 +89,7 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 #' @rdname get_predicted
 #' @importFrom stats predict qnorm qt
 #' @export
-get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", ...) {
+get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
 
   # So that predict doesn't fail
   if (is.null(ci)) {
@@ -90,12 +101,30 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
   rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, interval = ci_type, level = level, ...)
   fit <- as.data.frame(rez$fit)
 
-
   out <- fit$fit
-  attr(out, "SE") <- rez$se.fit
   attr(out, "ci") <- ci
-  attr(out, "CI_low") <- fit$lwr
-  attr(out, "CI_high") <- fit$upr
+
+  # robust CI
+  if (!is.null(vcov_estimation)) {
+    ci_vals <- .get_predicted_ci_analytic(
+      x,
+      fit$fit,
+      newdata,
+      ci,
+      ci_type,
+      vcov_estimation = vcov_estimation,
+      vcov_type = vcov_type,
+      vcov_args = vcov_args
+    )
+    attr(out, "SE") <- ci_vals$se
+    attr(out, "CI_low") <- ci_vals$ci_low
+    attr(out, "CI_high") <- ci_vals$ci_high
+  } else {
+    attr(out, "SE") <- rez$se.fit
+    attr(out, "CI_low") <- fit$lwr
+    attr(out, "CI_high") <- fit$upr
+  }
+
   class(out) <- c("get_predicted", class(out))
   out
 }
@@ -147,7 +176,7 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 #' @rdname get_predicted
 #' @importFrom stats predict terms model.matrix family
 #' @export
-get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, bootstrap = FALSE, ...) {
+get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, bootstrap = FALSE, vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
 
   # Get original data
   if (is.null(newdata)) newdata <- get_data(x)
@@ -171,10 +200,20 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
   # CI
   if (!is.null(ci)) {
     if (bootstrap == FALSE) {
-      ci_vals <- .get_predicted_ci_analytic(x, predicted, newdata, ci, ci_type)
+      ci_vals <- .get_predicted_ci_analytic(
+        x,
+        predicted,
+        newdata,
+        ci,
+        ci_type,
+        vcov_estimation = vcov_estimation,
+        vcov_type = vcov_type,
+        vcov_args = vcov_args
+      )
     } else {
       ci_vals <- .get_predicted_ci_merMod_bootmer(x, newdata, ci, ci_type, include_random, ...)
     }
+
     attr(predicted, "CI_low") <- ci_vals$ci_low
     attr(predicted, "CI_high") <- ci_vals$ci_high
     attr(predicted, "SE") <- ci_vals$se
@@ -395,8 +434,9 @@ as.matrix.get_predicted <- function(x, ...) {
 }
 
 
-#' @importFrom stats model.matrix terms
-.get_predicted_ci_analytic <- function(x, predicted, newdata, ci = 0.95, ci_type = "confidence") {
+#' @importFrom stats model.matrix terms reformulate
+.get_predicted_ci_analytic <- function(x, predicted, newdata, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL) {
+
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'
   # to get the variance-covariance matrix of the predictions. The square-root of
@@ -409,9 +449,72 @@ as.matrix.get_predicted <- function(x, ...) {
     newdata[resp] <- 0
   }
 
-  mm <- stats::model.matrix(stats::terms(x), newdata)
-  var_matrix <- mm %*% get_varcov(x) %*% t(mm)
+  # (robust) variance-covariance matrix
+  if (!is.null(vcov_estimation)) {
+    # check for existing vcov-prefix
+    if (!grepl("^vcov", vcov_estimation)) {
+      vcov_estimation <- paste0("vcov", vcov_estimation)
+    }
+    # set default for clubSandwich
+    if (vcov_estimation == "vcovCR" && is.null(vcov_type)) {
+      vcov_type <- "CR0"
+    }
+    if (!is.null(vcov_type) && vcov_type %in% c("CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3")) {
+      if (!requireNamespace("clubSandwich", quietly = TRUE)) {
+        stop("Package `clubSandwich` needed for this function. Please install and try again.")
+      }
+      robust_package <- "clubSandwich"
+      vcov_estimation <- "vcovCR"
+    } else {
+      if (!requireNamespace("sandwich", quietly = TRUE)) {
+        stop("Package `sandwich` needed for this function. Please install and try again.")
+      }
+      robust_package <- "sandwich"
+    }
+    # compute robust standard errors based on vcov
+    if (robust_package == "sandwich") {
+      vcov_estimation <- get(vcov_estimation, asNamespace("sandwich"))
+      vcm <- as.matrix(do.call(vcov_estimation, c(list(x = x, type = vcov_type), vcov_args)))
+    } else {
+      vcov_estimation <- clubSandwich::vcovCR
+      vcm <- as.matrix(do.call(vcov_estimation, c(list(obj = x, type = vcov_type), vcov_args)))
+    }
+  } else {
+    # get variance-covariance-matrix, depending on model type
+    vcm <- get_varcov(x, component = "conditional")
+  }
 
+
+  # model terms, required for model matrix
+  model_terms <- tryCatch({
+    stats::terms(x)
+  },
+  error = function(e) {
+    find_formula(x)$conditional
+  })
+
+  # drop offset from model_terms
+  if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc"))) {
+    all_terms <- find_terms(x)$conditional
+    off_terms <- grepl("^offset\\((.*)\\)", all_terms)
+    if (any(off_terms)) {
+      all_terms <- all_terms[!off_terms]
+      ## TODO preserve interactions
+      vcov_names <- dimnames(vcm)[[1]][grepl(":", dimnames(vcm)[[1]], fixed = TRUE)]
+      if (length(vcov_names)) {
+        vcov_names <- gsub(":", "*", vcov_names, fixed = TRUE)
+        all_terms <- unique(c(all_terms, vcov_names))
+      }
+      off_terms <- grepl("^offset\\((.*)\\)", all_terms)
+      model_terms <- stats::reformulate(all_terms[!off_terms], response = find_response(x))
+    }
+  }
+
+  # compute vcov for predictions
+  mm <- stats::model.matrix(model_terms, newdata)
+  var_matrix <- mm %*% vcm %*% t(mm)
+
+  # add sigma to standard errors, i.e. confidence or prediction intervals
   if (ci_type == "prediction") {
     if (is_mixed_model(x)) {
       se <- sqrt(diag(var_matrix) + get_variance_residual(x))
@@ -428,10 +531,11 @@ as.matrix.get_predicted <- function(x, ...) {
 
 #' @importFrom stats qnorm qt
 .get_predicted_se_to_ci <- function(x, predicted, se = NULL, ci = 0.95) {
-  m_info <- model_info(x)
   if (is.null(ci)) {
     return(list(ci_low = predicted, ci_high = predicted))
   } # Same as predicted
+
+  m_info <- model_info(x)
 
   # Return NA
   if (is.null(se)) {
