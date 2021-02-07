@@ -91,24 +91,19 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 #' @export
 get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
 
-  # So that predict doesn't fail
-  if (is.null(ci)) {
-    level <- 0
+  rez <- stats::predict(x, newdata = newdata, interval = "none", se.fit = FALSE, ...)
+  out <- if (is.list(rez)) {
+    as.vector(rez$fit)
   } else {
-    level <- ci
+    as.vector(rez)
   }
-
-  rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, interval = ci_type, level = level, ...)
-  fit <- as.data.frame(rez$fit)
-
-  out <- fit$fit
   attr(out, "ci") <- ci
 
   # robust CI
-  if (!is.null(vcov_estimation)) {
+  if (!is.null(vcov_estimation) || !is.null(ci)) {
     ci_vals <- .get_predicted_ci_analytic(
       x,
-      fit$fit,
+      out,
       newdata,
       ci,
       ci_type,
@@ -119,10 +114,6 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
     attr(out, "SE") <- ci_vals$se
     attr(out, "CI_low") <- ci_vals$ci_low
     attr(out, "CI_high") <- ci_vals$ci_high
-  } else {
-    attr(out, "SE") <- rez$se.fit
-    attr(out, "CI_low") <- fit$lwr
-    attr(out, "CI_high") <- fit$upr
   }
 
   class(out) <- c("get_predicted", class(out))
@@ -519,7 +510,7 @@ as.matrix.get_predicted <- function(x, ...) {
     if (is_mixed_model(x)) {
       se <- sqrt(diag(var_matrix) + get_variance_residual(x))
     } else {
-      se <- sqrt(diag(var_matrix) + get_sigma(x))
+      se <- sqrt(diag(var_matrix) + get_sigma(x)^2)
     }
   } else {
     se <- sqrt(diag(var_matrix))
@@ -536,6 +527,7 @@ as.matrix.get_predicted <- function(x, ...) {
   } # Same as predicted
 
   m_info <- model_info(x)
+  dof <- get_df(x, type = "residual")
 
   # Return NA
   if (is.null(se)) {
@@ -543,10 +535,10 @@ as.matrix.get_predicted <- function(x, ...) {
 
     # Get CI
   } else {
-    if (m_info$family %in% c("gaussian", "binomial", "poisson")) {
+    if ((is.null(dof) || is.infinite(dof)) && m_info$family %in% c("gaussian", "binomial", "poisson")) {
       crit_val <- stats::qnorm(p = (1 + ci) / 2)
     } else {
-      crit_val <- stats::qt(p = (1 + ci) / 2, df = get_df(x, type = "residual"))
+      crit_val <- stats::qt(p = (1 + ci) / 2, df = dof)
     }
 
     ci_low <- predicted - (se * crit_val)
