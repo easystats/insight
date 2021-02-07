@@ -111,7 +111,7 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
   out <- rez$fit
 
   # Confidence CI (see https://fromthebottomoftheheap.net/2018/12/10/confidence-intervals-for-glms/)
-  ci_vals <- .get_predicted_se_to_ci(x, predicted = out, se = rez$se.fit, ci = ci, family = stats::family(x)$family)
+  ci_vals <- .get_predicted_se_to_ci(x, predicted = out, se = rez$se.fit, ci = ci)
   ci_low <- ci_vals$ci_low
   ci_high <- ci_vals$ci_high
 
@@ -171,7 +171,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
   # CI
   if (!is.null(ci)) {
     if (bootstrap == FALSE) {
-      ci_vals <- .get_predicted_ci_merMod_analytic(x, predicted, newdata, ci, ci_type)
+      ci_vals <- .get_predicted_ci_analytic(x, predicted, newdata, ci, ci_type)
     } else {
       ci_vals <- .get_predicted_ci_merMod_bootmer(x, newdata, ci, ci_type, include_random, ...)
     }
@@ -186,7 +186,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
 }
 
 
-.get_predicted_ci_merMod_analytic <- function(x, predicted, newdata, ci = 0.95, ci_type = "confidence") {
+.get_predicted_ci_analytic <- function(x, predicted, newdata, ci = 0.95, ci_type = "confidence") {
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'
   # to get the variance-covariance matrix of the predictions. The square-root of
@@ -203,12 +203,16 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
   var_matrix <- mm %*% get_varcov(x) %*% t(mm)
 
   if (ci_type == "prediction") {
-    se <- sqrt(diag(var_matrix) + get_variance_residual(x))
+    if (is_mixed_model(x)) {
+      se <- sqrt(diag(var_matrix) + get_variance_residual(x))
+    } else {
+      se <- sqrt(diag(var_matrix) + get_sigma(x))
+    }
   } else {
     se <- sqrt(diag(var_matrix))
   }
 
-  .get_predicted_se_to_ci(x, predicted = predicted, se = se, ci = ci, family = stats::family(x)$family)
+  .get_predicted_se_to_ci(x, predicted = predicted, se = se, ci = ci)
 }
 
 
@@ -250,7 +254,7 @@ get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "res
   out <- rez$fit
 
   # CI
-  ci_vals <- .get_predicted_se_to_ci(x, predicted = out, se = rez$se.fit, ci = ci, family = stats::family(x)$family)
+  ci_vals <- .get_predicted_se_to_ci(x, predicted = out, se = rez$se.fit, ci = ci)
   ci_low <- ci_vals$ci_low
   ci_high <- ci_vals$ci_high
 
@@ -285,7 +289,7 @@ get_predicted.gam <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 
 
   # CI
-  ci_vals <- .get_predicted_se_to_ci(x, predicted = out, se = rez$se.fit, ci = ci, family = x$family$family)
+  ci_vals <- .get_predicted_se_to_ci(x, predicted = out, se = rez$se.fit, ci = ci)
   ci_low <- ci_vals$ci_low
   ci_high <- ci_vals$ci_high
 
@@ -422,7 +426,8 @@ as.matrix.get_predicted <- function(x, ...) {
 }
 
 #' @importFrom stats qnorm qt
-.get_predicted_se_to_ci <- function(x, predicted, se = NULL, ci = 0.95, family = "gaussian") {
+.get_predicted_se_to_ci <- function(x, predicted, se = NULL, ci = 0.95) {
+  m_info <- model_info(x)
   if (is.null(ci)) {
     return(list(ci_low = predicted, ci_high = predicted))
   } # Same as predicted
@@ -433,7 +438,7 @@ as.matrix.get_predicted <- function(x, ...) {
 
     # Get CI
   } else {
-    if (family %in% c("gaussian", "binomial", "poisson")) {
+    if (m_info$family %in% c("gaussian", "binomial", "poisson")) {
       crit_val <- stats::qnorm(p = (1 + ci) / 2)
     } else {
       crit_val <- stats::qt(p = (1 + ci) / 2, df = get_df(x, type = "residual"))
