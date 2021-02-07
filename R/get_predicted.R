@@ -185,37 +185,6 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
   predicted
 }
 
-
-.get_predicted_ci_analytic <- function(x, predicted, newdata, ci = 0.95, ci_type = "confidence") {
-  # Matrix-multiply X by the parameter vector B to get the predictions, then
-  # extract the variance-covariance matrix V of the parameters and compute XVX'
-  # to get the variance-covariance matrix of the predictions. The square-root of
-  # the diagonal of this matrix represent the standard errors of the predictions,
-  # which are then multiplied by 1.96 for the confidence intervals.
-
-  resp <- find_response(x)
-  # fake response
-  if (!all(resp %in% newdata)) {
-    newdata[resp] <- 0
-  }
-
-  mm <- stats::model.matrix(stats::terms(x), newdata)
-  var_matrix <- mm %*% get_varcov(x) %*% t(mm)
-
-  if (ci_type == "prediction") {
-    if (is_mixed_model(x)) {
-      se <- sqrt(diag(var_matrix) + get_variance_residual(x))
-    } else {
-      se <- sqrt(diag(var_matrix) + get_sigma(x))
-    }
-  } else {
-    se <- sqrt(diag(var_matrix))
-  }
-
-  .get_predicted_se_to_ci(x, predicted = predicted, se = se, ci = ci)
-}
-
-
 #' @importFrom stats quantile
 .get_predicted_ci_merMod_bootmer <- function(x, newdata, ci = 0.95, ci_type = NULL, include_random = TRUE, iter = 500, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -424,6 +393,38 @@ as.matrix.get_predicted <- function(x, ...) {
   }
   re.form
 }
+
+
+#' @importFrom stats model.matrix terms
+.get_predicted_ci_analytic <- function(x, predicted, newdata, ci = 0.95, ci_type = "confidence") {
+  # Matrix-multiply X by the parameter vector B to get the predictions, then
+  # extract the variance-covariance matrix V of the parameters and compute XVX'
+  # to get the variance-covariance matrix of the predictions. The square-root of
+  # the diagonal of this matrix represent the standard errors of the predictions,
+  # which are then multiplied by 1.96 for the confidence intervals.
+
+  resp <- find_response(x)
+  # fake response
+  if (!all(resp %in% newdata)) {
+    newdata[resp] <- 0
+  }
+
+  mm <- stats::model.matrix(stats::terms(x), newdata)
+  var_matrix <- mm %*% get_varcov(x) %*% t(mm)
+
+  if (ci_type == "prediction") {
+    if (is_mixed_model(x)) {
+      se <- sqrt(diag(var_matrix) + get_variance_residual(x))
+    } else {
+      se <- sqrt(diag(var_matrix) + get_sigma(x))
+    }
+  } else {
+    se <- sqrt(diag(var_matrix))
+  }
+
+  .get_predicted_se_to_ci(x, predicted = predicted, se = se, ci = ci)
+}
+
 
 #' @importFrom stats qnorm qt
 .get_predicted_se_to_ci <- function(x, predicted, se = NULL, ci = 0.95) {
