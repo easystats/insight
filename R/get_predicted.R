@@ -45,6 +45,10 @@ get_predicted <- function(x, ...) {
 }
 
 
+
+# default methods ---------------------------
+
+
 #' @rdname get_predicted
 #' @importFrom stats fitted predict
 #' @export
@@ -83,24 +87,21 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 
 
 
-# LM, GLMs ----------------------------------------------------------------
+
+# generic prediction function -------------------------------------
 
 
-#' @rdname get_predicted
-#' @importFrom stats predict qnorm qt
-#' @export
-get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
-
-  rez <- stats::predict(x, newdata = newdata, interval = "none", se.fit = FALSE, ...)
+#' @importFrom stats predict
+.generic_predictions <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, transform = NULL, type, ...) {
+  rez <- stats::predict(x, newdata = newdata, interval = "none", se.fit = FALSE, type = type, ...)
   out <- if (is.list(rez)) {
     as.vector(rez$fit)
   } else {
     as.vector(rez)
   }
-  attr(out, "ci") <- ci
 
-  # robust CI
-  if (!is.null(vcov_estimation) || !is.null(ci)) {
+  # (robust) CI
+  if (!is.null(ci)) {
     ci_vals <- .get_predicted_ci_analytic(
       x,
       out,
@@ -109,53 +110,64 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
       ci_type,
       vcov_estimation = vcov_estimation,
       vcov_type = vcov_type,
-      vcov_args = vcov_args
+      vcov_args = vcov_args,
+      transform = transform
     )
+    out <- ci_vals$predicted
     attr(out, "SE") <- ci_vals$se
     attr(out, "CI_low") <- ci_vals$ci_low
     attr(out, "CI_high") <- ci_vals$ci_high
   }
 
+  attr(out, "ci") <- ci
   class(out) <- c("get_predicted", class(out))
   out
 }
 
 
 
+
+# LM, GLMs ----------------------------------------------------------------
+
+
 #' @rdname get_predicted
-#' @importFrom stats family
 #' @export
-get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "response", ...) {
-  rez <- stats::predict(x, newdata = newdata, se.fit = TRUE, type = "link", level = ci, ...)
+get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
+  .generic_predictions(
+    x = x,
+    newdata = newdata,
+    ci = ci,
+    ci_type = ci_type,
+    vcov_estimation = vcov_estimation,
+    vcov_type = vcov_type,
+    vcov_args = vcov_args,
+    transform = NULL,
+    type = "response",
+    ...
+  )
+}
 
-  out <- rez$fit
 
-  # Confidence CI (see https://fromthebottomoftheheap.net/2018/12/10/confidence-intervals-for-glms/)
-  ci_vals <- .get_predicted_se_to_ci(x, predicted = out, se = rez$se.fit, ci = ci)
-  ci_low <- ci_vals$ci_low
-  ci_high <- ci_vals$ci_high
-
+#' @export
+get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "response", ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
   # Prediction CI
   # Seems to be debated: see https://stat.ethz.ch/pipermail/r-help/2003-May/033165.html
   # "Prediction intervals (i.e. intervals with 95% probability of catching a new observation) are somewhat tricky even to define for glms"
   # Essentially, the prediction interval for binomial is [0, 1], which is not really useful
   # But then see https://cran.r-project.org/web/packages/trending/vignettes/prediction_intervals.html
 
-
-  # Transform
-  if (transform == "response" || transform == TRUE) {
-    transform_function <- link_inverse(x)
-    out <- transform_function(out)
-    ci_low <- transform_function(ci_low)
-    ci_high <- transform_function(ci_high)
-  }
-
-  attr(out, "SE") <- rez$se.fit
-  attr(out, "ci") <- ci
-  attr(out, "CI_low") <- ci_low
-  attr(out, "CI_high") <- ci_high
-  class(out) <- c("get_predicted", class(out))
-  out
+  .generic_predictions(
+    x = x,
+    newdata = newdata,
+    ci = ci,
+    ci_type = ci_type,
+    vcov_estimation = vcov_estimation,
+    vcov_type = vcov_type,
+    vcov_args = vcov_args,
+    transform = transform,
+    type = "link",
+    ...
+  )
 }
 
 
@@ -185,8 +197,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
   }
 
   # Get prediction of point-estimate
-  transform <- ifelse(transform == TRUE, "response", ifelse(transform == FALSE, "link", transform))
-  predicted <- stats::predict(x, newdata = newdata, re.form = .format_reform(include_random), type = transform, allow.new.levels = TRUE, random.only = random.only)
+  predicted <- stats::predict(x, newdata = newdata, re.form = .format_reform(include_random), type = "link", allow.new.levels = TRUE, random.only = random.only)
 
   # CI
   if (!is.null(ci)) {
@@ -199,9 +210,12 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
         ci_type,
         vcov_estimation = vcov_estimation,
         vcov_type = vcov_type,
-        vcov_args = vcov_args
+        vcov_args = vcov_args,
+        transform = transform
       )
+      predicted <- ci_vals$predicted
     } else {
+      ## TODO transform response
       ci_vals <- .get_predicted_ci_merMod_bootmer(x, newdata, ci, ci_type, include_random, ...)
     }
 
@@ -426,7 +440,7 @@ as.matrix.get_predicted <- function(x, ...) {
 
 
 #' @importFrom stats model.matrix terms reformulate
-.get_predicted_ci_analytic <- function(x, predicted, newdata, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL) {
+.get_predicted_ci_analytic <- function(x, predicted, newdata, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, transform = NULL) {
 
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'
@@ -516,7 +530,17 @@ as.matrix.get_predicted <- function(x, ...) {
     se <- sqrt(diag(var_matrix))
   }
 
-  .get_predicted_se_to_ci(x, predicted = predicted, se = se, ci = ci)
+  out <- .get_predicted_se_to_ci(x, predicted = predicted, se = se, ci = ci)
+
+  # Transform
+  if (!is.null(transform) && (transform == "response" || transform == TRUE)) {
+    transform_function <- link_inverse(x)
+    predicted <- transform_function(predicted)
+    out$ci_low <- transform_function(out$ci_low)
+    out$ci_high <- transform_function(out$ci_high)
+  }
+
+  list(predicted = predicted, ci_low = out$ci_low, ci_high = out$ci_high, se = se)
 }
 
 
@@ -535,7 +559,7 @@ as.matrix.get_predicted <- function(x, ...) {
 
     # Get CI
   } else {
-    if ((is.null(dof) || is.infinite(dof)) && m_info$family %in% c("gaussian", "binomial", "poisson")) {
+    if (is.null(dof) || is.infinite(dof) || find_statistic(x) == "z-statistic") {
       crit_val <- stats::qnorm(p = (1 + ci) / 2)
     } else {
       crit_val <- stats::qt(p = (1 + ci) / 2, df = dof)

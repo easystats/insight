@@ -4,7 +4,6 @@
 \alias{get_predicted}
 \alias{get_predicted.default}
 \alias{get_predicted.lm}
-\alias{get_predicted.glm}
 \alias{get_predicted.merMod}
 \title{Predicted values}
 \usage{
@@ -22,8 +21,6 @@ get_predicted(x, ...)
   vcov_args = NULL,
   ...
 )
-
-\method{get_predicted}{glm}(x, newdata = NULL, ci = 0.95, transform = "response", ...)
 
 \method{get_predicted}{merMod}(
   x,
