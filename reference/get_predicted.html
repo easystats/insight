@@ -234,12 +234,66 @@ future updates.</p>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>predicted</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in model.frame.default(object, data, xlev = xlev): 'data' must be a data.frame, environment, or list</span></div><div class='input'><span class='va'>predicted</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'predicted' not found</span></div><div class='input'>
+<span class='va'>predicted</span>
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'>Predicted values:
+#&gt; 
+#&gt; </span><span> [1] 21.21678 21.21678 26.07124 21.21678 15.44448 21.31239 14.10597 26.66401
+#&gt;  [9] 26.03299 20.96820 20.96820 15.34888 15.34888 15.34888 14.87083 14.67962
+#&gt; [17] 14.39279 26.58752 26.85523 26.60665 25.99475 15.92253 15.92253 14.10597
+#&gt; [25] 15.44448 26.58752 26.10948 25.68880 13.74265 19.97387 12.38501 25.76529
+#&gt; </span><span style='color: #BBBB00;'>
+#&gt; NOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.</span><span></div><div class='input'>
 <span class='co'># Get CI</span>
 <span class='fu'><a href='https://rdrr.io/r/base/attributes.html'>attributes</a></span><span class='op'>(</span><span class='va'>predicted</span><span class='op'>)</span><span class='op'>$</span><span class='va'>CI_low</span> <span class='co'># Or CI_high</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'predicted' not found</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>predicted</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in as.data.frame(predicted): object 'predicted' not found</span></div></pre>
+</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
+#&gt;           19.727518           19.727518           24.173366           19.727518 
+#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
+#&gt;           13.562810           19.721680           12.044237           24.777260 
+#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE 
+#&gt;           24.118117           19.693139           19.693139           13.536280 
+#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental 
+#&gt;           13.536280           13.536280           13.222961           13.001249 
+#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla 
+#&gt;           12.570146           24.726448           24.872258           24.739874 
+#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 
+#&gt;           24.061069           13.572504           13.572504           12.044237 
+#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa 
+#&gt;           13.562810           24.726448           24.226768           23.546572 
+#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E 
+#&gt;           11.286007           18.412227            8.058613           23.684073 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>predicted</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    Predicted        SE   CI    CI_low  CI_high
+#&gt; 1   21.21678 0.7281647 0.95 19.727518 22.70605
+#&gt; 2   21.21678 0.7281647 0.95 19.727518 22.70605
+#&gt; 3   26.07124 0.9279509 0.95 24.173366 27.96911
+#&gt; 4   21.21678 0.7281647 0.95 19.727518 22.70605
+#&gt; 5   15.44448 0.9200310 0.95 13.562810 17.32616
+#&gt; 6   21.31239 0.7777664 0.95 19.721680 22.90310
+#&gt; 7   14.10597 1.0080670 0.95 12.044237 16.16769
+#&gt; 8   26.66401 0.9225132 0.95 24.777260 28.55076
+#&gt; 9   26.03299 0.9362657 0.95 24.118117 27.94787
+#&gt; 10  20.96820 0.6234320 0.95 19.693139 22.24326
+#&gt; 11  20.96820 0.6234320 0.95 19.693139 22.24326
+#&gt; 12  15.34888 0.8862558 0.95 13.536280 17.16147
+#&gt; 13  15.34888 0.8862558 0.95 13.536280 17.16147
+#&gt; 14  15.34888 0.8862558 0.95 13.536280 17.16147
+#&gt; 15  14.87083 0.8057154 0.95 13.222961 16.51871
+#&gt; 16  14.67962 0.8206255 0.95 13.001249 16.35798
+#&gt; 17  14.39279 0.8911693 0.95 12.570146 16.21544
+#&gt; 18  26.58752 0.9099596 0.95 24.726448 28.44860
+#&gt; 19  26.85523 0.9695585 0.95 24.872258 28.83820
+#&gt; 20  26.60665 0.9127445 0.95 24.739874 28.47342
+#&gt; 21  25.99475 0.9454598 0.95 24.061069 27.92843
+#&gt; 22  15.92253 1.1490264 0.95 13.572504 18.27255
+#&gt; 23  15.92253 1.1490264 0.95 13.572504 18.27255
+#&gt; 24  14.10597 1.0080670 0.95 12.044237 16.16769
+#&gt; 25  15.44448 0.9200310 0.95 13.562810 17.32616
+#&gt; 26  26.58752 0.9099596 0.95 24.726448 28.44860
+#&gt; 27  26.10948 0.9205392 0.95 24.226768 27.99220
+#&gt; 28  25.68880 1.0474287 0.95 23.546572 27.83104
+#&gt; 29  13.74265 1.2011595 0.95 11.286007 16.19930
+#&gt; 30  19.97387 0.7635547 0.95 18.412227 21.53552
+#&gt; 31  12.38501 2.1153615 0.95  8.058613 16.71141
+#&gt; 32  25.76529 1.0175965 0.95 23.684073 27.84651</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
