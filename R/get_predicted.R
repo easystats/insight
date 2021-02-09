@@ -450,8 +450,8 @@ as.matrix.get_predicted <- function(x, ...) {
 
   resp <- find_response(x)
   # fake response
-  if (!all(resp %in% newdata)) {
-    newdata[resp] <- 0
+  if (!is.null(newdata) && !all(resp %in% newdata)) {
+    newdata[[resp]] <- 0
   }
 
   # (robust) variance-covariance matrix
@@ -490,33 +490,37 @@ as.matrix.get_predicted <- function(x, ...) {
   }
 
 
-  # model terms, required for model matrix
-  model_terms <- tryCatch({
-    stats::terms(x)
-  },
-  error = function(e) {
-    find_formula(x)$conditional
-  })
+  if (is.null(newdata)) {
+    mm <- stats::model.matrix(x)
+  } else {
+    # model terms, required for model matrix
+    model_terms <- tryCatch({
+      stats::terms(x)
+    },
+    error = function(e) {
+      find_formula(x)$conditional
+    })
 
-  # drop offset from model_terms
-  if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc"))) {
-    all_terms <- find_terms(x)$conditional
-    off_terms <- grepl("^offset\\((.*)\\)", all_terms)
-    if (any(off_terms)) {
-      all_terms <- all_terms[!off_terms]
-      ## TODO preserve interactions
-      vcov_names <- dimnames(vcm)[[1]][grepl(":", dimnames(vcm)[[1]], fixed = TRUE)]
-      if (length(vcov_names)) {
-        vcov_names <- gsub(":", "*", vcov_names, fixed = TRUE)
-        all_terms <- unique(c(all_terms, vcov_names))
-      }
+    # drop offset from model_terms
+    if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc"))) {
+      all_terms <- find_terms(x)$conditional
       off_terms <- grepl("^offset\\((.*)\\)", all_terms)
-      model_terms <- stats::reformulate(all_terms[!off_terms], response = find_response(x))
+      if (any(off_terms)) {
+        all_terms <- all_terms[!off_terms]
+        ## TODO preserve interactions
+        vcov_names <- dimnames(vcm)[[1]][grepl(":", dimnames(vcm)[[1]], fixed = TRUE)]
+        if (length(vcov_names)) {
+          vcov_names <- gsub(":", "*", vcov_names, fixed = TRUE)
+          all_terms <- unique(c(all_terms, vcov_names))
+        }
+        off_terms <- grepl("^offset\\((.*)\\)", all_terms)
+        model_terms <- stats::reformulate(all_terms[!off_terms], response = find_response(x))
+      }
     }
+    mm <- stats::model.matrix(model_terms, newdata)
   }
 
   # compute vcov for predictions
-  mm <- stats::model.matrix(model_terms, newdata)
   var_matrix <- mm %*% vcm %*% t(mm)
 
   # add sigma to standard errors, i.e. confidence or prediction intervals

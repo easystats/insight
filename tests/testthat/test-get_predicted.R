@@ -56,7 +56,7 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
     # expect_equal(mean(as.data.frame(rez_boot)$CI_low - as.data.frame(rez)$CI_low), 0, tol = 0.001)
 
     # Compare to merTools
-    rez_merTools <- merTools::predictInterval(x, level = 0.95, seed = 333, n.sims=2000)
+    rez_merTools <- merTools::predictInterval(x, level = 0.95, seed = 333, n.sims = 2000)
     expect_equal(mean(as.data.frame(rez)$CI_low - rez_merTools$lwr), 0, tolerance = 0.5)
     # expect_equal(mean(as.data.frame(rez_boot)$CI_low - rez_merTools$lwr), 0, tolerance = 0.001)
 
@@ -133,7 +133,7 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
   })
 
   test_that("get_predicted - rstanarm (lm)", {
-    x <- rstanarm::stan_glm(mpg ~ am, data = mtcars, iter = 200, refresh = 0, seed = 333)
+    x <- suppressWarnings(rstanarm::stan_glm(mpg ~ am, data = mtcars, iter = 200, refresh = 0, seed = 333))
     rez <- insight::get_predicted(x)
     expect_equal(nrow(rez), 32)
 
