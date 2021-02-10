@@ -15,6 +15,8 @@
 
 * `model_info()` now returns `$is_leventest` if model is an object returned by
   `car::leveneTest()`.
+  
+* `get_parameters()` supports `htest` objects.
 
 ## Bug fixes
 

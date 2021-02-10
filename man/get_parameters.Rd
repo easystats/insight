@@ -33,6 +33,7 @@ Returns the coefficients (or posterior samples for Bayesian
      \item{\link[=get_parameters.glmm]{Mixed models} (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
      \item{\link[=get_parameters.zeroinfl]{Zero-inflated and hurdle models} (\pkg{pscl}, ...)}
      \item{\link[=get_parameters.betareg]{Models with special components} (\pkg{betareg}, \pkg{MuMIn}, ...)}
+     \item{\link[=get_parameters.htest]{Hypothesis tests} (\code{htest})}
    }
 }
 \details{
