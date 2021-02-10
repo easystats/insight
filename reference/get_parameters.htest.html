@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get model parameters — get_parameters • insight</title>
+<title>Get model parameters from htest-objects — get_parameters.htest • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,19 +46,8 @@
 
 
 
-<meta property="og:title" content="Get model parameters — get_parameters" />
-<meta property="og:description" content="Returns the coefficients (or posterior samples for Bayesian
-   models) from a model. See the documentation for your object's class:
-Bayesian models (rstanarm, brms, MCMCglmm, ...)
-Estimated marginal means (emmeans)
-Generalized additive models (mgcv, VGAM, ...)
-Marginal effects models (mfx)
-Mixed models (lme4, glmmTMB, GLMMadaptive, ...)
-Zero-inflated and hurdle models (pscl, ...)
-Models with special components (betareg, MuMIn, ...)
-Hypothesis tests (htest)
-
-" />
+<meta property="og:title" content="Get model parameters from htest-objects — get_parameters.htest" />
+<meta property="og:description" content="Returns the parameters from a hypothesis test." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -141,30 +130,17 @@ Hypothesis tests (htest)
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get model parameters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_parameters.R'><code>R/get_parameters.R</code></a></small>
-    <div class="hidden name"><code>get_parameters.Rd</code></div>
+    <h1>Get model parameters from htest-objects</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_parameters_htest.R'><code>R/get_parameters_htest.R</code></a></small>
+    <div class="hidden name"><code>get_parameters.htest.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the coefficients (or posterior samples for Bayesian
-   models) from a model. See the documentation for your object's class:</p><ul>
-<li><p><a href='get_parameters.BGGM.html'>Bayesian models</a> (<span class="pkg">rstanarm</span>, <span class="pkg">brms</span>, <span class="pkg">MCMCglmm</span>, ...)</p></li>
-<li><p><a href='get_parameters.emmGrid.html'>Estimated marginal means</a> (<span class="pkg">emmeans</span>)</p></li>
-<li><p><a href='get_parameters.gamm.html'>Generalized additive models</a> (<span class="pkg">mgcv</span>, <span class="pkg">VGAM</span>, ...)</p></li>
-<li><p><a href='get_parameters.betamfx.html'>Marginal effects models</a> (<span class="pkg">mfx</span>)</p></li>
-<li><p><a href='get_parameters.glmm.html'>Mixed models</a> (<span class="pkg">lme4</span>, <span class="pkg">glmmTMB</span>, <span class="pkg">GLMMadaptive</span>, ...)</p></li>
-<li><p><a href='get_parameters.zeroinfl.html'>Zero-inflated and hurdle models</a> (<span class="pkg">pscl</span>, ...)</p></li>
-<li><p><a href='get_parameters.betareg.html'>Models with special components</a> (<span class="pkg">betareg</span>, <span class="pkg">MuMIn</span>, ...)</p></li>
-<li><p><a href='get_parameters.htest.html'>Hypothesis tests</a> (<code>htest</code>)</p></li>
-</ul>
-
+    <p>Returns the parameters from a hypothesis test.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for htest</span>
+<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,40 +153,18 @@ Hypothesis tests (htest)
       <th>...</th>
       <td><p>Currently not used.</p></td>
     </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Toggle messages and warnings.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    
-<ul>
-<li><p>for non-Bayesian models, a data frame with two columns: the parameter names and the related point estimates.</p></li>
-<li><p>for Anova (<code><a href='https://rdrr.io/r/stats/aov.html'>aov()</a></code>) with error term, a list of parameters for the conditional and the random effects parameters</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>In most cases when models either return different "effects" (fixed,
-random) or "components" (conditional, zero-inflated, ...), the arguments
-<code>effects</code> and <code>component</code> can be used.
-<br /> <br />
-<code>get_parameters()</code> is comparable to <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code>, however, the coefficients
-are returned as data frame (with columns for names and point estimates of
-coefficients). For Bayesian models, the posterior samples of parameters are
-returned.</p>
+    <p>A data frame with two columns: the parameter names and the related
+  point estimates.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     Parameter   Estimate
-#&gt; 1 (Intercept) 38.7460642
-#&gt; 2          wt -3.2463673
-#&gt; 3         cyl -1.3641033
-#&gt; 4          vs  0.5241721</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sleep</span><span class='op'>)</span>
+<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>extra</span> <span class='op'>~</span> <span class='fl'>1</span>, data <span class='op'>=</span> <span class='va'>sleep</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   Parameter Estimate
+#&gt; 1     extra     1.54</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
