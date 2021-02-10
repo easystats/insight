@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 # The difference between a dataframe and its render
 
-Most of objects encountered throughout the **easystats** packages are "tables", i.e., a 2D matrix with columns and rows. In R, these objects are often, at their core, *dataframes*. Let's create one to use as an example:
+Most of objects encountered throughout the **easystats** packages are "tables", i.e., a 2D matrix with columns and rows. In R, these objects are often, at their core, *data frames*. Let's create one to use as an example:
 
 ```{r, warning=FALSE, message=FALSE}
 library(insight)
@@ -36,32 +36,32 @@ df <- data.frame(
 df
 ```
 
-When I display in in the console (calling an object - e.g. `df` - is actually equivalent to calling `print(df)`), the output looks alright, but it could be improved. Some packages, such as `knitr`, have functions to create a nicer output. For instance, in markdown, so that it can be nicely rendered in markdown documents when copied:
+When I display in in the console (calling an object - e.g. `df` - is actually equivalent to calling `print(df)`), the output looks alright, but it could be improved. Some packages, such as **knitr**, have functions to create a nicer output. For instance, in markdown, so that it can be nicely rendered in markdown documents when copied:
 
 ```{r, results='asis'}
-knitr::kable(df, format="markdown")
+knitr::kable(df, format = "markdown")
 ```
 
 
 Or HTML, which again makes it look great in HTML files. For instance, this code:
 
-```{r, results='asis'}
-knitr::kable(df, format="html")
+```{r, eval=FALSE}
+knitr::kable(df, format = "html")
 ```
 
 Will be rendered like this:
 
-```{r, echo=FALSE}
-knitr::kable(df, format="html")
+```{r, results='asis', echo=FALSE}
+knitr::kable(df, format = "html")
 ```
 
 # The *insight* workflow
 
-The **insight** package also contains function to improve the "printing", or rendering, of tables. Its design dissociates two separate and independent steps: **formatting** and **exporting**.
+The **insight** package also contains function to improve the "printing", or rendering, of tables. Its design dissociates two separate and independent steps: *formatting* and *exporting*.
 
 ## Formatting
 
-The purpose of formatting is to improve a given table, while still keeping it as a regular R dataframe, so that it can be for instance further modified by the user.
+The purpose of formatting is to improve a given table, while still keeping it as a regular R data frame, so that it can be for instance further modified by the user.
 
 
 ```{r}
@@ -72,16 +72,14 @@ As you can see, `format_table()` modifies columns, turning number into character
 
 ```{r}
 df %>% 
-  mutate(p = insight::format_p(p, stars = TRUE)) %>% 
-  insight::format_table()
+  mutate(p = format_p(p, stars = TRUE)) %>% 
+  format_table()
 ```
-
-TODO: What's happening here with the p-values???
 
 
 ## Exporting
 
-The next step is **exporting**, which takes a dataframe and renders it in a given format, so that it looks good in the console, or in markdown, html or latex.
+The next step is *exporting*, which takes a data frame and renders it in a given format, so that it looks good in the console, or in markdown, HTML or latex.
 
 TODO: to complete, as it's not clear for me either!
 
