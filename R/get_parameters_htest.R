@@ -10,8 +10,7 @@
 #'   point estimates.
 #'
 #' @examples
-#' data(sleep)
-#' get_parameters(t.test(extra ~ 1, data = sleep))
+#' get_parameters(t.test(1:10, y = c(7:20)))
 #' @export
 get_parameters.htest <- function(x, ...) {
   m_info <- model_info(x)
