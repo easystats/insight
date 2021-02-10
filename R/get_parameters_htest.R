@@ -131,7 +131,7 @@ get_parameters.htest <- function(x, ...) {
 
 .extract_htest_chi2 <- function(model) {
   out <- data.frame(
-    Parameter = "Parameter",
+    Parameter = model$data.name,
     stringsAsFactors = FALSE
   )
 
