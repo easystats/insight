@@ -382,10 +382,11 @@ print.get_predicted <- function(x, ...) {
   insight::print_colour("Predicted values:\n\n", "blue")
   if (inherits(x, "matrix")) {
     print(head(as.matrix(x)))
+    insight::print_colour("\nNOTE: You can get CIs by running `bayestestR::describe_posterior()` on this output.", "yellow")
   } else {
     print(as.numeric(x))
+    insight::print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.", "yellow")
   }
-  insight::print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.", "yellow")
 }
 
 
