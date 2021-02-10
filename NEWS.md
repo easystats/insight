@@ -23,6 +23,9 @@
 * Fixed issue/warning in `get_data()` for some *htest* objects, where the
   environment was not properly evaluated.
 
+* Fixed issue in `format_table()` with p-value formatting, when input data frame
+  contained a column named `"p"`, which was not numeric.
+
 # insight 0.12.0
 
 ## Breaking changes
