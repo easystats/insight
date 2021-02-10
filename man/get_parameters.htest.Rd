@@ -19,7 +19,6 @@ A data frame with two columns: the parameter names and the related
 Returns the parameters from a hypothesis test.
 }
 \examples{
-data(mtcars)
-m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
-get_parameters(m)
+data(sleep)
+get_parameters(t.test(extra ~ 1, data = sleep))
 }

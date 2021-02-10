@@ -10,9 +10,8 @@
 #'   point estimates.
 #'
 #' @examples
-#' data(mtcars)
-#' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
-#' get_parameters(m)
+#' data(sleep)
+#' get_parameters(t.test(extra ~ 1, data = sleep))
 #' @export
 get_parameters.htest <- function(x, ...) {
   m_info <- model_info(x)
@@ -150,8 +149,11 @@ get_parameters.htest <- function(x, ...) {
 
 
 .extract_htest_prop <- function(model) {
-  ## TODO for proportion
-  NULL
+  out <- data.frame(
+    Parameter = "probability",
+    Estimate = model$estimate,
+    stringsAsFactors = FALSE
+  )
 }
 
 
@@ -162,7 +164,7 @@ get_parameters.htest <- function(x, ...) {
 
 .extract_htest_binom <- function(model) {
   out <- data.frame(
-    Parameter = "p",
+    Parameter = "probability",
     Estimate = model$estimate,
     stringsAsFactors = FALSE
   )
