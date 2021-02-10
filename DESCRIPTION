@@ -67,6 +67,7 @@ Suggests:
     coxme,
     cplm,
     crch,
+    dplyr,
     effectsize,
     emmeans,
     estimatr,

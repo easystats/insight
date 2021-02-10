@@ -10,6 +10,10 @@
 #' @param object,x A data frame.
 #' @param ... Arguments passed to other methods.
 #'
+#' @examples
+#' display(iris)
+#'
+#'
 #' @return A data frame.
 #' @export
 display <- function(object, ...) {
@@ -28,4 +32,39 @@ print_md <- function(x, ...) {
 #' @export
 print_html <- function(x, ...) {
   UseMethod("print_html")
+}
+
+
+# data.frame --------------------------------------------------------------
+
+#' @rdname display
+#' @export
+display.data.frame <- function(object,
+                               ...) {
+  if (identical(format, "html")) {
+    print_html(x = object, ...)
+  } else {
+    print_md(x = object, ...)
+  }
+}
+
+
+
+#' @rdname display
+#' @export
+print_md.data.frame <- function(x,
+                                ...) {
+
+  export_table(x, format = "markdown", ...)
+}
+
+
+
+
+#' @rdname display
+#' @export
+print_md.data.frame <- function(x,
+                                ...) {
+
+  export_table(x, format = "html", ...)
 }

@@ -4,6 +4,8 @@
 \alias{display}
 \alias{print_md}
 \alias{print_html}
+\alias{display.data.frame}
+\alias{print_md.data.frame}
 \title{Generic export of data frames into formatted tables}
 \usage{
 display(object, ...)
@@ -11,6 +13,12 @@ display(object, ...)
 print_md(x, ...)
 
 print_html(x, ...)
+
+\method{display}{data.frame}(object, ...)
+
+\method{print_md}{data.frame}(x, ...)
+
+\method{print_md}{data.frame}(x, ...)
 }
 \arguments{
 \item{object, x}{A data frame.}
@@ -26,4 +34,9 @@ into various table formats (like plain text, markdown, ...). \code{print_md()}
 usually is a convenient wrapper for \code{display(format = "markdown")}.
 Similar, \code{print_html()} is a shortcut for \code{display(format = "html")}.
 See the documentation for the specific objects' classes.
+}
+\examples{
+display(iris)
+
+
 }
