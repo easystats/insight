@@ -99,7 +99,7 @@
 <div id="the-difference-between-a-dataframe-and-its-render" class="section level1">
 <h1 class="hasAnchor">
 <a href="#the-difference-between-a-dataframe-and-its-render" class="anchor"></a>The difference between a dataframe and its render</h1>
-<p>Most of objects encountered throughout the <strong>easystats</strong> packages are “tables”, i.e., a 2D matrix with columns and rows. In R, these objects are often, at their core, <em>dataframes</em>. Let’s create one to use as an example:</p>
+<p>Most of objects encountered throughout the <strong>easystats</strong> packages are “tables”, i.e., a 2D matrix with columns and rows. In R, these objects are often, at their core, <em>data frames</em>. Let’s create one to use as an example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/">insight</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
@@ -120,9 +120,9 @@
 <span class="co">#&gt; 3        5     A 0.95  6.213   7.123 0.4500</span>
 <span class="co">#&gt; 4        3     B 0.95 12.100  13.500 0.0042</span>
 <span class="co">#&gt; 5        1     B 0.95  1.230   3.610 0.3400</span></code></pre></div>
-<p>When I display in in the console (calling an object - e.g. <code>df</code> - is actually equivalent to calling <code><a href="https://rdrr.io/r/base/print.html">print(df)</a></code>), the output looks alright, but it could be improved. Some packages, such as <code>knitr</code>, have functions to create a nicer output. For instance, in markdown, so that it can be nicely rendered in markdown documents when copied:</p>
+<p>When I display in in the console (calling an object - e.g. <code>df</code> - is actually equivalent to calling <code><a href="https://rdrr.io/r/base/print.html">print(df)</a></code>), the output looks alright, but it could be improved. Some packages, such as <strong>knitr</strong>, have functions to create a nicer output. For instance, in markdown, so that it can be nicely rendered in markdown documents when copied:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">df</span>, format<span class="op">=</span><span class="st">"markdown"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">df</span>, format <span class="op">=</span> <span class="st">"markdown"</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">Variable</th>
@@ -177,131 +177,7 @@
 </table>
 <p>Or HTML, which again makes it look great in HTML files. For instance, this code:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">df</span>, format<span class="op">=</span><span class="st">"html"</span><span class="op">)</span></code></pre></div>
-<table class="table">
-<thead><tr>
-<th style="text-align:right;">
-Variable
-</th>
-<th style="text-align:left;">
-Group
-</th>
-<th style="text-align:right;">
-CI
-</th>
-<th style="text-align:right;">
-CI_low
-</th>
-<th style="text-align:right;">
-CI_high
-</th>
-<th style="text-align:right;">
-p
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-A
-</td>
-<td style="text-align:right;">
-0.95
-</td>
-<td style="text-align:right;">
-3.350
-</td>
-<td style="text-align:right;">
-4.230
-</td>
-<td style="text-align:right;">
-0.0010
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-A
-</td>
-<td style="text-align:right;">
-0.95
-</td>
-<td style="text-align:right;">
-2.425
-</td>
-<td style="text-align:right;">
-5.310
-</td>
-<td style="text-align:right;">
-0.0456
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:left;">
-A
-</td>
-<td style="text-align:right;">
-0.95
-</td>
-<td style="text-align:right;">
-6.213
-</td>
-<td style="text-align:right;">
-7.123
-</td>
-<td style="text-align:right;">
-0.4500
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-B
-</td>
-<td style="text-align:right;">
-0.95
-</td>
-<td style="text-align:right;">
-12.100
-</td>
-<td style="text-align:right;">
-13.500
-</td>
-<td style="text-align:right;">
-0.0042
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-B
-</td>
-<td style="text-align:right;">
-0.95
-</td>
-<td style="text-align:right;">
-1.230
-</td>
-<td style="text-align:right;">
-3.610
-</td>
-<td style="text-align:right;">
-0.3400
-</td>
-</tr>
-</tbody>
-</table>
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">df</span>, format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></code></pre></div>
 <p>Will be rendered like this:</p>
 <table class="table">
 <thead><tr>
@@ -431,11 +307,11 @@ B
 <div id="the-insight-workflow" class="section level1">
 <h1 class="hasAnchor">
 <a href="#the-insight-workflow" class="anchor"></a>The <em>insight</em> workflow</h1>
-<p>The <strong>insight</strong> package also contains function to improve the “printing”, or rendering, of tables. Its design dissociates two separate and independent steps: <strong>formatting</strong> and <strong>exporting</strong>.</p>
+<p>The <strong>insight</strong> package also contains function to improve the “printing”, or rendering, of tables. Its design dissociates two separate and independent steps: <em>formatting</em> and <em>exporting</em>.</p>
 <div id="formatting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#formatting" class="anchor"></a>Formatting</h2>
-<p>The purpose of formatting is to improve a given table, while still keeping it as a regular R dataframe, so that it can be for instance further modified by the user.</p>
+<p>The purpose of formatting is to improve a given table, while still keeping it as a regular R data frame, so that it can be for instance further modified by the user.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
 <span class="co">#&gt;   Variable Group         95% CI     p</span>
@@ -447,20 +323,19 @@ B
 <p>As you can see, <code><a href="../reference/format_table.html">format_table()</a></code> modifies columns, turning number into characters (so that it has the same amount of digits), and detecting confidence intervals. This is usually combined with column-specific formatting functions, like <code><a href="../reference/format_p.html">format_p()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="../reference/format_p.html">format_p</a></span><span class="op">(</span><span class="va">p</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;   Variable Group         95% CI      p</span>
-<span class="co">#&gt; 1     1.00     A [ 3.35,  4.23] &gt; .999</span>
-<span class="co">#&gt; 2     3.00     A [ 2.42,  5.31] &gt; .999</span>
-<span class="co">#&gt; 3     5.00     A [ 6.21,  7.12] &gt; .999</span>
-<span class="co">#&gt; 4     3.00     B [12.10, 13.50] &gt; .999</span>
-<span class="co">#&gt; 5     1.00     B [ 1.23,  3.61] &gt; .999</span></code></pre></div>
-<p>TODO: What’s happening here with the p-values???</p>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="../reference/format_p.html">format_p</a></span><span class="op">(</span><span class="va">p</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt;   Variable Group         95% CI           p</span>
+<span class="co">#&gt; 1     1.00     A [ 3.35,  4.23] p = 0.001**</span>
+<span class="co">#&gt; 2     3.00     A [ 2.42,  5.31] p = 0.046* </span>
+<span class="co">#&gt; 3     5.00     A [ 6.21,  7.12] p = 0.450  </span>
+<span class="co">#&gt; 4     3.00     B [12.10, 13.50] p = 0.004**</span>
+<span class="co">#&gt; 5     1.00     B [ 1.23,  3.61] p = 0.340</span></code></pre></div>
 </div>
 <div id="exporting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#exporting" class="anchor"></a>Exporting</h2>
-<p>The next step is <strong>exporting</strong>, which takes a dataframe and renders it in a given format, so that it looks good in the console, or in markdown, html or latex.</p>
+<p>The next step is <em>exporting</em>, which takes a data frame and renders it in a given format, so that it looks good in the console, or in markdown, HTML or latex.</p>
 <p>TODO: to complete, as it’s not clear for me either!</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span>
