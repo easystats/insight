@@ -142,3 +142,4 @@ reference:
   - get_parameters.glmm
   - get_parameters.zeroinfl
   - get_parameters.betareg
+  - get_parameters.htest
