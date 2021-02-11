@@ -1,5 +1,9 @@
-if (require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans")) {
+if (require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans") && require("bayestestR")) {
   data(mtcars)
+
+
+
+# Basic -------------------------------------------------------------------
 
 
   test_that("get_predicted - lm", {
@@ -16,7 +20,7 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
   })
 
 
-  test_that("get_predicted - data", {
+  test_that("get_predicted - data first", {
     set.seed(333)
     m <- lm(mpg ~ am, data = mtcars)
     newdata <- data.frame(am = sample(c(0, 1), replace = TRUE, size = 20))
@@ -35,6 +39,10 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
     expect_equal(nrow(as.data.frame(rez)), 32)
   })
 
+
+# Mixed Models ------------------------------------------------------------
+
+
   test_that("get_predicted - lmerMod", {
     x <- lme4::lmer(mpg ~ am + (1 | cyl), data = mtcars)
     rez <- insight::get_predicted(x)
@@ -50,10 +58,10 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
 
     # Bootstrapped
     set.seed(333)
-    rez <- insight::get_predicted(x, ci_type = "prediction", iter = 500)
+    rez_pred <- insight::get_predicted(x, ci_type = "prediction", iter = 500)
     rez_boot <- insight::get_predicted(x, bootstrap = TRUE, iter = 500)
     # Such a big discrepancy!
-    # expect_equal(mean(as.data.frame(rez_boot)$CI_low - as.data.frame(rez)$CI_low), 0, tol = 0.001)
+    # expect_equal(mean(as.data.frame(rez_boot)$CI_low - as.data.frame(rez_pred)$CI_low), 0, tol = 0.001)
 
     # Compare to merTools
     rez_merTools <- merTools::predictInterval(x, level = 0.95, seed = 333, n.sims = 2000)
@@ -67,6 +75,12 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
     # This is completely off
     # expect_equal(mean(as.data.frame(rez)$CI_low - rez_emmeans$lower.PL), 0, tolerance = 0.5)
 
+    # Compare with rstanarm
+    x2 <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh=0, iter=1000, seed=333)
+    rez_stan <- as.data.frame(t(insight::get_predicted(x2)))
+    expect_equal(max(abs(rez - sapply(rez_stan, median))), 0, tolerance = 0.5)
+    # Different indeed
+    # expect_equal(mean(as.data.frame(rez)$CI_low - bayestestR::hdi(rez_stan)$CI_low), 0, tolerance = 0.5)
   })
 
   test_that("get_predicted - merMod", {
@@ -103,6 +117,10 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
     expect_true(!all(is.na(as.data.frame(rez))))
   })
 
+
+# GAMs --------------------------------------------------------------------
+
+
   test_that("get_predicted - mgcv::gam and gamm", {
     x <- mgcv::gam(vs ~ am + s(wt), data = mtcars, family = "binomial")
     rez <- insight::get_predicted(x)
@@ -131,6 +149,9 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
     expect_equal(max(abs(rez - stats::predict(x$gam, type = "response"))), 0)
     expect_equal(nrow(as.data.frame(rez)), 32)
   })
+
+
+# Bayesian ----------------------------------------------------------------
 
   test_that("get_predicted - rstanarm (lm)", {
     x <- suppressWarnings(rstanarm::stan_glm(mpg ~ am, data = mtcars, iter = 200, refresh = 0, seed = 333))

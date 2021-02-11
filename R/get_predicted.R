@@ -398,7 +398,7 @@ as.data.frame.get_predicted <- function(x, ...) {
     out <- as.data.frame.matrix(x)
 
     # If no names (i.e., V1, V2, V3 etc., replace by iter_)
-    names(out) <- gsub("^V(\\d)$", "iter_\\1", names(out))
+    names(out) <- gsub("^V(\\d+)$", "iter_\\1", names(out))
 
     return(out)
   }
