@@ -179,6 +179,22 @@ if (require("testthat") &&
     )
   })
 
+
+  test_that("find_parameters summary.lm", {
+    s <- summary(m1)
+    expect_equal(
+      find_parameters(s),
+      list(
+        conditional = c(
+          "(Intercept)",
+          "Petal.Width",
+          "Speciesversicolor",
+          "Speciesvirginica"
+        )
+      )
+    )
+  })
+
   test_that("linkfun", {
     expect_false(is.null(link_function(m1)))
     expect_false(is.null(link_function(m2)))
