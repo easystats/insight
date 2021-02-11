@@ -92,14 +92,8 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 
 
 #' @importFrom stats predict
-.generic_predictions <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, transform = NULL, type, ...) {
-  rez <- stats::predict(x, newdata = newdata, interval = "none", se.fit = FALSE, type = type, ...)
-  out <- if (is.list(rez)) {
-    as.vector(rez$fit)
-  } else {
-    as.vector(rez)
-  }
-
+.generic_predictions <- function(x, newdata = NULL, predicted, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, transform = NULL, type, ...) {
+  out <- predicted
   # (robust) CI
   if (!is.null(ci)) {
     ci_vals <- .get_predicted_ci_analytic(
@@ -133,9 +127,11 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 #' @rdname get_predicted
 #' @export
 get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
+  predicted <- stats::predict(x, newdata = newdata, interval = "none", se.fit = FALSE, ...)
   .generic_predictions(
     x = x,
     newdata = newdata,
+    predicted = as.vector(predicted),
     ci = ci,
     ci_type = ci_type,
     vcov_estimation = vcov_estimation,
@@ -150,15 +146,16 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
 
 #' @export
 get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "response", ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
+  predicted <- stats::predict(x, newdata = newdata, interval = "none", se.fit = FALSE, transform = "link", ...)
   # Prediction CI
   # Seems to be debated: see https://stat.ethz.ch/pipermail/r-help/2003-May/033165.html
   # "Prediction intervals (i.e. intervals with 95% probability of catching a new observation) are somewhat tricky even to define for glms"
   # Essentially, the prediction interval for binomial is [0, 1], which is not really useful
   # But then see https://cran.r-project.org/web/packages/trending/vignettes/prediction_intervals.html
-
   .generic_predictions(
     x = x,
     newdata = newdata,
+    predicted = as.vector(predicted),
     ci = ci,
     ci_type = ci_type,
     vcov_estimation = vcov_estimation,
