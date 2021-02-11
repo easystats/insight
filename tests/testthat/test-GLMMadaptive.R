@@ -21,6 +21,13 @@ if (.runThisTest) {
       expect_false(model_info(m)$is_linear)
     })
 
+    test_that("n_parameters", {
+      expect_equal(n_parameters(m), 6)
+      expect_equal(n_parameters(m2), 6)
+      expect_equal(n_parameters(m, effects = "random"), 2)
+      expect_equal(n_parameters(m2, effects = "random"), 1)
+    })
+
     test_that("find_predictors", {
       expect_identical(
         find_predictors(m, effects = "fixed")$conditional,

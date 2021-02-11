@@ -11,6 +11,11 @@ if (require("testthat") &&
     expect_false(model_info(m1)$is_linear)
   })
 
+  test_that("n_parameters", {
+    expect_equal(n_parameters(m1), 8)
+    expect_equal(n_parameters(m1, component = "conditional"), 5)
+  })
+
   test_that("find_predictors", {
     expect_identical(
       find_predictors(m1),

@@ -36,7 +36,7 @@ n_parameters <- function(x, ...) {
 #' @rdname n_parameters
 #' @export
 n_parameters.default <- function(x, ...) {
-  length(find_parameters(x, effects = "fixed", flatten = TRUE, ...))
+  length(unlist(find_parameters(x, effects = "fixed", flatten = FALSE, ...)))
 }
 
 
@@ -48,7 +48,7 @@ n_parameters.default <- function(x, ...) {
 #' @export
 n_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
   effects <- match.arg(effects)
-  length(find_parameters(x, effects = effects, flatten = TRUE, ...))
+  length(unlist(find_parameters(x, effects = effects, flatten = FALSE, ...)))
 }
 
 #' @export
@@ -93,7 +93,7 @@ n_parameters.MixMod <- function(x,
                                 ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
-  length(find_parameters(x, effects = effects, component = component, flatten = TRUE, ...))
+  length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, ...)))
 }
 
 #' @rdname n_parameters
@@ -110,7 +110,7 @@ n_parameters.glmmTMB <- n_parameters.MixMod
 #' @export
 n_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
   component <- match.arg(component)
-  length(find_parameters(x, component = component, flatten = TRUE, ...))
+  length(unlist(find_parameters(x, component = component, flatten = FALSE, ...)))
 }
 
 #' @export
@@ -130,7 +130,7 @@ n_parameters.zerotrunc <- n_parameters.default
 #' @export
 n_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
   component <- match.arg(component)
-  length(find_parameters(x, component = component, flatten = TRUE, ...))
+  length(unlist(find_parameters(x, component = component, flatten = FALSE, ...)))
 }
 
 #' @export
@@ -154,7 +154,7 @@ n_parameters.brmsfit <- function(x,
                                  ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
-  length(find_parameters(x, effects = effects, component = component, flatten = TRUE, ...))
+  length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, ...)))
 }
 
 
@@ -165,7 +165,7 @@ n_parameters.stanreg <- function(x,
                                  ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
-  length(find_parameters(x, effects = effects, component = component, flatten = TRUE, ...))
+  length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, ...)))
 }
 
 #' @export
@@ -201,5 +201,5 @@ n_parameters.multinom <- function(x, ...) {
 
 #' @export
 n_parameters.bayesx <- function(x, ...) {
-  length(find_parameters(x, component = "conditional", flatten = TRUE, ...))
+  length(unlist(find_parameters(x, component = "conditional", flatten = FALSE, ...)))
 }

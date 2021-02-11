@@ -10,6 +10,10 @@ if (require("testthat") &&
     expect_false(model_info(m1)$is_linear)
   })
 
+  test_that("n_parameters", {
+    expect_equal(n_parameters(m1), 5)
+  })
+
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = c("age", "lwt", "race", "smoke")))
     expect_identical(

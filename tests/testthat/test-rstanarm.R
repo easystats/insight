@@ -30,6 +30,11 @@ if (.runThisTest) {
       )
     m6 <- insight::download_model("stanreg_gamm4_1")
 
+    test_that("n_parameters", {
+      expect_equal(n_parameters(m1), 21)
+      expect_equal(n_parameters(m1, effects = "fixed"), 5)
+    })
+
     test_that("get_priors", {
       expect_equal(
         colnames(get_priors(m1)),

@@ -38,6 +38,13 @@ if (require("testthat") &&
     expect_equal(get_df(m2, type = "model"), attr(logLik(m2), "df"), ignore_attr = TRUE)
   })
 
+  test_that("n_parameters", {
+    expect_equal(n_parameters(m1), 2)
+    expect_equal(n_parameters(m2), 2)
+    expect_equal(n_parameters(m1, effects = "random"), 2)
+    expect_equal(n_parameters(m2, effects = "random"), 3)
+  })
+
   test_that("find_predictors", {
     expect_equal(
       find_predictors(m1, effects = "all"),

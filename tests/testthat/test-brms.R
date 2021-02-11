@@ -24,6 +24,11 @@ if (.runThisTest) {
       expect_null(find_statistic(m5))
     })
 
+    test_that("n_parameters", {
+      expect_equal(n_parameters(m1), 65)
+      expect_equal(n_parameters(m1, effects = "fixed"), 5)
+    })
+
     test_that("model_info", {
       expect_true(model_info(m3)$is_trial)
       expect_true(model_info(m5)[[1]]$is_zero_inflated)

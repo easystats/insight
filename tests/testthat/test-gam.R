@@ -15,6 +15,11 @@ if (.runThisTest) {
       expect_true(model_info(m3)$is_multivariate)
     })
 
+    test_that("n_parameters", {
+      expect_equal(n_parameters(m1), 5)
+      expect_equal(n_parameters(m1, component = "conditional"), 1)
+    })
+
     test_that("clean_names", {
       expect_equal(clean_names(m1), c("y", "x0", "x1", "x2", "x3"))
       expect_equal(clean_names(m2), c("y", "x2", "x3", "x0", "x1"))
