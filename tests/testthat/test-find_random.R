@@ -7,7 +7,7 @@ osx <- tryCatch({
   }
 })
 
-if (require("testthat") && require("insight") && require("mgcv") && require("gamm4") && require("rstanarm") && !osx) {
+if (!osx && require("testthat") && require("insight") && require("mgcv") && require("gamm4") && require("rstanarm")) {
   data <- iris
   data$g <- data$Species
   data$Xr <- data$Species
