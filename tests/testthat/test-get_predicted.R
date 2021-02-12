@@ -1,14 +1,4 @@
-osx <- tryCatch({
-  si <- Sys.info()
-  if (!is.null(si["sysname"])) {
-    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-  } else {
-    FALSE
-  }
-})
-
-
-if (!osx && require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans") && require("bayestestR")) {
+if (require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans") && require("bayestestR")) {
   data(mtcars)
 
 
@@ -63,8 +53,8 @@ if (!osx && require("testthat") && require("insight") && require("lme4") && requ
     expect_equal(nrow(as.data.frame(rez)), 32)
 
     # No random
-    rez <- insight::get_predicted(x, newdata = mtcars[c("am")])
-    expect_true(!all(is.na(as.data.frame(rez))))
+    rez2 <- insight::get_predicted(x, newdata = mtcars[c("am")])
+    expect_true(!all(is.na(as.data.frame(rez2))))
 
     # Bootstrapped
     set.seed(333)
@@ -85,9 +75,15 @@ if (!osx && require("testthat") && require("insight") && require("lme4") && requ
     # This is completely off
     # expect_equal(mean(as.data.frame(rez)$CI_low - rez_emmeans$lower.PL), 0, tolerance = 0.5)
 
+    # Compare with glmmTMB
+    ref <- insight::get_predicted(glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars))
+    expect_equal(max(abs(rez - ref)), 0, tolerance = 0.2) # A bit high
+    # expect_equal(max(abs(as.data.frame(rez)$SE - as.data.frame(ref)$SE)), 0, tolerance = 1e-5)
+    # expect_equal(max(abs(as.data.frame(rez)$CI_low - as.data.frame(ref)$CI_low)), 0, tolerance = 1e-5)
+
     # Compare with rstanarm
-    x2 <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh=0, iter=1000, seed=333)
-    rez_stan <- as.data.frame(t(insight::get_predicted(x2)))
+    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh=0, iter=1000, seed=333)
+    rez_stan <- as.data.frame(t(insight::get_predicted(xref)))
     # expect_equal(max(abs(rez - sapply(rez_stan, median))), 0, tolerance = 0.5)
     # Different indeed
     # expect_equal(mean(as.data.frame(rez)$CI_low - bayestestR::hdi(rez_stan)$CI_low), 0, tolerance = 0.5)
@@ -102,6 +98,13 @@ if (!osx && require("testthat") && require("insight") && require("lme4") && requ
     expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
     expect_equal(nrow(as.data.frame(rez)), 32)
 
+    # Compare with glmmTMB
+    xref <- glmmTMB::glmmTMB(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
+    rez_ref <- insight::get_predicted(xref)
+    expect_equal(max(abs(rez - rez_ref)), 0, tolerance = 1e-5)
+    # expect_equal(max(abs(as.data.frame(rez)$SE - as.data.frame(rez_ref)$SE)), 0, tolerance = 1e-5)
+    # expect_equal(max(abs(as.data.frame(rez)$CI_low - as.data.frame(rez_ref)$CI_low)), 0, tolerance = 1e-5)
+
   })
 
   test_that("get_predicted - glmmTMB", {
@@ -113,14 +116,13 @@ if (!osx && require("testthat") && require("insight") && require("lme4") && requ
     expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
     expect_equal(nrow(as.data.frame(rez)), 32)
 
-    # Compare to lme4
-    x2 <- lme4::glmer(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
-    rez2 <- insight::get_predicted(x2)
-    expect_equal(max(abs(rez - rez2)), 0, tolerance = 1e-5)
-    # expect_equal(max(abs(as.data.frame(rez)$SE - as.data.frame(rez2)$SE)), 0, tolerance = 1e-5)
-    # expect_equal(max(abs(as.data.frame(rez)$CI_low - as.data.frame(rez2)$CI_low)), 0, tolerance = 1e-5)
-    # rez_boot <- insight::get_predicted(x2, bootstrap = TRUE, iter = 500)
-    # expect_equal(max(abs(as.data.frame(rez)$CI_low - as.data.frame(rez_boot)$CI_low)), 0, tolerance = 1e-5)
+    # Compare with rstanarm
+    x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
+    rez <- as.data.frame(insight::get_predicted(x, ci_type = "confidence"))
+    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh=0, iter=1000, seed=333)
+    rez_stan <- as.data.frame(t(insight::get_predicted(xref, ci_type = "confidence")))
+    expect_equal(max(abs(rez$Predicted - sapply(rez_stan, median))), 0, tolerance = 0.1)
+    # expect_equal(max(abs(rez$CI_low - bayestestR::hdi(rez_stan)$CI_low)), 0, tolerance = 0.1)
 
     # No random
     rez <- insight::get_predicted(x, newdata = mtcars[c("am")])

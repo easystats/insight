@@ -446,6 +446,8 @@ as.matrix.get_predicted <- function(x, ...) {
   # the diagonal of this matrix represent the standard errors of the predictions,
   # which are then multiplied by 1.96 for the confidence intervals.
 
+
+  ci_type <- match.arg(ci_type, c("confidence", "prediction"))
   resp <- find_response(x)
   # fake response
   if (!is.null(newdata) && !all(resp %in% newdata)) {
