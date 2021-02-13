@@ -674,6 +674,8 @@
 
 * `supported_models()` to print a list of supported models.
 
+* `get_statistical_method()` to guess statistical method requested by the user.
+
 ## Changes to functions
 
 * `model_info()` now returns the element `is_survival` for survival models.
