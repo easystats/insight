@@ -1,4 +1,4 @@
-#' @name get_statistical_method
+#' @name format_statistical_approach
 #' @title Guess requested statistical method
 #'
 #' @description
@@ -18,11 +18,11 @@
 #' @param method Character string describing the method/type of statistics.
 #'
 #' @examples
-#' get_statistical_method("p")
-#' get_statistical_method("bf")
+#' format_statistical_approach("p")
+#' format_statistical_approach("bf")
 #' @export
 
-get_statistical_method <- function(method) {
+format_statistical_approach <- function(method) {
   switch(substring(method, 1, 1),
     "p" = "parametric",
     "n" = "nonparametric",
