@@ -3,6 +3,8 @@
 #' @param x A data frame.
 #' @param sep Column separator.
 #' @param header Header separator. Can be \code{NULL}.
+#' @param empty_line Separator used for empty lines. If \code{NULL}, line remains
+#'   empty (i.e. filled with whitespaces).
 #' @param format Name of output-format, as string. If \code{NULL} (or \code{"text"}),
 #'   returned output is used for basic printing. Can be one of \code{NULL} (the
 #'   default) resp. \code{"text"} for plain text, \code{"markdown"} (or
@@ -65,6 +67,7 @@
 export_table <- function(x,
                          sep = " | ",
                          header = "-",
+                         empty_line = NULL,
                          digits = 2,
                          protect_integers = TRUE,
                          missing = "",
@@ -127,7 +130,8 @@ export_table <- function(x,
       footer = footer,
       align = align,
       group_by = group_by,
-      zap_small = zap_small
+      zap_small = zap_small,
+      empty_line = empty_line
     )
   } else if (is.list(x)) {
     # list of data frames
@@ -147,7 +151,8 @@ export_table <- function(x,
         footer = attributes(i)$table_footer,
         align = align,
         group_by = group_by,
-        zap_small = zap_small
+        zap_small = zap_small,
+        empty_line = empty_line
       )
     })
     out <- c()
@@ -189,7 +194,7 @@ export_table <- function(x,
 # create matrix of raw table layout --------------------
 
 
-.export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, subtitle = NULL, footer = NULL, align = NULL, group_by = NULL, zap_small = FALSE) {
+.export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, subtitle = NULL, footer = NULL, align = NULL, group_by = NULL, zap_small = FALSE, empty_line = NULL) {
   df <- as.data.frame(x)
 
   # round all numerics
@@ -231,7 +236,7 @@ export_table <- function(x,
     }
 
     if (format == "text") {
-      out <- .format_basic_table(final, header, sep, caption = caption, subtitle = subtitle, footer = footer, align = align)
+      out <- .format_basic_table(final, header, sep, caption = caption, subtitle = subtitle, footer = footer, align = align, empty_line = empty_line)
     } else if (format == "markdown") {
       out <- .format_markdown_table(final, x, caption = caption, subtitle = subtitle, footer = footer, align = align)
     }
@@ -248,7 +253,7 @@ export_table <- function(x,
 # plain text formatting ------------------------
 
 
-.format_basic_table <- function(final, header, sep, caption = NULL, subtitle = NULL, footer = NULL, align = NULL) {
+.format_basic_table <- function(final, header, sep, caption = NULL, subtitle = NULL, footer = NULL, align = NULL, empty_line = NULL) {
 
   # align table, if requested
   if (!is.null(align) && length(align) == 1) {
@@ -279,7 +284,12 @@ export_table <- function(x,
   rows <- c()
   for (row in 1:nrow(final)) {
     final_row <- paste0(final[row, ], collapse = sep)
-    rows <- paste0(rows, final_row, sep = "\n")
+    # check if we have an empty row
+    if (!is.null(empty_line) && all(nchar(trimws(final[row, ])) == 0)) {
+      rows <- paste0(rows, paste0(rep_len(empty_line, nchar(final_row)), collapse = ""), sep = "\n")
+    } else {
+      rows <- paste0(rows, final_row, sep = "\n")
+    }
 
     # First row separation
     if (row == 1) {

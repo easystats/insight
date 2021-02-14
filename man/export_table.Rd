@@ -8,6 +8,7 @@ export_table(
   x,
   sep = " | ",
   header = "-",
+  empty_line = NULL,
   digits = 2,
   protect_integers = TRUE,
   missing = "",
@@ -28,6 +29,9 @@ export_table(
 \item{sep}{Column separator.}
 
 \item{header}{Header separator. Can be \code{NULL}.}
+
+\item{empty_line}{Separator used for empty lines. If \code{NULL}, line remains
+empty (i.e. filled with whitespaces).}
 
 \item{digits}{Number of significant digits.}
 
