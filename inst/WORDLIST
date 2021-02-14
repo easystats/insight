@@ -5,6 +5,7 @@ BFBayesFactor
 BGGM
 BayesFactor
 BayesX
+Codecov
 Coloured
 DOI
 DirichletReg
@@ -33,6 +34,7 @@ ateucher
 bamlss
 bayesGARCH
 bayesQR
+bayesian
 bayestestR
 bayesx
 bbmle
@@ -67,11 +69,13 @@ gam
 gamls
 gamlss
 ggeffects
+ggstatsplot
 github
 glmm
 glmmADMB
 glmmTMB
 glmx
+heteroskedasticity
 htest
 https
 intra
@@ -80,6 +84,7 @@ io
 ivFixed
 ivprobit
 joss
+knitr
 lavaan
 lme
 lmerModLmerTest
@@ -119,6 +124,7 @@ spaMM
 specificities
 stanfit
 stanreg
+statsExpressions
 tranformations
 tseries
 tweedie

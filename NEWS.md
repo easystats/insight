@@ -674,7 +674,7 @@
 
 * `supported_models()` to print a list of supported models.
 
-* `format_statistical_approach()` to guess statistical method requested by the user.
+* `format_approach()` to guess statistical method requested by the user.
 
 ## Changes to functions
 
