@@ -97,11 +97,18 @@ For markdown or HTML, simply use the `format` argument.
 export_table(df, format = "md")
 ```
 
-...or HTML
+...or HTML.
 
 ```{r}
 export_table(df, format = "html")
 ```
 
+This can be combined with `format_table()`.
+
+```{r}
+df %>% 
+  format_table(ci_brackets = c("(", ")")) %>% 
+  export_table(format = "html")
+```
 
 TODO: What about display?
