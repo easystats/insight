@@ -55,7 +55,7 @@ get_predicted <- function(x, ...) {
 get_predicted.default <- function(x, newdata = NULL, ...) {
   out <- tryCatch(
     {
-      if(!is.null(newdata)) {
+      if (!is.null(newdata)) {
         stats::predict(x, newdata = newdata, ...)
       } else {
         stats::predict(x, ...)
