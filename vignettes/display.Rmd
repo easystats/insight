@@ -14,6 +14,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+if (!requireNamespace("dplyr", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
 ```
 
 # The difference between a dataframe and its render
@@ -65,7 +69,7 @@ The purpose of formatting is to improve a given table, while still keeping it as
 
 
 ```{r}
-insight::format_table(df)
+format_table(df)
 ```
 
 As you can see, `format_table()` modifies columns, turning number into characters (so that it has the same amount of digits), and  detecting confidence intervals. This is usually combined with column-specific formatting functions, like `format_p()`:
@@ -81,10 +85,22 @@ df %>%
 
 The next step is *exporting*, which takes a data frame and renders it in a given format, so that it looks good in the console, or in markdown, HTML or latex.
 
-TODO: to complete, as it's not clear for me either!
+For text output, we need to `cat()` the returned result to get nice output in the console.
 
 ```{r}
 cat(export_table(df))
+```
+
+For markdown or HTML, simply use the `format` argument.
+
+```{r}
+export_table(df, format = "md")
+```
+
+...or HTML
+
+```{r}
+export_table(df, format = "HTML")
 ```
 
 
