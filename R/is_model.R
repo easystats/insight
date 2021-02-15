@@ -104,6 +104,8 @@ is_regression_model <- function(x) {
     "dglm",
     "DirichletRegModel",
     "drc",
+    "eglm",
+    "elm",
     "emmGrid",
     "emm_list",
     "epi.2by2",
