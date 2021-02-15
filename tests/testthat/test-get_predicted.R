@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans") && require("bayestestR")) {
+if (require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans") && require("bayestestR") && require("mclust")) {
   data(mtcars)
 
 
@@ -187,5 +187,15 @@ if (require("testthat") && require("insight") && require("lme4") && require("glm
     expect_equal(max(abs(sapply(rez, median) - xref$Predicted)), 0, tolerance = 0.1)
 
     # expect_equal(max(abs(bayestestR::hdi(rez)$CI_low - xref$CI_low)), 0, tolerance = 0.1)
+  })
+
+
+# Mixture -----------------------------------------------------------------
+
+  test_that("get_predicted - mclust", {
+    x <- mclust::densityMclust(rnorm(100), verbose = FALSE)
+    expect_equal(length(insight::get_predicted(x)), 100)
+    rez <- insight::get_predicted(x, newdata = seq(-1, 1, length.out=20))
+    expect_equal(length(rez), 20)
   })
 }

@@ -94,6 +94,7 @@ Suggests:
     logistf,
     MASS,
     Matrix,
+    mclust,
     MCMCglmm,
     merTools,
     metaBMA,
