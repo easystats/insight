@@ -100,7 +100,7 @@ export_table(df, format = "md")
 ...or HTML
 
 ```{r}
-export_table(df, format = "HTML")
+export_table(df, format = "html")
 ```
 
 
