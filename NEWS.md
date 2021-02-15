@@ -1,3 +1,9 @@
+# insight 0.13.1
+
+## New supported model classes
+
+* Support for `elm`, `eglm` (*eflm*)
+
 # insight 0.13.0
 
 ## General
