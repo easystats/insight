@@ -132,11 +132,6 @@ Suggests:
     VGAM
 VignetteBuilder: 
     knitr
-Remotes: 
-    easystats/bayestestR,
-    easystats/effectsize,
-    easystats/parameters,
-    easystats/performance
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.1.1
