@@ -31,6 +31,7 @@ Returns weighting variable of a model.
 }
 \examples{
 data(mtcars)
+set.seed(123)
 mtcars$weight <- rnorm(nrow(mtcars), 1, .3)
 
 # LMs
