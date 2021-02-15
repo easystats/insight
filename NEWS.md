@@ -1,4 +1,4 @@
-# insight 0.12.1
+# insight 0.13.0
 
 ## General
 
@@ -27,6 +27,8 @@
 
 * Fixed issue in `format_table()` with p-value formatting, when input data frame
   contained a column named `"p"`, which was not numeric.
+
+* (Hopefully) fixed issue with failing CRAN checks.
 
 # insight 0.12.0
 
