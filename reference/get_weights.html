@@ -88,7 +88,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.13.0.1</span>
       </span>
     </div>
 
@@ -182,20 +182,55 @@ set <code>null_as_ones = TRUE</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span>
 <span class='va'>mtcars</span><span class='op'>$</span><span class='va'>weight</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>, <span class='fl'>1</span>, <span class='fl'>.3</span><span class='op'>)</span>
 
 <span class='co'># LMs</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in lm.wfit(x, y, w, offset = offset, singular.ok = singular.ok,     ...): missing or negative weights not allowed</span></div><div class='input'><span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in get_weights(m): object 'm' not found</span></div><div class='input'>
+<span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] 0.8318573 0.9309468 1.4676125 1.0211525 1.0387863 1.5145195 1.1382749
+#&gt;  [8] 0.6204816 0.7939441 0.8663014 1.3672245 1.1079441 1.1202314 1.0332048
+#&gt; [15] 0.8332477 1.5360739 1.1493551 0.4100149 1.2104068 0.8581626 0.6796529
+#&gt; [22] 0.9346075 0.6921987 0.7813326 0.8124882 0.4939920 1.2513361 1.0460119
+#&gt; [29] 0.6585589 1.3761445 1.1279393 0.9114786</div><div class='input'>
 <span class='fu'>get_weights</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>, null_as_ones <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</div><div class='input'>
 <span class='co'># GLMs</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>disp</span> <span class='op'>+</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span>, family <span class='op'>=</span> <span class='va'>quasibinomial</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in glm(vs ~ disp + mpg, data = mtcars, weights = weight, family = quasibinomial): negative weights not allowed</span></div><div class='input'><span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in get_weights(m): object 'm' not found</span></div><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>cyl</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span>, family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in glm(cbind(cyl, gear) ~ mpg, data = mtcars, weights = weight,     family = binomial): negative weights not allowed</span></div><div class='input'><span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in get_weights(m): object 'm' not found</span></div></pre>
+<span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
+#&gt;           0.8318573           0.9309468           1.4676125           1.0211525 
+#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
+#&gt;           1.0387863           1.5145195           1.1382749           0.6204816 
+#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE 
+#&gt;           0.7939441           0.8663014           1.3672245           1.1079441 
+#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental 
+#&gt;           1.1202314           1.0332048           0.8332477           1.5360739 
+#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla 
+#&gt;           1.1493551           0.4100149           1.2104068           0.8581626 
+#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 
+#&gt;           0.6796529           0.9346075           0.6921987           0.7813326 
+#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa 
+#&gt;           0.8124882           0.4939920           1.2513361           1.0460119 
+#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E 
+#&gt;           0.6585589           1.3761445           1.1279393           0.9114786 </div><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>cyl</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span>, family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span>
+<span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
+#&gt;            8.318573            9.309468           11.740900            9.190373 
+#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
+#&gt;           11.426650           13.630675           12.521023            4.963853 
+#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE 
+#&gt;            6.351553            8.663014           13.672245           12.187386 
+#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental 
+#&gt;           12.322546           11.365253            9.165724           16.896813 
+#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla 
+#&gt;           12.642907            3.280119            9.683254            6.865301 
+#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 
+#&gt;            4.757570           10.280683            7.614185            8.594659 
+#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa 
+#&gt;            8.937370            3.951936           11.262025            9.414107 
+#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E 
+#&gt;            8.561266           15.137589           14.663210            7.291828 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
