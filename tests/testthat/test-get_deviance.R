@@ -7,7 +7,9 @@ osx <- tryCatch({
   }
 })
 
-if (!osx && require("testthat") && require("insight") && require("lme4") && require("rstanarm")) {
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
+if (.runThisTest && !osx && require("testthat") && require("insight") && require("lme4") && require("rstanarm")) {
   data(mtcars)
 
   test_that("get_deviance - Bayesian lm", {

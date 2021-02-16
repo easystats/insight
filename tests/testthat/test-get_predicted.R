@@ -7,7 +7,9 @@ osx <- tryCatch({
   }
 })
 
-if (!osx && require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans") && require("bayestestR") && require("mclust")) {
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
+if (.runThisTest && !osx && require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans") && require("bayestestR") && require("mclust")) {
   data(mtcars)
 
 
@@ -204,7 +206,7 @@ if (!osx && require("testthat") && require("insight") && require("lme4") && requ
   test_that("get_predicted - mclust", {
     x <- mclust::densityMclust(rnorm(100), verbose = FALSE)
     expect_equal(length(insight::get_predicted(x)), 100)
-    rez <- insight::get_predicted(x, newdata = seq(-1, 1, length.out=20))
+    rez <- insight::get_predicted(x, newdata = seq(-1, 1, length.out = 20))
     expect_equal(length(rez), 20)
   })
 }
