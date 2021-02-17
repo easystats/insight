@@ -174,7 +174,7 @@
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p>Slightly improved handling of different CI-columns in <code><a href="../reference/format_table.html">format_table()</a></code>.</p></li>
-<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_leventest</code> if model is an object returned by <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html">car::leveneTest()</a></code>.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_leventest</code> if model is an object returned by <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html" class="external-link">car::leveneTest()</a></code>.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> supports <code>htest</code> objects.</p></li>
 </ul>
 </div>
@@ -212,14 +212,14 @@
 <h2 class="hasAnchor">
 <a href="#new-functions" class="anchor"></a>New functions</h2>
 <ul>
-<li><p>Added <code><a href="../reference/get_deviance.html">get_deviance()</a></code> function that returns the model deviance as a robust alternative to <code><a href="https://rdrr.io/r/stats/deviance.html">stats::deviance()</a></code>.</p></li>
+<li><p>Added <code><a href="../reference/get_deviance.html">get_deviance()</a></code> function that returns the model deviance as a robust alternative to <code><a href="https://rdrr.io/r/stats/deviance.html" class="external-link">stats::deviance()</a></code>.</p></li>
 <li><p>Added <code><a href="../reference/model_name.html">model_name()</a></code> function that returns the model’s “name”.</p></li>
-<li><p>Added <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> method for <code><a href="../reference/find_formula.html">find_formula()</a></code> output to flatten it.</p></li>
+<li><p>Added <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> method for <code><a href="../reference/find_formula.html">find_formula()</a></code> output to flatten it.</p></li>
 <li><p>Added <code>null_as_ones = TRUE</code> argument to <code><a href="../reference/get_weights.html">get_weights()</a></code> to return vector of 1s instead of <code>NULL</code>.</p></li>
 <li><p>Added <code><a href="../reference/get_intercept.html">get_intercept()</a></code> as a helper function to easily retrieve the value at the intercept.</p></li>
 <li><p>Added <code><a href="../reference/get_df.html">get_df()</a></code> as a robust alternative to <code>stats::df.residuals()</code>.</p></li>
-<li><p>Added <code><a href="../reference/get_predicted.html">get_predicted()</a></code> as a robust alternative to <code><a href="https://rdrr.io/r/stats/fitted.values.html">stats::fitted()</a></code>.</p></li>
-<li><p>Added <code><a href="../reference/get_loglikelihood.html">get_loglikelihood()</a></code> (and its alias <code><a href="../reference/get_loglikelihood.html">loglikelihood()</a></code>) function as a robust alternative to <code><a href="https://rdrr.io/r/stats/logLik.html">stats::logLik()</a></code>.</p></li>
+<li><p>Added <code><a href="../reference/get_predicted.html">get_predicted()</a></code> as a robust alternative to <code><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">stats::fitted()</a></code>.</p></li>
+<li><p>Added <code><a href="../reference/get_loglikelihood.html">get_loglikelihood()</a></code> (and its alias <code><a href="../reference/get_loglikelihood.html">loglikelihood()</a></code>) function as a robust alternative to <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">stats::logLik()</a></code>.</p></li>
 <li><p>Added <code><a href="../reference/get_residuals.html">get_residuals()</a></code> as a robust alternative extract model residuals.</p></li>
 <li><p>Added <code><a href="../reference/ellipsis_info.html">ellipsis_info()</a></code> to specify the nature of ellipsis (<code>...</code>) inputs.</p></li>
 <li><p>Added <code><a href="../reference/is_nested_models.html">is_nested_models()</a></code> to check if multiple regression models are nested (decreasing or increasing).</p></li>
@@ -234,7 +234,7 @@
 <ul>
 <li><p><code><a href="../reference/find_formula.html">find_formula()</a></code>, <code>find_predictor()</code>, <code><a href="../reference/find_random.html">find_random()</a></code> and related functions now also return names of random effects from generalized additive mixed models (<code>gamm</code>, <code>gamm4</code>, <code>stan_gamm4</code>).</p></li>
 <li><p>Added support for more BFBayesFactor objects.</p></li>
-<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_xtab</code> for <code><a href="https://rdrr.io/r/stats/chisq.test.html">chisq.test()</a></code> and <code><a href="https://rdrr.io/pkg/BayesFactor/man/contingencyTableBF.html">BayesFactor::contingencyTableBF()</a></code>. Furthermore, the <code>$family</code> element for those objects is set to <code>"categorical"</code>.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_xtab</code> for <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code> and <code><a href="https://rdrr.io/pkg/BayesFactor/man/contingencyTableBF.html" class="external-link">BayesFactor::contingencyTableBF()</a></code>. Furthermore, the <code>$family</code> element for those objects is set to <code>"categorical"</code>.</p></li>
 <li><p><code><a href="../reference/n_obs.html">n_obs()</a></code> now handles number of observations from models with binomial family correctly when these have matrix-columns as response variable.</p></li>
 </ul>
 </div>
@@ -255,7 +255,7 @@
 <h2 class="hasAnchor">
 <a href="#general-1" class="anchor"></a>General</h2>
 <ul>
-<li>Warnings that formerly were printed using <code><a href="../reference/print_color.html">print_color()</a></code> now use <code><a href="https://rdrr.io/r/base/warning.html">warning()</a></code>, to better suppress warning messages if required.</li>
+<li>Warnings that formerly were printed using <code><a href="../reference/print_color.html">print_color()</a></code> now use <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>, to better suppress warning messages if required.</li>
 </ul>
 </div>
 <div id="new-functions-1" class="section level2">
@@ -271,7 +271,7 @@
 <a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> and <code><a href="../reference/get_variance.html">get_variance_random()</a></code> gain a <code>tolerance</code>-argument, to set the tolerance level for singularity checks when computing random effect variances.</p></li>
-<li><p><code><a href="../reference/format_table.html">parameters_table()</a></code> formats more objects from the <em>easystats</em> packages, like ROPE-range or <code><a href="https://easystats.github.io/bayestestR/reference/p_rope.html">p_rope()</a></code>.</p></li>
+<li><p><code><a href="../reference/format_table.html">parameters_table()</a></code> formats more objects from the <em>easystats</em> packages, like ROPE-range or <code><a href="https://easystats.github.io/bayestestR/reference/p_rope.html" class="external-link">p_rope()</a></code>.</p></li>
 <li><p><code><a href="../reference/find_statistic.html">find_statistic()</a></code> now supports models of class <em>scam</em>.</p></li>
 <li><p><code><a href="../reference/get_data.html">get_data()</a></code> now also supports <code>htest</code>-object, where possible.</p></li>
 </ul>
@@ -281,7 +281,7 @@
 <a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fix CRAN check issues.</p></li>
-<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code><a href="https://mc-stan.org/rstanarm/reference/stan_gamm4.html">stan_gamm4()</a></code> now correctly includes random effects.</p></li>
+<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code><a href="https://mc-stan.org/rstanarm/reference/stan_gamm4.html" class="external-link">stan_gamm4()</a></code> now correctly includes random effects.</p></li>
 </ul>
 </div>
 </div>
@@ -293,7 +293,7 @@
 <h2 class="hasAnchor">
 <a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h2>
 <ul>
-<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now also detects models from <code><a href="https://rdrr.io/r/stats/oneway.test.html">oneway.test()</a></code>, <code><a href="https://rdrr.io/r/stats/binom.test.html">binom.test()</a></code> <code><a href="https://rdrr.io/r/stats/chisq.test.html">chisq.test()</a></code>, <code><a href="https://rdrr.io/r/stats/mcnemar.test.html">mcnemar.test()</a></code> and <code><a href="https://rdrr.io/r/stats/prop.test.html">prop.test()</a></code>. Furthermore, <code><a href="../reference/model_info.html">model_info()</a></code> better deals with objects from <code>BFBayesFactor</code>, and censored regression models no longer return <code>TRUE</code> for <code>$is_linear</code>.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now also detects models from <code><a href="https://rdrr.io/r/stats/oneway.test.html" class="external-link">oneway.test()</a></code>, <code><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">binom.test()</a></code> <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code>, <code><a href="https://rdrr.io/r/stats/mcnemar.test.html" class="external-link">mcnemar.test()</a></code> and <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">prop.test()</a></code>. Furthermore, <code><a href="../reference/model_info.html">model_info()</a></code> better deals with objects from <code>BFBayesFactor</code>, and censored regression models no longer return <code>TRUE</code> for <code>$is_linear</code>.</p></li>
 <li><p><code><a href="../reference/format_table.html">format_table()</a></code> is going to be renamed in a future update. Please use its alias <code><a href="../reference/export_table.html">export_table()</a></code>.</p></li>
 </ul>
 </div>
@@ -335,7 +335,7 @@
 <li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <code>MixMod</code> objects, which were caused due to internal changes in <em>GLMMadaptive</em>.</p></li>
 <li><p><code><a href="../reference/get_data.html">get_data()</a></code> for zero-inflated models from <em>pscl</em> did not include the offset-term in cases where the offset was defined as argument, not inside the model formula.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <code>coxph</code> models with survival-objects with <code>event</code>-argument as response.</p></li>
-<li><p>Fixed edge case in <code><a href="../reference/get_data.html">get_data()</a></code> for column name of response values that were log-transformed using <code><a href="https://rdrr.io/r/base/Log.html">log(x+1)</a></code>.</p></li>
+<li><p>Fixed edge case in <code><a href="../reference/get_data.html">get_data()</a></code> for column name of response values that were log-transformed using <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log(x+1)</a></code>.</p></li>
 </ul>
 </div>
 <div id="other-bug-fixes" class="section level3">
@@ -412,7 +412,7 @@
 <ul>
 <li><p><code><a href="../reference/get_data.html">get_data()</a></code> now works for models from <code>afex_aov()</code>.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> returns a more informative message for <code>BFBayesFactor</code> objects when not the first model is indexed.</p></li>
-<li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes <code><a href="https://rdrr.io/r/base/Log.html">exp()</a></code>-pattern.</p></li>
+<li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp()</a></code>-pattern.</p></li>
 <li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> for character-objects now works with “interaction patterns” (like <code><a href="../reference/clean_names.html">clean_names("scale(a):scale(b)")</a></code>).</p></li>
 <li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>protect_ratio</code> argument, to print numbers smaller than 1 as ratios.</p></li>
 </ul>
@@ -442,7 +442,7 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li><p><code><a href="../reference/get_data.html">get_data()</a></code> now returns the correct original data for “empty” polynomials (i.e. <code><a href="https://rdrr.io/r/stats/poly.html">poly(x, 1)</a></code>).</p></li>
+<li><p><code><a href="../reference/get_data.html">get_data()</a></code> now returns the correct original data for “empty” polynomials (i.e. <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly(x, 1)</a></code>).</p></li>
 <li><p>Fix CRAN check issues due to latest <em>estimatr</em> update.</p></li>
 </ul>
 </div>
@@ -463,8 +463,8 @@
 <a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_meta = TRUE</code> for <em>brms</em>-meta-analysis models.</p></li>
-<li><p>Make <code><a href="../reference/find_statistic.html">find_statistic()</a></code> work with <code><a href="https://rdrr.io/pkg/mgcv/man/bam.html">mgcv::bam()</a></code>.</p></li>
-<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also support <code><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html">truncated_nbinom2()</a></code> family from <em>glmmTMB</em>.</p></li>
+<li><p>Make <code><a href="../reference/find_statistic.html">find_statistic()</a></code> work with <code><a href="https://rdrr.io/pkg/mgcv/man/bam.html" class="external-link">mgcv::bam()</a></code>.</p></li>
+<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also support <code><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html" class="external-link">truncated_nbinom2()</a></code> family from <em>glmmTMB</em>.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-7" class="section level2">
@@ -472,8 +472,8 @@
 <a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue with correctly detecting sigma-parameters in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for multiple-response <code>brmsfit</code>-models.</p></li>
-<li><p>Fixed issue with <code><a href="../reference/find_formula.html">find_formula()</a></code> for models from <code><a href="https://mc-stan.org/rstanarm/reference/stan_nlmer.html">stan_nlmer()</a></code>.</p></li>
-<li><p>Fixed issues with <code><a href="../reference/find_terms.html">find_terms()</a></code> when response variable included a namespace, like <code><a href="https://rdrr.io/pkg/survival/man/Surv.html">survival::Surv()</a></code>.</p></li>
+<li><p>Fixed issue with <code><a href="../reference/find_formula.html">find_formula()</a></code> for models from <code><a href="https://mc-stan.org/rstanarm/reference/stan_nlmer.html" class="external-link">stan_nlmer()</a></code>.</p></li>
+<li><p>Fixed issues with <code><a href="../reference/find_terms.html">find_terms()</a></code> when response variable included a namespace, like <code><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">survival::Surv()</a></code>.</p></li>
 <li><p>Fixed issues with <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>stanreg</em> models, probably caused by the latest update to <em>rstanarm 2.21.2</em>.</p></li>
 <li><p>Fixed issues in <code><a href="../reference/get_variance.html">get_variance()</a></code> for <em>brmsfit</em> models.</p></li>
 <li><p>Fixed some issues around <code>crq</code> objects (package <em>quantreg</em>).</p></li>
@@ -517,7 +517,7 @@
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> did not return variance components for random effects for null-models with random slopes.</p></li>
 <li><p>Fixed issue with <code><a href="../reference/get_variance.html">get_variance()</a></code> for <code>lme</code>-models with categorical random slope.</p></li>
 <li><p>Fixed issue that occurred since R 4.0.0 in <code><a href="../reference/find_weights.html">find_weights()</a></code> when function call had no <code>weights</code>-argument.</p></li>
-<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with <code><a href="https://rdrr.io/r/base/cbind.html">cbind()</a></code>-response variables and matrix-like variables in the model frame (e.g. when using <code><a href="https://rdrr.io/r/stats/poly.html">poly()</a></code>).</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>-response variables and matrix-like variables in the model frame (e.g. when using <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly()</a></code>).</p></li>
 <li><p>Fixed issues with <code>PROreg::BBmm()</code>, due to changes in latest package update.</p></li>
 </ul>
 </div>
@@ -771,7 +771,7 @@
 <ul>
 <li><p>Fixed bug in <code><a href="../reference/find_formula.html">find_formula()</a></code> for mixed models, when random effects are written before any fixed effects terms (like <code>social ~ (1|school) + open + extro</code>).</p></li>
 <li><p>Fixed bug in <code><a href="../reference/model_info.html">model_info()</a></code> for <em>VGAM</em> models, where logit-link was not always correctly identified.</p></li>
-<li><p>Fixed issue in <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>brmsfit</em> models, where parameters of conditional and zero-inflated model components had identical names. This caused errors in <code><a href="https://easystats.github.io/bayestestR/reference/simulate_prior.html">bayestestR::simulate_prior()</a></code>.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>brmsfit</em> models, where parameters of conditional and zero-inflated model components had identical names. This caused errors in <code><a href="https://easystats.github.io/bayestestR/reference/simulate_prior.html" class="external-link">bayestestR::simulate_prior()</a></code>.</p></li>
 <li><p>Fixed CRAN check issue.</p></li>
 </ul>
 </div>
@@ -839,10 +839,10 @@
 <a href="#changes-to-functions-14" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_survival</code> for survival models.</p></li>
-<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_truncated</code> for truncated regression, or <em>brmsfit</em> models with <code><a href="https://rdrr.io/r/base/Round.html">trunc()</a></code> as additional response part.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns the element <code>is_truncated</code> for truncated regression, or <em>brmsfit</em> models with <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">trunc()</a></code> as additional response part.</p></li>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> now recognizes beta and beta inflated families from package <em>gamlss</em>.</p></li>
-<li><p>Better support for nonlinear quantile regression (<code><a href="https://rdrr.io/pkg/quantreg/man/nlrq.html">quantreg::nlrq()</a></code>).</p></li>
-<li><p>Better support for nonlinear mixed models (<code><a href="https://rdrr.io/pkg/lme4/man/nlmer.html">lme4::nlmer()</a></code>). Note that model-specification requires the random term to be written in parentheses, i.e. <code>(slope | group)</code>.</p></li>
+<li><p>Better support for nonlinear quantile regression (<code><a href="https://rdrr.io/pkg/quantreg/man/nlrq.html" class="external-link">quantreg::nlrq()</a></code>).</p></li>
+<li><p>Better support for nonlinear mixed models (<code><a href="https://rdrr.io/pkg/lme4/man/nlmer.html" class="external-link">lme4::nlmer()</a></code>). Note that model-specification requires the random term to be written in parentheses, i.e. <code>(slope | group)</code>.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-16" class="section level2">
@@ -855,7 +855,7 @@
 <li><p><code><a href="../reference/is_model.html">is_model()</a></code> did not recognize objects of class <code>anova</code> and <code>manova</code>.</p></li>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> now correctly recognizes censored regression models from <em>brmsfit</em>.</p></li>
 <li><p>Fixed issues in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> with <em>multinom</em> models.</p></li>
-<li><p>Fixed issues in <code><a href="../reference/clean_names.html">clean_names()</a></code> for cases where variable transformations where made in specific patterns, like <code><a href="https://rdrr.io/r/base/Log.html">log(test/10)</a></code>.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/clean_names.html">clean_names()</a></code> for cases where variable transformations where made in specific patterns, like <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log(test/10)</a></code>.</p></li>
 </ul>
 </div>
 </div>
@@ -890,7 +890,7 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-15" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li><p><code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also support objects of class <code>sim</code> and <code>sim.merMod</code> (from <code><a href="https://rdrr.io/pkg/arm/man/sim.html">arm::sim()</a></code>).</p></li>
+<li><p><code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> now also support objects of class <code>sim</code> and <code>sim.merMod</code> (from <code><a href="https://rdrr.io/pkg/arm/man/sim.html" class="external-link">arm::sim()</a></code>).</p></li>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also supports models of class <em>clmm</em>.</p></li>
 <li><p><code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> now include the Euclidean distance matrix for spatial models from <em>glmmTMB</em> (returned as random effects element, or more precise, as random slope).</p></li>
 </ul>
