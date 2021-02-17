@@ -1,16 +1,20 @@
-osx <- tryCatch({
-  si <- Sys.info()
-  if (!is.null(si["sysname"])) {
-    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-  } else {
+osx <- tryCatch(
+  {
+    si <- Sys.info()
+    if (!is.null(si["sysname"])) {
+      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+    } else {
+      FALSE
+    }
+  },
+  error = function(e) {
     FALSE
   }
-})
+)
 
-if (require("testthat") &&
+if (!osx && require("testthat") &&
   require("insight") &&
-  require("feisr") &&
-  !isTRUE(osx)) {
+  require("feisr")) {
   data(mwp)
   m1 <- feis(
     lnw ~ marry + enrol + as.factor(yeargr) | exp + I(exp^2),

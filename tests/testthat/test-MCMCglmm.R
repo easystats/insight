@@ -1,16 +1,21 @@
-osx <- tryCatch({
-  si <- Sys.info()
-  if (!is.null(si["sysname"])) {
-    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-  } else {
+osx <- tryCatch(
+  {
+    si <- Sys.info()
+    if (!is.null(si["sysname"])) {
+      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+    } else {
+      FALSE
+    }
+  },
+  error = function(e) {
     FALSE
   }
-})
+)
 
 
-if (require("testthat") &&
+if (!osx && require("testthat") &&
   require("insight") &&
-  require("MCMCglmm") && !isTRUE(osx)) {
+  require("MCMCglmm")) {
   data(PlodiaPO)
   m1 <- MCMCglmm(
     PO ~ plate,
