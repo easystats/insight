@@ -6,7 +6,7 @@
 #' @param stars Add significance stars (e.g., p < .001***).
 #' @param stars_only Return only significance stars.
 #' @param name Name prefixing the text. Can be \code{NULL}.
-#' @param digits Number of significant digits. May also be \code{"scientific"} to return exact p-values in scientific notation, or \code{"apa"} to use an APA-style for p-values.
+#' @param digits Number of significant digits. May also be \code{"scientific"} to return exact p-values in scientific notation, or \code{"apa"} to use an APA-style for p-values (e.g., p < .01, p < .05, etc.).
 #' @param ... Arguments from other methods.
 #' @inheritParams format_value
 #'
@@ -18,6 +18,7 @@
 #'
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)
 #' p <- coef(summary(model))[, 4]
+#' format_p(p, digits = "apa")
 #' format_p(p, digits = "scientific")
 #' @export
 format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing = "", digits = 3, ...) {

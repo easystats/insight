@@ -25,7 +25,7 @@ format_p(
 
 \item{missing}{Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.}
 
-\item{digits}{Number of significant digits. May also be \code{"scientific"} to return exact p-values in scientific notation, or \code{"apa"} to use an APA-style for p-values.}
+\item{digits}{Number of significant digits. May also be \code{"scientific"} to return exact p-values in scientific notation, or \code{"apa"} to use an APA-style for p-values (e.g., p < .01, p < .05, etc.).}
 
 \item{...}{Arguments from other methods.}
 }
@@ -42,5 +42,6 @@ format_p(c(.02, .065, 0, .23), stars_only = TRUE)
 
 model <- lm(mpg ~ wt + cyl, data = mtcars)
 p <- coef(summary(model))[, 4]
+format_p(p, digits = "apa")
 format_p(p, digits = "scientific")
 }
