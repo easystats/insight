@@ -117,7 +117,7 @@ Suggests:
     rms,
     robustbase,
     robustlmm,
-    rstanarm,
+    rstanarm (>= 2.21.1),
     rstudioapi,
     sandwich,
     speedglm,

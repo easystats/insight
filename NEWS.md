@@ -4,6 +4,10 @@
 
 * Support for `elm`, `eglm` (*eflm*)
 
+## Bug fixed
+
+* Fix or disable failing tests on Mac OS.
+
 # insight 0.13.0
 
 ## General
