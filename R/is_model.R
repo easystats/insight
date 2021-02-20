@@ -24,16 +24,29 @@
 #' is_regression_model(test)
 #' @export
 is_model <- function(x) {
-  inherits(x, .get_model_classes())
+  inherits(.get_class_list(x), .get_model_classes())
 }
 
+
+# Is regression model -----------------------------------------------------
 
 #' @rdname is_model
 #' @export
 is_regression_model <- function(x) {
-  inherits(x, .get_model_classes(regression_only = TRUE))
+  inherits(.get_class_list(x), .get_model_classes(regression_only = TRUE))
 }
 
+
+# Helpers -----------------------------------------------------------------
+
+.get_class_list <- function(x) {
+  if(length(class(x)) > 1 || class(x) != "list") return(x)
+
+  if(all(c("mer", "gam") %in% names(x))) {
+    class(x) <- c("gamm4", "list")
+  }
+  x
+}
 
 
 .get_model_classes <- function(regression_only = FALSE) {

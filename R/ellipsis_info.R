@@ -74,7 +74,7 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
   # Drop non-models if need be
   if (only_models && any(is_model == FALSE)) {
     warning(paste(
-      paste0(object_names[is_model == TRUE], collapse = ", "),
+      paste0(object_names[is_model == FALSE], collapse = ", "),
       "are not supported models and have been dropped."
     ))
     objects <- objects[is_model]
