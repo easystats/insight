@@ -1,8 +1,16 @@
 # insight 0.13.1
 
+## General
+
+* Improved handling for GAMs.
+
 ## New supported model classes
 
 * Support for `elm`, `eglm` (*eflm*)
+
+## Changes to functions
+
+* `format_ci()` also gains a `zap_small` argument.
 
 ## Bug fixed
 

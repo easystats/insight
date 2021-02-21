@@ -25,7 +25,7 @@
 #' x <- format_ci(c(1.205, 23.4, 100.43), c(3.57, -13.35, 9.4), width = "auto")
 #' cat(x, sep = "\n")
 #' @export
-format_ci <- function(CI_low, CI_high, ci = 0.95, digits = 2, brackets = TRUE, width = NULL, width_low = width, width_high = width, missing = "") {
+format_ci <- function(CI_low, CI_high, ci = 0.95, digits = 2, brackets = TRUE, width = NULL, width_low = width, width_high = width, missing = "", zap_small = FALSE) {
   # check proper defaults
   if (isTRUE(brackets)) {
     ci_brackets <- c("[", "]")
@@ -67,19 +67,19 @@ format_ci <- function(CI_low, CI_high, ci = 0.95, digits = 2, brackets = TRUE, w
   if (is.na(missing)) missing <- NA_character_
 
   if (!is.null(ci)) {
-    ifelse(is.na(CI_low) & is.na(CI_high), missing, paste0(ci * 100, "% CI ", .format_ci(CI_low, CI_high, digits = digits, ci_brackets = ci_brackets, width_low = width_low, width_high = width_high, missing = missing)))
+    ifelse(is.na(CI_low) & is.na(CI_high), missing, paste0(ci * 100, "% CI ", .format_ci(CI_low, CI_high, digits = digits, ci_brackets = ci_brackets, width_low = width_low, width_high = width_high, missing = missing, zap_small = zap_small)))
   } else {
-    ifelse(is.na(CI_low) & is.na(CI_high), missing, .format_ci(CI_low, CI_high, digits = digits, ci_brackets = ci_brackets, width_low = width_low, width_high = width_high, missing = missing))
+    ifelse(is.na(CI_low) & is.na(CI_high), missing, .format_ci(CI_low, CI_high, digits = digits, ci_brackets = ci_brackets, width_low = width_low, width_high = width_high, missing = missing, zap_small = zap_small))
   }
 }
 
 #' @keywords internal
-.format_ci <- function(CI_low, CI_high, digits = 2, ci_brackets = c("[", "]"), width_low = NULL, width_high = NULL, missing = "NA") {
+.format_ci <- function(CI_low, CI_high, digits = 2, ci_brackets = c("[", "]"), width_low = NULL, width_high = NULL, missing = "NA", zap_small = FALSE) {
   paste0(
     ci_brackets[1],
-    format_value(CI_low, digits = digits, missing = missing, width = width_low),
+    format_value(CI_low, digits = digits, missing = missing, width = width_low, zap_small = zap_small),
     ", ",
-    format_value(CI_high, digits = digits, missing = missing, width = width_high),
+    format_value(CI_high, digits = digits, missing = missing, width = width_high, zap_small = zap_small),
     ci_brackets[2]
   )
 }

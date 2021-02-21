@@ -39,6 +39,10 @@ if (require("testthat") && require("insight")) {
       format_ci(c(123, 123, 123, 123), c(123, 12345, 123456, 123456789012), width = "auto", digits = 0),
       c("95% CI [123,    123]", "95% CI [123,  12345]", "95% CI [123,  1e+05]", "95% CI [123,  1e+11]")
     )
+    expect_equal(format_ci(1.24, 0.0000054), "95% CI [1.24, 5.40e-06]")
+    expect_equal(format_ci(1.24, 0.0000054, digits = 0), "95% CI [1, 5e-06]")
+    expect_equal(format_ci(1.24, 0.0000054, zap_small = TRUE), "95% CI [1.24, 0.00]")
+    expect_equal(format_ci(1.24, 0.0000054, zap_small = TRUE, digits = 0), "95% CI [1, 0]")
   })
 
   test_that("format others", {
