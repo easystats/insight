@@ -33,9 +33,4 @@ model_name(m, include_call = TRUE)
 if (require("lme4")) {
   model_name(lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))
 }
-if (require("rstanarm")) {
-  model_name(stan_glm(Sepal.Length ~ Petal.Width,
-    data = iris, refresh = 0, iter = 200
-  ))
-}
 }

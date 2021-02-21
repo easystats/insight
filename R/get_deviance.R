@@ -11,11 +11,6 @@
 #' data(mtcars)
 #' x <- lm(mpg ~ cyl, data = mtcars)
 #' get_deviance(x)
-#'
-#' if (require("rstanarm")) {
-#'   x <- rstanarm::stan_glm(mpg ~ cyl, data = mtcars, refresh = 0)
-#'   get_deviance(x)
-#' }
 #' @export
 get_deviance <- function(x, ...) {
   UseMethod("get_deviance")
