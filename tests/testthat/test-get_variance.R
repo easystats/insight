@@ -57,7 +57,7 @@ if (!osx && .runThisTest && require("testthat") && require("insight") && require
                  c(Subject = 627.56905),
                  tolerance = 1e-2)
     expect_equal(v2$var.slope,
-                 c(Subject.1 = 35.85838),
+                 c(Subject.Days = 35.85838),
                  tolerance = 1e-2)
   })
 
@@ -66,7 +66,7 @@ if (!osx && .runThisTest && require("testthat") && require("insight") && require
                  c(subgrp.grp.1 = 0, Subject = 662.52047, grp.1 = 0),
                  tolerance = 1e-2)
     expect_equal(v3$var.slope,
-                 c(Subject.Days = 34.25771, subgrp.grp = 7.88485, grp = 0),
+                 c(Subject.Days = 34.25771, subgrp.grp.Days = 7.88485, grp.Days = 0),
                  tolerance = 1e-2)
   })
 
