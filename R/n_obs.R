@@ -98,16 +98,16 @@ n_obs.svyolr <- function(x, weighted = FALSE, ...) {
 
 #' @export
 n_obs.gam <- function(x, ...) {
-  if(!is.null(dim(x$y))) {
+  if (!is.null(dim(x$y))) {
     dim(x$y)[1]
-  } else{
+  } else {
     length(x$y)
   }
 }
 
 #' @export
 n_obs.gamm <- function(x, ...) {
-  if(.obj_has_name(x, "gam")) {
+  if (.obj_has_name(x, "gam")) {
     n_obs(x$gam, ...)
   } else{
     stop("Cannot find n_obs for this object. Please an open an issue!")
