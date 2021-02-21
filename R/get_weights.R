@@ -49,10 +49,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
     error = function(e) {
       NULL
     },
-    warning = function(e) {
-      NULL
-    },
-    finally = function(e) {
+    warning = function(w) {
       NULL
     }
   )
@@ -65,10 +62,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
       error = function(e) {
         NULL
       },
-      warning = function(e) {
-        NULL
-      },
-      finally = function(e) {
+      warning = function(w) {
         NULL
       }
     )
@@ -82,10 +76,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
       error = function(e) {
         NULL
       },
-      warning = function(e) {
-        NULL
-      },
-      finally = function(e) {
+      warning = function(w) {
         NULL
       }
     )
@@ -136,4 +127,15 @@ get_weights.brmsfit <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
 #' @export
 get_weights.btergm <- function(x, null_as_ones = FALSE, ...) {
   x@weights
+}
+
+
+#' @export
+get_weights.list <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {  # For GAMMs
+  if("gam" %in% names(x)) {
+    get_weights(x$gam, na_rm = na_rm, null_as_ones = null_as_ones, ...)
+  } else{
+    stop("Cannot find weights in this object. Please an open an issue!")
+  }
+
 }

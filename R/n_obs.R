@@ -25,10 +25,6 @@ n_obs <- function(x, ...) {
 
 #' @export
 n_obs.default <- function(x, ...) {
-  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
-    x <- x$gam
-    class(x) <- c(class(x), c("glm", "lm"))
-  }
 
   is_binomial <- tryCatch(
     {
@@ -100,13 +96,26 @@ n_obs.svyolr <- function(x, weighted = FALSE, ...) {
 }
 
 
+#' @export
+n_obs.gam <- function(x, ...) {
+  if(!is.null(dim(x$y))) {
+    dim(x$y)[1]
+  } else{
+    length(x$y)
+  }
+}
 
 #' @export
 n_obs.gamm <- function(x, ...) {
-  x <- x$gam
-  class(x) <- c(class(x), c("glm", "lm"))
-  NextMethod()
+  if(.obj_has_name(x, "gam")) {
+    n_obs(x$gam, ...)
+  } else{
+    stop("Cannot find n_obs for this object. Please an open an issue!")
+  }
 }
+
+#' @export
+n_obs.list <- n_obs.gamm
 
 
 #' @export
@@ -133,7 +142,6 @@ n_obs.summary.lm <- function(x, ...) {
 n_obs.mediate <- function(x, ...) {
   x$nobs
 }
-
 
 
 #' @export

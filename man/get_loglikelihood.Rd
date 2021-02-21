@@ -4,7 +4,6 @@
 \alias{get_loglikelihood}
 \alias{loglikelihood}
 \alias{get_loglikelihood.lm}
-\alias{get_loglikelihood.glm}
 \title{Log-Likelihood}
 \usage{
 get_loglikelihood(x, ...)
@@ -12,8 +11,6 @@ get_loglikelihood(x, ...)
 loglikelihood(x, ...)
 
 \method{get_loglikelihood}{lm}(x, estimator = "ML", REML = FALSE, ...)
-
-\method{get_loglikelihood}{glm}(x, ...)
 }
 \arguments{
 \item{x}{A model.}
@@ -22,13 +19,13 @@ loglikelihood(x, ...)
 
 \item{estimator}{Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator.}
 
-\item{REML}{This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwrite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.}
+\item{REML}{Only for linear models. This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwrite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.}
 }
 \value{
 An object of class \code{"logLik"}, also containing the log-likelihoods for each observation as a \code{per_observation} attribute  (\code{attributes(get_loglikelihood(x))$per_observation}) when possible. The code was partly inspired from the \CRANpkg{nonnest2} package.
 }
 \description{
-A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results when \code{estimator = "ML"} is specified).
+A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results by default).
 }
 \examples{
 x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)

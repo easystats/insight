@@ -133,6 +133,6 @@ if (!osx && require("testthat") && require("insight") && require("gamm4")) {
   })
 
   test_that("find_statistic", {
-    expect_error(find_statistic(m1))
+    expect_null(find_statistic(m1))
   })
 }

@@ -1,9 +1,9 @@
 #' Log-Likelihood
 #'
-#' A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results when \code{estimator = "ML"} is specified).
+#' A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results by default).
 #'
 #' @param estimator Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator.
-#' @param REML This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwrite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.
+#' @param REML Only for linear models. This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwrite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.
 #' @param ... Passed down to \code{logLik()}, if possible.
 #' @inheritParams get_residuals
 #'
@@ -43,9 +43,8 @@ get_loglikelihood.default <- function(x, ...) {
 # https://stats.stackexchange.com/questions/322038/input-format-for-response-in-binomial-glm-in-r
 
 
-#' @rdname get_loglikelihood
-#' @export
-get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
+#' @importFrom stats weights deviance dbinom dpois dgamma
+.get_loglikelihood_lm <- function(x, estimator = "ML", REML = FALSE, ...) {
 
   # Replace arg if compatibility base R is activated
   if (REML) estimator <- "REML"
@@ -81,16 +80,8 @@ get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
   .loglikelihood_prep_output(x, lls)
 }
 
-#' @export
-get_loglikelihood.ivreg <- get_loglikelihood.lm
 
-
-
-
-#' @importFrom stats weights deviance dbinom dpois dgamma
-#' @rdname get_loglikelihood
-#' @export
-get_loglikelihood.glm <- function(x, ...) {
+.get_loglikelihood_glm <- function(x, ...) {
   fam <- family(x)$family
   resp <- get_response(x)
   w <- get_weights(x, null_as_ones = TRUE)
@@ -112,37 +103,59 @@ get_loglikelihood.glm <- function(x, ...) {
 
   # Calculate Log Likelihoods depending on the family
   lls <- switch(fam,
-    binomial = {
-      stats::dbinom(round(n * resp), round(n), predicted, log = TRUE) * w
-    },
-    quasibinomial = {
-      NA
-    },
-    poisson = {
-      stats::dpois(resp, predicted, log = TRUE) * w
-    },
-    quasipoisson = {
-      NA
-    },
-    gaussian = {
-      nobs <- length(resp)
-      -((log(dev / nobs * 2 * pi) + 1) - log(w)) / 2
-    },
-    inverse.gaussian = {
-      -((log(disp * 2 * pi) + 1) + 3 * log(resp)) / 2
-    },
-    Gamma = {
-      stats::dgamma(resp, shape = 1 / disp, scale = predicted * disp, log = TRUE) * w
-    }
+                binomial = {
+                  stats::dbinom(round(n * resp), round(n), predicted, log = TRUE) * w
+                },
+                quasibinomial = {
+                  NA
+                },
+                poisson = {
+                  stats::dpois(resp, predicted, log = TRUE) * w
+                },
+                quasipoisson = {
+                  NA
+                },
+                gaussian = {
+                  nobs <- length(resp)
+                  -((log(dev / nobs * 2 * pi) + 1) - log(w)) / 2
+                },
+                inverse.gaussian = {
+                  -((log(disp * 2 * pi) + 1) + 3 * log(resp)) / 2
+                },
+                Gamma = {
+                  stats::dgamma(resp, shape = 1 / disp, scale = predicted * disp, log = TRUE) * w
+                }
   )
 
   .loglikelihood_prep_output(x, lls)
 }
 
 
-#' @export
-get_loglikelihood.glmer <- get_loglikelihood.glm
 
+
+#' @rdname get_loglikelihood
+#' @export
+get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
+  info <- model_info(x)
+  if (info$is_linear) {
+    ll <- .get_loglikelihood_lm(x, estimator = estimator, REML = REML, ...)
+  } else {
+    ll <- .get_loglikelihood_glm(x, ...)
+  }
+ ll
+}
+
+#' @export
+get_loglikelihood.ivreg <- get_loglikelihood.lm
+
+#' @export
+get_loglikelihood.glm <- get_loglikelihood.lm
+
+#' @export
+get_loglikelihood.glmer <- get_loglikelihood.lm
+
+#' @export
+get_loglikelihood.gam <- get_loglikelihood.lm
 
 
 #' @export
@@ -181,11 +194,10 @@ get_loglikelihood.iv_robust <- function(x, ...) {
       w <- w[!excl]
     }
   }
-  N0 <- N
 
   val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
 
-  attr(val, "nall") <- N0
+  attr(val, "nall") <- N
   attr(val, "nobs") <- N
   attr(val, "df") <- p + 1
   class(val) <- "logLik"
@@ -217,7 +229,6 @@ get_loglikelihood.plm <- function(x, ...) {
   res <- get_residuals(x)
   w <- get_weights(x, null_as_ones = TRUE)
   N <- n_obs(x)
-  N0 <- N
 
   ll <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
 
@@ -227,6 +238,14 @@ get_loglikelihood.plm <- function(x, ...) {
 
 #' @export
 get_loglikelihood.cpglm <- get_loglikelihood.plm
+
+
+
+
+
+
+# Core methods ------------------------------------------------------------
+
 
 
 # Helpers -----------------------------------------------------------------
