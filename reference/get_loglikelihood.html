@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Log-Likelihood — get_loglikelihood" />
-<meta property="og:description" content="A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for stats::logLik() out of the box, as the returned object is of the same class (and it gives the same results when estimator = &quot;ML&quot; is specified)." />
+<meta property="og:description" content="A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for stats::logLik() out of the box, as the returned object is of the same class (and it gives the same results by default)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -142,7 +142,7 @@
     </div>
 
     <div class="ref-description">
-    <p>A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for <code><a href='https://rdrr.io/r/stats/logLik.html'>stats::logLik()</a></code> out of the box, as the returned object is of the same class (and it gives the same results when <code>estimator = "ML"</code> is specified).</p>
+    <p>A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for <code><a href='https://rdrr.io/r/stats/logLik.html'>stats::logLik()</a></code> out of the box, as the returned object is of the same class (and it gives the same results by default).</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_loglikelihood</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -150,10 +150,7 @@
 <span class='fu'>loglikelihood</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for lm</span>
-<span class='fu'>get_loglikelihood</span><span class='op'>(</span><span class='va'>x</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span>, REML <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for glm</span>
-<span class='fu'>get_loglikelihood</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>get_loglikelihood</span><span class='op'>(</span><span class='va'>x</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span>, REML <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,7 +169,7 @@
     </tr>
     <tr>
       <th>REML</th>
-      <td><p>This argument is present for compatibility with <code><a href='https://rdrr.io/r/stats/logLik.html'>stats::logLik()</a></code>. Setting it to <code>TRUE</code> will overwrite the <code>estimator</code> argument and is thus equivalent to setting <code>estimator="REML"</code>. It will give the same results as <code><a href='https://rdrr.io/r/stats/logLik.html'>stats::logLik(..., REML=TRUE)</a></code>. Note that individual log-likelihoods are not available under REML.</p></td>
+      <td><p>Only for linear models. This argument is present for compatibility with <code><a href='https://rdrr.io/r/stats/logLik.html'>stats::logLik()</a></code>. Setting it to <code>TRUE</code> will overwrite the <code>estimator</code> argument and is thus equivalent to setting <code>estimator="REML"</code>. It will give the same results as <code><a href='https://rdrr.io/r/stats/logLik.html'>stats::logLik(..., REML=TRUE)</a></code>. Note that individual log-likelihoods are not available under REML.</p></td>
     </tr>
     </table>
 
