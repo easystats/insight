@@ -154,7 +154,8 @@
   width <span class='op'>=</span> <span class='cn'>NULL</span>,
   width_low <span class='op'>=</span> <span class='va'>width</span>,
   width_high <span class='op'>=</span> <span class='va'>width</span>,
-  missing <span class='op'>=</span> <span class='st'>""</span>
+  missing <span class='op'>=</span> <span class='st'>""</span>,
+  zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -191,6 +192,10 @@
     <tr>
       <th>missing</th>
       <td><p>Value by which <code>NA</code> values are replaced. By default, an empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p></td>
+    </tr>
+    <tr>
+      <th>zap_small</th>
+      <td><p>Logical, if <code>TRUE</code>, small values are rounded after <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal places than <code>digits</code> are printed in scientific notation.</p></td>
     </tr>
     </table>
 
