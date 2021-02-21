@@ -757,6 +757,11 @@
     vars <- lapply(vals$vc, function(i) i)[1]
   } else {
     vars <- lapply(vals$vc, function(i) i[1])
+    # check for uncorrelated random slopes-intercept
+    non_intercepts <- which(sapply(vals$vc, function(i) dimnames(i)[[1]][1]) != "(Intercept)")
+    if (length(non_intercepts)) {
+      vars <- vars[-non_intercepts]
+    }
   }
 
   sapply(vars, function(i) i)
@@ -772,7 +777,13 @@
   } else if (inherits(x, "lme")) {
     unlist(lapply(vals$vc, function(x) diag(x)[-1]))
   } else {
-    unlist(lapply(vals$vc, function(x) diag(x)[-1]))
+    out <- unlist(lapply(vals$vc, function(x) diag(x)[-1]))
+    # check for uncorrelated random slopes-intercept
+    non_intercepts <- which(sapply(vals$vc, function(i) dimnames(i)[[1]][1]) != "(Intercept)")
+    if (length(non_intercepts)) {
+      out <- c(out, unlist(lapply(vals$vc, function(i) i[1])[non_intercepts]))
+    }
+    out
   }
 }
 

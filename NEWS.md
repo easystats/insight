@@ -16,6 +16,10 @@
 
 * Fix or disable failing tests on Mac OS.
 
+* Fixed issues in `get_variance()`with non-correlated
+  random-slope-intercepts for *lme4* models.
+
+
 # insight 0.13.0
 
 ## General
