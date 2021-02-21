@@ -171,65 +171,7 @@
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='fu'>get_intercept</span><span class='op'>(</span><span class='fu'>lme4</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; [1] 3.406167</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>get_intercept</span><span class='op'>(</span><span class='fu'>rstanarm</span><span class='fu'>::</span><span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span>,
-    data <span class='op'>=</span> <span class='va'>iris</span>, refresh <span class='op'>=</span> <span class='fl'>0</span>, iter <span class='op'>=</span> <span class='fl'>200</span>
-  <span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
-#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
-#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='output co'>#&gt;   [1] 4.737214 4.843127 4.811422 4.787476 4.730067 4.911695 4.857806 4.806513
-#&gt;   [9] 4.784505 4.795137 4.861669 4.799004 4.783522 4.782341 4.717860 4.887860
-#&gt;  [17] 4.785259 4.802209 4.776340 4.742517 4.694994 4.834850 4.680350 4.749977
-#&gt;  [25] 4.649798 4.746444 4.739570 4.643777 4.654468 4.634621 4.820247 4.838888
-#&gt;  [33] 4.751717 4.827534 4.746268 4.646629 4.778062 4.646863 4.786925 4.731020
-#&gt;  [41] 4.653634 4.776799 4.724499 4.681740 4.717485 4.768505 4.759262 4.899855
-#&gt;  [49] 4.582984 4.670140 4.854260 4.868614 4.741675 4.857954 4.734067 4.805192
-#&gt;  [57] 4.656077 4.864557 4.724172 4.823839 4.708567 4.708479 4.665768 4.909268
-#&gt;  [65] 4.757921 4.785528 4.649101 4.682723 4.712035 4.765926 4.809893 4.766728
-#&gt;  [73] 4.726973 4.682240 4.898161 4.868922 4.803282 4.559690 4.600390 4.677673
-#&gt;  [81] 4.724272 4.702410 4.810921 4.694656 4.901844 4.750256 4.841537 4.702169
-#&gt;  [89] 4.797329 4.664561 4.854688 4.670811 4.915016 4.774480 4.888650 4.710689
-#&gt;  [97] 4.722365 4.769006 4.858781 4.810690 4.896883 4.761733 4.717391 4.828436
-#&gt; [105] 4.653613 4.881309 4.701921 4.843087 4.814883 4.724175 4.900314 4.772010
-#&gt; [113] 4.745472 4.694604 4.707639 4.781722 4.703498 4.578433 4.778713 4.794285
-#&gt; [121] 4.647657 4.750707 4.690345 4.869361 4.677180 4.886180 4.691864 4.730762
-#&gt; [129] 4.774311 4.769262 4.801849 4.678802 4.708745 4.787500 4.576420 4.869492
-#&gt; [137] 4.695817 4.834140 4.790764 4.838725 4.819615 4.536327 4.582612 4.532433
-#&gt; [145] 4.656481 4.842646 4.655144 4.807293 4.715104 4.724282 4.752753 4.827580
-#&gt; [153] 4.710250 4.850386 4.741494 4.852989 4.711866 4.770021 4.676980 4.714598
-#&gt; [161] 4.729076 4.743486 4.834766 4.825038 4.855040 4.703464 4.788733 4.918118
-#&gt; [169] 4.881308 4.690515 4.698701 4.780390 4.838769 4.838769 4.703622 4.844418
-#&gt; [177] 4.770349 4.841544 4.779075 4.907910 4.853501 4.903180 4.783104 4.855688
-#&gt; [185] 4.814117 4.911861 4.623390 4.659922 4.752852 4.775395 4.840886 4.777405
-#&gt; [193] 4.869951 4.744719 4.801521 4.771127 4.826759 4.622188 4.845862 4.753030
-#&gt; [201] 4.629978 4.645432 4.704738 4.705203 4.831674 4.854689 4.716889 4.744351
-#&gt; [209] 4.806071 4.836389 4.738966 4.790804 4.779229 4.782769 4.832241 4.784327
-#&gt; [217] 4.783242 4.647989 4.664710 4.764548 4.761619 4.731412 4.708256 4.803378
-#&gt; [225] 4.664605 4.791899 4.921499 4.652633 4.802569 4.778782 4.834728 4.694360
-#&gt; [233] 4.716389 4.727255 4.829802 4.772686 4.795225 4.524875 4.651596 4.863903
-#&gt; [241] 4.879312 4.901871 4.910723 4.762660 4.820922 4.754306 4.751971 4.815120
-#&gt; [249] 4.735525 4.693423 4.876772 4.679292 4.766693 4.764471 4.639563 4.628330
-#&gt; [257] 4.794578 4.892755 4.837688 4.855055 4.790672 4.821770 4.737807 4.754815
-#&gt; [265] 4.725280 4.698154 4.745066 4.700678 4.881267 4.738735 4.851928 4.646673
-#&gt; [273] 4.857754 4.862493 4.843381 4.816126 4.694511 4.800346 4.807447 4.760995
-#&gt; [281] 4.763423 4.788827 4.729395 4.687711 4.813444 4.804247 4.721160 4.875568
-#&gt; [289] 4.628586 4.791034 4.778071 4.768676 4.880463 4.757689 4.695192 4.724851
-#&gt; [297] 4.731944 4.682040 4.568446 4.868387 4.869285 4.771194 4.822914 4.881178
-#&gt; [305] 4.752709 4.816081 4.850954 4.730678 4.865370 4.844936 4.793168 4.728239
-#&gt; [313] 4.816910 4.695559 4.872345 4.712220 4.859588 4.791031 4.803962 4.722458
-#&gt; [321] 4.771035 4.702236 4.781065 4.775520 4.800875 4.668542 4.799396 4.891038
-#&gt; [329] 4.822266 4.877856 4.812979 4.858175 4.704952 4.793743 4.760643 4.817421
-#&gt; [337] 4.765092 4.973051 4.850082 4.801169 4.651892 4.622141 4.680678 4.658791
-#&gt; [345] 4.920324 4.765078 4.750136 4.845124 4.763675 4.832201 4.858954 4.824845
-#&gt; [353] 4.721203 4.736645 4.760324 4.824659 4.791333 4.851269 4.710595 4.893119
-#&gt; [361] 4.828546 4.691621 4.793489 4.800779 4.771145 4.787618 4.769311 4.779091
-#&gt; [369] 4.691180 4.729306 4.713605 4.792965 4.810963 4.936401 4.820209 4.884169
-#&gt; [377] 4.793020 4.741251 4.819134 4.809390 4.782827 4.721887 4.703406 4.708877
-#&gt; [385] 4.810777 4.769034 4.707562 4.714425 4.682774 4.875161 4.758485 4.697149
-#&gt; [393] 4.763194 4.733145 4.744424 4.735059 4.747332 4.663653 4.903146 4.715491</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"gamm4"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+</div><div class='output co'>#&gt; [1] 3.406167</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"gamm4"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='fu'>get_intercept</span><span class='op'>(</span><span class='fu'>gamm4</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gamm4/man/gamm4.html'>gamm4</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span><span class='op'>(</span><span class='va'>Petal.Width</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: gamm4</span></div><div class='output co'>#&gt; <span class='message'>This is gamm4 0.2-6</span></div><div class='output co'>#&gt; [1] 5.843333</div></pre>
