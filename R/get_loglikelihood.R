@@ -63,7 +63,7 @@ get_loglikelihood.default <- function(x, ...) {
     }
     N <- get_df(x, type = "residual") # n_obs - p
     val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x)^2))))
-    p <- x$rank # TODO: Can we replace this by n_parameters?
+    p <- n_parameters(x, only_estimable = TRUE)
     ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
     return(.loglikelihood_prep_output(x, ll))
   }
