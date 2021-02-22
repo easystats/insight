@@ -28,8 +28,6 @@ to every aspect of many model objects via consistent syntax and output.
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
 [![R
 check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/easystats/insight/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/insight?branch=master)
 
 Run the following to install the stable release of **insight** from
 CRAN:
