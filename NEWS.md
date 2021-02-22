@@ -10,7 +10,12 @@
 
 ## Changes to functions
 
-* `get_residuals(..., weighted = TRUE)` doesn't throw warnings if weights are 1 (no weights specified).
+* `get_residuals(..., weighted = TRUE)` doesn't throw warnings if weights are 1
+  (no weights specified).
+  
+* `n_parameters()` gains a `only_estimable` argument, to remove non-estimable
+  parameters from counting the number of parameters for models with 
+  rank-deficient model matrix.
 
 * `format_ci()` also gains a `zap_small` argument.
 
