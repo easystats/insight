@@ -1,6 +1,9 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("parsnip")) {
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
+if (.runThisTest &&
+    require("testthat") &&
+    require("insight") &&
+    require("parsnip")) {
   data(mtcars)
 
   m <- parsnip::linear_reg()

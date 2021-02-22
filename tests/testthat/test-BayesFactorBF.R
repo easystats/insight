@@ -1,5 +1,6 @@
-if (require("testthat") && require("insight") && require("stats") && require("BayesFactor")) {
-  .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
+if (.runThisTest && require("testthat") && require("insight") && require("stats") && require("BayesFactor")) {
 
   x <- correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
   test_that("get_data", {
@@ -86,8 +87,7 @@ if (require("testthat") && require("insight") && require("stats") && require("Ba
   }
 
   # ---------------------------
-  # if (.runThisTest) {
-  if (TRUE) {
+  if (.runThisTest) {
     data(ToothGrowth)
     ToothGrowth$dose <- factor(ToothGrowth$dose)
     levels(ToothGrowth$dose) <- c("Low", "Medium", "High")

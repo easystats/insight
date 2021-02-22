@@ -1,6 +1,9 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("gam")) {
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
+if (.runThisTest &&
+    require("testthat") &&
+    require("insight") &&
+    require("gam")) {
   data(kyphosis)
   m1 <- gam::gam(
     Kyphosis ~ s(Age, 4) + Number,

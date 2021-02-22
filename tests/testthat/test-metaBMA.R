@@ -1,4 +1,6 @@
-if (require("testthat") && require("insight") && require("metaBMA")) {
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
+if (.runThisTest && require("testthat") && require("insight") && require("metaBMA")) {
   data(towels)
   set.seed(123)
   mf <- meta_fixed(logOR, SE, study, data = towels, d = prior("norm", c(mean = 0, sd = .3), lower = 0))

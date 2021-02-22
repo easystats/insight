@@ -12,8 +12,9 @@ osx <- tryCatch(
   }
 )
 
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (!osx && require("testthat") && require("insight") && require("nonnest2")) {
+if (.runThisTest && !osx && require("testthat") && require("insight") && require("nonnest2")) {
   data(iris)
   data(mtcars)
 
