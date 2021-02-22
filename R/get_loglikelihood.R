@@ -136,6 +136,10 @@ get_loglikelihood.default <- function(x, ...) {
 #' @rdname get_loglikelihood
 #' @export
 get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
+  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
+    x <- x$gam
+  }
+
   info <- model_info(x)
   if (info$is_linear) {
     ll <- .get_loglikelihood_lm(x, estimator = estimator, REML = REML, ...)
@@ -157,6 +161,11 @@ get_loglikelihood.glmer <- get_loglikelihood.lm
 #' @export
 get_loglikelihood.gam <- get_loglikelihood.lm
 
+#' @export
+get_loglikelihood.gamm <- get_loglikelihood.lm
+
+#' @export
+get_loglikelihood.list <- get_loglikelihood.lm
 
 #' @export
 get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
@@ -243,8 +252,6 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
 
 
 
-
-# Core methods ------------------------------------------------------------
 
 
 

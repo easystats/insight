@@ -118,7 +118,7 @@ if (!osx && require("testthat") && require("insight") && require("nonnest2")) {
     test_that("get_loglikelihood - mgcv", {
       x <- mgcv::gam(Sepal.Length ~ s(Petal.Width), data=iris)
       # TODO: strange that the logLik by default is the REML one...
-      # but this seems to be alluded in the ligLik.gam docs
+      # but this seems to be alluded in the logLik.gam docs
       ll <- insight::get_loglikelihood(x, estimator="REML")
       ll2 <- stats::logLik(x)
       expect_equal(as.numeric(ll), as.numeric(ll2))
@@ -130,7 +130,7 @@ if (!osx && require("testthat") && require("insight") && require("nonnest2")) {
   # if (require("gamm4")) {
   #   test_that("get_loglikelihood - gamm4", {
   #     x <- gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data=iris)
-  #     ll <- insight::get_loglikelihood(x, estimator="REML")
+  #     ll <- insight::get_loglikelihood(x$gam, estimator="REML")
   #   })
   # }
 }
