@@ -26,30 +26,6 @@
 #'
 #' objects <- ellipsis_info(m1, m2, m5)
 #' attributes(objects)$same_response
-#'
-#' # Lavaan Models
-#' if (require("lavaan")) {
-#'   structure <- " visual  =~ x1 + x2 + x3
-#'                  textual =~ x4 + x5 + x6
-#'                  speed   =~ x7 + x8 + x9
-#'
-#'                   visual ~~ textual + speed "
-#'   m1 <- lavaan::sem(structure, data = HolzingerSwineford1939)
-#'
-#'   structure <- " visual  =~ x1 + x2 + x3
-#'                  textual =~ x4 + x5 + x6
-#'                  speed   =~ x7 + x8 + x9
-#'
-#'                   visual ~~ 0 * textual + speed "
-#'   m2 <- lavaan::sem(structure, data = HolzingerSwineford1939)
-#'
-#'   structure <- " x1  =~ mpg + cyl
-#'                  x2 =~ gear + am "
-#'
-#'   m3 <- lavaan::sem(structure, data = mtcars)
-#'
-#'   ellipsis_info(m1, m2, m3)
-#' }
 #' @export
 ellipsis_info <- function(objects, ...) {
   UseMethod("ellipsis_info")
