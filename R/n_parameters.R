@@ -10,7 +10,7 @@
 #'    term or the instrumental variables be returned? Applies to models
 #'    with zero-inflated and/or dispersion formula, or to models with instrumental
 #'    variable (so called fixed-effects regressions). May be abbreviated.
-#' @param only_estimable Logical, if \code{TRUE}, removes (i.e. does not count)
+#' @param remove_nonestimable Logical, if \code{TRUE}, removes (i.e. does not count)
 #'    non-estimable parameters (which may occur for models with rank-deficient
 #'    model matrix).
 #' @param ... Arguments passed to or from other methods.
@@ -38,14 +38,14 @@ n_parameters <- function(x, ...) {
 
 #' @rdname n_parameters
 #' @export
-n_parameters.default <- function(x, only_estimable = FALSE, ...) {
-  .n_parameters_effects(x, effects = "fixed", only_estimable = only_estimable)
+n_parameters.default <- function(x, remove_nonestimable = FALSE, ...) {
+  .n_parameters_effects(x, effects = "fixed", remove_nonestimable = remove_nonestimable)
 }
 
 
 # helper
-.process_estimable <- function(params, only_estimable) {
-  if (isTRUE(only_estimable)) {
+.process_estimable <- function(params, remove_nonestimable) {
+  if (isTRUE(remove_nonestimable)) {
     params <- params[!is.na(params$Estimate), ]
   }
   nrow(params)
@@ -57,9 +57,9 @@ n_parameters.default <- function(x, only_estimable = FALSE, ...) {
 
 #' @rdname n_parameters
 #' @export
-n_parameters.merMod <- function(x, effects = c("fixed", "random"), only_estimable = FALSE, ...) {
+n_parameters.merMod <- function(x, effects = c("fixed", "random"), remove_nonestimable = FALSE, ...) {
   effects <- match.arg(effects)
-  .n_parameters_effects(x, effects = effects, only_estimable = only_estimable)
+  .n_parameters_effects(x, effects = effects, remove_nonestimable = remove_nonestimable)
 }
 
 #' @export
@@ -101,16 +101,16 @@ n_parameters.wbm <- n_parameters.merMod
 n_parameters.MixMod <- function(x,
                                 effects = c("fixed", "random"),
                                 component = c("all", "conditional", "zi", "zero_inflated"),
-                                only_estimable = FALSE,
+                                remove_nonestimable = FALSE,
                                 ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
-  if (effects == "random" || isFALSE(only_estimable)) {
+  if (effects == "random" || isFALSE(remove_nonestimable)) {
     length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, ...)))
   } else {
     params <- get_parameters(x, effects = effects, component = component, ...)
-    .process_estimable(params, only_estimable)
+    .process_estimable(params, remove_nonestimable)
   }
 }
 
@@ -128,10 +128,10 @@ n_parameters.glmmTMB <- n_parameters.MixMod
 #' @export
 n_parameters.zeroinfl <- function(x,
                                   component = c("all", "conditional", "zi", "zero_inflated"),
-                                  only_estimable = FALSE,
+                                  remove_nonestimable = FALSE,
                                   ...) {
   component <- match.arg(component)
-  .n_parameters_component(x, component, only_estimable)
+  .n_parameters_component(x, component, remove_nonestimable)
 }
 
 #' @export
@@ -151,10 +151,10 @@ n_parameters.zerotrunc <- n_parameters.default
 #' @export
 n_parameters.gam <- function(x,
                              component = c("all", "conditional", "smooth_terms"),
-                             only_estimable = FALSE,
+                             remove_nonestimable = FALSE,
                              ...) {
   component <- match.arg(component)
-  .n_parameters_component(x, component, only_estimable)
+  .n_parameters_component(x, component, remove_nonestimable)
 }
 
 #' @export
@@ -235,10 +235,10 @@ n_parameters.bayesx <- function(x, ...) {
 
 # helper ---------------------
 
-.n_parameters_component <- function(x, component, only_estimable) {
-  if (isTRUE(only_estimable)) {
+.n_parameters_component <- function(x, component, remove_nonestimable) {
+  if (isTRUE(remove_nonestimable)) {
     params <- get_parameters(x, component = component, ...)
-    .process_estimable(params, only_estimable)
+    .process_estimable(params, remove_nonestimable)
   } else {
     length(unlist(find_parameters(x, component = component, flatten = FALSE, ...)))
   }
@@ -246,11 +246,11 @@ n_parameters.bayesx <- function(x, ...) {
 }
 
 
-.n_parameters_effects <- function(x, effects, only_estimable) {
-  if (effects == "random" || isFALSE(only_estimable)) {
+.n_parameters_effects <- function(x, effects, remove_nonestimable) {
+  if (effects == "random" || isFALSE(remove_nonestimable)) {
     length(unlist(find_parameters(x, effects = effects, flatten = FALSE, ...)))
   } else {
     params <- get_parameters(x, effects = effects, ...)
-    .process_estimable(params, only_estimable)
+    .process_estimable(params, remove_nonestimable)
   }
 }

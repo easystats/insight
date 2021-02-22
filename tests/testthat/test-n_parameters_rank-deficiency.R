@@ -5,6 +5,6 @@ if (require("testthat") && require("insight")) {
 
   test_that("n_parameters-rank_deficiency", {
     expect_equal(n_parameters(m), 8)
-    expect_equal(n_parameters(m, only_estimable = TRUE), m$rank)
+    expect_equal(n_parameters(m, remove_nonestimable = TRUE), m$rank)
   })
 }

@@ -12,29 +12,34 @@
 \usage{
 n_parameters(x, ...)
 
-\method{n_parameters}{default}(x, only_estimable = FALSE, ...)
+\method{n_parameters}{default}(x, remove_nonestimable = FALSE, ...)
 
-\method{n_parameters}{merMod}(x, effects = c("fixed", "random"), only_estimable = FALSE, ...)
+\method{n_parameters}{merMod}(
+  x,
+  effects = c("fixed", "random"),
+  remove_nonestimable = FALSE,
+  ...
+)
 
 \method{n_parameters}{glmmTMB}(
   x,
   effects = c("fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated"),
-  only_estimable = FALSE,
+  remove_nonestimable = FALSE,
   ...
 )
 
 \method{n_parameters}{zeroinfl}(
   x,
   component = c("all", "conditional", "zi", "zero_inflated"),
-  only_estimable = FALSE,
+  remove_nonestimable = FALSE,
   ...
 )
 
 \method{n_parameters}{gam}(
   x,
   component = c("all", "conditional", "smooth_terms"),
-  only_estimable = FALSE,
+  remove_nonestimable = FALSE,
   ...
 )
 
@@ -51,7 +56,7 @@ n_parameters(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{only_estimable}{Logical, if \code{TRUE}, removes (i.e. does not count)
+\item{remove_nonestimable}{Logical, if \code{TRUE}, removes (i.e. does not count)
 non-estimable parameters (which may occur for models with rank-deficient
 model matrix).}
 
