@@ -39,7 +39,7 @@ n_parameters <- function(x, ...) {
 #' @rdname n_parameters
 #' @export
 n_parameters.default <- function(x, remove_nonestimable = FALSE, ...) {
-  .n_parameters_effects(x, effects = "fixed", remove_nonestimable = remove_nonestimable)
+  .n_parameters_effects(x, effects = "fixed", remove_nonestimable = remove_nonestimable, ...)
 }
 
 
@@ -59,7 +59,7 @@ n_parameters.default <- function(x, remove_nonestimable = FALSE, ...) {
 #' @export
 n_parameters.merMod <- function(x, effects = c("fixed", "random"), remove_nonestimable = FALSE, ...) {
   effects <- match.arg(effects)
-  .n_parameters_effects(x, effects = effects, remove_nonestimable = remove_nonestimable)
+  .n_parameters_effects(x, effects = effects, remove_nonestimable = remove_nonestimable, ...)
 }
 
 #' @export
@@ -131,7 +131,7 @@ n_parameters.zeroinfl <- function(x,
                                   remove_nonestimable = FALSE,
                                   ...) {
   component <- match.arg(component)
-  .n_parameters_component(x, component, remove_nonestimable)
+  .n_parameters_component(x, component, remove_nonestimable, ...)
 }
 
 #' @export
@@ -154,7 +154,7 @@ n_parameters.gam <- function(x,
                              remove_nonestimable = FALSE,
                              ...) {
   component <- match.arg(component)
-  .n_parameters_component(x, component, remove_nonestimable)
+  .n_parameters_component(x, component, remove_nonestimable, ...)
 }
 
 #' @export
@@ -235,7 +235,7 @@ n_parameters.bayesx <- function(x, ...) {
 
 # helper ---------------------
 
-.n_parameters_component <- function(x, component, remove_nonestimable) {
+.n_parameters_component <- function(x, component, remove_nonestimable, ...) {
   if (isTRUE(remove_nonestimable)) {
     params <- get_parameters(x, component = component, ...)
     .process_estimable(params, remove_nonestimable)
@@ -246,7 +246,7 @@ n_parameters.bayesx <- function(x, ...) {
 }
 
 
-.n_parameters_effects <- function(x, effects, remove_nonestimable) {
+.n_parameters_effects <- function(x, effects, remove_nonestimable, ...) {
   if (effects == "random" || isFALSE(remove_nonestimable)) {
     length(unlist(find_parameters(x, effects = effects, flatten = FALSE, ...)))
   } else {
