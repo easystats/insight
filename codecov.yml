@@ -1,0 +1,35 @@
+codecov:
+  token: 4d51ca07-e26e-4231-92b5-5d61a106ff5c
+  branch: master
+
+coverage:
+  precision: 3
+  round: nearest
+  range: "50...100"
+
+  status:
+    project:
+      default:
+        target: 95%
+        threshold: 1%
+        branches: null
+        informational: true
+
+    patch:
+      default:
+        target: 95%
+        branches: null
+        threshold: 1%
+        informational: true
+
+    changes:
+      default:
+        target: 95%
+        branches: null
+        threshold: 1%
+        informational: true
+
+comment:
+  layout: "header, diff, changes, sunburst, uncovered, tree"
+  branches: null
+  behavior: default
