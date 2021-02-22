@@ -40,9 +40,9 @@ is_regression_model <- function(x) {
 # Helpers -----------------------------------------------------------------
 
 .get_class_list <- function(x) {
-  if(length(class(x)) > 1 || class(x) != "list") return(x)
+  if (length(class(x)) > 1 || class(x) != "list") return(x)
 
-  if(all(c("mer", "gam") %in% names(x))) {
+  if (all(c("mer", "gam") %in% names(x))) {
     class(x) <- c("gamm4", "list")
   }
   x
