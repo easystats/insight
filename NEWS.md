@@ -16,7 +16,7 @@
 
 * Fix or disable failing tests on Mac OS.
 
-* Fixed issues in `get_variance()`with non-correlated
+* Fixed issues in `get_variance()` with non-correlated
   random-slope-intercepts for *lme4* models.
 
 
