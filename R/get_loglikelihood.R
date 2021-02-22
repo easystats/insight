@@ -58,9 +58,12 @@ get_loglikelihood.default <- function(x, ...) {
   # REML (directly returned)
   # TODO: Find a way of reversing this formula to pull the sums out and get individual lls
   if (estimator == "reml") {
+    if(!"qr" %in% names(x)) {
+      stop("REML estimation not available for this model.")
+    }
     N <- get_df(x, type = "residual") # n_obs - p
     val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x)^2))))
-    p <- x$rank # Can we replace this by n_parameters?
+    p <- x$rank # TODO: Can we replace this by n_parameters?
     ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
     return(.loglikelihood_prep_output(x, ll))
   }
