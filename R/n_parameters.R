@@ -39,8 +39,7 @@ n_parameters <- function(x, ...) {
 #' @rdname n_parameters
 #' @export
 n_parameters.default <- function(x, only_estimable = FALSE, ...) {
-  params <- get_parameters(x, effects = "fixed", ...)
-  .process_estimable(params, only_estimable)
+  .n_parameters_effects(x, effects = "fixed", only_estimable = only_estimable)
 }
 
 
@@ -60,13 +59,7 @@ n_parameters.default <- function(x, only_estimable = FALSE, ...) {
 #' @export
 n_parameters.merMod <- function(x, effects = c("fixed", "random"), only_estimable = FALSE, ...) {
   effects <- match.arg(effects)
-
-  if (effects == "random") {
-    length(unlist(find_parameters(x, effects = "random", flatten = FALSE, ...)))
-  } else {
-    params <- get_parameters(x, effects = effects, ...)
-    .process_estimable(params, only_estimable)
-  }
+  .n_parameters_effects(x, effects = effects, only_estimable = only_estimable)
 }
 
 #' @export
@@ -113,8 +106,8 @@ n_parameters.MixMod <- function(x,
   effects <- match.arg(effects)
   component <- match.arg(component)
 
-  if (effects == "random") {
-    length(unlist(find_parameters(x, effects = "random", component = component, flatten = FALSE, ...)))
+  if (effects == "random" || isFALSE(only_estimable)) {
+    length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, ...)))
   } else {
     params <- get_parameters(x, effects = effects, component = component, ...)
     .process_estimable(params, only_estimable)
@@ -138,8 +131,7 @@ n_parameters.zeroinfl <- function(x,
                                   only_estimable = FALSE,
                                   ...) {
   component <- match.arg(component)
-  params <- get_parameters(x, component = component, ...)
-  .process_estimable(params, only_estimable)
+  .n_parameters_component(x, component, only_estimable)
 }
 
 #' @export
@@ -162,8 +154,7 @@ n_parameters.gam <- function(x,
                              only_estimable = FALSE,
                              ...) {
   component <- match.arg(component)
-  params <- get_parameters(x, component = component, ...)
-  .process_estimable(params, only_estimable)
+  .n_parameters_component(x, component, only_estimable)
 }
 
 #' @export
@@ -235,4 +226,31 @@ n_parameters.multinom <- function(x, ...) {
 #' @export
 n_parameters.bayesx <- function(x, ...) {
   length(unlist(find_parameters(x, component = "conditional", flatten = FALSE, ...)))
+}
+
+
+
+
+
+
+# helper ---------------------
+
+.n_parameters_component <- function(x, component, only_estimable) {
+  if (isTRUE(only_estimable)) {
+    params <- get_parameters(x, component = component, ...)
+    .process_estimable(params, only_estimable)
+  } else {
+    length(unlist(find_parameters(x, component = component, flatten = FALSE, ...)))
+  }
+
+}
+
+
+.n_parameters_effects <- function(x, effects, only_estimable) {
+  if (effects == "random" || isFALSE(only_estimable)) {
+    length(unlist(find_parameters(x, effects = effects, flatten = FALSE, ...)))
+  } else {
+    params <- get_parameters(x, effects = effects, ...)
+    .process_estimable(params, only_estimable)
+  }
 }
