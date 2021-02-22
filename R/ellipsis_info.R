@@ -130,19 +130,9 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   object_names <- names(objects)
 
   # Check if same outcome
-  same_response <- c()
   outcome <- get_response(objects[[1]])
-  for (i in 2:length(object_names)) {
-    rez <- FALSE
-    new_outcome <- get_response(objects[[i]])
-    if (length(outcome) == length(new_outcome)) {
-      if (sum(outcome - new_outcome) == 0) {
-        rez <- TRUE
-      }
-    }
-    same_response <- c(same_response, rez)
-  }
-  attr(objects, "same_response") <- all(same_response)
+  same_response <- all(sapply(objects[2:length(object_names)], function(i) identical(get_response(i), outcome)))
+  attr(objects, "same_response") <- isTRUE(same_response)
 
   # Check if nested
   is_nested_increasing <- is_nested_decreasing <- c()
@@ -153,7 +143,7 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   }
   is_nested <- all(is_nested_decreasing) || all(is_nested_increasing)
 
-  if (all(same_response) & is_nested) {
+  if (isTRUE(same_response) & is_nested) {
     class(objects) <- c("ListNestedRegressions", class(objects))
     attr(objects, "is_nested") <- TRUE
 
