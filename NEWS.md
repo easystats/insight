@@ -10,6 +10,8 @@
 
 ## Changes to functions
 
+* `get_residuals(..., weighted = TRUE)` doesn't throw warnings if weights are 1 (no weights specified).
+
 * `format_ci()` also gains a `zap_small` argument.
 
 ## Bug fixed
