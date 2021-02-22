@@ -187,13 +187,13 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
 
 .weighted_residuals <- function(x, verbose = TRUE) {
-  w <- get_weights(x)
+  w <- get_weights(x, null_as_ones = TRUE)
   tryCatch(
     {
       res_resp <- as.vector(get_residuals(x, weighted = FALSE, type = "response"))
       res_dev <- as.vector(get_residuals(x, weighted = FALSE, type = "deviance"))
 
-      if (!is.null(w) && !is.null(res_dev)) {
+      if (!is.null(w) && !is.null(res_dev) && !all(w == 1)) {
         if (!is.null(res_resp) && identical(res_resp, res_dev)) {
           res_dev <- res_dev * w^0.5
         }
