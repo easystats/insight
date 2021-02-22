@@ -58,7 +58,7 @@ get_loglikelihood.default <- function(x, ...) {
   # REML (directly returned)
   # TODO: Find a way of reversing this formula to pull the sums out and get individual lls
   if (estimator == "reml") {
-    if(!"qr" %in% names(x)) {
+    if (!"qr" %in% names(x)) {
       stop("REML estimation not available for this model.")
     }
     N <- get_df(x, type = "residual") # n_obs - p
