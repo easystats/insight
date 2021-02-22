@@ -60,8 +60,13 @@ n_parameters.default <- function(x, only_estimable = FALSE, ...) {
 #' @export
 n_parameters.merMod <- function(x, effects = c("fixed", "random"), only_estimable = FALSE, ...) {
   effects <- match.arg(effects)
-  params <- get_parameters(x, effects = effects, ...)
-  .process_estimable(params, only_estimable)
+
+  if (effects == "random") {
+    length(unlist(find_parameters(x, effects = "random", flatten = FALSE, ...)))
+  } else {
+    params <- get_parameters(x, effects = effects, ...)
+    .process_estimable(params, only_estimable)
+  }
 }
 
 #' @export
@@ -107,8 +112,13 @@ n_parameters.MixMod <- function(x,
                                 ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
-  params <- get_parameters(x, effects = effects, component = component, ...)
-  .process_estimable(params, only_estimable)
+
+  if (effects == "random") {
+    length(unlist(find_parameters(x, effects = "random", component = component, flatten = FALSE, ...)))
+  } else {
+    params <- get_parameters(x, effects = effects, component = component, ...)
+    .process_estimable(params, only_estimable)
+  }
 }
 
 #' @rdname n_parameters
