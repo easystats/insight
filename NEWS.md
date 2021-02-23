@@ -1,13 +1,18 @@
-# insight 0.\*.\*
+# insight 0.13.2
 
 ## General
+
+* Improved support for `orm` (*rms*).
 
 ## New supported model classes
 
 ## Changes to functions
 
-* Added `get_predicted()` for Bayesian models returns a data.frame by default instead of a matrix.
-* Added `iterations` argument to `get_predicted()` to control the number of draws returned for Bayesian models.
+* Added `get_predicted()` for Bayesian models returns a data.frame
+  by default instead of a matrix.
+  
+* Added `iterations` argument to `get_predicted()` to control the
+  number of draws returned for Bayesian models.
 
 # insight 0.13.1
 

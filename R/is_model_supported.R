@@ -171,6 +171,7 @@ supported_models <- function() {
     "negbinmfx",
     "negbinirr",
     "ols",
+    "orm",
     "poissonmfx",
     "poissonirr",
     "plm",
