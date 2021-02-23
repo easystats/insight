@@ -1852,11 +1852,25 @@ get_statistic.ols <- get_statistic.lrm
 get_statistic.rms <- get_statistic.lrm
 
 #' @export
-get_statistic.orm <- get_statistic.lrm
-
-#' @export
 get_statistic.psm <- get_statistic.lrm
 
+#' @export
+get_statistic.orm <- function(x, ...) {
+  parms <- get_parameters(x)
+  vc <- stats::vcov(x)
+  parms <- parms[parms$Parameter %in% dimnames(vc)[[1]], ]
+  stat <- parms$Estimate / sqrt(diag(vc))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = as.vector(stat),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
 
 
 #' @export
