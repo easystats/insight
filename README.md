@@ -5,7 +5,7 @@
 [![downloads](https://cranlogs.r-pkg.org/badges/insight)](https://cranlogs.r-pkg.org/)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/insight)](https://cranlogs.r-pkg.org/)
 
-**Gain insight into your models\!**
+**Gain insight into your models!**
 
 When fitting any statistical model, there are many useful pieces of
 information that are simultaneously calculated and stored beyond
@@ -80,9 +80,9 @@ as *coefficients*.
 
 #### Response and Predictors
 
-  - **response**: the outcome or response variable (dependent variable)
+-   **response**: the outcome or response variable (dependent variable)
     of a regression model.
-  - **predictor**: independent variables of (the *fixed* part of) a
+-   **predictor**: independent variables of (the *fixed* part of) a
     regression model. For mixed models, variables that are only in the
     *random effects* part (i.e. grouping factors) of the model are not
     returned as predictors by default. However, these can be included
@@ -106,9 +106,9 @@ and `poly(x, 2)`.
 
 #### Random Effects
 
-  - **random slopes**: variables that are specified as random slopes in
+-   **random slopes**: variables that are specified as random slopes in
     a mixed effects model.
-  - **random or grouping factors**: variables that are specified as
+-   **random or grouping factors**: variables that are specified as
     grouping variables in a mixed effects model.
 
 *Aren’t the predictors, terms and parameters the same thing?*
@@ -260,7 +260,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 173 model classes are supported.
+Currently, 174 model classes are supported.
 
 ``` r
 supported_models()
@@ -308,25 +308,25 @@ supported_models()
 #> [124] "MixMod"            "mixor"             "mle"              
 #> [127] "mle2"              "mlm"               "mlogit"           
 #> [130] "mmlogit"           "multinom"          "negbinirr"        
-#> [133] "negbinmfx"         "ols"               "plm"              
-#> [136] "poissonirr"        "poissonmfx"        "polr"             
-#> [139] "probitmfx"         "psm"               "Rchoice"          
-#> [142] "ridgelm"           "riskRegression"    "rlm"              
-#> [145] "rlmerMod"          "RM"                "rma"              
-#> [148] "rma.uni"           "robmixglm"         "rq"               
-#> [151] "rqs"               "rqss"              "scam"             
-#> [154] "sem"               "speedglm"          "speedlm"          
-#> [157] "stanmvreg"         "stanreg"           "summary.lm"       
-#> [160] "survfit"           "survreg"           "svyglm"           
-#> [163] "svyolr"            "tobit"             "truncreg"         
-#> [166] "vgam"              "vglm"              "wbgee"            
-#> [169] "wblm"              "wbm"               "zcpglm"           
-#> [172] "zeroinfl"          "zerotrunc"
+#> [133] "negbinmfx"         "ols"               "orm"              
+#> [136] "plm"               "poissonirr"        "poissonmfx"       
+#> [139] "polr"              "probitmfx"         "psm"              
+#> [142] "Rchoice"           "ridgelm"           "riskRegression"   
+#> [145] "rlm"               "rlmerMod"          "RM"               
+#> [148] "rma"               "rma.uni"           "robmixglm"        
+#> [151] "rq"                "rqs"               "rqss"             
+#> [154] "scam"              "sem"               "speedglm"         
+#> [157] "speedlm"           "stanmvreg"         "stanreg"          
+#> [160] "summary.lm"        "survfit"           "survreg"          
+#> [163] "svyglm"            "svyolr"            "tobit"            
+#> [166] "truncreg"          "vgam"              "vglm"             
+#> [169] "wbgee"             "wblm"              "wbm"              
+#> [172] "zcpglm"            "zeroinfl"          "zerotrunc"
 ```
 
-  - **Didn’t find a model?** [File an
+-   **Didn’t find a model?** [File an
     issue](https://github.com/easystats/insight/issues) and request
-    additional model-support in *insight*\!
+    additional model-support in *insight*!
 
 ## Credits
 
