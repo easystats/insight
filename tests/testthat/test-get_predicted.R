@@ -192,15 +192,12 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     df <- as.matrix(rez)
     expect_equal(nrow(df), 32)
 
-    # Convert to dataframe
-    rez <- as.data.frame(t(rez))
-
     # What does fitted() return????
     # expect_equal(max(abs(sapply(rez_stan, median) - stats::fitted(x))), 0, tolerance = 0.5)
 
     # Compare to lm
     xref <- as.data.frame(insight::get_predicted(lm(mpg ~ am, data = mtcars)))
-    expect_equal(max(abs(sapply(rez, median) - xref$Predicted)), 0, tolerance = 0.1)
+    expect_equal(max(abs(rowMeans(rez) - xref$Predicted)), 0, tolerance = 0.1)
 
     # expect_equal(max(abs(bayestestR::hdi(rez)$CI_low - xref$CI_low)), 0, tolerance = 0.1)
   })

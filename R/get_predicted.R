@@ -40,13 +40,13 @@
 #'
 #' # Get CI
 #' attributes(predicted)$CI_low # Or CI_high
-#' as.data.frame(predicted)
+#' as.data.frame(predicted) # To get everything
 #'
 #' \donttest{
 #' # Bayesian models
 #' if (require("rstanarm") && require("bayestestR")) {
 #'   model <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
-#'   describe_posterior(insight::get_predicted(model, ci_type = "prediction"))
+#'   insight::get_predicted(model, ci_type = "prediction")
 #' }}
 #' @export
 get_predicted <- function(x, ...) {
@@ -359,7 +359,10 @@ get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confi
   } else {
     out <- rstanarm::posterior_predict(x, newdata = newdata, transform = transform, re.form = .format_reform(include_random), draws = iterations, ...)
   }
-  out <- t(out)
+  out <- as.data.frame(t(out))
+
+  # If no names (i.e., V1, V2, V3 etc., replace by iter_)
+  names(out) <- gsub("^V(\\d+)$", "iter_\\1", names(out))
 
   attr(out, "SE") <- NA
   attr(out, "ci") <- ci
@@ -390,9 +393,9 @@ get_predicted.crr <- function(x, ...) {
 #' @export
 print.get_predicted <- function(x, ...) {
   insight::print_colour("Predicted values:\n\n", "blue")
-  if (inherits(x, "matrix")) {
-    print(head(as.matrix(x)))
-    insight::print_colour("\nNOTE: You can get CIs by running `bayestestR::describe_posterior()` on this output.", "yellow")
+  if (inherits(x, "data.frame") && "iter_1" %in% names(x)) {
+    print.data.frame(.print_bigdata(x, ...))
+    insight::print_colour("\nNOTE: You can get CIs by running `bayestestR::describe_posterior()` on this output, and reshape it to a long format with `bayestestR::reshape_draws()`.", "yellow")
   } else {
     print(as.numeric(x))
     insight::print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.", "yellow")
@@ -403,14 +406,10 @@ print.get_predicted <- function(x, ...) {
 #' @export
 as.data.frame.get_predicted <- function(x, ...) {
 
-  # In the case of multiple draws (i.e., matrix)
-  if (inherits(x, "matrix") || (!is.null(ncol(x)) && !is.na(ncol(x)) && ncol(x) > 1)) {
-    out <- as.data.frame.matrix(x)
-
-    # If no names (i.e., V1, V2, V3 etc., replace by iter_)
-    names(out) <- gsub("^V(\\d+)$", "iter_\\1", names(out))
-
-    return(out)
+  # In the case it's already a dataframe
+  if (inherits(x, "data.frame")) {
+    class(x) <- class(x)[class(x) != "get_predicted"]
+    return(x)
   }
 
   out <- data.frame("Predicted" = as.numeric(x))
@@ -424,6 +423,25 @@ as.data.frame.get_predicted <- function(x, ...) {
   }
   out
 }
+
+
+.print_bigdata <- function(x, nrows = 3, ncols = 3, ...) {
+  out <- x[1:nrows, 1:ncols]
+
+  # Add row
+  row <- out[1, ]
+  row[1, ] <- "..."
+  out <- rbind(out, row)
+
+  # Add col
+  out[[paste0("...x", ncol(x) - ncols)]] <- "..."
+
+  row.names(out)[nrows + 1] <- paste0("...x", nrow(x) - nrows)
+
+  class(out) <- "data.frame"
+  out
+}
+
 
 #' @export
 as.matrix.get_predicted <- function(x, ...) {
@@ -588,3 +606,24 @@ as.matrix.get_predicted <- function(x, ...) {
 
   list(ci_low = ci_low, ci_high = ci_high, se = se)
 }
+
+
+
+
+.get_predicted_simulate <- function(x, iterations = 500, include_random = NULL, ...) {
+  out <- tryCatch(
+    {
+      stats::simulate(x, nsim = iterations, re.form = .format_reform(include_random), ...)
+    },
+    error = function(e) { NULL }
+  )
+
+  if (is.null(out)) {
+    stop(sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'? You can open an issue.", class(x)[1]), call. = FALSE)
+  }
+
+  names(out) <- paste0("iter_", 1:ncol(out))
+  out
+}
+
+

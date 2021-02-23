@@ -103,12 +103,12 @@ predicted
 
 # Get CI
 attributes(predicted)$CI_low # Or CI_high
-as.data.frame(predicted)
+as.data.frame(predicted) # To get everything
 
 \donttest{
 # Bayesian models
 if (require("rstanarm") && require("bayestestR")) {
   model <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
-  describe_posterior(insight::get_predicted(model, ci_type = "prediction"))
+  insight::get_predicted(model, ci_type = "prediction")
 }}
 }
