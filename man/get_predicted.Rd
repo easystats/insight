@@ -5,6 +5,7 @@
 \alias{get_predicted.default}
 \alias{get_predicted.lm}
 \alias{get_predicted.merMod}
+\alias{get_predicted.stanreg}
 \title{Predicted values}
 \usage{
 get_predicted(x, ...)
@@ -33,6 +34,17 @@ get_predicted(x, ...)
   vcov_estimation = NULL,
   vcov_type = NULL,
   vcov_args = NULL,
+  ...
+)
+
+\method{get_predicted}{stanreg}(
+  x,
+  newdata = NULL,
+  ci = 0.95,
+  ci_type = "confidence",
+  transform = "response",
+  include_random = TRUE,
+  iterations = NULL,
   ...
 )
 }
@@ -67,6 +79,8 @@ are passed down to the \pkg{sandwich}-function specified in \code{vcov_estimatio
 \item{include_random}{If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.}
 
 \item{bootstrap}{Should confidence intervals (CIs) be computed via bootstrapping rather than analytically. If \code{TRUE}, you can specify the number of iterations by modifying the argument \code{iter = 500} (default).}
+
+\item{iterations}{For Bayesian models, it corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model).}
 }
 \value{
 The fitted values (i.e. predictions for the response).

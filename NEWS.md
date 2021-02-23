@@ -1,3 +1,13 @@
+# insight 0.\*.\*
+
+## General
+
+## New supported model classes
+
+## Changes to functions
+
+* Added `iterations` argument to `get_predicted` to control the number of draws returned for Bayesian models.
+
 # insight 0.13.1
 
 ## General
@@ -12,9 +22,9 @@
 
 * `get_residuals(..., weighted = TRUE)` doesn't throw warnings if weights are 1
   (no weights specified).
-  
+
 * `n_parameters()` gains a `only_estimable` argument, to remove non-estimable
-  parameters from counting the number of parameters for models with 
+  parameters from counting the number of parameters for models with
   rank-deficient model matrix.
 
 * `format_ci()` also gains a `zap_small` argument.
@@ -44,7 +54,7 @@
 
 * `model_info()` now returns `$is_leventest` if model is an object returned by
   `car::leveneTest()`.
-  
+
 * `get_parameters()` supports `htest` objects.
 
 ## Bug fixes
@@ -718,7 +728,7 @@
 * Better support for nonlinear quantile regression (`quantreg::nlrq()`).
 
 * Better support for nonlinear mixed models (`lme4::nlmer()`). Note that
-  model-specification requires the random term to be written in parentheses, 
+  model-specification requires the random term to be written in parentheses,
   i.e. `(slope | group)`.
 
 ## Bug fixes

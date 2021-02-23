@@ -9,6 +9,7 @@
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
 #' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
 #' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
+#' @param iterations For Bayesian models, it corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model).
 #' @param bootstrap Should confidence intervals (CIs) be computed via bootstrapping rather than analytically. If \code{TRUE}, you can specify the number of iterations by modifying the argument \code{iter = 500} (default).
 #' @param vcov_estimation String, indicating the suffix of the \code{vcov*()}-function
 #'   from the \pkg{sandwich} or \pkg{clubSandwich} package, e.g. \code{vcov_estimation = "CL"}
@@ -333,9 +334,9 @@ get_predicted.list <- get_predicted.gam # gamm4
 
 # Bayesian ----------------------------------------------------------------
 
-
+#' @rdname get_predicted
 #' @export
-get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, ...) {
+get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, iterations = NULL, ...) {
 
   # See:
   # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
@@ -351,12 +352,12 @@ get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confi
 
   if (ci_type == "confidence") {
     if (transform == TRUE) {
-      out <- rstanarm::posterior_epred(x, newdata = newdata, re.form = .format_reform(include_random), ...)
+      out <- rstanarm::posterior_epred(x, newdata = newdata, re.form = .format_reform(include_random), draws = iterations, ...)
     } else {
-      out <- rstanarm::posterior_linpred(x, newdata = newdata, transform = FALSE, re.form = .format_reform(include_random), ...)
+      out <- rstanarm::posterior_linpred(x, newdata = newdata, transform = FALSE, re.form = .format_reform(include_random), draws = iterations, ...)
     }
   } else {
-    out <- rstanarm::posterior_predict(x, newdata = newdata, transform = transform, re.form = .format_reform(include_random), ...)
+    out <- rstanarm::posterior_predict(x, newdata = newdata, transform = transform, re.form = .format_reform(include_random), draws = iterations, ...)
   }
   out <- t(out)
 
