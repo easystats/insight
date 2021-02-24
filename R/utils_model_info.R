@@ -310,6 +310,7 @@
     is_multivariate = multi.var,
     is_trial = is.trial,
     is_bayesian = is.bayes,
+    is_gam = is_gam_model(x),
     is_anova = inherits(x, c("aov", "aovlist", "MANOVA", "RM")),
     is_timeseries = inherits(x, c("Arima")),
     is_ttest = is_ttest,

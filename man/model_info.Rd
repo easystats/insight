@@ -54,6 +54,7 @@ Retrieve information from model objects.
      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
      \item \code{is_trial}: model response contains additional information about the trials
      \item \code{is_bayesian}: model is a Bayesian model
+     \item \code{is_gam}: model is a generalized additive model
      \item \code{is_anova}: model is an Anova object
      \item \code{is_ttest}: model is an an object of class \code{htest}, returned by \code{t.test()}
      \item \code{is_correlation}: model is an an object of class \code{htest}, returned by \code{cor.test()}

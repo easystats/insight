@@ -6,6 +6,11 @@
 
 ## New supported model classes
 
+## New functions
+
+* `is_gam_model()` as a small helpe to check if a model is a generalized
+  additive model with smooth terms.
+
 ## Changes to functions
 
 * Added `get_predicted()` for Bayesian models returns a data.frame
@@ -13,6 +18,9 @@
   
 * Added `iterations` argument to `get_predicted()` to control the
   number of draws returned for Bayesian models.
+
+* `model_info()` now returns `$is_gam` if model is generalized additive model
+  with smooth terms.
 
 # insight 0.13.1
 

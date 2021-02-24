@@ -84,6 +84,7 @@ reference:
   contents:
   - all_models_same_class
   - has_intercept
+  - is_gam_model
   - is_mixed_model
   - is_model
   - is_model_supported
