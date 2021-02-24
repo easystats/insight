@@ -196,12 +196,12 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, bootstrap = FALSE, vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
 
   # In case include_random is TRUE, but there's actually no random factors in newdata
-  if (include_random && !all(find_random(x, flatten = TRUE) %in% names(newdata))) {
+  if (!is.null(newdata) && include_random && !all(find_random(x, flatten = TRUE) %in% names(newdata))) {
     include_random <- FALSE
   }
 
   # Make prediction only using random if only random
-  if (all(names(newdata) %in% find_random(x, flatten = TRUE))) {
+  if (!is.null(newdata) && all(names(newdata) %in% find_random(x, flatten = TRUE))) {
     random.only <- TRUE
   } else {
     random.only <- FALSE
