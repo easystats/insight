@@ -1075,16 +1075,32 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters
 
     fac <- stats::qt((1 + ci_level) / 2, df = s$df)
 
-    if ("asymp.LCL" %in% colnames(s)) {
-      se <- (s$asymp.UCL - s$asymp.LCL) / (2 * fac)
-    } else {
-      se <- (s$upper.CL - s$lower.CL) / (2 * fac)
-    }
-    stat <- s[[x@misc$estName]] / se
+    stat <- tryCatch(
+      {
+        if (!"SE" %in% colnames(s)) {
+          if ("asymp.LCL" %in% colnames(s)) {
+            se <- (s$asymp.UCL - s$asymp.LCL) / (2 * fac)
+          } else {
+            se <- (s$upper.CL - s$lower.CL) / (2 * fac)
+          }
+        } else {
+          se <- s$SE
+        }
+        s[[x@misc$estName]] / se
+      },
+      error = function(e) {
+        NULL
+      }
+    )
 
     # 2nd try
     if (.is_empty_object(stat)) {
       stat <- s[["t.ratio"]]
+    }
+
+    # 3rd try
+    if (.is_empty_object(stat)) {
+      stat <- s[["z.ratio"]]
     }
 
     # quit
