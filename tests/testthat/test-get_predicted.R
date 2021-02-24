@@ -150,6 +150,18 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
 
   test_that("get_predicted - mgcv::gam and gamm", {
+    x <- mgcv::gam(mpg ~ am + s(wt), data = mtcars)
+    expect_equal(length(insight::get_predicted(x)), 32)
+    rez <- insight::get_predicted(x, newdata = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)))
+    expect_equal(length(rez), 3)
+
+    # No smooth
+    rez <- insight::get_predicted(x, newdata = data.frame(am = c(0, 0, 1)))
+    expect_equal(length(rez), 3)
+    rez2 <- insight::get_predicted(x, newdata = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)), include_smooth = FALSE)
+    expect_equal(max(abs(as.numeric(rez - rez2))), 0, tolerance = 1e-4)
+    expect_equal(length(unique(attributes(rez)$data$wt)), 1)
+
     x <- mgcv::gam(vs ~ am + s(wt), data = mtcars, family = "binomial")
     rez <- insight::get_predicted(x)
     expect_equal(length(rez), 32)
@@ -192,7 +204,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     df <- as.matrix(rez)
     expect_equal(nrow(df), 32)
 
-    # What does fitted() return????
+    # TODO: What does fitted() return for stanreg models????
     # expect_equal(max(abs(sapply(rez_stan, median) - stats::fitted(x))), 0, tolerance = 0.5)
 
     # Compare to lm

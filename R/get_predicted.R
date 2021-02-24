@@ -9,6 +9,7 @@
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
 #' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
 #' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
+#' @param include_smooth For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it.
 #' @param iterations For Bayesian models, it corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model).
 #' @param bootstrap Should confidence intervals (CIs) be computed via bootstrapping rather than analytically. If \code{TRUE}, you can specify the number of iterations by modifying the argument \code{iter = 500} (default).
 #' @param vcov_estimation String, indicating the suffix of the \code{vcov*()}-function
@@ -127,6 +128,7 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
   }
 
   attr(out, "ci") <- ci
+  attr(out, "data") <- newdata
   class(out) <- c("get_predicted", class(out))
   out
 }
@@ -140,6 +142,10 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 #' @rdname get_predicted
 #' @export
 get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
+
+  # Get data
+  newdata <- .get_predicted_newdata(x, newdata = newdata)
+
   predicted <- stats::predict(x, newdata = newdata, interval = "none", se.fit = FALSE, ...)
   .generic_predictions(
     x = x,
@@ -159,6 +165,10 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
 
 #' @export
 get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "response", ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
+
+  # Get data
+  newdata <- .get_predicted_newdata(x, newdata = newdata)
+
   predicted <- stats::predict(x, newdata = newdata, interval = "none", se.fit = FALSE, transform = "link", ...)
   # Prediction CI
   # Seems to be debated: see https://stat.ethz.ch/pipermail/r-help/2003-May/033165.html
@@ -191,8 +201,8 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 #' @export
 get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, bootstrap = FALSE, vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
 
-  # Get original data
-  if (is.null(newdata)) newdata <- get_data(x)
+  # Get data
+  newdata <- .get_predicted_newdata(x, newdata = newdata, include_random = include_random)
 
   # In case include_random is TRUE, but there's actually no random factors in newdata
   if (include_random && !all(find_random(x, flatten = TRUE) %in% names(newdata))) {
@@ -235,6 +245,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
   }
 
   attr(predicted, "ci") <- ci
+  attr(predicted, "data") <- newdata
   class(predicted) <- c("get_predicted", class(predicted))
   predicted
 }
@@ -259,8 +270,8 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
 #' @export
 get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "response", include_random = TRUE, ...) {
 
-  # Get original data
-  if (is.null(newdata)) newdata <- get_data(x)
+  # Get data
+  newdata <- .get_predicted_newdata(x, newdata = newdata, include_random = include_random)
 
   # In case include_random is TRUE, but there's actually no random factors in newdata
   if (include_random && !all(find_random(x, flatten = TRUE) %in% names(newdata))) {
@@ -290,6 +301,7 @@ get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "res
   attr(out, "ci") <- ci
   attr(out, "CI_low") <- ci_low
   attr(out, "CI_high") <- ci_high
+  attr(out, "data") <- newdata
   class(out) <- c("get_predicted", class(out))
   out
 }
@@ -300,10 +312,12 @@ get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "res
 
 
 #' @export
-get_predicted.gam <- function(x, newdata = NULL, ci = 0.95, transform = "response", include_random = TRUE, ...) {
+get_predicted.gam <- function(x, newdata = NULL, ci = 0.95, transform = "response", include_random = TRUE, include_smooth = TRUE, ...) {
+
+  # Get data
+  newdata <- .get_predicted_newdata(x, newdata = newdata, include_random = include_random, include_smooth = include_smooth)
 
   # Sanitize input
-  if (is.null(newdata)) newdata <- get_data(x)
   if (inherits(x, c("gamm", "list"))) x <- x$gam
 
   # Get prediction
@@ -320,6 +334,7 @@ get_predicted.gam <- function(x, newdata = NULL, ci = 0.95, transform = "respons
   attr(out, "ci") <- ci
   attr(out, "CI_low") <- ci_low
   attr(out, "CI_high") <- ci_high
+  attr(out, "data") <- newdata
   class(out) <- c("get_predicted", class(out))
   out
 }
@@ -336,10 +351,13 @@ get_predicted.list <- get_predicted.gam # gamm4
 
 #' @rdname get_predicted
 #' @export
-get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, iterations = NULL, ...) {
+get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, include_smooth = TRUE, iterations = NULL, ...) {
 
   # See:
   # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
+
+  # Get data
+  newdata <- .get_predicted_newdata(x, newdata = newdata, include_random = include_random, include_smooth = include_smooth)
 
   if (is.null(ci)) ci <- 0 # So that predict doesn't fail
 
@@ -368,6 +386,7 @@ get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confi
   attr(out, "ci") <- ci
   attr(out, "CI_low") <- NA
   attr(out, "CI_high") <- NA
+  attr(out, "data") <- newdata
   class(out) <- c("get_predicted", class(out))
   out
 }
@@ -606,6 +625,28 @@ as.matrix.get_predicted <- function(x, ...) {
 
   list(ci_low = ci_low, ci_high = ci_high, se = se)
 }
+
+
+
+
+
+.get_predicted_newdata <- function(x, newdata = NULL, include_random = TRUE, include_smooth = TRUE, ...) {
+  if (is.null(newdata)) newdata <- get_data(x)
+
+  # Smooth
+  smooths <- insight::clean_names(find_smooth(x, flatten = TRUE))
+  if(!is.null(smooths)) {
+    for(smooth in smooths) {
+      # Fix smooth to average value
+      if(!smooth %in% names(newdata) || include_smooth == FALSE) {
+        newdata[[smooth]] <- mean(get_data(x)[[smooth]], na.rm = TRUE)
+      }
+    }
+  }
+  newdata
+}
+
+
 
 
 

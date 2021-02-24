@@ -44,6 +44,7 @@ get_predicted(x, ...)
   ci_type = "confidence",
   transform = "response",
   include_random = TRUE,
+  include_smooth = TRUE,
   iterations = NULL,
   ...
 )
@@ -79,6 +80,8 @@ are passed down to the \pkg{sandwich}-function specified in \code{vcov_estimatio
 \item{include_random}{If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.}
 
 \item{bootstrap}{Should confidence intervals (CIs) be computed via bootstrapping rather than analytically. If \code{TRUE}, you can specify the number of iterations by modifying the argument \code{iter = 500} (default).}
+
+\item{include_smooth}{For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it.}
 
 \item{iterations}{For Bayesian models, it corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model).}
 }
