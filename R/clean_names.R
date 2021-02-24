@@ -51,6 +51,7 @@ clean_names <- function(x, ...) {
 
 #' @export
 clean_names.default <- function(x, ...) {
+  if(is.null(x)) return(x)
   cleaned <- unname(find_variables(x, flatten = TRUE))
   .remove_values(cleaned, c("1", "0"))
 }
