@@ -143,9 +143,6 @@ get_predicted.data.frame <- function(x, newdata = NULL, ...) {
 #' @export
 get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
 
-  # Get data
-  newdata <- .get_predicted_newdata(x, newdata = newdata)
-
   predicted <- stats::predict(x, newdata = newdata, interval = "none", se.fit = FALSE, ...)
   .generic_predictions(
     x = x,
@@ -165,9 +162,6 @@ get_predicted.lm <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence
 
 #' @export
 get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "response", ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
-
-  # Get data
-  newdata <- .get_predicted_newdata(x, newdata = newdata)
 
   predicted <- stats::predict(x, newdata = newdata, interval = "none", se.fit = FALSE, transform = "link", ...)
   # Prediction CI
@@ -200,9 +194,6 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 #' @importFrom stats predict terms model.matrix family
 #' @export
 get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, bootstrap = FALSE, vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
-
-  # Get data
-  newdata <- .get_predicted_newdata(x, newdata = newdata, include_random = include_random)
 
   # In case include_random is TRUE, but there's actually no random factors in newdata
   if (include_random && !all(find_random(x, flatten = TRUE) %in% names(newdata))) {
