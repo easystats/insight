@@ -36,6 +36,20 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   })
 
 
+  test_that("get_predicted - lm (log)", {
+    x <- lm(mpg ~ log(hp), data = mtcars)
+    rez <- insight::get_predicted(x)
+    expect_equal(length(rez), 32)
+
+    expect_equal(max(abs(rez - stats::fitted(x))), 0)
+    expect_equal(max(abs(rez - stats::predict(x))), 0)
+
+    data <- as.data.frame(rez)
+    expect_equal(max(abs(rez - data$Predicted)), 0)
+    expect_equal(nrow(data), 32)
+  })
+
+
   test_that("get_predicted - data first", {
     set.seed(333)
     m <- lm(mpg ~ am, data = mtcars)
@@ -45,8 +59,20 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(length(get_predicted(newdata, m)), 20)
   })
 
+
   test_that("get_predicted - glm", {
     x <- glm(vs ~ am, data = mtcars, family = "binomial")
+    rez <- insight::get_predicted(x)
+    expect_equal(length(rez), 32)
+
+    expect_equal(max(abs(rez - stats::fitted(x))), 0)
+    expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
+    expect_equal(nrow(as.data.frame(rez)), 32)
+  })
+
+
+  test_that("get_predicted - glm (log)", {
+    x <- glm(vs ~ log(hp), data = mtcars, family = "binomial")
     rez <- insight::get_predicted(x)
     expect_equal(length(rez), 32)
 
@@ -103,6 +129,20 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # expect_equal(max(abs(rez - sapply(rez_stan, median))), 0, tolerance = 0.5)
     # Different indeed
     # expect_equal(mean(as.data.frame(rez)$CI_low - bayestestR::hdi(rez_stan)$CI_low), 0, tolerance = 0.5)
+  })
+
+  test_that("get_predicted - lmerMod (log)", {
+    x <- lme4::lmer(mpg ~ am + log(hp) + (1 | cyl), data = mtcars)
+    rez <- insight::get_predicted(x)
+    expect_equal(length(rez), 32)
+
+    expect_equal(max(abs(rez - stats::fitted(x))), 0)
+    expect_equal(max(abs(rez - stats::predict(x))), 0)
+    expect_equal(nrow(as.data.frame(rez)), 32)
+
+    # No random
+    rez2 <- insight::get_predicted(x, newdata = mtcars[c("am", "hp")])
+    expect_true(!all(is.na(as.data.frame(rez2))))
   })
 
   test_that("get_predicted - merMod", {
