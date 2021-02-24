@@ -635,10 +635,10 @@ as.matrix.get_predicted <- function(x, ...) {
 
   # Smooth
   smooths <- insight::clean_names(find_smooth(x, flatten = TRUE))
-  if(!is.null(smooths)) {
-    for(smooth in smooths) {
+  if (!is.null(smooths)) {
+    for (smooth in smooths) {
       # Fix smooth to average value
-      if(!smooth %in% names(newdata) || include_smooth == FALSE) {
+      if (!smooth %in% names(newdata) || include_smooth == FALSE) {
         newdata[[smooth]] <- mean(get_data(x)[[smooth]], na.rm = TRUE)
       }
     }
