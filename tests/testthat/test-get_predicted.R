@@ -252,6 +252,17 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(max(abs(rowMeans(rez) - xref$Predicted)), 0, tolerance = 0.1)
 
     # expect_equal(max(abs(bayestestR::hdi(rez)$CI_low - xref$CI_low)), 0, tolerance = 0.1)
+
+    # rstanarm - gamm4
+    x <- suppressWarnings(rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
+                                               random = ~ (1 | Species), data = iris,
+                                               iter = 100, chains = 2, refresh = 0))
+    rez <- insight::get_predicted(x)
+    expect_equal(nrow(rez), 150)
+    rez <- insight::get_predicted(x, newdata=iris[1:10, c("Petal.Width", "Sepal.Length", "Species")])
+    expect_equal(nrow(rez), 10)
+    rez <- insight::get_predicted(x, newdata=iris[1:10, c("Petal.Width", "Sepal.Length")])
+    expect_equal(nrow(rez), 10)
   })
 
 

@@ -195,11 +195,6 @@ get_predicted.glm <- function(x, newdata = NULL, ci = 0.95, transform = "respons
 #' @export
 get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confidence", transform = "response", include_random = TRUE, bootstrap = FALSE, vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
 
-  # In case include_random is TRUE, but there's actually no random factors in newdata
-  if (!is.null(newdata) && include_random && !all(find_random(x, flatten = TRUE) %in% names(newdata))) {
-    include_random <- FALSE
-  }
-
   # Make prediction only using random if only random
   if (!is.null(newdata) && all(names(newdata) %in% find_random(x, flatten = TRUE))) {
     random.only <- TRUE
@@ -208,7 +203,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
   }
 
   # Get prediction of point-estimate
-  predicted <- stats::predict(x, newdata = newdata, re.form = .format_reform(include_random), type = "link", allow.new.levels = TRUE, random.only = random.only)
+  predicted <- stats::predict(x, newdata = newdata, re.form = .format_reform(include_random, x, newdata), type = "link", allow.new.levels = TRUE, random.only = random.only)
 
   # CI
   if (!is.null(ci)) {
@@ -246,7 +241,7 @@ get_predicted.merMod <- function(x, newdata = NULL, ci = 0.95, ci_type = "confid
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needed for this function to work. Please install it.")
   }
-  merBoot <- lme4::bootMer(x, predict, re.form = .format_reform(include_random), use.u = TRUE, nsim = iter, ...)
+  merBoot <- lme4::bootMer(x, predict, re.form = .format_reform(include_random, x, newdata), use.u = TRUE, nsim = iter, ...)
 
   ci_vals <- apply(merBoot$t, 2, function(x) as.numeric(stats::quantile(x, probs = c(1 - ci, 1 + ci) / 2, na.rm = TRUE)))
 
@@ -264,18 +259,13 @@ get_predicted.glmmTMB <- function(x, newdata = NULL, ci = 0.95, transform = "res
   # Get data
   newdata <- .get_predicted_newdata(x, newdata = newdata, include_random = include_random)
 
-  # In case include_random is TRUE, but there's actually no random factors in newdata
-  if (include_random && !all(find_random(x, flatten = TRUE) %in% names(newdata))) {
-    include_random <- FALSE
-  }
-
   # TODO: is this needed?
   if (include_random == FALSE) {
     newdata[find_variables(x, effects = "random")$random] <- NA
   }
 
   # Get prediction
-  rez <- as.data.frame(stats::predict(x, newdata = newdata, re.form = .format_reform(include_random), type = transform, se.fit = TRUE))
+  rez <- as.data.frame(stats::predict(x, newdata = newdata, re.form = .format_reform(include_random, x, newdata), type = transform, se.fit = TRUE))
   out <- rez$fit
 
   # CI
@@ -312,7 +302,7 @@ get_predicted.gam <- function(x, newdata = NULL, ci = 0.95, transform = "respons
   if (inherits(x, c("gamm", "list"))) x <- x$gam
 
   # Get prediction
-  rez <- as.data.frame(stats::predict(x, newdata = newdata, re.form = .format_reform(include_random), type = transform, se.fit = TRUE))
+  rez <- as.data.frame(stats::predict(x, newdata = newdata, re.form = .format_reform(include_random, x, newdata), type = transform, se.fit = TRUE))
   out <- rez$fit
 
 
@@ -358,15 +348,15 @@ get_predicted.stanreg <- function(x, newdata = NULL, ci = 0.95, ci_type = "confi
 
   transform <- ifelse(transform == "response", TRUE, ifelse(transform == "link", FALSE, transform))
 
-
+  re.form <- .format_reform(include_random, x, newdata)
   if (ci_type == "confidence") {
     if (transform == TRUE) {
-      out <- rstanarm::posterior_epred(x, newdata = newdata, re.form = .format_reform(include_random), draws = iterations, ...)
+      out <- rstanarm::posterior_epred(x, newdata = newdata, re.form = re.form, draws = iterations, ...)
     } else {
-      out <- rstanarm::posterior_linpred(x, newdata = newdata, transform = FALSE, re.form = .format_reform(include_random), draws = iterations, ...)
+      out <- rstanarm::posterior_linpred(x, newdata = newdata, transform = FALSE, re.form = re.form, draws = iterations, ...)
     }
   } else {
-    out <- rstanarm::posterior_predict(x, newdata = newdata, transform = transform, re.form = .format_reform(include_random), draws = iterations, ...)
+    out <- rstanarm::posterior_predict(x, newdata = newdata, transform = transform, re.form = re.form, draws = iterations, ...)
   }
   out <- as.data.frame(t(out))
 
@@ -464,7 +454,13 @@ as.matrix.get_predicted <- function(x, ...) {
 # Helpers -----------------------------------------------------------------
 
 #' @importFrom stats qnorm qt
-.format_reform <- function(include_random = TRUE) {
+.format_reform <- function(include_random = TRUE, model = NULL, newdata = NULL) {
+  # In case include_random is TRUE, but there's actually no random factors in newdata
+  if (include_random && !is.null(newdata) && !is.null(model) && !all(find_random(model, flatten = TRUE) %in% names(newdata))) {
+    include_random <- FALSE
+  }
+
+  # Format re.form
   if (is.null(include_random) || is.na(include_random)) {
     re.form <- include_random
   } else if (include_random == TRUE) {
@@ -642,10 +638,10 @@ as.matrix.get_predicted <- function(x, ...) {
 
 
 
-.get_predicted_simulate <- function(x, iterations = 500, include_random = NULL, ...) {
+.get_predicted_simulate <- function(x, newdata = NULL, iterations = 500, include_random = NULL, ...) {
   out <- tryCatch(
     {
-      stats::simulate(x, nsim = iterations, re.form = .format_reform(include_random), ...)
+      stats::simulate(x, nsim = iterations, re.form = .format_reform(include_random, x, newdata), ...)
     },
     error = function(e) { NULL }
   )
