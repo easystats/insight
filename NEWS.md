@@ -22,6 +22,9 @@
 * `model_info()` now returns `$is_gam` if model is generalized additive model
   with smooth terms.
 
+* `format_table()` and `export_table()` now check for valid input (e.g., 
+  non-emtpty data frame) and give an informative message.
+
 # insight 0.13.1
 
 ## General
