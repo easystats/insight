@@ -244,6 +244,9 @@ n_obs.biglm <- function(x, ...) {
 n_obs.bigglm <- n_obs.biglm
 
 #' @export
+n_obs.eglm <- n_obs.biglm
+
+#' @export
 n_obs.rqss <- n_obs.biglm
 
 #' @export
