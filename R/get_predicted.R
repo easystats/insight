@@ -405,7 +405,7 @@ print.get_predicted <- function(x, ...) {
   insight::print_colour("Predicted values:\n\n", "blue")
   if (inherits(x, "data.frame") && "iter_1" %in% names(x)) {
     print.data.frame(.print_bigdata(x, ...))
-    insight::print_colour("\nNOTE: You can get CIs by running `bayestestR::describe_posterior()` on this output, and reshape it to a long format with `bayestestR::reshape_draws()`.", "yellow")
+    insight::print_colour("\nNOTE: You can get CIs by running `bayestestR::describe_posterior()` on this output, and reshape it to a long format with `bayestestR::reshape_iterations()`.", "yellow")
   } else {
     print(as.numeric(x))
     insight::print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.", "yellow")
