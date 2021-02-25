@@ -183,6 +183,10 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # No random
     rez <- insight::get_predicted(x, newdata = mtcars[c("am")])
     expect_true(!all(is.na(as.data.frame(rez))))
+
+    x <- glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
+    rez <- insight::get_predicted(x, newdata = data.frame(Petal.Width = c(0, 1, 2)))
+    expect_equal(length(rez), 3)
   })
 
 
