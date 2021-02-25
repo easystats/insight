@@ -31,6 +31,7 @@
 #'   Only applies when \code{format = "html"}. \code{group_by} is passed down
 #'   to \code{gt::gt(groupname_col = group_by)}.
 #' @inheritParams format_value
+#' @inheritParams get_data
 #'
 #' @note The values for \code{caption}, \code{subtitle} and \code{footer}
 #'   can also be provided as attributes of \code{x}, e.g. if \code{caption = NULL}
@@ -79,7 +80,8 @@ export_table <- function(x,
                          footer = NULL,
                          align = NULL,
                          group_by = NULL,
-                         zap_small = FALSE) {
+                         zap_small = FALSE,
+                         verbose = TRUE) {
 
   # check args
   if (is.null(format)) {
@@ -88,6 +90,14 @@ export_table <- function(x,
 
   if (format == "md") {
     format <- "markdown"
+  }
+
+  # sanity check
+  if (is.null(x) || (is.data.frame(x) && nrow(x) == 0) || .is_empty_object(x)) {
+    if (isTRUE(verbose)) {
+      message(paste0("Can't export table to ", format, ", data frame is empty."))
+    }
+    return(NULL)
   }
 
   # if we have a list of data frame and HTML format, create a single

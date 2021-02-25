@@ -16,6 +16,7 @@ format_table(
   p_digits = 3,
   rope_digits = 2,
   preserve_attributes = FALSE,
+  verbose = TRUE,
   ...
 )
 
@@ -30,6 +31,7 @@ parameters_table(
   p_digits = 3,
   rope_digits = 2,
   preserve_attributes = FALSE,
+  verbose = TRUE,
   ...
 )
 }
@@ -53,6 +55,8 @@ parameters_table(
 \item{rope_digits}{Number of decimal places for the ROPE percentage values.}
 
 \item{preserve_attributes}{Logical, if \code{TRUE}, preserves all attributes from the input data frame.}
+
+\item{verbose}{Toggle messages and warnings.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -78,5 +82,4 @@ if (require("rstanarm") && require("parameters")) {
   as.data.frame(format_table(x))
 }
 }
-
 }

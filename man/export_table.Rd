@@ -20,7 +20,8 @@ export_table(
   footer = NULL,
   align = NULL,
   group_by = NULL,
-  zap_small = FALSE
+  zap_small = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -72,6 +73,8 @@ Only applies when \code{format = "html"}. \code{group_by} is passed down
 to \code{gt::gt(groupname_col = group_by)}.}
 
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.}
+
+\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 A data frame in character format.

@@ -15,8 +15,9 @@
 #' @param p_digits Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.
 #' @param rope_digits Number of decimal places for the ROPE percentage values.
 #' @param preserve_attributes Logical, if \code{TRUE}, preserves all attributes from the input data frame.
-#' @inheritParams format_p
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams format_p
+#' @inheritParams get_data
 #'
 #' @examples
 #' if (require("parameters")) {
@@ -31,10 +32,17 @@
 #'   as.data.frame(format_table(x))
 #' }
 #' }
-#'
 #' @return A data frame.
 #' @export
-format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, rope_digits = 2, preserve_attributes = FALSE, ...) {
+format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, rope_digits = 2, preserve_attributes = FALSE, verbose = TRUE, ...) {
+
+  # sanity check
+  if (is.null(x) || (is.data.frame(x) && nrow(x) == 0)) {
+    if (isTRUE(verbose)) {
+      message("Can't format table, data frame is empty.")
+    }
+    return(NULL)
+  }
 
   # check if user supplied digits attributes
   if (missing(digits)) digits <- .additional_arguments(x, "digits", 2)
