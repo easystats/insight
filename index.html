@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.13.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.13.1.1</span>
       </span>
     </div>
 
@@ -119,7 +119,7 @@
 <h2 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h2>
 <p><a href="https://easystats.github.io/insight/" class="external-link"><img src="https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63" alt="Documentation"></a> <a href="https://easystats.github.io/blog/posts/" class="external-link"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a> <a href="https://easystats.github.io/insight/reference/index.html" class="external-link"><img src="https://img.shields.io/badge/features-insight-orange.svg?colorB=2196F3" alt="Features"></a></p>
-<p>Built with non-programmers in mind, <strong>insight</strong> offers a broad toolbox for making model and data information easily accessible. While <strong>insight</strong> offers many useful functions for working with and understanding model objects (discussed below), we suggest users start with <code><a href="reference/model_info.html">model_info()</a></code>, as this function provides a clean and consistent overview of model objects (e.g., functional form of the model, the model family, link function, number of observations, variables included in the specification, etc.). With a clear understanding of the model introduced, users are able to adapt other functions for more nuanced exploration of and interaction with virtually any model object.Please visit <a href="https://easystats.github.io/insight/" class="external-link">https://easystats.github.io/insight/</a> for documentation.</p>
+<p>Built with non-programmers in mind, <strong>insight</strong> offers a broad toolbox for making model and data information easily accessible. While <strong>insight</strong> offers many useful functions for working with and understanding model objects (discussed below), we suggest users start with <code><a href="reference/model_info.html">model_info()</a></code>, as this function provides a clean and consistent overview of model objects (e.g., functional form of the model, the model family, link function, number of observations, variables included in the specification, etc.). With a clear understanding of the model introduced, users are able to adapt other functions for more nuanced exploration of and interaction with virtually any model object.Please visit <a href="https://easystats.github.io/insight/" class="external-link uri">https://easystats.github.io/insight/</a> for documentation.</p>
 <div id="definition-of-model-components" class="section level3">
 <h3 class="hasAnchor">
 <a href="#definition-of-model-components" class="anchor"></a>Definition of Model Components</h3>
@@ -172,7 +172,7 @@
 <a href="#functions" class="anchor"></a>Functions</h3>
 <p>The package revolves around two key prefixes: <code>get_*</code> and <code>find_*</code>. The <code>get_*</code> prefix extracts <em>values</em> (or <em>data</em>) associated with model-specific objects (e.g., parameters or variables), while the <code>find_*</code> prefix <em>lists</em> model-specific objects (e.g., priors or predictors). These are powerful families of functions allowing for great flexibility in use, whether at a high, descriptive level (<code>find_*</code>) or narrower level of statistical inspection and reporting (<code>get_*</code>).</p>
 <p><img src="https://raw.githubusercontent.com/easystats/insight/master/paper/figure1_small.png"></p>
-<p>In total, the <strong>insight</strong> package includes 16 core functions: <a href="https://easystats.github.io/insight/reference/get_data.html" class="external-link">get_data()</a>, <a href="https://easystats.github.io/insight/reference/get_priors.html" class="external-link">get_priors()</a>, <a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance()</a>, <a href="https://easystats.github.io/insight/reference/get_parameters.html" class="external-link">get_parameters()</a>, <a href="https://easystats.github.io/insight/reference/get_predictors.html" class="external-link">get_predictors()</a>, <a href="https://easystats.github.io/insight/reference/get_random.html" class="external-link">get_random()</a>, <a href="https://easystats.github.io/insight/reference/get_response.html" class="external-link">get_response()</a>, <a href="https://easystats.github.io/insight/reference/find_algorithm.html" class="external-link">find_algorithm()</a>, <a href="https://easystats.github.io/insight/reference/find_formula.html" class="external-link">find_formula()</a>, <a href="https://easystats.github.io/insight/reference/find_variables.html" class="external-link">find_variables()</a>, <a href="https://easystats.github.io/insight/reference/find_terms.html" class="external-link">find_terms()</a>, <a href="https://easystats.github.io/insight/reference/find_parameters.html" class="external-link">find_parameters()</a>, <a href="https://easystats.github.io/insight/reference/find_predictors.html" class="external-link">find_predictors()</a>, <a href="https://easystats.github.io/insight/reference/find_random.html" class="external-link">find_random()</a>, <a href="https://easystats.github.io/insight/reference/find_response.html" class="external-link">find_response()</a>, and <a href="https://easystats.github.io/insight/reference/model_info.html" class="external-link">model_info()</a>. In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the <code><a href="reference/find_terms.html">find_terms()</a></code> function’s <code>effects</code> argument allows for the extraction of “fixed effects” terms, “random effects” terms, or by default, “all” terms in the model object. We point users to the package documentation or the complementary package website, <a href="https://easystats.github.io/insight/" class="external-link">https://easystats.github.io/insight/</a>, for a detailed list of the arguments associated with each function as well as the returned values from each function.</p>
+<p>In total, the <strong>insight</strong> package includes 16 core functions: <a href="https://easystats.github.io/insight/reference/get_data.html" class="external-link">get_data()</a>, <a href="https://easystats.github.io/insight/reference/get_priors.html" class="external-link">get_priors()</a>, <a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance()</a>, <a href="https://easystats.github.io/insight/reference/get_parameters.html" class="external-link">get_parameters()</a>, <a href="https://easystats.github.io/insight/reference/get_predictors.html" class="external-link">get_predictors()</a>, <a href="https://easystats.github.io/insight/reference/get_random.html" class="external-link">get_random()</a>, <a href="https://easystats.github.io/insight/reference/get_response.html" class="external-link">get_response()</a>, <a href="https://easystats.github.io/insight/reference/find_algorithm.html" class="external-link">find_algorithm()</a>, <a href="https://easystats.github.io/insight/reference/find_formula.html" class="external-link">find_formula()</a>, <a href="https://easystats.github.io/insight/reference/find_variables.html" class="external-link">find_variables()</a>, <a href="https://easystats.github.io/insight/reference/find_terms.html" class="external-link">find_terms()</a>, <a href="https://easystats.github.io/insight/reference/find_parameters.html" class="external-link">find_parameters()</a>, <a href="https://easystats.github.io/insight/reference/find_predictors.html" class="external-link">find_predictors()</a>, <a href="https://easystats.github.io/insight/reference/find_random.html" class="external-link">find_random()</a>, <a href="https://easystats.github.io/insight/reference/find_response.html" class="external-link">find_response()</a>, and <a href="https://easystats.github.io/insight/reference/model_info.html" class="external-link">model_info()</a>. In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the <code><a href="reference/find_terms.html">find_terms()</a></code> function’s <code>effects</code> argument allows for the extraction of “fixed effects” terms, “random effects” terms, or by default, “all” terms in the model object. We point users to the package documentation or the complementary package website, <a href="https://easystats.github.io/insight/" class="external-link uri">https://easystats.github.io/insight/</a>, for a detailed list of the arguments associated with each function as well as the returned values from each function.</p>
 </div>
 <div id="examples-of-use-cases-in-r" class="section level3">
 <h3 class="hasAnchor">
@@ -248,7 +248,7 @@
 <div id="list-of-supported-models-by-class" class="section level2">
 <h2 class="hasAnchor">
 <a href="#list-of-supported-models-by-class" class="anchor"></a>List of Supported Models by Class</h2>
-<p>Currently, 173 model classes are supported.</p>
+<p>Currently, 174 model classes are supported.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/is_model_supported.html">supported_models</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;   [1] "aareg"             "afex_aov"          "Anova.mlm"        </span>
@@ -295,20 +295,20 @@
 <span class="co">#&gt; [124] "MixMod"            "mixor"             "mle"              </span>
 <span class="co">#&gt; [127] "mle2"              "mlm"               "mlogit"           </span>
 <span class="co">#&gt; [130] "mmlogit"           "multinom"          "negbinirr"        </span>
-<span class="co">#&gt; [133] "negbinmfx"         "ols"               "plm"              </span>
-<span class="co">#&gt; [136] "poissonirr"        "poissonmfx"        "polr"             </span>
-<span class="co">#&gt; [139] "probitmfx"         "psm"               "Rchoice"          </span>
-<span class="co">#&gt; [142] "ridgelm"           "riskRegression"    "rlm"              </span>
-<span class="co">#&gt; [145] "rlmerMod"          "RM"                "rma"              </span>
-<span class="co">#&gt; [148] "rma.uni"           "robmixglm"         "rq"               </span>
-<span class="co">#&gt; [151] "rqs"               "rqss"              "scam"             </span>
-<span class="co">#&gt; [154] "sem"               "speedglm"          "speedlm"          </span>
-<span class="co">#&gt; [157] "stanmvreg"         "stanreg"           "summary.lm"       </span>
-<span class="co">#&gt; [160] "survfit"           "survreg"           "svyglm"           </span>
-<span class="co">#&gt; [163] "svyolr"            "tobit"             "truncreg"         </span>
-<span class="co">#&gt; [166] "vgam"              "vglm"              "wbgee"            </span>
-<span class="co">#&gt; [169] "wblm"              "wbm"               "zcpglm"           </span>
-<span class="co">#&gt; [172] "zeroinfl"          "zerotrunc"</span></code></pre></div>
+<span class="co">#&gt; [133] "negbinmfx"         "ols"               "orm"              </span>
+<span class="co">#&gt; [136] "plm"               "poissonirr"        "poissonmfx"       </span>
+<span class="co">#&gt; [139] "polr"              "probitmfx"         "psm"              </span>
+<span class="co">#&gt; [142] "Rchoice"           "ridgelm"           "riskRegression"   </span>
+<span class="co">#&gt; [145] "rlm"               "rlmerMod"          "RM"               </span>
+<span class="co">#&gt; [148] "rma"               "rma.uni"           "robmixglm"        </span>
+<span class="co">#&gt; [151] "rq"                "rqs"               "rqss"             </span>
+<span class="co">#&gt; [154] "scam"              "sem"               "speedglm"         </span>
+<span class="co">#&gt; [157] "speedlm"           "stanmvreg"         "stanreg"          </span>
+<span class="co">#&gt; [160] "summary.lm"        "survfit"           "survreg"          </span>
+<span class="co">#&gt; [163] "svyglm"            "svyolr"            "tobit"            </span>
+<span class="co">#&gt; [166] "truncreg"          "vgam"              "vglm"             </span>
+<span class="co">#&gt; [169] "wbgee"             "wblm"              "wbm"              </span>
+<span class="co">#&gt; [172] "zcpglm"            "zeroinfl"          "zerotrunc"</span></code></pre></div>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues" class="external-link">File an issue</a> and request additional model-support in <em>insight</em>!</li>
@@ -362,17 +362,15 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://github.com/strengejacke/">Daniel Lüdecke</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> <br><small>(@strengejacke)</small>
-</li>
+<a href="https://github.com/strengejacke/">Daniel Lüdecke</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
-<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> <br><small>(@Dom_Makowski)</small>
-</li>
+<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
-<a href="https://sites.google.com/site/indrajeetspatilmorality/">Indrajeet Patil</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> <br><small>(@patilindrajeets)</small>
-</li>
+<a href="https://sites.google.com/site/indrajeetspatilmorality/">Indrajeet Patil</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Philip Waggoner <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-7825-7573" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
 <a href="https://sites.google.com/view/mattansb/">Mattan S. Ben-Shachar</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-4287-4801" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More on authors...</a></li>
 </ul>
 </div>
 

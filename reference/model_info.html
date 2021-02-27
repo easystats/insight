@@ -88,7 +88,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.13.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.13.1.1</span>
       </span>
     </div>
 
@@ -202,6 +202,7 @@
 <li><p><code>is_multivariate</code>: model is a multivariate response model (currently only works for <em>brmsfit</em> objects)</p></li>
 <li><p><code>is_trial</code>: model response contains additional information about the trials</p></li>
 <li><p><code>is_bayesian</code>: model is a Bayesian model</p></li>
+<li><p><code>is_gam</code>: model is a generalized additive model</p></li>
 <li><p><code>is_anova</code>: model is an Anova object</p></li>
 <li><p><code>is_ttest</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/t.test.html'>t.test()</a></code></p></li>
 <li><p><code>is_correlation</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test()</a></code></p></li>
@@ -307,6 +308,9 @@
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_bayesian
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $is_gam
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_anova
@@ -453,6 +457,9 @@
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_bayesian
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $is_gam
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $is_anova

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the value at the intercept — get_intercept • insight</title>
+<title>Checks if a model is a generalized additive model — is_gam_model • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="Get the value at the intercept — get_intercept" />
-<meta property="og:description" content="Returns the value at the intercept (i.e., the intercept parameter), and NA if there isn't one." />
+<meta property="og:title" content="Checks if a model is a generalized additive model — is_gam_model" />
+<meta property="og:description" content="Small helper that checks if a model is a generalized additive
+model." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -136,45 +137,47 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the value at the intercept</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_intercept.R'><code>R/get_intercept.R</code></a></small>
-    <div class="hidden name"><code>get_intercept.Rd</code></div>
+    <h1>Checks if a model is a generalized additive model</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/is_gam_model.R'><code>R/is_gam_model.R</code></a></small>
+    <div class="hidden name"><code>is_gam_model.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the value at the intercept (i.e., the intercept parameter), and <code>NA</code> if there isn't one.</p>
+    <p>Small helper that checks if a model is a generalized additive
+model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_intercept</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>is_gam_model</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A model.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Not used.</p></td>
+      <td><p>A model object.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The value of the intercept.</p>
+    <p>A logical, <code>TRUE</code> if <code>x</code> is a generalized additive model
+<em>and</em> has smooth-terms</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>This function only returns <code>TRUE</code> when the model inherits from a
+typical GAM model class <em>and</em> when smooth terms are present in the model
+formula. If model has no smooth terms or is not from a typical gam class,
+<code>FALSE</code> is returned.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>get_intercept</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 4.777629</div><div class='input'><span class='fu'>get_intercept</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='fl'>0</span> <span class='op'>+</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] NA</div><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>get_intercept</span><span class='op'>(</span><span class='fu'>lme4</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"mgcv"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
+  <span class='va'>model1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='va'>Sepal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+  <span class='va'>model2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>gam</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+  <span class='fu'>is_gam_model</span><span class='op'>(</span><span class='va'>model1</span><span class='op'>)</span>
+  <span class='fu'>is_gam_model</span><span class='op'>(</span><span class='va'>model2</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; [1] 3.406167</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"gamm4"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>get_intercept</span><span class='op'>(</span><span class='fu'>gamm4</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gamm4/man/gamm4.html'>gamm4</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span><span class='op'>(</span><span class='va'>Petal.Width</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: gamm4</span></div><div class='output co'>#&gt; <span class='message'>This is gamm4 0.2-6</span></div><div class='output co'>#&gt; [1] 5.843333</div></pre>
+</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
