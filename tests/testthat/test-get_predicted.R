@@ -92,4 +92,11 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.3)
     # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.4)
   })
+
+
+  # test_that("get_predicted - merMod", {
+  #   x <- lme4::glmer(vs ~ wt + (1|am), data = mtcars, family = "binomial")
+  #   x <- glmmTMB::glmmTMB(vs ~ wt + (1|am), data = mtcars, family = "binomial")
+  #   predict(x, type = "link")
+  # })
 }

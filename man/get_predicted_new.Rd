@@ -8,16 +8,23 @@
 \usage{
 get_predicted_new(x, data = NULL, ...)
 
-\method{get_predicted_new}{lm}(x, data = NULL, type = "link", iterations = NULL, ...)
+\method{get_predicted_new}{lm}(
+  x,
+  data = NULL,
+  type = "link",
+  iterations = NULL,
+  transform = TRUE,
+  ...
+)
 
 \method{get_predicted_new}{stanreg}(
   x,
   data = NULL,
   type = "link",
-  transform = "response",
+  iterations = NULL,
+  transform = TRUE,
   include_random = TRUE,
   include_smooth = TRUE,
-  iterations = NULL,
   ...
 )
 }
