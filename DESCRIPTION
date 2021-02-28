@@ -60,6 +60,7 @@ Suggests:
     biglm,
     blavaan,
     blme,
+    boot,
     brms,
     censReg,
     cgam,
