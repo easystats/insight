@@ -6,7 +6,10 @@
 #' @param data An optional data frame in which to look for variables with which to predict. If omitted, the data used to fit the model is used.
 #' @param type Can be \code{"response"} (default) or \code{"link"}. This is an important argument, read more about in the \strong{Details} section below.
 #' @param iterations For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.
-#' @param ... Other args to be passed for instance to \code{\link{get_predicted_ci}}.
+#' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
+#' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
+#' @param include_smooth For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it.
+#' @param ... Other argument to be passed for instance to \code{\link{get_predicted_ci}}.
 #'
 #' @seealso get_predicted_ci
 #'
