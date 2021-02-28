@@ -45,7 +45,6 @@
 #'   predictions <- get_predicted_new(x)
 #'   predictions
 #'   summary(predictions)
-#'   bayestestR::reshape_iterations(predictions)
 #' }}
 #' @export
 get_predicted_new <- function(x, data = NULL, ...) {
@@ -59,7 +58,7 @@ get_predicted_new <- function(x, data = NULL, ...) {
 # default methods ---------------------------
 
 
-#' @rdname get_predicted
+#' @rdname get_predicted_new
 #' @importFrom stats fitted predict
 #' @export
 get_predicted_new.default <- function(x, data = NULL, ...) {
