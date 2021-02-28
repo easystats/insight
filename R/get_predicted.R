@@ -52,10 +52,10 @@ get_predicted_new.lm <- function(x, data = NULL, type = "response", iterations =
     stats::predict(x, newdata = data, interval = "none", se.fit = FALSE, ...)
   }
 
-  if(is.null(iterations)) {
+  if (is.null(iterations)) {
     predictions <- predict_function(x, data = args$data)
   } else {
-    predictions <- insight:::.get_predicted_boot(x, data = args$data, predict_function = predict_function, iterations = iterations, ...)
+    predictions <- .get_predicted_boot(x, data = args$data, predict_function = predict_function, iterations = iterations, ...)
   }
 
   ci_vals <- get_predicted_ci(x, predictions, data = args$data, ci_type = args$ci_type, ...)
@@ -75,9 +75,9 @@ get_predicted_new.lm <- function(x, data = NULL, type = "response", iterations =
   if (is.null(data)) data <- get_data(x)
 
   # Prediction and CI type
-  if(type == "response") {
+  if (type == "response") {
     ci_type <- "prediction"
-  } else{
+  } else {
     ci_type <- "confidence"
   }
 
@@ -118,15 +118,14 @@ get_predicted_new.lm <- function(x, data = NULL, type = "response", iterations =
 
 
 
-#' @importFrom stats predict
-#' @importFrom boot boot
+#' @importFrom stats predict update
 .get_predicted_boot <- function(x, data = NULL, predict_function = NULL, iterations = 500, ...) {
-  if(is.null(data)) data <- get_data(x)
+  if (is.null(data)) data <- get_data(x)
 
   # TODO: how to make it work with the seed argument??
 
   # Using bootMer
-  if(inherits(x, "merMod")) {
+  if (inherits(x, "merMod")) {
     if (!requireNamespace("lme4", quietly = TRUE)) {
       stop("Package `lme4` needed for this function to work. Please install it.")
     }
@@ -134,8 +133,11 @@ get_predicted_new.lm <- function(x, data = NULL, type = "response", iterations =
 
   # Using boot
   } else {
+    if (!requireNamespace("boot", quietly = TRUE)) {
+      stop("Package `boot` needed for this function to work. Please install it.")
+    }
     boot_fun <- function(data, indices, ...) {
-      model <- update(x, data = data[indices, ])
+      model <- stats::update(x, data = data[indices, ])
       predict_function(model, data = data, ...)
     }
     draws <- boot::boot(data, boot_fun, R = iterations, ...)

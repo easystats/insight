@@ -73,5 +73,4 @@ get_predicted_ci(x, predictions, ci_type = "confidence", transform = "response")
 predictions <- predict(x, transform = "link")
 get_predicted_ci(x, predictions, ci_type = "prediction", transform = "link")
 get_predicted_ci(x, predictions, ci_type = "confidence", transform = "link")
-
 }

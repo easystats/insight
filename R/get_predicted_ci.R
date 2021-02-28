@@ -45,17 +45,17 @@
 #' predictions <- predict(x, transform = "link")
 #' get_predicted_ci(x, predictions, ci_type = "prediction", transform = "link")
 #' get_predicted_ci(x, predictions, ci_type = "confidence", transform = "link")
-#'
+#' @importFrom stats median sd quantile
 #' @export
 get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_type = "prediction", transform = "response", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
 
-  # If it's a dataframe, it means it must be bootstrapped / Bayesian
-  if(!is.null(predictions) && !is.null(ncol(predictions))) {
+  # If it's a data frame, it means it must be bootstrapped / Bayesian
+  if (!is.null(predictions) && !is.null(ncol(predictions))) {
     out <- data.frame(
-      Predicted = apply(predictions, 1, median),
-      SE = apply(predictions, 1, sd),
-      CI_low = apply(predictions, 1, quantile, probs = (1 - ci) / 2, na.rm = TRUE),
-      CI_high = apply(predictions, 1, quantile, probs = (1 + ci) / 2, na.rm = TRUE)
+      Predicted = apply(predictions, 1, stats::median),
+      SE = apply(predictions, 1, stats::sd),
+      CI_low = apply(predictions, 1, stats::quantile, probs = (1 - ci) / 2, na.rm = TRUE),
+      CI_high = apply(predictions, 1, stats::quantile, probs = (1 + ci) / 2, na.rm = TRUE)
     )
   } else {
     # Get SE
@@ -125,10 +125,10 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
 .get_predicted_ci_modelmatrix <- function(x, data = NULL, vcovmat = NULL, ...) {
 
   resp <- find_response(x)
-  if(is.null(vcovmat)) vcovmat <- .get_predicted_ci_vcov(x, ...)
+  if (is.null(vcovmat)) vcovmat <- .get_predicted_ci_vcov(x, ...)
 
 
-  if(is.null(data)) {
+  if (is.null(data)) {
     mm <- stats::model.matrix(x)
   } else {
     if (!all(resp %in% data)) data[[resp]] <- 0  # fake response
@@ -174,7 +174,6 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
 
 
 
-#' @importFrom stats model.matrix terms reformulate
 .get_predicted_ci_se <- function(x, data = NULL, ci_type = "prediction", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL) {
 
   # Matrix-multiply X by the parameter vector B to get the predictions, then
@@ -214,7 +213,7 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
 .get_predicted_se_to_ci <- function(x, predictions = NULL, se = NULL, ci = 0.95) {
 
   # Sanity checks
-  if(is.null(predictions)) {
+  if (is.null(predictions)) {
     return(data.frame(se = se))
   }
 
@@ -243,7 +242,3 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
 
   data.frame(SE = se, CI_low = ci_low, CI_high = ci_high)
 }
-
-
-
-
