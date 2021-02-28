@@ -279,4 +279,4 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(length(rez), 20)
   })
 
-
+}
