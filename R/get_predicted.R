@@ -107,9 +107,9 @@ get_predicted_new.data.frame <- function(x, data = NULL, ...) {
 
 #' @rdname get_predicted_new
 #' @export
-get_predicted_new.lm <- function(x, data = NULL, type = "link", iterations = NULL, ...) {
+get_predicted_new.lm <- function(x, data = NULL, type = "link", iterations = NULL, transform = TRUE, ...) {
 
-  args <- .get_predicted_args(x, data = data, type = type, ...)
+  args <- .get_predicted_args(x, data = data, type = type, transform = transform, ...)
 
   predict_function <- function(x, data, ...) {
     stats::predict(x, newdata = data, interval = "none", type = args$type, ...)
@@ -136,7 +136,7 @@ get_predicted_new.glm <- get_predicted_new.lm
 
 #' @rdname get_predicted_new
 #' @export
-get_predicted_new.stanreg <- function(x, data = NULL, type = "link", transform = "response", include_random = TRUE, include_smooth = TRUE, iterations = NULL, ...) {
+get_predicted_new.stanreg <- function(x, data = NULL, type = "link", iterations = NULL, transform = TRUE, include_random = TRUE, include_smooth = TRUE, ...) {
 
   # See:
   # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
