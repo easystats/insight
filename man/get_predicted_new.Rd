@@ -8,12 +8,12 @@
 \usage{
 get_predicted_new(x, data = NULL, ...)
 
-\method{get_predicted_new}{lm}(x, data = NULL, type = "response", iterations = NULL, ...)
+\method{get_predicted_new}{lm}(x, data = NULL, type = "link", iterations = NULL, ...)
 
 \method{get_predicted_new}{stanreg}(
   x,
   data = NULL,
-  type = "prediction",
+  type = "link",
   transform = "response",
   include_random = TRUE,
   include_smooth = TRUE,
@@ -28,7 +28,7 @@ get_predicted_new(x, data = NULL, ...)
 
 \item{...}{Other argument to be passed for instance to \code{\link{get_predicted_ci}}.}
 
-\item{type}{Can be \code{"response"} (default) or \code{"link"}. This is an important argument, read more about in the \strong{Details} section below.}
+\item{type}{Can be \code{"link"} (default) or \code{"response"}. This is an important argument, read more about in the \strong{Details} section below.}
 
 \item{iterations}{For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.}
 
@@ -49,7 +49,7 @@ Compute Model's Predictions.
 This argument has different effects depending on the model.
 \itemize{
   \item \strong{Linear models} - \code{lm()}: For linear models, this argument impacts mainly the nature of the uncertainty interval (CI). Prediction intervals (\code{type = "response"}) show the range that likely contains the value of a new observation (in what range it is likely to fall), whereas confidence intervals (\code{type = "link"}) reflect the uncertainty around the estimated parameters (and gives the range of uncertainty of the regression line). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit, but also the variability within the data).
-  \item \strong{General Linear models} - \code{glm()}: For other types of models (e.g., \code{glm}), this argument ... prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]})
+  \item \strong{General Linear models} - \code{glm()}: For other types of models (e.g., \code{glm}), this argument ... prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}). Note that by default, the output will still be transformed on the response-scale.
 }}
 }
 \examples{
