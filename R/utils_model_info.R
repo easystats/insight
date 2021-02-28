@@ -97,6 +97,18 @@
   is.categorical <- fitfam == "categorical"
 
 
+  # special handling of rms --------------
+
+  if (inherits(x, c("lrm", "blrm"))) {
+    resp <- get_response(x)
+    if (.n_unique(rep) == 2) {
+      binom_fam <- TRUE
+    } else {
+      is.ordinal <- TRUE
+    }
+  }
+
+
   # Bayesian model --------
 
   is.bayes <- .is_bayesian_model(x)

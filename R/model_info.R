@@ -313,6 +313,9 @@ model_info.logistf <- function(x, ...) {
 model_info.lrm <- model_info.logistf
 
 #' @export
+model_info.blrm <- model_info.logistf
+
+#' @export
 model_info.multinom <- model_info.logistf
 
 #' @export
