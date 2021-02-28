@@ -278,4 +278,39 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     rez <- insight::get_predicted(x, newdata = seq(-1, 1, length.out = 20))
     expect_equal(length(rez), 20)
   })
+
+
+
+
+
+
+
+
+
+
+
+
+# NEW ---------------------------------------------------------------------
+  test_that("get_predicted - NEW", {
+    x <- lm(mpg ~ cyl + hp, data = mtcars)
+    ref <- predict(x, se.fit = TRUE, interval = "confidence")
+    rez <- as.data.frame(get_predicted_new(x, type = "link"))
+    expect_equal(nrow(rez), 32)
+    expect_equal(max(abs(as.data.frame(ref$fit)$fit - rez$Predicted)), 0, tolerance = 1e-10)
+    expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
+    expect_equal(max(abs(as.data.frame(ref$fit)$lwr - rez$CI_low)), 0, tolerance = 1e-10)
+
+    ref <- predict(x, newdata = insight::get_data(x), se.fit = TRUE, interval = "prediction")
+    rez <- as.data.frame(get_predicted_new(x, type = "response"))
+    expect_equal(nrow(rez), 32)
+    expect_equal(max(abs(as.data.frame(ref$fit)$fit - rez$Predicted)), 0, tolerance = 1e-10)
+    expect_equal(max(abs(as.data.frame(ref$fit)$lwr - rez$CI_low)), 0, tolerance = 1e-10)
+
+    set.seed(333)
+    ref <- predict(x, newdata = insight::get_data(x), se.fit = TRUE, interval = "confidence")
+    rez <- get_predicted_new(x, iterations = 600)
+    expect_equal(nrow(rez), 32)
+    expect_equal(mean(abs(as.data.frame(ref$fit)$fit - attributes(rez)$Predicted)), 0, tolerance = 0.1)
+    expect_equal(mean(abs(as.data.frame(ref$fit)$lwr - attributes(rez)$CI_low)), 0, tolerance = 0.5)
+  })
 }
