@@ -52,7 +52,7 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
   # If it's a data frame, it means it must be bootstrapped / Bayesian
   if (!is.null(predictions) && !is.null(ncol(predictions))) {
     out <- data.frame(
-      Predicted = apply(predictions, 1, stats::median),
+      Predicted = apply(predictions, 1, mean),
       SE = apply(predictions, 1, stats::sd),
       CI_low = apply(predictions, 1, stats::quantile, probs = (1 - ci) / 2, na.rm = TRUE),
       CI_high = apply(predictions, 1, stats::quantile, probs = (1 + ci) / 2, na.rm = TRUE)

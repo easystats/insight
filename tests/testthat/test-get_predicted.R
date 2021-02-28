@@ -59,4 +59,37 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.2)
     expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
   })
+
+  test_that("get_predicted - glm", {
+    x <- glm(vs ~ wt, data = mtcars, family = "binomial")
+
+    # Confidence
+    ref <- predict(x, se.fit = TRUE, type = "response")
+    rez <- as.data.frame(get_predicted_new(x, type = "response"))
+    expect_equal(nrow(rez), 32)
+    expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
+    # TODO: this should work
+    # expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
+
+    # Prediction
+    ref <- predict(x, se.fit = TRUE, type = "response")
+    rez <- as.data.frame(get_predicted_new(x, type = "link"))
+    expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
+
+    # Bootstrap
+    ref <- predict(x, se.fit = TRUE, type = "response")
+    rez <- summary(get_predicted_new(x, iterations = 800))
+    expect_equal(mean(abs(ref$fit - rez$Predicted)), 0, tolerance = 0.5)
+
+    # vs. Bayesian
+    xbayes <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
+    rez <- as.data.frame(get_predicted_new(x, type = "link"))
+    rezbayes <- summary(get_predicted_new(xbayes, type = "link"))
+    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.3)
+    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
+    rez <- as.data.frame(get_predicted_new(x, type = "response"))
+    rezbayes <- summary(get_predicted_new(xbayes, type = "link"))
+    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.3)
+    # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.4)
+  })
 }

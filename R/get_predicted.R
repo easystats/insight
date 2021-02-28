@@ -4,7 +4,7 @@
 #'
 #' @param x A statistical model (can also be a data.frame, in which case the second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which to predict. If omitted, the data used to fit the model is used.
-#' @param type Can be \code{"response"} (default) or \code{"link"}. This is an important argument, read more about in the \strong{Details} section below.
+#' @param type Can be \code{"link"} (default) or \code{"response"}. This is an important argument, read more about in the \strong{Details} section below.
 #' @param iterations For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.
 #' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
 #' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
@@ -20,7 +20,7 @@
 #' This argument has different effects depending on the model.
 #' \itemize{
 #'   \item \strong{Linear models} - \code{lm()}: For linear models, this argument impacts mainly the nature of the uncertainty interval (CI). Prediction intervals (\code{type = "response"}) show the range that likely contains the value of a new observation (in what range it is likely to fall), whereas confidence intervals (\code{type = "link"}) reflect the uncertainty around the estimated parameters (and gives the range of uncertainty of the regression line). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit, but also the variability within the data).
-#'   \item \strong{General Linear models} - \code{glm()}: For other types of models (e.g., \code{glm}), this argument ... prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]})
+#'   \item \strong{General Linear models} - \code{glm()}: For other types of models (e.g., \code{glm}), this argument ... prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}). Note that by default, the output will still be transformed on the response-scale.
 #' }}
 #'
 #' @examples
@@ -107,12 +107,12 @@ get_predicted_new.data.frame <- function(x, data = NULL, ...) {
 
 #' @rdname get_predicted_new
 #' @export
-get_predicted_new.lm <- function(x, data = NULL, type = "response", iterations = NULL, ...) {
+get_predicted_new.lm <- function(x, data = NULL, type = "link", iterations = NULL, ...) {
 
   args <- .get_predicted_args(x, data = data, type = type, ...)
 
   predict_function <- function(x, data, ...) {
-    stats::predict(x, newdata = data, interval = "none", se.fit = FALSE, ...)
+    stats::predict(x, newdata = data, interval = "none", type = args$type, ...)
   }
 
   if (is.null(iterations)) {
@@ -136,7 +136,7 @@ get_predicted_new.glm <- get_predicted_new.lm
 
 #' @rdname get_predicted_new
 #' @export
-get_predicted_new.stanreg <- function(x, data = NULL, type = "prediction", transform = "response", include_random = TRUE, include_smooth = TRUE, iterations = NULL, ...) {
+get_predicted_new.stanreg <- function(x, data = NULL, type = "link", transform = "response", include_random = TRUE, include_smooth = TRUE, iterations = NULL, ...) {
 
   # See:
   # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
@@ -198,7 +198,9 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
 
 
 
-.get_predicted_args <- function(x, data = NULL, type = "response", include_random = TRUE, include_smooth = TRUE, ci = 0.95, ...) {
+.get_predicted_args <- function(x, data = NULL, type = "response", include_random = TRUE, include_smooth = TRUE, transform = TRUE, ci = 0.95, ...) {
+
+  info <- model_info(x)
 
   # Data
   if (is.null(data)) data <- get_data(x)
@@ -211,6 +213,13 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
     ci_type <- "prediction"
   } else {
     ci_type <- "confidence"
+  }
+
+  # Type (as required per stats::predict)
+  if(transform || info$is_linear) {
+    type <- "response"
+  } else {
+    type <- type
   }
 
   # Smooth
@@ -233,7 +242,7 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
 
   re.form <- .format_reform(include_random)
 
-  list(data = data, include_random = include_random, re.form = re.form, include_smooth = include_smooth, ci_type = ci_type, ci = ci)
+  list(data = data, include_random = include_random, re.form = re.form, include_smooth = include_smooth, ci_type = ci_type, ci = ci, type = type)
 }
 
 
