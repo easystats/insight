@@ -38,11 +38,11 @@
 #'
 #' # Logistic model
 #' x <- glm(vs ~ am, data = mtcars, family = "binomial")
-#' predictions <- predict(x, transform = "response")
+#' predictions <- predict(x, type = "response")
 #' get_predicted_ci(x, predictions, ci_type = "prediction", transform = "response")
 #' get_predicted_ci(x, predictions, ci_type = "confidence", transform = "response")
 #'
-#' predictions <- predict(x, transform = "link")
+#' predictions <- predict(x, type = "link")
 #' get_predicted_ci(x, predictions, ci_type = "prediction", transform = "link")
 #' get_predicted_ci(x, predictions, ci_type = "confidence", transform = "link")
 #' @importFrom stats median sd quantile
