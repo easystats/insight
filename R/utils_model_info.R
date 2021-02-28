@@ -99,12 +99,7 @@
 
   # Bayesian model --------
 
-  is.bayes <- inherits(x, c(
-    "brmsfit", "stanfit", "MCMCglmm", "stanreg",
-    "stanmvreg", "bmerMod", "BFBayesFactor", "bamlss",
-    "bayesx", "mcmc", "bcplm", "bayesQR", "BGGM",
-    "meta_random", "meta_fixed", "meta_bma", "blavaan"
-  ))
+  is.bayes <- .is_bayesian_model(x)
 
 
   # survival model --------

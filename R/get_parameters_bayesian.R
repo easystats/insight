@@ -398,6 +398,22 @@ get_parameters.bayesQR <- function(x,
 
 
 
+#' @export
+get_parameters.blrm <- function(x,
+                                parameters = NULL,
+                                summary = FALSE,
+                                centrality = "mean",
+                                ...) {
+  out <- as.data.frame(x$draws)
+  out <- out[.get_parms_data(x, "all", "all", parameters)]
+  if (isTRUE(summary)) {
+    out <- .summary_of_posteriors(out, centrality = centrality)
+  }
+  out
+}
+
+
+
 #' @rdname get_parameters.BGGM
 #' @export
 get_parameters.sim.merMod <- function(x,

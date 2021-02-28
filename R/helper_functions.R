@@ -580,6 +580,17 @@
 
 
 
+.is_bayesian_model <- function(x) {
+  inherits(x, c(
+    "brmsfit", "stanfit", "MCMCglmm", "stanreg",
+    "stanmvreg", "bmerMod", "BFBayesFactor", "bamlss",
+    "bayesx", "mcmc", "bcplm", "bayesQR", "BGGM",
+    "meta_random", "meta_fixed", "meta_bma", "blavaan",
+    "blrm"
+  ))
+}
+
+
 
 # safe conversion from factor to numeric
 #' @importFrom stats na.omit
