@@ -23,30 +23,90 @@
 #' @examples
 #' data(mtcars)
 #' x <- lm(mpg ~ cyl + hp, data = mtcars)
-#' predicted <- get_predicted_new(x)
-#' predicted
+#' predictions <- get_predicted_new(x)
+#' predictions
 #'
 #'
 #' get_predicted_new(x, type = "link")
 #'
 #' # Get CI
-#' attributes(predicted)$CI_low # Or CI_high
-#' as.data.frame(predicted) # To get everything
+#' attributes(predictions)$CI_low # Or CI_high
+#' as.data.frame(predictions) # To get everything
 #'
 #' get_predicted_new(x, iterations = 100)
 #'
-#'
+#' \donttest{
+#' # Bayesian models
+#' if (require("rstanarm") && require("bayestestR")) {
+#'   x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
+#'   predictions <- get_predicted_new(x)
+#'   predictions
+#'   summary(predictions)
+#'   bayestestR::reshape_iterations(predictions)
+#' }}
 #' @export
 get_predicted_new <- function(x, data = NULL, ...) {
   UseMethod("get_predicted_new")
 }
 
 
+
+
+
+# default methods ---------------------------
+
+
+#' @rdname get_predicted
+#' @importFrom stats fitted predict
+#' @export
+get_predicted_new.default <- function(x, data = NULL, ...) {
+  out <- tryCatch(
+    {
+      if (!is.null(data)) {
+        stats::predict(x, newdata = data, ...)
+      } else {
+        stats::predict(x, ...)
+      }
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(out)) {
+    out <- tryCatch(
+      {
+        stats::fitted(x)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
+  out
+}
+
+#' @export
+get_predicted_new.data.frame <- function(x, data = NULL, ...) {
+  # This makes it pipe friendly; data %>% get_predicted_new(model)
+  if (is.null(data)) {
+    stop("Please provide a model to base the estimations on.")
+  } else {
+    get_predicted_new(data, x, ...)
+  }
+}
+
+
+
+# LM and GLM --------------------------------------------------------------
+# =========================================================================
+
+
 #' @rdname get_predicted_new
 #' @export
 get_predicted_new.lm <- function(x, data = NULL, type = "response", iterations = NULL, ...) {
 
-  args <- .get_predicted_args(x, data = data, type = type)
+  args <- .get_predicted_args(x, data = data, type = type, ...)
 
   predict_function <- function(x, data, ...) {
     stats::predict(x, newdata = data, interval = "none", se.fit = FALSE, ...)
@@ -63,16 +123,85 @@ get_predicted_new.lm <- function(x, data = NULL, type = "response", iterations =
   .get_predicted_out(predictions, as.list(ci_vals), args)
 }
 
+#' @export
+get_predicted_new.glm <- get_predicted_new.lm
+
+
+# Bayesian --------------------------------------------------------------
+# =======================================================================
+
+
+#' @rdname get_predicted_new
+#' @export
+get_predicted_new.stanreg <- function(x, data = NULL, type = "prediction", transform = "response", include_random = TRUE, include_smooth = TRUE, iterations = NULL, ...) {
+
+  # See:
+  # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
+  # Also, https://github.com/jthaman/ciTools will be of help here
+
+  # Sanitize arguments
+  args <- .get_predicted_args(x, data = data, type = type, include_random = include_random, include_smooth = include_smooth)
+
+  if (!requireNamespace("rstantools", quietly = TRUE)) {
+    stop("Package `rstantools` needed for this function to work. Please install it.")
+  }
+
+  transform <- ifelse(transform == "response", TRUE, ifelse(transform == "link", FALSE, transform))
+
+  if (type == "link") {
+    if (transform == TRUE) {
+      draws <- rstantools::posterior_epred(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
+    } else {
+      draws <- rstantools::posterior_linpred(x, newdata = args$newdata, transform = FALSE, re.form = args$re.form, draws = iterations, ...)
+    }
+  } else {
+    draws <- rstantools::posterior_predict(x, newdata = args$newdata, transform = transform, re.form = args$re.form, draws = iterations, ...)
+  }
+
+  predictions <- as.data.frame(t(draws))
+  names(predictions) <- gsub("^V(\\d+)$", "iter_\\1", names(predictions))
+
+  ci_vals <- get_predicted_ci(x, predictions, data = args$data, ci_type = args$ci_type, ...)
+  .get_predicted_out(predictions, as.list(ci_vals), args)
+}
+
+
+#' @export
+get_predicted_new.brmsfit <- get_predicted_new.stanreg
 
 
 
-# Initialize --------------------------------------------------------------
+
+# ====================================================================
+# Utils --------------------------------------------------------------
+# ====================================================================
 
 
-.get_predicted_args <- function(x, data = NULL, type = "response", include_random = TRUE, include_smooth = TRUE, ...) {
+#' @importFrom stats qnorm qt
+.format_reform <- function(include_random = TRUE) {
+
+  # Format re.form
+  if (is.null(include_random) || is.na(include_random)) {
+    re.form <- include_random
+  } else if (include_random == TRUE) {
+    re.form <- NULL
+  } else if (include_random == FALSE) {
+    re.form <- NA
+  } else {
+    re.form <- include_random
+  }
+  re.form
+}
+
+
+
+.get_predicted_args <- function(x, data = NULL, type = "response", include_random = TRUE, include_smooth = TRUE, ci = 0.95, ...) {
 
   # Data
   if (is.null(data)) data <- get_data(x)
+
+  # CI
+  if(is.null(ci)) ci <- 0
 
   # Prediction and CI type
   if (type == "response") {
@@ -101,10 +230,8 @@ get_predicted_new.lm <- function(x, data = NULL, type = "response", iterations =
 
   re.form <- .format_reform(include_random)
 
-  list(data = data, include_random = include_random, re.form = re.form, include_smooth = include_smooth, ci_type = ci_type)
+  list(data = data, include_random = include_random, re.form = re.form, include_smooth = include_smooth, ci_type = ci_type, ci = ci)
 }
-
-
 
 
 

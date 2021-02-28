@@ -3,11 +3,23 @@
 \name{get_predicted_new}
 \alias{get_predicted_new}
 \alias{get_predicted_new.lm}
+\alias{get_predicted_new.stanreg}
 \title{Compute Model's Predictions}
 \usage{
 get_predicted_new(x, data = NULL, ...)
 
 \method{get_predicted_new}{lm}(x, data = NULL, type = "response", iterations = NULL, ...)
+
+\method{get_predicted_new}{stanreg}(
+  x,
+  data = NULL,
+  type = "prediction",
+  transform = "response",
+  include_random = TRUE,
+  include_smooth = TRUE,
+  iterations = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{A statistical model (can also be a data.frame, in which case the second argument has to be a model).}
@@ -37,19 +49,27 @@ This argument has different effects depending on the model.
 \examples{
 data(mtcars)
 x <- lm(mpg ~ cyl + hp, data = mtcars)
-predicted <- get_predicted_new(x)
-predicted
+predictions <- get_predicted_new(x)
+predictions
 
 
 get_predicted_new(x, type = "link")
 
 # Get CI
-attributes(predicted)$CI_low # Or CI_high
-as.data.frame(predicted) # To get everything
+attributes(predictions)$CI_low # Or CI_high
+as.data.frame(predictions) # To get everything
 
 get_predicted_new(x, iterations = 100)
 
-
+\donttest{
+# Bayesian models
+if (require("rstanarm") && require("bayestestR")) {
+  x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
+  predictions <- get_predicted_new(x)
+  predictions
+  summary(predictions)
+  bayestestR::reshape_iterations(predictions)
+}}
 }
 \seealso{
 get_predicted_ci
