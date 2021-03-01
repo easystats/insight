@@ -70,11 +70,20 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
     # TODO: this should work
     # expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
+    ref <- as.data.frame(suppressWarnings(insight::link_inverse(x)(predict.lm(x, interval = "prediction"))))
+    expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
+    # TODO: I think our current CIs for logistic models are wrong
+    # expect_equal(max(abs(ref$lwr - rez$CI_low)), 0, tolerance = 1e-10)
+
 
     # Prediction
     ref <- predict(x, se.fit = TRUE, type = "response")
     rez <- as.data.frame(get_predicted_new(x, type = "link"))
     expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
+    ref <- as.data.frame(insight::link_inverse(x)(predict.lm(x, interval = "confidence")))
+    expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
+    # TODO: The CI also doesn't match
+    # expect_equal(max(abs(ref$lwr - rez$CI_low)), 0, tolerance = 1e-10)
 
     # Bootstrap
     ref <- predict(x, se.fit = TRUE, type = "response")
