@@ -72,7 +72,9 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
   test_that("get_predicted - glm", {
     x <- glm(vs ~ wt, data = mtcars, family = "binomial")
-    # ciTools::add_ci(mtcars, x)
+    # all(predict.lm(x, se.fit = TRUE)$se.fit == insight:::.get_predicted_ci_se(x, data = insight::get_data(x)))
+    # head(ciTools::add_ci(mtcars, x)[12:14])
+    # ciTools::add_pi(mtcars, x)
 
     # General
     rezlink <- get_predicted_new(x, type = "link")

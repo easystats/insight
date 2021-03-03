@@ -169,7 +169,7 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
 
 
 
-.get_predicted_ci_se <- function(x, predictions, data = NULL, ci_type = "prediction", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL) {
+.get_predicted_ci_se <- function(x, predictions = NULL, data = NULL, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL) {
 
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'
