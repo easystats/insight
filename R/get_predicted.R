@@ -170,7 +170,6 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
 # ====================================================================
 
 
-#' @importFrom stats qnorm qt
 .format_reform <- function(include_random = TRUE) {
 
   # Format re.form
