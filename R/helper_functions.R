@@ -38,6 +38,7 @@
 }
 
 
+#' @importFrom stats na.omit complete.cases
 # is string empty?
 .is_empty_object <- function(x) {
   if (is.list(x)) {
@@ -52,7 +53,11 @@
   }
   # this is an ugly fix because of ugly tibbles
   if (inherits(x, c("tbl_df", "tbl"))) x <- as.data.frame(x)
-  x <- suppressWarnings(x[!is.na(x)])
+  if (inherits(x, "data.frame")) {
+    x <- x[!sapply(x, function(i) all(is.na(i)))]
+    x <- x[stats::complete.cases(x), ]
+  }
+  x <- stats::na.omit(x)
   length(x) == 0 || is.null(x)
 }
 
