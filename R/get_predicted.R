@@ -4,9 +4,9 @@
 #'
 #' @param x A statistical model (can also be a data.frame, in which case the second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which to predict. If omitted, the data used to fit the model is used.
-#' @param type Can be \code{"link"} (default) or \code{"response"}. This is an important argument, read more about in the \strong{Details} section below.
+#' @param type Can be \code{"link"} (default), "prediction", or \code{"response"}. Note that this argument is different from the \code{type} argument found in the base \code{\link{predict.glm}} method. As this is an important argument, read more about in the \strong{Details} section below.
+#' @param scale Either \code{"response"} (default) or \code{"link"}. If \code{"response"}, the output is on the scale of the response variable, which is the most convenient to understand and visualize the relationships. If \code{"link"}, no transformation is applied and the values are on the scale of the model's predictors. For instance, for a logistic model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale). Only used if \code{type} is "link" or "prediction" (if \code{type = "response"}, the scale is naturally on the response scale).
 #' @param iterations For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.
-#' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
 #' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
 #' @param include_smooth For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it.
 #' @param ... Other argument to be passed for instance to \code{\link{get_predicted_ci}}.
@@ -16,11 +16,11 @@
 #' @return The fitted values (i.e. predictions for the response). For Bayesian or bootstrapped models (when \code{iterations != NULL}), this will be a dataframe with all iterations as columns (observations are still rows).
 #'
 #' @details
-#' \subsection{Prediction type ("response" vs. "link")}{
+#' \subsection{Prediction type ("link" vs. "prediction" vs. "response")}{
 #' This argument has different effects depending on the model.
 #' \itemize{
-#'   \item \strong{Linear models} - \code{lm()}: For linear models, this argument impacts mainly the nature of the uncertainty interval (CI). Prediction intervals (\code{type = "response"}) show the range that likely contains the value of a new observation (in what range it is likely to fall), whereas confidence intervals (\code{type = "link"}) reflect the uncertainty around the estimated parameters (and gives the range of uncertainty of the regression line). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit, but also the variability within the data).
-#'   \item \strong{General Linear models} - \code{glm()}: For other types of models (e.g., \code{glm}), this argument ... prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}). Note that by default, the output will still be transformed on the response-scale.
+#'   \item \strong{Linear models} - \code{lm()}: For linear models, this argument impacts mainly the nature of the uncertainty interval (CI). Prediction intervals (\code{type = "prediction"} and \code{type = "response"} are equivalent in this case) show the range that likely contains the value of a new observation (in what range it is likely to fall), whereas confidence intervals (\code{type = "link"}) reflect the uncertainty around the estimated parameters (and gives the range of uncertainty of the regression line). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit, but also the variability within the data).
+#'   \item \strong{General Linear models} - \code{glm()}: For other types of models (e.g., \code{glm}), this argument DOES THIS AND THAT. For binomial models, prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}). For Bayesian models, ... it does this and that.
 #' }}
 #'
 #' @examples
@@ -30,7 +30,7 @@
 #' predictions
 #'
 #'
-#' get_predicted_new(x, type = "link")
+#' get_predicted_new(x, type = "prediction")
 #'
 #' # Get CI
 #' attributes(predictions)$CI_low # Or CI_high
@@ -106,9 +106,9 @@ get_predicted_new.data.frame <- function(x, data = NULL, ...) {
 
 #' @rdname get_predicted_new
 #' @export
-get_predicted_new.lm <- function(x, data = NULL, type = "link", iterations = NULL, transform = TRUE, ...) {
+get_predicted_new.lm <- function(x, data = NULL, type = "link", scale = "response", iterations = NULL, ...) {
 
-  args <- .get_predicted_args(x, data = data, type = type, transform = transform, ...)
+  args <- .get_predicted_args(x, data = data, type = type, scale = scale, ...)
 
   predict_function <- function(x, data, ...) {
     stats::predict(x, newdata = data, interval = "none", type = args$type, ...)
@@ -122,7 +122,9 @@ get_predicted_new.lm <- function(x, data = NULL, type = "link", iterations = NUL
 
   ci_vals <- get_predicted_ci(x, predictions, data = args$data, ci_type = args$ci_type, ...)
 
-  .get_predicted_out(predictions, as.list(ci_vals), args)
+  out <- .get_predicted_transform(x, args, predictions, ci_vals)
+
+  .get_predicted_out(out$predictions, out$ci_vals, args)
 }
 
 #' @export
@@ -135,36 +137,28 @@ get_predicted_new.glm <- get_predicted_new.lm
 
 #' @rdname get_predicted_new
 #' @export
-get_predicted_new.stanreg <- function(x, data = NULL, type = "link", iterations = NULL, transform = TRUE, include_random = TRUE, include_smooth = TRUE, ...) {
-
-  # See:
-  # rstanarm::posterior_epred(), rstanarm::posterior_linpred(), rstanarm::posterior_predict(), rstanarm::posterior_interval
-  # Also, https://github.com/jthaman/ciTools will be of help here
-
-  # Sanitize arguments
-  args <- .get_predicted_args(x, data = data, type = type, include_random = include_random, include_smooth = include_smooth)
+get_predicted_new.stanreg <- function(x, data = NULL, type = "link", scale = "response", iterations = NULL, include_random = TRUE, include_smooth = TRUE, ...) {
 
   if (!requireNamespace("rstantools", quietly = TRUE)) {
     stop("Package `rstantools` needed for this function to work. Please install it.")
   }
 
-  transform <- ifelse(transform == "response", TRUE, ifelse(transform == "link", FALSE, transform))
+  args <- .get_predicted_args(x, data = data, type = type, scale = scale, include_random = include_random, include_smooth = include_smooth)
 
-  if (type == "link") {
-    if (transform == TRUE) {
-      draws <- rstantools::posterior_epred(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
-    } else {
-      draws <- rstantools::posterior_linpred(x, newdata = args$newdata, transform = FALSE, re.form = args$re.form, draws = iterations, ...)
-    }
+  if (args$predict == "link") {
+    draws <- rstantools::posterior_linpred(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
   } else {
-    draws <- rstantools::posterior_predict(x, newdata = args$newdata, transform = transform, re.form = args$re.form, draws = iterations, ...)
+    draws <- rstantools::posterior_predict(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
   }
 
   predictions <- as.data.frame(t(draws))
   names(predictions) <- gsub("^V(\\d+)$", "iter_\\1", names(predictions))
 
   ci_vals <- get_predicted_ci(x, predictions, data = args$data, ci_type = args$ci_type, ...)
-  .get_predicted_out(predictions, as.list(ci_vals), args)
+
+  out <- .get_predicted_transform(x, args, predictions, ci_vals)
+
+  .get_predicted_out(out$predictions, out$ci_vals, args)
 }
 
 
@@ -197,8 +191,13 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
 
 
 
-.get_predicted_args <- function(x, data = NULL, type = "response", include_random = TRUE, include_smooth = TRUE, transform = TRUE, ci = 0.95, ...) {
+.get_predicted_args <- function(x, data = NULL, type = "link", scale = "response", include_random = TRUE, include_smooth = TRUE, ci = 0.95, ...) {
 
+  # Sanitize input
+  predict <- match.arg(type, c("link", "prediction", "response"))
+  scale <- match.arg(scale, c("response", "link"))
+
+  # Get info
   info <- model_info(x)
 
   # Data
@@ -208,17 +207,17 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
   if (is.null(ci)) ci <- 0
 
   # Prediction and CI type
-  if (type == "response") {
+  if (predict == "prediction" || predict == "response") {
     ci_type <- "prediction"
   } else {
     ci_type <- "confidence"
   }
 
   # Type (as required per stats::predict)
-  if (transform || info$is_linear) {
+  if (info$is_linear) {
     type <- "response"
   } else {
-    type <- type
+    type <- "link"
   }
 
   # Smooth
@@ -238,10 +237,38 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
   if (include_random && !is.null(data) && !is.null(x) && !all(find_random(x, flatten = TRUE) %in% names(data))) {
     include_random <- FALSE
   }
-
   re.form <- .format_reform(include_random)
 
-  list(data = data, include_random = include_random, re.form = re.form, include_smooth = include_smooth, ci_type = ci_type, ci = ci, type = type)
+  # Return all args
+  list(data = data, include_random = include_random, re.form = re.form, include_smooth = include_smooth, ci_type = ci_type, ci = ci, type = type, predict = predict, scale = scale, info = info)
+}
+
+
+.get_predicted_transform <- function(x, args, predictions, ci_vals = NULL, ...) {
+
+  # Transform to response scale
+  if(args$info$is_linear == FALSE && args$scale == "response") {
+
+    if(args$info$is_bayesian && args$predict %in% c("prediction", "response")) {
+      return(list(predictions = predictions, ci_vals = ci_vals))
+    }
+
+    if(is.data.frame(predictions)) {
+      predictions <- as.data.frame(sapply(predictions, link_inverse(x)))
+    } else {
+      predictions <- link_inverse(x)(predictions)
+    }
+    if(!is.null(ci_vals)) {
+      ci_vals <- as.data.frame(sapply(ci_vals, link_inverse(x)))
+    }
+  }
+
+  # Make actual responses
+  if(args$info$is_binomial && args$predict == "response") {
+    predictions <- ifelse(predictions > 0.5, 1, 0)
+  }
+
+  list(predictions = predictions, ci_vals = ci_vals)
 }
 
 

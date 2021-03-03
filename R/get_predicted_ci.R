@@ -6,7 +6,6 @@
 #' @param predictions A vector of predicted values (as obtained by \code{stats::fitted()}, \code{stats::predict()} or \code{\link{get_predicted}}).
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
 #' @param ci_type Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This applies mostly for "simple" linear models (like \code{lm}), as for other models (e.g., \code{glm}), prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
-#' @param transform Either \code{"response"} (default) or \code{"link"}. If \code{"link"}, no transformation is applied and the values are on the scale of the linear predictors. If \code{"response"}, the output is on the scale of the response variable. Thus for a default binomial model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale).
 #' @param vcov_estimation String, indicating the suffix of the \code{vcov*()}-function
 #'   from the \pkg{sandwich} or \pkg{clubSandwich} package, e.g. \code{vcov_estimation = "CL"}
 #'   (which calls \code{\link[sandwich]{vcovCL}} to compute clustered covariance matrix
@@ -37,17 +36,18 @@
 #' get_predicted_ci(x, predictions)
 #'
 #' # Logistic model
-#' x <- glm(vs ~ am, data = mtcars, family = "binomial")
-#' predictions <- predict(x, type = "response")
-#' get_predicted_ci(x, predictions, ci_type = "prediction", transform = "response")
-#' get_predicted_ci(x, predictions, ci_type = "confidence", transform = "response")
-#'
+#' x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 #' predictions <- predict(x, type = "link")
-#' get_predicted_ci(x, predictions, ci_type = "prediction", transform = "link")
-#' get_predicted_ci(x, predictions, ci_type = "confidence", transform = "link")
+#' get_predicted_ci(x, predictions, ci_type = "prediction")
+#' get_predicted_ci(x, predictions, ci_type = "confidence")
 #' @importFrom stats median sd quantile
 #' @export
-get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_type = "prediction", transform = "response", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
+get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
+
+  # TODO: Compare against:
+  # https://github.com/jthaman/ciTools
+  # https://tidypredict.tidymodels.org/index.html
+
 
   # If it's a data frame, it means it must be bootstrapped / Bayesian
   if (!is.null(predictions) && !is.null(ncol(predictions))) {
@@ -59,14 +59,9 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
     )
   } else {
     # Get SE
-    se <- .get_predicted_ci_se(x, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
+    se <- .get_predicted_ci_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
     # Convert to CI
     out <- .get_predicted_se_to_ci(x, predictions, se = se, ci = ci)
-  }
-
-  # Transform
-  if (!is.null(transform) && (transform == "response" || transform == TRUE)) {
-    out <- as.data.frame(sapply(out, link_inverse(x)))
   }
 
   out
@@ -174,7 +169,7 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
 
 
 
-.get_predicted_ci_se <- function(x, data = NULL, ci_type = "prediction", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL) {
+.get_predicted_ci_se <- function(x, predictions, data = NULL, ci_type = "prediction", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL) {
 
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'
@@ -199,6 +194,12 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
   } else {
     se <- sqrt(diag(var_matrix))
   }
+
+  # transform if GLM
+  # if(model_info(x)$is_linear == FALSE) {
+  #   se <- se * abs(family(x)$mu.eta(predictions))
+  # }
+
 
   se
 }
@@ -240,5 +241,5 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
     ci_high <- predictions + (se * crit_val)
   }
 
-  data.frame(SE = se, CI_low = ci_low, CI_high = ci_high)
+  data.frame(Predicted = predictions, SE = se, CI_low = ci_low, CI_high = ci_high)
 }
