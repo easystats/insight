@@ -68,7 +68,6 @@ x <- lm(mpg ~ cyl + hp, data = mtcars)
 predictions <- get_predicted_new(x)
 predictions
 
-
 get_predicted_new(x, predict = "response")
 
 # Get CI
@@ -76,15 +75,15 @@ attributes(predictions)$CI_low # Or CI_high
 as.data.frame(predictions) # To get everything
 
 get_predicted_new(x, iterations = 100)
-
-\donttest{
+\dontrun{
 # Bayesian models
 if (require("rstanarm") && require("bayestestR")) {
   x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
   predictions <- get_predicted_new(x)
   predictions
   summary(predictions)
-}}
+}
+}
 }
 \seealso{
 get_predicted_ci

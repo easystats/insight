@@ -29,7 +29,6 @@
 #' predictions <- get_predicted_new(x)
 #' predictions
 #'
-#'
 #' get_predicted_new(x, predict = "response")
 #'
 #' # Get CI
@@ -37,7 +36,7 @@
 #' as.data.frame(predictions) # To get everything
 #'
 #' get_predicted_new(x, iterations = 100)
-#' \donttest{
+#' \dontrun{
 #' # Bayesian models
 #' if (require("rstanarm") && require("bayestestR")) {
 #'   x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
@@ -46,7 +45,6 @@
 #'   summary(predictions)
 #' }
 #' }
-#'
 #' @export
 get_predicted_new <- function(x, data = NULL, ...) {
   UseMethod("get_predicted_new")
