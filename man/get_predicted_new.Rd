@@ -14,7 +14,7 @@ get_predicted_new(x, data = NULL, ...)
 \method{get_predicted_new}{lm}(
   x,
   data = NULL,
-  type = "link",
+  predict = "link",
   scale = "response",
   iterations = NULL,
   ...
@@ -23,7 +23,7 @@ get_predicted_new(x, data = NULL, ...)
 \method{get_predicted_new}{stanreg}(
   x,
   data = NULL,
-  type = "link",
+  predict = "link",
   scale = "response",
   iterations = NULL,
   include_random = TRUE,
@@ -38,7 +38,7 @@ get_predicted_new(x, data = NULL, ...)
 
 \item{...}{Other argument to be passed for instance to \code{\link{get_predicted_ci}}.}
 
-\item{type}{Can be \code{"link"} (default), "prediction", or \code{"response"}. Note that this argument is different from the \code{type} argument found in the base \code{\link{predict.glm}} method. As this is an important argument, read more about in the \strong{Details} section below.}
+\item{predict}{Can be \code{"link"} (default) or \code{"response"}. As this is an important argument, read more about in the \strong{Details} section below.}
 
 \item{scale}{Either \code{"response"} (default) or \code{"link"}. If \code{"response"}, the output is on the scale of the response variable, which is the most convenient to understand and visualize the relationships. If \code{"link"}, no transformation is applied and the values are on the scale of the model's predictors. For instance, for a logistic model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale). Only used if \code{type} is "link" or "prediction" (if \code{type = "response"}, the scale is naturally on the response scale).}
 
@@ -55,10 +55,10 @@ The fitted values (i.e. predictions for the response). For Bayesian or bootstrap
 Compute Model's Predictions.
 }
 \details{
-\subsection{Prediction type ("link" vs. "prediction" vs. "response")}{
+\subsection{Prediction type ("link" vs. "response")}{
 This argument has different effects depending on the model.
 \itemize{
-  \item \strong{Linear models} - \code{lm()}: For linear models, this argument impacts mainly the nature of the uncertainty interval (CI). Prediction intervals (\code{type = "prediction"} and \code{type = "response"} are equivalent in this case) show the range that likely contains the value of a new observation (in what range it is likely to fall), whereas confidence intervals (\code{type = "link"}) reflect the uncertainty around the estimated parameters (and gives the range of uncertainty of the regression line). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit, but also the variability within the data).
+  \item \strong{Linear models} - \code{lm()}: For linear models, this argument impacts mainly the nature of the uncertainty interval (CI). Prediction intervals (\code{predict = "response"}) show the range that likely contains the value of a new observation (in what range it is likely to fall), whereas confidence intervals (\code{predict = "link"}) reflect the uncertainty around the estimated parameters (and gives the range of uncertainty of the regression line). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit, but also the variability within the data).
   \item \strong{General Linear models} - \code{glm()}: For other types of models (e.g., \code{glm}), this argument DOES THIS AND THAT. For binomial models, prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}). For Bayesian models, ... it does this and that.
 }}
 }
@@ -69,7 +69,7 @@ predictions <- get_predicted_new(x)
 predictions
 
 
-get_predicted_new(x, type = "prediction")
+get_predicted_new(x, predict = "response")
 
 # Get CI
 attributes(predictions)$CI_low # Or CI_high

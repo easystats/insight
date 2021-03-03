@@ -44,11 +44,6 @@
 #' @export
 get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
 
-  # TODO: Compare against:
-  # https://github.com/jthaman/ciTools
-  # https://tidypredict.tidymodels.org/index.html
-
-
   # If it's a data frame, it means it must be bootstrapped / Bayesian
   if (!is.null(predictions) && !is.null(ncol(predictions))) {
     out <- data.frame(
