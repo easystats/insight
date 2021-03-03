@@ -253,14 +253,28 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
       return(list(predictions = predictions, ci_vals = ci_vals))
     }
 
+
+    if(!is.null(ci_vals)) {
+      # Transform CI
+      se_col <- names(ci_vals) == "SE"
+      ci_vals[!se_col] <- as.data.frame(sapply(ci_vals[!se_col], link_inverse(x)))
+
+      # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
+      if(is.data.frame(predictions)) {
+        mu_eta <- abs(family(x)$mu.eta(rowMeans(predictions)))
+      } else {
+        mu_eta <- abs(family(x)$mu.eta(predictions))
+      }
+      ci_vals[se_col] <- ci_vals[se_col] * mu_eta
+    }
+
+    # Transform predictions
     if(is.data.frame(predictions)) {
       predictions <- as.data.frame(sapply(predictions, link_inverse(x)))
     } else {
       predictions <- link_inverse(x)(predictions)
     }
-    if(!is.null(ci_vals)) {
-      ci_vals <- as.data.frame(sapply(ci_vals, link_inverse(x)))
-    }
+
   }
 
   # Make actual responses

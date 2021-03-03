@@ -195,12 +195,6 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
     se <- sqrt(diag(var_matrix))
   }
 
-  # transform if GLM
-  # if(model_info(x)$is_linear == FALSE) {
-  #   se <- se * abs(family(x)$mu.eta(predictions))
-  # }
-
-
   se
 }
 

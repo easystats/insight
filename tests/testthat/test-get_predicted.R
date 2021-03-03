@@ -88,31 +88,22 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
     # Confidence
     ref <- predict(x, se.fit = TRUE, type = "response")
-    rez <- as.data.frame(get_predicted_new(x, type = "prediction"))
+    rez <- as.data.frame(get_predicted_new(x, type = "link"))
     expect_equal(nrow(rez), 32)
     expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
-    # TODO: this should work
-    # expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
+    expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
+    ref <- as.data.frame(suppressWarnings(insight::link_inverse(x)(predict.lm(x, interval = "confidence"))))
+    expect_equal(max(abs(ref$lwr - rez$CI_low)), 0, tolerance = 1e-2)
 
     # Prediction
     ref <- predict(x, se.fit = TRUE, type = "response")
-    rez <- as.data.frame(get_predicted_new(x, type = "link"))
+    rez <- as.data.frame(get_predicted_new(x, type = "prediction"))
     expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
-
-    # Comparison with results from predict.lm (Mattan's method for CI)
-    ref <- as.data.frame(suppressWarnings(insight::link_inverse(x)(predict.lm(x, interval = "prediction"))))
-    expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
-    # TODO: I think our current CIs for logistic models are wrong
-    # expect_equal(max(abs(ref$lwr - rez$CI_low)), 0, tolerance = 1e-10)
-    ref <- as.data.frame(insight::link_inverse(x)(predict.lm(x, interval = "confidence")))
-    expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
-    # TODO: The CI also doesn't match
-    # expect_equal(max(abs(ref$lwr - rez$CI_low)), 0, tolerance = 1e-10)
 
     # Bootstrap
-    ref <- predict(x, se.fit = TRUE, predict = "response")
+    ref <- predict(x, se.fit = TRUE, type = "response")
     rez <- summary(get_predicted_new(x, iterations = 800))
-    # expect_equal(mean(abs(ref$fit - rez$Predicted)), 0, tolerance = 0.5)
+    expect_equal(mean(abs(ref$fit - rez$Predicted)), 0, tolerance = 0.5)
 
     # vs. Bayesian
     xbayes <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
