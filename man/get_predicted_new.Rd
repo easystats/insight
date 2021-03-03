@@ -40,7 +40,7 @@ get_predicted_new(x, data = NULL, ...)
 
 \item{predict}{Can be \code{"link"} (default) or \code{"response"}. As this is an important argument, read more about in the \strong{Details} section below.}
 
-\item{scale}{Either \code{"response"} (default) or \code{"link"}. If \code{"response"}, the output is on the scale of the response variable, which is the most convenient to understand and visualize the relationships. If \code{"link"}, no transformation is applied and the values are on the scale of the model's predictors. For instance, for a logistic model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale). Only used if \code{predict = "link} (if \code{predict = "response"}, the scale is naturally on the response scale).}
+\item{scale}{Either \code{"response"} (default) or \code{"link"}. If \code{"response"}, the output is on the scale of the response variable, which is the most convenient to understand and visualize the relationships. If \code{"link"}, no transformation is applied and the values are on the scale of the model's predictors. For instance, for a logistic model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale). Only used if \code{predict = "link"} (if \code{predict = "response"}, the scale is naturally on the response scale).}
 
 \item{iterations}{For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.}
 
