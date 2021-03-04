@@ -755,6 +755,10 @@
   # retrieve only intercepts
   if (inherits(x, "MixMod")) {
     vars <- lapply(vals$vc, function(i) i)[1]
+    ri_names <- find_random(x, split_nested = FALSE, flatten = TRUE)
+    if (length(ri_names) == length(vars)) {
+      names(vars) <- ri_names
+    }
   } else {
     vars <- lapply(vals$vc, function(i) i[1])
     # check for uncorrelated random slopes-intercept
