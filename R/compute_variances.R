@@ -163,7 +163,7 @@
     # GLMMapdative
   } else if (inherits(x, "MixMod")) {
     vc1 <- vc2 <- NULL
-    re_names <- find_random(x, flatten = TRUE)
+    re_names <- find_random(x)
 
     vc_cond <- !grepl("^zi_", colnames(x$D))
     if (any(vc_cond)) {
@@ -180,12 +180,12 @@
     }
 
     vc1 <- list(vc1)
-    names(vc1) <- re_names[1]
+    names(vc1) <- re_names[[1]]
     attr(vc1, "sc") <- as.numeric(get_sigma(x))
 
     if (!is.null(vc2)) {
       vc2 <- list(vc2)
-      names(vc2) <- re_names[2]
+      names(vc2) <- re_names[[2]]
       attr(vc2, "sc") <- as.numeric(get_sigma(x))
     }
 
