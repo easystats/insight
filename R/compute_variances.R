@@ -174,6 +174,8 @@
 
     vc_zi <- grepl("^zi_", colnames(x$D))
     if (any(vc_zi)) {
+      colnames(x$D) <- gsub("^zi_(.*)", "\\1", colnames(x$D))
+      rownames(x$D) <- colnames(x$D)
       vc2 <- x$D[vc_zi, vc_zi, drop = FALSE]
       attr(vc2, "stddev") <- sqrt(diag(vc2))
       attr(vc2, "correlation") <- stats::cov2cor(x$D[vc_zi, vc_zi, drop = FALSE])
