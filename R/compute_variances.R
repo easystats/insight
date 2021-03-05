@@ -4,7 +4,8 @@
                                name_fun = NULL,
                                name_full = NULL,
                                verbose = TRUE,
-                               tolerance = 1e-5) {
+                               tolerance = 1e-5,
+                               model_component = "conditional") {
 
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
@@ -24,7 +25,7 @@
 
   # get necessary model information, like fixed and random effects,
   # variance-covariance matrix etc.
-  vals <- .get_variance_information(x, faminfo = faminfo, name_fun = name_fun, verbose = verbose)
+  vals <- .get_variance_information(x, faminfo = faminfo, name_fun = name_fun, verbose = verbose, model_component = model_component)
 
   # Test for non-zero random effects ((near) singularity)
   no_random_variance <- FALSE
@@ -137,7 +138,7 @@
 # calculate the variance components...
 #
 #' @importFrom stats model.matrix
-.get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE) {
+.get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE, model_component = "conditional") {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
   }
@@ -276,7 +277,11 @@
   # for glmmTMB, tell user that dispersion model is ignored
 
   if (inherits(x, "glmmTMB")) {
-    vals <- lapply(vals, .collapse_cond)
+    if (is.null(model_component) || model_component == "conditional") {
+      vals <- lapply(vals, .collapse_cond)
+    } else {
+      vals <- lapply(vals, .collapse_zi)
+    }
   }
 
   if (!is.null(find_formula(x)[["dispersion"]]) && verbose) {
@@ -306,6 +311,15 @@
 .collapse_cond <- function(x) {
   if (is.list(x) && "cond" %in% names(x)) {
     x[["cond"]]
+  } else {
+    x
+  }
+}
+
+
+.collapse_zi <- function(x) {
+  if (is.list(x) && "zi" %in% names(x)) {
+    x[["zi"]]
   } else {
     x
   }

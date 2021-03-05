@@ -152,9 +152,6 @@ get_variance.rlmerMod <- get_variance.merMod
 get_variance.cpglmm <- get_variance.merMod
 
 #' @export
-get_variance.glmmTMB <- get_variance.merMod
-
-#' @export
 get_variance.glmmadmb <- get_variance.merMod
 
 #' @export
@@ -178,6 +175,19 @@ get_variance.lme <- get_variance.merMod
 #' @export
 get_variance.brmsfit <- get_variance.merMod
 
+
+#' @export
+get_variance.glmmTMB <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, tolerance = 1e-5, model_component = NULL, ...) {
+  component <- match.arg(component)
+  tryCatch(
+    {
+      .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose, tolerance = tolerance, model_component = model_component)
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
 
 
 #' @export
