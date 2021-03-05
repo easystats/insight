@@ -158,9 +158,6 @@ get_variance.glmmadmb <- get_variance.merMod
 get_variance.stanreg <- get_variance.merMod
 
 #' @export
-get_variance.MixMod <- get_variance.merMod
-
-#' @export
 get_variance.clmm <- get_variance.merMod
 
 #' @export
@@ -188,6 +185,9 @@ get_variance.glmmTMB <- function(x, component = c("all", "fixed", "random", "res
     }
   )
 }
+
+#' @export
+get_variance.MixMod <- get_variance.glmmTMB
 
 
 #' @export
