@@ -6,6 +6,7 @@
 #' @name get_sigma
 #'
 #' @param x A model.
+#' @inheritParams find_parameters
 #'
 #' @return The residual standard deviation (sigma), or \code{NULL} if this information could not be accessed.
 #'
@@ -39,7 +40,7 @@
 #' get_sigma(m)
 #' @importFrom stats sigma
 #' @export
-get_sigma <- function(x) {
+get_sigma <- function(x, verbose = TRUE) {
 
   # special handling ---------------
   if (inherits(x, "merModList")) {
@@ -70,7 +71,7 @@ get_sigma <- function(x) {
   if (.is_empty_object(s)) {
     s <- tryCatch(
       {
-        sqrt(get_deviance(x) / get_df(x, type = "residual"))
+        sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
       },
       error = function(e) {
         NULL

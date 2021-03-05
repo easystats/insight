@@ -23,7 +23,9 @@
   with smooth terms.
 
 * `format_table()` and `export_table()` now check for valid input (e.g., 
-  non-emtpty data frame) and give an informative message.
+  non-empty data frame) and give an informative message.
+
+* Improved support for `MixMod` (*GLMMadaptive*) in `get_variance()`.
 
 # insight 0.13.1
 

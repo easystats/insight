@@ -137,7 +137,7 @@
 # as list, since we need these information throughout the functions to
 # calculate the variance components...
 #
-#' @importFrom stats model.matrix
+#' @importFrom stats model.matrix cov2cor
 .get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE, model_component = "conditional") {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
@@ -162,10 +162,40 @@
 
     # GLMMapdative
   } else if (inherits(x, "MixMod")) {
+    vc1 <- vc2 <- NULL
+    re_names <- find_random(x, flatten = TRUE)
+
+    vc_cond <- !grepl("^zi_", colnames(x$D))
+    if (any(vc_cond)) {
+      vc1 <- x$D[vc_cond, vc_cond, drop = FALSE]
+      attr(vc1, "stddev") <- sqrt(diag(vc1))
+      attr(vc1, "correlation") <- stats::cov2cor(x$D[vc_cond, vc_cond, drop = FALSE])
+    }
+
+    vc_zi <- grepl("^zi_", colnames(x$D))
+    if (any(vc_zi)) {
+      vc2 <- x$D[vc_zi, vc_zi, drop = FALSE]
+      attr(vc2, "stddev") <- sqrt(diag(vc2))
+      attr(vc2, "correlation") <- stats::cov2cor(x$D[vc_zi, vc_zi, drop = FALSE])
+    }
+
+    vc1 <- list(vc1)
+    names(vc1) <- re_names[1]
+    attr(vc1, "sc") <- as.numeric(get_sigma(x))
+
+    if (!is.null(vc2)) {
+      vc2 <- list(vc2)
+      names(vc2) <- re_names[2]
+      attr(vc2, "sc") <- as.numeric(get_sigma(x))
+    }
+
+    vcorr <- .compact_list(list(vc1, vc2))
+    names(vcorr) <- c("cond", "zi")[1:length(vcorr)]
+
     vals <- list(
       beta = lme4::fixef(x),
       X = stats::model.matrix(x),
-      vc = x$D,
+      vc = vcorr,
       re = list(lme4::ranef(x))
     )
     names(vals$re) <- x$id_name
@@ -276,7 +306,7 @@
 
   # for glmmTMB, tell user that dispersion model is ignored
 
-  if (inherits(x, "glmmTMB")) {
+  if (inherits(x, c("glmmTMB", "MixMod"))) {
     if (is.null(model_component) || model_component == "conditional") {
       vals <- lapply(vals, .collapse_cond)
     } else {
@@ -367,11 +397,12 @@
     sum(diag(crossprod(Z.m, Z))) / n_obs(x)
   }
 
-  if (inherits(x, "MixMod")) {
-    .sigma_sum(vals$vc)
-  } else {
-    sum(sapply(vals$vc[terms], .sigma_sum))
-  }
+  # if (inherits(x, "MixMod")) {
+  #   .sigma_sum(vals$vc)
+  # } else {
+  #   sum(sapply(vals$vc[terms], .sigma_sum))
+  # }
+  sum(sapply(vals$vc[terms], .sigma_sum))
 }
 
 
@@ -658,7 +689,7 @@
   } else if (inherits(model, "MixMod")) {
     v <- family_var
     p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
-    mu <- stats::predict(model, type_pred = "link", type = "mean_subject")
+    mu <- suppressWarnings(stats::predict(model, type_pred = "link", type = "mean_subject"))
     k <- sig
     pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
   } else {
@@ -687,7 +718,7 @@
     pvar <- (1 - p) * (mu + p * mu^2)
   } else if (inherits(model, "MixMod")) {
     p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
-    mu <- stats::predict(model, type = "mean_subject")
+    mu <- suppressWarnings(stats::predict(model, type = "mean_subject"))
     pvar <- (1 - p) * (mu + p * mu^2)
   } else {
     pvar <- family_var
@@ -767,19 +798,26 @@
 # between-subject-variance (tau 00)
 .between_subject_variance <- function(vals, x) {
   # retrieve only intercepts
-  if (inherits(x, "MixMod")) {
-    vars <- lapply(vals$vc, function(i) i)[1]
-    ri_names <- find_random(x, split_nested = FALSE, flatten = TRUE)
-    if (length(ri_names) == length(vars)) {
-      names(vars) <- ri_names
-    }
-  } else {
-    vars <- lapply(vals$vc, function(i) i[1])
-    # check for uncorrelated random slopes-intercept
-    non_intercepts <- which(sapply(vals$vc, function(i) dimnames(i)[[1]][1]) != "(Intercept)")
-    if (length(non_intercepts)) {
-      vars <- vars[-non_intercepts]
-    }
+  # if (inherits(x, "MixMod")) {
+  #   vars <- lapply(vals$vc, function(i) i)[1]
+  #   ri_names <- find_random(x, split_nested = FALSE, flatten = TRUE)
+  #   if (length(ri_names) == length(vars)) {
+  #     names(vars) <- ri_names
+  #   }
+  # } else {
+  #   vars <- lapply(vals$vc, function(i) i[1])
+  #   # check for uncorrelated random slopes-intercept
+  #   non_intercepts <- which(sapply(vals$vc, function(i) dimnames(i)[[1]][1]) != "(Intercept)")
+  #   if (length(non_intercepts)) {
+  #     vars <- vars[-non_intercepts]
+  #   }
+  # }
+
+  vars <- lapply(vals$vc, function(i) i[1])
+  # check for uncorrelated random slopes-intercept
+  non_intercepts <- which(sapply(vals$vc, function(i) dimnames(i)[[1]][1]) != "(Intercept)")
+  if (length(non_intercepts)) {
+    vars <- vars[-non_intercepts]
   }
 
   sapply(vars, function(i) i)
@@ -791,9 +829,7 @@
 # random slope-variances (tau 11)
 #' @importFrom stats setNames
 .random_slope_variance <- function(vals, x) {
-  if (inherits(x, "MixMod")) {
-    diag(vals$vc)[-1]
-  } else if (inherits(x, "lme")) {
+  if (inherits(x, "lme")) {
     unlist(lapply(vals$vc, function(x) diag(x)[-1]))
   } else {
     out <- unlist(lapply(vals$vc, function(x) diag(x)[-1]))

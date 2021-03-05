@@ -4,10 +4,12 @@
 \alias{get_sigma}
 \title{Get residual standard deviation from models}
 \usage{
-get_sigma(x)
+get_sigma(x, verbose = TRUE)
 }
 \arguments{
 \item{x}{A model.}
+
+\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 The residual standard deviation (sigma), or \code{NULL} if this information could not be accessed.
