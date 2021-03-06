@@ -4,8 +4,6 @@
 
 * Improved support for `orm` (*rms*).
 
-## New supported model classes
-
 ## New functions
 
 * `is_gam_model()` as a small helpe to check if a model is a generalized
