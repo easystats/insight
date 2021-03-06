@@ -38,7 +38,7 @@
 }
 
 
-#' @importFrom stats na.omit complete.cases
+#' @importFrom stats na.omit
 # is string empty?
 .is_empty_object <- function(x) {
   if (inherits(x, "data.frame")) {
@@ -56,7 +56,7 @@
   }
   if (inherits(x, "data.frame")) {
     x <- x[!sapply(x, function(i) all(is.na(i)))]
-    x <- x[stats::complete.cases(x), ]
+    x <- x[!apply(x, 1, function(i) all(is.na(i))), ]
   }
   x <- stats::na.omit(x)
   length(x) == 0 || is.null(x) || isTRUE(nrow(x) == 0)
