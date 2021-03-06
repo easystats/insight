@@ -199,6 +199,7 @@ supported_models <- function() {
     "summary.lm",
     "survfit",
     "survreg",
+    "svy_vglm",
     "svyglm",
     "svyolr",
     "tobit",

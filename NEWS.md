@@ -4,9 +4,13 @@
 
 * Improved support for `orm` (*rms*).
 
+## New supported model classes
+
+* Support for `svy_vglm` (*svyVGAM*)
+
 ## New functions
 
-* `is_gam_model()` as a small helpe to check if a model is a generalized
+* `is_gam_model()` as a small helper to check if a model is a generalized
   additive model with smooth terms.
 
 ## Changes to functions

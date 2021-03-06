@@ -452,6 +452,21 @@ get_statistic.coxph <- function(x, ...) {
 
 
 #' @export
+get_statistic.svy_vglm <- function(x, verbose = TRUE, ...) {
+  cs <- summary(x)$coeftable
+  out <- data.frame(
+    Parameter = find_parameters(x, flatten = TRUE),
+    Statistic = as.vector(cs[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.coxr <- function(x, ...) {
   parms <- get_parameters(x)
   vc <- get_varcov(x)

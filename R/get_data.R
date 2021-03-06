@@ -973,6 +973,13 @@ get_data.negbinmfx <- get_data.betamfx
 
 
 #' @export
+get_data.svy_vglm <- function(x, verbose = TRUE, ...) {
+  mf <- x$design$variables[find_variables(x, flatten = TRUE)]
+  .prepare_get_data(x, mf, verbose = verbose)
+}
+
+
+#' @export
 get_data.mediate <- function(x, ...) {
   d1 <- get_data(x$model.m)
   d2 <- get_data(x$model.y)

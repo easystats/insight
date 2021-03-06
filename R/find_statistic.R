@@ -208,6 +208,7 @@ find_statistic <- function(x, ...) {
       "sem",
       "slm",
       "survreg",
+      "svy_vglm",
       "test_mediation",
       "tobit",
       "vglm",

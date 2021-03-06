@@ -266,6 +266,12 @@ find_formula.maxim <- find_formula.default
 
 
 #' @export
+find_formula.svy_vglm <- function(x, ...) {
+  find_formula(x$fit)
+}
+
+
+#' @export
 find_formula.btergm <- function(x, ...) {
   f <- list(conditional = x@formula)
   .find_formula_return(f)

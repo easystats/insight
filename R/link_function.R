@@ -629,6 +629,12 @@ link_function.vglm <- function(x, ...) {
 
 
 #' @export
+link_function.svy_vglm <- function(x, ...) {
+  link_function(x$fit)
+}
+
+
+#' @export
 link_function.polr <- function(x, ...) {
   link <- switch(x$method,
     logistic = "logit",

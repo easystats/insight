@@ -1015,6 +1015,11 @@ model_info.vgam <- function(x, ...) {
 model_info.vglm <- model_info.vgam
 
 
+#' @export
+model_info.svy_vglm <- function(x, ...) {
+  model_info(x$fit)
+}
+
 
 #' @export
 model_info.glmmTMB <- function(x, ...) {
