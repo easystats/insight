@@ -183,12 +183,12 @@
 
     vc1 <- list(vc1)
     names(vc1) <- re_names[[1]]
-    attr(vc1, "sc") <- as.numeric(get_sigma(x))
+    attr(vc1, "sc") <- sqrt(get_deviance(x, verbose = FALSE) / get_df(x, type = "residual", verbose = FALSE))
 
     if (!is.null(vc2)) {
       vc2 <- list(vc2)
       names(vc2) <- re_names[[2]]
-      attr(vc2, "sc") <- as.numeric(get_sigma(x))
+      attr(vc2, "sc") <- sqrt(get_deviance(x, verbose = FALSE) / get_df(x, type = "residual", verbose = FALSE))
     }
 
     vcorr <- .compact_list(list(vc1, vc2))
