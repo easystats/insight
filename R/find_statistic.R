@@ -238,6 +238,7 @@ find_statistic <- function(x, ...) {
   chi.mods <-
     c(
       "coxph.penal",
+      "epi.2by2",
       "geeglm",
       "logistf",
       "MANOVA",

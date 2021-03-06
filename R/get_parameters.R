@@ -120,6 +120,22 @@ get_parameters.tobit <- get_parameters.default
 
 
 #' @export
+get_parameters.epi.2by2 <- function(x, ...) {
+  coef_names <- grepl(".strata.wald", names(x$massoc), fixed = TRUE)
+  cf <- x$massoc[coef_names]
+  names(cf) <- gsub(".strata.wald", "", names(cf), fixed = TRUE)
+
+  params <- data.frame(
+    Parameter = names(cf),
+    Estimate = unname(unlist(lapply(cf, function(i) i["est"]))),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+#' @export
 get_parameters.Rchoice <- function(x, ...) {
   cf <- stats::coef(x)
   params <- data.frame(

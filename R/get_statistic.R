@@ -1750,6 +1750,22 @@ get_statistic.logistf <- function(x, ...) {
 
 
 
+#' @export
+get_statistic.epi.2by2 <- function(x, ...) {
+  stat <- x$massoc$chisq.strata
+  out <- data.frame(
+    Parameter = "Chi2",
+    Statistic = stat$test.statistic,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
 #' @importFrom stats vcov
 #' @export
 get_statistic.svyglm.nb <- function(x, ...) {
