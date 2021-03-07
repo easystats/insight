@@ -214,7 +214,7 @@
 
     vals <- list(
       beta = lme4::fixef(x),
-      X = matrix(data = c("Intercept" = 1), nrow = n_obs(x)),
+      X = matrix(1, nrow = n_obs(x), dimnames = list(NULL, "(Intercept)_1")),
       vc = vcorr,
       re = list(lme4::ranef(x))
     )
@@ -405,7 +405,7 @@
     rn <- rownames(Sigma)
 
     # fix for models w/o intercept
-    if (!"(Intercept)" %in% colnames(vals$X)) {
+    if (!any(grepl("^\\(Intercept\\)", colnames(vals$X)))) {
       vals$X <- cbind("(Intercept)" = 1, vals$X)
     }
 
@@ -859,7 +859,7 @@
   } else {
     out <- unlist(lapply(vals$vc, function(x) diag(x)[-1]))
     # check for uncorrelated random slopes-intercept
-    non_intercepts <- which(sapply(vals$vc, function(i) dimnames(i)[[1]][1]) != "(Intercept)")
+    non_intercepts <- which(sapply(vals$vc, function(i) !grepl("^\\(Intercept\\)", dimnames(i)[[1]][1])))
     if (length(non_intercepts)) {
       dn <- unlist(lapply(vals$vc, function(i) dimnames(i)[1])[non_intercepts])
       rndslopes <- unlist(lapply(vals$vc, function(i) i[1])[non_intercepts])
