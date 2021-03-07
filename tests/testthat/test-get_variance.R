@@ -15,7 +15,8 @@ osx <- tryCatch(
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (!osx && .runThisTest && require("testthat") && require("insight") && require("lme4")) {
-  data(sleepstudy)
+  data("sleepstudy")
+  data("Penicillin")
   set.seed(12345)
   sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
   sleepstudy$subgrp <- NA
@@ -36,12 +37,14 @@ if (!osx && .runThisTest && require("testthat") && require("insight") && require
     Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
     data = sleepstudy
   )
+  fm6 <- lmer(diameter ~ 0 + sample + (1 | plate) , data = Penicillin)
 
   v1 <- get_variance(fm1)
   v2 <- get_variance(fm2)
   v3 <- get_variance(fm3)
   v4 <- get_variance(fm4)
   v5 <- get_variance(fm5)
+  v6 <- get_variance(fm6)
 
   test_that("get_variance-1", {
     expect_equal(v1$var.intercept,
@@ -82,5 +85,11 @@ if (!osx && .runThisTest && require("testthat") && require("insight") && require
                  c(`subgrp:grp` = 38.76069, Subject = 1377.50569, grp = 3.32031),
                  tolerance = 1e-2)
     expect_null(v5$var.slope)
+  })
+
+  test_that("get_variance-6", {
+    expect_equal(v6$var.intercept, c(plate = 0.71691), tolerance = 1e-2)
+    expect_equal(v6$var.random, c(plate = 0.71691), tolerance = 1e-2)
+    expect_null(v6$var.slope)
   })
 }
