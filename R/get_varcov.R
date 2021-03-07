@@ -174,8 +174,8 @@ get_varcov.mhurdle <- function(x, component = c("all", "conditional", "zi", "zer
   component <- match.arg(component)
   vc <- stats::vcov(x)
 
-  rownames(vc) <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", rownames(vc))
-  colnames(vc) <- rownames(vc)
+  # rownames(vc) <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", rownames(vc))
+  # colnames(vc) <- rownames(vc)
 
   keep <- match(find_parameters(x, flatten = TRUE, component = component), rownames(vc))
   vc <- vc[keep, keep, drop = FALSE]

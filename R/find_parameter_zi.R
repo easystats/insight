@@ -66,7 +66,7 @@ find_parameters.mhurdle <- function(x, component = c("all", "conditional", "zi",
   ip_pars <- which(grepl("^h3\\.", names(cf)))
   aux_pars <- (1:length(names(cf)))[-c(cond_pars, zi_pars, ip_pars)]
 
-  names(cf) <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", names(cf))
+  # names(cf) <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", names(cf))
 
   l <- .compact_list(list(
     conditional = names(cf)[cond_pars],

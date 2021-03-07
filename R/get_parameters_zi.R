@@ -138,7 +138,7 @@ get_parameters.mhurdle <- function(x, component = c("all", "conditional", "zi", 
     zi_dat <- data.frame(
       Parameter = names(cf)[zi_pars],
       Estimate = unname(cf[zi_pars]),
-      Component = "zero_inflation",
+      Component = "zero_inflated",
       stringsAsFactors = FALSE,
       row.names = NULL
     )
@@ -177,6 +177,6 @@ get_parameters.mhurdle <- function(x, component = c("all", "conditional", "zi", 
     pars <- .remove_column(pars, "Component")
   }
 
-  pars$Parameter <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", pars$Parameter)
+  # pars$Parameter <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", pars$Parameter)
   .remove_backticks_from_parameter_names(pars)
 }

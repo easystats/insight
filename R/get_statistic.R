@@ -189,8 +189,25 @@ get_statistic.mhurdle <- function(x, component = c("all", "conditional", "zi", "
 
   s <- summary(x)
   params <- get_parameters(x, component = "all")
-  params$Statistic <- as.vector(s$coefficients[, 3])
 
+  stats <- data.frame(
+    Parameter = rownames(s$coefficients),
+    Statistic = as.vector(s$coefficients[, 3]),
+    Component = NA,
+    stringsAsFactors = FALSE
+  )
+
+  cond_pars <- which(grepl("^h2\\.", rownames(s$coefficients)))
+  zi_pars <- which(grepl("^h1\\.", rownames(s$coefficients)))
+  ip_pars <- which(grepl("^h3\\.", rownames(s$coefficients)))
+  aux_pars <- (1:length(rownames(s$coefficients)))[-c(cond_pars, zi_pars, ip_pars)]
+
+  stats$Component[cond_pars] <- "conditional"
+  stats$Component[zi_pars] <- "zero_inflated"
+  stats$Component[ip_pars] <- "infrequent_purchase"
+  stats$Component[aux_pars] <- "auxiliary"
+
+  params <- merge(params, stats, sort = FALSE)
   params <- .filter_component(params, component)[intersect(c("Parameter", "Statistic", "Component"), colnames(params))]
   params <- .remove_backticks_from_parameter_names(params)
   attr(params, "statistic") <- find_statistic(x)
