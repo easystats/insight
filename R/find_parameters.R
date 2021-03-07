@@ -551,24 +551,6 @@ find_parameters.mlm <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.glmx <- function(x, flatten = FALSE, ...) {
-  cf <- stats::coef(summary(x))
-
-  out <- list(
-    conditional = .remove_backticks_from_string(names(cf$glm[, 1])),
-    extra = .remove_backticks_from_string(rownames(cf$extra))
-  )
-
-  if (flatten) {
-    unique(unlist(out))
-  } else {
-    out
-  }
-}
-
-
-
-#' @export
 find_parameters.gbm <- function(x, flatten = FALSE, ...) {
   s <- summary(x, plotit = FALSE)
   pars <- list(conditional = as.character(s$var))

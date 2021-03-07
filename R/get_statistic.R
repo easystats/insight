@@ -855,6 +855,38 @@ get_statistic.negbinirr <- get_statistic.logitor
 # Other models -------------------------------------------------------
 
 
+#' @rdname get_statistic
+#' @export
+get_statistic.mjoint <- function(x, component = c("all", "conditional", "survival"), ...) {
+  component <- match.arg(component)
+  s <- summary(x)
+
+  params <- rbind(
+    data.frame(
+      Parameter = rownames(s$coefs.long),
+      Statistic = unname(s$coefs.long[, 3]),
+      Component = "conditional",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    ),
+    data.frame(
+      Parameter = rownames(s$coefs.surv),
+      Statistic = unname(s$coefs.surv[, 3]),
+      Component = "survival",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  )
+
+  if (component != "all") {
+    params <- params[params$Component == component, , drop = FALSE]
+  }
+
+  attr(params, "statistic") <- find_statistic(x)
+  params
+}
+
+
 #' @export
 get_statistic.Rchoice <- function(x, verbose = TRUE, ...) {
   cs <- summary(x)$CoefTable

@@ -99,6 +99,27 @@ get_data.summary.lm <- function(x, ...) {
 # classical and survival models -----------------------------------------------
 
 
+#' @export
+get_data.mjoint <- function(x, verbose = TRUE, ...) {
+  mf <- tryCatch(
+    {
+      dat <- x$data[[1]]
+      data_columns <- intersect(
+        colnames(dat),
+        unique(c(find_response(x, combine = FALSE, component = "all"),
+                 find_variables(x, flatten = TRUE)))
+      )
+      dat[, data_columns, drop = FALSE]
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+
+  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
+}
+
+
 #' @rdname get_data
 #' @export
 get_data.gee <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {

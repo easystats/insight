@@ -4,7 +4,7 @@
 \alias{find_response}
 \title{Find name of the response variable}
 \usage{
-find_response(x, combine = TRUE)
+find_response(x, combine = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -13,6 +13,8 @@ find_response(x, combine = TRUE)
 the name of the response matches the notation in formula, and would for
 instance also contain patterns like \code{"cbind(...)"}. Else, the original
 variable names from the matrix-column are returned. See 'Examples'.}
+
+\item{...}{Currently not used.}
 }
 \value{
 The name(s) of the response variable(s) from \code{x} as character

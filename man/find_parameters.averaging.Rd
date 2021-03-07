@@ -4,6 +4,8 @@
 \alias{find_parameters.averaging}
 \alias{find_parameters.betareg}
 \alias{find_parameters.DirichletRegModel}
+\alias{find_parameters.mjoint}
+\alias{find_parameters.glmx}
 \title{Find model parameters from models with special components}
 \usage{
 \method{find_parameters}{averaging}(x, component = c("conditional", "full"), flatten = FALSE, ...)
@@ -20,6 +22,20 @@
   x,
   component = c("all", "conditional", "precision", "location", "distributional",
     "auxiliary"),
+  flatten = FALSE,
+  ...
+)
+
+\method{find_parameters}{mjoint}(
+  x,
+  component = c("all", "conditional", "survival"),
+  flatten = FALSE,
+  ...
+)
+
+\method{find_parameters}{glmx}(
+  x,
+  component = c("all", "conditional", "extra"),
   flatten = FALSE,
   ...
 )
