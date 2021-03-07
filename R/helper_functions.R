@@ -511,6 +511,9 @@
     "zero_inflated" = dat[dat$Component == "zero_inflated", , drop = FALSE],
     "dispersion" = dat[dat$Component == "dispersion", , drop = FALSE],
     "smooth_terms" = dat[dat$Component == "smooth_terms", , drop = FALSE],
+    "ip" = ,
+    "infrequent_purchase" = dat[dat$Component == "infrequent_purchase", , drop = FALSE],
+    "auxiliary" = dat[dat$Component == "auxiliary", , drop = FALSE],
     dat
   )
 }

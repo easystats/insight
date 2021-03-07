@@ -171,9 +171,9 @@ get_parameters.mhurdle <- function(x, component = c("all", "conditional", "zi", 
   }
 
   pars <- rbind(cond_dat, zi_dat, ip_dat, aux_dat)
+  pars <- .filter_component(pars, component)
 
   if (component != "all") {
-    pars <- pars[pars$Component == component, ]
     pars <- .remove_column(pars, "Component")
   }
 

@@ -183,6 +183,22 @@ get_statistic.feis <- get_statistic.default
 # Models with zero-inflation component --------------------------------------
 
 
+#' @export
+get_statistic.mhurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"), ...) {
+  component <- match.arg(component)
+
+  s <- summary(x)
+  params <- get_parameters(x, component = "all")
+  params$Statistic <- as.vector(s$coefficients[, 3])
+
+  params <- .filter_component(params, component)[intersect(c("Parameter", "Statistic", "Component"), colnames(params))]
+  params <- .remove_backticks_from_parameter_names(params)
+  attr(params, "statistic") <- find_statistic(x)
+
+  params
+}
+
+
 #' @importFrom stats coef
 #' @rdname get_statistic
 #' @export

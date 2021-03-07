@@ -169,6 +169,20 @@ get_varcov.mjoint <- function(x, component = c("all", "conditional", "survival")
 }
 
 
+#' @export
+get_varcov.mhurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"), ...) {
+  component <- match.arg(component)
+  vc <- stats::vcov(x)
+
+  rownames(vc) <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", rownames(vc))
+  colnames(vc) <- rownames(vc)
+
+  keep <- match(find_parameters(x, flatten = TRUE, component = component), rownames(vc))
+  vc <- vc[keep, keep, drop = FALSE]
+  .process_vcov(vc)
+}
+
+
 #' @rdname get_varcov
 #' @export
 get_varcov.truncreg <- function(x, component = c("conditional", "all"), ...) {
