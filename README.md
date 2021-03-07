@@ -260,7 +260,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 176 model classes are supported.
+Currently, 177 model classes are supported.
 
 ``` r
 supported_models()
@@ -304,25 +304,25 @@ supported_models()
 #> [112] "mcmc.list"         "MCMCglmm"          "mediate"          
 #> [115] "merMod"            "merModList"        "meta_bma"         
 #> [118] "meta_fixed"        "meta_random"       "metaplus"         
-#> [121] "mipo"              "mira"              "mixed"            
-#> [124] "MixMod"            "mixor"             "mjoint"           
-#> [127] "mle"               "mle2"              "mlm"              
-#> [130] "mlogit"            "mmlogit"           "multinom"         
-#> [133] "negbinirr"         "negbinmfx"         "ols"              
-#> [136] "orm"               "plm"               "poissonirr"       
-#> [139] "poissonmfx"        "polr"              "probitmfx"        
-#> [142] "psm"               "Rchoice"           "ridgelm"          
-#> [145] "riskRegression"    "rlm"               "rlmerMod"         
-#> [148] "RM"                "rma"               "rma.uni"          
-#> [151] "robmixglm"         "rq"                "rqs"              
-#> [154] "rqss"              "scam"              "sem"              
-#> [157] "speedglm"          "speedlm"           "stanmvreg"        
-#> [160] "stanreg"           "summary.lm"        "survfit"          
-#> [163] "survreg"           "svy_vglm"          "svyglm"           
-#> [166] "svyolr"            "tobit"             "truncreg"         
-#> [169] "vgam"              "vglm"              "wbgee"            
-#> [172] "wblm"              "wbm"               "zcpglm"           
-#> [175] "zeroinfl"          "zerotrunc"
+#> [121] "mhurdle"           "mipo"              "mira"             
+#> [124] "mixed"             "MixMod"            "mixor"            
+#> [127] "mjoint"            "mle"               "mle2"             
+#> [130] "mlm"               "mlogit"            "mmlogit"          
+#> [133] "multinom"          "negbinirr"         "negbinmfx"        
+#> [136] "ols"               "orm"               "plm"              
+#> [139] "poissonirr"        "poissonmfx"        "polr"             
+#> [142] "probitmfx"         "psm"               "Rchoice"          
+#> [145] "ridgelm"           "riskRegression"    "rlm"              
+#> [148] "rlmerMod"          "RM"                "rma"              
+#> [151] "rma.uni"           "robmixglm"         "rq"               
+#> [154] "rqs"               "rqss"              "scam"             
+#> [157] "sem"               "speedglm"          "speedlm"          
+#> [160] "stanmvreg"         "stanreg"           "summary.lm"       
+#> [163] "survfit"           "survreg"           "svy_vglm"         
+#> [166] "svyglm"            "svyolr"            "tobit"            
+#> [169] "truncreg"          "vgam"              "vglm"             
+#> [172] "wbgee"             "wblm"              "wbm"              
+#> [175] "zcpglm"            "zeroinfl"          "zerotrunc"
 ```
 
 -   **Didn’t find a model?** [File an
