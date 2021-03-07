@@ -123,11 +123,41 @@ get_predicted_new.lm <- function(x, data = NULL, predict = "relation", iteration
 
   ci_data <- get_predicted_ci(x, predictions, data = args$data, ci_type = args$ci_type, ...)
 
-  .get_predicted_transform(x, args, predictions, ci_data)
+  out <- .get_predicted_transform(x, predictions, args, ci_data)
+  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
 #' @export
 get_predicted_new.glm <- get_predicted_new.lm
+
+
+# GAM -------------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted_new.gam <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, include_smooth = TRUE, ...) {
+
+  # Sanitize input
+  args <- .get_predicted_args(x, data = data, predict = predict, ci = ci, include_random = include_random, include_smooth = include_smooth, ...)
+  if (inherits(x, c("gamm", "list"))) x <- x$gam
+
+  # TODO: check this for prediction intervals: https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/
+
+  # Get prediction
+  rez <- as.data.frame(stats::predict(x, newdata = args$data, re.form = args$re.form, type = args$type, se.fit = TRUE, unconditional = FALSE))
+  predictions <- rez$fit
+
+  # Get CI
+  ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
+  .get_predicted_out(predictions, args = args, ci_data = ci_data)
+}
+
+#' @export
+get_predicted_new.gamm <- get_predicted_new.gam
+
+#' @export
+get_predicted_new.list <- get_predicted_new.gam # gamm4
+
 
 
 # Bayesian --------------------------------------------------------------
@@ -144,26 +174,22 @@ get_predicted_new.stanreg <- function(x, data = NULL, predict = "relation", iter
   args <- .get_predicted_args(x, data = data, predict = predict, include_random = include_random, include_smooth = include_smooth, ...)
 
   # Get draws
-  if (args$predict %in% c("link", "relation")) {
+  if (args$predict %in% c("link")) {
     draws <- rstantools::posterior_linpred(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
   } else {
-    draws <- rstantools::posterior_predict(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
+    draws <- rstantools::posterior_epred(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
   }
   draws <- as.data.frame(t(draws))
   names(draws) <- gsub("^V(\\d+)$", "iter_\\1", names(draws))
 
   # Get predictions (summarize)
-  if(args$info$is_binomial) {
-    predictions <- apply(draws, 1, mean)
-  } else {
-    predictions <- apply(draws, 1, centrality_function)
-  }
+  predictions <- apply(draws, 1, centrality_function)
   attr(predictions, "iterations") <- draws
 
   # Output
   ci_data <- get_predicted_ci(x, predictions = predictions, data = args$data, ci_type = args$ci_type, ...)
 
-  .get_predicted_transform(x, args, predictions, ci_data)
+  .get_predicted_out(predictions, args = args, ci_data = ci_data)
 }
 
 
@@ -195,7 +221,7 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
 
 
 
-.get_predicted_args <- function(x, data = NULL, predict = "relation", include_random = TRUE, include_smooth = TRUE, ci = 0.95, ...) {
+.get_predicted_args <- function(x, data = NULL, predict = "relation", include_random = TRUE, include_smooth = TRUE, ci = 0.95, newdata = NULL, ...) {
 
   # Sanitize input
   predict <- match.arg(predict, c("link", "relation", "prediction"))
@@ -205,6 +231,7 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
   info <- model_info(x)
 
   # Data
+  if(!is.null(newdata) && is.null(data)) data <- newdata
   if (is.null(data)) data <- get_data(x)
 
   # CI
@@ -230,7 +257,7 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
   }
 
   # Transform
-  if(info$is_linear == FALSE && scale == "response" && !all(info$is_bayesian && predict == "prediction")) {
+  if(info$is_linear == FALSE && scale == "response") {
     transform <- TRUE
   } else {
     transform <- FALSE
@@ -260,7 +287,9 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
 }
 
 
-.get_predicted_transform <- function(x, args, predictions, ci_data = NULL, ...) {
+
+
+.get_predicted_transform <- function(x, predictions, args = NULL, ci_data = NULL, ...) {
 
   # Transform to response scale
   if (args$transform == TRUE) {
@@ -283,8 +312,12 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
     }
   }
 
+  list(predictions = predictions, ci_data = ci_data)
+}
 
-  # Add attributes
+
+.get_predicted_out <- function(predictions, args = NULL, ci_data = NULL, ...) {
+
   if (!is.null(ci_data)) {
     attr(predictions, "ci_data") <- ci_data
   }
@@ -297,9 +330,6 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
   class(predictions) <- c("get_predicted", class(predictions))
   predictions
 }
-
-
-
 
 # Bootstrap ---------------------------------------------------------------
 
