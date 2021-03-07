@@ -149,6 +149,9 @@ get_variance.merMod <- function(x, component = c("all", "fixed", "random", "resi
 get_variance.rlmerMod <- get_variance.merMod
 
 #' @export
+get_variance.mjoint <- get_variance.merMod
+
+#' @export
 get_variance.cpglmm <- get_variance.merMod
 
 #' @export

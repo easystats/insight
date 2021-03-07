@@ -7,6 +7,7 @@
 \alias{get_statistic.clm2}
 \alias{get_statistic.betamfx}
 \alias{get_statistic.logitmfx}
+\alias{get_statistic.mjoint}
 \alias{get_statistic.emmGrid}
 \alias{get_statistic.gee}
 \alias{get_statistic.betareg}
@@ -32,6 +33,8 @@ get_statistic(x, ...)
 )
 
 \method{get_statistic}{logitmfx}(x, component = c("all", "conditional", "marginal"), ...)
+
+\method{get_statistic}{mjoint}(x, component = c("all", "conditional", "survival"), ...)
 
 \method{get_statistic}{emmGrid}(x, ci = 0.95, adjust = "none", merge_parameters = FALSE, ...)
 
