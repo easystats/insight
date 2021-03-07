@@ -89,7 +89,7 @@ if (!osx && .runThisTest && require("testthat") && require("insight") && require
 
   test_that("get_variance-6", {
     expect_equal(v6$var.intercept, c(plate = 0.71691), tolerance = 1e-2)
-    expect_equal(v6$var.random, c(plate = 0.71691), tolerance = 1e-2)
+    expect_equal(v6$var.random, 0.71691, tolerance = 1e-2)
     expect_null(v6$var.slope)
   })
 }
