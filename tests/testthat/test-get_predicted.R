@@ -71,6 +71,8 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     rezbayes <- summary(get_predicted_new(xbayes, type = "prediction"))
     expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
     expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
+
+
   })
 
   test_that("get_predicted - glm", {
@@ -107,17 +109,29 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(mean(abs(ref$fit - rez$Predicted)), 0, tolerance = 0.1)
 
     # vs. Bayesian
-    # xbayes <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
-    # rez <- as.data.frame(get_predicted_new(x, predict = "link"))
-    # rezbayes <- summary(get_predicted_new(xbayes, predict = "link"))
-    # expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.3)
-    # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
-    # rez <- as.data.frame(get_predicted_new(x, predict = "response"))
-    # rezbayes <- summary(get_predicted_new(xbayes, predict = "link"))
-    # expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.3)
+    xbayes <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
+    rez <- as.data.frame(get_predicted_new(x, predict = "link"))
+    rezbayes <- summary(get_predicted_new(xbayes, predict = "link"))
+    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
+    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
+    rez <- as.data.frame(get_predicted_new(x, predict = "prediction"))
+    rezbayes <- summary(get_predicted_new(xbayes, predict = "prediction"))
+    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
     # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
   })
 
+  # test_that("get_predicted - lm (log)", {
+  #   x <- lm(mpg ~ log(hp), data = mtcars)
+  #   rez <- insight::get_predicted_new(x)
+  #   expect_equal(length(rez), 32)
+  #
+  #   expect_equal(max(abs(rez - stats::fitted(x))), 0)
+  #   expect_equal(max(abs(rez - stats::predict(x))), 0)
+  #
+  #   data <- as.data.frame(rez)
+  #   expect_equal(max(abs(rez - data$Predicted)), 0)
+  #   expect_equal(nrow(data), 32)
+  # })
 
   # Mixed --------------------------------------------------------------
   # =========================================================================
@@ -128,6 +142,17 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   # ciTools::add_pi(mtcars, x)
   #   predict(x, type = "link")
   # })
+
+
+
+  # GAM --------------------------------------------------------------
+  # =========================================================================
+  test_that("get_predicted - mgcv::gam and gamm", {
+    x <- mgcv::gam(mpg ~ am + s(wt), data = mtcars)
+    expect_equal(length(insight::get_predicted_new(x)), 32)
+    rez <- insight::get_predicted_new(x, data = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)))
+    expect_equal(length(rez), 3)
+  })
 
 
   # Bayesian --------------------------------------------------------------
@@ -155,7 +180,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_true(min(rezlink$CI_high) < 0)
     expect_true(min(rezrela$CI_high) > 0)
     rezpred <- summary(get_predicted_new(x, predict = "prediction"))
-    # expect_equal(mean(abs(rezlink$Predicted - rezpred$Predicted)), 0, tolerance = 0.1)
-    # expect_true(all(mean(rezlink$CI_high - rezpred$CI_high) < 0))
+    expect_equal(mean(abs(rezrela$Predicted - rezpred$Predicted)), 0, tolerance = 0.1)
+    expect_true(all(mean(rezrela$CI_high - rezpred$CI_high) < 0))
   })
 }

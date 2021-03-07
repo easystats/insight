@@ -22,18 +22,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 # Basic -------------------------------------------------------------------
 
 
-  # test_that("get_predicted - lm (log)", {
-  #   x <- lm(mpg ~ log(hp), data = mtcars)
-  #   rez <- insight::get_predicted(x)
-  #   expect_equal(length(rez), 32)
-  #
-  #   expect_equal(max(abs(rez - stats::fitted(x))), 0)
-  #   expect_equal(max(abs(rez - stats::predict(x))), 0)
-  #
-  #   data <- as.data.frame(rez)
-  #   expect_equal(max(abs(rez - data$Predicted)), 0)
-  #   expect_equal(nrow(data), 32)
-  # })
+
 
 
 
