@@ -822,25 +822,9 @@
 # random intercept-variances, i.e.
 # between-subject-variance (tau 00)
 .between_subject_variance <- function(vals, x) {
-  # retrieve only intercepts
-  # if (inherits(x, "MixMod")) {
-  #   vars <- lapply(vals$vc, function(i) i)[1]
-  #   ri_names <- find_random(x, split_nested = FALSE, flatten = TRUE)
-  #   if (length(ri_names) == length(vars)) {
-  #     names(vars) <- ri_names
-  #   }
-  # } else {
-  #   vars <- lapply(vals$vc, function(i) i[1])
-  #   # check for uncorrelated random slopes-intercept
-  #   non_intercepts <- which(sapply(vals$vc, function(i) dimnames(i)[[1]][1]) != "(Intercept)")
-  #   if (length(non_intercepts)) {
-  #     vars <- vars[-non_intercepts]
-  #   }
-  # }
-
   vars <- lapply(vals$vc, function(i) i[1])
   # check for uncorrelated random slopes-intercept
-  non_intercepts <- which(sapply(vals$vc, function(i) dimnames(i)[[1]][1]) != "(Intercept)")
+  non_intercepts <- which(sapply(vals$vc, function(i) !grepl("^\\(Intercept\\)", dimnames(i)[[1]][1])))
   if (length(non_intercepts)) {
     vars <- vars[-non_intercepts]
   }
