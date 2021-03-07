@@ -386,6 +386,11 @@
   .sigma_sum <- function(Sigma) {
     rn <- rownames(Sigma)
 
+    # fix for models w/o intercept
+    if (!"(Intercept)" %in% colnames(vals$X)) {
+      vals$X <- cbind("(Intercept)" = 1, vals$X)
+    }
+
     if (!is.null(rn)) {
       valid <- rownames(Sigma) %in% colnames(vals$X)
       if (!all(valid)) {

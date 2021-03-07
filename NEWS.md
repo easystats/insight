@@ -29,6 +29,10 @@
 
 * Improved support for `MixMod` (*GLMMadaptive*) in `get_variance()`.
 
+## Bug fixes
+
+* Fixed issue in `get_variance()` for models without intercept.
+
 # insight 0.13.1
 
 ## General
