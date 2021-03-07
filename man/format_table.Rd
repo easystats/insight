@@ -15,6 +15,7 @@ format_table(
   ci_digits = 2,
   p_digits = 3,
   rope_digits = 2,
+  zap_small = FALSE,
   preserve_attributes = FALSE,
   verbose = TRUE,
   ...
@@ -30,6 +31,7 @@ parameters_table(
   ci_digits = 2,
   p_digits = 3,
   rope_digits = 2,
+  zap_small = FALSE,
   preserve_attributes = FALSE,
   verbose = TRUE,
   ...
@@ -53,6 +55,8 @@ parameters_table(
 \item{p_digits}{Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.}
 
 \item{rope_digits}{Number of decimal places for the ROPE percentage values.}
+
+\item{zap_small}{Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.}
 
 \item{preserve_attributes}{Logical, if \code{TRUE}, preserves all attributes from the input data frame.}
 
