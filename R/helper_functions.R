@@ -246,11 +246,11 @@
 
   # all elements of a model
   elements <- c(
-    "conditional", "conditional2", "conditional3", "precision",
+    "conditional", "conditional1", "conditional2", "conditional3", "precision",
     "nonlinear", "random", "zero_inflated", "zero_inflated_random",
     "dispersion", "instruments", "interactions", "simplex",
     "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes",
-    "cluster", "extra", "scale", "marginal", "alpha", "beta"
+    "cluster", "extra", "scale", "marginal", "alpha", "beta", "survival"
   )
 
   # auxiliary parameters
@@ -279,7 +279,7 @@
 
   elements <- switch(effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale", "marginal", "beta")],
+    fixed = elements[elements %in% c("conditional", "conditional1", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale", "marginal", "beta", "survival")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
@@ -303,7 +303,8 @@
     extra = elements[elements == "extra"],
     scale = elements[elements == "scale"],
     precision = elements[elements == "precision"],
-    marginal = elements[elements == "marginal"]
+    marginal = elements[elements == "marginal"],
+    survival = elements[elements == "survival"]
   )
 
   elements
