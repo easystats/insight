@@ -82,6 +82,30 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
 }
 
 
+#' @export
+find_response.joint <- function(x, combine = TRUE, component = c("conditional", "survival", "all"), ...) {
+  component <- match.arg(component)
+  f <- find_formula(x)
+
+  if (is.null(f)) {
+    return(NULL)
+  }
+
+  conditional <- .safe_deparse(f$conditional[[2L]])
+  survial <- .safe_deparse(f$survival[[2L]])
+
+  resp <- switch(component,
+                 "conditional" = conditional,
+                 "survial" = survial,
+                 "all" = c(conditional, survial))
+
+  unlist(lapply(resp, check_cbind, combine = combine, model = x))
+}
+
+
+
+
+
 
 
 # utils ---------------------

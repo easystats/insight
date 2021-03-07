@@ -339,6 +339,13 @@ find_formula.glht <- function(x, ...) {
 
 
 #' @export
+find_formula.joint <- function(x, ...) {
+  f <- stats::formula(x)
+  .find_formula_return(list(conditional = f$lformula, survival = f$sformula))
+}
+
+
+#' @export
 find_formula.betareg <- function(x, ...) {
   f <- stats::formula(x)
   fs <- .safe_deparse(f)

@@ -137,6 +137,12 @@ n_obs.mjoint <- function(x, ...) {
 
 
 #' @export
+n_obs.joint <- function(x, ...) {
+  nrow(x$data$longitudinal)
+}
+
+
+#' @export
 n_obs.merModList <- function(x, ...) {
   stats::nobs(x[[1]])
 }
