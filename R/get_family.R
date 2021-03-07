@@ -40,12 +40,12 @@ get_family.list <- function(x, ...) {
 .get_family <- function(x, ...) {
   info <- model_info(x)
 
-  if (info$is_logit) {
-    fam <- stats::binomial(link = "logit")
+  if (info$family == "binomial") {
+    fam <- stats::binomial(link = info$link_function)
   } else if (info$is_linear) {
     fam <- stats::gaussian(link = "identity")
   } else if (info$is_poisson) {
-    fam <- stats::poisson(link = "log")
+    fam <- stats::poisson(link = info$link_function)
   } else {
     stop("Could not retrieve family from this object. Open an issue on the insight's GitHub.")
   }
