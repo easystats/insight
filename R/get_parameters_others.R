@@ -151,3 +151,35 @@ get_parameters.clm2 <- function(x, component = c("all", "conditional", "scale"),
 
 #' @export
 get_parameters.clmm2 <- get_parameters.clm2
+
+
+
+#' @rdname get_parameters.betareg
+#' @export
+get_parameters.mjoint <- function(x, component = c("all", "conditional", "survival"), ...) {
+  component <- match.arg(component)
+  s <- summary(x)
+
+  params <- rbind(
+    data.frame(
+      Parameter = rownames(s$coefs.long),
+      Estimate = unname(s$coefs.long[, 1]),
+      Component = "conditional",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    ),
+    data.frame(
+      Parameter = rownames(s$coefs.surv),
+      Estimate = unname(s$coefs.surv[, 1]),
+      Component = "survival",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  )
+
+  if (component != "all") {
+    params <- params[params$Component == component, , drop = FALSE]
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}

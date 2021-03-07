@@ -67,3 +67,34 @@ find_parameters.DirichletRegModel <- function(x, component = c("all", "condition
   pars$conditional <- .remove_backticks_from_string(pars$conditional)
   .filter_parameters(pars, effects = "all", component = component, flatten = flatten, recursive = FALSE)
 }
+
+
+
+#' @rdname find_parameters.averaging
+#' @export
+find_parameters.mjoint <- function(x, component = c("all", "conditional", "survival"), flatten = FALSE, ...) {
+  component <- match.arg(component)
+  s <- summary(x)
+
+  out <- list(
+    conditional = .remove_backticks_from_string(rownames(s$coefs.long)),
+    survival = .remove_backticks_from_string(rownames(s$coefs.surv))
+  )
+
+  .filter_parameters(out, effects = "all", component = component, flatten = flatten, recursive = FALSE)
+}
+
+
+
+#' @rdname find_parameters.averaging
+#' @export
+find_parameters.glmx <- function(x, component = c("all", "conditional", "extra"), flatten = FALSE, ...) {
+  cf <- stats::coef(summary(x))
+
+  out <- list(
+    conditional = .remove_backticks_from_string(names(cf$glm[, 1])),
+    extra = .remove_backticks_from_string(rownames(cf$extra))
+  )
+
+  .filter_parameters(out, effects = "all", component = component, flatten = flatten, recursive = FALSE)
+}

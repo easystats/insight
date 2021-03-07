@@ -260,7 +260,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 175 model classes are supported.
+Currently, 176 model classes are supported.
 
 ``` r
 supported_models()
@@ -305,24 +305,24 @@ supported_models()
 #> [115] "merMod"            "merModList"        "meta_bma"         
 #> [118] "meta_fixed"        "meta_random"       "metaplus"         
 #> [121] "mipo"              "mira"              "mixed"            
-#> [124] "MixMod"            "mixor"             "mle"              
-#> [127] "mle2"              "mlm"               "mlogit"           
-#> [130] "mmlogit"           "multinom"          "negbinirr"        
-#> [133] "negbinmfx"         "ols"               "orm"              
-#> [136] "plm"               "poissonirr"        "poissonmfx"       
-#> [139] "polr"              "probitmfx"         "psm"              
-#> [142] "Rchoice"           "ridgelm"           "riskRegression"   
-#> [145] "rlm"               "rlmerMod"          "RM"               
-#> [148] "rma"               "rma.uni"           "robmixglm"        
-#> [151] "rq"                "rqs"               "rqss"             
-#> [154] "scam"              "sem"               "speedglm"         
-#> [157] "speedlm"           "stanmvreg"         "stanreg"          
-#> [160] "summary.lm"        "survfit"           "survreg"          
-#> [163] "svy_vglm"          "svyglm"            "svyolr"           
-#> [166] "tobit"             "truncreg"          "vgam"             
-#> [169] "vglm"              "wbgee"             "wblm"             
-#> [172] "wbm"               "zcpglm"            "zeroinfl"         
-#> [175] "zerotrunc"
+#> [124] "MixMod"            "mixor"             "mjoint"           
+#> [127] "mle"               "mle2"              "mlm"              
+#> [130] "mlogit"            "mmlogit"           "multinom"         
+#> [133] "negbinirr"         "negbinmfx"         "ols"              
+#> [136] "orm"               "plm"               "poissonirr"       
+#> [139] "poissonmfx"        "polr"              "probitmfx"        
+#> [142] "psm"               "Rchoice"           "ridgelm"          
+#> [145] "riskRegression"    "rlm"               "rlmerMod"         
+#> [148] "RM"                "rma"               "rma.uni"          
+#> [151] "robmixglm"         "rq"                "rqs"              
+#> [154] "rqss"              "scam"              "sem"              
+#> [157] "speedglm"          "speedlm"           "stanmvreg"        
+#> [160] "stanreg"           "summary.lm"        "survfit"          
+#> [163] "survreg"           "svy_vglm"          "svyglm"           
+#> [166] "svyolr"            "tobit"             "truncreg"         
+#> [169] "vgam"              "vglm"              "wbgee"            
+#> [172] "wblm"              "wbm"               "zcpglm"           
+#> [175] "zeroinfl"          "zerotrunc"
 ```
 
 -   **Didn’t find a model?** [File an

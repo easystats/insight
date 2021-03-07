@@ -6,6 +6,7 @@
 \alias{get_parameters.averaging}
 \alias{get_parameters.glmx}
 \alias{get_parameters.clm2}
+\alias{get_parameters.mjoint}
 \title{Get model parameters from models with special components}
 \usage{
 \method{get_parameters}{betareg}(
@@ -32,6 +33,8 @@
 )
 
 \method{get_parameters}{clm2}(x, component = c("all", "conditional", "scale"), ...)
+
+\method{get_parameters}{mjoint}(x, component = c("all", "conditional", "survival"), ...)
 }
 \arguments{
 \item{x}{A fitted model.}

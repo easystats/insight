@@ -162,6 +162,9 @@ model_info.mmclogit <- function(x, ...) {
 model_info.maxLik <- model_info.mmclogit
 
 #' @export
+model_info.mjoint <- model_info.mmclogit
+
+#' @export
 model_info.censReg <- model_info.mmclogit
 
 #' @export

@@ -134,6 +134,11 @@ find_predictors <- function(x, effects = c("fixed", "random", "all"), component 
     f[["conditional"]] <- f[["conditional"]][[3]]
   }
 
+  # from conditional model, remove response
+  if (.obj_has_name(f, "survival")) {
+    f[["survival"]] <- f[["survival"]][[3]]
+  }
+
   # if we have random effects, just return grouping variable, not random slopes
   if (.obj_has_name(f, "random")) {
     f[["random"]] <- .get_group_factor(x, f[["random"]])

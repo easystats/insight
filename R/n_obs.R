@@ -97,6 +97,12 @@ n_obs.svyolr <- function(x, weighted = FALSE, ...) {
 
 
 #' @export
+n_obs.svy_vglm <- function(x, ...) {
+  n_obs(x$fit)
+}
+
+
+#' @export
 n_obs.gam <- function(x, ...) {
   if (!is.null(dim(x$y))) {
     dim(x$y)[1]
@@ -121,6 +127,12 @@ n_obs.list <- n_obs.gamm
 #' @export
 n_obs.lavaan <- function(x, ...) {
   x@SampleStats@ntotal
+}
+
+
+#' @export
+n_obs.mjoint <- function(x, ...) {
+  nrow(x$data[[1]])
 }
 
 

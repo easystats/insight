@@ -272,6 +272,29 @@ find_formula.svy_vglm <- function(x, ...) {
 
 
 #' @export
+find_formula.mjoint <- function(x, ...) {
+  s <- summary(x)
+
+  f.cond <- s$formLongFixed
+  if (length(s$formLongFixed) == 1) {
+    names(f.cond) <- "conditional"
+  } else {
+    names(f.cond) <- paste0("conditional", 1:length(f.cond))
+  }
+
+  f.rand <- s$formLongRandom
+  if (length(s$formLongRandom) == 1) {
+    names(f.rand) <- "random"
+  } else {
+    names(f.rand) <- paste0("random", 1:length(f.rand))
+  }
+
+  f <- c(f.cond, f.rand, list(survival = s$formSurv))
+  .find_formula_return(f)
+}
+
+
+#' @export
 find_formula.btergm <- function(x, ...) {
   f <- list(conditional = x@formula)
   .find_formula_return(f)

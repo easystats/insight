@@ -202,6 +202,24 @@
     )
     names(vals$re) <- x$id_name
 
+    # joineRML
+  } else if (inherits(x, "mjoint")) {
+    re_names <- find_random(x, flatten = TRUE)
+    vcorr <- summary(x)$D
+    attr(vcorr, "stddev") <- sqrt(diag(vcorr))
+    attr(vcorr, "correlation") <- stats::cov2cor(vcorr)
+    vcorr <- list(vcorr)
+    names(vcorr) <- re_names[1]
+    attr(vcorr, "sc") <- x$coef$sigma2[[1]]
+
+    vals <- list(
+      beta = lme4::fixef(x),
+      X = matrix(data = c("Intercept" = 1), nrow = n_obs(x)),
+      vc = vcorr,
+      re = list(lme4::ranef(x))
+    )
+    names(vals$re) <- re_names[1:length(vals$re)]
+
     # nlme
   } else if (inherits(x, "lme")) {
     re_names <- find_random(x, split_nested = TRUE, flatten = TRUE)
