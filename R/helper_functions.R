@@ -286,7 +286,7 @@
 
   elements <- switch(component,
     all = elements,
-    conditional = elements[elements %in% c("conditional", "conditional1", "conditional2", "conditional3", "precision", "nonlinear", "random", "slopes", "infrequent_purchase", "auxiliary")],
+    conditional = elements[elements %in% c("conditional", "conditional1", "conditional2", "conditional3", "precision", "nonlinear", "random", "slopes")],
     zi = ,
     zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random")],
     dispersion = elements[elements == "dispersion"],
