@@ -14,14 +14,6 @@
 #'   x <- mgcv::gamm(vs ~ am + s(wt), random = list(cyl = ~1), data = mtcars, family = "binomial")
 #'   get_family(x)
 #' }
-#'
-#' \dontrun{
-#' if (require("rstanarm")) {
-#'   x <- stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0)
-#'   get_family(x)
-#' }
-#' }
-#'
 #' @export
 get_family <- function(x, ...) {
   UseMethod("get_family")
@@ -36,7 +28,7 @@ get_family.default <- function(x, ...) {
 
 #' @export
 get_family.list <- function(x, ...) {
-  if("gam" %in% names(x)) {
+  if ("gam" %in% names(x)) {
     .get_family(x)
   } else {
     stop("Could not retrieve family from this list. Check the input.")
@@ -48,11 +40,11 @@ get_family.list <- function(x, ...) {
 .get_family <- function(x, ...) {
   info <- model_info(x)
 
-  if(info$is_logit) {
+  if (info$is_logit) {
     fam <- stats::binomial(link = "logit")
-  } else if(info$is_linear) {
+  } else if (info$is_linear) {
     fam <- stats::gaussian(link = "identity")
-  } else if(info$is_poisson) {
+  } else if (info$is_poisson) {
     fam <- stats::poisson(link = "log")
   } else {
     stop("Could not retrieve family from this object. Open an issue on the insight's GitHub.")

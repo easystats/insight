@@ -23,12 +23,4 @@ if (require("mgcv")) {
   x <- mgcv::gamm(vs ~ am + s(wt), random = list(cyl = ~1), data = mtcars, family = "binomial")
   get_family(x)
 }
-
-\dontrun{
-if (require("rstanarm")) {
-  x <- stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0)
-  get_family(x)
-}
-}
-
 }
