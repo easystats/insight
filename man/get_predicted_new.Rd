@@ -73,7 +73,7 @@ as.data.frame(get_predicted_new(x, iterations = 100), include_iterations = FALSE
 
 \dontrun{
 # Bayesian models
-if (require("rstanarm") && require("bayestestR")) {
+if (require("rstanarm")) {
   x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
   predictions <- get_predicted_new(x)
   predictions

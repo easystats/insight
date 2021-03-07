@@ -152,6 +152,29 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(length(insight::get_predicted_new(x)), 32)
     rez <- insight::get_predicted_new(x, data = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)))
     expect_equal(length(rez), 3)
+
+    # No smooth
+    rez <- insight::get_predicted_new(x, newdata = data.frame(am = c(0, 0, 1)))
+    expect_equal(length(rez), 3)
+    rez2 <- insight::get_predicted_new(x, newdata = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)), include_smooth = FALSE)
+    expect_equal(max(abs(as.numeric(rez - rez2))), 0, tolerance = 1e-4)
+    expect_equal(length(unique(attributes(rez)$data$wt)), 1)
+
+    x <- mgcv::gam(vs ~ am + s(wt), data = mtcars, family = "binomial")
+    rez <- insight::get_predicted_new(x)
+    expect_equal(length(rez), 32)
+
+    expect_equal(max(abs(rez - stats::fitted(x))), 0)
+    expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
+    expect_equal(nrow(as.data.frame(rez)), 32)
+
+    x <- mgcv::gamm(vs ~ am + s(wt), random = list(cyl = ~1), data = mtcars, family = "binomial", verbosePQL = FALSE)
+    # rez <- insight::get_predicted_new(x)
+    # expect_equal(length(rez), 32)
+    #
+    # expect_equal(max(abs(rez - x$gam$fitted.values)), 0)
+    # expect_equal(max(abs(rez - stats::predict(x$gam, type = "response"))), 0)
+    # expect_equal(nrow(as.data.frame(rez)), 32)
   })
 
 

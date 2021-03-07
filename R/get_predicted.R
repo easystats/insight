@@ -41,7 +41,7 @@
 #'
 #' \dontrun{
 #' # Bayesian models
-#' if (require("rstanarm") && require("bayestestR")) {
+#' if (require("rstanarm")) {
 #'   x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
 #'   predictions <- get_predicted_new(x)
 #'   predictions
@@ -135,21 +135,34 @@ get_predicted_new.glm <- get_predicted_new.lm
 # =======================================================================
 
 #' @export
-get_predicted_new.gam <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, include_smooth = TRUE, ...) {
+get_predicted_new.gam <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, include_smooth = TRUE, iterations = NULL, ...) {
 
   # Sanitize input
   args <- .get_predicted_args(x, data = data, predict = predict, ci = ci, include_random = include_random, include_smooth = include_smooth, ...)
   if (inherits(x, c("gamm", "list"))) x <- x$gam
 
-  # TODO: check this for prediction intervals: https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/
+  # TODO: check this for prediction intervals:
+  # https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/
+  # https://github.com/gavinsimpson/gratia/blob/master/R/confint-methods.R
+  # https://github.com/gavinsimpson/gratia/blob/master/R/posterior-samples.R
+
+  # Prediction function
+  predict_function <- function(x, data, ...) {
+    stats::predict(x, newdata = data, type = args$type, re.form = args$re.form, unconditional = FALSE, ...)
+  }
 
   # Get prediction
-  rez <- as.data.frame(stats::predict(x, newdata = args$data, re.form = args$re.form, type = args$type, se.fit = TRUE, unconditional = FALSE))
-  predictions <- rez$fit
+  rez <- predict_function(x, data = args$data, se.fit = TRUE)
+  if (is.null(iterations)) {
+    predictions <- rez$fit
+  } else {
+    predictions <- .get_predicted_boot(x, data = args$data, predict_function = predict_function, iterations = iterations, ...)
+  }
 
   # Get CI
   ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
-  .get_predicted_out(predictions, args = args, ci_data = ci_data)
+  out <- .get_predicted_transform(x, predictions, args, ci_data)
+  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
 #' @export
@@ -195,8 +208,6 @@ get_predicted_new.stanreg <- function(x, data = NULL, predict = "relation", iter
 
 #' @export
 get_predicted_new.brmsfit <- get_predicted_new.stanreg
-
-
 
 
 # ====================================================================
@@ -299,7 +310,7 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
       ci_data[!se_col] <- as.data.frame(sapply(ci_data[!se_col], link_inverse(x)))
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
-      mu_eta <- abs(family(x)$mu.eta(predictions))
+      mu_eta <- abs(get_family(x)$mu.eta(predictions))
       ci_data[se_col] <- ci_data[se_col] * mu_eta
     }
 
