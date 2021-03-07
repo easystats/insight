@@ -29,24 +29,6 @@
 #'
 #' @return The fitted values (i.e. predictions for the response).
 #'
-#' @examples
-#' data(mtcars)
-#' x <- lm(mpg ~ cyl + hp, data = mtcars)
-#' predicted <- get_predicted(x)
-#' predicted
-#'
-#' # Get CI
-#' attributes(predicted)$CI_low # Or CI_high
-#' as.data.frame(predicted) # To get everything
-#'
-#' \donttest{
-#' # Bayesian models
-#' if (require("rstanarm") && require("bayestestR")) {
-#'   model <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
-#'   # For Bayesian models, the 'ci_type' argument controls the type of prediction
-#'   predicted <- insight::get_predicted(model, ci_type = "prediction")
-#'   predicted
-#' }}
 #' @export
 get_predicted <- function(x, ...) {
   UseMethod("get_predicted")

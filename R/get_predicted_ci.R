@@ -44,15 +44,32 @@
 #' @export
 get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
 
-  # If it's a data frame, it means it must be bootstrapped / Bayesian
-  if (!is.null(predictions) && !is.null(ncol(predictions))) {
-    out <- data.frame(
-      Predicted = apply(predictions, 1, mean),
-      SE = apply(predictions, 1, stats::sd),
-      CI_low = apply(predictions, 1, stats::quantile, probs = (1 - ci) / 2, na.rm = TRUE),
-      CI_high = apply(predictions, 1, stats::quantile, probs = (1 + ci) / 2, na.rm = TRUE)
-    )
-  } else {
+  if ("iterations" %in% names(attributes(predictions))) {
+    iter <- attributes(predictions)$iterations
+    se <- data.frame(SE = apply(iter, 1, stats::sd))
+
+    if (model_info(x)$is_bayesian) { # Bayesian --------------------------------
+
+      if (ci_type == "confidence") {
+        out <- data.frame(
+          CI_low = apply(iter, 1, stats::quantile, probs = (1 - ci) / 2, na.rm = TRUE),
+          CI_high = apply(iter, 1, stats::quantile, probs = (1 + ci) / 2, na.rm = TRUE)
+        )
+      } else {
+        out <- as.data.frame(rstantools::predictive_interval(x, newdata = data, prob = ci))
+        names(out) <- c("CI_low", "CI_high")
+      }
+
+    } else { # Bootstrapped ----------------------------------------------------
+      out <- data.frame(
+        CI_low = apply(iter, 1, stats::quantile, probs = (1 - ci) / 2, na.rm = TRUE),
+        CI_high = apply(iter, 1, stats::quantile, probs = (1 + ci) / 2, na.rm = TRUE)
+      )
+    }
+
+    out <- cbind(se, out)
+
+  } else { # Regular -----------------------------------------------------------
     # Get SE
     se <- .get_predicted_ci_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
     # Convert to CI
@@ -202,6 +219,9 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
 #' @importFrom stats qnorm qt
 .get_predicted_se_to_ci <- function(x, predictions = NULL, se = NULL, ci = 0.95) {
 
+  # TODO: Prediction interval for binomial: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-i/
+  # TODO: Prediction interval for poisson: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-ii/
+
   # Sanity checks
   if (is.null(predictions)) {
     return(data.frame(se = se))
@@ -230,5 +250,5 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
     ci_high <- predictions + (se * crit_val)
   }
 
-  data.frame(Predicted = predictions, SE = se, CI_low = ci_low, CI_high = ci_high)
+  data.frame(SE = se, CI_low = ci_low, CI_high = ci_high)
 }

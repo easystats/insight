@@ -25,15 +25,20 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   test_that("get_predicted - lm", {
     x <- lm(mpg ~ cyl + hp, data = mtcars)
 
-    # General
+    # Link vs. relation
     rezlink <- get_predicted_new(x, predict = "link")
-    rezresp <- get_predicted_new(x, predict = "response")
-    expect_equal(mean(abs(rezlink - rezresp)), 0, tolerance = 1e-3)
-    expect_true(all(mean(attributes(rezlink)$CI_high - attributes(rezresp)$CI_high) < 0))
+    rezrela <- get_predicted_new(x, predict = "relation")
+    expect_equal(mean(abs(rezlink - rezrela)), 0, tolerance = 1e-3)
+    expect_equal(mean(summary(rezlink)$CI_high - summary(rezrela)$CI_high), 0, tolerance = 1e-3)
+
+    # Relation vs. Prediction
+    rezpred <- get_predicted_new(x, predict = "prediction")
+    expect_equal(mean(abs(rezlink - rezpred)), 0, tolerance = 1e-3)
+    expect_true(all(mean(summary(rezlink)$CI_high - summary(rezpred)$CI_high) < 0))
 
     # Confidence
     ref <- predict(x, se.fit = TRUE, interval = "confidence")
-    rez <- as.data.frame(get_predicted_new(x, predict = "link"))
+    rez <- as.data.frame(get_predicted_new(x, predict = "relation"))
     expect_equal(nrow(rez), 32)
     expect_equal(max(abs(as.data.frame(ref$fit)$fit - rez$Predicted)), 0, tolerance = 1e-10)
     expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
@@ -41,7 +46,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
     # Prediction
     ref <- predict(x, newdata = insight::get_data(x), se.fit = TRUE, interval = "prediction")
-    rez <- as.data.frame(get_predicted_new(x, predict = "response"))
+    rez <- as.data.frame(get_predicted_new(x, predict = "prediction"))
     expect_equal(nrow(rez), 32)
     expect_equal(max(abs(as.data.frame(ref$fit)$fit - rez$Predicted)), 0, tolerance = 1e-10)
     expect_equal(max(abs(as.data.frame(ref$fit)$lwr - rez$CI_low)), 0, tolerance = 1e-10)
@@ -50,9 +55,10 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     set.seed(333)
     ref <- predict(x, newdata = insight::get_data(x), se.fit = TRUE, interval = "confidence")
     rez <- get_predicted_new(x, iterations = 600)
-    expect_equal(nrow(rez), 32)
-    expect_equal(mean(abs(as.data.frame(ref$fit)$fit - attributes(rez)$Predicted)), 0, tolerance = 0.1)
-    expect_equal(mean(abs(as.data.frame(ref$fit)$lwr - attributes(rez)$CI_low)), 0, tolerance = 0.5)
+    expect_equal(length(rez), 32)
+    expect_null(nrow(rez))
+    expect_equal(mean(abs(as.data.frame(ref$fit)$fit - summary(rez)$Predicted)), 0, tolerance = 0.1)
+    expect_equal(mean(abs(as.data.frame(ref$fit)$lwr - summary(rez)$CI_low)), 0, tolerance = 0.5)
     # TODO: Is it possible to get "prediction" CIs via bootstrapping?
 
     # vs. Bayesian
@@ -61,52 +67,55 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     rezbayes <- summary(get_predicted_new(xbayes, type = "link"))
     expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
     expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
-    rez <- as.data.frame(get_predicted_new(x, type = "response"))
-    rezbayes <- summary(get_predicted_new(xbayes, type = "response"))
-    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.2)
-    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
+    rez <- as.data.frame(get_predicted_new(x, type = "prediction"))
+    rezbayes <- summary(get_predicted_new(xbayes, type = "prediction"))
+    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
+    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
   })
 
   test_that("get_predicted - glm", {
     x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 
-    # General
+    # Link vs. relation
     rezlink <- get_predicted_new(x, predict = "link")
-    rezlink2 <- get_predicted_new(x, predict = "link", scale = "link")
-    rezresp <- get_predicted_new(x, predict = "response")
-    expect_equal(mean(abs(rezlink - rezresp)), 0, tolerance = 1e-3)
-    expect_true(all(mean(attributes(rezlink)$CI_high - attributes(rezresp)$CI_high) < 0))
-    expect_true(min(rezlink2) < 0)
+    rezrela <- get_predicted_new(x, predict = "relation")
+    expect_true(min(rezlink) < 0)
+    expect_true(min(rezrela) > 0)
+    expect_true(min(summary(rezlink)$CI_high) < 0)
+    expect_true(min(summary(rezrela)$CI_high) > 0)
 
-    # Confidence
+    # Relation vs. Prediction
+    rezrela <- get_predicted_new(x, predict = "relation")
+    rezpred <- get_predicted_new(x, predict = "prediction")
+    expect_equal(mean(abs(rezrela - rezpred)), 0, tolerance = 1e-3)
+    expect_true(all(mean(summary(rezrela)$CI_high - summary(rezpred)$CI_high) < 0))
+
+    # Against stats::predict
     ref <- predict(x, se.fit = TRUE, type = "response")
-    rez <- as.data.frame(get_predicted_new(x, predict = "link"))
+    rez <- as.data.frame(get_predicted_new(x, predict = "relation"))
     expect_equal(nrow(rez), 32)
     expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
     expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
     ref <- as.data.frame(suppressWarnings(insight::link_inverse(x)(predict.lm(x, interval = "confidence"))))
     expect_equal(max(abs(ref$lwr - rez$CI_low)), 0, tolerance = 1e-2)
 
-    # Prediction
-    ref <- predict(x, se.fit = TRUE, type = "response")
-    rez <- as.data.frame(get_predicted_new(x, predict = "response"))
-    expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
 
     # Bootstrap
+    set.seed(333)
     ref <- predict(x, se.fit = TRUE, type = "response")
     rez <- summary(get_predicted_new(x, iterations = 800))
-    expect_equal(mean(abs(ref$fit - rez$Predicted)), 0, tolerance = 0.5)
+    expect_equal(mean(abs(ref$fit - rez$Predicted)), 0, tolerance = 0.1)
 
     # vs. Bayesian
-    xbayes <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
-    rez <- as.data.frame(get_predicted_new(x, predict = "link"))
-    rezbayes <- summary(get_predicted_new(xbayes, predict = "link"))
-    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.3)
-    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
-    rez <- as.data.frame(get_predicted_new(x, predict = "response"))
-    rezbayes <- summary(get_predicted_new(xbayes, predict = "link"))
-    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.3)
-    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
+    # xbayes <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
+    # rez <- as.data.frame(get_predicted_new(x, predict = "link"))
+    # rezbayes <- summary(get_predicted_new(xbayes, predict = "link"))
+    # expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.3)
+    # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
+    # rez <- as.data.frame(get_predicted_new(x, predict = "response"))
+    # rezbayes <- summary(get_predicted_new(xbayes, predict = "link"))
+    # expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.3)
+    # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
   })
 
 
@@ -125,22 +134,28 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   # =========================================================================
 
   test_that("get_predicted - rstanarm", {
-    set.seed(333)
     # LM
     x <- rstanarm::stan_glm(mpg ~ cyl + hp, data = mtcars, refresh = 0, seed = 333)
     rezlink <- summary(get_predicted_new(x, predict = "link"))
-    rezresp <- summary(get_predicted_new(x, predict = "response"))
-    expect_equal(mean(abs(rezlink$Predicted - rezresp$Predicted)), 0, tolerance = 0.1)
-    expect_true(all(mean(rezlink$CI_high - rezresp$CI_high) < 0))
+    rezrela <- summary(get_predicted_new(x, predict = "relation"))
+    expect_equal(mean(abs(rezlink$Predicted - rezrela$Predicted)), 0, tolerance = 0.1)
+    expect_equal(mean(abs(rezlink$CI_high - rezrela$CI_high)), 0, tolerance = 0.1)
+    rezpred <- summary(get_predicted_new(x, predict = "prediction"))
+    expect_equal(mean(abs(rezlink$Predicted - rezpred$Predicted)), 0, tolerance = 0.1)
+    expect_true(all(mean(rezlink$CI_high - rezpred$CI_high) < 0))
 
 
 
     # GLM
-    x <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0)
+    x <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
     rezlink <- summary(get_predicted_new(x, predict = "link"))
-    rezlink2 <- summary(get_predicted_new(x, predict = "link", scale = "link"))
-    rezresp <- summary(get_predicted_new(x, predict = "response"))
-    expect_equal(mean(abs(rezlink$Predicted - rezresp$Predicted)), 0, tolerance = 0.2)
-    expect_true(all(mean(rezlink$CI_high - rezresp$CI_high) < 0))
+    rezrela <- summary(get_predicted_new(x, predict = "relation"))
+    expect_true(min(rezlink$Predicted) < 0)
+    expect_true(min(rezrela$Predicted) > 0)
+    expect_true(min(rezlink$CI_high) < 0)
+    expect_true(min(rezrela$CI_high) > 0)
+    rezpred <- summary(get_predicted_new(x, predict = "prediction"))
+    # expect_equal(mean(abs(rezlink$Predicted - rezpred$Predicted)), 0, tolerance = 0.1)
+    # expect_true(all(mean(rezlink$CI_high - rezpred$CI_high) < 0))
   })
 }

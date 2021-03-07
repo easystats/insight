@@ -3,14 +3,9 @@
 #' @importFrom utils head
 #' @export
 print.get_predicted <- function(x, ...) {
-  insight::print_colour("Predicted values:\n\n", "blue")
-  if (inherits(x, "data.frame") && "iter_1" %in% names(x)) {
-    print.data.frame(.print_bigdata(x, ...))
-    insight::print_colour("\nNOTE: You can get CIs by running `bayestestR::describe_posterior()` on this output, and reshape it to a long format with `bayestestR::reshape_iterations()`.", "yellow")
-  } else {
-    print(as.numeric(x))
-    insight::print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.", "yellow")
-  }
+  print_colour("Predicted values:\n\n", "blue")
+  print(as.numeric(x))
+  print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.", "yellow")
 }
 
 
@@ -43,25 +38,17 @@ print.get_predicted <- function(x, ...) {
 
 
 
-
 #' @export
-as.data.frame.get_predicted <- function(x, ...) {
-
-  # In the case it's already a dataframe
-  if (inherits(x, "data.frame")) {
-    class(x) <- class(x)[class(x) != "get_predicted"]
-    return(x)
-  }
+as.data.frame.get_predicted <- function(x, ..., include_iterations = TRUE) {
 
   out <- data.frame("Predicted" = as.numeric(x))
-  if (all(c("SE") %in% names(attributes(x)))) {
-    out$SE <- attributes(x)$SE
+  if ("ci_data" %in% names(attributes(x))) {
+    out <- cbind(out, attributes(x)$ci_data)
   }
-  if (all(c("CI_low", "CI_high") %in% names(attributes(x)))) {
-    out$CI <- attributes(x)$ci
-    out$CI_low <- attributes(x)$CI_low
-    out$CI_high <- attributes(x)$CI_high
+  if ("iterations" %in% names(attributes(x)) && include_iterations == TRUE) {
+    out <- cbind(out, attributes(x)$iterations)
   }
+
   out
 }
 
@@ -69,20 +56,7 @@ as.data.frame.get_predicted <- function(x, ...) {
 
 #' @export
 summary.get_predicted <- function(object, ...) {
-  if (!inherits(object, "data.frame")) {
-    return(as.data.frame(object))
-  }
-  out <- data.frame(Predicted = attributes(object)$Predicted)
-
-  if (all(c("SE") %in% names(attributes(object)))) {
-    out$SE <- attributes(object)$SE
-  }
-  if (all(c("CI_low", "CI_high") %in% names(attributes(object)))) {
-    out$CI <- attributes(object)$ci
-    out$CI_low <- attributes(object)$CI_low
-    out$CI_high <- attributes(object)$CI_high
-  }
-  out
+  as.data.frame(object, include_iterations = FALSE, ...)
 }
 
 

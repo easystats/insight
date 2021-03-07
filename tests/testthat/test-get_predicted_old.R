@@ -22,64 +22,30 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 # Basic -------------------------------------------------------------------
 
 
-  test_that("get_predicted - lm", {
-    x <- lm(mpg ~ am, data = mtcars)
-    rez <- insight::get_predicted(x)
-    expect_equal(length(rez), 32)
-
-    expect_equal(max(abs(rez - stats::fitted(x))), 0)
-    expect_equal(max(abs(rez - stats::predict(x))), 0)
-
-    data <- as.data.frame(rez)
-    expect_equal(max(abs(rez - data$Predicted)), 0)
-    expect_equal(nrow(data), 32)
-  })
-
-
-  test_that("get_predicted - lm (log)", {
-    x <- lm(mpg ~ log(hp), data = mtcars)
-    rez <- insight::get_predicted(x)
-    expect_equal(length(rez), 32)
-
-    expect_equal(max(abs(rez - stats::fitted(x))), 0)
-    expect_equal(max(abs(rez - stats::predict(x))), 0)
-
-    data <- as.data.frame(rez)
-    expect_equal(max(abs(rez - data$Predicted)), 0)
-    expect_equal(nrow(data), 32)
-  })
+  # test_that("get_predicted - lm (log)", {
+  #   x <- lm(mpg ~ log(hp), data = mtcars)
+  #   rez <- insight::get_predicted(x)
+  #   expect_equal(length(rez), 32)
+  #
+  #   expect_equal(max(abs(rez - stats::fitted(x))), 0)
+  #   expect_equal(max(abs(rez - stats::predict(x))), 0)
+  #
+  #   data <- as.data.frame(rez)
+  #   expect_equal(max(abs(rez - data$Predicted)), 0)
+  #   expect_equal(nrow(data), 32)
+  # })
 
 
-  test_that("get_predicted - data first", {
-    set.seed(333)
-    m <- lm(mpg ~ am, data = mtcars)
-    newdata <- data.frame(am = sample(c(0, 1), replace = TRUE, size = 20))
 
-    expect_equal(length(get_predicted(m, newdata)), 20)
-    expect_equal(length(get_predicted(newdata, m)), 20)
-  })
-
-
-  test_that("get_predicted - glm", {
-    x <- glm(vs ~ am, data = mtcars, family = "binomial")
-    rez <- insight::get_predicted(x)
-    expect_equal(length(rez), 32)
-
-    expect_equal(max(abs(rez - stats::fitted(x))), 0)
-    expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
-    expect_equal(nrow(as.data.frame(rez)), 32)
-  })
-
-
-  test_that("get_predicted - glm (log)", {
-    x <- glm(vs ~ log(hp), data = mtcars, family = "binomial")
-    rez <- insight::get_predicted(x)
-    expect_equal(length(rez), 32)
-
-    expect_equal(max(abs(rez - stats::fitted(x))), 0)
-    expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
-    expect_equal(nrow(as.data.frame(rez)), 32)
-  })
+  # test_that("get_predicted - glm (log)", {
+  #   x <- glm(vs ~ log(hp), data = mtcars, family = "binomial")
+  #   rez <- insight::get_predicted(x)
+  #   expect_equal(length(rez), 32)
+  #
+  #   expect_equal(max(abs(rez - stats::fitted(x))), 0)
+  #   expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
+  #   expect_equal(nrow(as.data.frame(rez)), 32)
+  # })
 
 
 # Mixed Models ------------------------------------------------------------
@@ -235,39 +201,6 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   })
 
 
-# Bayesian ----------------------------------------------------------------
-
-  test_that("get_predicted - rstanarm (lm)", {
-    x <- suppressWarnings(rstanarm::stan_glm(mpg ~ am, data = mtcars, iter = 500, refresh = 0, seed = 333))
-    rez <- insight::get_predicted(x)
-    expect_equal(nrow(rez), 32)
-
-    df <- as.data.frame(rez)
-    expect_equal(nrow(df), 32)
-
-    df <- as.matrix(rez)
-    expect_equal(nrow(df), 32)
-
-    # TODO: What does fitted() return for stanreg models????
-    # expect_equal(max(abs(sapply(rez_stan, median) - stats::fitted(x))), 0, tolerance = 0.5)
-
-    # Compare to lm
-    xref <- as.data.frame(insight::get_predicted(lm(mpg ~ am, data = mtcars)))
-    expect_equal(max(abs(rowMeans(rez) - xref$Predicted)), 0, tolerance = 0.1)
-
-    # expect_equal(max(abs(bayestestR::hdi(rez)$CI_low - xref$CI_low)), 0, tolerance = 0.1)
-
-    # rstanarm - gamm4
-    x <- suppressWarnings(rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
-                                               random = ~ (1 | Species), data = iris,
-                                               iter = 100, chains = 2, refresh = 0))
-    rez <- insight::get_predicted(x)
-    expect_equal(nrow(rez), 150)
-    rez <- insight::get_predicted(x, newdata=iris[1:10, c("Petal.Width", "Sepal.Length", "Species")])
-    expect_equal(nrow(rez), 10)
-    rez <- insight::get_predicted(x, newdata=iris[1:10, c("Petal.Width", "Sepal.Length")])
-    expect_equal(nrow(rez), 10)
-  })
 
 
 # Mixture -----------------------------------------------------------------

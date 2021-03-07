@@ -93,22 +93,3 @@ Returns values predicted by a model (i.e., fitted values). The Confidence/Credib
 Intervals (CI) are stored as an attribute, which one can easily extract with
 \code{as.data.frame()} (see examples below).
 }
-\examples{
-data(mtcars)
-x <- lm(mpg ~ cyl + hp, data = mtcars)
-predicted <- get_predicted(x)
-predicted
-
-# Get CI
-attributes(predicted)$CI_low # Or CI_high
-as.data.frame(predicted) # To get everything
-
-\donttest{
-# Bayesian models
-if (require("rstanarm") && require("bayestestR")) {
-  model <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
-  # For Bayesian models, the 'ci_type' argument controls the type of prediction
-  predicted <- insight::get_predicted(model, ci_type = "prediction")
-  predicted
-}}
-}
