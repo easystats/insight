@@ -618,6 +618,19 @@ model_info.hurdle <- function(x, ...) {
 }
 
 
+#' @export
+model_info.mhurdle <- function(x, ...) {
+  .make_family(
+    x = x,
+    zero.inf = TRUE,
+    hurdle = TRUE,
+    ...
+  )
+}
+
+
+
+
 
 
 # Bayesian Models ---------------------------

@@ -107,3 +107,76 @@ get_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", "
 
   .remove_backticks_from_parameter_names(pars)
 }
+
+
+
+
+#' @rdname get_parameters.zeroinfl
+#' @export
+get_parameters.mhurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"), ...) {
+  component <- match.arg(component)
+  cf <- stats::coef(x)
+
+  cond_pars <- which(grepl("^h2\\.", names(cf)))
+  zi_pars <- which(grepl("^h1\\.", names(cf)))
+  ip_pars <- which(grepl("^h3\\.", names(cf)))
+  aux_pars <- (1:length(names(cf)))[-c(cond_pars, zi_pars, ip_pars)]
+
+  if (length(cond_pars)) {
+    cond_dat <- data.frame(
+      Parameter = names(cf)[cond_pars],
+      Estimate = unname(cf[cond_pars]),
+      Component = "conditional",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    cond_dat <- NULL
+  }
+
+  if (length(zi_pars)) {
+    zi_dat <- data.frame(
+      Parameter = names(cf)[zi_pars],
+      Estimate = unname(cf[zi_pars]),
+      Component = "zero_inflation",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    zi_dat <- NULL
+  }
+
+  if (length(ip_pars)) {
+    ip_dat <- data.frame(
+      Parameter = names(cf)[ip_pars],
+      Estimate = unname(cf[ip_pars]),
+      Component = "infrequent_purchase",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    ip_dat <- NULL
+  }
+
+  if (length(aux_pars)) {
+    aux_dat <- data.frame(
+      Parameter = names(cf)[aux_pars],
+      Estimate = unname(cf[aux_pars]),
+      Component = "auxiliary",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    aux_dat <- NULL
+  }
+
+  pars <- rbind(cond_dat, zi_dat, ip_dat, aux_dat)
+
+  if (component != "all") {
+    pars <- pars[pars$Component == component, ]
+    pars <- .remove_column(pars, "Component")
+  }
+
+  pars$Parameter <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", pars$Parameter)
+  .remove_backticks_from_parameter_names(pars)
+}

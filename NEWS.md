@@ -6,7 +6,8 @@
 
 ## New supported model classes
 
-* Support for `svy_vglm` (*svyVGAM*), `mjoint` (*joineRML*)
+* Support for `svy_vglm` (*svyVGAM*), `mjoint` (*joineRML*),
+  `mhurdle` (*mhurdle*)
 
 ## New functions
 

@@ -3,6 +3,7 @@
 \name{get_parameters.zeroinfl}
 \alias{get_parameters.zeroinfl}
 \alias{get_parameters.zcpglm}
+\alias{get_parameters.mhurdle}
 \title{Get model parameters from zero-inflated and hurdle models}
 \usage{
 \method{get_parameters}{zeroinfl}(
@@ -14,6 +15,13 @@
 \method{get_parameters}{zcpglm}(
   x,
   component = c("all", "conditional", "zi", "zero_inflated"),
+  ...
+)
+
+\method{get_parameters}{mhurdle}(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase",
+    "ip", "auxiliary"),
   ...
 )
 }

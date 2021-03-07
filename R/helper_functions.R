@@ -250,11 +250,12 @@
     "nonlinear", "random", "zero_inflated", "zero_inflated_random",
     "dispersion", "instruments", "interactions", "simplex",
     "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes",
-    "cluster", "extra", "scale", "marginal", "alpha", "beta", "survival"
+    "cluster", "extra", "scale", "marginal", "alpha", "beta",
+    "survival", "infrequent_purchase", "auxiliary"
   )
 
   # auxiliary parameters
-  auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape", "phi", "ndt", "hu", "xi", "coi", "zoi")
+  auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape", "phi", "ndt", "hu", "xi", "coi", "zoi", "auxiliary")
 
   # random parameters
   random_parameters <- c("random", "zero_inflated_random")
@@ -279,13 +280,13 @@
 
   elements <- switch(effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "conditional1", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale", "marginal", "beta", "survival")],
+    fixed = elements[elements %in% c("conditional", "conditional1", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale", "marginal", "beta", "survival", "infrequent_purchase", "auxiliary")],
     random = elements[elements %in% c("random", "zero_inflated_random")]
   )
 
   elements <- switch(component,
     all = elements,
-    conditional = elements[elements %in% c("conditional", "conditional2", "conditional3", "precision", "nonlinear", "random", "slopes")],
+    conditional = elements[elements %in% c("conditional", "conditional1", "conditional2", "conditional3", "precision", "nonlinear", "random", "slopes", "infrequent_purchase", "auxiliary")],
     zi = ,
     zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random")],
     dispersion = elements[elements == "dispersion"],
@@ -304,7 +305,9 @@
     scale = elements[elements == "scale"],
     precision = elements[elements == "precision"],
     marginal = elements[elements == "marginal"],
-    survival = elements[elements == "survival"]
+    survival = elements[elements == "survival"],
+    auxiliary = elements[elements == "auxiliary"],
+    infrequent_purchase = elements[elements == "infrequent_purchase"]
   )
 
   elements

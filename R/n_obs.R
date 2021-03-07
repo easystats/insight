@@ -439,6 +439,13 @@ n_obs.survfit <- function(x, ...) {
 
 
 #' @export
+n_obs.mhurdle <- function(x, ...) {
+  nrow(x$model)
+}
+
+
+
+#' @export
 n_obs.survreg <- function(x, ...) {
   length(x$linear.predictors)
 }

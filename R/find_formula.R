@@ -611,24 +611,24 @@ find_formula.plm <- function(x, ...) {
 #' @export
 find_formula.felm <- function(x, ...) {
   f <- .safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+  f_parts <- .trim(unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE)))
 
-  f.cond <- .trim(f_parts[1])
+  f.cond <- f_parts[1]
 
   if (length(f_parts) > 1) {
-    f.rand <- paste0("~", .trim(f_parts[2]))
+    f.rand <- paste0("~", f_parts[2])
   } else {
     f.rand <- NULL
   }
 
   if (length(f_parts) > 2) {
-    f.instr <- paste0("~", .trim(f_parts[3]))
+    f.instr <- paste0("~", f_parts[3])
   } else {
     f.instr <- NULL
   }
 
   if (length(f_parts) > 3) {
-    f.clus <- paste0("~", .trim(f_parts[4]))
+    f.clus <- paste0("~", f_parts[4])
   } else {
     f.clus <- NULL
   }
@@ -638,6 +638,43 @@ find_formula.felm <- function(x, ...) {
     random = stats::as.formula(f.rand),
     instruments = stats::as.formula(f.instr),
     cluster = stats::as.formula(f.clus)
+  ))
+  .find_formula_return(f)
+}
+
+
+
+#' @export
+find_formula.mhurdle <- function(x, ...) {
+  f <- .safe_deparse(stats::formula(x)[[3]])
+  f_parts <- .trim(unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE)))
+
+  f.zi <- paste0("~", f_parts[1])
+
+  if (length(f_parts) > 1) {
+    f.cond <- paste0(.safe_deparse(stats::formula(x)[[2]]), "~", f_parts[2])
+  } else {
+    f.cond <- NULL
+  }
+
+  if (length(f_parts) > 2) {
+    f.ip <- paste0("~", f_parts[3])
+  } else {
+    f.ip <- NULL
+  }
+
+  # remove "empty" parts
+  if (f.zi == "~0") {
+    f.zi <- NULL
+  }
+  if (f.ip == "~0") {
+    f.ip <- NULL
+  }
+
+  f <- .compact_list(list(
+    conditional = stats::as.formula(f.cond),
+    zero_inflated = stats::as.formula(f.zi),
+    infrequent_purchase = stats::as.formula(f.ip)
   ))
   .find_formula_return(f)
 }

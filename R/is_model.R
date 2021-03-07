@@ -216,6 +216,7 @@ is_regression_model <- function(x) {
     "meta_random",
     "meta_ordered",
     "metaplus",
+    "mhurdle",
     "mipo",
     "mira",
     "mixed",

@@ -99,6 +99,7 @@ find_statistic <- function(x, ...) {
       "lqmm",
       "maxLik",
       "mixed",
+      "mhurdle",
       "mlm",
       "multinom",
       "nlmerMod",
