@@ -139,6 +139,8 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
     mm <- stats::model.matrix(x)
   } else {
     if (!all(resp %in% data)) data[[resp]] <- 0  # fake response
+    # else, model.matrix below fails, e.g. for log-terms
+    attr(data, "terms") <- NULL
 
     # model terms, required for model matrix
     model_terms <- tryCatch({
