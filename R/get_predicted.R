@@ -60,7 +60,6 @@ get_predicted_new <- function(x, data = NULL, ...) {
 # default methods ---------------------------
 
 
-#' @rdname get_predicted_new
 #' @importFrom stats fitted predict
 #' @export
 get_predicted_new.default <- function(x, data = NULL, ...) {
@@ -138,6 +137,43 @@ get_predicted_new.glm <- get_predicted_new.lm
 
 # Mixed Models (lme4, glmmTMB) ------------------------------------------
 # =======================================================================
+
+#' @export
+get_predicted_new.lmerMod <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, iterations = NULL, ...) {
+
+  # Sanitize input
+  args <- .get_predicted_args(x, data = data, predict = predict, ci = ci, include_random = include_random, ...)
+
+  # Make prediction only using random if only random
+  if (all(names(args$data) %in% find_random(x, flatten = TRUE))) {
+    random.only <- TRUE
+  } else {
+    random.only <- FALSE
+  }
+
+  # Prediction function
+  predict_function <- function(x, ...) {
+    stats::predict(x, newdata = args$data, type = args$type, re.form = args$re.form, random.only = random.only, ...)
+  }
+
+  if (is.null(iterations)) {
+    predictions <- predict_function(x)
+  } else {
+    predictions <- .get_predicted_boot(x, data = args$data, predict_function = predict_function, iterations = iterations, ...)
+  }
+
+  ci_data <- get_predicted_ci(x, predictions, data = args$data, ci_type = args$ci_type, ...)
+
+  out <- .get_predicted_transform(x, predictions, args, ci_data)
+  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+}
+
+#' @export
+get_predicted_new.merMod <- get_predicted_new.lmerMod
+
+
+
+
 
 
 

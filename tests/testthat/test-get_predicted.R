@@ -135,13 +135,28 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
   # Mixed --------------------------------------------------------------
   # =========================================================================
-  # test_that("get_predicted - merMod", {
-  #   x <- lme4::glmer(vs ~ wt + (1|am), data = mtcars, family = "binomial")
-  #   x <- glmmTMB::glmmTMB(vs ~ wt + (1|am), data = mtcars, family = "binomial")
-  # head(ciTools::add_ci(mtcars, x)[12:14])
-  # ciTools::add_pi(mtcars, x)
-  #   predict(x, type = "link")
-  # })
+
+  test_that("get_predicted - lmerMod", {
+    x <- lme4::lmer(mpg ~ am + (1 | cyl), data = mtcars)
+
+    # Link vs. relation
+    rezlink <- get_predicted_new(x, predict = "link")
+    rezrela <- get_predicted_new(x, predict = "relation")
+    rezpred <- get_predicted_new(x, predict = "prediction")
+    expect_equal(mean(abs(rezlink - rezrela)), 0, tolerance = 1e-3)
+    expect_equal(mean(summary(rezlink)$CI_high - summary(rezrela)$CI_high), 0, tolerance = 1e-3)
+    expect_true(all(summary(rezlink)$CI_high - summary(rezpred)$CI_high < 0))
+
+    # Bootstrap
+    set.seed(333)
+    rez <- as.data.frame(get_predicted_new(x, iterations = 5))
+    expect_equal(c(nrow(rez), ncol(rez)), c(32, 9))
+  })
+
+
+
+
+
 
   test_that("get_predicted - glmmTMB", {
     x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)

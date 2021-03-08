@@ -2,14 +2,11 @@
 % Please edit documentation in R/get_predicted.R
 \name{get_predicted_new}
 \alias{get_predicted_new}
-\alias{get_predicted_new.default}
 \alias{get_predicted_new.lm}
 \alias{get_predicted_new.stanreg}
 \title{Compute Model's Predictions}
 \usage{
 get_predicted_new(x, data = NULL, ...)
-
-\method{get_predicted_new}{default}(x, data = NULL, ...)
 
 \method{get_predicted_new}{lm}(x, data = NULL, predict = "relation", iterations = NULL, ...)
 
