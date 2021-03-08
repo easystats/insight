@@ -2,6 +2,8 @@
 
 ## General
 
+* `get_predicted()` has be revamped with a new API and a stable output form (a vector).
+
 * Improved support for `orm` (*rms*).
 
 ## New supported model classes
@@ -16,16 +18,14 @@
 
 ## Changes to functions
 
-* Added `get_predicted()` for Bayesian models returns a data.frame
-  by default instead of a matrix.
-  
+
 * Added `iterations` argument to `get_predicted()` to control the
   number of draws returned for Bayesian models.
 
 * `model_info()` now returns `$is_gam` if model is generalized additive model
   with smooth terms.
 
-* `format_table()` and `export_table()` now check for valid input (e.g., 
+* `format_table()` and `export_table()` now check for valid input (e.g.,
   non-empty data frame) and give an informative message.
 
 * Improved support for `MixMod` (*GLMMadaptive*) in `get_variance()`.

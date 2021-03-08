@@ -2,7 +2,7 @@
 #'
 #' Returns the Confidence (or Prediction) Interval (CI) associated with predictions made by a model.
 #'
-#' @inheritParams get_predicted_new
+#' @inheritParams get_predicted
 #' @param predictions A vector of predicted values (as obtained by \code{stats::fitted()}, \code{stats::predict()} or \code{\link{get_predicted}}).
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
 #' @param ci_type Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This applies mostly for "simple" linear models (like \code{lm}), as for other models (e.g., \code{glm}), prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
@@ -32,7 +32,7 @@
 #' get_predicted_ci(x, predictions, ci_type = "prediction")
 #' get_predicted_ci(x, predictions, ci_type = "confidence")
 #'
-#' predictions <- get_predicted_new(x, iterations = 500)
+#' predictions <- get_predicted(x, iterations = 500)
 #' get_predicted_ci(x, predictions)
 #'
 #' # Logistic model

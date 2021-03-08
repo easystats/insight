@@ -4,7 +4,7 @@
 #'
 #' @param x A statistical model (can also be a data.frame, in which case the second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which to predict. If omitted, the data used to fit the model is used.
-#' @param predict Can be \code{"link"}, \code{"relation"} (default), or \code{"prediction"}. As this is an important argument, read more about in the \strong{Details} section below.
+#' @param predict Can be \code{"link"}, \code{"relation"} (default), or \code{"prediction"}. This modulates the scale of the output as well as the type of certainty interval. More specifically, \code{"link"} gives an output on the link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). \code{"relation"} (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). Finally, \code{"predict"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). gives Read more about in the \strong{Details} section below.
 #' @param iterations For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.
 #' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
 #' @param include_smooth For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it.
@@ -16,41 +16,45 @@
 #' @return The fitted values (i.e. predictions for the response). For Bayesian or bootstrapped models (when \code{iterations != NULL}), this will be a dataframe with all iterations as columns (observations are still rows).
 #'
 #' @details
-#' \subsection{Prediction type ("link" vs. "response")}{
-#' This argument has different effects depending on the model.
+#' The \code{predict} argument jointly modulates two separate concepts, the \strong{scale} and the \strong{uncertainty interval}.
+#'
+#' \subsection{Confidence Interval vs. Prediction Interval)}{
 #' \itemize{
-#'   \item \strong{Linear models} - \code{lm()}: For linear models, this argument impacts mainly the nature of the uncertainty interval (CI). Prediction intervals (\code{predict = "response"}) show the range that likely contains the value of a new observation (in what range it is likely to fall), whereas confidence intervals (\code{predict = "link"}) reflect the uncertainty around the estimated parameters (and gives the range of uncertainty of the regression line). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit, but also the variability within the data).
-#'   \item \strong{General Linear models} - \code{glm()}: For other types of models (e.g., \code{glm}), this argument DOES THIS AND THAT. For binomial models, prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}). For Bayesian models, ... it does this and that.
+#'   \item \strong{Linear models} - \code{lm()}: For linear models, Prediction intervals (\code{predict = "prediction"}) show the range that likely contains the value of a new observation (in what range it is likely to fall), whereas confidence intervals (\code{predict = "relation"} or \code{predict = "link"}) reflect the uncertainty around the estimated parameters (and gives the range of uncertainty of the regression line). lIn general, Prediction Intervals (PIs) account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit, but also the variability within the data).
+#'   \item \strong{General Linear models} - \code{glm()}: For binomial models, prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
 #' }}
 #'
-#' scale: Either \code{"response"} (default) or \code{"link"}. If \code{"response"}, the output is on the scale of the response variable, which is the most convenient to understand and visualize the relationships. If \code{"link"}, no transformation is applied and the values are on the scale of the model's predictors. For instance, for a logistic model, \code{"response"} gives the predicted probabilities, and \code{"link"} makes predictions of log-odds (probabilities on logit scale). Only used if \code{predict = "link"} (if \code{predict = "response"}, the scale is naturally on the response scale).
+#'
+#' \subsection{Link scale vs. Response scale}{
+#' Having the output is on the scale of the response variable is arguably the most convenient to understand and visualize the relationships. If on the link-scale, no transformation is applied and the values are on the scale of the model's predictors. For instance, for a logistic model, the response scale corresponds to the predicted probabilities, whereas the link-scale makes predictions of log-odds (probabilities on the logit scale).
+#' }
 #'
 #' @examples
 #' data(mtcars)
 #' x <- lm(mpg ~ cyl + hp, data = mtcars)
-#' predictions <- get_predicted_new(x)
+#' predictions <- get_predicted(x)
 #' predictions
 #'
-#' get_predicted_new(x, predict = "prediction")
+#' get_predicted(x, predict = "prediction")
 #'
 #' # Get CI
 #' as.data.frame(predictions)
 #'
 #' # Bootsrapped
-#' as.data.frame(get_predicted_new(x, iterations = 100), include_iterations = FALSE)
+#' as.data.frame(get_predicted(x, iterations = 100), include_iterations = FALSE)
 #'
 #' \dontrun{
 #' # Bayesian models
 #' if (require("rstanarm")) {
 #'   x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
-#'   predictions <- get_predicted_new(x)
+#'   predictions <- get_predicted(x)
 #'   predictions
 #'   as.data.frame(predictions, include_iterations = FALSE)
 #' }
 #' }
 #' @export
-get_predicted_new <- function(x, data = NULL, ...) {
-  UseMethod("get_predicted_new")
+get_predicted <- function(x, data = NULL, ...) {
+  UseMethod("get_predicted")
 }
 
 
@@ -62,7 +66,7 @@ get_predicted_new <- function(x, data = NULL, ...) {
 
 #' @importFrom stats fitted predict
 #' @export
-get_predicted_new.default <- function(x, data = NULL, ...) {
+get_predicted.default <- function(x, data = NULL, ...) {
   out <- tryCatch(
     {
       if (!is.null(data)) {
@@ -90,12 +94,12 @@ get_predicted_new.default <- function(x, data = NULL, ...) {
 }
 
 #' @export
-get_predicted_new.data.frame <- function(x, data = NULL, ...) {
-  # This makes it pipe friendly; data %>% get_predicted_new(model)
+get_predicted.data.frame <- function(x, data = NULL, ...) {
+  # This makes it pipe friendly; data %>% get_predicted(model)
   if (is.null(data)) {
     stop("Please provide a model to base the estimations on.")
   } else {
-    get_predicted_new(data, x, ...)
+    get_predicted(data, x, ...)
   }
 }
 
@@ -105,9 +109,9 @@ get_predicted_new.data.frame <- function(x, data = NULL, ...) {
 # =========================================================================
 
 
-#' @rdname get_predicted_new
+#' @rdname get_predicted
 #' @export
-get_predicted_new.lm <- function(x, data = NULL, predict = "relation", iterations = NULL, ...) {
+get_predicted.lm <- function(x, data = NULL, predict = "relation", iterations = NULL, ...) {
   args <- .get_predicted_args(x, data = data, predict = predict, ...)
 
   predict_function <- function(x, data, ...) {
@@ -127,7 +131,7 @@ get_predicted_new.lm <- function(x, data = NULL, predict = "relation", iteration
 }
 
 #' @export
-get_predicted_new.glm <- get_predicted_new.lm
+get_predicted.glm <- get_predicted.lm
 
 
 
@@ -139,7 +143,7 @@ get_predicted_new.glm <- get_predicted_new.lm
 # =======================================================================
 
 #' @export
-get_predicted_new.lmerMod <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, iterations = NULL, ...) {
+get_predicted.lmerMod <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, iterations = NULL, ...) {
 
   # Sanitize input
   args <- .get_predicted_args(x, data = data, predict = predict, ci = ci, include_random = include_random, ...)
@@ -169,7 +173,7 @@ get_predicted_new.lmerMod <- function(x, data = NULL, predict = "relation", ci =
 }
 
 #' @export
-get_predicted_new.merMod <- get_predicted_new.lmerMod
+get_predicted.merMod <- get_predicted.lmerMod
 
 
 
@@ -178,7 +182,7 @@ get_predicted_new.merMod <- get_predicted_new.lmerMod
 
 
 #' @export
-get_predicted_new.glmmTMB <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, iterations = NULL, ...) {
+get_predicted.glmmTMB <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, iterations = NULL, ...) {
 
   # Sanity checks
   if(predict == "prediction") {
@@ -217,7 +221,7 @@ get_predicted_new.glmmTMB <- function(x, data = NULL, predict = "relation", ci =
 # =======================================================================
 
 #' @export
-get_predicted_new.gam <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, include_smooth = TRUE, iterations = NULL, ...) {
+get_predicted.gam <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, include_smooth = TRUE, iterations = NULL, ...) {
 
   # Sanity checks
   if(predict == "prediction") {
@@ -255,10 +259,10 @@ get_predicted_new.gam <- function(x, data = NULL, predict = "relation", ci = 0.9
 }
 
 #' @export
-get_predicted_new.gamm <- get_predicted_new.gam
+get_predicted.gamm <- get_predicted.gam
 
 #' @export
-get_predicted_new.list <- get_predicted_new.gam # gamm4
+get_predicted.list <- get_predicted.gam # gamm4
 
 
 
@@ -266,9 +270,9 @@ get_predicted_new.list <- get_predicted_new.gam # gamm4
 # =======================================================================
 
 
-#' @rdname get_predicted_new
+#' @rdname get_predicted
 #' @export
-get_predicted_new.stanreg <- function(x, data = NULL, predict = "relation", iterations = NULL, include_random = TRUE, include_smooth = TRUE, centrality_function = stats::median, ...) {
+get_predicted.stanreg <- function(x, data = NULL, predict = "relation", iterations = NULL, include_random = TRUE, include_smooth = TRUE, centrality_function = stats::median, ...) {
   if (!requireNamespace("rstantools", quietly = TRUE)) {
     stop("Package `rstantools` needed for this function to work. Please install it.")
   }
@@ -296,7 +300,7 @@ get_predicted_new.stanreg <- function(x, data = NULL, predict = "relation", iter
 
 
 #' @export
-get_predicted_new.brmsfit <- get_predicted_new.stanreg
+get_predicted.brmsfit <- get_predicted.stanreg
 
 
 
@@ -306,7 +310,7 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
 
 
 #' @export
-get_predicted_new.crr <- function(x, ...) {
+get_predicted.crr <- function(x, ...) {
   out <- as.data.frame(unclass(stats::predict(x, ...)))
   class(out) <- c("get_predicted", class(out))
   out

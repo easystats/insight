@@ -68,11 +68,11 @@ get_deviance.stanreg <- function(x, verbose = TRUE, ...) {
     w <- get_weights(x, null_as_ones = TRUE, verbose = verbose)
     n <- n_obs(x)
     y <- get_response(x)
-    mu <- get_predicted(x) # Alternatively, x$family$linkinv(x$linear.predictors)
+    mu <- stats::fitted(x)
 
     dev_resids_fun <- x$family$dev.resids
 
-    dev <- sum(dev_resids_fun(y, rowMeans(mu), w))
+    dev <- sum(dev_resids_fun(y, mu, w))
   } else {
     stop("Could not compute deviance for this type of model")
   }

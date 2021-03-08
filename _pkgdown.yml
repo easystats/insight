@@ -42,6 +42,7 @@ reference:
   - get_intercept
   - get_loglikelihood
   - get_predicted
+  - get_predicted_ci
   - get_priors
   - get_residuals
   - get_sigma

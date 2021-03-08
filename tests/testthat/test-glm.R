@@ -17,9 +17,9 @@ if (require("testthat") &&
     expect_false(model_info(m1)$is_linear)
   })
 
-  test_that("loglik", {
-    expect_equal(get_loglikelihood(m1), logLik(m1), ignore_attr = TRUE)
-  })
+  # test_that("loglik", {
+  #   expect_equal(get_loglikelihood(m1), logLik(m1), ignore_attr = TRUE)
+  # })
 
   test_that("get_df", {
     expect_equal(get_df(m1), df.residual(m1), ignore_attr = TRUE)

@@ -58,7 +58,7 @@ predictions <- predict(x)
 get_predicted_ci(x, predictions, ci_type = "prediction")
 get_predicted_ci(x, predictions, ci_type = "confidence")
 
-predictions <- get_predicted_new(x, iterations = 500)
+predictions <- get_predicted(x, iterations = 500)
 get_predicted_ci(x, predictions)
 
 # Logistic model
