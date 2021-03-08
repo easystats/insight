@@ -151,9 +151,69 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     set.seed(333)
     rez <- as.data.frame(get_predicted_new(x, iterations = 5))
     expect_equal(c(nrow(rez), ncol(rez)), c(32, 9))
+
+
+    # Compare to merTools
+    rez_merTools <- merTools::predictInterval(x, level = 0.95, seed = 333, n.sims = 2000)
+    expect_equal(mean(abs(as.data.frame(rezpred)$CI_low - rez_merTools$lwr)), 0, tolerance = 0.5)
+
+
+    # Compare to emmeans (not sure what it does)
+    # refgrid <- emmeans::ref_grid(x, at = as.list(get_data(x)), data = get_data(x))
+    # rez_emmeans <- as.data.frame(predict(refgrid, level = 0.95, interval = "prediction"))
+    # This is completely off
+    # expect_equal(mean(as.data.frame(rez)$CI_low - rez_emmeans$lower.PL), 0, tolerance = 0.5)
+
+    # Compare with glmmTMB
+    # ref <- insight::get_predicted_new(glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars))
+    # expect_equal(max(abs(rez - ref)), 0, tolerance = 0.2) # A bit high
+    # expect_equal(max(abs(as.data.frame(rez)$SE - as.data.frame(ref)$SE)), 0, tolerance = 1e-5)
+    # expect_equal(max(abs(as.data.frame(rez)$CI_low - as.data.frame(ref)$CI_low)), 0, tolerance = 1e-5)
+
+    # Compare with rstanarm
+    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh=0, iter=1000, seed=333)
+    rez_stan <- insight::get_predicted_new(xref, predict = "relation")
+    expect_equal(mean(abs(rezrela - rez_stan)), 0, tolerance = 0.1)
+    # Different indeed
+    # expect_equal(mean(as.data.frame(rezrela)$CI_low - as.data.frame(rez_stan)$CI_low), 0, tolerance = 0.5)
   })
 
 
+
+  # test_that("get_predicted - lmerMod (log)", {
+  #   x <- lme4::lmer(mpg ~ am + log(hp) + (1 | cyl), data = mtcars)
+  #   rez <- insight::get_predicted_new(x)
+  #   expect_equal(length(rez), 32)
+  #
+  #   expect_equal(max(abs(rez - stats::fitted(x))), 0)
+  #   expect_equal(max(abs(rez - stats::predict(x))), 0)
+  #   expect_equal(nrow(as.data.frame(rez)), 32)
+  #
+  #   # No random
+  #   rez2 <- insight::get_predicted_new(x, newdata = mtcars[c("am", "hp")])
+  #   expect_true(!all(is.na(as.data.frame(rez2))))
+  # })
+
+
+
+  test_that("get_predicted - merMod", {
+    x <- lme4::glmer(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
+    rezlink <- get_predicted_new(x, predict = "link")
+    rezrela <- get_predicted_new(x, predict = "relation")
+    expect_true(min(rezlink) < 0)
+    expect_true(min(rezrela) > 0)
+    expect_true(min(summary(rezlink)$CI_low) < 0)
+    expect_true(min(summary(rezrela)$CI_low) > 0)
+    expect_equal(max(abs(rezrela - stats::fitted(x))), 0)
+    expect_equal(max(abs(rezrela - stats::predict(x, type = "response"))), 0)
+    expect_equal(nrow(as.data.frame(rezlink)), 32)
+
+    # Compare with glmmTMB
+    xref <- glmmTMB::glmmTMB(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
+    rez_ref <- insight::get_predicted_new(xref, predict = "relation")
+    expect_equal(max(abs(rezrela - rez_ref)), 0, tolerance = 1e-5)
+    expect_equal(mean(abs(as.data.frame(rezrela)$SE - as.data.frame(rez_ref)$SE)), 0, tolerance = 0.2)
+  })
 
 
 

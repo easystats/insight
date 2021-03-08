@@ -299,6 +299,22 @@ get_predicted_new.stanreg <- function(x, data = NULL, predict = "relation", iter
 get_predicted_new.brmsfit <- get_predicted_new.stanreg
 
 
+
+
+# Other models ----------------------------------------------------------
+# =======================================================================
+
+
+#' @export
+get_predicted_new.crr <- function(x, ...) {
+  out <- as.data.frame(unclass(stats::predict(x, ...)))
+  class(out) <- c("get_predicted", class(out))
+  out
+}
+
+
+
+
 # ====================================================================
 # Utils --------------------------------------------------------------
 # ====================================================================
