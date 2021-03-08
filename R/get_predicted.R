@@ -4,7 +4,7 @@
 #'
 #' @param x A statistical model (can also be a data.frame, in which case the second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which to predict. If omitted, the data used to fit the model is used.
-#' @param predict Can be \code{"link"} (default) or \code{"response"}. As this is an important argument, read more about in the \strong{Details} section below.
+#' @param predict Can be \code{"link"}, \code{"relation"} (default), or \code{"prediction"}. As this is an important argument, read more about in the \strong{Details} section below.
 #' @param iterations For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.
 #' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
 #' @param include_smooth For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it.
@@ -131,20 +131,73 @@ get_predicted_new.lm <- function(x, data = NULL, predict = "relation", iteration
 get_predicted_new.glm <- get_predicted_new.lm
 
 
+
+
+
+
+
+# Mixed Models (lme4, glmmTMB) ------------------------------------------
+# =======================================================================
+
+
+
+#' @export
+get_predicted_new.glmmTMB <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, iterations = NULL, ...) {
+
+  # Sanity checks
+  if(predict == "prediction") {
+    warning("predict = 'prediction' is currently not available for glmmTMB models. Changing to 'relation'.")
+    predict <- "relation"
+  }
+
+  # Sanitize input
+  args <- .get_predicted_args(x, data = data, predict = predict, ci = ci, include_random = include_random, ...)
+
+  # Prediction function
+  predict_function <- function(x, data, ...) {
+    stats::predict(x, newdata = data, type = args$type, re.form = args$re.form, unconditional = FALSE, ...)
+  }
+
+  # Get prediction
+  rez <- predict_function(x, data = args$data, se.fit = TRUE)
+  if (is.null(iterations)) {
+    predictions <- as.numeric(rez$fit)
+  } else {
+    predictions <- .get_predicted_boot(x, data = args$data, predict_function = predict_function, iterations = iterations, ...)
+  }
+
+  # Get CI
+  ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
+  out <- .get_predicted_transform(x, predictions, args, ci_data)
+  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+}
+
+
+
+
+
+
 # GAM -------------------------------------------------------------------
 # =======================================================================
 
 #' @export
 get_predicted_new.gam <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, include_smooth = TRUE, iterations = NULL, ...) {
 
-  # Sanitize input
-  args <- .get_predicted_args(x, data = data, predict = predict, ci = ci, include_random = include_random, include_smooth = include_smooth, ...)
-  if (inherits(x, c("gamm", "list"))) x <- x$gam
-
+  # Sanity checks
+  if(predict == "prediction") {
+    warning("predict = 'prediction' is currently not available for GAM models. Changing to 'relation'.")
+    predict <- "relation"
+  }
   # TODO: check this for prediction intervals:
   # https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/
   # https://github.com/gavinsimpson/gratia/blob/master/R/confint-methods.R
   # https://github.com/gavinsimpson/gratia/blob/master/R/posterior-samples.R
+
+  # Sanitize input
+  args <- .get_predicted_args(x, data = data, predict = predict, ci = ci, include_random = include_random, include_smooth = include_smooth, ...)
+  if (inherits(x, c("gamm", "list"))) x <- x$gam
+
+
 
   # Prediction function
   predict_function <- function(x, data, ...) {
@@ -290,6 +343,10 @@ get_predicted_new.brmsfit <- get_predicted_new.stanreg
   # In case include_random is TRUE, but there's actually no random factors in data
   if (include_random && !is.null(data) && !is.null(x) && !all(find_random(x, flatten = TRUE) %in% names(data))) {
     include_random <- FALSE
+  }
+  # Add (or set) random variables to "NA"
+  if (include_random == FALSE) {
+    data[find_variables(x, effects = "random")$random] <- NA
   }
   re.form <- .format_reform(include_random)
 

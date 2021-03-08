@@ -31,7 +31,7 @@ get_predicted_new(x, data = NULL, ...)
 
 \item{...}{Other argument to be passed for instance to \code{\link{get_predicted_ci}}.}
 
-\item{predict}{Can be \code{"link"} (default) or \code{"response"}. As this is an important argument, read more about in the \strong{Details} section below.}
+\item{predict}{Can be \code{"link"}, \code{"relation"} (default), or \code{"prediction"}. As this is an important argument, read more about in the \strong{Details} section below.}
 
 \item{iterations}{For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.}
 

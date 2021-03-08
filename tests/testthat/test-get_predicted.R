@@ -83,8 +83,8 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     rezrela <- get_predicted_new(x, predict = "relation")
     expect_true(min(rezlink) < 0)
     expect_true(min(rezrela) > 0)
-    expect_true(min(summary(rezlink)$CI_high) < 0)
-    expect_true(min(summary(rezrela)$CI_high) > 0)
+    expect_true(min(summary(rezlink)$CI_low) < 0)
+    expect_true(min(summary(rezrela)$CI_low) > 0)
 
     # Relation vs. Prediction
     rezrela <- get_predicted_new(x, predict = "relation")
@@ -143,6 +143,48 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   #   predict(x, type = "link")
   # })
 
+  test_that("get_predicted - glmmTMB", {
+    x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
+
+    # Link vs. relation
+    rezlink <- get_predicted_new(x, predict = "link")
+    rezrela <- get_predicted_new(x, predict = "relation")
+    expect_equal(mean(abs(rezlink - rezrela)), 0, tolerance = 1e-3)
+    expect_equal(mean(summary(rezlink)$CI_high - summary(rezrela)$CI_high), 0, tolerance = 1e-3)
+
+    # Bootstrap
+    set.seed(333)
+    rez <- as.data.frame(get_predicted_new(x, iterations = 5))
+    expect_equal(c(nrow(rez), ncol(rez)), c(32, 9))
+
+    # Binomial
+    x <- glmmTMB::glmmTMB(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
+    rezlink <- get_predicted_new(x, predict = "link")
+    rezrela <- get_predicted_new(x, predict = "relation")
+    expect_true(min(rezlink) < 0)
+    expect_true(min(rezrela) > 0)
+    expect_true(min(summary(rezlink)$CI_low) < 0)
+    expect_true(min(summary(rezrela)$CI_low) > 0)
+    expect_equal(max(abs(rezrela - stats::fitted(x))), 0)
+    expect_equal(max(abs(rezrela - stats::predict(x, type = "response"))), 0)
+    expect_equal(nrow(as.data.frame(rez)), 32)
+
+    # No random
+    rez <- insight::get_predicted_new(x, newdata = mtcars[c("am")])
+    expect_true(!all(is.na(as.data.frame(rez))))
+    x <- glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
+    rez <- insight::get_predicted_new(x, data = data.frame(Petal.Width = c(0, 1, 2)))
+    expect_equal(length(rez), 3)
+
+    # vs. Bayesian
+    x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
+    rez <- summary(insight::get_predicted_new(x))
+    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh=0, iter=1000, seed=333)
+    rezbayes <- summary(insight::get_predicted_new(xref))
+    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
+    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
+  })
+
 
 
   # GAM --------------------------------------------------------------
@@ -160,6 +202,12 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(max(abs(as.numeric(rez - rez2))), 0, tolerance = 1e-4)
     expect_equal(length(unique(attributes(rez)$data$wt)), 1)
 
+    # Bootstrap
+    set.seed(333)
+    rez <- summary(get_predicted_new(x, iterations = 50))
+    expect_equal(nrow(rez), 32)
+
+    # Binomial
     x <- mgcv::gam(vs ~ am + s(wt), data = mtcars, family = "binomial")
     rez <- insight::get_predicted_new(x)
     expect_equal(length(rez), 32)
@@ -168,13 +216,13 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
     expect_equal(nrow(as.data.frame(rez)), 32)
 
+    # GAMM
     x <- mgcv::gamm(vs ~ am + s(wt), random = list(cyl = ~1), data = mtcars, family = "binomial", verbosePQL = FALSE)
-    # rez <- insight::get_predicted_new(x)
-    # expect_equal(length(rez), 32)
-    #
-    # expect_equal(max(abs(rez - x$gam$fitted.values)), 0)
-    # expect_equal(max(abs(rez - stats::predict(x$gam, type = "response"))), 0)
-    # expect_equal(nrow(as.data.frame(rez)), 32)
+    rez <- insight::get_predicted_new(x)
+    expect_equal(length(rez), 32)
+    expect_equal(max(abs(rez - x$gam$fitted.values)), 0)
+    expect_equal(max(abs(rez - stats::predict(x$gam, type = "response"))), 0)
+    expect_equal(nrow(as.data.frame(rez)), 32)
   })
 
 

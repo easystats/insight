@@ -23,7 +23,25 @@ get_family <- function(x, ...) {
 #' @importFrom stats family
 #' @export
 get_family.default <- function(x, ...) {
-  stats::family(x, ...)
+  fam <- tryCatch(
+    {
+      stats::family(x, ...)
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+  if(is.null(fam)) {
+    fam <- tryCatch(
+      {
+        .get_family(x, ...)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
+  fam
 }
 
 #' @export
