@@ -40,7 +40,9 @@ is_regression_model <- function(x) {
 # Helpers -----------------------------------------------------------------
 
 .get_class_list <- function(x) {
-  if (length(class(x)) > 1 || class(x) != "list") return(x)
+  if (length(class(x)) > 1 || class(x) != "list") {
+    return(x)
+  }
 
   if (all(c("mer", "gam") %in% names(x))) {
     class(x) <- c("gamm4", "list")
@@ -54,6 +56,7 @@ is_regression_model <- function(x) {
     "_ranger",
     "aareg",
     "afex_aov",
+    "AKP",
     "ancova",
     "anova",
     "Anova.mlm",
@@ -255,6 +258,9 @@ is_regression_model <- function(x) {
     "pseudoglm",
     "psm",
     "probitmfx",
+    "qr",
+    "QRNLMM",
+    "QRLMM",
     "rankFD",
     "Rchoice",
     "rdrobust",

@@ -1,6 +1,7 @@
 #' A robust alternative to stats::family
 #'
-#' A robust and resilient alternative to \code{stats::family}. To avoid issues with models like \code{gamm4}.
+#' A robust and resilient alternative to \code{stats::family}. To avoid issues
+#' with models like \code{gamm4}.
 #'
 #' @param x A statistical model.
 #' @param ... Further arguments passed to methods.
@@ -11,7 +12,12 @@
 #' get_family(x)
 #'
 #' if (require("mgcv")) {
-#'   x <- mgcv::gamm(vs ~ am + s(wt), random = list(cyl = ~1), data = mtcars, family = "binomial")
+#'   x <- mgcv::gamm(
+#'     vs ~ am + s(wt),
+#'     random = list(cyl = ~1),
+#'     data = mtcars,
+#'     family = "binomial"
+#'   )
 #'   get_family(x)
 #' }
 #' @export
@@ -31,7 +37,7 @@ get_family.default <- function(x, ...) {
       NULL
     }
   )
-  if(is.null(fam)) {
+  if (is.null(fam)) {
     fam <- tryCatch(
       {
         .get_family(x, ...)

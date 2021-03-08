@@ -42,7 +42,6 @@
 #'
 #' # Bootsrapped
 #' as.data.frame(get_predicted(x, iterations = 100), include_iterations = FALSE)
-#'
 #' \dontrun{
 #' # Bayesian models
 #' if (require("rstanarm")) {
@@ -185,7 +184,7 @@ get_predicted.merMod <- get_predicted.lmerMod
 get_predicted.glmmTMB <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, iterations = NULL, ...) {
 
   # Sanity checks
-  if(predict == "prediction") {
+  if (predict == "prediction") {
     warning("predict = 'prediction' is currently not available for glmmTMB models. Changing to 'relation'.")
     predict <- "relation"
   }
@@ -224,7 +223,7 @@ get_predicted.glmmTMB <- function(x, data = NULL, predict = "relation", ci = 0.9
 get_predicted.gam <- function(x, data = NULL, predict = "relation", ci = 0.95, include_random = TRUE, include_smooth = TRUE, iterations = NULL, ...) {
 
   # Sanity checks
-  if(predict == "prediction") {
+  if (predict == "prediction") {
     warning("predict = 'prediction' is currently not available for GAM models. Changing to 'relation'.")
     predict <- "relation"
   }
@@ -351,7 +350,7 @@ get_predicted.crr <- function(x, ...) {
   info <- model_info(x)
 
   # Data
-  if(!is.null(newdata) && is.null(data)) data <- newdata
+  if (!is.null(newdata) && is.null(data)) data <- newdata
   if (is.null(data)) data <- get_data(x)
 
   # CI
@@ -377,7 +376,7 @@ get_predicted.crr <- function(x, ...) {
   }
 
   # Transform
-  if(info$is_linear == FALSE && scale == "response") {
+  if (info$is_linear == FALSE && scale == "response") {
     transform <- TRUE
   } else {
     transform <- FALSE
@@ -441,7 +440,6 @@ get_predicted.crr <- function(x, ...) {
 
 
 .get_predicted_out <- function(predictions, args = NULL, ci_data = NULL, ...) {
-
   if (!is.null(ci_data)) {
     attr(predictions, "ci_data") <- ci_data
   }

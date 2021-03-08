@@ -6,15 +6,24 @@
 #'   separate columns for lower and upper confidence interval values). Furthermore,
 #'   column names are formatted as well.
 #'
-#' @param x A data frame of model's parameters, as returned by various functions of the \strong{easystats}-packages. May also be a result from \code{broom::tidy()}.
-#' @param pretty_names Return "pretty" (i.e. more human readable) parameter names.
-#' @param digits Number of decimal places for numeric values (except confidence intervals and p-values).
-#' @param ci_width Minimum width of the returned string for confidence intervals. If not \code{NULL} and width is larger than the string's length, leading whitespaces are added to the string. If \code{width="auto"}, width will be set to the length of the longest string.
-#' @param ci_brackets Logical, if \code{TRUE} (default), CI-values are encompassed in square brackets (else in parentheses).
+#' @param x A data frame of model's parameters, as returned by various functions
+#'   of the \strong{easystats}-packages. May also be a result from
+#'   \code{broom::tidy()}.
+#' @param pretty_names Return "pretty" (i.e. more human readable) parameter
+#'   names.
+#' @param digits Number of decimal places for numeric values (except confidence
+#'   intervals and p-values).
+#' @param ci_width Minimum width of the returned string for confidence
+#'   intervals. If not \code{NULL} and width is larger than the string's length,
+#'   leading whitespaces are added to the string. If \code{width="auto"}, width
+#'   will be set to the length of the longest string.
+#' @param ci_brackets Logical, if \code{TRUE} (default), CI-values are
+#'   encompassed in square brackets (else in parentheses).
 #' @param ci_digits Number of decimal places for confidence intervals.
 #' @param p_digits Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.
 #' @param rope_digits Number of decimal places for the ROPE percentage values.
-#' @param preserve_attributes Logical, if \code{TRUE}, preserves all attributes from the input data frame.
+#' @param preserve_attributes Logical, if \code{TRUE}, preserves all attributes
+#'   from the input data frame.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
@@ -35,7 +44,20 @@
 #' }
 #' @return A data frame.
 #' @export
-format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_width = "auto", ci_brackets = TRUE, ci_digits = 2, p_digits = 3, rope_digits = 2, zap_small = FALSE, preserve_attributes = FALSE, verbose = TRUE, ...) {
+format_table <- function(x,
+                         pretty_names = TRUE,
+                         stars = FALSE,
+                         digits = 2,
+                         ci_width = "auto",
+                         ci_brackets = TRUE,
+                         ci_digits = 2,
+                         p_digits = 3,
+                         rope_digits = 2,
+                         zap_small = FALSE,
+                         preserve_attributes = FALSE,
+                         verbose = TRUE,
+                         ...) {
+
 
   # sanity check
   if (is.null(x) || (is.data.frame(x) && nrow(x) == 0)) {
@@ -131,7 +153,14 @@ format_table <- function(x, pretty_names = TRUE, stars = FALSE, digits = 2, ci_w
 
 
   # Bayesian ---
-  x <- .format_bayes_columns(x, stars, rope_digits = rope_digits, zap_small = zap_small, ci_width = ci_width, ci_brackets = ci_brackets)
+  x <- .format_bayes_columns(
+    x,
+    stars,
+    rope_digits = rope_digits,
+    zap_small = zap_small,
+    ci_width = ci_width,
+    ci_brackets = ci_brackets
+  )
 
 
   # rename performance columns
@@ -374,7 +403,11 @@ parameters_table <- format_table
 
 
 
-.format_broom_ci_columns <- function(x, ci_digits, ci_width = "auto", ci_brackets = TRUE, zap_small) {
+.format_broom_ci_columns <- function(x,
+                                     ci_digits,
+                                     ci_width = "auto",
+                                     ci_brackets = TRUE,
+                                     zap_small) {
   if (!any(grepl("conf.low", names(x), fixed = TRUE))) {
     return(x)
   }

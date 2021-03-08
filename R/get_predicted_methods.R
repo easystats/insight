@@ -40,7 +40,6 @@ print.get_predicted <- function(x, ...) {
 
 #' @export
 as.data.frame.get_predicted <- function(x, ..., include_iterations = TRUE) {
-
   out <- data.frame("Predicted" = as.numeric(x))
   if ("ci_data" %in% names(attributes(x))) {
     out <- cbind(out, attributes(x)$ci_data)

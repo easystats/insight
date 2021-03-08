@@ -1,7 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && require("testthat") && require("insight") && require("stats") && require("BayesFactor")) {
-
   x <- correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
@@ -110,12 +109,20 @@ if (.runThisTest && require("testthat") && require("insight") && require("stats"
 
     test_that("clean_parameters", {
       cp <- clean_parameters(x)
-      expect_equal(cp$Cleaned_Parameter,
-                   c("supp [OJ]", "supp [VC]", "dose [Low]", "dose [Medium]",
-                     "dose [High]", "mu", "sig2", "g_supp"))
-      expect_equal(cp$Component,
-                   c("conditional", "conditional", "conditional", "conditional",
-                     "conditional", "extra", "extra", "extra"))
+      expect_equal(
+        cp$Cleaned_Parameter,
+        c(
+          "supp [OJ]", "supp [VC]", "dose [Low]", "dose [Medium]",
+          "dose [High]", "mu", "sig2", "g_supp"
+        )
+      )
+      expect_equal(
+        cp$Component,
+        c(
+          "conditional", "conditional", "conditional", "conditional",
+          "conditional", "extra", "extra", "extra"
+        )
+      )
     })
 
 

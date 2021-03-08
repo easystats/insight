@@ -71,12 +71,20 @@ if (require("testthat") &&
 
   test_that("clean_parameters", {
     cp <- clean_parameters(m1)
-    expect_equal(cp$Cleaned_Parameter,
-                 c("union", "wks", "(Intercept)", "imean(lag(union))", "imean(wks)",
-                   "blk", "fem", "union:blk"))
-    expect_equal(cp$Component,
-                 c("conditional", "conditional", "instruments", "instruments",
-                   "instruments", "instruments", "instruments", "interactions"))
+    expect_equal(
+      cp$Cleaned_Parameter,
+      c(
+        "union", "wks", "(Intercept)", "imean(lag(union))", "imean(wks)",
+        "blk", "fem", "union:blk"
+      )
+    )
+    expect_equal(
+      cp$Component,
+      c(
+        "conditional", "conditional", "instruments", "instruments",
+        "instruments", "instruments", "instruments", "interactions"
+      )
+    )
   })
 
   test_that("get_data", {

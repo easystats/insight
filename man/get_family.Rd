@@ -12,7 +12,8 @@ get_family(x, ...)
 \item{...}{Further arguments passed to methods.}
 }
 \description{
-A robust and resilient alternative to \code{stats::family}. To avoid issues with models like \code{gamm4}.
+A robust and resilient alternative to \code{stats::family}. To avoid issues
+with models like \code{gamm4}.
 }
 \examples{
 data(mtcars)
@@ -20,7 +21,12 @@ x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 get_family(x)
 
 if (require("mgcv")) {
-  x <- mgcv::gamm(vs ~ am + s(wt), random = list(cyl = ~1), data = mtcars, family = "binomial")
+  x <- mgcv::gamm(
+    vs ~ am + s(wt),
+    random = list(cyl = ~1),
+    data = mtcars,
+    family = "binomial"
+  )
   get_family(x)
 }
 }

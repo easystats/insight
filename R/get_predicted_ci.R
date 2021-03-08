@@ -1,22 +1,41 @@
 #' Confidence and Prediction Interval for Model Predictions
 #'
-#' Returns the Confidence (or Prediction) Interval (CI) associated with predictions made by a model.
+#' Returns the Confidence (or Prediction) Interval (CI) associated with
+#' predictions made by a model.
 #'
 #' @inheritParams get_predicted
-#' @param predictions A vector of predicted values (as obtained by \code{stats::fitted()}, \code{stats::predict()} or \code{\link{get_predicted}}).
+#' @param predictions A vector of predicted values (as obtained by
+#'   \code{stats::fitted()}, \code{stats::predict()} or
+#'   \code{\link{get_predicted}}).
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
-#' @param ci_type Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals show the range that likely contains the value of a new observation (in what range it would fall), whereas confidence intervals reflect the uncertainty around the estimated parameters (and gives the range of the link; for instance of the regression line in a linear regressions). Prediction intervals account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit). This applies mostly for "simple" linear models (like \code{lm}), as for other models (e.g., \code{glm}), prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
-#' @param vcov_estimation String, indicating the suffix of the \code{vcov*()}-function
-#'   from the \pkg{sandwich} or \pkg{clubSandwich} package, e.g. \code{vcov_estimation = "CL"}
-#'   (which calls \code{\link[sandwich]{vcovCL}} to compute clustered covariance matrix
+#' @param ci_type Can be \code{"prediction"} or \code{"confidence"}. Prediction
+#'   intervals show the range that likely contains the value of a new
+#'   observation (in what range it would fall), whereas confidence intervals
+#'   reflect the uncertainty around the estimated parameters (and gives the
+#'   range of the link; for instance of the regression line in a linear
+#'   regressions). Prediction intervals account for both the uncertainty in the
+#'   model's parameters, plus the random variation of the individual values.
+#'   Thus, prediction intervals are always wider than confidence intervals.
+#'   Moreover, prediction intervals will not necessarily become narrower as the
+#'   sample size increases (as they do not reflect only the quality of the fit).
+#'   This applies mostly for "simple" linear models (like \code{lm}), as for
+#'   other models (e.g., \code{glm}), prediction intervals are somewhat useless
+#'   (for instance, for a binomial model for which the dependent variable is a
+#'   vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
+#' @param vcov_estimation String, indicating the suffix of the
+#'   \code{vcov*()}-function from the \pkg{sandwich} or \pkg{clubSandwich}
+#'   package, e.g. \code{vcov_estimation = "CL"} (which calls
+#'   \code{\link[sandwich]{vcovCL}} to compute clustered covariance matrix
 #'   estimators), or \code{vcov_estimation = "HC"} (which calls
-#'   \code{\link[sandwich:vcovHC]{vcovHC()}} to compute heteroskedasticity-consistent
-#'   covariance matrix estimators).
+#'   \code{\link[sandwich:vcovHC]{vcovHC()}} to compute
+#'   heteroskedasticity-consistent covariance matrix estimators).
 #' @param vcov_type Character vector, specifying the estimation type for the
-#'   robust covariance matrix estimation (see \code{\link[sandwich:vcovHC]{vcovHC()}}
-#'   or \code{clubSandwich::vcovCR()} for details).
-#' @param vcov_args List of named vectors, used as additional arguments that
-#'   are passed down to the \pkg{sandwich}-function specified in \code{vcov_estimation}.
+#'   robust covariance matrix estimation (see
+#'   \code{\link[sandwich:vcovHC]{vcovHC()}} or \code{clubSandwich::vcovCR()}
+#'   for details).
+#' @param vcov_args List of named vectors, used as additional arguments that are
+#'   passed down to the \pkg{sandwich}-function specified in
+#'   \code{vcov_estimation}.
 #' @param ... Not used for now.
 #'
 #'
@@ -42,8 +61,15 @@
 #' get_predicted_ci(x, predictions, ci_type = "confidence")
 #' @importFrom stats median sd quantile
 #' @export
-get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL, ...) {
-
+get_predicted_ci <- function(x,
+                             predictions = NULL,
+                             data = NULL,
+                             ci = 0.95,
+                             ci_type = "confidence",
+                             vcov_estimation = NULL,
+                             vcov_type = NULL,
+                             vcov_args = NULL,
+                             ...) {
   if ("iterations" %in% names(attributes(predictions))) {
     iter <- attributes(predictions)$iterations
     se <- data.frame(SE = apply(iter, 1, stats::sd))
@@ -59,7 +85,6 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
         out <- as.data.frame(rstantools::predictive_interval(x, newdata = data, prob = ci))
         names(out) <- c("CI_low", "CI_high")
       }
-
     } else { # Bootstrapped ----------------------------------------------------
       out <- data.frame(
         CI_low = apply(iter, 1, stats::quantile, probs = (1 - ci) / 2, na.rm = TRUE),
@@ -68,7 +93,6 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
     }
 
     out <- cbind(se, out)
-
   } else { # Regular -----------------------------------------------------------
     # Get SE
     se <- .get_predicted_ci_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
@@ -130,7 +154,6 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
 
 #' @importFrom stats model.matrix terms reformulate
 .get_predicted_ci_modelmatrix <- function(x, data = NULL, vcovmat = NULL, ...) {
-
   resp <- find_response(x)
   if (is.null(vcovmat)) vcovmat <- .get_predicted_ci_vcov(x, ...)
 
@@ -138,17 +161,19 @@ get_predicted_ci <- function(x, predictions = NULL, data = NULL, ci = 0.95, ci_t
   if (is.null(data)) {
     mm <- stats::model.matrix(x)
   } else {
-    if (!all(resp %in% data)) data[[resp]] <- 0  # fake response
+    if (!all(resp %in% data)) data[[resp]] <- 0 # fake response
     # else, model.matrix below fails, e.g. for log-terms
     attr(data, "terms") <- NULL
 
     # model terms, required for model matrix
-    model_terms <- tryCatch({
-      stats::terms(x)
-    },
-    error = function(e) {
-      find_formula(x)$conditional
-    })
+    model_terms <- tryCatch(
+      {
+        stats::terms(x)
+      },
+      error = function(e) {
+        find_formula(x)$conditional
+      }
+    )
 
     # drop offset from model_terms
     if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc"))) {

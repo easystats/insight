@@ -71,7 +71,6 @@ as.data.frame(predictions)
 
 # Bootsrapped
 as.data.frame(get_predicted(x, iterations = 100), include_iterations = FALSE)
-
 \dontrun{
 # Bayesian models
 if (require("rstanarm")) {

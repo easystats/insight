@@ -106,8 +106,10 @@ get_data.mjoint <- function(x, verbose = TRUE, ...) {
       dat <- x$data[[1]]
       data_columns <- intersect(
         colnames(dat),
-        unique(c(find_response(x, combine = FALSE, component = "all"),
-                 find_variables(x, flatten = TRUE)))
+        unique(c(
+          find_response(x, combine = FALSE, component = "all"),
+          find_variables(x, flatten = TRUE)
+        ))
       )
       dat[, data_columns, drop = FALSE]
     },

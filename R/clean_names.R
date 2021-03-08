@@ -51,7 +51,9 @@ clean_names <- function(x, ...) {
 
 #' @export
 clean_names.default <- function(x, ...) {
-  if (is.null(x)) return(x)
+  if (is.null(x)) {
+    return(x)
+  }
   cleaned <- unname(find_variables(x, flatten = TRUE))
   .remove_values(cleaned, c("1", "0"))
 }
@@ -60,7 +62,9 @@ clean_names.default <- function(x, ...) {
 #' @rdname clean_names
 #' @export
 clean_names.character <- function(x, include_names = FALSE, ...) {
-  if (is.null(x)) return(x)
+  if (is.null(x)) {
+    return(x)
+  }
   out <- sapply(x, function(.x) {
     if (grepl(":", .x, fixed = TRUE) && !grepl("::", .x, fixed = TRUE)) {
       paste(sapply(strsplit(.x, ":", fixed = TRUE), .remove_pattern_from_names), collapse = ":")

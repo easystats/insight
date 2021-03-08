@@ -25,7 +25,6 @@ n_obs <- function(x, ...) {
 
 #' @export
 n_obs.default <- function(x, ...) {
-
   is_binomial <- tryCatch(
     {
       fam <- stats::family(x)
@@ -115,7 +114,7 @@ n_obs.gam <- function(x, ...) {
 n_obs.gamm <- function(x, ...) {
   if (.obj_has_name(x, "gam")) {
     n_obs(x$gam, ...)
-  } else{
+  } else {
     stop("Cannot find n_obs for this object. Please an open an issue!")
   }
 }

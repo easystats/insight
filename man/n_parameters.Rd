@@ -56,9 +56,9 @@ n_parameters(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{remove_nonestimable}{Logical, if \code{TRUE}, removes (i.e. does not count)
-non-estimable parameters (which may occur for models with rank-deficient
-model matrix).}
+\item{remove_nonestimable}{Logical, if \code{TRUE}, removes (i.e. does not
+count) non-estimable parameters (which may occur for models with
+rank-deficient model matrix).}
 
 \item{effects}{Should number of parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}

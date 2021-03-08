@@ -131,10 +131,10 @@ get_weights.btergm <- function(x, null_as_ones = FALSE, ...) {
 
 
 #' @export
-get_weights.list <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {  # For GAMMs
+get_weights.list <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) { # For GAMMs
   if ("gam" %in% names(x)) {
     get_weights(x$gam, na_rm = na_rm, null_as_ones = null_as_ones, ...)
-  } else{
+  } else {
     stop("Cannot find weights in this object. Please an open an issue!")
   }
 }
