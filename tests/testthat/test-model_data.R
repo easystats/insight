@@ -1,10 +1,10 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-    require("testthat") &&
-    require("insight") &&
-    require("splines") &&
-    require("glmmTMB")) {
+  require("testthat") &&
+  require("insight") &&
+  require("splines") &&
+  require("glmmTMB")) {
   data(iris)
 
   m1 <- lm(Sepal.Length ~ Species + ns(Petal.Width), data = iris)

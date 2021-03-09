@@ -38,17 +38,25 @@ parameters_table(
 )
 }
 \arguments{
-\item{x}{A data frame of model's parameters, as returned by various functions of the \strong{easystats}-packages. May also be a result from \code{broom::tidy()}.}
+\item{x}{A data frame of model's parameters, as returned by various functions
+of the \strong{easystats}-packages. May also be a result from
+\code{broom::tidy()}.}
 
-\item{pretty_names}{Return "pretty" (i.e. more human readable) parameter names.}
+\item{pretty_names}{Return "pretty" (i.e. more human readable) parameter
+names.}
 
 \item{stars}{Add significance stars (e.g., p < .001***).}
 
-\item{digits}{Number of decimal places for numeric values (except confidence intervals and p-values).}
+\item{digits}{Number of decimal places for numeric values (except confidence
+intervals and p-values).}
 
-\item{ci_width}{Minimum width of the returned string for confidence intervals. If not \code{NULL} and width is larger than the string's length, leading whitespaces are added to the string. If \code{width="auto"}, width will be set to the length of the longest string.}
+\item{ci_width}{Minimum width of the returned string for confidence
+intervals. If not \code{NULL} and width is larger than the string's length,
+leading whitespaces are added to the string. If \code{width="auto"}, width
+will be set to the length of the longest string.}
 
-\item{ci_brackets}{Logical, if \code{TRUE} (default), CI-values are encompassed in square brackets (else in parentheses).}
+\item{ci_brackets}{Logical, if \code{TRUE} (default), CI-values are
+encompassed in square brackets (else in parentheses).}
 
 \item{ci_digits}{Number of decimal places for confidence intervals.}
 
@@ -58,7 +66,8 @@ parameters_table(
 
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.}
 
-\item{preserve_attributes}{Logical, if \code{TRUE}, preserves all attributes from the input data frame.}
+\item{preserve_attributes}{Logical, if \code{TRUE}, preserves all attributes
+from the input data frame.}
 
 \item{verbose}{Toggle messages and warnings.}
 

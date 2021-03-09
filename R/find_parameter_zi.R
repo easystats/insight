@@ -13,7 +13,8 @@
 #'   elements:
 #'    \itemize{
 #'      \item \code{conditional}, the "fixed effects" part from the model.
-#'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model.
+#'      \item \code{zero_inflated}, the "fixed effects" part from the
+#'      zero-inflation component of the model.
 #'    }
 #'
 #' @examples
@@ -31,7 +32,13 @@ find_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi"
     zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
   ))
 
-  .filter_parameters(l, effects = "all", component = component, flatten = flatten, recursive = FALSE)
+  .filter_parameters(
+    l,
+    effects = "all",
+    component = component,
+    flatten = flatten,
+    recursive = FALSE
+  )
 }
 
 #' @export
@@ -51,13 +58,22 @@ find_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", 
     zero_inflated = names(cf$zero)
   ))
 
-  .filter_parameters(l, effects = "all", component = component, flatten = flatten, recursive = FALSE)
+  .filter_parameters(
+    l,
+    effects = "all",
+    component = component,
+    flatten = flatten,
+    recursive = FALSE
+  )
 }
 
 
 #' @rdname find_parameters.zeroinfl
 #' @export
-find_parameters.mhurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"), flatten = FALSE, ...) {
+find_parameters.mhurdle <- function(x,
+                                    component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"),
+                                    flatten = FALSE,
+                                    ...) {
   component <- match.arg(component)
   cf <- stats::coef(x)
 
@@ -75,5 +91,11 @@ find_parameters.mhurdle <- function(x, component = c("all", "conditional", "zi",
     auxiliary = names(cf)[aux_pars]
   ))
 
-  .filter_parameters(l, effects = "all", component = component, flatten = flatten, recursive = FALSE)
+  .filter_parameters(
+    l,
+    effects = "all",
+    component = component,
+    flatten = flatten,
+    recursive = FALSE
+  )
 }

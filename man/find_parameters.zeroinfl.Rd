@@ -47,7 +47,8 @@ A list of parameter names. The returned list may have following
   elements:
    \itemize{
      \item \code{conditional}, the "fixed effects" part from the model.
-     \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model.
+     \item \code{zero_inflated}, the "fixed effects" part from the
+     zero-inflation component of the model.
    }
 }
 \description{

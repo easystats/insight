@@ -14,7 +14,7 @@
 #' @return Depending on \code{format}, either an object of class \code{gt_tbl}
 #'   or a character vector of class \code{knitr_kable}.
 #'
-#'  @examples
+#' @examples
 #' display(iris[1:5, ])
 #' @export
 display <- function(object, ...) {

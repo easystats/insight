@@ -9,9 +9,15 @@
 #'  Depending on \code{component}, the returned list has following
 #'  elements (or \code{NULL}, if model has no interaction term):
 #'  \itemize{
-#'    \item \code{conditional}, interaction terms that belong to the "fixed effects" terms from the model
-#'    \item \code{zero_inflated}, interaction terms that belong to the "fixed effects" terms from the zero-inflation component of the model
-#'    \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, interaction terms that belong to the instrumental variables
+#'    \item \code{conditional}, interaction terms that belong to the "fixed
+#'    effects" terms from the model
+#'
+#'    \item \code{zero_inflated}, interaction terms that belong to the "fixed
+#'    effects" terms from the zero-inflation component of the model
+#'
+#'    \item \code{instruments}, for fixed-effects regressions like \code{ivreg},
+#'    \code{felm} or \code{plm}, interaction terms that belong to the
+#'    instrumental variables
 #'  }
 #'
 #' @examples
@@ -29,7 +35,11 @@ find_interactions <- function(x, component = c("all", "conditional", "zi", "zero
 }
 
 
-.find_interactions <- function(x, effects = "fixed", component, flatten, main_effects = FALSE) {
+.find_interactions <- function(x,
+                               effects = "fixed",
+                               component,
+                               flatten,
+                               main_effects = FALSE) {
   f <- find_formula(x)
   is_mv <- is_multivariate(f)
   elements <- .get_elements(effects = effects, component = component)

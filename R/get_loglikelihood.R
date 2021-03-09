@@ -106,28 +106,28 @@ get_loglikelihood.default <- function(x, ...) {
 
   # Calculate Log Likelihoods depending on the family
   lls <- switch(fam,
-                binomial = {
-                  stats::dbinom(round(n * resp), round(n), predicted, log = TRUE) * w
-                },
-                quasibinomial = {
-                  NA
-                },
-                poisson = {
-                  stats::dpois(resp, predicted, log = TRUE) * w
-                },
-                quasipoisson = {
-                  NA
-                },
-                gaussian = {
-                  nobs <- length(resp)
-                  -((log(dev / nobs * 2 * pi) + 1) - log(w)) / 2
-                },
-                inverse.gaussian = {
-                  -((log(disp * 2 * pi) + 1) + 3 * log(resp)) / 2
-                },
-                Gamma = {
-                  stats::dgamma(resp, shape = 1 / disp, scale = predicted * disp, log = TRUE) * w
-                }
+    binomial = {
+      stats::dbinom(round(n * resp), round(n), predicted, log = TRUE) * w
+    },
+    quasibinomial = {
+      NA
+    },
+    poisson = {
+      stats::dpois(resp, predicted, log = TRUE) * w
+    },
+    quasipoisson = {
+      NA
+    },
+    gaussian = {
+      nobs <- length(resp)
+      -((log(dev / nobs * 2 * pi) + 1) - log(w)) / 2
+    },
+    inverse.gaussian = {
+      -((log(disp * 2 * pi) + 1) + 3 * log(resp)) / 2
+    },
+    Gamma = {
+      stats::dgamma(resp, shape = 1 / disp, scale = predicted * disp, log = TRUE) * w
+    }
   )
 
   .loglikelihood_prep_output(x, lls)
@@ -149,7 +149,7 @@ get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
   } else {
     ll <- .get_loglikelihood_glm(x, ...)
   }
- ll
+  ll
 }
 
 #' @export

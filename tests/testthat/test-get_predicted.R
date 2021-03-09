@@ -71,8 +71,6 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     rezbayes <- summary(get_predicted(xbayes, type = "prediction"))
     expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
     expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
-
-
   })
 
   test_that("get_predicted - glm", {
@@ -171,7 +169,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # expect_equal(max(abs(as.data.frame(rez)$CI_low - as.data.frame(ref)$CI_low)), 0, tolerance = 1e-5)
 
     # Compare with rstanarm
-    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh=0, iter=1000, seed=333)
+    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
     rez_stan <- insight::get_predicted(xref, predict = "relation")
     expect_equal(mean(abs(rezrela - rez_stan)), 0, tolerance = 0.1)
     # Different indeed
@@ -254,7 +252,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # vs. Bayesian
     x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
     rez <- summary(insight::get_predicted(x))
-    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh=0, iter=1000, seed=333)
+    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
     rezbayes <- summary(insight::get_predicted(xref))
     expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
     expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)

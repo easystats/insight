@@ -10,9 +10,9 @@
 #'    term or the instrumental variables be returned? Applies to models
 #'    with zero-inflated and/or dispersion formula, or to models with instrumental
 #'    variable (so called fixed-effects regressions). May be abbreviated.
-#' @param remove_nonestimable Logical, if \code{TRUE}, removes (i.e. does not count)
-#'    non-estimable parameters (which may occur for models with rank-deficient
-#'    model matrix).
+#' @param remove_nonestimable Logical, if \code{TRUE}, removes (i.e. does not
+#'   count) non-estimable parameters (which may occur for models with
+#'   rank-deficient model matrix).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return The number of parameters in the model.
@@ -242,7 +242,6 @@ n_parameters.bayesx <- function(x, ...) {
   } else {
     length(unlist(find_parameters(x, component = component, flatten = FALSE, ...)))
   }
-
 }
 
 

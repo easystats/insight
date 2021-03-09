@@ -31,9 +31,6 @@ print_html(x, ...)
 \value{
 Depending on \code{format}, either an object of class \code{gt_tbl}
   or a character vector of class \code{knitr_kable}.
-
- @examples
-display(iris[1:5, ])
 }
 \description{
 \code{display()} is a generic function to export data frames
@@ -41,4 +38,7 @@ into various table formats (like plain text, markdown, ...). \code{print_md()}
 usually is a convenient wrapper for \code{display(format = "markdown")}.
 Similar, \code{print_html()} is a shortcut for \code{display(format = "html")}.
 See the documentation for the specific objects' classes.
+}
+\examples{
+display(iris[1:5, ])
 }

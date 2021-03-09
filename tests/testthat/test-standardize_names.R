@@ -22,8 +22,10 @@ if (require("testthat") &&
 
       expect_equal(
         names(standardize_names(x, style = "easystats")),
-        c("Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high",
-          "Statistic", "df", "p")
+        c(
+          "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high",
+          "Statistic", "df", "p"
+        )
       )
 
       # aov object

@@ -19,6 +19,7 @@ MCSE
 MuMIn
 Nakagawa
 Newburgh
+PIs
 Rchoice
 Savel'ev
 Schielzeth
@@ -44,6 +45,7 @@ brmsfit
 btergm
 cgam
 cglm
+ci
 clmm
 cloglog
 cmprsk
@@ -56,6 +58,7 @@ cplm
 dirichlet
 doi
 easystats
+eflm
 emm
 emmGrid
 ergm
@@ -72,6 +75,7 @@ glmm
 glmmADMB
 glmmTMB
 glmx
+heteroskedasticity
 htest
 https
 intra
@@ -79,7 +83,10 @@ intraclass
 io
 ivFixed
 ivprobit
+joineRML
 joss
+knitr
+lIn
 lavaan
 lme
 lmerModLmerTest
@@ -94,6 +101,7 @@ metafor
 metaplus
 mfx
 mgcv
+mhurdle
 mira
 mixor
 mlogit
@@ -119,6 +127,7 @@ spaMM
 specificities
 stanfit
 stanreg
+svyVGAM
 tranformations
 tseries
 tweedie
