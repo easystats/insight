@@ -49,6 +49,7 @@ reference:
   - get_variance
   - get_varcov
   - get_deviance
+  - get_family
 
 - title: "Find Information or Get Data from Model Objects"
   desc: >
