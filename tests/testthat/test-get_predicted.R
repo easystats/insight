@@ -254,8 +254,8 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     rez <- summary(insight::get_predicted(x))
     xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
     rezbayes <- summary(insight::get_predicted(xref))
-    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
-    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
+    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0.021, tolerance = 0.1)
+    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0.24, tolerance = 0.2)
   })
 
 
