@@ -161,6 +161,7 @@
   ci_digits <span class='op'>=</span> <span class='fl'>2</span>,
   p_digits <span class='op'>=</span> <span class='fl'>3</span>,
   rope_digits <span class='op'>=</span> <span class='fl'>2</span>,
+  zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>,
   preserve_attributes <span class='op'>=</span> <span class='cn'>FALSE</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
@@ -176,6 +177,7 @@
   ci_digits <span class='op'>=</span> <span class='fl'>2</span>,
   p_digits <span class='op'>=</span> <span class='fl'>3</span>,
   rope_digits <span class='op'>=</span> <span class='fl'>2</span>,
+  zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>,
   preserve_attributes <span class='op'>=</span> <span class='cn'>FALSE</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
@@ -186,11 +188,14 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A data frame of model's parameters, as returned by various functions of the <strong>easystats</strong>-packages. May also be a result from <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy()</a></code>.</p></td>
+      <td><p>A data frame of model's parameters, as returned by various functions
+of the <strong>easystats</strong>-packages. May also be a result from
+<code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy()</a></code>.</p></td>
     </tr>
     <tr>
       <th>pretty_names</th>
-      <td><p>Return "pretty" (i.e. more human readable) parameter names.</p></td>
+      <td><p>Return "pretty" (i.e. more human readable) parameter
+names.</p></td>
     </tr>
     <tr>
       <th>stars</th>
@@ -198,15 +203,20 @@
     </tr>
     <tr>
       <th>digits</th>
-      <td><p>Number of decimal places for numeric values (except confidence intervals and p-values).</p></td>
+      <td><p>Number of decimal places for numeric values (except confidence
+intervals and p-values).</p></td>
     </tr>
     <tr>
       <th>ci_width</th>
-      <td><p>Minimum width of the returned string for confidence intervals. If not <code>NULL</code> and width is larger than the string's length, leading whitespaces are added to the string. If <code>width="auto"</code>, width will be set to the length of the longest string.</p></td>
+      <td><p>Minimum width of the returned string for confidence
+intervals. If not <code>NULL</code> and width is larger than the string's length,
+leading whitespaces are added to the string. If <code>width="auto"</code>, width
+will be set to the length of the longest string.</p></td>
     </tr>
     <tr>
       <th>ci_brackets</th>
-      <td><p>Logical, if <code>TRUE</code> (default), CI-values are encompassed in square brackets (else in parentheses).</p></td>
+      <td><p>Logical, if <code>TRUE</code> (default), CI-values are
+encompassed in square brackets (else in parentheses).</p></td>
     </tr>
     <tr>
       <th>ci_digits</th>
@@ -221,8 +231,13 @@
       <td><p>Number of decimal places for the ROPE percentage values.</p></td>
     </tr>
     <tr>
+      <th>zap_small</th>
+      <td><p>Logical, if <code>TRUE</code>, small values are rounded after <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal places than <code>digits</code> are printed in scientific notation.</p></td>
+    </tr>
+    <tr>
       <th>preserve_attributes</th>
-      <td><p>Logical, if <code>TRUE</code>, preserves all attributes from the input data frame.</p></td>
+      <td><p>Logical, if <code>TRUE</code>, preserves all attributes
+from the input data frame.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -266,7 +281,7 @@
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>This is rstanarm version 2.21.1</span></div><div class='output co'>#&gt; <span class='message'>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span></div><div class='output co'>#&gt; <span class='message'>- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>  options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘rstanarm’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:parameters’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    compare_models</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Note that the default rope range for linear models might change in future versions (see https://github.com/easystats/bayestestR/issues/364).Please set it explicitly to preserve current results.</span></div><div class='output co'>#&gt;           Parameter Median       69% CI       89% CI       95% CI   pd
+#&gt; <span class='message'>    compare_models</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Note that the default rope range for binomial models might change in future versions (see https://github.com/easystats/bayestestR/issues/364).Please set it explicitly to preserve current results.</span></div><div class='output co'>#&gt;           Parameter Median       69% CI       89% CI       95% CI   pd
 #&gt; 1       (Intercept)   5.01 [4.94, 5.09] [4.88, 5.11] [4.86, 5.14] 100%
 #&gt; 2 Speciesversicolor   0.93 [0.82, 1.03] [0.76, 1.10] [0.74, 1.14] 100%
 #&gt; 3  Speciesvirginica   1.58 [1.48, 1.69] [1.41, 1.75] [1.38, 1.78] 100%

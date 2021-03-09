@@ -181,9 +181,13 @@ as character vector, not as list. Duplicated values are removed.</p></td>
     <p>A list of character vectors that represent the interaction terms.
  Depending on <code>component</code>, the returned list has following
  elements (or <code>NULL</code>, if model has no interaction term):</p><ul>
-<li><p><code>conditional</code>, interaction terms that belong to the "fixed effects" terms from the model</p></li>
-<li><p><code>zero_inflated</code>, interaction terms that belong to the "fixed effects" terms from the zero-inflation component of the model</p></li>
-<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, interaction terms that belong to the instrumental variables</p></li>
+<li><p><code>conditional</code>, interaction terms that belong to the "fixed
+   effects" terms from the model</p></li>
+<li><p><code>zero_inflated</code>, interaction terms that belong to the "fixed
+   effects" terms from the zero-inflation component of the model</p></li>
+<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>,
+   <code>felm</code> or <code>plm</code>, interaction terms that belong to the
+   instrumental variables</p></li>
 </ul>
 
 

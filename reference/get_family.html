@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get model parameters from zero-inflated and hurdle models — get_parameters.zeroinfl • insight</title>
+<title>A robust alternative to stats::family — get_family • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="Get model parameters from zero-inflated and hurdle models — get_parameters.zeroinfl" />
-<meta property="og:description" content="Returns the coefficients from a model." />
+<meta property="og:title" content="A robust alternative to stats::family — get_family" />
+<meta property="og:description" content="A robust and resilient alternative to stats::family. To avoid issues
+with models like gamm4." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -136,75 +137,54 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get model parameters from zero-inflated and hurdle models</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_parameters_zi.R'><code>R/get_parameters_zi.R</code></a></small>
-    <div class="hidden name"><code>get_parameters.zeroinfl.Rd</code></div>
+    <h1>A robust alternative to stats::family</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_family.R'><code>R/get_family.R</code></a></small>
+    <div class="hidden name"><code>get_family.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the coefficients from a model.</p>
+    <p>A robust and resilient alternative to <code><a href='https://rdrr.io/r/stats/family.html'>stats::family</a></code>. To avoid issues
+with models like <code>gamm4</code>.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for zeroinfl</span>
-<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span><span class='op'>)</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='co'># S3 method for zcpglm</span>
-<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span><span class='op'>)</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='co'># S3 method for mhurdle</span>
-<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"infrequent_purchase"</span>,
-    <span class='st'>"ip"</span>, <span class='st'>"auxiliary"</span><span class='op'>)</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_family</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr>
-    <tr>
-      <th>component</th>
-      <td><p>Should all predictor variables, predictor variables for the
- conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
-<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model.</p></td>
+      <td><p>A statistical model.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Currently not used.</p></td>
+      <td><p>Further arguments passed to methods.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>For models with smooth terms or zero-inflation component, a data
-  frame with three columns: the parameter names, the related point estimates
-  and the component.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'><a href='get_parameters.html'>get_parameters</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     Parameter   Estimate
-#&gt; 1 (Intercept) 38.7460642
-#&gt; 2          wt -3.2463673
-#&gt; 3         cyl -1.3641033
-#&gt; 4          vs  0.5241721</div></pre>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
+<span class='fu'>get_family</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Family: binomial 
+#&gt; Link function: logit 
+#&gt; </div><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"mgcv"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>mgcv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gamm.html'>gamm</a></span><span class='op'>(</span>
+    <span class='va'>vs</span> <span class='op'>~</span> <span class='va'>am</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span><span class='op'>(</span><span class='va'>wt</span><span class='op'>)</span>,
+    random <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>cyl <span class='op'>=</span> <span class='op'>~</span><span class='fl'>1</span><span class='op'>)</span>,
+    data <span class='op'>=</span> <span class='va'>mtcars</span>,
+    family <span class='op'>=</span> <span class='st'>"binomial"</span>
+  <span class='op'>)</span>
+  <span class='fu'>get_family</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; 
+#&gt;  Maximum number of PQL iterations:  20 </div><div class='output co'>#&gt; <span class='message'>iteration 1</span></div><div class='output co'>#&gt; <span class='message'>iteration 2</span></div><div class='output co'>#&gt; <span class='message'>iteration 3</span></div><div class='output co'>#&gt; <span class='message'>iteration 4</span></div><div class='output co'>#&gt; <span class='message'>iteration 5</span></div><div class='output co'>#&gt; <span class='message'>iteration 6</span></div><div class='output co'>#&gt; <span class='message'>iteration 7</span></div><div class='output co'>#&gt; <span class='message'>iteration 8</span></div><div class='output co'>#&gt; 
+#&gt; Family: binomial 
+#&gt; Link function: logit 
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
