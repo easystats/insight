@@ -891,9 +891,15 @@ get_statistic.negbinirr <- get_statistic.logitor
 #' @export
 get_statistic.sarlm <- function(x, ...) {
   s <- summary(x)
+  # add rho, if present
+  if (!is.null(s$rho)) {
+    rho <- as.numeric(s$rho) / as.numeric(s$rho.se)
+  } else {
+    rho <- NULL
+  }
   stat <- data.frame(
     Parameter = find_parameters(x, flatten = TRUE),
-    Statistic = as.vector(s$Coef[, 3]),
+    Statistic = c(rho, as.vector(s$Coef[, 3])),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
