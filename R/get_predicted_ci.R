@@ -123,8 +123,12 @@ get_predicted_ci <- function(x,
   }
 
   # Analytical solution
-  se <- .get_predicted_ci_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
-  .get_predicted_se_to_ci(x, predictions, se = se, ci = ci)
+  if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian")) {# gaussian or CI
+    se <- .get_predicted_ci_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
+    return(.get_predicted_se_to_ci(x, predictions, se = se, ci = ci))
+  } else {
+    return(.get_predicted_pi_glm(x, predictions, ci = ci))
+  }
 }
 
 
@@ -263,7 +267,7 @@ get_predicted_ci <- function(x,
 
 
 
-# Convert to CI -----------------------------------------------------------
+## Convert to CI -----------
 
 
 
@@ -304,6 +308,34 @@ get_predicted_ci <- function(x,
   data.frame(SE = se, CI_low = ci_low, CI_high = ci_high)
 }
 
+
+
+# Get PI ------------------------------------------------------------------
+
+#' @keywords internal
+.get_predicted_pi_glm <- function(x, predictions, ci = ci) {
+
+  mi <- model_info(x)
+  link <- link_function(x)
+  inv <- link_inverse(x)
+  alpha <- 1 - ci
+  prob <- c(alpha/2, 1-alpha/2)
+
+  if (mi$is_binomial) {
+    p <- inv(predictions)
+    lwr <- qbinom(prob[1], size = 1, prob = p)
+    upr <- qbinom(prob[2], size = 1, prob = p)
+  } else if (mi$is_poisson) {
+    rate <- inv(predictions)
+    lwr <- qpois(prob[1], lambda = rate)
+    upr <- qpois(prob[2], lambda = rate)
+  }
+
+  data.frame(
+    CI_low = link(lwr),
+    CI_high = link(upr)
+  )
+}
 
 
 # Interval helpers --------------------------------------------------------
