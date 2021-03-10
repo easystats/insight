@@ -315,6 +315,7 @@ find_statistic <- function(x, ...) {
       "BFBayesFactor",
       "brmsfit",
       "gbm",
+      "joint",
       "list",
       "MCMCglmm",
       "mediate",
