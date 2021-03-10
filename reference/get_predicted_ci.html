@@ -322,13 +322,13 @@ the context of bootstrapped and Bayesian models. Possible values are
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>x</span>, type <span class='op'>=</span> <span class='st'>"link"</span><span class='op'>)</span>
 <span class='va'>ci_vals</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span>, ci_type <span class='op'>=</span> <span class='st'>"prediction"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                         SE    CI_low  CI_high
-#&gt; Mazda RX4         1.166957 -1.578147 2.996240
-#&gt; Mazda RX4 Wag     1.124961 -1.983026 2.426739
-#&gt; Datsun 710        1.250300 -1.168331 3.732753
-#&gt; Hornet 4 Drive    1.115523 -2.614114 1.758655
-#&gt; Hornet Sportabout 1.139191 -3.090376 1.375171
-#&gt; Valiant           1.142408 -3.134892 1.343265</div><div class='input'><span class='va'>ci_vals</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span>, ci_type <span class='op'>=</span> <span class='st'>"confidence"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                   CI_low CI_high
+#&gt; Mazda RX4           -Inf     Inf
+#&gt; Mazda RX4 Wag       -Inf     Inf
+#&gt; Datsun 710          -Inf     Inf
+#&gt; Hornet 4 Drive      -Inf     Inf
+#&gt; Hornet Sportabout   -Inf     Inf
+#&gt; Valiant             -Inf     Inf</div><div class='input'><span class='va'>ci_vals</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span>, ci_type <span class='op'>=</span> <span class='st'>"confidence"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;                          SE     CI_low   CI_high
 #&gt; Mazda RX4         0.5623444 -0.3931282 1.8112213
