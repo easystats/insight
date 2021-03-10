@@ -13,6 +13,8 @@ get_predicted_ci(
   vcov_estimation = NULL,
   vcov_type = NULL,
   vcov_args = NULL,
+  dispersion_function = "sd",
+  interval_function = "quantile",
   ...
 )
 }
@@ -59,6 +61,12 @@ for details).}
 passed down to the \pkg{sandwich}-function specified in
 \code{vcov_estimation}.}
 
+\item{dispersion_function, interval_function}{These arguments are only used in
+the context of bootstrapped and Bayesian models. Possible values are
+\code{dispersion_function = c("sd", "mad")} and
+\code{interval_function = c("quantile", "hdi", "eti")}. For the latter, the
+\pkg{bayestestR} package is required.}
+
 \item{...}{Not used for now.}
 }
 \value{
@@ -74,15 +82,42 @@ data(mtcars)
 # Linear model
 x <- lm(mpg ~ cyl + hp, data = mtcars)
 predictions <- predict(x)
-get_predicted_ci(x, predictions, ci_type = "prediction")
-get_predicted_ci(x, predictions, ci_type = "confidence")
+ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")
+head(ci_vals)
+ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
+head(ci_vals)
 
 predictions <- get_predicted(x, iterations = 500)
 get_predicted_ci(x, predictions)
 
+if (require("bayestestR")) {
+  ci_vals <- get_predicted_ci(x, predictions, ci = c(0.80, 0.95))
+  head(ci_vals)
+  bayestestR::reshape_ci(ci_vals)
+
+  ci_vals <- get_predicted_ci(x,
+                              predictions,
+                              dispersion_function = "MAD",
+                              interval_function = "HDI")
+  head(ci_vals)
+}
+
+
 # Logistic model
 x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 predictions <- predict(x, type = "link")
-get_predicted_ci(x, predictions, ci_type = "prediction")
-get_predicted_ci(x, predictions, ci_type = "confidence")
+ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")
+head(ci_vals)
+ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
+head(ci_vals)
+
+\dontrun{
+# Bayesian models
+if (require("rstanarm")) {
+  x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
+  predictions <- get_predicted(x)
+  predictions
+  as.data.frame(predictions, include_iterations = FALSE)
+}
+}
 }

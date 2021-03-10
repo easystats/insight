@@ -36,6 +36,11 @@
 #' @param vcov_args List of named vectors, used as additional arguments that are
 #'   passed down to the \pkg{sandwich}-function specified in
 #'   \code{vcov_estimation}.
+#' @param dispersion_function,interval_function These arguments are only used in
+#'   the context of bootstrapped and Bayesian models. Possible values are
+#'   \code{dispersion_function = c("sd", "mad")} and
+#'   \code{interval_function = c("quantile", "hdi", "eti")}. For the latter, the
+#'   \pkg{bayestestR} package is required.
 #' @param ... Not used for now.
 #'
 #'
@@ -48,17 +53,44 @@
 #' # Linear model
 #' x <- lm(mpg ~ cyl + hp, data = mtcars)
 #' predictions <- predict(x)
-#' get_predicted_ci(x, predictions, ci_type = "prediction")
-#' get_predicted_ci(x, predictions, ci_type = "confidence")
+#' ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")
+#' head(ci_vals)
+#' ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
+#' head(ci_vals)
 #'
 #' predictions <- get_predicted(x, iterations = 500)
 #' get_predicted_ci(x, predictions)
 #'
+#' if (require("bayestestR")) {
+#'   ci_vals <- get_predicted_ci(x, predictions, ci = c(0.80, 0.95))
+#'   head(ci_vals)
+#'   bayestestR::reshape_ci(ci_vals)
+#'
+#'   ci_vals <- get_predicted_ci(x,
+#'                               predictions,
+#'                               dispersion_function = "MAD",
+#'                               interval_function = "HDI")
+#'   head(ci_vals)
+#' }
+#'
+#'
 #' # Logistic model
 #' x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 #' predictions <- predict(x, type = "link")
-#' get_predicted_ci(x, predictions, ci_type = "prediction")
-#' get_predicted_ci(x, predictions, ci_type = "confidence")
+#' ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")
+#' head(ci_vals)
+#' ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
+#' head(ci_vals)
+#'
+#' \dontrun{
+#' # Bayesian models
+#' if (require("rstanarm")) {
+#'   x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
+#'   predictions <- get_predicted(x)
+#'   predictions
+#'   as.data.frame(predictions, include_iterations = FALSE)
+#' }
+#' }
 #' @importFrom stats median sd quantile
 #' @export
 get_predicted_ci <- function(x,
@@ -69,38 +101,30 @@ get_predicted_ci <- function(x,
                              vcov_estimation = NULL,
                              vcov_type = NULL,
                              vcov_args = NULL,
+                             dispersion_function = "sd",
+                             interval_function = "quantile",
                              ...) {
-  if ("iterations" %in% names(attributes(predictions))) {
-    iter <- attributes(predictions)$iterations
-    se <- data.frame(SE = apply(iter, 1, stats::sd))
 
-    if (model_info(x)$is_bayesian) { # Bayesian --------------------------------
-
-      if (ci_type == "confidence") {
-        out <- data.frame(
-          CI_low = apply(iter, 1, stats::quantile, probs = (1 - ci) / 2, na.rm = TRUE),
-          CI_high = apply(iter, 1, stats::quantile, probs = (1 + ci) / 2, na.rm = TRUE)
-        )
-      } else {
-        out <- as.data.frame(rstantools::predictive_interval(x, newdata = data, prob = ci))
-        names(out) <- c("CI_low", "CI_high")
-      }
-    } else { # Bootstrapped ----------------------------------------------------
-      out <- data.frame(
-        CI_low = apply(iter, 1, stats::quantile, probs = (1 - ci) / 2, na.rm = TRUE),
-        CI_high = apply(iter, 1, stats::quantile, probs = (1 + ci) / 2, na.rm = TRUE)
-      )
-    }
-
-    out <- cbind(se, out)
-  } else { # Regular -----------------------------------------------------------
-    # Get SE
-    se <- .get_predicted_ci_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
-    # Convert to CI
-    out <- .get_predicted_se_to_ci(x, predictions, se = se, ci = ci)
+  # Predictive interval
+  if (model_info(x)$is_bayesian && ci_type == "prediction") {
+    se <- data.frame(SE = apply(attributes(predictions)$iterations, 1, stats::sd))
+    out <- as.data.frame(rstantools::predictive_interval(x, newdata = data, prob = ci))
+    names(out) <- c("CI_low", "CI_high")
+    return(cbind(se, out))
   }
 
-  out
+  # If draws are present
+  if ("iterations" %in% names(attributes(predictions))) {
+    out <- .get_predicted_ci_compute_interval(iter = attributes(predictions)$iterations,
+                                              ci = ci,
+                                              dispersion_function,
+                                              interval_function)
+    return(out)
+  }
+
+  # Analytical solution
+  se <- .get_predicted_ci_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
+  .get_predicted_se_to_ci(x, predictions, se = se, ci = ci)
 }
 
 
@@ -278,4 +302,53 @@ get_predicted_ci <- function(x,
   }
 
   data.frame(SE = se, CI_low = ci_low, CI_high = ci_high)
+}
+
+
+
+# Interval helpers --------------------------------------------------------
+
+#' @importFrom stats quantile sd mad
+.get_predicted_ci_compute_interval <- function(iter, ci = 0.95, dispersion_function = "SD", interval_function = "quantile") {
+  data <- as.data.frame(t(iter))  # Reshape
+
+  # Dispersion
+  if(is.character(dispersion_function)) {
+    dispersion_function <- match.arg(tolower(dispersion_function), c("sd", "mad"))
+    if(dispersion_function == "sd") {
+      se <- apply(data, 2, stats::sd)
+    } else if(dispersion_function == "mad") {
+      se <- apply(data, 2, stats::mad)
+    } else{
+      stop("`dispersion_function` argument not recognized.")
+    }
+  } else {
+    se <- apply(data, 2, dispersion_function)
+  }
+
+  # Interval
+  interval_function <- match.arg(tolower(interval_function), c("quantile", "hdi", "eti"))
+  if(dispersion_function == "quantile") {
+    out <- data.frame(Parameter = 1:length(se))
+    for(i in ci) {
+      temp <- data.frame(
+        CI_low = apply(iter, 1, stats::quantile, probs = (1 - i) / 2, na.rm = TRUE),
+        CI_high = apply(iter, 1, stats::quantile, probs = (1 + i) / 2, na.rm = TRUE)
+      )
+      names(temp) <- paste0(c("CI_low_", "CI_high_"), i)
+      out <- cbind(out, temp)
+    }
+    if(length(ci) == 1) names(out) <- c("Parameter", "CI_low", "CI_high")
+  } else {
+    if (!requireNamespace("bayestestR", quietly = TRUE)) {
+      stop("Package `bayestestR` needed for this function. Please install and try again.")
+    }
+    out <- as.data.frame(bayestestR::ci(data, ci = ci, method = interval_function))
+    if(length(ci) > 1) out <- bayestestR::reshape_ci(out)
+
+  }
+  out$Parameter <- out$CI <- NULL
+  out <- cbind(data.frame(SE = se), out)
+  row.names(out) <- NULL
+  out
 }
