@@ -39,12 +39,12 @@ print.get_predicted <- function(x, ...) {
 
 
 #' @export
-as.data.frame.get_predicted <- function(x, ..., include_iterations = TRUE) {
+as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
   out <- data.frame("Predicted" = as.numeric(x))
   if ("ci_data" %in% names(attributes(x))) {
     out <- cbind(out, attributes(x)$ci_data)
   }
-  if ("iterations" %in% names(attributes(x)) && include_iterations == TRUE) {
+  if ("iterations" %in% names(attributes(x)) && keep_iterations == TRUE) {
     out <- cbind(out, attributes(x)$iterations)
   }
 
@@ -55,7 +55,7 @@ as.data.frame.get_predicted <- function(x, ..., include_iterations = TRUE) {
 
 #' @export
 summary.get_predicted <- function(object, ...) {
-  as.data.frame(object, include_iterations = FALSE, ...)
+  as.data.frame(object, keep_iterations = FALSE, ...)
 }
 
 

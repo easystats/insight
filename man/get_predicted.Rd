@@ -70,14 +70,15 @@ get_predicted(x, predict = "prediction")
 as.data.frame(predictions)
 
 # Bootsrapped
-as.data.frame(get_predicted(x, iterations = 100), include_iterations = FALSE)
+as.data.frame(get_predicted(x, iterations = 4))
+summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
 \dontrun{
 # Bayesian models
 if (require("rstanarm")) {
   x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
   predictions <- get_predicted(x)
   predictions
-  as.data.frame(predictions, include_iterations = FALSE)
+  as.data.frame(predictions, keep_iterations = FALSE)
 }
 }
 }

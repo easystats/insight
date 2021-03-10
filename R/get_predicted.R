@@ -41,14 +41,15 @@
 #' as.data.frame(predictions)
 #'
 #' # Bootsrapped
-#' as.data.frame(get_predicted(x, iterations = 100), include_iterations = FALSE)
+#' as.data.frame(get_predicted(x, iterations = 4))
+#' summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
 #' \dontrun{
 #' # Bayesian models
 #' if (require("rstanarm")) {
 #'   x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
 #'   predictions <- get_predicted(x)
 #'   predictions
-#'   as.data.frame(predictions, include_iterations = FALSE)
+#'   as.data.frame(predictions, keep_iterations = FALSE)
 #' }
 #' }
 #' @export
@@ -281,15 +282,18 @@ get_predicted.stanreg <- function(x, data = NULL, predict = "relation", iteratio
   # Get draws
   if (args$predict %in% c("link")) {
     draws <- rstantools::posterior_linpred(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
-  } else {
+  } else if (args$predict %in% c("relation")) {
     draws <- rstantools::posterior_epred(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
+  } else {
+    draws <- rstantools::posterior_predict(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
   }
   draws <- as.data.frame(t(draws))
   names(draws) <- gsub("^V(\\d+)$", "iter_\\1", names(draws))
 
   # Get predictions (summarize)
-  predictions <- apply(draws, 1, centrality_function)
-  attr(predictions, "iterations") <- draws
+  predictions <- .get_predicted_centrality_from_draws(x,
+                                                      draws,
+                                                      centrality_function)
 
   # Output
   ci_data <- get_predicted_ci(x, predictions = predictions, data = args$data, ci_type = args$ci_type, ...)
@@ -482,11 +486,25 @@ get_predicted.crr <- function(x, ...) {
     draws <- boot::boot(data, boot_fun, R = iterations, ...)
   }
 
+  # Format draws
   draws <- as.data.frame(t(draws$t))
   names(draws) <- paste0("iter_", 1:ncol(draws))
-  draws
 
-  predictions <- apply(draws, 1, centrality_function)
-  attr(predictions, "iterations") <- draws
+  .get_predicted_centrality_from_draws(x, draws, centrality_function)
+}
+
+
+
+
+
+.get_predicted_centrality_from_draws <- function(x, iter, centrality_function = stats::median) {
+
+  if(model_info(x)$is_binomial) {
+    # For 0-1 values, median returns 0-1 so makes little sense
+    predictions <- apply(draws, 1, mean)
+  } else {
+    predictions <- apply(draws, 1, centrality_function)
+  }
+  attr(predictions, "iterations") <- iter
   predictions
 }

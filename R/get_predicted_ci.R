@@ -108,15 +108,10 @@ get_predicted_ci <- function(x,
   # If draws are present
   if ("iterations" %in% names(attributes(predictions))) {
     iter <- attributes(predictions)$iteration
-    se <- .get_predicted_se_from_iter(iter = iter, dispersion_function)
 
-    # Predictive interval
-    if (model_info(x)$is_bayesian && ci_type == "prediction") {
-      out <- as.data.frame(rstantools::predictive_interval(x, newdata = data, prob = ci))
-      names(out) <- c("CI_low", "CI_high")
-    } else {
-      out <- .get_predicted_interval_from_iter(iter = iter, ci = ci, interval_function)
-    }
+    se <- .get_predicted_se_from_iter(iter = iter, dispersion_function)
+    out <- .get_predicted_interval_from_iter(iter = iter, ci = ci, interval_function)
+
     return(cbind(se, out))
   }
 
@@ -313,25 +308,25 @@ get_predicted_ci <- function(x,
 #' @importFrom stats qbinom qpois
 .get_predicted_pi_glm <- function(x, predictions, ci = ci) {
 
-  mi <- model_info(x)
-  link <- link_function(x)
-  inv <- link_inverse(x)
+  info <- model_info(x)
+  linkfun <- link_function(x)
+  linkinv <- link_inverse(x)
   alpha <- 1 - ci
   prob <- c(alpha/2, 1-alpha/2)
 
-  if (mi$is_binomial) {
-    p <- inv(predictions)
-    lwr <- qbinom(prob[1], size = 1, prob = p)
-    upr <- qbinom(prob[2], size = 1, prob = p)
-  } else if (mi$is_poisson) {
-    rate <- inv(predictions)
-    lwr <- qpois(prob[1], lambda = rate)
-    upr <- qpois(prob[2], lambda = rate)
+  if (info$is_binomial) {
+    p <- linkinv(predictions)
+    ci_low <- stats::qbinom(prob[1], size = 1, prob = p)
+    ci_high <- stats::qbinom(prob[2], size = 1, prob = p)
+  } else if (info$is_poisson) {
+    rate <- linkinv(predictions)
+    ci_low <- stats::qpois(prob[1], lambda = rate)
+    ci_high <- stats::qpois(prob[2], lambda = rate)
   }
 
   data.frame(
-    CI_low = link(lwr),
-    CI_high = link(upr)
+    CI_low = linkfun(ci_low),
+    CI_high = linkfun(ci_high)
   )
 }
 
