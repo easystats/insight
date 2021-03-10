@@ -265,39 +265,39 @@ the context of bootstrapped and Bayesian models. Possible values are
 #&gt; Valiant           0.7777664 19.72168 22.90310</div><div class='input'>
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_predicted.html'>get_predicted</a></span><span class='op'>(</span><span class='va'>x</span>, iterations <span class='op'>=</span> <span class='fl'>500</span><span class='op'>)</span>
 <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           SE    CI_low  CI_high
-#&gt; 1  0.7031546 19.934530 22.67952
-#&gt; 2  0.7031546 19.934530 22.67952
-#&gt; 3  1.1750487 23.801814 28.36394
-#&gt; 4  0.7031546 19.934530 22.67952
-#&gt; 5  0.7225206 13.974464 16.80481
-#&gt; 6  0.7459755 19.969942 22.94548
-#&gt; 7  0.9627085 11.492710 15.31728
-#&gt; 8  1.1523062 24.477470 28.97491
-#&gt; 9  1.1827347 23.764067 28.33274
-#&gt; 10 0.6206705 19.787201 22.23289
-#&gt; 11 0.6206705 19.787201 22.23289
-#&gt; 12 0.6917564 13.890161 16.67008
-#&gt; 13 0.6917564 13.890161 16.67008
-#&gt; 14 0.6917564 13.890161 16.67008
-#&gt; 15 0.6542993 13.407237 16.08918
-#&gt; 16 0.6970883 13.058719 15.89435
-#&gt; 17 0.8100814 12.263706 15.59144
-#&gt; 18 1.1448026 24.418809 28.93036
-#&gt; 19 1.1841021 24.624125 29.19990
-#&gt; 20 1.1463916 24.433474 28.95774
-#&gt; 21 1.1911197 23.690444 28.31186
-#&gt; 22 0.9522121 14.163479 17.95865
-#&gt; 23 0.9522121 14.163479 17.95865
-#&gt; 24 0.9627085 11.492710 15.31728
-#&gt; 25 0.7225206 13.974464 16.80481
-#&gt; 26 1.1448026 24.418809 28.93036
-#&gt; 27 1.1680755 23.865687 28.39933
-#&gt; 28 1.2814755 23.162466 28.14862
-#&gt; 29 1.1889021 10.317412 15.13272
-#&gt; 30 0.8376374 18.091193 21.44328
-#&gt; 31 2.1577888  6.167162 14.63238
-#&gt; 32 1.2552411 23.293597 28.18889</div><div class='input'>
+</div><div class='output co'>#&gt;            SE    CI_low  CI_high
+#&gt; V1  0.7031546 19.934530 22.67952
+#&gt; V2  0.7031546 19.934530 22.67952
+#&gt; V3  1.1750487 23.801814 28.36394
+#&gt; V4  0.7031546 19.934530 22.67952
+#&gt; V5  0.7225206 13.974464 16.80481
+#&gt; V6  0.7459755 19.969942 22.94548
+#&gt; V7  0.9627085 11.492710 15.31728
+#&gt; V8  1.1523062 24.477470 28.97491
+#&gt; V9  1.1827347 23.764067 28.33274
+#&gt; V10 0.6206705 19.787201 22.23289
+#&gt; V11 0.6206705 19.787201 22.23289
+#&gt; V12 0.6917564 13.890161 16.67008
+#&gt; V13 0.6917564 13.890161 16.67008
+#&gt; V14 0.6917564 13.890161 16.67008
+#&gt; V15 0.6542993 13.407237 16.08918
+#&gt; V16 0.6970883 13.058719 15.89435
+#&gt; V17 0.8100814 12.263706 15.59144
+#&gt; V18 1.1448026 24.418809 28.93036
+#&gt; V19 1.1841021 24.624125 29.19990
+#&gt; V20 1.1463916 24.433474 28.95774
+#&gt; V21 1.1911197 23.690444 28.31186
+#&gt; V22 0.9522121 14.163479 17.95865
+#&gt; V23 0.9522121 14.163479 17.95865
+#&gt; V24 0.9627085 11.492710 15.31728
+#&gt; V25 0.7225206 13.974464 16.80481
+#&gt; V26 1.1448026 24.418809 28.93036
+#&gt; V27 1.1680755 23.865687 28.39933
+#&gt; V28 1.2814755 23.162466 28.14862
+#&gt; V29 1.1889021 10.317412 15.13272
+#&gt; V30 0.8376374 18.091193 21.44328
+#&gt; V31 2.1577888  6.167162 14.63238
+#&gt; V32 1.2552411 23.293597 28.18889</div><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/bayestestR/'>"bayestestR"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>ci_vals</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span>, ci <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.80</span>, <span class='fl'>0.95</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
@@ -309,13 +309,13 @@ the context of bootstrapped and Bayesian models. Possible values are
                               interval_function <span class='op'>=</span> <span class='st'>"HDI"</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: bayestestR</span></div><div class='output co'>#&gt; <span class='message'>Note: The default CI width (currently `ci=0.89`) might change in future versions (see https://github.com/easystats/bayestestR/discussions/250). To prevent any issues, please set it explicitly when using bayestestR functions, via the 'ci' argument.</span></div><div class='output co'>#&gt;          SE   CI_low  CI_high
-#&gt; 1 0.6706930 19.93032 22.67184
-#&gt; 2 0.6706930 19.93032 22.67184
-#&gt; 3 1.2152205 23.90788 28.39651
-#&gt; 4 0.6706930 19.93032 22.67184
-#&gt; 5 0.6522580 13.96751 16.81325
-#&gt; 6 0.6982206 19.94684 22.90819</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: bayestestR</span></div><div class='output co'>#&gt; <span class='message'>Note: The default CI width (currently `ci=0.89`) might change in future versions (see https://github.com/easystats/bayestestR/discussions/250). To prevent any issues, please set it explicitly when using bayestestR functions, via the 'ci' argument.</span></div><div class='output co'>#&gt;           SE   CI_low  CI_high
+#&gt; V1 0.6706930 19.93032 22.67184
+#&gt; V2 0.6706930 19.93032 22.67184
+#&gt; V3 1.2152205 23.90788 28.39651
+#&gt; V4 0.6706930 19.93032 22.67184
+#&gt; V5 0.6522580 13.96751 16.81325
+#&gt; V6 0.6982206 19.94684 22.90819</div><div class='input'>
 
 <span class='co'># Logistic model</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
