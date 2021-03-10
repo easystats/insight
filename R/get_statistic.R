@@ -893,7 +893,7 @@ get_statistic.sarlm <- function(x, ...) {
   s <- summary(x)
   stat <- data.frame(
     Parameter = find_parameters(x, flatten = TRUE),
-    Statistic = as.vector(s[, 3]),
+    Statistic = as.vector(s$Coef[, 3]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
