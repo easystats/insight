@@ -888,6 +888,23 @@ get_statistic.negbinirr <- get_statistic.logitor
 # Other models -------------------------------------------------------
 
 
+#' @export
+get_statistic.sarlm <- function(x, ...) {
+  s <- summary(x)
+  stat <- data.frame(
+    Parameter = find_parameters(x, flatten = TRUE),
+    Statistic = as.vector(s[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  stat <- .remove_backticks_from_parameter_names(stat)
+  attr(stat, "statistic") <- find_statistic(x)
+
+  stat
+}
+
+
 #' @rdname get_statistic
 #' @export
 get_statistic.mjoint <- function(x, component = c("all", "conditional", "survival"), ...) {

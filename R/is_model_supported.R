@@ -192,6 +192,7 @@ supported_models <- function() {
     "rq",
     "rqs",
     "rqss",
+    "sarlm",
     "scam",
     "sem",
     "speedlm",
