@@ -179,6 +179,7 @@ is_regression_model <- function(x) {
     "iv_robust",
     "ivreg",
     "ivprobit",
+    "joint",
     "lavaan",
     "lm",
     "lm_robust",
