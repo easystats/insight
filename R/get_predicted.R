@@ -494,7 +494,7 @@ get_predicted.crr <- function(x, ...) {
 
 
 
-.get_predicted_centrality_from_draws <- function(x, iter, centrality_function = base::mean) {
+.get_predicted_centrality_from_draws <- function(x, iter, centrality_function = base::mean, ...) {
 
   predictions <- apply(iter, 1, centrality_function)
   attr(predictions, "iterations") <- iter
