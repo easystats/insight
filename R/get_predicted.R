@@ -501,9 +501,9 @@ get_predicted.crr <- function(x, ...) {
 
   if(model_info(x)$is_binomial) {
     # For 0-1 values, median returns 0-1 so makes little sense
-    predictions <- apply(draws, 1, mean)
+    predictions <- apply(iter, 1, mean)
   } else {
-    predictions <- apply(draws, 1, centrality_function)
+    predictions <- apply(iter, 1, centrality_function)
   }
   attr(predictions, "iterations") <- iter
   predictions
