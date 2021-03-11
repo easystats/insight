@@ -7,8 +7,7 @@
 #' @param predict Can be \code{"link"}, \code{"relation"} (default), or \code{"prediction"}. This modulates the scale of the output as well as the type of certainty interval. More specifically, \code{"link"} gives an output on the link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). \code{"relation"} (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). Finally, \code{"predict"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). gives Read more about in the \strong{Details} section below.
 #' @param iterations For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.
 #' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
-#' @param include_smooth For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it.
-#' @param centrality_function The function used to obtain a centrality estimate for bootstrapped or Bayesian models. Usually \code{median()} (default), \code{mean()}, or \code{bayestestR::map_estimate()}.
+#' @param include_smooth For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it. (default), \code{mean()}, or \code{bayestestR::map_estimate()}.
 #' @param ... Other argument to be passed for instance to \code{\link{get_predicted_ci}}.
 #'
 #' @seealso get_predicted_ci
@@ -272,7 +271,7 @@ get_predicted.list <- get_predicted.gam # gamm4
 
 #' @rdname get_predicted
 #' @export
-get_predicted.stanreg <- function(x, data = NULL, predict = "relation", iterations = NULL, include_random = TRUE, include_smooth = TRUE, centrality_function = stats::median, ...) {
+get_predicted.stanreg <- function(x, data = NULL, predict = "relation", iterations = NULL, include_random = TRUE, include_smooth = TRUE, ...) {
   if (!requireNamespace("rstantools", quietly = TRUE)) {
     stop("Package `rstantools` needed for this function to work. Please install it.")
   }
@@ -291,9 +290,7 @@ get_predicted.stanreg <- function(x, data = NULL, predict = "relation", iteratio
   names(draws) <- gsub("^V(\\d+)$", "iter_\\1", names(draws))
 
   # Get predictions (summarize)
-  predictions <- .get_predicted_centrality_from_draws(x,
-                                                      draws,
-                                                      centrality_function)
+  predictions <- .get_predicted_centrality_from_draws(x, draws, ...)
 
   # Output
   ci_data <- get_predicted_ci(x, predictions = predictions, data = args$data, ci_type = args$ci_type, ...)
@@ -462,7 +459,7 @@ get_predicted.crr <- function(x, ...) {
 
 
 #' @importFrom stats predict update
-.get_predicted_boot <- function(x, data = NULL, predict_function = NULL, iterations = 500, centrality_function = stats::median, ...) {
+.get_predicted_boot <- function(x, data = NULL, predict_function = NULL, iterations = 500, ...) {
   if (is.null(data)) data <- get_data(x)
 
   # TODO: how to make it work with the seed argument??
@@ -490,21 +487,16 @@ get_predicted.crr <- function(x, ...) {
   draws <- as.data.frame(t(draws$t))
   names(draws) <- paste0("iter_", 1:ncol(draws))
 
-  .get_predicted_centrality_from_draws(x, draws, centrality_function)
+  .get_predicted_centrality_from_draws(x, draws, ...)
 }
 
 
 
 
 
-.get_predicted_centrality_from_draws <- function(x, iter, centrality_function = stats::median) {
+.get_predicted_centrality_from_draws <- function(x, iter, centrality_function = base::mean) {
 
-  if(model_info(x)$is_binomial) {
-    # For 0-1 values, median returns 0-1 so makes little sense
-    predictions <- apply(iter, 1, mean)
-  } else {
-    predictions <- apply(iter, 1, centrality_function)
-  }
+  predictions <- apply(iter, 1, centrality_function)
   attr(predictions, "iterations") <- iter
   predictions
 }

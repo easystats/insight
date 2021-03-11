@@ -63,12 +63,12 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
     # vs. Bayesian
     xbayes <- rstanarm::stan_glm(mpg ~ cyl + hp, data = mtcars, refresh = 0, seed = 333)
-    rez <- as.data.frame(get_predicted(x, type = "link"))
-    rezbayes <- summary(get_predicted(xbayes, type = "link"))
+    rez <- as.data.frame(get_predicted(x, predict = "link"))
+    rezbayes <- summary(get_predicted(xbayes, predict = "link"))
     expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
     expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
-    rez <- as.data.frame(get_predicted(x, type = "prediction"))
-    rezbayes <- summary(get_predicted(xbayes, type = "prediction"))
+    rez <- as.data.frame(get_predicted(x, predict = "prediction"))
+    rezbayes <- summary(get_predicted(xbayes, predict = "prediction"))
     expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
     expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
   })

@@ -17,7 +17,6 @@ get_predicted(x, data = NULL, ...)
   iterations = NULL,
   include_random = TRUE,
   include_smooth = TRUE,
-  centrality_function = stats::median,
   ...
 )
 }
@@ -34,9 +33,7 @@ get_predicted(x, data = NULL, ...)
 
 \item{include_random}{If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.}
 
-\item{include_smooth}{For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it.}
-
-\item{centrality_function}{The function used to obtain a centrality estimate for bootstrapped or Bayesian models. Usually \code{median()} (default), \code{mean()}, or \code{bayestestR::map_estimate()}.}
+\item{include_smooth}{For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it. (default), \code{mean()}, or \code{bayestestR::map_estimate()}.}
 }
 \value{
 The fitted values (i.e. predictions for the response). For Bayesian or bootstrapped models (when \code{iterations != NULL}), this will be a dataframe with all iterations as columns (observations are still rows).
