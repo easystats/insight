@@ -523,11 +523,20 @@ get_parameters.blavaan <- function(x, summary = FALSE, centrality = "mean", ...)
   draws <- blavaan::blavInspect(x, "draws")
   posteriors <- as.data.frame(as.matrix(draws))
 
-  names(posteriors) <- names(lavaan::coef(x))
+  param_tab <- lavaan::parameterEstimates(x)
+  params <- paste0(param_tab$lhs, param_tab$op, param_tab$rhs)
 
-  # remove invalid / unknown
-  params <- find_parameters(x, flatten = TRUE)
-  posteriors <- posteriors[colnames(posteriors) %in% params]
+  coef_labels <- names(lavaan::coef(x))
+  are_labels <- !coef_labels %in% params
+  if (any(are_labels)) {
+    unique_labels <- unique(coef_labels[are_labels])
+    for (ll in seq_along(unique_labels)) {
+      coef_labels[coef_labels == unique_labels[ll]] <-
+        params[param_tab$label == unique_labels[ll]]
+    }
+  }
+
+  colnames(posteriors) <- coef_labels
 
   if (isTRUE(summary)) {
     posteriors <- .summary_of_posteriors(posteriors, centrality = centrality)
