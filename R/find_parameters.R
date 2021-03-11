@@ -194,31 +194,31 @@ find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
     stop("Package 'lavaan' required for this function to work. Please install it.")
   }
 
-  pe <- lavaan::parameterEstimates(x)
-  pe <- pe[pe$label == "", ]
+  param_tab <- lavaan::parameterEstimates(x)
+  params <- paste0(param_tab$lhs, param_tab$op, param_tab$rhs)
+
+  coef_labels <- names(lavaan::coef(x))
+  are_labels <- !coef_labels %in% params
+  if (any(are_labels)) {
+    unique_labels <- unique(coef_labels[are_labels])
+    for (ll in seq_along(unique_labels)) {
+      coef_labels[coef_labels == unique_labels[ll]] <-
+        params[param_tab$label == unique_labels[ll]]
+    }
+  }
 
   pars <- data.frame(
-    pars = paste0(pe$lhs, pe$op, pe$rhs),
-    comp = pe$op,
+    pars = coef_labels,
+    comp = NA,
     stringsAsFactors = FALSE
   )
 
-  pars$comp[pars$comp == "~"] <- "regression"
-  pars$comp[pars$comp == "=~"] <- "latent"
-  pars$comp[pars$comp == "~~"] <- "residual"
-  pars$comp[pars$comp == "~1"] <- "intercept"
+  pars$comp[grepl("=~", pars$pars, fixed = TRUE)] <- "latent"
+  pars$comp[grepl("~~", pars$pars, fixed = TRUE)] <- "residual"
+  pars$comp[grepl("~1", pars$pars, fixed = TRUE)] <- "intercept"
+  pars$comp[is.na(pars$comp)] <- "regression"
 
-  pos_latent <- which(pars$comp == "=~")
-  pos_residual <- which(pars$comp == "~~")
-  pos_intercept <- which(pars$comp == "~1")
-  pos_regression <- which(pars$comp == "~")
-
-  pos <- suppressWarnings(c(min(pos_latent), min(pos_residual), min(pos_intercept), min(pos_regression)))
-
-  comp_levels <- c("latent", "residual", "intercept", "regression")
-  comp_levels <- comp_levels[order(pos)]
-
-  pars$comp <- factor(pars$comp, levels = comp_levels)
+  pars$comp <- factor(pars$comp, levels = unique(pars$comp))
   pars <- split(pars, pars$comp)
   pars <- .compact_list(lapply(pars, function(i) i$pars))
 

@@ -242,18 +242,12 @@ clean_parameters.lavaan <- function(x, ...) {
 
 #' @export
 clean_parameters.blavaan <- function(x, ...) {
-  params <- find_parameters(x)
-
-  do.call(rbind, lapply(names(params), function(i) {
-    data.frame(
-      Parameter = params[[i]],
-      Component = i,
-      Group = "",
-      Function = "",
-      Cleaned_Parameter = params[[i]],
-      stringsAsFactors = FALSE
-    )
-  }))
+  params <- get_parameters(x, summary = TRUE)
+  params$Estimate <- NULL
+  params$Group <- ""
+  params$Function <- ""
+  params$Cleaned_Parameter = params$Parameter
+  params
 }
 
 

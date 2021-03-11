@@ -540,6 +540,12 @@ get_parameters.blavaan <- function(x, summary = FALSE, centrality = "mean", ...)
 
   if (isTRUE(summary)) {
     posteriors <- .summary_of_posteriors(posteriors, centrality = centrality)
+    posteriors$Component <- NA
+
+    posteriors$Component[grepl("=~", posteriors$Parameter, fixed = TRUE)] <- "latent"
+    posteriors$Component[grepl("~~", posteriors$Parameter, fixed = TRUE)] <- "residual"
+    posteriors$Component[grepl("~1", posteriors$Parameter, fixed = TRUE)] <- "intercept"
+    posteriors$Component[is.na(posteriors$Component)] <- "regression"
   }
 
   posteriors
