@@ -70,7 +70,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     rez <- as.data.frame(get_predicted(x, predict = "prediction"))
     rezbayes <- summary(get_predicted(xbayes, predict = "prediction"))
     expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
-    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
+    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
   })
 
   test_that("get_predicted - glm", {

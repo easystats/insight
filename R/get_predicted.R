@@ -280,11 +280,11 @@ get_predicted.stanreg <- function(x, data = NULL, predict = "relation", iteratio
 
   # Get draws
   if (args$predict %in% c("link")) {
-    draws <- rstantools::posterior_linpred(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
+    draws <- rstantools::posterior_linpred(x, newdata = args$data, re.form = args$re.form, draws = iterations, ...)
   } else if (args$predict %in% c("relation")) {
-    draws <- rstantools::posterior_epred(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
+    draws <- rstantools::posterior_epred(x, newdata = args$data, re.form = args$re.form, draws = iterations, ...)
   } else {
-    draws <- rstantools::posterior_predict(x, newdata = args$newdata, re.form = args$re.form, draws = iterations, ...)
+    draws <- rstantools::posterior_predict(x, newdata = args$data, re.form = args$re.form, draws = iterations, ...)
   }
   draws <- as.data.frame(t(draws))
   names(draws) <- gsub("^V(\\d+)$", "iter_\\1", names(draws))
