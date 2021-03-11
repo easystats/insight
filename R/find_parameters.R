@@ -194,17 +194,31 @@ find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
     stop("Package 'lavaan' required for this function to work. Please install it.")
   }
 
+  pe <- lavaan::parameterEstimates(x)
+  pe <- pe[pe$label == "", ]
+
   pars <- data.frame(
-    pars = colnames(get_parameters(x)),
-    comp = NA,
+    pars = paste0(pe$lhs, pe$op, pe$rhs),
+    comp = pe$op,
     stringsAsFactors = FALSE
   )
 
-  pars$comp[grepl("~", pars$pars, fixed = TRUE)] <- "regression"
-  pars$comp[grepl("=~", pars$pars, fixed = TRUE)] <- "latent"
-  pars$comp[grepl("~~", pars$pars, fixed = TRUE)] <- "residual"
-  pars$comp[grepl("~1", pars$pars, fixed = TRUE)] <- "intercept"
+  pars$comp[pars$comp == "~"] <- "regression"
+  pars$comp[pars$comp == "=~"] <- "latent"
+  pars$comp[pars$comp == "~~"] <- "residual"
+  pars$comp[pars$comp == "~1"] <- "intercept"
 
+  pos_latent <- which(pars$comp == "=~")
+  pos_residual <- which(pars$comp == "~~")
+  pos_intercept <- which(pars$comp == "~1")
+  pos_regression <- which(pars$comp == "~")
+
+  pos <- suppressWarnings(c(min(pos_latent), min(pos_residual), min(pos_intercept), min(pos_regression)))
+
+  comp_levels <- c("latent", "residual", "intercept", "regression")
+  comp_levels <- comp_levels[order(pos)]
+
+  pars$comp <- factor(pars$comp, levels = comp_levels)
   pars <- split(pars, pars$comp)
   pars <- .compact_list(lapply(pars, function(i) i$pars))
 
