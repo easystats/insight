@@ -511,7 +511,7 @@ get_parameters.metaplus <- function(x, ...) {
 
 
 #' @export
-get_parameters.blavaan <- function(x, ...) {
+get_parameters.blavaan <- function(x, summary = FALSE, centrality = "mean", ...) {
   if (!requireNamespace("lavaan", quietly = TRUE)) {
     stop("Package 'lavaan' required for this function to work. Please install it.")
   }
@@ -524,6 +524,14 @@ get_parameters.blavaan <- function(x, ...) {
   posteriors <- as.data.frame(as.matrix(draws))
 
   names(posteriors) <- names(lavaan::coef(x))
+
+  # remove duplicated
+  posteriors <- posteriors[!duplicated(colnames(posteriors))]
+
+  if (isTRUE(summary)) {
+    posteriors <- .summary_of_posteriors(posteriors, centrality = centrality)
+  }
+
   posteriors
 }
 

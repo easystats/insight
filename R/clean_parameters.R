@@ -242,7 +242,7 @@ clean_parameters.lavaan <- function(x, ...) {
 
 #' @export
 clean_parameters.blavaan <- function(x, ...) {
-  params <- get_parameters.lavaan(x)
+  params <- get_parameters(x)
 
   data.frame(
     Parameter = params$Parameter,
