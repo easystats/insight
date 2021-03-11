@@ -525,8 +525,9 @@ get_parameters.blavaan <- function(x, summary = FALSE, centrality = "mean", ...)
 
   names(posteriors) <- names(lavaan::coef(x))
 
-  # remove duplicated
-  posteriors <- posteriors[!duplicated(colnames(posteriors))]
+  # remove invalid / unknown
+  params <- find_parameters(x, flatten = TRUE)
+  posteriors <- posteriors[colnames(posteriors) %in% params]
 
   if (isTRUE(summary)) {
     posteriors <- .summary_of_posteriors(posteriors, centrality = centrality)

@@ -34,6 +34,9 @@
 
 * Fixed issue in `get_variance()` for models without intercept.
 
+* Fixed labelling issue in `get_parameters()` and `clean_parameters()` for 
+  `blavaan` models.
+
 # insight 0.13.1
 
 ## General

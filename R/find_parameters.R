@@ -205,19 +205,22 @@ find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
   pars$comp[grepl("~~", pars$pars, fixed = TRUE)] <- "residual"
   pars$comp[grepl("~1", pars$pars, fixed = TRUE)] <- "intercept"
 
+  # remove unknown
+  pars <- pars[!is.na(pars$comp), ]
+
   pos_latent <- grep("=~", pars$pars, fixed = TRUE)
   pos_residual <- grep("~~", pars$pars, fixed = TRUE)
   pos_intercept <- grep("~1", pars$pars, fixed = TRUE)
   pos_regression <- setdiff(1:nrow(pars), c(pos_latent, pos_residual, pos_intercept))
 
-  pos <- c(min(pos_latent), min(pos_residual), min(pos_intercept), min(pos_regression))
+  pos <- suppressWarnings(c(min(pos_latent), min(pos_residual), min(pos_intercept), min(pos_regression)))
 
   comp_levels <- c("latent", "residual", "intercept", "regression")
   comp_levels <- comp_levels[order(pos)]
 
   pars$comp <- factor(pars$comp, levels = comp_levels)
   pars <- split(pars, pars$comp)
-  pars <- lapply(pars, function(i) i$pars)
+  pars <- .compact_list(lapply(pars, function(i) i$pars))
 
   if (flatten) {
     unique(unlist(pars))
