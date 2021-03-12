@@ -13,6 +13,9 @@
 #' @details This function prints \code{text} directly to the console using
 #'   \code{cat()}, so no string is returned. \code{color_text()}, however,
 #'   returns only the formatted string, without using \code{cat()}.
+#'   \code{color_theme()} either returns \code{"dark"} when RStudio is used
+#'   with dark color scheme, \code{"light"} when it's used with light theme,
+#'   and \code{NULL} if the theme could not be detected.
 #'
 #' @return Nothing.
 #'
@@ -40,4 +43,25 @@ color_text <- function(text, color) {
 #' @export
 colour_text <- function(text, colour) {
   .colour(colour = colour, x = text)
+}
+
+#' @rdname print_color
+#' @export
+color_theme <- function() {
+  if (requireNamespace("rstudioapi", quietly = TRUE)) {
+    if (!rstudioapi::isAvailable()) {
+      return(NULL)
+    }
+    if (!rstudioapi::hasFun("getThemeInfo")) {
+      return(NULL)
+    }
+
+    theme <- rstudioapi::getThemeInfo()
+    if (isTRUE(theme$dark)) {
+      return("dark")
+    } else {
+      return("light")
+    }
+  }
+  return(NULL)
 }

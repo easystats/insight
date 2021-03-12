@@ -5,6 +5,7 @@
 \alias{print_colour}
 \alias{color_text}
 \alias{colour_text}
+\alias{color_theme}
 \title{Coloured console output}
 \usage{
 print_color(text, color)
@@ -14,6 +15,8 @@ print_colour(text, colour)
 color_text(text, color)
 
 colour_text(text, colour)
+
+color_theme()
 }
 \arguments{
 \item{text}{The text to print.}
@@ -34,6 +37,9 @@ Convenient function that allows coloured output in the console.
 This function prints \code{text} directly to the console using
   \code{cat()}, so no string is returned. \code{color_text()}, however,
   returns only the formatted string, without using \code{cat()}.
+  \code{color_theme()} either returns \code{"dark"} when RStudio is used
+  with dark color scheme, \code{"light"} when it's used with light theme,
+  and \code{NULL} if the theme could not be detected.
 }
 \examples{
 print_color("I'm blue dabedi dabedei", "blue")
