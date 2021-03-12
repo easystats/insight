@@ -158,7 +158,6 @@
   iterations <span class='op'>=</span> <span class='cn'>NULL</span>,
   include_random <span class='op'>=</span> <span class='cn'>TRUE</span>,
   include_smooth <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  centrality_function <span class='op'>=</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/r/stats/median.html'>median</a></span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -191,11 +190,7 @@
     </tr>
     <tr>
       <th>include_smooth</th>
-      <td><p>For General Additive Models (GAMs). If <code>FALSE</code>, will fix the value of the smooth to its average, so that the predictions are not depending on it.</p></td>
-    </tr>
-    <tr>
-      <th>centrality_function</th>
-      <td><p>The function used to obtain a centrality estimate for bootstrapped or Bayesian models. Usually <code><a href='https://rdrr.io/r/stats/median.html'>median()</a></code> (default), <code><a href='https://rdrr.io/r/base/mean.html'>mean()</a></code>, or <code><a href='https://easystats.github.io/bayestestR/reference/map_estimate.html'>bayestestR::map_estimate()</a></code>.</p></td>
+      <td><p>For General Additive Models (GAMs). If <code>FALSE</code>, will fix the value of the smooth to its average, so that the predictions are not depending on it. (default), <code><a href='https://rdrr.io/r/base/mean.html'>mean()</a></code>, or <code><a href='https://easystats.github.io/bayestestR/reference/map_estimate.html'>bayestestR::map_estimate()</a></code>.</p></td>
     </tr>
     </table>
 
@@ -279,8 +274,72 @@
 #&gt; Volvo 142E           25.76529 1.0175965 23.684073 27.84651</div><div class='input'>
 <span class='co'># Bootsrapped</span>
 <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, iterations <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in apply(draws, 1, centrality_function): object 'draws' not found</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, iterations <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Same as as.data.frame(..., keep_iterations = F)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'draws' not found</span></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+</div><div class='output co'>#&gt;     Predicted        SE    CI_low  CI_high   iter_1   iter_2    iter_3   iter_4
+#&gt; V1   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465
+#&gt; V2   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465
+#&gt; V3   26.68824 2.1071592 23.923281 28.45535 27.17221 28.54269 23.659855 27.37819
+#&gt; V4   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465
+#&gt; V5   15.13788 0.6993607 14.449638 16.00809 15.17414 14.88754 16.075708 14.41413
+#&gt; V6   21.50666 0.2661665 21.218778 21.82150 21.44688 21.84475 21.200284 21.53475
+#&gt; V7   13.70504 0.9691530 12.860329 14.57005 14.51349 14.57464 12.859324 12.87272
+#&gt; V8   27.32278 1.5728255 25.262793 28.63473 27.46478 28.68126 25.084254 28.06082
+#&gt; V9   26.64730 2.1423408 23.836861 28.44378 27.15333 28.53375 23.567958 27.33415
+#&gt; V10  21.13822 0.5763256 20.430601 21.72774 21.27699 21.76429 20.373213 21.13838
+#&gt; V11  21.13822 0.5763256 20.430601 21.72774 21.27699 21.76429 20.373213 21.13838
+#&gt; V12  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403
+#&gt; V13  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403
+#&gt; V14  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403
+#&gt; V15  14.52381 0.5199296 13.824308 14.88069 14.89101 14.75344 14.697258 13.75353
+#&gt; V16  14.31912 0.5784758 13.586160 14.79003 14.79663 14.70874 14.237774 13.53333
+#&gt; V17  14.01208 0.7481657 13.228939 14.65405 14.65506 14.64169 13.548549 13.20302
+#&gt; V18  27.24090 1.6402586 25.089953 28.61158 27.42703 28.66338 24.900460 27.97274
+#&gt; V19  27.52747 1.4071749 25.694894 28.69259 27.55916 28.72596 25.543737 28.28102
+#&gt; V20  27.26137 1.6233459 25.133163 28.61737 27.43647 28.66785 24.946409 27.99476
+#&gt; V21  26.60636 2.1775842 23.750441 28.43221 27.13446 28.52481 23.476061 27.29011
+#&gt; V22  15.64961 1.0691873 14.967235 17.08834 15.41009 14.99929 17.224417 14.96464
+#&gt; V23  15.64961 1.0691873 14.967235 17.08834 15.41009 14.99929 17.224417 14.96464
+#&gt; V24  13.70504 0.9691530 12.860329 14.57005 14.51349 14.57464 12.859324 12.87272
+#&gt; V25  15.13788 0.6993607 14.449638 16.00809 15.17414 14.88754 16.075708 14.41413
+#&gt; V26  27.24090 1.6402586 25.089953 28.61158 27.42703 28.66338 24.900460 27.97274
+#&gt; V27  26.72917 2.0720426 24.009701 28.46693 27.19108 28.55163 23.751752 27.42223
+#&gt; V28  26.27885 2.4614371 23.055655 28.34305 26.98345 28.45329 22.740888 26.93779
+#&gt; V29  13.31613 1.2812482 12.021408 14.47804 14.33417 14.48970 11.986305 12.45434
+#&gt; V30  20.07382 1.5283530 18.134607 21.47592 20.78622 21.53184 17.983899 19.99334
+#&gt; V31  11.86282 2.5413452  8.886492 14.13421 13.66407 14.17233  8.723972 10.89091
+#&gt; V32  26.36073 2.3901892 23.231920 28.36277 27.02120 28.47117 22.924681 27.02587</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, iterations <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Same as as.data.frame(..., keep_iterations = F)</span>
+</div><div class='output co'>#&gt;     Predicted        SE   CI_low  CI_high
+#&gt; V1   20.79277 0.4191720 20.40466 21.32894
+#&gt; V2   20.79277 0.4191720 20.40466 21.32894
+#&gt; V3   25.80472 1.6752669 24.17555 27.89555
+#&gt; V4   20.79277 0.4191720 20.40466 21.32894
+#&gt; V5   15.02221 1.4760667 13.08730 16.25470
+#&gt; V6   20.87179 0.4824623 20.39369 21.47334
+#&gt; V7   13.91592 0.8563141 13.18083 14.97353
+#&gt; V8   26.29465 1.4076209 24.74293 27.85412
+#&gt; V9   25.77311 1.6949509 24.13895 27.89822
+#&gt; V10  20.58731 0.2716659 20.41033 20.95349
+#&gt; V11  20.58731 0.2716659 20.41033 20.95349
+#&gt; V12  14.94319 1.4180929 13.09398 16.16318
+#&gt; V13  14.94319 1.4180929 13.09398 16.16318
+#&gt; V14  14.94319 1.4180929 13.09398 16.16318
+#&gt; V15  14.54809 1.1493426 13.12739 15.70562
+#&gt; V16  14.39005 1.0556934 13.14075 15.52260
+#&gt; V17  14.15298 0.9376581 13.16079 15.24806
+#&gt; V18  26.23143 1.4375043 24.66972 27.85947
+#&gt; V19  26.45269 1.3403888 24.92595 27.84076
+#&gt; V20  26.24724 1.4298837 24.68802 27.85813
+#&gt; V21  25.74151 1.7148722 24.10235 27.90089
+#&gt; V22  15.41732 1.7795023 13.03686 16.72929
+#&gt; V23  15.41732 1.7795023 13.03686 16.72929
+#&gt; V24  13.91592 0.8563141 13.18083 14.97353
+#&gt; V25  15.02221 1.4760667 13.08730 16.25470
+#&gt; V26  26.23143 1.4375043 24.66972 27.85947
+#&gt; V27  25.83633 1.6558286 24.21216 27.89287
+#&gt; V28  25.48864 1.8818604 23.80951 27.92227
+#&gt; V29  13.61564 0.8226222 12.81194 14.62578
+#&gt; V30  19.76550 0.5808276 19.44717 20.55177
+#&gt; V31  12.49355 1.3168882 10.79937 13.50598
+#&gt; V32  25.55186 1.8389438 23.88272 27.91693</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Bayesian models</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
