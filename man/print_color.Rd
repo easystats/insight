@@ -3,11 +3,17 @@
 \name{print_color}
 \alias{print_color}
 \alias{print_colour}
+\alias{color_text}
+\alias{colour_text}
 \title{Coloured console output}
 \usage{
 print_color(text, color)
 
 print_colour(text, colour)
+
+color_text(text, color)
+
+colour_text(text, colour)
 }
 \arguments{
 \item{text}{The text to print.}
@@ -26,7 +32,8 @@ Convenient function that allows coloured output in the console.
 }
 \details{
 This function prints \code{text} directly to the console using
-  \code{cat()}, so no string is returned.
+  \code{cat()}, so no string is returned. \code{color_text()}, however,
+  returns only the formatted string, without using \code{cat()}.
 }
 \examples{
 print_color("I'm blue dabedi dabedei", "blue")
