@@ -129,7 +129,7 @@
     green = .green(x),
     blue = .blue(x),
     black = .black(x),
-    black = .white(x),
+    white = .white(x),
     violet = .violet(x),
     cyan = .cyan(x),
     grey = .grey(x),
