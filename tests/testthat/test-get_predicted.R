@@ -118,18 +118,18 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
   })
 
-  # test_that("get_predicted - lm (log)", {
-  #   x <- lm(mpg ~ log(hp), data = mtcars)
-  #   rez <- insight::get_predicted(x)
-  #   expect_equal(length(rez), 32)
-  #
-  #   expect_equal(max(abs(rez - stats::fitted(x))), 0)
-  #   expect_equal(max(abs(rez - stats::predict(x))), 0)
-  #
-  #   data <- as.data.frame(rez)
-  #   expect_equal(max(abs(rez - data$Predicted)), 0)
-  #   expect_equal(nrow(data), 32)
-  # })
+  test_that("get_predicted - lm (log)", {
+    x <- lm(mpg ~ log(hp), data = mtcars)
+    rez <- insight::get_predicted(x)
+    expect_equal(length(rez), 32)
+
+    expect_equal(max(abs(rez - stats::fitted(x))), 0)
+    expect_equal(max(abs(rez - stats::predict(x))), 0)
+
+    data <- as.data.frame(rez)
+    expect_equal(max(abs(rez - data$Predicted)), 0)
+    expect_equal(nrow(data), 32)
+  })
 
   # Mixed --------------------------------------------------------------
   # =========================================================================
@@ -163,10 +163,10 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # expect_equal(mean(as.data.frame(rez)$CI_low - rez_emmeans$lower.PL), 0, tolerance = 0.5)
 
     # Compare with glmmTMB
-    # ref <- insight::get_predicted(glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars))
-    # expect_equal(max(abs(rez - ref)), 0, tolerance = 0.2) # A bit high
-    # expect_equal(max(abs(as.data.frame(rez)$SE - as.data.frame(ref)$SE)), 0, tolerance = 1e-5)
-    # expect_equal(max(abs(as.data.frame(rez)$CI_low - as.data.frame(ref)$CI_low)), 0, tolerance = 1e-5)
+    ref <- insight::get_predicted(glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars), predict = "relation")
+    expect_equal(mean(abs(rezrela - ref)), 0, tolerance = 0.1) # A bit high
+    # expect_equal(mean(abs(as.data.frame(rezrela)$SE - as.data.frame(ref)$SE)), 0, tolerance = 1e-5)
+    # expect_equal(mean(abs(as.data.frame(rezrela)$CI_low - as.data.frame(ref)$CI_low)), 0, tolerance = 1e-5)
 
     # Compare with rstanarm
     xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
@@ -178,19 +178,19 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
 
 
-  # test_that("get_predicted - lmerMod (log)", {
-  #   x <- lme4::lmer(mpg ~ am + log(hp) + (1 | cyl), data = mtcars)
-  #   rez <- insight::get_predicted(x)
-  #   expect_equal(length(rez), 32)
-  #
-  #   expect_equal(max(abs(rez - stats::fitted(x))), 0)
-  #   expect_equal(max(abs(rez - stats::predict(x))), 0)
-  #   expect_equal(nrow(as.data.frame(rez)), 32)
-  #
-  #   # No random
-  #   rez2 <- insight::get_predicted(x, newdata = mtcars[c("am", "hp")])
-  #   expect_true(!all(is.na(as.data.frame(rez2))))
-  # })
+  test_that("get_predicted - lmerMod (log)", {
+    x <- lme4::lmer(mpg ~ am + log(hp) + (1 | cyl), data = mtcars)
+    rez <- insight::get_predicted(x)
+    expect_equal(length(rez), 32)
+
+    expect_equal(max(abs(rez - stats::fitted(x))), 0)
+    expect_equal(max(abs(rez - stats::predict(x))), 0)
+    expect_equal(nrow(as.data.frame(rez)), 32)
+
+    # No random
+    rez2 <- insight::get_predicted(x, newdata = mtcars[c("am", "hp")])
+    expect_true(!all(is.na(as.data.frame(rez2))))
+  })
 
 
 
@@ -250,12 +250,12 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(length(rez), 3)
 
     # vs. Bayesian
-    # x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
-    # rez <- summary(insight::get_predicted(x))
-    # xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
-    # rezbayes <- summary(insight::get_predicted(xref))
-    # expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0.021, tolerance = 0.1)
-    # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0.24, tolerance = 0.2)
+    x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
+    rez <- summary(insight::get_predicted(x))
+    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
+    rezbayes <- summary(insight::get_predicted(xref))
+    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
+    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
   })
 
 
@@ -326,5 +326,17 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     rezpred <- summary(get_predicted(x, predict = "prediction"))
     expect_equal(mean(abs(rezrela$Predicted - rezpred$Predicted)), 0, tolerance = 0.1)
     expect_true(all(mean(rezrela$CI_high - rezpred$CI_high) < 0))
+
+    # Mixed
+    x <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, seed = 333, iter = 500)
+    rezrela <- summary(get_predicted(x, predict = "relation"))
+    rezpred <- summary(get_predicted(x, predict = "prediction"))
+    rezrela2 <- summary(get_predicted(x, predict = "relation", include_random = FALSE))
+    rezpred2 <- summary(get_predicted(x, predict = "prediction", include_random = FALSE))
+    expect_true(mean(abs(rezrela$Predicted - rezrela2$Predicted)) > 0)
+    expect_true(mean(abs(rezpred$Predicted - rezpred2$Predicted)) > 0)
+    rezrela3 <- summary(get_predicted(x, predict = "relation", data = mtcars["am"]))
+    expect_equal(mean(abs(rezrela2$Predicted - rezrela3$Predicted)), 0, tolerance = 0.001)
   })
+
 }

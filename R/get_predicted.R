@@ -278,6 +278,7 @@ get_predicted.stanreg <- function(x, data = NULL, predict = "relation", iteratio
 
   args <- .get_predicted_args(x, data = data, predict = predict, include_random = include_random, include_smooth = include_smooth, ...)
 
+
   # Get draws
   if (args$predict %in% c("link")) {
     draws <- rstantools::posterior_linpred(x, newdata = args$data, re.form = args$re.form, draws = iterations, ...)
@@ -402,9 +403,16 @@ get_predicted.crr <- function(x, ...) {
   }
   # Add (or set) random variables to "NA"
   if (include_random == FALSE) {
-    data[find_variables(x, effects = "random")$random] <- NA
+    if (inherits(x, c("stanreg", "brmsfit"))) {
+      # rstantools predictions doens't allow for NaNs in newdata
+      data[find_variables(x, effects = "random")$random] <- NULL
+    } else {
+      data[find_variables(x, effects = "random")$random] <- NA
+    }
+
   }
   re.form <- .format_reform(include_random)
+
 
   # Return all args
   list(data = data, include_random = include_random, re.form = re.form, include_smooth = include_smooth, ci_type = ci_type, ci = ci, type = type, predict = predict, scale = scale, transform = transform, info = info)
