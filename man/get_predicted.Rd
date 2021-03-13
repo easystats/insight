@@ -27,7 +27,7 @@ get_predicted(x, data = NULL, ...)
 
 \item{...}{Other argument to be passed for instance to \code{\link{get_predicted_ci}}.}
 
-\item{predict}{Can be \code{"link"}, \code{"relation"} (default), or \code{"prediction"}. This modulates the scale of the output as well as the type of certainty interval. More specifically, \code{"link"} gives an output on the link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). \code{"relation"} (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). Finally, \code{"predict"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). gives Read more about in the \strong{Details} section below.}
+\item{predict}{Can be \code{"link"}, \code{"relation"} (default), or \code{"prediction"}. This modulates the scale of the output as well as the type of certainty interval. More specifically, \code{"link"} gives an output on the link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). \code{"relation"} (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). Finally, \code{"predict"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). Read more about in the \strong{Details} section below.}
 
 \item{iterations}{For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.}
 
@@ -69,15 +69,6 @@ as.data.frame(predictions)
 # Bootsrapped
 as.data.frame(get_predicted(x, iterations = 4))
 summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
-\dontrun{
-# Bayesian models
-if (require("rstanarm")) {
-  x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
-  predictions <- get_predicted(x)
-  predictions
-  as.data.frame(predictions, keep_iterations = FALSE)
-}
-}
 }
 \seealso{
 get_predicted_ci

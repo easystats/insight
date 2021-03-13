@@ -2,7 +2,10 @@
 
 ## General
 
-* `get_predicted()` has be revamped with a new API and a stable output form (a vector).
+* `get_predicted()` has be revamped with a new API and a stable output form
+  (a vector). In the course of this revision, a new function
+  `get_predicted_ci()` to calculcate uncertainty intervals for model
+  predictions.
 
 * Improved support for `orm` (*rms*).
 
@@ -17,7 +20,6 @@
   additive model with smooth terms.
 
 ## Changes to functions
-
 
 * Added `iterations` argument to `get_predicted()` to control the
   number of draws returned for Bayesian models.

@@ -110,14 +110,4 @@ ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")
 head(ci_vals)
 ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 head(ci_vals)
-
-\dontrun{
-# Bayesian models
-if (require("rstanarm")) {
-  x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
-  predictions <- get_predicted(x)
-  predictions
-  as.data.frame(predictions, include_iterations = FALSE)
-}
-}
 }

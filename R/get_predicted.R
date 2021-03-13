@@ -4,7 +4,7 @@
 #'
 #' @param x A statistical model (can also be a data.frame, in which case the second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which to predict. If omitted, the data used to fit the model is used.
-#' @param predict Can be \code{"link"}, \code{"relation"} (default), or \code{"prediction"}. This modulates the scale of the output as well as the type of certainty interval. More specifically, \code{"link"} gives an output on the link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). \code{"relation"} (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). Finally, \code{"predict"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). gives Read more about in the \strong{Details} section below.
+#' @param predict Can be \code{"link"}, \code{"relation"} (default), or \code{"prediction"}. This modulates the scale of the output as well as the type of certainty interval. More specifically, \code{"link"} gives an output on the link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). \code{"relation"} (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). Finally, \code{"predict"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). Read more about in the \strong{Details} section below.
 #' @param iterations For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.
 #' @param include_random If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.
 #' @param include_smooth For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it. (default), \code{mean()}, or \code{bayestestR::map_estimate()}.
@@ -42,15 +42,6 @@
 #' # Bootsrapped
 #' as.data.frame(get_predicted(x, iterations = 4))
 #' summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
-#' \dontrun{
-#' # Bayesian models
-#' if (require("rstanarm")) {
-#'   x <- stan_glm(mpg ~ am, data = mtcars, refresh = 0)
-#'   predictions <- get_predicted(x)
-#'   predictions
-#'   as.data.frame(predictions, keep_iterations = FALSE)
-#' }
-#' }
 #' @export
 get_predicted <- function(x, data = NULL, ...) {
   UseMethod("get_predicted")
