@@ -4,7 +4,7 @@
 
 * `get_predicted()` has be revamped with a new API and a stable output form
   (a vector). In the course of this revision, a new function
-  `get_predicted_ci()` to calculcate uncertainty intervals for model
+  `get_predicted_ci()` to calculate uncertainty intervals for model
   predictions.
 
 * Improved support for `orm` (*rms*).
