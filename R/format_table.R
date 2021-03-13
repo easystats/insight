@@ -439,6 +439,7 @@ parameters_table <- format_table
     x$ROPE_low <- format_ci(x$ROPE_low, x$ROPE_high, ci = NULL, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
     x$ROPE_high <- NULL
     names(x)[names(x) == "ROPE_low"] <- "ROPE"
+    x$ROPE_CI <- NULL
   }
   x
 }

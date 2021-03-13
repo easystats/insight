@@ -9,7 +9,8 @@ print_parameters(
   ...,
   split_by = c("Effects", "Component", "Group", "Response"),
   format = "text",
-  keep_parameter_column = TRUE
+  keep_parameter_column = TRUE,
+  remove_empty_column = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,9 @@ returned list have both a \code{"Cleaned_Parameter"} and \code{"Parameter"}
 column. If \code{FALSE}, the (unformatted) \code{"Parameter"} is removed,
 and the column with cleaned parameter names (\code{"Cleaned_Parameter"}) is
 renamed into \code{"Parameter"}.}
+
+\item{remove_empty_column}{Logical, if \code{TRUE}, columns with completely
+empty character values will be removed.}
 }
 \value{
 A data frame or a list of data frames (if \code{split_by} is not \code{NULL}).

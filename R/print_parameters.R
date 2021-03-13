@@ -26,6 +26,8 @@
 #'   column. If \code{FALSE}, the (unformatted) \code{"Parameter"} is removed,
 #'   and the column with cleaned parameter names (\code{"Cleaned_Parameter"}) is
 #'   renamed into \code{"Parameter"}.
+#' @param remove_empty_column Logical, if \code{TRUE}, columns with completely
+#'   empty character values will be removed.
 #'
 #' @return A data frame or a list of data frames (if \code{split_by} is not \code{NULL}).
 #' If a list is returned, the element names reflect the model components where the
@@ -81,7 +83,7 @@
 #'
 #' @importFrom stats na.omit
 #' @export
-print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group", "Response"), format = "text", keep_parameter_column = TRUE) {
+print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group", "Response"), format = "text", keep_parameter_column = TRUE, remove_empty_column = FALSE) {
   obj <- list(...)
 
   # save attributes of original object
@@ -192,18 +194,30 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
       colnames(element)[colnames(element) == "Cleaned_Parameter"] <- "Parameter"
     }
 
+    # remove empty columns
+    if (isTRUE(remove_empty_column)) {
+      for (j in colnames(element)) {
+        if (is.character(element[[j]]) && all(element[j] == "")) {
+          element[[j]] <- NULL
+        }
+      }
+    }
+
     # for sub-table titles
     if (is.null(format) || format == "text") {
-      title_prefix <- "# "
+      title_prefix <- "#"
     } else {
       title_prefix <- ""
     }
+
+    title1 <- .capitalize(title1)
+    title2 <- .capitalize(title2)
 
     # add attributes
     attr(element, "main_title") <- .trim(title1)
     attr(element, "table_caption") <- c(paste0(title_prefix, .trim(title1)), "blue")
     attr(element, "sub_title") <- .trim(title2)
-    attr(element, "table_subtitle") <- c(.trim(title2), "red")
+    attr(element, "table_subtitle") <- c(.trim(title2), "blue")
     attr(element, "Effects") <- .effects
     attr(element, "Component") <- .component
 
