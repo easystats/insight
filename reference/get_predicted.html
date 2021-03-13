@@ -178,7 +178,7 @@
     </tr>
     <tr>
       <th>predict</th>
-      <td><p>Can be <code>"link"</code>, <code>"relation"</code> (default), or <code>"prediction"</code>. This modulates the scale of the output as well as the type of certainty interval. More specifically, <code>"link"</code> gives an output on the link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). <code>"relation"</code> (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). Finally, <code>"predict"</code> also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). gives Read more about in the <strong>Details</strong> section below.</p></td>
+      <td><p>Can be <code>"link"</code>, <code>"relation"</code> (default), or <code>"prediction"</code>. This modulates the scale of the output as well as the type of certainty interval. More specifically, <code>"link"</code> gives an output on the link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). <code>"relation"</code> (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). Finally, <code>"predict"</code> also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). Read more about in the <strong>Details</strong> section below.</p></td>
     </tr>
     <tr>
       <th>iterations</th>
@@ -339,16 +339,7 @@
 #&gt; V29  13.61564 0.8226222 12.81194 14.62578
 #&gt; V30  19.76550 0.5808276 19.44717 20.55177
 #&gt; V31  12.49355 1.3168882 10.79937 13.50598
-#&gt; V32  25.55186 1.8389438 23.88272 27.91693</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># Bayesian models</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
-  <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-  <span class='va'>predictions</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>predictions</span>, keep_iterations <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='op'>}</span>
-<span class='op'>}</span>
-</div></span></pre>
+#&gt; V32  25.55186 1.8389438 23.88272 27.91693</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
