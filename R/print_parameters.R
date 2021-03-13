@@ -153,8 +153,7 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
 
       # Rename "fixed", "random" etc. into proper titles. Here we have the
       # "Main title" of a subcomponent (like "Random effects")
-      if (parts[j] %in% c("fixed", "random") ||
-        (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
+      if (parts[j] %in% c("fixed", "random") || (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
         tmp <- switch(parts[j],
           "fixed" = "Fixed effects",
           "random" = "Random effects",
@@ -176,9 +175,17 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
 
     .effects <- unique(element$Effects)
     .component <- unique(element$Component)
+    .group <- unique(element$Group)
 
-    # we don't need "Effects" and "Random" column any more
-    keep <- setdiff(colnames(element), c("Effects", "Component", "Cleaned_Parameter"))
+    # we don't need "Effects" and "Component" column any more, and probably
+    # also no longer the "Group" column
+    columns_to_remove <- c("Effects", "Component", "Cleaned_Parameter")
+    if (.n_unique(.group) == 1) {
+      columns_to_remove <- c(columns_to_remove, "Group")
+    } else {
+      .group <- NULL
+    }
+    keep <- setdiff(colnames(element), columns_to_remove)
     element <- element[, c("Cleaned_Parameter", keep)]
 
     # if we had a pretty_names attributes in the original object,
@@ -220,6 +227,7 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
     attr(element, "table_subtitle") <- c(.trim(title2), "blue")
     attr(element, "Effects") <- .effects
     attr(element, "Component") <- .component
+    attr(element, "Group") <- .group
 
     element
   })
