@@ -2,9 +2,10 @@
 #' @name print_parameters
 #'
 #' @description This function takes a data frame, typically a data frame with
-#' information on summaries of model parameters like \code{\link[bayestestR]{hdi}}
-#' or \code{\link[bayestestR]{equivalence_test}}, as input and splits this information
-#' into several parts, depending on the model. See details below.
+#' information on summaries of model parameters like \code{\link[bayestestR]{describe_posterior}},
+#' \code{\link[bayestestR]{hdi}} or \code{\link[parameters]{model_parameters}},
+#' as input and splits this information into several parts, depending on the
+#' model. See details below.
 #'
 #' @param x A fitted model, or a data frame returned by \code{\link{clean_parameters}}.
 #' @param ... One or more objects (data frames), which contain information about
@@ -47,14 +48,16 @@
 #' Then, \code{...} take one or more data frames that also contain information
 #' about parameters from the same model, but also have additional information
 #' provided by other methods. For instance, a data frame in \code{...} might
-#' be the result of \code{\link[bayestestR]{hdi}}, where we
-#' have a) a \code{Parameters} column and b) columns with the HDI values.
+#' be the result of, for instance, \code{\link[bayestestR]{describe_posterior}},
+#' or \code{\link[parameters]{model_parameters}}, where we have a) a
+#' \code{Parameter} column and b) columns with other parameter values (like
+#' CI, HDI, test statistic, etc.).
 #' \cr \cr
 #' Now we have a data frame with model parameters and information about the
 #' association to the different model components, a data frame with model
 #' parameters, and some summary statistics. \code{print_parameters()}
-#' then merges these data frames, so the statistic of interest (in our example:
-#' the HDI) is also associated with the different model components. The data
+#' then merges these data frames, so the parameters or statistics of interest
+#' are also associated with the different model components. The data
 #' frame is split into a list, so for a clear printing. Users can loop over this
 #' list and print each component for a better overview. Further, parameter
 #' names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'.
@@ -65,8 +68,8 @@
 #' model <- download_model("brms_zi_2")
 #' x <- hdi(model, effects = "all", component = "all")
 #'
-#' # hdi() returns a data frame; here we use only the informaton on
-#' # parameter names and HDI values
+#' # hdi() returns a data frame; here we use only the
+#' # information on parameter names and HDI values
 #' tmp <- as.data.frame(x)[, 1:4]
 #' tmp
 #'
@@ -80,7 +83,6 @@
 #' # different model components.
 #' x
 #' }
-#'
 #' @importFrom stats na.omit
 #' @export
 print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group", "Response"), format = "text", keep_parameter_column = TRUE, remove_empty_column = FALSE) {
