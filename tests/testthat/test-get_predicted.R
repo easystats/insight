@@ -250,12 +250,12 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(length(rez), 3)
 
     # vs. Bayesian
-    x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
-    rez <- summary(insight::get_predicted(x))
-    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
-    rezbayes <- summary(insight::get_predicted(xref))
-    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
-    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
+    # x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
+    # rez <- summary(insight::get_predicted(x))
+    # xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
+    # rezbayes <- summary(insight::get_predicted(xref))
+    # expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
+    # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
   })
 
 
