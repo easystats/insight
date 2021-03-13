@@ -205,7 +205,7 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
 
     # for sub-table titles
     if (is.null(format) || format == "text") {
-      title_prefix <- "#"
+      title_prefix <- "# "
     } else {
       title_prefix <- ""
     }

@@ -320,7 +320,9 @@ export_table <- function(x,
     } else {
       subtitle <- ""
     }
+    # paste everything together and remove unnecessary double spaces
     title_line <- .trim(paste0(caption[1], " ", subtitle[1]))
+    title_line <- gsub("  ", " ", title_line, fixed = TRUE)
     rows <- paste0(title_line, "\n\n", rows)
   }
 
