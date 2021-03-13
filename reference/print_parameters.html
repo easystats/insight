@@ -48,9 +48,10 @@
 
 <meta property="og:title" content="Prepare summary statistics of model parameters for printing — print_parameters" />
 <meta property="og:description" content="This function takes a data frame, typically a data frame with
-information on summaries of model parameters like hdi
-or equivalence_test, as input and splits this information
-into several parts, depending on the model. See details below." />
+information on summaries of model parameters like describe_posterior,
+hdi or model_parameters,
+as input and splits this information into several parts, depending on the
+model. See details below." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -146,9 +147,10 @@ into several parts, depending on the model. See details below." />
 
     <div class="ref-description">
     <p>This function takes a data frame, typically a data frame with
-information on summaries of model parameters like <code><a href='https://easystats.github.io/bayestestR/reference/hdi.html'>hdi</a></code>
-or <code><a href='https://easystats.github.io/bayestestR/reference/equivalence_test.html'>equivalence_test</a></code>, as input and splits this information
-into several parts, depending on the model. See details below.</p>
+information on summaries of model parameters like <code><a href='https://easystats.github.io/bayestestR/reference/describe_posterior.html'>describe_posterior</a></code>,
+<code><a href='https://easystats.github.io/bayestestR/reference/hdi.html'>hdi</a></code> or <code><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>model_parameters</a></code>,
+as input and splits this information into several parts, depending on the
+model. See details below.</p>
     </div>
 
     <pre class="usage"><span class='fu'>print_parameters</span><span class='op'>(</span>
@@ -226,14 +228,16 @@ are associated.
 Then, <code>...</code> take one or more data frames that also contain information
 about parameters from the same model, but also have additional information
 provided by other methods. For instance, a data frame in <code>...</code> might
-be the result of <code><a href='https://easystats.github.io/bayestestR/reference/hdi.html'>hdi</a></code>, where we
-have a) a <code>Parameters</code> column and b) columns with the HDI values.
+be the result of, for instance, <code><a href='https://easystats.github.io/bayestestR/reference/describe_posterior.html'>describe_posterior</a></code>,
+or <code><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>model_parameters</a></code>, where we have a) a
+<code>Parameter</code> column and b) columns with other parameter values (like
+CI, HDI, test statistic, etc.).
 <br /> <br />
 Now we have a data frame with model parameters and information about the
 association to the different model components, a data frame with model
 parameters, and some summary statistics. <code>print_parameters()</code>
-then merges these data frames, so the statistic of interest (in our example:
-the HDI) is also associated with the different model components. The data
+then merges these data frames, so the parameters or statistics of interest
+are also associated with the different model components. The data
 frame is split into a list, so for a clear printing. Users can loop over this
 list and print each component for a better overview. Further, parameter
 names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'.</p>
@@ -244,8 +248,8 @@ names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'
 <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='download_model.html'>download_model</a></span><span class='op'>(</span><span class='st'>"brms_zi_2"</span><span class='op'>)</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://easystats.github.io/bayestestR/reference/hdi.html'>hdi</a></span><span class='op'>(</span><span class='va'>model</span>, effects <span class='op'>=</span> <span class='st'>"all"</span>, component <span class='op'>=</span> <span class='st'>"all"</span><span class='op'>)</span>
 
-<span class='co'># hdi() returns a data frame; here we use only the informaton on</span>
-<span class='co'># parameter names and HDI values</span>
+<span class='co'># hdi() returns a data frame; here we use only the</span>
+<span class='co'># information on parameter names and HDI values</span>
 <span class='va'>tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>
 <span class='va'>tmp</span>
 
@@ -259,7 +263,6 @@ names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'
 <span class='co'># different model components.</span>
 <span class='va'>x</span>
 <span class='op'>}</span>
-
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
