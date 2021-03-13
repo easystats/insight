@@ -22,6 +22,9 @@
 #'   assumed use for output is basic printing. If \code{"markdown"}, markdown-format
 #'   is assumed. This only affects the style of title- and table-caption attributes,
 #'   which are used in \code{\link{export_table}}.
+#' @param parameter_column String, name of the column that contains the
+#'   parameter names. Usually, for data frames returned by functions the
+#'   easystats-packages, this will be \code{"Parameter"}.
 #' @param keep_parameter_column Logical, if \code{TRUE}, the data frames in the
 #'   returned list have both a \code{"Cleaned_Parameter"} and \code{"Parameter"}
 #'   column. If \code{FALSE}, the (unformatted) \code{"Parameter"} is removed,
@@ -85,8 +88,14 @@
 #' }
 #' @importFrom stats na.omit
 #' @export
-print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group", "Response"), format = "text", keep_parameter_column = TRUE, remove_empty_column = FALSE) {
-  obj <- list(...)
+print_parameters <- function(x,
+                             ...,
+                             split_by = c("Effects", "Component", "Group", "Response"),
+                             format = "text",
+                             parameter_column = "Parameter",
+                             keep_parameter_column = TRUE,
+                             remove_empty_column = FALSE) {
+    obj <- list(...)
 
   # save attributes of original object
   att <- do.call(c, .compact_list(lapply(obj, function(i) {
@@ -102,11 +111,14 @@ print_parameters <- function(x, ..., split_by = c("Effects", "Component", "Group
   } else {
     x
   }
-  cn1 <- colnames(cp)
 
   # merge all objects together
   obj <- Reduce(
     function(x, y) {
+      # check for valid column name
+      if (parameter_column != "Parameter" && parameter_column %in% colnames(y) && !"Parameter" %in% colnames(y)) {
+        colnames(y)[colnames(y) == parameter_column] <- "Parameter"
+      }
       merge_by <- unique(c("Parameter", intersect(colnames(y), intersect(c("Effects", "Component", "Group", "Response"), colnames(x)))))
       merge(x, y, all.x = FALSE, by = merge_by, sort = FALSE)
     },

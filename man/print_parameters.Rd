@@ -9,6 +9,7 @@ print_parameters(
   ...,
   split_by = c("Effects", "Component", "Group", "Response"),
   format = "text",
+  parameter_column = "Parameter",
   keep_parameter_column = TRUE,
   remove_empty_column = FALSE
 )
@@ -32,6 +33,10 @@ split by the values from those columns defined in \code{split_by}.}
 assumed use for output is basic printing. If \code{"markdown"}, markdown-format
 is assumed. This only affects the style of title- and table-caption attributes,
 which are used in \code{\link{export_table}}.}
+
+\item{parameter_column}{String, name of the column that contains the
+parameter names. Usually, for data frames returned by functions the
+easystats-packages, this will be \code{"Parameter"}.}
 
 \item{keep_parameter_column}{Logical, if \code{TRUE}, the data frames in the
 returned list have both a \code{"Cleaned_Parameter"} and \code{"Parameter"}
