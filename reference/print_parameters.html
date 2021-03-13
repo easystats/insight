@@ -156,7 +156,8 @@ into several parts, depending on the model. See details below.</p>
   <span class='va'>...</span>,
   split_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Effects"</span>, <span class='st'>"Component"</span>, <span class='st'>"Group"</span>, <span class='st'>"Response"</span><span class='op'>)</span>,
   format <span class='op'>=</span> <span class='st'>"text"</span>,
-  keep_parameter_column <span class='op'>=</span> <span class='cn'>TRUE</span>
+  keep_parameter_column <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  remove_empty_column <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -196,6 +197,11 @@ returned list have both a <code>"Cleaned_Parameter"</code> and <code>"Parameter"
 column. If <code>FALSE</code>, the (unformatted) <code>"Parameter"</code> is removed,
 and the column with cleaned parameter names (<code>"Cleaned_Parameter"</code>) is
 renamed into <code>"Parameter"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>remove_empty_column</th>
+      <td><p>Logical, if <code>TRUE</code>, columns with completely
+empty character values will be removed.</p></td>
     </tr>
     </table>
 
