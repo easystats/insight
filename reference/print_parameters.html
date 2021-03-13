@@ -158,6 +158,7 @@ model. See details below.</p>
   <span class='va'>...</span>,
   split_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Effects"</span>, <span class='st'>"Component"</span>, <span class='st'>"Group"</span>, <span class='st'>"Response"</span><span class='op'>)</span>,
   format <span class='op'>=</span> <span class='st'>"text"</span>,
+  parameter_column <span class='op'>=</span> <span class='st'>"Parameter"</span>,
   keep_parameter_column <span class='op'>=</span> <span class='cn'>TRUE</span>,
   remove_empty_column <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
@@ -191,6 +192,12 @@ split by the values from those columns defined in <code>split_by</code>.</p></td
 assumed use for output is basic printing. If <code>"markdown"</code>, markdown-format
 is assumed. This only affects the style of title- and table-caption attributes,
 which are used in <code><a href='export_table.html'>export_table</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>parameter_column</th>
+      <td><p>String, name of the column that contains the
+parameter names. Usually, for data frames returned by functions the
+easystats-packages, this will be <code>"Parameter"</code>.</p></td>
     </tr>
     <tr>
       <th>keep_parameter_column</th>
