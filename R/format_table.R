@@ -319,12 +319,14 @@ parameters_table <- format_table
   # Main CI
   ci_low <- names(x)[grep("^CI_low", names(x))]
   ci_high <- names(x)[grep("^CI_high", names(x))]
+  ci_value <- att[["ci"]]
+
   if (length(ci_low) >= 1 && length(ci_low) == length(ci_high)) {
-    if (!is.null(att$ci)) {
-      if (length(unique(stats::na.omit(att$ci))) > 1) {
-        ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(att$ci)) * 100)
+    if (!is.null(ci_value)) {
+      if (length(unique(stats::na.omit(ci_value))) > 1) {
+        ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(ci_value)) * 100)
       } else {
-        ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(att$ci))[1] * 100)
+        ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(ci_value))[1] * 100)
       }
       x$CI <- NULL
     } else if (!is.null(x$CI)) {
@@ -371,8 +373,8 @@ parameters_table <- format_table
     # CI percentage
     if (length(other) == 1 && !is.null(att[[paste0("ci_", other)]])) {
       other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(att[[paste0("ci_", other)]])) * 100)
-    } else if (!is.null(att$ci)) {
-      other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(att$ci)) * 100)
+    } else if (!is.null(att[["ci"]])) {
+      other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(att[["ci"]])) * 100)
     } else if (length(other == 1) && paste0(other, "_CI") %in% colnames(x)) {
       other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(x[[paste0(other, "_CI")]])) * 100)
     } else {
