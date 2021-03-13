@@ -321,39 +321,70 @@ parameters_table <- format_table
   ci_high <- names(x)[grep("^CI_high", names(x))]
   ci_value <- att[["ci"]]
 
-  if (length(ci_low) >= 1 && length(ci_low) == length(ci_high)) {
-    if (!is.null(ci_value)) {
-      if (length(unique(stats::na.omit(ci_value))) > 1) {
-        ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(ci_value)) * 100)
-      } else {
-        ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(ci_value))[1] * 100)
-      }
-      x$CI <- NULL
-    } else if (!is.null(x$CI)) {
-      ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(x$CI))[1] * 100)
-      x$CI <- NULL
-    } else {
-      # all these edge cases... for some objects in "parameters::model_parameters()",
-      # when we have multiple ci-levels, column names can be "CI_low_0.8" or
-      # "CI_low_0.95" etc. - this is handled here, if we have no ci-attribute
-      if (grepl("CI_low_(\\d)\\.(\\d)", ci_low) && grepl("CI_high_(\\d)\\.(\\d)", ci_high)) {
-        ci_levels <- as.numeric(gsub("CI_low_(\\d)\\.(\\d)", "\\1.\\2", ci_low))
-        ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(ci_levels)) * 100)
-        x$CI <- NULL
-      } else {
-        ci_colname <- "CI"
-      }
+  # CI or SI?
+  ci_method <- att[["ci_method"]]
+
+  if (!is.null(ci_method) && all(tolower(ci_method) == "si")) {
+
+    # Support Intervals
+
+    if (is.null(ci_value) && !is.null(x$CI)) {
+      ci_value <- unique(x$CI)[1]
     }
 
-    # Get characters to align the CI
-    for (i in 1:length(ci_colname)) {
-      x[[ci_low[i]]] <- format_ci(x[[ci_low[i]]], x[[ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
-      # rename lower CI into final CI column
-      ci_position <- which(names(x) == ci_low[i])
-      colnames(x)[ci_position] <- ci_colname[i]
-      # remove upper CI column
-      ci_position <- which(names(x) == ci_high[i])
-      x[[ci_position]] <- NULL
+    if (is.null(ci_value)) {
+      ci_colname <- "SI"
+    } else {
+      ci_colname <- sprintf("BF = %.5g SI", ci_value)
+    }
+
+    x[[ci_low[1]]] <- format_ci(x[[ci_low[1]]], x[[ci_high[1]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
+
+    ci_position <- which(names(x) == ci_low[1])
+    colnames(x)[ci_position] <- ci_colname
+    # remove upper CI column
+    ci_position <- which(names(x) == ci_high[1])
+    x[[ci_position]] <- NULL
+    x$CI <- NULL
+  }
+  else {
+
+    # regular CIs
+
+    if (length(ci_low) >= 1 && length(ci_low) == length(ci_high)) {
+      if (!is.null(ci_value)) {
+        if (length(unique(stats::na.omit(ci_value))) > 1) {
+          ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(ci_value)) * 100)
+        } else {
+          ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(ci_value))[1] * 100)
+        }
+        x$CI <- NULL
+      } else if (!is.null(x$CI)) {
+        ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(x$CI))[1] * 100)
+        x$CI <- NULL
+      } else {
+        # all these edge cases... for some objects in "parameters::model_parameters()",
+        # when we have multiple ci-levels, column names can be "CI_low_0.8" or
+        # "CI_low_0.95" etc. - this is handled here, if we have no ci-attribute
+        if (grepl("CI_low_(\\d)\\.(\\d)", ci_low) && grepl("CI_high_(\\d)\\.(\\d)", ci_high)) {
+          ci_levels <- as.numeric(gsub("CI_low_(\\d)\\.(\\d)", "\\1.\\2", ci_low))
+          ci_colname <- sprintf("%i%% CI", unique(stats::na.omit(ci_levels)) * 100)
+          x$CI <- NULL
+        } else {
+          ci_colname <- "CI"
+        }
+      }
+
+      # Get characters to align the CI
+      for (i in 1:length(ci_colname)) {
+        x[[ci_low[i]]] <- format_ci(x[[ci_low[i]]], x[[ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
+        # rename lower CI into final CI column
+        ci_position <- which(names(x) == ci_low[i])
+        colnames(x)[ci_position] <- ci_colname[i]
+        # remove upper CI column
+        ci_position <- which(names(x) == ci_high[i])
+        x[[ci_position]] <- NULL
+      }
     }
   }
 
