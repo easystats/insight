@@ -11,7 +11,9 @@ print_parameters(
   format = "text",
   parameter_column = "Parameter",
   keep_parameter_column = TRUE,
-  remove_empty_column = FALSE
+  remove_empty_column = FALSE,
+  titles = NULL,
+  subtitles = NULL
 )
 }
 \arguments{
@@ -46,6 +48,17 @@ renamed into \code{"Parameter"}.}
 
 \item{remove_empty_column}{Logical, if \code{TRUE}, columns with completely
 empty character values will be removed.}
+
+\item{titles, subtitles}{By default, the names of the model components (like
+fixed or random effects, count or zero-inflated model part) are added as
+attributes \code{"table_title"} and \code{"table_subtitle"} to each list
+element returned by \code{print_parameters()}. These attributes are then
+extracted and used as table (sub) titles in \code{\link{export_table}}.
+Use \code{titles} and \code{subtitles} to override the default attribute
+values for \code{"table_title"} and \code{"table_subtitle"}. \code{titles}
+and \code{subtitles} may be any length from 1 to same length as returned
+list elements. If \code{titles} and \code{subtitles} are shorter than
+existing elements, only the first default attributes are overwritten.}
 }
 \value{
 A data frame or a list of data frames (if \code{split_by} is not \code{NULL}).

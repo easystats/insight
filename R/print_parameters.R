@@ -32,6 +32,16 @@
 #'   renamed into \code{"Parameter"}.
 #' @param remove_empty_column Logical, if \code{TRUE}, columns with completely
 #'   empty character values will be removed.
+#' @param titles,subtitles By default, the names of the model components (like
+#'   fixed or random effects, count or zero-inflated model part) are added as
+#'   attributes \code{"table_title"} and \code{"table_subtitle"} to each list
+#'   element returned by \code{print_parameters()}. These attributes are then
+#'   extracted and used as table (sub) titles in \code{\link{export_table}}.
+#'   Use \code{titles} and \code{subtitles} to override the default attribute
+#'   values for \code{"table_title"} and \code{"table_subtitle"}. \code{titles}
+#'   and \code{subtitles} may be any length from 1 to same length as returned
+#'   list elements. If \code{titles} and \code{subtitles} are shorter than
+#'   existing elements, only the first default attributes are overwritten.
 #'
 #' @return A data frame or a list of data frames (if \code{split_by} is not \code{NULL}).
 #' If a list is returned, the element names reflect the model components where the
@@ -94,7 +104,9 @@ print_parameters <- function(x,
                              format = "text",
                              parameter_column = "Parameter",
                              keep_parameter_column = TRUE,
-                             remove_empty_column = FALSE) {
+                             remove_empty_column = FALSE,
+                             titles = NULL,
+                             subtitles = NULL) {
     obj <- list(...)
 
   # save attributes of original object
@@ -245,6 +257,19 @@ print_parameters <- function(x,
 
     element
   })
+
+  # override titles?
+  if (!is.null(titles) && length(titles) <= length(out)) {
+    for (i in 1:length(titles)) {
+      attr(out[[i]], "table_caption") <- c(titles[i], "blue")
+    }
+  }
+
+  if (!is.null(subtitles) && length(subtitles) <= length(out)) {
+    for (i in 1:length(subtitles)) {
+      attr(out[[i]], "table_subtitle") <- c(subtitles[i], "blue")
+    }
+  }
 
   att$pretty_names <- NULL
   attr(out, "additional_attributes") <- att
