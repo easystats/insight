@@ -470,6 +470,14 @@ export_table <- function(x,
   group_by_columns <- c(intersect(c("Group", "Response", "Effects", "Component"), names(final)), group_by)
   if (!length(group_by_columns)) {
     group_by_columns <- NULL
+  } else {
+    # remove columns with only 1 unique value - this *should* be safe to
+    # remove, but we may check if all printed sub titles look like intended
+    for (i in group_by_columns) {
+      if (.n_unique(final[[i]]) <= 1) {
+        final[[i]] <- NULL
+      }
+    }
   }
 
   tab <- gt::gt(final, groupname_col = group_by_columns)
