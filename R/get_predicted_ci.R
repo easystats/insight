@@ -302,7 +302,7 @@ get_predicted_ci <- function(x,
   linkfun <- link_function(x)
   linkinv <- link_inverse(x)
   alpha <- 1 - ci
-  prob <- c(alpha/2, 1-alpha/2)
+  prob <- c(alpha / 2, 1 - alpha / 2)
 
   if (info$is_binomial) {
     p <- linkinv(predictions)
@@ -328,11 +328,11 @@ get_predicted_ci <- function(x,
   data <- as.data.frame(t(iter))  # Reshape
 
   # Dispersion
-  if(is.character(dispersion_function)) {
+  if (is.character(dispersion_function)) {
     dispersion_function <- match.arg(tolower(dispersion_function), c("sd", "mad"))
-    if(dispersion_function == "sd") {
+    if (dispersion_function == "sd") {
       se <- apply(data, 2, stats::sd)
-    } else if(dispersion_function == "mad") {
+    } else if (dispersion_function == "mad") {
       se <- apply(data, 2, stats::mad)
     } else{
       stop("`dispersion_function` argument not recognized.")
@@ -350,9 +350,9 @@ get_predicted_ci <- function(x,
 
   # Interval
   interval_function <- match.arg(tolower(interval_function), c("quantile", "hdi", "eti"))
-  if(interval_function == "quantile") {
+  if (interval_function == "quantile") {
     out <- data.frame(Parameter = 1:nrow(iter))
-    for(i in ci) {
+    for (i in ci) {
       temp <- data.frame(
         CI_low = apply(iter, 1, stats::quantile, probs = (1 - i) / 2, na.rm = TRUE),
         CI_high = apply(iter, 1, stats::quantile, probs = (1 + i) / 2, na.rm = TRUE)
@@ -360,13 +360,13 @@ get_predicted_ci <- function(x,
       names(temp) <- paste0(c("CI_low_", "CI_high_"), i)
       out <- cbind(out, temp)
     }
-    if(length(ci) == 1) names(out) <- c("Parameter", "CI_low", "CI_high")
+    if (length(ci) == 1) names(out) <- c("Parameter", "CI_low", "CI_high")
   } else {
     if (!requireNamespace("bayestestR", quietly = TRUE)) {
       stop("Package `bayestestR` needed for this function. Please install and try again.")
     }
     out <- as.data.frame(bayestestR::ci(as.data.frame(t(iter)), ci = ci, method = interval_function))
-    if(length(ci) > 1) out <- bayestestR::reshape_ci(out)
+    if (length(ci) > 1) out <- reshape_ci(out)
 
   }
   out$Parameter <- out$CI <- NULL

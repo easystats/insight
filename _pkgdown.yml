@@ -122,6 +122,7 @@ reference:
   - export_table
   - null_model
   - print_parameters
+  - reshape_ci
   - standardize_names
 
 - title: "Example Datasets"
