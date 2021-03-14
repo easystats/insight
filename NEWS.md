@@ -32,6 +32,9 @@
 
 * Improved support for `MixMod` (*GLMMadaptive*) in `get_variance()`.
 
+* Improved `print_parameters()`, to allow more flexibility and better cope with
+  different output formats.
+
 ## Bug fixes
 
 * Fixed issue in `get_variance()` for models without intercept.
