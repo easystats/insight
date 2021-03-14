@@ -248,9 +248,14 @@ print_parameters <- function(x,
 
     # add attributes
     attr(element, "main_title") <- .trim(title1)
-    attr(element, "table_caption") <- c(paste0(title_prefix, .trim(title1)), "blue")
     attr(element, "sub_title") <- .trim(title2)
-    attr(element, "table_subtitle") <- c(.trim(title2), "blue")
+    if (is.null(format) || format == "text") {
+      attr(element, "table_caption") <- c(paste0(title_prefix, .trim(title1)), "blue")
+      attr(element, "table_subtitle") <- c(.trim(title2), "blue")
+    } else {
+      attr(element, "table_caption") <- .trim(title1)
+      attr(element, "table_subtitle") <- .trim(title2)
+    }
     attr(element, "Effects") <- .effects
     attr(element, "Component") <- .component
     attr(element, "Group") <- .group
