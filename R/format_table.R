@@ -514,7 +514,7 @@ parameters_table <- format_table
   if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars)
   if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = stars)
   if ("Rhat" %in% names(x)) x$Rhat <- format_value(x$Rhat, digits = 3)
-  if ("ESS" %in% names(x)) x$ESS <- format_value(x$ESS, protect_integers = TRUE)
+  if ("ESS" %in% names(x)) x$ESS <- round(x$ESS)
 
   if ("ROPE_Equivalence" %in% names(x)) names(x)[names(x) == "ROPE_Equivalence"] <- "Equivalence (ROPE)"
   if ("ROPE_Percentage" %in% names(x)) {
