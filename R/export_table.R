@@ -498,7 +498,7 @@ export_table <- function(x,
           "center"
         ))
       }
-      out[["_boxhead"]]$column_align[1] <- col_align
+      out[["_boxhead"]]$column_align <- col_align
     }
   }
 
