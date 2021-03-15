@@ -26,7 +26,7 @@ reshape_ci <- function(x) {
     # Reshape
     if (length(unique(x$CI)) > 1) {
       if (!"Parameter" %in% names(x)) {
-        x$Parameter <- x$CI
+        x$Parameter <- NA
         remove_parameter <- TRUE
       } else {
         remove_parameter <- FALSE
