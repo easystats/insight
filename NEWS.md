@@ -42,6 +42,8 @@
 * Fixed labelling issue in `get_parameters()` and `clean_parameters()` for 
   `blavaan` models.
 
+* `clean_parameters()` for *MCMCglmm* objects did not include random parameters.
+
 * Fixed minor issue with unintended sub-titles for `print_html()`.
 
 # insight 0.13.1

@@ -92,7 +92,7 @@ clean_parameters.default <- function(x, group = "", ...) {
           Component = com,
           Group = j,
           Function = fun,
-          Cleaned_Parameter = pars[[i]][[j]],
+          Cleaned_Parameter = clean_names(pars[[i]][[j]]),
           stringsAsFactors = FALSE,
           row.names = NULL
         )
@@ -105,7 +105,7 @@ clean_parameters.default <- function(x, group = "", ...) {
         Component = com,
         Group = group,
         Function = fun,
-        Cleaned_Parameter = pars[[i]],
+        Cleaned_Parameter = clean_names(pars[[i]]),
         stringsAsFactors = FALSE,
         row.names = NULL
       )
@@ -221,6 +221,9 @@ clean_parameters.glmm <- function(x, ...) {
   .remove_empty_columns_from_pars(out)
 }
 
+
+#' @export
+clean_parameters.MCMCglmm <- clean_parameters.glmm
 
 
 #' @export
@@ -347,7 +350,7 @@ clean_parameters.mlm <- function(x, ...) {
       Effects = eff,
       Component = com,
       Response = i,
-      Cleaned_Parameter = pars[[i]]$conditional,
+      Cleaned_Parameter = clean_names(pars[[i]]$conditional),
       stringsAsFactors = FALSE,
       row.names = NULL
     )
