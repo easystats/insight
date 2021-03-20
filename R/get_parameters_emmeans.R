@@ -18,8 +18,14 @@
 #'
 #' @examples
 #' data(mtcars)
-#' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
-#' get_parameters(m)
+#' model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
+#' if (require("emmeans", quietly = TRUE)) {
+#'   emm <- emmeans(model2, "cyl")
+#'   get_parameters(emm)
+#'
+#'   emm <- emmeans(model, pairwise ~ cyl)
+#'   get_parameters(emm)
+#' }
 #' @export
 get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE, ...) {
   # check if we have a Bayesian model here

@@ -32,6 +32,7 @@ Returns the names of model parameters, like they typically
      \item{\link[=find_parameters.BGGM]{Bayesian models} (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
      \item{\link[=find_parameters.gamlss]{Generalized additive models} (\pkg{mgcv}, \pkg{VGAM}, ...)}
      \item{\link[=find_parameters.betamfx]{Marginal effects models} (\pkg{mfx})}
+     \item{\link[=find_parameters.emmGrid]{Estimated marginal means} (\pkg{emmeans})}
      \item{\link[=find_parameters.glmmTMB]{Mixed models} (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
      \item{\link[=find_parameters.zeroinfl]{Zero-inflated and hurdle models} (\pkg{pscl}, ...)}
      \item{\link[=find_parameters.averaging]{Models with special components} (\pkg{betareg}, \pkg{MuMIn}, ...)}

@@ -9,6 +9,7 @@
 #'      \item{\link[=find_parameters.BGGM]{Bayesian models} (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
 #'      \item{\link[=find_parameters.gamlss]{Generalized additive models} (\pkg{mgcv}, \pkg{VGAM}, ...)}
 #'      \item{\link[=find_parameters.betamfx]{Marginal effects models} (\pkg{mfx})}
+#'      \item{\link[=find_parameters.emmGrid]{Estimated marginal means} (\pkg{emmeans})}
 #'      \item{\link[=find_parameters.glmmTMB]{Mixed models} (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
 #'      \item{\link[=find_parameters.zeroinfl]{Zero-inflated and hurdle models} (\pkg{pscl}, ...)}
 #'      \item{\link[=find_parameters.averaging]{Models with special components} (\pkg{betareg}, \pkg{MuMIn}, ...)}
@@ -474,34 +475,6 @@ find_parameters.glht <- function(x, flatten = FALSE, ...) {
     unique(unlist(l))
   } else {
     l
-  }
-}
-
-
-#' @export
-find_parameters.emmGrid <- function(x, flatten = TRUE, ...) {
-  s <- summary(x)
-  estimate_pos <- which(colnames(s) == x@misc$estName)
-  out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
-
-  if (flatten) {
-    unique(unlist(out))
-  } else {
-    out
-  }
-}
-
-
-#' @export
-find_parameters.emm_list <- function(x, flatten = TRUE, ...) {
-  s <- summary(x)[[1]]
-  estimate_pos <- which(colnames(s) == x[[1]]@misc$estName)
-  out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
-
-  if (flatten) {
-    unique(unlist(out))
-  } else {
-    out
   }
 }
 
