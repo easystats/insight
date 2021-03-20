@@ -20,15 +20,20 @@
 #' }
 #' @export
 find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE, ...) {
-  out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)
+  if (!.is_baysian_emmeans(x)) {
+    out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)
 
-  if ("Component" %in% colnames(params)) {
-    params$Component <- factor(params$Component, levels = unique(params$Component))
-    out <- lapply(split(params, params$Component), function(i) i[[1]])
+    if ("Component" %in% colnames(params)) {
+      params$Component <- factor(params$Component, levels = unique(params$Component))
+      out <- lapply(split(params, params$Component), function(i) i[[1]])
+    } else {
+      s <- summary(x)
+      estimate_pos <- which(colnames(s) == x@misc$estName)
+      out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
+    }
   } else {
-    s <- summary(x)
-    estimate_pos <- which(colnames(s) == x@misc$estName)
-    out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
+    params <- get_parameters(x, summary = FALSE, merge_parameters = merge_parameters)
+    out <- list(conditional = colnames(params))
   }
 
   if (flatten) {
@@ -41,15 +46,20 @@ find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE
 
 #' @export
 find_parameters.emm_list <- function(x, flatten = FALSE, merge_parameters = FALSE, ...) {
-  out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)
+  if (!.is_baysian_emmeans(x)) {
+    out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)
 
-  if ("Component" %in% colnames(params)) {
-    params$Component <- factor(params$Component, levels = unique(params$Component))
-    out <- lapply(split(params, params$Component), function(i) i[[1]])
+    if ("Component" %in% colnames(params)) {
+      params$Component <- factor(params$Component, levels = unique(params$Component))
+      out <- lapply(split(params, params$Component), function(i) i[[1]])
+    } else {
+      s <- summary(x)[[1]]
+      estimate_pos <- which(colnames(s) == x[[1]]@misc$estName)
+      out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
+    }
   } else {
-    s <- summary(x)[[1]]
-    estimate_pos <- which(colnames(s) == x[[1]]@misc$estName)
-    out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
+    params <- get_parameters(x, summary = FALSE, merge_parameters = merge_parameters)
+    out <- list(conditional = colnames(params))
   }
 
   if (flatten) {
