@@ -15,12 +15,12 @@
 #' data(mtcars)
 #' model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
 #' if (require("emmeans", quietly = TRUE)) {
-#'   emm <- emmeans(model2, c("wt", "cyl"))
+#'   emm <- emmeans(model, c("wt", "cyl"))
 #'   find_parameters(emm)
 #' }
 #' @export
-find_parameters.emmGrid <- function(x, flatten = TRUE, merge_parameters = FALSE, ...) {
-  out <- params <- get_parameters(x, summary = TRUE)
+find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE, ...) {
+  out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)
 
   if ("Component" %in% colnames(params)) {
     params$Component <- factor(params$Component, levels = unique(params$Component))
@@ -40,8 +40,8 @@ find_parameters.emmGrid <- function(x, flatten = TRUE, merge_parameters = FALSE,
 
 
 #' @export
-find_parameters.emm_list <- function(x, flatten = TRUE, merge_parameters = FALSE, ...) {
-  out <- params <- get_parameters(x, summary = TRUE)
+find_parameters.emm_list <- function(x, flatten = FALSE, merge_parameters = FALSE, ...) {
+  out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)
 
   if ("Component" %in% colnames(params)) {
     params$Component <- factor(params$Component, levels = unique(params$Component))

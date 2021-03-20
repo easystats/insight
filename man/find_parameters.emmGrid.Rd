@@ -4,7 +4,7 @@
 \alias{find_parameters.emmGrid}
 \title{Find model parameters from estimated marginal means objects}
 \usage{
-\method{find_parameters}{emmGrid}(x, flatten = TRUE, merge_parameters = FALSE, ...)
+\method{find_parameters}{emmGrid}(x, flatten = FALSE, merge_parameters = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -30,7 +30,7 @@ Returns the parameter names from a model.
 data(mtcars)
 model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
 if (require("emmeans", quietly = TRUE)) {
-  emm <- emmeans(model2, c("wt", "cyl"))
+  emm <- emmeans(model, c("wt", "cyl"))
   find_parameters(emm)
 }
 }

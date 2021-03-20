@@ -20,7 +20,7 @@
 #' data(mtcars)
 #' model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
 #' if (require("emmeans", quietly = TRUE)) {
-#'   emm <- emmeans(model2, "cyl")
+#'   emm <- emmeans(model, "cyl")
 #'   get_parameters(emm)
 #'
 #'   emm <- emmeans(model, pairwise ~ cyl)
