@@ -61,15 +61,15 @@ clean_names.default <- function(x, ...) {
 
 #' @rdname clean_names
 #' @export
-clean_names.character <- function(x, include_names = FALSE, ...) {
+clean_names.character <- function(x, include_names = FALSE, is_emmeans = FALSE, ...) {
   if (is.null(x)) {
     return(x)
   }
   out <- sapply(x, function(.x) {
     if (grepl(":", .x, fixed = TRUE) && !grepl("::", .x, fixed = TRUE)) {
-      paste(sapply(strsplit(.x, ":", fixed = TRUE), .remove_pattern_from_names), collapse = ":")
+      paste(sapply(strsplit(.x, ":", fixed = TRUE), .remove_pattern_from_names, is_emmeans = is_emmeans), collapse = ":")
     } else {
-      .remove_pattern_from_names(.x)
+      .remove_pattern_from_names(.x, is_emmeans = is_emmeans)
     }
   })
 
@@ -81,7 +81,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 }
 
 
-.remove_pattern_from_names <- function(x, ignore_asis = FALSE, ignore_lag = FALSE) {
+.remove_pattern_from_names <- function(x, ignore_asis = FALSE, ignore_lag = FALSE, is_emmeans = FALSE) {
   # return if x is empty
   if (.is_empty_string(x)) {
     return("")
@@ -109,7 +109,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
   # which matches the "cleaned" variable name
   cleaned <- sapply(1:length(x), function(i) {
     # check if we have special patterns like 100 * log(xy), and remove it
-    if (grepl("^([0-9]+)", x[i])) {
+    if (isFALSE(is_emmeans) && grepl("^([0-9]+)", x[i])) {
       x[i] <- gsub("^([0-9]+)[^(\\.|[:alnum:])]+(.*)", "\\2", x[i])
     }
     for (j in 1:length(pattern)) {
