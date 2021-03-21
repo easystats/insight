@@ -7,7 +7,7 @@
 \usage{
 clean_names(x, ...)
 
-\method{clean_names}{character}(x, include_names = FALSE, is_emmeans = FALSE, ...)
+\method{clean_names}{character}(x, include_names = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model, or a character vector.}

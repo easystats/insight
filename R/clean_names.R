@@ -61,7 +61,18 @@ clean_names.default <- function(x, ...) {
 
 #' @rdname clean_names
 #' @export
-clean_names.character <- function(x, include_names = FALSE, is_emmeans = FALSE, ...) {
+clean_names.character <- function(x, include_names = FALSE, ...) {
+  .clean_names(x = x, include_names = include_names, ...)
+}
+
+
+
+
+
+# helper -----------------
+
+
+.clean_names <- function(x, include_names = FALSE, is_emmeans = FALSE, ...) {
   if (is.null(x)) {
     return(x)
   }
@@ -79,6 +90,11 @@ clean_names.character <- function(x, include_names = FALSE, is_emmeans = FALSE, 
     unname(out)
   }
 }
+
+
+
+
+# utils ---------------------
 
 
 .remove_pattern_from_names <- function(x, ignore_asis = FALSE, ignore_lag = FALSE, is_emmeans = FALSE) {
