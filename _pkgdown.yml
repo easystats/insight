@@ -134,6 +134,7 @@ reference:
 - title: "Documentation of Specific Class Objects"
   contents:
   - find_parameters.BGGM
+  - find_parameters.emmGrid
   - find_parameters.gamlss
   - find_parameters.betamfx
   - find_parameters.glmmTMB
