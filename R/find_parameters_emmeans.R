@@ -18,6 +18,7 @@
 #'   emm <- emmeans(model, c("wt", "cyl"))
 #'   find_parameters(emm)
 #' }
+#' @importFrom stats setNames
 #' @export
 find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE, ...) {
   out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)
@@ -28,9 +29,7 @@ find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE
     if ("Component" %in% colnames(params)) {
       out <- lapply(split(params, params$Component), function(i) i[[1]])
     } else {
-      s <- summary(x)
-      estimate_pos <- which(colnames(s) == x@misc$estName)
-      out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
+      out <- stats::setNames(list(params[[1]]), unique(.classify_emmeans(x)))
     }
   } else {
     col_names <- colnames(get_parameters(x, summary = FALSE, merge_parameters = merge_parameters))
@@ -38,7 +37,7 @@ find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE
       params$Parameter <- col_names
       out <- lapply(split(params, params$Component), function(i) i[[1]])
     } else {
-      out <- list(conditional = col_names)
+      out <- stats::setNames(list(col_names), unique(.classify_emmeans(x)))
     }
   }
 
@@ -51,32 +50,4 @@ find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE
 
 
 #' @export
-find_parameters.emm_list <- function(x, flatten = FALSE, merge_parameters = FALSE, ...) {
-  out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)
-  if ("Component" %in% colnames(params)) {
-    params$Component <- factor(params$Component, levels = unique(params$Component))
-  }
-  if (!.is_baysian_emmeans(x)) {
-    if ("Component" %in% colnames(params)) {
-      out <- lapply(split(params, params$Component), function(i) i[[1]])
-    } else {
-      s <- summary(x)[[1]]
-      estimate_pos <- which(colnames(s) == x[[1]]@misc$estName)
-      out <- list(conditional = colnames(s)[1:(estimate_pos - 1)])
-    }
-  } else {
-    col_names <- colnames(get_parameters(x, summary = FALSE, merge_parameters = merge_parameters))
-    if ("Component" %in% colnames(params)) {
-      params$Parameter <- col_names
-      out <- lapply(split(params, params$Component), function(i) i[[1]])
-    } else {
-      out <- list(conditional = col_names)
-    }
-  }
-
-  if (flatten) {
-    unique(unlist(out))
-  } else {
-    out
-  }
-}
+find_parameters.emm_list <- find_parameters.emmGrid

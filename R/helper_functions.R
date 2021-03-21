@@ -834,3 +834,49 @@
   if (isTRUE(na.rm)) x <- stats::na.omit(x)
   length(unique(x))
 }
+
+
+
+
+# classify emmeans objects -------------
+
+
+is.emmeans.contrast <- function(x) {
+  if (inherits(x, "list")) {
+    out <- vector("list", length = length(x))
+    for (i in seq_along(x)) {
+      out[[i]] <- is.emmeans.contrast(x[[i]])
+    }
+    return(unlist(out))
+  }
+
+  res <- "con.coef" %in% names(x@misc)
+  rep(res, nrow(x@linfct))
+}
+
+
+is.emmeans.trend <- function(x) {
+  if (inherits(x, "list")) {
+    out <- vector("list", length = length(x))
+    for (i in seq_along(x)) {
+      out[[i]] <- is.emmeans.trend(x[[i]])
+    }
+    return(unlist(out))
+  }
+
+  "trend" %in% names(x@roles) & !is.emmeans.contrast(x)
+}
+
+
+is.emmean <- function(x) {
+  !is.emmeans.trend(x) & !is.emmeans.contrast(x)
+}
+
+
+.classify_emmeans <- function(x) {
+  c_ <- is.emmeans.contrast(x)
+  t_ <- is.emmeans.trend(x)
+
+  ifelse(c_, "contrast",
+         ifelse(t_, "trend", "emmean"))
+}
