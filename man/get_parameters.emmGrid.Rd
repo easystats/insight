@@ -31,6 +31,14 @@ A data frame with two columns: the parameter names and the related
 \description{
 Returns the coefficients from a model.
 }
+\note{
+Note that \code{emmGrid} or \code{emm_list} objects returned by
+  functions from \pkg{emmeans} have a different structure compared to
+  usual regression models. Hence, the \code{Parameter} column does not
+  always contain names of \emph{variables}, but may rather contain
+  \emph{values}, e.g. for contrasts. See an example for pairwise
+  comparisons below.
+}
 \examples{
 data(mtcars)
 model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
