@@ -35,6 +35,10 @@
 * Improved `print_parameters()`, to allow more flexibility and better cope with
   different output formats.
 
+* `get_parameters()`, `find_parameters()` and `clean_parameters()` for 
+  *emmGrid* and *emm_list* objects were revised and now better match the
+  actual parameter names (also for contrasts).
+
 ## Bug fixes
 
 * Fixed issue in `get_variance()` for models without intercept.
