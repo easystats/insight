@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find names of model parameters — find_parameters • insight</title>
+<title>Find model parameters from estimated marginal means objects — find_parameters.emmGrid • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,20 +46,8 @@
 
 
 
-<meta property="og:title" content="Find names of model parameters — find_parameters" />
-<meta property="og:description" content="Returns the names of model parameters, like they typically
-    appear in the summary() output. For Bayesian models, the parameter
-    names equal the column names of the posterior samples after coercion
-    from as.data.frame(). See the documentation for your object's class:
-Bayesian models (rstanarm, brms, MCMCglmm, ...)
-Generalized additive models (mgcv, VGAM, ...)
-Marginal effects models (mfx)
-Estimated marginal means (emmeans)
-Mixed models (lme4, glmmTMB, GLMMadaptive, ...)
-Zero-inflated and hurdle models (pscl, ...)
-Models with special components (betareg, MuMIn, ...)
-
-" />
+<meta property="og:title" content="Find model parameters from estimated marginal means objects — find_parameters.emmGrid" />
+<meta property="og:description" content="Returns the parameter names from a model." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -148,31 +136,17 @@ Models with special components (betareg, MuMIn, ...)
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find names of model parameters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_parameters.R'><code>R/find_parameters.R</code></a></small>
-    <div class="hidden name"><code>find_parameters.Rd</code></div>
+    <h1>Find model parameters from estimated marginal means objects</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_parameters_emmeans.R'><code>R/find_parameters_emmeans.R</code></a></small>
+    <div class="hidden name"><code>find_parameters.emmGrid.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the names of model parameters, like they typically
-    appear in the <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code> output. For Bayesian models, the parameter
-    names equal the column names of the posterior samples after coercion
-    from <code><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame()</a></code>. See the documentation for your object's class:</p><ul>
-<li><p><a href='find_parameters.BGGM.html'>Bayesian models</a> (<span class="pkg">rstanarm</span>, <span class="pkg">brms</span>, <span class="pkg">MCMCglmm</span>, ...)</p></li>
-<li><p><a href='find_parameters.gamlss.html'>Generalized additive models</a> (<span class="pkg">mgcv</span>, <span class="pkg">VGAM</span>, ...)</p></li>
-<li><p><a href='find_parameters.betamfx.html'>Marginal effects models</a> (<span class="pkg">mfx</span>)</p></li>
-<li><p><a href='find_parameters.emmGrid.html'>Estimated marginal means</a> (<span class="pkg">emmeans</span>)</p></li>
-<li><p><a href='find_parameters.glmmTMB.html'>Mixed models</a> (<span class="pkg">lme4</span>, <span class="pkg">glmmTMB</span>, <span class="pkg">GLMMadaptive</span>, ...)</p></li>
-<li><p><a href='find_parameters.zeroinfl.html'>Zero-inflated and hurdle models</a> (<span class="pkg">pscl</span>, ...)</p></li>
-<li><p><a href='find_parameters.averaging.html'>Models with special components</a> (<span class="pkg">betareg</span>, <span class="pkg">MuMIn</span>, ...)</p></li>
-</ul>
-
+    <p>Returns the parameter names from a model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_parameters</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>find_parameters</span><span class='op'>(</span><span class='va'>x</span>, flatten <span class='op'>=</span> <span class='cn'>FALSE</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for emmGrid</span>
+<span class='fu'><a href='find_parameters.html'>find_parameters</a></span><span class='op'>(</span><span class='va'>x</span>, flatten <span class='op'>=</span> <span class='cn'>FALSE</span>, merge_parameters <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -182,17 +156,20 @@ Models with special components (betareg, MuMIn, ...)
       <td><p>A fitted model.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr>
-    <tr>
       <th>flatten</th>
       <td><p>Logical, if <code>TRUE</code>, the values are returned
 as character vector, not as list. Duplicated values are removed.</p></td>
     </tr>
     <tr>
-      <th>verbose</th>
-      <td><p>Toggle messages and warnings.</p></td>
+      <th>merge_parameters</th>
+      <td><p>Logical, if <code>TRUE</code> and <code>x</code> has multiple
+columns for parameter names (like <code>emmGrid</code> objects may have), these
+are merged into a single parameter column, with parameters names and values
+as values.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
     </tr>
     </table>
 
@@ -203,10 +180,13 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>find_parameters</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/rvlenth/emmeans'>"emmeans"</a></span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>emm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"wt"</span>, <span class='st'>"cyl"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='find_parameters.html'>find_parameters</a></span><span class='op'>(</span><span class='va'>emm</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; $conditional
-#&gt; [1] "(Intercept)" "wt"          "cyl"         "vs"         
+#&gt; [1] "wt"  "cyl"
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
