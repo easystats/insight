@@ -126,7 +126,6 @@ clean_parameters.emmGrid <- function(x, ...) {
   l <- lapply(names(pars), function(i) {
     data.frame(
       Parameter = pars[[i]],
-      Effects = "fixed",
       Component = i,
       Cleaned_Parameter = .clean_names(x = pars[[i]], is_emmeans = TRUE),
       stringsAsFactors = FALSE,

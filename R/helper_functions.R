@@ -877,6 +877,6 @@ is.emmean <- function(x) {
   c_ <- is.emmeans.contrast(x)
   t_ <- is.emmeans.trend(x)
 
-  ifelse(c_, "contrast",
-         ifelse(t_, "trend", "emmean"))
+  ifelse(c_, "contrasts",
+         ifelse(t_, "emtrends", "emmeans"))
 }
