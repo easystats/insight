@@ -12,7 +12,7 @@
 ## New supported model classes
 
 * Support for `svy_vglm` (*svyVGAM*), `mjoint` (*joineRML*),
-  `mhurdle` (*mhurdle*), `sarlm` (*spatialreg*)
+  `mhurdle` (*mhurdle*), `sarlm` (*spatialreg*), `model_fit` (*tidymodels*)
 
 ## New functions
 

@@ -49,6 +49,12 @@ find_response.default <- function(x, combine = TRUE, ...) {
 
 
 #' @export
+find_response.model_fit <- function(x, combine = TRUE, ...) {
+  find_response(x$fit, combine = combine, ...)
+}
+
+
+#' @export
 find_response.mediate <- function(x, combine = TRUE, ...) {
   f <- find_formula(x)
 

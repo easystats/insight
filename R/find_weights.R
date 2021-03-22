@@ -71,6 +71,12 @@ find_weights.brmsfit <- function(x, ...) {
 
 
 #' @export
+find_weights.model_fit <- function(x, ...) {
+  find_weights(x$fit, ...)
+}
+
+
+#' @export
 find_weights.merMod <- function(x, ...) {
   tryCatch(
     {

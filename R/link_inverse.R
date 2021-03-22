@@ -675,6 +675,9 @@ link_inverse.svy_vglm <- function(x, ...) {
   link_inverse(x$fit)
 }
 
+#' @export
+link_inverse.model_fit <- link_inverse.svy_vglm
+
 
 #' @export
 link_inverse.gam <- function(x, ...) {

@@ -135,3 +135,9 @@ find_parameters.glmx <- function(x,
     recursive = FALSE
   )
 }
+
+
+#' @export
+find_parameters.model_fit <- function(x, flatten = FALSE, ...) {
+  find_parameters(x$fit, flatten = flatten, ...)
+}

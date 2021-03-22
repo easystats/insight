@@ -1395,7 +1395,7 @@ find_formula.BFBayesFactor <- function(x, ...) {
 
 #' @export
 find_formula.model_fit <- function(x, ...) {
-  find_formula(x$fit)
+  find_formula(x$fit, ...)
 }
 
 

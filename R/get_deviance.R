@@ -88,3 +88,9 @@ get_deviance.stanreg <- function(x, verbose = TRUE, ...) {
 get_deviance.lmerMod <- function(x, ...) {
   stats::deviance(x, REML = FALSE, ...)
 }
+
+
+#' @export
+get_deviance.model_fit <- function(x, ...) {
+  get_deviance(x$fit, ...)
+}

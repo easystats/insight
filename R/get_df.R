@@ -49,6 +49,12 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
 
 
 #' @export
+get_df.model_fit <- function(x, type = "residual", verbose = TRUE, ...) {
+  get_df(x$fit, type = type, verbose = verbose, ...)
+}
+
+
+#' @export
 get_df.ivFixed <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "model") {

@@ -169,6 +169,7 @@ supported_models <- function() {
     "meta_random",
     "mlogit",
     "mmlogit",
+    "model_fit",
     "multinom",
     "negbinmfx",
     "negbinirr",

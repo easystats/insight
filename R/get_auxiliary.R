@@ -72,6 +72,11 @@ get_dispersion <- function(x, ...) {
 }
 
 
+get_dispersion.model_fit <- function(x, ...) {
+  get_dispersion(x$fit, ...)
+}
+
+
 get_dispersion.glm <- function(x, ...) {
   info <- model_info(x)
   disp <- NULL

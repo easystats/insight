@@ -889,6 +889,12 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.model_fit <- function(x, ...) {
+  get_statistic(x$fit, ...)
+}
+
+
+#' @export
 get_statistic.sarlm <- function(x, ...) {
   s <- summary(x)
   # add rho, if present

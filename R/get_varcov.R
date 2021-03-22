@@ -358,6 +358,9 @@ get_varcov.poissonirr <- get_varcov.logitmfx
 #' @export
 get_varcov.negbinirr <- get_varcov.logitmfx
 
+#' @export
+get_varcov.model_fit <- get_varcov.logitmfx
+
 
 
 

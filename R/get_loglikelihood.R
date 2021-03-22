@@ -32,6 +32,10 @@ get_loglikelihood.default <- function(x, ...) {
   .loglikelihood_prep_output(x, lls = NA, ...)
 }
 
+#' @export
+get_loglikelihood.model_fit <- function(x, ...) {
+  get_loglikelihood(x$fit, ...)
+}
 
 
 

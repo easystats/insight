@@ -65,8 +65,14 @@ get_call.default <- function(x) {
 get_call.lm <- function(x) {
   x$call
 }
+
 #' @export
 get_call.glm <- get_call.lm
+
+#' @export
+get_call.model_fit <- function(x) {
+  get_call(x$fit)
+}
 
 
 #' @export

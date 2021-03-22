@@ -226,6 +226,12 @@ clean_parameters.merModList <- function(x, ...) {
 
 
 #' @export
+clean_parameters.model_fit <- function(x, ...) {
+  clean_parameters(x$fit, ...)
+}
+
+
+#' @export
 clean_parameters.glmm <- function(x, ...) {
   pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
 

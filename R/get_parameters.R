@@ -120,6 +120,12 @@ get_parameters.tobit <- get_parameters.default
 
 
 #' @export
+get_parameters.model_fit <- function(x, ...) {
+  get_parameters(x$fit, ...)
+}
+
+
+#' @export
 get_parameters.epi.2by2 <- function(x, ...) {
   coef_names <- grepl(".strata.wald", names(x$massoc), fixed = TRUE)
   cf <- x$massoc[coef_names]

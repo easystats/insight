@@ -92,6 +92,11 @@ get_data.summary.lm <- function(x, ...) {
 }
 
 
+#' @export
+get_data.model_fit <- function(x, verbose = TRUE, ...) {
+  get_data(x$fit, verbose = verbose, ...)
+}
+
 
 
 

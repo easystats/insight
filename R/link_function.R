@@ -357,6 +357,9 @@ link_function.poissonirr <- link_function.logitmfx
 #' @export
 link_function.logitor <- link_function.logitmfx
 
+#' @export
+link_function.model_fit <- link_function.logitmfx
+
 
 
 

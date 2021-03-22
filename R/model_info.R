@@ -137,6 +137,10 @@ model_info.default <- function(x, verbose = TRUE, ...) {
 }
 
 
+#' @export
+model_info.model_fit <- function(x, verbose = TRUE, ...) {
+  model_info(x$fit, verbose = verbose, ...)
+}
 
 
 

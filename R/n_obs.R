@@ -102,6 +102,10 @@ n_obs.svy_vglm <- function(x, ...) {
 
 
 #' @export
+n_obs.model_fit <- n_obs.svy_vglm
+
+
+#' @export
 n_obs.gam <- function(x, ...) {
   if (!is.null(dim(x$y))) {
     dim(x$y)[1]

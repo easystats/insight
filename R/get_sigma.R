@@ -43,6 +43,10 @@
 get_sigma <- function(x, verbose = TRUE) {
 
   # special handling ---------------
+  if (inherits(x, "model_fit")) {
+    x <- x$fit
+  }
+
   if (inherits(x, "merModList")) {
     s <- suppressWarnings(summary(x))
     return(s$residError)

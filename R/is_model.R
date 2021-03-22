@@ -233,6 +233,7 @@ is_regression_model <- function(x) {
     "mlm",
     "mlma",
     "mlogit",
+    "model_fit",
     "multinom",
     "mvmeta",
     "mvr",

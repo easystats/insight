@@ -136,6 +136,11 @@ get_residuals.vgam <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 get_residuals.vglm <- get_residuals.vgam
 
 
+#' @export
+get_residuals.model_fit <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  get_residuals(x$fit, weighted = weighted, verbose = verbose, ...)
+}
+
 
 #' @export
 get_residuals.coxph <- function(x, weighted = FALSE, verbose = TRUE, ...) {
