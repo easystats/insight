@@ -73,8 +73,26 @@ get_priors.stanreg <- function(x, ...) {
     prior_info$adjusted_scale[flat] <- NA
   }
 
-  prior_info$parameter <- find_parameters(x)$conditional
+
+  params <- find_parameters(x)$conditional
+
+  # this is a perticular fix for the "R2" prior, which conveys prior
+  # information about *all* the parameters. In this case, number of
+  # parameters doesn't match number of priors
+
+  if (length(params) != nrow(prior_info)) {
+    if (length(params) == 1) {
+      prior_info$parameter <- "(Intercept)"
+    } else if ("R2" %in% prior_info$dist) {
+      prior_info$parameter <- prior_info$dist
+      prior_info$parameter[prior_info$dist != "R2"] <- "(Intercept)"
+    }
+  } else {
+    prior_info$parameter <- params
+  }
   prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))]
+
+
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
   colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info))

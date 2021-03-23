@@ -50,6 +50,8 @@
 
 * Fixed minor issue with unintended sub-titles for `print_html()`.
 
+* Fixed issue in `get_prior()` for `rstanarm::R2()` priors.
+
 # insight 0.13.1
 
 ## General
