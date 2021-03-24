@@ -98,9 +98,9 @@
 
     
     
-<div id="the-difference-between-a-dataframe-and-its-render" class="section level1">
-<h1 class="hasAnchor">
-<a href="#the-difference-between-a-dataframe-and-its-render" class="anchor"></a>The difference between a dataframe and its render</h1>
+<div id="the-difference-between-a-dataframe-and-its-render" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-difference-between-a-dataframe-and-its-render" class="anchor"></a>The difference between a dataframe and its render</h2>
 <p>Most of objects encountered throughout the <strong>easystats</strong> packages are “tables”, i.e., a 2D matrix with columns and rows. In R, these objects are often, at their core, <em>data frames</em>. Let’s create one to use as an example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span>
@@ -125,62 +125,16 @@
 <p>When I display in in the console (calling an object - e.g. <code>df</code> - is actually equivalent to calling <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print(df)</a></code>), the output looks alright, but it could be improved. Some packages, such as <strong>knitr</strong>, have functions to create a nicer output. For instance, in markdown, so that it can be nicely rendered in markdown documents when copied:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">df</span>, format <span class="op">=</span> <span class="st">"markdown"</span><span class="op">)</span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="right">Variable</th>
-<th align="left">Group</th>
-<th align="right">CI</th>
-<th align="right">CI_low</th>
-<th align="right">CI_high</th>
-<th align="right">p</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">A</td>
-<td align="right">0.95</td>
-<td align="right">3.350</td>
-<td align="right">4.230</td>
-<td align="right">0.0010</td>
-</tr>
-<tr class="even">
-<td align="right">3</td>
-<td align="left">A</td>
-<td align="right">0.95</td>
-<td align="right">2.425</td>
-<td align="right">5.310</td>
-<td align="right">0.0456</td>
-</tr>
-<tr class="odd">
-<td align="right">5</td>
-<td align="left">A</td>
-<td align="right">0.95</td>
-<td align="right">6.213</td>
-<td align="right">7.123</td>
-<td align="right">0.4500</td>
-</tr>
-<tr class="even">
-<td align="right">3</td>
-<td align="left">B</td>
-<td align="right">0.95</td>
-<td align="right">12.100</td>
-<td align="right">13.500</td>
-<td align="right">0.0042</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">B</td>
-<td align="right">0.95</td>
-<td align="right">1.230</td>
-<td align="right">3.610</td>
-<td align="right">0.3400</td>
-</tr>
-</tbody>
-</table>
-<p>Or HTML, which again makes it look great in HTML files. For instance, this code:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<pre><code>| Variable|Group |   CI| CI_low| CI_high|      p|
+|--------:|:-----|----:|------:|-------:|------:|
+|        1|A     | 0.95|  3.350|   4.230| 0.0010|
+|        3|A     | 0.95|  2.425|   5.310| 0.0456|
+|        5|A     | 0.95|  6.213|   7.123| 0.4500|
+|        3|B     | 0.95| 12.100|  13.500| 0.0042|
+|        1|B     | 0.95|  1.230|   3.610| 0.3400|</code></pre>
+<p>Or HTML, which again makes it look great in HTML files (such as this webpage you’re reading):</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">df</span>, format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></code></pre></div>
-<p>Will be rendered like this:</p>
 <table class="table">
 <thead><tr>
 <th style="text-align:right;">
@@ -306,15 +260,15 @@ B
 </tbody>
 </table>
 </div>
-<div id="the-insight-workflow" class="section level1">
-<h1 class="hasAnchor">
-<a href="#the-insight-workflow" class="anchor"></a>The <em>insight</em> workflow</h1>
-<p>The <strong>insight</strong> package also contains function to improve the “printing”, or rendering, of tables. Its design dissociates two separate and independent steps: <em>formatting</em> and <em>exporting</em>.</p>
-<div id="formatting" class="section level2">
+<div id="the-insight-workflow" class="section level2">
 <h2 class="hasAnchor">
-<a href="#formatting" class="anchor"></a>Formatting</h2>
+<a href="#the-insight-workflow" class="anchor"></a>The <em>insight</em> workflow</h2>
+<p>The <strong>insight</strong> package also contains function to improve the “printing”, or rendering, of tables. Its design dissociates two separate and independent steps: <em>formatting</em> and <em>exporting</em>.</p>
+<div id="formatting" class="section level3">
+<h3 class="hasAnchor">
+<a href="#formatting" class="anchor"></a>Formatting</h3>
 <p>The purpose of formatting is to improve a given table, while still keeping it as a regular R data frame, so that it can be for instance further modified by the user.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
 <span class="co">#&gt;   Variable Group         95% CI     p</span>
 <span class="co">#&gt; 1     1.00     A [ 3.35,  4.23] 0.001</span>
@@ -323,7 +277,7 @@ B
 <span class="co">#&gt; 4     3.00     B [12.10, 13.50] 0.004</span>
 <span class="co">#&gt; 5     1.00     B [ 1.23,  3.61] 0.340</span></code></pre></div>
 <p>As you can see, <code><a href="../reference/format_table.html">format_table()</a></code> modifies columns, turning number into characters (so that it has the same amount of digits), and detecting confidence intervals. This is usually combined with column-specific formatting functions, like <code><a href="../reference/format_p.html">format_p()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="../reference/format_p.html">format_p</a></span><span class="op">(</span><span class="va">p</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="op">)</span>
@@ -334,12 +288,12 @@ B
 <span class="co">#&gt; 4     3.00     B [12.10, 13.50] p = 0.004**</span>
 <span class="co">#&gt; 5     1.00     B [ 1.23,  3.61] p = 0.340</span></code></pre></div>
 </div>
-<div id="exporting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#exporting" class="anchor"></a>Exporting</h2>
+<div id="exporting" class="section level3">
+<h3 class="hasAnchor">
+<a href="#exporting" class="anchor"></a>Exporting</h3>
 <p>The next step is <em>exporting</em>, which takes a data frame and renders it in a given format, so that it looks good in the console, or in markdown, HTML or latex.</p>
-<p>For text output, we need to <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code> the returned result to get nice output in the console.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>For console output, we need to <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code> the returned result to get nicely printed code:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Variable | Group |   CI | CI_low | CI_high |        p</span>
 <span class="co">#&gt; -----------------------------------------------------</span>
@@ -348,8 +302,8 @@ B
 <span class="co">#&gt;        5 |     A | 0.95 |   6.21 |    7.12 |     0.45</span>
 <span class="co">#&gt;        3 |     B | 0.95 |  12.10 |   13.50 | 4.20e-03</span>
 <span class="co">#&gt;        1 |     B | 0.95 |   1.23 |    3.61 |     0.34</span></code></pre></div>
-<p>For markdown or HTML, simply use the <code>format</code> argument.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>For markdown or HTML, simply modify the <code>format</code> argument to markdown (“md”)…</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">df</span>, format <span class="op">=</span> <span class="st">"md"</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -403,14 +357,14 @@ B
 </tr>
 </tbody>
 </table>
-<p>…or HTML.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>…or HTML format.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">df</span>, format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#sidyhyljlg .gt_table {
+#pqctbjbjwo .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -435,7 +389,7 @@ B
   border-left-color: #D3D3D3;
 }
 
-#sidyhyljlg .gt_heading {
+#pqctbjbjwo .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -447,7 +401,7 @@ B
   border-right-color: #D3D3D3;
 }
 
-#sidyhyljlg .gt_title {
+#pqctbjbjwo .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -457,7 +411,7 @@ B
   border-bottom-width: 0;
 }
 
-#sidyhyljlg .gt_subtitle {
+#pqctbjbjwo .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -467,13 +421,13 @@ B
   border-top-width: 0;
 }
 
-#sidyhyljlg .gt_bottom_border {
+#pqctbjbjwo .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#sidyhyljlg .gt_col_headings {
+#pqctbjbjwo .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -488,7 +442,7 @@ B
   border-right-color: #D3D3D3;
 }
 
-#sidyhyljlg .gt_col_heading {
+#pqctbjbjwo .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -508,7 +462,7 @@ B
   overflow-x: hidden;
 }
 
-#sidyhyljlg .gt_column_spanner_outer {
+#pqctbjbjwo .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -520,15 +474,15 @@ B
   padding-right: 4px;
 }
 
-#sidyhyljlg .gt_column_spanner_outer:first-child {
+#pqctbjbjwo .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#sidyhyljlg .gt_column_spanner_outer:last-child {
+#pqctbjbjwo .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#sidyhyljlg .gt_column_spanner {
+#pqctbjbjwo .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -540,7 +494,7 @@ B
   width: 100%;
 }
 
-#sidyhyljlg .gt_group_heading {
+#pqctbjbjwo .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -562,7 +516,7 @@ B
   vertical-align: middle;
 }
 
-#sidyhyljlg .gt_empty_group_heading {
+#pqctbjbjwo .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -577,15 +531,15 @@ B
   vertical-align: middle;
 }
 
-#sidyhyljlg .gt_from_md > :first-child {
+#pqctbjbjwo .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#sidyhyljlg .gt_from_md > :last-child {
+#pqctbjbjwo .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#sidyhyljlg .gt_row {
+#pqctbjbjwo .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -604,7 +558,7 @@ B
   overflow-x: hidden;
 }
 
-#sidyhyljlg .gt_stub {
+#pqctbjbjwo .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -616,7 +570,7 @@ B
   padding-left: 12px;
 }
 
-#sidyhyljlg .gt_summary_row {
+#pqctbjbjwo .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -626,7 +580,7 @@ B
   padding-right: 5px;
 }
 
-#sidyhyljlg .gt_first_summary_row {
+#pqctbjbjwo .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -636,7 +590,7 @@ B
   border-top-color: #D3D3D3;
 }
 
-#sidyhyljlg .gt_grand_summary_row {
+#pqctbjbjwo .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -646,7 +600,7 @@ B
   padding-right: 5px;
 }
 
-#sidyhyljlg .gt_first_grand_summary_row {
+#pqctbjbjwo .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -656,11 +610,11 @@ B
   border-top-color: #D3D3D3;
 }
 
-#sidyhyljlg .gt_striped {
+#pqctbjbjwo .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#sidyhyljlg .gt_table_body {
+#pqctbjbjwo .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -669,7 +623,7 @@ B
   border-bottom-color: #D3D3D3;
 }
 
-#sidyhyljlg .gt_footnotes {
+#pqctbjbjwo .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -683,13 +637,13 @@ B
   border-right-color: #D3D3D3;
 }
 
-#sidyhyljlg .gt_footnote {
+#pqctbjbjwo .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#sidyhyljlg .gt_sourcenotes {
+#pqctbjbjwo .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -703,46 +657,46 @@ B
   border-right-color: #D3D3D3;
 }
 
-#sidyhyljlg .gt_sourcenote {
+#pqctbjbjwo .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#sidyhyljlg .gt_left {
+#pqctbjbjwo .gt_left {
   text-align: left;
 }
 
-#sidyhyljlg .gt_center {
+#pqctbjbjwo .gt_center {
   text-align: center;
 }
 
-#sidyhyljlg .gt_right {
+#pqctbjbjwo .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#sidyhyljlg .gt_font_normal {
+#pqctbjbjwo .gt_font_normal {
   font-weight: normal;
 }
 
-#sidyhyljlg .gt_font_bold {
+#pqctbjbjwo .gt_font_bold {
   font-weight: bold;
 }
 
-#sidyhyljlg .gt_font_italic {
+#pqctbjbjwo .gt_font_italic {
   font-style: italic;
 }
 
-#sidyhyljlg .gt_super {
+#pqctbjbjwo .gt_super {
   font-size: 65%;
 }
 
-#sidyhyljlg .gt_footnote_marks {
+#pqctbjbjwo .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="sidyhyljlg" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="pqctbjbjwo" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Variable</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">CI</th>
@@ -796,7 +750,7 @@ B
 <tfoot class="gt_sourcenotes"></tfoot>
 </table></div>
 <p>This can be combined with <code><a href="../reference/format_table.html">format_table()</a></code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span>ci_brackets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"("</span>, <span class="st">")"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></code></pre></div>
@@ -804,7 +758,7 @@ B
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#mvtgxgvvmy .gt_table {
+#vohyumhkzd .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -829,7 +783,7 @@ B
   border-left-color: #D3D3D3;
 }
 
-#mvtgxgvvmy .gt_heading {
+#vohyumhkzd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -841,7 +795,7 @@ B
   border-right-color: #D3D3D3;
 }
 
-#mvtgxgvvmy .gt_title {
+#vohyumhkzd .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -851,7 +805,7 @@ B
   border-bottom-width: 0;
 }
 
-#mvtgxgvvmy .gt_subtitle {
+#vohyumhkzd .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -861,13 +815,13 @@ B
   border-top-width: 0;
 }
 
-#mvtgxgvvmy .gt_bottom_border {
+#vohyumhkzd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mvtgxgvvmy .gt_col_headings {
+#vohyumhkzd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -882,7 +836,7 @@ B
   border-right-color: #D3D3D3;
 }
 
-#mvtgxgvvmy .gt_col_heading {
+#vohyumhkzd .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -902,7 +856,7 @@ B
   overflow-x: hidden;
 }
 
-#mvtgxgvvmy .gt_column_spanner_outer {
+#vohyumhkzd .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -914,15 +868,15 @@ B
   padding-right: 4px;
 }
 
-#mvtgxgvvmy .gt_column_spanner_outer:first-child {
+#vohyumhkzd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mvtgxgvvmy .gt_column_spanner_outer:last-child {
+#vohyumhkzd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mvtgxgvvmy .gt_column_spanner {
+#vohyumhkzd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -934,7 +888,7 @@ B
   width: 100%;
 }
 
-#mvtgxgvvmy .gt_group_heading {
+#vohyumhkzd .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -956,7 +910,7 @@ B
   vertical-align: middle;
 }
 
-#mvtgxgvvmy .gt_empty_group_heading {
+#vohyumhkzd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -971,15 +925,15 @@ B
   vertical-align: middle;
 }
 
-#mvtgxgvvmy .gt_from_md > :first-child {
+#vohyumhkzd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mvtgxgvvmy .gt_from_md > :last-child {
+#vohyumhkzd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mvtgxgvvmy .gt_row {
+#vohyumhkzd .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -998,7 +952,7 @@ B
   overflow-x: hidden;
 }
 
-#mvtgxgvvmy .gt_stub {
+#vohyumhkzd .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1010,7 +964,7 @@ B
   padding-left: 12px;
 }
 
-#mvtgxgvvmy .gt_summary_row {
+#vohyumhkzd .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1020,7 +974,7 @@ B
   padding-right: 5px;
 }
 
-#mvtgxgvvmy .gt_first_summary_row {
+#vohyumhkzd .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1030,7 +984,7 @@ B
   border-top-color: #D3D3D3;
 }
 
-#mvtgxgvvmy .gt_grand_summary_row {
+#vohyumhkzd .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1040,7 +994,7 @@ B
   padding-right: 5px;
 }
 
-#mvtgxgvvmy .gt_first_grand_summary_row {
+#vohyumhkzd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1050,11 +1004,11 @@ B
   border-top-color: #D3D3D3;
 }
 
-#mvtgxgvvmy .gt_striped {
+#vohyumhkzd .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mvtgxgvvmy .gt_table_body {
+#vohyumhkzd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1063,7 +1017,7 @@ B
   border-bottom-color: #D3D3D3;
 }
 
-#mvtgxgvvmy .gt_footnotes {
+#vohyumhkzd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1077,13 +1031,13 @@ B
   border-right-color: #D3D3D3;
 }
 
-#mvtgxgvvmy .gt_footnote {
+#vohyumhkzd .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#mvtgxgvvmy .gt_sourcenotes {
+#vohyumhkzd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1097,46 +1051,46 @@ B
   border-right-color: #D3D3D3;
 }
 
-#mvtgxgvvmy .gt_sourcenote {
+#vohyumhkzd .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#mvtgxgvvmy .gt_left {
+#vohyumhkzd .gt_left {
   text-align: left;
 }
 
-#mvtgxgvvmy .gt_center {
+#vohyumhkzd .gt_center {
   text-align: center;
 }
 
-#mvtgxgvvmy .gt_right {
+#vohyumhkzd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mvtgxgvvmy .gt_font_normal {
+#vohyumhkzd .gt_font_normal {
   font-weight: normal;
 }
 
-#mvtgxgvvmy .gt_font_bold {
+#vohyumhkzd .gt_font_bold {
   font-weight: bold;
 }
 
-#mvtgxgvvmy .gt_font_italic {
+#vohyumhkzd .gt_font_italic {
   font-style: italic;
 }
 
-#mvtgxgvvmy .gt_super {
+#vohyumhkzd .gt_super {
   font-size: 65%;
 }
 
-#mvtgxgvvmy .gt_footnote_marks {
+#vohyumhkzd .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="mvtgxgvvmy" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="vohyumhkzd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Variable</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">95% CI</th>
@@ -1199,7 +1153,7 @@ B
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
