@@ -20,7 +20,7 @@ if (!requireNamespace("dplyr", quietly = TRUE)) {
 
 ```
 
-# The difference between a dataframe and its render
+## The difference between a dataframe and its render
 
 Most of objects encountered throughout the **easystats** packages are "tables", i.e., a 2D matrix with columns and rows. In R, these objects are often, at their core, *data frames*. Let's create one to use as an example:
 
@@ -42,28 +42,32 @@ df
 
 When I display in in the console (calling an object - e.g. `df` - is actually equivalent to calling `print(df)`), the output looks alright, but it could be improved. Some packages, such as **knitr**, have functions to create a nicer output. For instance, in markdown, so that it can be nicely rendered in markdown documents when copied:
 
-```{r, results='asis'}
-knitr::kable(df, format = "markdown")
-```
-
-
-Or HTML, which again makes it look great in HTML files. For instance, this code:
-
 ```{r, eval=FALSE}
+knitr::kable(df, format = "markdown")
+
+```
+```
+| Variable|Group |   CI| CI_low| CI_high|      p|
+|--------:|:-----|----:|------:|-------:|------:|
+|        1|A     | 0.95|  3.350|   4.230| 0.0010|
+|        3|A     | 0.95|  2.425|   5.310| 0.0456|
+|        5|A     | 0.95|  6.213|   7.123| 0.4500|
+|        3|B     | 0.95| 12.100|  13.500| 0.0042|
+|        1|B     | 0.95|  1.230|   3.610| 0.3400|
+```
+
+Or HTML, which again makes it look great in HTML files (such as this webpage you're reading):
+
+```{r, results='asis'}
 knitr::kable(df, format = "html")
 ```
 
-Will be rendered like this:
 
-```{r, results='asis', echo=FALSE}
-knitr::kable(df, format = "html")
-```
-
-# The *insight* workflow
+## The *insight* workflow
 
 The **insight** package also contains function to improve the "printing", or rendering, of tables. Its design dissociates two separate and independent steps: *formatting* and *exporting*.
 
-## Formatting
+### Formatting
 
 The purpose of formatting is to improve a given table, while still keeping it as a regular R data frame, so that it can be for instance further modified by the user.
 
@@ -81,23 +85,23 @@ df %>%
 ```
 
 
-## Exporting
+### Exporting
 
 The next step is *exporting*, which takes a data frame and renders it in a given format, so that it looks good in the console, or in markdown, HTML or latex.
 
-For text output, we need to `cat()` the returned result to get nice output in the console.
+For console output, we need to `cat()` the returned result to get nicely printed code:
 
 ```{r}
 cat(export_table(df))
 ```
 
-For markdown or HTML, simply use the `format` argument.
+For markdown or HTML, simply modify the `format` argument to markdown ("md")...
 
 ```{r}
 export_table(df, format = "md")
 ```
 
-...or HTML.
+...or HTML format.
 
 ```{r}
 export_table(df, format = "html")
