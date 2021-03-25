@@ -107,7 +107,7 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
       )
     )
     if (verbose) {
-      warning("Priors for parameters should follow a Beta distribution, however, shape parameters cannot be excatly determined. See 'https://mc-stan.org/rstanarm/reference/priors.html#r2-family' for details.", call. = FALSE)
+      warning("Priors for parameters should follow a Beta distribution, however, shape parameters cannot be exactly determined. See 'https://mc-stan.org/rstanarm/reference/priors.html#r2-family' for details.", call. = FALSE)
     }
   }
 
