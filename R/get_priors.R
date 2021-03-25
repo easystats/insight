@@ -25,7 +25,7 @@ get_priors <- function(x, ...) {
 
 
 #' @export
-get_priors.stanreg <- function(x, ...) {
+get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
     stop("To use this function, please install package 'rstanarm'.")
   }
@@ -106,6 +106,9 @@ get_priors.stanreg <- function(x, ...) {
         stringsAsFactors = FALSE
       )
     )
+    if (verbose) {
+      warning("Priors for parameters should follow a Beta distribution, however, shape parameters cannot be excatly determined. See 'https://mc-stan.org/rstanarm/reference/priors.html#r2-family' for details.", call. = FALSE)
+    }
   }
 
 
