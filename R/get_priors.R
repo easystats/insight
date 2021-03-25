@@ -43,7 +43,13 @@ get_priors.stanreg <- function(x, ...) {
         .x$adjusted_scale <- 0
       }
       .x <- do.call(cbind, .x)
-      as.data.frame(.x)
+      out <- as.data.frame(.x)
+      if ("R2" %in% out$dist) {
+        out$what <- NULL
+        out$scale <- 0
+        out$adjusted_scale <- 0
+      }
+      out
     }
   }))
 
@@ -74,24 +80,33 @@ get_priors.stanreg <- function(x, ...) {
   }
 
 
-  params <- find_parameters(x)$conditional
+  params <- find_parameters(x, parameters = "^(?!(R2|log-fit_ratio))")$conditional
 
-  # this is a perticular fix for the "R2" prior, which conveys prior
+  # this is a particular fix for the "R2" prior, which conveys prior
   # information about *all* the parameters. In this case, number of
   # parameters doesn't match number of priors
 
   if (length(params) != nrow(prior_info)) {
-    if (length(params) == 1) {
-      prior_info$parameter <- "(Intercept)"
-    } else if ("R2" %in% prior_info$dist) {
-      prior_info$parameter <- prior_info$dist
-      prior_info$parameter[prior_info$dist != "R2"] <- "(Intercept)"
-    }
+    prior_info$parameter <- "(Intercept)"
   } else {
     prior_info$parameter <- params
   }
   prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))]
 
+  if (length(params) > 1 && "R2" %in% prior_info$dist) {
+    dummy <- prior_info[prior_info$dist == "R2", , drop = FALSE]
+    prior_info <- rbind(
+      prior_info[prior_info$dist != "R2", , drop = FALSE],
+      data.frame(
+        parameter = params[params != "(Intercept)"],
+        dist = "beta",
+        location = dummy$location,
+        scale = length(params) / 2,
+        adjusted_scale = length(params) / 2,
+        stringsAsFactors = FALSE
+      )
+    )
+  }
 
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
