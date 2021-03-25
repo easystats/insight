@@ -864,7 +864,11 @@
     if (is.null(rho01)) {
       vc <- lme4::VarCorr(x)
       if ("Corr" %in% colnames(vc)) {
-        rho01 <- as.vector(suppressWarnings(na.omit(as.numeric(vc[, "Corr"]))))
+        re_name <- find_random(x, split_nested = FALSE, flatten = TRUE)
+        rho01 <- as.vector(suppressWarnings(stats::na.omit(as.numeric(vc[, "Corr"]))))
+        if (length(re_name) == length(rho01)) {
+          names(rho01) <- re_name
+        }
       }
     }
     rho01
