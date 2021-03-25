@@ -43,13 +43,7 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
         .x$adjusted_scale <- 0
       }
       .x <- do.call(cbind, .x)
-      out <- as.data.frame(.x)
-      if ("R2" %in% out$dist) {
-        out$what <- NULL
-        out$scale <- 0
-        out$adjusted_scale <- 0
-      }
-      out
+      as.data.frame(.x)
     }
   }))
 
@@ -87,30 +81,16 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   # parameters doesn't match number of priors
 
   if (length(params) != nrow(prior_info)) {
-    prior_info$parameter <- "(Intercept)"
+    if (length(params) == 1) {
+      prior_info$parameter <- "(Intercept)"
+    } else if ("R2" %in% prior_info$dist) {
+      prior_info$parameter <- prior_info$dist
+      prior_info$parameter[prior_info$dist != "R2"] <- "(Intercept)"
+    }
   } else {
     prior_info$parameter <- params
   }
   prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))]
-
-  if (length(params) > 1 && "R2" %in% prior_info$dist) {
-    dummy <- prior_info[prior_info$dist == "R2", , drop = FALSE]
-    prior_info <- rbind(
-      prior_info[prior_info$dist != "R2", , drop = FALSE],
-      data.frame(
-        parameter = params[params != "(Intercept)"],
-        dist = "beta",
-        location = dummy$location,
-        scale = length(params) / 2,
-        adjusted_scale = length(params) / 2,
-        stringsAsFactors = FALSE
-      )
-    )
-    if (verbose) {
-      warning("Priors for parameters should follow a Beta distribution, however, shape parameters cannot be exactly determined. See 'https://mc-stan.org/rstanarm/reference/priors.html#r2-family' for details.", call. = FALSE)
-    }
-  }
-
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
   colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info))
