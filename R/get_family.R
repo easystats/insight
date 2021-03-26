@@ -65,7 +65,7 @@ get_family.model_fit <- function(x, ...) {
 }
 
 
-#' @importFrom stats binomial gaussian Gamma inverse.gaussian poisson quasi quasibinomial quasipoisson
+#' @importFrom stats binomial gaussian poisson
 .get_family <- function(x, ...) {
   info <- model_info(x)
 

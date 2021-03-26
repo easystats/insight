@@ -262,11 +262,11 @@ get_predicted_ci <- function(x,
 
   # Sanity checks
   if (is.null(predictions)) {
-    return(data.frame(se = se))
+    return(data.frame(SE = se))
   }
 
   if (is.null(ci)) {
-    return(data.frame(ci_low = predictions, ci_high = predictions))
+    return(data.frame(CI_low = predictions, CI_high = predictions))
   } # Same as predicted
 
   dof <- get_df(x, type = "residual")
