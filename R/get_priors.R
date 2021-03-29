@@ -205,7 +205,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   prior_info$coef <- paste0(prior_info$dpar, prior_info$coef)
 
   prior_info$Distribution <- gsub("(.*)\\(.*", "\\1", prior_info$prior)
-  prior_info$Location <- gsub("(.*)\\((.*)\\,(.*)", "\\2", prior_info$prior)
+  prior_info$Location <- gsub("(.*)\\(([[:alnum:]]+)\\,(.*)", "\\2", prior_info$prior)
   prior_info$Scale <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior)
   prior_info$Parameter <- prior_info$coef
 
@@ -446,7 +446,7 @@ get_priors.mcmc.list <- function(x, ...) {
 
 #' @importFrom stats na.omit
 .is_numeric_character <- function(x) {
-  (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x))))) ||
+  (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x[nchar(x) > 0]))))) ||
     (is.factor(x) && !anyNA(suppressWarnings(as.numeric(levels(x)))))
 }
 
