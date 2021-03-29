@@ -198,7 +198,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   }
 
 
-  prior_info <- x$prior[x$prior$coef != "" & x$prior$class %in% c("b", "(Intercept)"), ]
+  prior_info <- x$prior[x$prior$coef != "" & x$prior$class %in% c("b", "Intercept", "(Intercept)"), ]
   # find additional components, avoid duplicated coef-names
   components <- prior_info$dpar != ""
   prior_info$dpar[components] <- paste0(prior_info$dpar[components], "_")
