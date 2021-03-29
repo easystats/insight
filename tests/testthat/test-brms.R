@@ -475,10 +475,11 @@ if (.runThisTest) {
       expect_equal(
         get_priors(m1),
         data.frame(
-          Parameter = c("Age", "Base", "Base:Trt1", "Trt1"),
-          Distribution = c("student_t", "student_t", "student_t", "student_t"),
-          Location = c("5, 0", "5, 0", "5, 0", "5, 0"),
-          Scale = c(10, 10, 10, 10),
+          Parameter = c("Age", "Base", "Base:Trt1", "Trt1", "(Intercept)"),
+          Distribution = c("student_t", "student_t", "student_t", "student_t", "student_t"),
+          df = c(5, 5, 5, 5, 3),
+          Location = c(0, 0, 0, 0, 1),
+          Scale = c(10, 10, 10, 10, 10),
           stringsAsFactors = FALSE
         )
       )
@@ -486,10 +487,11 @@ if (.runThisTest) {
       expect_equal(
         get_priors(m3),
         data.frame(
-          Parameter = c("c2", "treat1", "treat1:c2"),
-          Distribution = c("uniform", "uniform", "uniform"),
-          Location = c(0, 0, 0),
-          Scale = c(NA, NA, NA),
+          Parameter = c("c2", "treat1", "treat1:c2", "(Intercept)"),
+          Distribution = c("uniform", "uniform", "uniform", "student_t"),
+          df = c(NA, NA, NA, 3),
+          Location = c(0, 0, 0, 0),
+          Scale = c(NA, NA, NA, 2.5),
           stringsAsFactors = FALSE
         )
       )

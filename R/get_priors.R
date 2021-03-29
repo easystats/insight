@@ -205,11 +205,25 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   prior_info$coef <- paste0(prior_info$dpar, prior_info$coef)
 
   prior_info$Distribution <- gsub("(.*)\\(.*", "\\1", prior_info$prior)
-  prior_info$Location <- gsub("(.*)\\(([[:alnum:]]+)\\,(.*)", "\\2", prior_info$prior)
-  prior_info$Scale <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior)
+  student_t <- prior_info$Distribution %in% c("t", "student_t", "Student's t")
+  if (any(student_t)) {
+    prior_info$Location[student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\3", prior_info$prior[student_t])
+    prior_info$Location[!student_t] <- gsub("(.*)\\(([[:alnum:]]+)\\,(.*)", "\\2", prior_info$prior[!student_t])
+  } else {
+    prior_info$Location <- gsub("(.*)\\(([[:alnum:]]+)\\,(.*)", "\\2", prior_info$prior)
+  }
+  if (any(student_t)) {
+    prior_info$Scale[student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\4", prior_info$prior[student_t])
+    prior_info$Scale[!student_t] <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior[!student_t])
+  } else {
+    prior_info$Scale <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior)
+  }
+  if (any(student_t)) {
+    prior_info$df <- NA
+    prior_info$df[student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\2", prior_info$prior[student_t])
+  }
   prior_info$Parameter <- prior_info$coef
-
-  prior_info <- prior_info[, c("Parameter", "Distribution", "Location", "Scale")]
+  prior_info <- prior_info[, intersect(c("Parameter", "Distribution", "df", "Location", "Scale"), colnames(prior_info))]
 
   pinfo <- as.data.frame(lapply(prior_info, function(x) {
     if (.is_numeric_character(x)) {
@@ -218,6 +232,10 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
       as.character(x)
     }
   }), stringsAsFactors = FALSE)
+
+  # fix uniform
+  pinfo$Distribution[pinfo$Distribution == "" & is.na(pinfo$Location)] <- "uniform"
+  pinfo$Location[pinfo$Distribution == "uniform" & is.na(pinfo$Location)] <- 0
 
   if (.is_empty_string(pinfo$Distribution)) {
     if (verbose) {
