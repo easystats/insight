@@ -237,6 +237,12 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   pinfo$Distribution[pinfo$Distribution == "" & is.na(pinfo$Location)] <- "uniform"
   pinfo$Location[pinfo$Distribution == "uniform" & is.na(pinfo$Location)] <- 0
 
+  # move intercept parameters to top
+  row_order <- c(which(grepl("(Intercept|\\(Intercept\\))", pinfo$Parameter)),
+                 which(!grepl("(Intercept|\\(Intercept\\))", pinfo$Parameter)))
+  pinfo <- pinfo[row_order, ]
+  rownames(pinfo) <- NULL
+
   if (.is_empty_string(pinfo$Distribution)) {
     if (verbose) {
       print_color("Model was fitted with uninformative (flat) priors!\n", "red")
