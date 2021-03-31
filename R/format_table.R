@@ -528,6 +528,11 @@ parameters_table <- format_table
   if ("Prior_Location" %in% names(x)) x$Prior_Location <- format_value(x$Prior_Location, protect_integers = TRUE)
   if ("Prior_Scale" %in% names(x)) x$Prior_Scale <- format_value(x$Prior_Scale, protect_integers = TRUE)
   if ("Prior_Distribution" %in% names(x)) x$Prior_Distribution <- ifelse(is.na(x$Prior_Distribution), "", x$Prior_Distribution)
+  if ("Prior_df" %in% names(x)) x$Prior_df <- format_value(x$Prior_df, protect_integers = TRUE)
+  if (all(c("Prior_Distribution", "Prior_df") %in% names(x))) {
+    missing_df <- is.na(x$Prior_df) | x$Prior_df == ""
+    x$Prior_Distribution[!missing_df] <- paste0(x$Prior_Distribution[!missing_df], " (df=", x$Prior_df[!missing_df], ")")
+  }
   if (all(c("Prior_Distribution", "Prior_Location", "Prior_Scale") %in% names(x))) {
     x$Prior <- paste0(
       .capitalize(x$Prior_Distribution),
@@ -541,7 +546,7 @@ parameters_table <- format_table
 
     col_position <- which(names(x) == "Prior_Distribution")
     x <- x[c(names(x)[0:(col_position - 1)], "Prior", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
-    x$Prior_Distribution <- x$Prior_Location <- x$Prior_Scale <- NULL
+    x$Prior_Distribution <- x$Prior_Location <- x$Prior_Scale <- x$Prior_df <- NULL
   }
 
   x
