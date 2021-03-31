@@ -543,6 +543,7 @@ parameters_table <- format_table
       ")"
     )
     x$Prior <- ifelse(x$Prior == " ( +- )", "", x$Prior) # Remove empty
+    x$Prior <- trimws(gsub("( +- )", "", x$Prior, fixed = TRUE))
 
     col_position <- which(names(x) == "Prior_Distribution")
     x <- x[c(names(x)[0:(col_position - 1)], "Prior", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
