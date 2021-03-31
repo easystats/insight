@@ -1,7 +1,7 @@
 #' Numeric Values Formatting
 #'
 #' @param x Numeric value.
-#' @param digits Number of significant digits.
+#' @param digits Number of significant digits. May also be \code{"scientific"} to return scientific notation.
 #' @param protect_integers Should integers be kept as integers (i.e., without decimals)?
 #' @param missing Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.
 #' @param width Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.
@@ -102,12 +102,16 @@ format_value.logical <- format_value.numeric
         )
       )
     } else {
-      need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits) & !.zap_small) & x != 0
-      x <- ifelse(is.na(x), .missing,
-        ifelse(need_sci, sprintf("%.*e", digits, x),
-          sprintf("%.*f", digits, x)
+      if (is.character(digits) && digits == "scientific") {
+        x <- sprintf("%.5e", x)
+      } else {
+        need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits) & !.zap_small) & x != 0
+        x <- ifelse(is.na(x), .missing,
+                    ifelse(need_sci, sprintf("%.*e", digits, x),
+                           sprintf("%.*f", digits, x)
+                    )
         )
-      )
+      }
     }
   } else if (anyNA(x)) {
     x <- .convert_missing(x, .missing)

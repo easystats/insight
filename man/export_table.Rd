@@ -34,7 +34,7 @@ export_table(
 \item{empty_line}{Separator used for empty lines. If \code{NULL}, line remains
 empty (i.e. filled with whitespaces).}
 
-\item{digits}{Number of significant digits.}
+\item{digits}{Number of significant digits. May also be \code{"scientific"} to return scientific notation.}
 
 \item{protect_integers}{Should integers be kept as integers (i.e., without decimals)?}
 

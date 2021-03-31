@@ -35,7 +35,7 @@ format_value(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{digits}{Number of significant digits.}
+\item{digits}{Number of significant digits. May also be \code{"scientific"} to return scientific notation.}
 
 \item{protect_integers}{Should integers be kept as integers (i.e., without decimals)?}
 
