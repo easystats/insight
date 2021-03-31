@@ -107,7 +107,7 @@ print_parameters <- function(x,
                              remove_empty_column = FALSE,
                              titles = NULL,
                              subtitles = NULL) {
-    obj <- list(...)
+  obj <- list(...)
 
   # save attributes of original object
   att <- do.call(c, .compact_list(lapply(obj, function(i) {
@@ -230,7 +230,7 @@ print_parameters <- function(x,
     # remove empty columns
     if (isTRUE(remove_empty_column)) {
       for (j in colnames(element)) {
-        if (is.character(element[[j]]) && all(element[j] == "")) {
+        if (all(is.na(element[[j]])) || (is.character(element[[j]]) && all(element[[j]] == ""))) {
           element[[j]] <- NULL
         }
       }
