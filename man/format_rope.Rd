@@ -11,7 +11,12 @@ format_rope(rope_percentage, name = "in ROPE", digits = 2)
 
 \item{name}{Name prefixing the text. Can be \code{NULL}.}
 
-\item{digits}{Number of significant digits. May also be \code{"scientific"} to return exact p-values in scientific notation, or \code{"apa"} to use an APA-style for p-values (e.g., p < .01, p < .05, etc.).}
+\item{digits}{Number of significant digits. May also be \code{"scientific"}
+to return exact p-values in scientific notation, or \code{"apa"} to use
+an APA-style for p-values (e.g., p < .01, p < .05, etc.). If
+\code{"scientific"}, control the number of digits by adding the value as
+suffix, e.g. \code{digits = "scientific4"} to have scientific notation
+with 4 decimal places.}
 }
 \value{
 A formatted string.

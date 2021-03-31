@@ -64,7 +64,9 @@ encompassed in square brackets (else in parentheses).}
 
 \item{rope_digits}{Number of decimal places for the ROPE percentage values.}
 
-\item{zap_small}{Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.}
+\item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
+\code{digits} decimal places. If \code{FALSE}, values with more decimal
+places than \code{digits} are printed in scientific notation.}
 
 \item{preserve_attributes}{Logical, if \code{TRUE}, preserves all attributes
 from the input data frame.}

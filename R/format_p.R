@@ -6,7 +6,12 @@
 #' @param stars Add significance stars (e.g., p < .001***).
 #' @param stars_only Return only significance stars.
 #' @param name Name prefixing the text. Can be \code{NULL}.
-#' @param digits Number of significant digits. May also be \code{"scientific"} to return exact p-values in scientific notation, or \code{"apa"} to use an APA-style for p-values (e.g., p < .01, p < .05, etc.).
+#' @param digits Number of significant digits. May also be \code{"scientific"}
+#'   to return exact p-values in scientific notation, or \code{"apa"} to use
+#'   an APA-style for p-values (e.g., p < .01, p < .05, etc.). If
+#'   \code{"scientific"}, control the number of digits by adding the value as
+#'   suffix, e.g. \code{digits = "scientific4"} to have scientific notation
+#'   with 4 decimal places.
 #' @param ... Arguments from other methods.
 #' @inheritParams format_value
 #'
@@ -20,6 +25,7 @@
 #' p <- coef(summary(model))[, 4]
 #' format_p(p, digits = "apa")
 #' format_p(p, digits = "scientific")
+#' format_p(p, digits = "scientific2")
 #' @export
 format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing = "", digits = 3, ...) {
 
@@ -51,13 +57,24 @@ format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing =
         )
       )
     )
-  } else if (digits == "scientific") {
+  } else if (is.character(digits) && grepl("^scientific", digits)) {
+    digits <- tryCatch(
+      {
+        as.numeric(gsub("scientific", "", digits, fixed = TRUE))
+      },
+      error = function(e) {
+        NA
+      }
+    )
+    if (is.na(digits)) {
+      digits <- 5
+    }
     text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, sprintf("= %.5e***", p),
-        ifelse(p < 0.01, sprintf("= %.5e**", p),
-          ifelse(p < 0.05, sprintf("= %.5e*", p),
-            ifelse(p > 0.999, sprintf("= %.5e*", p),
-              sprintf("= %.5e", p)
+      ifelse(p < 0.001, sprintf("= %.*e***", digits, p),
+        ifelse(p < 0.01, sprintf("= %.*e**", digits, p),
+          ifelse(p < 0.05, sprintf("= %.*e*", digits, p),
+            ifelse(p > 0.999, sprintf("= %.*e", digits, p),
+              sprintf("= %.*e", digits, p)
             )
           )
         )

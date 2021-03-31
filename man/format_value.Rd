@@ -35,17 +35,27 @@ format_value(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{digits}{Number of significant digits. May also be \code{"scientific"} to return scientific notation.}
+\item{digits}{Number of significant digits. May also be \code{"scientific"}
+to return scientific notation. For the latter case, control the number of
+digits by adding the value as suffix, e.g. \code{digits = "scientific4"}
+to have scientific notation with 4 decimal places.}
 
-\item{protect_integers}{Should integers be kept as integers (i.e., without decimals)?}
+\item{protect_integers}{Should integers be kept as integers (i.e., without
+decimals)?}
 
-\item{missing}{Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.}
+\item{missing}{Value by which \code{NA} values are replaced. By default, an
+empty string (i.e. \code{""}) is returned for \code{NA}.}
 
-\item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
+\item{width}{Minimum width of the returned string. If not \code{NULL} and
+\code{width} is larger than the string's length, leading whitespaces are
+added to the string.}
 
-\item{as_percent}{Logical, if \code{TRUE}, value is formatted as percentage value.}
+\item{as_percent}{Logical, if \code{TRUE}, value is formatted as percentage
+value.}
 
-\item{zap_small}{Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.}
+\item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
+\code{digits} decimal places. If \code{FALSE}, values with more decimal
+places than \code{digits} are printed in scientific notation.}
 }
 \value{
 A formatted string.
@@ -60,6 +70,8 @@ format_value(1.2012313)
 format_value(c(0.0045, 234, -23))
 format_value(c(0.0045, .12, .34))
 format_value(c(0.0045, .12, .34), as_percent = TRUE)
+format_value(c(0.0045, .12, .34), digits = "scientific")
+format_value(c(0.0045, .12, .34), digits = "scientific2")
 
 format_value(as.factor(c("A", "B", "A")))
 format_value(iris$Species)

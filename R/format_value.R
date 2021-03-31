@@ -1,12 +1,22 @@
 #' Numeric Values Formatting
 #'
 #' @param x Numeric value.
-#' @param digits Number of significant digits. May also be \code{"scientific"} to return scientific notation.
-#' @param protect_integers Should integers be kept as integers (i.e., without decimals)?
-#' @param missing Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.
-#' @param width Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.
-#' @param as_percent Logical, if \code{TRUE}, value is formatted as percentage value.
-#' @param zap_small Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.
+#' @param digits Number of significant digits. May also be \code{"scientific"}
+#'   to return scientific notation. For the latter case, control the number of
+#'   digits by adding the value as suffix, e.g. \code{digits = "scientific4"}
+#'   to have scientific notation with 4 decimal places.
+#' @param protect_integers Should integers be kept as integers (i.e., without
+#'   decimals)?
+#' @param missing Value by which \code{NA} values are replaced. By default, an
+#'   empty string (i.e. \code{""}) is returned for \code{NA}.
+#' @param width Minimum width of the returned string. If not \code{NULL} and
+#'   \code{width} is larger than the string's length, leading whitespaces are
+#'   added to the string.
+#' @param as_percent Logical, if \code{TRUE}, value is formatted as percentage
+#'   value.
+#' @param zap_small Logical, if \code{TRUE}, small values are rounded after
+#'   \code{digits} decimal places. If \code{FALSE}, values with more decimal
+#'   places than \code{digits} are printed in scientific notation.
 #' @param ... Arguments passed to or from other methods.
 #'
 #'
@@ -19,6 +29,8 @@
 #' format_value(c(0.0045, 234, -23))
 #' format_value(c(0.0045, .12, .34))
 #' format_value(c(0.0045, .12, .34), as_percent = TRUE)
+#' format_value(c(0.0045, .12, .34), digits = "scientific")
+#' format_value(c(0.0045, .12, .34), digits = "scientific2")
 #'
 #' format_value(as.factor(c("A", "B", "A")))
 #' format_value(iris$Species)
@@ -102,8 +114,19 @@ format_value.logical <- format_value.numeric
         )
       )
     } else {
-      if (is.character(digits) && digits == "scientific") {
-        x <- sprintf("%.5e", x)
+      if (is.character(digits) && grepl("^scientific", digits)) {
+        digits <- tryCatch(
+          {
+            as.numeric(gsub("scientific", "", digits, fixed = TRUE))
+          },
+          error = function(e) {
+            NA
+          }
+        )
+        if (is.na(digits)) {
+          digits <- 5
+        }
+        x <- sprintf("%.*e", digits, x)
       } else {
         need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits) & !.zap_small) & x != 0
         x <- ifelse(is.na(x), .missing,

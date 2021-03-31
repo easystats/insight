@@ -23,9 +23,15 @@ format_p(
 
 \item{name}{Name prefixing the text. Can be \code{NULL}.}
 
-\item{missing}{Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.}
+\item{missing}{Value by which \code{NA} values are replaced. By default, an
+empty string (i.e. \code{""}) is returned for \code{NA}.}
 
-\item{digits}{Number of significant digits. May also be \code{"scientific"} to return exact p-values in scientific notation, or \code{"apa"} to use an APA-style for p-values (e.g., p < .01, p < .05, etc.).}
+\item{digits}{Number of significant digits. May also be \code{"scientific"}
+to return exact p-values in scientific notation, or \code{"apa"} to use
+an APA-style for p-values (e.g., p < .01, p < .05, etc.). If
+\code{"scientific"}, control the number of digits by adding the value as
+suffix, e.g. \code{digits = "scientific4"} to have scientific notation
+with 4 decimal places.}
 
 \item{...}{Arguments from other methods.}
 }
@@ -44,4 +50,5 @@ model <- lm(mpg ~ wt + cyl, data = mtcars)
 p <- coef(summary(model))[, 4]
 format_p(p, digits = "apa")
 format_p(p, digits = "scientific")
+format_p(p, digits = "scientific2")
 }

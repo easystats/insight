@@ -34,13 +34,20 @@ export_table(
 \item{empty_line}{Separator used for empty lines. If \code{NULL}, line remains
 empty (i.e. filled with whitespaces).}
 
-\item{digits}{Number of significant digits. May also be \code{"scientific"} to return scientific notation.}
+\item{digits}{Number of significant digits. May also be \code{"scientific"}
+to return scientific notation. For the latter case, control the number of
+digits by adding the value as suffix, e.g. \code{digits = "scientific4"}
+to have scientific notation with 4 decimal places.}
 
-\item{protect_integers}{Should integers be kept as integers (i.e., without decimals)?}
+\item{protect_integers}{Should integers be kept as integers (i.e., without
+decimals)?}
 
-\item{missing}{Value by which \code{NA} values are replaced. By default, an empty string (i.e. \code{""}) is returned for \code{NA}.}
+\item{missing}{Value by which \code{NA} values are replaced. By default, an
+empty string (i.e. \code{""}) is returned for \code{NA}.}
 
-\item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string.}
+\item{width}{Minimum width of the returned string. If not \code{NULL} and
+\code{width} is larger than the string's length, leading whitespaces are
+added to the string.}
 
 \item{format}{Name of output-format, as string. If \code{NULL} (or \code{"text"}),
 returned output is used for basic printing. Can be one of \code{NULL} (the
@@ -72,7 +79,9 @@ column. For HTML-tables, may be one of \code{"center"}, \code{"left"} or
 Only applies when \code{format = "html"}. \code{group_by} is passed down
 to \code{gt::gt(groupname_col = group_by)}.}
 
-\item{zap_small}{Logical, if \code{TRUE}, small values are rounded after \code{digits} decimal places. If \code{FALSE}, values with more decimal places than \code{digits} are printed in scientific notation.}
+\item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
+\code{digits} decimal places. If \code{FALSE}, values with more decimal
+places than \code{digits} are printed in scientific notation.}
 
 \item{verbose}{Toggle messages and warnings.}
 }
