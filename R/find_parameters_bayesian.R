@@ -92,7 +92,7 @@ find_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random
         if (is.factor(dat[[i]])) {
           sprintf("%s-%s", i, levels(dat[[i]]))
         } else {
-          i
+          sprintf("%s-%s", i, i)
         }
       }))
     }
@@ -109,7 +109,7 @@ find_parameters.BFBayesFactor <- function(x, effects = c("all", "fixed", "random
         if (is.factor(dat[[i]])) {
           sprintf("%s-%s", i, levels(dat[[i]]))
         } else {
-          i
+          sprintf("%s-%s", i, i)
         }
       }))
     }
