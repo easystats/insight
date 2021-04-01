@@ -90,7 +90,7 @@ get_loglikelihood.model_fit <- function(x, ...) {
 
 .get_loglikelihood_glm <- function(x, ...) {
   fam <- family(x)$family
-  resp <- .factor_to_numeric(get_response(x))
+  resp <- get_response(x)
   w <- get_weights(x, null_as_ones = TRUE)
   dev <- stats::deviance(x)
   disp <- dev / sum(w)
@@ -98,6 +98,7 @@ get_loglikelihood.model_fit <- function(x, ...) {
 
   # Make adjustment for binomial models with matrix as input
   if (fam == "binomial") {
+    resp <- .factor_to_numeric(resp, lowest = 0)
     if (!is.null(ncol(resp))) {
       n <- apply(resp, 1, sum)
       resp <- ifelse(n == 0, 0, resp[, 1] / n)
