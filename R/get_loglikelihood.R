@@ -90,7 +90,7 @@ get_loglikelihood.model_fit <- function(x, ...) {
 
 .get_loglikelihood_glm <- function(x, ...) {
   fam <- family(x)$family
-  resp <- get_response(x)
+  resp <- .factor_to_numeric(get_response(x))
   w <- get_weights(x, null_as_ones = TRUE)
   dev <- stats::deviance(x)
   disp <- dev / sum(w)
