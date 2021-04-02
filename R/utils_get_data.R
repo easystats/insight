@@ -470,10 +470,11 @@
 # return data from a data frame that is in the environment,
 # and subset the data, if necessary
 .get_data_from_env <- function(x) {
+  model_call <- get_call(x)
   # first try, parent frame
   dat <- tryCatch(
     {
-      eval(x$call$data, envir = parent.frame())
+      eval(model_call$data, envir = parent.frame())
     },
     error = function(e) {
       NULL
@@ -484,7 +485,7 @@
     # second try, global env
     dat <- tryCatch(
       {
-        eval(x$call$data, envir = globalenv())
+        eval(model_call$data, envir = globalenv())
       },
       error = function(e) {
         NULL
@@ -493,8 +494,8 @@
   }
 
 
-  if (!is.null(dat) && .obj_has_name(x$call, "subset")) {
-    dat <- subset(dat, subset = eval(x$call$subset))
+  if (!is.null(dat) && .obj_has_name(model_call, "subset")) {
+    dat <- subset(dat, subset = eval(model_call$subset))
   }
 
   dat

@@ -131,6 +131,10 @@ check_cbind <- function(resp, combine, model) {
     resp <- .extract_combined_response(resp, "Event")
   } else if (!combine && any(grepl("Curv\\((.*)\\)", resp))) {
     resp <- .extract_combined_response(resp, "Curv")
+  } else if (!combine && any(grepl("MMO\\((.*)\\)", resp))) {
+    resp <- .extract_combined_response(resp, "MMO")
+  } else if (!combine && any(grepl("MMO2\\((.*)\\)", resp))) {
+    resp <- .extract_combined_response(resp, "MMO2")
   } else if (!combine && any(grepl("/", resp, fixed = TRUE))) {
     resp <- strsplit(resp, split = "/", fixed = TRUE)
     resp <- gsub("(I|\\(|\\))", "", .trim(unlist(resp)))
@@ -151,9 +155,13 @@ check_cbind <- function(resp, combine, model) {
 
 
 .extract_combined_response <- function(resp, pattern) {
-  resp <- sub(sprintf("%s\\(([^,].*)([\\)].*)", pattern), "\\1", resp)
-  resp <- strsplit(resp, split = ",", fixed = TRUE)
-  resp <- .trim(unlist(resp))
+  if (pattern %in% c("MMO", "MMO2") && !grepl(paste0("^", pattern, "\\((.*),(.*)\\)"), resp)) {
+    resp <- gsub(paste0("^", pattern, "\\((.*)\\)"), "\\1", resp)
+  } else {
+    resp <- sub(sprintf("%s\\(([^,].*)([\\)].*)", pattern), "\\1", resp)
+    resp <- strsplit(resp, split = ",", fixed = TRUE)
+    resp <- .trim(unlist(resp))
+  }
 
   if (any(.string_contains("-", resp[2]))) {
     resp[2] <- .trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))

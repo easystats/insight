@@ -362,6 +362,20 @@ model_info.clmm <- model_info.clm
 #' @export
 model_info.mixor <- model_info.clm
 
+#' @export
+model_info.mvord <- function(x, ...) {
+  link_name <- x$rho$link$name
+  faminfo <- stats::binomial(link = ifelse(link_name == "mvprobit", "probit", "logit"))
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    multi.var = TRUE,
+    ...
+  )
+}
+
 
 
 

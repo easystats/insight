@@ -70,6 +70,11 @@ get_call.lm <- function(x) {
 get_call.glm <- get_call.lm
 
 #' @export
+get_call.mvord <- function(x) {
+  x$rho$mc
+}
+
+#' @export
 get_call.model_fit <- function(x) {
   get_call(x$fit)
 }

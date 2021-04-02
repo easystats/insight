@@ -37,5 +37,5 @@ is_multivariate <- function(x) {
   }
 
   (inherits(x, "brmsfit") && !is.null(stats::formula(x)$response)) |
-    inherits(x, "stanmvreg") | inherits(x, "mlm") | gam_mv | !is.null(attr(x, "is_mv", exact = TRUE))
+    inherits(x, c("stanmvreg", "mlm", "mvord")) | gam_mv | !is.null(attr(x, "is_mv", exact = TRUE))
 }

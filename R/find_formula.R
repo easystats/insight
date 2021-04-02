@@ -295,6 +295,13 @@ find_formula.mjoint <- function(x, ...) {
 
 
 #' @export
+find_formula.mvord <- function(x, ...) {
+  f <- list(conditional = x$rho$formula)
+  .find_formula_return(f)
+}
+
+
+#' @export
 find_formula.btergm <- function(x, ...) {
   f <- list(conditional = x@formula)
   .find_formula_return(f)
