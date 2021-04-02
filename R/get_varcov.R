@@ -165,7 +165,9 @@ get_varcov.mvord <- function(x, component = c("all", "conditional", "thresholds"
 
   if (component != "all") {
     fp <- find_parameters(x)[[component]]
-    fp <- gsub("\\s", "\\.", fp)
+    if (component == "thresholds") {
+      fp <- gsub("\\s", "\\.", fp)
+    }
     keep <- match(fp, rownames(vc))
     vc <- vc[keep, keep, drop = FALSE]
   }
