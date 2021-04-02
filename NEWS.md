@@ -1,3 +1,14 @@
+# insight 0.13.3
+
+## New supported model classes
+
+* Support for `mvord` (*mvord*)
+
+## Bug fixes
+
+* Fixed issue (warning) in `get_loglikelihood()` for binomial models with
+  non-numeric reponse variables.
+
 # insight 0.13.2
 
 ## General
