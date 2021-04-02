@@ -7,7 +7,7 @@
 ## Bug fixes
 
 * Fixed issue (warning) in `get_loglikelihood()` for binomial models with
-  non-numeric reponse variables.
+  non-numeric response variables.
 
 # insight 0.13.2
 

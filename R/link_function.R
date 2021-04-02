@@ -303,6 +303,14 @@ link_function.flexsurvreg <- function(x, ...) {
 
 
 #' @export
+link_function.mvord <- function(x, ...) {
+  link_name <- x$rho$link$name
+  l <- stats::make.link(link = ifelse(link_name == "mvprobit", "probit", "logit"))
+  l$linkfun
+}
+
+
+#' @export
 link_function.clm <- function(x, ...) {
   stats::make.link(link = .get_ordinal_link(x))$linkfun
 }

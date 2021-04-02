@@ -194,6 +194,13 @@ n_obs.ivprobit <- function(x, ...) {
 
 
 #' @export
+n_obs.mvord <- function(x, ...) {
+  x$rho$n
+}
+
+
+
+#' @export
 n_obs.bamlss <- function(x, ...) {
   nrow(x$model.frame)
 }

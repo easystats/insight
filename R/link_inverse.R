@@ -305,6 +305,14 @@ link_inverse.ivprobit <- function(x, ...) {
 }
 
 
+#' @export
+link_inverse.mvord <- function(x, ...) {
+  link_name <- x$rho$link$name
+  l <- stats::make.link(link = ifelse(link_name == "mvprobit", "probit", "logit"))
+  l$linkinv
+}
+
+
 
 
 
