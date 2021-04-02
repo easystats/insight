@@ -151,6 +151,13 @@
 <li>Support for <code>mvord</code> (<em>mvord</em>)</li>
 </ul>
 </div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>Add <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>lavaan</em> models.</li>
+</ul>
+</div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
@@ -186,9 +193,9 @@
 <code><a href="../reference/is_gam_model.html">is_gam_model()</a></code> as a small helper to check if a model is a generalized additive model with smooth terms.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p>Added <code>iterations</code> argument to <code><a href="../reference/get_predicted.html">get_predicted()</a></code> to control the number of draws returned for Bayesian models.</p></li>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_gam</code> if model is generalized additive model with smooth terms.</p></li>
@@ -228,9 +235,9 @@
 <li>Support for <code>elm</code>, <code>eglm</code> (<em>eflm</em>)</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/get_residuals.html">get_residuals(..., weighted = TRUE)</a></code> doesn’t throw warnings if weights are 1 (no weights specified).</p></li>
 <li><p><code><a href="../reference/n_parameters.html">n_parameters()</a></code> gains a <code>only_estimable</code> argument, to remove non-estimable parameters from counting the number of parameters for models with rank-deficient model matrix.</p></li>
@@ -264,9 +271,9 @@
 <li>Support for <code>crr</code> (<em>cmprsk</em>), <code>ergm</code> (<em>ergm</em>), <code>btergm</code> (<em>btergm</em>), <code>Rchoice</code> (<em>Rchoice</em>), <code>garch</code> (<em>tseries</em>)</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p>Slightly improved handling of different CI-columns in <code><a href="../reference/format_table.html">format_table()</a></code>.</p></li>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_leventest</code> if model is an object returned by <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html" class="external-link">car::leveneTest()</a></code>.</p></li>
@@ -323,9 +330,9 @@
 <li><p><code><a href="../reference/n_parameters.html">n_parameters()</a></code> was moved from <em>parameters</em> to <em>insight</em>.</p></li>
 </ul>
 </div>
-<div id="changes-to-functions-3" class="section level2">
+<div id="changes-to-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/find_formula.html">find_formula()</a></code>, <code>find_predictor()</code>, <code><a href="../reference/find_random.html">find_random()</a></code> and related functions now also return names of random effects from generalized additive mixed models (<code>gamm</code>, <code>gamm4</code>, <code>stan_gamm4</code>).</p></li>
 <li><p>Added support for more BFBayesFactor objects.</p></li>
@@ -361,9 +368,9 @@
 <code><a href="../reference/find_smooth.html">find_smooth()</a></code>, to return in particular smooth terms used in a model.</li>
 </ul>
 </div>
-<div id="changes-to-functions-4" class="section level2">
+<div id="changes-to-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> and <code><a href="../reference/get_variance.html">get_variance_random()</a></code> gain a <code>tolerance</code>-argument, to set the tolerance level for singularity checks when computing random effect variances.</p></li>
 <li><p><code><a href="../reference/format_table.html">parameters_table()</a></code> formats more objects from the <em>easystats</em> packages, like ROPE-range or <code><a href="https://easystats.github.io/bayestestR/reference/p_rope.html" class="external-link">p_rope()</a></code>.</p></li>
@@ -408,9 +415,9 @@
 <li><p>Added generics for <code><a href="../reference/display.html">display()</a></code> and <code><a href="../reference/display.html">print_md()</a></code>, to allow other packages to create tables in other formats when not printing the output to console.</p></li>
 </ul>
 </div>
-<div id="changes-to-functions-5" class="section level2">
+<div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/standardize_names.html">standardize_names()</a></code> tries to be as loyal to the <em>broom</em>-naming conventions as possible.</p></li>
 <li><p>The function of the <code>brackets</code>-argument in <code><a href="../reference/format_ci.html">format_ci()</a></code> was changed. It is now also possible to provide a length-two character vector, to define own brackets that encompass the CI-values.</p></li>
@@ -471,9 +478,9 @@
 <li><p>Improved handling for <em>mira</em> objects.</p></li>
 </ul>
 </div>
-<div id="changes-to-functions-6" class="section level2">
+<div id="changes-to-functions-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>na_reference</code> argument, to set the “reference” for Bayes factor values that are <code>NA</code>, and an <code>exact</code> argument for returning scientific formatted extreme values.</p></li>
 <li><p><code><a href="../reference/format_value.html">format_value()</a></code> gains a <code>zap_small</code> argument, to prevent scientific printing of numbers if these have more decimal places than indicated by <code>digits</code>.</p></li>
@@ -501,9 +508,9 @@
 <h1 class="page-header" data-toc-text="0.9.6">
 <a href="#insight-096" class="anchor"></a>insight 0.9.6<small> 2020-09-20 </small>
 </h1>
-<div id="changes-to-functions-7" class="section level2">
+<div id="changes-to-functions-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-8" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/get_data.html">get_data()</a></code> now works for models from <code>afex_aov()</code>.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> returns a more informative message for <code>BFBayesFactor</code> objects when not the first model is indexed.</p></li>
@@ -553,9 +560,9 @@
 <li>Support for <code>mipo</code> (<em>mice</em>), <code>lqmm</code> and <code>lqm</code> (<em>lqmm</em>). Preliminary support for <code>semLME</code> (<em>smicd</em>), <code>mle</code> (<em>stats4</em>) and <code>mle2</code> (<em>bbmle</em>).</li>
 </ul>
 </div>
-<div id="changes-to-functions-8" class="section level2">
+<div id="changes-to-functions-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-8" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-9" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_meta = TRUE</code> for <em>brms</em>-meta-analysis models.</p></li>
 <li><p>Make <code><a href="../reference/find_statistic.html">find_statistic()</a></code> work with <code><a href="https://rdrr.io/pkg/mgcv/man/bam.html" class="external-link">mgcv::bam()</a></code>.</p></li>
@@ -594,9 +601,9 @@
 <li>Value formatting functions <code><a href="../reference/format_bf.html">format_bf()</a></code>, <code><a href="../reference/format_pd.html">format_pd()</a></code>, <code><a href="../reference/format_p.html">format_p()</a></code>, <code><a href="../reference/format_rope.html">format_rope()</a></code> and <code><a href="../reference/format_number.html">format_number()</a></code> were moved from package <em>parameters</em> to <em>insight</em>.</li>
 </ul>
 </div>
-<div id="changes-to-functions-9" class="section level2">
+<div id="changes-to-functions-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-9" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-10" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also returns the correlation among random slopes.</p></li>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also (partially) supports <code>brmsfit</code> models.</p></li>
