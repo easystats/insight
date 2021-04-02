@@ -159,6 +159,21 @@ get_varcov.glmx <- function(x, component = c("all", "conditional", "extra"), ...
 
 
 #' @export
+get_varcov.mvord <- function(x, component = c("all", "conditional", "thresholds", "correlation"), ...) {
+  component <- match.arg(component)
+  vc <- stats::vcov(x)
+
+  if (component != "all") {
+    fp <- find_parameters(x)[[component]]
+    fp <- gsub("\\s", "\\.", fp)
+    keep <- match(fp, rownames(vc))
+    vc <- vc[keep, keep, drop = FALSE]
+  }
+  .process_vcov(vc)
+}
+
+
+#' @export
 get_varcov.mjoint <- function(x, component = c("all", "conditional", "survival"), ...) {
   component <- match.arg(component)
   vc <- stats::vcov(x)

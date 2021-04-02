@@ -527,6 +527,26 @@ find_parameters.mlm <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.mvord <- function(x, flatten = FALSE, ...) {
+  junk <- utils::capture.output(s <- summary(x))
+
+  out <- list(
+    thresholds = .remove_backticks_from_string(rownames(s$thresholds)),
+    conditional = .remove_backticks_from_string(rownames(s$coefficients)),
+    correlation = .remove_backticks_from_string(rownames(s$error.structure))
+  )
+  attr(out, "is_mv") <- TRUE
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}
+
+
+
+#' @export
 find_parameters.gbm <- function(x, flatten = FALSE, ...) {
   s <- summary(x, plotit = FALSE)
   pars <- list(conditional = as.character(s$var))

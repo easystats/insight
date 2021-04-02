@@ -153,10 +153,11 @@ get_parameters.clm2 <- function(x, component = c("all", "conditional", "scale"),
 get_parameters.clmm2 <- get_parameters.clm2
 
 
-
+#' @rdname get_parameters.betareg
 #' @export
-get_parameters.mvord <- function(x, ...) {
-  s <- utils::capture.output(summary(x))
+get_parameters.mvord <- function(x, component = c("all", "conditional", "thresholds", "correlation"), ...) {
+  component <- match.arg(component)
+  junk <- utils::capture.output(s <- summary(x))
   # intercepts thresholds
   thresholds <- as.data.frame(s$thresholds)
   thresholds$Parameter <- rownames(thresholds)
@@ -166,13 +167,40 @@ get_parameters.mvord <- function(x, ...) {
   coefficients$Parameter <- rownames(coefficients)
   coefficients$Response <- gsub("(.*)\\s(.*)", "\\2", coefficients$Parameter)
 
+  if (!all(coefficients$Response %in% thresholds$Response)) {
+    resp <- unique(thresholds$Response)
+    for (i in coefficients$Response) {
+      coefficients$Response[coefficients$Response == i] <- resp[grepl(paste0(i, "$"), resp)]
+    }
+  }
+
   params <- data.frame(
     Parameter = c(thresholds$Parameter, coefficients$Parameter),
     Estimate = c(unname(thresholds[, "Estimate"]), unname(coefficients[, "Estimate"])),
+    Component = c(rep("thresholds", nrow(thresholds)), rep("conditional", nrow(coefficients))),
     Response = c(thresholds$Response, coefficients$Response),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+
+  params_error <- data.frame(
+    Parameter = rownames(s$error.structure),
+    Estimate = unname(s$error.structure[, "Estimate"]),
+    Component = "correlation",
+    Response = NA,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  params <- rbind(params, params_error)
+
+  if (.n_unique(params$Response) == 1) {
+    params$Response <- NULL
+  }
+
+  if (component != "all") {
+    params <- params[params$Component == component, , drop = FALSE]
+  }
 
   .remove_backticks_from_parameter_names(params)
 }

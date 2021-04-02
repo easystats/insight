@@ -192,6 +192,7 @@ find_statistic <- function(x, ...) {
       "mclogit",
       "mmclogit",
       "mvmeta",
+      "mvord",
       "negbin",
       "negbinmfx",
       "negbinirr",
