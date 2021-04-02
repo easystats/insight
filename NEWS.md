@@ -4,6 +4,10 @@
 
 * Support for `mvord` (*mvord*)
 
+## Changes to functions
+
+* Add `get_statistic()` for *lavaan* models.
+
 ## Bug fixes
 
 * Fixed issue (warning) in `get_loglikelihood()` for binomial models with

@@ -942,6 +942,35 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.lavaan <- function(x, ...) {
+  if (!requireNamespace("lavaan", quietly = TRUE)) {
+    stop("Package 'lavaan' required for this function to work. Please install it.")
+  }
+
+  params <- lavaan::parameterEstimates(x)
+
+  params$parameter <- paste0(params$lhs, params$op, params$rhs)
+  params$comp <- NA
+
+  params$comp[params$op == "~"] <- "regression"
+  params$comp[params$op == "=~"] <- "latent"
+  params$comp[params$op == "~~"] <- "residual"
+  params$comp[params$op == "~1"] <- "intercept"
+
+  params <- data.frame(
+    Parameter = params$parameter,
+    Statistic = params$z,
+    Component = params$comp,
+    stringsAsFactors = FALSE
+  )
+
+  params <- .remove_backticks_from_parameter_names(params)
+  attr(params, "statistic") <- find_statistic(x)
+  params
+}
+
+
+#' @export
 get_statistic.model_fit <- function(x, ...) {
   get_statistic(x$fit, ...)
 }
