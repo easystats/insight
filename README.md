@@ -5,7 +5,7 @@
 [![downloads](https://cranlogs.r-pkg.org/badges/insight)](https://cranlogs.r-pkg.org/)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/insight)](https://cranlogs.r-pkg.org/)
 
-**Gain insight into your models\!**
+**Gain insight into your models!**
 
 When fitting any statistical model, there are many useful pieces of
 information that are simultaneously calculated and stored beyond
@@ -80,9 +80,9 @@ as *coefficients*.
 
 #### Response and Predictors
 
-  - **response**: the outcome or response variable (dependent variable)
+-   **response**: the outcome or response variable (dependent variable)
     of a regression model.
-  - **predictor**: independent variables of (the *fixed* part of) a
+-   **predictor**: independent variables of (the *fixed* part of) a
     regression model. For mixed models, variables that are only in the
     *random effects* part (i.e. grouping factors) of the model are not
     returned as predictors by default. However, these can be included
@@ -106,9 +106,9 @@ and `poly(x, 2)`.
 
 #### Random Effects
 
-  - **random slopes**: variables that are specified as random slopes in
+-   **random slopes**: variables that are specified as random slopes in
     a mixed effects model.
-  - **random or grouping factors**: variables that are specified as
+-   **random or grouping factors**: variables that are specified as
     grouping variables in a mixed effects model.
 
 *Aren’t the predictors, terms and parameters the same thing?*
@@ -260,7 +260,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 179 model classes are supported.
+Currently, 180 model classes are supported.
 
 ``` r
 supported_models()
@@ -308,27 +308,27 @@ supported_models()
 #> [124] "mixed"             "MixMod"            "mixor"            
 #> [127] "mjoint"            "mle"               "mle2"             
 #> [130] "mlm"               "mlogit"            "mmlogit"          
-#> [133] "model_fit"         "multinom"          "negbinirr"        
-#> [136] "negbinmfx"         "ols"               "orm"              
-#> [139] "plm"               "poissonirr"        "poissonmfx"       
-#> [142] "polr"              "probitmfx"         "psm"              
-#> [145] "Rchoice"           "ridgelm"           "riskRegression"   
-#> [148] "rlm"               "rlmerMod"          "RM"               
-#> [151] "rma"               "rma.uni"           "robmixglm"        
-#> [154] "rq"                "rqs"               "rqss"             
-#> [157] "sarlm"             "scam"              "sem"              
-#> [160] "speedglm"          "speedlm"           "stanmvreg"        
-#> [163] "stanreg"           "summary.lm"        "survfit"          
-#> [166] "survreg"           "svy_vglm"          "svyglm"           
-#> [169] "svyolr"            "tobit"             "truncreg"         
-#> [172] "vgam"              "vglm"              "wbgee"            
-#> [175] "wblm"              "wbm"               "zcpglm"           
-#> [178] "zeroinfl"          "zerotrunc"
+#> [133] "model_fit"         "multinom"          "mvord"            
+#> [136] "negbinirr"         "negbinmfx"         "ols"              
+#> [139] "orm"               "plm"               "poissonirr"       
+#> [142] "poissonmfx"        "polr"              "probitmfx"        
+#> [145] "psm"               "Rchoice"           "ridgelm"          
+#> [148] "riskRegression"    "rlm"               "rlmerMod"         
+#> [151] "RM"                "rma"               "rma.uni"          
+#> [154] "robmixglm"         "rq"                "rqs"              
+#> [157] "rqss"              "sarlm"             "scam"             
+#> [160] "sem"               "speedglm"          "speedlm"          
+#> [163] "stanmvreg"         "stanreg"           "summary.lm"       
+#> [166] "survfit"           "survreg"           "svy_vglm"         
+#> [169] "svyglm"            "svyolr"            "tobit"            
+#> [172] "truncreg"          "vgam"              "vglm"             
+#> [175] "wbgee"             "wblm"              "wbm"              
+#> [178] "zcpglm"            "zeroinfl"          "zerotrunc"
 ```
 
-  - **Didn’t find a model?** [File an
+-   **Didn’t find a model?** [File an
     issue](https://github.com/easystats/insight/issues) and request
-    additional model-support in *insight*\!
+    additional model-support in *insight*!
 
 ## Credits
 
