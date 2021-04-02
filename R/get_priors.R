@@ -171,34 +171,39 @@ get_priors.stanmvreg <- function(x, ...) {
 #' @rdname get_priors
 #' @export
 get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
+
+  # 1. Gather prior info -------------------
+  priors <- x$prior # Copy priors info from model
+
   ## TODO needs testing for edge cases - check if "coef"-column is
   # always empty for intercept-class
-  x$prior$coef[x$prior$class == "Intercept"] <- "(Intercept)"
+  priors$coef[priors$class == "Intercept"] <- "(Intercept)"
 
 
   # get default prior for all parameters, if defined
-  def_prior_b <- which(x$prior$prior != "" & x$prior$class == "b" & x$prior$coef == "")
+  def_prior_b <- which(priors$prior != "" &priors$class == "b" & priors$coef == "")
 
   # check which parameters have a default prior
-  need_def_prior <- which(x$prior$prior == "" & x$prior$class == "b" & x$prior$coef != "")
+  need_def_prior <- which(priors$prior == "" & priors$class == "b" & priors$coef != "")
 
   if (!.is_empty_object(def_prior_b) && !.is_empty_object(need_def_prior)) {
-    x$prior$prior[need_def_prior] <- x$prior$prior[def_prior_b]
+    priors$prior[need_def_prior] <- priors$prior[def_prior_b]
   }
 
 
   # get default prior for all parameters, if defined
-  def_prior_intercept <- which(x$prior$prior != "" & x$prior$class == "Intercept" & x$prior$coef == "")
+  def_prior_intercept <- which(priors$prior != "" & priors$class == "Intercept" & priors$coef == "")
 
   # check which parameters have a default prior
-  need_def_prior <- which(x$prior$prior == "" & x$prior$class == "Intercept" & x$prior$coef != "")
+  need_def_prior <- which(priors$prior == "" & priors$class == "Intercept" & priors$coef != "")
 
   if (!.is_empty_object(def_prior_intercept) && !.is_empty_object(need_def_prior)) {
-    x$prior$prior[need_def_prior] <- x$prior$prior[def_prior_intercept]
+    priors$prior[need_def_prior] <- priors$prior[def_prior_intercept]
   }
 
+  prior_info <- priors[priors$coef != "" & priors$class %in% c("b", "Intercept", "(Intercept)"), ]
 
-  prior_info <- x$prior[x$prior$coef != "" & x$prior$class %in% c("b", "Intercept", "(Intercept)"), ]
+  # 2. Format prior info -------------------
   # find additional components, avoid duplicated coef-names
   components <- prior_info$dpar != ""
   prior_info$dpar[components] <- paste0(prior_info$dpar[components], "_")
