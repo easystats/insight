@@ -115,6 +115,16 @@ get_df.lqmm <- function(x, type = "residual", ...) {
 get_df.lqm <- get_df.lqmm
 
 
+get_df.cgam <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "model") {
+    .model_df(x)
+  } else {
+    x$resid_df_obs
+  }
+}
+
+
 #' @export
 get_df.glht <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
