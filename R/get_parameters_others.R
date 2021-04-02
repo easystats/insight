@@ -154,6 +154,31 @@ get_parameters.clmm2 <- get_parameters.clm2
 
 
 
+#' @export
+get_parameters.mvord <- function(x, ...) {
+  s <- utils::capture.output(summary(x))
+  # intercepts thresholds
+  thresholds <- as.data.frame(s$thresholds)
+  thresholds$Parameter <- rownames(thresholds)
+  thresholds$Response <- gsub("(.*)\\s(.*)", "\\1", thresholds$Parameter)
+  # coefficients
+  coefficients <- as.data.frame(s$coefficients)
+  coefficients$Parameter <- rownames(coefficients)
+  coefficients$Response <- gsub("(.*)\\s(.*)", "\\2", coefficients$Parameter)
+
+  params <- data.frame(
+    Parameter = c(thresholds$Parameter, coefficients$Parameter),
+    Estimate = c(unname(thresholds[, "Estimate"]), unname(coefficients[, "Estimate"])),
+    Response = c(thresholds$Response, coefficients$Response),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+
 #' @rdname get_parameters.betareg
 #' @export
 get_parameters.mjoint <- function(x, component = c("all", "conditional", "survival"), ...) {

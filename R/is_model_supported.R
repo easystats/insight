@@ -66,102 +66,50 @@ supported_models <- function() {
     "glmrob", "glmRob", "glmx", "gls", "gmnl",
 
     # h ----------------------------
-    "HLfit",
-    "htest",
-    "hurdle",
-    "ivFixed",
-    "iv_robust",
-    "ivreg",
-    "ivprobit",
-    "lavaan",
-    "lm",
-    "lm_robust",
-    "lme",
-    "lmrob",
-    "lmRob",
-    "lmerMod",
-    "lmerModLmerTest",
-    "lmodel2",
-    "logitmfx",
-    "logitor",
-    "logistf",
-    "LORgee",
-    "lqm",
-    "lqmm",
-    "lrm",
-    "manova",
-    "MANOVA",
-    "margins",
-    "maxLik",
-    "mcmc",
-    "MCMCglmm",
-    "mediate",
-    "metaplus",
-    "merMod",
-    "merModList",
-    "mipo",
-    "mira",
-    "mixed",
-    "mixor",
-    "MixMod",
-    "mhurdle",
-    "mjoint",
-    "mle",
-    "mle2",
-    "mlm",
-    "mclogit",
-    "mcmc.list",
-    "meta_bma",
-    "meta_fixed",
-    "meta_random",
-    "mlogit",
-    "mmlogit",
-    "model_fit",
-    "multinom",
-    "negbinmfx",
-    "negbinirr",
-    "ols",
-    "orm",
-    "poissonmfx",
-    "poissonirr",
-    "plm",
-    "polr",
-    "psm",
-    "probitmfx",
-    "Rchoice",
-    "ridgelm",
-    "riskRegression",
-    "rlm",
-    "rlmerMod",
-    "RM",
-    "rma",
-    "rma.uni",
-    "robmixglm",
-    "rq",
-    "rqs",
-    "rqss",
-    "sarlm",
-    "scam",
-    "sem",
-    "speedlm",
-    "speedglm",
-    "stanmvreg",
-    "stanreg",
-    "summary.lm",
-    "survfit",
-    "survreg",
-    "svy_vglm",
-    "svyglm",
-    "svyolr",
-    "tobit",
-    "truncreg",
-    "vgam",
-    "vglm",
-    "wbm",
-    "wblm",
-    "wbgee",
-    "zcpglm",
-    "zeroinfl",
-    "zerotrunc"
+    "HLfit", "htest", "hurdle",
+
+    # i ----------------------------
+    "ivFixed", "iv_robust", "ivreg", "ivprobit",
+
+    # l ----------------------------
+    "lavaan", "lm", "lm_robust", "lme", "lmrob", "lmRob", "lmerMod",
+    "lmerModLmerTest", "lmodel2", "logitmfx", "logitor", "logistf", "LORgee",
+    "lqm", "lqmm", "lrm",
+
+    # m ----------------------------
+    "manova", "MANOVA", "margins", "maxLik", "mcmc", "MCMCglmm", "mediate",
+    "metaplus", "merMod", "merModList", "mipo", "mira", "mixed", "mixor",
+    "MixMod", "mhurdle", "mjoint", "mle", "mle2", "mlm", "mclogit", "mcmc.list",
+    "meta_bma", "meta_fixed", "meta_random", "mlogit", "mmlogit", "model_fit",
+    "multinom", "mvord",
+
+    # n ----------------------------
+    "negbinmfx", "negbinirr",
+
+    # o ----------------------------
+    "ols", "orm",
+
+    # p ----------------------------
+    "poissonmfx", "poissonirr", "plm", "polr", "psm", "probitmfx",
+
+    # r ----------------------------
+    "Rchoice", "ridgelm", "riskRegression", "rlm", "rlmerMod", "RM", "rma",
+    "rma.uni", "robmixglm", "rq", "rqs", "rqss",
+
+    # s ----------------------------
+    "sarlm", "scam", "sem", "speedlm", "speedglm", "stanmvreg", "stanreg",
+    "summary.lm", "survfit", "survreg", "svy_vglm", "svyglm", "svyolr",
+
+    # t ----------------------------
+    "tobit", "truncreg",
+
+    # v ----------------------------
+    "vgam", "vglm",
+
+    # w ----------------------------
+    "wbm", "wblm", "wbgee",
+
+    # z ----------------------------
+    "zcpglm", "zeroinfl", "zerotrunc"
   )
 }
