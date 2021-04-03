@@ -86,7 +86,7 @@ get_df.emmGrid <- function(x, ...) {
 
 
 #' @export
-get_df.emmGrid <- function(x, ...) {
+get_df.emm_list <- function(x, ...) {
   if (!is.null(x[[1]]@misc$is_boot) && x[[1]]@misc$is_boot) {
     return(.boot_em_df(x))
   }

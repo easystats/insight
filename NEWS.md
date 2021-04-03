@@ -8,10 +8,15 @@
 
 * Add `get_statistic()` for *lavaan* models.
 
+* `get_df()` supports more models/objects.
+
 ## Bug fixes
 
 * Fixed issue (warning) in `get_loglikelihood()` for binomial models with
   non-numeric response variables.
+
+* `find_statistic()` correctly distinguishes t- and z-statistic for *emmGrid*
+  objects.
 
 # insight 0.13.2
 

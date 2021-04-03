@@ -76,8 +76,6 @@ find_statistic <- function(x, ...) {
       "crqs",
       "drc",
       "elm",
-      "emmGrid",
-      "emm_list",
       "feis",
       "felm",
       "gamlss",
@@ -268,6 +266,8 @@ find_statistic <- function(x, ...) {
       "cgam",
       "cgamm",
       "eglm",
+      "emmGrid",
+      "emm_list",
       "fixest",
       "gam",
       "glm",
@@ -374,7 +374,22 @@ find_statistic <- function(x, ...) {
   }
 
   if (model_class %in% g.mods) {
-    if (model_info(x)$family %in% g.t.mods) {
+    if (model_class %in% c("emmGrid", "emm_list")) {
+      stat <- tryCatch(
+        {
+          df <- get_df(x)
+          if (all(is.na(df)) || all(is.infinite(df))) {
+            "z-statistic"
+          } else {
+            "t-statistic"
+          }
+        },
+        error = function(e) {
+          "t-statistic"
+        }
+      )
+      return(stat)
+    } else if (model_info(x)$family %in% g.t.mods) {
       return("t-statistic")
     } else {
       return("z-statistic")
