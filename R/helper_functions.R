@@ -58,7 +58,10 @@
     x <- x[!sapply(x, function(i) all(is.na(i)))]
     x <- x[!apply(x, 1, function(i) all(is.na(i))), ]
   }
-  x <- stats::na.omit(x)
+  # need to check for is.null for R 3.4
+  if (!is.null(x)) {
+    x <- stats::na.omit(x)
+  }
   length(x) == 0 || is.null(x) || isTRUE(nrow(x) == 0)
 }
 
