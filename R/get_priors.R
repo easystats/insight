@@ -181,7 +181,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
 
   # get default prior for all parameters, if defined
-  def_prior_b <- which(priors$prior != "" &priors$class == "b" & priors$coef == "")
+  def_prior_b <- which(priors$prior != "" & priors$class == "b" & priors$coef == "")
 
   # check which parameters have a default prior
   need_def_prior <- which(priors$prior == "" & priors$class == "b" & priors$coef != "")
