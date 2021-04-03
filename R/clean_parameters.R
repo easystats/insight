@@ -418,6 +418,12 @@ clean_parameters.mlm <- function(x, ...) {
       "distributional"
     } else if (grepl("beta", i, fixed = TRUE)) {
       "distributional"
+    } else if (grepl("mix", i, fixed = TRUE)) {
+      "distributional"
+    } else if (grepl("shiftprop", i, fixed = TRUE)) {
+      "distributional"
+    } else if (grepl("dispersion", i, fixed = TRUE)) {
+      "dispersion"
     } else {
       "conditional"
     }

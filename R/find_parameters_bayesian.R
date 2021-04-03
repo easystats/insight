@@ -209,10 +209,14 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
   priors <- fe[grepl("^prior_", fe, perl = TRUE)]
   sigma <- fe[grepl("^sigma_", fe, perl = TRUE)]
   beta <- fe[grepl("beta", fe, fixed = TRUE)]
+  mix <- fe[grepl("mix", fe, fixed = TRUE)]
+  shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
+  dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
   rand_sd <- fe[grepl("(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
   randzi_sd <- fe[grepl("^sd_(.*_zi)", fe, perl = TRUE)]
   rand_cor <- fe[grepl("(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
   randzi_cor <- fe[grepl("^cor_(.*_zi)", fe, perl = TRUE)]
+  auxiliary <- fe[grepl("(shape|precision)", fe)]
 
   l <- .compact_list(list(
     conditional = cond,
@@ -223,6 +227,10 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
     smooth_terms = smooth_terms,
     sigma = sigma,
     beta = beta,
+    dispersion = dispersion,
+    mix = mix,
+    shiftprop = shiftprop,
+    auxiliary = auxiliary,
     priors = priors
   ))
 
@@ -280,6 +288,18 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
         beta <- NULL
       }
 
+      if (.obj_has_name(l, "dispersion")) {
+        dispersion <- l$dispersion[grepl(sprintf("^dispersion_\\Q%s\\E$", i), l$dispersion)]
+      } else {
+        dispersion <- NULL
+      }
+
+      if (.obj_has_name(l, "mix")) {
+        mix <- l$mix[grepl(sprintf("^mix_\\Q%s\\E$", i), l$mix)]
+      } else {
+        mix <- NULL
+      }
+
       if (.obj_has_name(l, "smooth_terms")) {
         smooth_terms <- l$smooth_terms
       } else {
@@ -301,6 +321,8 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
         smooth_terms = smooth_terms,
         sigma = sigma,
         beta = beta,
+        dispersion = dispersion,
+        mix = mix,
         priors = priors
       ))
 

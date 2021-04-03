@@ -201,7 +201,8 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
     priors$prior[need_def_prior] <- priors$prior[def_prior_intercept]
   }
 
-  prior_info <- priors[priors$coef != "" & priors$class %in% c("b", "Intercept", "(Intercept)"), ]
+  select_priors <- (priors$coef != "" & priors$class %in% c("b", "Intercept", "(Intercept)")) | priors$class %in% c("sigma", "mix", "shiftprop")
+  prior_info <- priors[select_priors, ]
 
   # 2. Format prior info -------------------
   # find additional components, avoid duplicated coef-names
@@ -243,6 +244,8 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
     prior_info$df[student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\2", prior_info$prior[student_t])
   }
   prior_info$Parameter <- prior_info$coef
+  prior_info$Parameter[prior_info$class %in% c("sigma", "mix", "shiftprop")] <- prior_info$class[prior_info$class %in% c("sigma", "mix", "shiftprop")]
+
   prior_info <- prior_info[, intersect(c("Parameter", "Distribution", "df", "Location", "Scale"), colnames(prior_info))]
 
   pinfo <- as.data.frame(lapply(prior_info, function(x) {
