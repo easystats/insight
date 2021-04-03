@@ -172,6 +172,8 @@ get_priors.stanmvreg <- function(x, ...) {
 #' @export
 get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
+  ## TODO #332
+
   # 1. Gather prior info -------------------
   priors <- as.data.frame(x$prior) # Copy priors info from model
 
