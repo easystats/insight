@@ -210,19 +210,34 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   prior_info$coef <- paste0(prior_info$dpar, prior_info$coef)
 
   prior_info$Distribution <- gsub("(.*)\\(.*", "\\1", prior_info$prior)
+
+  # fix uniform prior description
+  prior_info$Distribution[grepl("^(U|u)niform(.*)", prior_info$Distribution)] <- "uniform"
+  prior_info$prior[grepl("^(U|u)niform(.*)", prior_info$prior)] <- "uniform"
+
   student_t <- prior_info$Distribution %in% c("t", "student_t", "Student's t")
+  uniform <- prior_info$Distribution == "uniform"
+
   if (any(student_t)) {
     prior_info$Location[student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\3", prior_info$prior[student_t])
     prior_info$Location[!student_t] <- gsub("(.*)\\(([[:alnum:]]+)\\,(.*)", "\\2", prior_info$prior[!student_t])
   } else {
     prior_info$Location <- gsub("(.*)\\(([[:alnum:]]+)\\,(.*)", "\\2", prior_info$prior)
   }
+  if (any(uniform)) {
+    prior_info$Location[uniform] <- NA
+  }
+
   if (any(student_t)) {
     prior_info$Scale[student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\4", prior_info$prior[student_t])
     prior_info$Scale[!student_t] <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior[!student_t])
   } else {
     prior_info$Scale <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior)
   }
+  if (any(uniform)) {
+    prior_info$Scale[uniform] <- NA
+  }
+
   if (any(student_t)) {
     prior_info$df <- NA
     prior_info$df[student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\2", prior_info$prior[student_t])

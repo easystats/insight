@@ -5,9 +5,9 @@ if (require("testthat") &&
   require("nlme") &&
   require("bdsmatrix") &&
   require("coxme")) {
-  data(lung)
+
   set.seed(1234)
-  lung$inst2 <- sample(1:10, size = nrow(lung), replace = T)
+  lung$inst2 <- sample(1:10, size = nrow(lung), replace = TRUE)
   lung <- subset(lung, subset = ph.ecog %in% 0:2)
   lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
 
