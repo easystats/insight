@@ -257,6 +257,9 @@
     "auxiliary", "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi"
   )
 
+  # zero-inflation component
+  zero_inflated_component <- c("zero_inflated", "zero_inflated_random")
+
   # auxiliary parameters
   auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision",
                             "nu", "tau", "shape", "phi", "ndt", "hu", "xi",
@@ -264,6 +267,9 @@
 
   # random parameters
   random_parameters <- c("random", "zero_inflated_random")
+
+  # conditional component
+  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component))
 
   # location parameters
   location_parameters <- if (effects == "fixed") {
@@ -285,34 +291,16 @@
 
   elements <- switch(effects,
     all = elements,
-    fixed = elements[elements %in% c("conditional", "conditional1", "conditional2", "conditional3", "precision", "zero_inflated", "dispersion", "instruments", "interactions", "simplex", "smooth_terms", "correlation", "slopes", "sigma", "nonlinear", "cluster", "extra", "scale", "marginal", "beta", "survival", "infrequent_purchase", "auxiliary")],
-    random = elements[elements %in% c("random", "zero_inflated_random")]
+    fixed = elements[!elements %in% random_parameters],
+    random = elements[elements %in% random_parameters]
   )
 
   elements <- switch(component,
     all = elements,
-    conditional = elements[elements %in% c("conditional", "conditional1", "conditional2", "conditional3", "precision", "nonlinear", "random", "slopes")],
+    conditional = elements[elements %in% conditional_component],
     zi = ,
-    zero_inflated = elements[elements %in% c("zero_inflated", "zero_inflated_random")],
-    dispersion = elements[elements == "dispersion"],
-    instruments = elements[elements == "instruments"],
-    interactions = elements[elements == "interactions"],
-    simplex = elements[elements == "simplex"],
-    sigma = elements[elements == "sigma"],
-    beta = elements[elements == "beta"],
-    alpha = elements[elements == "alpha"],
-    smooth_terms = elements[elements == "smooth_terms"],
-    correlation = elements[elements == "correlation"],
-    cluster = elements[elements == "cluster"],
-    nonlinear = elements[elements == "nonlinear"],
-    slopes = elements[elements == "slopes"],
-    extra = elements[elements == "extra"],
-    scale = elements[elements == "scale"],
-    precision = elements[elements == "precision"],
-    marginal = elements[elements == "marginal"],
-    survival = elements[elements == "survival"],
-    auxiliary = elements[elements == "auxiliary"],
-    infrequent_purchase = elements[elements == "infrequent_purchase"]
+    zero_inflated = elements[elements %in% zero_inflated_component],
+    elements[elements == component]
   )
 
   elements
