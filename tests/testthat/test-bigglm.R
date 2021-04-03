@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest || Sys.getenv("USER") == "travis") {
+if (.runThisTest) {
   if (require("testthat") &&
     require("insight") && require("glmmTMB") && require("biglm")) {
     data(Salamanders)
