@@ -240,7 +240,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
   # fix uniform
   pinfo$Distribution[pinfo$Distribution == "" & is.na(pinfo$Location)] <- "uniform"
-  pinfo$Location[pinfo$Distribution == "uniform" & is.na(pinfo$Location)] <- 0
+  pinfo$Location[pinfo$Distribution == "uniform" & is.na(pinfo$Location)] <- NA
 
   # move intercept parameters to top
   row_order <- c(which(grepl("(Intercept|\\(Intercept\\))", pinfo$Parameter)),
