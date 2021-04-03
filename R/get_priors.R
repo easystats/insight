@@ -173,7 +173,7 @@ get_priors.stanmvreg <- function(x, ...) {
 get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
   # 1. Gather prior info -------------------
-  priors <- x$prior # Copy priors info from model
+  priors <- as.data.frame(x$prior) # Copy priors info from model
 
   ## TODO needs testing for edge cases - check if "coef"-column is
   # always empty for intercept-class
@@ -240,7 +240,6 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
   # fix uniform
   pinfo$Distribution[pinfo$Distribution == "" & is.na(pinfo$Location)] <- "uniform"
-  pinfo$Location[pinfo$Distribution == "uniform" & is.na(pinfo$Location)] <- NA
 
   # move intercept parameters to top
   row_order <- c(which(grepl("(Intercept|\\(Intercept\\))", pinfo$Parameter)),
