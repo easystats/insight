@@ -4,7 +4,12 @@
 \alias{get_auxiliary}
 \title{Get auxiliary parameters from models}
 \usage{
-get_auxiliary(x, type = c("sigma", "dispersion", "beta"), verbose = TRUE, ...)
+get_auxiliary(
+  x,
+  type = c("sigma", "dispersion", "beta", "mix", "shiftprop"),
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{A model.}

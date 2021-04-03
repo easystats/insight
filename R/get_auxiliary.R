@@ -48,15 +48,15 @@
 #' get_auxiliary(model, type = "dispersion") # same as summary(model)$dispersion
 #' @importFrom stats sigma
 #' @export
-get_auxiliary <- function(x, type = c("sigma", "dispersion", "beta"), verbose = TRUE, ...) {
+get_auxiliary <- function(x, type = c("sigma", "dispersion", "beta", "mix", "shiftprop"), verbose = TRUE, ...) {
   type <- match.arg(type)
 
   if (type == "sigma") {
     return(as.numeric(get_sigma(x)))
   } else if (type == "dispersion") {
     return(get_dispersion(x))
-  } else if (type == "beta") {
-    return(.get_beta(x))
+  } else {
+    return(.get_generic_aux(x, type))
   }
 }
 
@@ -128,13 +128,13 @@ get_dispersion.brmsfit <- get_dispersion.glmmTMB
 
 
 
-# beta ------------------
+# special ------------------
 
 
-.get_beta <- function(x, ...) {
-  beta <- NULL
-  if (inherits(x, "brmsfir")) {
-    beta <- mean(as.data.frame(x)[["beta"]], na.rm = TRUE)
+.get_generic_aux <- function(x, param, ...) {
+  aux <- NULL
+  if (inherits(x, "brmsfit")) {
+    aux <- mean(as.data.frame(x)[[param]], na.rm = TRUE)
   }
-  beta
+  aux
 }

@@ -250,15 +250,17 @@
   # all elements of a model
   elements <- c(
     "conditional", "conditional1", "conditional2", "conditional3", "precision",
-    "nonlinear", "random", "zero_inflated", "zero_inflated_random",
-    "dispersion", "instruments", "interactions", "simplex",
-    "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes",
-    "cluster", "extra", "scale", "marginal", "alpha", "beta",
-    "survival", "infrequent_purchase", "auxiliary"
+    "nonlinear", "random", "zero_inflated", "zero_inflated_random", "shape",
+    "dispersion", "instruments", "interactions", "simplex", "smooth_terms",
+    "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra",
+    "scale", "marginal", "alpha", "beta", "survival", "infrequent_purchase",
+    "auxiliary", "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi"
   )
 
   # auxiliary parameters
-  auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape", "phi", "ndt", "hu", "xi", "coi", "zoi", "auxiliary")
+  auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision",
+                            "nu", "tau", "shape", "phi", "ndt", "hu", "xi",
+                            "coi", "zoi", "mix", "shiftprop", "auxiliary")
 
   # random parameters
   random_parameters <- c("random", "zero_inflated_random")
