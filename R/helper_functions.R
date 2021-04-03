@@ -243,6 +243,8 @@
 
 
 
+## TODO 332
+
 # to reduce redundant code, I extract this part which is used several
 # times across this package
 .get_elements <- function(effects, component) {
