@@ -121,7 +121,7 @@ get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_t
   component <- match.arg(component)
   sc <- summary(x)
 
-  smooth_terms <- sc$qsstab[, 3]
+  smooth_terms <- sc$qsstab[, 1]
   names(smooth_terms) <- rownames(sc$qsstab)
 
   .return_smooth_parms(
