@@ -66,6 +66,12 @@ if (require("testthat") &&
     expect_null(get_weights(m2))
   })
 
+  test_that("get_deviance + logLik", {
+    expect_equal(get_deviance(m2), 1697.449311, tolerance = 1e-3)
+    expect_equal(get_loglikelihood(m2), logLik(m2), tolerance = 1e-3, ignore_attr = TRUE)
+    expect_equal(get_df(m2, type = "model"), 4)
+  })
+
   test_that("model_info", {
     expect_true(model_info(m1)$is_zero_inflated)
     expect_false(model_info(m2)$is_zero_inflated)
