@@ -307,6 +307,12 @@ find_parameters.brmsfit <- function(x, effects = "all", component = "all", flatt
         mix <- NULL
       }
 
+      if (.obj_has_name(l, "shape" ) || .obj_has_name(l, "precision" )) {
+        aux <- l$aux[grepl(sprintf("^(shape|precision)_\\Q%s\\E$", i), l$aux)]
+      } else {
+        aux <- NULL
+      }
+
       if (.obj_has_name(l, "smooth_terms")) {
         smooth_terms <- l$smooth_terms
       } else {
@@ -330,7 +336,8 @@ find_parameters.brmsfit <- function(x, effects = "all", component = "all", flatt
         beta = beta,
         dispersion = dispersion,
         mix = mix,
-        priors = priors
+        priors = priors,
+        auxiliary = aux
       ))
 
       .compact_list(pars[elements])
