@@ -303,6 +303,7 @@
 
   elements <- switch(component,
     all = elements,
+    cond = ,
     conditional = elements[elements %in% conditional_component],
     zi = ,
     zero_inflated = elements[elements %in% zero_inflated_component],
