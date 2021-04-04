@@ -271,7 +271,7 @@
   random_parameters <- c("random", "zero_inflated_random")
 
   # conditional component
-  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component))
+  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "smooth_terms"))
 
   # location parameters
   location_parameters <- if (effects == "fixed") {
