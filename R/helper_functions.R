@@ -251,16 +251,16 @@
     "conditional", "conditional1", "conditional2", "conditional3", "precision",
     "nonlinear", "random", "zi", "zero_inflated", "zero_inflated_random", "shape",
     "dispersion", "instruments", "interactions", "simplex", "smooth_terms",
-    "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra",
-    "scale", "marginal", "alpha", "beta", "survival", "infrequent_purchase",
-    "auxiliary", "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi"
+    "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale",
+    "marginal", "alpha", "beta", "survival", "infrequent_purchase", "auxiliary",
+    "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi", "aux", "dist"
   )
 }
 
 .aux_elements <- function() {
-  c("sigma", "alpha", "beta", "dispersion", "precision",
-    "nu", "tau", "shape", "phi", "ndt", "hu", "xi",
-    "coi", "zoi", "mix", "shiftprop", "auxiliary")
+  c("sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape",
+    "phi", "ndt", "hu", "xi", "coi", "zoi", "mix", "shiftprop", "auxiliary",
+    "aux", "dist")
 }
 
 .get_elements <- function(effects, component) {
@@ -293,7 +293,7 @@
   }
 
   # fixed pattern?
-  if (all(component %in% c("distributional", "auxiliary"))) {
+  if (all(component %in% c("aux", "dist", "distributional", "auxiliary"))) {
     return(auxiliary_parameters)
   }
 
@@ -518,6 +518,8 @@
     "ip" = ,
     "infrequent_purchase" = dat[dat$Component == "infrequent_purchase", , drop = FALSE],
     "auxiliary" = dat[dat$Component == "auxiliary", , drop = FALSE],
+    "distributional" = dat[dat$Component == "distributional", , drop = FALSE],
+    "sigma" = dat[dat$Component == "sigma", , drop = FALSE],
     dat
   )
 }
