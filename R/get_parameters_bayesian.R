@@ -464,9 +464,9 @@ get_parameters.sim <- function(x,
 #' @importFrom stats median
 .summary_of_posteriors <- function(out, centrality = "mean", ...) {
   s <- switch(centrality,
-    "mean" = sapply(out, mean),
-    "median" = sapply(out, stats::median),
-    sapply(out, mean)
+    "mean" = sapply(out, mean, na.rm = TRUE),
+    "median" = sapply(out, stats::median, na.rm = TRUE),
+    sapply(out, mean, na.rm = TRUE)
   )
   data.frame(
     Parameter = names(s),
