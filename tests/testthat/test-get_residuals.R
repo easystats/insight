@@ -111,7 +111,8 @@ if (require("testthat") && require("insight") && require("lme4")) {
     )
     expect_equal(
       as.vector(get_deviance(m)),
-      as.vector(deviance(m))
+      177.4023,
+      tolerance = 1e-3
     )
     expect_equal(
       get_residuals(m, weighted = TRUE),
