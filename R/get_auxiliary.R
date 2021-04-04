@@ -9,10 +9,11 @@
 #' @param type The name of the auxiliary parameter that should be retrieved.
 #' \code{"sigma"} is available for most models, \code{"dispersion"} for models
 #' of class \code{glm}, \code{glmerMod} or \code{glmmTMB} as well as \code{brmsfit}.
-#' \code{"beta"} is currently only returned for \code{brmsfit} models.
-#'
+#' \code{"beta"} and other parameters are currently only returned for \code{brmsfit}
+#' models. See 'Details'.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
+#' @inheritParams get_parameters.BGGM
 #'
 #' @return The requested auxiliary parameter, or \code{NULL} if this information
 #' could not be accessed.
@@ -26,8 +27,8 @@
 #' There are many different definitions of "dispersion", depending on the context.
 #' \code{get_auxiliary()} returns the dispersion parameters that usually can
 #' be considered as variance-to-mean ratio for generalized (linear) mixed
-#' models. Exceptions are models of class \code{glmmTMB} and \code{brmsfit},
-#' where the dispersion equals \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
+#' models. Exceptions are models of class \code{glmmTMB}, where the dispersion
+#' equals \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
 #' In detail, the computation of the dispersion parameter for generalized linear
 #' models is the ratio of the sum of the squared working-residuals and the
 #' residual degrees of freedom. For mixed models of class \code{glmer}, the
@@ -35,6 +36,11 @@
 #' and is the ratio of the sum of the squared Pearson-residuals and the residual
 #' degrees of freedom. For models of class \code{glmmTMB}, dispersion is
 #' \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
+#' }
+#' \subsection{\pkg{brms} models}{
+#' For models of class \code{brmsfit}, there are different options for the
+#' \code{type} argument. See a list of supported auxiliary parameters here:
+#' \code{\link[find_parameters.BGGM]{find_parameters()}}.
 #' }
 #'
 #' @examples
@@ -48,15 +54,17 @@
 #' get_auxiliary(model, type = "dispersion") # same as summary(model)$dispersion
 #' @importFrom stats sigma
 #' @export
-get_auxiliary <- function(x, type = c("sigma", "dispersion", "beta", "mix", "shiftprop"), verbose = TRUE, ...) {
-  type <- match.arg(type)
+get_auxiliary <- function(x, type = "sigma", summary = TRUE, centrality = "mean", verbose = TRUE, ...) {
+  type <- match.arg(type, choices = .aux_elements())
 
-  if (type == "sigma") {
+  if (inherits(x, "brmsfit")) {
+    return(.get_generic_aux(x, type, summary = summary, centrality = centrality))
+  } else if (type == "sigma") {
     return(as.numeric(get_sigma(x)))
   } else if (type == "dispersion") {
     return(get_dispersion(x))
   } else {
-    return(.get_generic_aux(x, type))
+    return(NULL)
   }
 }
 
@@ -131,10 +139,13 @@ get_dispersion.brmsfit <- get_dispersion.glmmTMB
 # special ------------------
 
 
-.get_generic_aux <- function(x, param, ...) {
+.get_generic_aux <- function(x, param, summary = TRUE, centrality = "mean", ...) {
   aux <- NULL
   if (inherits(x, "brmsfit")) {
-    aux <- mean(as.data.frame(x)[[param]], na.rm = TRUE)
+    aux <- as.data.frame(x)[[param]]
+    if (summary) {
+      aux <- .summary_of_posteriors(aux, centrality = centrality)
+    }
   }
   aux
 }

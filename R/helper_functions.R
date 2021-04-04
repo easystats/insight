@@ -257,6 +257,11 @@
   )
 }
 
+.aux_elements <- function() {
+  c("sigma", "alpha", "beta", "dispersion", "precision",
+    "nu", "tau", "shape", "phi", "ndt", "hu", "xi",
+    "coi", "zoi", "mix", "shiftprop", "auxiliary")
+}
 
 .get_elements <- function(effects, component) {
 
@@ -267,9 +272,7 @@
   zero_inflated_component <- c("zi", "zero_inflated", "zero_inflated_random")
 
   # auxiliary parameters
-  auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision",
-                            "nu", "tau", "shape", "phi", "ndt", "hu", "xi",
-                            "coi", "zoi", "mix", "shiftprop", "auxiliary")
+  auxiliary_parameters <- .aux_elements()
 
   # random parameters
   random_parameters <- c("random", "zero_inflated_random")
