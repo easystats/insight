@@ -23,11 +23,17 @@
 #'      \item \code{random}, the "random effects" part from the model
 #'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
-#'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
 #'      \item \code{smooth_terms}, the smooth parameters
+#'    }
+#'    Furthermore, some models, especially from \pkg{brms}, can also return
+#'    auxiliary parameters. These may be one of the following:
+#'    \itemize{
 #'      \item \code{sigma}, the residual standard deviation (auxiliary parameter)
 #'      \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
 #'      \item \code{beta}, the beta parameter (auxiliary parameter)
+#'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
+#'      \item \code{mix}, mixture parameters (\pkg{brms} only)
+#'      \item \code{shiftprop}, shifted proportion parameters (\pkg{brms} only)
 #'    }
 #'
 #' @examples
@@ -195,7 +201,10 @@ find_parameters.bamlss <- function(x,
 
 #' @rdname find_parameters.BGGM
 #' @export
-find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "location", "distributional", "auxiliary", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
+find_parameters.brmsfit <- function(x, effects = "all", component = "all", flatten = FALSE, parameters = NULL, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  component <- match.arg(component, choices = .all_elements())
+
   ## TODO remove "optional = FALSE" in a future update?
   fe <- colnames(as.data.frame(x, optional = FALSE))
   is_mv <- NULL
@@ -234,8 +243,6 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
     priors = priors
   ))
 
-  effects <- match.arg(effects)
-  component <- match.arg(component)
   elements <- .get_elements(effects = effects, component = component)
   elements <- c(elements, "priors")
 

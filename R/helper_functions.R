@@ -243,12 +243,11 @@
 
 
 
-# to reduce redundant code, I extract this part which is used several
-# times across this package
-.get_elements <- function(effects, component) {
+# helper to access model components ----------------
 
-  # all elements of a model
-  elements <- c(
+
+.all_elements <- function() {
+  c(
     "conditional", "conditional1", "conditional2", "conditional3", "precision",
     "nonlinear", "random", "zero_inflated", "zero_inflated_random", "shape",
     "dispersion", "instruments", "interactions", "simplex", "smooth_terms",
@@ -256,6 +255,13 @@
     "scale", "marginal", "alpha", "beta", "survival", "infrequent_purchase",
     "auxiliary", "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi"
   )
+}
+
+
+.get_elements <- function(effects, component) {
+
+  # all elements of a model
+  elements <- .all_elements()
 
   # zero-inflation component
   zero_inflated_component <- c("zero_inflated", "zero_inflated_random")
@@ -305,6 +311,7 @@
 
   elements
 }
+
 
 
 
