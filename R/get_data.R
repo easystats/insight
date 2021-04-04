@@ -849,9 +849,9 @@ get_data.bife <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 #' @rdname get_data
 #' @export
-get_data.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated"), verbose = TRUE, ...) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+get_data.brmsfit <- function(x, effects = "all", component = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  component <- match.arg(component, choices = c("all", .all_elements()))
 
   model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE)
   mf <- stats::model.frame(x)

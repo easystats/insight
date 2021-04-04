@@ -6,7 +6,9 @@
 \usage{
 get_auxiliary(
   x,
-  type = c("sigma", "dispersion", "beta", "mix", "shiftprop"),
+  type = "sigma",
+  summary = TRUE,
+  centrality = "mean",
   verbose = TRUE,
   ...
 )
@@ -17,7 +19,19 @@ get_auxiliary(
 \item{type}{The name of the auxiliary parameter that should be retrieved.
 \code{"sigma"} is available for most models, \code{"dispersion"} for models
 of class \code{glm}, \code{glmerMod} or \code{glmmTMB} as well as \code{brmsfit}.
-\code{"beta"} is currently only returned for \code{brmsfit} models.}
+\code{"beta"} and other parameters are currently only returned for \code{brmsfit}
+models. See 'Details'.}
+
+\item{summary}{Logical, indicates whether the full posterior samples
+(\code{summary = FALSE})) or the summarized centrality indices of
+the posterior samples (\code{summary = TRUE})) should be returned as
+estimates.}
+
+\item{centrality}{Only for models with posterior samples, and when
+\code{summary = TRUE}. In this case, \code{centrality = "mean"} would
+calculate means of posterior samples for each parameter, while
+\code{centrality = "median"} would use the more robust median value as
+measure of central tendency.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -41,8 +55,8 @@ See \code{\link{get_sigma}}.
 There are many different definitions of "dispersion", depending on the context.
 \code{get_auxiliary()} returns the dispersion parameters that usually can
 be considered as variance-to-mean ratio for generalized (linear) mixed
-models. Exceptions are models of class \code{glmmTMB} and \code{brmsfit},
-where the dispersion equals \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
+models. Exceptions are models of class \code{glmmTMB}, where the dispersion
+equals \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
 In detail, the computation of the dispersion parameter for generalized linear
 models is the ratio of the sum of the squared working-residuals and the
 residual degrees of freedom. For mixed models of class \code{glmer}, the
@@ -50,6 +64,11 @@ dispersion parameter is also called \ifelse{html}{\out{&phi;}}{\eqn{\phi}}
 and is the ratio of the sum of the squared Pearson-residuals and the residual
 degrees of freedom. For models of class \code{glmmTMB}, dispersion is
 \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
+}
+\subsection{\pkg{brms} models}{
+For models of class \code{brmsfit}, there are different options for the
+\code{type} argument. See a list of supported auxiliary parameters here:
+\code{\link{find_parameters.BGGM}}.
 }
 }
 \examples{

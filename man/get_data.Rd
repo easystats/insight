@@ -72,13 +72,7 @@ get_data(x, ...)
   ...
 )
 
-\method{get_data}{brmsfit}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated"),
-  verbose = TRUE,
-  ...
-)
+\method{get_data}{brmsfit}(x, effects = "all", component = "all", verbose = TRUE, ...)
 
 \method{get_data}{stanreg}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 
@@ -95,10 +89,10 @@ or both be returned? Only applies to mixed models.}
 \item{verbose}{Toggle messages and warnings.}
 
 \item{component}{Should all predictor variables, predictor variables for the
- conditional model, the zero-inflated part of the model, the dispersion
- term or the instrumental variables be returned? Applies to models
- with zero-inflated and/or dispersion formula, or to models with instrumental
- variable (so called fixed-effects regressions). May be abbreviated. Note that the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
 }

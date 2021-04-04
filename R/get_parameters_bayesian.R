@@ -218,14 +218,14 @@ get_parameters.stanmvreg <- function(x,
 #' @rdname get_parameters.BGGM
 #' @export
 get_parameters.brmsfit <- function(x,
-                                   effects = c("fixed", "random", "all"),
-                                   component = c("all", "conditional", "location", "distributional", "auxiliary", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
+                                   effects = "fixed",
+                                   component = "all",
                                    parameters = NULL,
                                    summary = FALSE,
                                    centrality = "mean",
                                    ...) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  component <- match.arg(component, choices = c("all", .all_elements()))
 
   if (is_multivariate(x)) {
     parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
@@ -464,9 +464,9 @@ get_parameters.sim <- function(x,
 #' @importFrom stats median
 .summary_of_posteriors <- function(out, centrality = "mean", ...) {
   s <- switch(centrality,
-    "mean" = sapply(out, mean),
-    "median" = sapply(out, stats::median),
-    sapply(out, mean)
+    "mean" = sapply(out, mean, na.rm = TRUE),
+    "median" = sapply(out, stats::median, na.rm = TRUE),
+    sapply(out, mean, na.rm = TRUE)
   )
   data.frame(
     Parameter = names(s),

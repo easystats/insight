@@ -23,11 +23,17 @@
 #'      \item \code{random}, the "random effects" part from the model
 #'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
 #'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
-#'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
 #'      \item \code{smooth_terms}, the smooth parameters
+#'    }
+#'    Furthermore, some models, especially from \pkg{brms}, can also return
+#'    auxiliary parameters. These may be one of the following:
+#'    \itemize{
 #'      \item \code{sigma}, the residual standard deviation (auxiliary parameter)
 #'      \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
 #'      \item \code{beta}, the beta parameter (auxiliary parameter)
+#'      \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
+#'      \item \code{mix}, mixture parameters (\pkg{brms} only)
+#'      \item \code{shiftprop}, shifted proportion parameters (\pkg{brms} only)
 #'    }
 #'
 #' @examples
@@ -195,7 +201,10 @@ find_parameters.bamlss <- function(x,
 
 #' @rdname find_parameters.BGGM
 #' @export
-find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "location", "distributional", "auxiliary", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"), flatten = FALSE, parameters = NULL, ...) {
+find_parameters.brmsfit <- function(x, effects = "all", component = "all", flatten = FALSE, parameters = NULL, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  component <- match.arg(component, choices = c("all", .all_elements()))
+
   ## TODO remove "optional = FALSE" in a future update?
   fe <- colnames(as.data.frame(x, optional = FALSE))
   is_mv <- NULL
@@ -207,7 +216,7 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
   simo <- fe[grepl("^simo_", fe, perl = TRUE)]
   smooth_terms <- fe[grepl("^sds_", fe, perl = TRUE)]
   priors <- fe[grepl("^prior_", fe, perl = TRUE)]
-  sigma <- fe[grepl("^sigma_", fe, perl = TRUE)]
+  sigma <- fe[grepl("^sigma_", fe, perl = TRUE) | grepl("sigma", fe, fixed = TRUE)]
   beta <- fe[grepl("beta", fe, fixed = TRUE)]
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
   shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
@@ -234,8 +243,6 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
     priors = priors
   ))
 
-  effects <- match.arg(effects)
-  component <- match.arg(component)
   elements <- .get_elements(effects = effects, component = component)
   elements <- c(elements, "priors")
 
@@ -300,6 +307,12 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
         mix <- NULL
       }
 
+      if (.obj_has_name(l, "shape" ) || .obj_has_name(l, "precision" )) {
+        aux <- l$aux[grepl(sprintf("^(shape|precision)_\\Q%s\\E$", i), l$aux)]
+      } else {
+        aux <- NULL
+      }
+
       if (.obj_has_name(l, "smooth_terms")) {
         smooth_terms <- l$smooth_terms
       } else {
@@ -323,7 +336,8 @@ find_parameters.brmsfit <- function(x, effects = c("all", "fixed", "random"), co
         beta = beta,
         dispersion = dispersion,
         mix = mix,
-        priors = priors
+        priors = priors,
+        auxiliary = aux
       ))
 
       .compact_list(pars[elements])

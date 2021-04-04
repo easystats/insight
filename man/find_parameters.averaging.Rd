@@ -44,18 +44,20 @@
 \item{x}{A fitted model.}
 
 \item{component}{Which type of parameters to return, such as parameters for the
- conditional model, the zero-inflated part of the model, the dispersion
- term, the instrumental variables or marginal effects be returned? Applies
- to models with zero-inflated and/or dispersion formula, or to models with
- instrumental variables (so called fixed-effects regressions), or models
- with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
+conditional model, the zero-inflated part of the model, the dispersion
+term, the instrumental variables or marginal effects be returned? Applies
+to models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models
+with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model. There are two convenient shortcuts:
+component, depending on the model. There are three convenient shortcuts:
+\code{component = "all"} returns all possible parameters.
 If \code{component = "location"}, location parameters such as \code{conditional},
-\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
-For \code{component = "distributional"} (or \code{"auxiliary"}), components
-like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
-other auxiliary parameters) are returned.}
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned
+(everything that are fixed or random effects - depending on the \code{effects}
+argument - but no auxiliary parameters). For \code{component = "distributional"}
+(or \code{"auxiliary"}), components like \code{sigma}, \code{dispersion},
+\code{beta} or \code{precision} (and other auxiliary parameters) are returned.}
 
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}

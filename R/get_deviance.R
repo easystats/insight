@@ -7,6 +7,14 @@
 #'
 #' @return The model deviance.
 #'
+#' @details For GLMMs of class \code{glmerMod}, \code{glmmTMB} or \code{MixMod},
+#' the \emph{absolute unconditional} deviance is returned (see 'Details' in
+#' \code{?lme4::`merMod-class`}), i.e. minus twice the log-likelihood. To get
+#' the \emph{relative conditional} deviance (relative to a saturated model,
+#' conditioned on the conditional modes of random effects), use \code{deviance()}.
+#' The value returned \code{get_deviance()} usually equals the deviance-value
+#' from the \code{summary()}.
+#'
 #' @examples
 #' data(mtcars)
 #' x <- lm(mpg ~ cyl, data = mtcars)
@@ -88,6 +96,25 @@ get_deviance.stanreg <- function(x, verbose = TRUE, ...) {
 get_deviance.lmerMod <- function(x, ...) {
   stats::deviance(x, REML = FALSE, ...)
 }
+
+
+#' @export
+get_deviance.glmmTMB <- function(x, ...) {
+  tryCatch(
+    {
+      -2 * as.numeric(get_loglikelihood(x, ...))
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
+
+#' @export
+get_deviance.glmerMod <- get_deviance.glmmTMB
+
+#' @export
+get_deviance.MixMod <- get_deviance.glmmTMB
 
 
 #' @export

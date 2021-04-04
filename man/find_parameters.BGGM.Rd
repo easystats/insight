@@ -38,9 +38,8 @@
 
 \method{find_parameters}{brmsfit}(
   x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "location", "distributional", "auxiliary", "zi",
-    "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
+  effects = "all",
+  component = "all",
   flatten = FALSE,
   parameters = NULL,
   ...
@@ -76,18 +75,20 @@
 \item{x}{A fitted model.}
 
 \item{component}{Which type of parameters to return, such as parameters for the
- conditional model, the zero-inflated part of the model, the dispersion
- term, the instrumental variables or marginal effects be returned? Applies
- to models with zero-inflated and/or dispersion formula, or to models with
- instrumental variables (so called fixed-effects regressions), or models
- with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
+conditional model, the zero-inflated part of the model, the dispersion
+term, the instrumental variables or marginal effects be returned? Applies
+to models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models
+with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model. There are two convenient shortcuts:
+component, depending on the model. There are three convenient shortcuts:
+\code{component = "all"} returns all possible parameters.
 If \code{component = "location"}, location parameters such as \code{conditional},
-\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned.
-For \code{component = "distributional"} (or \code{"auxiliary"}), components
-like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
-other auxiliary parameters) are returned.}
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned
+(everything that are fixed or random effects - depending on the \code{effects}
+argument - but no auxiliary parameters). For \code{component = "distributional"}
+(or \code{"auxiliary"}), components like \code{sigma}, \code{dispersion},
+\code{beta} or \code{precision} (and other auxiliary parameters) are returned.}
 
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}
@@ -109,11 +110,17 @@ A list of parameter names. For simple models, only one list-element,
      \item \code{random}, the "random effects" part from the model
      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
-     \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
      \item \code{smooth_terms}, the smooth parameters
+   }
+   Furthermore, some models, especially from \pkg{brms}, can also return
+   auxiliary parameters. These may be one of the following:
+   \itemize{
      \item \code{sigma}, the residual standard deviation (auxiliary parameter)
      \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
      \item \code{beta}, the beta parameter (auxiliary parameter)
+     \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
+     \item \code{mix}, mixture parameters (\pkg{brms} only)
+     \item \code{shiftprop}, shifted proportion parameters (\pkg{brms} only)
    }
 }
 \description{

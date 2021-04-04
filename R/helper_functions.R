@@ -243,33 +243,42 @@
 
 
 
-# to reduce redundant code, I extract this part which is used several
-# times across this package
+# helper to access model components ----------------
+
+
+.all_elements <- function() {
+  c(
+    "conditional", "conditional1", "conditional2", "conditional3", "precision",
+    "nonlinear", "random", "zi", "zero_inflated", "zero_inflated_random", "shape",
+    "dispersion", "instruments", "interactions", "simplex", "smooth_terms",
+    "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale",
+    "marginal", "alpha", "beta", "survival", "infrequent_purchase", "auxiliary",
+    "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi", "aux", "dist"
+  )
+}
+
+.aux_elements <- function() {
+  c("sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape",
+    "phi", "ndt", "hu", "xi", "coi", "zoi", "mix", "shiftprop", "auxiliary",
+    "aux", "dist")
+}
+
 .get_elements <- function(effects, component) {
 
   # all elements of a model
-  elements <- c(
-    "conditional", "conditional1", "conditional2", "conditional3", "precision",
-    "nonlinear", "random", "zero_inflated", "zero_inflated_random", "shape",
-    "dispersion", "instruments", "interactions", "simplex", "smooth_terms",
-    "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra",
-    "scale", "marginal", "alpha", "beta", "survival", "infrequent_purchase",
-    "auxiliary", "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi"
-  )
+  elements <- .all_elements()
 
   # zero-inflation component
-  zero_inflated_component <- c("zero_inflated", "zero_inflated_random")
+  zero_inflated_component <- c("zi", "zero_inflated", "zero_inflated_random")
 
   # auxiliary parameters
-  auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision",
-                            "nu", "tau", "shape", "phi", "ndt", "hu", "xi",
-                            "coi", "zoi", "mix", "shiftprop", "auxiliary")
+  auxiliary_parameters <- .aux_elements()
 
   # random parameters
   random_parameters <- c("random", "zero_inflated_random")
 
   # conditional component
-  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component))
+  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "smooth_terms"))
 
   # location parameters
   location_parameters <- if (effects == "fixed") {
@@ -284,7 +293,7 @@
   }
 
   # fixed pattern?
-  if (all(component %in% c("distributional", "auxiliary"))) {
+  if (all(component %in% c("aux", "dist", "distributional", "auxiliary"))) {
     return(auxiliary_parameters)
   }
 
@@ -297,6 +306,7 @@
 
   elements <- switch(component,
     all = elements,
+    cond = ,
     conditional = elements[elements %in% conditional_component],
     zi = ,
     zero_inflated = elements[elements %in% zero_inflated_component],
@@ -305,6 +315,7 @@
 
   elements
 }
+
 
 
 
@@ -507,6 +518,8 @@
     "ip" = ,
     "infrequent_purchase" = dat[dat$Component == "infrequent_purchase", , drop = FALSE],
     "auxiliary" = dat[dat$Component == "auxiliary", , drop = FALSE],
+    "distributional" = dat[dat$Component == "distributional", , drop = FALSE],
+    "sigma" = dat[dat$Component == "sigma", , drop = FALSE],
     dat
   )
 }

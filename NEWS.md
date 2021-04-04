@@ -10,6 +10,11 @@
 
 * `get_df()` supports more models/objects.
 
+* `get_deviance()` now works for `glmerMod`, `MixMod` and `glmmTMB` models.
+
+* The behaviour and documentation of the `effects` and `component` arguments,
+  in particular for `brmsfit` models, were revised to be more consistent.
+
 ## Bug fixes
 
 * Fixed issue (warning) in `get_loglikelihood()` for binomial models with

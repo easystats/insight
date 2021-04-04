@@ -422,6 +422,10 @@ clean_parameters.mlm <- function(x, ...) {
       "distributional"
     } else if (grepl("shiftprop", i, fixed = TRUE)) {
       "distributional"
+    } else if (grepl("shape", i, fixed = TRUE)) {
+      "distributional"
+    } else if (grepl("auxiliary", i, fixed = TRUE)) {
+      "distributional"
     } else if (grepl("dispersion", i, fixed = TRUE)) {
       "dispersion"
     } else {

@@ -5,6 +5,7 @@
 #'
 #' @param ... Currently not used.
 #'
+#' @inheritParams find_parameters.glmmTMB
 #' @inheritParams find_parameters
 #' @inheritParams find_predictors
 #'

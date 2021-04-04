@@ -21,6 +21,12 @@ if (.runThisTest) {
       expect_false(model_info(m)$is_linear)
     })
 
+    test_that("get_deviance + logLik", {
+      expect_equal(get_deviance(m3), 183.96674, tolerance = 1e-3)
+      expect_equal(get_loglikelihood(m3), logLik(m3), tolerance = 1e-3, ignore_attr = TRUE)
+      expect_equal(get_df(m3, type = "model"), 5)
+    })
+
     test_that("n_parameters", {
       expect_equal(n_parameters(m), 6)
       expect_equal(n_parameters(m2), 6)
