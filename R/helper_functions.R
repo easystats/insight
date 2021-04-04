@@ -249,7 +249,7 @@
 .all_elements <- function() {
   c(
     "conditional", "conditional1", "conditional2", "conditional3", "precision",
-    "nonlinear", "random", "zero_inflated", "zero_inflated_random", "shape",
+    "nonlinear", "random", "zi", "zero_inflated", "zero_inflated_random", "shape",
     "dispersion", "instruments", "interactions", "simplex", "smooth_terms",
     "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra",
     "scale", "marginal", "alpha", "beta", "survival", "infrequent_purchase",
@@ -264,7 +264,7 @@
   elements <- .all_elements()
 
   # zero-inflation component
-  zero_inflated_component <- c("zero_inflated", "zero_inflated_random")
+  zero_inflated_component <- c("zi", "zero_inflated", "zero_inflated_random")
 
   # auxiliary parameters
   auxiliary_parameters <- c("sigma", "alpha", "beta", "dispersion", "precision",
