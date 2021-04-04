@@ -4,10 +4,12 @@
 \alias{get_sigma}
 \title{Get residual standard deviation from models}
 \usage{
-get_sigma(x, verbose = TRUE)
+get_sigma(x, ci = 0.95, verbose = TRUE)
 }
 \arguments{
 \item{x}{A model.}
+
+\item{ci}{The CI width.}
 
 \item{verbose}{Toggle messages and warnings.}
 }
@@ -15,8 +17,9 @@ get_sigma(x, verbose = TRUE)
 The residual standard deviation (sigma), or \code{NULL} if this information could not be accessed.
 }
 \description{
-Returns the residual standard deviation from classical
-  and mixed models.
+Returns \code{sigma}, which corresponds the estimated standard deviation of the residuals. This function extends the \code{sigma()} base R generic for models that don't have implemented it. It also computes the confidence interval (CI), which is stored as an attribute.
+
+Sigma is a key-component of regression models, and part of the so-called auxiliary parameters that are estimated. Indeed, linear models for instance assume that the residuals comes from a normal distribution with mean 0 and standard deviation \code{sigma}. See the details section below for more information about its interpretation and calculation.
 }
 \details{
 \subsection{Interpretation of Sigma}{

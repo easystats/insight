@@ -3,7 +3,7 @@
 if (.runThisTest) {
   if (require("testthat") && require("insight") && require("mgcv")) {
     set.seed(123)
-    dat <- gamSim(1, n = 400, dist = "normal", scale = 2)
+    dat <- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
     m1 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
 
     m2 <- download_model("gam_zi_1")

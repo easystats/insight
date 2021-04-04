@@ -1,11 +1,13 @@
 #' @title Get residual standard deviation from models
 #'
-#' @description Returns the residual standard deviation from classical
-#'   and mixed models.
+#' @description Returns \code{sigma}, which corresponds the estimated standard deviation of the residuals. This function extends the \code{sigma()} base R generic for models that don't have implemented it. It also computes the confidence interval (CI), which is stored as an attribute.
+#'
+#' Sigma is a key-component of regression models, and part of the so-called auxiliary parameters that are estimated. Indeed, linear models for instance assume that the residuals comes from a normal distribution with mean 0 and standard deviation \code{sigma}. See the details section below for more information about its interpretation and calculation.
 #'
 #' @name get_sigma
 #'
 #' @param x A model.
+#' @param ci The CI width.
 #' @inheritParams find_parameters
 #'
 #' @return The residual standard deviation (sigma), or \code{NULL} if this information could not be accessed.
@@ -40,7 +42,31 @@
 #' get_sigma(m)
 #' @importFrom stats sigma
 #' @export
-get_sigma <- function(x, verbose = TRUE) {
+get_sigma <- function(x, ci = 0.95, verbose = TRUE) {
+  s <- .get_sigma(x, verbose = verbose)
+
+  # Confidence interval for sigma
+  ci <- tryCatch(
+    {
+      .get_sigma_ci(x, ci = ci)
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (!is.null(ci)) {
+    attributes(s) <- c(attributes(s), ci)
+  }
+
+  s
+}
+
+
+# Retrieve sigma ----------------------------------------------------------
+
+
+.get_sigma <- function(x, verbose = TRUE) {
 
   # special handling ---------------
   if (inherits(x, "model_fit")) {
@@ -49,11 +75,11 @@ get_sigma <- function(x, verbose = TRUE) {
 
   if (inherits(x, "merModList")) {
     s <- suppressWarnings(summary(x))
-    return(s$residError)
+    s <- s$residError
   }
 
   if (inherits(x, "summary.lm")) {
-    return(x$sigma)
+    s <- x$sigma
   }
 
   if (inherits(x, c("mipo", "mira", "riskRegression"))) {
@@ -120,6 +146,31 @@ get_sigma <- function(x, verbose = TRUE) {
   class(s) <- c("insight_aux", class(s))
   s
 }
+
+
+
+
+
+
+# Methods -----------------------------------------------------------------
+
+#' @importFrom stats qchisq
+.get_sigma_ci <- function(x, ci = 0.95, ...) {
+
+  # TODO: What does it work for Bayesian models?
+
+  if (is.null(ci) || is.na(ci)) {
+    return(NULL)
+  }
+
+  alpha <- 1 - ci
+  dev <- get_deviance(x)
+  n <- n_obs(x)
+  low <- dev / stats::qchisq(1 - alpha / 2, n)
+  high <- dev / stats::qchisq(alpha / 2, n)
+  list(CI_low = sqrt(low), CI_high = sqrt(high))
+}
+
 
 
 #' @export
