@@ -1,5 +1,11 @@
 # insight 0.13.3
 
+## General
+
+* Better support for accessing auxiliary parameters (via `get_sigma()` and 
+  `get_auxiliary()`, as well as `get_parameters(component = "all")`) for 
+  `brmsfit` models.
+
 ## New supported model classes
 
 * Support for `mvord` (*mvord*)
