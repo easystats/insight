@@ -47,8 +47,8 @@
 
 
 <meta property="og:title" content="Get residual standard deviation from models — get_sigma" />
-<meta property="og:description" content="Returns the residual standard deviation from classical
-  and mixed models." />
+<meta property="og:description" content="Returns sigma, which corresponds the estimated standard deviation of the residuals. This function extends the sigma() base R generic for models that don't have implemented it. It also computes the confidence interval (CI), which is stored as an attribute.
+Sigma is a key-component of regression models, and part of the so-called auxiliary parameters that are estimated. Indeed, linear models for instance assume that the residuals comes from a normal distribution with mean 0 and standard deviation sigma. See the details section below for more information about its interpretation and calculation." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -146,11 +146,11 @@
     </div>
 
     <div class="ref-description">
-    <p>Returns the residual standard deviation from classical
-  and mixed models.</p>
+    <p>Returns <code>sigma</code>, which corresponds the estimated standard deviation of the residuals. This function extends the <code><a href='https://rdrr.io/pkg/lme4/man/sigma.html'>sigma()</a></code> base R generic for models that don't have implemented it. It also computes the confidence interval (CI), which is stored as an attribute.</p>
+<p>Sigma is a key-component of regression models, and part of the so-called auxiliary parameters that are estimated. Indeed, linear models for instance assume that the residuals comes from a normal distribution with mean 0 and standard deviation <code>sigma</code>. See the details section below for more information about its interpretation and calculation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_sigma</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_sigma</span><span class='op'>(</span><span class='va'>x</span>, ci <span class='op'>=</span> <span class='fl'>0.95</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,6 +158,10 @@
     <tr>
       <th>x</th>
       <td><p>A model.</p></td>
+    </tr>
+    <tr>
+      <th>ci</th>
+      <td><p>The CI width.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -199,7 +203,11 @@
 <span class='fu'>get_sigma</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 2.608133
 #&gt; attr(,"class")
-#&gt; [1] "insight_aux" "numeric"    </div></pre>
+#&gt; [1] "insight_aux" "numeric"    
+#&gt; attr(,"CI_low")
+#&gt; [1] 1.961968
+#&gt; attr(,"CI_high")
+#&gt; [1] 3.226954</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
