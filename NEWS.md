@@ -10,7 +10,7 @@
 
 * `get_df()` supports more models/objects.
 
-* `get_deviance()` now works for `glmerMod` and `glmmTMB` models.
+* `get_deviance()` now works for `glmerMod`, `MixMod` and `glmmTMB` models.
 
 * The behaviour and documentation of the `effects` and `component` arguments,
   in particular for `brmsfit` models, were revised to be more consistent.

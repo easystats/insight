@@ -102,10 +102,11 @@ get_deviance.glmmTMB <- function(x, ...) {
   )
 }
 
-
 #' @export
 get_deviance.glmerMod <- get_deviance.glmmTMB
 
+#' @export
+get_deviance.MixMod <- get_deviance.glmmTMB
 
 
 #' @export
