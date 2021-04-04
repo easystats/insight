@@ -26,18 +26,21 @@
 \arguments{
 \item{x}{A fitted model.}
 
-\item{effects}{Should variables for fixed effects, random effects
+\item{effects}{Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{...}{Currently not used.}
 
-\item{component}{Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated. Note that the
-\emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model.}
+\item{component}{Which type of parameters to return, such as parameters for the
+conditional model, the zero-inflated part of the model or the dispersion
+term? Applies to models with zero-inflated and/or dispersion formula. Note
+that the \emph{conditional} component is also called \emph{count} or \emph{mean}
+component, depending on the model. There are two convenient shortcuts:
+If \code{component = "location"}, location parameters such as \code{conditional}
+or \code{zero_inflated} are returned (everything that are fixed, but not
+random effects and no auxiliary parameters). For \code{component = "distributional"}
+(or \code{"auxiliary"}), components like \code{sigma} or \code{dispersion}
+(and other auxiliary parameters) are returned.}
 }
 \value{
 If \code{effects = "fixed"}, a data frame with two columns: the

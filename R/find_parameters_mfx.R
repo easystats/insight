@@ -5,11 +5,11 @@
 #'     appear in the \code{summary()} output.
 #'
 #' @param component Which type of parameters to return, such as parameters for the
-#'    conditional model, the zero-inflated part of the model, the dispersion
-#'    term, the instrumental variables or marginal effects be returned? Applies
-#'    to models with zero-inflated and/or dispersion formula, or to models with
-#'    instrumental variables (so called fixed-effects regressions), or models
-#'    with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
+#'   conditional model, the zero-inflated part of the model, the dispersion
+#'   term, the instrumental variables or marginal effects be returned? Applies
+#'   to models with zero-inflated and/or dispersion formula, or to models with
+#'   instrumental variables (so called fixed-effects regressions), or models
+#'   with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 #'   \emph{conditional} component is also called \emph{count} or \emph{mean}
 #'   component, depending on the model. There are two convenient shortcuts:
 #'   If \code{component = "location"}, location parameters such as \code{conditional},
