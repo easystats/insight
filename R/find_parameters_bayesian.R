@@ -216,7 +216,7 @@ find_parameters.brmsfit <- function(x, effects = "all", component = "all", flatt
   simo <- fe[grepl("^simo_", fe, perl = TRUE)]
   smooth_terms <- fe[grepl("^sds_", fe, perl = TRUE)]
   priors <- fe[grepl("^prior_", fe, perl = TRUE)]
-  sigma <- fe[grepl("^sigma_", fe, perl = TRUE)] | fe[grepl("sigma", fe, fixed = TRUE)]
+  sigma <- fe[grepl("^sigma_", fe, perl = TRUE) | fe[grepl("sigma", fe, fixed = TRUE)]
   beta <- fe[grepl("beta", fe, fixed = TRUE)]
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
   shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
