@@ -91,6 +91,24 @@ get_deviance.lmerMod <- function(x, ...) {
 
 
 #' @export
+get_deviance.glmmTMB <- function(x, ...) {
+  tryCatch(
+    {
+      -2 * as.numeric(get_loglikelihood(x, ...))
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
+
+
+#' @export
+get_deviance.glmerMod <- get_deviance.glmmTMB
+
+
+
+#' @export
 get_deviance.model_fit <- function(x, ...) {
   get_deviance(x$fit, ...)
 }
