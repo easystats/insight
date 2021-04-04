@@ -52,9 +52,8 @@
 
 \method{get_parameters}{brmsfit}(
   x,
-  effects = c("fixed", "random", "all"),
-  component = c("all", "conditional", "location", "distributional", "auxiliary", "zi",
-    "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
+  effects = "fixed",
+  component = "all",
   parameters = NULL,
   summary = FALSE,
   centrality = "mean",
@@ -111,7 +110,8 @@ to models with zero-inflated and/or dispersion formula, or to models with
 instrumental variables (so called fixed-effects regressions), or models
 with marginal effects from \pkg{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model. There are two convenient shortcuts:
+component, depending on the model. There are three convenient shortcuts:
+\code{component = "all"} returns all possible parameters.
 If \code{component = "location"}, location parameters such as \code{conditional},
 \code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned
 (everything that are fixed, but not random effects and no auxiliary parameters).

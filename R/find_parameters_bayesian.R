@@ -203,7 +203,7 @@ find_parameters.bamlss <- function(x,
 #' @export
 find_parameters.brmsfit <- function(x, effects = "all", component = "all", flatten = FALSE, parameters = NULL, ...) {
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  component <- match.arg(component, choices = .all_elements())
+  component <- match.arg(component, choices = c("all", .all_elements()))
 
   ## TODO remove "optional = FALSE" in a future update?
   fe <- colnames(as.data.frame(x, optional = FALSE))
