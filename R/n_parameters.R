@@ -173,11 +173,12 @@ n_parameters.vgam <- n_parameters.gam
 #' @rdname n_parameters
 #' @export
 n_parameters.brmsfit <- function(x,
-                                 effects = c("all", "fixed", "random"),
-                                 component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex", "sigma", "smooth_terms"),
+                                 effects = "all",
+                                 component = "all",
                                  ...) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  component <- match.arg(component, choices = c("all", .all_elements()))
+
   length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, ...)))
 }
 

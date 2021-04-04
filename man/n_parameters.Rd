@@ -43,13 +43,7 @@ n_parameters(x, ...)
   ...
 )
 
-\method{n_parameters}{brmsfit}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "simplex",
-    "sigma", "smooth_terms"),
-  ...
-)
+\method{n_parameters}{brmsfit}(x, effects = "all", component = "all", ...)
 }
 \arguments{
 \item{x}{A statistical model.}

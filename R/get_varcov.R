@@ -325,8 +325,8 @@ get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", 
 
 #' @rdname get_varcov
 #' @export
-get_varcov.brmsfit <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
-  component <- match.arg(component)
+get_varcov.brmsfit <- function(x, component = "conditional", ...) {
+  component <- match.arg(component, choices = c("all", .all_elements()))
   params <- find_parameters(x, effects = "fixed", component = component, flatten = TRUE)
   params <- gsub("^b_", "", params)
 

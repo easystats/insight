@@ -376,14 +376,14 @@ if (.runThisTest) {
         )
       )
       expect_equal(
-        colnames(get_parameters(m4, effects = "random", component = "cond")),
+        colnames(get_parameters(m4, effects = "random", component = "conditional")),
         c(
           "r_persons.1.Intercept.", "r_persons.2.Intercept.", "r_persons.3.Intercept.",
           "r_persons.4.Intercept.", "sd_persons__Intercept"
         )
       )
       expect_equal(
-        colnames(get_parameters(m5, effects = "random", component = "cond")),
+        colnames(get_parameters(m5, effects = "random", component = "conditional")),
         c(
           "r_persons__count.1.Intercept.",
           "r_persons__count.2.Intercept.",

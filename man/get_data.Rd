@@ -72,13 +72,7 @@ get_data(x, ...)
   ...
 )
 
-\method{get_data}{brmsfit}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated"),
-  verbose = TRUE,
-  ...
-)
+\method{get_data}{brmsfit}(x, effects = "all", component = "all", verbose = TRUE, ...)
 
 \method{get_data}{stanreg}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 

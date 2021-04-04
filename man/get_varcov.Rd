@@ -54,7 +54,7 @@ get_varcov(x, ...)
   ...
 )
 
-\method{get_varcov}{brmsfit}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+\method{get_varcov}{brmsfit}(x, component = "conditional", ...)
 
 \method{get_varcov}{betamfx}(x, component = c("conditional", "precision", "all"), ...)
 
