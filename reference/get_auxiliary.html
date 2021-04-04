@@ -152,7 +152,9 @@ dispersion, sigma, or beta...</p>
 
     <pre class="usage"><span class='fu'>get_auxiliary</span><span class='op'>(</span>
   <span class='va'>x</span>,
-  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"sigma"</span>, <span class='st'>"dispersion"</span>, <span class='st'>"beta"</span>, <span class='st'>"mix"</span>, <span class='st'>"shiftprop"</span><span class='op'>)</span>,
+  type <span class='op'>=</span> <span class='st'>"sigma"</span>,
+  summary <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  centrality <span class='op'>=</span> <span class='st'>"mean"</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -169,7 +171,23 @@ dispersion, sigma, or beta...</p>
       <td><p>The name of the auxiliary parameter that should be retrieved.
 <code>"sigma"</code> is available for most models, <code>"dispersion"</code> for models
 of class <code>glm</code>, <code>glmerMod</code> or <code>glmmTMB</code> as well as <code>brmsfit</code>.
-<code>"beta"</code> is currently only returned for <code>brmsfit</code> models.</p></td>
+<code>"beta"</code> and other parameters are currently only returned for <code>brmsfit</code>
+models. See 'Details'.</p></td>
+    </tr>
+    <tr>
+      <th>summary</th>
+      <td><p>Logical, indicates whether the full posterior samples
+(<code>summary = FALSE</code>)) or the summarized centrality indices of
+the posterior samples (<code>summary = TRUE</code>)) should be returned as
+estimates.</p></td>
+    </tr>
+    <tr>
+      <th>centrality</th>
+      <td><p>Only for models with posterior samples, and when
+<code>summary = TRUE</code>. In this case, <code>centrality = "mean"</code> would
+calculate means of posterior samples for each parameter, while
+<code>centrality = "median"</code> would use the more robust median value as
+measure of central tendency.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -194,8 +212,8 @@ only for a limited set of models.</p><h3 class='hasAnchor' id='sigma-parameter'>
 <p>There are many different definitions of "dispersion", depending on the context.
 <code>get_auxiliary()</code> returns the dispersion parameters that usually can
 be considered as variance-to-mean ratio for generalized (linear) mixed
-models. Exceptions are models of class <code>glmmTMB</code> and <code>brmsfit</code>,
-where the dispersion equals &sigma;<sup>2</sup>.
+models. Exceptions are models of class <code>glmmTMB</code>, where the dispersion
+equals &sigma;<sup>2</sup>.
 In detail, the computation of the dispersion parameter for generalized linear
 models is the ratio of the sum of the squared working-residuals and the
 residual degrees of freedom. For mixed models of class <code>glmer</code>, the
@@ -203,6 +221,13 @@ dispersion parameter is also called &phi;
 and is the ratio of the sum of the squared Pearson-residuals and the residual
 degrees of freedom. For models of class <code>glmmTMB</code>, dispersion is
 &sigma;<sup>2</sup>.</p>
+<h3 class='hasAnchor' id='list-brms-'><a class='anchor' href='#list-brms-'></a><span class="pkg">brms</span> models</h3>
+<p>For models of class <code>brmsfit</code>, there are different options for the
+<code>type</code> argument. See a list of supported auxiliary parameters here:
+<code><a href='find_parameters.BGGM.html'>find_parameters.BGGM</a></code>.</p><h3 class='hasAnchor' id='-models'><a class='anchor' href='#-models'></a><span class="pkg">brms</span> models</h3>
+<p>For models of class <code>brmsfit</code>, there are different options for the
+<code>type</code> argument. See a list of supported auxiliary parameters here:
+<code><a href='find_parameters.BGGM.html'>find_parameters.BGGM</a></code>.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
