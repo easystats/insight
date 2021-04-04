@@ -33,10 +33,10 @@ component, depending on the model. There are three convenient shortcuts:
 \code{component = "all"} returns all possible parameters.
 If \code{component = "location"}, location parameters such as \code{conditional},
 \code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned
-(everything that are fixed, but not random effects and no auxiliary parameters).
-For \code{component = "distributional"} (or \code{"auxiliary"}), components
-like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and
-other auxiliary parameters) are returned.}
+(everything that are fixed or random effects - depending on the \code{effects}
+argument - but no auxiliary parameters). For \code{component = "distributional"}
+(or \code{"auxiliary"}), components like \code{sigma}, \code{dispersion},
+\code{beta} or \code{precision} (and other auxiliary parameters) are returned.}
 }
 \value{
 A list of parameter names. The returned list may have following
