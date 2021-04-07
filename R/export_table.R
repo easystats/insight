@@ -309,7 +309,7 @@ export_table <- function(x,
     }
   }
 
-  if (!is.null(caption)) {
+  if (!is.null(caption) && caption != "") {
     if (length(caption) == 2 && .is_valid_colour(caption[2])) {
       caption <- .colour(caption[2], caption[1])
     }
