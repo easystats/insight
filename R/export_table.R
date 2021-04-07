@@ -149,8 +149,24 @@ export_table <- function(x,
     )
   } else if (is.list(x)) {
 
+    # remove empty elements
+    l <- .compact_list(x)
+
     # list of data frames
-    tmp <- lapply(.compact_list(x), function(i) {
+    tmp <- lapply(1:length(l), function(element) {
+
+      i <- l[[element]]
+
+      # use individual footer for each list element...
+      t_footer <- attributes(i)$table_footer
+
+      # ...unless we have a footer-argument.
+      # Then use this as last (final) footer
+      if (element == length(l) &&
+          is.null(attributes(i)$table_footer) &&
+          !is.null(footer)) {
+        t_footer <- footer
+      }
 
       # for lists of data frame, each list element may have
       # an own attribute for the title, to have "subheadings"
@@ -170,7 +186,7 @@ export_table <- function(x,
         format = format,
         caption = attributes(i)[[attr_name]],
         subtitle = attributes(i)$table_subtitle,
-        footer = attributes(i)$table_footer,
+        footer = t_footer,
         align = align,
         group_by = group_by,
         zap_small = zap_small,
