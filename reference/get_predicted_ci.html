@@ -304,7 +304,7 @@ the context of bootstrapped and Bayesian models. Possible values are
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/bayestestR/'>"bayestestR"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>ci_vals</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span>, ci <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.80</span>, <span class='fl'>0.95</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
-  <span class='fu'>bayestestR</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/bayestestR/reference/reshape_ci.html'>reshape_ci</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
+  <span class='fu'>bayestestR</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/insight/reference/reshape_ci.html'>reshape_ci</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
 
   <span class='va'>ci_vals</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>,
                               <span class='va'>predictions</span>,
@@ -312,10 +312,7 @@ the context of bootstrapped and Bayesian models. Possible values are
                               interval_function <span class='op'>=</span> <span class='st'>"HDI"</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: bayestestR</span></div><div class='output co'>#&gt; <span class='message'>Note: The default CI width (currently `ci=0.89`) might change in future versions (see https://github.com/easystats/bayestestR/discussions/250). To prevent any issues, please set it explicitly when using bayestestR functions, via the 'ci' argument.</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘bayestestR’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:insight’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    reshape_ci</span></div><div class='output co'>#&gt;           SE   CI_low  CI_high
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: bayestestR</span></div><div class='output co'>#&gt;           SE   CI_low  CI_high
 #&gt; V1 0.6511853 20.08775 22.75861
 #&gt; V2 0.6511853 20.08775 22.75861
 #&gt; V3 1.1886593 24.12011 28.22016
