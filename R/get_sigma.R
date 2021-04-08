@@ -66,26 +66,43 @@ get_sigma <- function(x, ci = 0.95, verbose = TRUE) {
 # Retrieve sigma ----------------------------------------------------------
 
 
-.get_sigma <- function(x, verbose = TRUE) {
+.get_sigma <- function(x, ...) {
+  UseMethod(".get_sigma")
+}
 
-  # special handling ---------------
-  if (inherits(x, "model_fit")) {
-    x <- x$fit
-  }
 
-  if (inherits(x, "merModList")) {
-    s <- suppressWarnings(summary(x))
-    s <- s$residError
-  }
+# special handling ---------------
 
-  if (inherits(x, "summary.lm")) {
-    s <- x$sigma
-  }
+.get_sigma.model_fit <- function(x, verbose = TRUE, ...) {
+  .get_sigma(x$fit, verbose = verbose)
+}
 
+.get_sigma.merModList <- function(x, verbose = TRUE, ...) {
+  s <- suppressWarnings(summary(x))
+  s$residError
+}
+
+.get_sigma.summary.lm <- function(x, verbose = TRUE, ...) {
+  x$sigma
+}
+
+.get_sigma.cpglmm <- function(x, verbose = TRUE, ...) {
+  tryCatch(
+    {
+      stats::deviance(x)[["sigmaML"]]
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
+
+# default handling ---------------
+
+.get_sigma.default <- function(x, verbose = TRUE, ...) {
   if (inherits(x, c("mipo", "mira", "riskRegression"))) {
     return(NULL)
   }
-
 
   # default sigma ---------------
   s <- tryCatch(
@@ -146,6 +163,7 @@ get_sigma <- function(x, ci = 0.95, verbose = TRUE) {
   class(s) <- c("insight_aux", class(s))
   s
 }
+
 
 
 

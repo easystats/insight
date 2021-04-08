@@ -16,10 +16,15 @@
 
 * `get_df()` supports more models/objects.
 
+* `get_sigma()` supports more models/objects.
+
 * `get_deviance()` now works for `glmerMod`, `MixMod` and `glmmTMB` models.
 
 * The behaviour and documentation of the `effects` and `component` arguments,
   in particular for `brmsfit` models, were revised to be more consistent.
+
+* `export_table()` now correctly prints the footer if the input was a list of
+  data frames.
 
 ## Bug fixes
 
