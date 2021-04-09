@@ -21,38 +21,84 @@ get_predicted(x, data = NULL, ...)
 )
 }
 \arguments{
-\item{x}{A statistical model (can also be a data.frame, in which case the second argument has to be a model).}
+\item{x}{A statistical model (can also be a data.frame, in which case the
+second argument has to be a model).}
 
-\item{data}{An optional data frame in which to look for variables with which to predict. If omitted, the data used to fit the model is used.}
+\item{data}{An optional data frame in which to look for variables with which
+to predict. If omitted, the data used to fit the model is used.}
 
-\item{...}{Other argument to be passed for instance to \code{\link{get_predicted_ci}}.}
+\item{...}{Other argument to be passed for instance to
+\code{\link{get_predicted_ci}}.}
 
-\item{predict}{Can be \code{"link"}, \code{"relation"} (default), or \code{"prediction"}. This modulates the scale of the output as well as the type of certainty interval. More specifically, \code{"link"} gives an output on the link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). \code{"relation"} (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). Finally, \code{"predict"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). Read more about in the \strong{Details} section below.}
+\item{predict}{Can be \code{"link"}, \code{"relation"} (default), or
+\code{"prediction"}. This modulates the scale of the output as well as the
+type of certainty interval. More specifically, \code{"link"} gives an
+output on the link-scale (for logistic models, that means the log-odds
+scale) with a confidence interval (CI). \code{"relation"} (default) also
+returns confidence intervals, but this time the output is on the response
+scale (for logistic models, that means probabilities). Finally,
+\code{"predict"} also gives an output on the response scale, but this time
+associated with a prediction interval (PI), which is larger than a
+confidence interval (though it mostly make sense for linear models). Read
+more about in the \strong{Details} section below.}
 
-\item{iterations}{For Bayesian models, this corresponds to the number of posterior draws. If \code{NULL}, will return all the draws (one for each iteration of the model). For frequentist models, if not \code{NULL}, will generate bootstrapped draws, from which bootstrapped CIs will be computed.}
+\item{iterations}{For Bayesian models, this corresponds to the number of
+posterior draws. If \code{NULL}, will return all the draws (one for each
+iteration of the model). For frequentist models, if not \code{NULL}, will
+generate bootstrapped draws, from which bootstrapped CIs will be computed.}
 
-\item{include_random}{If \code{TRUE} (default), include all random effects in the prediction. If \code{FALSE}, don't take them into account. Can also be a formula to specify which random effects to condition on when predicting (passed to the \code{re.form} argument). If \code{include_random = TRUE} and \code{newdata} is provided, make sure to include the random effect variables in \code{newdata} as well.}
+\item{include_random}{If \code{TRUE} (default), include all random effects in
+the prediction. If \code{FALSE}, don't take them into account. Can also be
+a formula to specify which random effects to condition on when predicting
+(passed to the \code{re.form} argument). If \code{include_random = TRUE}
+and \code{newdata} is provided, make sure to include the random effect
+variables in \code{newdata} as well.}
 
-\item{include_smooth}{For General Additive Models (GAMs). If \code{FALSE}, will fix the value of the smooth to its average, so that the predictions are not depending on it. (default), \code{mean()}, or \code{bayestestR::map_estimate()}.}
+\item{include_smooth}{For General Additive Models (GAMs). If \code{FALSE},
+will fix the value of the smooth to its average, so that the predictions
+are not depending on it. (default), \code{mean()}, or
+\code{bayestestR::map_estimate()}.}
 }
 \value{
-The fitted values (i.e. predictions for the response). For Bayesian or bootstrapped models (when \code{iterations != NULL}), this will be a dataframe with all iterations as columns (observations are still rows).
+The fitted values (i.e. predictions for the response). For Bayesian
+  or bootstrapped models (when \code{iterations != NULL}), this will be a
+  dataframe with all iterations as columns (observations are still rows).
 }
 \description{
 Compute Model's Predictions.
 }
 \details{
-The \code{predict} argument jointly modulates two separate concepts, the \strong{scale} and the \strong{uncertainty interval}.
+The \code{predict} argument jointly modulates two separate concepts, the
+\strong{scale} and the \strong{uncertainty interval}.
 
 \subsection{Confidence Interval vs. Prediction Interval)}{
 \itemize{
-  \item \strong{Linear models} - \code{lm()}: For linear models, Prediction intervals (\code{predict = "prediction"}) show the range that likely contains the value of a new observation (in what range it is likely to fall), whereas confidence intervals (\code{predict = "relation"} or \code{predict = "link"}) reflect the uncertainty around the estimated parameters (and gives the range of uncertainty of the regression line). lIn general, Prediction Intervals (PIs) account for both the uncertainty in the model's parameters, plus the random variation of the individual values. Thus, prediction intervals are always wider than confidence intervals. Moreover, prediction intervals will not necessarily become narrower as the sample size increases (as they do not reflect only the quality of the fit, but also the variability within the data).
-  \item \strong{General Linear models} - \code{glm()}: For binomial models, prediction intervals are somewhat useless (for instance, for a binomial model for which the dependent variable is a vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
+  \item \strong{Linear models} - \code{lm()}: For linear models, Prediction
+  intervals (\code{predict = "prediction"}) show the range that likely
+  contains the value of a new observation (in what range it is likely to
+  fall), whereas confidence intervals (\code{predict = "relation"} or
+  \code{predict = "link"}) reflect the uncertainty around the estimated
+  parameters (and gives the range of uncertainty of the regression line). lIn
+  general, Prediction Intervals (PIs) account for both the uncertainty in the
+  model's parameters, plus the random variation of the individual values.
+  Thus, prediction intervals are always wider than confidence intervals.
+  Moreover, prediction intervals will not necessarily become narrower as the
+  sample size increases (as they do not reflect only the quality of the fit,
+  but also the variability within the data).
+  \item \strong{General Linear models} - \code{glm()}: For binomial models,
+  prediction intervals are somewhat useless (for instance, for a binomial
+  model for which the dependent variable is a vector of 1s and 0s, the
+  prediction interval is... \code{[0, 1]}).
 }}
 
 
 \subsection{Link scale vs. Response scale}{
-Having the output is on the scale of the response variable is arguably the most convenient to understand and visualize the relationships. If on the link-scale, no transformation is applied and the values are on the scale of the model's predictors. For instance, for a logistic model, the response scale corresponds to the predicted probabilities, whereas the link-scale makes predictions of log-odds (probabilities on the logit scale).
+Having the output is on the scale of the response variable is arguably the
+most convenient to understand and visualize the relationships. If on the
+link-scale, no transformation is applied and the values are on the scale of
+the model's predictors. For instance, for a logistic model, the response
+scale corresponds to the predicted probabilities, whereas the link-scale
+makes predictions of log-odds (probabilities on the logit scale).
 }
 }
 \examples{

@@ -258,9 +258,11 @@
 }
 
 .aux_elements <- function() {
-  c("sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape",
+  c(
+    "sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape",
     "phi", "ndt", "hu", "xi", "coi", "zoi", "mix", "shiftprop", "auxiliary",
-    "aux", "dist")
+    "aux", "dist"
+  )
 }
 
 .get_elements <- function(effects, component) {
@@ -884,5 +886,6 @@ is.emmean <- function(x) {
   t_ <- is.emmeans.trend(x)
 
   ifelse(c_, "contrasts",
-         ifelse(t_, "emtrends", "emmeans"))
+    ifelse(t_, "emtrends", "emmeans")
+  )
 }

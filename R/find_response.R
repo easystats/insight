@@ -80,9 +80,10 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
   survial <- .safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
-                 "conditional" = conditional,
-                 "survial" = survial,
-                 "all" = c(conditional, survial))
+    "conditional" = conditional,
+    "survial" = survial,
+    "all" = c(conditional, survial)
+  )
 
   unlist(lapply(resp, check_cbind, combine = combine, model = x))
 }
@@ -101,9 +102,10 @@ find_response.joint <- function(x, combine = TRUE, component = c("conditional", 
   survial <- .safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
-                 "conditional" = conditional,
-                 "survial" = survial,
-                 "all" = c(conditional, survial))
+    "conditional" = conditional,
+    "survial" = survial,
+    "all" = c(conditional, survial)
+  )
 
   unlist(lapply(resp, check_cbind, combine = combine, model = x))
 }

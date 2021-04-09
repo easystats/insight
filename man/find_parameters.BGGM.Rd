@@ -108,10 +108,13 @@ A list of parameter names. For simple models, only one list-element,
    \itemize{
      \item \code{conditional}, the "fixed effects" part from the model
      \item \code{random}, the "random effects" part from the model
-     \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
-     \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
+     \item \code{zero_inflated}, the "fixed effects" part from the
+     zero-inflation component of the model
+     \item \code{zero_inflated_random}, the "random effects" part from the
+     zero-inflation component of the model
      \item \code{smooth_terms}, the smooth parameters
    }
+
    Furthermore, some models, especially from \pkg{brms}, can also return
    auxiliary parameters. These may be one of the following:
    \itemize{
