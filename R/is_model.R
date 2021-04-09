@@ -72,7 +72,7 @@ is_regression_model <- function(x) {
     # d --------------------
     "DirichletRegModel", "drc",
     # e --------------------
-    "eglm", "elm", "emmGrid", "emm_list",  "epi.2by2", "ergm",
+    "eglm", "elm", "emmGrid", "emm_list", "epi.2by2", "ergm",
     # f --------------------
     "feglm", "feis", "felm", "fitdistr", "fixest", "flexmix",
     "flexsurvreg",
@@ -101,7 +101,7 @@ is_regression_model <- function(x) {
     "mclogit", "mcp1", "mcp2", "mmclogit", "mcmc", "mcmc.list",
     "MCMCglmm", "mediate", "merMod", "merModList", "meta_bma",
     "meta_fixed", "meta_random", "meta_ordered", "metaplus",
-    "mhurdle", "mipo","mira", "mixed", "mixor", "MixMod", "mjoint",
+    "mhurdle", "mipo", "mira", "mixed", "mixor", "MixMod", "mjoint",
     "mle", "mle2", "mlergm", "mlm", "mlma", "mlogit", "model_fit",
     "multinom", "mvmeta", "mvord", "mvr",
     # n --------------------

@@ -56,11 +56,6 @@ link_inverse.default <- function(x, ...) {
 
 
 
-
-
-
-
-
 # GLM families ---------------------------------------------------
 
 
@@ -81,13 +76,6 @@ link_inverse.speedglm <- link_inverse.glm
 
 #' @export
 link_inverse.bigglm <- link_inverse.glm
-
-
-
-
-
-
-
 
 
 
@@ -115,13 +103,7 @@ link_inverse.flexsurvreg <- function(x, ...) {
 }
 
 
-
-
-
-
-
 # Gaussian identity links ---------------------------------
-
 
 #' @export
 link_inverse.lm <- function(x, ...) {

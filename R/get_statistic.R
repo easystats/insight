@@ -1,6 +1,7 @@
 #' @title Get statistic associated with estimates
-#' @description Returns the statistic (\emph{t}, \code{z}, ...) for model estimates.
-#'   In most cases, this is the related column from \code{coef(summary())}.
+#' @description Returns the statistic (\emph{t}, \code{z}, ...) for model
+#'   estimates. In most cases, this is the related column from
+#'   \code{coef(summary())}.
 #' @name get_statistic
 #'
 #' @param x A model.
@@ -19,13 +20,16 @@
 #'   on the model.
 #' @param robust Logical, if \code{TRUE}, test statistic based on robust standard
 #'   errors is returned.
-#' @param adjust Character value naming the method used to adjust p-values or confidence intervals. See \code{?emmeans::summary.emmGrid} for details.
-#' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%). Currently only applies to objects of class \code{emmGrid}.
+#' @param adjust Character value naming the method used to adjust p-values or
+#'   confidence intervals. See \code{?emmeans::summary.emmGrid} for details.
+#' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%). Currently
+#'   only applies to objects of class \code{emmGrid}.
 #' @param ... Currently not used.
 #' @inheritParams get_parameters
 #' @inheritParams get_parameters.emmGrid
 #'
-#' @return A data frame with the model's parameter names and the related test statistic.
+#' @return A data frame with the model's parameter names and the related test
+#'   statistic.
 #'
 #' @examples
 #' data(mtcars)
@@ -176,10 +180,6 @@ get_statistic.feis <- get_statistic.default
 
 
 
-
-
-
-
 # Models with zero-inflation component --------------------------------------
 
 
@@ -312,10 +312,6 @@ get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "z
 
   stat
 }
-
-
-
-
 
 
 # gam models --------------------------------------------------------------
@@ -467,11 +463,6 @@ get_statistic.cgam <- function(x, component = c("all", "conditional", "smooth_te
   attr(out, "statistic") <- find_statistic(x)
   out
 }
-
-
-
-
-
 
 
 
@@ -629,10 +620,6 @@ get_statistic.aareg <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
-
-
-
-
 
 
 
@@ -833,12 +820,7 @@ get_statistic.mlogit <- function(x, ...) {
 
 
 
-
-
-
-
 # mfx models -------------------------------------------------------
-
 
 #' @rdname get_statistic
 #' @importFrom stats coef
@@ -931,11 +913,6 @@ get_statistic.poissonirr <- get_statistic.logitor
 
 #' @export
 get_statistic.negbinirr <- get_statistic.logitor
-
-
-
-
-
 
 
 # Other models -------------------------------------------------------

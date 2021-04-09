@@ -260,8 +260,10 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   pinfo$Distribution[pinfo$Distribution == "" & is.na(pinfo$Location)] <- "uniform"
 
   # move intercept parameters to top
-  row_order <- c(which(grepl("(Intercept|\\(Intercept\\))", pinfo$Parameter)),
-                 which(!grepl("(Intercept|\\(Intercept\\))", pinfo$Parameter)))
+  row_order <- c(
+    which(grepl("(Intercept|\\(Intercept\\))", pinfo$Parameter)),
+    which(!grepl("(Intercept|\\(Intercept\\))", pinfo$Parameter))
+  )
   pinfo <- pinfo[row_order, ]
   rownames(pinfo) <- NULL
 

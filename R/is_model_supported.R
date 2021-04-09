@@ -58,7 +58,7 @@ supported_models <- function() {
     "eglm", "elm", "ergm",
 
     # f ----------------------------
-    "feis", "felm", "feglm", "fitdistr",  "fixest", "flexsurvreg",
+    "feis", "felm", "feglm", "fitdistr", "fixest", "flexsurvreg",
 
     # g ----------------------------
     "gam", "Gam", "gamlss", "gamm", "gamm4", "garch", "gbm", "gee", "geeglm",

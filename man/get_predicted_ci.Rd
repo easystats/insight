@@ -19,13 +19,15 @@ get_predicted_ci(
 )
 }
 \arguments{
-\item{x}{A statistical model (can also be a data.frame, in which case the second argument has to be a model).}
+\item{x}{A statistical model (can also be a data.frame, in which case the
+second argument has to be a model).}
 
 \item{predictions}{A vector of predicted values (as obtained by
 \code{stats::fitted()}, \code{stats::predict()} or
 \code{\link{get_predicted}}).}
 
-\item{data}{An optional data frame in which to look for variables with which to predict. If omitted, the data used to fit the model is used.}
+\item{data}{An optional data frame in which to look for variables with which
+to predict. If omitted, the data used to fit the model is used.}
 
 \item{ci}{The interval level (default \code{0.95}, i.e., 95\% CI).}
 
@@ -96,9 +98,10 @@ if (require("bayestestR")) {
   bayestestR::reshape_ci(ci_vals)
 
   ci_vals <- get_predicted_ci(x,
-                              predictions,
-                              dispersion_function = "MAD",
-                              interval_function = "HDI")
+    predictions,
+    dispersion_function = "MAD",
+    interval_function = "HDI"
+  )
   head(ci_vals)
 }
 
