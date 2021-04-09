@@ -327,6 +327,11 @@ parameters_table <- format_table
 
   if (!is.null(ci_method) && all(tolower(ci_method) == "si")) {
 
+    # return when we have no CI columns
+    if (length(ci_low) == 0 || length(ci_high) == 0) {
+      return(x)
+    }
+
     # Support Intervals
 
     if (is.null(ci_value) && !is.null(x$CI)) {
