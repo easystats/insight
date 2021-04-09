@@ -34,6 +34,8 @@
 * `find_statistic()` correctly distinguishes t- and z-statistic for *emmGrid*
   objects.
 
+* Fixed issue in `model_info()` for `BGGM`.
+
 # insight 0.13.2
 
 ## General

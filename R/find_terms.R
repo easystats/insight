@@ -46,10 +46,12 @@ find_terms <- function(x, flatten = FALSE, ...) {
     return(NULL)
   }
 
+  resp <- find_response(x)
+
   if (is_multivariate(f)) {
-    l <- lapply(f, .get_variables_list)
+    l <- lapply(f, .get_variables_list, resp = resp)
   } else {
-    l <- .get_variables_list(f)
+    l <- .get_variables_list(f, resp)
   }
 
   if (flatten) {
@@ -61,9 +63,14 @@ find_terms <- function(x, flatten = FALSE, ...) {
 
 
 
-.get_variables_list <- function(f) {
-  f$response <- sub("(.*)::(.*)", "\\2", .safe_deparse(f$conditional[[2L]]))
-  f$conditional <- .safe_deparse(f$conditional[[3L]])
+.get_variables_list <- function(f, resp = NULL) {
+  # exception for formula w/o response
+  if (is.null(resp) || !.is_empty_object(resp)) {
+    f$response <- sub("(.*)::(.*)", "\\2", .safe_deparse(f$conditional[[2L]]))
+    f$conditional <- .safe_deparse(f$conditional[[3L]])
+  } else {
+    f$conditional <- .safe_deparse(f$conditional[[2L]])
+  }
 
   f <- lapply(f, function(.x) {
     if (is.list(.x)) {
