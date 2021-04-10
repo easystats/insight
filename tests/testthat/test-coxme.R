@@ -5,7 +5,6 @@ if (require("testthat") &&
   require("nlme") &&
   require("bdsmatrix") &&
   require("coxme")) {
-
   set.seed(1234)
   lung$inst2 <- sample(1:10, size = nrow(lung), replace = TRUE)
   lung <- subset(lung, subset = ph.ecog %in% 0:2)

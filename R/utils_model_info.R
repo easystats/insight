@@ -193,8 +193,8 @@
 
   if (inherits(x, "htest")) {
     if (grepl("kruskal-wallis", tolower(x$method), fixed = TRUE) ||
-        grepl("wilcoxon", tolower(x$method), fixed = TRUE) ||
-        grepl("friedman", tolower(x$method), fixed = TRUE)) {
+      grepl("wilcoxon", tolower(x$method), fixed = TRUE) ||
+      grepl("friedman", tolower(x$method), fixed = TRUE)) {
       is_ranktest <- TRUE
     } else if (grepl("t-test", x$method)) {
       is_ttest <- TRUE

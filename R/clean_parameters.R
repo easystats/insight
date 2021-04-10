@@ -279,7 +279,7 @@ clean_parameters.blavaan <- function(x, ...) {
   params$Estimate <- NULL
   params$Group <- ""
   params$Function <- ""
-  params$Cleaned_Parameter = params$Parameter
+  params$Cleaned_Parameter <- params$Parameter
   params
 }
 

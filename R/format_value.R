@@ -130,9 +130,9 @@ format_value.logical <- format_value.numeric
       } else {
         need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits) & !.zap_small) & x != 0
         x <- ifelse(is.na(x), .missing,
-                    ifelse(need_sci, sprintf("%.*e", digits, x),
-                           sprintf("%.*f", digits, x)
-                    )
+          ifelse(need_sci, sprintf("%.*e", digits, x),
+            sprintf("%.*f", digits, x)
+          )
         )
       }
     }

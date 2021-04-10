@@ -1,7 +1,8 @@
 #' @title Extract degrees of freedom
 #' @name get_df
 #'
-#' @description Estimate or extract residual or model-based degrees of freedom from regression models.
+#' @description Estimate or extract residual or model-based degrees of freedom
+#'   from regression models.
 #'
 #' @param x A statistical model.
 #' @param type Can be \code{"residual"} or \code{"model"}. \code{"residual"}

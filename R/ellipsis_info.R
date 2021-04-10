@@ -69,19 +69,13 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
 }
 
 
-
-
-
 # ListObjects and ListModels ----------------------------------------------
-
-
 
 #' @export
 ellipsis_info.ListObjects <- function(objects, ...) {
   # Do nothing
   objects
 }
-
 
 
 #' @export
@@ -106,8 +100,6 @@ ellipsis_info.ListModels <- function(objects, ...) {
 
 
 # ListRegressions ---------------------------------------------------------
-
-
 
 
 #' @export
@@ -137,10 +129,12 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   # Check if nested
   is_nested_increasing <- is_nested_decreasing <- c()
   len <- length(objects)
+
   for (i in 2:len) {
     is_nested_decreasing <- c(is_nested_decreasing, .nested_regressions(objects[[i - 1]], objects[[i]]))
     is_nested_increasing <- c(is_nested_increasing, .nested_regressions(objects[[len + 2 - i]], objects[[len + 1 - i]]))
   }
+
   is_nested <- all(is_nested_decreasing) || all(is_nested_increasing)
 
   if (isTRUE(same_response) & is_nested) {
@@ -160,6 +154,7 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     class(objects) <- c("ListNonNestedRegressions", class(objects))
     attr(objects, "is_nested") <- FALSE
   }
+
   objects
 }
 
@@ -169,8 +164,17 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
 #' @keywords internal
 .nested_regressions <- function(basemodel, model) {
-  params_base <- find_parameters(basemodel, effects = "fixed", component = "conditional", flatten = TRUE)
-  params <- find_parameters(model, effects = "fixed", component = "conditional", flatten = TRUE)
+  params_base <- find_parameters(basemodel,
+    effects = "fixed",
+    component = "conditional",
+    flatten = TRUE
+  )
+
+  params <- find_parameters(model,
+    effects = "fixed",
+    component = "conditional",
+    flatten = TRUE
+  )
 
   all(params %in% params_base)
 }

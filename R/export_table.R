@@ -154,7 +154,6 @@ export_table <- function(x,
 
     # list of data frames
     tmp <- lapply(1:length(l), function(element) {
-
       i <- l[[element]]
 
       # use individual footer for each list element...
@@ -163,8 +162,8 @@ export_table <- function(x,
       # ...unless we have a footer-argument.
       # Then use this as last (final) footer
       if (element == length(l) &&
-          is.null(attributes(i)$table_footer) &&
-          !is.null(footer)) {
+        is.null(attributes(i)$table_footer) &&
+        !is.null(footer)) {
         t_footer <- footer
       }
 
@@ -259,7 +258,7 @@ export_table <- function(x,
     out <- .format_html_table(df, caption = caption, subtitle = subtitle, footer = footer, align = align, group_by = group_by)
 
     # text and markdown go here...
-    } else {
+  } else {
     # Add colnames as row
     df <- rbind(colnames(df), df)
 

@@ -338,5 +338,4 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     rezrela3 <- summary(get_predicted(x, predict = "relation", data = mtcars["am"]))
     expect_equal(mean(abs(rezrela2$Predicted - rezrela3$Predicted)), 0, tolerance = 0.001)
   })
-
 }

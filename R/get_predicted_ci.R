@@ -67,9 +67,10 @@
 #'   bayestestR::reshape_ci(ci_vals)
 #'
 #'   ci_vals <- get_predicted_ci(x,
-#'                               predictions,
-#'                               dispersion_function = "MAD",
-#'                               interval_function = "HDI")
+#'     predictions,
+#'     dispersion_function = "MAD",
+#'     interval_function = "HDI"
+#'   )
 #'   head(ci_vals)
 #' }
 #'
@@ -106,7 +107,7 @@ get_predicted_ci <- function(x,
   }
 
   # Analytical solution
-  if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian")) {# gaussian or CI
+  if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian")) { # gaussian or CI
     se <- .get_predicted_ci_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
     return(.get_predicted_se_to_ci(x, predictions, se = se, ci = ci))
   } else {
@@ -297,7 +298,6 @@ get_predicted_ci <- function(x,
 
 #' @importFrom stats qbinom qpois
 .get_predicted_pi_glm <- function(x, predictions, ci = ci) {
-
   info <- model_info(x)
   linkfun <- link_function(x)
   linkinv <- link_inverse(x)
@@ -325,7 +325,7 @@ get_predicted_ci <- function(x,
 
 #' @importFrom stats sd mad
 .get_predicted_se_from_iter <- function(iter, dispersion_function = "SD") {
-  data <- as.data.frame(t(iter))  # Reshape
+  data <- as.data.frame(t(iter)) # Reshape
 
   # Dispersion
   if (is.character(dispersion_function)) {
@@ -334,7 +334,7 @@ get_predicted_ci <- function(x,
       se <- apply(data, 2, stats::sd)
     } else if (dispersion_function == "mad") {
       se <- apply(data, 2, stats::mad)
-    } else{
+    } else {
       stop("`dispersion_function` argument not recognized.")
     }
   } else {
@@ -367,7 +367,6 @@ get_predicted_ci <- function(x,
     }
     out <- as.data.frame(bayestestR::ci(as.data.frame(t(iter)), ci = ci, method = interval_function))
     if (length(ci) > 1) out <- reshape_ci(out)
-
   }
   out$Parameter <- out$CI <- NULL
   row.names(out) <- NULL
