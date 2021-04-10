@@ -101,10 +101,14 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
 
 #' @export
 get_weights.brmsfit <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
-  w <- find_weights(x)
+  w <- unique(find_weights(x))
 
   if (!is.null(w)) {
-    w <- get_data(x)[[w]]
+    if (length(w) > 1) {
+      return(get_data(x)[w])
+    } else {
+      w <- get_data(x)[[w]]
+    }
   }
 
   if (!is.null(w) && all(w == 1L)) {
