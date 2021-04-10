@@ -36,6 +36,9 @@
 
 * Fixed issue in `model_info()` for `BGGM`.
 
+* Fixed issue in `find_formula()` for `gamlss` models with `random()` function
+  in formula.
+
 # insight 0.13.2
 
 ## General

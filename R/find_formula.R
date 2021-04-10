@@ -149,10 +149,13 @@ find_formula.gam <- function(x, ...) {
 
 
 
+#' @importFrom stats update.formula
 #' @export
 find_formula.gamlss <- function(x, ...) {
   f <- tryCatch(
     {
+      f.cond <- stats::as.formula(.get_fixed_effects(x$mu.formula))
+
       f.random <- lapply(.findbars(x$mu.formula), function(.x) {
         f <- .safe_deparse(.x)
         stats::as.formula(paste0("~", f))
@@ -160,10 +163,14 @@ find_formula.gamlss <- function(x, ...) {
 
       if (length(f.random) == 1) {
         f.random <- f.random[[1]]
+      } else if (grepl("random\\((.*)\\)", .safe_deparse(f.cond))) {
+        re <- gsub("(.*)random\\((.*)\\)", "\\2", .safe_deparse(f.cond))
+        f.random <- stats::as.formula(paste0("~1|", re))
+        f.cond <- stats::update.formula(f.cond, stats::as.formula(paste0(". ~ . - random(", re, ")")))
       }
 
       .compact_list(list(
-        conditional = stats::as.formula(.get_fixed_effects(x$mu.formula)),
+        conditional = f.cond,
         random = f.random,
         sigma = x$sigma.formula,
         nu = x$nu.formula,
