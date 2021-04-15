@@ -39,6 +39,9 @@
 * Fixed issue in `find_formula()` for `gamlss` models with `random()` function
   in formula.
 
+* Fixed issue with `get_parameters()` and `find_parameters()` for 
+  multi-group *blavaan* models.
+
 # insight 0.13.2
 
 ## General
