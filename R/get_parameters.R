@@ -533,6 +533,14 @@ get_parameters.blavaan <- function(x, summary = FALSE, centrality = "mean", ...)
   params <- paste0(param_tab$lhs, param_tab$op, param_tab$rhs)
 
   coef_labels <- names(lavaan::coef(x))
+
+  if ("group" %in% colnames(param_tab) && .n_unique(param_tab$group) > 1) {
+    params <- paste0(params, " (group ", param_tab$group, ")")
+    groups <- grepl("(.*)\\.g(.*)", coef_labels)
+    coef_labels[!groups] <- paste0(coef_labels[!groups], " (group 1)")
+    coef_labels[groups] <- gsub("(.*)\\.g(.*)", "\\1 \\(group \\2\\)", coef_labels[groups])
+  }
+
   are_labels <- !coef_labels %in% params
   if (any(are_labels)) {
     unique_labels <- unique(coef_labels[are_labels])
