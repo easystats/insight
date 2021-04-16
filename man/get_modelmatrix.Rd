@@ -9,7 +9,7 @@ get_modelmatrix(x, ...)
 \arguments{
 \item{x}{An object.}
 
-\item{...}{Not used.}
+\item{...}{Passed down to other methods (mainly \code{model.matrix()}).}
 }
 \description{
 Creates a design matrix from the description. Any character variables are coerced to factors.
@@ -19,5 +19,4 @@ data(mtcars)
 
 model <- lm(am ~ vs, data = mtcars)
 get_modelmatrix(model)
-
 }
