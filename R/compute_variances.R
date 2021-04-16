@@ -1,4 +1,3 @@
-#' @importFrom stats nobs
 .compute_variances <- function(x,
                                component,
                                name_fun = NULL,
@@ -137,7 +136,6 @@
 # as list, since we need these information throughout the functions to
 # calculate the variance components...
 #
-#' @importFrom stats cov2cor
 .get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE, model_component = "conditional") {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
@@ -383,7 +381,6 @@
 
 # fixed effects variance ----
 
-#' @importFrom stats var
 .compute_variance_fixed <- function(vals) {
   with(vals, stats::var(as.vector(beta %*% t(X))))
 }
@@ -396,7 +393,6 @@
 
 # variance associated with a random-effects term (Johnson 2014) ----
 
-#' @importFrom stats nobs
 .compute_variance_random <- function(terms, x, vals) {
   if (is.null(terms)) {
     return(NULL)
@@ -528,7 +524,6 @@
 # Nakagawa et al. 2017 propose three different methods, here we only rely
 # on the lognormal-approximation.
 #
-#' @importFrom stats family
 .variance_distributional <- function(x, faminfo, sig, name, verbose = TRUE) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
@@ -663,7 +658,6 @@
 
 
 # Get distributional variance for tweedie-family
-#' @importFrom stats plogis
 .variance_family_tweedie <- function(x, mu, phi) {
   p <- unname(stats::plogis(x$fit$par["thetaf"]) + 1)
   phi * mu^p
@@ -695,7 +689,6 @@
 # For zero-inflated negative-binomial models, the distributional variance
 # is based on Zuur et al. 2012
 #
-#' @importFrom stats plogis family predict
 .variance_zinb <- function(model, sig, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance
@@ -735,7 +728,6 @@
 # For zero-inflated poisson models, the distributional variance
 # is based on Zuur et al. 2012
 #
-#' @importFrom stats plogis family predict
 .variance_zip <- function(model, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
     p <- stats::predict(model, type = "zprob")
@@ -836,7 +828,6 @@
 
 
 # random slope-variances (tau 11)
-#' @importFrom stats setNames
 .random_slope_variance <- function(vals, x) {
   if (inherits(x, "lme")) {
     unlist(lapply(vals$vc, function(x) diag(x)[-1]))
@@ -888,8 +879,6 @@
 
 
 # slope-slope-correlations (rho 01)
-#' @importFrom utils combn
-#' @importFrom stats setNames
 .random_slopes_corr <- function(vals, x) {
   corrs <- lapply(vals$vc, attr, "correlation")
   rnd_slopes <- unlist(find_random_slopes(x))

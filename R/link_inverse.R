@@ -22,7 +22,6 @@
 #' link_inverse(m)(.3)
 #' # same as
 #' exp(.3)
-#' @importFrom stats family make.link gaussian formula
 #' @export
 link_inverse <- function(x, ...) {
   UseMethod("link_inverse")
@@ -736,7 +735,6 @@ link_inverse.mira <- function(x, ...) {
 }
 
 
-#' @importFrom stats poisson
 .get_cplm_family <- function(x) {
   link <- parse(text = .safe_deparse(x@call))[[1]]$link
 

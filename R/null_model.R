@@ -17,7 +17,6 @@
 #'   summary(m)
 #'   summary(null_model(m))
 #' }
-#' @importFrom stats as.formula update reformulate
 #' @export
 null_model <- function(model, verbose = TRUE, ...) {
   if (is_mixed_model(model)) {

@@ -16,7 +16,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' n_obs(m)
-#' @importFrom stats model.frame nobs family
 #' @export
 n_obs <- function(x, ...) {
   UseMethod("n_obs")
@@ -50,7 +49,6 @@ n_obs.default <- function(x, ...) {
 }
 
 
-#' @importFrom stats nobs formula
 #' @export
 n_obs.glm <- function(x, ...) {
   is_binomial <- tryCatch(
@@ -433,7 +431,6 @@ n_obs.RM <- n_obs.MANOVA
 
 
 
-#' @importFrom stats fitted
 #' @export
 n_obs.nlrq <- function(x, ...) {
   length(stats::fitted(x))

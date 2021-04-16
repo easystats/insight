@@ -96,7 +96,6 @@
 #' # different model components.
 #' x
 #' }
-#' @importFrom stats na.omit
 #' @export
 print_parameters <- function(x,
                              ...,

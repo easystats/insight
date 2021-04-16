@@ -80,7 +80,6 @@
 #' }
 #'
 #' model_info(m)
-#' @importFrom stats formula terms
 #' @export
 model_info <- function(x, ...) {
   UseMethod("model_info")
@@ -98,7 +97,6 @@ model_info.data.frame <- function(x, ...) {
 }
 
 
-#' @importFrom stats family
 #' @rdname model_info
 #' @export
 model_info.default <- function(x, verbose = TRUE, ...) {
@@ -386,7 +384,6 @@ model_info.mvord <- function(x, ...) {
 # Models with family-function  ----------------------------------
 
 
-#' @importFrom stats family
 #' @export
 model_info.bamlss <- function(x, ...) {
   faminfo <- stats::family(x)

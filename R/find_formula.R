@@ -38,7 +38,6 @@
 #'   f
 #'   format(f)
 #' }
-#' @importFrom stats formula terms as.formula
 #' @export
 find_formula <- function(x, ...) {
   UseMethod("find_formula")
@@ -149,7 +148,6 @@ find_formula.gam <- function(x, ...) {
 
 
 
-#' @importFrom stats update.formula
 #' @export
 find_formula.gamlss <- function(x, ...) {
   f <- tryCatch(
@@ -186,7 +184,6 @@ find_formula.gamlss <- function(x, ...) {
 
 
 
-#' @importFrom stats as.formula
 #' @export
 find_formula.bamlss <- function(x, ...) {
   f <- stats::formula(x)
@@ -806,12 +803,10 @@ find_formula.ivprobit <- function(x, ...) {
 
 
 
-#' @importFrom stats formula as.formula
 #' @export
 find_formula.wbm <- function(x, ...) {
   f <- .safe_deparse(stats::formula(x))
   f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
-  # .split_formula(as.formula(f))
 
   f.cond <- .trim(f_parts[1])
 
@@ -917,7 +912,6 @@ find_formula.zcpglm <- function(x, ...) {
 # Ordinal models  --------------------------------------
 
 
-#' @importFrom stats as.formula
 #' @export
 find_formula.clmm2 <- function(x, ...) {
   f <- .compact_list(list(
@@ -929,7 +923,6 @@ find_formula.clmm2 <- function(x, ...) {
 }
 
 
-#' @importFrom stats formula
 #' @export
 find_formula.clm2 <- function(x, ...) {
   f <- .compact_list(list(
@@ -1359,7 +1352,6 @@ find_formula.MCMCglmm <- function(x, ...) {
 
 
 
-#' @importFrom utils tail
 #' @export
 find_formula.BFBayesFactor <- function(x, ...) {
   if (.classify_BFBayesFactor(x) == "linear") {

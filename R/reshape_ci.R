@@ -14,7 +14,6 @@
 #' )
 #' reshape_ci(x)
 #' reshape_ci(reshape_ci(x))
-#' @importFrom stats reshape
 #' @export
 reshape_ci <- function(x) {
 

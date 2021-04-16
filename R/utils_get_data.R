@@ -3,7 +3,6 @@
 # the model. This also means that, unless necessary for further processing,
 # variables transformed during model fitting are not included in this data frame
 #
-#' @importFrom stats getCall formula na.omit
 .prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
   if (.is_empty_object(mf)) {
     if (isTRUE(verbose)) {
@@ -11,9 +10,6 @@
     }
     return(NULL)
   }
-
-  # save for later use
-  original_model_frame <- mf
 
   # we may store model weights here later
   mw <- NULL

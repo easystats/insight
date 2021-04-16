@@ -627,7 +627,6 @@ clean_parameters.mlm <- function(x, ...) {
 
 
 
-#' @importFrom stats na.omit
 .clean_bfbayesfactor_params <- function(out) {
   pars <- do.call(rbind, strsplit(out$Parameter, "-", TRUE))
 

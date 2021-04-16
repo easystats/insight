@@ -38,7 +38,6 @@
 }
 
 
-#' @importFrom stats na.omit
 # is string empty?
 .is_empty_object <- function(x) {
   if (inherits(x, "data.frame")) {
@@ -323,7 +322,6 @@
 
 # checks if a mixed model fit is singular or not. Need own function,
 # because lme4::isSingular() does not work with glmmTMB
-#' @importFrom stats na.omit
 .is_singular <- function(x, vals, tolerance = 1e-5) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
@@ -479,7 +477,6 @@
 
 
 
-#' @importFrom stats family
 .gam_family <- function(x) {
   faminfo <- tryCatch(
     {
@@ -566,7 +563,6 @@
 
 
 
-#' @importFrom stats reshape
 #' @keywords internal
 .gather <- function(x, names_to = "key", values_to = "value", columns = colnames(x)) {
   if (is.numeric(columns)) columns <- colnames(x)[columns]
@@ -590,7 +586,6 @@
 
 
 
-#' @importFrom methods slot
 .is_baysian_emmeans <- function(x) {
   if (inherits(x, "emm_list")) {
     x <- x[[1]]
@@ -614,7 +609,6 @@
 
 
 # safe conversion from factor to numeric
-#' @importFrom stats na.omit
 .factor_to_numeric <- function(x, lowest = NULL) {
   if (is.data.frame(x)) {
     as.data.frame(lapply(x, .factor_to_numeric_helper, lowest = lowest))
@@ -624,7 +618,6 @@
 }
 
 
-#' @importFrom stats na.omit
 .factor_to_numeric_helper <- function(x, lowest = NULL) {
   if (is.numeric(x)) {
     return(x)
@@ -759,8 +752,6 @@
 ## copied from lme4::nobars() -----------------------
 
 
-#' @importFrom methods is
-#' @importFrom stats reformulate
 .nobars <- function(term) {
   nb <- .nobars_(term)
   if (methods::is(term, "formula") && length(term) == 3 && is.symbol(nb)) {
@@ -834,7 +825,6 @@
 
 
 
-#' @importFrom stats na.omit
 .n_unique <- function(x, na.rm = TRUE) {
   if (is.null(x)) {
     return(0)

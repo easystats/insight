@@ -21,7 +21,6 @@
 #' # same as
 #' log(.3)
 #' @export
-#' @importFrom stats family make.link
 link_function <- function(x, ...) {
   UseMethod("link_function")
 }
@@ -698,7 +697,6 @@ link_function.DirichletRegModel <- function(x, what = c("mean", "precision"), ..
 
 
 
-#' @importFrom stats poisson
 #' @export
 link_function.gbm <- function(x, ...) {
   switch(x$distribution$name,

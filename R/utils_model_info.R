@@ -348,7 +348,6 @@
 }
 
 
-#' @importFrom stats gaussian binomial Gamma
 .make_tobit_family <- function(x, dist = NULL) {
   if (is.null(dist)) {
     if (inherits(x, "flexsurvreg")) {
