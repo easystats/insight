@@ -589,7 +589,7 @@ n_obs.Rchoice <- function(x, ...) {
 
 #' @export
 n_obs.betamfx <- function(x, ...) {
-  nobs(x$fit)
+  stats::nobs(x$fit)
 }
 
 #' @export

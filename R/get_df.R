@@ -239,7 +239,7 @@ get_df.vgam <- function(x, type = "residual", ...) {
     .model_df(x)
   } else {
     params <- get_parameters(x)
-    out <- setNames(rep(NA, nrow(params)), params$Parameter)
+    out <- stats::setNames(rep(NA, nrow(params)), params$Parameter)
     out[names(x@nl.df)] <- x@nl.df
     out
   }

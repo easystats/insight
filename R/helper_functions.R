@@ -654,8 +654,8 @@
 
 .expandDoubleVert <- function(term) {
   frml <- stats::formula(substitute(~x, list(x = term[[2]])))
-  newtrms <- paste0("0+", attr(terms(frml), "term.labels"))
-  if (attr(terms(frml), "intercept") != 0) {
+  newtrms <- paste0("0+", attr(stats::terms(frml), "term.labels"))
+  if (attr(stats::terms(frml), "intercept") != 0) {
     newtrms <- c("1", newtrms)
   }
   stats::as.formula(paste("~(", paste(vapply(newtrms, function(trm) {
@@ -738,7 +738,7 @@
       }))
     }
   }
-  modterm <- .expandDoubleVerts(if (is(term, "formula")) {
+  modterm <- .expandDoubleVerts(if (methods::is(term, "formula")) {
     term[[length(term)]]
   } else {
     term

@@ -1227,7 +1227,7 @@ find_formula.mmclogit <- function(x, ...) {
     {
       list(
         conditional = stats::formula(x),
-        random = as.formula(parse(text = .safe_deparse(x$call))[[1]]$random)
+        random = stats::as.formula(parse(text = .safe_deparse(x$call))[[1]]$random)
       )
     },
     error = function(x) {

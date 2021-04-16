@@ -245,7 +245,7 @@
       f <- find_formula(x)$conditional
       mm <- stats::model.matrix(f, x$model)
       vals <- list(
-        beta = c("(Intercept)" = 1, stats::coef(x)[intersect(names(coef(x)), colnames(mm))]),
+        beta = c("(Intercept)" = 1, stats::coef(x)[intersect(names(stats::coef(x)), colnames(mm))]),
         X = mm,
         vc = ordinal::VarCorr(x),
         re = ordinal::ranef(x)
