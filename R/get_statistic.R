@@ -216,7 +216,6 @@ get_statistic.mhurdle <- function(x, component = c("all", "conditional", "zi", "
 }
 
 
-#' @importFrom stats coef
 #' @rdname get_statistic
 #' @export
 get_statistic.glmmTMB <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
@@ -317,7 +316,6 @@ get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "z
 # gam models --------------------------------------------------------------
 
 
-#' @importFrom stats na.omit
 #' @export
 get_statistic.Gam <- function(x, ...) {
   p.aov <- stats::na.omit(summary(x)$parametric.anova)
@@ -376,7 +374,6 @@ get_statistic.list <- function(x, ...) {
 }
 
 
-#' @importFrom utils capture.output
 #' @export
 get_statistic.gamlss <- function(x, ...) {
   parms <- get_parameters(x)
@@ -512,7 +509,6 @@ get_statistic.coxr <- function(x, ...) {
 get_statistic.crr <- get_statistic.coxr
 
 
-#' @importFrom stats vcov
 #' @export
 get_statistic.coxme <- function(x, ...) {
   beta <- x$coefficients
@@ -823,7 +819,6 @@ get_statistic.mlogit <- function(x, ...) {
 # mfx models -------------------------------------------------------
 
 #' @rdname get_statistic
-#' @importFrom stats coef
 #' @export
 get_statistic.betamfx <- function(x, component = c("all", "conditional", "precision", "marginal"), ...) {
   component <- match.arg(component)
@@ -1369,7 +1364,6 @@ get_statistic.averaging <- function(x, component = c("conditional", "full"), ...
 
 
 
-#' @importFrom stats coef
 #' @export
 get_statistic.bayesx <- function(x, ...) {
   out <- data.frame(
@@ -1486,7 +1480,6 @@ get_statistic.sem <- function(x, ...) {
 }
 
 
-#' @importFrom utils capture.output
 #' @export
 get_statistic.cpglm <- function(x, ...) {
   if (!requireNamespace("cplm", quietly = TRUE)) {
@@ -1509,7 +1502,6 @@ get_statistic.cpglm <- function(x, ...) {
 
 
 
-#' @importFrom utils capture.output
 #' @export
 get_statistic.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
   if (!requireNamespace("cplm", quietly = TRUE)) {
@@ -1840,7 +1832,6 @@ get_statistic.glmx <- function(x, component = c("all", "conditional", "extra"), 
 
 
 #' @rdname get_statistic
-#' @importFrom stats coef
 #' @export
 get_statistic.gee <- function(x, robust = FALSE, ...) {
   parms <- get_parameters(x)
@@ -1883,8 +1874,6 @@ get_statistic.complmrob <- function(x, ...) {
 
 
 
-#' @importFrom stats qchisq
-#' @importFrom utils capture.output
 #' @export
 get_statistic.logistf <- function(x, ...) {
   parms <- get_parameters(x)
@@ -1919,7 +1908,6 @@ get_statistic.epi.2by2 <- function(x, ...) {
 
 
 
-#' @importFrom stats vcov
 #' @export
 get_statistic.svyglm.nb <- function(x, ...) {
   if (!isNamespaceLoaded("survey")) {
@@ -1946,7 +1934,6 @@ get_statistic.svyglm.zip <- get_statistic.svyglm.nb
 
 
 #' @rdname get_statistic
-#' @importFrom stats coef
 #' @export
 get_statistic.betareg <- function(x, component = c("all", "conditional", "precision"), ...) {
   component <- match.arg(component)
@@ -1973,8 +1960,6 @@ get_statistic.betareg <- function(x, component = c("all", "conditional", "precis
 
 
 #' @rdname get_statistic
-#' @importFrom stats coef
-#' @importFrom utils capture.output
 #' @export
 get_statistic.DirichletRegModel <- function(x, component = c("all", "conditional", "precision"), ...) {
   component <- match.arg(component)
@@ -2005,7 +1990,6 @@ get_statistic.DirichletRegModel <- function(x, component = c("all", "conditional
 
 
 
-#' @importFrom methods slot
 #' @export
 get_statistic.glimML <- function(x, ...) {
   if (!requireNamespace("aod", quietly = TRUE)) {
@@ -2028,7 +2012,6 @@ get_statistic.glimML <- function(x, ...) {
 
 
 
-#' @importFrom stats coef vcov
 #' @export
 get_statistic.lrm <- function(x, ...) {
   parms <- get_parameters(x)
@@ -2091,7 +2074,6 @@ get_statistic.rma <- function(x, ...) {
 
 
 
-#' @importFrom stats qnorm
 #' @export
 get_statistic.metaplus <- function(x, ...) {
   params <- get_parameters(x)

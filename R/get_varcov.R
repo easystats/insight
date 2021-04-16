@@ -31,7 +31,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_varcov(m)
-#' @importFrom stats vcov
 #' @export
 get_varcov <- function(x, ...) {
   UseMethod("get_varcov")
@@ -574,7 +573,6 @@ get_varcov.gamm <- function(x, ...) {
 }
 
 
-#' @importFrom stats cov
 #' @export
 get_varcov.lqmm <- function(x, ...) {
   sc <- summary(x, covariance = TRUE)
@@ -772,7 +770,6 @@ get_varcov.LORgee <- get_varcov.gee
 
 
 
-#' @importFrom stats residuals estVar sd
 .get_weighted_varcov <- function(x, cov_unscaled) {
   ssd <- .weighted_crossprod(stats::residuals(x), w = x$weights)
   df <- sum(x$weights)

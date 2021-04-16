@@ -31,7 +31,6 @@
 #' get_weights(m)
 #' m <- glm(cbind(cyl, gear) ~ mpg, data = mtcars, weights = weight, family = binomial)
 #' get_weights(m)
-#' @importFrom stats na.omit
 #' @export
 get_weights <- function(x, ...) {
   UseMethod("get_weights")

@@ -271,7 +271,6 @@ parameters_table <- format_table
 
 
 
-#' @importFrom stats na.omit
 .format_freq_stats <- function(x) {
   for (stats in c("t", "Chi2")) {
     if (stats %in% names(x) && "df" %in% names(x)) {
@@ -315,7 +314,6 @@ parameters_table <- format_table
 
 
 
-#' @importFrom stats na.omit
 .format_main_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE, zap_small, ci_name = "CI") {
   # Main CI
   ci_low <- names(x)[grep(paste0("^", ci_name, "_low"), names(x))]
@@ -400,7 +398,6 @@ parameters_table <- format_table
 
 
 
-#' @importFrom stats na.omit
 .format_other_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE, zap_small) {
   other_ci_low <- names(x)[grep("_CI_low$", names(x))]
   other_ci_high <- names(x)[grep("_CI_high$", names(x))]

@@ -26,7 +26,6 @@ get_deviance <- function(x, ...) {
 
 
 #' @rdname get_deviance
-#' @importFrom stats deviance
 #' @export
 get_deviance.default <- function(x, verbose = TRUE, ...) {
   dev <- tryCatch(

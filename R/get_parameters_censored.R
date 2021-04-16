@@ -45,7 +45,6 @@ get_parameters.crr <- function(x, ...) {
 }
 
 
-#' @importFrom utils stack
 #' @export
 get_parameters.lmodel2 <- function(x, ...) {
   res <- x$regression.results
@@ -115,7 +114,6 @@ get_parameters.crq <- function(x, ...) {
 get_parameters.crqs <- get_parameters.crq
 
 
-#' @importFrom stats coef
 #' @export
 get_parameters.lqmm <- function(x, ...) {
   cs <- stats::coef(x)

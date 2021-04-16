@@ -26,7 +26,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
-#' @importFrom stats coef
 #' @export
 find_parameters <- function(x, ...) {
   UseMethod("find_parameters")
@@ -343,8 +342,6 @@ find_parameters.crr <- function(x, flatten = FALSE, ...) {
 }
 
 
-#' @importFrom utils capture.output
-#' @importFrom stats coef
 #' @export
 find_parameters.riskRegression <- function(x, flatten = FALSE, ...) {
   junk <- utils::capture.output(cs <- stats::coef(x))
@@ -487,7 +484,6 @@ find_parameters.glht <- function(x, flatten = FALSE, ...) {
 }
 
 
-#' @importFrom stats na.omit coef
 #' @export
 find_parameters.manova <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = .remove_backticks_from_string(rownames(stats::na.omit(stats::coef(x)))))
@@ -655,7 +651,6 @@ find_parameters.crqs <- find_parameters.crq
 
 
 
-#' @importFrom stats coef
 #' @export
 find_parameters.lqmm <- function(x, flatten = FALSE, ...) {
   cs <- stats::coef(x)

@@ -36,7 +36,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
-#' @importFrom stats coef
 #' @export
 find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE, ...) {
   effects <- match.arg(effects)

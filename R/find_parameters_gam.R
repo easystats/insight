@@ -20,7 +20,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
-#' @importFrom stats na.omit coef
 #' @export
 find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
   pars <- lapply(x$parameters, function(i) {

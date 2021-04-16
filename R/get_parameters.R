@@ -38,7 +38,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
-#' @importFrom stats coef
 #' @export
 get_parameters <- function(x, ...) {
   UseMethod("get_parameters")
@@ -237,8 +236,6 @@ get_parameters.survreg <- function(x, ...) {
 }
 
 
-#' @importFrom utils capture.output
-#' @importFrom stats coef
 #' @export
 get_parameters.riskRegression <- function(x, ...) {
   junk <- utils::capture.output(cs <- stats::coef(x))
@@ -674,7 +671,6 @@ get_parameters.aovlist <- function(x, ...) {
 
 
 
-#' @importFrom stats na.omit coef
 #' @export
 get_parameters.manova <- function(x, ...) {
   params <- stats::na.omit(stats::coef(x))
@@ -713,7 +709,6 @@ get_parameters.afex_aov <- function(x, ...) {
 # utility functions ---------------------------------
 
 
-#' @importFrom methods slot slotNames
 .get_armsim_fixef_parms <- function(x) {
   sn <- methods::slotNames(x)
   as.data.frame(methods::slot(x, sn[1]))
@@ -721,7 +716,6 @@ get_parameters.afex_aov <- function(x, ...) {
 
 
 
-#' @importFrom methods .hasSlot
 .get_armsim_ranef_parms <- function(x) {
   dat <- NULL
   if (methods::.hasSlot(x, "ranef")) {

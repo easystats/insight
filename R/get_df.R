@@ -286,8 +286,6 @@ get_df.rqs <- function(x, type = "residual", ...) {
 
 # Model approach (Residual df) ------------------------------
 
-#' @importFrom stats df.residual
-#' @importFrom utils capture.output
 #' @keywords internal
 .degrees_of_freedom_fit <- function(model, verbose = TRUE) {
   info <- model_info(model, verbose = FALSE)
@@ -326,7 +324,6 @@ get_df.rqs <- function(x, type = "residual", ...) {
 
 
 
-#' @importFrom stats logLik
 .model_df <- function(x) {
   dof <- tryCatch(
     {

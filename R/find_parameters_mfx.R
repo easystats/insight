@@ -35,7 +35,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
-#' @importFrom stats coef
 #' @export
 find_parameters.betamfx <- function(x, component = c("all", "conditional", "precision", "marginal", "location", "distributional", "auxiliary"), flatten = FALSE, ...) {
   pars <- list(

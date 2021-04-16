@@ -18,7 +18,6 @@
 #'   emm <- emmeans(model, c("wt", "cyl"))
 #'   find_parameters(emm)
 #' }
-#' @importFrom stats setNames
 #' @export
 find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE, ...) {
   out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)

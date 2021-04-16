@@ -88,7 +88,6 @@ format_value.logical <- format_value.numeric
 
 
 
-#' @importFrom stats na.omit
 .format_value_unless_integer <- function(x, digits = 2, .missing = "", .width = NULL, .as_percent = FALSE, .zap_small = FALSE, ...) {
   if (is.numeric(x) && !all(.is.int(stats::na.omit(x)))) {
     .format_value(x, digits = digits, .missing = .missing, .width = .width, .as_percent = .as_percent, .zap_small = .zap_small)

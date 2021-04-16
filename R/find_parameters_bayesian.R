@@ -381,7 +381,6 @@ find_parameters.brmsfit <- function(x,
 
 
 
-#' @importFrom stats coef
 #' @rdname find_parameters.BGGM
 #' @export
 find_parameters.bayesx <- function(x,

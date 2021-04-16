@@ -26,7 +26,6 @@ get_loglikelihood <- function(x, ...) {
 loglikelihood <- get_loglikelihood
 
 
-#' @importFrom stats logLik
 #' @export
 get_loglikelihood.default <- function(x, ...) {
   .loglikelihood_prep_output(x, lls = NA, ...)
@@ -47,7 +46,6 @@ get_loglikelihood.model_fit <- function(x, ...) {
 # https://stats.stackexchange.com/questions/322038/input-format-for-response-in-binomial-glm-in-r
 
 
-#' @importFrom stats weights deviance dbinom dpois dgamma
 .get_loglikelihood_lm <- function(x, estimator = "ML", REML = FALSE, ...) {
 
   # Replace arg if compatibility base R is activated

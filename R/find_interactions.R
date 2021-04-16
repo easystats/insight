@@ -62,7 +62,6 @@ find_interactions <- function(x, component = c("all", "conditional", "zi", "zero
 }
 
 
-#' @importFrom stats terms
 .get_interaction_terms <- function(f, main_effects = FALSE) {
   if (is.null(f)) {
     return(NULL)

@@ -82,7 +82,6 @@
 #' head(ci_vals)
 #' ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 #' head(ci_vals)
-#' @importFrom stats median sd quantile
 #' @export
 get_predicted_ci <- function(x,
                              predictions = NULL,
@@ -164,7 +163,6 @@ get_predicted_ci <- function(x,
 # Get Model matrix ------------------------------------------------------------
 
 
-#' @importFrom stats terms reformulate
 .get_predicted_ci_modelmatrix <- function(x, data = NULL, vcovmat = NULL, ...) {
   resp <- find_response(x)
   if (is.null(vcovmat)) vcovmat <- .get_predicted_ci_vcov(x, ...)
@@ -255,7 +253,6 @@ get_predicted_ci <- function(x,
 
 
 
-#' @importFrom stats qnorm qt
 .get_predicted_se_to_ci <- function(x, predictions = NULL, se = NULL, ci = 0.95) {
 
   # TODO: Prediction interval for binomial: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-i/
@@ -296,7 +293,6 @@ get_predicted_ci <- function(x,
 
 # Get PI ------------------------------------------------------------------
 
-#' @importFrom stats qbinom qpois
 .get_predicted_pi_glm <- function(x, predictions, ci = ci) {
   info <- model_info(x)
   linkfun <- link_function(x)
@@ -323,7 +319,6 @@ get_predicted_ci <- function(x,
 
 # Interval helpers --------------------------------------------------------
 
-#' @importFrom stats sd mad
 .get_predicted_se_from_iter <- function(iter, dispersion_function = "SD") {
   data <- as.data.frame(t(iter)) # Reshape
 
@@ -345,7 +340,6 @@ get_predicted_ci <- function(x,
 
 
 
-#' @importFrom stats quantile
 .get_predicted_interval_from_iter <- function(iter, ci = 0.95, interval_function = "quantile") {
 
   # Interval

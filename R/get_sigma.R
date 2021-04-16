@@ -40,7 +40,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_sigma(m)
-#' @importFrom stats sigma
 #' @export
 get_sigma <- function(x, ci = 0.95, verbose = TRUE) {
   s <- .get_sigma(x, verbose = verbose)
@@ -172,7 +171,6 @@ get_sigma <- function(x, ci = 0.95, verbose = TRUE) {
 
 # Methods -----------------------------------------------------------------
 
-#' @importFrom stats qchisq
 .get_sigma_ci <- function(x, ci = 0.95, ...) {
 
   # TODO: What does it work for Bayesian models?

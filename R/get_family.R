@@ -26,7 +26,6 @@ get_family <- function(x, ...) {
 }
 
 
-#' @importFrom stats family
 #' @export
 get_family.default <- function(x, ...) {
   fam <- tryCatch(
@@ -65,7 +64,6 @@ get_family.model_fit <- function(x, ...) {
 }
 
 
-#' @importFrom stats binomial gaussian poisson
 .get_family <- function(x, ...) {
   info <- model_info(x)
 

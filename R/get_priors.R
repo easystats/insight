@@ -356,7 +356,6 @@ get_priors.meta_fixed <- function(x, ...) {
 
 
 
-#' @importFrom utils tail
 #' @export
 get_priors.BFBayesFactor <- function(x, ...) {
   prior <- .compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
@@ -492,7 +491,6 @@ get_priors.mcmc.list <- function(x, ...) {
 }
 
 
-#' @importFrom stats na.omit
 .is_numeric_character <- function(x) {
   (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x[nchar(x) > 0]))))) ||
     (is.factor(x) && !anyNA(suppressWarnings(as.numeric(levels(x)))))

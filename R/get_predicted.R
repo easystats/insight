@@ -96,7 +96,6 @@ get_predicted <- function(x, data = NULL, ...) {
 
 # default methods ---------------------------
 
-#' @importFrom stats fitted predict
 #' @export
 get_predicted.default <- function(x, data = NULL, ...) {
   out <- tryCatch(
@@ -640,7 +639,6 @@ get_predicted.crr <- function(x, ...) {
 
 # Bootstrap ---------------------------------------------------------------
 
-#' @importFrom stats predict update
 .get_predicted_boot <- function(x,
                                 data = NULL,
                                 predict_function = NULL,

@@ -52,7 +52,6 @@
 #' )
 #' model <- glm(lot1 ~ log(u), data = clotting, family = Gamma())
 #' get_auxiliary(model, type = "dispersion") # same as summary(model)$dispersion
-#' @importFrom stats sigma
 #' @export
 get_auxiliary <- function(x, type = "sigma", summary = TRUE, centrality = "mean", verbose = TRUE, ...) {
   type <- match.arg(type, choices = .aux_elements())

@@ -16,7 +16,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
-#' @importFrom stats coef
 #' @export
 get_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_terms", "location"), ...) {
   x <- x$gam
@@ -77,7 +76,6 @@ get_parameters.vgam <- function(x, component = c("all", "conditional", "smooth_t
 
 
 
-#' @importFrom stats na.omit
 #' @export
 get_parameters.gamlss <- function(x, ...) {
   pars <- lapply(x$parameters, function(i) {
@@ -115,7 +113,6 @@ get_parameters.gamlss <- function(x, ...) {
 
 
 #' @rdname get_parameters.gamm
-#' @importFrom stats setNames
 #' @export
 get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
   component <- match.arg(component)
@@ -133,7 +130,6 @@ get_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_t
 
 
 
-#' @importFrom stats setNames
 #' @export
 get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
   component <- match.arg(component)

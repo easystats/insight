@@ -1,6 +1,5 @@
 # Printing -----------------------------------------------------------------
 
-#' @importFrom utils head
 #' @export
 print.get_predicted <- function(x, ...) {
   print_colour("Predicted values:\n\n", "blue")

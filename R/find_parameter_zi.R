@@ -21,7 +21,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
-#' @importFrom stats na.omit coef
 #' @export
 find_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
   cf <- names(stats::coef(x))

@@ -15,7 +15,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
-#' @importFrom stats coef
 #' @export
 get_parameters.betamfx <- function(x, component = c("all", "conditional", "precision", "marginal"), ...) {
   component <- match.arg(component)

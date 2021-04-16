@@ -35,7 +35,6 @@ get_residuals <- function(x, ...) {
 
 
 #' @rdname get_residuals
-#' @importFrom stats predict residuals fitted
 #' @export
 get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
@@ -162,7 +161,6 @@ get_residuals.crr <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
 
 
-#' @importFrom utils capture.output
 #' @export
 get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   if (isTRUE(weighted)) {

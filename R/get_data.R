@@ -27,7 +27,6 @@
 #'   m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #'   head(get_data(m))
 #' }
-#' @importFrom stats model.frame na.omit
 #' @export
 get_data <- function(x, ...) {
   UseMethod("get_data")
@@ -530,7 +529,6 @@ get_data.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 
-#' @importFrom stats model.frame
 #' @rdname get_data
 #' @export
 get_data.MixMod <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), verbose = TRUE, ...) {
