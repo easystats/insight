@@ -8,6 +8,8 @@ get_modelmatrix(x, ...)
 }
 \arguments{
 \item{x}{An object.}
+
+\item{...}{Not used.}
 }
 \description{
 Creates a design matrix from the description. Any character variables are coerced to factors.

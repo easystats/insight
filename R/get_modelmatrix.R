@@ -4,6 +4,7 @@
 #'
 #'
 #' @param x An object.
+#' @param ... Not used.
 #'
 #' @examples
 #' data(mtcars)
