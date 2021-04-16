@@ -164,7 +164,7 @@ get_predicted_ci <- function(x,
 # Get Model matrix ------------------------------------------------------------
 
 
-#' @importFrom stats model.matrix terms reformulate
+#' @importFrom stats terms reformulate
 .get_predicted_ci_modelmatrix <- function(x, data = NULL, vcovmat = NULL, ...) {
   resp <- find_response(x)
   if (is.null(vcovmat)) vcovmat <- .get_predicted_ci_vcov(x, ...)

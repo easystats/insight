@@ -137,7 +137,7 @@
 # as list, since we need these information throughout the functions to
 # calculate the variance components...
 #
-#' @importFrom stats model.matrix cov2cor
+#' @importFrom stats cov2cor
 .get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE, model_component = "conditional") {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)

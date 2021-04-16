@@ -18,5 +18,5 @@ get_modelmatrix <- function(x, ...) {
 
 #' @export
 get_modelmatrix.default <- function(x, ...) {
-  model.matrix(x, ...)
+  stats::model.matrix(x, ...)
 }
