@@ -41,6 +41,7 @@ reference:
   - get_df
   - get_intercept
   - get_loglikelihood
+  - get_modelmatrix
   - get_predicted
   - get_predicted_ci
   - get_priors
