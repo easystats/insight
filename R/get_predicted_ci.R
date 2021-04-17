@@ -201,7 +201,7 @@ get_predicted_ci <- function(x,
         model_terms <- stats::reformulate(all_terms[!off_terms], response = find_response(x))
       }
     }
-    mm <- stats::model.matrix(model_terms, data = data)
+    mm <- get_modelmatrix(model_terms, data = data)
   }
   mm
 }
