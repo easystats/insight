@@ -1607,7 +1607,7 @@ find_formula.model_fit <- function(x, ...) {
   if (any(grepl("\\$", .safe_deparse(f[[1]])))) {
     fc <- try(.formula_clean(f[[1]]), silent = TRUE)
     if (inherits(fc, "try-error")) {
-      stop(fc, call. = FALSE)
+      stop(attributes(fc)$condition$message, call. = FALSE)
     } else {
       warning(
         paste(
