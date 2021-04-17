@@ -1604,7 +1604,7 @@ find_formula.model_fit <- function(x, ...) {
     sep = "\n  "
   )
 
-  if (any(grepl(f[[1]], "\\$"))) {
+  if (any(grepl(.safe_deparse(f[[1]]), "\\$"))) {
     fc <- try(.formula_clean(f[[1]]), silent = TRUE)
     if (inherits(fc, "try-error")) {
       stop(
