@@ -236,10 +236,16 @@
 # add remainng variables with special pattern -------------------------------
 
 .add_remaining_missing_variables <- function(model, mf, effects, component) {
-  missing_vars <- setdiff(
-    find_predictors(model, effects = effects, component = component, flatten = TRUE),
-    colnames(mf)
-  )
+  # check if data argument was used
+  data_arg <- parse(text = .safe_deparse(get_call(model)))[[1]]$data
+
+  # do we have variable names like "mtcars$mpg"?
+  if (is.null(data_arg) && all(grepl("(.*)\\$(.*)", colnames(mf)))) {
+    colnames(mf) <- gsub("(.*)\\$(.*)", "\\2", colnames(mf))
+  }
+
+  predictors <- find_predictors(model, effects = effects, component = component, flatten = TRUE)
+  missing_vars <- setdiff(predictors, colnames(mf))
 
   if (!is.null(missing_vars) && length(missing_vars) > 0) {
     env_data <- .get_data_from_env(model)
