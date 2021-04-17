@@ -1586,10 +1586,70 @@ find_formula.model_fit <- function(x, ...) {
   if (is.null(f)) {
     return(NULL)
   }
+
+  .check_formula_for_dollar(f)
   class(f) <- c("insight_formula", class(f))
   f
 }
 
+
+# formulas with $, like "lm(mtcars$mpg ~ mtcars$hp), may cause problems
+# in various functions throughout the easystats packages. We warn the user
+# here...
+
+.check_formula_for_dollar <- function(f) {
+  error_message <- paste(
+    "Using `$` in model formulas can produce unexpected results.",
+    "Specify your model using the `data` argument instead.",
+    sep = "\n  "
+  )
+
+  if (any(grepl(f[[1]], "\\$"))) {
+    fc <- try(.formula_clean(f[[1]]), silent = TRUE)
+    if (inherits(fc, "try-error")) {
+      stop(
+        error_message, call. = FALSE
+      )
+    } else {
+      warning(
+        paste(
+          error_message,
+          "Try:",
+          paste0("  ", fc$formula, ", data = ", fc$data),
+          sep = "\n  "
+        ), call. = FALSE
+      )
+    }
+  }
+}
+
+
+.formula_clean <- function(f) {
+  fc <- as.character(f)
+  LHS <- fc[2]
+  RHS <- fc[3]
+
+  parts <- trimws(unlist(strsplit(split = "[\\s\\*\\+\\:\\-\\|\\/\\(\\)\\^,]", x = LHS, perl = TRUE)))
+  d_LHS <- unique(gsub("(.*)\\$(.*)", "\\1", parts[grepl("(.*)\\$(.*)", parts)]))
+
+  parts <- trimws(unlist(strsplit(split = "[\\s\\*\\+\\:\\-\\|\\/\\(\\)\\^,]", x = RHS, perl = TRUE)))
+  d_RHS <- unique(gsub("(.*)\\$(.*)", "\\1", parts[grepl("(.*)\\$(.*)", parts)]))
+
+  if (.n_unique(c(d_LHS, d_RHS)) > 1) {
+    stop("Multiple data objects present in formula. Specify your model using the `data` argument instead.", call. = FALSE)
+  } else {
+    d <- unique(d_RHS)
+  }
+  LHS_clean <- gsub(paste0(d_LHS, "\\$"), "", LHS)
+  RHS_clean <- gsub(paste0(d_RHS, "\\$"), "", RHS)
+
+  list(data = d, formula = paste(LHS_clean, fc[1], RHS_clean))
+}
+
+
+
+
+# methods -------------------------
 
 
 #' @export
