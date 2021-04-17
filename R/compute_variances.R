@@ -194,7 +194,7 @@
 
     vals <- list(
       beta = lme4::fixef(x),
-      X = stats::model.matrix(x),
+      X = get_modelmatrix(x),
       vc = vcorr,
       re = list(lme4::ranef(x))
     )
@@ -221,7 +221,7 @@
     # nlme
   } else if (inherits(x, "lme")) {
     re_names <- find_random(x, split_nested = TRUE, flatten = TRUE)
-    comp_x <- stats::model.matrix(x, data = get_data(x))
+    comp_x <- get_modelmatrix(x)
     rownames(comp_x) <- 1:nrow(comp_x)
     if (.is_nested_lme(x)) {
       vals_vc <- .get_nested_lme_varcorr(x)
@@ -242,8 +242,7 @@
     # ordinal
   } else if (inherits(x, "clmm")) {
     if (requireNamespace("ordinal", quietly = TRUE)) {
-      f <- find_formula(x)$conditional
-      mm <- stats::model.matrix(f, x$model)
+      mm <- get_modelmatrix(x)
       vals <- list(
         beta = c("(Intercept)" = 1, stats::coef(x)[intersect(names(stats::coef(x)), colnames(mm))]),
         X = mm,
@@ -256,17 +255,14 @@
   } else if (inherits(x, "glmmadmb")) {
     vals <- list(
       beta = lme4::fixef(x),
-      X = stats::model.matrix(x),
+      X = get_modelmatrix(x),
       vc = lme4::VarCorr(x),
       re = lme4::ranef(x)
     )
 
     # brms
   } else if (inherits(x, "brmsfit")) {
-    # comp_x <- as.matrix(cbind(`(Intercept)` = 1, get_predictors(x)))
-    formula_rhs <- .safe_deparse(find_formula(x)$conditional[[3]])
-    formula_rhs <- stats::as.formula(paste0("~", formula_rhs))
-    comp_x <- stats::model.matrix(formula_rhs, data = get_data(x))
+    comp_x <- get_modelmatrix(x)
     rownames(comp_x) <- 1:nrow(comp_x)
     vc <- lapply(names(lme4::VarCorr(x)), function(i) {
       element <- lme4::VarCorr(x)[[i]]

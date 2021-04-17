@@ -169,7 +169,7 @@ get_predicted_ci <- function(x,
 
 
   if (is.null(data)) {
-    mm <- stats::model.matrix(x)
+    mm <- get_modelmatrix(x)
   } else {
     if (!all(resp %in% data)) data[[resp]] <- 0 # fake response
     # else, model.matrix below fails, e.g. for log-terms
