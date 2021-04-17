@@ -6,11 +6,19 @@
   `get_auxiliary()`, as well as `get_parameters(component = "all")`) for 
   `brmsfit` models.
 
+## New functions
+
+* `get_modelmatrix()` as a robust alternative to `model.matrix()` for
+  different model classes.
+
 ## New supported model classes
 
 * Support for `mvord` (*mvord*)
 
 ## Changes to functions
+
+* `find_formula()` now warns when data name is present in formula, since this
+  can lead to unexpected behaviour in other package functions.
 
 * Add `get_statistic()` for *lavaan* models.
 
