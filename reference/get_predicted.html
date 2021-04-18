@@ -148,7 +148,7 @@
     <p>Compute Model's Predictions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, data <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for lm</span>
 <span class='fu'>get_predicted</span><span class='op'>(</span>
@@ -181,14 +181,14 @@
 second argument has to be a model).</p></td>
     </tr>
     <tr>
-      <th>data</th>
-      <td><p>An optional data frame in which to look for variables with which
-to predict. If omitted, the data used to fit the model is used.</p></td>
-    </tr>
-    <tr>
       <th>...</th>
       <td><p>Other argument to be passed for instance to
 <code><a href='get_predicted_ci.html'>get_predicted_ci</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>An optional data frame in which to look for variables with which
+to predict. If omitted, the data used to fit the model is used.</p></td>
     </tr>
     <tr>
       <th>predict</th>
