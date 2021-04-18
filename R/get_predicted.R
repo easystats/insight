@@ -90,7 +90,7 @@
 #' as.data.frame(get_predicted(x, iterations = 4))
 #' summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
 #' @export
-get_predicted <- function(x, data = NULL, ...) {
+get_predicted <- function(x, ...) {
   UseMethod("get_predicted")
 }
 
@@ -409,7 +409,7 @@ get_predicted.stanreg <- function(x,
                                   include_smooth = TRUE,
                                   verbose = TRUE,
                                   ...) {
-  if (!requireNamespace("rstantools", quietly = TRUE) || packageVersion("rstantool") < "2.1.0") {
+  if (!requireNamespace("rstantools", quietly = TRUE) || utils::packageVersion("rstantool") < "2.1.0") {
     stop("Package `rstantools` in version 2.1.0 or higher needed for this function to work. Please install it.")
   }
 

@@ -6,7 +6,7 @@
 \alias{get_predicted.stanreg}
 \title{Compute Model's Predictions}
 \usage{
-get_predicted(x, data = NULL, ...)
+get_predicted(x, ...)
 
 \method{get_predicted}{lm}(
   x,
@@ -32,11 +32,11 @@ get_predicted(x, data = NULL, ...)
 \item{x}{A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).}
 
-\item{data}{An optional data frame in which to look for variables with which
-to predict. If omitted, the data used to fit the model is used.}
-
 \item{...}{Other argument to be passed for instance to
 \code{\link{get_predicted_ci}}.}
+
+\item{data}{An optional data frame in which to look for variables with which
+to predict. If omitted, the data used to fit the model is used.}
 
 \item{predict}{Can be \code{"link"}, \code{"relation"} (default), or
 \code{"prediction"}. This modulates the scale of the output as well as the
