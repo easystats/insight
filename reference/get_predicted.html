@@ -151,7 +151,14 @@
     <pre class="usage"><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, data <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for lm</span>
-<span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, data <span class='op'>=</span> <span class='cn'>NULL</span>, predict <span class='op'>=</span> <span class='st'>"relation"</span>, iterations <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>get_predicted</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  predict <span class='op'>=</span> <span class='st'>"relation"</span>,
+  iterations <span class='op'>=</span> <span class='cn'>NULL</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for stanreg</span>
 <span class='fu'>get_predicted</span><span class='op'>(</span>
@@ -161,6 +168,7 @@
   iterations <span class='op'>=</span> <span class='cn'>NULL</span>,
   include_random <span class='op'>=</span> <span class='cn'>TRUE</span>,
   include_smooth <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -202,6 +210,10 @@ more about in the <strong>Details</strong> section below.</p></td>
 posterior draws. If <code>NULL</code>, will return all the draws (one for each
 iteration of the model). For frequentist models, if not <code>NULL</code>, will
 generate bootstrapped draws, from which bootstrapped CIs will be computed.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle warnings.</p></td>
     </tr>
     <tr>
       <th>include_random</th>
