@@ -215,8 +215,14 @@
 <span class="co"># find all terms, including response and random effects</span>
 <span class="co"># this is essentially the same as the previous example plus response</span>
 <span class="fu"><a href="../reference/find_terms.html">find_terms</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="co">#&gt; $response</span>
+<span class="co">#&gt; [1] "Reaction"</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; $conditional</span>
-<span class="co">#&gt; [1] "(Days^2)" "1"        "(Weeks)"</span>
+<span class="co">#&gt; [1] "Days"         "I(Days^2)"    "log1p(Weeks)" "cat"         </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $random</span>
+<span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Days"     "Subject"</span>
 
 <span class="co"># find all variables, i.e. also quadratic or log-transformed predictors</span>
 <span class="fu"><a href="../reference/find_variables.html">find_variables</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
