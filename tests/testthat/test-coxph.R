@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("insight") &&
   require("survival")) {
-  data("lung")
   lung <- subset(lung, subset = ph.ecog %in% 0:2)
   lung$sex <- factor(lung$sex, labels = c("male", "female"))
   lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))

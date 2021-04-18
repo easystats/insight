@@ -5,7 +5,7 @@
 if (require("testthat") &&
   require("insight") &&
   require("lme4") &&
-  require("afex") &&
+  suppressPackageStartupMessages(require("afex")) &&
   FALSE) {
   data(sleepstudy)
 

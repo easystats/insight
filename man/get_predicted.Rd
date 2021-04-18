@@ -8,7 +8,14 @@
 \usage{
 get_predicted(x, data = NULL, ...)
 
-\method{get_predicted}{lm}(x, data = NULL, predict = "relation", iterations = NULL, ...)
+\method{get_predicted}{lm}(
+  x,
+  data = NULL,
+  predict = "relation",
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+)
 
 \method{get_predicted}{stanreg}(
   x,
@@ -17,6 +24,7 @@ get_predicted(x, data = NULL, ...)
   iterations = NULL,
   include_random = TRUE,
   include_smooth = TRUE,
+  verbose = TRUE,
   ...
 )
 }
@@ -46,6 +54,8 @@ more about in the \strong{Details} section below.}
 posterior draws. If \code{NULL}, will return all the draws (one for each
 iteration of the model). For frequentist models, if not \code{NULL}, will
 generate bootstrapped draws, from which bootstrapped CIs will be computed.}
+
+\item{verbose}{Toggle warnings.}
 
 \item{include_random}{If \code{TRUE} (default), include all random effects in
 the prediction. If \code{FALSE}, don't take them into account. Can also be

@@ -103,7 +103,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # Bootstrap
     set.seed(333)
     ref <- predict(x, se.fit = TRUE, type = "response")
-    rez <- summary(get_predicted(x, iterations = 800))
+    rez <- summary(get_predicted(x, iterations = 800, verbose = FALSE))
     expect_equal(mean(abs(ref$fit - rez$Predicted)), 0, tolerance = 0.1)
 
     # vs. Bayesian

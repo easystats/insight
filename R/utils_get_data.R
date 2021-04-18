@@ -237,7 +237,12 @@
 
 .add_remaining_missing_variables <- function(model, mf, effects, component) {
   # check if data argument was used
-  data_arg <- parse(text = .safe_deparse(get_call(model)))[[1]]$data
+  model_call <- get_call(model)
+  if (!is.null(model_call)) {
+    data_arg <- parse(text = .safe_deparse(model_call))[[1]]$data
+  } else {
+    data_arg <- NULL
+  }
 
   # do we have variable names like "mtcars$mpg"?
   if (is.null(data_arg) && all(grepl("(.*)\\$(.*)", colnames(mf)))) {

@@ -33,6 +33,7 @@
 #'   \code{bayestestR::map_estimate()}.
 #' @param ... Other argument to be passed for instance to
 #'   \code{\link{get_predicted_ci}}.
+#' @inheritParams get_df
 #'
 #' @seealso get_predicted_ci
 #'
@@ -97,7 +98,7 @@ get_predicted <- function(x, data = NULL, ...) {
 # default methods ---------------------------
 
 #' @export
-get_predicted.default <- function(x, data = NULL, ...) {
+get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
   out <- tryCatch(
     {
       if (!is.null(data)) {
@@ -125,12 +126,12 @@ get_predicted.default <- function(x, data = NULL, ...) {
 }
 
 #' @export
-get_predicted.data.frame <- function(x, data = NULL, ...) {
+get_predicted.data.frame <- function(x, data = NULL, verbose = TRUE, ...) {
   # This makes it pipe friendly; data %>% get_predicted(model)
   if (is.null(data)) {
     stop("Please provide a model to base the estimations on.")
   } else {
-    get_predicted(data, x, ...)
+    get_predicted(data, x, verbose = verbose, ...)
   }
 }
 
@@ -146,6 +147,7 @@ get_predicted.lm <- function(x,
                              data = NULL,
                              predict = "relation",
                              iterations = NULL,
+                             verbose = TRUE,
                              ...) {
   args <- .get_predicted_args(x, data = data, predict = predict, ...)
 
@@ -161,6 +163,7 @@ get_predicted.lm <- function(x,
       data = args$data,
       predict_function = predict_function,
       iterations = iterations,
+      verbose = verbose,
       ...
     )
   }
@@ -192,6 +195,7 @@ get_predicted.lmerMod <- function(x,
                                   ci = 0.95,
                                   include_random = TRUE,
                                   iterations = NULL,
+                                  verbose = TRUE,
                                   ...) {
 
   # Sanitize input
@@ -231,6 +235,7 @@ get_predicted.lmerMod <- function(x,
       data = args$data,
       predict_function = predict_function,
       iterations = iterations,
+      verbose = verbose,
       ...
     )
   }
@@ -252,11 +257,14 @@ get_predicted.glmmTMB <- function(x,
                                   ci = 0.95,
                                   include_random = TRUE,
                                   iterations = NULL,
+                                  verbose = TRUE,
                                   ...) {
 
   # Sanity checks
   if (predict == "prediction") {
-    warning("predict = 'prediction' is currently not available for glmmTMB models. Changing to 'relation'.")
+    if (verbose) {
+      warning("predict = 'prediction' is currently not available for glmmTMB models. Changing to 'relation'.")
+    }
     predict <- "relation"
   }
 
@@ -293,6 +301,7 @@ get_predicted.glmmTMB <- function(x,
       data = args$data,
       predict_function = predict_function,
       iterations = iterations,
+      verbose = verbose,
       ...
     )
   }
@@ -316,11 +325,14 @@ get_predicted.gam <- function(x,
                               include_random = TRUE,
                               include_smooth = TRUE,
                               iterations = NULL,
+                              verbose = TRUE,
                               ...) {
 
   # Sanity checks
   if (predict == "prediction") {
-    warning("predict = 'prediction' is currently not available for GAM models. Changing to 'relation'.")
+    if (verbose) {
+      warning("predict = 'prediction' is currently not available for GAM models. Changing to 'relation'.")
+    }
     predict <- "relation"
   }
   # TODO: check this for prediction intervals:
@@ -364,6 +376,7 @@ get_predicted.gam <- function(x,
       data = args$data,
       predict_function = predict_function,
       iterations = iterations,
+      verbose = verbose,
       ...
     )
   }
@@ -394,9 +407,10 @@ get_predicted.stanreg <- function(x,
                                   iterations = NULL,
                                   include_random = TRUE,
                                   include_smooth = TRUE,
+                                  verbose = TRUE,
                                   ...) {
-  if (!requireNamespace("rstantools", quietly = TRUE)) {
-    stop("Package `rstantools` needed for this function to work. Please install it.")
+  if (!requireNamespace("rstantools", quietly = TRUE) || packageVersion("rstantool") < "2.1.0") {
+    stop("Package `rstantools` in version 2.1.0 or higher needed for this function to work. Please install it.")
   }
 
   args <- .get_predicted_args(
@@ -465,7 +479,7 @@ get_predicted.brmsfit <- get_predicted.stanreg
 
 
 #' @export
-get_predicted.crr <- function(x, ...) {
+get_predicted.crr <- function(x, verbose = TRUE, ...) {
   out <- as.data.frame(unclass(stats::predict(x, ...)))
   class(out) <- c("get_predicted", class(out))
   out
@@ -643,6 +657,7 @@ get_predicted.crr <- function(x, ...) {
                                 data = NULL,
                                 predict_function = NULL,
                                 iterations = 500,
+                                verbose = TRUE,
                                 ...) {
   if (is.null(data)) data <- get_data(x)
 
@@ -662,7 +677,11 @@ get_predicted.crr <- function(x, ...) {
     }
     boot_fun <- function(data, indices, ...) {
       model <- stats::update(x, data = data[indices, ])
-      predict_function(model, data = data, ...)
+      if (verbose) {
+        predict_function(model, data = data, ...)
+      } else {
+        suppressWarnings(predict_function(model, data = data, ...))
+      }
     }
     draws <- boot::boot(data, boot_fun, R = iterations, ...)
   }
