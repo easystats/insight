@@ -85,7 +85,7 @@ find_terms <- function(x, flatten = FALSE, ...) {
   f$conditional <- gsub("(-1|- 1)(?![^(]*\\))", "#1", f$conditional, perl = TRUE)
 
   f <- lapply(f, function(.x) {
-    f_parts <- gsub("~", "", .trim(unlist(strsplit(split = "[\\*\\+:-\\|/](?![^(]*\\))", x = .x, perl = TRUE))))
+    f_parts <- gsub("~", "", .trim(unlist(strsplit(split = "[\\*\\+:\\-\\|/](?![^(]*\\))", x = .x, perl = TRUE))))
     # if user has used namespace in formula-functions, these are returned
     # as empty elements. remove those here
     if (any(nchar(f_parts) == 0)) {
