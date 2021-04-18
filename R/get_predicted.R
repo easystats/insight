@@ -409,7 +409,7 @@ get_predicted.stanreg <- function(x,
                                   include_smooth = TRUE,
                                   verbose = TRUE,
                                   ...) {
-  if (!requireNamespace("rstantools", quietly = TRUE) || utils::packageVersion("rstantool") < "2.1.0") {
+  if (!requireNamespace("rstantools", quietly = TRUE) || utils::packageVersion("rstantools") < "2.1.0") {
     stop("Package `rstantools` in version 2.1.0 or higher needed for this function to work. Please install it.")
   }
 
