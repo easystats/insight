@@ -1626,10 +1626,12 @@ find_formula.model_fit <- function(x, ...) {
   LHS <- fc[2]
   RHS <- fc[3]
 
-  parts <- trimws(unlist(strsplit(split = "[\\s\\*\\+:\\-\\|/\\(\\)\\^,]", x = LHS, perl = TRUE)))
+  pattern <- "[\\s*+:()|^,\\-\\/]" # was: "[\\s\\*\\+:\\-\\|/\\(\\)\\^,]"
+
+  parts <- trimws(unlist(strsplit(split = pattern, x = LHS, perl = TRUE)))
   d_LHS <- unique(gsub("(.*)\\$(.*)", "\\1", parts[grepl("(.*)\\$(.*)", parts)]))
 
-  parts <- trimws(unlist(strsplit(split = "[\\s\\*\\+:\\-\\|/\\(\\)\\^,]", x = RHS, perl = TRUE)))
+  parts <- trimws(unlist(strsplit(split = pattern, x = RHS, perl = TRUE)))
   d_RHS <- unique(gsub("(.*)\\$(.*)", "\\1", parts[grepl("(.*)\\$(.*)", parts)]))
 
   if (.n_unique(c(d_LHS, d_RHS)) > 1) {
