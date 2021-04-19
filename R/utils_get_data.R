@@ -170,7 +170,7 @@
     )
 
     if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
-      warning("Some model terms could not be found in model data. You probably need to load the data into the environment.", call. = FALSE)
+      warning("Some model terms could not be found in model data.\n  You probably need to load the data into the environment.", call. = FALSE)
     }
   }
 
