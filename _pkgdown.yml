@@ -106,6 +106,7 @@ reference:
   - format_p
   - format_pd
   - format_rope
+  - format_string
   - format_value
   - parameters_table
   - print_color
