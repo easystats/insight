@@ -180,6 +180,7 @@
   model for many different model objects. Following information
    is returned, where all values starting with <code>is_</code> are logicals.</p><ul>
 <li><p><code>is_binomial</code>: family is binomial (but not negative binomial)</p></li>
+<li><p><code>is_bernoulli</code>: special case of binomial models: family is Bernoulli</p></li>
 <li><p><code>is_poisson</code>: family is poisson</p></li>
 <li><p><code>is_negbin</code>: family is negative binomial</p></li>
 <li><p><code>is_count</code>: model is a count model (i.e. family is either poisson or negative binomial)</p></li>
@@ -233,6 +234,9 @@
 
 <span class='fu'>model_info</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $is_binomial
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $is_bernoulli
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $is_count
@@ -382,6 +386,9 @@
 
 <span class='fu'>model_info</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $is_binomial
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $is_bernoulli
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $is_count
