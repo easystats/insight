@@ -89,7 +89,7 @@
 
   is.multinomial <-
     inherits(x, c("gmnl", "mlogit", "DirichletRegModel", "multinom", "brmultinom")) |
-      fitfam %in% c("cratio", "sratio", "acat", "multinomial", "multinomial2", "dirichlet")
+      fitfam %in% c("cratio", "sratio", "acat", "multinom", "multinomial", "multinomial2", "dirichlet")
 
 
   # categorical family --------

@@ -18,7 +18,7 @@
 ## Changes to functions
 
 * `find_formula()` now warns when data name is present in formula, since this
-  can lead to unexpected behaviour in other package functions.
+  can result in unexpected behaviour in other package functions.
 
 * Add `get_statistic()` for *lavaan* models.
 
@@ -42,7 +42,7 @@
 * `find_statistic()` correctly distinguishes t- and z-statistic for *emmGrid*
   objects.
 
-* Fixed issue in `model_info()` for `BGGM`.
+* Fixed issue in `model_info()` for `BGGM` and `mgcv::gam()`.
 
 * Fixed issue in `find_formula()` for `gamlss` models with `random()` function
   in formula.

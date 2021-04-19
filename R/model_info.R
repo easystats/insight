@@ -1019,7 +1019,7 @@ model_info.gam <- function(x, ...) {
   .make_family(
     x = x,
     fitfam = faminfo$family,
-    logit.link = link == "logit",
+    logit.link = !is.null(link) && (link == "logit" || faminfo$family == "multinom"),
     link.fun = link,
     multi.var = is.mv,
     ...
