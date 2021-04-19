@@ -16,6 +16,7 @@
 #'    is returned, where all values starting with \code{is_} are logicals.
 #'    \itemize{
 #'      \item \code{is_binomial}: family is binomial (but not negative binomial)
+#'      \item \code{is_bernoulli}: special case of binomial models: family is Bernoulli
 #'      \item \code{is_poisson}: family is poisson
 #'      \item \code{is_negbin}: family is negative binomial
 #'      \item \code{is_count}: model is a count model (i.e. family is either poisson or negative binomial)

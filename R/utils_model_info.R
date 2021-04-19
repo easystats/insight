@@ -8,6 +8,23 @@
       grepl("\\Qbinomial\\E", fitfam, ignore.case = TRUE)
 
 
+  # bernoulli family --------
+
+  is_bernoulli <- FALSE
+
+  if (binom_fam && inherits(x, "glm")) {
+    resp <- get_response(x)
+    if (is.data.frame(resp) && ncol(resp) == 1) {
+      resp <- as.vector(resp[[1]])
+    }
+    if (!is.data.frame(resp) && all(.is.int(.factor_to_numeric(resp[[1]])))) {
+      is_bernoulli <- TRUE
+    }
+  } else if (fitfam %in% "bernoulli") {
+    is_bernoulli <- TRUE
+  }
+
+
   # poisson family --------
 
   poisson_fam <-
@@ -293,6 +310,7 @@
 
   list(
     is_binomial = binom_fam & !neg_bin_fam,
+    is_bernoulli = is_bernoulli,
     is_count = poisson_fam | neg_bin_fam,
     is_poisson = poisson_fam,
     is_negbin = neg_bin_fam,

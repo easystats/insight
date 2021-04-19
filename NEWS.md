@@ -20,6 +20,8 @@
 * `find_formula()` now warns when data name is present in formula, since this
   can result in unexpected behaviour in other package functions.
 
+* `model_info()` returns `is_bernoulli = TRUE` for Bernoulli models.
+
 * Add `get_statistic()` for *lavaan* models.
 
 * `get_df()` supports more models/objects.
