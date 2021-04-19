@@ -38,7 +38,7 @@
 }
 
 
-# is string empty?
+# is object empty?
 .is_empty_object <- function(x) {
   if (inherits(x, "data.frame")) {
     x <- as.data.frame(x)
@@ -56,12 +56,11 @@
   if (inherits(x, "data.frame")) {
     x <- x[!sapply(x, function(i) all(is.na(i)))]
     x <- x[!apply(x, 1, function(i) all(is.na(i))), ]
-  }
-  # need to check for is.null for R 3.4
-  if (!is.null(x)) {
+    # need to check for is.null for R 3.4
+  } else if (!is.null(x)) {
     x <- stats::na.omit(x)
   }
-  length(x) == 0 || is.null(x) || isTRUE(nrow(x) == 0)
+  length(x) == 0 || is.null(x) || isTRUE(nrow(x) == 0) || isTRUE(ncol(x) == 0)
 }
 
 
