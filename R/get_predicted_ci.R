@@ -305,7 +305,7 @@ get_predicted_ci <- function(x,
 
 # Get PI ------------------------------------------------------------------
 
-.get_predicted_pi_glm <- function(x, predictions, ci = ci) {
+.get_predicted_pi_glm <- function(x, predictions, ci = 0.95) {
   info <- model_info(x)
   linkfun <- link_function(x)
   linkinv <- link_inverse(x)
