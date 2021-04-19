@@ -282,6 +282,18 @@ get_predicted_ci <- function(x,
       crit_val <- stats::qt(p = (1 + ci) / 2, df = dof)
     }
 
+    if (length(predictions) != length(se)) {
+      # multiple length?
+      if (length(predictions) %% length(se) != 0) {
+        # for multiple length, SE and predictions may match, could be intended?
+        # could there be any cases where we have twice or x times the length of
+        # predictions as standard errors?
+        warning("Predictions and standard errors are not of the same length.\n  Please check if you need the 'data' argument.", call. = FALSE)
+      } else {
+        stop("Predictions and standard errors are not of the same length.\n  Please specify the 'data' argument.", call. = FALSE)
+      }
+    }
+
     ci_low <- predictions - (se * crit_val)
     ci_high <- predictions + (se * crit_val)
   }
