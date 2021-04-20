@@ -74,8 +74,7 @@ n_obs.glm <- function(x, ...) {
         .nobs <- sum(resp_data)
       }
     } else if (!is.data.frame(resp_data) && !.is.int(resp_data)) {
-      w <- get_weights(x)
-      .nobs <- sum(resp_data * w)
+      .nobs <- sum(get_weights(x))
     }
   }
 
