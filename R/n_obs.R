@@ -64,14 +64,18 @@ n_obs.glm <- function(x, ...) {
 
   if (isTRUE(is_binomial)) {
     resp <- deparse(stats::formula(x)[[2]])
+    resp_data <- get_response(x)
+
     if (grepl("^cbind\\(", resp)) {
       trials <- trimws(sub("cbind\\((.*),(.*)\\)", "\\2", resp))
-      resp_data <- get_response(x)
       if (grepl("-", trials, fixed = TRUE)) {
         .nobs <- sum(resp_data[[2]])
       } else {
         .nobs <- sum(resp_data)
       }
+    } else if (!is.data.frame(resp_data) && !.is.int(resp_data)) {
+      w <- get_weights(x)
+      .nobs <- sum(resp_data * w)
     }
   }
 
