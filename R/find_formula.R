@@ -115,6 +115,15 @@ find_formula.anova <- function(x, ...) {
 
 
 #' @export
+find_formula.SemiParBIV <- function(x, ...) {
+  f <- stats::formula(x, ...)
+  names(f) <- c("Equation 1", "Equation 2", "Equation 3")[1:length(f)]
+  f <- list(conditional = f)
+  .find_formula_return(f)
+}
+
+
+#' @export
 find_formula.gam <- function(x, ...) {
   f <- tryCatch(
     {

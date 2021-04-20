@@ -78,7 +78,7 @@ is_regression_model <- function(x) {
     "flexsurvreg",
     # g --------------------
     "gam", "Gam", "GAMBoost", "gamlr", "gamlss", "gamm", "gamm4",
-    "garch", "gbm", "gee", "geeglm", "glht", "glimML", "Glm", "glm",
+    "garch", "gbm", "gee", "geeglm", "gjrm", "glht", "glimML", "Glm", "glm",
     "glmaag", "glmbb", "glmboostLSS", "glmc", "glmdm", "glmdisc",
     "glmerMod", "glmlep", "glmm", "glmmadmb", "glmmEP", "glmmfields",
     "glmmLasso", "glmmPQL", "glmmTMB", "glmnet", "glmrob", "glmRob",
@@ -119,7 +119,7 @@ is_regression_model <- function(x) {
     "rjags", "rlm", "rlme", "rlmerMod", "RM", "rma", "rmanovab",
     "rma.uni", "rms", "robmixglm", "robtab", "rq", "rqs", "rqss",
     # s --------------------
-    "sarlm", "scam", "sem", "slm", "speedlm", "speedglm", "splmm",
+    "sarlm", "scam", "sem", "SemiParBIV", "slm", "speedlm", "speedglm", "splmm",
     "spml", "stanmvreg", "stanreg", "summary.lm", "survfit", "survreg",
     "survPresmooth", "svyglm", "svy_vglm", "svyolr",
     # t --------------------

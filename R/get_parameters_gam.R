@@ -148,6 +148,22 @@ get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_t
 }
 
 
+#' @export
+get_parameters.SemiParBIV <- function(x, ...) {
+  s <- summary(x)
+  s <- .compact_list(s[grepl("^tableP", names(s))])
+  params <- do.call(rbind, lapply(1:length(s), function(i) {
+    out <- as.data.frame(s[[i]])
+    out$Parameter <- rownames(out)
+    out$Group <- paste0("Estimate", i)
+    out
+  }))
+  colnames(params)[1] <- "Coefficient"
+  rownames(params) <- NULL
+  .remove_backticks_from_parameter_names(params[c("Parameter", "Coefficient", "Group")])
+}
+
+
 
 
 # helper -------------------

@@ -188,6 +188,13 @@ n_obs.flexsurvreg <- function(x, ...) {
 
 
 #' @export
+n_obs.SemiParBIV <- function(x, ...) {
+  x$n
+}
+
+
+
+#' @export
 n_obs.ivprobit <- function(x, ...) {
   nrow(x$mr1)
 }

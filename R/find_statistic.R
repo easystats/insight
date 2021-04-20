@@ -213,6 +213,7 @@ find_statistic <- function(x, ...) {
       "rrvglm",
       "sarlm",
       "sem",
+      "SemiParBIV",
       "slm",
       "survreg",
       "svy_vglm",

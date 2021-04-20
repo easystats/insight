@@ -134,6 +134,21 @@ find_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_
 
 
 #' @export
+find_parameters.SemiParBIV <- function(x, flatten = FALSE, ...) {
+  pars <- get_parameters(x)
+  l <- lapply(split(pars, pars$Group), function(i) {
+    as.vector(i$Parameter)
+  })
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
+#' @export
 find_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms", "location"), flatten = FALSE, ...) {
   sc <- summary(x)
 
