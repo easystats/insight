@@ -127,10 +127,10 @@ get_parameters.model_fit <- function(x, ...) {
 #' @export
 get_parameters.selection <- function(x, component = c("all", "selection", "outcome", "auxiliary"), ...) {
   component <- match.arg(component)
-  s <- summary(x)
+  s <- as.data.frame(summary(x)$estimate)
   params <- data.frame(
-    Parameter = row.names(s$estimate),
-    Estimate = s$estimate[[1]],
+    Parameter = row.names(s),
+    Estimate = s[[1]],
     Component = "auxiliary",
     stringsAsFactors = FALSE,
     row.names = NULL
