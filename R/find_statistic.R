@@ -83,6 +83,7 @@ find_statistic <- function(x, ...) {
       "glmmPQL",
       "gls",
       "gmm",
+      "gnls",
       "HLfit",
       "ivreg",
       "ivFixed",
