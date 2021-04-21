@@ -136,7 +136,7 @@ find_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_
 #' @export
 find_parameters.SemiParBIV <- function(x, flatten = FALSE, ...) {
   pars <- get_parameters(x)
-  l <- lapply(split(pars, pars$Group), function(i) {
+  l <- lapply(split(pars, pars$Component), function(i) {
     as.vector(i$Parameter)
   })
   if (flatten) {

@@ -364,13 +364,13 @@ get_statistic.SemiParBIV <- function(x, ...) {
   params <- do.call(rbind, lapply(1:length(s), function(i) {
     out <- as.data.frame(s[[i]])
     out$Parameter <- rownames(out)
-    out$Group <- paste0("Equation", i)
+    out$Component <- paste0("Equation", i)
     out
   }))
 
   colnames(params)[3] <- "Statistic"
   rownames(params) <- NULL
-  out <- .remove_backticks_from_parameter_names(params[c("Parameter", "Statistic", "Group")])
+  out <- .remove_backticks_from_parameter_names(params[c("Parameter", "Statistic", "Component")])
 
   attr(out, "statistic") <- find_statistic(x)
   out
