@@ -149,7 +149,7 @@ get_predicted.lm <- function(x,
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
-  args <- .get_predicted_args(x, data = data, predict = predict, ...)
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   predict_function <- function(x, data, ...) {
     stats::predict(x, newdata = data, interval = "none", type = args$type, ...)
@@ -205,6 +205,7 @@ get_predicted.lmerMod <- function(x,
     predict = predict,
     ci = ci,
     include_random = include_random,
+    verbose = verbose,
     ...
   )
 
@@ -275,6 +276,7 @@ get_predicted.glmmTMB <- function(x,
     predict = predict,
     ci = ci,
     include_random = include_random,
+    verbose = verbose,
     ...
   )
 
@@ -348,6 +350,7 @@ get_predicted.gam <- function(x,
     ci = ci,
     include_random = include_random,
     include_smooth = include_smooth,
+    verbose = verbose,
     ...
   )
 
@@ -419,6 +422,7 @@ get_predicted.stanreg <- function(x,
     predict = predict,
     include_random = include_random,
     include_smooth = include_smooth,
+    verbose = verbose,
     ...
   )
 
@@ -517,6 +521,7 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
                                 include_smooth = TRUE,
                                 ci = 0.95,
                                 newdata = NULL,
+                                verbose = TRUE,
                                 ...) {
 
   # Sanitize input
@@ -528,7 +533,7 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
 
   # Data
   if (!is.null(newdata) && is.null(data)) data <- newdata
-  if (is.null(data)) data <- get_data(x)
+  if (is.null(data)) data <- get_data(x, verbose = verbose)
 
   # CI
   if (is.null(ci)) ci <- 0
@@ -659,7 +664,7 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
                                 iterations = 500,
                                 verbose = TRUE,
                                 ...) {
-  if (is.null(data)) data <- get_data(x)
+  if (is.null(data)) data <- get_data(x, verbose = verbose)
 
   # TODO: how to make it work with the seed argument??
 

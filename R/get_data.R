@@ -78,7 +78,7 @@ get_data.data.frame <- function(x, ...) {
 
 
 #' @export
-get_data.summary.lm <- function(x, ...) {
+get_data.summary.lm <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       .get_data_from_env(x)[, all.vars(x$terms), drop = FALSE]
@@ -87,7 +87,7 @@ get_data.summary.lm <- function(x, ...) {
       NULL
     }
   )
-  .prepare_get_data(x, mf)
+  .prepare_get_data(x, mf, verbose = verbose)
 }
 
 
@@ -169,11 +169,11 @@ get_data.rqss <- function(x, component = c("all", "conditional", "smooth_terms")
 
 
 #' @export
-get_data.selection <- function(x, ...) {
+get_data.selection <- function(x, verbose = TRUE, ...) {
   if ("lm" %in% names(x)) {
-    suppressWarnings(get_data(x$lm))
+    suppressWarnings(get_data(x$lm, verbose = verbose))
   } else if (!is.null(x$twoStep$lm)) {
-    suppressWarnings(get_data(x$twoStep$lm))
+    suppressWarnings(get_data(x$twoStep$lm, verbose = verbose))
   } else {
     NULL
   }
@@ -255,7 +255,10 @@ get_data.zerotrunc <- get_data.hurdle
 
 #' @rdname get_data
 #' @export
-get_data.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), verbose = TRUE, ...) {
+get_data.zcpglm <- function(x,
+                            component = c("all", "conditional", "zi", "zero_inflated"),
+                            verbose = TRUE,
+                            ...) {
   component <- match.arg(component)
 
   mf <- stats::model.frame(x)
@@ -295,7 +298,11 @@ get_data.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_i
 
 #' @rdname get_data
 #' @export
-get_data.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), verbose = TRUE, ...) {
+get_data.glmmTMB <- function(x,
+                             effects = c("all", "fixed", "random"),
+                             component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+                             verbose = TRUE,
+                             ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
