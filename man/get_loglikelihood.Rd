@@ -10,7 +10,7 @@ get_loglikelihood(x, ...)
 
 loglikelihood(x, ...)
 
-\method{get_loglikelihood}{lm}(x, estimator = "ML", REML = FALSE, ...)
+\method{get_loglikelihood}{lm}(x, estimator = "ML", REML = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}
@@ -20,6 +20,8 @@ loglikelihood(x, ...)
 \item{estimator}{Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator.}
 
 \item{REML}{Only for linear models. This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwrite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.}
+
+\item{verbose}{Toggle warnings and messages.}
 }
 \value{
 An object of class \code{"logLik"}, also containing the log-likelihoods for each observation as a \code{per_observation} attribute  (\code{attributes(get_loglikelihood(x))$per_observation}) when possible. The code was partly inspired from the \CRANpkg{nonnest2} package.

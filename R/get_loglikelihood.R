@@ -46,7 +46,7 @@ get_loglikelihood.model_fit <- function(x, ...) {
 # https://stats.stackexchange.com/questions/322038/input-format-for-response-in-binomial-glm-in-r
 
 
-.get_loglikelihood_lm <- function(x, estimator = "ML", REML = FALSE, ...) {
+.get_loglikelihood_lm <- function(x, estimator = "ML", REML = FALSE, verbose = TRUE, ...) {
 
   # Replace arg if compatibility base R is activated
   if (REML) estimator <- "REML"
@@ -64,7 +64,7 @@ get_loglikelihood.model_fit <- function(x, ...) {
       stop("REML estimation not available for this model.")
     }
     N <- get_df(x, type = "residual") # n_obs - p
-    val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x)^2))))
+    val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x, verbose = verbose)^2))))
     p <- n_parameters(x, remove_nonestimable = TRUE)
     ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
     return(.loglikelihood_prep_output(x, ll))
@@ -80,19 +80,19 @@ get_loglikelihood.model_fit <- function(x, ...) {
     stop("'estimator' should be one of 'ML', 'REML' or 'OLS'.")
   }
   # Get individual log-likelihoods
-  lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x)^2) / s2))
+  lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = verbose)^2) / s2))
 
   .loglikelihood_prep_output(x, lls)
 }
 
 
-.get_loglikelihood_glm <- function(x, ...) {
+.get_loglikelihood_glm <- function(x, verbose = TRUE...) {
   fam <- stats::family(x)$family
-  resp <- get_response(x)
+  resp <- get_response(x, verbose = verbose)
   w <- get_weights(x, null_as_ones = TRUE)
   dev <- stats::deviance(x)
   disp <- dev / sum(w)
-  predicted <- get_predicted(x)
+  predicted <- get_predicted(x, verbose = verbose)
 
   # Make adjustment for binomial models with matrix as input
   if (fam == "binomial") {
@@ -141,16 +141,16 @@ get_loglikelihood.model_fit <- function(x, ...) {
 
 #' @rdname get_loglikelihood
 #' @export
-get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, ...) {
+get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, verbose = TRUE, ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
     x <- x$gam
   }
 
   info <- model_info(x)
   if (info$is_linear) {
-    ll <- .get_loglikelihood_lm(x, estimator = estimator, REML = REML, ...)
+    ll <- .get_loglikelihood_lm(x, estimator = estimator, REML = REML, verbose = verbose, ...)
   } else {
-    ll <- .get_loglikelihood_glm(x, ...)
+    ll <- .get_loglikelihood_glm(x, verbose = verbose, ...)
   }
   ll
 }

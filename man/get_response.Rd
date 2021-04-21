@@ -4,7 +4,7 @@
 \alias{get_response}
 \title{Get the values from the response variable}
 \usage{
-get_response(x, select = NULL)
+get_response(x, select = NULL, verbose = TRUE)
 }
 \arguments{
 \item{x}{A fitted model.}

@@ -26,7 +26,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_response(m)
 #' @export
-get_response <- function(x, select = NULL) {
+get_response <- function(x, select = NULL, verbose = TRUE) {
   rn <- find_response(x, combine = FALSE)
 
   if (is.null(rn)) {
@@ -39,7 +39,7 @@ get_response <- function(x, select = NULL) {
     class(rv) <- "matrix"
     data.frame(rv)
   } else if (length(rn) > 1) {
-    rv <- get_data(x)[, rn, drop = FALSE]
+    rv <- get_data(x, verbose = verbose)[, rn, drop = FALSE]
     colnames(rv) <- rn
     # if user only wants specific response value, return this only
     if (!is.null(select) && all(select %in% colnames(rv))) {
@@ -47,7 +47,7 @@ get_response <- function(x, select = NULL) {
     }
     rv
   } else {
-    rv <- get_data(x)[[find_response(x, combine = TRUE)]]
+    rv <- get_data(x, verbose = verbose)[[find_response(x, combine = TRUE)]]
     if (!is.factor(rv) &&
       !is.numeric(rv) &&
       !is.character(rv) && !is.logical(rv) && !is.integer(rv)) {
