@@ -1623,7 +1623,8 @@ find_formula.model_fit <- function(x, ...) {
           error_message,
           paste0("Try: ", fc$formula, ", data = ", fc$data),
           sep = "\n  "
-        ), call. = FALSE
+        ),
+        call. = FALSE
       )
     }
   }

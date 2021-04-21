@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-    suppressWarnings(require("testthat") &&
+  suppressWarnings(require("testthat") &&
     require("insight") &&
     require("rstanarm"))) {
   data("pbcLong")
