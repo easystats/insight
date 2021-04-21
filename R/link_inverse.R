@@ -190,6 +190,10 @@ link_inverse.complmrob <- link_inverse.lm
 #' @export
 link_inverse.speedlm <- link_inverse.lm
 
+#' @export
+link_inverse.afex_aov <- link_inverse.lm
+
+
 
 
 #' @rdname link_inverse
