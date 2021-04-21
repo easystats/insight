@@ -29,6 +29,9 @@
 
 * `get_sigma()` supports more models/objects.
 
+* `get_sigma()` and `get_deviance()` for `lrm` models (package *rms*) now only
+  return one value, sigma or deviance for the model with intercept and predictors.
+
 * `get_deviance()` now works for `glmerMod`, `MixMod` and `glmmTMB` models.
 
 * The behaviour and documentation of the `effects` and `component` arguments,

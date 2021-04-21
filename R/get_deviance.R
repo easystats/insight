@@ -98,6 +98,13 @@ get_deviance.lmerMod <- function(x, ...) {
 
 
 #' @export
+get_deviance.lrm <- function(x, ...) {
+  d <- stats::deviance(x, ...)
+  d[length(d)]
+}
+
+
+#' @export
 get_deviance.glmmTMB <- function(x, ...) {
   tryCatch(
     {

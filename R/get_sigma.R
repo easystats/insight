@@ -76,6 +76,11 @@ get_sigma <- function(x, ci = 0.95, verbose = TRUE) {
   .get_sigma(x$fit, verbose = verbose)
 }
 
+.get_sigma.lrm <- function(x, verbose = TRUE, ...) {
+  s <- stats::sigma(x)
+  s[length(s)]
+}
+
 .get_sigma.merModList <- function(x, verbose = TRUE, ...) {
   s <- suppressWarnings(summary(x))
   s$residError
