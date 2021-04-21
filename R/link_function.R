@@ -153,6 +153,8 @@ link_function.MANOVA <- link_function.lm
 #' @export
 link_function.RM <- link_function.lm
 
+#' @export
+link_function.afex_aov <- link_function.lm
 
 
 

@@ -260,7 +260,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 180 model classes are supported.
+Currently, 181 model classes are supported.
 
 ``` r
 supported_models()
@@ -317,13 +317,14 @@ supported_models()
 #> [151] "RM"                "rma"               "rma.uni"          
 #> [154] "robmixglm"         "rq"                "rqs"              
 #> [157] "rqss"              "sarlm"             "scam"             
-#> [160] "sem"               "speedglm"          "speedlm"          
-#> [163] "stanmvreg"         "stanreg"           "summary.lm"       
-#> [166] "survfit"           "survreg"           "svy_vglm"         
-#> [169] "svyglm"            "svyolr"            "tobit"            
-#> [172] "truncreg"          "vgam"              "vglm"             
-#> [175] "wbgee"             "wblm"              "wbm"              
-#> [178] "zcpglm"            "zeroinfl"          "zerotrunc"
+#> [160] "sem"               "SemiParBIV"        "speedglm"         
+#> [163] "speedlm"           "stanmvreg"         "stanreg"          
+#> [166] "summary.lm"        "survfit"           "survreg"          
+#> [169] "svy_vglm"          "svyglm"            "svyolr"           
+#> [172] "tobit"             "truncreg"          "vgam"             
+#> [175] "vglm"              "wbgee"             "wblm"             
+#> [178] "wbm"               "zcpglm"            "zeroinfl"         
+#> [181] "zerotrunc"
 ```
 
 -   **Didn’t find a model?** [File an

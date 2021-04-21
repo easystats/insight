@@ -13,7 +13,7 @@
 
 ## New supported model classes
 
-* Support for `mvord` (*mvord*)
+* Support for `mvord` (*mvord*), `SemiParBIV` (*GJRM*)
 
 ## Changes to functions
 

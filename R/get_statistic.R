@@ -357,6 +357,28 @@ get_statistic.scam <- get_statistic.gam
 
 
 #' @export
+get_statistic.SemiParBIV <- function(x, ...) {
+  s <- summary(x)
+  s <- .compact_list(s[grepl("^tableP", names(s))])
+
+  params <- do.call(rbind, lapply(1:length(s), function(i) {
+    out <- as.data.frame(s[[i]])
+    out$Parameter <- rownames(out)
+    out$Component <- paste0("Equation", i)
+    out
+  }))
+
+  colnames(params)[3] <- "Statistic"
+  rownames(params) <- NULL
+  out <- .remove_backticks_from_parameter_names(params[c("Parameter", "Statistic", "Component")])
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+
+#' @export
 get_statistic.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c("gam", "lm", "glm")
