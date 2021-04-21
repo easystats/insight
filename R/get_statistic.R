@@ -955,8 +955,9 @@ get_statistic.selection <- function(x, component = c("all", "selection", "outcom
     params <- params[params$Component == component, , drop = FALSE]
   }
 
+  params <- .remove_backticks_from_parameter_names(params)
   attr(params, "statistic") <- find_statistic(x)
-  .remove_backticks_from_parameter_names(params)
+  params
 }
 
 
