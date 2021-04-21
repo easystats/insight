@@ -155,12 +155,12 @@ get_parameters.SemiParBIV <- function(x, ...) {
   params <- do.call(rbind, lapply(1:length(s), function(i) {
     out <- as.data.frame(s[[i]])
     out$Parameter <- rownames(out)
-    out$Group <- paste0("Estimate", i)
+    out$Group <- paste0("Equation", i)
     out
   }))
-  colnames(params)[1] <- "Coefficient"
+  colnames(params)[1] <- "Estimate"
   rownames(params) <- NULL
-  .remove_backticks_from_parameter_names(params[c("Parameter", "Coefficient", "Group")])
+  .remove_backticks_from_parameter_names(params[c("Parameter", "Estimate", "Group")])
 }
 
 
