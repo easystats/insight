@@ -943,7 +943,7 @@ get_statistic.selection <- function(x, component = c("all", "selection", "outcom
   estimates <- as.data.frame(s$estimate, row.names = FALSE)
   params <- data.frame(
     Parameter = rn,
-    Estimate = estimates[[3]],
+    Statistic = estimates[[3]],
     Component = "auxiliary",
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -955,6 +955,7 @@ get_statistic.selection <- function(x, component = c("all", "selection", "outcom
     params <- params[params$Component == component, , drop = FALSE]
   }
 
+  attr(params, "statistic") <- find_statistic(x)
   .remove_backticks_from_parameter_names(params)
 }
 
