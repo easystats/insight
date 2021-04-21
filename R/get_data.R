@@ -168,6 +168,17 @@ get_data.rqss <- function(x, component = c("all", "conditional", "smooth_terms")
 
 
 
+#' @export
+get_data.selection <- function(x, ...) {
+  if ("lm" %in% names(x)) {
+    suppressWarnings(get_data(x$lm))
+  } else if (!is.null(x$twoStep$lm)) {
+    suppressWarnings(get_data(x$twoStep$lm))
+  } else {
+    NULL
+  }
+}
+
 
 
 #' @export

@@ -13,7 +13,8 @@
 
 ## New supported model classes
 
-* Support for `mvord` (*mvord*), `SemiParBIV` (*GJRM*)
+* Support for `mvord` (*mvord*), `SemiParBIV` (*GJRM*), 
+  `selection` (*sampleSelection*)
 
 ## Changes to functions
 

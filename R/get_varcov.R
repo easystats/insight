@@ -158,6 +158,24 @@ get_varcov.glmx <- function(x, component = c("all", "conditional", "extra"), ...
 
 
 #' @export
+get_varcov.selection <- function(x, component = c("all", "selection", "outcome", "auxiliary"), ...) {
+  component <- match.arg(component)
+  vc <- stats::vcov(object = x)
+
+  if (component != "all") {
+    keep <- match(find_parameters(x)[[component]], rownames(vc))
+    vc <- vc[keep, keep, drop = FALSE]
+  }
+
+  # we can't check for rank-deficiency here...
+  if (.is_negativ_matrix(vc)) {
+    vc <- .fix_negative_matrix(vc)
+  }
+  .remove_backticks_from_matrix_names(as.matrix(vc))
+}
+
+
+#' @export
 get_varcov.mvord <- function(x, component = c("all", "conditional", "thresholds", "correlation"), ...) {
   component <- match.arg(component)
   vc <- stats::vcov(x)

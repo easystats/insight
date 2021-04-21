@@ -48,7 +48,7 @@ find_terms <- function(x, flatten = FALSE, ...) {
 
   resp <- find_response(x)
 
-  if (is_multivariate(f)) {
+  if (is_multivariate(f) || isTRUE(attributes(f)$two_stage)) {
     l <- lapply(f, .get_variables_list, resp = resp)
   } else {
     l <- .get_variables_list(f, resp)

@@ -135,6 +135,18 @@ n_obs.lavaan <- function(x, ...) {
 
 
 #' @export
+n_obs.selection <- function(x, ...) {
+  if ("lm" %in% names(x)) {
+    n_obs(x$lm)
+  } else if (!is.null(x$twoStep$lm)) {
+    n_obs(x$twoStep$lm)
+  } else {
+    NULL
+  }
+}
+
+
+#' @export
 n_obs.mjoint <- function(x, ...) {
   nrow(x$data[[1]])
 }

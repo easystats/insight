@@ -251,7 +251,8 @@
     "dispersion", "instruments", "interactions", "simplex", "smooth_terms",
     "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale",
     "marginal", "alpha", "beta", "survival", "infrequent_purchase", "auxiliary",
-    "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi", "aux", "dist"
+    "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi", "aux", "dist",
+    "selection", "outcome"
   )
 }
 

@@ -76,7 +76,7 @@ find_statistic <- function(x, ...) {
       "ols", "orcutt",
       "pb1", "pb2", "polr",
       "rlm", "rms", "rlmerMod", "rq", "rqs", "rqss",
-      "speedlm", "spml", "summary.lm", "svyglm", "svyolr",
+      "selection", "speedlm", "spml", "summary.lm", "svyglm", "svyolr",
       "truncreg",
       "varest",
       "wbm", "wblm",

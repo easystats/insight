@@ -936,6 +936,28 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.selection <- function(x, component = c("all", "selection", "outcome", "auxiliary"), ...) {
+  component <- match.arg(component)
+  s <- summary(x)
+  params <- data.frame(
+    Parameter = row.names(s$estimate),
+    Estimate = s$estimate[[3]],
+    Component = "auxiliary",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+  params$Component[s$param$index$betaS] <- "selection"
+  params$Component[s$param$index$betaO] <- "outcome"
+
+  if (component != "all") {
+    params <- params[params$Component == component, , drop = FALSE]
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
+
+
+#' @export
 get_statistic.lavaan <- function(x, ...) {
   if (!requireNamespace("lavaan", quietly = TRUE)) {
     stop("Package 'lavaan' required for this function to work. Please install it.")

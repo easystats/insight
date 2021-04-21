@@ -97,9 +97,9 @@ supported_models <- function() {
     "rma.uni", "robmixglm", "rq", "rqs", "rqss",
 
     # s ----------------------------
-    "sarlm", "scam", "sem", "SemiParBIV", "speedlm", "speedglm", "stanmvreg",
-    "stanreg", "summary.lm", "survfit", "survreg", "svy_vglm", "svyglm",
-    "svyolr",
+    "sarlm", "scam", "selection", "sem", "SemiParBIV", "speedlm", "speedglm",
+    "stanmvreg", "stanreg", "summary.lm", "survfit", "survreg", "svy_vglm",
+    "svyglm", "svyolr",
 
     # t ----------------------------
     "tobit", "truncreg",
