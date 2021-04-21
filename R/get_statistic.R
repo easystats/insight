@@ -938,12 +938,12 @@ get_statistic.negbinirr <- get_statistic.logitor
 #' @export
 get_statistic.selection <- function(x, component = c("all", "selection", "outcome", "auxiliary"), ...) {
   component <- match.arg(component)
-  s <- summary(x)$estimate
-  rn <- row.names(s)
-  s <- as.data.frame(s, row.names = FALSE)
+  s <- summary(x)
+  rn <- row.names(s$estimate)
+  estimates <- as.data.frame(s$estimate, row.names = FALSE)
   params <- data.frame(
     Parameter = rn,
-    Estimate = s[[3]],
+    Estimate = estimates[[3]],
     Component = "auxiliary",
     stringsAsFactors = FALSE,
     row.names = NULL
