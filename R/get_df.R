@@ -157,6 +157,18 @@ get_df.glht <- function(x, type = "residual", ...) {
 
 
 #' @export
+get_df.selection <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "model") {
+    .model_df(x)
+  } else {
+    s <- summary(x)
+    s$param$df
+  }
+}
+
+
+#' @export
 get_df.logitor <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "model") {

@@ -280,7 +280,7 @@ find_formula.maxim <- find_formula.default
 
 #' @export
 find_formula.selection <- function(x, ...) {
-  model_call <- parse(text = deparse(get_call(m)))[[1]]
+  model_call <- parse(text = deparse(get_call(x)))[[1]]
   f <- list(conditional = list(selection = stats::as.formula(model_call$selection),
                                outcome = stats::as.formula(model_call$outcome)))
   attr(f, "two_stage") <- TRUE

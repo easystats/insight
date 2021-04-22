@@ -90,6 +90,10 @@ get_sigma <- function(x, ci = 0.95, verbose = TRUE) {
   x$sigma
 }
 
+.get_sigma.selection <- function(x, verbose = TRUE, ...) {
+  unname(stats::coef(x)["sigma"])
+}
+
 .get_sigma.cpglmm <- function(x, verbose = TRUE, ...) {
   tryCatch(
     {
