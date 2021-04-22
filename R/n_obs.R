@@ -135,14 +135,13 @@ n_obs.lavaan <- function(x, ...) {
 
 
 #' @export
-n_obs.selection <- function(x, ...) {
-  if ("lm" %in% names(x)) {
-    n_obs(x$lm)
-  } else if (!is.null(x$twoStep$lm)) {
-    n_obs(x$twoStep$lm)
-  } else {
-    NULL
-  }
+n_obs.selection <- function(x, type = c("all", "observed", "censored"), ...) {
+  type <- match.arg(type)
+  s <- summary(x)
+  switch(type,
+         "all" = s$param$nObs,
+         "observed" = s$param$N1,
+         s$param$N0)
 }
 
 
