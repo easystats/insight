@@ -182,5 +182,5 @@ format_value.logical <- format_value.numeric
 
 
 .is.fraction <- function(x) {
-  !.is.int(x) && is.numeric(x) && .n_unique(x) > 2
+  !all(.is.int(x)) && is.numeric(x) && .n_unique(x) > 2
 }
