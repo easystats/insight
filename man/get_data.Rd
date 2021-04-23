@@ -54,7 +54,7 @@ get_data(x, ...)
 
 \method{get_data}{merMod}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 
-\method{get_data}{glmmadmb}(x, effects = c("all", "fixed", "random"), ...)
+\method{get_data}{glmmadmb}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 
 \method{get_data}{rlmerMod}(x, effects = c("all", "fixed", "random"), ...)
 

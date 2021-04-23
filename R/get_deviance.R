@@ -74,7 +74,7 @@ get_deviance.stanreg <- function(x, verbose = TRUE, ...) {
   } else if (info$is_binomial) {
     w <- get_weights(x, null_as_ones = TRUE, verbose = verbose)
     n <- n_obs(x)
-    y <- get_response(x)
+    y <- get_response(x, verbose = FALSE)
     mu <- stats::fitted(x)
 
     dev_resids_fun <- x$family$dev.resids

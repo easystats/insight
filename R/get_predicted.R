@@ -586,9 +586,9 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
   if (include_random == FALSE) {
     if (inherits(x, c("stanreg", "brmsfit"))) {
       # rstantools predictions doens't allow for NaNs in newdata
-      data[find_variables(x, effects = "random")$random] <- NULL
+      data[find_variables(x, effects = "random", verbose = FALSE)$random] <- NULL
     } else {
-      data[find_variables(x, effects = "random")$random] <- NA
+      data[find_variables(x, effects = "random", verbose = FALSE)$random] <- NA
     }
   }
 

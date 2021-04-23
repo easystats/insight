@@ -13,7 +13,7 @@
   is_bernoulli <- FALSE
 
   if (binom_fam && inherits(x, "glm")) {
-    resp <- get_response(x, verbose = verbose)
+    resp <- get_response(x, verbose = FALSE)
     if (is.data.frame(resp) && ncol(resp) == 1) {
       resp <- as.vector(resp[[1]])
     }
@@ -117,7 +117,7 @@
   # special handling of rms --------------
 
   if (inherits(x, c("lrm", "blrm"))) {
-    resp <- get_response(x, verbose = verbose)
+    resp <- get_response(x, verbose = FALSE)
     if (.n_unique(resp) == 2) {
       binom_fam <- TRUE
     } else {
@@ -186,7 +186,7 @@
     } else {
       model_terms <- tryCatch(
         {
-          find_variables(x, effects = "all", component = "all", flatten = FALSE)
+          find_variables(x, effects = "all", component = "all", flatten = FALSE, verbose = FALSE)
         },
         error = function(x) {
           NULL

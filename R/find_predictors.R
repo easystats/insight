@@ -19,6 +19,7 @@
 #'   component, depending on the model.
 #' @param flatten Logical, if \code{TRUE}, the values are returned
 #'    as character vector, not as list. Duplicated values are removed.
+#' @param verbose Toggle warnings.
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #'    predictor variables. Depending on the combination of the arguments
@@ -39,11 +40,16 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_predictors(m)
 #' @export
-find_predictors <- function(x, effects = c("fixed", "random", "all"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"), flatten = FALSE) {
+find_predictors <- function(x,
+                            effects = c("fixed", "random", "all"),
+                            component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
+                            flatten = FALSE,
+                            verbose = TRUE) {
+
   effects <- match.arg(effects)
   component <- match.arg(component)
 
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = verbose)
   is_mv <- is_multivariate(f)
   elements <- .get_elements(effects, component)
 

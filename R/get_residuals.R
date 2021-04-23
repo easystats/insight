@@ -88,7 +88,7 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
       {
         yield_warning <- no_response_resid && verbose
         pred <- stats::predict(x, type = "response")
-        observed <- .factor_to_numeric(get_response(x))
+        observed <- .factor_to_numeric(get_response(x, verbose = FALSE))
         observed - pred
       },
       error = function(e) {
@@ -102,7 +102,7 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
       {
         yield_warning <- no_response_resid && verbose
         pred <- stats::fitted(x)
-        observed <- .factor_to_numeric(get_response(x))
+        observed <- .factor_to_numeric(get_response(x, verbose = FALSE))
         observed - pred
       },
       error = function(e) {
@@ -193,8 +193,8 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   w <- get_weights(x, null_as_ones = TRUE)
   tryCatch(
     {
-      res_resp <- as.vector(get_residuals(x, weighted = FALSE, type = "response", verbose = verbose))
-      res_dev <- as.vector(get_residuals(x, weighted = FALSE, type = "deviance", verbose = verbose))
+      res_resp <- as.vector(get_residuals(x, weighted = FALSE, type = "response", verbose = FALSE))
+      res_dev <- as.vector(get_residuals(x, weighted = FALSE, type = "deviance", verbose = FALSE))
 
       if (!is.null(w) && !is.null(res_dev) && !all(w == 1)) {
         if (!is.null(res_resp) && identical(res_resp, res_dev)) {

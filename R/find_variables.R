@@ -5,6 +5,7 @@
 #'   response value and random effects.
 #'
 #' @inheritParams find_predictors
+#' @inheritParams find_formula
 #'
 #' @note The difference to \code{\link{find_terms}} is that \code{find_variables()}
 #'   returns each variable name only once, while \code{find_terms()} may return a
@@ -52,7 +53,12 @@
 #'   find_variables(m2, flatten = TRUE)
 #' }
 #' @export
-find_variables <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "smooth_terms"), flatten = FALSE) {
+find_variables <- function(x,
+                           effects = c("all", "fixed", "random"),
+                           component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "smooth_terms"),
+                           flatten = FALSE,
+                           verbose = TRUE) {
+
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -62,7 +68,13 @@ find_variables <- function(x, effects = c("all", "fixed", "random"), component =
     resp <- NULL
   }
 
-  pr <- find_predictors(x, effects = effects, component = component, flatten = flatten)
+  pr <- find_predictors(
+    x,
+    effects = effects,
+    component = component,
+    flatten = flatten,
+    verbose = verbose
+  )
 
   if (flatten) {
     unique(c(resp, pr))

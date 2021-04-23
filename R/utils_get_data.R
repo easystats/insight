@@ -162,7 +162,7 @@
     # check if we really have all formula terms in our model frame now
     pv <- tryCatch(
       {
-        find_predictors(x, effects = effects, flatten = TRUE)
+        find_predictors(x, effects = effects, flatten = TRUE, verbose = FALSE)
       },
       error = function(x) {
         NULL
@@ -249,7 +249,7 @@
     colnames(mf) <- gsub("(.*)\\$(.*)", "\\2", colnames(mf))
   }
 
-  predictors <- find_predictors(model, effects = effects, component = component, flatten = TRUE)
+  predictors <- find_predictors(model, effects = effects, component = component, flatten = TRUE, verbose = FALSE)
   missing_vars <- setdiff(predictors, colnames(mf))
 
   if (!is.null(missing_vars) && length(missing_vars) > 0) {
@@ -399,7 +399,7 @@
 # special model handling -----------------------------------
 
 .get_zelig_relogit_frame <- function(x) {
-  vars <- find_variables(x, flatten = TRUE)
+  vars <- find_variables(x, flatten = TRUE, verbose = FALSE)
   x$data[, vars, drop = FALSE]
 }
 
@@ -409,7 +409,7 @@
 # combine data from count and zi-component -----------------------------------
 
 .return_zeroinf_data <- function(x, component, verbose = TRUE) {
-  model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE)
+  model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE, verbose = FALSE)
   model.terms$offset <- find_offset(x)
 
   mf <- tryCatch(

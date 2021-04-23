@@ -99,7 +99,7 @@ find_parameters.BFBayesFactor <- function(x,
     ))
 
     params <- colnames(posteriors)
-    vars <- find_variables(x, effects = "all")
+    vars <- find_variables(x, effects = "all", verbose = FALSE)
     interactions <- find_interactions(x)
     dat <- get_data(x)
 

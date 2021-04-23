@@ -9,7 +9,8 @@ find_variables(
   effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion",
     "instruments", "smooth_terms"),
-  flatten = FALSE
+  flatten = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ component, depending on the model.}
 
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A list with (depending on the model) following elements (character
