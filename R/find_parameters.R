@@ -58,7 +58,7 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
   if (is.null(pars$conditional) || is.null(pars)) {
     if (isTRUE(verbose)) {
-      warning(sprintf("Parameters can't be retrieved for objects of class '%s'.", class(x)[1]), call. = FALSE)
+      warning(format_message(sprintf("Parameters can't be retrieved for objects of class '%s'.", class(x)[1])), call. = FALSE)
     }
     return(NULL)
   }

@@ -288,9 +288,9 @@ get_predicted_ci <- function(x,
         # for multiple length, SE and predictions may match, could be intended?
         # could there be any cases where we have twice or x times the length of
         # predictions as standard errors?
-        warning("Predictions and standard errors are not of the same length.\n  Please check if you need the 'data' argument.", call. = FALSE)
+        warning(format_message("Predictions and standard errors are not of the same length. Please check if you need the 'data' argument."), call. = FALSE)
       } else {
-        stop("Predictions and standard errors are not of the same length.\n  Please specify the 'data' argument.", call. = FALSE)
+        stop(format_message("Predictions and standard errors are not of the same length. Please specify the 'data' argument."), call. = FALSE)
       }
     }
 

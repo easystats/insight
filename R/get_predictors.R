@@ -24,7 +24,7 @@ get_predictors <- function(x, verbose = TRUE) {
 
   if (.is_empty_object(dat)) {
     if (isTRUE(verbose)) {
-      warning("Data frame is empty, probably you have an intercept-only model?", call. = FALSE)
+      warning(format_message("Data frame is empty, probably you have an intercept-only model?"), call. = FALSE)
     }
     return(NULL)
   }

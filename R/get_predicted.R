@@ -264,7 +264,7 @@ get_predicted.glmmTMB <- function(x,
   # Sanity checks
   if (predict == "prediction") {
     if (verbose) {
-      warning("predict = 'prediction' is currently not available for glmmTMB models. Changing to 'relation'.")
+      warning(format_message("predict = 'prediction' is currently not available for glmmTMB models. Changing to 'relation'."))
     }
     predict <- "relation"
   }
@@ -333,7 +333,7 @@ get_predicted.gam <- function(x,
   # Sanity checks
   if (predict == "prediction") {
     if (verbose) {
-      warning("predict = 'prediction' is currently not available for GAM models. Changing to 'relation'.")
+      warning(format_message("predict = 'prediction' is currently not available for GAM models. Changing to 'relation'."))
     }
     predict <- "relation"
   }
