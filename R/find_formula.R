@@ -1606,9 +1606,27 @@ find_formula.model_fit <- function(x, ...) {
     return(NULL)
   }
 
+  # check if formula contains data name with "$". This may
+  # result in unexpected behaviour, and we should warn users
   .check_formula_for_dollar(f)
+
+  # check if formula contains poly-term with "raw=T". In this case,
+  # all.vars() returns "T" as variable, which is not intended
+  .check_formula_for_T(f)
+
   class(f) <- c("insight_formula", class(f))
   f
+}
+
+
+
+
+.check_formula_for_T <- function(f) {
+  f <- .safe_deparse(f[[1]])
+  if (grepl("(.*)poly\\((.*),\\s*raw\\s*=\\s*T\\)", f)) {
+    warning(format_message("Looks like you are using 'poly()' with 'raw = T'. This results in unexpected behaviour, because 'all.vars()' considers 'T' as variable. Please use 'raw = TRUE'."),
+            call. = FALSE)
+  }
 }
 
 
@@ -1617,11 +1635,7 @@ find_formula.model_fit <- function(x, ...) {
 # here...
 
 .check_formula_for_dollar <- function(f) {
-  error_message <- paste(
-    "Using `$` in model formulas can produce unexpected results.",
-    "Specify your model using the `data` argument instead.",
-    sep = "\n  "
-  )
+  error_message <- format_message("Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.")
 
   if (any(grepl("\\$", .safe_deparse(f[[1]])))) {
     fc <- try(.formula_clean(f[[1]]), silent = TRUE)

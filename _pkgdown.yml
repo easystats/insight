@@ -102,6 +102,7 @@ reference:
   - color_if
   - format_bf
   - format_ci
+  - format_message
   - format_number
   - format_p
   - format_pd

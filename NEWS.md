@@ -11,6 +11,11 @@
 * `get_modelmatrix()` as a robust alternative to `model.matrix()` for
   different model classes.
 
+* `format_message()` to format warnings and messages by adjusting the maximum
+  line_length, possibly to the width of the console window.
+
+* `format_string()` to shorten a string to a maximum length.
+
 ## New supported model classes
 
 * Support for `mvord` (*mvord*), `SemiParBIV` (*GJRM*), 
