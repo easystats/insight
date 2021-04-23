@@ -61,6 +61,9 @@
 * Fixed issue with `get_parameters()` and `find_parameters()` for 
   multi-group *blavaan* models.
 
+* Fixed issue in `ellipsis_info()` when detecting nested models with 
+  poly-terms.
+
 # insight 0.13.2
 
 ## General
