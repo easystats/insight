@@ -97,7 +97,7 @@
   <div class="contents col-md-9">
 <div id="insight-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#insight-" class="anchor"></a>insight <img src="reference/figures/logo.png" align="right" height="139">
+<a href="#insight-" class="anchor" aria-hidden="true"></a>insight <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 
 <p><strong>Gain insight into your models!</strong></p>
@@ -105,7 +105,7 @@
 <p><strong>insight</strong> is an R-package that fills this important gap by providing a suite of functions to support almost any model (see a list of the many models supported below in the <strong>List of Supported Packages and Models</strong> section). The goal of <strong>insight</strong>, then, is to provide tools to provide <em>easy</em>, <em>intuitive</em>, and <em>consistent</em> access to information contained in model objects. These tools aid applied research in virtually any field who fit, diagnose, and present statistical models by streamlining access to every aspect of many model objects via consistent syntax and output.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h2>
 <p><a href="https://cran.r-project.org/package=insight" class="external-link"><img src="https://www.r-pkg.org/badges/version/insight" alt="CRAN_Status_Badge"></a> <a href="https://github.com/easystats/insight/actions" class="external-link"><img src="https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master" alt="R check"></a></p>
 <p>Run the following to install the stable release of <strong>insight</strong> from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -117,26 +117,26 @@
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<a href="#documentation" class="anchor" aria-hidden="true"></a>Documentation</h2>
 <p><a href="https://easystats.github.io/insight/" class="external-link"><img src="https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63" alt="Documentation"></a> <a href="https://easystats.github.io/blog/posts/" class="external-link"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a> <a href="https://easystats.github.io/insight/reference/index.html" class="external-link"><img src="https://img.shields.io/badge/features-insight-orange.svg?colorB=2196F3" alt="Features"></a></p>
 <p>Built with non-programmers in mind, <strong>insight</strong> offers a broad toolbox for making model and data information easily accessible. While <strong>insight</strong> offers many useful functions for working with and understanding model objects (discussed below), we suggest users start with <code><a href="reference/model_info.html">model_info()</a></code>, as this function provides a clean and consistent overview of model objects (e.g., functional form of the model, the model family, link function, number of observations, variables included in the specification, etc.). With a clear understanding of the model introduced, users are able to adapt other functions for more nuanced exploration of and interaction with virtually any model object.Please visit <a href="https://easystats.github.io/insight/" class="external-link uri">https://easystats.github.io/insight/</a> for documentation.</p>
 <div id="definition-of-model-components" class="section level3">
 <h3 class="hasAnchor">
-<a href="#definition-of-model-components" class="anchor"></a>Definition of Model Components</h3>
+<a href="#definition-of-model-components" class="anchor" aria-hidden="true"></a>Definition of Model Components</h3>
 <p>The functions from <strong>insight</strong> address different components of a model. In an effort to avoid confusion about specific “targets” of each function, in this section we provide a short explanation of <strong>insight</strong>’s definitions of regression model components.</p>
 <div id="data" class="section level4">
 <h4 class="hasAnchor">
-<a href="#data" class="anchor"></a>Data</h4>
+<a href="#data" class="anchor" aria-hidden="true"></a>Data</h4>
 <p>The dataset used to fit the model.</p>
 </div>
 <div id="parameters" class="section level4">
 <h4 class="hasAnchor">
-<a href="#parameters" class="anchor"></a>Parameters</h4>
+<a href="#parameters" class="anchor" aria-hidden="true"></a>Parameters</h4>
 <p>Values estimated or learned from data that capture the relationship between variables. In regression models, these are usually referred to as <em>coefficients</em>.</p>
 </div>
 <div id="response-and-predictors" class="section level4">
 <h4 class="hasAnchor">
-<a href="#response-and-predictors" class="anchor"></a>Response and Predictors</h4>
+<a href="#response-and-predictors" class="anchor" aria-hidden="true"></a>Response and Predictors</h4>
 <ul>
 <li>
 <strong>response</strong>: the outcome or response variable (dependent variable) of a regression model.</li>
@@ -146,17 +146,17 @@
 </div>
 <div id="variables" class="section level4">
 <h4 class="hasAnchor">
-<a href="#variables" class="anchor"></a>Variables</h4>
+<a href="#variables" class="anchor" aria-hidden="true"></a>Variables</h4>
 <p>Any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A “variable” only relates to the unique occurence of a term, or the term name. For instance, the expression <code>x + poly(x, 2)</code> has only the variable <code>x</code>.</p>
 </div>
 <div id="terms" class="section level4">
 <h4 class="hasAnchor">
-<a href="#terms" class="anchor"></a>Terms</h4>
+<a href="#terms" class="anchor" aria-hidden="true"></a>Terms</h4>
 <p>Terms themselves consist of variable and factor names separated by operators, or involve arithmetic expressions. For instance, the expression <code>x + poly(x, 2)</code> has <em>one</em> variable <code>x</code>, but <em>two</em> terms <code>x</code> and <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly(x, 2)</a></code>.</p>
 </div>
 <div id="random-effects" class="section level4">
 <h4 class="hasAnchor">
-<a href="#random-effects" class="anchor"></a>Random Effects</h4>
+<a href="#random-effects" class="anchor" aria-hidden="true"></a>Random Effects</h4>
 <ul>
 <li>
 <strong>random slopes</strong>: variables that are specified as random slopes in a mixed effects model.</li>
@@ -169,18 +169,18 @@
 </div>
 <div id="functions" class="section level3">
 <h3 class="hasAnchor">
-<a href="#functions" class="anchor"></a>Functions</h3>
+<a href="#functions" class="anchor" aria-hidden="true"></a>Functions</h3>
 <p>The package revolves around two key prefixes: <code>get_*</code> and <code>find_*</code>. The <code>get_*</code> prefix extracts <em>values</em> (or <em>data</em>) associated with model-specific objects (e.g., parameters or variables), while the <code>find_*</code> prefix <em>lists</em> model-specific objects (e.g., priors or predictors). These are powerful families of functions allowing for great flexibility in use, whether at a high, descriptive level (<code>find_*</code>) or narrower level of statistical inspection and reporting (<code>get_*</code>).</p>
 <p><img src="https://raw.githubusercontent.com/easystats/insight/master/paper/figure1_small.png"></p>
 <p>In total, the <strong>insight</strong> package includes 16 core functions: <a href="https://easystats.github.io/insight/reference/get_data.html" class="external-link">get_data()</a>, <a href="https://easystats.github.io/insight/reference/get_priors.html" class="external-link">get_priors()</a>, <a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance()</a>, <a href="https://easystats.github.io/insight/reference/get_parameters.html" class="external-link">get_parameters()</a>, <a href="https://easystats.github.io/insight/reference/get_predictors.html" class="external-link">get_predictors()</a>, <a href="https://easystats.github.io/insight/reference/get_random.html" class="external-link">get_random()</a>, <a href="https://easystats.github.io/insight/reference/get_response.html" class="external-link">get_response()</a>, <a href="https://easystats.github.io/insight/reference/find_algorithm.html" class="external-link">find_algorithm()</a>, <a href="https://easystats.github.io/insight/reference/find_formula.html" class="external-link">find_formula()</a>, <a href="https://easystats.github.io/insight/reference/find_variables.html" class="external-link">find_variables()</a>, <a href="https://easystats.github.io/insight/reference/find_terms.html" class="external-link">find_terms()</a>, <a href="https://easystats.github.io/insight/reference/find_parameters.html" class="external-link">find_parameters()</a>, <a href="https://easystats.github.io/insight/reference/find_predictors.html" class="external-link">find_predictors()</a>, <a href="https://easystats.github.io/insight/reference/find_random.html" class="external-link">find_random()</a>, <a href="https://easystats.github.io/insight/reference/find_response.html" class="external-link">find_response()</a>, and <a href="https://easystats.github.io/insight/reference/model_info.html" class="external-link">model_info()</a>. In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the <code><a href="reference/find_terms.html">find_terms()</a></code> function’s <code>effects</code> argument allows for the extraction of “fixed effects” terms, “random effects” terms, or by default, “all” terms in the model object. We point users to the package documentation or the complementary package website, <a href="https://easystats.github.io/insight/" class="external-link uri">https://easystats.github.io/insight/</a>, for a detailed list of the arguments associated with each function as well as the returned values from each function.</p>
 </div>
 <div id="examples-of-use-cases-in-r" class="section level3">
 <h3 class="hasAnchor">
-<a href="#examples-of-use-cases-in-r" class="anchor"></a>Examples of Use Cases in R</h3>
+<a href="#examples-of-use-cases-in-r" class="anchor" aria-hidden="true"></a>Examples of Use Cases in R</h3>
 <p>We now would like to provide examples of use cases of the <strong>insight</strong> package. These examples probably do not cover typical real-world problems, but serve as illustration of the core idea of this package: The unified interface to access model information. <strong>insight</strong> should help both users and package developers in order to reduce the hassle with the many exceptions from various modelling packages when accessing model information.</p>
 <div id="making-predictions-at-specific-values-of-a-term-of-interest" class="section level4">
 <h4 class="hasAnchor">
-<a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor"></a>Making Predictions at Specific Values of a Term of Interest</h4>
+<a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor" aria-hidden="true"></a>Making Predictions at Specific Values of a Term of Interest</h4>
 <p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p>
 <p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -206,7 +206,7 @@
 </div>
 <div id="printing-model-coefficients" class="section level4">
 <h4 class="hasAnchor">
-<a href="#printing-model-coefficients" class="anchor"></a>Printing Model Coefficients</h4>
+<a href="#printing-model-coefficients" class="anchor" aria-hidden="true"></a>Printing Model Coefficients</h4>
 <p>The next example should emphasize the possibilities to generalize functions to many different model objects using <strong>insight</strong>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
 <p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -242,12 +242,12 @@
 </div>
 <div id="contributing-and-support" class="section level2">
 <h2 class="hasAnchor">
-<a href="#contributing-and-support" class="anchor"></a>Contributing and Support</h2>
+<a href="#contributing-and-support" class="anchor" aria-hidden="true"></a>Contributing and Support</h2>
 <p>In case you want to file an issue or contribute in another way to the package, please follow <a href="https://github.com/easystats/insight/blob/master/.github/CONTRIBUTING.md" class="external-link">this guide</a>. For questions about the functionality, you may either contact us via email or also file an issue.</p>
 </div>
 <div id="list-of-supported-models-by-class" class="section level2">
 <h2 class="hasAnchor">
-<a href="#list-of-supported-models-by-class" class="anchor"></a>List of Supported Models by Class</h2>
+<a href="#list-of-supported-models-by-class" class="anchor" aria-hidden="true"></a>List of Supported Models by Class</h2>
 <p>Currently, 182 model classes are supported.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/is_model_supported.html">supported_models</a></span><span class="op">(</span><span class="op">)</span>
@@ -319,7 +319,7 @@
 </div>
 <div id="credits" class="section level2">
 <h2 class="hasAnchor">
-<a href="#credits" class="anchor"></a>Credits</h2>
+<a href="#credits" class="anchor" aria-hidden="true"></a>Credits</h2>
 <p>If this package helped you, please consider citing as follows:</p>
 <p>Lüdecke D, Waggoner P, Makowski D. insight: A Unified Interface to Access Information from Model Objects in R. Journal of Open Source Software 2019;4:1412. doi: <a href="https://doi.org/10.21105/joss.01412" class="external-link">10.21105/joss.01412</a></p>
 </div>
