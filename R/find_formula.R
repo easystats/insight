@@ -3,7 +3,7 @@
 #'
 #' @description Returns the formula(s) for the different parts of a model
 #'    (like fixed or random effects, zero-inflated component, ...).
-#'    \code{check_formula()} checks if a model formula has valid syntax
+#'    \code{formula_ok()} checks if a model formula has valid syntax
 #'    regarding writing \code{TRUE} instead of \code{T} inside \code{poly()}
 #'    and that no data names are used (i.e. no \code{data$variable}, but rather
 #'    \code{variable}).
@@ -52,7 +52,7 @@ find_formula <- function(x, verbose = TRUE, ...) {
 
 #' @rdname find_formula
 #' @export
-check_formula <- function(x, verbose = TRUE, ...) {
+formula_ok <- function(x, verbose = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
 
   # check if formula contains data name with "$". This may
@@ -63,7 +63,7 @@ check_formula <- function(x, verbose = TRUE, ...) {
   # all.vars() returns "T" as variable, which is not intended
   check_2 <- .check_formula_for_T(f, verbose = verbose)
 
-  any(check_1 | check_2)
+  all(check_1 && check_2)
 }
 
 
@@ -1651,9 +1651,9 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       warning(format_message("Looks like you are using 'poly()' with 'raw = T'. This results in unexpected behaviour, because 'all.vars()' considers 'T' as variable. Please use 'raw = TRUE'."),
               call. = FALSE)
     }
-    return(TRUE)
+    return(FALSE)
   }
-  return(FALSE)
+  return(TRUE)
 }
 
 
@@ -1676,10 +1676,10 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
           call. = FALSE
         )
       }
-      return(TRUE)
+      return(FALSE)
     }
   }
-  return(FALSE)
+  return(TRUE)
 }
 
 
