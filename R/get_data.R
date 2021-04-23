@@ -1240,7 +1240,7 @@ get_data.clmm2 <- function(x, ...) {
       }
 
       data_complete <- cbind(data_complete, x$grFac)
-      colnames(data_complete)[ncol(data_complete)] <- unlist(.find_random_effects(x, f = find_formula(x), split_nested = TRUE))
+      colnames(data_complete)[ncol(data_complete)] <- unlist(.find_random_effects(x, f = find_formula(x, verbose = FALSE), split_nested = TRUE))
 
       data_complete
     },

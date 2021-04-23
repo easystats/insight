@@ -39,14 +39,14 @@
 #'   find_terms(m)
 #' }
 #' @export
-find_terms <- function(x, flatten = FALSE, ...) {
-  f <- find_formula(x)
+find_terms <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  f <- find_formula(x, verbose = verbose)
 
   if (is.null(f)) {
     return(NULL)
   }
 
-  resp <- find_response(x)
+  resp <- find_response(x, verbose = FALSE)
 
   if (is_multivariate(f) || isTRUE(attributes(f)$two_stage)) {
     l <- lapply(f, .get_variables_list, resp = resp)

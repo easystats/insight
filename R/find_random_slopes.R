@@ -22,7 +22,7 @@
 #' @export
 find_random_slopes <- function(x) {
   random_slopes <- vector(mode = "list")
-  forms <- find_formula(x)
+  forms <- find_formula(x, verbose = FALSE)
 
   random_slopes$random <- .extract_random_slopes(forms$random)
   random_slopes$zero_inflated_random <- .extract_random_slopes(forms$zero_inflated_random)

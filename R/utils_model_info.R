@@ -281,7 +281,7 @@
   }
 
   if (inherits(x, "brmsfit") && !is_multivariate(x)) {
-    is_meta <- grepl("(.*)\\|(.*)se\\((.*)\\)", .safe_deparse(find_formula(x)$conditional[[2]]))
+    is_meta <- grepl("(.*)\\|(.*)se\\((.*)\\)", .safe_deparse(find_formula(x, verbose = FALSE)$conditional[[2]]))
   }
 
 

@@ -369,7 +369,7 @@ get_parameters.MixMod <- function(x,
   effects <- match.arg(effects)
   component <- match.arg(component)
 
-  has_zeroinf <- !is.null(find_formula(x)[["zero_inflated"]])
+  has_zeroinf <- !is.null(find_formula(x, verbose = FALSE)[["zero_inflated"]])
 
   if (component %in% c("zi", "zero_inflated") && !has_zeroinf) {
     stop("Model has no zero-inflation component.", call. = FALSE)

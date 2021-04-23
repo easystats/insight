@@ -36,7 +36,7 @@ null_model <- function(model, verbose = TRUE, ...) {
     nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
     null.model <- stats::update(model, fixed = nullform)
   } else if (inherits(model, "cpglmm")) {
-    nullform <- find_formula(model)[["random"]]
+    nullform <- find_formula(model, verbose = FALSE)[["random"]]
     null.model <- stats::update(model, nullform)
   } else {
     f <- stats::formula(model)

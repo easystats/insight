@@ -4,10 +4,12 @@
 \alias{find_formula}
 \title{Find model formula}
 \usage{
-find_formula(x, ...)
+find_formula(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{verbose}{Toggle warnings.}
 
 \item{...}{Currently not used.}
 }

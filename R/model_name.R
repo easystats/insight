@@ -33,7 +33,7 @@ model_name.default <- function(x, include_formula = FALSE, include_call = FALSE,
 
   name <- class(x)[[1]]
   if (include_formula) {
-    f <- format(find_formula(x))
+    f <- format(find_formula(x, verbose = FALSE))
     name <- paste0(name, "(", f, ")")
   }
   name

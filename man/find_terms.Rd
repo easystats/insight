@@ -4,13 +4,15 @@
 \alias{find_terms}
 \title{Find all model terms}
 \usage{
-find_terms(x, flatten = FALSE, ...)
+find_terms(x, flatten = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}
+
+\item{verbose}{Toggle warnings.}
 
 \item{...}{Currently not used.}
 }

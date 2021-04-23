@@ -40,7 +40,7 @@
 #' }
 #' @export
 find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
 
   if (is_multivariate(x)) {
     rn <- names(find_response(x))

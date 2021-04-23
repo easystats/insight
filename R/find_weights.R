@@ -48,7 +48,7 @@ find_weights.default <- function(x, ...) {
 
 #' @export
 find_weights.brmsfit <- function(x, ...) {
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
 
   if (is_multivariate(f)) {
     resp <- unlist(lapply(f, function(i) .safe_deparse(i$conditional[[2L]])))

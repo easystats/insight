@@ -30,7 +30,7 @@ find_response <- function(x, combine = TRUE, ...) {
 
 #' @export
 find_response.default <- function(x, combine = TRUE, ...) {
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
 
   if (is.null(f)) {
     return(NULL)
@@ -56,7 +56,7 @@ find_response.model_fit <- function(x, combine = TRUE, ...) {
 
 #' @export
 find_response.selection <- function(x, combine = TRUE, ...) {
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
   resp <- c(.safe_deparse(f$conditional$selection[[2L]]),
             .safe_deparse(f$conditional$outcome[[2L]]))
   check_cbind(resp, combine, model = x)
@@ -65,7 +65,7 @@ find_response.selection <- function(x, combine = TRUE, ...) {
 
 #' @export
 find_response.mediate <- function(x, combine = TRUE, ...) {
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
 
   if (is.null(f)) {
     return(NULL)
@@ -79,7 +79,7 @@ find_response.mediate <- function(x, combine = TRUE, ...) {
 #' @export
 find_response.mjoint <- function(x, combine = TRUE, component = c("conditional", "survival", "all"), ...) {
   component <- match.arg(component)
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
 
   if (is.null(f)) {
     return(NULL)
@@ -101,7 +101,7 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
 #' @export
 find_response.joint <- function(x, combine = TRUE, component = c("conditional", "survival", "all"), ...) {
   component <- match.arg(component)
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
 
   if (is.null(f)) {
     return(NULL)
