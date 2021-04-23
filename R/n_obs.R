@@ -64,8 +64,9 @@ n_obs.glm <- function(x, ...) {
 
   if (isTRUE(is_binomial)) {
     resp <- deparse(stats::formula(x)[[2]])
-    resp_data <- get_response(x)
+    resp_data <- get_response(x, verbose = FALSE)
 
+    # response is a matrix of numbers of trials and successes
     if (grepl("^cbind\\(", resp)) {
       trials <- trimws(sub("cbind\\((.*),(.*)\\)", "\\2", resp))
       if (grepl("-", trials, fixed = TRUE)) {
@@ -73,7 +74,9 @@ n_obs.glm <- function(x, ...) {
       } else {
         .nobs <- sum(resp_data)
       }
-    } else if (!is.data.frame(resp_data) && !.is.int(resp_data)) {
+
+      # response is a fraction
+    } else if (!is.data.frame(resp_data) && .is.fraction(resp_data)) {
       .nobs <- sum(get_weights(x))
     }
   }
