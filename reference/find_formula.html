@@ -150,7 +150,7 @@
    (like fixed or random effects, zero-inflated component, ...).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,6 +158,10 @@
     <tr>
       <th>x</th>
       <td><p>A fitted model.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle warnings.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -194,7 +198,7 @@
 <span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $conditional
 #&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x7f809644bb50&gt;
+#&gt; &lt;environment: 0x7f9d65872090&gt;
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "insight_formula" "list"           </div><div class='input'>
