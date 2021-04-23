@@ -1646,6 +1646,11 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
 .check_formula_for_T <- function(f, verbose = TRUE) {
   f <- .safe_deparse(f[[1]])
+
+  if (.is_empty_object(f)) {
+    return(TRUE)
+  }
+
   if (grepl("(.*)poly\\((.*),\\s*raw\\s*=\\s*T\\)", f)) {
     if (verbose) {
       warning(format_message("Looks like you are using 'poly()' with 'raw = T'. This results in unexpected behaviour, because 'all.vars()' considers 'T' as variable. Please use 'raw = TRUE'."),
@@ -1662,6 +1667,10 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 # here...
 
 .check_formula_for_dollar <- function(f, verbose = TRUE) {
+  if (.is_empty_object(f)) {
+    return(TRUE)
+  }
+
   if (any(grepl("\\$", .safe_deparse(f[[1]])))) {
     fc <- try(.formula_clean(f[[1]]), silent = TRUE)
     if (inherits(fc, "try-error")) {
