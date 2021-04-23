@@ -176,5 +176,18 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     flatten = TRUE
   )
 
+  # poly() are not properly recognized as nested, so remove poly() syntax here
+  pattern <- paste0("^poly\\(((\\w|\\.)*).*\\)(\\d)")
+
+  poly_terms <- grepl("^poly\\((.*)\\)", params)
+  if (any(poly_terms)) {
+    params[poly_terms] <- gsub(pattern, "\\1\\3", params[poly_terms])
+  }
+
+  poly_terms <- grepl("^poly\\((.*)\\)", params_base)
+  if (any(poly_terms)) {
+    params_base[poly_terms] <- gsub(pattern, "\\1\\3", params_base[poly_terms])
+  }
+
   all(params %in% params_base)
 }
