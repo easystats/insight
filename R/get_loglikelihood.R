@@ -86,7 +86,7 @@ get_loglikelihood.model_fit <- function(x, ...) {
 }
 
 
-.get_loglikelihood_glm <- function(x, verbose = TRUE...) {
+.get_loglikelihood_glm <- function(x, verbose = TRUE, ...) {
   fam <- stats::family(x)$family
   resp <- get_response(x, verbose = verbose)
   w <- get_weights(x, null_as_ones = TRUE)
