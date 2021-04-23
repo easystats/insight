@@ -48,7 +48,11 @@
 
 <meta property="og:title" content="Find model formula — find_formula" />
 <meta property="og:description" content="Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...)." />
+   (like fixed or random effects, zero-inflated component, ...).
+   check_formula() checks if a model formula has valid syntax
+   regarding writing TRUE instead of T inside poly()
+   and that no data names are used (i.e. no data$variable, but rather
+   variable)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -147,10 +151,16 @@
 
     <div class="ref-description">
     <p>Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...).</p>
+   (like fixed or random effects, zero-inflated component, ...).
+   <code>check_formula()</code> checks if a model formula has valid syntax
+   regarding writing <code>TRUE</code> instead of <code>T</code> inside <code><a href='https://rdrr.io/r/stats/poly.html'>poly()</a></code>
+   and that no data names are used (i.e. no <code>data$variable</code>, but rather
+   <code>variable</code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>check_formula</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,7 +208,7 @@
 <span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $conditional
 #&gt; mpg ~ wt + cyl + vs
-#&gt; &lt;environment: 0x7fe50377d4b0&gt;
+#&gt; &lt;environment: 0x7fadeb83f430&gt;
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "insight_formula" "list"           </div><div class='input'>
