@@ -2,9 +2,12 @@
 % Please edit documentation in R/find_formula.R
 \name{find_formula}
 \alias{find_formula}
+\alias{check_formula}
 \title{Find model formula}
 \usage{
 find_formula(x, verbose = TRUE, ...)
+
+check_formula(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -33,6 +36,10 @@ A list of formulas that describe the model. For simple models,
 \description{
 Returns the formula(s) for the different parts of a model
    (like fixed or random effects, zero-inflated component, ...).
+   \code{check_formula()} checks if a model formula has valid syntax
+   regarding writing \code{TRUE} instead of \code{T} inside \code{poly()}
+   and that no data names are used (i.e. no \code{data$variable}, but rather
+   \code{variable}).
 }
 \note{
 For models of class \code{lme} or \code{gls} the correlation-component

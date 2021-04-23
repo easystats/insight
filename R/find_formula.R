@@ -3,6 +3,10 @@
 #'
 #' @description Returns the formula(s) for the different parts of a model
 #'    (like fixed or random effects, zero-inflated component, ...).
+#'    \code{check_formula()} checks if a model formula has valid syntax
+#'    regarding writing \code{TRUE} instead of \code{T} inside \code{poly()}
+#'    and that no data names are used (i.e. no \code{data$variable}, but rather
+#'    \code{variable}).
 #'
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
@@ -42,6 +46,24 @@
 #' @export
 find_formula <- function(x, verbose = TRUE, ...) {
   UseMethod("find_formula")
+}
+
+
+
+#' @rdname find_formula
+#' @export
+check_formula <- function(x, verbose = TRUE, ...) {
+  f <- find_formula(x, verbose = FALSE)
+
+  # check if formula contains data name with "$". This may
+  # result in unexpected behaviour, and we should warn users
+  check_1 <- .check_formula_for_dollar(f, verbose = verbose)
+
+  # check if formula contains poly-term with "raw=T". In this case,
+  # all.vars() returns "T" as variable, which is not intended
+  check_2 <- .check_formula_for_T(f, verbose = verbose)
+
+  any(check_1 | check_2)
 }
 
 
@@ -1624,10 +1646,14 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
 .check_formula_for_T <- function(f, verbose = TRUE) {
   f <- .safe_deparse(f[[1]])
-  if (grepl("(.*)poly\\((.*),\\s*raw\\s*=\\s*T\\)", f) && verbose) {
-    warning(format_message("Looks like you are using 'poly()' with 'raw = T'. This results in unexpected behaviour, because 'all.vars()' considers 'T' as variable. Please use 'raw = TRUE'."),
-            call. = FALSE)
+  if (grepl("(.*)poly\\((.*),\\s*raw\\s*=\\s*T\\)", f)) {
+    if (verbose) {
+      warning(format_message("Looks like you are using 'poly()' with 'raw = T'. This results in unexpected behaviour, because 'all.vars()' considers 'T' as variable. Please use 'raw = TRUE'."),
+              call. = FALSE)
+    }
+    return(TRUE)
   }
+  return(FALSE)
 }
 
 
@@ -1640,16 +1666,20 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     fc <- try(.formula_clean(f[[1]]), silent = TRUE)
     if (inherits(fc, "try-error")) {
       stop(attributes(fc)$condition$message, call. = FALSE)
-    } else if (verbose) {
-      warning(
-        format_message(paste0(
-          "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.",
-          "\n  Try: ", fc$formula, ", data = ", fc$data
-        )),
-        call. = FALSE
-      )
+    } else {
+      if (verbose) {
+        warning(
+          format_message(paste0(
+            "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.",
+            "\n  Try: ", fc$formula, ", data = ", fc$data
+          )),
+          call. = FALSE
+        )
+      }
+      return(TRUE)
     }
   }
+  return(FALSE)
 }
 
 

@@ -107,7 +107,7 @@ n_parameters.MixMod <- function(x,
   component <- match.arg(component)
 
   if (effects == "random" || isFALSE(remove_nonestimable)) {
-    length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, ...)))
+    length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, verbose = FALSE, ...)))
   } else {
     params <- get_parameters(x, effects = effects, component = component, ...)
     .process_estimable(params, remove_nonestimable)
@@ -179,7 +179,7 @@ n_parameters.brmsfit <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   component <- match.arg(component, choices = c("all", .all_elements()))
 
-  length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, ...)))
+  length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, verbose = FALSE, ...)))
 }
 
 
@@ -190,7 +190,7 @@ n_parameters.stanreg <- function(x,
                                  ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
-  length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, ...)))
+  length(unlist(find_parameters(x, effects = effects, component = component, flatten = FALSE, verbose = FALSE, ...)))
 }
 
 #' @export
@@ -226,7 +226,7 @@ n_parameters.multinom <- function(x, ...) {
 
 #' @export
 n_parameters.bayesx <- function(x, ...) {
-  length(unlist(find_parameters(x, component = "conditional", flatten = FALSE, ...)))
+  length(unlist(find_parameters(x, component = "conditional", flatten = FALSE, verbose = FALSE, ...)))
 }
 
 
@@ -241,14 +241,14 @@ n_parameters.bayesx <- function(x, ...) {
     params <- get_parameters(x, component = component, ...)
     .process_estimable(params, remove_nonestimable)
   } else {
-    length(unlist(find_parameters(x, component = component, flatten = FALSE, ...)))
+    length(unlist(find_parameters(x, component = component, flatten = FALSE, verbose = FALSE, ...)))
   }
 }
 
 
 .n_parameters_effects <- function(x, effects, remove_nonestimable, ...) {
   if (effects == "random" || isFALSE(remove_nonestimable)) {
-    length(unlist(find_parameters(x, effects = effects, flatten = FALSE, ...)))
+    length(unlist(find_parameters(x, effects = effects, flatten = FALSE, verbose = FALSE, ...)))
   } else {
     params <- get_parameters(x, effects = effects, ...)
     .process_estimable(params, remove_nonestimable)

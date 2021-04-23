@@ -16,7 +16,7 @@
 #' }
 #' @export
 find_smooth <- function(x, flatten = FALSE) {
-  all_terms <- find_terms(x, flatten = TRUE)
+  all_terms <- find_terms(x, flatten = TRUE, verbose = FALSE)
   patterns <- "^(s|ti|te|t2|gam::s|VGAM::s|mgcv::s|mgcv::ti|mgcv::te|mgcv::t2|brms::s|brms::t2)\\("
   l <- .compact_list(list(conditional = all_terms[grepl(patterns, all_terms)]))
 
