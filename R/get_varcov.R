@@ -769,7 +769,7 @@ get_varcov.LORgee <- get_varcov.gee
 .fix_rank_deficiency <- function(m, verbose = TRUE) {
   if (anyNA(m)) {
     if (isTRUE(verbose)) {
-      warning("Model matrix is rank deficient. Some variance-covariance parameters are missing.", call. = FALSE)
+      warning(format_message("Model matrix is rank deficient. Some variance-covariance parameters are missing."), call. = FALSE)
     }
     mm <- m[!is.na(m)]
     if (!is.matrix(mm)) {

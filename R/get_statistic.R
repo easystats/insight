@@ -1512,7 +1512,7 @@ get_statistic.sem <- function(x, ...) {
   params <- get_parameters(x, effects = "fixed")
 
   if (is.null(x$se)) {
-    warning("Model has no standard errors. Please fit model again with bootstrapped standard errors.", call. = FALSE)
+    warning(format_message("Model has no standard errors. Please fit model again with bootstrapped standard errors."), call. = FALSE)
     return(NULL)
   }
 

@@ -170,7 +170,7 @@
     )
 
     if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
-      warning("Some model terms could not be found in model data.\n  You probably need to load the data into the environment.", call. = FALSE)
+      warning(format_message("Some model terms could not be found in model data. You probably need to load the data into the environment."), call. = FALSE)
     }
   }
 
@@ -350,13 +350,13 @@
 
   if (.is_empty_object(dat)) {
     if (isTRUE(verbose)) {
-      warning(sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects), call. = FALSE)
+      warning(format_message(sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)), call. = FALSE)
     }
     return(NULL)
   }
 
   if (length(still_missing) && isTRUE(verbose)) {
-    warning(sprintf("Warning: Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,")), call. = FALSE)
+    warning(format_message(sprintf("Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,"))), call. = FALSE)
   }
 
   if ("(offset)" %in% colnames(mf) && !("(offset)" %in% colnames(dat))) {

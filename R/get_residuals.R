@@ -115,7 +115,7 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
     if (verbose) warning("Can't extract residuals from model.")
     res <- NULL
   } else if (yield_warning) {
-    warning(paste0("Can't extract '", res_type, "' residuals. Returning response residuals."), call. = FALSE)
+    warning(format_message(paste0("Can't extract '", res_type, "' residuals. Returning response residuals.")), call. = FALSE)
   }
 
   res
@@ -203,9 +203,9 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
         res_dev <- res_dev[!is.na(w) & w != 0]
       } else if (verbose) {
         if (is.null(w)) {
-          warning("Can't calculate weighted residuals from model. Model doesn't seem to have weights.", call. = FALSE)
+          warning(format_message("Can't calculate weighted residuals from model. Model doesn't seem to have weights."), call. = FALSE)
         } else if (is.null(res_dev)) {
-          warning("Can't calculate weighted residuals from model. Could not extract deviance-residuals.", call. = FALSE)
+          warning(format_message("Can't calculate weighted residuals from model. Could not extract deviance-residuals."), call. = FALSE)
         }
       }
       res_dev
