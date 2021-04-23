@@ -12,7 +12,7 @@
 #' @examples
 #' format_message("Much too long string for just one line, I guess!", 15)
 #' @export
-format_message <- function(string, line_length = (options()$width - 1)) {
+format_message <- function(string, line_length = options()$width) {
   if (is.null(line_length) || is.infinite(line_length) || line_length < 1) {
     line_length <- 70
   }
