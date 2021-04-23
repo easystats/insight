@@ -122,8 +122,8 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   object_names <- names(objects)
 
   # Check if same outcome
-  outcome <- get_response(objects[[1]])
-  same_response <- all(sapply(objects[2:length(object_names)], function(i) identical(get_response(i), outcome)))
+  outcome <- get_response(objects[[1]], verbose = FALSE)
+  same_response <- all(sapply(objects[2:length(object_names)], function(i) identical(get_response(i, verbose = FALSE), outcome)))
   attr(objects, "same_response") <- isTRUE(same_response)
 
   # Check if nested

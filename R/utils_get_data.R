@@ -162,7 +162,7 @@
     # check if we really have all formula terms in our model frame now
     pv <- tryCatch(
       {
-        find_predictors(x, effects = effects, flatten = TRUE, verbose = FALSE)
+        find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose)
       },
       error = function(x) {
         NULL
