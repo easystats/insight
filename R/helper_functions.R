@@ -4,7 +4,7 @@
 
 
 # remove NULL elements from lists
-.compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i) || (!is.data.frame(i) && any(i == "NULL", na.rm = TRUE)) || (is.data.frame(i) && nrow(i) == 0))]
+.compact_list <- function(x) x[!sapply(x, function(i) all(length(i) == 0) || all(is.null(i)) || (!is.data.frame(i) && any(i == "NULL", na.rm = TRUE)) || (is.data.frame(i) && nrow(i) == 0))]
 
 
 
@@ -43,7 +43,7 @@
   if (inherits(x, "data.frame")) {
     x <- as.data.frame(x)
   }
-  if (is.list(x)) {
+  if (is.list(x) && length(x) > 0) {
     x <- tryCatch(
       {
         .compact_list(x)
@@ -54,9 +54,11 @@
     )
   }
   if (inherits(x, "data.frame")) {
-    x <- x[!sapply(x, function(i) all(is.na(i)))]
-    x <- x[!apply(x, 1, function(i) all(is.na(i))), ]
-    # need to check for is.null for R 3.4
+    if (nrow(x) > 0 && ncol(x) > 0) {
+      x <- x[!sapply(x, function(i) all(is.na(i)))]
+      x <- x[!apply(x, 1, function(i) all(is.na(i))), ]
+      # need to check for is.null for R 3.4
+    }
   } else if (!is.null(x)) {
     x <- stats::na.omit(x)
   }
