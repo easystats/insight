@@ -4,10 +4,12 @@
 \alias{format_message}
 \title{Format messages and warnings}
 \usage{
-format_message(string, line_length = options()$width)
+format_message(string, ..., line_length = options()$width)
 }
 \arguments{
 \item{string}{A string.}
+
+\item{...}{Further strings that will be concatenated as indented new lines.}
 
 \item{line_length}{Numeric, the maximum length of a line.}
 }
@@ -20,5 +22,14 @@ Inserts line breaks into a longer message or warning string.
   can be accessed. By default, new lines are indented by two whitespace.
 }
 \examples{
-format_message("Much too long string for just one line, I guess!", 15)
+msg <- format_message("Much too long string for just one line, I guess!",
+                      line_length = 15)
+message(msg)
+
+msg <- format_message("Much too long string for just one line, I guess!",
+                      "First new line",
+                      "Second new line",
+                      "(both indented)",
+                      line_length = 30)
+message(msg)
 }
