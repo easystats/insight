@@ -1653,7 +1653,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   if (grepl("(.*)poly\\((.*),\\s*raw\\s*=\\s*T\\)", f)) {
     if (verbose) {
-      warning(format_message("Looks like you are using 'poly()' with 'raw = T'. This results in unexpected behaviour, because 'all.vars()' considers 'T' as variable. Please use 'raw = TRUE'."),
+      warning(format_message("Looks like you are using 'poly()' with 'raw = T'. This results in unexpected behaviour, because 'all.vars()' considers 'T' as variable.", "Please use 'raw = TRUE'."),
               call. = FALSE)
     }
     return(FALSE)
