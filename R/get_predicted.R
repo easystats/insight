@@ -6,17 +6,18 @@
 #'   second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which
 #'   to predict. If omitted, the data used to fit the model is used.
-#' @param predict Can be \code{"link"}, \code{"relation"} (default), or
+#' @param predict Can be \code{"link"}, \code{"expectation"} (default), or
 #'   \code{"prediction"}. This modulates the scale of the output as well as the
 #'   type of certainty interval. More specifically, \code{"link"} gives an
 #'   output on the link-scale (for logistic models, that means the log-odds
-#'   scale) with a confidence interval (CI). \code{"relation"} (default) also
+#'   scale) with a confidence interval (CI). \code{"expectation"} (default) also
 #'   returns confidence intervals, but this time the output is on the response
 #'   scale (for logistic models, that means probabilities). Finally,
 #'   \code{"predict"} also gives an output on the response scale, but this time
 #'   associated with a prediction interval (PI), which is larger than a
 #'   confidence interval (though it mostly make sense for linear models). Read
-#'   more about in the \strong{Details} section below.
+#'   more about in the \strong{Details} section below. \code{"relation"} is
+#'   also accepted as a (deprecated) alias for \code{"expectation"}.
 #' @param iterations For Bayesian models, this corresponds to the number of
 #'   posterior draws. If \code{NULL}, will return all the draws (one for each
 #'   iteration of the model). For frequentist models, if not \code{NULL}, will
@@ -50,9 +51,9 @@
 #'   \item \strong{Linear models} - \code{lm()}: For linear models, Prediction
 #'   intervals (\code{predict = "prediction"}) show the range that likely
 #'   contains the value of a new observation (in what range it is likely to
-#'   fall), whereas confidence intervals (\code{predict = "relation"} or
+#'   fall), whereas confidence intervals (\code{predict = "expectation"} or
 #'   \code{predict = "link"}) reflect the uncertainty around the estimated
-#'   parameters (and gives the range of uncertainty of the regression line). lIn
+#'   parameters (and gives the range of uncertainty of the regression line). In
 #'   general, Prediction Intervals (PIs) account for both the uncertainty in the
 #'   model's parameters, plus the random variation of the individual values.
 #'   Thus, prediction intervals are always wider than confidence intervals.
@@ -61,8 +62,8 @@
 #'   but also the variability within the data).
 #'   \item \strong{General Linear models} - \code{glm()}: For binomial models,
 #'   prediction intervals are somewhat useless (for instance, for a binomial
-#'   model for which the dependent variable is a vector of 1s and 0s, the
-#'   prediction interval is... \code{[0, 1]}).
+#'   (bernoulli) model for which the dependent variable is a vector of 1s and
+#'   0s, the prediction interval is... \code{[0, 1]}).
 #' }}
 #'
 #'
@@ -145,10 +146,11 @@ get_predicted.data.frame <- function(x, data = NULL, verbose = TRUE, ...) {
 #' @export
 get_predicted.lm <- function(x,
                              data = NULL,
-                             predict = "relation",
+                             predict = c("expectation", "link", "prediction", "relation"),
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
+
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   predict_function <- function(x, data, ...) {
@@ -191,7 +193,7 @@ get_predicted.glm <- get_predicted.lm
 #' @export
 get_predicted.lmerMod <- function(x,
                                   data = NULL,
-                                  predict = "relation",
+                                  predict = c("expectation", "link", "prediction", "relation"),
                                   ci = 0.95,
                                   include_random = TRUE,
                                   iterations = NULL,
@@ -254,7 +256,7 @@ get_predicted.merMod <- get_predicted.lmerMod
 #' @export
 get_predicted.glmmTMB <- function(x,
                                   data = NULL,
-                                  predict = "relation",
+                                  predict = c("expectation", "link", "prediction", "relation"),
                                   ci = 0.95,
                                   include_random = TRUE,
                                   iterations = NULL,
@@ -264,10 +266,16 @@ get_predicted.glmmTMB <- function(x,
   # Sanity checks
   if (predict == "prediction") {
     if (verbose) {
-      warning(format_message("predict = 'prediction' is currently not available for glmmTMB models. Changing to 'relation'."))
+      warning(
+        format_message("`predict = 'prediction'` is currently not available for glmmTMB models.",
+                       "Changing to `predict = 'expectation'`."
+        )
+      )
     }
-    predict <- "relation"
+    predict <- "expectation"
   }
+  # TODO: prediction intervals
+  # https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#predictions-andor-confidence-or-prediction-intervals-on-predictions
 
   # Sanitize input
   args <- .get_predicted_args(
@@ -322,7 +330,7 @@ get_predicted.glmmTMB <- function(x,
 #' @export
 get_predicted.gam <- function(x,
                               data = NULL,
-                              predict = "relation",
+                              predict = c("expectation", "link", "prediction", "relation"),
                               ci = 0.95,
                               include_random = TRUE,
                               include_smooth = TRUE,
@@ -333,9 +341,13 @@ get_predicted.gam <- function(x,
   # Sanity checks
   if (predict == "prediction") {
     if (verbose) {
-      warning(format_message("predict = 'prediction' is currently not available for GAM models. Changing to 'relation'."))
+      warning(
+        format_message("`predict = 'prediction'` is currently not available for GAM models.",
+                       "Changing to `predict = 'expectation'`."
+        )
+      )
     }
-    predict <- "relation"
+    predict <- "expectation"
   }
   # TODO: check this for prediction intervals:
   # https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/
@@ -406,14 +418,18 @@ get_predicted.list <- get_predicted.gam # gamm4
 #' @export
 get_predicted.stanreg <- function(x,
                                   data = NULL,
-                                  predict = "relation",
+                                  predict = c("expectation", "link", "prediction", "relation"),
                                   iterations = NULL,
                                   include_random = TRUE,
                                   include_smooth = TRUE,
                                   verbose = TRUE,
                                   ...) {
   if (!requireNamespace("rstantools", quietly = TRUE) || utils::packageVersion("rstantools") < "2.1.0") {
-    stop("Package `rstantools` in version 2.1.0 or higher needed for this function to work. Please install it.")
+    stop(
+      format_message("Package `rstantools` in version 2.1.0 or higher needed for this function to work.",
+                     "Please install it."
+      )
+    )
   }
 
   args <- .get_predicted_args(
@@ -436,7 +452,7 @@ get_predicted.stanreg <- function(x,
       draws = iterations,
       ...
     )
-  } else if (args$predict %in% c("relation")) {
+  } else if (args$predict %in% c("expectation")) {
     draws <- rstantools::posterior_epred(
       x,
       newdata = args$data,
@@ -516,7 +532,7 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
 
 .get_predicted_args <- function(x,
                                 data = NULL,
-                                predict = "relation",
+                                predict = c("expectation", "link", "prediction", "relation"),
                                 include_random = TRUE,
                                 include_smooth = TRUE,
                                 ci = 0.95,
@@ -525,8 +541,15 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
                                 ...) {
 
   # Sanitize input
-  predict <- match.arg(predict, c("link", "relation", "prediction"))
+  predict <- match.arg(predict, choices = c("expectation", "link", "prediction", "relation"))
   # Other names: "response", "expected", "distribution", "observations"
+  if (predict == "relation") {
+    message(format_message(
+      '`predict = "relation"` is deprecated.',
+      'Use `predict = "expectation"` instead.')
+    )
+    predict <- "expectation"
+  }
 
   # Get info
   info <- model_info(x)
@@ -542,7 +565,7 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
   if (predict == "link") {
     ci_type <- "confidence"
     scale <- "link"
-  } else if (predict == "relation") {
+  } else if (predict == "expectation") {
     ci_type <- "confidence"
     scale <- "response"
   } else if (predict == "prediction") {
@@ -625,6 +648,7 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
       ci_data[!se_col] <- as.data.frame(sapply(ci_data[!se_col], link_inverse(x)))
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
+      # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
       mu_eta <- abs(get_family(x)$mu.eta(predictions))
       ci_data[se_col] <- ci_data[se_col] * mu_eta
     }
