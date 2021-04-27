@@ -1980,6 +1980,27 @@ get_statistic.svyglm.nb <- function(x, ...) {
 get_statistic.svyglm.zip <- get_statistic.svyglm.nb
 
 
+#' @export
+get_statistic.svyglm <- function(x, ...) {
+  parms <- get_parameters(x)
+  vc <- get_varcov(x)
+  se <- sqrt(diag(vc))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = parms$Estimate / se,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
+get_statistic.svyolr <- get_statistic.svyglm
+
 
 #' @rdname get_statistic
 #' @export
