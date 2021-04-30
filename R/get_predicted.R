@@ -263,6 +263,8 @@ get_predicted.glmmTMB <- function(x,
                                   verbose = TRUE,
                                   ...) {
 
+  predict <- match.arg(predict)
+
   # Sanity checks
   if (predict == "prediction") {
     if (verbose) {
@@ -337,6 +339,8 @@ get_predicted.gam <- function(x,
                               iterations = NULL,
                               verbose = TRUE,
                               ...) {
+
+  predict <- match.arg(predict)
 
   # Sanity checks
   if (predict == "prediction") {

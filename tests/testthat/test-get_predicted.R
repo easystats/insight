@@ -27,7 +27,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
     # Link vs. relation
     rezlink <- get_predicted(x, predict = "link")
-    rezrela <- get_predicted(x, predict = "relation")
+    rezrela <- get_predicted(x, predict = "expectation")
     expect_equal(mean(abs(rezlink - rezrela)), 0, tolerance = 1e-3)
     expect_equal(mean(summary(rezlink)$CI_high - summary(rezrela)$CI_high), 0, tolerance = 1e-3)
 
@@ -38,7 +38,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
     # Confidence
     ref <- predict(x, se.fit = TRUE, interval = "confidence")
-    rez <- as.data.frame(get_predicted(x, predict = "relation"))
+    rez <- as.data.frame(get_predicted(x, predict = "expectation"))
     expect_equal(nrow(rez), 32)
     expect_equal(max(abs(as.data.frame(ref$fit)$fit - rez$Predicted)), 0, tolerance = 1e-10)
     expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
@@ -78,21 +78,21 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
     # Link vs. relation
     rezlink <- get_predicted(x, predict = "link")
-    rezrela <- get_predicted(x, predict = "relation")
+    rezrela <- get_predicted(x, predict = "expectation")
     expect_true(min(rezlink) < 0)
     expect_true(min(rezrela) > 0)
     expect_true(min(summary(rezlink)$CI_low) < 0)
     expect_true(min(summary(rezrela)$CI_low) > 0)
 
     # Relation vs. Prediction
-    rezrela <- get_predicted(x, predict = "relation")
+    rezrela <- get_predicted(x, predict = "expectation")
     rezpred <- get_predicted(x, predict = "prediction")
     expect_equal(mean(abs(rezrela - rezpred)), 0, tolerance = 1e-3)
     expect_true(all(mean(summary(rezrela)$CI_high - summary(rezpred)$CI_high) < 0))
 
     # Against stats::predict
     ref <- predict(x, se.fit = TRUE, type = "response")
-    rez <- as.data.frame(get_predicted(x, predict = "relation"))
+    rez <- as.data.frame(get_predicted(x, predict = "expectation"))
     expect_equal(nrow(rez), 32)
     expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
     expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
@@ -139,7 +139,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
     # Link vs. relation
     rezlink <- get_predicted(x, predict = "link")
-    rezrela <- get_predicted(x, predict = "relation")
+    rezrela <- get_predicted(x, predict = "expectation")
     rezpred <- get_predicted(x, predict = "prediction")
     expect_equal(mean(abs(rezlink - rezrela)), 0, tolerance = 1e-3)
     expect_equal(mean(summary(rezlink)$CI_high - summary(rezrela)$CI_high), 0, tolerance = 1e-3)
@@ -163,14 +163,14 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # expect_equal(mean(as.data.frame(rez)$CI_low - rez_emmeans$lower.PL), 0, tolerance = 0.5)
 
     # Compare with glmmTMB
-    ref <- insight::get_predicted(glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars), predict = "relation")
+    ref <- insight::get_predicted(glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars), predict = "expectation")
     expect_equal(mean(abs(rezrela - ref)), 0, tolerance = 0.1) # A bit high
     # expect_equal(mean(abs(as.data.frame(rezrela)$SE - as.data.frame(ref)$SE)), 0, tolerance = 1e-5)
     # expect_equal(mean(abs(as.data.frame(rezrela)$CI_low - as.data.frame(ref)$CI_low)), 0, tolerance = 1e-5)
 
     # Compare with rstanarm
     xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
-    rez_stan <- insight::get_predicted(xref, predict = "relation")
+    rez_stan <- insight::get_predicted(xref, predict = "expectation")
     expect_equal(mean(abs(rezrela - rez_stan)), 0, tolerance = 0.1)
     # Different indeed
     # expect_equal(mean(as.data.frame(rezrela)$CI_low - as.data.frame(rez_stan)$CI_low), 0, tolerance = 0.5)
@@ -197,7 +197,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   test_that("get_predicted - merMod", {
     x <- lme4::glmer(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
     rezlink <- get_predicted(x, predict = "link")
-    rezrela <- get_predicted(x, predict = "relation")
+    rezrela <- get_predicted(x, predict = "expectation")
     expect_true(min(rezlink) < 0)
     expect_true(min(rezrela) > 0)
     expect_true(min(summary(rezlink)$CI_low) < 0)
@@ -208,7 +208,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
     # Compare with glmmTMB
     xref <- glmmTMB::glmmTMB(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
-    rez_ref <- insight::get_predicted(xref, predict = "relation")
+    rez_ref <- insight::get_predicted(xref, predict = "expectation")
     expect_equal(max(abs(rezrela - rez_ref)), 0, tolerance = 1e-5)
     expect_equal(mean(abs(as.data.frame(rezrela)$SE - as.data.frame(rez_ref)$SE)), 0, tolerance = 0.2)
   })
@@ -221,7 +221,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
     # Link vs. relation
     rezlink <- get_predicted(x, predict = "link")
-    rezrela <- get_predicted(x, predict = "relation")
+    rezrela <- get_predicted(x, predict = "expectation")
     expect_equal(mean(abs(rezlink - rezrela)), 0, tolerance = 1e-3)
     expect_equal(mean(summary(rezlink)$CI_high - summary(rezrela)$CI_high), 0, tolerance = 1e-3)
 
@@ -233,7 +233,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # Binomial
     x <- glmmTMB::glmmTMB(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
     rezlink <- get_predicted(x, predict = "link")
-    rezrela <- get_predicted(x, predict = "relation")
+    rezrela <- get_predicted(x, predict = "expectation")
     expect_true(min(rezlink) < 0)
     expect_true(min(rezrela) > 0)
     expect_true(min(summary(rezlink)$CI_low) < 0)
@@ -306,7 +306,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # LM
     x <- rstanarm::stan_glm(mpg ~ cyl + hp, data = mtcars, refresh = 0, seed = 333)
     rezlink <- summary(get_predicted(x, predict = "link"))
-    rezrela <- summary(get_predicted(x, predict = "relation"))
+    rezrela <- summary(get_predicted(x, predict = "expectation"))
     expect_equal(mean(abs(rezlink$Predicted - rezrela$Predicted)), 0, tolerance = 0.1)
     expect_equal(mean(abs(rezlink$CI_high - rezrela$CI_high)), 0, tolerance = 0.1)
     rezpred <- summary(get_predicted(x, predict = "prediction"))
@@ -318,7 +318,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # GLM
     x <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
     rezlink <- summary(get_predicted(x, predict = "link"))
-    rezrela <- summary(get_predicted(x, predict = "relation"))
+    rezrela <- summary(get_predicted(x, predict = "expectation"))
     expect_true(min(rezlink$Predicted) < 0)
     expect_true(min(rezrela$Predicted) > 0)
     expect_true(min(rezlink$CI_high) < 0)
@@ -329,13 +329,13 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
     # Mixed
     x <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, seed = 333, iter = 500)
-    rezrela <- summary(get_predicted(x, predict = "relation"))
+    rezrela <- summary(get_predicted(x, predict = "expectation"))
     rezpred <- summary(get_predicted(x, predict = "prediction"))
-    rezrela2 <- summary(get_predicted(x, predict = "relation", include_random = FALSE))
+    rezrela2 <- summary(get_predicted(x, predict = "expectation", include_random = FALSE))
     rezpred2 <- summary(get_predicted(x, predict = "prediction", include_random = FALSE))
     expect_true(mean(abs(rezrela$Predicted - rezrela2$Predicted)) > 0)
     expect_true(mean(abs(rezpred$Predicted - rezpred2$Predicted)) > 0)
-    rezrela3 <- summary(get_predicted(x, predict = "relation", data = mtcars["am"]))
+    rezrela3 <- summary(get_predicted(x, predict = "expectation", data = mtcars["am"]))
     expect_equal(mean(abs(rezrela2$Predicted - rezrela3$Predicted)), 0, tolerance = 0.001)
   })
 }
