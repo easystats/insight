@@ -11,7 +11,7 @@ get_predicted(x, ...)
 \method{get_predicted}{lm}(
   x,
   data = NULL,
-  predict = "relation",
+  predict = c("expectation", "link", "prediction", "relation"),
   iterations = NULL,
   verbose = TRUE,
   ...
@@ -20,7 +20,7 @@ get_predicted(x, ...)
 \method{get_predicted}{stanreg}(
   x,
   data = NULL,
-  predict = "relation",
+  predict = c("expectation", "link", "prediction", "relation"),
   iterations = NULL,
   include_random = TRUE,
   include_smooth = TRUE,
@@ -38,17 +38,18 @@ second argument has to be a model).}
 \item{data}{An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used.}
 
-\item{predict}{Can be \code{"link"}, \code{"relation"} (default), or
+\item{predict}{Can be \code{"link"}, \code{"expectation"} (default), or
 \code{"prediction"}. This modulates the scale of the output as well as the
 type of certainty interval. More specifically, \code{"link"} gives an
 output on the link-scale (for logistic models, that means the log-odds
-scale) with a confidence interval (CI). \code{"relation"} (default) also
+scale) with a confidence interval (CI). \code{"expectation"} (default) also
 returns confidence intervals, but this time the output is on the response
 scale (for logistic models, that means probabilities). Finally,
 \code{"predict"} also gives an output on the response scale, but this time
 associated with a prediction interval (PI), which is larger than a
 confidence interval (though it mostly make sense for linear models). Read
-more about in the \strong{Details} section below.}
+more about in the \strong{Details} section below. \code{"relation"} is
+also accepted as a (deprecated) alias for \code{"expectation"}.}
 
 \item{iterations}{For Bayesian models, this corresponds to the number of
 posterior draws. If \code{NULL}, will return all the draws (one for each
@@ -86,9 +87,9 @@ The \code{predict} argument jointly modulates two separate concepts, the
   \item \strong{Linear models} - \code{lm()}: For linear models, Prediction
   intervals (\code{predict = "prediction"}) show the range that likely
   contains the value of a new observation (in what range it is likely to
-  fall), whereas confidence intervals (\code{predict = "relation"} or
+  fall), whereas confidence intervals (\code{predict = "expectation"} or
   \code{predict = "link"}) reflect the uncertainty around the estimated
-  parameters (and gives the range of uncertainty of the regression line). lIn
+  parameters (and gives the range of uncertainty of the regression line). In
   general, Prediction Intervals (PIs) account for both the uncertainty in the
   model's parameters, plus the random variation of the individual values.
   Thus, prediction intervals are always wider than confidence intervals.
@@ -97,8 +98,8 @@ The \code{predict} argument jointly modulates two separate concepts, the
   but also the variability within the data).
   \item \strong{General Linear models} - \code{glm()}: For binomial models,
   prediction intervals are somewhat useless (for instance, for a binomial
-  model for which the dependent variable is a vector of 1s and 0s, the
-  prediction interval is... \code{[0, 1]}).
+  (bernoulli) model for which the dependent variable is a vector of 1s and
+  0s, the prediction interval is... \code{[0, 1]}).
 }}
 
 
