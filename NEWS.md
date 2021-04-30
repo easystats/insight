@@ -64,6 +64,9 @@
 * Fixed issue in `ellipsis_info()` when detecting nested models with 
   poly-terms.
 
+* Fixed issue in `find_response()` for *brmsfit* models that used the
+  `resp_thres()` function in the model formula.
+
 # insight 0.13.2
 
 ## General
