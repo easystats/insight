@@ -153,6 +153,19 @@ check_cbind <- function(resp, combine, model) {
     # check for brms Additional Response Information
     r1 <- .trim(sub("(.*)\\|(.*)", "\\1", resp))
     r2 <- .trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
+    # check for "resp_" pattern
+    r_resp <- .trim(unlist(strsplit(resp, "|", fixed = TRUE))[2])
+    if (grepl("^resp", r_resp)) {
+      r3 <- .trim(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp)))
+      names(r3) <- r3
+      numeric_values <- suppressWarnings(as.numeric(r2))
+      r2 <- r2[is.na(numeric_values)]
+      if (length(r2)) {
+        r2 <- c(r2, r3)
+      } else {
+        r2 <- r3
+      }
+    }
     resp <- c(r1, r2)
   }
 
