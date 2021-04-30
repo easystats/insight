@@ -777,10 +777,21 @@ find_parameters.mira <- function(x, flatten = FALSE, ...) {
   find_parameters(x$analyses[[1]], flatten = flatten, ...)
 }
 
+## For questions or problems with this ask Fernando Miguez (femiguez@iastate.edu)
+#' @export
+find_parameters.nls <- function(x, flatten = FALSE, ...) {
 
+  f <- find_formula(x)
+  elements <- .get_elements(effects = "fixed", component = "all")
+  f <- .prepare_predictors(x, f, elements)
+  pars <- .return_vars(f, x)
 
-
-
+  if (flatten) {
+    unique(unlist(pars))
+  } else {
+    pars
+  }
+}
 
 # helper ----------------------------
 

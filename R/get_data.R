@@ -230,13 +230,11 @@ get_data.lqmm <- function(x, verbose = TRUE, ...) {
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
+#' @export
+get_data.nls <- get_data.gls
 
-
-
-
-
-
-
+#' @export
+get_data.gnls <- get_data.gls
 
 
 # zero-inflated models -------------------------------------------------------
