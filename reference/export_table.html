@@ -249,7 +249,7 @@ column. For HTML-tables, may be one of <code>"center"</code>, <code>"left"</code
       <th>group_by</th>
       <td><p>Name of column in <code>x</code> that indicates grouping for tables.
 Only applies when <code>format = "html"</code>. <code>group_by</code> is passed down
-to <code><a href='https://rdrr.io/pkg/gt/man/gt.html'>gt::gt(groupname_col = group_by)</a></code>.</p></td>
+to <code>gt::gt(groupname_col = group_by)</code>.</p></td>
     </tr>
     <tr>
       <th>zap_small</th>
@@ -276,7 +276,7 @@ places than <code>digits</code> are printed in scientific notation.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>export_table</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Sepal.Length | Sepal.Width | Petal.Length | Petal.Width |    Species
+</div><div class='co'>#&gt; Sepal.Length | Sepal.Width | Petal.Length | Petal.Width |    Species
 #&gt; --------------------------------------------------------------------
 #&gt;         5.10 |        3.50 |         1.40 |        0.20 |     setosa
 #&gt;         4.90 |        3.00 |         1.40 |        0.20 |     setosa
@@ -428,7 +428,7 @@ places than <code>digits</code> are printed in scientific notation.</p></td>
 #&gt;         6.50 |        3.00 |         5.20 |        2.00 |  virginica
 #&gt;         6.20 |        3.40 |         5.40 |        2.30 |  virginica
 #&gt;         5.90 |        3.00 |         5.10 |        1.80 |  virginica</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>export_table</span><span class='op'>(</span><span class='va'>iris</span>, sep <span class='op'>=</span> <span class='st'>" "</span>, header <span class='op'>=</span> <span class='st'>"*"</span>, digits <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+</div><div class='co'>#&gt; Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
 #&gt; ************************************************************
 #&gt;          5.1         3.5          1.4         0.2     setosa
 #&gt;          4.9         3.0          1.4         0.2     setosa

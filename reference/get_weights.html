@@ -191,17 +191,17 @@ set <code>null_as_ones = TRUE</code>.</p>
 <span class='co'># LMs</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span><span class='op'>)</span>
 <span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0.8318573 0.9309468 1.4676125 1.0211525 1.0387863 1.5145195 1.1382749
+</div><div class='co'>#&gt;  [1] 0.8318573 0.9309468 1.4676125 1.0211525 1.0387863 1.5145195 1.1382749
 #&gt;  [8] 0.6204816 0.7939441 0.8663014 1.3672245 1.1079441 1.1202314 1.0332048
 #&gt; [15] 0.8332477 1.5360739 1.1493551 0.4100149 1.2104068 0.8581626 0.6796529
 #&gt; [22] 0.9346075 0.6921987 0.7813326 0.8124882 0.4939920 1.2513361 1.0460119
 #&gt; [29] 0.6585589 1.3761445 1.1279393 0.9114786</div><div class='input'>
 <span class='fu'>get_weights</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>, null_as_ones <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</div><div class='input'>
+</div><div class='co'>#&gt;  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</div><div class='input'>
 <span class='co'># GLMs</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>disp</span> <span class='op'>+</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span>, family <span class='op'>=</span> <span class='va'>quasibinomial</span><span class='op'>)</span>
 <span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
+</div><div class='co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
 #&gt;           0.8318573           0.9309468           1.4676125           1.0211525 
 #&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
 #&gt;           1.0387863           1.5145195           1.1382749           0.6204816 
@@ -218,7 +218,7 @@ set <code>null_as_ones = TRUE</code>.</p>
 #&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E 
 #&gt;           0.6585589           1.3761445           1.1279393           0.9114786 </div><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>cyl</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, weights <span class='op'>=</span> <span class='va'>weight</span>, family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span>
 <span class='fu'>get_weights</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
+</div><div class='co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
 #&gt;            8.318573            9.309468           11.740900            9.190373 
 #&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
 #&gt;           11.426650           13.630675           12.521023            4.963853 

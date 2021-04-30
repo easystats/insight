@@ -175,7 +175,7 @@
   <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>Days</span> <span class='op'>|</span> <span class='va'>Subject</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sleepstudy</span><span class='op'>)</span>
   <span class='fu'>find_random_slopes</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; $random
+</div><div class='co'>#&gt; $random
 #&gt; [1] "Days"
 #&gt; </div></pre>
   </div>

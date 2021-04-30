@@ -170,7 +170,7 @@ with models like <code>gamm4</code>.</p>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
 <span class='fu'>get_family</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
+</div><div class='co'>#&gt; 
 #&gt; Family: binomial 
 #&gt; Link function: logit 
 #&gt; </div><div class='input'>
@@ -183,8 +183,8 @@ with models like <code>gamm4</code>.</p>
   <span class='op'>)</span>
   <span class='fu'>get_family</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; 
-#&gt;  Maximum number of PQL iterations:  20 </div><div class='output co'>#&gt; <span class='message'>iteration 1</span></div><div class='output co'>#&gt; <span class='message'>iteration 2</span></div><div class='output co'>#&gt; <span class='message'>iteration 3</span></div><div class='output co'>#&gt; <span class='message'>iteration 4</span></div><div class='output co'>#&gt; <span class='message'>iteration 5</span></div><div class='output co'>#&gt; <span class='message'>iteration 6</span></div><div class='output co'>#&gt; <span class='message'>iteration 7</span></div><div class='output co'>#&gt; <span class='message'>iteration 8</span></div><div class='output co'>#&gt; 
+</div><div class='co'>#&gt; 
+#&gt;  Maximum number of PQL iterations:  20 </div><div class='co'>#&gt; iteration 1</div><div class='co'>#&gt; iteration 2</div><div class='co'>#&gt; iteration 3</div><div class='co'>#&gt; iteration 4</div><div class='co'>#&gt; iteration 5</div><div class='co'>#&gt; iteration 6</div><div class='co'>#&gt; iteration 7</div><div class='co'>#&gt; iteration 8</div><div class='co'>#&gt; 
 #&gt; Family: binomial 
 #&gt; Link function: logit 
 #&gt; </div></pre>

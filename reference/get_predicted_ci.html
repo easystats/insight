@@ -253,7 +253,7 @@ the context of bootstrapped and Bayesian models. Possible values are
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 <span class='va'>ci_vals</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span>, ci_type <span class='op'>=</span> <span class='st'>"prediction"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                         SE    CI_low  CI_high
+</div><div class='co'>#&gt;                         SE    CI_low  CI_high
 #&gt; Mazda RX4         3.255505 14.558527 27.87504
 #&gt; Mazda RX4 Wag     3.255505 14.558527 27.87504
 #&gt; Datsun 710        3.305931 19.309850 32.83263
@@ -261,7 +261,7 @@ the context of bootstrapped and Bayesian models. Possible values are
 #&gt; Hornet Sportabout 3.303717  8.687625 22.20134
 #&gt; Valiant           3.266957 14.630713 27.99407</div><div class='input'><span class='va'>ci_vals</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span>, ci_type <span class='op'>=</span> <span class='st'>"confidence"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                          SE   CI_low  CI_high
+</div><div class='co'>#&gt;                          SE   CI_low  CI_high
 #&gt; Mazda RX4         0.7281647 19.72752 22.70605
 #&gt; Mazda RX4 Wag     0.7281647 19.72752 22.70605
 #&gt; Datsun 710        0.9279509 24.17337 27.96911
@@ -270,7 +270,7 @@ the context of bootstrapped and Bayesian models. Possible values are
 #&gt; Valiant           0.7777664 19.72168 22.90310</div><div class='input'>
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_predicted.html'>get_predicted</a></span><span class='op'>(</span><span class='va'>x</span>, iterations <span class='op'>=</span> <span class='fl'>500</span><span class='op'>)</span>
 <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;            SE   CI_low  CI_high
+</div><div class='co'>#&gt;            SE   CI_low  CI_high
 #&gt; V1  0.6778386 20.06367 22.73426
 #&gt; V2  0.6778386 20.06367 22.73426
 #&gt; V3  1.1213280 24.07299 28.19569
@@ -315,7 +315,7 @@ the context of bootstrapped and Bayesian models. Possible values are
   <span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: bayestestR</span></div><div class='output co'>#&gt;           SE   CI_low  CI_high
+</div><div class='co'>#&gt; Loading required package: bayestestR</div><div class='co'>#&gt;           SE   CI_low  CI_high
 #&gt; V1 0.6511853 20.08775 22.75861
 #&gt; V2 0.6511853 20.08775 22.75861
 #&gt; V3 1.1886593 24.12011 28.22016
@@ -328,7 +328,7 @@ the context of bootstrapped and Bayesian models. Possible values are
 <span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>x</span>, type <span class='op'>=</span> <span class='st'>"link"</span><span class='op'>)</span>
 <span class='va'>ci_vals</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span>, ci_type <span class='op'>=</span> <span class='st'>"prediction"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                   CI_low CI_high
+</div><div class='co'>#&gt;                   CI_low CI_high
 #&gt; Mazda RX4           -Inf     Inf
 #&gt; Mazda RX4 Wag       -Inf     Inf
 #&gt; Datsun 710          -Inf     Inf
@@ -336,7 +336,7 @@ the context of bootstrapped and Bayesian models. Possible values are
 #&gt; Hornet Sportabout   -Inf     Inf
 #&gt; Valiant             -Inf     Inf</div><div class='input'><span class='va'>ci_vals</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>predictions</span>, ci_type <span class='op'>=</span> <span class='st'>"confidence"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ci_vals</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                          SE     CI_low   CI_high
+</div><div class='co'>#&gt;                          SE     CI_low   CI_high
 #&gt; Mazda RX4         0.5623444 -0.3931282 1.8112213
 #&gt; Mazda RX4 Wag     0.4690190 -0.6974034 1.1411172
 #&gt; Datsun 710        0.7195076 -0.1279982 2.6924199

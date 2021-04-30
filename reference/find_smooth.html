@@ -174,10 +174,10 @@ as character vector, not as list. Duplicated values are removed.</p></td>
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>gam</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
   <span class='fu'>find_smooth</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: mgcv</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: nlme</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘nlme’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:lme4’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    lmList</span></div><div class='output co'>#&gt; <span class='message'>This is mgcv 1.8-34. For overview type 'help("mgcv-package")'.</span></div><div class='output co'>#&gt; $conditional
+</div><div class='co'>#&gt; Loading required package: mgcv</div><div class='co'>#&gt; Loading required package: nlme</div><div class='co'>#&gt; 
+#&gt; Attaching package: ‘nlme’</div><div class='co'>#&gt; The following object is masked from ‘package:lme4’:
+#&gt; 
+#&gt;     lmList</div><div class='co'>#&gt; This is mgcv 1.8-34. For overview type 'help("mgcv-package")'.</div><div class='co'>#&gt; $conditional
 #&gt; [1] "s(Sepal.Length)"
 #&gt; </div></pre>
   </div>

@@ -149,7 +149,7 @@
     <div class="ref-description">
     <p>Returns the statistic (<em>t</em>, <code>z</code>, ...) for model
   estimates. In most cases, this is the related column from
-  <code><a href='https://rdrr.io/r/stats/coef.html'>coef(summary())</a></code>.</p>
+  <code>coef(summary())</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -207,7 +207,7 @@
       <th>column_index</th>
       <td><p>For model objects that have no defined <code>get_statistic()</code>
 method yet, the default method is called. This method tries to extract the
-statistic column from <code><a href='https://rdrr.io/r/stats/coef.html'>coef(summary())</a></code>, where the index of the column
+statistic column from <code>coef(summary())</code>, where the index of the column
 that is being pulled is <code>column_index</code>. Defaults to 3, which is the
 default statistic column for most models' summary-output.</p></td>
     </tr>
@@ -259,7 +259,7 @@ errors is returned.</p></td>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     Parameter  Statistic
+</div><div class='co'>#&gt;     Parameter  Statistic
 #&gt; 1 (Intercept) 11.3994647
 #&gt; 2          wt -4.1204121
 #&gt; 3         cyl -2.2234114

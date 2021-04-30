@@ -261,7 +261,7 @@ applies to models of class <code>mixor</code>.</p></td>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='fu'>get_varcov</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;             (Intercept)         wt        cyl         vs
+</div><div class='co'>#&gt;             (Intercept)         wt        cyl         vs
 #&gt; (Intercept)   11.552774  0.1680680 -1.5843752 -4.7487893
 #&gt; wt             0.168068  0.6207461 -0.3301421 -0.2797924
 #&gt; cyl           -1.584375 -0.3301421  0.3764045  0.7257641
