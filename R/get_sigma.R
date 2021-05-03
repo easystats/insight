@@ -7,7 +7,7 @@
 #' @name get_sigma
 #'
 #' @param x A model.
-#' @param ci The CI width.
+#' @param ci Scalar, the CI level. The default (\code{NULL}) returns no CI.
 #' @inheritParams find_parameters
 #'
 #' @return The residual standard deviation (sigma), or \code{NULL} if this information could not be accessed.
@@ -41,7 +41,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_sigma(m)
 #' @export
-get_sigma <- function(x, ci = 0.95, verbose = TRUE) {
+get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   s <- .get_sigma(x, verbose = verbose)
 
   # Confidence interval for sigma
@@ -105,6 +105,59 @@ get_sigma <- function(x, ci = 0.95, verbose = TRUE) {
   )
 }
 
+.get_sigma.brmsfit <- function(x, verbose = TRUE, ...) {
+  s <- tryCatch(
+    {
+      dat <- as.data.frame(x)
+      sigma_column <- grep("sigma", colnames(dat), fixed = TRUE)
+      if (length(sigma_column)) {
+        mean(dat[[sigma_column]][1])
+      } else {
+        NULL
+      }
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+
+  # compute sigma manually ---------------
+  if (.is_empty_object(s)) {
+    # default sigma ---------------
+    s <- tryCatch(
+      {
+        stats::sigma(x)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
+
+  if (.is_empty_object(s)) {
+    info <- model_info(x)
+    if (!is.null(info) && info$is_mixed) {
+      s <- tryCatch(
+        {
+          sqrt(get_variance_residual(x, verbose = FALSE))
+        },
+        error = function(e) {
+          NULL
+        }
+      )
+    }
+  }
+
+  if (.is_empty_object(s)) {
+    return(NULL)
+  }
+  class(s) <- c("insight_aux", class(s))
+  s
+}
+
+
+
 # default handling ---------------
 
 .get_sigma.default <- function(x, verbose = TRUE, ...) {
@@ -121,25 +174,6 @@ get_sigma <- function(x, ci = 0.95, verbose = TRUE) {
       NULL
     }
   )
-
-
-  # sigma for brms ---------------
-  if (.is_empty_object(s) && inherits(x, "brmsfit")) {
-    s <- tryCatch(
-      {
-        dat <- as.data.frame(x)
-        sigma_column <- grep("sigma", colnames(dat), fixed = TRUE)
-        if (length(sigma_column)) {
-          mean(dat[[sigma_column]][1])
-        } else {
-          NULL
-        }
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-  }
 
 
   # compute sigma manually ---------------

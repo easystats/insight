@@ -4,12 +4,12 @@
 \alias{get_sigma}
 \title{Get residual standard deviation from models}
 \usage{
-get_sigma(x, ci = 0.95, verbose = TRUE)
+get_sigma(x, ci = NULL, verbose = TRUE)
 }
 \arguments{
 \item{x}{A model.}
 
-\item{ci}{The CI width.}
+\item{ci}{Scalar, the CI level. The default (\code{NULL}) returns no CI.}
 
 \item{verbose}{Toggle messages and warnings.}
 }
