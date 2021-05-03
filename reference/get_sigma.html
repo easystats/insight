@@ -150,7 +150,7 @@ Sigma is a key-component of regression models, and part of the so-called auxilia
 <p>Sigma is a key-component of regression models, and part of the so-called auxiliary parameters that are estimated. Indeed, linear models for instance assume that the residuals comes from a normal distribution with mean 0 and standard deviation <code>sigma</code>. See the details section below for more information about its interpretation and calculation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_sigma</span><span class='op'>(</span><span class='va'>x</span>, ci <span class='op'>=</span> <span class='fl'>0.95</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_sigma</span><span class='op'>(</span><span class='va'>x</span>, ci <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,7 +161,7 @@ Sigma is a key-component of regression models, and part of the so-called auxilia
     </tr>
     <tr>
       <th>ci</th>
-      <td><p>The CI width.</p></td>
+      <td><p>Scalar, the CI level. The default (<code>NULL</code>) returns no CI.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -203,11 +203,7 @@ Sigma is a key-component of regression models, and part of the so-called auxilia
 <span class='fu'>get_sigma</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 </div><div class='co'>#&gt; [1] 2.608133
 #&gt; attr(,"class")
-#&gt; [1] "insight_aux" "numeric"    
-#&gt; attr(,"CI_low")
-#&gt; [1] 1.961968
-#&gt; attr(,"CI_high")
-#&gt; [1] 3.226954</div></pre>
+#&gt; [1] "insight_aux" "numeric"    </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
