@@ -150,7 +150,6 @@ get_predicted.lm <- function(x,
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
-
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   predict_function <- function(x, data, ...) {
@@ -262,15 +261,15 @@ get_predicted.glmmTMB <- function(x,
                                   iterations = NULL,
                                   verbose = TRUE,
                                   ...) {
-
   predict <- match.arg(predict)
 
   # Sanity checks
   if (predict == "prediction") {
     if (verbose) {
       warning(
-        format_message("`predict = 'prediction'` is currently not available for glmmTMB models.",
-                       "Changing to `predict = 'expectation'`."
+        format_message(
+          "`predict = 'prediction'` is currently not available for glmmTMB models.",
+          "Changing to `predict = 'expectation'`."
         )
       )
     }
@@ -339,15 +338,15 @@ get_predicted.gam <- function(x,
                               iterations = NULL,
                               verbose = TRUE,
                               ...) {
-
   predict <- match.arg(predict)
 
   # Sanity checks
   if (predict == "prediction") {
     if (verbose) {
       warning(
-        format_message("`predict = 'prediction'` is currently not available for GAM models.",
-                       "Changing to `predict = 'expectation'`."
+        format_message(
+          "`predict = 'prediction'` is currently not available for GAM models.",
+          "Changing to `predict = 'expectation'`."
         )
       )
     }
@@ -430,8 +429,9 @@ get_predicted.stanreg <- function(x,
                                   ...) {
   if (!requireNamespace("rstantools", quietly = TRUE) || utils::packageVersion("rstantools") < "2.1.0") {
     stop(
-      format_message("Package `rstantools` in version 2.1.0 or higher needed for this function to work.",
-                     "Please install it."
+      format_message(
+        "Package `rstantools` in version 2.1.0 or higher needed for this function to work.",
+        "Please install it."
       )
     )
   }
@@ -550,8 +550,8 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
   if (predict == "relation") {
     message(format_message(
       '`predict = "relation"` is deprecated.',
-      'Use `predict = "expectation"` instead.')
-    )
+      'Use `predict = "expectation"` instead.'
+    ))
     predict <- "expectation"
   }
 

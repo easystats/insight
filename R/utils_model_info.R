@@ -210,11 +210,11 @@
 
   if (inherits(x, "htest")) {
     if (grepl("kruskal-wallis", tolower(x$method), fixed = TRUE) ||
-        grepl("design-based kruskalwallis", tolower(x$method), fixed = TRUE) ||
-        grepl("design-based median", tolower(x$method), fixed = TRUE) ||
-        grepl("design-based vanderwaerden", tolower(x$method), fixed = TRUE) ||
-        grepl("wilcoxon", tolower(x$method), fixed = TRUE) ||
-        grepl("friedman", tolower(x$method), fixed = TRUE)) {
+      grepl("design-based kruskalwallis", tolower(x$method), fixed = TRUE) ||
+      grepl("design-based median", tolower(x$method), fixed = TRUE) ||
+      grepl("design-based vanderwaerden", tolower(x$method), fixed = TRUE) ||
+      grepl("wilcoxon", tolower(x$method), fixed = TRUE) ||
+      grepl("friedman", tolower(x$method), fixed = TRUE)) {
       is_ranktest <- TRUE
     } else if (grepl("t-test", x$method)) {
       is_ttest <- TRUE
@@ -229,8 +229,8 @@
       is_proptest <- TRUE
       fitfam <- "binomial"
     } else if (any(grepl("chi-squared", c(tolower(x$method), tolower(attributes(x$statistic)$names)), fixed = TRUE)) ||
-               grepl("Fisher's Exact Test", x$method, fixed = TRUE) ||
-               grepl("pearson's x^2", tolower(x$method), fixed = TRUE)) {
+      grepl("Fisher's Exact Test", x$method, fixed = TRUE) ||
+      grepl("pearson's x^2", tolower(x$method), fixed = TRUE)) {
       is_chi2test <- TRUE
       is_xtab <- TRUE
       fitfam <- "categorical"

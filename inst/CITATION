@@ -1,6 +1,6 @@
 bibentry(
   bibtype = "article",
-	title = "insight: A Unified Interface to Access Information from Model Objects in R.",
+	title = "{insight}: A Unified Interface to Access Information from Model Objects in {R}.",
 	volume = "4",
 	doi = "10.21105/joss.01412",
 	number = "38",

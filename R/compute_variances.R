@@ -30,8 +30,10 @@
   no_random_variance <- FALSE
   if (.is_singular(x, vals, tolerance = tolerance) && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
-      warning(format_message(sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singulariy.", name_full),
-                             "Solution: Respecify random structure! You may also decrease the 'tolerance' level to enforce the calculation of random effect variances."), call. = FALSE)
+      warning(format_message(
+        sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singulariy.", name_full),
+        "Solution: Respecify random structure! You may also decrease the 'tolerance' level to enforce the calculation of random effect variances."
+      ), call. = FALSE)
     }
     no_random_variance <- TRUE
   }
@@ -54,8 +56,10 @@
 
   # Are random slopes present as fixed effects? Warn.
   if (!.random_slopes_in_fixed(x) && verbose) {
-    warning(format_message(sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.", name_full),
-                           "Solution: Respecify fixed structure!"), call. = FALSE)
+    warning(format_message(
+      sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.", name_full),
+      "Solution: Respecify fixed structure!"
+    ), call. = FALSE)
   }
 
   # Separate observation variance from variance of random effects
