@@ -780,7 +780,6 @@ find_parameters.mira <- function(x, flatten = FALSE, ...) {
 ## For questions or problems with this ask Fernando Miguez (femiguez@iastate.edu)
 #' @export
 find_parameters.nls <- function(x, flatten = FALSE, ...) {
-
   f <- find_formula(x)
   elements <- .get_elements(effects = "fixed", component = "all")
   f <- .prepare_predictors(x, f, elements)

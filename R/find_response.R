@@ -57,8 +57,10 @@ find_response.model_fit <- function(x, combine = TRUE, ...) {
 #' @export
 find_response.selection <- function(x, combine = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
-  resp <- c(.safe_deparse(f$conditional$selection[[2L]]),
-            .safe_deparse(f$conditional$outcome[[2L]]))
+  resp <- c(
+    .safe_deparse(f$conditional$selection[[2L]]),
+    .safe_deparse(f$conditional$outcome[[2L]])
+  )
   check_cbind(resp, combine, model = x)
 }
 

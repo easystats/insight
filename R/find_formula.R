@@ -304,8 +304,10 @@ find_formula.maxim <- find_formula.default
 #' @export
 find_formula.selection <- function(x, verbose = TRUE, ...) {
   model_call <- parse(text = deparse(get_call(x)))[[1]]
-  f <- list(conditional = list(selection = stats::as.formula(model_call$selection),
-                               outcome = stats::as.formula(model_call$outcome)))
+  f <- list(conditional = list(
+    selection = stats::as.formula(model_call$selection),
+    outcome = stats::as.formula(model_call$outcome)
+  ))
   attr(f, "two_stage") <- TRUE
   .find_formula_return(f, verbose = verbose)
 }
@@ -1655,8 +1657,10 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     if (verbose) {
       warning(format_message(
         "Looks like you are using 'poly()' with 'raw = T'. This results in unexpected behaviour, because 'all.vars()' considers 'T' as variable.",
-        "Please use 'raw = TRUE'."),
-        call. = FALSE)
+        "Please use 'raw = TRUE'."
+      ),
+      call. = FALSE
+      )
     }
     return(FALSE)
   }

@@ -31,6 +31,7 @@ bayesGARCH
 bayestestR
 bbmle
 behaviour
+bernoulli
 blavaan
 brms
 brmsfit
@@ -68,7 +69,6 @@ ivprobit
 joineRML
 joss
 knitr
-lIn
 labelling
 lavaan
 lme
@@ -94,6 +94,7 @@ quantreg
 riskRegression
 rms
 rstanarm
+sampleSelection
 sjPlot
 smicd
 spaMM

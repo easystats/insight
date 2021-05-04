@@ -12,14 +12,16 @@
 #' @return A formatted string.
 #' @examples
 #' msg <- format_message("Much too long string for just one line, I guess!",
-#'                       line_length = 15)
+#'   line_length = 15
+#' )
 #' message(msg)
 #'
 #' msg <- format_message("Much too long string for just one line, I guess!",
-#'                       "First new line",
-#'                       "Second new line",
-#'                       "(both indented)",
-#'                       line_length = 30)
+#'   "First new line",
+#'   "Second new line",
+#'   "(both indented)",
+#'   line_length = 30
+#' )
 #' message(msg)
 #' @export
 format_message <- function(string, ..., line_length = options()$width) {

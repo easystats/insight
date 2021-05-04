@@ -58,7 +58,6 @@ find_variables <- function(x,
                            component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "smooth_terms"),
                            flatten = FALSE,
                            verbose = TRUE) {
-
   effects <- match.arg(effects)
   component <- match.arg(component)
 

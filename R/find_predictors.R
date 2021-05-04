@@ -45,7 +45,6 @@ find_predictors <- function(x,
                             component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
                             flatten = FALSE,
                             verbose = TRUE) {
-
   effects <- match.arg(effects)
   component <- match.arg(component)
 
