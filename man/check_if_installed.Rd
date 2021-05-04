@@ -13,7 +13,7 @@ checked in any of the libraries}
 \item{stop}{Logical that decides whether the function should stop if the
 needed package is not installed.}
 
-\item{…}{Currently ignored}
+\item{...}{Currently ignored}
 }
 \description{
 Checking if needed package is installed

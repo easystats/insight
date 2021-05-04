@@ -4,7 +4,7 @@
 #'   checked in any of the libraries
 #' @param stop Logical that decides whether the function should stop if the
 #'   needed package is not installed.
-#' @param … Currently ignored
+#' @param ... Currently ignored
 #'
 #' @export
 
