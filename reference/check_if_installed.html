@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Format messages and warnings — format_message • insight</title>
+<title>Checking if needed package is installed — check_if_installed • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,10 +46,8 @@
 
 
 
-<meta property="og:title" content="Format messages and warnings — format_message" />
-<meta property="og:description" content="Inserts line breaks into a longer message or warning string.
-  Line length is adjusted to maximum length of the console, if the width
-  can be accessed. By default, new lines are indented by two whitespace." />
+<meta property="og:title" content="Checking if needed package is installed — check_if_installed" />
+<meta property="og:description" content="Checking if needed package is installed" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -67,8 +65,6 @@
 <![endif]-->
 
 
-
-<!-- dependencies from examples -->
 
 
   
@@ -141,61 +137,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Format messages and warnings</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/format_message.R'><code>R/format_message.R</code></a></small>
-    <div class="hidden name"><code>format_message.Rd</code></div>
+    <h1>Checking if needed package is installed</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/check_if_installed.R'><code>R/check_if_installed.R</code></a></small>
+    <div class="hidden name"><code>check_if_installed.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Inserts line breaks into a longer message or warning string.
-  Line length is adjusted to maximum length of the console, if the width
-  can be accessed. By default, new lines are indented by two whitespace.</p>
+    <p>Checking if needed package is installed</p>
     </div>
 
-    <pre class="usage"><span class='fu'>format_message</span><span class='op'>(</span><span class='va'>string</span>, <span class='va'>...</span>, line_length <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>width</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>check_if_installed</span><span class='op'>(</span><span class='va'>package</span>, stop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>string</th>
-      <td><p>A string.</p></td>
+      <th>package</th>
+      <td><p>A string naming the package, whose installation needs to be
+checked in any of the libraries</p></td>
+    </tr>
+    <tr>
+      <th>stop</th>
+      <td><p>Logical that decides whether the function should stop if the
+needed package is not installed.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further strings that will be concatenated as indented new lines.</p></td>
-    </tr>
-    <tr>
-      <th>line_length</th>
-      <td><p>Numeric, the maximum length of a line.</p></td>
+      <td><p>Currently ignored</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A formatted string.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>msg</span> <span class='op'>&lt;-</span> <span class='fu'>format_message</span><span class='op'>(</span><span class='st'>"Much too long string for just one line, I guess!"</span>,
-  line_length <span class='op'>=</span> <span class='fl'>15</span>
-<span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span><span class='op'>(</span><span class='va'>msg</span><span class='op'>)</span>
-</div><div class='co'>#&gt; Much too long
-#&gt;   string for just
-#&gt;   one line, I
-#&gt;   guess!</div><div class='input'>
-<span class='va'>msg</span> <span class='op'>&lt;-</span> <span class='fu'>format_message</span><span class='op'>(</span><span class='st'>"Much too long string for just one line, I guess!"</span>,
-  <span class='st'>"First new line"</span>,
-  <span class='st'>"Second new line"</span>,
-  <span class='st'>"(both indented)"</span>,
-  line_length <span class='op'>=</span> <span class='fl'>30</span>
-<span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span><span class='op'>(</span><span class='va'>msg</span><span class='op'>)</span>
-</div><div class='co'>#&gt; Much too long string for just
-#&gt;   one line, I guess!
-#&gt;   First new line
-#&gt;   Second new line
-#&gt;   (both indented)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
