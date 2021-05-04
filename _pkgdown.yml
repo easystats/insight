@@ -129,6 +129,7 @@ reference:
   - print_parameters
   - reshape_ci
   - standardize_names
+  - check_if_installed
 
 - title: "Example Datasets"
   desc: >
