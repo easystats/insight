@@ -16,6 +16,8 @@
 
 * `format_string()` to shorten a string to a maximum length.
 
+* `check_if_installed()` to see if the needed package is installed.
+
 ## New supported model classes
 
 * Support for `mvord` (*mvord*), `SemiParBIV` (*GJRM*), 
