@@ -9,15 +9,15 @@
 #' @export
 
 check_if_installed <- function(package, stop = TRUE, ...) {
-  # prepare the message
-  message <- cat(
-    "Package '", package, "' is required for this function to work.\n",
-    "Please install it by running install.packages('", package, "').",
-    sep = ""
-  )
-
   # does it need to be displayed?
   if (!requireNamespace(package, quietly = TRUE)) {
+    # prepare the message
+    message <- cat(
+      "Package '", package, "' is required for this function to work.\n",
+      "Please install it by running install.packages('", package, "').",
+      sep = ""
+    )
+
     if (stop) stop(message(message), call. = FALSE) else message(message)
   }
 }
