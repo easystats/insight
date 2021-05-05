@@ -256,14 +256,15 @@ errors is returned.</p></td>
   statistic.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='co'>#&gt;     Parameter  Statistic
-#&gt; 1 (Intercept) 11.3994647
-#&gt; 2          wt -4.1204121
-#&gt; 3         cyl -2.2234114
-#&gt; 4          vs  0.3221477</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>get_statistic</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Parameter  Statistic</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 (Intercept) 11.3994647</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2          wt -4.1204121</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3         cyl -2.2234114</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4          vs  0.3221477</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

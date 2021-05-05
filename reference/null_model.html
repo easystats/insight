@@ -174,32 +174,33 @@
     <p>The null-model of <code>x</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sleepstudy</span><span class='op'>)</span>
-  <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>Days</span> <span class='op'>|</span> <span class='va'>Subject</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sleepstudy</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>null_model</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='co'>#&gt; Linear mixed model fit by REML ['lmerMod']
-#&gt; Formula: Reaction ~ (1 + Days | Subject)
-#&gt;    Data: sleepstudy
-#&gt; 
-#&gt; REML criterion at convergence: 1769.8
-#&gt; 
-#&gt; Scaled residuals: 
-#&gt;     Min      1Q  Median      3Q     Max 
-#&gt; -4.0449 -0.4486  0.0089  0.4819  5.2186 
-#&gt; 
-#&gt; Random effects:
-#&gt;  Groups   Name        Variance Std.Dev. Corr 
-#&gt;  Subject  (Intercept) 651.6    25.53         
-#&gt;           Days        142.2    11.93    -0.18
-#&gt;  Residual             654.9    25.59         
-#&gt; Number of obs: 180, groups:  Subject, 18
-#&gt; 
-#&gt; Fixed effects:
-#&gt;             Estimate Std. Error t value
-#&gt; (Intercept)   257.76       6.76   38.13</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sleepstudy</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>Days</span> <span class='op'>|</span> <span class='va'>Subject</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sleepstudy</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>null_model</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Linear mixed model fit by REML ['lmerMod']</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Formula: Reaction ~ (1 + Days | Subject)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Data: sleepstudy</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> REML criterion at convergence: 1769.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Scaled residuals: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Min      1Q  Median      3Q     Max </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -4.0449 -0.4486  0.0089  0.4819  5.2186 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Random effects:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Groups   Name        Variance Std.Dev. Corr </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Subject  (Intercept) 651.6    25.53         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Days        142.2    11.93    -0.18</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Residual             654.9    25.59         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of obs: 180, groups:  Subject, 18</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fixed effects:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Estimate Std. Error t value</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> (Intercept)   257.76       6.76   38.13</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

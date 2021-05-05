@@ -183,14 +183,16 @@ a <em>maximum</em> length of <code>length</code>, but might be shorter.</p></td>
     <p>A formatted string.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>s</span> <span class='op'>&lt;-</span> <span class='st'>"This can be considered as very long string!"</span>
-<span class='co'># string is shorter than max.length, so returned as is</span>
-<span class='fu'>format_string</span><span class='op'>(</span><span class='va'>s</span>, <span class='fl'>60</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] "This can be considered as very long string!"</div><div class='input'>
-<span class='co'># string is shortened to as many words that result in</span>
-<span class='co'># a string of maximum 20 chars</span>
-<span class='fu'>format_string</span><span class='op'>(</span><span class='va'>s</span>, <span class='fl'>20</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] "This can be..."</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>s</span> <span class='op'>&lt;-</span> <span class='st'>"This can be considered as very long string!"</span></span>
+<span class='r-in'><span class='co'># string is shorter than max.length, so returned as is</span></span>
+<span class='r-in'><span class='fu'>format_string</span><span class='op'>(</span><span class='va'>s</span>, <span class='fl'>60</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "This can be considered as very long string!"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># string is shortened to as many words that result in</span></span>
+<span class='r-in'><span class='co'># a string of maximum 20 chars</span></span>
+<span class='r-in'><span class='fu'>format_string</span><span class='op'>(</span><span class='va'>s</span>, <span class='fl'>20</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "This can be..."</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -258,14 +258,15 @@ applies to models of class <code>mixor</code>.</p></td>
   in case of a negative variance-covariance matrix.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>get_varcov</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='co'>#&gt;             (Intercept)         wt        cyl         vs
-#&gt; (Intercept)   11.552774  0.1680680 -1.5843752 -4.7487893
-#&gt; wt             0.168068  0.6207461 -0.3301421 -0.2797924
-#&gt; cyl           -1.584375 -0.3301421  0.3764045  0.7257641
-#&gt; vs            -4.748789 -0.2797924  0.7257641  2.6475113</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>get_varcov</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             (Intercept)         wt        cyl         vs</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> (Intercept)   11.552774  0.1680680 -1.5843752 -4.7487893</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> wt             0.168068  0.6207461 -0.3301421 -0.2797924</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl           -1.584375 -0.3301421  0.3764045  0.7257641</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> vs            -4.748789 -0.2797924  0.7257641  2.6475113</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
