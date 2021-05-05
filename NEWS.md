@@ -68,6 +68,9 @@
 
 * Fixed issue in `find_response()` for *brmsfit* models that used the
   `resp_thres()` function in the model formula.
+  
+* Argument `zap_small` in `format_value()` did not work properly over 
+  vectorized vectors.
 
 # insight 0.13.2
 

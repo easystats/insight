@@ -106,12 +106,15 @@ format_value.logical <- format_value.numeric
 
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
-      need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits) & !.zap_small) & x != 0
-      x <- ifelse(is.na(x), .missing,
-        ifelse(need_sci, sprintf("%.*e%%", digits, 100 * x),
-          sprintf("%.*f%%", digits, 100 * x)
-        )
-      )
+      need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0
+      if (.zap_small) {
+        x <- ifelse(is.na(x), .missing, sprintf("%.*f%%", digits, 100 * x))
+      } else {
+        x <- ifelse(is.na(x), .missing,
+               ifelse(need_sci,
+                      sprintf("%.*e%%", digits, 100 * x),
+                      sprintf("%.*f%%", digits, 100 * x)))
+      }
     } else {
       if (is.character(digits) && grepl("^scientific", digits)) {
         digits <- tryCatch(
@@ -127,12 +130,15 @@ format_value.logical <- format_value.numeric
         }
         x <- sprintf("%.*e", digits, x)
       } else {
-        need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits) & !.zap_small) & x != 0
-        x <- ifelse(is.na(x), .missing,
-          ifelse(need_sci, sprintf("%.*e", digits, x),
-            sprintf("%.*f", digits, x)
-          )
-        )
+        need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits)) & x != 0
+        if (.zap_small) {
+          x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
+        } else {
+          x <- ifelse(is.na(x), .missing,
+                 ifelse(need_sci,
+                        sprintf("%.*e", digits, x),
+                        sprintf("%.*f", digits, x)))
+        }
       }
     }
   } else if (anyNA(x)) {
