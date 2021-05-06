@@ -203,6 +203,12 @@ get_predicted_ci <- function(x,
     }
     mm <- get_modelmatrix(model_terms, data = data)
   }
+
+  # fix rank deficiency
+  if (ncol(vcovmat) < ncol(mm)) {
+    mm <- mm[, intersect(colnames(mm), colnames(vcovmat))]
+  }
+
   mm
 }
 

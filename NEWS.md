@@ -69,6 +69,9 @@
 * Fixed issue in `find_response()` for *brmsfit* models that used the
   `resp_thres()` function in the model formula.
   
+* Fixed issue in `get_predicted_ci()` for models with rank-deficient 
+  model matrix.
+  
 * Argument `zap_small` in `format_value()` did not work properly over 
   vectorized vectors.
 
