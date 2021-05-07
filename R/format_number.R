@@ -1,6 +1,7 @@
 #' Convert number to words
 #'
-#' Convert number to words. The code has been adapted from here https://github.com/ateucher/useful_code/blob/master/R/numbers2words.r
+#' @note
+#' The code has been adapted from here https://github.com/ateucher/useful_code/blob/master/R/numbers2words.r
 #'
 #' @param x Number.
 #' @param textual Return words. If \code{FALSE}, will run \code{\link{format_value}}.
@@ -20,8 +21,6 @@ format_number <- function(x, textual = TRUE, ...) {
     format_value(x, ...)
   }
 }
-
-
 
 
 

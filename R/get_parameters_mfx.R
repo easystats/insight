@@ -16,7 +16,9 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
 #' @export
-get_parameters.betamfx <- function(x, component = c("all", "conditional", "precision", "marginal"), ...) {
+get_parameters.betamfx <- function(x,
+                                   component = c("all", "conditional", "precision", "marginal"),
+                                   ...) {
   component <- match.arg(component)
   params <- get_parameters.betareg(x$fit, component = "all", ...)
   mfx <- x$mfxest

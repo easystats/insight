@@ -1,12 +1,14 @@
 #' String Values Formatting
 #'
 #' @param x String value.
-#' @param length Numeric, maximum length of the returned string. If not \code{NULL},
-#'   will shorten the string to a maximum \code{length}, however, it will not
-#'   truncate inside words. I.e. if the string length happens to be inside a word,
-#'   this word is removed from the returned string, so the returned string has
-#'   a \emph{maximum} length of \code{length}, but might be shorter.
-#' @param abbreviate String that will be used as suffix, if \code{x} was shortened.
+#' @param length Numeric, maximum length of the returned string. If not
+#'   \code{NULL}, will shorten the string to a maximum \code{length}, however,
+#'   it will not truncate inside words. I.e. if the string length happens to be
+#'   inside a word, this word is removed from the returned string, so the
+#'   returned string has a \emph{maximum} length of \code{length}, but might be
+#'   shorter.
+#' @param abbreviate String that will be used as suffix, if \code{x} was
+#'   shortened.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return A formatted string.
@@ -33,7 +35,13 @@ format_string.default <- function(x, ...) {
 
 #' @export
 format_string.data.frame <- function(x, length = NULL, abbreviate = "...", ...) {
-  as.data.frame(sapply(x, format_string, length = length, abbreviate = abbreviate, simplify = FALSE))
+  as.data.frame(sapply(
+    x,
+    format_string,
+    length = length,
+    abbreviate = abbreviate,
+    simplify = FALSE
+  ))
 }
 
 

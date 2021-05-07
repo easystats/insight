@@ -26,11 +26,19 @@ format_ci(
 
 \item{digits}{Number of significant digits.}
 
-\item{brackets}{Either a logical, and if \code{TRUE} (default), values are encompassed in square brackets. If \code{FALSE} or \code{NULL}, no brackets are used. Else, a character vector of length two, indicating the opening and closing brackets.}
+\item{brackets}{Either a logical, and if \code{TRUE} (default), values are
+encompassed in square brackets. If \code{FALSE} or \code{NULL}, no brackets
+are used. Else, a character vector of length two, indicating the opening
+and closing brackets.}
 
-\item{width}{Minimum width of the returned string. If not \code{NULL} and \code{width} is larger than the string's length, leading whitespaces are added to the string. If \code{width="auto"}, width will be set to the length of the longest string.}
+\item{width}{Minimum width of the returned string. If not \code{NULL} and
+\code{width} is larger than the string's length, leading whitespaces are
+added to the string. If \code{width="auto"}, width will be set to the
+length of the longest string.}
 
-\item{width_low, width_high}{Like \code{width}, but only applies to the lower or higher confidence interval value. This can be used when the values for the lower and upper CI are of very different length.}
+\item{width_low, width_high}{Like \code{width}, but only applies to the lower
+or higher confidence interval value. This can be used when the values for
+the lower and upper CI are of very different length.}
 
 \item{missing}{Value by which \code{NA} values are replaced. By default, an
 empty string (i.e. \code{""}) is returned for \code{NA}.}

@@ -9,9 +9,6 @@ print.get_predicted <- function(x, ...) {
 
 
 
-
-
-
 .print_bigdata <- function(x, nrows = 3, ncols = 3, ...) {
   out <- x[1:nrows, 1:ncols]
 
@@ -31,11 +28,7 @@ print.get_predicted <- function(x, ...) {
 
 
 
-
-
 # As data frame -----------------------------------------------------------
-
-
 
 #' @export
 as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
@@ -56,8 +49,6 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
 summary.get_predicted <- function(object, ...) {
   as.data.frame(object, keep_iterations = FALSE, ...)
 }
-
-
 
 
 

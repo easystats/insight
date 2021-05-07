@@ -76,7 +76,10 @@ get_varcov.mlm <- function(x, ...) {
 
 #' @rdname get_varcov
 #' @export
-get_varcov.betareg <- function(x, component = c("conditional", "precision", "all"), verbose = TRUE, ...) {
+get_varcov.betareg <- function(x,
+                               component = c("conditional", "precision", "all"),
+                               verbose = TRUE,
+                               ...) {
   component <- match.arg(component)
 
   vc <- switch(component,
@@ -90,7 +93,10 @@ get_varcov.betareg <- function(x, component = c("conditional", "precision", "all
 
 #' @rdname get_varcov
 #' @export
-get_varcov.DirichletRegModel <- function(x, component = c("conditional", "precision", "all"), verbose = TRUE, ...) {
+get_varcov.DirichletRegModel <- function(x,
+                                         component = c("conditional", "precision", "all"),
+                                         verbose = TRUE,
+                                         ...) {
   component <- match.arg(component)
   if (x$parametrization == "common") {
     vc <- stats::vcov(x)
@@ -253,7 +259,9 @@ get_varcov.gamlss <- function(x, component = c("conditional", "all"), ...) {
 
 #' @rdname get_varcov
 #' @export
-get_varcov.hurdle <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
+get_varcov.hurdle <- function(x,
+                              component = c("conditional", "zero_inflated", "zi", "all"),
+                              ...) {
   component <- match.arg(component)
 
   vc <- switch(component,
@@ -273,7 +281,9 @@ get_varcov.zerocount <- get_varcov.hurdle
 
 #' @rdname get_varcov
 #' @export
-get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
+get_varcov.zcpglm <- function(x,
+                              component = c("conditional", "zero_inflated", "zi", "all"),
+                              ...) {
   component <- match.arg(component)
 
   # installed?
@@ -294,16 +304,14 @@ get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "
 
 
 
-
-
-
-
 # Zero-Inflated mixed models ------------------------------------------------
 
 
 #' @rdname get_varcov
 #' @export
-get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
+get_varcov.MixMod <- function(x,
+                              component = c("conditional", "zero_inflated", "zi", "all"),
+                              ...) {
   component <- match.arg(component)
 
   vc <- switch(component,
@@ -318,7 +326,9 @@ get_varcov.MixMod <- function(x, component = c("conditional", "zero_inflated", "
 
 #' @rdname get_varcov
 #' @export
-get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", "zi", "dispersion", "all"), ...) {
+get_varcov.glmmTMB <- function(x,
+                               component = c("conditional", "zero_inflated", "zi", "dispersion", "all"),
+                               ...) {
   component <- match.arg(component)
 
   vc <- switch(component,
@@ -330,9 +340,6 @@ get_varcov.glmmTMB <- function(x, component = c("conditional", "zero_inflated", 
   )
   .process_vcov(vc)
 }
-
-
-
 
 
 
@@ -351,16 +358,14 @@ get_varcov.brmsfit <- function(x, component = "conditional", ...) {
 }
 
 
-
-
-
-
 # mfx models -------------------------------------------------------
 
 
 #' @rdname get_varcov
 #' @export
-get_varcov.betamfx <- function(x, component = c("conditional", "precision", "all"), ...) {
+get_varcov.betamfx <- function(x,
+                               component = c("conditional", "precision", "all"),
+                               ...) {
   component <- match.arg(component)
   get_varcov.betareg(x$fit, component = component, ...)
 }
@@ -393,10 +398,6 @@ get_varcov.negbinirr <- get_varcov.logitmfx
 
 #' @export
 get_varcov.model_fit <- get_varcov.logitmfx
-
-
-
-
 
 
 # Other models with special handling -----------------------------------------
@@ -716,10 +717,6 @@ get_varcov.gee <- function(x, ...) {
 
 #' @export
 get_varcov.LORgee <- get_varcov.gee
-
-
-
-
 
 
 

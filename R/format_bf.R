@@ -18,8 +18,13 @@
 #' format_bf(bfs, protect_ratio = TRUE, exact = TRUE)
 #' format_bf(bfs, na_reference = 1)
 #' @export
-format_bf <- function(bf, stars = FALSE, stars_only = FALSE, name = "BF",
-                      protect_ratio = FALSE, na_reference = NA, exact = FALSE) {
+format_bf <- function(bf,
+                      stars = FALSE,
+                      stars_only = FALSE,
+                      name = "BF",
+                      protect_ratio = FALSE,
+                      na_reference = NA,
+                      exact = FALSE) {
   if (!is.na(na_reference)) {
     bf[is.na(bf)] <- na_reference
   } else {

@@ -9,16 +9,17 @@
 #' @param verbose Toggle warnings and messages.
 #' @param ... Passed down to \code{residuals()}, if possible.
 #'
-#' @return The residuals, or \code{NULL} if this information could not be accessed.
+#' @return The residuals, or \code{NULL} if this information could not be
+#'   accessed.
 #'
 #' @note This function returns the default type of residuals, i.e. for the
-#' response from linear models, the deviance residuals for models of class
-#' \code{glm} etc. To access different types, pass down the \code{type} argument
-#' (see 'Examples').
+#'   response from linear models, the deviance residuals for models of class
+#'   \code{glm} etc. To access different types, pass down the \code{type}
+#'   argument (see 'Examples').
 #' \cr \cr
-#' This function is a robust alternative to \code{residuals()}, as it works
-#' for some special model objects that otherwise do not respond properly to
-#' calling \code{residuals()}.
+#' This function is a robust alternative to \code{residuals()}, as it works for
+#' some special model objects that otherwise do not respond properly to calling
+#' \code{residuals()}.
 #'
 #' @examples
 #' data(mtcars)
@@ -193,8 +194,19 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   w <- get_weights(x, null_as_ones = TRUE)
   tryCatch(
     {
-      res_resp <- as.vector(get_residuals(x, weighted = FALSE, type = "response", verbose = FALSE))
-      res_dev <- as.vector(get_residuals(x, weighted = FALSE, type = "deviance", verbose = FALSE))
+      res_resp <- as.vector(get_residuals(
+        x,
+        weighted = FALSE,
+        type = "response",
+        verbose = FALSE
+      ))
+
+      res_dev <- as.vector(get_residuals(
+        x,
+        weighted = FALSE,
+        type = "deviance",
+        verbose = FALSE
+      ))
 
       if (!is.null(w) && !is.null(res_dev) && !all(w == 1)) {
         if (!is.null(res_resp) && identical(res_resp, res_dev)) {
