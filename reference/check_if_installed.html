@@ -146,7 +146,12 @@
     <p>Checking if needed package is installed</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_if_installed</span><span class='op'>(</span><span class='va'>package</span>, stop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>check_if_installed</span><span class='op'>(</span>
+  <span class='va'>package</span>,
+  reason <span class='op'>=</span> <span class='st'>"for this function to work"</span>,
+  stop <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,6 +160,11 @@
       <th>package</th>
       <td><p>A string naming the package, whose installation needs to be
 checked in any of the libraries</p></td>
+    </tr>
+    <tr>
+      <th>reason</th>
+      <td><p>A phrase describing why the package is needed. The default is a
+generic description.</p></td>
     </tr>
     <tr>
       <th>stop</th>
