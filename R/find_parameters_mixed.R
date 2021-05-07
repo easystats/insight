@@ -41,9 +41,8 @@ find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), co
   effects <- match.arg(effects)
   component <- match.arg(component)
 
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' required for this function to work. Please install it.")
-  }
+  # installed
+  check_if_installed("lme4")
 
   # we extract random effects only when really necessary, to save
   # computational time. In particular model with large sample and
@@ -72,9 +71,8 @@ find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), co
 
 #' @export
 find_parameters.MixMod <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' required for this function to work. Please install it.")
-  }
+  # installed
+  check_if_installed("lme4")
 
   re.names <- dimnames(lme4::ranef(x))[[2]]
 
@@ -113,9 +111,8 @@ find_parameters.MixMod <- function(x, effects = c("all", "fixed", "random"), com
 
 #' @export
 find_parameters.nlmerMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' required for this function to work. Please install it.")
-  }
+  # installed
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
   startvectors <- .get_startvector_from_env(x)
@@ -143,9 +140,8 @@ find_parameters.nlmerMod <- function(x, effects = c("all", "fixed", "random"), f
 find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   effects <- match.arg(effects)
 
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' required for this function to work. Please install it.")
-  }
+  # installed
+  check_if_installed("lme4")
 
   # we extract random effects only when really necessary, to save
   # computational time. In particular model with large sample and
@@ -179,9 +175,8 @@ find_parameters.merModList <- function(x, effects = c("all", "fixed", "random"),
 find_parameters.HLfit <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
   effects <- match.arg(effects)
 
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' required for this function to work. Please install it.")
-  }
+  # installed
+  check_if_installed("lme4")
 
   # we extract random effects only when really necessary, to save
   # computational time. In particular model with large sample and
@@ -223,9 +218,8 @@ find_parameters.sem <- function(x, effects = c("all", "fixed", "random"), flatte
 
 #' @export
 find_parameters.cpglmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
-  if (!requireNamespace("cplm", quietly = TRUE)) {
-    stop("Package 'cplm' required for this function to work. Please install it.")
-  }
+  # installed
+  check_if_installed("cplm")
 
   effects <- match.arg(effects)
 
@@ -249,9 +243,8 @@ find_parameters.cpglmm <- function(x, effects = c("all", "fixed", "random"), fla
 
 #' @export
 find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' required for this function to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
 
@@ -271,9 +264,8 @@ find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flat
 
 #' @export
 find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' required for this function to work. Please install it.")
-  }
+  # installed
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
 
@@ -293,9 +285,8 @@ find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flat
 
 #' @export
 find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' required for this function to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
 

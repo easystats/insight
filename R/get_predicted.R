@@ -698,9 +698,9 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
 
   # Using bootMer
   if (inherits(x, "merMod")) {
-    if (!requireNamespace("lme4", quietly = TRUE)) {
-      stop("Package `lme4` needed for this function to work. Please install it.")
-    }
+    # installed
+    check_if_installed("lme4")
+
     draws <- lme4::bootMer(x, predict_function, nsim = iterations, use.u = TRUE, ...)
 
     # Using boot

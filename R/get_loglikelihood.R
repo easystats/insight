@@ -175,9 +175,8 @@ get_loglikelihood.list <- get_loglikelihood.lm
 
 #' @export
 get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
-  if (!requireNamespace("rstanarm", quietly = TRUE)) {
-    stop("Package 'rstanarm' required. Please install it by running `install.packages('rstanarm')`.")
-  }
+  # installed?
+  check_if_installed("rstanarm")
 
   # Get posterior distribution of logliks
   mat <- rstanarm::log_lik(x)

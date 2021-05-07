@@ -206,10 +206,9 @@ n_parameters.stanmvreg <- n_parameters.stanreg
 
 #' @export
 n_parameters.lavaan <- function(x, ...) {
-  length(stats::coef(x))
-  # if (!requireNamespace("lavaan", quietly = TRUE)) {
-  #   stop("Package 'lavaan' required for this function to work. Please install it by running `install.packages('lavaan')`.")
-  # }
+  # TODO
+  # installed?
+  # check_if_installed("lavaan")
   # lavaan::fitmeasures(x)[["npar"]]
 }
 

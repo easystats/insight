@@ -1068,9 +1068,8 @@ model_info.svy_vglm <- function(x, ...) {
 
 #' @export
 model_info.glmmTMB <- function(x, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
+  # installed?
+  check_if_installed("lme4")
 
   faminfo <- stats::family(x)
   .make_family(

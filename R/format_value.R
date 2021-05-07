@@ -111,9 +111,11 @@ format_value.logical <- format_value.numeric
         x <- ifelse(is.na(x), .missing, sprintf("%.*f%%", digits, 100 * x))
       } else {
         x <- ifelse(is.na(x), .missing,
-               ifelse(need_sci,
-                      sprintf("%.*e%%", digits, 100 * x),
-                      sprintf("%.*f%%", digits, 100 * x)))
+          ifelse(need_sci,
+            sprintf("%.*e%%", digits, 100 * x),
+            sprintf("%.*f%%", digits, 100 * x)
+          )
+        )
       }
     } else {
       if (is.character(digits) && grepl("^scientific", digits)) {
@@ -135,9 +137,11 @@ format_value.logical <- format_value.numeric
           x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
         } else {
           x <- ifelse(is.na(x), .missing,
-                 ifelse(need_sci,
-                        sprintf("%.*e", digits, x),
-                        sprintf("%.*f", digits, x)))
+            ifelse(need_sci,
+              sprintf("%.*e", digits, x),
+              sprintf("%.*f", digits, x)
+            )
+          )
         }
       }
     }

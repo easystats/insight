@@ -400,9 +400,8 @@ link_function.mipo <- function(x, ...) {
 
 #' @export
 link_function.mira <- function(x, ...) {
-  if (!requireNamespace("mice", quietly = TRUE)) {
-    stop("Package `mice` required. Please install it.", call. = FALSE)
-  }
+  # installed?
+  check_if_installed("mice")
   link_function(mice::pool(x), ...)
 }
 

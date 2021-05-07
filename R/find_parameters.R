@@ -190,9 +190,8 @@ find_parameters.brmultinom <- find_parameters.multinom
 
 #' @export
 find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
-  if (!requireNamespace("lavaan", quietly = TRUE)) {
-    stop("Package 'lavaan' required for this function to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("lavaan")
 
   param_tab <- lavaan::parameterEstimates(x)
   params <- paste0(param_tab$lhs, param_tab$op, param_tab$rhs)
@@ -240,9 +239,8 @@ find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
-  if (!requireNamespace("lavaan", quietly = TRUE)) {
-    stop("Package 'lavaan' required for this function to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("lavaan")
 
   pars <- get_parameters(x)
   pars$Component <- factor(pars$Component, levels = unique(pars$Component))
@@ -448,9 +446,9 @@ find_parameters.survreg <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.mle2 <- function(x, flatten = FALSE, ...) {
-  if (!requireNamespace("bbmle", quietly = TRUE)) {
-    stop("Package `bbmle` needs to be installed to extract parameter names.", call. = FALSE)
-  }
+  # installed?
+  check_if_installed("bbmle")
+
   s <- bbmle::summary(x)
   out <- list(conditional = rownames(s@coef))
 

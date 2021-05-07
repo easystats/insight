@@ -100,12 +100,8 @@ get_parameters.emm_list <- function(x, summary = FALSE, ...) {
 
 
 .clean_emmeans_draws <- function(x, ...) {
-  if (!requireNamespace("emmeans", quietly = TRUE)) {
-    stop(
-      "Package 'emmeans' required for this function to work.\n",
-      "Please install it by running `install.packages('emmeans')`."
-    )
-  }
+  # installed?
+  check_if_installed("emmeans")
 
   if (!is.null(attributes(x)$misc$predict.type) && attributes(x)$misc$predict.type != "none") {
     x <- emmeans::regrid(x, transform = attributes(x)$misc$predict.type, ...)

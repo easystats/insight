@@ -47,9 +47,8 @@ get_parameters.BGGM <- function(x,
                                 component = c("correlation", "conditional", "intercept", "all"),
                                 summary = FALSE, centrality = "mean",
                                 ...) {
-  if (!requireNamespace("BGGM", quietly = TRUE)) {
-    stop("Package 'BGGM' required for this function to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("BGGM")
 
   out <- as.data.frame(BGGM::posterior_samples(x))
   intercepts <- grepl("_\\(Intercept\\)$", colnames(out))
@@ -110,9 +109,8 @@ get_parameters.BFBayesFactor <- function(x,
                                          summary = FALSE,
                                          centrality = "mean",
                                          ...) {
-  if (!requireNamespace("BayesFactor", quietly = TRUE)) {
-    stop("This function requires package `BayesFactor` to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("BayesFactor")
 
   effects <- match.arg(effects)
   component <- match.arg(component)

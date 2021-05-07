@@ -48,9 +48,8 @@ get_parameters.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @rdname get_parameters.glmm
 #' @export
 get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
+  # installed?
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
 
@@ -116,9 +115,8 @@ get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
 
     .remove_backticks_from_parameter_names(out)
   } else {
-    if (!requireNamespace("lme4", quietly = TRUE)) {
-      stop("To use this function, please install package 'lme4'.")
-    }
+    # installed?
+    check_if_installed("lme4")
     lme4::ranef(x)
   }
 }
@@ -133,9 +131,8 @@ get_parameters.wbgee <- function(x, ...) {
 
 #' @export
 get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
+  # installed?
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
   startvectors <- .get_startvector_from_env(x)
@@ -180,9 +177,8 @@ get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
 #' @rdname get_parameters.glmm
 #' @export
 get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
+  # installed?
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
 
@@ -231,9 +227,8 @@ get_parameters.merModList <- function(x, ...) {
 
 #' @export
 get_parameters.HLfit <- function(x, effects = c("fixed", "random"), ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
+  # installed?
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
 
@@ -296,9 +291,8 @@ get_parameters.sem <- function(x, effects = c("fixed", "random"), ...) {
 
 #' @export
 get_parameters.cpglmm <- function(x, effects = c("fixed", "random"), ...) {
-  if (!requireNamespace("cplm", quietly = TRUE)) {
-    stop("To use this function, please install package 'cplm'.")
-  }
+  # installed?
+  check_if_installed("cplm")
 
   effects <- match.arg(effects)
 
@@ -328,9 +322,8 @@ get_parameters.cpglmm <- function(x, effects = c("fixed", "random"), ...) {
 
 #' @export
 get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
+  # installed?
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
 
@@ -362,9 +355,8 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
 get_parameters.MixMod <- function(x,
                                   effects = c("fixed", "random"),
                                   component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
+  # installed?
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
   component <- match.arg(component)
@@ -440,9 +432,8 @@ get_parameters.MixMod <- function(x,
 get_parameters.glmmTMB <- function(x,
                                    effects = c("fixed", "random"),
                                    component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("To use this function, please install package 'lme4'.")
-  }
+  # installed?
+  check_if_installed("lme4")
 
   effects <- match.arg(effects)
   component <- match.arg(component)

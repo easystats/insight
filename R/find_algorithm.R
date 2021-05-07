@@ -157,9 +157,8 @@ find_algorithm.speedlm <- function(x, ...) {
 
 #' @export
 find_algorithm.blavaan <- function(x, ...) {
-  if (!requireNamespace("blavaan", quietly = TRUE)) {
-    stop("Package 'blavaan' required for this function to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("blavaan")
 
   list(
     "chains" = blavaan::blavInspect(x, "n.chains"),

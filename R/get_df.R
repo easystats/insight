@@ -225,9 +225,8 @@ get_df.merModList <- function(x, type = "residual", ...) {
 
 #' @export
 get_df.mira <- function(x, type = "residual", ...) {
-  if (!requireNamespace("mice", quietly = TRUE)) {
-    stop("Package 'mice' needed for this function to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("mice")
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   get_df(mice::pool(x), type, ...)
 }

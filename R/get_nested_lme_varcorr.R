@@ -2,9 +2,8 @@
 # It retrieves the variance-covariance matrix of random effects
 # from nested lme-models.
 .get_nested_lme_varcorr <- function(x) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
+  # installed?
+  check_if_installed("lme4")
 
   vcor <- lme4::VarCorr(x)
   class(vcor) <- "matrix"

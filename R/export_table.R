@@ -498,9 +498,8 @@ export_table <- function(x,
 # html formatting ---------------------------
 
 .format_html_table <- function(final, caption = NULL, subtitle = NULL, footer = NULL, align = "center", group_by = NULL) {
-  if (!requireNamespace("gt", quietly = TRUE)) {
-    stop("Package 'gt' required to create HTML tables. Please install it.", call. = FALSE)
-  }
+  # installed?
+  check_if_installed("gt")
 
   if (is.null(align)) {
     align <- "firstleft"
