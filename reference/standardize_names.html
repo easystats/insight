@@ -47,9 +47,9 @@
 
 
 <meta property="og:title" content="Standardize column names — standardize_names" />
-<meta property="og:description" content="Standardize column names from data frames, in particular objects returned from
-model_parameters(), so column names are
-consistent and the same for any model object." />
+<meta property="og:description" content="Standardize column names from data frames, in particular objects returned
+from model_parameters(), so column
+names are consistent and the same for any model object." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -147,9 +147,9 @@ consistent and the same for any model object." />
     </div>
 
     <div class="ref-description">
-    <p>Standardize column names from data frames, in particular objects returned from
-<code><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>model_parameters()</a></code>, so column names are
-consistent and the same for any model object.</p>
+    <p>Standardize column names from data frames, in particular objects returned
+from <code><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>model_parameters()</a></code>, so column
+names are consistent and the same for any model object.</p>
     </div>
 
     <pre class="usage"><span class='fu'>standardize_names</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -207,11 +207,12 @@ or on <span class="pkg">broom</span>'s naming scheme.</p></td>
   kind of model was used in <code><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>model_parameters()</a></code>.
   <br /> <br />
   For <code>style = "broom"</code>, column names are renamed to match <span class="pkg">broom</span>'s
-  naming scheme, i.e. <code>Parameter</code> is renamed to <code>term</code>, <code>Coefficient</code>
-  becomes <code>estimate</code> and so on.
+  naming scheme, i.e. <code>Parameter</code> is renamed to <code>term</code>,
+  <code>Coefficient</code> becomes <code>estimate</code> and so on.
   <br /> <br />
-  For <code>style = "easystats"</code>, when <code>data</code> is an object from <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy()</a></code>,
-  column names are converted from "broom"-style into "easystats"-style.</p>
+  For <code>style = "easystats"</code>, when <code>data</code> is an object from
+  <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy()</a></code>, column names are converted from "broom"-style into
+  "easystats"-style.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/parameters/'>"parameters"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>

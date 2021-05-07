@@ -47,8 +47,15 @@
 
 
 <meta property="og:title" content="Get residual standard deviation from models — get_sigma" />
-<meta property="og:description" content="Returns sigma, which corresponds the estimated standard deviation of the residuals. This function extends the sigma() base R generic for models that don't have implemented it. It also computes the confidence interval (CI), which is stored as an attribute.
-Sigma is a key-component of regression models, and part of the so-called auxiliary parameters that are estimated. Indeed, linear models for instance assume that the residuals comes from a normal distribution with mean 0 and standard deviation sigma. See the details section below for more information about its interpretation and calculation." />
+<meta property="og:description" content="Returns sigma, which corresponds the estimated standard
+  deviation of the residuals. This function extends the sigma() base R
+  generic for models that don't have implemented it. It also computes the
+  confidence interval (CI), which is stored as an attribute.
+Sigma is a key-component of regression models, and part of the so-called
+auxiliary parameters that are estimated. Indeed, linear models for instance
+assume that the residuals comes from a normal distribution with mean 0 and
+standard deviation sigma. See the details section below for more
+information about its interpretation and calculation." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -146,8 +153,15 @@ Sigma is a key-component of regression models, and part of the so-called auxilia
     </div>
 
     <div class="ref-description">
-    <p>Returns <code>sigma</code>, which corresponds the estimated standard deviation of the residuals. This function extends the <code><a href='https://rdrr.io/pkg/lme4/man/sigma.html'>sigma()</a></code> base R generic for models that don't have implemented it. It also computes the confidence interval (CI), which is stored as an attribute.</p>
-<p>Sigma is a key-component of regression models, and part of the so-called auxiliary parameters that are estimated. Indeed, linear models for instance assume that the residuals comes from a normal distribution with mean 0 and standard deviation <code>sigma</code>. See the details section below for more information about its interpretation and calculation.</p>
+    <p>Returns <code>sigma</code>, which corresponds the estimated standard
+  deviation of the residuals. This function extends the <code><a href='https://rdrr.io/pkg/lme4/man/sigma.html'>sigma()</a></code> base R
+  generic for models that don't have implemented it. It also computes the
+  confidence interval (CI), which is stored as an attribute.</p>
+<p>Sigma is a key-component of regression models, and part of the so-called
+auxiliary parameters that are estimated. Indeed, linear models for instance
+assume that the residuals comes from a normal distribution with mean 0 and
+standard deviation <code>sigma</code>. See the details section below for more
+information about its interpretation and calculation.</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_sigma</span><span class='op'>(</span><span class='va'>x</span>, ci <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
@@ -171,7 +185,8 @@ Sigma is a key-component of regression models, and part of the so-called auxilia
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The residual standard deviation (sigma), or <code>NULL</code> if this information could not be accessed.</p>
+    <p>The residual standard deviation (sigma), or <code>NULL</code> if this
+  information could not be accessed.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
