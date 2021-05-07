@@ -229,10 +229,17 @@ find_parameters.brmsfit <- function(x,
   fe <- colnames(as.data.frame(x, optional = FALSE))
   is_mv <- NULL
 
+  # remove "Intercept"
+  fe <- fe[!grepl("^Intercept", fe)]
+
   cond <- fe[grepl("^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
   zi <- fe[grepl("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
   rand <- fe[grepl("(?!.*__zi)(?=.*^r_)", fe, perl = TRUE) & !grepl("^prior_", fe, perl = TRUE)]
   randzi <- fe[grepl("^r_(.*__zi)", fe, perl = TRUE)]
+  rand_sd <- fe[grepl("(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
+  randzi_sd <- fe[grepl("^sd_(.*_zi)", fe, perl = TRUE)]
+  rand_cor <- fe[grepl("(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
+  randzi_cor <- fe[grepl("^cor_(.*_zi)", fe, perl = TRUE)]
   simo <- fe[grepl("^simo_", fe, perl = TRUE)]
   smooth_terms <- fe[grepl("^sds_", fe, perl = TRUE)]
   priors <- fe[grepl("^prior_", fe, perl = TRUE)]
@@ -241,11 +248,14 @@ find_parameters.brmsfit <- function(x,
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
   shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
   dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
-  rand_sd <- fe[grepl("(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
-  randzi_sd <- fe[grepl("^sd_(.*_zi)", fe, perl = TRUE)]
-  rand_cor <- fe[grepl("(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
-  randzi_cor <- fe[grepl("^cor_(.*_zi)", fe, perl = TRUE)]
-  auxiliary <- fe[grepl("(shape|precision)", fe)]
+  auxiliary <- fe[grepl("(shape|precision|_ndt_)", fe)]
+
+  # if auxilliary is modelled directly, we need to remove duplicates here
+  # e.g. "b_sigma..." is in "cond" and in "sigma" now, we just need it in "cond".
+
+  sigma <- setdiff(sigma, c(cond, rand, rand_sd, rand_cor))
+  beta <- setdiff(beta, c(cond, rand, rand_sd, rand_cor))
+  auxiliary <- setdiff(auxiliary, c(cond, rand, rand_sd, rand_cor))
 
   l <- .compact_list(list(
     conditional = cond,
