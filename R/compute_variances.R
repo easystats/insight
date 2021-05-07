@@ -142,16 +142,21 @@
 # as list, since we need these information throughout the functions to
 # calculate the variance components...
 #
-.get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE, model_component = "conditional") {
-  # installed?
-  check_if_installed("lme4")
+.get_variance_information <- function(x,
+                                      faminfo,
+                                      name_fun = "get_variances",
+                                      verbose = TRUE,
+                                      model_component = "conditional") {
 
-  if (inherits(x, "lme") && !requireNamespace("nlme", quietly = TRUE)) {
-    stop("Package `nlme` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  # installed?
+  check_if_installed("lme4", reason = "to compute variances for mixed models")
+
+  if (inherits(x, "lme")) {
+    check_if_installed("nlme", reason = "to compute variances for mixed models")
   }
 
-  if (inherits(x, "rstanarm") && !requireNamespace("rstanarm", quietly = TRUE)) {
-    stop("Package `rstanarm` needs to be installed to compute variances for mixed models.", call. = FALSE)
+  if (inherits(x, "rstanarm")) {
+    check_if_installed("rstanarm", reason = "to compute variances for mixed models")
   }
 
   # stanreg

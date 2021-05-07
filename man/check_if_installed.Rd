@@ -4,11 +4,19 @@
 \alias{check_if_installed}
 \title{Checking if needed package is installed}
 \usage{
-check_if_installed(package, stop = TRUE, ...)
+check_if_installed(
+  package,
+  reason = "for this function to work",
+  stop = TRUE,
+  ...
+)
 }
 \arguments{
 \item{package}{A string naming the package, whose installation needs to be
 checked in any of the libraries}
+
+\item{reason}{A phrase describing why the package is needed. The default is a
+generic description.}
 
 \item{stop}{Logical that decides whether the function should stop if the
 needed package is not installed.}
