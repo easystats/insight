@@ -60,6 +60,9 @@
 * Fixed issue in `find_formula()` for `gamlss` models with `random()` function
   in formula.
 
+* Fixed issue with `find_parameters()` for *brmsfit* models when auxiliary
+  parameters are directly modelled.
+
 * Fixed issue with `get_parameters()` and `find_parameters()` for 
   multi-group *blavaan* models.
 
