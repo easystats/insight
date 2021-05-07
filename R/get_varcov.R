@@ -276,9 +276,8 @@ get_varcov.zerocount <- get_varcov.hurdle
 get_varcov.zcpglm <- function(x, component = c("conditional", "zero_inflated", "zi", "all"), ...) {
   component <- match.arg(component)
 
-  if (!requireNamespace("cplm", quietly = TRUE)) {
-    stop("To use this function, please install package 'cplm'.")
-  }
+  # installed?
+  check_if_installed("cplm")
 
   vc <- cplm::vcov(x)
   tweedie <- which(grepl("^tw_", rownames(vc)))
@@ -652,19 +651,19 @@ get_varcov.feis <- function(x, ...) {
 
 #' @export
 get_varcov.glimML <- function(x, ...) {
-  if (!requireNamespace("aod", quietly = TRUE)) {
-    stop("Package 'aod' required for this function to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("aod")
+
   vc <- aod::vcov(x)
+
   .process_vcov(vc)
 }
 
 
 #' @export
 get_varcov.vglm <- function(x, ...) {
-  if (!requireNamespace("VGAM", quietly = TRUE)) {
-    stop("Package 'VGAM' required for this function to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("VGAM")
   vc <- VGAM::vcov(x)
   .process_vcov(vc)
 }

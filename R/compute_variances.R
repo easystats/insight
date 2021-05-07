@@ -143,9 +143,8 @@
 # calculate the variance components...
 #
 .get_variance_information <- function(x, faminfo, name_fun = "get_variances", verbose = TRUE, model_component = "conditional") {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
+  # installed?
+  check_if_installed("lme4")
 
   if (inherits(x, "lme") && !requireNamespace("nlme", quietly = TRUE)) {
     stop("Package `nlme` needs to be installed to compute variances for mixed models.", call. = FALSE)
@@ -303,9 +302,9 @@
 
     # cpglmm
   } else if (inherits(x, "cpglmm")) {
-    if (!requireNamespace("cplm", quietly = TRUE)) {
-      stop("Package 'cplm' required. Please install it.")
-    }
+    # installed?
+    check_if_installed("cplm")
+
     vals <- list(
       beta = cplm::fixef(x),
       X = cplm::model.matrix(x),
@@ -377,19 +376,11 @@
 
 
 
-
-
-
-
 # fixed effects variance ----
 
 .compute_variance_fixed <- function(vals) {
   with(vals, stats::var(as.vector(beta %*% t(X))))
 }
-
-
-
-
 
 
 
@@ -540,9 +531,8 @@
   # check if null-model could be computed
   if (!is.null(.null_model)) {
     if (inherits(.null_model, "cpglmm")) {
-      if (!requireNamespace("cplm", quietly = TRUE)) {
-        stop("Package 'cplm' required. Please install it.")
-      }
+      # installed?
+      check_if_installed("cplm")
       null_fixef <- unname(cplm::fixef(.null_model))
     } else {
       null_fixef <- unname(.collapse_cond(lme4::fixef(.null_model)))
@@ -557,8 +547,7 @@
       warning(format_message("Can't calculate model's distribution-specific variance. Results are not reliable."), call. = FALSE)
     }
     return(0)
-  }
-  else if (mu < 6) {
+  } else if (mu < 6) {
     if (verbose) {
       warning(format_message(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)), call. = FALSE)
     }
@@ -752,9 +741,8 @@
 # Get distribution-specific variance for general and
 # undefined families / link-functions
 .variance_family_default <- function(x, mu, verbose) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
+  # installed?
+  check_if_installed("lme4")
 
   tryCatch(
     {

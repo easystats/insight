@@ -49,15 +49,10 @@ get_modelmatrix.brmsfit <- function(x, ...) {
 
 #' @export
 get_modelmatrix.cpglmm <- function(x, ...) {
-  if (!requireNamespace("cplm", quietly = TRUE)) {
-    stop("Package 'cplm' required. Please install it.")
-  }
+  # installed?
+  check_if_installed("cplm")
   cplm::model.matrix(x, ...)
 }
-
-
-
-
 
 
 # helper ----------------
