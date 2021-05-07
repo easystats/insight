@@ -26,9 +26,8 @@ get_priors <- function(x, ...) {
 
 #' @export
 get_priors.stanreg <- function(x, verbose = TRUE, ...) {
-  if (!requireNamespace("rstanarm", quietly = TRUE)) {
-    stop("To use this function, please install package 'rstanarm'.")
-  }
+  # installed?
+  check_if_installed("rstanarm")
 
   ps <- rstanarm::prior_summary(x)
 
@@ -113,9 +112,9 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_priors.stanmvreg <- function(x, ...) {
-  if (!requireNamespace("rstanarm", quietly = TRUE)) {
-    stop("To use this function, please install package 'rstanarm'.")
-  }
+  # installed?
+  check_if_installed("rstanarm")
+
 
   ps <- rstanarm::prior_summary(x)
 
@@ -449,9 +448,9 @@ get_priors.BFBayesFactor <- function(x, ...) {
 
 #' @export
 get_priors.blavaan <- function(x, ...) {
-  if (!requireNamespace("lavaan", quietly = TRUE)) {
-    stop("Package 'lavaan' required for this function to work. Please install it.")
-  }
+  # installed?
+  check_if_installed("lavaan")
+
 
   PE <- lavaan::parameterEstimates(
     x,
