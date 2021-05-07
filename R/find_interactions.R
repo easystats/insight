@@ -29,9 +29,17 @@
 #' m <- lm(mpg ~ wt * cyl + vs * hp * gear + carb, data = mtcars)
 #' find_interactions(m)
 #' @export
-find_interactions <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"), flatten = FALSE) {
+find_interactions <- function(x,
+                              component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"),
+                              flatten = FALSE) {
   component <- match.arg(component)
-  .find_interactions(x, effects = "fixed", component, flatten, main_effects = FALSE)
+
+  .find_interactions(x,
+    effects = "fixed",
+    component,
+    flatten,
+    main_effects = FALSE
+  )
 }
 
 

@@ -1,8 +1,15 @@
 #' @title Get residual standard deviation from models
 #'
-#' @description Returns \code{sigma}, which corresponds the estimated standard deviation of the residuals. This function extends the \code{sigma()} base R generic for models that don't have implemented it. It also computes the confidence interval (CI), which is stored as an attribute.
+#' @description Returns \code{sigma}, which corresponds the estimated standard
+#'   deviation of the residuals. This function extends the \code{sigma()} base R
+#'   generic for models that don't have implemented it. It also computes the
+#'   confidence interval (CI), which is stored as an attribute.
 #'
-#' Sigma is a key-component of regression models, and part of the so-called auxiliary parameters that are estimated. Indeed, linear models for instance assume that the residuals comes from a normal distribution with mean 0 and standard deviation \code{sigma}. See the details section below for more information about its interpretation and calculation.
+#' Sigma is a key-component of regression models, and part of the so-called
+#' auxiliary parameters that are estimated. Indeed, linear models for instance
+#' assume that the residuals comes from a normal distribution with mean 0 and
+#' standard deviation \code{sigma}. See the details section below for more
+#' information about its interpretation and calculation.
 #'
 #' @name get_sigma
 #'
@@ -10,7 +17,8 @@
 #' @param ci Scalar, the CI level. The default (\code{NULL}) returns no CI.
 #' @inheritParams find_parameters
 #'
-#' @return The residual standard deviation (sigma), or \code{NULL} if this information could not be accessed.
+#' @return The residual standard deviation (sigma), or \code{NULL} if this
+#'   information could not be accessed.
 #'
 #' @details
 #'   \subsection{Interpretation of Sigma}{
@@ -208,10 +216,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   class(s) <- c("insight_aux", class(s))
   s
 }
-
-
-
-
 
 
 

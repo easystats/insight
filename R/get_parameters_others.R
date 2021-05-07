@@ -16,7 +16,9 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
 #' @export
-get_parameters.betareg <- function(x, component = c("all", "conditional", "precision", "location", "distributional", "auxiliary"), ...) {
+get_parameters.betareg <- function(x,
+                                   component = c("all", "conditional", "precision", "location", "distributional", "auxiliary"),
+                                   ...) {
   component <- match.arg(component)
   cf <- stats::coef(x)
 
@@ -39,7 +41,9 @@ get_parameters.betareg <- function(x, component = c("all", "conditional", "preci
 
 #' @rdname get_parameters.betareg
 #' @export
-get_parameters.DirichletRegModel <- function(x, component = c("all", "conditional", "precision", "location", "distributional", "auxiliary"), ...) {
+get_parameters.DirichletRegModel <- function(x,
+                                             component = c("all", "conditional", "precision", "location", "distributional", "auxiliary"),
+                                             ...) {
   component <- match.arg(component)
   cf <- stats::coef(x)
 
@@ -77,7 +81,9 @@ get_parameters.DirichletRegModel <- function(x, component = c("all", "conditiona
 
 #' @rdname get_parameters.betareg
 #' @export
-get_parameters.averaging <- function(x, component = c("conditional", "full"), ...) {
+get_parameters.averaging <- function(x,
+                                     component = c("conditional", "full"),
+                                     ...) {
   component <- match.arg(component)
   cf <- stats::coef(x, full = component == "full")
 
@@ -94,7 +100,9 @@ get_parameters.averaging <- function(x, component = c("conditional", "full"), ..
 
 #' @rdname get_parameters.betareg
 #' @export
-get_parameters.glmx <- function(x, component = c("all", "conditional", "extra", "location", "distributional", "auxiliary"), ...) {
+get_parameters.glmx <- function(x,
+                                component = c("all", "conditional", "extra", "location", "distributional", "auxiliary"),
+                                ...) {
   component <- match.arg(component)
   cf <- stats::coef(summary(x))
 
@@ -125,7 +133,9 @@ get_parameters.glmx <- function(x, component = c("all", "conditional", "extra", 
 
 #' @rdname get_parameters.betareg
 #' @export
-get_parameters.clm2 <- function(x, component = c("all", "conditional", "scale"), ...) {
+get_parameters.clm2 <- function(x,
+                                component = c("all", "conditional", "scale"),
+                                ...) {
   component <- match.arg(component)
 
   cf <- stats::coef(summary(x))
@@ -155,7 +165,9 @@ get_parameters.clmm2 <- get_parameters.clm2
 
 #' @rdname get_parameters.betareg
 #' @export
-get_parameters.mvord <- function(x, component = c("all", "conditional", "thresholds", "correlation"), ...) {
+get_parameters.mvord <- function(x,
+                                 component = c("all", "conditional", "thresholds", "correlation"),
+                                 ...) {
   component <- match.arg(component)
   junk <- utils::capture.output(s <- summary(x))
   # intercepts thresholds
@@ -209,7 +221,9 @@ get_parameters.mvord <- function(x, component = c("all", "conditional", "thresho
 
 #' @rdname get_parameters.betareg
 #' @export
-get_parameters.mjoint <- function(x, component = c("all", "conditional", "survival"), ...) {
+get_parameters.mjoint <- function(x,
+                                  component = c("all", "conditional", "survival"),
+                                  ...) {
   component <- match.arg(component)
   s <- summary(x)
 
