@@ -7,6 +7,8 @@
 #' @param colnames_to The name of the new column that will contain the column names.
 #' @param values_to The name of the new column that will contain the values of the pivotted variables.
 #' @param rows_to The name of the column that will contain the row-number from the original data. If \code{NULL}, will be removed.
+#' @param ... Additional arguments passed on to methods.
+#' @param names_to Same as \code{colnames_to}, is there for compatibility with \code{tidyr::pivot_longer()}.
 #'
 #'
 #' @examples
@@ -24,9 +26,12 @@
 #'
 #'
 #' @export
-data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL) {
+data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL, ..., names_to = colnames_to) {
 
   # Sanity checks
+  if(names_to != colnames_to) colnames_to <- names_to
+
+  # Select columns
   if(is.character(cols) && length(cols) == 1 && cols == "all") {
     cols <- names(data)
   }

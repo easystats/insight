@@ -9,7 +9,9 @@ data_to_long(
   cols = "all",
   colnames_to = "Name",
   values_to = "Value",
-  rows_to = NULL
+  rows_to = NULL,
+  ...,
+  names_to = colnames_to
 )
 }
 \arguments{
@@ -22,6 +24,10 @@ data_to_long(
 \item{values_to}{The name of the new column that will contain the values of the pivotted variables.}
 
 \item{rows_to}{The name of the column that will contain the row-number from the original data. If \code{NULL}, will be removed.}
+
+\item{...}{Additional arguments passed on to methods.}
+
+\item{names_to}{Same as \code{colnames_to}, is there for compatibility with \code{tidyr::pivot_longer()}.}
 }
 \description{
 This function "lengthens" data, increasing the number of rows and decreasing the number of columns. This is a dependency-free base-R equivalent of \code{tidyr::pivot_longer()}.
