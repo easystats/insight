@@ -28,18 +28,38 @@
 #' @export
 data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL, ..., names_to = colnames_to) {
 
-  # Sanity checks
-  if(names_to != colnames_to) colnames_to <- names_to
+  # Select columns ----------------
+  if(is.character(cols) && length(cols) == 1){
+    # If only one name
 
-  # Select columns
-  if(is.character(cols) && length(cols) == 1 && cols == "all") {
-    cols <- names(data)
+    if(cols == "all") {
+      # If all, take all
+      cols <- names(data)
+    } else {
+      # Surely, a regex
+      cols <- grep(cols, names(data), value = TRUE)
+    }
+
   }
 
+  # If numeric, surely the index of the cols
   if(is.numeric(cols)) {
     cols <- names(data)[cols]
   }
 
+
+  # Sanity checks ----------------
+  # Make sure all cols are in data
+  if(!all(cols %in% names(data))) {
+    stop("Some variables as selected by 'cols' are not present in the data.")
+  }
+
+  # Compatibility with tidyr
+  if(names_to != colnames_to) colnames_to <- names_to
+
+
+
+  # Reshaping ---------------------
   # Create Index column as needed by reshape
   data[["_Row"]] <- 1:nrow(data)
 
@@ -52,6 +72,7 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
                          direction = "long"
   )
 
+  # Cleaning --------------------------
   # Sort the dataframe (to match pivot_longer's output)
   long <- long[order(long[["_Row"]], long[[colnames_to]]), ]
 
@@ -62,9 +83,11 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
     names(long)[names(long) == "_Row"] <- rows_to
   }
 
-  # Clean
-  long[[colnames_to]] <- cols[long[[colnames_to]]]  # Re-insert col names as levels
-  row.names(long) <- NULL  # Reset row names
+  # Re-insert col names as levels
+  long[[colnames_to]] <- cols[long[[colnames_to]]]
+
+  # Reset row names
+  row.names(long) <- NULL
 
   long
 }
