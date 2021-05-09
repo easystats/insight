@@ -5,25 +5,38 @@
 #' @param data A data frame to pivot.
 #' @param cols A vector of column names or indices to pivot into longer format.
 #' @param colnames_to The name of the new column that will contain the column names.
-#' @param values_to The name of the new column that will contain the values of the pivotted variables.
+#' @param values_to The name of the new column that will contain the values of the pivoted variables.
 #' @param rows_to The name of the column that will contain the row-number from the original data. If \code{NULL}, will be removed.
+#' @param colnames_from The name of the column that contains the levels to be used as future columns
+#' @param values_from The name of the column that contains the values of the put in the columns.
+#' @param rows_from The name of the column that identifies the rows. If \code{NULL}, will use all the unique rows.
 #' @param ... Additional arguments passed on to methods.
 #' @param names_to Same as \code{colnames_to}, is there for compatibility with \code{tidyr::pivot_longer()}.
+#' @param sep The indicating a separating character in the variable names in the wide format.
 #'
 #'
 #' @examples
-#' data <- data.frame(replicate(5, rnorm(10)))
+#' wide_data <- data.frame(replicate(5, rnorm(10)))
 #'
-#' # Default behaviour (equivalent to tidyr::pivot_longer(data, cols = 1:5))
-#' data_to_long(data)
+#' # From wide to long
+#' # ------------------
+#' # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
+#' data_to_long(wide_data)
 #'
 #' # Customizing the names
-#' data_to_long(data,
+#' data_to_long(wide_data,
 #'              cols = c(1, 2),
 #'              colnames_to = "Column",
 #'              values_to = "Numbers",
 #'              rows_to = "Row")
 #'
+#' # From long to wide
+#' # -----------------
+#' long_data <- data_to_long(wide_data, rows_to = "Row_ID")  # Save row number
+#' data_to_wide(long_data,
+#'              colnames_from = "Name",
+#'              values_from = "Value",
+#'              rows_from = "Row_ID")
 #'
 #' @export
 data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL, ..., names_to = colnames_to) {
@@ -90,4 +103,35 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
   row.names(long) <- NULL
 
   long
+}
+
+
+
+#' @rdname data_to_long
+#' @export
+data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", rows_from = NULL, sep = "_") {
+
+
+  # If no other row identifier, create one
+  if(is.null(rows_from)) {
+    if(all(names(data) %in% c(values_from, colnames_from))) {
+      data[["_Rows"]] <- row.names(data)
+    }
+    data[["_Rows"]] <- apply(data[ , !names(data) %in% c(values_from, colnames_from), drop = FALSE ] , 1 , paste , collapse = "_")
+    rows_from <- "_Rows"
+  }
+
+  # Reshape
+  wide <- stats::reshape(data,
+                         v.names = values_from,
+                         idvar = rows_from,
+                         timevar = colnames_from,
+                         sep = sep,
+                         direction = "wide")
+
+  # Clean
+  if("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
+  row.names(wide) <- NULL  # Reset row names
+
+  wide
 }

@@ -2,6 +2,7 @@
 % Please edit documentation in R/data_to_long.R
 \name{data_to_long}
 \alias{data_to_long}
+\alias{data_to_wide}
 \title{Reshape (pivot) data from wide to long}
 \usage{
 data_to_long(
@@ -13,6 +14,14 @@ data_to_long(
   ...,
   names_to = colnames_to
 )
+
+data_to_wide(
+  data,
+  values_from = "Value",
+  colnames_from = "Name",
+  rows_from = NULL,
+  sep = "_"
+)
 }
 \arguments{
 \item{data}{A data frame to pivot.}
@@ -21,29 +30,46 @@ data_to_long(
 
 \item{colnames_to}{The name of the new column that will contain the column names.}
 
-\item{values_to}{The name of the new column that will contain the values of the pivotted variables.}
+\item{values_to}{The name of the new column that will contain the values of the pivoted variables.}
 
 \item{rows_to}{The name of the column that will contain the row-number from the original data. If \code{NULL}, will be removed.}
 
 \item{...}{Additional arguments passed on to methods.}
 
 \item{names_to}{Same as \code{colnames_to}, is there for compatibility with \code{tidyr::pivot_longer()}.}
+
+\item{values_from}{The name of the column that contains the values of the put in the columns.}
+
+\item{colnames_from}{The name of the column that contains the levels to be used as future columns}
+
+\item{rows_from}{The name of the column that identifies the rows. If \code{NULL}, will use all the unique rows.}
+
+\item{sep}{The indicating a separating character in the variable names in the wide format.}
 }
 \description{
 This function "lengthens" data, increasing the number of rows and decreasing the number of columns. This is a dependency-free base-R equivalent of \code{tidyr::pivot_longer()}.
 }
 \examples{
-data <- data.frame(replicate(5, rnorm(10)))
+wide_data <- data.frame(replicate(5, rnorm(10)))
 
-# Default behaviour (equivalent to tidyr::pivot_longer(data, cols = 1:5))
-data_to_long(data)
+# From wide to long
+# ------------------
+# Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
+data_to_long(wide_data)
 
 # Customizing the names
-data_to_long(data,
+data_to_long(wide_data,
              cols = c(1, 2),
              colnames_to = "Column",
              values_to = "Numbers",
              rows_to = "Row")
 
+# From long to wide
+# -----------------
+long_data <- data_to_long(wide_data, rows_to = "Row_ID")  # Save row number
+data_to_wide(long_data,
+             colnames_from = "Name",
+             values_from = "Value",
+             rows_from = "Row_ID")
 
 }
