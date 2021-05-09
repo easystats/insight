@@ -20,7 +20,9 @@ data_to_wide(
   values_from = "Value",
   colnames_from = "Name",
   rows_from = NULL,
-  sep = "_"
+  sep = "_",
+  ...,
+  names_from = colnames_from
 )
 }
 \arguments{
@@ -36,7 +38,7 @@ data_to_wide(
 
 \item{...}{Additional arguments passed on to methods.}
 
-\item{names_to}{Same as \code{colnames_to}, is there for compatibility with \code{tidyr::pivot_longer()}.}
+\item{names_to, names_from}{Same as \code{colnames_to}, is there for compatibility with \code{tidyr::pivot_longer()}.}
 
 \item{values_from}{The name of the column that contains the values of the put in the columns.}
 

@@ -11,7 +11,7 @@
 #' @param values_from The name of the column that contains the values of the put in the columns.
 #' @param rows_from The name of the column that identifies the rows. If \code{NULL}, will use all the unique rows.
 #' @param ... Additional arguments passed on to methods.
-#' @param names_to Same as \code{colnames_to}, is there for compatibility with \code{tidyr::pivot_longer()}.
+#' @param names_to,names_from Same as \code{colnames_to}, is there for compatibility with \code{tidyr::pivot_longer()}.
 #' @param sep The indicating a separating character in the variable names in the wide format.
 #'
 #'
@@ -109,8 +109,10 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
 
 #' @rdname data_to_long
 #' @export
-data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", rows_from = NULL, sep = "_") {
+data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", rows_from = NULL, sep = "_", ..., names_from = colnames_from) {
 
+  # Compatibility with tidyr
+  if(names_from != colnames_from) colnames_from <- names_from
 
   # If no other row identifier, create one
   if(is.null(rows_from)) {
