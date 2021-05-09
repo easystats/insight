@@ -74,4 +74,27 @@ data_to_wide(long_data,
              values_from = "Value",
              rows_from = "Row_ID")
 
+# Full example
+# ------------------
+if (require("psych")) {
+  data <- psych::bfi  # Wide format with one row per participant's personality test
+
+  # Pivot long format
+  long <- data_to_long(data,
+                       cols = "\\\\d",  # Select all columns that contain a digit
+                       colnames_to = "Item",
+                       values_to = "Score",
+                       rows_to = "Participant")
+
+  # Separate facet and question number
+  long$Facet <- gsub("\\\\d", "", long$Item)
+  long$Item <- gsub("[A-Z]", "", long$Item)
+  long$Item <- paste0("I", long$Item)
+
+  wide <- data_to_wide(long,
+                       colnames_from = "Item",
+                       values_from = "Score")
+   head(wide)
+}
+
 }

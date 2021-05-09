@@ -38,6 +38,29 @@
 #'              values_from = "Value",
 #'              rows_from = "Row_ID")
 #'
+#' # Full example
+#' # ------------------
+#' if (require("psych")) {
+#'   data <- psych::bfi  # Wide format with one row per participant's personality test
+#'
+#'   # Pivot long format
+#'   long <- data_to_long(data,
+#'                        cols = "\\d",  # Select all columns that contain a digit
+#'                        colnames_to = "Item",
+#'                        values_to = "Score",
+#'                        rows_to = "Participant")
+#'
+#'   # Separate facet and question number
+#'   long$Facet <- gsub("\\d", "", long$Item)
+#'   long$Item <- gsub("[A-Z]", "", long$Item)
+#'   long$Item <- paste0("I", long$Item)
+#'
+#'   wide <- data_to_wide(long,
+#'                        colnames_from = "Item",
+#'                        values_from = "Score")
+#'    head(wide)
+#' }
+#'
 #' @export
 data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL, ..., names_to = colnames_to) {
 
@@ -74,7 +97,7 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
-  data[["_Row"]] <- 1:nrow(data)
+  data[["_Row"]] <- as.numeric_ifnumeric(row.names(data))
 
   # Reshape
   long <- stats::reshape(data,
@@ -119,7 +142,7 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
     if(all(names(data) %in% c(values_from, colnames_from))) {
       data[["_Rows"]] <- row.names(data)
     }
-    data[["_Rows"]] <- apply(data[ , !names(data) %in% c(values_from, colnames_from), drop = FALSE ] , 1 , paste , collapse = "_")
+    data[["_Rows"]] <- apply(data[  , !names(data) %in% c(values_from, colnames_from), drop = FALSE ] , 1 , paste , collapse = "_")
     rows_from <- "_Rows"
   }
 

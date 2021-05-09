@@ -118,6 +118,7 @@ Suggests:
     performance,
     plm,
     pscl,
+    psych,
     quantreg,
     rmarkdown,
     rms,
