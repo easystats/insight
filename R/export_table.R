@@ -110,6 +110,8 @@ export_table <- function(x,
     }))
   }
 
+  # check for indention
+  indent_groups <- attributes(x)$indent_groups
 
   # single data frame
   if (is.data.frame(x)) {
@@ -145,7 +147,8 @@ export_table <- function(x,
       align = align,
       group_by = group_by,
       zap_small = zap_small,
-      empty_line = empty_line
+      empty_line = empty_line,
+      indent_groups = indent_groups
     )
   } else if (is.list(x)) {
 
@@ -189,7 +192,8 @@ export_table <- function(x,
         align = align,
         group_by = group_by,
         zap_small = zap_small,
-        empty_line = empty_line
+        empty_line = empty_line,
+        indent_groups = indent_groups
       )
     })
 
@@ -234,7 +238,22 @@ export_table <- function(x,
 # create matrix of raw table layout --------------------
 
 
-.export_table <- function(x, sep = " | ", header = "-", digits = 2, protect_integers = TRUE, missing = "", width = NULL, format = NULL, caption = NULL, subtitle = NULL, footer = NULL, align = NULL, group_by = NULL, zap_small = FALSE, empty_line = NULL) {
+.export_table <- function(x,
+                          sep = " | ",
+                          header = "-",
+                          digits = 2,
+                          protect_integers = TRUE,
+                          missing = "",
+                          width = NULL,
+                          format = NULL,
+                          caption = NULL,
+                          subtitle = NULL,
+                          footer = NULL,
+                          align = NULL,
+                          group_by = NULL,
+                          zap_small = FALSE,
+                          empty_line = NULL,
+                          indent_groups = NULL) {
   df <- as.data.frame(x)
 
   # round all numerics
@@ -279,9 +298,26 @@ export_table <- function(x,
     }
 
     if (format == "text") {
-      out <- .format_basic_table(final, header, sep, caption = caption, subtitle = subtitle, footer = footer, align = align, empty_line = empty_line)
+      out <- .format_basic_table(
+        final,
+        header,
+        sep,
+        caption = caption,
+        subtitle = subtitle,
+        footer = footer,
+        align = align,
+        empty_line = empty_line,
+        indent_groups = indent_groups
+      )
     } else if (format == "markdown") {
-      out <- .format_markdown_table(final, x, caption = caption, subtitle = subtitle, footer = footer, align = align)
+      out <- .format_markdown_table(
+        final,
+        x,
+        caption = caption,
+        subtitle = subtitle,
+        footer = footer,
+        align = align
+      )
     }
   }
 
@@ -296,7 +332,15 @@ export_table <- function(x,
 # plain text formatting ------------------------
 
 
-.format_basic_table <- function(final, header, sep, caption = NULL, subtitle = NULL, footer = NULL, align = NULL, empty_line = NULL) {
+.format_basic_table <- function(final,
+                                header,
+                                sep,
+                                caption = NULL,
+                                subtitle = NULL,
+                                footer = NULL,
+                                align = NULL,
+                                empty_line = NULL,
+                                indent_groups = NULL) {
 
   # align table, if requested
   if (!is.null(align) && length(align) == 1) {
