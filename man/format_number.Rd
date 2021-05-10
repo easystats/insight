@@ -17,7 +17,10 @@ format_number(x, textual = TRUE, ...)
 A formatted string.
 }
 \description{
-Convert number to words. The code has been adapted from here https://github.com/ateucher/useful_code/blob/master/R/numbers2words.r
+Convert number to words
+}
+\note{
+The code has been adapted from here https://github.com/ateucher/useful_code/blob/master/R/numbers2words.r
 }
 \examples{
 format_number(2)

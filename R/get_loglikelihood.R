@@ -1,13 +1,29 @@
 #' Log-Likelihood
 #'
-#' A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for \code{stats::logLik()} out of the box, as the returned object is of the same class (and it gives the same results by default).
+#' A robust function to compute the log-likelihood of a model, as well as
+#' individual log-likelihoods (for each observation) whenever possible. Can be
+#' used as a replacement for \code{stats::logLik()} out of the box, as the
+#' returned object is of the same class (and it gives the same results by
+#' default).
 #'
-#' @param estimator Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="ML"} (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased OLS estimator.
-#' @param REML Only for linear models. This argument is present for compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will overwrite the \code{estimator} argument and is thus equivalent to setting \code{estimator="REML"}. It will give the same results as \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods are not available under REML.
+#' @param estimator Corresponds to the different estimators for the standard
+#'   deviation of the errors. If \code{estimator="ML"} (default), the scaling is
+#'   done by n (the biased ML estimator), which is then equivalent to using
+#'   \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased
+#'   OLS estimator.
+#' @param REML Only for linear models. This argument is present for
+#'   compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will
+#'   overwrite the \code{estimator} argument and is thus equivalent to setting
+#'   \code{estimator="REML"}. It will give the same results as
+#'   \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods
+#'   are not available under REML.
 #' @param ... Passed down to \code{logLik()}, if possible.
 #' @inheritParams get_residuals
 #'
-#' @return An object of class \code{"logLik"}, also containing the log-likelihoods for each observation as a \code{per_observation} attribute  (\code{attributes(get_loglikelihood(x))$per_observation}) when possible. The code was partly inspired from the \CRANpkg{nonnest2} package.
+#' @return An object of class \code{"logLik"}, also containing the
+#'   log-likelihoods for each observation as a \code{per_observation} attribute
+#'   (\code{attributes(get_loglikelihood(x))$per_observation}) when possible.
+#'   The code was partly inspired from the \CRANpkg{nonnest2} package.
 #'
 #' @examples
 #' x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
@@ -46,7 +62,12 @@ get_loglikelihood.model_fit <- function(x, ...) {
 # https://stats.stackexchange.com/questions/322038/input-format-for-response-in-binomial-glm-in-r
 
 
-.get_loglikelihood_lm <- function(x, estimator = "ML", REML = FALSE, verbose = TRUE, ...) {
+.get_loglikelihood_lm <- function(x,
+                                  estimator = "ML",
+                                  REML = FALSE,
+                                  verbose = TRUE,
+                                  ...) {
+
 
   # Replace arg if compatibility base R is activated
   if (REML) estimator <- "REML"
@@ -137,18 +158,25 @@ get_loglikelihood.model_fit <- function(x, ...) {
 }
 
 
-
-
 #' @rdname get_loglikelihood
 #' @export
-get_loglikelihood.lm <- function(x, estimator = "ML", REML = FALSE, verbose = TRUE, ...) {
+get_loglikelihood.lm <- function(x,
+                                 estimator = "ML",
+                                 REML = FALSE,
+                                 verbose = TRUE,
+                                 ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
     x <- x$gam
   }
 
   info <- model_info(x)
   if (info$is_linear) {
-    ll <- .get_loglikelihood_lm(x, estimator = estimator, REML = REML, verbose = verbose, ...)
+    ll <- .get_loglikelihood_lm(x,
+      estimator = estimator,
+      REML = REML,
+      verbose = verbose,
+      ...
+    )
   } else {
     ll <- .get_loglikelihood_glm(x, verbose = verbose, ...)
   }
@@ -175,9 +203,8 @@ get_loglikelihood.list <- get_loglikelihood.lm
 
 #' @export
 get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
-  if (!requireNamespace("rstanarm", quietly = TRUE)) {
-    stop("Package 'rstanarm' required. Please install it by running `install.packages('rstanarm')`.")
-  }
+  # installed?
+  check_if_installed("rstanarm")
 
   # Get posterior distribution of logliks
   mat <- rstanarm::log_lik(x)
@@ -253,11 +280,6 @@ get_loglikelihood.plm <- function(x, ...) {
 
 #' @export
 get_loglikelihood.cpglm <- get_loglikelihood.plm
-
-
-
-
-
 
 
 

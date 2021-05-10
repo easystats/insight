@@ -1,4 +1,14 @@
-.make_family <- function(x, fitfam = "gaussian", zero.inf = FALSE, hurdle = FALSE, logit.link = FALSE, multi.var = FALSE, link.fun = "identity", dispersion = FALSE, verbose = TRUE, ...) {
+.make_family <- function(x,
+                         fitfam = "gaussian",
+                         zero.inf = FALSE,
+                         hurdle = FALSE,
+                         logit.link = FALSE,
+                         multi.var = FALSE,
+                         link.fun = "identity",
+                         dispersion = FALSE,
+                         verbose = TRUE,
+                         ...) {
+
   # create logical for family
 
   # binomial family --------
@@ -186,7 +196,13 @@
     } else {
       model_terms <- tryCatch(
         {
-          find_variables(x, effects = "all", component = "all", flatten = FALSE, verbose = FALSE)
+          find_variables(
+            x,
+            effects = "all",
+            component = "all",
+            flatten = FALSE,
+            verbose = FALSE
+          )
         },
         error = function(x) {
           NULL
@@ -401,9 +417,8 @@
 
 
 .classify_BFBayesFactor <- function(x) {
-  if (!requireNamespace("BayesFactor", quietly = TRUE)) {
-    stop("This function needs `BayesFactor` to be installed.")
-  }
+  # installed?
+  check_if_installed("BayesFactor")
 
   if (any(class(x@denominator) %in% c("BFcorrelation"))) {
     "correlation"

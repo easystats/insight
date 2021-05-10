@@ -132,15 +132,13 @@ get_predicted_ci <- function(x,
       vcov_type <- "CR0"
     }
     if (!is.null(vcov_type) && vcov_type %in% c("CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3")) {
-      if (!requireNamespace("clubSandwich", quietly = TRUE)) {
-        stop("Package `clubSandwich` needed for this function. Please install and try again.")
-      }
+      # installed?
+      check_if_installed("clubSandwich")
       robust_package <- "clubSandwich"
       vcov_estimation <- "vcovCR"
     } else {
-      if (!requireNamespace("sandwich", quietly = TRUE)) {
-        stop("Package `sandwich` needed for this function. Please install and try again.")
-      }
+      # installed?
+      check_if_installed("sandwich")
       robust_package <- "sandwich"
     }
     # compute robust standard errors based on vcov
@@ -374,9 +372,8 @@ get_predicted_ci <- function(x,
     }
     if (length(ci) == 1) names(out) <- c("Parameter", "CI_low", "CI_high")
   } else {
-    if (!requireNamespace("bayestestR", quietly = TRUE)) {
-      stop("Package `bayestestR` needed for this function. Please install and try again.")
-    }
+    # installed?
+    check_if_installed("bayestestR")
     out <- as.data.frame(bayestestR::ci(as.data.frame(t(iter)), ci = ci, method = interval_function))
     if (length(ci) > 1) out <- reshape_ci(out)
   }

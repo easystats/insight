@@ -14,13 +14,15 @@ format_string(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{length}{Numeric, maximum length of the returned string. If not \code{NULL},
-will shorten the string to a maximum \code{length}, however, it will not
-truncate inside words. I.e. if the string length happens to be inside a word,
-this word is removed from the returned string, so the returned string has
-a \emph{maximum} length of \code{length}, but might be shorter.}
+\item{length}{Numeric, maximum length of the returned string. If not
+\code{NULL}, will shorten the string to a maximum \code{length}, however,
+it will not truncate inside words. I.e. if the string length happens to be
+inside a word, this word is removed from the returned string, so the
+returned string has a \emph{maximum} length of \code{length}, but might be
+shorter.}
 
-\item{abbreviate}{String that will be used as suffix, if \code{x} was shortened.}
+\item{abbreviate}{String that will be used as suffix, if \code{x} was
+shortened.}
 }
 \value{
 A formatted string.

@@ -707,18 +707,14 @@ link_inverse.mipo <- function(x, ...) {
 
 #' @export
 link_inverse.mira <- function(x, ...) {
-  if (!requireNamespace("mice", quietly = TRUE)) {
-    stop("Package `mice` required. Please install it.", call. = FALSE)
-  }
+  # installed?
+  check_if_installed("mice")
   link_inverse(mice::pool(x), ...)
 }
 
 
 
-
-
 # helper --------------
-
 
 .brms_link_inverse <- function(fam) {
   # do we have custom families?
@@ -747,9 +743,8 @@ link_inverse.mira <- function(x, ...) {
   if (!is.numeric(link)) {
     stats::poisson(link = link)
   } else {
-    if (!requireNamespace("statmod", quietly = TRUE)) {
-      stop("Package 'statmod' required. Please install it.")
-    }
+    # installed?
+    check_if_installed("statmod")
     statmod::tweedie(link.power = link)
   }
 }

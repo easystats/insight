@@ -17,7 +17,9 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
 #' @export
-get_parameters.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+get_parameters.zeroinfl <- function(x,
+                                    component = c("all", "conditional", "zi", "zero_inflated"),
+                                    ...) {
   component <- match.arg(component)
   .return_zeroinf_parms(x, component)
 }
@@ -31,7 +33,9 @@ get_parameters.zerotrunc <- get_parameters.default
 
 #' @rdname get_parameters.zeroinfl
 #' @export
-get_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+get_parameters.zcpglm <- function(x,
+                                  component = c("all", "conditional", "zi", "zero_inflated"),
+                                  ...) {
   component <- match.arg(component)
   cf <- stats::coef(x)
 
@@ -112,7 +116,9 @@ get_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", "
 
 #' @rdname get_parameters.zeroinfl
 #' @export
-get_parameters.mhurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"), ...) {
+get_parameters.mhurdle <- function(x,
+                                   component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"),
+                                   ...) {
   component <- match.arg(component)
   cf <- stats::coef(x)
 

@@ -4,6 +4,12 @@ if (require("testthat") && require("insight")) {
     expect_error(check_if_installed("xklfueofi8eur3rnfalfb"))
 
     # just the message
-    expect_snapshot(check_if_installed("xklfueofi8eur3rnfalfb", FALSE))
+    expect_snapshot(check_if_installed("xklfueofi8eur3rnfalfb", stop = FALSE))
+
+    # customize the message
+    expect_snapshot(check_if_installed("xklfueofi8eur3rnfalfb",
+      reason = "for kittens to be happy",
+      stop = FALSE
+    ))
   })
 }

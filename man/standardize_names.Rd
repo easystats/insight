@@ -35,9 +35,9 @@ or on \pkg{broom}'s naming scheme.}
 A data frame, with standardized column names.
 }
 \description{
-Standardize column names from data frames, in particular objects returned from
-\code{\link[parameters:model_parameters]{model_parameters()}}, so column names are
-consistent and the same for any model object.
+Standardize column names from data frames, in particular objects returned
+from \code{\link[parameters:model_parameters]{model_parameters()}}, so column
+names are consistent and the same for any model object.
 }
 \details{
 This method is in particular useful for package developers or users
@@ -51,11 +51,12 @@ This method is in particular useful for package developers or users
   kind of model was used in \code{model_parameters()}.
   \cr \cr
   For \code{style = "broom"}, column names are renamed to match \pkg{broom}'s
-  naming scheme, i.e. \code{Parameter} is renamed to \code{term}, \code{Coefficient}
-  becomes \code{estimate} and so on.
+  naming scheme, i.e. \code{Parameter} is renamed to \code{term},
+  \code{Coefficient} becomes \code{estimate} and so on.
   \cr \cr
-  For \code{style = "easystats"}, when \code{data} is an object from \code{broom::tidy()},
-  column names are converted from "broom"-style into "easystats"-style.
+  For \code{style = "easystats"}, when \code{data} is an object from
+  \code{broom::tidy()}, column names are converted from "broom"-style into
+  "easystats"-style.
 }
 \examples{
 if (require("parameters")) {
