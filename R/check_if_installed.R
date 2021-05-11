@@ -15,14 +15,15 @@ check_if_installed <- function(package,
                                stop = TRUE,
                                ...) {
   # does it need to be displayed?
-  if (!requireNamespace(package, quietly = TRUE)) {
+  is_installed <- requireNamespace(package, quietly = TRUE)
+  if (!is_installed) {
     # prepare the message
-    message <- cat(
+    message <- paste0(
       "Package '", package, "' is required ", reason, ".\n",
-      "Please install it by running install.packages('", package, "').",
-      sep = ""
+      "Please install it by running install.packages('", package, "')."
     )
 
-    if (stop) stop(message(message), call. = FALSE) else message(message)
+    if (stop) stop(message, call. = FALSE) else warning(message, call. = FALSE)
   }
+  invisible(is_installed)
 }
