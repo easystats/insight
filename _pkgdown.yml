@@ -121,6 +121,7 @@ reference:
   contents:
   - clean_names
   - clean_parameters
+  - data_to_long
   - display
   - download_model
   - ellipsis_info
