@@ -360,7 +360,7 @@ clean_parameters.aovlist <- function(x, ...) {
 
 #' @export
 clean_parameters.afex_aov <- function(x, ...) {
-  if ("aov" %in% names(x)) {
+  if (!is.null(x$aov)) {
     clean_parameters(x$aov, ...)
   } else {
     clean_parameters(x$lm, ...)

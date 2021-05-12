@@ -289,7 +289,7 @@ model_info.mlm <- function(x, ...) {
 
 #' @export
 model_info.afex_aov <- function(x, verbose = TRUE, ...) {
-  if ("aov" %in% names(x)) {
+  if (!is.null(x$aov)) {
     .make_family(x$aov, verbose = verbose, ...)
   } else {
     .make_family(x$lm, verbose = verbose, ...)

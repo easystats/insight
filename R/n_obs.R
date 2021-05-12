@@ -330,12 +330,10 @@ n_obs.gbm <- function(x, ...) {
 
 
 #' @export
-n_obs.afex_aov <- function(x, ...) {
-  if ("aov" %in% names(x)) {
-    n_obs(x$aov)
-  } else {
-    n_obs(x$lm)
-  }
+#' @rdname n_obs
+#' @inheritParams get_data
+n_obs.afex_aov <- function(x, shape = c("long", "wide"), ...) {
+  nrow(get_data(x, shape = shape))
 }
 
 

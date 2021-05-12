@@ -524,11 +524,7 @@ get_varcov.flexsurvreg <- function(x, ...) {
 
 #' @export
 get_varcov.afex_aov <- function(x, ...) {
-  if ("lm" %in% names(x)) {
-    get_varcov(x$lm)
-  } else {
-    NULL
-  }
+  get_varcov(x$lm, ...)
 }
 
 
