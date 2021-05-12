@@ -130,6 +130,11 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
 
 
 
+
+
+
+
+
 #' @rdname data_to_long
 #' @export
 data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", rows_from = NULL, sep = "_", ..., names_from = colnames_from) {
@@ -160,3 +165,15 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
 
   wide
 }
+
+
+
+
+# Aliases -----------------------------------------------------------------
+
+
+#' @export
+reshape_longer <- data_to_long
+
+#' @export
+reshape_wider <- data_to_wide
