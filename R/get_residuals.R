@@ -233,5 +233,5 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
 #' @export
 get_residuals.afex_aov <- function(x, weighted = FALSE, verbose = TRUE, ...) {
-  suppressMessages(residuals(x))
+  suppressMessages(stats::residuals(x))
 }
