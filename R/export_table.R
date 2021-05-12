@@ -489,7 +489,7 @@ export_table <- function(x,
 
 .indent_rows <- function(final, indent_rows) {
   # create index for those rows that should be indented
-  grp_rows <- indent_rows
+  grp_rows <- indent_rows + 1
 
   # indent
   final[grp_rows, 1] <- paste0("  ", final[grp_rows, 1])
@@ -502,6 +502,7 @@ export_table <- function(x,
   final[non_grp_rows, 1] <- paste0(final[non_grp_rows, 1], "  ")
 
   # remove indent token
+  grps <- grep("# ", final[, 1], fixed = TRUE)
   final[, 1] <- gsub("# ", "", final[, 1], fixed = TRUE)
 
   # move group name (indent header) to left
@@ -531,6 +532,11 @@ export_table <- function(x,
 
   ## create header line for markdown table -----
   header <- "|"
+
+  # indention? than adjust column width for first column
+  if (!is.null(indent_rows) || !is.null(indent_groups)) {
+    column_width[1] <- column_width[1] + 2
+  }
 
   # go through all columns of the data frame
   for (i in 1:n_columns) {
