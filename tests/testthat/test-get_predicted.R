@@ -14,7 +14,7 @@ osx <- tryCatch(
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && !osx && require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans") && require("bayestestR") && require("mclust") && require("rstantools")) {
+if (.runThisTest && !osx && require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans") && require("bayestestR") && require("mclust") && require("rstantools") && require("psych") && require("fungible")) {
   data(mtcars)
 
 
@@ -337,5 +337,34 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_true(mean(abs(rezpred$Predicted - rezpred2$Predicted)) > 0)
     rezrela3 <- summary(get_predicted(x, predict = "expectation", data = mtcars["am"]))
     expect_equal(mean(abs(rezrela2$Predicted - rezrela3$Predicted)), 0, tolerance = 0.001)
+  })
+
+
+
+
+  # FA / PCA ----------------------------------------------------------------
+  # =========================================================================
+3
+  test_that("get_predicted - FA / PCA", {
+    # PCA
+    x <- get_predicted(psych::principal(mtcars, 3))
+    expect_equal(dim(x), c(32, 3))
+    x <- get_predicted(psych::principal(mtcars, 3), data = mtcars[1:5, ])
+    expect_equal(dim(x), c(5, 3))
+
+    x <- get_predicted(prcomp(mtcars))
+    expect_equal(dim(x), c(32, ncol(mtcars)))
+    x <- get_predicted(prcomp(mtcars), data = mtcars[1:5, ])
+    expect_equal(dim(x), c(5, ncol(mtcars)))
+
+    # FA
+    x <- get_predicted(psych::fa(mtcars, 3))
+    expect_equal(dim(x), c(32, 3))
+    x <- get_predicted(psych::fa(mtcars, 3), data = mtcars[1:5, ])
+    expect_equal(dim(x), c(5, 3))
+
+    expect_error(get_predicted(fungible::faMain(mtcars, numFactors = 3)))
+    x <- get_predicted(fungible::faMain(mtcars, numFactors = 3), data = mtcars[1:5, ])
+    expect_equal(dim(x), c(5, 3))
   })
 }

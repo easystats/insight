@@ -8,6 +8,9 @@
 #'   needed package is not installed.
 #' @param ... Currently ignored
 #'
+#' @examples
+#' check_if_installed("inexistent_package")
+#'
 #' @export
 
 check_if_installed <- function(package,

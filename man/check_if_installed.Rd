@@ -26,3 +26,7 @@ needed package is not installed.}
 \description{
 Checking if needed package is installed
 }
+\examples{
+check_if_installed("inexistent_package")
+
+}

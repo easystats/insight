@@ -79,6 +79,7 @@ Suggests:
     estimatr,
     feisr,
     fixest,
+    fungible,
     gam,
     gamlss,
     gamm4,

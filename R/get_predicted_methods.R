@@ -3,7 +3,11 @@
 #' @export
 print.get_predicted <- function(x, ...) {
   print_colour("Predicted values:\n\n", "blue")
-  print(as.numeric(x))
+  if(is.null(ncol(x))) {
+    print.default(x)
+  } else {
+    print.data.frame(x)
+  }
   print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.", "yellow")
 }
 
