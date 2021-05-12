@@ -45,6 +45,15 @@ find_predictors <- function(x,
                             component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
                             flatten = FALSE,
                             verbose = TRUE) {
+  UseMethod("find_predictors")
+}
+
+#' @export
+find_predictors.default <- function(x,
+                                    effects = c("fixed", "random", "all"),
+                                    component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
+                                    flatten = FALSE,
+                                    verbose = TRUE) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -83,6 +92,26 @@ find_predictors <- function(x,
     if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
   }
 
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+#' @export
+find_predictors.afex_aov <- function(x,
+                                     effects = c("fixed", "random", "all"),
+                                     component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
+                                     flatten = FALSE,
+                                     verbose = TRUE) {
+  effects <- match.arg(effects)
+
+  if (effects == "all") effects <- c("fixed", "random")
+
+  l <- list(fixed = c(names(attr(x, "between")), names(attr(x, "within"))),
+            random = attr(x, "id"))[effects]
 
   if (flatten) {
     unique(unlist(l))
