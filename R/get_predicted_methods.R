@@ -36,12 +36,19 @@ print.get_predicted <- function(x, ...) {
 
 #' @export
 as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
-  out <- data.frame("Predicted" = as.numeric(x))
-  if ("ci_data" %in% names(attributes(x))) {
-    out <- cbind(out, attributes(x)$ci_data)
-  }
-  if ("iterations" %in% names(attributes(x)) && keep_iterations == TRUE) {
-    out <- cbind(out, attributes(x)$iterations)
+  if(inherits(x, "data.frame") && !"iterations" %in% names(attributes(x))) {
+    # Then it must be a regular data.frame (e.g., from PCA/FA)
+    out <- as.data.frame.data.frame(x)
+
+  } else {
+    # Then it must be predictions from a regression model
+    out <- data.frame("Predicted" = as.numeric(x))
+    if ("ci_data" %in% names(attributes(x))) {
+      out <- cbind(out, attributes(x)$ci_data)
+    }
+    if ("iterations" %in% names(attributes(x)) && keep_iterations == TRUE) {
+      out <- cbind(out, attributes(x)$iterations)
+    }
   }
 
   out
