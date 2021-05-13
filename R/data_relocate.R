@@ -30,9 +30,13 @@ data_relocate <- function(data, cols, before = NULL, after = NULL, safe = TRUE) 
 
   # Find new positions
   if (!is.null(before)) {
+    before <- before[before %in% data_cols][1]  # Take first that exists (if vector is supplied)
+    if(length(before) != 1) stop("The column passed to 'before' wasn't found. Possibly mispelled.")
     where <- min(match(before, data_cols))
     position <- c(setdiff(position, where), where)
   } else if (!is.null(after)) {
+    after <- after[after %in% data_cols][1]  # Take first that exists (if vector is supplied)
+    if(length(after) != 1) stop("The column passed to 'after' wasn't found. Possibly mispelled.")
     where <- max(match(after, data_cols))
     position <- c(where, setdiff(position, where))
   } else {
