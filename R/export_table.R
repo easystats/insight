@@ -279,8 +279,16 @@ export_table <- function(x,
 
   if (identical(format, "html")) {
     # html formatting starts here, needs less preparation of table matrix
-    out <- .format_html_table(df, caption = caption, subtitle = subtitle,
-                              footer = footer, align = align, group_by = group_by)
+    out <- .format_html_table(
+      df,
+      caption = caption,
+      subtitle = subtitle,
+      footer = footer,
+      align = align,
+      group_by = group_by,
+      indent_groups = indent_groups,
+      indent_rows = indent_rows
+    )
 
     # text and markdown go here...
   } else {
@@ -487,19 +495,19 @@ export_table <- function(x,
 }
 
 
-.indent_rows <- function(final, indent_rows) {
+.indent_rows <- function(final, indent_rows, whitespace = "  ") {
   # create index for those rows that should be indented
   grp_rows <- indent_rows + 1
 
   # indent
-  final[grp_rows, 1] <- paste0("  ", final[grp_rows, 1])
+  final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
 
   # find rows that should not be indented
   non_grp_rows <- 1:nrow(final)
   non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
 
   # paste whitespace at end, to ensure equal width for each string
-  final[non_grp_rows, 1] <- paste0(final[non_grp_rows, 1], "  ")
+  final[non_grp_rows, 1] <- paste0(final[non_grp_rows, 1], whitespace)
 
   # remove indent token
   grps <- grep("# ", final[, 1], fixed = TRUE)
@@ -509,6 +517,26 @@ export_table <- function(x,
   final[grps, 1] <- format(final[grps, 1], justify = "left", width = max(nchar(final[, 1])))
   final
 }
+
+
+
+.indent_rows_html <- function(final, indent_rows, whitespace = "") {
+  # create index for those rows that should be indented
+  grp_rows <- indent_rows + 1
+
+  # indent
+  final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
+
+  # find rows that should not be indented
+  non_grp_rows <- 1:nrow(final)
+  non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
+
+  # remove indent token
+  final[, 1] <- gsub("# ", "", final[, 1])
+
+  final
+}
+
 
 
 
@@ -541,7 +569,7 @@ export_table <- function(x,
   # go through all columns of the data frame
   for (i in 1:n_columns) {
 
-    # create separater line for current column
+    # create separator line for current column
     line <- paste0(rep_len("-", column_width[i]), collapse = "")
 
     # check if user-defined alignment is requested, and if so, extract
@@ -635,7 +663,14 @@ export_table <- function(x,
 
 # html formatting ---------------------------
 
-.format_html_table <- function(final, caption = NULL, subtitle = NULL, footer = NULL, align = "center", group_by = NULL) {
+.format_html_table <- function(final,
+                               caption = NULL,
+                               subtitle = NULL,
+                               footer = NULL,
+                               align = "center",
+                               group_by = NULL,
+                               indent_groups = NULL,
+                               indent_rows = NULL) {
   # installed?
   check_if_installed("gt")
 
@@ -656,6 +691,11 @@ export_table <- function(x,
         final[[i]] <- NULL
       }
     }
+  }
+
+  # indent groups?
+  if (!is.null(indent_rows) && any(grepl("# ", final[, 1], fixed = TRUE))) {
+    final <- .indent_rows_html(final, indent_rows)
   }
 
   tab <- gt::gt(final, groupname_col = group_by_columns)
