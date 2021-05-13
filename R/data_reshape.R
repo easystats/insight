@@ -60,7 +60,7 @@
 #'                        values_from = "Score")
 #'    head(wide)
 #' }
-#'
+#' @return data.frame
 #' @export
 data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL, ..., names_to = colnames_to) {
 
@@ -171,9 +171,10 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
 
 # Aliases -----------------------------------------------------------------
 
-
+#' @rdname data_to_long
 #' @export
 reshape_longer <- data_to_long
 
+#' @rdname data_to_long
 #' @export
 reshape_wider <- data_to_wide
