@@ -151,6 +151,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "SD"] <- "std.dev"
   cn[cn == "p"] <- "p.value"
   cn[cn == "BF"] <- "bayes.factor"
+  cn[cn == "log_BF"] <- "log(bayes.factor)"
   cn[cn == "Component"] <- "component"
   cn[cn == "Effects"] <- "effect"
   cn[cn == "Response"] <- "response"
