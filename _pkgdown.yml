@@ -122,6 +122,9 @@ reference:
   - clean_names
   - clean_parameters
   - data_to_long
+  - data_match
+  - data_relocate
+  - data_restoretype
   - display
   - download_model
   - ellipsis_info

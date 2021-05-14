@@ -515,6 +515,10 @@ parameters_table <- format_table
 .format_bayes_columns <- function(x, stars, rope_digits = 2, zap_small, ci_width = "auto", ci_brackets = TRUE) {
   # Indices
   if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars)
+  if ("log_BF" %in% names(x)) {
+    x$BF <- format_bf(exp(x$BF), name = NULL, stars = stars)
+    x$log_BF <- NULL
+  }
   if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = stars)
   if ("Rhat" %in% names(x)) x$Rhat <- format_value(x$Rhat, digits = 3)
   if ("ESS" %in% names(x)) x$ESS <- round(x$ESS)
