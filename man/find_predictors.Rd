@@ -10,7 +10,8 @@ find_predictors(
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion",
     "instruments", "correlation", "smooth_terms"),
   flatten = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ component, depending on the model.}
 as character vector, not as list. Duplicated values are removed.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{...}{Currently not used.}
 }
 \value{
 A list of character vectors that represent the name(s) of the

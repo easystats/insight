@@ -20,6 +20,7 @@
 #' @param flatten Logical, if \code{TRUE}, the values are returned
 #'    as character vector, not as list. Duplicated values are removed.
 #' @param verbose Toggle warnings.
+#' @param ... Currently not used.
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #'    predictor variables. Depending on the combination of the arguments
@@ -44,7 +45,8 @@ find_predictors <- function(x,
                             effects = c("fixed", "random", "all"),
                             component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
                             flatten = FALSE,
-                            verbose = TRUE) {
+                            verbose = TRUE,
+                            ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
