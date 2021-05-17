@@ -66,8 +66,6 @@
 
 
 
-<!-- dependencies from examples -->
-
 
   
 
@@ -91,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0.1</span>
       </span>
     </div>
 
@@ -148,7 +146,7 @@
     <p>Confidence/Credible Interval (CI) Formatting</p>
     </div>
 
-    <pre class="usage"><span class='fu'>format_ci</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>format_ci</span><span class='op'>(</span>
   <span class='va'>CI_low</span>,
   <span class='va'>CI_high</span>,
   ci <span class='op'>=</span> <span class='fl'>0.95</span>,
@@ -159,7 +157,7 @@
   width_high <span class='op'>=</span> <span class='va'>width</span>,
   missing <span class='op'>=</span> <span class='st'>""</span>,
   zap_small <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -218,7 +216,7 @@ places than <code>digits</code> are printed in scientific notation.</p></td>
     <p>A formatted string.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='fu'>format_ci</span><span class='op'>(</span><span class='fl'>1.20</span>, <span class='fl'>3.57</span>, ci <span class='op'>=</span> <span class='fl'>0.90</span><span class='op'>)</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>format_ci</span><span class='op'>(</span><span class='fl'>1.20</span>, <span class='fl'>3.57</span>, ci <span class='op'>=</span> <span class='fl'>0.90</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "90% CI [1.20, 3.57]"</span>
 <span class='r-in'><span class='fu'>format_ci</span><span class='op'>(</span><span class='fl'>1.20</span>, <span class='fl'>3.57</span>, ci <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "[1.20, 3.57]"</span>
@@ -243,7 +241,7 @@ places than <code>digits</code> are printed in scientific notation.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 95% CI [  1.21,   3.57]</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 95% CI [ 23.40, -13.35]</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 95% CI [100.43,   9.40]</span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

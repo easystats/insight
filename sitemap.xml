@@ -46,6 +46,18 @@
     <loc>/reference/color_if.html</loc>
   </url>
   <url>
+    <loc>/reference/data_match.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data_relocate.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data_restoretype.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data_to_long.html</loc>
+  </url>
+  <url>
     <loc>/reference/display.html</loc>
   </url>
   <url>
@@ -125,6 +137,9 @@
   </url>
   <url>
     <loc>/reference/fish.html</loc>
+  </url>
+  <url>
+    <loc>/reference/force_numeric.html</loc>
   </url>
   <url>
     <loc>/reference/format_bf.html</loc>

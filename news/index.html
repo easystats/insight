@@ -88,7 +88,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0.1</span>
       </span>
     </div>
 
@@ -140,17 +140,27 @@
       <small>Source: <a href='https://github.com/easystats/insight/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="insight-0133" class="section level1">
-<h1 class="page-header" data-toc-text="0.13.3">
-<a href="#insight-0133" class="anchor" aria-hidden="true"></a>insight 0.13.3<small> Unreleased </small></h1>
+    <div id="insight-0141" class="section level1">
+<h1 class="page-header" data-toc-text="0.14.1">
+<a href="#insight-0141" class="anchor" aria-hidden="true"></a>insight 0.14.1<small> Unreleased </small></h1>
+<div id="new-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-functions" class="anchor" aria-hidden="true"></a>New functions</h2>
+<ul><li>
+<code><a href="../reference/data_to_long.html">data_to_long()</a></code>, <code><a href="../reference/data_match.html">data_match()</a></code>, <code><a href="../reference/data_relocate.html">data_relocate()</a></code>, <code><a href="../reference/data_restoretype.html">data_restoretype()</a></code>, <code><a href="../reference/force_numeric.html">force_numeric()</a></code>.</li>
+</ul></div>
+</div>
+    <div id="insight-0140" class="section level1">
+<h1 class="page-header" data-toc-text="0.14.0">
+<a href="#insight-0140" class="anchor" aria-hidden="true"></a>insight 0.14.0<small> 2021-05-07 </small></h1>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li>Better support for accessing auxiliary parameters (via <code><a href="../reference/get_sigma.html">get_sigma()</a></code> and <code><a href="../reference/get_auxiliary.html">get_auxiliary()</a></code>, as well as <code>get_parameters(component = "all")</code>) for <code>brmsfit</code> models.</li>
 </ul></div>
-<div id="new-functions" class="section level2">
+<div id="new-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-1" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li><p><code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> as a robust alternative to <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code> for different model classes.</p></li>
 <li><p><code><a href="../reference/format_message.html">format_message()</a></code> to format warnings and messages by adjusting the maximum line_length, possibly to the width of the console window.</p></li>
 <li><p><code><a href="../reference/format_string.html">format_string()</a></code> to shorten a string to a maximum length.</p></li>
@@ -203,9 +213,9 @@
 <a href="#new-supported-model-classes-1" class="anchor" aria-hidden="true"></a>New supported model classes</h2>
 <ul><li>Support for <code>svy_vglm</code> (<em>svyVGAM</em>), <code>mjoint</code> (<em>joineRML</em>), <code>mhurdle</code> (<em>mhurdle</em>), <code>sarlm</code> (<em>spatialreg</em>), <code>model_fit</code> (<em>tidymodels</em>)</li>
 </ul></div>
-<div id="new-functions-1" class="section level2">
+<div id="new-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-1" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-2" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li>
 <code><a href="../reference/is_gam_model.html">is_gam_model()</a></code> as a small helper to check if a model is a generalized additive model with smooth terms.</li>
 </ul></div>
@@ -299,9 +309,9 @@
 <a href="#new-supported-model-classes-4" class="anchor" aria-hidden="true"></a>New supported model classes</h2>
 <ul><li>Support for <code>coxr</code> (<em>coxrobust</em>), <code>coeftest</code> (<em>lmtest</em>), <code>ivFixed</code> (<em>ivFixed</em>), <code>ivprobit</code> (<em>ivprobit</em>), <code>riskRegression</code> (<em>riskRegression</em>). <code>summary.lm</code>, <code>lmodel2</code> (<em>lmodel2</em>), improved support for <code>bamlss</code> (<em>bamlss</em>).</li>
 </ul></div>
-<div id="new-functions-2" class="section level2">
+<div id="new-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-2" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-3" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li><p>Added <code><a href="../reference/get_deviance.html">get_deviance()</a></code> function that returns the model deviance as a robust alternative to <code><a href="https://rdrr.io/r/stats/deviance.html" class="external-link">stats::deviance()</a></code>.</p></li>
 <li><p>Added <code><a href="../reference/model_name.html">model_name()</a></code> function that returns the model’s “name”.</p></li>
 <li><p>Added <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> method for <code><a href="../reference/find_formula.html">find_formula()</a></code> output to flatten it.</p></li>
@@ -340,9 +350,9 @@
 <a href="#general-4" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li>Warnings that formerly were printed using <code><a href="../reference/print_color.html">print_color()</a></code> now use <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>, to better suppress warning messages if required.</li>
 </ul></div>
-<div id="new-functions-3" class="section level2">
+<div id="new-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-3" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-4" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li>
 <code><a href="../reference/find_smooth.html">find_smooth()</a></code>, to return in particular smooth terms used in a model.</li>
 </ul></div>
@@ -524,9 +534,9 @@
 <ul><li>
 <code>BGGM</code> (<em>BGGM</em>), <code>metaplus</code> (<em>metaplus</em>), <code>glht</code> (<em>multcomp</em>), <code>glmm</code> (<em>glmm</em>), improved support for <code>manova</code> (<em>stats</em>)</li>
 </ul></div>
-<div id="new-functions-4" class="section level2">
+<div id="new-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-4" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-5" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li>Value formatting functions <code><a href="../reference/format_bf.html">format_bf()</a></code>, <code><a href="../reference/format_pd.html">format_pd()</a></code>, <code><a href="../reference/format_p.html">format_p()</a></code>, <code><a href="../reference/format_rope.html">format_rope()</a></code> and <code><a href="../reference/format_number.html">format_number()</a></code> were moved from package <em>parameters</em> to <em>insight</em>.</li>
 </ul></div>
 <div id="changes-to-functions-10" class="section level2">

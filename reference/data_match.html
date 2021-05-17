@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find names of model parameters from mixed models — find_parameters.glmmTMB • insight</title>
+<title>Find rows of a dataframe that are matching a specific subset — data_match • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,8 @@
 
 
 
-<meta property="og:title" content="Find names of model parameters from mixed models — find_parameters.glmmTMB" />
-<meta property="og:description" content="Returns the names of model parameters, like they typically
-    appear in the summary() output." />
+<meta property="og:title" content="Find rows of a dataframe that are matching a specific subset — data_match" />
+<meta property="og:description" content="Find row indices of a dataframe that are matching a specific configuration." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -138,85 +137,42 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find names of model parameters from mixed models</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/find_parameters_mixed.R'><code>R/find_parameters_mixed.R</code></a></small>
-    <div class="hidden name"><code>find_parameters.glmmTMB.Rd</code></div>
+    <h1>Find rows of a dataframe that are matching a specific subset</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/data_match.R'><code>R/data_match.R</code></a></small>
+    <div class="hidden name"><code>data_match.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns the names of model parameters, like they typically
-    appear in the <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code> output.</p>
+    <p>Find row indices of a dataframe that are matching a specific configuration.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S3 method for glmmTMB</span>
-<span class='fu'><a href='find_parameters.html'>find_parameters</a></span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  effects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span><span class='op'>)</span>,
-  component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>, <span class='st'>"dispersion"</span><span class='op'>)</span>,
-  flatten <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='co'># S3 method for merMod</span>
-<span class='fu'><a href='find_parameters.html'>find_parameters</a></span><span class='op'>(</span><span class='va'>x</span>, effects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span><span class='op'>)</span>, flatten <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>data_match</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>to</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A fitted model.</p></td>
+      <td><p>A dataframe.</p></td>
     </tr>
     <tr>
-      <th>effects</th>
-      <td><p>Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
-    </tr>
-    <tr>
-      <th>component</th>
-      <td><p>Which type of parameters to return, such as parameters for the
-conditional model, the zero-inflated part of the model or the dispersion
-term? Applies to models with zero-inflated and/or dispersion formula. Note
-that the <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model. There are three convenient shortcuts:
-<code>component = "all"</code> returns all possible parameters.
-If <code>component = "location"</code>, location parameters such as <code>conditional</code>
-or <code>zero_inflated</code> are returned (everything that are fixed or random
-effects - depending on the <code>effects</code> argument - but no auxiliary
-parameters). For <code>component = "distributional"</code> (or <code>"auxiliary"</code>),
-components like <code>sigma</code> or <code>dispersion</code> (and other auxiliary
-parameters) are returned.</p></td>
-    </tr>
-    <tr>
-      <th>flatten</th>
-      <td><p>Logical, if <code>TRUE</code>, the values are returned
-as character vector, not as list. Duplicated values are removed.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
+      <th>to</th>
+      <td><p>The dataframe of which to meet the characteristics.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A list of parameter names. The returned list may have following
-  elements:</p><ul>
-<li><p><code>conditional</code>, the "fixed effects" part from the model.</p></li>
-<li><p><code>random</code>, the "random effects" part from the model.</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model.</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model.</p></li>
-<li><p><code>dispersion</code>, the dispersion parameters (auxiliary parameter)</p></li>
-</ul>
-
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='find_parameters.html'>find_parameters</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $conditional</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "(Intercept)" "wt"          "cyl"         "vs"         </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>matching_rows</span> <span class='op'>&lt;-</span> <span class='fu'>data_match</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>vs <span class='op'>=</span> <span class='fl'>0</span>, am <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in as.numeric_ifnumeric(row.names(x)[idx])</span> could not find function "as.numeric_ifnumeric"</span>
+<span class='r-in'><span class='va'>mtcars</span><span class='op'>[</span><span class='va'>matching_rows</span>, <span class='op'>]</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in `[.data.frame`(mtcars, matching_rows, )</span> object 'matching_rows' not found</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>matching_rows</span> <span class='op'>&lt;-</span> <span class='fu'>data_match</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>vs <span class='op'>=</span> <span class='fl'>0</span>, am <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in as.numeric_ifnumeric(row.names(x)[idx])</span> could not find function "as.numeric_ifnumeric"</span>
+<span class='r-in'><span class='va'>mtcars</span><span class='op'>[</span><span class='va'>matching_rows</span>, <span class='op'>]</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in `[.data.frame`(mtcars, matching_rows, )</span> object 'matching_rows' not found</span>
+<span class='r-in'></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
