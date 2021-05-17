@@ -65,10 +65,10 @@
 data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL, ..., names_to = colnames_to) {
 
   # Select columns ----------------
-  if(is.character(cols) && length(cols) == 1){
+  if (is.character(cols) && length(cols) == 1) {
     # If only one name
 
-    if(cols == "all") {
+    if (cols == "all") {
       # If all, take all
       cols <- names(data)
     } else {
@@ -79,25 +79,25 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
   }
 
   # If numeric, surely the index of the cols
-  if(is.numeric(cols)) {
+  if (is.numeric(cols)) {
     cols <- names(data)[cols]
   }
 
 
   # Sanity checks ----------------
   # Make sure all cols are in data
-  if(!all(cols %in% names(data))) {
+  if (!all(cols %in% names(data))) {
     stop("Some variables as selected by 'cols' are not present in the data.")
   }
 
   # Compatibility with tidyr
-  if(names_to != colnames_to) colnames_to <- names_to
+  if (names_to != colnames_to) colnames_to <- names_to
 
 
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
-  data[["_Row"]] <- as.numeric_ifnumeric(row.names(data))
+  data[["_Row"]] <- force_numeric(row.names(data))
 
   # Reshape
   long <- stats::reshape(data,
@@ -113,7 +113,7 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
   long <- long[order(long[["_Row"]], long[[colnames_to]]), ]
 
   # Remove or rename the row index
-  if(is.null(rows_to)) {
+  if (is.null(rows_to)) {
     long[["_Row"]] <- NULL
   } else {
     names(long)[names(long) == "_Row"] <- rows_to
@@ -140,11 +140,11 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
 data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", rows_from = NULL, sep = "_", ..., names_from = colnames_from) {
 
   # Compatibility with tidyr
-  if(names_from != colnames_from) colnames_from <- names_from
+  if (names_from != colnames_from) colnames_from <- names_from
 
   # If no other row identifier, create one
-  if(is.null(rows_from)) {
-    if(all(names(data) %in% c(values_from, colnames_from))) {
+  if (is.null(rows_from)) {
+    if (all(names(data) %in% c(values_from, colnames_from))) {
       data[["_Rows"]] <- row.names(data)
     }
     data[["_Rows"]] <- apply(data[  , !names(data) %in% c(values_from, colnames_from), drop = FALSE ] , 1 , paste , collapse = "_")
@@ -160,7 +160,7 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
                          direction = "wide")
 
   # Clean
-  if("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
+  if ("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
   row.names(wide) <- NULL  # Reset row names
 
   wide

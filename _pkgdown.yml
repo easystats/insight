@@ -129,6 +129,7 @@ reference:
   - download_model
   - ellipsis_info
   - export_table
+  - force_numeric
   - null_model
   - print_parameters
   - reshape_ci

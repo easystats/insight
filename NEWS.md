@@ -1,4 +1,11 @@
-# insight 0.13.3
+# insight 0.14.1
+
+## New functions
+
+* `data_to_long()`, `data_match()`, `data_relocate()`, `data_restoretype()`, 
+  `force_numeric()`.
+
+# insight 0.14.0
 
 ## General
 
