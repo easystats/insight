@@ -516,7 +516,7 @@ parameters_table <- format_table
   # Indices
   if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars)
   if ("log_BF" %in% names(x)) {
-    x$BF <- format_bf(exp(x$BF), name = NULL, stars = stars)
+    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = stars)
     x$log_BF <- NULL
   }
   if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = stars)
