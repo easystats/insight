@@ -50,7 +50,8 @@
 <meta property="og:description" content="This functions takes a data frame with model parameters as input
   and formats certain columns into a more readable layout (like collapsing
   separate columns for lower and upper confidence interval values). Furthermore,
-  column names are formatted as well." />
+  column names are formatted as well. Note that format_table()
+  converts all columns into character vectors!" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -149,7 +150,8 @@
     <p>This functions takes a data frame with model parameters as input
   and formats certain columns into a more readable layout (like collapsing
   separate columns for lower and upper confidence interval values). Furthermore,
-  column names are formatted as well.</p>
+  column names are formatted as well. Note that <code>format_table()</code>
+  converts all columns into character vectors!</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>format_table</span><span class='op'>(</span>
@@ -254,7 +256,8 @@ from the input data frame.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame.</p>
+    <p>A data frame. Note that <code>format_table()</code> converts all columns
+into character vectors!</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/parameters/'>"parameters"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
