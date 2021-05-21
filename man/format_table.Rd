@@ -76,13 +76,15 @@ from the input data frame.}
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{
-A data frame.
+A data frame. Note that \code{format_table()} converts all columns
+into character vectors!
 }
 \description{
 This functions takes a data frame with model parameters as input
   and formats certain columns into a more readable layout (like collapsing
   separate columns for lower and upper confidence interval values). Furthermore,
-  column names are formatted as well.
+  column names are formatted as well. Note that \code{format_table()}
+  converts all columns into character vectors!
 }
 \examples{
 if (require("parameters")) {

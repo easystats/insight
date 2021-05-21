@@ -4,7 +4,8 @@
 #' @description This functions takes a data frame with model parameters as input
 #'   and formats certain columns into a more readable layout (like collapsing
 #'   separate columns for lower and upper confidence interval values). Furthermore,
-#'   column names are formatted as well.
+#'   column names are formatted as well. Note that \code{format_table()}
+#'   converts all columns into character vectors!
 #'
 #' @param x A data frame of model's parameters, as returned by various functions
 #'   of the \strong{easystats}-packages. May also be a result from
@@ -42,7 +43,8 @@
 #'   as.data.frame(format_table(x))
 #' }
 #' }
-#' @return A data frame.
+#' @return A data frame. Note that \code{format_table()} converts all columns
+#' into character vectors!
 #' @export
 format_table <- function(x,
                          pretty_names = TRUE,
