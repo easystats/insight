@@ -123,3 +123,7 @@ attr(x, "table_footer") <- list(
 cat(export_table(x))
 }
 }
+\seealso{
+Vignettes \href{https://easystats.github.io/insight/articles/display.html}{Formatting, printing and exporting tables}
+and \href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{Formatting model parameters}.
+}

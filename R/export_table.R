@@ -39,6 +39,8 @@
 #'   attribute will be used as table caption. \code{table_subtitle} is the
 #'   attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
 #'
+#' @inherit format_table seealso
+#'
 #' @return A data frame in character format.
 #' @examples
 #' cat(export_table(iris))

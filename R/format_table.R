@@ -30,7 +30,12 @@
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
+#' @seealso Vignettes \href{https://easystats.github.io/insight/articles/display.html}{Formatting, printing and exporting tables}
+#' and \href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{Formatting model parameters}.
+#'
 #' @examples
+#' format_table(head(iris), digits = 1)
+#'
 #' if (require("parameters")) {
 #'   x <- model_parameters(lm(Sepal.Length ~ Species * Sepal.Width, data = iris))
 #'   as.data.frame(format_table(x))
@@ -191,13 +196,6 @@ format_table <- function(x,
   }
   x
 }
-
-
-
-
-#' @rdname format_table
-#' @export
-parameters_table <- format_table
 
 
 

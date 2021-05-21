@@ -2,26 +2,9 @@
 % Please edit documentation in R/format_table.R
 \name{format_table}
 \alias{format_table}
-\alias{parameters_table}
 \title{Parameter table formatting}
 \usage{
 format_table(
-  x,
-  pretty_names = TRUE,
-  stars = FALSE,
-  digits = 2,
-  ci_width = "auto",
-  ci_brackets = TRUE,
-  ci_digits = 2,
-  p_digits = 3,
-  rope_digits = 2,
-  zap_small = FALSE,
-  preserve_attributes = FALSE,
-  verbose = TRUE,
-  ...
-)
-
-parameters_table(
   x,
   pretty_names = TRUE,
   stars = FALSE,
@@ -87,6 +70,8 @@ This functions takes a data frame with model parameters as input
   converts all columns into character vectors!
 }
 \examples{
+format_table(head(iris), digits = 1)
+
 if (require("parameters")) {
   x <- model_parameters(lm(Sepal.Length ~ Species * Sepal.Width, data = iris))
   as.data.frame(format_table(x))
@@ -99,4 +84,8 @@ if (require("rstanarm") && require("parameters")) {
   as.data.frame(format_table(x))
 }
 }
+}
+\seealso{
+Vignettes \href{https://easystats.github.io/insight/articles/display.html}{Formatting, printing and exporting tables}
+and \href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{Formatting model parameters}.
 }
