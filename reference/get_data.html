@@ -201,6 +201,9 @@
 <span class='co'># S3 method for mixed</span>
 <span class='fu'>get_data</span><span class='op'>(</span><span class='va'>x</span>, effects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
+<span class='co'># S3 method for afex_aov</span>
+<span class='fu'>get_data</span><span class='op'>(</span><span class='va'>x</span>, shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"long"</span>, <span class='st'>"wide"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='co'># S3 method for lme</span>
 <span class='fu'>get_data</span><span class='op'>(</span><span class='va'>x</span>, effects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"fixed"</span>, <span class='st'>"random"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -251,6 +254,11 @@ with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
 component, depending on the model.</p></td>
+    </tr>
+    <tr>
+      <th>shape</th>
+      <td><p>Return long or wide data? Only applicable in repeated measures
+designs.</p></td>
     </tr>
     </table>
 

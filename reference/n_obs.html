@@ -153,6 +153,9 @@
 <span class='co'># S3 method for svyolr</span>
 <span class='fu'>n_obs</span><span class='op'>(</span><span class='va'>x</span>, weighted <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
 
+<span class='co'># S3 method for afex_aov</span>
+<span class='fu'>n_obs</span><span class='op'>(</span><span class='va'>x</span>, shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"long"</span>, <span class='st'>"wide"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='co'># S3 method for stanmvreg</span>
 <span class='fu'>n_obs</span><span class='op'>(</span><span class='va'>x</span>, select <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
@@ -170,6 +173,11 @@
     <tr>
       <th>weighted</th>
       <td><p>For survey designs, returns the weighted sample size.</p></td>
+    </tr>
+    <tr>
+      <th>shape</th>
+      <td><p>Return long or wide data? Only applicable in repeated measures
+designs.</p></td>
     </tr>
     <tr>
       <th>select</th>
