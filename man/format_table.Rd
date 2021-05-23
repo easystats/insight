@@ -76,15 +76,19 @@ from the input data frame.}
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{
-A data frame.
+A data frame. Note that \code{format_table()} converts all columns
+into character vectors!
 }
 \description{
 This functions takes a data frame with model parameters as input
   and formats certain columns into a more readable layout (like collapsing
   separate columns for lower and upper confidence interval values). Furthermore,
-  column names are formatted as well.
+  column names are formatted as well. Note that \code{format_table()}
+  converts all columns into character vectors!
 }
 \examples{
+format_table(head(iris), digits = 1)
+
 if (require("parameters")) {
   x <- model_parameters(lm(Sepal.Length ~ Species * Sepal.Width, data = iris))
   as.data.frame(format_table(x))
@@ -97,4 +101,8 @@ if (require("rstanarm") && require("parameters")) {
   as.data.frame(format_table(x))
 }
 }
+}
+\seealso{
+Vignettes \href{https://easystats.github.io/insight/articles/display.html}{Formatting, printing and exporting tables}
+and \href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{Formatting model parameters}.
 }

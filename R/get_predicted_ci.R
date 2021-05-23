@@ -36,10 +36,10 @@
 #' @param vcov_args List of named vectors, used as additional arguments that are
 #'   passed down to the \pkg{sandwich}-function specified in
 #'   \code{vcov_estimation}.
-#' @param dispersion_function,interval_function These arguments are only used in
+#' @param dispersion_method,ci_method These arguments are only used in
 #'   the context of bootstrapped and Bayesian models. Possible values are
-#'   \code{dispersion_function = c("sd", "mad")} and
-#'   \code{interval_function = c("quantile", "hdi", "eti")}. For the latter, the
+#'   \code{dispersion_method = c("sd", "mad")} and
+#'   \code{ci_method = c("quantile", "hdi", "eti")}. For the latter, the
 #'   \pkg{bayestestR} package is required.
 #' @param ... Not used for now.
 #'
@@ -68,8 +68,8 @@
 #'
 #'   ci_vals <- get_predicted_ci(x,
 #'     predictions,
-#'     dispersion_function = "MAD",
-#'     interval_function = "HDI"
+#'     dispersion_method = "MAD",
+#'     ci_method = "HDI"
 #'   )
 #'   head(ci_vals)
 #' }
@@ -91,16 +91,16 @@ get_predicted_ci <- function(x,
                              vcov_estimation = NULL,
                              vcov_type = NULL,
                              vcov_args = NULL,
-                             dispersion_function = "sd",
-                             interval_function = "quantile",
+                             dispersion_method = "sd",
+                             ci_method = "quantile",
                              ...) {
 
   # If draws are present
   if ("iterations" %in% names(attributes(predictions))) {
     iter <- attributes(predictions)$iteration
 
-    se <- .get_predicted_se_from_iter(iter = iter, dispersion_function)
-    out <- .get_predicted_interval_from_iter(iter = iter, ci = ci, interval_function)
+    se <- .get_predicted_se_from_iter(iter = iter, dispersion_method)
+    out <- .get_predicted_interval_from_iter(iter = iter, ci = ci, ci_method)
 
     return(cbind(se, out))
   }
@@ -335,32 +335,32 @@ get_predicted_ci <- function(x,
 
 # Interval helpers --------------------------------------------------------
 
-.get_predicted_se_from_iter <- function(iter, dispersion_function = "SD") {
+.get_predicted_se_from_iter <- function(iter, dispersion_method = "SD") {
   data <- as.data.frame(t(iter)) # Reshape
 
   # Dispersion
-  if (is.character(dispersion_function)) {
-    dispersion_function <- match.arg(tolower(dispersion_function), c("sd", "mad"))
-    if (dispersion_function == "sd") {
+  if (is.character(dispersion_method)) {
+    dispersion_method <- match.arg(tolower(dispersion_method), c("sd", "mad"))
+    if (dispersion_method == "sd") {
       se <- apply(data, 2, stats::sd)
-    } else if (dispersion_function == "mad") {
+    } else if (dispersion_method == "mad") {
       se <- apply(data, 2, stats::mad)
     } else {
-      stop("`dispersion_function` argument not recognized.")
+      stop("`dispersion_method` argument not recognized.")
     }
   } else {
-    se <- apply(data, 2, dispersion_function)
+    se <- apply(data, 2, dispersion_method)
   }
   data.frame(SE = se)
 }
 
 
 
-.get_predicted_interval_from_iter <- function(iter, ci = 0.95, interval_function = "quantile") {
+.get_predicted_interval_from_iter <- function(iter, ci = 0.95, ci_method = "quantile") {
 
   # Interval
-  interval_function <- match.arg(tolower(interval_function), c("quantile", "hdi", "eti"))
-  if (interval_function == "quantile") {
+  ci_method <- match.arg(tolower(ci_method), c("quantile", "hdi", "eti"))
+  if (ci_method == "quantile") {
     out <- data.frame(Parameter = 1:nrow(iter))
     for (i in ci) {
       temp <- data.frame(
@@ -374,7 +374,7 @@ get_predicted_ci <- function(x,
   } else {
     # installed?
     check_if_installed("bayestestR")
-    out <- as.data.frame(bayestestR::ci(as.data.frame(t(iter)), ci = ci, method = interval_function))
+    out <- as.data.frame(bayestestR::ci(as.data.frame(t(iter)), ci = ci, method = ci_method))
     if (length(ci) > 1) out <- reshape_ci(out)
   }
   out$Parameter <- out$CI <- NULL

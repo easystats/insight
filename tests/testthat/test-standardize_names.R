@@ -4,7 +4,7 @@ if (require("testthat") &&
   require("parameters")) {
   .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-  if (packageVersion("parameters") > "0.11.0") {
+  if (packageVersion("parameters") >= "0.14.0") {
     test_that("standardize_names works", {
       set.seed(123)
 
@@ -46,7 +46,8 @@ if (require("testthat") &&
       names(standardize_names(z, style = "broom")),
       c(
         "parameter1", "parameter2", "mean.parameter1", "mean.parameter2", "estimate",
-        "conf.level", "conf.low", "conf.high", "statistic", "df.error", "p.value", "method"
+        "conf.level", "conf.low", "conf.high", "statistic", "df.error", "p.value",
+        "method", "alternative"
       )
     )
 
@@ -55,7 +56,7 @@ if (require("testthat") &&
 
     expect_equal(
       names(standardize_names(chi, style = "broom")),
-      c("statistic", "df", "p.value", "method")
+      c("statistic", "df", "p.value", "method", "alternative")
     )
   }
 }

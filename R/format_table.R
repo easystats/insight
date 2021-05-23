@@ -4,7 +4,8 @@
 #' @description This functions takes a data frame with model parameters as input
 #'   and formats certain columns into a more readable layout (like collapsing
 #'   separate columns for lower and upper confidence interval values). Furthermore,
-#'   column names are formatted as well.
+#'   column names are formatted as well. Note that \code{format_table()}
+#'   converts all columns into character vectors!
 #'
 #' @param x A data frame of model's parameters, as returned by various functions
 #'   of the \strong{easystats}-packages. May also be a result from
@@ -29,7 +30,12 @@
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
+#' @seealso Vignettes \href{https://easystats.github.io/insight/articles/display.html}{Formatting, printing and exporting tables}
+#' and \href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{Formatting model parameters}.
+#'
 #' @examples
+#' format_table(head(iris), digits = 1)
+#'
 #' if (require("parameters")) {
 #'   x <- model_parameters(lm(Sepal.Length ~ Species * Sepal.Width, data = iris))
 #'   as.data.frame(format_table(x))
@@ -42,7 +48,8 @@
 #'   as.data.frame(format_table(x))
 #' }
 #' }
-#' @return A data frame.
+#' @return A data frame. Note that \code{format_table()} converts all columns
+#' into character vectors!
 #' @export
 format_table <- function(x,
                          pretty_names = TRUE,
@@ -191,12 +198,9 @@ format_table <- function(x,
 }
 
 
-
-
 #' @rdname format_table
 #' @export
 parameters_table <- format_table
-
 
 
 
@@ -515,6 +519,10 @@ parameters_table <- format_table
 .format_bayes_columns <- function(x, stars, rope_digits = 2, zap_small, ci_width = "auto", ci_brackets = TRUE) {
   # Indices
   if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars)
+  if ("log_BF" %in% names(x)) {
+    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = stars)
+    x$log_BF <- NULL
+  }
   if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = stars)
   if ("Rhat" %in% names(x)) x$Rhat <- format_value(x$Rhat, digits = 3)
   if ("ESS" %in% names(x)) x$ESS <- round(x$ESS)

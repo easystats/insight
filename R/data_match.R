@@ -16,14 +16,14 @@
 data_match <- function(x, to) {
 
   # Sanity checks
-  if(!is.data.frame(to)) to <- as.data.frame(to)
+  if (!is.data.frame(to)) to <- as.data.frame(to)
 
   # Find matching rows
   idx <- 1:nrow(x)
-  for(col in names(to)) {
-    if(col %in% names(x)) {
+  for (col in names(to)) {
+    if (col %in% names(x)) {
       idx <- idx[x[[col]][idx] %in% to[[col]]]
     }
   }
-  row.names(x)[idx]
+  force_numeric(row.names(x)[idx])
 }

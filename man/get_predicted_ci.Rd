@@ -13,8 +13,8 @@ get_predicted_ci(
   vcov_estimation = NULL,
   vcov_type = NULL,
   vcov_args = NULL,
-  dispersion_function = "sd",
-  interval_function = "quantile",
+  dispersion_method = "sd",
+  ci_method = "quantile",
   ...
 )
 }
@@ -63,10 +63,10 @@ for details).}
 passed down to the \pkg{sandwich}-function specified in
 \code{vcov_estimation}.}
 
-\item{dispersion_function, interval_function}{These arguments are only used in
+\item{dispersion_method, ci_method}{These arguments are only used in
 the context of bootstrapped and Bayesian models. Possible values are
-\code{dispersion_function = c("sd", "mad")} and
-\code{interval_function = c("quantile", "hdi", "eti")}. For the latter, the
+\code{dispersion_method = c("sd", "mad")} and
+\code{ci_method = c("quantile", "hdi", "eti")}. For the latter, the
 \pkg{bayestestR} package is required.}
 
 \item{...}{Not used for now.}
@@ -99,8 +99,8 @@ if (require("bayestestR")) {
 
   ci_vals <- get_predicted_ci(x,
     predictions,
-    dispersion_function = "MAD",
-    interval_function = "HDI"
+    dispersion_method = "MAD",
+    ci_method = "HDI"
   )
   head(ci_vals)
 }

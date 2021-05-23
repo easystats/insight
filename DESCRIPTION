@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.14.1
+Version: 0.14.0.1
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -143,5 +143,5 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.1.1.9001
+RoxygenNote: 7.1.1
 Config/testthat/edition: 3

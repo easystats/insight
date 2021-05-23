@@ -544,7 +544,7 @@ get_predicted.prcomp <- function(x, data = NULL, ...) {
 get_predicted.faMain <- function(x, data = NULL, ...) {
   check_if_installed("fungible")
 
-  if(is.null(data)) {
+  if (is.null(data)) {
     stop("A dataframe (either the original of a new one) must be provided (`get_predicted(fa_results, data = df`).")
   } else {
     out <- as.data.frame(fungible::faScores(X = data, faMainObject = x)$fscores)

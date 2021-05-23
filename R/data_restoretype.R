@@ -16,22 +16,22 @@
 #' @export
 data_restoretype <- function(data, reference = NULL) {
 
-  for(col in names(data)) {
+  for (col in names(data)) {
 
     # No reference data (regular fixing) ----------------
-    if(is.null(reference)) {
-      if(is.character(data[[col]])) {
-        data[[col]] <- as.numeric_ifnumeric(data[[col]])
+    if (is.null(reference)) {
+      if (is.character(data[[col]])) {
+        data[[col]] <- force_numeric(data[[col]])
       }
     } else {
 
-      if(is.factor(reference[[col]]) && !is.factor(data[[col]])) {
+      if (is.factor(reference[[col]]) && !is.factor(data[[col]])) {
         # Restore factor levels
         data[[col]] <- factor(data[[col]], levels = levels(reference[[col]]))
       }
 
       if (is.numeric(reference[[col]]) && !is.numeric(data[[col]])) {
-        data[[col]] <- as.numeric_ifnumeric(as.character(data[[col]]))
+        data[[col]] <- force_numeric(as.character(data[[col]]))
       }
 
       if (is.character(reference[[col]]) && !is.character(data[[col]])) {
@@ -53,18 +53,18 @@ data_restoretype <- function(data, reference = NULL) {
 
 
 
-#' Convert to Numeric if Possible
+#' Convert to Numeric if üossible
 #'
 #' Tries to convert vector to numeric if possible (if no warnings or errors). Otherwise, leaves it as is.
 #'
 #' @param x A vector to be converted.
 #'
 #' @examples
-#' as.numeric_ifnumeric(c("1", "2"))
-#' as.numeric_ifnumeric(c("1", "2", "A"))
+#' force_numeric(c("1", "2"))
+#' force_numeric(c("1", "2", "A"))
 #' @return Numeric vector (if possible)
 #' @export
-as.numeric_ifnumeric <- function(x) {
+force_numeric <- function(x) {
   tryCatch(as.numeric(as.character(x)), error = function(e) x, warning = function(w) x)
 }
 
