@@ -12,6 +12,7 @@
 \alias{get_data.rlmerMod}
 \alias{get_data.clmm}
 \alias{get_data.mixed}
+\alias{get_data.afex_aov}
 \alias{get_data.lme}
 \alias{get_data.MixMod}
 \alias{get_data.brmsfit}
@@ -62,6 +63,8 @@ get_data(x, ...)
 
 \method{get_data}{mixed}(x, effects = c("all", "fixed", "random"), ...)
 
+\method{get_data}{afex_aov}(x, shape = c("long", "wide"), ...)
+
 \method{get_data}{lme}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_data}{MixMod}(
@@ -95,6 +98,9 @@ with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
+
+\item{shape}{Return long or wide data? Only applicable in repeated measures
+designs.}
 }
 \value{
 The data that was used to fit the model.

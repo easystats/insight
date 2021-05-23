@@ -502,8 +502,16 @@ get_data.mixed <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
-get_data.afex_aov <- function(x, ...) {
-  .get_data_from_modelframe(x, x$data$long, "all")
+#' @rdname get_data
+#' @param shape Return long or wide data? Only applicable in repeated measures
+#'   designs.
+get_data.afex_aov <- function(x, shape = c("long", "wide"), ...) {
+  if (!length(attr(aB, "within"))) {
+    shape <- "long"
+  } else {
+    shape <- match.arg(shape)
+  }
+  x$data[[shape]]
 }
 
 
