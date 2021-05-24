@@ -45,7 +45,8 @@ find_predictors <- function(x,
                             effects = c("fixed", "random", "all"),
                             component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
                             flatten = FALSE,
-                            verbose = TRUE) {
+                            verbose = TRUE,
+                            ...) {
   UseMethod("find_predictors")
 }
 
@@ -54,7 +55,8 @@ find_predictors.default <- function(x,
                                     effects = c("fixed", "random", "all"),
                                     component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
                                     flatten = FALSE,
-                                    verbose = TRUE) {
+                                    verbose = TRUE,
+                                    ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -106,7 +108,8 @@ find_predictors.afex_aov <- function(x,
                                      effects = c("fixed", "random", "all"),
                                      component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
                                      flatten = FALSE,
-                                     verbose = TRUE) {
+                                     verbose = TRUE,
+                                     ...) {
   effects <- match.arg(effects)
 
   if (effects == "all") effects <- c("fixed", "random")
