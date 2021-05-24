@@ -4,7 +4,7 @@
 print.get_predicted <- function(x, ...) {
   print_colour("Predicted values:\n\n", "blue")
   if(is.null(ncol(x))) {
-    print.default(x)
+    print.default(as.numeric(x))
   } else {
     print.data.frame(x)
   }

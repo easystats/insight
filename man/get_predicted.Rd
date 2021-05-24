@@ -76,7 +76,7 @@ The fitted values (i.e. predictions for the response). For Bayesian
   dataframe with all iterations as columns (observations are still rows).
 }
 \description{
-The \code{get_predicted()} function is a robust, flexible and user-friendly alternative to base R \code{\link{predict}} function. Additional features and advantages include availability of uncertainty intervals (CI), a more intuitive API and the support of more models than base R's \code{predict}. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the \code{Details} section for more information.
+The \code{get_predicted()} function is a robust, flexible and user-friendly alternative to base R \code{\link{predict}} function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's \code{predict}. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the \code{Details} section for more information.
 }
 \details{
 The \code{predict} argument jointly modulates two separate concepts, the
@@ -123,7 +123,7 @@ get_predicted(x, predict = "prediction")
 # Get CI
 as.data.frame(predictions)
 
-# Bootsrapped
+# Bootstrapped
 as.data.frame(get_predicted(x, iterations = 4))
 summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
 }
