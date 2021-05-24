@@ -53,7 +53,7 @@ data_restoretype <- function(data, reference = NULL) {
 
 
 
-#' Convert to Numeric if üossible
+#' Convert to Numeric if possible
 #'
 #' Tries to convert vector to numeric if possible (if no warnings or errors). Otherwise, leaves it as is.
 #'
