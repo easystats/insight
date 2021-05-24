@@ -749,17 +749,15 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   } else {
     check_if_installed("boot")
 
-    original_data <- get_data(x)
-
-    boot_fun <- function(data, indices, ...) {
-      model <- stats::update(x, data = original_data[indices, ])
+    boot_fun <- function(data, indices, predict_data, ...) {
+      model <- stats::update(x, data = data[indices, , drop = FALSE])
       if (verbose) {
-        predict_function(model, data = data, ...)
+        predict_function(model, data = predict_data, ...)
       } else {
-        suppressWarnings(predict_function(model, data = data, ...))
+        suppressWarnings(predict_function(model, data = predict_data, ...))
       }
     }
-    draws <- boot::boot(data, boot_fun, R = iterations, ...)
+    draws <- boot::boot(data = get_data(x), boot_fun, R = iterations, predict_data = data, ...)
   }
 
   # Format draws
