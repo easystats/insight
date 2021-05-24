@@ -4,7 +4,7 @@
 \alias{get_predicted}
 \alias{get_predicted.lm}
 \alias{get_predicted.stanreg}
-\title{Compute Model's Predictions}
+\title{Model Predictions (robust)}
 \usage{
 get_predicted(x, ...)
 
@@ -76,7 +76,7 @@ The fitted values (i.e. predictions for the response). For Bayesian
   dataframe with all iterations as columns (observations are still rows).
 }
 \description{
-Compute Model's Predictions.
+The \code{get_predicted()} function is a robust, flexible and user-friendly alternative to base R \code{\link{predict}} function. Additional features and advantages include availability of uncertainty intervals (CI), a more intuitive API and the support of more models than base R's \code{predict}. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the \code{Details} section for more information.
 }
 \details{
 The \code{predict} argument jointly modulates two separate concepts, the
@@ -128,5 +128,5 @@ as.data.frame(get_predicted(x, iterations = 4))
 summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
 }
 \seealso{
-get_predicted_ci
+\code{\link{get_predicted_ci}}
 }

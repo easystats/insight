@@ -1,6 +1,6 @@
-#' Compute Model's Predictions
+#' Model Predictions (robust)
 #'
-#' Compute Model's Predictions.
+#' The \code{get_predicted()} function is a robust, flexible and user-friendly alternative to base R \code{\link{predict}} function. Additional features and advantages include availability of uncertainty intervals (CI), a more intuitive API and the support of more models than base R's \code{predict}. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the \code{Details} section for more information.
 #'
 #' @param x A statistical model (can also be a data.frame, in which case the
 #'   second argument has to be a model).
@@ -36,7 +36,7 @@
 #'   \code{\link{get_predicted_ci}}.
 #' @inheritParams get_df
 #'
-#' @seealso get_predicted_ci
+#' @seealso \code{\link{get_predicted_ci}}
 #'
 #' @return The fitted values (i.e. predictions for the response). For Bayesian
 #'   or bootstrapped models (when \code{iterations != NULL}), this will be a
