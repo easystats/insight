@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute Model's Predictions — get_predicted • insight</title>
+<title>Model Predictions (robust) — get_predicted • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Compute Model's Predictions — get_predicted" />
-<meta property="og:description" content="Compute Model's Predictions." />
+<meta property="og:title" content="Model Predictions (robust) — get_predicted" />
+<meta property="og:description" content="The get_predicted() function is a robust, flexible and user-friendly alternative to base R predict function. Additional features and advantages include availability of uncertainty intervals (CI), a more intuitive API and the support of more models than base R's predict. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making &quot;predictions&quot; (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the Details section for more information." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -137,13 +137,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute Model's Predictions</h1>
+    <h1>Model Predictions (robust)</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/get_predicted.R'><code>R/get_predicted.R</code></a></small>
     <div class="hidden name"><code>get_predicted.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Compute Model's Predictions.</p>
+    <p>The <code>get_predicted()</code> function is a robust, flexible and user-friendly alternative to base R <code><a href='https://rdrr.io/r/stats/predict.html'>predict</a></code> function. Additional features and advantages include availability of uncertainty intervals (CI), a more intuitive API and the support of more models than base R's <code>predict</code>. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the <code>Details</code> section for more information.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -273,7 +273,7 @@ makes predictions of log-odds (probabilities on the logit scale).</p>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>get_predicted_ci</p></div>
+    <div class='dont-index'><p><code><a href='get_predicted_ci.html'>get_predicted_ci</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>
