@@ -82,13 +82,18 @@ predictions made by a model.
 data(mtcars)
 
 # Linear model
+# ------------
 x <- lm(mpg ~ cyl + hp, data = mtcars)
 predictions <- predict(x)
 ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")
 head(ci_vals)
 ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 head(ci_vals)
+ci_vals <- get_predicted_ci(x, predictions, ci = c(0.8, 0.9, 0.95))
+head(ci_vals)
 
+# Bootstrapped
+# ------------
 predictions <- get_predicted(x, iterations = 500)
 get_predicted_ci(x, predictions)
 
@@ -107,6 +112,7 @@ if (require("bayestestR")) {
 
 
 # Logistic model
+# --------------
 x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 predictions <- predict(x, type = "link")
 ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")

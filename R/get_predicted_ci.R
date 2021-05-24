@@ -51,13 +51,18 @@
 #' data(mtcars)
 #'
 #' # Linear model
+#' # ------------
 #' x <- lm(mpg ~ cyl + hp, data = mtcars)
 #' predictions <- predict(x)
 #' ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")
 #' head(ci_vals)
 #' ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 #' head(ci_vals)
+#' ci_vals <- get_predicted_ci(x, predictions, ci = c(0.8, 0.9, 0.95))
+#' head(ci_vals)
 #'
+#' # Bootstrapped
+#' # ------------
 #' predictions <- get_predicted(x, iterations = 500)
 #' get_predicted_ci(x, predictions)
 #'
@@ -76,6 +81,7 @@
 #'
 #'
 #' # Logistic model
+#' # --------------
 #' x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 #' predictions <- predict(x, type = "link")
 #' ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")
@@ -95,23 +101,44 @@ get_predicted_ci <- function(x,
                              ci_method = "quantile",
                              ...) {
 
-  # If draws are present
+  # If draws are present (bootstrapped or Bayesian)
   if ("iterations" %in% names(attributes(predictions))) {
     iter <- attributes(predictions)$iteration
 
     se <- .get_predicted_se_from_iter(iter = iter, dispersion_method)
-    out <- .get_predicted_interval_from_iter(iter = iter, ci = ci, ci_method)
+    out <- .get_predicted_ci_from_iter(iter = iter, ci = ci, ci_method)
 
     return(cbind(se, out))
   }
 
   # Analytical solution
+  # 1. Find appropriate interval function
   if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian")) { # gaussian or CI
-    se <- .get_predicted_ci_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
-    return(.get_predicted_se_to_ci(x, predictions, se = se, ci = ci))
+    se <- get_predicted_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
+    ci_function <- .get_predicted_se_to_ci
   } else {
-    return(.get_predicted_pi_glm(x, predictions, ci = ci))
+    se <- rep(NA, length(predictions))
+    ci_function <- .get_predicted_pi_glm
   }
+
+  # 2. Run it once or multiple times if multiple CI levels are requested
+  if(is.null(ci)) {
+    out <- data.frame(SE = se)
+
+  } else if(length(ci) == 1) {
+    out <- ci_function(x, predictions, ci = ci, se = se)
+
+  } else {
+    out <- data.frame(SE = se)
+    for(ci_val in ci) {
+      temp <- ci_function(x, predictions, ci = ci_val, se = se)
+      temp$SE <- NULL
+      names(temp) <- paste0(names(temp), "_", ci_val)
+      out <- cbind(out, temp)
+    }
+  }
+
+  out
 }
 
 
@@ -222,7 +249,7 @@ get_predicted_ci <- function(x,
 
 
 
-.get_predicted_ci_se <- function(x, predictions = NULL, data = NULL, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL) {
+get_predicted_se <- function(x, predictions = NULL, data = NULL, ci_type = "confidence", vcov_estimation = NULL, vcov_type = NULL, vcov_args = NULL) {
 
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'
@@ -257,7 +284,7 @@ get_predicted_ci <- function(x,
 
 
 
-.get_predicted_se_to_ci <- function(x, predictions = NULL, se = NULL, ci = 0.95) {
+.get_predicted_se_to_ci <- function(x, predictions = NULL, se = NULL, ci = 0.95, ...) {
 
   # TODO: Prediction interval for binomial: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-i/
   # TODO: Prediction interval for poisson: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-ii/
@@ -309,7 +336,7 @@ get_predicted_ci <- function(x,
 
 # Get PI ------------------------------------------------------------------
 
-.get_predicted_pi_glm <- function(x, predictions, ci = 0.95) {
+.get_predicted_pi_glm <- function(x, predictions, ci = 0.95, ...) {
   info <- model_info(x)
   linkfun <- link_function(x)
   linkinv <- link_inverse(x)
@@ -351,12 +378,12 @@ get_predicted_ci <- function(x,
   } else {
     se <- apply(data, 2, dispersion_method)
   }
-  data.frame(SE = se)
+  data.frame(SE = se, row.names = 1:length(se))
 }
 
 
 
-.get_predicted_interval_from_iter <- function(iter, ci = 0.95, ci_method = "quantile") {
+.get_predicted_ci_from_iter <- function(iter, ci = 0.95, ci_method = "quantile") {
 
   # Interval
   ci_method <- match.arg(tolower(ci_method), c("quantile", "hdi", "eti"))
