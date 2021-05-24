@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_restoretype.R
 \name{force_numeric}
 \alias{force_numeric}
-\title{Convert to Numeric if üossible}
+\title{Convert to Numeric if possible}
 \usage{
 force_numeric(x)
 }
