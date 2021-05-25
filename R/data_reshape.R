@@ -159,6 +159,13 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
 #' @export
 data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", rows_from = NULL, sep = "_", ..., names_from = colnames_from) {
 
+  if (inherits(data, "tbl_df")) {
+    tbl_input <- TRUE
+    data <- as.data.frame(data)
+  } else {
+    tbl_input <- FALSE
+  }
+
   # Compatibility with tidyr
   if (names_from != colnames_from) colnames_from <- names_from
 
@@ -192,6 +199,10 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
   # add back attributes where possible
   for (i in colnames(wide)) {
     attributes(wide[[i]]) <- variable_attr[[i]]
+  }
+
+  if (isTRUE(tbl_input)) {
+    class(wide) <- c("tbl_df", "tbl", "data.frame")
   }
 
   wide
