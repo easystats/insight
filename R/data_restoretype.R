@@ -21,7 +21,7 @@ data_restoretype <- function(data, reference = NULL) {
     # No reference data (regular fixing) ----------------
     if (is.null(reference)) {
       if (is.character(data[[col]])) {
-        data[[col]] <- force_numeric(data[[col]])
+        data[[col]] <- to_numeric(data[[col]])
       }
     } else {
 
@@ -31,7 +31,7 @@ data_restoretype <- function(data, reference = NULL) {
       }
 
       if (is.numeric(reference[[col]]) && !is.numeric(data[[col]])) {
-        data[[col]] <- force_numeric(as.character(data[[col]]))
+        data[[col]] <- to_numeric(as.character(data[[col]]))
       }
 
       if (is.character(reference[[col]]) && !is.character(data[[col]])) {
@@ -53,18 +53,18 @@ data_restoretype <- function(data, reference = NULL) {
 
 
 
-#' Convert to Numeric if possible
+#' Convert to Numeric (if possible)
 #'
 #' Tries to convert vector to numeric if possible (if no warnings or errors). Otherwise, leaves it as is.
 #'
 #' @param x A vector to be converted.
 #'
 #' @examples
-#' force_numeric(c("1", "2"))
-#' force_numeric(c("1", "2", "A"))
+#' to_numeric(c("1", "2"))
+#' to_numeric(c("1", "2", "A"))
 #' @return Numeric vector (if possible)
 #' @export
-force_numeric <- function(x) {
+to_numeric <- function(x) {
   tryCatch(as.numeric(as.character(x)), error = function(e) x, warning = function(w) x)
 }
 

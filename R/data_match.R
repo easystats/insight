@@ -25,5 +25,5 @@ data_match <- function(x, to) {
       idx <- idx[x[[col]][idx] %in% to[[col]]]
     }
   }
-  force_numeric(row.names(x)[idx])
+  to_numeric(row.names(x)[idx])
 }

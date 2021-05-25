@@ -7,6 +7,8 @@
   
 ## Bug fixes
 
+* Stability improvements to `get_predicted()`.
+
 * Fixed issues when accessing information from an `afex_aov` model with an empty `aov` slot (in anticipation for `{afex}` v.1.0.0).
 
 # insight 0.14.0

@@ -97,7 +97,7 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
-  data[["_Row"]] <- force_numeric(row.names(data))
+  data[["_Row"]] <- to_numeric(row.names(data))
 
   # Reshape
   long <- stats::reshape(data,
