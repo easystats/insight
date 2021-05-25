@@ -121,20 +121,25 @@ reference:
   contents:
   - clean_names
   - clean_parameters
-  - data_to_long
-  - data_match
-  - data_relocate
-  - data_restoretype
   - display
   - download_model
   - ellipsis_info
   - export_table
-  - force_numeric
   - null_model
   - print_parameters
-  - reshape_ci
   - standardize_names
   - check_if_installed
+
+- title: "Data management"
+  desc: >
+    Utility functions (mostly for managing or preparing data)
+  contents:
+  - data_to_long
+  - data_match
+  - data_relocate
+  - data_restoretype
+  - to_numeric
+  - reshape_ci
 
 - title: "Example Datasets"
   desc: >
