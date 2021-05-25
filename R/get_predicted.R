@@ -242,7 +242,7 @@ get_predicted.lmerMod <- function(x,
     )
   }
 
-  ci_data <- get_predicted_ci(x, predictions, data = args$data, ci_type = args$ci_type, ...)
+  ci_data <- get_predicted_ci(x, predictions, data = args$data, ci = ci, ci_type = args$ci_type, ...)
   out <- .get_predicted_transform(x, predictions, args, ci_data)
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
