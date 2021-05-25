@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert to Numeric if possible — force_numeric • insight</title>
+<title>Convert to Numeric (if possible) — to_numeric • insight</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Convert to Numeric if possible — force_numeric" />
+<meta property="og:title" content="Convert to Numeric (if possible) — to_numeric" />
 <meta property="og:description" content="Tries to convert vector to numeric if possible (if no warnings or errors). Otherwise, leaves it as is." />
 <meta property="og:image" content="/logo.png" />
 
@@ -137,16 +137,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert to Numeric if possible</h1>
+    <h1>Convert to Numeric (if possible)</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/insight/blob/master/R/data_restoretype.R'><code>R/data_restoretype.R</code></a></small>
-    <div class="hidden name"><code>force_numeric.Rd</code></div>
+    <div class="hidden name"><code>to_numeric.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Tries to convert vector to numeric if possible (if no warnings or errors). Otherwise, leaves it as is.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>force_numeric</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>to_numeric</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,9 +162,9 @@
     <p>Numeric vector (if possible)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>force_numeric</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span>, <span class='st'>"2"</span><span class='op'>)</span><span class='op'>)</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>to_numeric</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span>, <span class='st'>"2"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1 2</span>
-<span class='r-in'><span class='fu'>force_numeric</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"A"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>to_numeric</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"A"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "1" "2" "A"</span>
 </code></pre></div>
   </div>

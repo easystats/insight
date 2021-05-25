@@ -139,9 +139,6 @@
     <loc>/reference/fish.html</loc>
   </url>
   <url>
-    <loc>/reference/force_numeric.html</loc>
-  </url>
-  <url>
     <loc>/reference/format_bf.html</loc>
   </url>
   <url>
@@ -320,5 +317,8 @@
   </url>
   <url>
     <loc>/reference/standardize_names.html</loc>
+  </url>
+  <url>
+    <loc>/reference/to_numeric.html</loc>
   </url>
 </urlset>
