@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_relocate.R
 \name{data_relocate}
 \alias{data_relocate}
-\title{Relocate (reorder) columns of a dataframe}
+\title{Relocate (reorder) columns of a data frame}
 \usage{
 data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE)
 }
@@ -16,16 +16,15 @@ data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE)
 \item{safe}{If \code{TRUE}, will disregard non-existing columns.}
 }
 \value{
-data.frame
+A data frame with reordered columns.
 }
 \description{
-Relocate (reorder) columns of a dataframe
+Relocate (reorder) columns of a data frame
 }
 \examples{
 # Reorder columns
-data_relocate(iris, cols="Species", before = "Sepal.Length")
-data_relocate(iris, cols="Species", before = "Sepal.Width")
-data_relocate(iris, cols="Sepal.Width", after = "Species")
-data_relocate(iris, cols=c("Species", "Petal.Length"), after = "Sepal.Width")
-
+data_relocate(iris, cols = "Species", before = "Sepal.Length")
+data_relocate(iris, cols = "Species", before = "Sepal.Width")
+data_relocate(iris, cols = "Sepal.Width", after = "Species")
+data_relocate(iris, cols = c("Species", "Petal.Length"), after = "Sepal.Width")
 }

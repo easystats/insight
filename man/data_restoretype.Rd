@@ -2,18 +2,18 @@
 % Please edit documentation in R/data_restoretype.R
 \name{data_restoretype}
 \alias{data_restoretype}
-\title{Restore the type of columns according to a reference dataframe}
+\title{Restore the type of columns according to a reference data frame}
 \usage{
 data_restoretype(data, reference = NULL)
 }
 \arguments{
 \item{data}{A data frame to pivot.}
 
-\item{reference}{A reference dataframe from which to find the correct
+\item{reference}{A reference data frame from which to find the correct
 column types.}
 }
 \description{
-Restore the type of columns according to a reference dataframe
+Restore the type of columns according to a reference data frame
 }
 \examples{
 data <- data.frame(

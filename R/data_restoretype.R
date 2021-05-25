@@ -1,7 +1,7 @@
-#' Restore the type of columns according to a reference dataframe
+#' Restore the type of columns according to a reference data frame
 #'
 #' @inheritParams data_to_long
-#' @param reference A reference dataframe from which to find the correct
+#' @param reference A reference data frame from which to find the correct
 #'   column types.
 #'
 #' @examples

@@ -93,7 +93,8 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
   # Compatibility with tidyr
   if (names_to != colnames_to) colnames_to <- names_to
 
-
+  # save attribute of each variable
+  variable_attr <- lapply(data, attributes)
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
@@ -125,6 +126,11 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
   # Reset row names
   row.names(long) <- NULL
 
+  # add back attributes where possible
+  for (i in colnames(long)) {
+    attributes(long[[i]]) <- variable_attr[[i]]
+  }
+
   long
 }
 
@@ -141,6 +147,9 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
 
   # Compatibility with tidyr
   if (names_from != colnames_from) colnames_from <- names_from
+
+  # save attribute of each variable
+  variable_attr <- lapply(data, attributes)
 
   # If no other row identifier, create one
   if (is.null(rows_from)) {
@@ -162,6 +171,11 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
   # Clean
   if ("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
   row.names(wide) <- NULL  # Reset row names
+
+  # add back attributes where possible
+  for (i in colnames(wide)) {
+    attributes(wide[[i]]) <- variable_attr[[i]]
+  }
 
   wide
 }
