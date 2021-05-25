@@ -65,7 +65,10 @@
 data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL, ..., names_to = colnames_to) {
 
   if (inherits(data, "tbl_df")) {
-    stop(format_message("Please don't use objects that claim to be from a certain class though they do not behave like it... Consider using 'as.data.frame()' to coerce your input into a stable data frame."), call. = FALSE)
+    tbl_input <- TRUE
+    data <- as.data.frame(data)
+  } else {
+    tbl_input <- FALSE
   }
 
   # Select columns ----------------
@@ -133,6 +136,10 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
   # add back attributes where possible
   for (i in colnames(long)) {
     attributes(long[[i]]) <- variable_attr[[i]]
+  }
+
+  if (isTRUE(tbl_input)) {
+    class(long) <- c("tbl_df", "tbl", "data.frame")
   }
 
   long
