@@ -333,7 +333,17 @@
 <span class='r-in'>             colnames_from <span class='op'>=</span> <span class='st'>"Name"</span>,</span>
 <span class='r-in'>             values_from <span class='op'>=</span> <span class='st'>"Value"</span>,</span>
 <span class='r-in'>             rows_from <span class='op'>=</span> <span class='st'>"Row_ID"</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in data_to_wide(long_data, colnames_from = "Name", values_from = "Value",     rows_from = "Row_ID")</span> object 'long' not found</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Row_ID     Value_X1    Value_X2    Value_X3   Value_X4    Value_X5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       1 -1.400043517 -0.55369938  0.46815442  0.9353632  0.07003485</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       2  0.255317055  0.62898204  0.36295126  0.1764886 -0.63912332</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       3 -2.437263611  2.06502490 -1.30454355  0.2436855 -0.04996490</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4       4 -0.005571287 -1.63098940  0.73777632  1.6235489 -0.25148344</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5       5  0.621552721  0.51242695  1.88850493  0.1120381  0.44479712</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6       6  1.148411606 -1.86301149 -0.09744510 -0.1339970  2.75541758</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7       7 -1.821817661 -0.52201251 -0.93584735 -1.9100875  0.04653138</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8       8 -0.247325302 -0.05260191 -0.01595031 -0.2792372  0.57770907</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9       9 -0.244199607  0.54299634 -0.82678895 -0.3134460  0.11819487</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10     10 -0.282705449 -0.91407483 -1.51239965  1.0673079 -1.91172049</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Full example</span></span>
 <span class='r-in'><span class='co'># ------------------</span></span>
@@ -358,7 +368,20 @@
 <span class='r-in'>   <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>wide</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: psych</span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in data_to_wide(long, colnames_from = "Item", values_from = "Score")</span> object 'long' not found</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   gender education age Participant Facet Score_I1 Score_I2 Score_I3 Score_I4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      1        NA  16       61617     A        2        4        3        4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2      1        NA  16       61617     C        2        3        3        4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      1        NA  16       61617     E        3        3        3        4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4      1        NA  16       61617     N        3        4        2        2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      1        NA  16       61617     O        3        6        3        4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      2        NA  18       61618     A        2        4        5        2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Score_I5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2        4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3        4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4        3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5        3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6        5</span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
