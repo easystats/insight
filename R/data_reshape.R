@@ -65,7 +65,10 @@
 data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL, ..., names_to = colnames_to) {
 
   if (inherits(data, "tbl_df")) {
-    stop(format_message("Please don't use objects that claim to be from a certain class though they do not behave like it... Consider using 'as.data.frame()' to coerce your input into a stable data frame."), call. = FALSE)
+    tbl_input <- TRUE
+    data <- as.data.frame(data)
+  } else {
+    tbl_input <- FALSE
   }
 
   # Select columns ----------------
@@ -130,9 +133,16 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
   # Reset row names
   row.names(long) <- NULL
 
+  # Remove reshape attributes
+  attributes(long)$reshapeLong <- NULL
+
   # add back attributes where possible
   for (i in colnames(long)) {
     attributes(long[[i]]) <- variable_attr[[i]]
+  }
+
+  if (isTRUE(tbl_input)) {
+    class(long) <- c("tbl_df", "tbl", "data.frame")
   }
 
   long
@@ -148,6 +158,13 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
 #' @rdname data_to_long
 #' @export
 data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", rows_from = NULL, sep = "_", ..., names_from = colnames_from) {
+
+  if (inherits(data, "tbl_df")) {
+    tbl_input <- TRUE
+    data <- as.data.frame(data)
+  } else {
+    tbl_input <- FALSE
+  }
 
   # Compatibility with tidyr
   if (names_from != colnames_from) colnames_from <- names_from
@@ -176,9 +193,16 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
   if ("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
   row.names(wide) <- NULL  # Reset row names
 
+  # Remove reshape attributes
+  attributes(long)$reshapeWide <- NULL
+
   # add back attributes where possible
   for (i in colnames(wide)) {
     attributes(wide[[i]]) <- variable_attr[[i]]
+  }
+
+  if (isTRUE(tbl_input)) {
+    class(wide) <- c("tbl_df", "tbl", "data.frame")
   }
 
   wide
