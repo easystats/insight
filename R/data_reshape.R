@@ -65,7 +65,7 @@
 data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL, ..., names_to = colnames_to) {
 
   if (inherits(data, "tbl_df")) {
-    stop(format_message("Please don't use objects that behave like a class they claim to be objects from..."), call. = FALSE)
+    stop(format_message("Please don't use objects that claim to be from a certain class though they do not behave like it..."), call. = FALSE)
   }
 
   # Select columns ----------------
