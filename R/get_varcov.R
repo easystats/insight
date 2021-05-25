@@ -164,6 +164,19 @@ get_varcov.glmx <- function(x, component = c("all", "conditional", "extra"), ...
 
 
 #' @export
+get_varcov.pgmm <- function(x, component = c("conditional", "all"), ...) {
+  component <- match.arg(component)
+  vc <- stats::vcov(x)
+
+  if (component != "all") {
+    keep <- match(find_parameters(x)[[component]], rownames(vc))
+    vc <- vc[keep, keep, drop = FALSE]
+  }
+  .process_vcov(vc)
+}
+
+
+#' @export
 get_varcov.selection <- function(x, component = c("all", "selection", "outcome", "auxiliary"), ...) {
   component <- match.arg(component)
   vc <- stats::vcov(object = x)

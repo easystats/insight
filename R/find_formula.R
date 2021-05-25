@@ -662,6 +662,9 @@ find_formula.plm <- function(x, verbose = TRUE, ...) {
 }
 
 
+#' @export
+find_formula.pgmm <- find_formula.plm
+
 
 #' @export
 find_formula.felm <- function(x, verbose = TRUE, ...) {

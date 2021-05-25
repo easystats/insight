@@ -102,7 +102,7 @@ find_statistic <- function(x, ...) {
       "mclogit", "mmclogit", "mvmeta", "mvord",
       "negbin", "negbinmfx", "negbinirr", "nlreg",
       "objectiveML", "orm",
-      "poissonmfx", "poissonirr", "psm", "probitmfx",
+      "poissonmfx", "poissonirr", "psm", "probitmfx", "pgmm",
       "qr", "QRNLMM", "QRLMM",
       "Rchoice", "riskRegression", "robmixglm", "rma", "rma.mv", "rma.uni", "rrvglm",
       "sarlm", "sem", "SemiParBIV", "slm", "survreg", "svy_vglm",

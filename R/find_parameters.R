@@ -260,6 +260,26 @@ find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.pgmm <- function(x, component = c("conditional", "all"), flatten = FALSE, ...) {
+  component <- match.arg(component)
+  s <- summary(x)
+
+  l <- list(
+    conditional = rownames(s$coefficients),
+    time_dummies = x$args$namest
+  )
+
+  .filter_parameters(
+    l,
+    effects = "all",
+    component = component,
+    flatten = flatten,
+    recursive = FALSE
+  )
+}
+
+
+#' @export
 find_parameters.wbm <- function(x, flatten = FALSE, ...) {
   s <- summary(x)
 

@@ -936,6 +936,32 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.pgmm <- function(x, component = c("conditional", "all"), verbose = TRUE, ...) {
+  component <- match.arg(component)
+  cs <- stats::coef(summary(x, time.dummies = TRUE))
+
+  out <- data.frame(
+    Parameter = row.names(cs),
+    Statistic = as.vector(cs[, 3]),
+    Component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out$Component[out$Parameter %in% x$args$namest] <- "time_dummies"
+
+  if (component == "conditional") {
+    out <- out[out$Component == "conditional", ]
+    out <- .remove_column(out, "Component")
+  }
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.selection <- function(x, component = c("all", "selection", "outcome", "auxiliary"), ...) {
   component <- match.arg(component)
   s <- summary(x)

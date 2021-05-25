@@ -718,7 +718,26 @@ get_parameters.afex_aov <- function(x, ...) {
 }
 
 
+#' @export
+get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
+  s <- summary(x, time.dummies = TRUE)
+  params <- data.frame(
+    Parameter = rownames(s$coefficients),
+    Estimate = unname(s$coefficients),
+    Component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
 
+  params$Component[params$Parameter %in% x$args$namest] <- "time_dummies"
+
+  if (component == "conditional") {
+    params <- params[params$Component == "conditional", ]
+    params <- .remove_column(params, "Component")
+  }
+
+  .remove_backticks_from_parameter_names(params)
+}
 
 
 

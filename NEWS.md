@@ -3,8 +3,12 @@
 ## New functions
 
 * `data_to_long()`, `data_match()`, `data_relocate()`, `data_restoretype()`, 
-  `force_numeric()`.
+  `to_numeric()`.
   
+## New supported model classes
+
+* Support for `pgmm` (*plm*)
+
 ## Bug fixes
 
 * Stability improvements to `get_predicted()`.

@@ -110,7 +110,7 @@ is_regression_model <- function(x) {
     # o --------------------
     "objectiveML", "ols", "osrt", "orcutt",
     # p --------------------
-    "pairwise.htest", "pb1", "pb2", "plm", "plmm", "PMCMR",
+    "pairwise.htest", "pb1", "pb2", "pgmm", "plm", "plmm", "PMCMR",
     "poissonmfx", "poissonirr", "polr", "pseudoglm", "psm", "probitmfx",
     # q --------------------
     "qr", "QRNLMM", "QRLMM",

@@ -766,6 +766,21 @@ get_data.feglm <- function(x, ...) {
 
 
 #' @export
+get_data.pgmm <- function(x, verbose = TRUE, ...) {
+  model_terms <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
+  mf <- tryCatch(
+    {
+      .get_data_from_env(x)[, model_terms, drop = FALSE]
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+  .prepare_get_data(x, mf, verbose = verbose)
+}
+
+
+#' @export
 get_data.plm <- function(x, ...) {
   mf <- stats::model.frame(x)
   model_terms <- find_variables(x, effects = "all", component = "all", flatten = TRUE)

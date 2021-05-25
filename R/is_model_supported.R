@@ -90,7 +90,7 @@ supported_models <- function() {
     "ols", "orm",
 
     # p ----------------------------
-    "poissonmfx", "poissonirr", "plm", "polr", "psm", "probitmfx",
+    "poissonmfx", "poissonirr", "pgmm", "plm", "polr", "psm", "probitmfx",
 
     # r ----------------------------
     "Rchoice", "ridgelm", "riskRegression", "rlm", "rlmerMod", "RM", "rma",
