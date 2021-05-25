@@ -133,6 +133,9 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
   # Reset row names
   row.names(long) <- NULL
 
+  # Remove reshape attributes
+  attributes(long)$reshapeLong <- NULL
+
   # add back attributes where possible
   for (i in colnames(long)) {
     attributes(long[[i]]) <- variable_attr[[i]]
