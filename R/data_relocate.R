@@ -61,7 +61,7 @@ data_relocate <- function(data, cols, before = NULL, after = NULL, safe = TRUE) 
   position <- position[position <= length(data_cols)]
 
   out <- data[position]
-  attributes(out) <- utils::modifyList(att, attributes(ou))
+  attributes(out) <- utils::modifyList(att, attributes(out))
 
   out
 }
