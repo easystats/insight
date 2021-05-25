@@ -194,7 +194,7 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
   row.names(wide) <- NULL  # Reset row names
 
   # Remove reshape attributes
-  attributes(long)$reshapeWide <- NULL
+  attributes(wide)$reshapeWide <- NULL
 
   # add back attributes where possible
   for (i in colnames(wide)) {
