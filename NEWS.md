@@ -4,6 +4,10 @@
 
 * `data_to_long()`, `data_match()`, `data_relocate()`, `data_restoretype()`, 
   `force_numeric()`.
+  
+## Bug fixes
+
+* Fixed issues when accessing information from an `afex_aov` model with an empty `aov` slot (in anticipation for `{afex}` v.1.0.0).
 
 # insight 0.14.0
 
