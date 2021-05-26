@@ -720,6 +720,7 @@ get_parameters.afex_aov <- function(x, ...) {
 
 #' @export
 get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
+  component <- match.arg(component)
   s <- summary(x, time.dummies = TRUE)
   params <- data.frame(
     Parameter = rownames(s$coefficients),
