@@ -938,7 +938,7 @@ get_statistic.negbinirr <- get_statistic.logitor
 #' @export
 get_statistic.pgmm <- function(x, component = c("conditional", "all"), verbose = TRUE, ...) {
   component <- match.arg(component)
-  cs <- stats::coef(summary(x, time.dummies = TRUE))
+  cs <- stats::coef(summary(x, time.dummies = TRUE, robust = FALSE))
 
   out <- data.frame(
     Parameter = row.names(cs),

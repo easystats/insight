@@ -262,7 +262,7 @@ find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.pgmm <- function(x, component = c("conditional", "all"), flatten = FALSE, ...) {
   component <- match.arg(component)
-  s <- summary(x)
+  s <- summary(x, robust = FALSE)
 
   l <- list(
     conditional = rownames(s$coefficients),
