@@ -666,6 +666,10 @@ model_info.mhurdle <- function(x, ...) {
 
 
 #' @export
+model_info.stanreg <- model_info.default
+
+
+#' @export
 model_info.brmsfit <- function(x, ...) {
   faminfo <- stats::family(x)
   if (is_multivariate(x)) {

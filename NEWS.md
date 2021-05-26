@@ -2,18 +2,26 @@
 
 ## New functions
 
-* `data_to_long()`, `data_match()`, `data_relocate()`, `data_restoretype()`, 
-  `to_numeric()`.
+* Added several data management and preparation functions: `data_to_long()`, 
+  `data_match()`, `data_relocate()`, `data_restoretype()`, `force_numeric()`.
   
 ## New supported model classes
 
 * Support for `pgmm` (*plm*)
 
+## Changes to functions
+
+* Improved handling of auxiliary parameters for *stanreg* models.
+
 ## Bug fixes
 
 * Stability improvements to `get_predicted()`.
 
-* Fixed issues when accessing information from an `afex_aov` model with an empty `aov` slot (in anticipation for `{afex}` v.1.0.0).
+* Fixed issues when accessing information from an `afex_aov` model with an 
+  empty `aov` slot (in anticipation for `{afex}` v.1.0.0).
+
+* Fixed issue in `model_info()` for *stanreg* object with non-standard
+  model-family specification.
 
 # insight 0.14.0
 

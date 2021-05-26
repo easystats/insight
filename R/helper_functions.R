@@ -261,7 +261,7 @@
 .aux_elements <- function() {
   c(
     "sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape",
-    "phi", "ndt", "hu", "xi", "coi", "zoi", "mix", "shiftprop", "auxiliary",
+    "phi", "(phi)", "ndt", "hu", "xi", "coi", "zoi", "mix", "shiftprop", "auxiliary",
     "aux", "dist"
   )
 }

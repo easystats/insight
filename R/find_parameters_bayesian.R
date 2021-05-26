@@ -248,9 +248,9 @@ find_parameters.brmsfit <- function(x,
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
   shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
   dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
-  auxiliary <- fe[grepl("(shape|precision|_ndt_)", fe)]
+  auxiliary <- fe[grepl("(shape|phi|precision|_ndt_)", fe)]
 
-  # if auxilliary is modelled directly, we need to remove duplicates here
+  # if auxiliary is modelled directly, we need to remove duplicates here
   # e.g. "b_sigma..." is in "cond" and in "sigma" now, we just need it in "cond".
 
   sigma <- setdiff(sigma, c(cond, rand, rand_sd, rand_cor))
@@ -436,12 +436,17 @@ find_parameters.stanreg <- function(x,
   rand_sd <- fe[grepl("^Sigma\\[", fe, perl = TRUE)]
   smooth_terms <- fe[grepl("^smooth_sd", fe, perl = TRUE)]
   sigma <- fe[grepl("sigma", fe, fixed = TRUE)]
+  auxiliary <- fe[grepl("(shape|phi|precision)", fe)]
+
+  # remove auxiliary from conditional
+  cond <- setdiff(cond, auxiliary)
 
   l <- .compact_list(list(
     conditional = cond,
     random = c(rand, rand_sd),
     smooth_terms = smooth_terms,
-    sigma = sigma
+    sigma = sigma,
+    auxiliary = auxiliary
   ))
 
   l <- .filter_pars(l, parameters)
