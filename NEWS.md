@@ -1,3 +1,9 @@
+# insight 0.14.2
+
+## Bug fixes
+
+* Fixed issue in `model_info()` with `stan_polr()` models.
+
 # insight 0.14.1
 
 ## New functions

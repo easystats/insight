@@ -666,7 +666,13 @@ model_info.mhurdle <- function(x, ...) {
 
 
 #' @export
-model_info.stanreg <- model_info.default
+model_info.stanreg <- function(x, ...) {
+  if (inherits(x, "polr")) {
+    model_info.polr(x)
+  } else {
+    model_info.default(x)
+  }
+}
 
 
 #' @export
