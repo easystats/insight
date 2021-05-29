@@ -517,7 +517,7 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_predicted.principal <- function(x, data = NULL, ...) {
-  if(is.null(data)) {
+  if (is.null(data)) {
     out <- as.data.frame(x$scores)
   } else {
     out <- as.data.frame(stats::predict(x, data, ...))
@@ -531,7 +531,7 @@ get_predicted.fa <- get_predicted.principal
 
 #' @export
 get_predicted.prcomp <- function(x, data = NULL, ...) {
-  if(is.null(data)) {
+  if (is.null(data)) {
     out <- as.data.frame(x$x)
   } else {
     out <- as.data.frame(stats::predict(x, data, ...))

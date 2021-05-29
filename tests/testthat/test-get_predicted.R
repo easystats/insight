@@ -344,7 +344,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
   # FA / PCA ----------------------------------------------------------------
   # =========================================================================
-3
+  3
   test_that("get_predicted - FA / PCA", {
     # PCA
     x <- get_predicted(psych::principal(mtcars, 3))

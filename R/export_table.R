@@ -266,8 +266,10 @@ export_table <- function(x,
   col_names <- names(df)
   df <- as.data.frame(sapply(df, function(i) {
     if (is.numeric(i)) {
-      format_value(i, digits = digits, protect_integers = protect_integers,
-                   missing = missing, width = width, zap_small = zap_small)
+      format_value(i,
+        digits = digits, protect_integers = protect_integers,
+        missing = missing, width = width, zap_small = zap_small
+      )
     } else {
       i
     }

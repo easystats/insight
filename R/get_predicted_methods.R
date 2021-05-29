@@ -3,7 +3,7 @@
 #' @export
 print.get_predicted <- function(x, ...) {
   print_colour("Predicted values:\n\n", "blue")
-  if(is.null(ncol(x))) {
+  if (is.null(ncol(x))) {
     print.default(as.numeric(x))
   } else {
     print.data.frame(x)
@@ -36,10 +36,9 @@ print.get_predicted <- function(x, ...) {
 
 #' @export
 as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
-  if(inherits(x, "data.frame") && !"iterations" %in% names(attributes(x))) {
+  if (inherits(x, "data.frame") && !"iterations" %in% names(attributes(x))) {
     # Then it must be a regular data.frame (e.g., from PCA/FA)
     out <- as.data.frame.data.frame(x)
-
   } else {
     # Then it must be predictions from a regression model
     out <- data.frame("Predicted" = as.numeric(x))
