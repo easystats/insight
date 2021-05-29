@@ -1,8 +1,8 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
+.runThisTest <- TRUE
 if (.runThisTest) {
   if (suppressWarnings(require("testthat") &&
-    require("insight") &&
+    require("insight") && require("lme4") &&
     require("BayesFactor") &&
     require("rstanarm"))) {
     m1 <- insight::download_model("stanreg_merMod_5")
@@ -29,6 +29,25 @@ if (.runThisTest) {
         refresh = 0
       )
     m6 <- insight::download_model("stanreg_gamm4_1")
+
+    m7 <- stan_lm(mpg ~ wt + qsec + am, data = mtcars, prior = R2(0.75),
+                  chains = 1, iter = 300,refresh = 0)
+
+    m8 <- stan_lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy, refresh = 0)
+
+    m9 <- stan_aov(yield ~ block + N*P*K, data = npk, prior = R2(0.5), refresh = 0)
+
+    test_that("model_info-stanreg-glm", {
+      expect_snapshot(model_info(m1))
+      expect_snapshot(model_info(m2))
+      expect_snapshot(model_info(m3))
+      expect_snapshot(model_info(m4))
+      expect_snapshot(model_info(m5))
+      expect_snapshot(model_info(m6))
+      expect_snapshot(model_info(m7))
+      expect_snapshot(model_info(m8))
+      expect_snapshot(model_info(m9))
+    })
 
     test_that("n_parameters", {
       expect_equal(n_parameters(m1), 21)

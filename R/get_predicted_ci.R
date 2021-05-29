@@ -122,15 +122,13 @@ get_predicted_ci <- function(x,
   }
 
   # 2. Run it once or multiple times if multiple CI levels are requested
-  if(is.null(ci)) {
+  if (is.null(ci)) {
     out <- data.frame(SE = se)
-
-  } else if(length(ci) == 1) {
+  } else if (length(ci) == 1) {
     out <- ci_function(x, predictions, ci = ci, se = se)
-
   } else {
     out <- data.frame(SE = se)
-    for(ci_val in ci) {
+    for (ci_val in ci) {
       temp <- ci_function(x, predictions, ci = ci_val, se = se)
       temp$SE <- NULL
       names(temp) <- paste0(names(temp), "_", ci_val)

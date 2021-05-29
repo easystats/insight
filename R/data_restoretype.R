@@ -15,7 +15,6 @@
 #' summary(fixed)
 #' @export
 data_restoretype <- function(data, reference = NULL) {
-
   for (col in names(data)) {
 
     # No reference data (regular fixing) ----------------
@@ -24,7 +23,6 @@ data_restoretype <- function(data, reference = NULL) {
         data[[col]] <- to_numeric(data[[col]])
       }
     } else {
-
       if (is.factor(reference[[col]]) && !is.factor(data[[col]])) {
         # Restore factor levels
         data[[col]] <- factor(data[[col]], levels = levels(reference[[col]]))
@@ -67,5 +65,3 @@ data_restoretype <- function(data, reference = NULL) {
 to_numeric <- function(x) {
   tryCatch(as.numeric(as.character(x)), error = function(e) x, warning = function(w) x)
 }
-
-

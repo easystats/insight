@@ -114,8 +114,10 @@ find_predictors.afex_aov <- function(x,
 
   if (effects == "all") effects <- c("fixed", "random")
 
-  l <- list(fixed = c(names(attr(x, "between")), names(attr(x, "within"))),
-            random = attr(x, "id"))[effects]
+  l <- list(
+    fixed = c(names(attr(x, "between")), names(attr(x, "within"))),
+    random = attr(x, "id")
+  )[effects]
 
   if (flatten) {
     unique(unlist(l))
