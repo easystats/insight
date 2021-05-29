@@ -1,5 +1,5 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-.runThisTest <- TRUE
+
 if (.runThisTest) {
   if (suppressWarnings(require("testthat") &&
     require("insight") && require("lme4") &&
