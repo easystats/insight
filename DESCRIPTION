@@ -32,7 +32,12 @@ Authors@R:
              family = "Wiernik",
              role = c("aut"),
              email = "brenton@wiernik.org",
-             comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")))
+             comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")),
+      person(given = "Alex",
+             family = "Hayes",
+             role = c("rev"),
+             email = "alexpghayes@gmail.com",
+             comment = c(ORCID = "0000-0002-4985-5160")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: A tool to provide an easy, intuitive and consistent
     access to information contained in various R models, like model
