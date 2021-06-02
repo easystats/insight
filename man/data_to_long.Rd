@@ -86,30 +86,33 @@ data_to_long(wide_data)
 
 # Customizing the names
 data_to_long(wide_data,
-             cols = c(1, 2),
-             colnames_to = "Column",
-             values_to = "Numbers",
-             rows_to = "Row")
+  cols = c(1, 2),
+  colnames_to = "Column",
+  values_to = "Numbers",
+  rows_to = "Row"
+)
 
 # From long to wide
 # -----------------
-long_data <- data_to_long(wide_data, rows_to = "Row_ID")  # Save row number
+long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
 data_to_wide(long_data,
-             colnames_from = "Name",
-             values_from = "Value",
-             rows_from = "Row_ID")
+  colnames_from = "Name",
+  values_from = "Value",
+  rows_from = "Row_ID"
+)
 
 # Full example
 # ------------------
 if (require("psych")) {
-  data <- psych::bfi  # Wide format with one row per participant's personality test
+  data <- psych::bfi # Wide format with one row per participant's personality test
 
   # Pivot long format
   long <- data_to_long(data,
-                       cols = "\\\\d",  # Select all columns that contain a digit
-                       colnames_to = "Item",
-                       values_to = "Score",
-                       rows_to = "Participant")
+    cols = "\\\\d", # Select all columns that contain a digit
+    colnames_to = "Item",
+    values_to = "Score",
+    rows_to = "Participant"
+  )
 
   # Separate facet and question number
   long$Facet <- gsub("\\\\d", "", long$Item)
@@ -117,8 +120,9 @@ if (require("psych")) {
   long$Item <- paste0("I", long$Item)
 
   wide <- data_to_wide(long,
-                       colnames_from = "Item",
-                       values_from = "Score")
-   head(wide)
+    colnames_from = "Item",
+    values_from = "Score"
+  )
+  head(wide)
 }
 }

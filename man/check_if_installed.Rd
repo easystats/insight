@@ -8,6 +8,7 @@ check_if_installed(
   package,
   reason = "for this function to work",
   stop = TRUE,
+  minimum_version = NULL,
   ...
 )
 }
@@ -21,6 +22,9 @@ generic description.}
 \item{stop}{Logical that decides whether the function should stop if the
 needed package is not installed.}
 
+\item{minimum_version}{String, representing the minimum package version that
+is required. If \code{NULL}, no check for minimum version is done.}
+
 \item{...}{Currently ignored}
 }
 \description{
@@ -28,8 +32,8 @@ Checking if needed package is installed
 }
 \examples{
 \dontrun{
-  check_if_installed("inexistent_package")
+check_if_installed("inexistent_package")
+check_if_installed("insight")
+check_if_installed("insight", minimum_version = "99.8.7")
 }
-
-
 }
