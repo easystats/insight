@@ -300,10 +300,11 @@
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Customizing the names</span></span>
 <span class='r-in'><span class='fu'>data_to_long</span><span class='op'>(</span><span class='va'>wide_data</span>,</span>
-<span class='r-in'>             cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,</span>
-<span class='r-in'>             colnames_to <span class='op'>=</span> <span class='st'>"Column"</span>,</span>
-<span class='r-in'>             values_to <span class='op'>=</span> <span class='st'>"Numbers"</span>,</span>
-<span class='r-in'>             rows_to <span class='op'>=</span> <span class='st'>"Row"</span><span class='op'>)</span></span>
+<span class='r-in'>  cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>  colnames_to <span class='op'>=</span> <span class='st'>"Column"</span>,</span>
+<span class='r-in'>  values_to <span class='op'>=</span> <span class='st'>"Numbers"</span>,</span>
+<span class='r-in'>  rows_to <span class='op'>=</span> <span class='st'>"Row"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>             X3         X4          X5 Row Column      Numbers</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1   0.46815442  0.9353632  0.07003485   1     X1 -1.400043517</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 2   0.46815442  0.9353632  0.07003485   1     X2 -0.553699384</span>
@@ -328,11 +329,12 @@
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># From long to wide</span></span>
 <span class='r-in'><span class='co'># -----------------</span></span>
-<span class='r-in'><span class='va'>long_data</span> <span class='op'>&lt;-</span> <span class='fu'>data_to_long</span><span class='op'>(</span><span class='va'>wide_data</span>, rows_to <span class='op'>=</span> <span class='st'>"Row_ID"</span><span class='op'>)</span>  <span class='co'># Save row number</span></span>
+<span class='r-in'><span class='va'>long_data</span> <span class='op'>&lt;-</span> <span class='fu'>data_to_long</span><span class='op'>(</span><span class='va'>wide_data</span>, rows_to <span class='op'>=</span> <span class='st'>"Row_ID"</span><span class='op'>)</span> <span class='co'># Save row number</span></span>
 <span class='r-in'><span class='fu'>data_to_wide</span><span class='op'>(</span><span class='va'>long_data</span>,</span>
-<span class='r-in'>             colnames_from <span class='op'>=</span> <span class='st'>"Name"</span>,</span>
-<span class='r-in'>             values_from <span class='op'>=</span> <span class='st'>"Value"</span>,</span>
-<span class='r-in'>             rows_from <span class='op'>=</span> <span class='st'>"Row_ID"</span><span class='op'>)</span></span>
+<span class='r-in'>  colnames_from <span class='op'>=</span> <span class='st'>"Name"</span>,</span>
+<span class='r-in'>  values_from <span class='op'>=</span> <span class='st'>"Value"</span>,</span>
+<span class='r-in'>  rows_from <span class='op'>=</span> <span class='st'>"Row_ID"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>    Row_ID     Value_X1    Value_X2    Value_X3   Value_X4    Value_X5</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1       1 -1.400043517 -0.55369938  0.46815442  0.9353632  0.07003485</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 2       2  0.255317055  0.62898204  0.36295126  0.1764886 -0.63912332</span>
@@ -348,14 +350,15 @@
 <span class='r-in'><span class='co'># Full example</span></span>
 <span class='r-in'><span class='co'># ------------------</span></span>
 <span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://personality-project.org/r/psych/'>"psych"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'>  <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>psych</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/psych/man/bfi.html'>bfi</a></span>  <span class='co'># Wide format with one row per participant's personality test</span></span>
+<span class='r-in'>  <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>psych</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/psych/man/bfi.html'>bfi</a></span> <span class='co'># Wide format with one row per participant's personality test</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='co'># Pivot long format</span></span>
 <span class='r-in'>  <span class='va'>long</span> <span class='op'>&lt;-</span> <span class='fu'>data_to_long</span><span class='op'>(</span><span class='va'>data</span>,</span>
-<span class='r-in'>                       cols <span class='op'>=</span> <span class='st'>"\\d"</span>,  <span class='co'># Select all columns that contain a digit</span></span>
-<span class='r-in'>                       colnames_to <span class='op'>=</span> <span class='st'>"Item"</span>,</span>
-<span class='r-in'>                       values_to <span class='op'>=</span> <span class='st'>"Score"</span>,</span>
-<span class='r-in'>                       rows_to <span class='op'>=</span> <span class='st'>"Participant"</span><span class='op'>)</span></span>
+<span class='r-in'>    cols <span class='op'>=</span> <span class='st'>"\\d"</span>, <span class='co'># Select all columns that contain a digit</span></span>
+<span class='r-in'>    colnames_to <span class='op'>=</span> <span class='st'>"Item"</span>,</span>
+<span class='r-in'>    values_to <span class='op'>=</span> <span class='st'>"Score"</span>,</span>
+<span class='r-in'>    rows_to <span class='op'>=</span> <span class='st'>"Participant"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='co'># Separate facet and question number</span></span>
 <span class='r-in'>  <span class='va'>long</span><span class='op'>$</span><span class='va'>Facet</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"\\d"</span>, <span class='st'>""</span>, <span class='va'>long</span><span class='op'>$</span><span class='va'>Item</span><span class='op'>)</span></span>
@@ -363,9 +366,10 @@
 <span class='r-in'>  <span class='va'>long</span><span class='op'>$</span><span class='va'>Item</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"I"</span>, <span class='va'>long</span><span class='op'>$</span><span class='va'>Item</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='va'>wide</span> <span class='op'>&lt;-</span> <span class='fu'>data_to_wide</span><span class='op'>(</span><span class='va'>long</span>,</span>
-<span class='r-in'>                       colnames_from <span class='op'>=</span> <span class='st'>"Item"</span>,</span>
-<span class='r-in'>                       values_from <span class='op'>=</span> <span class='st'>"Score"</span><span class='op'>)</span></span>
-<span class='r-in'>   <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>wide</span><span class='op'>)</span></span>
+<span class='r-in'>    colnames_from <span class='op'>=</span> <span class='st'>"Item"</span>,</span>
+<span class='r-in'>    values_from <span class='op'>=</span> <span class='st'>"Score"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>wide</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: psych</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   gender education age Participant Facet Score_I1 Score_I2 Score_I3 Score_I4</span>
