@@ -26,18 +26,18 @@ check_if_installed <- function(package,
   is_installed <- requireNamespace(package, quietly = TRUE)
   if (!is_installed) {
     # prepare the message
-    message <- format_message(paste0(
-      "Package '", package, "' is required ", reason, ".\n",
-      "Please install it by running install.packages('", package, "')."
-    ))
+    message <- format_message(
+      paste0("Package '", package, "' is required ", reason, "."),
+      paste0("Please install it by running install.packages('", package, "').")
+    )
 
     if (stop) stop(message, call. = FALSE) else warning(message, call. = FALSE)
   } else if (!is.null(minimum_version) && utils::packageVersion(package) < package_version(minimum_version)) {
     # prepare the message
-    message <- format_message(paste0(
-      "Package '", package, "' is installed, but package version '", minimum_version,"' is required ", reason, ".\n",
-      "Please update the package by running install.packages('", package, "')."
-    ))
+    message <- format_message(
+      paste0("Package '", package, "' is installed, but package version '", minimum_version,"' is required ", reason, "."),
+      paste0("Please update the package by running install.packages('", package, "').")
+    )
 
     if (stop) stop(message, call. = FALSE) else warning(message, call. = FALSE)
   }
