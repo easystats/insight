@@ -253,7 +253,7 @@ find_parameters.brmsfit <- function(x,
   # if auxiliary is modelled directly, we need to remove duplicates here
   # e.g. "b_sigma..." is in "cond" and in "sigma" now, we just need it in "cond".
 
-  sigma <- setdiff(sigma, c(cond, rand, rand_sd, rand_cor))
+  sigma <- setdiff(sigma, c(cond, rand, rand_sd, rand_cor, "prior_sigma"))
   beta <- setdiff(beta, c(cond, rand, rand_sd, rand_cor))
   auxiliary <- setdiff(auxiliary, c(cond, rand, rand_sd, rand_cor))
 

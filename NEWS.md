@@ -9,6 +9,9 @@
 
 * Fixed issue in `model_info()` with `stan_polr()` models.
 
+* Fixed issue in `find_parameters()` for *brms* when model contained parameters
+  for the priors on sigma.
+
 # insight 0.14.1
 
 ## New functions
