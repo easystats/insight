@@ -59,82 +59,78 @@ find_statistic <- function(x, ...) {
 
   # t-value objects ----------------------------------------------------------
 
-  t.mods <-
-    c(
-      "bayesx", "BBreg", "BBmm", "bcplm", "biglm", "blmerMod",
-      "cch", "censReg", "complmrob", "cpglm", "cpglmm", "crq", "crqs",
-      "drc",
-      "elm",
-      "feis", "felm",
-      "gamlss", "garch", "glmmPQL", "gls", "gmm", "gnls",
-      "HLfit",
-      "ivreg", "ivFixed", "iv_robust", "ivprobit",
-      "lm", "lm_robust", "lm.beta", "lme", "lmerMod", "lmerModLmerTest",
-      "lmodel2", "lmRob", "lmrob", "lqm", "lqmm",
-      "maxLik", "mixed", "mhurdle", "mlm", "multinom",
-      "nlmerMod", "nlrq", "nls",
-      "ols", "orcutt",
-      "pb1", "pb2", "polr",
-      "rlm", "rms", "rlmerMod", "rq", "rqs", "rqss",
-      "selection", "speedlm", "spml", "summary.lm", "svyglm", "svyolr",
-      "truncreg",
-      "varest",
-      "wbm", "wblm",
-      "yuen"
-    )
+  t.mods <- c(
+    "bayesx", "BBreg", "BBmm", "bcplm", "biglm", "blmerMod",
+    "cch", "censReg", "complmrob", "cpglm", "cpglmm", "crq", "crqs",
+    "drc",
+    "elm",
+    "feis", "felm",
+    "gamlss", "garch", "glmmPQL", "gls", "gmm", "gnls",
+    "HLfit",
+    "ivreg", "ivFixed", "iv_robust", "ivprobit",
+    "lm", "lm_robust", "lm.beta", "lme", "lmerMod", "lmerModLmerTest",
+    "lmodel2", "lmRob", "lmrob", "lqm", "lqmm",
+    "maxLik", "mixed", "mhurdle", "mlm", "multinom",
+    "nlmerMod", "nlrq", "nls",
+    "ols", "orcutt",
+    "pb1", "pb2", "polr",
+    "rlm", "rms", "rlmerMod", "rq", "rqs", "rqss",
+    "selection", "speedlm", "spml", "summary.lm", "svyglm", "svyolr",
+    "truncreg",
+    "varest",
+    "wbm", "wblm",
+    "yuen"
+  )
 
   # z-value objects ----------------------------------------------------------
 
-  z.mods <-
-    c(
-      "aareg", "Arima", "averaging",
-      "betamfx", "betaor", "betareg", "bife", "bglmerMod", "boot_test_mediation",
-      "bracl", "brglm", "brglmFit", "brmultinom", "btergm",
-      "cglm", "cph", "clm", "clm2", "clmm", "clmm2", "clogit", "coxme", "coxph",
-      "coxr", "crch", "crr",
-      "DirichletRegModel",
-      "ergm",
-      "feglm", "flexsurvreg",
-      "gee", "glimML", "glmm", "glmmadmb", "glmmLasso", "glmmTMB", "glmx", "gmnl",
-      "hurdle",
-      "lavaan", "loggammacenslmrob", "logitmfx", "logitor", "LORgee", "lrm",
-      "margins", "metaplus", "mixor", "MixMod", "mjoint", "mle", "mle2", "mlogit",
-      "mclogit", "mmclogit", "mvmeta", "mvord",
-      "negbin", "negbinmfx", "negbinirr", "nlreg",
-      "objectiveML", "orm",
-      "poissonmfx", "poissonirr", "psm", "probitmfx", "pgmm",
-      "qr", "QRNLMM", "QRLMM",
-      "Rchoice", "riskRegression", "robmixglm", "rma", "rma.mv", "rma.uni", "rrvglm",
-      "sarlm", "sem", "SemiParBIV", "slm", "survreg", "svy_vglm",
-      "test_mediation", "tobit",
-      "vglm",
-      "wbgee",
-      "zcpglm", "zeroinfl", "zerotrunc"
-    )
+  z.mods <- c(
+    "aareg", "Arima", "averaging",
+    "betamfx", "betaor", "betareg", "bife", "bglmerMod", "boot_test_mediation",
+    "bracl", "brglm", "brglmFit", "brmultinom", "btergm",
+    "cglm", "cph", "clm", "clm2", "clmm", "clmm2", "clogit", "coxme", "coxph",
+    "coxr", "crch", "crr",
+    "DirichletRegModel",
+    "ergm",
+    "feglm", "flexsurvreg",
+    "gee", "glimML", "glmm", "glmmadmb", "glmmLasso", "glmmTMB", "glmx", "gmnl",
+    "hurdle",
+    "lavaan", "loggammacenslmrob", "logitmfx", "logitor", "LORgee", "lrm",
+    "margins", "metaplus", "mixor", "MixMod", "mjoint", "mle", "mle2", "mlogit",
+    "mclogit", "mmclogit", "mvmeta", "mvord",
+    "negbin", "negbinmfx", "negbinirr", "nlreg",
+    "objectiveML", "orm",
+    "poissonmfx", "poissonirr", "psm", "probitmfx", "pgmm",
+    "qr", "QRNLMM", "QRLMM",
+    "Rchoice", "riskRegression", "robmixglm", "rma", "rma.mv", "rma.uni", "rrvglm",
+    "sarlm", "sem", "SemiParBIV", "slm", "survreg", "svy_vglm",
+    "test_mediation", "tobit",
+    "vglm",
+    "wbgee",
+    "zcpglm", "zeroinfl", "zerotrunc"
+  )
 
   # F-value objects ----------------------------------------------------------
 
-  f.mods <-
-    c(
-      "afex_aov", "Anova.mlm", "aov", "aovlist", "anova",
-      "Gam",
-      "manova", "maov",
-      "t1way"
-    )
+  f.mods <- c(
+    "afex_aov", "Anova.mlm", "aov", "aovlist", "anova",
+    "Gam",
+    "manova", "maov",
+    "t1way"
+  )
 
   # chi-squared value objects ------------------------------------------------
 
-  chi.mods <-
-    c(
-      "coxph.penal",
-      "epi.2by2",
-      "geeglm",
-      "logistf",
-      "MANOVA", "mlma",
-      "nparLD",
-      "RM",
-      "vgam"
-    )
+  chi.mods <- c(
+    "coxph.penal",
+    "epi.2by2",
+    "geeglm",
+    "logistf",
+    "MANOVA", "mlma",
+    "nparLD",
+    "RM",
+    "vgam"
+  )
 
   # mixed bag ----------------------------------------------------------------
 
@@ -182,17 +178,16 @@ find_statistic <- function(x, ...) {
 
   # no statistic -------------------------------------------------------------
 
-  unsupported.mods <-
-    c(
-      "bcplm", "BFBayesFactor", "brmsfit",
-      "gbm",
-      "joint",
-      "list",
-      "MCMCglmm", "mediate", "mlergm",
-      "pairwise.htest",
-      "ridgelm",
-      "splmm", "stanreg", "stanmvreg", "survfit"
-    )
+  unsupported.mods <- c(
+    "bcplm", "BFBayesFactor", "brmsfit",
+    "gbm",
+    "joint",
+    "list",
+    "MCMCglmm", "mediate", "mlergm",
+    "pairwise.htest",
+    "ridgelm",
+    "splmm", "stanreg", "stanmvreg", "survfit"
+  )
 
   # edge cases ---------------------------------------------------------------
 
@@ -261,42 +256,48 @@ find_statistic <- function(x, ...) {
 
   if (model_class %in% unclear.mods) {
     col_names <- colnames(as.data.frame(summary(x)$coefficients))
-    t_names <-
-      c(
-        "t",
-        "t-value",
-        "t value",
-        "t.value",
-        "Pr(>|t|)"
-      )
-    z_names <-
-      c(
-        "z",
-        "z-value",
-        "z value",
-        "z.value",
-        "Pr(>|z|)",
-        "Pr(>|Z|)",
-        "Naive z",
-        "Robust z",
-        "san.z",
-        "Wald Z"
-      )
+
+    t_names <- c(
+      "t",
+      "t-value",
+      "t value",
+      "t.value",
+      "Pr(>|t|)"
+    )
+
+    z_names <- c(
+      "z",
+      "z-value",
+      "z value",
+      "z.value",
+      "Pr(>|z|)",
+      "Pr(>|Z|)",
+      "Naive z",
+      "Robust z",
+      "san.z",
+      "Wald Z"
+    )
+
     f_names <- c("F", "F-value", "F value", "F.value")
+
     chi_names <- c("Chisq", "chi-sq", "chi.sq", "Wald", "W", "Pr(>|W|)")
 
     if (length(col_names) == 0L) {
       return(NULL)
     }
+
     if (any(t_names %in% col_names)) {
       return("t-statistic")
     }
+
     if (any(z_names %in% col_names)) {
       return("z-statistic")
     }
+
     if (any(f_names %in% col_names)) {
       return("F-statistic")
     }
+
     if (any(chi_names %in% col_names)) {
       return("chi-squared statistic")
     }

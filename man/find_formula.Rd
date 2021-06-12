@@ -21,16 +21,37 @@ A list of formulas that describe the model. For simple models,
    only one list-element, \code{conditional}, is returned. For more complex
    models, the returned list may have following elements:
    \itemize{
-     \item \code{conditional}, the "fixed effects" part from the model. One exception are \code{DirichletRegModel} models from \pkg{DirichletReg}, which has two or three components, depending on \code{model}.
-     \item \code{random}, the "random effects" part from the model (or the \code{id} for gee-models and similar)
-     \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
-     \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
+     \item \code{conditional}, the "fixed effects" part from the model. One
+     exception are \code{DirichletRegModel} models from \pkg{DirichletReg},
+     which has two or three components, depending on \code{model}.
+
+     \item \code{random}, the "random effects" part from the model (or the
+     \code{id} for gee-models and similar)
+
+     \item \code{zero_inflated}, the "fixed effects" part from the
+     zero-inflation component of the model
+
+     \item \code{zero_inflated_random}, the "random effects" part from the
+     zero-inflation component of the model
+
      \item \code{dispersion}, the dispersion formula
-     \item \code{instruments}, for fixed-effects regressions like \code{ivreg::ivreg()}, \code{lfe::felm()} or \code{plm::plm()}, the instrumental variables
-     \item \code{cluster}, for fixed-effects regressions like \code{lfe::felm()}, the cluster specification
-     \item \code{correlation}, for models with correlation-component like \code{nlme::gls()}, the formula that describes the correlation structure
-     \item \code{slopes}, for fixed-effects individual-slope models like \code{feisr::feis()}, the formula for the slope parameters
-     \item \code{precision}, for \code{DirichletRegModel} models from \pkg{DirichletReg}, when parametrization (i.e. \code{model}) is \code{"alternative"}.
+
+     \item \code{instruments}, for fixed-effects regressions like
+     \code{ivreg::ivreg()}, \code{lfe::felm()} or \code{plm::plm()}, the
+     instrumental variables
+
+     \item \code{cluster}, for fixed-effects regressions like
+     \code{lfe::felm()}, the cluster specification
+
+     \item \code{correlation}, for models with correlation-component like
+     \code{nlme::gls()}, the formula that describes the correlation structure
+
+     \item \code{slopes}, for fixed-effects individual-slope models like
+     \code{feisr::feis()}, the formula for the slope parameters
+
+     \item \code{precision}, for \code{DirichletRegModel} models from
+     \pkg{DirichletReg}, when parametrization (i.e. \code{model}) is
+     \code{"alternative"}.
    }
 }
 \description{

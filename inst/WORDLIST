@@ -36,7 +36,6 @@ blavaan
 brms
 brmsfit
 btergm
-ci
 cloglog
 cmprsk
 colour
@@ -82,11 +81,13 @@ metaBMA
 metaplus
 mhurdle
 mira
+modelled
 modelling
 multcomp
 mvord
 occurence
 optimizers
+plm
 poisson
 pre
 pscl
@@ -109,6 +110,7 @@ tweedie
 unformatted
 untransformed
 variates
+vectorized
 vgam
 warmup
 warmups

@@ -16,16 +16,37 @@
 #'    only one list-element, \code{conditional}, is returned. For more complex
 #'    models, the returned list may have following elements:
 #'    \itemize{
-#'      \item \code{conditional}, the "fixed effects" part from the model. One exception are \code{DirichletRegModel} models from \pkg{DirichletReg}, which has two or three components, depending on \code{model}.
-#'      \item \code{random}, the "random effects" part from the model (or the \code{id} for gee-models and similar)
-#'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model
-#'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model
+#'      \item \code{conditional}, the "fixed effects" part from the model. One
+#'      exception are \code{DirichletRegModel} models from \pkg{DirichletReg},
+#'      which has two or three components, depending on \code{model}.
+#'
+#'      \item \code{random}, the "random effects" part from the model (or the
+#'      \code{id} for gee-models and similar)
+#'
+#'      \item \code{zero_inflated}, the "fixed effects" part from the
+#'      zero-inflation component of the model
+#'
+#'      \item \code{zero_inflated_random}, the "random effects" part from the
+#'      zero-inflation component of the model
+#'
 #'      \item \code{dispersion}, the dispersion formula
-#'      \item \code{instruments}, for fixed-effects regressions like \code{ivreg::ivreg()}, \code{lfe::felm()} or \code{plm::plm()}, the instrumental variables
-#'      \item \code{cluster}, for fixed-effects regressions like \code{lfe::felm()}, the cluster specification
-#'      \item \code{correlation}, for models with correlation-component like \code{nlme::gls()}, the formula that describes the correlation structure
-#'      \item \code{slopes}, for fixed-effects individual-slope models like \code{feisr::feis()}, the formula for the slope parameters
-#'      \item \code{precision}, for \code{DirichletRegModel} models from \pkg{DirichletReg}, when parametrization (i.e. \code{model}) is \code{"alternative"}.
+#'
+#'      \item \code{instruments}, for fixed-effects regressions like
+#'      \code{ivreg::ivreg()}, \code{lfe::felm()} or \code{plm::plm()}, the
+#'      instrumental variables
+#'
+#'      \item \code{cluster}, for fixed-effects regressions like
+#'      \code{lfe::felm()}, the cluster specification
+#'
+#'      \item \code{correlation}, for models with correlation-component like
+#'      \code{nlme::gls()}, the formula that describes the correlation structure
+#'
+#'      \item \code{slopes}, for fixed-effects individual-slope models like
+#'      \code{feisr::feis()}, the formula for the slope parameters
+#'
+#'      \item \code{precision}, for \code{DirichletRegModel} models from
+#'      \pkg{DirichletReg}, when parametrization (i.e. \code{model}) is
+#'      \code{"alternative"}.
 #'    }
 #'
 #' @note For models of class \code{lme} or \code{gls} the correlation-component
@@ -70,7 +91,6 @@ formula_ok <- function(x, verbose = TRUE, ...) {
 
 # Default method -----------------------------------
 
-
 #' @export
 find_formula.default <- function(x, verbose = TRUE, ...) {
   f <- tryCatch(
@@ -83,7 +103,6 @@ find_formula.default <- function(x, verbose = TRUE, ...) {
   )
   .find_formula_return(f, verbose = verbose)
 }
-
 
 
 #' @export
@@ -114,7 +133,6 @@ find_formula.data.frame <- function(x, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 find_formula.aovlist <- function(x, verbose = TRUE, ...) {
   f <- attr(x, "terms", exact = TRUE)
@@ -123,19 +141,13 @@ find_formula.aovlist <- function(x, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 find_formula.anova <- function(x, verbose = TRUE, ...) {
   stop("Formulas cannot be retrieved from anova() objects.")
 }
 
 
-
-
-
-
 # GAM -----------------------------------------------------------
-
 
 #' @export
 find_formula.SemiParBIV <- function(x, verbose = TRUE, ...) {
@@ -259,11 +271,7 @@ find_formula.gamm <- function(x, verbose = TRUE, ...) {
 
 
 
-
-
-
 # Meta-Analysis -----------------------
-
 
 #' @export
 find_formula.rma <- function(x, verbose = TRUE, ...) {
@@ -281,10 +289,6 @@ find_formula.meta_fixed <- find_formula.rma
 
 #' @export
 find_formula.meta_bma <- find_formula.rma
-
-
-
-
 
 
 
@@ -552,10 +556,6 @@ find_formula.cglm <- function(x, verbose = TRUE, ...) {
 
 
 
-
-
-
-
 # mfx models ---------------------------------------
 
 
@@ -587,11 +587,6 @@ find_formula.poissonirr <- find_formula.logitmfx
 
 #' @export
 find_formula.probitmfx <- find_formula.logitmfx
-
-
-
-
-
 
 
 
@@ -925,11 +920,7 @@ find_formula.tobit <- function(x, verbose = TRUE, ...) {
 }
 
 
-
-
-
 # Zero inflated models --------------------------------------
-
 
 #' @export
 find_formula.hurdle <- function(x, verbose = TRUE, ...) {
@@ -947,12 +938,6 @@ find_formula.zerotrunc <- find_formula.hurdle
 find_formula.zcpglm <- function(x, verbose = TRUE, ...) {
   .zeroinf_formula(x, separator = "\\|\\|", verbose = verbose)
 }
-
-
-
-
-
-
 
 
 
@@ -1014,17 +999,7 @@ find_formula.DirichletRegModel <- function(x, verbose = TRUE, ...) {
 
 
 
-
-
-
-
-
-
-
-
-
 # Mixed models -----------------------
-
 
 #' @export
 find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
@@ -1195,7 +1170,6 @@ find_formula.lme <- function(x, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 find_formula.lqmm <- function(x, verbose = TRUE, ...) {
   fm <- eval(x$call$fixed)
@@ -1302,13 +1276,7 @@ find_formula.glmm <- function(x, verbose = TRUE, ...) {
 }
 
 
-
-
-
-
-
 # Bayesian models --------------------------------
-
 
 #' @export
 find_formula.BGGM <- function(x, verbose = TRUE, ...) {
@@ -1316,12 +1284,10 @@ find_formula.BGGM <- function(x, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 find_formula.mcmc.list <- function(x, verbose = TRUE, ...) {
   NULL
 }
-
 
 
 #' @export
@@ -1361,7 +1327,6 @@ find_formula.stanreg <- function(x, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 find_formula.brmsfit <- function(x, verbose = TRUE, ...) {
   f <- stats::formula(x)
@@ -1377,7 +1342,6 @@ find_formula.brmsfit <- function(x, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 find_formula.stanmvreg <- function(x, verbose = TRUE, ...) {
   f <- stats::formula(x)
@@ -1385,7 +1349,6 @@ find_formula.stanmvreg <- function(x, verbose = TRUE, ...) {
   attr(mv_formula, "is_mv") <- "1"
   .find_formula_return(mv_formula)
 }
-
 
 
 #' @export
@@ -1396,7 +1359,6 @@ find_formula.MCMCglmm <- function(x, verbose = TRUE, ...) {
   f <- .compact_list(list(conditional = fm, random = fmr))
   .find_formula_return(f, verbose = verbose)
 }
-
 
 
 #' @export
@@ -1442,8 +1404,6 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
 
 
 
-
-
 # tidymodels --------------------------------------------------------------
 
 #' @export
@@ -1452,11 +1412,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 }
 
 
-
-
-
 # helper ---------------------------
-
 
 .get_brms_formula <- function(f) {
   f.cond <- f$formula
@@ -1495,8 +1451,6 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     zero_inflated_random = f.zirandom
   ))
 }
-
-
 
 
 .get_stanmv_formula <- function(f) {
@@ -1628,7 +1582,6 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
 # Helpers and Methods -----------------------------------------------------
 
-
 .find_formula_return <- function(f, verbose = TRUE) {
   if (is.null(f)) {
     return(NULL)
@@ -1645,8 +1598,6 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   class(f) <- c("insight_formula", class(f))
   f
 }
-
-
 
 
 .check_formula_for_T <- function(f, verbose = TRUE) {
@@ -1726,10 +1677,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 }
 
 
-
-
 # methods -------------------------
-
 
 #' @export
 format.insight_formula <- function(x, what = c("conditional", "random"), ...) {

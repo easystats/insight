@@ -1,7 +1,8 @@
 #' @title Find names of model weights
 #' @name find_weights
 #'
-#' @description Returns the name of the variable that describes the weights of a model.
+#' @description Returns the name of the variable that describes the weights of a
+#'   model.
 #'
 #' @param x A fitted model.
 #' @param ... Currently not used.

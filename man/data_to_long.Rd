@@ -54,27 +54,36 @@ reshape_wider(
 
 \item{colnames_to}{The name of the new column that will contain the column names.}
 
-\item{values_to}{The name of the new column that will contain the values of the pivoted variables.}
+\item{values_to}{The name of the new column that will contain the values of
+the pivoted variables.}
 
-\item{rows_to}{The name of the column that will contain the row-number from the original data. If \code{NULL}, will be removed.}
+\item{rows_to}{The name of the column that will contain the row-number from
+the original data. If \code{NULL}, will be removed.}
 
 \item{...}{Additional arguments passed on to methods.}
 
-\item{names_to, names_from}{Same as \code{colnames_to}, is there for compatibility with \code{tidyr::pivot_longer()}.}
+\item{names_to, names_from}{Same as \code{colnames_to}, is there for
+compatibility with \code{tidyr::pivot_longer()}.}
 
-\item{values_from}{The name of the column that contains the values of the put in the columns.}
+\item{values_from}{The name of the column that contains the values of the put
+in the columns.}
 
-\item{colnames_from}{The name of the column that contains the levels to be used as future columns}
+\item{colnames_from}{The name of the column that contains the levels to be
+used as future columns}
 
-\item{rows_from}{The name of the column that identifies the rows. If \code{NULL}, will use all the unique rows.}
+\item{rows_from}{The name of the column that identifies the rows. If
+\code{NULL}, will use all the unique rows.}
 
-\item{sep}{The indicating a separating character in the variable names in the wide format.}
+\item{sep}{The indicating a separating character in the variable names in the
+wide format.}
 }
 \value{
 data.frame
 }
 \description{
-This function "lengthens" data, increasing the number of rows and decreasing the number of columns. This is a dependency-free base-R equivalent of \code{tidyr::pivot_longer()}.
+This function "lengthens" data, increasing the number of rows and decreasing
+the number of columns. This is a dependency-free base-R equivalent of
+\code{tidyr::pivot_longer()}.
 }
 \examples{
 wide_data <- data.frame(replicate(5, rnorm(10)))

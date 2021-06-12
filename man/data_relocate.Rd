@@ -11,7 +11,8 @@ data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE)
 
 \item{cols}{A character vector indicating the names of the columns to move.}
 
-\item{before, after}{Destination of columns. Supplying neither will move columns to the left-hand side; specifying both is an error.}
+\item{before, after}{Destination of columns. Supplying neither will move
+columns to the left-hand side; specifying both is an error.}
 
 \item{safe}{If \code{TRUE}, will disregard non-existing columns.}
 }

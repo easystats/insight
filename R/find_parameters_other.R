@@ -21,7 +21,10 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
 #' @export
-find_parameters.averaging <- function(x, component = c("conditional", "full"), flatten = FALSE, ...) {
+find_parameters.averaging <- function(x,
+                                      component = c("conditional", "full"),
+                                      flatten = FALSE,
+                                      ...) {
   component <- match.arg(component)
   cf <- stats::coef(x, full = component == "full")
   out <- list(conditional = .remove_backticks_from_string(names(cf)))

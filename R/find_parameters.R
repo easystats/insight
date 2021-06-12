@@ -97,7 +97,6 @@ find_parameters.summary.lm <- function(x, flatten = FALSE, ...) {
 
 # Ordinal -----------------------------------------------
 
-
 #' @export
 find_parameters.polr <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = c(sprintf("Intercept: %s", names(x$zeta)), names(stats::coef(x))))
@@ -181,11 +180,6 @@ find_parameters.multinom <- function(x, flatten = FALSE, ...) {
 find_parameters.brmultinom <- find_parameters.multinom
 
 
-
-
-
-
-
 # SEM models ------------------------------------------------------
 
 #' @export
@@ -258,9 +252,11 @@ find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
 
 # Panel models ----------------------------------------
 
-
 #' @export
-find_parameters.pgmm <- function(x, component = c("conditional", "all"), flatten = FALSE, ...) {
+find_parameters.pgmm <- function(x,
+                                 component = c("conditional", "all"),
+                                 flatten = FALSE,
+                                 ...) {
   component <- match.arg(component)
   s <- summary(x, robust = FALSE)
 
@@ -303,16 +299,10 @@ find_parameters.wbm <- function(x, flatten = FALSE, ...) {
 find_parameters.wbgee <- find_parameters.wbm
 
 
-
-
-
-
 # Other models -----------------------------------
-
 
 #' @export
 find_parameters.rms <- find_parameters.default
-
 
 #' @export
 find_parameters.tobit <- find_parameters.default

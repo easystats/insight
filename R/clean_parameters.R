@@ -47,7 +47,11 @@ clean_parameters <- function(x, ...) {
 
 #' @export
 clean_parameters.default <- function(x, group = "", ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  pars <- find_parameters(x,
+    effects = "all",
+    component = "all",
+    flatten = FALSE
+  )
 
   l <- lapply(names(pars), function(i) {
     eff <- if (grepl("random", i, fixed = TRUE)) {
@@ -145,7 +149,11 @@ clean_parameters.emm_list <- clean_parameters.emmGrid
 
 #' @export
 clean_parameters.BFBayesFactor <- function(x, ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  pars <- find_parameters(x,
+    effects = "all",
+    component = "all",
+    flatten = FALSE
+  )
 
   l <- lapply(names(pars), function(i) {
     eff <- if (grepl("random", i, fixed = TRUE)) {
@@ -179,7 +187,11 @@ clean_parameters.BFBayesFactor <- function(x, ...) {
 
 #' @export
 clean_parameters.wbm <- function(x, ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  pars <- find_parameters(x,
+    effects = "all",
+    component = "all",
+    flatten = FALSE
+  )
 
   l <- lapply(names(pars), function(i) {
     com <- if (grepl("random", i, fixed = TRUE)) {
@@ -232,7 +244,11 @@ clean_parameters.model_fit <- function(x, ...) {
 
 #' @export
 clean_parameters.glmm <- function(x, ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  pars <- find_parameters(x,
+    effects = "all",
+    component = "all",
+    flatten = FALSE
+  )
 
   l <- lapply(names(pars), function(i) {
     data.frame(
@@ -287,7 +303,12 @@ clean_parameters.blavaan <- function(x, ...) {
 
 #' @export
 clean_parameters.brmsfit <- function(x, ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  pars <- find_parameters(x,
+    effects = "all",
+    component = "all",
+    flatten = FALSE
+  )
+
   is_mv <- is_multivariate(pars)
 
   if (is_mv) {
@@ -305,11 +326,14 @@ clean_parameters.brmsfit <- function(x, ...) {
 }
 
 
-
-
 #' @export
 clean_parameters.stanreg <- function(x, ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  pars <- find_parameters(x,
+    effects = "all",
+    component = "all",
+    flatten = FALSE
+  )
+
   l <- .get_stan_params(pars)
 
   out <- do.call(rbind, l)
@@ -390,8 +414,6 @@ clean_parameters.mlm <- function(x, ...) {
   out <- .remove_empty_columns_from_pars(out)
   .fix_random_effect_smooth(x, out)
 }
-
-
 
 
 
@@ -547,11 +569,13 @@ clean_parameters.mlm <- function(x, ...) {
   # fix intercept names
 
   intercepts <- which(out$Cleaned_Parameter %in% c("Intercept", "zi_Intercept"))
+
   if (!.is_empty_object(intercepts)) {
     out$Cleaned_Parameter[intercepts] <- "(Intercept)"
   }
 
   interaction_terms <- which(grepl("\\.", out$Cleaned_Parameter))
+
   if (length(interaction_terms)) {
     for (i in interaction_terms) {
       i_terms <- strsplit(out$Cleaned_Parameter[i], "\\.")
@@ -588,6 +612,7 @@ clean_parameters.mlm <- function(x, ...) {
   # correlation and sd
 
   cor_sd <- grepl("^Sigma\\[(.*)", out$Cleaned_Parameter)
+
   if (any(cor_sd)) {
     parm1 <- gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\2", out$Parameter[cor_sd], perl = TRUE)
     parm2 <- gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\3", out$Parameter[cor_sd], perl = TRUE)
@@ -616,6 +641,7 @@ clean_parameters.mlm <- function(x, ...) {
   # clean remaining parameters
 
   smooth <- grepl("^smooth_sd\\[", out$Cleaned_Parameter)
+
   if (length(smooth)) {
     out$Cleaned_Parameter <- gsub("^smooth_sd\\[(.*)\\]", "\\1", out$Cleaned_Parameter)
     out$Component[smooth] <- "smooth_sd"
@@ -676,7 +702,6 @@ clean_parameters.mlm <- function(x, ...) {
   out$Cleaned_Parameter <- gsub("(\\.$)", "", out$Cleaned_Parameter)
   out
 }
-
 
 
 

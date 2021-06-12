@@ -42,7 +42,10 @@ find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
 
 #' @rdname find_parameters.gamlss
 #' @export
-find_parameters.gam <- function(x, component = c("all", "conditional", "smooth_terms", "location"), flatten = FALSE, ...) {
+find_parameters.gam <- function(x,
+                                component = c("all", "conditional", "smooth_terms", "location"),
+                                flatten = FALSE,
+                                ...) {
   pars <- list(conditional = names(stats::coef(x)))
   pars$conditional <- .remove_backticks_from_string(pars$conditional)
 
@@ -71,7 +74,10 @@ find_parameters.scam <- find_parameters.gam
 
 
 #' @export
-find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_terms", "location"), flatten = FALSE, ...) {
+find_parameters.Gam <- function(x,
+                                component = c("all", "conditional", "smooth_terms", "location"),
+                                flatten = FALSE,
+                                ...) {
   pars <- names(stats::coef(x))
   component <- match.arg(component)
 
@@ -80,7 +86,13 @@ find_parameters.Gam <- function(x, component = c("all", "conditional", "smooth_t
     smooth_terms = pars[.grep_smoothers(pars)]
   ))
 
-  .filter_parameters(l, effects = "all", component = component, flatten = flatten, recursive = TRUE)
+  .filter_parameters(
+    l,
+    effects = "all",
+    component = component,
+    flatten = flatten,
+    recursive = TRUE
+  )
 }
 
 
@@ -90,7 +102,10 @@ find_parameters.vgam <- find_parameters.Gam
 
 
 #' @export
-find_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_terms", "location"), flatten = FALSE, ...) {
+find_parameters.gamm <- function(x,
+                                 component = c("all", "conditional", "smooth_terms", "location"),
+                                 flatten = FALSE,
+                                 ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
   component <- match.arg(component)
@@ -106,7 +121,10 @@ find_parameters.gamm <- function(x, component = c("all", "conditional", "smooth_
 
 
 #' @export
-find_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_terms", "location"), flatten = FALSE, ...) {
+find_parameters.cgam <- function(x,
+                                 component = c("all", "conditional", "smooth_terms", "location"),
+                                 flatten = FALSE,
+                                 ...) {
   component <- match.arg(component)
   sc <- summary(x)
 
@@ -154,7 +172,10 @@ find_parameters.selection <- find_parameters.SemiParBIV
 
 
 #' @export
-find_parameters.rqss <- function(x, component = c("all", "conditional", "smooth_terms", "location"), flatten = FALSE, ...) {
+find_parameters.rqss <- function(x,
+                                 component = c("all", "conditional", "smooth_terms", "location"),
+                                 flatten = FALSE,
+                                 ...) {
   sc <- summary(x)
 
   pars <- list(
