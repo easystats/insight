@@ -49,11 +49,12 @@ get_statistic(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{column_index}{For model objects that have no defined \code{get_statistic()}
-method yet, the default method is called. This method tries to extract the
-statistic column from \code{coef(summary())}, where the index of the column
-that is being pulled is \code{column_index}. Defaults to 3, which is the
-default statistic column for most models' summary-output.}
+\item{column_index}{For model objects that have no defined
+\code{get_statistic()} method yet, the default method is called. This
+method tries to extract the statistic column from \code{coef(summary())},
+where the index of the column that is being pulled is \code{column_index}.
+Defaults to 3, which is the default statistic column for most models'
+summary-output.}
 
 \item{verbose}{Toggle messages and warnings.}
 
@@ -77,8 +78,8 @@ columns for parameter names (like \code{emmGrid} objects may have), these
 are merged into a single parameter column, with parameters names and values
 as values.}
 
-\item{robust}{Logical, if \code{TRUE}, test statistic based on robust standard
-errors is returned.}
+\item{robust}{Logical, if \code{TRUE}, test statistic based on robust
+standard errors is returned.}
 }
 \value{
 A data frame with the model's parameter names and the related test

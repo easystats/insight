@@ -60,6 +60,7 @@ n_obs.glm <- function(x, ...) {
       FALSE
     }
   )
+
   .nobs <- stats::nobs(x)
 
   if (isTRUE(is_binomial)) {

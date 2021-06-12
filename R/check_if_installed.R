@@ -35,7 +35,7 @@ check_if_installed <- function(package,
   } else if (!is.null(minimum_version) && utils::packageVersion(package) < package_version(minimum_version)) {
     # prepare the message
     message <- format_message(
-      paste0("Package '", package, "' is installed, but package version '", minimum_version,"' is required ", reason, "."),
+      paste0("Package '", package, "' is installed, but package version '", minimum_version, "' is required ", reason, "."),
       paste0("Please update the package by running install.packages('", package, "').")
     )
 

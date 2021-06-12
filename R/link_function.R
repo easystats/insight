@@ -62,10 +62,7 @@ link_function.default <- function(x, ...) {
 
 
 
-
-
 # Gaussian family ------------------------------------------
-
 
 #' @export
 link_function.lm <- function(x, ...) {
@@ -157,10 +154,6 @@ link_function.RM <- link_function.lm
 link_function.afex_aov <- link_function.lm
 
 
-
-
-
-
 # General family ---------------------------------
 
 #' @export
@@ -179,13 +172,7 @@ link_function.brglm <- link_function.default
 link_function.cgam <- link_function.default
 
 
-
-
-
-
-
 # Logit link ------------------------
-
 
 #' @export
 link_function.multinom <- function(x, ...) {
@@ -235,20 +222,12 @@ link_function.riskRegression <- link_function.multinom
 link_function.comprisk <- link_function.multinom
 
 
-
-
-
-
 # Probit link ------------------------
-
 
 #' @export
 link_function.ivprobit <- function(x, ...) {
   stats::make.link(link = "probit")$linkfun
 }
-
-
-
 
 
 # Log links ------------------------
@@ -267,12 +246,7 @@ link_function.zerotrunc <- link_function.zeroinfl
 
 
 
-
-
-
-
 # Tobit links ---------------------------------
-
 
 #' @export
 link_function.tobit <- function(x, ...) {
@@ -293,11 +267,6 @@ link_function.flexsurvreg <- function(x, ...) {
   dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
   .make_tobit_family(x, dist)$linkfun
 }
-
-
-
-
-
 
 
 # Ordinal and cumulative links --------------------------
@@ -324,9 +293,6 @@ link_function.clmm <- link_function.clm
 
 #' @export
 link_function.mixor <- link_function.clm
-
-
-
 
 
 
@@ -370,13 +336,7 @@ link_function.logitor <- link_function.logitmfx
 link_function.model_fit <- link_function.logitmfx
 
 
-
-
-
-
-
 # Other models -----------------------------
-
 
 
 #' @export
@@ -731,13 +691,6 @@ link_function.brmsfit <- function(x, ...) {
     .brms_link_fun(fam)
   }
 }
-
-
-
-
-
-
-
 
 
 # helper -----------------------

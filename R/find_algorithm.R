@@ -12,7 +12,8 @@
 #'   For frequentist models:
 #'    \itemize{
 #'      \item \code{algorithm}, for instance \code{"OLS"} or \code{"ML"}
-#'      \item \code{optimizer}, name of optimizing function, only applies to specific models (like \code{gam})
+#'      \item \code{optimizer}, name of optimizing function, only applies to
+#'      specific models (like \code{gam})
 #'    }
 #'   For frequentist mixed models:
 #'    \itemize{

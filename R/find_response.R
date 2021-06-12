@@ -101,7 +101,10 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
 
 
 #' @export
-find_response.joint <- function(x, combine = TRUE, component = c("conditional", "survival", "all"), ...) {
+find_response.joint <- function(x,
+                                combine = TRUE,
+                                component = c("conditional", "survival", "all"),
+                                ...) {
   component <- match.arg(component)
   f <- find_formula(x, verbose = FALSE)
 
@@ -120,11 +123,6 @@ find_response.joint <- function(x, combine = TRUE, component = c("conditional", 
 
   unlist(lapply(resp, check_cbind, combine = combine, model = x))
 }
-
-
-
-
-
 
 
 # utils ---------------------

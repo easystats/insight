@@ -256,14 +256,10 @@ get_loglikelihood.svycoxph <- function(x, ...) {
 }
 
 
-
-
 #' @export
 get_loglikelihood.crr <- function(x, ...) {
   x$loglik
 }
-
-
 
 
 #' @export

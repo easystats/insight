@@ -47,14 +47,11 @@ get_varcov.default <- function(x, verbose = TRUE, ...) {
   .process_vcov(vc, verbose)
 }
 
-
 #' @export
 get_varcov.maxLik <- get_varcov.default
 
 #' @export
 get_varcov.HLfit <- get_varcov.default
-
-
 
 
 # mlm ---------------------------------------------
@@ -119,7 +116,9 @@ get_varcov.DirichletRegModel <- function(x,
 
 #' @rdname get_varcov
 #' @export
-get_varcov.clm2 <- function(x, component = c("all", "conditional", "scale"), ...) {
+get_varcov.clm2 <- function(x,
+                            component = c("all", "conditional", "scale"),
+                            ...) {
   component <- match.arg(component)
 
   n_intercepts <- length(x$xi)
@@ -151,7 +150,9 @@ get_varcov.clmm2 <- get_varcov.clm2
 
 
 #' @export
-get_varcov.glmx <- function(x, component = c("all", "conditional", "extra"), ...) {
+get_varcov.glmx <- function(x,
+                            component = c("all", "conditional", "extra"),
+                            ...) {
   component <- match.arg(component)
   vc <- stats::vcov(object = x)
 
@@ -177,7 +178,9 @@ get_varcov.pgmm <- function(x, component = c("conditional", "all"), ...) {
 
 
 #' @export
-get_varcov.selection <- function(x, component = c("all", "selection", "outcome", "auxiliary"), ...) {
+get_varcov.selection <- function(x,
+                                 component = c("all", "selection", "outcome", "auxiliary"),
+                                 ...) {
   component <- match.arg(component)
   vc <- stats::vcov(object = x)
 
@@ -195,7 +198,9 @@ get_varcov.selection <- function(x, component = c("all", "selection", "outcome",
 
 
 #' @export
-get_varcov.mvord <- function(x, component = c("all", "conditional", "thresholds", "correlation"), ...) {
+get_varcov.mvord <- function(x,
+                             component = c("all", "conditional", "thresholds", "correlation"),
+                             ...) {
   component <- match.arg(component)
   vc <- stats::vcov(x)
 
@@ -212,7 +217,9 @@ get_varcov.mvord <- function(x, component = c("all", "conditional", "thresholds"
 
 
 #' @export
-get_varcov.mjoint <- function(x, component = c("all", "conditional", "survival"), ...) {
+get_varcov.mjoint <- function(x,
+                              component = c("all", "conditional", "survival"),
+                              ...) {
   component <- match.arg(component)
   vc <- stats::vcov(x)
 

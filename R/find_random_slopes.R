@@ -10,7 +10,8 @@
 #'    returned list has following elements:
 #'    \itemize{
 #'      \item \code{random}, the random slopes from the conditional part of model
-#'      \item \code{zero_inflated_random}, the random slopes from the zero-inflation component of the model
+#'      \item \code{zero_inflated_random}, the random slopes from the
+#'      zero-inflation component of the model
 #'    }
 #'
 #' @examples
@@ -41,6 +42,7 @@ find_random_slopes <- function(x) {
   if (is.null(fr)) {
     return(NULL)
   }
+
   if (!is.list(fr)) fr <- list(fr)
 
   random_slope <- lapply(fr, function(forms) {

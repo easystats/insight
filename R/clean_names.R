@@ -67,10 +67,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 
 
 
-
-
 # helper -----------------
-
 
 .clean_names <- function(x, include_names = FALSE, is_emmeans = FALSE, ...) {
   if (is.null(x)) {
@@ -78,7 +75,13 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
   }
   out <- sapply(x, function(.x) {
     if (grepl(":", .x, fixed = TRUE) && !grepl("::", .x, fixed = TRUE)) {
-      paste(sapply(strsplit(.x, ":", fixed = TRUE), .remove_pattern_from_names, is_emmeans = is_emmeans), collapse = ":")
+      paste(sapply(
+        strsplit(.x, ":", fixed = TRUE),
+        .remove_pattern_from_names,
+        is_emmeans = is_emmeans
+      ),
+      collapse = ":"
+      )
     } else {
       .remove_pattern_from_names(.x, is_emmeans = is_emmeans)
     }
@@ -97,7 +100,11 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 # utils ---------------------
 
 
-.remove_pattern_from_names <- function(x, ignore_asis = FALSE, ignore_lag = FALSE, is_emmeans = FALSE) {
+.remove_pattern_from_names <- function(x,
+                                       ignore_asis = FALSE,
+                                       ignore_lag = FALSE,
+                                       is_emmeans = FALSE) {
+
   # return if x is empty
   if (.is_empty_string(x)) {
     return("")

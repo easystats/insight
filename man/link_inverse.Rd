@@ -24,8 +24,9 @@ link_inverse(x, ...)
 \item{...}{Currently not used.}
 
 \item{what}{For \code{gamlss} models, indicates for which distribution
-parameter the link (inverse) function should be returned; for \code{betareg}
-or \code{DirichletRegModel}, can be \code{"mean"} or \code{"precision"}.}
+parameter the link (inverse) function should be returned; for
+\code{betareg} or \code{DirichletRegModel}, can be \code{"mean"} or
+\code{"precision"}.}
 }
 \value{
 A function, describing the inverse-link function from a model-object.

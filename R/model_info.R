@@ -16,47 +16,108 @@
 #'    is returned, where all values starting with \code{is_} are logicals.
 #'    \itemize{
 #'      \item \code{is_binomial}: family is binomial (but not negative binomial)
-#'      \item \code{is_bernoulli}: special case of binomial models: family is Bernoulli
+#'
+#'      \item \code{is_bernoulli}: special case of binomial models: family is
+#'      Bernoulli
+#'
 #'      \item \code{is_poisson}: family is poisson
+#'
 #'      \item \code{is_negbin}: family is negative binomial
-#'      \item \code{is_count}: model is a count model (i.e. family is either poisson or negative binomial)
+#'
+#'      \item \code{is_count}: model is a count model (i.e. family is either
+#'      poisson or negative binomial)
+#'
 #'      \item \code{is_beta}: family is beta
+#'
 #'      \item \code{is_betabinomial}: family is beta-binomial
+#'
 #'      \item \code{is_dirichlet}: family is dirichlet
+#'
 #'      \item \code{is_exponential}: family is exponential (e.g. Gamma or Weibull)
+#'
 #'      \item \code{is_logit}: model has logit link
+#'
 #'      \item \code{is_probit}: model has probit link
+#'
 #'      \item \code{is_linear}: family is gaussian
+#'
 #'      \item \code{is_tweedie}: family is tweedie
+#'
 #'      \item \code{is_ordinal}: family is ordinal or cumulative link
+#'
 #'      \item \code{is_cumulative}: family is ordinal or cumulative link
+#'
 #'      \item \code{is_multinomial}: family is multinomial or categorical link
+#'
 #'      \item \code{is_categorical}: family is categorical link
-#'      \item \code{is_censored}: model is a censored model (has a censored response, including survival models)
-#'      \item \code{is_truncated}: model is a truncated model (has a truncated response)
+#'
+#'      \item \code{is_censored}: model is a censored model (has a censored
+#'      response, including survival models)
+#'
+#'      \item \code{is_truncated}: model is a truncated model (has a truncated
+#'      response)
+#'
 #'      \item \code{is_survival}: model is a survival model
+#'
 #'      \item \code{is_zero_inflated}: model has zero-inflation component
-#'      \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
+#'
+#'      \item \code{is_hurdle}: model has zero-inflation component and is a
+#'      hurdle-model (truncated family distribution)
+#'
 #'      \item \code{is_dispersion}: model has dispersion component
-#'      \item \code{is_mixed}: model is a mixed effects model (with random effects)
-#'      \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
-#'      \item \code{is_trial}: model response contains additional information about the trials
+#'
+#'      \item \code{is_mixed}: model is a mixed effects model (with random
+#'      effects)
+#'
+#'      \item \code{is_multivariate}: model is a multivariate response model
+#'      (currently only works for \emph{brmsfit} objects)
+#'
+#'      \item \code{is_trial}: model response contains additional information
+#'      about the trials
+#'
 #'      \item \code{is_bayesian}: model is a Bayesian model
+#'
 #'      \item \code{is_gam}: model is a generalized additive model
+#'
 #'      \item \code{is_anova}: model is an Anova object
-#'      \item \code{is_ttest}: model is an an object of class \code{htest}, returned by \code{t.test()}
-#'      \item \code{is_correlation}: model is an an object of class \code{htest}, returned by \code{cor.test()}
-#'      \item \code{is_ranktest}: model is an an object of class \code{htest}, returned by \code{cor.test()} (if Spearman's rank correlation), \code{wilcox.text()} or \code{kruskal.test()}.
-#'      \item \code{is_levenetest}: model is an an object of class \code{anova}, returned by \code{car::leveneTest()}.
-#'      \item \code{is_onewaytest}: model is an an object of class \code{htest}, returned by \code{oneway.test()}
-#'      \item \code{is_proptest}: model is an an object of class \code{htest}, returned by \code{prop.test()}
-#'      \item \code{is_binomtest}: model is an an object of class \code{htest}, returned by \code{binom.test()}
-#'      \item \code{is_chi2test}: model is an an object of class \code{htest}, returned by \code{chisq.test()}
-#'      \item \code{is_xtab}: model is an an object of class \code{htest} or \code{BFBayesFactor}, and test-statistic stems from a contingency table (i.e. \code{chisq.test()} or \code{BayesFactor::contingencyTableBF()}).
+#'
+#'      \item \code{is_ttest}: model is an an object of class \code{htest},
+#'      returned by \code{t.test()}
+#'
+#'      \item \code{is_correlation}: model is an an object of class
+#'      \code{htest}, returned by \code{cor.test()}
+#'
+#'      \item \code{is_ranktest}: model is an an object of class \code{htest},
+#'      returned by \code{cor.test()} (if Spearman's rank correlation),
+#'      \code{wilcox.text()} or \code{kruskal.test()}.
+#'
+#'      \item \code{is_levenetest}: model is an an object of class \code{anova},
+#'      returned by \code{car::leveneTest()}.
+#'
+#'      \item \code{is_onewaytest}: model is an an object of class \code{htest},
+#'      returned by \code{oneway.test()}
+#'
+#'      \item \code{is_proptest}: model is an an object of class \code{htest},
+#'      returned by \code{prop.test()}
+#'
+#'      \item \code{is_binomtest}: model is an an object of class \code{htest},
+#'      returned by \code{binom.test()}
+#'
+#'      \item \code{is_chi2test}: model is an an object of class \code{htest},
+#'      returned by \code{chisq.test()}
+#'
+#'      \item \code{is_xtab}: model is an an object of class \code{htest} or
+#'      \code{BFBayesFactor}, and test-statistic stems from a contingency table
+#'      (i.e. \code{chisq.test()} or \code{BayesFactor::contingencyTableBF()}).
+#'
 #'      \item \code{link_function}: the link-function
+#'
 #'      \item \code{family}: the family-object
+#'
 #'      \item \code{n_obs}: number of observations
-#'      \item \code{model_terms}: a list with all model terms, including terms such as random effects or from zero-inflated model parts.
+#'
+#'      \item \code{model_terms}: a list with all model terms, including terms
+#'      such as random effects or from zero-inflated model parts.
 #'    }
 #'
 #' @examples
@@ -85,9 +146,6 @@
 model_info <- function(x, ...) {
   UseMethod("model_info")
 }
-
-
-
 
 
 # Default methods --------------------------------------
@@ -141,7 +199,6 @@ model_info.default <- function(x, verbose = TRUE, ...) {
 model_info.model_fit <- function(x, verbose = TRUE, ...) {
   model_info(x$fit, verbose = verbose, ...)
 }
-
 
 
 # Models with general handling, Gaussian ----------------------------------
@@ -297,12 +354,7 @@ model_info.afex_aov <- function(x, verbose = TRUE, ...) {
 }
 
 
-
-
-
-
 # Models with logit-link --------------------------------
-
 
 #' @export
 model_info.logistf <- function(x, verbose = TRUE, ...) {
@@ -331,11 +383,6 @@ model_info.mlogit <- model_info.logistf
 
 #' @export
 model_info.gmnl <- model_info.logistf
-
-
-
-
-
 
 
 
@@ -381,13 +428,7 @@ model_info.mvord <- function(x, verbose = verbose, ...) {
 
 
 
-
-
-
-
-
 # Models with family-function  ----------------------------------
-
 
 #' @export
 model_info.bamlss <- function(x, verbose = TRUE, ...) {
@@ -421,12 +462,7 @@ model_info.brmultinom <- model_info.speedglm
 
 
 
-
-
-
-
 # Models with tobit family ----------------------------------
-
 
 #' @export
 model_info.flexsurvreg <- function(x, verbose = TRUE, ...) {
@@ -462,10 +498,6 @@ model_info.crch <- model_info.tobit
 
 #' @export
 model_info.survreg <- model_info.tobit
-
-
-
-
 
 
 
@@ -552,13 +584,7 @@ model_info.fixest <- function(x, verbose = TRUE, ...) {
 model_info.feglm <- model_info.fixest
 
 
-
-
-
-
-
 # Survival-models ----------------------------------------
-
 
 #' @export
 model_info.coxph <- function(x, verbose = TRUE, ...) {
@@ -592,12 +618,7 @@ model_info.comprisk <- model_info.coxph
 
 
 
-
-
-
-
 # Zero-Inflated Models ------------------------------
-
 
 #' @export
 model_info.zeroinfl <- function(x, ...) {
@@ -656,10 +677,6 @@ model_info.mhurdle <- function(x, ...) {
     ...
   )
 }
-
-
-
-
 
 
 # Bayesian Models ---------------------------
@@ -744,13 +761,7 @@ model_info.BGGM <- function(x, ...) {
 }
 
 
-
-
-
-
-
 # Other models ----------------------------
-
 
 #' @export
 model_info.garch <- function(x, ...) {
@@ -1240,11 +1251,7 @@ model_info.mira <- function(x, ...) {
 }
 
 
-
-
-
 # mfx models -------------------------------
-
 
 #' @export
 model_info.betamfx <- function(x, ...) {

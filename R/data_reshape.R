@@ -1,18 +1,27 @@
 #' Reshape (pivot) data from wide to long
 #'
-#' This function "lengthens" data, increasing the number of rows and decreasing the number of columns. This is a dependency-free base-R equivalent of \code{tidyr::pivot_longer()}.
+#' This function "lengthens" data, increasing the number of rows and decreasing
+#' the number of columns. This is a dependency-free base-R equivalent of
+#' \code{tidyr::pivot_longer()}.
 #'
 #' @param data A data frame to pivot.
 #' @param cols A vector of column names or indices to pivot into longer format.
 #' @param colnames_to The name of the new column that will contain the column names.
-#' @param values_to The name of the new column that will contain the values of the pivoted variables.
-#' @param rows_to The name of the column that will contain the row-number from the original data. If \code{NULL}, will be removed.
-#' @param colnames_from The name of the column that contains the levels to be used as future columns
-#' @param values_from The name of the column that contains the values of the put in the columns.
-#' @param rows_from The name of the column that identifies the rows. If \code{NULL}, will use all the unique rows.
+#' @param values_to The name of the new column that will contain the values of
+#'   the pivoted variables.
+#' @param rows_to The name of the column that will contain the row-number from
+#'   the original data. If \code{NULL}, will be removed.
+#' @param colnames_from The name of the column that contains the levels to be
+#'   used as future columns
+#' @param values_from The name of the column that contains the values of the put
+#'   in the columns.
+#' @param rows_from The name of the column that identifies the rows. If
+#'   \code{NULL}, will use all the unique rows.
 #' @param ... Additional arguments passed on to methods.
-#' @param names_to,names_from Same as \code{colnames_to}, is there for compatibility with \code{tidyr::pivot_longer()}.
-#' @param sep The indicating a separating character in the variable names in the wide format.
+#' @param names_to,names_from Same as \code{colnames_to}, is there for
+#'   compatibility with \code{tidyr::pivot_longer()}.
+#' @param sep The indicating a separating character in the variable names in the
+#'   wide format.
 #'
 #'
 #' @examples
@@ -66,7 +75,13 @@
 #' }
 #' @return data.frame
 #' @export
-data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "Value", rows_to = NULL, ..., names_to = colnames_to) {
+data_to_long <- function(data,
+                         cols = "all",
+                         colnames_to = "Name",
+                         values_to = "Value",
+                         rows_to = NULL,
+                         ...,
+                         names_to = colnames_to) {
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
     data <- as.data.frame(data)
@@ -75,6 +90,7 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
   }
 
   # Select columns ----------------
+
   if (is.character(cols) && length(cols) == 1) {
     # If only one name
 
@@ -94,6 +110,7 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
 
 
   # Sanity checks ----------------
+
   # Make sure all cols are in data
   if (!all(cols %in% names(data))) {
     stop("Some variables as selected by 'cols' are not present in the data.")
@@ -119,6 +136,7 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
   )
 
   # Cleaning --------------------------
+
   # Sort the dataframe (to match pivot_longer's output)
   long <- long[order(long[["_Row"]], long[[colnames_to]]), ]
 
@@ -152,14 +170,15 @@ data_to_long <- function(data, cols = "all", colnames_to = "Name", values_to = "
 
 
 
-
-
-
-
-
 #' @rdname data_to_long
 #' @export
-data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", rows_from = NULL, sep = "_", ..., names_from = colnames_from) {
+data_to_wide <- function(data,
+                         values_from = "Value",
+                         colnames_from = "Name",
+                         rows_from = NULL,
+                         sep = "_",
+                         ...,
+                         names_from = colnames_from) {
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
     data <- as.data.frame(data)
@@ -178,6 +197,7 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
     if (all(names(data) %in% c(values_from, colnames_from))) {
       data[["_Rows"]] <- row.names(data)
     }
+
     data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, colnames_from), drop = FALSE], 1, paste, collapse = "_")
     rows_from <- "_Rows"
   }
@@ -209,8 +229,6 @@ data_to_wide <- function(data, values_from = "Value", colnames_from = "Name", ro
 
   wide
 }
-
-
 
 
 # Aliases -----------------------------------------------------------------

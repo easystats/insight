@@ -31,18 +31,18 @@ or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{...}{Currently not used.}
 
-\item{component}{Which type of parameters to return, such as parameters for the
-conditional model, the zero-inflated part of the model or the dispersion
-term? Applies to models with zero-inflated and/or dispersion formula. Note
-that the \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model. There are three convenient shortcuts:
-\code{component = "all"} returns all possible parameters.
-If \code{component = "location"}, location parameters such as \code{conditional}
-or \code{zero_inflated} are returned (everything that are fixed or random
-effects - depending on the \code{effects} argument - but no auxiliary
-parameters). For \code{component = "distributional"} (or \code{"auxiliary"}),
-components like \code{sigma} or \code{dispersion} (and other auxiliary
-parameters) are returned.}
+\item{component}{Which type of parameters to return, such as parameters for
+the conditional model, the zero-inflated part of the model or the
+dispersion term? Applies to models with zero-inflated and/or dispersion
+formula. Note that the \emph{conditional} component is also called
+\emph{count} or \emph{mean} component, depending on the model. There are
+three convenient shortcuts: \code{component = "all"} returns all possible
+parameters. If \code{component = "location"}, location parameters such as
+\code{conditional} or \code{zero_inflated} are returned (everything that
+are fixed or random effects - depending on the \code{effects} argument -
+but no auxiliary parameters). For \code{component = "distributional"} (or
+\code{"auxiliary"}), components like \code{sigma} or \code{dispersion} (and
+other auxiliary parameters) are returned.}
 }
 \value{
 If \code{effects = "fixed"}, a data frame with two columns: the

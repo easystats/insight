@@ -4,8 +4,9 @@
 #' @description Returns the link-inverse function from a model object.
 #'
 #' @param what For \code{gamlss} models, indicates for which distribution
-#'   parameter the link (inverse) function should be returned; for \code{betareg}
-#'   or \code{DirichletRegModel}, can be \code{"mean"} or \code{"precision"}.
+#'   parameter the link (inverse) function should be returned; for
+#'   \code{betareg} or \code{DirichletRegModel}, can be \code{"mean"} or
+#'   \code{"precision"}.
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
 #'
@@ -56,7 +57,6 @@ link_inverse.default <- function(x, ...) {
 
 
 # GLM families ---------------------------------------------------
-
 
 #' @export
 link_inverse.glm <- function(x, ...) {
@@ -224,9 +224,7 @@ link_inverse.DirichletRegModel <- function(x, what = c("mean", "precision"), ...
 
 
 
-
 # Logit links -----------------------------------
-
 
 #' @export
 link_inverse.gmnl <- function(x, ...) {
@@ -276,13 +274,7 @@ link_inverse.logistf <- link_inverse.gmnl
 link_inverse.multinom <- link_inverse.gmnl
 
 
-
-
-
-
-
 # Probit link ------------------------
-
 
 #' @export
 link_inverse.ivprobit <- function(x, ...) {
@@ -298,11 +290,7 @@ link_inverse.mvord <- function(x, ...) {
 }
 
 
-
-
-
 # Log-links ---------------------------------------
-
 
 #' @export
 link_inverse.zeroinfl <- function(x, ...) {
@@ -317,14 +305,7 @@ link_inverse.zerotrunc <- link_inverse.zeroinfl
 
 
 
-
-
-
-
-
-
 # Ordinal models -----------------------------------
-
 
 #' @export
 link_inverse.clm <- function(x, ...) {
@@ -339,10 +320,6 @@ link_inverse.clm2 <- link_inverse.clm
 
 #' @export
 link_inverse.mixor <- link_inverse.clm
-
-
-
-
 
 
 
@@ -384,13 +361,7 @@ link_inverse.negbinirr <- link_inverse.logitmfx
 
 
 
-
-
-
-
-
 # Other models ----------------------------
-
 
 #' @export
 link_inverse.Rchoice <- function(x, ...) {
@@ -427,7 +398,6 @@ link_inverse.cglm <- function(x, ...) {
   }
   stats::make.link(link = link)$linkinv
 }
-
 
 
 #' @export
@@ -651,8 +621,6 @@ link_inverse.MixMod <- link_inverse.glmmPQL
 
 #' @export
 link_inverse.cgam <- link_inverse.glmmPQL
-
-
 
 
 #' @export

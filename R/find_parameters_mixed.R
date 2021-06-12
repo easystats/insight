@@ -4,18 +4,18 @@
 #' @description Returns the names of model parameters, like they typically
 #'     appear in the \code{summary()} output.
 #'
-#' @param component Which type of parameters to return, such as parameters for the
-#'   conditional model, the zero-inflated part of the model or the dispersion
-#'   term? Applies to models with zero-inflated and/or dispersion formula. Note
-#'   that the \emph{conditional} component is also called \emph{count} or \emph{mean}
-#'   component, depending on the model. There are three convenient shortcuts:
-#'   \code{component = "all"} returns all possible parameters.
-#'   If \code{component = "location"}, location parameters such as \code{conditional}
-#'   or \code{zero_inflated} are returned (everything that are fixed or random
-#'   effects - depending on the \code{effects} argument - but no auxiliary
-#'   parameters). For \code{component = "distributional"} (or \code{"auxiliary"}),
-#'   components like \code{sigma} or \code{dispersion} (and other auxiliary
-#'   parameters) are returned.
+#' @param component Which type of parameters to return, such as parameters for
+#'   the conditional model, the zero-inflated part of the model or the
+#'   dispersion term? Applies to models with zero-inflated and/or dispersion
+#'   formula. Note that the \emph{conditional} component is also called
+#'   \emph{count} or \emph{mean} component, depending on the model. There are
+#'   three convenient shortcuts: \code{component = "all"} returns all possible
+#'   parameters. If \code{component = "location"}, location parameters such as
+#'   \code{conditional} or \code{zero_inflated} are returned (everything that
+#'   are fixed or random effects - depending on the \code{effects} argument -
+#'   but no auxiliary parameters). For \code{component = "distributional"} (or
+#'   \code{"auxiliary"}), components like \code{sigma} or \code{dispersion} (and
+#'   other auxiliary parameters) are returned.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
 #' @inheritParams find_parameters.betamfx
@@ -27,8 +27,10 @@
 #'    \itemize{
 #'      \item \code{conditional}, the "fixed effects" part from the model.
 #'      \item \code{random}, the "random effects" part from the model.
-#'      \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model.
-#'      \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model.
+#'      \item \code{zero_inflated}, the "fixed effects" part from the
+#'      zero-inflation component of the model.
+#'      \item \code{zero_inflated_random}, the "random effects" part from the
+#'      zero-inflation component of the model.
 #'      \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
 #'    }
 #'
@@ -37,7 +39,11 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
 #' @export
-find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), flatten = FALSE, ...) {
+find_parameters.glmmTMB <- function(x,
+                                    effects = c("all", "fixed", "random"),
+                                    component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+                                    flatten = FALSE,
+                                    ...) {
   effects <- match.arg(effects)
   component <- match.arg(component)
 
@@ -64,13 +70,21 @@ find_parameters.glmmTMB <- function(x, effects = c("all", "fixed", "random"), co
     ))
   }
 
-  .filter_parameters(l, effects = effects, component = component, flatten = flatten)
+  .filter_parameters(l,
+    effects = effects,
+    component = component,
+    flatten = flatten
+  )
 }
 
 
 
 #' @export
-find_parameters.MixMod <- function(x, effects = c("all", "fixed", "random"), component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
+find_parameters.MixMod <- function(x,
+                                   effects = c("all", "fixed", "random"),
+                                   component = c("all", "conditional", "zi", "zero_inflated"),
+                                   flatten = FALSE,
+                                   ...) {
   # installed
   check_if_installed("lme4")
 
@@ -110,7 +124,10 @@ find_parameters.MixMod <- function(x, effects = c("all", "fixed", "random"), com
 
 
 #' @export
-find_parameters.nlmerMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.nlmerMod <- function(x,
+                                     effects = c("all", "fixed", "random"),
+                                     flatten = FALSE,
+                                     ...) {
   # installed
   check_if_installed("lme4")
 
@@ -137,7 +154,10 @@ find_parameters.nlmerMod <- function(x, effects = c("all", "fixed", "random"), f
 
 #' @rdname find_parameters.glmmTMB
 #' @export
-find_parameters.merMod <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.merMod <- function(x,
+                                   effects = c("all", "fixed", "random"),
+                                   flatten = FALSE,
+                                   ...) {
   effects <- match.arg(effects)
 
   # installed
@@ -166,13 +186,19 @@ find_parameters.rlmerMod <- find_parameters.merMod
 find_parameters.glmmadmb <- find_parameters.merMod
 
 #' @export
-find_parameters.merModList <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.merModList <- function(x,
+                                       effects = c("all", "fixed", "random"),
+                                       flatten = FALSE,
+                                       ...) {
   effects <- match.arg(effects)
   find_parameters(x[[1]], effects = effects, flatten = flatten, ...)
 }
 
 #' @export
-find_parameters.HLfit <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.HLfit <- function(x,
+                                  effects = c("all", "fixed", "random"),
+                                  flatten = FALSE,
+                                  ...) {
   effects <- match.arg(effects)
 
   # installed
@@ -196,10 +222,11 @@ find_parameters.HLfit <- function(x, effects = c("all", "fixed", "random"), flat
 }
 
 
-
-
 #' @export
-find_parameters.sem <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.sem <- function(x,
+                                effects = c("all", "fixed", "random"),
+                                flatten = FALSE,
+                                ...) {
   if (!.is_semLme(x)) {
     return(NULL)
   }
@@ -217,7 +244,10 @@ find_parameters.sem <- function(x, effects = c("all", "fixed", "random"), flatte
 
 
 #' @export
-find_parameters.cpglmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.cpglmm <- function(x,
+                                   effects = c("all", "fixed", "random"),
+                                   flatten = FALSE,
+                                   ...) {
   # installed
   check_if_installed("cplm")
 
@@ -242,7 +272,10 @@ find_parameters.cpglmm <- function(x, effects = c("all", "fixed", "random"), fla
 
 
 #' @export
-find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.coxme <- function(x,
+                                  effects = c("all", "fixed", "random"),
+                                  flatten = FALSE,
+                                  ...) {
   # installed?
   check_if_installed("lme4")
 
@@ -257,13 +290,20 @@ find_parameters.coxme <- function(x, effects = c("all", "fixed", "random"), flat
     ))
   }
 
-  .filter_parameters(l, effects = effects, flatten = flatten, recursive = FALSE)
+  .filter_parameters(l,
+    effects = effects,
+    flatten = flatten,
+    recursive = FALSE
+  )
 }
 
 
 
 #' @export
-find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.mixed <- function(x,
+                                  effects = c("all", "fixed", "random"),
+                                  flatten = FALSE,
+                                  ...) {
   # installed
   check_if_installed("lme4")
 
@@ -284,7 +324,10 @@ find_parameters.mixed <- function(x, effects = c("all", "fixed", "random"), flat
 
 
 #' @export
-find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.lme <- function(x,
+                                effects = c("all", "fixed", "random"),
+                                flatten = FALSE,
+                                ...) {
   # installed?
   check_if_installed("lme4")
 
@@ -312,7 +355,10 @@ find_parameters.lme <- function(x, effects = c("all", "fixed", "random"), flatte
 
 
 #' @export
-find_parameters.glmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.glmm <- function(x,
+                                 effects = c("all", "fixed", "random"),
+                                 flatten = FALSE,
+                                 ...) {
   effects <- match.arg(effects)
   s <- summary(x)
   fe_params <- rownames(s$coefmat)
@@ -329,33 +375,50 @@ find_parameters.glmm <- function(x, effects = c("all", "fixed", "random"), flatt
 
 
 #' @export
-find_parameters.BBmm <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.BBmm <- function(x,
+                                 effects = c("all", "fixed", "random"),
+                                 flatten = FALSE,
+                                 ...) {
   l <- .compact_list(list(
     conditional = names(x$fixed.coef),
     random = x$namesRand
   ))
 
   effects <- match.arg(effects)
-  .filter_parameters(l, effects = effects, flatten = flatten, recursive = FALSE)
+  .filter_parameters(l,
+    effects = effects,
+    flatten = flatten,
+    recursive = FALSE
+  )
 }
 
 
 
 #' @export
-find_parameters.glimML <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.glimML <- function(x,
+                                   effects = c("all", "fixed", "random"),
+                                   flatten = FALSE,
+                                   ...) {
   l <- .compact_list(list(
     conditional = names(x@fixed.param),
     random = names(x@random.param)
   ))
 
   effects <- match.arg(effects)
-  .filter_parameters(l, effects = effects, flatten = flatten, recursive = FALSE)
+  .filter_parameters(l,
+    effects = effects,
+    flatten = flatten,
+    recursive = FALSE
+  )
 }
 
 
 
 #' @export
-find_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...) {
+find_parameters.mixor <- function(x,
+                                  effects = c("all", "fixed", "random"),
+                                  flatten = FALSE,
+                                  ...) {
   effects <- match.arg(effects)
   coefs <- x$Model
   random_start <- grep("(\\(Intercept\\) \\(Intercept\\)|Random\\.\\(Intercept\\))", rownames(coefs))

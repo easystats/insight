@@ -24,7 +24,13 @@
 
   # get necessary model information, like fixed and random effects,
   # variance-covariance matrix etc.
-  vals <- .get_variance_information(x, faminfo = faminfo, name_fun = name_fun, verbose = verbose, model_component = model_component)
+  vals <- .get_variance_information(
+    x,
+    faminfo = faminfo,
+    name_fun = name_fun,
+    verbose = verbose,
+    model_component = model_component
+  )
 
   # Test for non-zero random effects ((near) singularity)
   no_random_variance <- FALSE

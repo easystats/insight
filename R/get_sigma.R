@@ -22,17 +22,18 @@
 #'
 #' @details
 #'   \subsection{Interpretation of Sigma}{
-#'   The residual standard deviation, \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}},
-#'   indicates that the predicted outcome will be within +/- \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}}
-#'   units of the linear predictor for approximately 68\% of the data points
+#'   The residual standard deviation,
+#'   \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}}, indicates that the predicted
+#'   outcome will be within +/- \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}} units
+#'   of the linear predictor for approximately 68\% of the data points
 #'   (\cite{Gelman, Hill & Vehtari 2020, p.84}). In other words, the residual
 #'   standard deviation indicates the accuracy for a model to predict scores,
-#'   thus it can be thought of as \dQuote{a measure of the average distance
-#'   each observation falls from its prediction from the model}
-#'   (\cite{Gelman, Hill & Vehtari 2020, p.168}). \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}}
-#'   can be considered as a measure of the unexplained variation in the data,
-#'   or of the precision of inferences about regression coefficients.
-#'   }
+#'   thus it can be thought of as \dQuote{a measure of the average distance each
+#'   observation falls from its prediction from the model} (\cite{Gelman, Hill &
+#'   Vehtari 2020, p.168}). \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}} can be
+#'   considered as a measure of the unexplained variation in the data, or of the
+#'   precision of inferences about regression coefficients. }
+#'
 #'   \subsection{Calculation of Sigma}{
 #'   By default, \code{get_sigma()} tries to extract sigma by calling
 #'   \code{stats::sigma()}. If the model-object has no \code{sigma()} method,
@@ -42,7 +43,8 @@
 #'   accessed using the square-root from \code{get_variance_residual()}.
 #'   }
 #'
-#' @references Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.
+#' @references Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other
+#'   Stories. Cambridge University Press.
 #'
 #' @examples
 #' data(mtcars)

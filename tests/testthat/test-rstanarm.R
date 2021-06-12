@@ -30,12 +30,14 @@ if (.runThisTest) {
       )
     m6 <- insight::download_model("stanreg_gamm4_1")
 
-    m7 <- stan_lm(mpg ~ wt + qsec + am, data = mtcars, prior = R2(0.75),
-                  chains = 1, iter = 300,refresh = 0)
+    m7 <- stan_lm(mpg ~ wt + qsec + am,
+      data = mtcars, prior = R2(0.75),
+      chains = 1, iter = 300, refresh = 0
+    )
 
     m8 <- stan_lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy, refresh = 0)
 
-    m9 <- stan_aov(yield ~ block + N*P*K, data = npk, prior = R2(0.5), refresh = 0)
+    m9 <- stan_aov(yield ~ block + N * P * K, data = npk, prior = R2(0.5), refresh = 0)
 
     test_that("model_info-stanreg-glm", {
       expect_snapshot(model_info(m1))

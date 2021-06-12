@@ -5,11 +5,12 @@
 #' @name get_statistic
 #'
 #' @param x A model.
-#' @param column_index For model objects that have no defined \code{get_statistic()}
-#'   method yet, the default method is called. This method tries to extract the
-#'   statistic column from \code{coef(summary())}, where the index of the column
-#'   that is being pulled is \code{column_index}. Defaults to 3, which is the
-#'   default statistic column for most models' summary-output.
+#' @param column_index For model objects that have no defined
+#'   \code{get_statistic()} method yet, the default method is called. This
+#'   method tries to extract the statistic column from \code{coef(summary())},
+#'   where the index of the column that is being pulled is \code{column_index}.
+#'   Defaults to 3, which is the default statistic column for most models'
+#'   summary-output.
 #' @param component Should all parameters, parameters for the conditional model,
 #'   or for the zero-inflated part of the model be returned? Applies to models
 #'   with zero-inflated component. \code{component} may be one of
@@ -18,8 +19,8 @@
 #'   is also possible. May be abbreviated. Note that the \emph{conditional}
 #'   component is also called \emph{count} or \emph{mean} component, depending
 #'   on the model.
-#' @param robust Logical, if \code{TRUE}, test statistic based on robust standard
-#'   errors is returned.
+#' @param robust Logical, if \code{TRUE}, test statistic based on robust
+#'   standard errors is returned.
 #' @param adjust Character value naming the method used to adjust p-values or
 #'   confidence intervals. See \code{?emmeans::summary.emmGrid} for details.
 #' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%). Currently
@@ -184,7 +185,9 @@ get_statistic.feis <- get_statistic.default
 
 
 #' @export
-get_statistic.mhurdle <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"), ...) {
+get_statistic.mhurdle <- function(x,
+                                  component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"),
+                                  ...) {
   component <- match.arg(component)
 
   s <- summary(x)
@@ -218,7 +221,9 @@ get_statistic.mhurdle <- function(x, component = c("all", "conditional", "zi", "
 
 #' @rdname get_statistic
 #' @export
-get_statistic.glmmTMB <- function(x, component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
+get_statistic.glmmTMB <- function(x,
+                                  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+                                  ...) {
   component <- match.arg(component)
 
   cs <- .compact_list(stats::coef(summary(x)))
@@ -246,7 +251,9 @@ get_statistic.glmmTMB <- function(x, component = c("all", "conditional", "zi", "
 
 
 #' @export
-get_statistic.zeroinfl <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+get_statistic.zeroinfl <- function(x,
+                                   component = c("all", "conditional", "zi", "zero_inflated"),
+                                   ...) {
   component <- match.arg(component)
 
   cs <- .compact_list(stats::coef(summary(x)))
@@ -261,7 +268,11 @@ get_statistic.zeroinfl <- function(x, component = c("all", "conditional", "zi", 
     }
 
     data.frame(
-      Parameter = find_parameters(x, effects = "fixed", component = comp, flatten = TRUE),
+      Parameter = find_parameters(x,
+        effects = "fixed",
+        component = comp,
+        flatten = TRUE
+      ),
       Statistic = as.vector(stats[, 3]),
       Component = comp,
       stringsAsFactors = FALSE,
@@ -288,7 +299,9 @@ get_statistic.zerocount <- get_statistic.zeroinfl
 
 
 #' @export
-get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+get_statistic.MixMod <- function(x,
+                                 component = c("all", "conditional", "zi", "zero_inflated"),
+                                 ...) {
   component <- match.arg(component)
   s <- summary(x)
   cs <- list(s$coef_table, s$coef_table_zi)
@@ -297,7 +310,11 @@ get_statistic.MixMod <- function(x, component = c("all", "conditional", "zi", "z
 
   out <- lapply(names(cs), function(i) {
     data.frame(
-      Parameter = find_parameters(x, effects = "fixed", component = i, flatten = TRUE),
+      Parameter = find_parameters(x,
+        effects = "fixed",
+        component = i,
+        flatten = TRUE
+      ),
       Statistic = as.vector(cs[[i]][, 3]),
       Component = i,
       stringsAsFactors = FALSE,
@@ -458,7 +475,9 @@ get_statistic.vgam <- function(x, ...) {
 
 
 #' @export
-get_statistic.cgam <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+get_statistic.cgam <- function(x,
+                               component = c("all", "conditional", "smooth_terms"),
+                               ...) {
   component <- match.arg(component)
 
   sc <- summary(x)
@@ -646,7 +665,9 @@ get_statistic.aareg <- function(x, ...) {
 
 #' @rdname get_statistic
 #' @export
-get_statistic.clm2 <- function(x, component = c("all", "conditional", "scale"), ...) {
+get_statistic.clm2 <- function(x,
+                               component = c("all", "conditional", "scale"),
+                               ...) {
   component <- match.arg(component)
 
   stats <- stats::coef(summary(x))
@@ -676,7 +697,9 @@ get_statistic.clmm2 <- get_statistic.clm2
 
 
 #' @export
-get_statistic.mvord <- function(x, component = c("all", "conditional", "thresholds", "correlation"), ...) {
+get_statistic.mvord <- function(x,
+                                component = c("all", "conditional", "thresholds", "correlation"),
+                                ...) {
   component <- match.arg(component)
   junk <- utils::capture.output(s <- summary(x))
   # intercepts thresholds
@@ -729,7 +752,9 @@ get_statistic.mvord <- function(x, component = c("all", "conditional", "threshol
 
 
 #' @export
-get_statistic.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_statistic.glmm <- function(x,
+                               effects = c("all", "fixed", "random"),
+                               ...) {
   effects <- match.arg(effects)
   s <- summary(x)
 
@@ -748,7 +773,9 @@ get_statistic.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 #' @export
-get_statistic.mixor <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_statistic.mixor <- function(x,
+                                effects = c("all", "fixed", "random"),
+                                ...) {
   stats <- x$Model[, "z value"]
   effects <- match.arg(effects)
 
@@ -842,7 +869,9 @@ get_statistic.mlogit <- function(x, ...) {
 
 #' @rdname get_statistic
 #' @export
-get_statistic.betamfx <- function(x, component = c("all", "conditional", "precision", "marginal"), ...) {
+get_statistic.betamfx <- function(x,
+                                  component = c("all", "conditional", "precision", "marginal"),
+                                  ...) {
   component <- match.arg(component)
   parms <- get_parameters(x, component = "all", ...)
   cs <- do.call(rbind, stats::coef(summary(x$fit)))
@@ -866,7 +895,9 @@ get_statistic.betamfx <- function(x, component = c("all", "conditional", "precis
 
 
 #' @export
-get_statistic.betaor <- function(x, component = c("all", "conditional", "precision"), ...) {
+get_statistic.betaor <- function(x,
+                                 component = c("all", "conditional", "precision"),
+                                 ...) {
   component <- match.arg(component)
   parms <- get_parameters(x, component = "all", ...)
   cs <- do.call(rbind, stats::coef(summary(x$fit)))
@@ -890,7 +921,9 @@ get_statistic.betaor <- function(x, component = c("all", "conditional", "precisi
 
 #' @rdname get_statistic
 #' @export
-get_statistic.logitmfx <- function(x, component = c("all", "conditional", "marginal"), ...) {
+get_statistic.logitmfx <- function(x,
+                                   component = c("all", "conditional", "marginal"),
+                                   ...) {
   parms <- get_parameters(x, component = "all", ...)
   cs <- stats::coef(summary(x$fit))
   stat <- c(as.vector(x$mfxest[, 3]), as.vector(cs[, 3]))
@@ -936,7 +969,10 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
-get_statistic.pgmm <- function(x, component = c("conditional", "all"), verbose = TRUE, ...) {
+get_statistic.pgmm <- function(x,
+                               component = c("conditional", "all"),
+                               verbose = TRUE,
+                               ...) {
   component <- match.arg(component)
   cs <- stats::coef(summary(x, time.dummies = TRUE, robust = FALSE))
 
@@ -962,7 +998,9 @@ get_statistic.pgmm <- function(x, component = c("conditional", "all"), verbose =
 
 
 #' @export
-get_statistic.selection <- function(x, component = c("all", "selection", "outcome", "auxiliary"), ...) {
+get_statistic.selection <- function(x,
+                                    component = c("all", "selection", "outcome", "auxiliary"),
+                                    ...) {
   component <- match.arg(component)
   s <- summary(x)
   rn <- row.names(s$estimate)
@@ -1046,7 +1084,9 @@ get_statistic.sarlm <- function(x, ...) {
 
 #' @rdname get_statistic
 #' @export
-get_statistic.mjoint <- function(x, component = c("all", "conditional", "survival"), ...) {
+get_statistic.mjoint <- function(x,
+                                 component = c("all", "conditional", "survival"),
+                                 ...) {
   component <- match.arg(component)
   s <- summary(x)
 
@@ -1574,7 +1614,9 @@ get_statistic.cpglm <- function(x, ...) {
 
 
 #' @export
-get_statistic.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), ...) {
+get_statistic.zcpglm <- function(x,
+                                 component = c("all", "conditional", "zi", "zero_inflated"),
+                                 ...) {
   # installed?
   check_if_installed("cplm")
 
@@ -1761,7 +1803,9 @@ get_statistic.nlrq <- get_statistic.rq
 
 
 #' @export
-get_statistic.rqss <- function(x, component = c("all", "conditional", "smooth_terms"), ...) {
+get_statistic.rqss <- function(x,
+                               component = c("all", "conditional", "smooth_terms"),
+                               ...) {
   component <- match.arg(component)
 
   cs <- summary(x)
@@ -1870,7 +1914,9 @@ get_statistic.fixest <- function(x, ...) {
 
 
 #' @export
-get_statistic.glmx <- function(x, component = c("all", "conditional", "extra"), ...) {
+get_statistic.glmx <- function(x,
+                               component = c("all", "conditional", "extra"),
+                               ...) {
   component <- match.arg(component)
   cf <- stats::coef(summary(x))
   parms <- get_parameters(x)
@@ -2026,7 +2072,9 @@ get_statistic.svyolr <- get_statistic.svyglm
 
 #' @rdname get_statistic
 #' @export
-get_statistic.betareg <- function(x, component = c("all", "conditional", "precision"), ...) {
+get_statistic.betareg <- function(x,
+                                  component = c("all", "conditional", "precision"),
+                                  ...) {
   component <- match.arg(component)
   parms <- get_parameters(x)
   cs <- do.call(rbind, stats::coef(summary(x)))
@@ -2052,7 +2100,9 @@ get_statistic.betareg <- function(x, component = c("all", "conditional", "precis
 
 #' @rdname get_statistic
 #' @export
-get_statistic.DirichletRegModel <- function(x, component = c("all", "conditional", "precision"), ...) {
+get_statistic.DirichletRegModel <- function(x,
+                                            component = c("all", "conditional", "precision"),
+                                            ...) {
   component <- match.arg(component)
   parms <- get_parameters(x)
   junk <- utils::capture.output(cs <- summary(x)$coef.mat)

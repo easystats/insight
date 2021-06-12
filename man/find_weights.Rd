@@ -16,7 +16,8 @@ The name of the weighting variable as character vector, or \code{NULL}
   if no weights were specified.
 }
 \description{
-Returns the name of the variable that describes the weights of a model.
+Returns the name of the variable that describes the weights of a
+  model.
 }
 \examples{
 data(mtcars)

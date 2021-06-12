@@ -21,18 +21,18 @@
 \item{effects}{Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
-\item{component}{Which type of parameters to return, such as parameters for the
-conditional model, the zero-inflated part of the model or the dispersion
-term? Applies to models with zero-inflated and/or dispersion formula. Note
-that the \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model. There are three convenient shortcuts:
-\code{component = "all"} returns all possible parameters.
-If \code{component = "location"}, location parameters such as \code{conditional}
-or \code{zero_inflated} are returned (everything that are fixed or random
-effects - depending on the \code{effects} argument - but no auxiliary
-parameters). For \code{component = "distributional"} (or \code{"auxiliary"}),
-components like \code{sigma} or \code{dispersion} (and other auxiliary
-parameters) are returned.}
+\item{component}{Which type of parameters to return, such as parameters for
+the conditional model, the zero-inflated part of the model or the
+dispersion term? Applies to models with zero-inflated and/or dispersion
+formula. Note that the \emph{conditional} component is also called
+\emph{count} or \emph{mean} component, depending on the model. There are
+three convenient shortcuts: \code{component = "all"} returns all possible
+parameters. If \code{component = "location"}, location parameters such as
+\code{conditional} or \code{zero_inflated} are returned (everything that
+are fixed or random effects - depending on the \code{effects} argument -
+but no auxiliary parameters). For \code{component = "distributional"} (or
+\code{"auxiliary"}), components like \code{sigma} or \code{dispersion} (and
+other auxiliary parameters) are returned.}
 
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}
@@ -45,8 +45,10 @@ A list of parameter names. The returned list may have following
    \itemize{
      \item \code{conditional}, the "fixed effects" part from the model.
      \item \code{random}, the "random effects" part from the model.
-     \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component of the model.
-     \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation component of the model.
+     \item \code{zero_inflated}, the "fixed effects" part from the
+     zero-inflation component of the model.
+     \item \code{zero_inflated_random}, the "random effects" part from the
+     zero-inflation component of the model.
      \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
    }
 }

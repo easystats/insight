@@ -79,8 +79,6 @@ get_parameters.htest <- function(x, ...) {
 }
 
 
-
-
 # extract htest leveneTest ----------------------
 
 
@@ -93,10 +91,7 @@ get_parameters.htest <- function(x, ...) {
 }
 
 
-
-
 # extract htest ttest ----------------------
-
 
 .extract_htest_ttest <- function(model, standardized_d = NULL, hedges_g = NULL) {
   out <- data.frame(
@@ -113,15 +108,12 @@ get_parameters.htest <- function(x, ...) {
 
 
 
-
 # extract htest oneway ----------------------
 
 
 .extract_htest_oneway <- function(model) {
   NULL
 }
-
-
 
 
 # extract htest chi2 ----------------------
@@ -142,8 +134,6 @@ get_parameters.htest <- function(x, ...) {
 }
 
 
-
-
 # extract htest prop ----------------------
 
 
@@ -156,10 +146,7 @@ get_parameters.htest <- function(x, ...) {
 }
 
 
-
-
 # extract htest binom ----------------------
-
 
 .extract_htest_binom <- function(model) {
   out <- data.frame(

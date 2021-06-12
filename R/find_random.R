@@ -16,7 +16,8 @@
 #'    returned list has following elements:
 #'    \itemize{
 #'      \item \code{random}, the "random effects" terms from the conditional part of model
-#'      \item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation component of the model
+#'      \item \code{zero_inflated_random}, the "random effects" terms from the
+#'      zero-inflation component of the model
 #'    }
 #'
 #' @examples
