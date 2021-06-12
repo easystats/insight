@@ -67,7 +67,6 @@
 
 
 
-
   
 
   
@@ -174,18 +173,18 @@ or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
     </tr>
     <tr>
       <th>component</th>
-      <td><p>Which type of parameters to return, such as parameters for the
-conditional model, the zero-inflated part of the model or the dispersion
-term? Applies to models with zero-inflated and/or dispersion formula. Note
-that the <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model. There are three convenient shortcuts:
-<code>component = "all"</code> returns all possible parameters.
-If <code>component = "location"</code>, location parameters such as <code>conditional</code>
-or <code>zero_inflated</code> are returned (everything that are fixed or random
-effects - depending on the <code>effects</code> argument - but no auxiliary
-parameters). For <code>component = "distributional"</code> (or <code>"auxiliary"</code>),
-components like <code>sigma</code> or <code>dispersion</code> (and other auxiliary
-parameters) are returned.</p></td>
+      <td><p>Which type of parameters to return, such as parameters for
+the conditional model, the zero-inflated part of the model or the
+dispersion term? Applies to models with zero-inflated and/or dispersion
+formula. Note that the <em>conditional</em> component is also called
+<em>count</em> or <em>mean</em> component, depending on the model. There are
+three convenient shortcuts: <code>component = "all"</code> returns all possible
+parameters. If <code>component = "location"</code>, location parameters such as
+<code>conditional</code> or <code>zero_inflated</code> are returned (everything that
+are fixed or random effects - depending on the <code>effects</code> argument -
+but no auxiliary parameters). For <code>component = "distributional"</code> (or
+<code>"auxiliary"</code>), components like <code>sigma</code> or <code>dispersion</code> (and
+other auxiliary parameters) are returned.</p></td>
     </tr>
     <tr>
       <th>flatten</th>
@@ -204,8 +203,10 @@ as character vector, not as list. Duplicated values are removed.</p></td>
   elements:</p><ul>
 <li><p><code>conditional</code>, the "fixed effects" part from the model.</p></li>
 <li><p><code>random</code>, the "random effects" part from the model.</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component of the model.</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation component of the model.</p></li>
+<li><p><code>zero_inflated</code>, the "fixed effects" part from the
+     zero-inflation component of the model.</p></li>
+<li><p><code>zero_inflated_random</code>, the "random effects" part from the
+     zero-inflation component of the model.</p></li>
 <li><p><code>dispersion</code>, the dispersion parameters (auxiliary parameter)</p></li>
 </ul>
 

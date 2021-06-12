@@ -74,7 +74,6 @@ information about its interpretation and calculation." />
 
 
 
-
   
 
   
@@ -189,16 +188,19 @@ information about its interpretation and calculation.</p>
 
     
 <h3 class='hasAnchor' id='interpretation-of-sigma'><a class='anchor' aria-hidden='true' href='#interpretation-of-sigma'></a>Interpretation of Sigma</h3>
-<p>The residual standard deviation, &sigma;,
-  indicates that the predicted outcome will be within +/- &sigma;
-  units of the linear predictor for approximately 68% of the data points
+<p>The residual standard deviation,
+  &sigma;, indicates that the predicted
+  outcome will be within +/- &sigma; units
+  of the linear predictor for approximately 68% of the data points
   (<cite>Gelman, Hill &amp; Vehtari 2020, p.84</cite>). In other words, the residual
   standard deviation indicates the accuracy for a model to predict scores,
-  thus it can be thought of as &#8220;a measure of the average distance
-  each observation falls from its prediction from the model&#8221;
-  (<cite>Gelman, Hill &amp; Vehtari 2020, p.168</cite>). &sigma;
-  can be considered as a measure of the unexplained variation in the data,
-  or of the precision of inferences about regression coefficients.</p><p></p><h3 class='hasAnchor' id='calculation-of-sigma'><a class='anchor' aria-hidden='true' href='#calculation-of-sigma'></a>Calculation of Sigma</h3>
+  thus it can be thought of as &#8220;a measure of the average distance each
+  observation falls from its prediction from the model&#8221; (<cite>Gelman, Hill &amp;
+  Vehtari 2020, p.168</cite>). &sigma; can be
+  considered as a measure of the unexplained variation in the data, or of the
+  precision of inferences about regression coefficients.</p>
+
+<p></p><h3 class='hasAnchor' id='calculation-of-sigma'><a class='anchor' aria-hidden='true' href='#calculation-of-sigma'></a>Calculation of Sigma</h3>
 <p>By default, <code>get_sigma()</code> tries to extract sigma by calling
   <code><a href='https://rdrr.io/r/stats/sigma.html'>stats::sigma()</a></code>. If the model-object has no <code><a href='https://rdrr.io/pkg/lme4/man/sigma.html'>sigma()</a></code> method,
   the next step is calculating sigma as square-root of the model-deviance
@@ -208,7 +210,8 @@ information about its interpretation and calculation.</p>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Gelman, A., Hill, J., &amp; Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.</p>
+    <p>Gelman, A., Hill, J., &amp; Vehtari, A. (2020). Regression and Other
+  Stories. Cambridge University Press.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>

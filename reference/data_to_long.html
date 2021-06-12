@@ -47,7 +47,9 @@
 
 
 <meta property="og:title" content="Reshape (pivot) data from wide to long — data_to_long" />
-<meta property="og:description" content="This function &quot;lengthens&quot; data, increasing the number of rows and decreasing the number of columns. This is a dependency-free base-R equivalent of tidyr::pivot_longer()." />
+<meta property="og:description" content="This function &quot;lengthens&quot; data, increasing the number of rows and decreasing
+the number of columns. This is a dependency-free base-R equivalent of
+tidyr::pivot_longer()." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -63,7 +65,6 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-
 
 
 
@@ -143,7 +144,9 @@
     </div>
 
     <div class="ref-description">
-    <p>This function "lengthens" data, increasing the number of rows and decreasing the number of columns. This is a dependency-free base-R equivalent of <code><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>tidyr::pivot_longer()</a></code>.</p>
+    <p>This function "lengthens" data, increasing the number of rows and decreasing
+the number of columns. This is a dependency-free base-R equivalent of
+<code><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>tidyr::pivot_longer()</a></code>.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>data_to_long</span><span class='op'>(</span>
@@ -203,11 +206,13 @@
     </tr>
     <tr>
       <th>values_to</th>
-      <td><p>The name of the new column that will contain the values of the pivoted variables.</p></td>
+      <td><p>The name of the new column that will contain the values of
+the pivoted variables.</p></td>
     </tr>
     <tr>
       <th>rows_to</th>
-      <td><p>The name of the column that will contain the row-number from the original data. If <code>NULL</code>, will be removed.</p></td>
+      <td><p>The name of the column that will contain the row-number from
+the original data. If <code>NULL</code>, will be removed.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -215,23 +220,28 @@
     </tr>
     <tr>
       <th>names_to, names_from</th>
-      <td><p>Same as <code>colnames_to</code>, is there for compatibility with <code><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>tidyr::pivot_longer()</a></code>.</p></td>
+      <td><p>Same as <code>colnames_to</code>, is there for
+compatibility with <code><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>tidyr::pivot_longer()</a></code>.</p></td>
     </tr>
     <tr>
       <th>values_from</th>
-      <td><p>The name of the column that contains the values of the put in the columns.</p></td>
+      <td><p>The name of the column that contains the values of the put
+in the columns.</p></td>
     </tr>
     <tr>
       <th>colnames_from</th>
-      <td><p>The name of the column that contains the levels to be used as future columns</p></td>
+      <td><p>The name of the column that contains the levels to be
+used as future columns</p></td>
     </tr>
     <tr>
       <th>rows_from</th>
-      <td><p>The name of the column that identifies the rows. If <code>NULL</code>, will use all the unique rows.</p></td>
+      <td><p>The name of the column that identifies the rows. If
+<code>NULL</code>, will use all the unique rows.</p></td>
     </tr>
     <tr>
       <th>sep</th>
-      <td><p>The indicating a separating character in the variable names in the wide format.</p></td>
+      <td><p>The indicating a separating character in the variable names in the
+wide format.</p></td>
     </tr>
     </table>
 
