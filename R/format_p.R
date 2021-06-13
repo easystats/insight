@@ -8,9 +8,9 @@
 #' @param name Name prefixing the text. Can be \code{NULL}.
 #' @param digits Number of significant digits. May also be \code{"scientific"}
 #'   to return exact p-values in scientific notation, or \code{"apa"} to use
-#'   an APA-style for p-values (e.g., p < .01, p < .05, etc.). If
-#'   \code{"scientific"}, control the number of digits by adding the value as
-#'   suffix, e.g. \code{digits = "scientific4"} to have scientific notation
+#'   an APA 7th edition-style for p-values (equivalent to \code{digits = 3}).
+#'   If \code{"scientific"}, control the number of digits by adding the value as
+#'   a suffix, e.g.m \code{digits = "scientific4"} to have scientific notation
 #'   with 4 decimal places.
 #' @param ... Arguments from other methods.
 #' @inheritParams format_value
@@ -46,18 +46,10 @@ format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing =
   }
 
   if (digits == "apa") {
-    text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, "< .001***",
-        ifelse(p < 0.01, "< .01**",
-          ifelse(p < 0.05, "< .05*",
-            ifelse(p > .999, "> .999",
-              paste0("= ", format_value(p, 3))
-            )
-          )
-        )
-      )
-    )
-  } else if (is.character(digits) && grepl("^scientific", digits)) {
+    digits <- 3
+  }
+  
+  if (is.character(digits) && grepl("^scientific", digits)) {
     digits <- tryCatch(
       {
         as.numeric(gsub("scientific", "", digits, fixed = TRUE))
