@@ -54,5 +54,5 @@ check_if_installed <- function(package,
     if (stop) stop(message, call. = FALSE) else warning(message, call. = FALSE)
   }
 
-  invisible(is_installed)
+  invisible(all(is_installed))
 }
