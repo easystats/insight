@@ -48,7 +48,7 @@ format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing =
   if (digits == "apa") {
     digits <- 3
   }
-  
+
   if (is.character(digits) && grepl("^scientific", digits)) {
     digits <- tryCatch(
       {
