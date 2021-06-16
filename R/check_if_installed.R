@@ -33,10 +33,10 @@ check_if_installed <- function(package,
   # does it need to be displayed?
   is_installed <- sapply(package, requireNamespace, quietly = TRUE)
 
-  # only keep not-installed packages
-  package <- package[!is_installed]
-
   if (!all(is_installed)) {
+    # only keep not-installed packages
+    package <- package[!is_installed]
+
     # prepare the message
     if (length(package) > 1) {
       message <- format_message(
