@@ -12,6 +12,8 @@
 * Fixed issue in `find_parameters()` for *brms* when model contained parameters
   for the priors on sigma.
 
+* Fixed issue in `n_obs()` for `stats4::mle()` models.
+
 # insight 0.14.1
 
 ## New functions

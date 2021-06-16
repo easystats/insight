@@ -347,7 +347,25 @@ n_obs.glimML <- function(x, ...) {
 
 #' @export
 n_obs.mle2 <- function(x, ...) {
-  nrow(get_data(x))
+  n <- tryCatch(
+    {
+      x@nobs
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+  if (is.null(n)) {
+    n <- tryCatch(
+      {
+        nrow(get_data(x))
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  }
+  n
 }
 
 #' @export
