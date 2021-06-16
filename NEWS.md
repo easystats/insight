@@ -5,6 +5,9 @@
 * `check_if_installed()` gains a `minimum_version` argument, to check if an
   installed package is not older than the specified version number.
 
+* The `package` argument in `check_if_installed()` is now vectorized, so you
+  can check for multiple packages in one function call.
+
 ## Bug fixes
 
 * Fixed issue in `model_info()` with `stan_polr()` models.

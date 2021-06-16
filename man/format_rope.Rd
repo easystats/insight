@@ -13,9 +13,9 @@ format_rope(rope_percentage, name = "in ROPE", digits = 2)
 
 \item{digits}{Number of significant digits. May also be \code{"scientific"}
 to return exact p-values in scientific notation, or \code{"apa"} to use
-an APA-style for p-values (e.g., p < .01, p < .05, etc.). If
-\code{"scientific"}, control the number of digits by adding the value as
-suffix, e.g. \code{digits = "scientific4"} to have scientific notation
+an APA 7th edition-style for p-values (equivalent to \code{digits = 3}).
+If \code{"scientific"}, control the number of digits by adding the value as
+a suffix, e.g.m \code{digits = "scientific4"} to have scientific notation
 with 4 decimal places.}
 }
 \value{

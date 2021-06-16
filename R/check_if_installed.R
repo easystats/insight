@@ -1,13 +1,14 @@
 #' Checking if needed package is installed
 
-#' @param package A string naming the package, whose installation needs to be
-#'   checked in any of the libraries
+#' @param package A string (vector) naming the package, whose installation needs
+#'   to be checked in any of the libraries.
 #' @param reason A phrase describing why the package is needed. The default is a
 #'   generic description.
 #' @param stop Logical that decides whether the function should stop if the
 #'   needed package is not installed.
 #' @param minimum_version String, representing the minimum package version that
-#'   is required. If \code{NULL}, no check for minimum version is done.
+#'   is required. If \code{NULL}, no check for minimum version is done. Note
+#'   that \code{minimum_version} only works when \code{package} is of length 1.
 #' @param ... Currently ignored
 #'
 #' @examples
@@ -26,10 +27,17 @@ check_if_installed <- function(package,
   is_installed <- requireNamespace(package, quietly = TRUE)
   if (!is_installed) {
     # prepare the message
-    message <- format_message(
-      paste0("Package '", package, "' is required ", reason, "."),
-      paste0("Please install it by running install.packages('", package, "').")
-    )
+    if (length(package) > 1) {
+      message <- format_message(
+        paste0("Packages ", paste(sprintf("'%s'", package), collapse = " and "), " are required ", reason, "."),
+        paste0("Please install them by running install.packages(", paste(sprintf("\"%s\"", package), collapse = ", "), ").")
+      )
+    } else {
+      message <- format_message(
+        paste0("Package '", package, "' is required ", reason, "."),
+        paste0("Please install it by running install.packages('", package, "').")
+      )
+    }
 
     if (stop) stop(message, call. = FALSE) else warning(message, call. = FALSE)
   } else if (!is.null(minimum_version) && utils::packageVersion(package) < package_version(minimum_version)) {

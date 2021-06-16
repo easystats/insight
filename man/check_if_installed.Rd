@@ -13,8 +13,8 @@ check_if_installed(
 )
 }
 \arguments{
-\item{package}{A string naming the package, whose installation needs to be
-checked in any of the libraries}
+\item{package}{A string (vector) naming the package, whose installation needs
+to be checked in any of the libraries.}
 
 \item{reason}{A phrase describing why the package is needed. The default is a
 generic description.}
@@ -23,7 +23,8 @@ generic description.}
 needed package is not installed.}
 
 \item{minimum_version}{String, representing the minimum package version that
-is required. If \code{NULL}, no check for minimum version is done.}
+is required. If \code{NULL}, no check for minimum version is done. Note
+that \code{minimum_version} only works when \code{package} is of length 1.}
 
 \item{...}{Currently ignored}
 }
