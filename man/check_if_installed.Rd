@@ -28,6 +28,11 @@ that \code{minimum_version} only works when \code{package} is of length 1.}
 
 \item{...}{Currently ignored}
 }
+\value{
+If \code{stop = TRUE}, and \cpde{package} is not yet installed, the
+  function stops and throws an error. Else, a named logical vector is returned,
+  indicating which of the packages are installed, and which not.
+}
 \description{
 Checking if needed package is installed
 }
@@ -36,5 +41,8 @@ Checking if needed package is installed
 check_if_installed("inexistent_package")
 check_if_installed("insight")
 check_if_installed("insight", minimum_version = "99.8.7")
+
+x <- check_if_installed(c("inexistent", "also_not_here"), stop = FALSE)
+x
 }
 }
