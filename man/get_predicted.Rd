@@ -54,7 +54,8 @@ also accepted as a (deprecated) alias for \code{"expectation"}.}
 \item{iterations}{For Bayesian models, this corresponds to the number of
 posterior draws. If \code{NULL}, will return all the draws (one for each
 iteration of the model). For frequentist models, if not \code{NULL}, will
-generate bootstrapped draws, from which bootstrapped CIs will be computed.}
+generate bootstrapped draws, from which bootstrapped CIs will be computed.
+Iterations can be accessed via \code{as.data.frame}.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -72,8 +73,8 @@ are not depending on it. (default), \code{mean()}, or
 }
 \value{
 The fitted values (i.e. predictions for the response). For Bayesian
-  or bootstrapped models (when \code{iterations != NULL}), this will be a
-  dataframe with all iterations as columns (observations are still rows).
+  or bootstrapped models (when \code{iterations != NULL}), iterations (as
+  columns and observations are rows) can be accessed via \code{as.data.frame}.
 }
 \description{
 The \code{get_predicted()} function is a robust, flexible and user-friendly alternative to base R \code{\link{predict}} function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's \code{predict}. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the \code{Details} section for more information.

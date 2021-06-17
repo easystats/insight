@@ -22,6 +22,7 @@
 #'   posterior draws. If \code{NULL}, will return all the draws (one for each
 #'   iteration of the model). For frequentist models, if not \code{NULL}, will
 #'   generate bootstrapped draws, from which bootstrapped CIs will be computed.
+#'   Iterations can be accessed via \code{as.data.frame}.
 #' @param include_random If \code{TRUE} (default), include all random effects in
 #'   the prediction. If \code{FALSE}, don't take them into account. Can also be
 #'   a formula to specify which random effects to condition on when predicting
@@ -39,8 +40,8 @@
 #' @seealso \code{\link{get_predicted_ci}}
 #'
 #' @return The fitted values (i.e. predictions for the response). For Bayesian
-#'   or bootstrapped models (when \code{iterations != NULL}), this will be a
-#'   dataframe with all iterations as columns (observations are still rows).
+#'   or bootstrapped models (when \code{iterations != NULL}), iterations (as
+#'   columns and observations are rows) can be accessed via \code{as.data.frame}.
 #'
 #' @details
 #' The \code{predict} argument jointly modulates two separate concepts, the
@@ -453,6 +454,7 @@ get_predicted.stanreg <- function(x,
       x,
       newdata = args$data,
       re.form = args$re.form,
+      nsamples = iterations,
       draws = iterations,
       ...
     )
@@ -461,6 +463,7 @@ get_predicted.stanreg <- function(x,
       x,
       newdata = args$data,
       re.form = args$re.form,
+      nsamples = iterations,
       draws = iterations,
       ...
     )
@@ -470,6 +473,7 @@ get_predicted.stanreg <- function(x,
       newdata = args$data,
       re.form = args$re.form,
       draws = iterations,
+      nsamples = iterations,
       ...
     )
   }
