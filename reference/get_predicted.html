@@ -207,7 +207,8 @@ also accepted as a (deprecated) alias for <code>"expectation"</code>.</p></td>
       <td><p>For Bayesian models, this corresponds to the number of
 posterior draws. If <code>NULL</code>, will return all the draws (one for each
 iteration of the model). For frequentist models, if not <code>NULL</code>, will
-generate bootstrapped draws, from which bootstrapped CIs will be computed.</p></td>
+generate bootstrapped draws, from which bootstrapped CIs will be computed.
+Iterations can be accessed via <code>as.data.frame</code>.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -234,8 +235,8 @@ are not depending on it. (default), <code><a href='https://rdrr.io/r/base/mean.h
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The fitted values (i.e. predictions for the response). For Bayesian
-  or bootstrapped models (when <code>iterations != NULL</code>), this will be a
-  dataframe with all iterations as columns (observations are still rows).</p>
+  or bootstrapped models (when <code>iterations != NULL</code>), iterations (as
+  columns and observations are rows) can be accessed via <code>as.data.frame</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <code>predict</code> argument jointly modulates two separate concepts, the
