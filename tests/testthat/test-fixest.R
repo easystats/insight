@@ -21,7 +21,7 @@ if (!osx &&
   data(trade)
   m1 <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
   m2 <- femlm(log1p(Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")
-  m3 <- feglm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
+  m3 <- feglm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "poisson")
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_count)
