@@ -18,23 +18,6 @@
       grepl("\\Qbinomial\\E", fitfam, ignore.case = TRUE)
 
 
-  # bernoulli family --------
-
-  is_bernoulli <- FALSE
-
-  if (binom_fam && inherits(x, "glm")) {
-    resp <- get_response(x, verbose = FALSE)
-    if (is.data.frame(resp) && ncol(resp) == 1) {
-      resp <- as.vector(resp[[1]])
-    }
-    if (!is.data.frame(resp) && all(.is.int(.factor_to_numeric(resp[[1]])))) {
-      is_bernoulli <- TRUE
-    }
-  } else if (fitfam %in% "bernoulli") {
-    is_bernoulli <- TRUE
-  }
-
-
   # poisson family --------
 
   poisson_fam <-
@@ -53,6 +36,23 @@
       grepl("\\Qnegbinomial\\E", fitfam, ignore.case = TRUE) |
       grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE) |
       fitfam %in% c("ztnbinom", "nbinom")
+
+
+  # bernoulli family --------
+
+  is_bernoulli <- FALSE
+
+  if (binom_fam && inherits(x, "glm") && !neg_bin_fam && !poisson_fam) {
+    resp <- get_response(x, verbose = FALSE)
+    if (is.data.frame(resp) && ncol(resp) == 1) {
+      resp <- as.vector(resp[[1]])
+    }
+    if (!is.data.frame(resp) && all(.is.int(.factor_to_numeric(resp[[1]])))) {
+      is_bernoulli <- TRUE
+    }
+  } else if (fitfam %in% "bernoulli") {
+    is_bernoulli <- TRUE
+  }
 
 
   # beta family --------
