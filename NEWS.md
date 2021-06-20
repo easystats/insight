@@ -17,6 +17,8 @@
 
 * Fixed issue in `n_obs()` for `stats4::mle()` models.
 
+* Fixed failing tests due to latest *fixest* update.
+
 # insight 0.14.1
 
 ## New functions
