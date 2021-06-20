@@ -55,8 +55,8 @@ format_ci <- function(CI_low,
 
   if (!is.null(width) && width == "auto") {
     if (is.numeric(CI_low) && is.numeric(CI_high)) {
-      CI_low <- round(CI_low, digits)
-      CI_high <- round(CI_high, digits)
+      CI_low <- format_value(CI_low, digits  = digits)
+      CI_high <- format_value(CI_high, digits = digits)
     }
     if (all(is.na(CI_low))) {
       width_low <- 1
