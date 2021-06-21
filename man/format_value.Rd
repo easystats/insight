@@ -35,10 +35,12 @@ format_value(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{digits}{Number of significant digits. May also be \code{"scientific"}
-to return scientific notation. For the latter case, control the number of
-digits by adding the value as suffix, e.g. \code{digits = "scientific4"}
-to have scientific notation with 4 decimal places.}
+\item{digits}{Number of digits for rounding or significant figures. May also
+be \code{"signif"} to return significant figures or \code{"scientific"}
+to return scientific notation. Control the number of digits by adding the
+value as suffix, e.g. \code{digits = "scientific4"} to have scientific
+notation with 4 decimal places, or \code{digits = "signif5"} for 5
+significant figures (see also \code{\link{signif}}).}
 
 \item{protect_integers}{Should integers be kept as integers (i.e., without
 decimals)?}
@@ -72,6 +74,11 @@ format_value(c(0.0045, .12, .34))
 format_value(c(0.0045, .12, .34), as_percent = TRUE)
 format_value(c(0.0045, .12, .34), digits = "scientific")
 format_value(c(0.0045, .12, .34), digits = "scientific2")
+
+# default
+format_value(c(0.0045, .123, .345))
+# significant figures
+format_value(c(0.0045, .123, .345), digits = "signif")
 
 format_value(as.factor(c("A", "B", "A")))
 format_value(iris$Species)

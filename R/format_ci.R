@@ -3,7 +3,6 @@
 #' @param CI_low Lower CI bound.
 #' @param CI_high Upper CI bound.
 #' @param ci CI level in percentage.
-#' @param digits Number of significant digits.
 #' @param brackets Either a logical, and if \code{TRUE} (default), values are
 #'   encompassed in square brackets. If \code{FALSE} or \code{NULL}, no brackets
 #'   are used. Else, a character vector of length two, indicating the opening
@@ -55,8 +54,24 @@ format_ci <- function(CI_low,
 
   if (!is.null(width) && width == "auto") {
     if (is.numeric(CI_low) && is.numeric(CI_high)) {
-      CI_low <- format_value(CI_low, digits  = digits)
-      CI_high <- format_value(CI_high, digits = digits)
+      if (is.numeric(digits)) {
+        CI_low <- round(CI_low, digits)
+        CI_high <- round(CI_high, digits)
+      } else if (is.character(digits) && grepl("^signif", digits)) {
+        sig_digits <- tryCatch(
+          {
+            as.numeric(gsub("signif", "", digits, fixed = TRUE))
+          },
+          error = function(e) {
+            NA
+          }
+        )
+        if (is.na(sig_digits)) {
+          sig_digits <- 2
+        }
+        CI_low <- signif(CI_low, digits = sig_digits)
+        CI_high <- signif(CI_high, digits = sig_digits)
+      }
     }
     if (all(is.na(CI_low))) {
       width_low <- 1
