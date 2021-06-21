@@ -150,7 +150,7 @@ get_parameters.selection <- function(x, component = c("all", "selection", "outco
 
 #' @export
 get_parameters.epi.2by2 <- function(x, ...) {
-  coef_names <- grepl(".strata.wald", names(x$massoc.detail), fixed = TRUE)
+  coef_names <- grepl("^([^NNT]*)(\\.strata\\.wald)", names(x$massoc.detail), perl = TRUE)
   cf <- x$massoc.detail[coef_names]
   names(cf) <- gsub(".strata.wald", "", names(cf), fixed = TRUE)
 
