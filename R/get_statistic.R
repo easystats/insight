@@ -2010,7 +2010,7 @@ get_statistic.logistf <- function(x, ...) {
 
 #' @export
 get_statistic.epi.2by2 <- function(x, ...) {
-  stat <- x$massoc$chisq.strata
+  stat <- x$massoc.detail$chi2.strata.uncor
   out <- data.frame(
     Parameter = "Chi2",
     Statistic = stat$test.statistic,

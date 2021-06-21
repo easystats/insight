@@ -19,6 +19,8 @@
 
 * Fixed failing tests due to latest *fixest* update.
 
+* Fixed issues due to latest *epiR* update.
+
 # insight 0.14.1
 
 ## New functions

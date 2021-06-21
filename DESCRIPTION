@@ -81,6 +81,7 @@ Suggests:
     dplyr,
     effectsize,
     emmeans,
+    epiR,
     estimatr,
     feisr,
     fixest,
@@ -148,5 +149,5 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.1.1.9001
+RoxygenNote: 7.1.1
 Config/testthat/edition: 3
