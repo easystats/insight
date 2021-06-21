@@ -184,10 +184,12 @@
     </tr>
     <tr>
       <th>digits</th>
-      <td><p>Number of significant digits. May also be <code>"scientific"</code>
-to return scientific notation. For the latter case, control the number of
-digits by adding the value as suffix, e.g. <code>digits = "scientific4"</code>
-to have scientific notation with 4 decimal places.</p></td>
+      <td><p>Number of digits for rounding or significant figures. May also
+be <code>"signif"</code> to return significant figures or <code>"scientific"</code>
+to return scientific notation. Control the number of digits by adding the
+value as suffix, e.g. <code>digits = "scientific4"</code> to have scientific
+notation with 4 decimal places, or <code>digits = "signif5"</code> for 5
+significant figures (see also <code><a href='https://rdrr.io/r/base/Round.html'>signif</a></code>).</p></td>
     </tr>
     <tr>
       <th>protect_integers</th>
@@ -239,6 +241,13 @@ places than <code>digits</code> are printed in scientific notation.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "4.50000e-03" "1.20000e-01" "3.40000e-01"</span>
 <span class='r-in'><span class='fu'>format_value</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.0045</span>, <span class='fl'>.12</span>, <span class='fl'>.34</span><span class='op'>)</span>, digits <span class='op'>=</span> <span class='st'>"scientific2"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "4.50e-03" "1.20e-01" "3.40e-01"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># default</span></span>
+<span class='r-in'><span class='fu'>format_value</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.0045</span>, <span class='fl'>.123</span>, <span class='fl'>.345</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "4.50e-03" "0.12"     "0.34"    </span>
+<span class='r-in'><span class='co'># significant figures</span></span>
+<span class='r-in'><span class='fu'>format_value</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.0045</span>, <span class='fl'>.123</span>, <span class='fl'>.345</span><span class='op'>)</span>, digits <span class='op'>=</span> <span class='st'>"signif"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "0.0045" "0.123"  "0.345" </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'>format_value</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"A"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] A B A</span>
