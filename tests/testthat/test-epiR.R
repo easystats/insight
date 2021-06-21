@@ -34,12 +34,12 @@ if (!osx && require("testthat") &&
   test_that("get_parameters", {
     expect_equal(
       params$Estimate,
-      c(4.00754, 4.02561, 0.44835, 223.03967, 0.75047, 0.17642, 0.54201),
+      c(4.00754, 4.02561, 0.44835, 0.75047, 0.17642, 0.54201),
       tolerance = 1e-3
     )
     expect_equal(
       params$Parameter,
-      c("RR", "OR", "ARisk", "NNT", "AFRisk", "PARisk", "PAFRisk")
+      c("RR", "OR", "ARisk", "AFRisk", "PARisk", "PAFRisk")
     )
   })
 
