@@ -8,6 +8,9 @@
 * The `package` argument in `check_if_installed()` is now vectorized, so you
   can check for multiple packages in one function call.
 
+* Value formatting functions (like `format_value()` or `format_ci()`) can now
+  round to significant digits using `digits = "signif"`.
+
 ## Bug fixes
 
 * Fixed issue in `model_info()` with `stan_polr()` models.
