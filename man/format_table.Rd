@@ -47,8 +47,12 @@ names.}
 
 \item{stars}{Add significance stars (e.g., p < .001***).}
 
-\item{digits}{Number of decimal places for numeric values (except confidence
-intervals and p-values).}
+\item{digits, ci_digits, p_digits, rope_digits}{Number of digits for rounding or
+significant figures. May also be \code{"signif"} to return significant
+figures or \code{"scientific"} to return scientific notation. Control the
+number of digits by adding the value as suffix, e.g. \code{digits = "scientific4"}
+to have scientific notation with 4 decimal places, or \code{digits = "signif5"}
+for 5 significant figures (see also \code{\link{signif}}).}
 
 \item{ci_width}{Minimum width of the returned string for confidence
 intervals. If not \code{NULL} and width is larger than the string's length,
@@ -57,12 +61,6 @@ will be set to the length of the longest string.}
 
 \item{ci_brackets}{Logical, if \code{TRUE} (default), CI-values are
 encompassed in square brackets (else in parentheses).}
-
-\item{ci_digits}{Number of decimal places for confidence intervals.}
-
-\item{p_digits}{Number of decimal places for p-values. May also be \code{"scientific"} for scientific notation of p-values.}
-
-\item{rope_digits}{Number of decimal places for the ROPE percentage values.}
 
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
