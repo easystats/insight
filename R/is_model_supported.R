@@ -38,7 +38,8 @@ supported_models <- function() {
 .supported_models_list <- function() {
   c(
     # a ----------------------------
-    "aareg", "afex_aov", "aov", "aovlist", "Anova.mlm", "Arima", "averaging",
+    "aareg", "afex_aov", "aov", "aovlist", "AKP", "Anova.mlm", "Arima",
+    "averaging",
 
     # b ----------------------------
     "bamlss", "bamlss.frame", "bayesx", "bayesQR", "BBmm", "BBreg", "bcplm",
@@ -48,14 +49,14 @@ supported_models <- function() {
 
     # c ----------------------------
     "censReg", "cgam", "cgamm", "cglm", "clm", "clm2", "clmm", "clmm2",
-    "clogit", "coeftest", "complmrob", "coxme", "coxph", "coxph.penal", "coxr",
-    "cpglm", "cpglmm", "crch", "crq", "crqs", "crr",
+    "clogit", "coeftest", "complmrob", "confusionMatrix", "coxme", "coxph",
+    "coxph.penal", "coxr", "cpglm", "cpglmm", "crch", "crq", "crqs", "crr",
 
     # d ----------------------------
     "DirichletRegModel",
 
     # e ----------------------------
-    "eglm", "elm", "ergm",
+    "eglm", "elm", "epi.2by2", "ergm",
 
     # f ----------------------------
     "feis", "felm", "feglm", "fitdistr", "fixest", "flexsurvreg",
@@ -77,38 +78,42 @@ supported_models <- function() {
     "lqm", "lqmm", "lrm",
 
     # m ----------------------------
-    "manova", "MANOVA", "margins", "maxLik", "mcmc", "MCMCglmm", "mediate",
-    "metaplus", "merMod", "merModList", "mipo", "mira", "mixed", "mixor",
-    "MixMod", "mhurdle", "mjoint", "mle", "mle2", "mlm", "mclogit", "mcmc.list",
-    "meta_bma", "meta_fixed", "meta_random", "mlogit", "mmlogit", "model_fit",
-    "multinom", "mvord",
+    "manova", "MANOVA", "margins", "maxLik", "mcmc", "MCMCglmm", "mcp12", "mcp1",
+    "mcp2", "med1way", "mediate", "metaplus", "merMod", "merModList", "mipo",
+    "mira", "mixed", "mixor", "MixMod", "mhurdle", "mjoint", "mle", "mle2",
+    "mlm", "mclogit", "mcmc.list", "meta_bma", "meta_fixed", "meta_random",
+    "mlogit", "mmlogit", "model_fit", "multinom", "mvord",
 
     # n ----------------------------
     "negbinmfx", "negbinirr",
 
     # o ----------------------------
-    "ols", "orm",
+    "ols", "onesampb", "orm",
 
     # p ----------------------------
-    "poissonmfx", "poissonirr", "pgmm", "plm", "polr", "psm", "probitmfx",
+    "PMCMR", "poissonmfx", "poissonirr", "pgmm", "plm", "polr", "psm",
+    "probitmfx",
 
     # r ----------------------------
-    "Rchoice", "ridgelm", "riskRegression", "rlm", "rlmerMod", "RM", "rma",
-    "rma.uni", "robmixglm", "rq", "rqs", "rqss",
+    "Rchoice", "ridgelm", "riskRegression", "rjags", "rlm", "rlmerMod",
+    "robtab", "RM", "rma", "rma.uni", "robmixglm", "rq", "rqs", "rqss",
 
     # s ----------------------------
-    "sarlm", "scam", "selection", "sem", "SemiParBIV", "speedlm", "speedglm",
-    "stanmvreg", "stanreg", "summary.lm", "survfit", "survreg", "svy_vglm",
-    "svyglm", "svyolr",
+    "sarlm", "scam", "selection", "sem", "semLm", "semLme", "SemiParBIV", "slm",
+    "speedlm", "speedglm", "stanfit", "stanmvreg", "stanreg", "summary.lm",
+    "survfit", "survreg", "svy_vglm", "svyglm", "svyolr",
 
     # t ----------------------------
-    "tobit", "truncreg",
+    "t1way", "tobit", "truncreg",
 
     # v ----------------------------
     "vgam", "vglm",
 
     # w ----------------------------
     "wbm", "wblm", "wbgee",
+
+    # y ----------------------------
+    "yuen", "yuend",
 
     # z ----------------------------
     "zcpglm", "zeroinfl", "zerotrunc"
