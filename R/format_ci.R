@@ -60,17 +60,11 @@ format_ci <- function(CI_low,
     # and then convert to numeric
     if (is.character(digits)) {
       if (grepl("^scientific", digits)) {
-        sig_digits <- tryCatch(
-          expr = { as.numeric(gsub("scientific", "", digits, fixed = TRUE)) + 3 },
-          error = function(e) { 6 }
-        )
-        if (is.na(sig_digits)) sig_digits <- 6
+        if (digits == "scientific") digits <- "scientific3"
+        sig_digits <- as.numeric(gsub("scientific", "", digits, fixed = TRUE)) + 3
       } else {
-        sig_digits <- tryCatch(
-          expr = { as.numeric(gsub("signif", "", digits, fixed = TRUE)) },
-          error = function(e) { 2 }
-        )
-        if (is.na(sig_digits)) sig_digits <- 2
+        if (digits == "signif") digits <- "signif2"
+        sig_digits <- as.numeric(gsub("signif", "", digits, fixed = TRUE))
       }
     }
 
