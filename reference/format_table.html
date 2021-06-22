@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.2</span>
       </span>
     </div>
 
@@ -204,9 +204,13 @@ names.</p></td>
       <td><p>Add significance stars (e.g., p &lt; .001***).</p></td>
     </tr>
     <tr>
-      <th>digits</th>
-      <td><p>Number of decimal places for numeric values (except confidence
-intervals and p-values).</p></td>
+      <th>digits, ci_digits, p_digits, rope_digits</th>
+      <td><p>Number of digits for rounding or
+significant figures. May also be <code>"signif"</code> to return significant
+figures or <code>"scientific"</code> to return scientific notation. Control the
+number of digits by adding the value as suffix, e.g. <code>digits = "scientific4"</code>
+to have scientific notation with 4 decimal places, or <code>digits = "signif5"</code>
+for 5 significant figures (see also <code><a href='https://rdrr.io/r/base/Round.html'>signif</a></code>).</p></td>
     </tr>
     <tr>
       <th>ci_width</th>
@@ -219,18 +223,6 @@ will be set to the length of the longest string.</p></td>
       <th>ci_brackets</th>
       <td><p>Logical, if <code>TRUE</code> (default), CI-values are
 encompassed in square brackets (else in parentheses).</p></td>
-    </tr>
-    <tr>
-      <th>ci_digits</th>
-      <td><p>Number of decimal places for confidence intervals.</p></td>
-    </tr>
-    <tr>
-      <th>p_digits</th>
-      <td><p>Number of decimal places for p-values. May also be <code>"scientific"</code> for scientific notation of p-values.</p></td>
-    </tr>
-    <tr>
-      <th>rope_digits</th>
-      <td><p>Number of decimal places for the ROPE percentage values.</p></td>
     </tr>
     <tr>
       <th>zap_small</th>
