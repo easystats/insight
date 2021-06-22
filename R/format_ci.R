@@ -53,26 +53,38 @@ format_ci <- function(CI_low,
   }
 
   if (!is.null(width) && width == "auto") {
-    if (is.numeric(CI_low) && is.numeric(CI_high)) {
-      if (is.numeric(digits)) {
-        CI_low <- round(CI_low, digits)
-        CI_high <- round(CI_high, digits)
-      } else if (is.character(digits) && grepl("^signif", digits)) {
+    # set default numeric value for digits
+    sig_digits <- digits
+
+    # check if we have special handling, like "scientific" or "signif"
+    # and then convert to numeric
+    if (is.character(digits)) {
+      if (grepl("^scientific", digits)) {
         sig_digits <- tryCatch(
-          {
-            as.numeric(gsub("signif", "", digits, fixed = TRUE))
-          },
-          error = function(e) {
-            NA
-          }
+          expr = { as.numeric(gsub("scientific", "", digits, fixed = TRUE)) + 3 },
+          error = function(e) { 6 }
         )
-        if (is.na(sig_digits)) {
-          sig_digits <- 2
-        }
+        if (is.na(sig_digits)) sig_digits <- 6
+      } else {
+        sig_digits <- tryCatch(
+          expr = { as.numeric(gsub("signif", "", digits, fixed = TRUE)) },
+          error = function(e) { 2 }
+        )
+        if (is.na(sig_digits)) sig_digits <- 2
+      }
+    }
+
+    # round CI-values for standard rounding, or scientific
+    if (is.numeric(CI_low) && is.numeric(CI_high)) {
+      if (is.numeric(digits) || (is.character(digits) && grepl("^scientific", digits))) {
+        CI_low <- round(CI_low, sig_digits)
+        CI_high <- round(CI_high, sig_digits)
+      } else {
         CI_low <- signif(CI_low, digits = sig_digits)
         CI_high <- signif(CI_high, digits = sig_digits)
       }
     }
+
     if (all(is.na(CI_low))) {
       width_low <- 1
     } else {
@@ -84,6 +96,7 @@ format_ci <- function(CI_low,
         }
       })))
     }
+
     if (all(is.na(CI_high))) {
       width_high <- 1
     } else {
