@@ -127,15 +127,23 @@ format_value.logical <- format_value.numeric
     } else {
       if (is.character(digits) && grepl("^scientific", digits)) {
         digits <- tryCatch(
-          expr = { as.numeric(gsub("scientific", "", digits, fixed = TRUE)) },
-          error = function(e) { 5 }
+          expr = {
+            as.numeric(gsub("scientific", "", digits, fixed = TRUE))
+          },
+          error = function(e) {
+            5
+          }
         )
         if (is.na(digits)) digits <- 5
         x <- sprintf("%.*e", digits, x)
       } else if (is.character(digits) && grepl("^signif", digits)) {
         digits <- tryCatch(
-          expr = { as.numeric(gsub("signif", "", digits, fixed = TRUE)) },
-          error = function(e) { NA }
+          expr = {
+            as.numeric(gsub("signif", "", digits, fixed = TRUE))
+          },
+          error = function(e) {
+            NA
+          }
         )
         if (is.na(digits)) digits <- 3
         x <- as.character(signif(x, digits))
