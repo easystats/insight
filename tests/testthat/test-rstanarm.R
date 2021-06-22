@@ -5,6 +5,11 @@ if (.runThisTest) {
     require("insight") && require("lme4") &&
     require("BayesFactor") &&
     require("rstanarm"))) {
+
+    # skip_on_cran()
+
+    # defining models ---------------------
+
     m1 <- insight::download_model("stanreg_merMod_5")
     m2 <- insight::download_model("stanreg_glm_6")
     m3 <- insight::download_model("stanreg_glm_1")
@@ -39,6 +44,86 @@ if (.runThisTest) {
 
     m9 <- stan_aov(yield ~ block + N * P * K, data = npk, prior = R2(0.5), refresh = 0)
 
+    N <- 200
+    x <- rnorm(N, 2, 1)
+    z <- rnorm(N, 2, 1)
+    mu <- binomial(link = "logit")$linkinv(1 + 0.2 * x)
+    phi <- exp(1.5 + 0.4 * z)
+    y <- rbeta(N, mu * phi, (1 - mu) * phi)
+    hist(y, col = "dark grey", border = FALSE, xlim = c(0, 1))
+    fake_dat <- data.frame(y, x, z)
+    m10 <- stan_betareg(
+      y ~ x | z,
+      data = fake_dat,
+      link = "logit",
+      link.phi = "log",
+      algorithm = "optimizing" # just for speed of example
+    )
+
+    ols <- lm(mpg ~ wt + qsec + am,
+      data = mtcars, # all row are complete so ...
+      na.action = na.exclude
+    ) # not necessary in this case
+    b <- coef(ols)[-1]
+    R <- qr.R(ols$qr)[-1, -1]
+    SSR <- crossprod(ols$residuals)[1]
+    not_NA <- !is.na(fitted(ols))
+    N <- sum(not_NA)
+    xbar <- colMeans(mtcars[not_NA, c("wt", "qsec", "am")])
+    y <- mtcars$mpg[not_NA]
+    ybar <- mean(y)
+    s_y <- sd(y)
+    m11 <- stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
+      prior = R2(.75),
+      # the next line is only to make the example go fast
+      chains = 1, iter = 500, seed = 12345
+    )
+
+    dat <- infert[order(infert$stratum), ] # order by strata
+    m12 <- stan_clogit(case ~ spontaneous + induced + (1 | education),
+      strata = stratum,
+      data = dat,
+      subset = parity <= 2,
+      QR = TRUE,
+      chains = 2, iter = 500
+    ) # for speed only
+
+    if (.Platform$OS.type != "windows" || .Platform$r_arch != "i386") {
+      m13 <- stan_jm(
+        formulaLong = logBili ~ year + (1 | id),
+        dataLong = pbcLong,
+        formulaEvent = Surv(futimeYears, death) ~ sex + trt,
+        dataEvent = pbcSurv,
+        time_var = "year",
+        # this next line is only to keep the example small in size!
+        chains = 1, cores = 1, seed = 12345, iter = 1000
+      )
+
+      expect_snapshot(model_info(m13))
+    }
+
+    data("Orange", package = "datasets")
+    Orange$circumference <- Orange$circumference / 100
+    Orange$age <- Orange$age / 100
+    m14 <- stan_nlmer(
+      circumference ~ SSlogis(age, Asym, xmid, scal) ~ Asym | Tree,
+      data = Orange,
+      # for speed only
+      chains = 1,
+      iter = 1000
+    )
+
+    m15 <- stan_mvmer(
+      formula = list(
+        logBili ~ year + (1 | id),
+        albumin ~ sex + year + (year | id)
+      ),
+      data = pbcLong,
+      # this next line is only to keep the example small in size!
+      chains = 1, cores = 1, seed = 12345, iter = 1000
+    )
+
+
     test_that("model_info-stanreg-glm", {
       expect_snapshot(model_info(m1))
       expect_snapshot(model_info(m2))
@@ -49,6 +134,11 @@ if (.runThisTest) {
       expect_snapshot(model_info(m7))
       expect_snapshot(model_info(m8))
       expect_snapshot(model_info(m9))
+      expect_snapshot(model_info(m10))
+      expect_snapshot(model_info(m11))
+      expect_snapshot(model_info(m12))
+      expect_snapshot(model_info(m14))
+      expect_snapshot(model_info(m15))
     })
 
     test_that("n_parameters", {
