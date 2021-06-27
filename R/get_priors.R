@@ -363,10 +363,12 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
     p)
 
   # class == sds  -------------------------------
-  p <- ifelse(
-    pr$class == "sds",
-    paste0("sds", ifelse(pr$coef  != "", paste0("_", pr$coef), "")),
-    p)
+  # TODO: Fix coef for sds_
+  # TODO: Fix beta for smooth term (bs_coef instead of b_coef)
+  # p <- ifelse(
+  #   pr$class == "sds",
+  #   paste0("sds", ifelse(pr$coef  != "", paste0("_", pr$coef), "")),
+  #   p)
 
   p
 }
