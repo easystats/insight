@@ -362,6 +362,12 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
            pr$coef),
     p)
 
+  # class == sds  -------------------------------
+  p <- ifelse(
+    pr$class == "sds",
+    paste0("sds", ifelse(pr$coef  != "", paste0("_", pr$coef), "")),
+    p)
+
   p
 }
 
