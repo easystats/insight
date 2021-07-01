@@ -53,7 +53,7 @@ supported_models <- function() {
     "coxph.penal", "coxr", "cpglm", "cpglmm", "crch", "crq", "crqs", "crr",
 
     # d ----------------------------
-    "DirichletRegModel",
+    "dep.effect", "DirichletRegModel", "drc",
 
     # e ----------------------------
     "eglm", "elm", "epi.2by2", "ergm",
@@ -104,13 +104,13 @@ supported_models <- function() {
     "survfit", "survreg", "svy_vglm", "svyglm", "svyolr",
 
     # t ----------------------------
-    "t1way", "tobit", "truncreg",
+    "t1way", "tobit", "trimcibt", "truncreg",
 
     # v ----------------------------
     "vgam", "vglm",
 
     # w ----------------------------
-    "wbm", "wblm", "wbgee",
+    "wbm", "wblm", "wbgee", "wmcpAKP",
 
     # y ----------------------------
     "yuen", "yuend",

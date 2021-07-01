@@ -504,22 +504,25 @@ get_priors.mcmc.list <- function(x, ...) {
 
   # class == Intercept -------------------------
   p <- ifelse(pr$class == "Intercept",
-              paste0(
-                "b",
-                ifelse(pr$dpar != "", paste0("_", pr$dpar), ""),
-                "_Intercept"
-              ),
-              p
+    paste0(
+      "b",
+      ifelse(pr$dpar != "", paste0("_", pr$dpar), ""),
+      "_Intercept"
+    ),
+    p
   )
 
   # class == b ------------------------------
   # Are there other possible parameters?
   p <- ifelse(
     pr$class == "b",
-    paste0("b_",
-           ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
-           pr$coef),
-    p)
+    paste0(
+      "b_",
+      ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
+      pr$coef
+    ),
+    p
+  )
 
   # class == L ------------------------------
   p <- ifelse(pr$class == "L", paste0("cor_", pr$group, "_*"), p)
@@ -532,12 +535,15 @@ get_priors.mcmc.list <- function(x, ...) {
   # class == sd  -------------------------------
   p <- ifelse(
     pr$class == "sd",
-    paste0("sd_",
-           pr$group,
-           "__",
-           ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
-           pr$coef),
-    p)
+    paste0(
+      "sd_",
+      pr$group,
+      "__",
+      ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
+      pr$coef
+    ),
+    p
+  )
 
   p
 }
