@@ -2,6 +2,8 @@
 
 ## Changes to functions
 
+* `get_predicted()` gains a new option, `predict = "response"` for binomial models.
+
 * `check_if_installed()` gains a `minimum_version` argument, to check if an
   installed package is not older than the specified version number.
 

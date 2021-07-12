@@ -4,11 +4,11 @@
 print.get_predicted <- function(x, ...) {
   print_colour("Predicted values:\n\n", "blue")
   if (is.null(ncol(x))) {
-    print.default(as.numeric(x))
+    print.default(as.vector(x))
   } else {
     print.data.frame(x)
   }
-  print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.", "yellow")
+  print_colour("\nNOTE: Confidence intervals, if available, are stored as attributes and can be accessed using `as.data.frame()` on this output.", "yellow")
 }
 
 
@@ -41,7 +41,7 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
     out <- as.data.frame.data.frame(x)
   } else {
     # Then it must be predictions from a regression model
-    out <- data.frame("Predicted" = as.numeric(x))
+    out <- data.frame("Predicted" = as.vector(x))
     if ("ci_data" %in% names(attributes(x))) {
       out <- cbind(out, attributes(x)$ci_data)
     }
