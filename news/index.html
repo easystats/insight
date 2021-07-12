@@ -145,7 +145,8 @@
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
-<ul><li><p><code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> gains a <code>minimum_version</code> argument, to check if an installed package is not older than the specified version number.</p></li>
+<ul><li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> gains a new option, <code>predict = "response"</code> for binomial models.</p></li>
+<li><p><code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> gains a <code>minimum_version</code> argument, to check if an installed package is not older than the specified version number.</p></li>
 <li><p>The <code>package</code> argument in <code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> is now vectorized, so you can check for multiple packages in one function call.</p></li>
 <li><p>Value formatting functions (like <code><a href="../reference/format_value.html">format_value()</a></code> or <code><a href="../reference/format_ci.html">format_ci()</a></code>) can now round to significant digits using <code>digits = "signif"</code>.</p></li>
 </ul></div>
@@ -547,7 +548,7 @@
 <a href="#changes-to-functions-11" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_meta = TRUE</code> for <em>brms</em>-meta-analysis models.</p></li>
 <li><p>Make <code><a href="../reference/find_statistic.html">find_statistic()</a></code> work with <code><a href="https://rdrr.io/pkg/mgcv/man/bam.html" class="external-link">mgcv::bam()</a></code>.</p></li>
-<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also support <code><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html" class="external-link">truncated_nbinom2()</a></code> family from <em>glmmTMB</em>.</p></li>
+<li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also support <code>truncated_nbinom2()</code> family from <em>glmmTMB</em>.</p></li>
 </ul></div>
 <div id="bug-fixes-11" class="section level2">
 <h2 class="hasAnchor">

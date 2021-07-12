@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Model Predictions (robust) — get_predicted" />
-<meta property="og:description" content="The get_predicted() function is a robust, flexible and user-friendly alternative to base R predict function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's predict. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making &quot;predictions&quot; (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the Details section for more information." />
+<meta property="og:description" content="The get_predicted() function is a robust, flexible and user-friendly alternative to base R predict function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's predict function. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making &quot;predictions&quot; (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the Details section for more information." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -142,7 +142,7 @@
     </div>
 
     <div class="ref-description">
-    <p>The <code>get_predicted()</code> function is a robust, flexible and user-friendly alternative to base R <code><a href='https://rdrr.io/r/stats/predict.html'>predict</a></code> function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's <code>predict</code>. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the <code>Details</code> section for more information.</p>
+    <p>The <code>get_predicted()</code> function is a robust, flexible and user-friendly alternative to base R <code><a href='https://rdrr.io/r/stats/predict.html'>predict</a></code> function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's <code>predict</code> function. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the <code>Details</code> section for more information.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -151,7 +151,7 @@
 <span class='fu'>get_predicted</span><span class='op'>(</span>
   <span class='va'>x</span>,
   data <span class='op'>=</span> <span class='cn'>NULL</span>,
-  predict <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"expectation"</span>, <span class='st'>"link"</span>, <span class='st'>"prediction"</span>, <span class='st'>"relation"</span><span class='op'>)</span>,
+  predict <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"expectation"</span>, <span class='st'>"link"</span>, <span class='st'>"prediction"</span>, <span class='st'>"response"</span>, <span class='st'>"relation"</span><span class='op'>)</span>,
   iterations <span class='op'>=</span> <span class='cn'>NULL</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
@@ -161,7 +161,7 @@
 <span class='fu'>get_predicted</span><span class='op'>(</span>
   <span class='va'>x</span>,
   data <span class='op'>=</span> <span class='cn'>NULL</span>,
-  predict <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"expectation"</span>, <span class='st'>"link"</span>, <span class='st'>"prediction"</span>, <span class='st'>"relation"</span><span class='op'>)</span>,
+  predict <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"expectation"</span>, <span class='st'>"link"</span>, <span class='st'>"prediction"</span>, <span class='st'>"response"</span>, <span class='st'>"relation"</span><span class='op'>)</span>,
   iterations <span class='op'>=</span> <span class='cn'>NULL</span>,
   include_random <span class='op'>=</span> <span class='cn'>TRUE</span>,
   include_smooth <span class='op'>=</span> <span class='cn'>TRUE</span>,
@@ -189,18 +189,7 @@ to predict. If omitted, the data used to fit the model is used.</p></td>
     </tr>
     <tr>
       <th>predict</th>
-      <td><p>Can be <code>"link"</code>, <code>"expectation"</code> (default), or
-<code>"prediction"</code>. This modulates the scale of the output as well as the
-type of certainty interval. More specifically, <code>"link"</code> gives an
-output on the link-scale (for logistic models, that means the log-odds
-scale) with a confidence interval (CI). <code>"expectation"</code> (default) also
-returns confidence intervals, but this time the output is on the response
-scale (for logistic models, that means probabilities). Finally,
-<code>"predict"</code> also gives an output on the response scale, but this time
-associated with a prediction interval (PI), which is larger than a
-confidence interval (though it mostly make sense for linear models). Read
-more about in the <strong>Details</strong> section below. <code>"relation"</code> is
-also accepted as a (deprecated) alias for <code>"expectation"</code>.</p></td>
+      <td><p>Can be <code>"link"</code>, <code>"expectation"</code> (default), <code>"prediction"</code>, or <code>"response"</code>. You can see these 4 options for predictions as on a gradient from "close to the model" to "close to the response data". More specifically, the <code>predict</code> argument modulates two things; the scale of the output as well as the type of certainty interval (see the details and examples). More specifically, <code>"link"</code> returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). <code>"expectation"</code> (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). <code>"predict"</code> also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). Finally, <code>"response"</code> only differs from the previous option for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor). Read more about in the <strong>Details</strong> section below.</p></td>
     </tr>
     <tr>
       <th>iterations</th>
@@ -239,9 +228,9 @@ are not depending on it. (default), <code><a href='https://rdrr.io/r/base/mean.h
   columns and observations are rows) can be accessed via <code>as.data.frame</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The <code>predict</code> argument jointly modulates two separate concepts, the
-<strong>scale</strong> and the <strong>uncertainty interval</strong>.</p>
-<h3 class='hasAnchor' id='confidence-interval-vs-prediction-interval-'><a class='anchor' aria-hidden='true' href='#confidence-interval-vs-prediction-interval-'></a>Confidence Interval vs. Prediction Interval)</h3>
+    <p>In <code>insight::get_predicted()</code>, the <code>predict</code> argument jointly
+modulates two separate concepts, the <strong>scale</strong> and the <strong>uncertainty interval</strong>.</p>
+<h3 class='hasAnchor' id='confidence-interval-ci-vs-prediction-interval-pi-'><a class='anchor' aria-hidden='true' href='#confidence-interval-ci-vs-prediction-interval-pi-'></a>Confidence Interval (CI) vs. Prediction Interval (PI))</h3>
 
 <ul>
 <li><p><strong>Linear models</strong> - <code><a href='https://rdrr.io/r/stats/lm.html'>lm()</a></code>: For linear models, Prediction
@@ -267,9 +256,11 @@ are not depending on it. (default), <code><a href='https://rdrr.io/r/base/mean.h
 <p>Having the output is on the scale of the response variable is arguably the
 most convenient to understand and visualize the relationships. If on the
 link-scale, no transformation is applied and the values are on the scale of
-the model's predictors. For instance, for a logistic model, the response
+the model. For instance, for a logistic model, the response
 scale corresponds to the predicted probabilities, whereas the link-scale
-makes predictions of log-odds (probabilities on the logit scale).</p>
+makes predictions of log-odds (probabilities on the logit scale). Note that,
+when <code>predict = "response"</code>, the probabilities are rounded (so that the
+prediction corresponds to the most likely outcome).</p>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -278,6 +269,7 @@ makes predictions of log-odds (probabilities on the logit scale).</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'></span>
 <span class='r-in'><span class='va'>predictions</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>predictions</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Predicted values:</span></span>
@@ -287,8 +279,9 @@ makes predictions of log-odds (probabilities on the logit scale).</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [17] 14.39279 26.58752 26.85523 26.60665 25.99475 15.92253 15.92253 14.10597</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [25] 15.44448 26.58752 26.10948 25.68880 13.74265 19.97387 12.38501 25.76529</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BBBB00;'>NOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BBBB00;'>NOTE: Confidence intervals, if available, are stored as attributes and can be accessed using `as.data.frame()` on this output.</span></span>
 <span class='r-in'></span>
+<span class='r-in'><span class='co'># Options and methods ---------------------</span></span>
 <span class='r-in'><span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, predict <span class='op'>=</span> <span class='st'>"prediction"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Predicted values:</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
@@ -297,7 +290,7 @@ makes predictions of log-odds (probabilities on the logit scale).</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [17] 14.39279 26.58752 26.85523 26.60665 25.99475 15.92253 15.92253 14.10597</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [25] 15.44448 26.58752 26.10948 25.68880 13.74265 19.97387 12.38501 25.76529</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BBBB00;'>NOTE: Confidence intervals, if available, are stored as attributes and can be acccessed using `as.data.frame()` on this output.</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BBBB00;'>NOTE: Confidence intervals, if available, are stored as attributes and can be accessed using `as.data.frame()` on this output.</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Get CI</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>predictions</span><span class='op'>)</span></span>
@@ -404,6 +397,57 @@ makes predictions of log-odds (probabilities on the logit scale).</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 30  19.76550 0.5808276 19.44717 20.55177</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 31  12.49355 1.3168882 10.79937 13.50598</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 32  25.55186 1.8389438 23.88272 27.91693</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Different predicttion types ------------------------</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>, <span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Fit a logistic model</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span>, data <span class='op'>=</span> <span class='va'>data</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Expectation (default): response scale + CI</span></span>
+<span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, predict <span class='op'>=</span> <span class='st'>"expectation"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>pred</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Predicted         SE      CI_low    CI_high</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 0.16579367 0.05943589 0.078854431 0.31573138</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 0.06637193 0.03625646 0.022083989 0.18286787</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 0.02479825 0.01843411 0.005675609 0.10175666</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 0.01498061 0.01261461 0.002839122 0.07513285</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 0.10623680 0.04779474 0.042437982 0.24173444</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 0.48159935 0.07901420 0.333158095 0.63336131</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Prediction: response scale + PI</span></span>
+<span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, predict <span class='op'>=</span> <span class='st'>"prediction"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>pred</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Predicted       CI_low      CI_high</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 0.16579367 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 0.06637193 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 0.02479825 2.220446e-16 2.220446e-16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 0.01498061 2.220446e-16 2.220446e-16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 0.10623680 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 0.48159935 2.220446e-16 1.000000e+00</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Link: link scale + CI</span></span>
+<span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, predict <span class='op'>=</span> <span class='st'>"link"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>pred</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Predicted        SE     CI_low    CI_high</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 -1.61573668 0.4297415 -2.4580146 -0.7734588</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 -2.64380391 0.5850960 -3.7905709 -1.4970369</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 -3.67187114 0.7622663 -5.1658856 -2.1778567</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 -4.18590475 0.8548690 -5.8614172 -2.5103923</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 -2.12977030 0.5033646 -3.1163467 -1.1431939</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 -0.07363584 0.3164854 -0.6939359  0.5466642</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Response: response "type" + PI</span></span>
+<span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'>get_predicted</span><span class='op'>(</span><span class='va'>x</span>, predict <span class='op'>=</span> <span class='st'>"response"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>pred</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Predicted CI_low    CI_high</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    setosa setosa versicolor</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    setosa setosa versicolor</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3    setosa setosa     setosa</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4    setosa setosa     setosa</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5    setosa setosa versicolor</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6    setosa setosa versicolor</span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
