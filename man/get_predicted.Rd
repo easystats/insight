@@ -11,7 +11,7 @@ get_predicted(x, ...)
 \method{get_predicted}{lm}(
   x,
   data = NULL,
-  predict = c("expectation", "link", "prediction", "relation"),
+  predict = c("expectation", "link", "prediction", "response", "relation"),
   iterations = NULL,
   verbose = TRUE,
   ...
@@ -20,7 +20,7 @@ get_predicted(x, ...)
 \method{get_predicted}{stanreg}(
   x,
   data = NULL,
-  predict = c("expectation", "link", "prediction", "relation"),
+  predict = c("expectation", "link", "prediction", "response", "relation"),
   iterations = NULL,
   include_random = TRUE,
   include_smooth = TRUE,
@@ -38,18 +38,7 @@ second argument has to be a model).}
 \item{data}{An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used.}
 
-\item{predict}{Can be \code{"link"}, \code{"expectation"} (default), or
-\code{"prediction"}. This modulates the scale of the output as well as the
-type of certainty interval. More specifically, \code{"link"} gives an
-output on the link-scale (for logistic models, that means the log-odds
-scale) with a confidence interval (CI). \code{"expectation"} (default) also
-returns confidence intervals, but this time the output is on the response
-scale (for logistic models, that means probabilities). Finally,
-\code{"predict"} also gives an output on the response scale, but this time
-associated with a prediction interval (PI), which is larger than a
-confidence interval (though it mostly make sense for linear models). Read
-more about in the \strong{Details} section below. \code{"relation"} is
-also accepted as a (deprecated) alias for \code{"expectation"}.}
+\item{predict}{Can be \code{"link"}, \code{"expectation"} (default), \code{"prediction"}, or \code{"response"}. You can see these 4 options for predictions as on a gradient from "close to the model" to "close to the response data". More specifically, the \code{predict} argument modulates two things; the scale of the output as well as the type of certainty interval (see the details and examples). More specifically, \code{"link"} returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). \code{"expectation"} (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). \code{"predict"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). Finally, \code{"response"} only differs from the previous option for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor). Read more about in the \strong{Details} section below.}
 
 \item{iterations}{For Bayesian models, this corresponds to the number of
 posterior draws. If \code{NULL}, will return all the draws (one for each
@@ -77,13 +66,13 @@ The fitted values (i.e. predictions for the response). For Bayesian
   columns and observations are rows) can be accessed via \code{as.data.frame}.
 }
 \description{
-The \code{get_predicted()} function is a robust, flexible and user-friendly alternative to base R \code{\link{predict}} function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's \code{predict}. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the \code{Details} section for more information.
+The \code{get_predicted()} function is a robust, flexible and user-friendly alternative to base R \code{\link{predict}} function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's \code{predict} function. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the \code{Details} section for more information.
 }
 \details{
-The \code{predict} argument jointly modulates two separate concepts, the
-\strong{scale} and the \strong{uncertainty interval}.
+In \code{insight::get_predicted()}, the \code{predict} argument jointly
+modulates two separate concepts, the \strong{scale} and the \strong{uncertainty interval}.
 
-\subsection{Confidence Interval vs. Prediction Interval)}{
+\subsection{Confidence Interval (CI) vs. Prediction Interval (PI))}{
 \itemize{
   \item \strong{Linear models} - \code{lm()}: For linear models, Prediction
   intervals (\code{predict = "prediction"}) show the range that likely
@@ -108,17 +97,21 @@ The \code{predict} argument jointly modulates two separate concepts, the
 Having the output is on the scale of the response variable is arguably the
 most convenient to understand and visualize the relationships. If on the
 link-scale, no transformation is applied and the values are on the scale of
-the model's predictors. For instance, for a logistic model, the response
+the model. For instance, for a logistic model, the response
 scale corresponds to the predicted probabilities, whereas the link-scale
-makes predictions of log-odds (probabilities on the logit scale).
+makes predictions of log-odds (probabilities on the logit scale). Note that,
+when \code{predict = "response"}, the probabilities are rounded (so that the
+prediction corresponds to the most likely outcome).
 }
 }
 \examples{
 data(mtcars)
 x <- lm(mpg ~ cyl + hp, data = mtcars)
+
 predictions <- get_predicted(x)
 predictions
 
+# Options and methods ---------------------
 get_predicted(x, predict = "prediction")
 
 # Get CI
@@ -127,6 +120,29 @@ as.data.frame(predictions)
 # Bootstrapped
 as.data.frame(get_predicted(x, iterations = 4))
 summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
+
+# Different predicttion types ------------------------
+data(iris)
+data <- droplevels(iris[1:100, ])
+
+# Fit a logistic model
+x <- glm(Species ~ Sepal.Length, data = data, family = "binomial")
+
+# Expectation (default): response scale + CI
+pred <- get_predicted(x, predict = "expectation")
+head(as.data.frame(pred))
+
+# Prediction: response scale + PI
+pred <- get_predicted(x, predict = "prediction")
+head(as.data.frame(pred))
+
+# Link: link scale + CI
+pred <- get_predicted(x, predict = "link")
+head(as.data.frame(pred))
+
+# Response: response "type" + PI
+pred <- get_predicted(x, predict = "response")
+head(as.data.frame(pred))
 }
 \seealso{
 \code{\link{get_predicted_ci}}
