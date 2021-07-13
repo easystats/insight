@@ -1415,60 +1415,60 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 # helper ---------------------------
 
 .get_brms_formula <- function(f) {
-  f.cond <- f$formula
-  f.random <- lapply(.findbars(f.cond), function(.x) {
+  f_cond <- f$formula
+  f_random <- lapply(.findbars(f_cond), function(.x) {
     fm <- .safe_deparse(.x)
     stats::as.formula(paste0("~", fm))
   })
 
-  if (length(f.random) == 1) {
-    f.random <- f.random[[1]]
+  if (length(f_random) == 1) {
+    f_random <- f_random[[1]]
   }
 
-  f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
+  f_cond <- stats::as.formula(.get_fixed_effects(f_cond))
 
-  f.zi <- f$pforms$zi
-  f.zirandom <- NULL
+  f_zi <- f$pforms$zi
+  f_zirandom <- NULL
 
-  if (!.is_empty_object(f.zi)) {
-    f.zirandom <- lapply(.findbars(f.zi), function(.x) {
+  if (!.is_empty_object(f_zi)) {
+    f_zirandom <- lapply(.findbars(f_zi), function(.x) {
       f <- .safe_deparse(.x)
       stats::as.formula(paste0("~", f))
     })
 
-    if (length(f.zirandom) == 1) {
-      f.zirandom <- f.zirandom[[1]]
+    if (length(f_zirandom) == 1) {
+      f_zirandom <- f_zirandom[[1]]
     }
 
-    f.zi <- stats::as.formula(paste0("~", .safe_deparse(f.zi[[3L]])))
-    f.zi <- stats::as.formula(.get_fixed_effects(f.zi))
+    f_zi <- stats::as.formula(paste0("~", .safe_deparse(f_zi[[3L]])))
+    f_zi <- stats::as.formula(.get_fixed_effects(f_zi))
   }
 
   .compact_list(list(
-    conditional = f.cond,
-    random = f.random,
-    zero_inflated = f.zi,
-    zero_inflated_random = f.zirandom
+    conditional = f_cond,
+    random = f_random,
+    zero_inflated = f_zi,
+    zero_inflated_random = f_zirandom
   ))
 }
 
 
 .get_stanmv_formula <- function(f) {
-  f.cond <- f
-  f.random <- lapply(.findbars(f.cond), function(.x) {
+  f_cond <- f
+  f_random <- lapply(.findbars(f_cond), function(.x) {
     fm <- .safe_deparse(.x)
     stats::as.formula(paste0("~", fm))
   })
 
-  if (length(f.random) == 1) {
-    f.random <- f.random[[1]]
+  if (length(f_random) == 1) {
+    f_random <- f_random[[1]]
   }
 
-  f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
+  f_cond <- stats::as.formula(.get_fixed_effects(f_cond))
 
   .compact_list(list(
-    conditional = f.cond,
-    random = f.random
+    conditional = f_cond,
+    random = f_random
   ))
 }
 
