@@ -41,6 +41,11 @@
 #' }
 #' @export
 find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
+  UseMethod("find_random")
+}
+
+#' @export
+find_random.default <- function(x, split_nested = FALSE, flatten = FALSE) {
   f <- find_formula(x, verbose = FALSE)
 
   if (is_multivariate(x)) {
@@ -64,7 +69,14 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 }
 
-
+#' @export
+find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
+  if (flatten) {
+    attr(x, "id")
+  } else {
+    list(random = attr(x, "id"))
+  }
+}
 
 
 

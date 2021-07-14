@@ -334,6 +334,7 @@ n_obs.gbm <- function(x, ...) {
 #' @rdname n_obs
 #' @inheritParams get_data
 n_obs.afex_aov <- function(x, shape = c("long", "wide"), ...) {
+  shape <- match.arg(shape)
   nrow(get_data(x, shape = shape))
 }
 

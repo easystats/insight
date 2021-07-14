@@ -20,5 +20,15 @@
 #' }
 #' @export
 is_mixed_model <- function(x) {
+  UseMethod("is_mixed_model")
+}
+
+#' @export
+is_mixed_model.defult <- function(x) {
   !is.null(find_random(x))
+}
+
+#' @export
+is_mixed_model.afex_aov <- function(x) {
+  as.logical(length(attr(x, "within")))
 }

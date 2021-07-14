@@ -54,6 +54,10 @@ get_modelmatrix.cpglmm <- function(x, ...) {
   cplm::model.matrix(x, ...)
 }
 
+#' @export
+get_modelmatrix.afex_aov <- function(x, ...) {
+  stats::model.matrix(object = x$lm, ...)
+}
 
 # helper ----------------
 
