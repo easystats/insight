@@ -164,12 +164,12 @@ find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
     x <- as.character(x)
     x[1] == "Error" && length(x) > 1
   })
-  error <- capture.output(print(f[[3]][i][[1]]))
+  error <- utils::capture.output(print(f[[3]][i][[1]]))
   f[[3]][i] <- NULL
 
   list(
     response = resp,
-    conditional = attr(terms.formula(f), "term.labels"),
+    conditional = attr(stats::terms.formula(f), "term.labels"),
     error =  error
   )
 }

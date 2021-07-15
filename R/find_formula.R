@@ -441,7 +441,7 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
     e <- paste0("Error(",id,"/",within, ")")
 
     between <- names(attr(x, "between"))
-    if (length(between)>0L) {
+    if (length(between) > 0L) {
       between_f <- between[!sapply(d[between], is.numeric)]
       between_c <- setdiff(between,between_f)
 
@@ -452,7 +452,7 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
       within <- paste0(c(within, between), collapse = "*")
     }
 
-    out <- list(conditional = formula(paste0(dv, "~", within, "+", e)))
+    out <- list(conditional = stats::formula(paste0(dv, "~", within, "+", e)))
     class(out) <- c("insight_formula", "list")
     out
   }
