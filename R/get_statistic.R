@@ -139,6 +139,20 @@ get_statistic.merModList <- function(x, ...) {
   out
 }
 
+#' @export
+get_statistic.afex_aov <- function(x, ...) {
+  out <- data.frame(
+    Parameter = rownames(x$anova_table),
+    Statistic = x$anova_table$"F",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
 
 #' @export
 get_statistic.plm <- get_statistic.default
