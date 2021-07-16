@@ -24,7 +24,7 @@ is_mixed_model <- function(x) {
 }
 
 #' @export
-is_mixed_model.defult <- function(x) {
+is_mixed_model.default <- function(x) {
   !is.null(find_random(x))
 }
 
