@@ -147,7 +147,22 @@ predictions made by a model." />
 predictions made by a model.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, predictions <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>get_predicted_ci</span><span class='op'>(</span><span class='va'>x</span>, predictions <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>get_predicted_ci</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  predictions <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ci <span class='op'>=</span> <span class='fl'>0.95</span>,
+  ci_type <span class='op'>=</span> <span class='st'>"confidence"</span>,
+  vcov_estimation <span class='op'>=</span> <span class='cn'>NULL</span>,
+  vcov_type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  vcov_args <span class='op'>=</span> <span class='cn'>NULL</span>,
+  dispersion_method <span class='op'>=</span> <span class='st'>"sd"</span>,
+  ci_method <span class='op'>=</span> <span class='st'>"quantile"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,6 +181,11 @@ second argument has to be a model).</p></td>
     <tr>
       <th>...</th>
       <td><p>Not used for now.</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>An optional data frame in which to look for variables with which
+to predict. If omitted, the data used to fit the model is used.</p></td>
     </tr>
     <tr>
       <th>ci</th>
