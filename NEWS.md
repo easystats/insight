@@ -1,8 +1,12 @@
-# insight 0.14.2
+# insight 0.14.3
 
 ## Changes to functions
 
 * `get_predicted()` gains a new option, `predict = "response"` for binomial models.
+
+# insight 0.14.2
+
+## Changes to functions
 
 * `check_if_installed()` gains a `minimum_version` argument, to check if an
   installed package is not older than the specified version number.
