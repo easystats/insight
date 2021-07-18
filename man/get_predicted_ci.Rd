@@ -4,19 +4,7 @@
 \alias{get_predicted_ci}
 \title{Confidence and Prediction Interval for Model Predictions}
 \usage{
-get_predicted_ci(
-  x,
-  predictions = NULL,
-  data = NULL,
-  ci = 0.95,
-  ci_type = "confidence",
-  vcov_estimation = NULL,
-  vcov_type = NULL,
-  vcov_args = NULL,
-  dispersion_method = "sd",
-  ci_method = "quantile",
-  ...
-)
+get_predicted_ci(x, predictions = NULL, ...)
 }
 \arguments{
 \item{x}{A statistical model (can also be a data.frame, in which case the
@@ -26,8 +14,7 @@ second argument has to be a model).}
 \code{stats::fitted()}, \code{stats::predict()} or
 \code{\link{get_predicted}}).}
 
-\item{data}{An optional data frame in which to look for variables with which
-to predict. If omitted, the data used to fit the model is used.}
+\item{...}{Not used for now.}
 
 \item{ci}{The interval level (default \code{0.95}, i.e., 95\% CI).}
 
@@ -68,8 +55,6 @@ the context of bootstrapped and Bayesian models. Possible values are
 \code{dispersion_method = c("sd", "mad")} and
 \code{ci_method = c("quantile", "hdi", "eti")}. For the latter, the
 \pkg{bayestestR} package is required.}
-
-\item{...}{Not used for now.}
 }
 \value{
 The Confidence (or Prediction) Interval (CI).

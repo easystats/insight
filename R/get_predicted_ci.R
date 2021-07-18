@@ -89,18 +89,27 @@
 #' ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 #' head(ci_vals)
 #' @export
-get_predicted_ci <- function(x,
-                             predictions = NULL,
-                             data = NULL,
-                             ci = 0.95,
-                             ci_type = "confidence",
-                             vcov_estimation = NULL,
-                             vcov_type = NULL,
-                             vcov_args = NULL,
-                             dispersion_method = "sd",
-                             ci_method = "quantile",
-                             ...) {
+get_predicted_ci <- function(x, predictions = NULL, ...) {
+  UseMethod("get_predicted_ci")
+}
 
+
+
+# General method ----------------------------------------------------------
+
+
+#' @export
+get_predicted_ci.default <- function(x,
+                                     predictions = NULL,
+                                     data = NULL,
+                                     ci = 0.95,
+                                     ci_type = "confidence",
+                                     vcov_estimation = NULL,
+                                     vcov_type = NULL,
+                                     vcov_args = NULL,
+                                     dispersion_method = "sd",
+                                     ci_method = "quantile",
+                                     ...) {
   # If draws are present (bootstrapped or Bayesian)
   if ("iterations" %in% names(attributes(predictions))) {
     iter <- attributes(predictions)$iteration
@@ -139,6 +148,13 @@ get_predicted_ci <- function(x,
   out
 }
 
+
+# Specific definitions ----------------------------------------------------
+
+#' @export
+get_predicted_ci.mlm <- function(x, ...) {
+  stop("TBD")
+}
 
 
 # Get Variance-covariance Matrix ---------------------------------------------------
@@ -183,7 +199,6 @@ get_predicted_ci <- function(x,
   }
   vcovmat
 }
-
 
 
 # Get Model matrix ------------------------------------------------------------
