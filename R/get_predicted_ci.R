@@ -97,7 +97,7 @@ get_predicted_ci <- function(x, predictions = NULL, ...) {
 
 # General method ----------------------------------------------------------
 
-
+#' @rdname get_predicted_ci
 #' @export
 get_predicted_ci.default <- function(x,
                                      predictions = NULL,

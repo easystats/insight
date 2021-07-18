@@ -2,9 +2,24 @@
 % Please edit documentation in R/get_predicted_ci.R
 \name{get_predicted_ci}
 \alias{get_predicted_ci}
+\alias{get_predicted_ci.default}
 \title{Confidence and Prediction Interval for Model Predictions}
 \usage{
 get_predicted_ci(x, predictions = NULL, ...)
+
+\method{get_predicted_ci}{default}(
+  x,
+  predictions = NULL,
+  data = NULL,
+  ci = 0.95,
+  ci_type = "confidence",
+  vcov_estimation = NULL,
+  vcov_type = NULL,
+  vcov_args = NULL,
+  dispersion_method = "sd",
+  ci_method = "quantile",
+  ...
+)
 }
 \arguments{
 \item{x}{A statistical model (can also be a data.frame, in which case the
@@ -15,6 +30,9 @@ second argument has to be a model).}
 \code{\link{get_predicted}}).}
 
 \item{...}{Not used for now.}
+
+\item{data}{An optional data frame in which to look for variables with which
+to predict. If omitted, the data used to fit the model is used.}
 
 \item{ci}{The interval level (default \code{0.95}, i.e., 95\% CI).}
 
