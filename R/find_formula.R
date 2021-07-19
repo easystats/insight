@@ -1437,6 +1437,10 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   f_beta <- f$pforms$beta
   f_phi <- f$pforms$phi
   f_hu <- f$pforms$hu
+  f_ndt <- f$pforms$ndt
+  f_zoi <- f$pforms$zoi
+  f_coi <- f$pforms$coi
+  f_kappa <- f$pforms$kappa
 
   if (!.is_empty_object(f_zi)) {
     f_zirandom <- lapply(.findbars(f_zi), function(.x) {
@@ -1462,7 +1466,11 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     shape = f_shape,
     phi = f_phi,
     hurdle = f_hu,
-    mu = f_mu
+    mu = f_mu,
+    ndt = f_ndt,
+    zero_one_inflated = f_zoi,
+    conditional_one_inflated = f_coi,
+    kappa = f_kappa
   ))
 }
 
