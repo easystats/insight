@@ -1430,6 +1430,14 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   f_zi <- f$pforms$zi
   f_zirandom <- NULL
 
+  # auxiliary
+  f_sigma <- f$pforms$sigma
+  f_mu <- f$pforms$mu
+  f_shape <- f$pforms$shape
+  f_beta <- f$pforms$beta
+  f_phi <- f$pforms$phi
+  f_hu <- f$pforms$hu
+
   if (!.is_empty_object(f_zi)) {
     f_zirandom <- lapply(.findbars(f_zi), function(.x) {
       f <- .safe_deparse(.x)
@@ -1448,7 +1456,13 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     conditional = f_cond,
     random = f_random,
     zero_inflated = f_zi,
-    zero_inflated_random = f_zirandom
+    zero_inflated_random = f_zirandom,
+    sigma = f_sigma,
+    beta = f_beta,
+    shape = f_shape,
+    phi = f_phi,
+    hurdle = f_hu,
+    mu = f_mu
   ))
 }
 
