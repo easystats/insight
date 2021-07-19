@@ -1433,6 +1433,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   # auxiliary
   f_sigma <- f$pforms$sigma
   f_mu <- f$pforms$mu
+  f_nu <- f$pforms$nu
   f_shape <- f$pforms$shape
   f_beta <- f$pforms$beta
   f_phi <- f$pforms$phi
@@ -1441,6 +1442,8 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   f_zoi <- f$pforms$zoi
   f_coi <- f$pforms$coi
   f_kappa <- f$pforms$kappa
+  f_bias <- f$pforms$bias
+  f_bs <- f$pforms$bs
 
   if (!.is_empty_object(f_zi)) {
     f_zirandom <- lapply(.findbars(f_zi), function(.x) {
@@ -1467,7 +1470,10 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     phi = f_phi,
     hurdle = f_hu,
     mu = f_mu,
+    nu = f_nu,
     ndt = f_ndt,
+    bs = f_bs,
+    bias = f_bias,
     zero_one_inflated = f_zoi,
     conditional_one_inflated = f_coi,
     kappa = f_kappa
