@@ -100,16 +100,16 @@ if (.runThisTest) {
       )
     }
 
-    data("Orange", package = "datasets")
-    Orange$circumference <- Orange$circumference / 100
-    Orange$age <- Orange$age / 100
-    m14 <- stan_nlmer(
-      circumference ~ SSlogis(age, Asym, xmid, scal) ~ Asym | Tree,
-      data = Orange,
-      # for speed only
-      chains = 1,
-      iter = 1000
-    )
+    # data("Orange", package = "datasets")
+    # Orange$circumference <- Orange$circumference / 100
+    # Orange$age <- Orange$age / 100
+    # m14 <- stan_nlmer(
+    #   circumference ~ SSlogis(age, Asym, xmid, scal) ~ Asym | Tree,
+    #   data = Orange,
+    #   # for speed only
+    #   chains = 1,
+    #   iter = 1000
+    # )
 
     m15 <- stan_mvmer(
       formula = list(
