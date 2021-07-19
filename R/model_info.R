@@ -1283,3 +1283,13 @@ model_info.poissonirr <- model_info.logitmfx
 
 #' @export
 model_info.negbinirr <- model_info.logitmfx
+
+
+
+
+# not yet supported -------------------------------
+
+#' @export
+model_info.earth <- function(x, ...) {
+  stop("Models of class 'earth' are not yet supported.", call. = FALSE)
+}
