@@ -706,7 +706,9 @@
         } else {
           max_len <- max(sapply(columns, length))
           for (i in 1:length(columns)) {
-            columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
+            if (length(columns[[i]]) < max_len) {
+              columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
+            }
           }
           d <- as.data.frame(columns)
         }

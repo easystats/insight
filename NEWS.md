@@ -10,6 +10,9 @@
 
 * Fixed issue in `find_formula()` for *brms* models with auxiliary parameters.
 
+* Fixed issue where `get_data()` for *htest* objects did not always preserve
+  factors.
+
 # insight 0.14.2
 
 ## Changes to functions
