@@ -40,6 +40,11 @@
 #' }
 #' @export
 find_terms <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  UseMethod("find_terms")
+}
+
+#' @export
+find_terms.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   f <- find_formula(x, verbose = verbose)
 
   if (is.null(f)) {
@@ -61,6 +66,38 @@ find_terms <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   }
 }
 
+
+#' @export
+find_terms.aovlist <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  resp <- find_response(x, verbose = FALSE)
+  f <- find_formula(x, verbose = verbose)[[1]]
+
+  l <- .get_variables_list_aovlist(f, resp)
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+#' @export
+find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  resp <- find_response(x, verbose = FALSE)
+
+  if (length(attr(x, "within"))==0L) {
+    l <- find_terms(x$lm, flatten = FALSE, verbose = TRUE, ...)
+    l$response <- resp
+  } else {
+    f <- find_formula(x, verbose = verbose)[[1]]
+    l <- .get_variables_list_aovlist(f, resp)
+  }
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
 
 
 .get_variables_list <- function(f, resp = NULL) {
@@ -122,7 +159,21 @@ find_terms <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   .compact_list(f[c(length(f), 1:(length(f) - 1))])
 }
 
+.get_variables_list_aovlist <- function(f, resp = NULL) {
+  i <- sapply(f[[3]], function(x) {
+    x <- as.character(x)
+    x[1] == "Error" && length(x) > 1
+  })
+  error <- utils::capture.output(print(f[[3]][i][[1]]))
+  f[[3]][i] <- NULL
+  f[[3]] <- f[[3]][[2]]
+  f[[3]] <- as.name(paste0(attr(stats::terms.formula(f), "term.labels"),collapse = "+"))
 
+  l <- .get_variables_list(f, resp)
+  names(l) <- c("response", "conditional")
+  l$error = error
+  l
+}
 
 .formula_to_string <- function(f) {
   if (!is.character(f)) f <- .safe_deparse(f)

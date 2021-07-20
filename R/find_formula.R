@@ -424,10 +424,34 @@ find_formula.betareg <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
-  if (!is.null(x$aov)) {
-    find_formula(x$aov, verbose = verbose, ...)
+  if (length(attr(x, "within")) == 0L) {
+    fff <- find_formula(x$lm, verbose = verbose, ...)
+    fff$conditional[2] <- call(attr(x, "dv")) # need to fix LHS
+    fff
+
   } else {
-    find_formula(x$lm, verbose = verbose, ...)
+    d <- insight::get_data(x, shape = "long")
+
+    dv <- attr(x, "dv")
+    id <- attr(x, "id")
+
+    within <- names(attr(x, "within"))
+    within <- paste0(within, collapse = "*")
+    within <- paste0("(", within, ")")
+    e <- paste0("Error(",id,"/",within, ")")
+
+    between <- names(attr(x, "between"))
+    if (length(between) > 0L) {
+      tempf <- find_formula(x$lm)[[1]]
+      between <- as.character(tempf)[3]
+      between <- paste0("(", between, ")")
+
+      within <- paste0(c(within, between), collapse = "*")
+    }
+
+    out <- list(conditional = stats::formula(paste0(dv, "~", within, "+", e)))
+    class(out) <- c("insight_formula", "list")
+    out
   }
 }
 

@@ -52,6 +52,10 @@ get_loglikelihood.model_fit <- function(x, ...) {
   get_loglikelihood(x$fit, ...)
 }
 
+#' @export
+get_loglikelihood.afex_aov <- function(x, ...) {
+  get_loglikelihood(x$lm, ...)
+}
 
 
 
