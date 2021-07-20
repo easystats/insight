@@ -166,12 +166,11 @@ find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   })
   error <- utils::capture.output(print(f[[3]][i][[1]]))
   f[[3]][i] <- NULL
+  f[[3]] <- f[[3]][[2]]
+  f[[3]] <- as.name(paste0(attr(stats::terms.formula(f), "term.labels"),collapse = "+"))
 
-  list(
-    response = resp,
-    conditional = attr(stats::terms.formula(f), "term.labels"),
-    error =  error
-  )
+  c(.get_variables_list(f, resp),
+    error =  error)
 }
 
 .formula_to_string <- function(f) {

@@ -442,11 +442,8 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
 
     between <- names(attr(x, "between"))
     if (length(between) > 0L) {
-      between_f <- between[!sapply(d[between], is.numeric)]
-      between_c <- setdiff(between,between_f)
-
-      between_f <- paste0(between_f, collapse = "*")
-      between <- paste0(c(between_f,between_c), collapse = "+")
+      tempf <- find_formula(x$lm)[[1]]
+      between <- as.character(tempf)[3]
       between <- paste0("(", between, ")")
 
       within <- paste0(c(within, between), collapse = "*")
