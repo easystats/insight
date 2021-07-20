@@ -74,7 +74,7 @@ find_terms.aovlist <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
   l <- .get_variables_list_aovlist(f, resp)
   if (flatten) {
-    unlist(l)
+    unique(unlist(l))
   } else {
     l
   }
@@ -93,7 +93,7 @@ find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   }
 
   if (flatten) {
-    unlist(l)
+    unique(unlist(l))
   } else {
     l
   }
@@ -169,8 +169,10 @@ find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   f[[3]] <- f[[3]][[2]]
   f[[3]] <- as.name(paste0(attr(stats::terms.formula(f), "term.labels"),collapse = "+"))
 
-  c(.get_variables_list(f, resp),
-    error =  error)
+  l <- .get_variables_list(f, resp)
+  names(l) <- c("response", "conditional")
+  l$error = error
+  l
 }
 
 .formula_to_string <- function(f) {
