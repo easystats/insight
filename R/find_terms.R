@@ -84,7 +84,7 @@ find_terms.aovlist <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   resp <- find_response(x, verbose = FALSE)
 
-  if (length(attr(x, "within"))==0L) {
+  if (length(attr(x, "within")) == 0L) {
     l <- find_terms(x$lm, flatten = FALSE, verbose = TRUE, ...)
     l$response <- resp
   } else {
