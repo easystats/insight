@@ -5,7 +5,7 @@
 #'
 #' @inheritParams get_residuals
 #' @param include_formula Should the name include the model's formula.
-#' @param include_call If \code{TRUE}, will return the function call as a name.
+#' @param include_call If `TRUE`, will return the function call as a name.
 #' @param ... Currently not used.
 #'
 #' @return A character string of a name (which usually equals the model's class attribute).

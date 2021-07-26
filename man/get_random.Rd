@@ -11,7 +11,7 @@ get_random(x)
 }
 \value{
 The data from all random effects terms, as data frame. Or \code{NULL}
-   if model has no random effects.
+if model has no random effects.
 }
 \description{
 Returns the data from all random effects terms.

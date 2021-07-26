@@ -49,7 +49,7 @@ dispersion, sigma, or beta...
 Currently, only sigma and the dispersion parameter are returned, and
 only for a limited set of models.
 \subsection{Sigma Parameter}{
-See \code{\link{get_sigma}}.
+See \code{\link[=get_sigma]{get_sigma()}}.
 }
 \subsection{Dispersion Parameter}{
 There are many different definitions of "dispersion", depending on the context.
@@ -68,7 +68,7 @@ degrees of freedom. For models of class \code{glmmTMB}, dispersion is
 \subsection{\pkg{brms} models}{
 For models of class \code{brmsfit}, there are different options for the
 \code{type} argument. See a list of supported auxiliary parameters here:
-\code{\link{find_parameters.BGGM}}.
+\code{\link[=find_parameters.BGGM]{find_parameters.BGGM()}}.
 }
 }
 \examples{

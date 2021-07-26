@@ -18,8 +18,8 @@ A formatted string.
 }
 \description{
 Inserts line breaks into a longer message or warning string.
-  Line length is adjusted to maximum length of the console, if the width
-  can be accessed. By default, new lines are indented by two whitespace.
+Line length is adjusted to maximum length of the console, if the width
+can be accessed. By default, new lines are indented by two whitespace.
 }
 \examples{
 msg <- format_message("Much too long string for just one line, I guess!",

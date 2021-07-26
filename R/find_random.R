@@ -4,7 +4,7 @@
 #' @description Return the name of the grouping factors from mixed effects models.
 #'
 #' @param x A fitted mixed model.
-#' @param split_nested Logical, if \code{TRUE}, terms from nested random
+#' @param split_nested Logical, if `TRUE`, terms from nested random
 #'   effects will be returned as separated elements, not as single string
 #'   with colon. See 'Examples'.
 #'
@@ -15,8 +15,8 @@
 #'    random effects (grouping factors). Depending on the model, the
 #'    returned list has following elements:
 #'    \itemize{
-#'      \item \code{random}, the "random effects" terms from the conditional part of model
-#'      \item \code{zero_inflated_random}, the "random effects" terms from the
+#'      \item `random`, the "random effects" terms from the conditional part of model
+#'      \item `zero_inflated_random`, the "random effects" terms from the
 #'      zero-inflation component of the model
 #'    }
 #'

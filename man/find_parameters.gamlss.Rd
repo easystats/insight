@@ -40,15 +40,15 @@ argument - but no auxiliary parameters). For \code{component = "distributional"}
 }
 \value{
 A list of parameter names. The returned list may have following
-  elements:
-   \itemize{
-     \item \code{conditional}, the "fixed effects" part from the model.
-     \item \code{smooth_terms}, the smooth parameters.
-   }
+elements:
+\itemize{
+\item \code{conditional}, the "fixed effects" part from the model.
+\item \code{smooth_terms}, the smooth parameters.
+}
 }
 \description{
 Returns the names of model parameters, like they typically
-    appear in the \code{summary()} output.
+appear in the \code{summary()} output.
 }
 \examples{
 data(mtcars)

@@ -5,7 +5,7 @@
 #'
 #' @inheritParams find_random
 #'
-#' @return The data from all random effects terms, as data frame. Or \code{NULL}
+#' @return The data from all random effects terms, as data frame. Or `NULL`
 #'    if model has no random effects.
 #'
 #' @examples
@@ -34,7 +34,7 @@ get_random <- function(x) {
 
 #' @export
 get_random.default <- function(x) {
-    if (.is_empty_object(find_random(x))) {
+  if (.is_empty_object(find_random(x))) {
     warning("No random effects found in model.")
     return(NULL)
   }

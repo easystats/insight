@@ -1,7 +1,7 @@
 #' A robust alternative to stats::family
 #'
-#' A robust and resilient alternative to \code{stats::family}. To avoid issues
-#' with models like \code{gamm4}.
+#' A robust and resilient alternative to `stats::family`. To avoid issues
+#' with models like `gamm4`.
 #'
 #' @param x A statistical model.
 #' @param ... Further arguments passed to methods.

@@ -1,23 +1,23 @@
 #' @title Get residual standard deviation from models
 #'
-#' @description Returns \code{sigma}, which corresponds the estimated standard
-#'   deviation of the residuals. This function extends the \code{sigma()} base R
+#' @description Returns `sigma`, which corresponds the estimated standard
+#'   deviation of the residuals. This function extends the `sigma()` base R
 #'   generic for models that don't have implemented it. It also computes the
 #'   confidence interval (CI), which is stored as an attribute.
 #'
 #' Sigma is a key-component of regression models, and part of the so-called
 #' auxiliary parameters that are estimated. Indeed, linear models for instance
 #' assume that the residuals comes from a normal distribution with mean 0 and
-#' standard deviation \code{sigma}. See the details section below for more
+#' standard deviation `sigma`. See the details section below for more
 #' information about its interpretation and calculation.
 #'
 #' @name get_sigma
 #'
 #' @param x A model.
-#' @param ci Scalar, the CI level. The default (\code{NULL}) returns no CI.
+#' @param ci Scalar, the CI level. The default (`NULL`) returns no CI.
 #' @inheritParams find_parameters
 #'
-#' @return The residual standard deviation (sigma), or \code{NULL} if this
+#' @return The residual standard deviation (sigma), or `NULL` if this
 #'   information could not be accessed.
 #'
 #' @details
@@ -25,7 +25,7 @@
 #'   The residual standard deviation,
 #'   \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}}, indicates that the predicted
 #'   outcome will be within +/- \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}} units
-#'   of the linear predictor for approximately 68\% of the data points
+#'   of the linear predictor for approximately `68%` of the data points
 #'   (\cite{Gelman, Hill & Vehtari 2020, p.84}). In other words, the residual
 #'   standard deviation indicates the accuracy for a model to predict scores,
 #'   thus it can be thought of as \dQuote{a measure of the average distance each
@@ -35,12 +35,12 @@
 #'   precision of inferences about regression coefficients. }
 #'
 #'   \subsection{Calculation of Sigma}{
-#'   By default, \code{get_sigma()} tries to extract sigma by calling
-#'   \code{stats::sigma()}. If the model-object has no \code{sigma()} method,
+#'   By default, `get_sigma()` tries to extract sigma by calling
+#'   `stats::sigma()`. If the model-object has no `sigma()` method,
 #'   the next step is calculating sigma as square-root of the model-deviance
 #'   divided by the residual degrees of freedom. Finally, if even this approach
-#'   fails, and \code{x} is a mixed model, the residual standard deviation is
-#'   accessed using the square-root from \code{get_variance_residual()}.
+#'   fails, and `x` is a mixed model, the residual standard deviation is
+#'   accessed using the square-root from `get_variance_residual()`.
 #'   }
 #'
 #' @references Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other
@@ -190,7 +190,10 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   if (.is_empty_object(s)) {
     s <- tryCatch(
       {
-        sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
+        sqrt(get_deviance(x, verbose = verbose) / get_df(x,
+          type = "residual",
+          verbose = verbose
+        ))
       },
       error = function(e) {
         NULL

@@ -20,16 +20,16 @@ get_residuals(x, ...)
 }
 \value{
 The residuals, or \code{NULL} if this information could not be
-  accessed.
+accessed.
 }
 \description{
 Returns the residuals from regression models.
 }
 \note{
 This function returns the default type of residuals, i.e. for the
-  response from linear models, the deviance residuals for models of class
-  \code{glm} etc. To access different types, pass down the \code{type}
-  argument (see 'Examples').
+response from linear models, the deviance residuals for models of class
+\code{glm} etc. To access different types, pass down the \code{type}
+argument (see 'Examples').
 \cr \cr
 This function is a robust alternative to \code{residuals()}, as it works for
 some special model objects that otherwise do not respond properly to calling

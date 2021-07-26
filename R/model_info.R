@@ -11,112 +11,112 @@
 #' @return A list with information about the model, like family, link-function
 #'   etc. (see 'Details').
 #'
-#' @details \code{model_info()} returns a list with information about the
+#' @details `model_info()` returns a list with information about the
 #'   model for many different model objects. Following information
-#'    is returned, where all values starting with \code{is_} are logicals.
+#'    is returned, where all values starting with `is_` are logicals.
 #'    \itemize{
-#'      \item \code{is_binomial}: family is binomial (but not negative binomial)
+#'      \item `is_binomial`: family is binomial (but not negative binomial)
 #'
-#'      \item \code{is_bernoulli}: special case of binomial models: family is
+#'      \item `is_bernoulli`: special case of binomial models: family is
 #'      Bernoulli
 #'
-#'      \item \code{is_poisson}: family is poisson
+#'      \item `is_poisson`: family is poisson
 #'
-#'      \item \code{is_negbin}: family is negative binomial
+#'      \item `is_negbin`: family is negative binomial
 #'
-#'      \item \code{is_count}: model is a count model (i.e. family is either
+#'      \item `is_count`: model is a count model (i.e. family is either
 #'      poisson or negative binomial)
 #'
-#'      \item \code{is_beta}: family is beta
+#'      \item `is_beta`: family is beta
 #'
-#'      \item \code{is_betabinomial}: family is beta-binomial
+#'      \item `is_betabinomial`: family is beta-binomial
 #'
-#'      \item \code{is_dirichlet}: family is dirichlet
+#'      \item `is_dirichlet`: family is dirichlet
 #'
-#'      \item \code{is_exponential}: family is exponential (e.g. Gamma or Weibull)
+#'      \item `is_exponential`: family is exponential (e.g. Gamma or Weibull)
 #'
-#'      \item \code{is_logit}: model has logit link
+#'      \item `is_logit`: model has logit link
 #'
-#'      \item \code{is_probit}: model has probit link
+#'      \item `is_probit`: model has probit link
 #'
-#'      \item \code{is_linear}: family is gaussian
+#'      \item `is_linear`: family is gaussian
 #'
-#'      \item \code{is_tweedie}: family is tweedie
+#'      \item `is_tweedie`: family is tweedie
 #'
-#'      \item \code{is_ordinal}: family is ordinal or cumulative link
+#'      \item `is_ordinal`: family is ordinal or cumulative link
 #'
-#'      \item \code{is_cumulative}: family is ordinal or cumulative link
+#'      \item `is_cumulative`: family is ordinal or cumulative link
 #'
-#'      \item \code{is_multinomial}: family is multinomial or categorical link
+#'      \item `is_multinomial`: family is multinomial or categorical link
 #'
-#'      \item \code{is_categorical}: family is categorical link
+#'      \item `is_categorical`: family is categorical link
 #'
-#'      \item \code{is_censored}: model is a censored model (has a censored
+#'      \item `is_censored`: model is a censored model (has a censored
 #'      response, including survival models)
 #'
-#'      \item \code{is_truncated}: model is a truncated model (has a truncated
+#'      \item `is_truncated`: model is a truncated model (has a truncated
 #'      response)
 #'
-#'      \item \code{is_survival}: model is a survival model
+#'      \item `is_survival`: model is a survival model
 #'
-#'      \item \code{is_zero_inflated}: model has zero-inflation component
+#'      \item `is_zero_inflated`: model has zero-inflation component
 #'
-#'      \item \code{is_hurdle}: model has zero-inflation component and is a
+#'      \item `is_hurdle`: model has zero-inflation component and is a
 #'      hurdle-model (truncated family distribution)
 #'
-#'      \item \code{is_dispersion}: model has dispersion component
+#'      \item `is_dispersion`: model has dispersion component
 #'
-#'      \item \code{is_mixed}: model is a mixed effects model (with random
+#'      \item `is_mixed`: model is a mixed effects model (with random
 #'      effects)
 #'
-#'      \item \code{is_multivariate}: model is a multivariate response model
-#'      (currently only works for \emph{brmsfit} objects)
+#'      \item `is_multivariate`: model is a multivariate response model
+#'      (currently only works for *brmsfit* objects)
 #'
-#'      \item \code{is_trial}: model response contains additional information
+#'      \item `is_trial`: model response contains additional information
 #'      about the trials
 #'
-#'      \item \code{is_bayesian}: model is a Bayesian model
+#'      \item `is_bayesian`: model is a Bayesian model
 #'
-#'      \item \code{is_gam}: model is a generalized additive model
+#'      \item `is_gam`: model is a generalized additive model
 #'
-#'      \item \code{is_anova}: model is an Anova object
+#'      \item `is_anova`: model is an Anova object
 #'
-#'      \item \code{is_ttest}: model is an an object of class \code{htest},
-#'      returned by \code{t.test()}
+#'      \item `is_ttest`: model is an an object of class `htest`,
+#'      returned by `t.test()`
 #'
-#'      \item \code{is_correlation}: model is an an object of class
-#'      \code{htest}, returned by \code{cor.test()}
+#'      \item `is_correlation`: model is an an object of class
+#'      `htest`, returned by `cor.test()`
 #'
-#'      \item \code{is_ranktest}: model is an an object of class \code{htest},
-#'      returned by \code{cor.test()} (if Spearman's rank correlation),
-#'      \code{wilcox.text()} or \code{kruskal.test()}.
+#'      \item `is_ranktest`: model is an an object of class `htest`,
+#'      returned by `cor.test()` (if Spearman's rank correlation),
+#'      `wilcox.text()` or `kruskal.test()`.
 #'
-#'      \item \code{is_levenetest}: model is an an object of class \code{anova},
-#'      returned by \code{car::leveneTest()}.
+#'      \item `is_levenetest`: model is an an object of class `anova`,
+#'      returned by `car::leveneTest()`.
 #'
-#'      \item \code{is_onewaytest}: model is an an object of class \code{htest},
-#'      returned by \code{oneway.test()}
+#'      \item `is_onewaytest`: model is an an object of class `htest`,
+#'      returned by `oneway.test()`
 #'
-#'      \item \code{is_proptest}: model is an an object of class \code{htest},
-#'      returned by \code{prop.test()}
+#'      \item `is_proptest`: model is an an object of class `htest`,
+#'      returned by `prop.test()`
 #'
-#'      \item \code{is_binomtest}: model is an an object of class \code{htest},
-#'      returned by \code{binom.test()}
+#'      \item `is_binomtest`: model is an an object of class `htest`,
+#'      returned by `binom.test()`
 #'
-#'      \item \code{is_chi2test}: model is an an object of class \code{htest},
-#'      returned by \code{chisq.test()}
+#'      \item `is_chi2test`: model is an an object of class `htest`,
+#'      returned by `chisq.test()`
 #'
-#'      \item \code{is_xtab}: model is an an object of class \code{htest} or
-#'      \code{BFBayesFactor}, and test-statistic stems from a contingency table
-#'      (i.e. \code{chisq.test()} or \code{BayesFactor::contingencyTableBF()}).
+#'      \item `is_xtab`: model is an an object of class `htest` or
+#'      `BFBayesFactor`, and test-statistic stems from a contingency table
+#'      (i.e. `chisq.test()` or `BayesFactor::contingencyTableBF()`).
 #'
-#'      \item \code{link_function}: the link-function
+#'      \item `link_function`: the link-function
 #'
-#'      \item \code{family}: the family-object
+#'      \item `family`: the family-object
 #'
-#'      \item \code{n_obs}: number of observations
+#'      \item `n_obs`: number of observations
 #'
-#'      \item \code{model_terms}: a list with all model terms, including terms
+#'      \item `model_terms`: a list with all model terms, including terms
 #'      such as random effects or from zero-inflated model parts.
 #'    }
 #'

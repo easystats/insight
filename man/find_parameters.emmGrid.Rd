@@ -21,7 +21,7 @@ as values.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,
-   \code{conditional}, is returned.
+\code{conditional}, is returned.
 }
 \description{
 Returns the parameter names from a model.

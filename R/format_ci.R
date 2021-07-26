@@ -3,15 +3,15 @@
 #' @param CI_low Lower CI bound.
 #' @param CI_high Upper CI bound.
 #' @param ci CI level in percentage.
-#' @param brackets Either a logical, and if \code{TRUE} (default), values are
-#'   encompassed in square brackets. If \code{FALSE} or \code{NULL}, no brackets
+#' @param brackets Either a logical, and if `TRUE` (default), values are
+#'   encompassed in square brackets. If `FALSE` or `NULL`, no brackets
 #'   are used. Else, a character vector of length two, indicating the opening
 #'   and closing brackets.
-#' @param width Minimum width of the returned string. If not \code{NULL} and
-#'   \code{width} is larger than the string's length, leading whitespaces are
-#'   added to the string. If \code{width="auto"}, width will be set to the
+#' @param width Minimum width of the returned string. If not `NULL` and
+#'   `width` is larger than the string's length, leading whitespaces are
+#'   added to the string. If `width="auto"`, width will be set to the
 #'   length of the longest string.
-#' @param width_low,width_high Like \code{width}, but only applies to the lower
+#' @param width_low,width_high Like `width`, but only applies to the lower
 #'   or higher confidence interval value. This can be used when the values for
 #'   the lower and upper CI are of very different length.
 #' @inheritParams format_value

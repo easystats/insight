@@ -146,12 +146,12 @@ should be returned.}
 }
 \value{
 The posterior samples from the requested parameters as data frame.
-  If \code{summary = TRUE}, returns a data frame with two columns: the
-  parameter names and the related point estimates (based on \code{centrality}).
+If \code{summary = TRUE}, returns a data frame with two columns: the
+parameter names and the related point estimates (based on \code{centrality}).
 }
 \description{
 Returns the coefficients (or posterior samples for Bayesian
-   models) from a model.
+models) from a model.
 }
 \details{
 In most cases when models either return different "effects" (fixed,
@@ -165,7 +165,7 @@ package), posteriors are only extracted from the first numerator model (i.e.,
 \code{model[1]}). If you want to apply some function \code{foo()} to another
 model stored in the \code{BFBayesFactor} object, index it directly, e.g.
 \code{foo(model[2])}, \code{foo(1/model[5])}, etc.
-See also \code{\link[bayestestR]{weighted_posteriors}}.
+See also \code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.
 }
 
 \examples{

@@ -46,10 +46,9 @@ other auxiliary parameters) are returned.}
 }
 \value{
 If \code{effects = "fixed"}, a data frame with two columns: the
-  parameter names and the related point estimates. If \code{effects =
-  "random"}, a list of data frames with the random effects (as returned by
-  \code{ranef()}), unless the random effects have the same simplified
-  structure as fixed effects (e.g. for models from \pkg{MCMCglmm}).
+parameter names and the related point estimates. If \code{effects = "random"}, a list of data frames with the random effects (as returned by
+\code{ranef()}), unless the random effects have the same simplified
+structure as fixed effects (e.g. for models from \pkg{MCMCglmm}).
 }
 \description{
 Returns the coefficients from a model.

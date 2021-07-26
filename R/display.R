@@ -1,18 +1,18 @@
 #' @title Generic export of data frames into formatted tables
 #' @name display
 #'
-#' @description \code{display()} is a generic function to export data frames
-#' into various table formats (like plain text, markdown, ...). \code{print_md()}
-#' usually is a convenient wrapper for \code{display(format = "markdown")}.
-#' Similar, \code{print_html()} is a shortcut for \code{display(format = "html")}.
+#' @description `display()` is a generic function to export data frames
+#' into various table formats (like plain text, markdown, ...). `print_md()`
+#' usually is a convenient wrapper for `display(format = "markdown")`.
+#' Similar, `print_html()` is a shortcut for `display(format = "html")`.
 #' See the documentation for the specific objects' classes.
 #'
 #' @param object,x A data frame.
-#' @param format String, indicating the output format. Can be \code{"markdown"} or \code{"html"}.
+#' @param format String, indicating the output format. Can be `"markdown"` or `"html"`.
 #' @param ... Arguments passed to other methods.
 #'
-#' @return Depending on \code{format}, either an object of class \code{gt_tbl}
-#'   or a character vector of class \code{knitr_kable}.
+#' @return Depending on `format`, either an object of class `gt_tbl`
+#'   or a character vector of class `knitr_kable`.
 #'
 #' @examples
 #' display(iris[1:5, ])

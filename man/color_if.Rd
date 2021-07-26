@@ -55,8 +55,8 @@ The .
 }
 \description{
 Convenient function that formats columns in data frames
-  with color codes, where the color is chosen based on certain conditions.
-  Columns are then printed in color in the console.
+with color codes, where the color is chosen based on certain conditions.
+Columns are then printed in color in the console.
 }
 \details{
 The predicate-function simply works like this:
