@@ -730,7 +730,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
       se_col <- names(ci_data) == "SE"
 
       # fix for R 3.4
-      rownames(ci_data) <- NULL
+      row.names(ci_data) <- NULL
 
       ci_data[!se_col] <- lapply(ci_data[!se_col], link_inverse(x))
 
