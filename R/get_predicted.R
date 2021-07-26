@@ -728,6 +728,10 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     if (!is.null(ci_data)) {
       # Transform CI
       se_col <- names(ci_data) == "SE"
+
+      # fix for R 3.4
+      rownames(ci_data) <- NULL
+
       ci_data[!se_col] <- lapply(ci_data[!se_col], link_inverse(x))
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
