@@ -6,8 +6,8 @@
 #'
 #' @param x A model object, or an object returned by a function from this package.
 #'
-#' @return A logical, \code{TRUE} if either \code{x} is a model object and is
-#'    a multivariate response model, or \code{TRUE} if a return value from a
+#' @return A logical, `TRUE` if either `x` is a model object and is
+#'    a multivariate response model, or `TRUE` if a return value from a
 #'    function of \pkg{insight} is from a multivariate response model.
 #'
 #' @examples

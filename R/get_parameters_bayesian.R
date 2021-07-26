@@ -7,13 +7,13 @@
 #' @param iterations Number of posterior draws.
 #' @param progress Display progress.
 #' @param summary Logical, indicates whether the full posterior samples
-#'   (\code{summary = FALSE})) or the summarized centrality indices of
-#'   the posterior samples (\code{summary = TRUE})) should be returned as
+#'   (`summary = FALSE`)) or the summarized centrality indices of
+#'   the posterior samples (`summary = TRUE`)) should be returned as
 #'   estimates.
 #' @param centrality Only for models with posterior samples, and when
-#'   \code{summary = TRUE}. In this case, \code{centrality = "mean"} would
+#'   `summary = TRUE`. In this case, `centrality = "mean"` would
 #'   calculate means of posterior samples for each parameter, while
-#'   \code{centrality = "median"} would use the more robust median value as
+#'   `centrality = "median"` would use the more robust median value as
 #'   measure of central tendency.
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
@@ -23,20 +23,20 @@
 #' @inheritParams find_predictors
 #'
 #' @return The posterior samples from the requested parameters as data frame.
-#'   If \code{summary = TRUE}, returns a data frame with two columns: the
-#'   parameter names and the related point estimates (based on \code{centrality}).
+#'   If `summary = TRUE`, returns a data frame with two columns: the
+#'   parameter names and the related point estimates (based on `centrality`).
 #'
 #' @details In most cases when models either return different "effects" (fixed,
 #' random) or "components" (conditional, zero-inflated, ...), the arguments
-#' \code{effects} and \code{component} can be used.
+#' `effects` and `component` can be used.
 #'
 #' @section BFBayesFactor Models:
-#' Note that for \code{BFBayesFactor} models (from the \pkg{BayesFactor}
+#' Note that for `BFBayesFactor` models (from the \pkg{BayesFactor}
 #' package), posteriors are only extracted from the first numerator model (i.e.,
-#' \code{model[1]}). If you want to apply some function \code{foo()} to another
-#' model stored in the \code{BFBayesFactor} object, index it directly, e.g.
-#' \code{foo(model[2])}, \code{foo(1/model[5])}, etc.
-#' See also \code{\link[bayestestR]{weighted_posteriors}}.
+#' `model[1]`). If you want to apply some function `foo()` to another
+#' model stored in the `BFBayesFactor` object, index it directly, e.g.
+#' `foo(model[2])`, `foo(1/model[5])`, etc.
+#' See also [bayestestR::weighted_posteriors()].
 #'
 #' @examples
 #' data(mtcars)

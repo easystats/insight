@@ -9,15 +9,15 @@
 #' @inheritParams find_parameters
 #' @inheritParams find_predictors
 #'
-#' @return If \code{effects = "fixed"}, a data frame with two columns: the
-#'   parameter names and the related point estimates. If \code{effects =
-#'   "random"}, a list of data frames with the random effects (as returned by
-#'   \code{ranef()}), unless the random effects have the same simplified
+#' @return If `effects = "fixed"`, a data frame with two columns: the
+#'   parameter names and the related point estimates. If `effects =
+#'   "random"`, a list of data frames with the random effects (as returned by
+#'   `ranef()`), unless the random effects have the same simplified
 #'   structure as fixed effects (e.g. for models from \pkg{MCMCglmm}).
 #'
 #' @details In most cases when models either return different "effects" (fixed,
 #' random) or "components" (conditional, zero-inflated, ...), the arguments
-#' \code{effects} and \code{component} can be used.
+#' `effects` and `component` can be used.
 #'
 #' @examples
 #' data(mtcars)

@@ -3,7 +3,7 @@
 #' Creates a design matrix from the description. Any character variables are coerced to factors.
 #'
 #' @param x An object.
-#' @param ... Passed down to other methods (mainly \code{model.matrix()}).
+#' @param ... Passed down to other methods (mainly `model.matrix()`).
 #'
 #' @examples
 #' data(mtcars)

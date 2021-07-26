@@ -2,12 +2,12 @@
 #'
 #' @param x String value.
 #' @param length Numeric, maximum length of the returned string. If not
-#'   \code{NULL}, will shorten the string to a maximum \code{length}, however,
+#'   `NULL`, will shorten the string to a maximum `length`, however,
 #'   it will not truncate inside words. I.e. if the string length happens to be
 #'   inside a word, this word is removed from the returned string, so the
-#'   returned string has a \emph{maximum} length of \code{length}, but might be
+#'   returned string has a *maximum* length of `length`, but might be
 #'   shorter.
-#' @param abbreviate String that will be used as suffix, if \code{x} was
+#' @param abbreviate String that will be used as suffix, if `x` was
 #'   shortened.
 #' @param ... Arguments passed to or from other methods.
 #'

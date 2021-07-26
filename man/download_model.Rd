@@ -12,19 +12,19 @@ download_model(name, url = NULL)
 \item{url}{String with the URL from where to download the model data.
 Optional, and should only be used in case the repository-URL is
 changing. By default, models are downloaded from
-\code{https://raw.github.com/easystats/circus/master/data/}.}
+\verb{https://raw.github.com/easystats/circus/master/data/}.}
 }
 \value{
 A model from the \emph{circus}-repository.
 }
 \description{
 Downloads pre-compiled models from the \emph{circus}-repository.
-  The \emph{circus}-repository contains a variety of fitted models to help
-  the systematic testing of other packages
+The \emph{circus}-repository contains a variety of fitted models to help
+the systematic testing of other packages
 }
 \details{
 The code that generated the model is available at the
-  \url{https://easystats.github.io/circus/reference/index.html}.
+\url{https://easystats.github.io/circus/reference/index.html}.
 }
 \references{
 \url{https://easystats.github.io/circus/}

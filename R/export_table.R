@@ -2,42 +2,42 @@
 #'
 #' @param x A data frame.
 #' @param sep Column separator.
-#' @param header Header separator. Can be \code{NULL}.
-#' @param empty_line Separator used for empty lines. If \code{NULL}, line remains
+#' @param header Header separator. Can be `NULL`.
+#' @param empty_line Separator used for empty lines. If `NULL`, line remains
 #'   empty (i.e. filled with whitespaces).
-#' @param format Name of output-format, as string. If \code{NULL} (or \code{"text"}),
-#'   returned output is used for basic printing. Can be one of \code{NULL} (the
-#'   default) resp. \code{"text"} for plain text, \code{"markdown"} (or
-#'   \code{"md"}) for markdown and \code{"html"} for HTML output.
-#' @param title,caption,subtitle Table title (same as caption) and subtitle, as strings. If \code{NULL},
-#'   no title or subtitle is printed, unless it is stored as attributes (\code{table_title},
-#'   or its alias \code{table_caption}, and \code{table_subtitle}).
+#' @param format Name of output-format, as string. If `NULL` (or `"text"`),
+#'   returned output is used for basic printing. Can be one of `NULL` (the
+#'   default) resp. `"text"` for plain text, `"markdown"` (or
+#'   `"md"`) for markdown and `"html"` for HTML output.
+#' @param title,caption,subtitle Table title (same as caption) and subtitle, as strings. If `NULL`,
+#'   no title or subtitle is printed, unless it is stored as attributes (`table_title`,
+#'   or its alias `table_caption`, and `table_subtitle`).
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
 #'   new text line under the table.
 #' @param align Column alignment. For markdown-formatted tables, the default
-#'   \code{align = NULL} will right-align numeric columns, while all other
-#'   columns will be left-aligned. If \code{format = "html"}, the default is
+#'   `align = NULL` will right-align numeric columns, while all other
+#'   columns will be left-aligned. If `format = "html"`, the default is
 #'   left-align first column and center all remaining. May be a string to
-#'   indicate alignment rules for the complete table, like \code{"left"},
-#'   \code{"right"}, \code{"center"} or \code{"firstleft"} (to left-align first
+#'   indicate alignment rules for the complete table, like `"left"`,
+#'   `"right"`, `"center"` or `"firstleft"` (to left-align first
 #'   column, center remaining); or maybe a string with abbreviated alignment
 #'   characters, where the length of the string must equal the number of columns,
-#'   for instance, \code{align = "lccrl"} would left-align the first column, center
+#'   for instance, `align = "lccrl"` would left-align the first column, center
 #'   the second and third, right-align column four and left-align the fifth
-#'   column. For HTML-tables, may be one of \code{"center"}, \code{"left"} or
-#'   \code{"right"}.
-#' @param group_by Name of column in \code{x} that indicates grouping for tables.
-#'   Only applies when \code{format = "html"}. \code{group_by} is passed down
-#'   to \code{gt::gt(groupname_col = group_by)}.
+#'   column. For HTML-tables, may be one of `"center"`, `"left"` or
+#'   `"right"`.
+#' @param group_by Name of column in `x` that indicates grouping for tables.
+#'   Only applies when `format = "html"`. `group_by` is passed down
+#'   to `gt::gt(groupname_col = group_by)`.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
-#' @note The values for \code{caption}, \code{subtitle} and \code{footer}
-#'   can also be provided as attributes of \code{x}, e.g. if \code{caption = NULL}
-#'   and \code{x} has attribute \code{table_caption}, the value for this
-#'   attribute will be used as table caption. \code{table_subtitle} is the
-#'   attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
+#' @note The values for `caption`, `subtitle` and `footer`
+#'   can also be provided as attributes of `x`, e.g. if `caption = NULL`
+#'   and `x` has attribute `table_caption`, the value for this
+#'   attribute will be used as table caption. `table_subtitle` is the
+#'   attribute for `subtitle`, and `table_footer` for `footer`.
 #'
 #' @inherit format_table seealso
 #'

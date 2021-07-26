@@ -39,7 +39,7 @@ be \code{"signif"} to return significant figures or \code{"scientific"}
 to return scientific notation. Control the number of digits by adding the
 value as suffix, e.g. \code{digits = "scientific4"} to have scientific
 notation with 4 decimal places, or \code{digits = "signif5"} for 5
-significant figures (see also \code{\link{signif}}).}
+significant figures (see also \code{\link[=signif]{signif()}}).}
 
 \item{protect_integers}{Should integers be kept as integers (i.e., without
 decimals)?}
@@ -95,10 +95,10 @@ Data frame and Tables Pretty Formatting
 }
 \note{
 The values for \code{caption}, \code{subtitle} and \code{footer}
-  can also be provided as attributes of \code{x}, e.g. if \code{caption = NULL}
-  and \code{x} has attribute \code{table_caption}, the value for this
-  attribute will be used as table caption. \code{table_subtitle} is the
-  attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
+can also be provided as attributes of \code{x}, e.g. if \code{caption = NULL}
+and \code{x} has attribute \code{table_caption}, the value for this
+attribute will be used as table caption. \code{table_subtitle} is the
+attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
 }
 \examples{
 cat(export_table(iris))

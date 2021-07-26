@@ -1,19 +1,19 @@
 #' Model Deviance
 #'
-#' Returns model deviance (see \code{stats::deviance()}).
+#' Returns model deviance (see `stats::deviance()`).
 #'
 #' @param ... Not used.
 #' @inheritParams get_residuals
 #'
 #' @return The model deviance.
 #'
-#' @details For GLMMs of class \code{glmerMod}, \code{glmmTMB} or \code{MixMod},
-#' the \emph{absolute unconditional} deviance is returned (see 'Details' in
-#' \code{?lme4::`merMod-class`}), i.e. minus twice the log-likelihood. To get
-#' the \emph{relative conditional} deviance (relative to a saturated model,
-#' conditioned on the conditional modes of random effects), use \code{deviance()}.
-#' The value returned \code{get_deviance()} usually equals the deviance-value
-#' from the \code{summary()}.
+#' @details For GLMMs of class `glmerMod`, `glmmTMB` or `MixMod`,
+#' the *absolute unconditional* deviance is returned (see 'Details' in
+#' `?lme4::`merMod-class``), i.e. minus twice the log-likelihood. To get
+#' the *relative conditional* deviance (relative to a saturated model,
+#' conditioned on the conditional modes of random effects), use `deviance()`.
+#' The value returned `get_deviance()` usually equals the deviance-value
+#' from the `summary()`.
 #'
 #' @examples
 #' data(mtcars)

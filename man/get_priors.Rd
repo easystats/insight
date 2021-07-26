@@ -18,11 +18,11 @@ get_priors(x, ...)
 }
 \value{
 A data frame with a summary of the prior distributions used
-  for the parameters in a given model.
+for the parameters in a given model.
 }
 \description{
 Provides a summary of the prior distributions used
-  for the parameters in a given model.
+for the parameters in a given model.
 }
 \examples{
 \dontrun{

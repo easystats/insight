@@ -10,7 +10,7 @@
 #'    term or the instrumental variables be returned? Applies to models
 #'    with zero-inflated and/or dispersion formula, or to models with instrumental
 #'    variable (so called fixed-effects regressions). May be abbreviated.
-#' @param remove_nonestimable Logical, if \code{TRUE}, removes (i.e. does not
+#' @param remove_nonestimable Logical, if `TRUE`, removes (i.e. does not
 #'   count) non-estimable parameters (which may occur for models with
 #'   rank-deficient model matrix).
 #' @param ... Arguments passed to or from other methods.
@@ -18,10 +18,10 @@
 #' @return The number of parameters in the model.
 #'
 #' @note This function returns the number of parameters for the fixed effects
-#' by default, as returned by \code{find_parameters(x, effects = "fixed")}.
-#' It does not include \emph{all} estimated model parameters, i.e. auxiliary
+#' by default, as returned by `find_parameters(x, effects = "fixed")`.
+#' It does not include *all* estimated model parameters, i.e. auxiliary
 #' parameters like sigma or dispersion are not counted. To get the number of
-#' \emph{all estimated} parameters, use \code{get_df(x, type = "model")}.
+#' *all estimated* parameters, use `get_df(x, type = "model")`.
 #'
 #' @examples
 #' data(iris)

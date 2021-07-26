@@ -34,9 +34,9 @@ are not available under REML.}
 }
 \value{
 An object of class \code{"logLik"}, also containing the
-  log-likelihoods for each observation as a \code{per_observation} attribute
-  (\code{attributes(get_loglikelihood(x))$per_observation}) when possible.
-  The code was partly inspired from the \CRANpkg{nonnest2} package.
+log-likelihoods for each observation as a \code{per_observation} attribute
+(\code{attributes(get_loglikelihood(x))$per_observation}) when possible.
+The code was partly inspired from the \CRANpkg{nonnest2} package.
 }
 \description{
 A robust function to compute the log-likelihood of a model, as well as

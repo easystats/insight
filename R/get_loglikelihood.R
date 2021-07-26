@@ -2,27 +2,27 @@
 #'
 #' A robust function to compute the log-likelihood of a model, as well as
 #' individual log-likelihoods (for each observation) whenever possible. Can be
-#' used as a replacement for \code{stats::logLik()} out of the box, as the
+#' used as a replacement for `stats::logLik()` out of the box, as the
 #' returned object is of the same class (and it gives the same results by
 #' default).
 #'
 #' @param estimator Corresponds to the different estimators for the standard
-#'   deviation of the errors. If \code{estimator="ML"} (default), the scaling is
+#'   deviation of the errors. If `estimator="ML"` (default), the scaling is
 #'   done by n (the biased ML estimator), which is then equivalent to using
-#'   \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased
+#'   `stats::logLik()`. If `estimator="OLS"`, it returns the unbiased
 #'   OLS estimator.
 #' @param REML Only for linear models. This argument is present for
-#'   compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will
-#'   overwrite the \code{estimator} argument and is thus equivalent to setting
-#'   \code{estimator="REML"}. It will give the same results as
-#'   \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods
+#'   compatibility with `stats::logLik()`. Setting it to `TRUE` will
+#'   overwrite the `estimator` argument and is thus equivalent to setting
+#'   `estimator="REML"`. It will give the same results as
+#'   `stats::logLik(..., REML=TRUE)`. Note that individual log-likelihoods
 #'   are not available under REML.
-#' @param ... Passed down to \code{logLik()}, if possible.
+#' @param ... Passed down to `logLik()`, if possible.
 #' @inheritParams get_residuals
 #'
-#' @return An object of class \code{"logLik"}, also containing the
-#'   log-likelihoods for each observation as a \code{per_observation} attribute
-#'   (\code{attributes(get_loglikelihood(x))$per_observation}) when possible.
+#' @return An object of class `"logLik"`, also containing the
+#'   log-likelihoods for each observation as a `per_observation` attribute
+#'   (`attributes(get_loglikelihood(x))$per_observation`) when possible.
 #'   The code was partly inspired from the \CRANpkg{nonnest2} package.
 #'
 #' @examples

@@ -30,8 +30,8 @@ that \code{minimum_version} only works when \code{package} is of length 1.}
 }
 \value{
 If \code{stop = TRUE}, and \code{package} is not yet installed, the
-  function stops and throws an error. Else, a named logical vector is
-  returned, indicating which of the packages are installed, and which not.
+function stops and throws an error. Else, a named logical vector is
+returned, indicating which of the packages are installed, and which not.
 }
 \description{
 Checking if needed package is installed

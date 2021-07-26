@@ -103,34 +103,34 @@ should be returned.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,
-   \code{conditional}, is returned. For more complex models, the returned
-   list may have following elements:
-   \itemize{
-     \item \code{conditional}, the "fixed effects" part from the model
-     \item \code{random}, the "random effects" part from the model
-     \item \code{zero_inflated}, the "fixed effects" part from the
-     zero-inflation component of the model
-     \item \code{zero_inflated_random}, the "random effects" part from the
-     zero-inflation component of the model
-     \item \code{smooth_terms}, the smooth parameters
-   }
+\code{conditional}, is returned. For more complex models, the returned
+list may have following elements:
+\itemize{
+\item \code{conditional}, the "fixed effects" part from the model
+\item \code{random}, the "random effects" part from the model
+\item \code{zero_inflated}, the "fixed effects" part from the
+zero-inflation component of the model
+\item \code{zero_inflated_random}, the "random effects" part from the
+zero-inflation component of the model
+\item \code{smooth_terms}, the smooth parameters
+}
 
-   Furthermore, some models, especially from \pkg{brms}, can also return
-   auxiliary parameters. These may be one of the following:
-   \itemize{
-     \item \code{sigma}, the residual standard deviation (auxiliary parameter)
-     \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
-     \item \code{beta}, the beta parameter (auxiliary parameter)
-     \item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
-     \item \code{mix}, mixture parameters (\pkg{brms} only)
-     \item \code{shiftprop}, shifted proportion parameters (\pkg{brms} only)
-   }
+Furthermore, some models, especially from \pkg{brms}, can also return
+auxiliary parameters. These may be one of the following:
+\itemize{
+\item \code{sigma}, the residual standard deviation (auxiliary parameter)
+\item \code{dispersion}, the dispersion parameters (auxiliary parameter)
+\item \code{beta}, the beta parameter (auxiliary parameter)
+\item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
+\item \code{mix}, mixture parameters (\pkg{brms} only)
+\item \code{shiftprop}, shifted proportion parameters (\pkg{brms} only)
+}
 }
 \description{
 Returns the names of model parameters, like they typically
-    appear in the \code{summary()} output. For Bayesian models, the parameter
-    names equal the column names of the posterior samples after coercion
-    from \code{as.data.frame()}.
+appear in the \code{summary()} output. For Bayesian models, the parameter
+names equal the column names of the posterior samples after coercion
+from \code{as.data.frame()}.
 }
 \examples{
 data(mtcars)

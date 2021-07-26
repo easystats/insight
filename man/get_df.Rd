@@ -24,7 +24,7 @@ i.e. the number of (estimated) parameters.}
 }
 \description{
 Estimate or extract residual or model-based degrees of freedom
-  from regression models.
+from regression models.
 }
 \examples{
 model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
