@@ -135,7 +135,7 @@ if (.runThisTest) {
       expect_snapshot(model_info(m10))
       expect_snapshot(model_info(m11))
       expect_snapshot(model_info(m12))
-      expect_snapshot(model_info(m14))
+      # expect_snapshot(model_info(m14))
       expect_snapshot(model_info(m15))
     })
 
