@@ -107,13 +107,34 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h2>
 <p><a href="https://cran.r-project.org/package=insight" class="external-link"><img src="https://www.r-pkg.org/badges/version/insight" alt="CRAN_Status_Badge"></a> <a href="https://github.com/easystats/insight/actions" class="external-link"><img src="https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master" alt="R check"></a></p>
-<p>Run the following to install the stable release of <strong>insight</strong> from CRAN:</p>
+<p>The <em>insight</em> package is available on CRAN, while its latest development version is available on R-universe (from <em>rOpenSci</em>).</p>
+<table class="table">
+<colgroup>
+<col width="13%">
+<col width="12%">
+<col width="75%">
+</colgroup>
+<thead><tr class="header">
+<th>Type</th>
+<th>Source</th>
+<th>Command</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Release</td>
+<td>CRAN</td>
+<td><code>install.packages("insight")</code></td>
+</tr>
+<tr class="even">
+<td>Development</td>
+<td>R-universe</td>
+<td><code>install.packages("insight", repos = "https://easystats.r-universe.dev")</code></td>
+</tr>
+</tbody>
+</table>
+<p>Once you have downloaded the package, you can then load it using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"insight"</span><span class="op">)</span></code></pre></div>
-<p>Or this one to install the latest development version:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"easystats/insight"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/insight/" class="external-link">"insight"</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
@@ -183,7 +204,7 @@
 <a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor" aria-hidden="true"></a>Making Predictions at Specific Values of a Term of Interest</h4>
 <p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p>
 <p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span>
 <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
@@ -191,7 +212,7 @@
 <span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/find_predictors.html">find_predictors</a></span><span class="op">(</span><span class="va">m</span>, flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">pred</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">dat</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> 
+    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">dat</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
         <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dat</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">dat</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 
@@ -209,9 +230,9 @@
 <a href="#printing-model-coefficients" class="anchor" aria-hidden="true"></a>Printing Model Coefficients</h4>
 <p>The next example should emphasize the possibilities to generalize functions to many different model objects using <strong>insight</strong>. The aim is simply to print coefficients in a complete, human readable sentence.</p>
 <p>The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">print_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"My parameters are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span>, 
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"My parameters are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span>,
         <span class="st">", thank you for your attention!"</span><span class="op">)</span>
 <span class="op">}</span>
 
@@ -224,9 +245,9 @@
 <span class="fu">print_params</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span>
 <span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></code></pre></div>
 <p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">print_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"My parameters are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">model</span>, flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"My parameters are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">model</span>, flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
         collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span>, <span class="st">", thank you for your attention!"</span><span class="op">)</span>
 <span class="op">}</span>
 
@@ -248,70 +269,78 @@
 <div id="list-of-supported-models-by-class" class="section level2">
 <h2 class="hasAnchor">
 <a href="#list-of-supported-models-by-class" class="anchor" aria-hidden="true"></a>List of Supported Models by Class</h2>
-<p>Currently, 182 model classes are supported.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Currently, 205 model classes are supported.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/is_model_supported.html">supported_models</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;   [1] "aareg"             "afex_aov"          "Anova.mlm"        </span>
-<span class="co">#&gt;   [4] "aov"               "aovlist"           "Arima"            </span>
-<span class="co">#&gt;   [7] "averaging"         "bamlss"            "bamlss.frame"     </span>
-<span class="co">#&gt;  [10] "bayesQR"           "bayesx"            "BBmm"             </span>
-<span class="co">#&gt;  [13] "BBreg"             "bcplm"             "betamfx"          </span>
-<span class="co">#&gt;  [16] "betaor"            "betareg"           "BFBayesFactor"    </span>
-<span class="co">#&gt;  [19] "BGGM"              "bife"              "bigglm"           </span>
-<span class="co">#&gt;  [22] "biglm"             "blavaan"           "blrm"             </span>
-<span class="co">#&gt;  [25] "bracl"             "brglm"             "brmsfit"          </span>
-<span class="co">#&gt;  [28] "brmultinom"        "btergm"            "censReg"          </span>
-<span class="co">#&gt;  [31] "cgam"              "cgamm"             "cglm"             </span>
-<span class="co">#&gt;  [34] "clm"               "clm2"              "clmm"             </span>
-<span class="co">#&gt;  [37] "clmm2"             "clogit"            "coeftest"         </span>
-<span class="co">#&gt;  [40] "complmrob"         "coxme"             "coxph"            </span>
-<span class="co">#&gt;  [43] "coxph.penal"       "coxr"              "cpglm"            </span>
-<span class="co">#&gt;  [46] "cpglmm"            "crch"              "crq"              </span>
-<span class="co">#&gt;  [49] "crqs"              "crr"               "DirichletRegModel"</span>
-<span class="co">#&gt;  [52] "eglm"              "elm"               "ergm"             </span>
-<span class="co">#&gt;  [55] "feglm"             "feis"              "felm"             </span>
-<span class="co">#&gt;  [58] "fitdistr"          "fixest"            "flexsurvreg"      </span>
-<span class="co">#&gt;  [61] "gam"               "Gam"               "gamlss"           </span>
-<span class="co">#&gt;  [64] "gamm"              "gamm4"             "garch"            </span>
-<span class="co">#&gt;  [67] "gbm"               "gee"               "geeglm"           </span>
-<span class="co">#&gt;  [70] "glht"              "glimML"            "glm"              </span>
-<span class="co">#&gt;  [73] "Glm"               "glmm"              "glmmadmb"         </span>
-<span class="co">#&gt;  [76] "glmmPQL"           "glmmTMB"           "glmrob"           </span>
-<span class="co">#&gt;  [79] "glmRob"            "glmx"              "gls"              </span>
-<span class="co">#&gt;  [82] "gmnl"              "HLfit"             "htest"            </span>
-<span class="co">#&gt;  [85] "hurdle"            "iv_robust"         "ivFixed"          </span>
-<span class="co">#&gt;  [88] "ivprobit"          "ivreg"             "lavaan"           </span>
-<span class="co">#&gt;  [91] "lm"                "lm_robust"         "lme"              </span>
-<span class="co">#&gt;  [94] "lmerMod"           "lmerModLmerTest"   "lmodel2"          </span>
-<span class="co">#&gt;  [97] "lmrob"             "lmRob"             "logistf"          </span>
-<span class="co">#&gt; [100] "logitmfx"          "logitor"           "LORgee"           </span>
-<span class="co">#&gt; [103] "lqm"               "lqmm"              "lrm"              </span>
-<span class="co">#&gt; [106] "manova"            "MANOVA"            "margins"          </span>
-<span class="co">#&gt; [109] "maxLik"            "mclogit"           "mcmc"             </span>
-<span class="co">#&gt; [112] "mcmc.list"         "MCMCglmm"          "mediate"          </span>
-<span class="co">#&gt; [115] "merMod"            "merModList"        "meta_bma"         </span>
-<span class="co">#&gt; [118] "meta_fixed"        "meta_random"       "metaplus"         </span>
-<span class="co">#&gt; [121] "mhurdle"           "mipo"              "mira"             </span>
-<span class="co">#&gt; [124] "mixed"             "MixMod"            "mixor"            </span>
-<span class="co">#&gt; [127] "mjoint"            "mle"               "mle2"             </span>
-<span class="co">#&gt; [130] "mlm"               "mlogit"            "mmlogit"          </span>
-<span class="co">#&gt; [133] "model_fit"         "multinom"          "mvord"            </span>
-<span class="co">#&gt; [136] "negbinirr"         "negbinmfx"         "ols"              </span>
-<span class="co">#&gt; [139] "orm"               "plm"               "poissonirr"       </span>
-<span class="co">#&gt; [142] "poissonmfx"        "polr"              "probitmfx"        </span>
-<span class="co">#&gt; [145] "psm"               "Rchoice"           "ridgelm"          </span>
-<span class="co">#&gt; [148] "riskRegression"    "rlm"               "rlmerMod"         </span>
-<span class="co">#&gt; [151] "RM"                "rma"               "rma.uni"          </span>
-<span class="co">#&gt; [154] "robmixglm"         "rq"                "rqs"              </span>
-<span class="co">#&gt; [157] "rqss"              "sarlm"             "scam"             </span>
-<span class="co">#&gt; [160] "selection"         "sem"               "SemiParBIV"       </span>
-<span class="co">#&gt; [163] "speedglm"          "speedlm"           "stanmvreg"        </span>
-<span class="co">#&gt; [166] "stanreg"           "summary.lm"        "survfit"          </span>
-<span class="co">#&gt; [169] "survreg"           "svy_vglm"          "svyglm"           </span>
-<span class="co">#&gt; [172] "svyolr"            "tobit"             "truncreg"         </span>
-<span class="co">#&gt; [175] "vgam"              "vglm"              "wbgee"            </span>
-<span class="co">#&gt; [178] "wblm"              "wbm"               "zcpglm"           </span>
-<span class="co">#&gt; [181] "zeroinfl"          "zerotrunc"</span></code></pre></div>
+<span class="co">#&gt;   [1] "aareg"             "afex_aov"          "AKP"              </span>
+<span class="co">#&gt;   [4] "Anova.mlm"         "aov"               "aovlist"          </span>
+<span class="co">#&gt;   [7] "Arima"             "averaging"         "bamlss"           </span>
+<span class="co">#&gt;  [10] "bamlss.frame"      "bayesQR"           "bayesx"           </span>
+<span class="co">#&gt;  [13] "BBmm"              "BBreg"             "bcplm"            </span>
+<span class="co">#&gt;  [16] "betamfx"           "betaor"            "betareg"          </span>
+<span class="co">#&gt;  [19] "BFBayesFactor"     "BGGM"              "bife"             </span>
+<span class="co">#&gt;  [22] "bigglm"            "biglm"             "blavaan"          </span>
+<span class="co">#&gt;  [25] "blrm"              "bracl"             "brglm"            </span>
+<span class="co">#&gt;  [28] "brmsfit"           "brmultinom"        "btergm"           </span>
+<span class="co">#&gt;  [31] "censReg"           "cgam"              "cgamm"            </span>
+<span class="co">#&gt;  [34] "cglm"              "clm"               "clm2"             </span>
+<span class="co">#&gt;  [37] "clmm"              "clmm2"             "clogit"           </span>
+<span class="co">#&gt;  [40] "coeftest"          "complmrob"         "confusionMatrix"  </span>
+<span class="co">#&gt;  [43] "coxme"             "coxph"             "coxph.penal"      </span>
+<span class="co">#&gt;  [46] "coxr"              "cpglm"             "cpglmm"           </span>
+<span class="co">#&gt;  [49] "crch"              "crq"               "crqs"             </span>
+<span class="co">#&gt;  [52] "crr"               "dep.effect"        "DirichletRegModel"</span>
+<span class="co">#&gt;  [55] "drc"               "eglm"              "elm"              </span>
+<span class="co">#&gt;  [58] "epi.2by2"          "ergm"              "feglm"            </span>
+<span class="co">#&gt;  [61] "feis"              "felm"              "fitdistr"         </span>
+<span class="co">#&gt;  [64] "fixest"            "flexsurvreg"       "gam"              </span>
+<span class="co">#&gt;  [67] "Gam"               "gamlss"            "gamm"             </span>
+<span class="co">#&gt;  [70] "gamm4"             "garch"             "gbm"              </span>
+<span class="co">#&gt;  [73] "gee"               "geeglm"            "glht"             </span>
+<span class="co">#&gt;  [76] "glimML"            "glm"               "Glm"              </span>
+<span class="co">#&gt;  [79] "glmm"              "glmmadmb"          "glmmPQL"          </span>
+<span class="co">#&gt;  [82] "glmmTMB"           "glmrob"            "glmRob"           </span>
+<span class="co">#&gt;  [85] "glmx"              "gls"               "gmnl"             </span>
+<span class="co">#&gt;  [88] "HLfit"             "htest"             "hurdle"           </span>
+<span class="co">#&gt;  [91] "iv_robust"         "ivFixed"           "ivprobit"         </span>
+<span class="co">#&gt;  [94] "ivreg"             "lavaan"            "lm"               </span>
+<span class="co">#&gt;  [97] "lm_robust"         "lme"               "lmerMod"          </span>
+<span class="co">#&gt; [100] "lmerModLmerTest"   "lmodel2"           "lmrob"            </span>
+<span class="co">#&gt; [103] "lmRob"             "logistf"           "logitmfx"         </span>
+<span class="co">#&gt; [106] "logitor"           "LORgee"            "lqm"              </span>
+<span class="co">#&gt; [109] "lqmm"              "lrm"               "manova"           </span>
+<span class="co">#&gt; [112] "MANOVA"            "margins"           "maxLik"           </span>
+<span class="co">#&gt; [115] "mclogit"           "mcmc"              "mcmc.list"        </span>
+<span class="co">#&gt; [118] "MCMCglmm"          "mcp1"              "mcp12"            </span>
+<span class="co">#&gt; [121] "mcp2"              "med1way"           "mediate"          </span>
+<span class="co">#&gt; [124] "merMod"            "merModList"        "meta_bma"         </span>
+<span class="co">#&gt; [127] "meta_fixed"        "meta_random"       "metaplus"         </span>
+<span class="co">#&gt; [130] "mhurdle"           "mipo"              "mira"             </span>
+<span class="co">#&gt; [133] "mixed"             "MixMod"            "mixor"            </span>
+<span class="co">#&gt; [136] "mjoint"            "mle"               "mle2"             </span>
+<span class="co">#&gt; [139] "mlm"               "mlogit"            "mmlogit"          </span>
+<span class="co">#&gt; [142] "model_fit"         "multinom"          "mvord"            </span>
+<span class="co">#&gt; [145] "negbinirr"         "negbinmfx"         "ols"              </span>
+<span class="co">#&gt; [148] "onesampb"          "orm"               "pgmm"             </span>
+<span class="co">#&gt; [151] "plm"               "PMCMR"             "poissonirr"       </span>
+<span class="co">#&gt; [154] "poissonmfx"        "polr"              "probitmfx"        </span>
+<span class="co">#&gt; [157] "psm"               "Rchoice"           "ridgelm"          </span>
+<span class="co">#&gt; [160] "riskRegression"    "rjags"             "rlm"              </span>
+<span class="co">#&gt; [163] "rlmerMod"          "RM"                "rma"              </span>
+<span class="co">#&gt; [166] "rma.uni"           "robmixglm"         "robtab"           </span>
+<span class="co">#&gt; [169] "rq"                "rqs"               "rqss"             </span>
+<span class="co">#&gt; [172] "sarlm"             "scam"              "selection"        </span>
+<span class="co">#&gt; [175] "sem"               "SemiParBIV"        "semLm"            </span>
+<span class="co">#&gt; [178] "semLme"            "slm"               "speedglm"         </span>
+<span class="co">#&gt; [181] "speedlm"           "stanfit"           "stanmvreg"        </span>
+<span class="co">#&gt; [184] "stanreg"           "summary.lm"        "survfit"          </span>
+<span class="co">#&gt; [187] "survreg"           "svy_vglm"          "svyglm"           </span>
+<span class="co">#&gt; [190] "svyolr"            "t1way"             "tobit"            </span>
+<span class="co">#&gt; [193] "trimcibt"          "truncreg"          "vgam"             </span>
+<span class="co">#&gt; [196] "vglm"              "wbgee"             "wblm"             </span>
+<span class="co">#&gt; [199] "wbm"               "wmcpAKP"           "yuen"             </span>
+<span class="co">#&gt; [202] "yuend"             "zcpglm"            "zeroinfl"         </span>
+<span class="co">#&gt; [205] "zerotrunc"</span></code></pre></div>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues" class="external-link">File an issue</a> and request additional model-support in <em>insight</em>!</li>
