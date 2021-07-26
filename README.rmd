@@ -41,19 +41,18 @@ When fitting any statistical model, there are many useful pieces of information 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
 [![R check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
 
-Run the following to install the stable release of **insight** from CRAN:
+The *insight* package is available on CRAN, while its latest development version is available on R-universe (from _rOpenSci_).
 
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
-install.packages("insight")
+Type | Source | Command
+---|---|---
+Release | CRAN | `install.packages("insight")`
+Development | R-universe | `install.packages("insight", repos = "https://easystats.r-universe.dev")`
+
+Once you have downloaded the package, you can then load it using:
+
+```{r, eval=FALSE}
+library("insight")
 ```
-
-Or this one to install the latest development version:
-
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
-install.packages("remotes")
-remotes::install_github("easystats/insight")
-```
-
 
 ## Documentation
 
