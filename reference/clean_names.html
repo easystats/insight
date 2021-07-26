@@ -48,8 +48,8 @@
 
 <meta property="og:title" content="Get clean names of model terms — clean_names" />
 <meta property="og:description" content="This function &quot;cleans&quot; names of model terms (or a character
-  vector with such names) by removing patterns like log() or
-  as.factor() etc." />
+vector with such names) by removing patterns like log() or
+as.factor() etc." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -145,8 +145,8 @@
 
     <div class="ref-description">
     <p>This function "cleans" names of model terms (or a character
-  vector with such names) by removing patterns like <code><a href='https://rdrr.io/r/base/Log.html'>log()</a></code> or
-  <code><a href='https://rdrr.io/r/base/factor.html'>as.factor()</a></code> etc.</p>
+vector with such names) by removing patterns like <code><a href='https://rdrr.io/r/base/Log.html'>log()</a></code> or
+<code><a href='https://rdrr.io/r/base/factor.html'>as.factor()</a></code> etc.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>clean_names</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -175,18 +175,18 @@ names are the original values of <code>x</code>.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The "cleaned" variable names as character vector, i.e. pattern
-  like <code>s()</code> for splines or <code><a href='https://rdrr.io/r/base/Log.html'>log()</a></code> are removed from
-  the model terms.</p>
+like <code>s()</code> for splines or <code><a href='https://rdrr.io/r/base/Log.html'>log()</a></code> are removed from
+the model terms.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Typically, this method is intended to work on character vectors,
-  in order to remove patterns that obscure the variable names. For
-  convenience reasons it is also possible to call <code>clean_names()</code>
-  also on a model object. If <code>x</code> is a regression model, this
-  function is (almost) equal to calling <code><a href='find_variables.html'>find_variables()</a></code>. The
-  main difference is that <code>clean_names()</code> always returns a character
-  vector, while <code><a href='find_variables.html'>find_variables()</a></code> returns a list of character
-  vectors, unless <code>flatten = TRUE</code>. See 'Examples'.</p>
+in order to remove patterns that obscure the variable names. For
+convenience reasons it is also possible to call <code>clean_names()</code>
+also on a model object. If <code>x</code> is a regression model, this
+function is (almost) equal to calling <code><a href='find_variables.html'>find_variables()</a></code>. The
+main difference is that <code>clean_names()</code> always returns a character
+vector, while <code><a href='find_variables.html'>find_variables()</a></code> returns a list of character
+vectors, unless <code>flatten = TRUE</code>. See 'Examples'.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># example from ?stats::glm</span></span>

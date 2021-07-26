@@ -48,11 +48,11 @@
 
 <meta property="og:title" content="Find model formula — find_formula" />
 <meta property="og:description" content="Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...).
-   formula_ok() checks if a model formula has valid syntax
-   regarding writing TRUE instead of T inside poly()
-   and that no data names are used (i.e. no data$variable, but rather
-   variable)." />
+(like fixed or random effects, zero-inflated component, ...).
+formula_ok() checks if a model formula has valid syntax
+regarding writing TRUE instead of T inside poly()
+and that no data names are used (i.e. no data$variable, but rather
+variable)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -148,11 +148,11 @@
 
     <div class="ref-description">
     <p>Returns the formula(s) for the different parts of a model
-   (like fixed or random effects, zero-inflated component, ...).
-   <code>formula_ok()</code> checks if a model formula has valid syntax
-   regarding writing <code>TRUE</code> instead of <code>T</code> inside <code><a href='https://rdrr.io/r/stats/poly.html'>poly()</a></code>
-   and that no data names are used (i.e. no <code>data$variable</code>, but rather
-   <code>variable</code>).</p>
+(like fixed or random effects, zero-inflated component, ...).
+<code>formula_ok()</code> checks if a model formula has valid syntax
+regarding writing <code>TRUE</code> instead of <code>T</code> inside <code><a href='https://rdrr.io/r/stats/poly.html'>poly()</a></code>
+and that no data names are used (i.e. no <code>data$variable</code>, but rather
+<code>variable</code>).</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -179,37 +179,45 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of formulas that describe the model. For simple models,
-   only one list-element, <code>conditional</code>, is returned. For more complex
-   models, the returned list may have following elements:</p><ul>
+only one list-element, <code>conditional</code>, is returned. For more complex
+models, the returned list may have following elements:</p><ul>
 <li><p><code>conditional</code>, the "fixed effects" part from the model. One
-     exception are <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>,
-     which has two or three components, depending on <code>model</code>.</p></li>
-<li><p><code>random</code>, the "random effects" part from the model (or the
-     <code>id</code> for gee-models and similar)</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the
-     zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the
-     zero-inflation component of the model</p></li>
-<li><p><code>dispersion</code>, the dispersion formula</p></li>
-<li><p><code>instruments</code>, for fixed-effects regressions like
-     <code><a href='https://john-d-fox.github.io/ivreg//reference/ivreg.html'>ivreg::ivreg()</a></code>, <code><a href='https://rdrr.io/pkg/lfe/man/felm.html'>lfe::felm()</a></code> or <code><a href='https://rdrr.io/pkg/plm/man/plm.html'>plm::plm()</a></code>, the
-     instrumental variables</p></li>
-<li><p><code>cluster</code>, for fixed-effects regressions like
-     <code><a href='https://rdrr.io/pkg/lfe/man/felm.html'>lfe::felm()</a></code>, the cluster specification</p></li>
-<li><p><code>correlation</code>, for models with correlation-component like
-     <code><a href='https://rdrr.io/pkg/nlme/man/gls.html'>nlme::gls()</a></code>, the formula that describes the correlation structure</p></li>
-<li><p><code>slopes</code>, for fixed-effects individual-slope models like
-     <code><a href='https://rdrr.io/pkg/feisr/man/feis.html'>feisr::feis()</a></code>, the formula for the slope parameters</p></li>
-<li><p><code>precision</code>, for <code>DirichletRegModel</code> models from
-     <span class="pkg">DirichletReg</span>, when parametrization (i.e. <code>model</code>) is
-     <code>"alternative"</code>.</p></li>
+exception are <code>DirichletRegModel</code> models from <span class="pkg">DirichletReg</span>,
+which has two or three components, depending on <code>model</code>.</p><pre><code> \item `random`, the "random effects" part from the model (or the
+ `id` for gee-models and similar)
+
+ \item `zero_inflated`, the "fixed effects" part from the
+ zero-inflation component of the model
+
+ \item `zero_inflated_random`, the "random effects" part from the
+ zero-inflation component of the model
+
+ \item `dispersion`, the dispersion formula
+
+ \item `instruments`, for fixed-effects regressions like
+ `ivreg::ivreg()`, `lfe::felm()` or `plm::plm()`, the
+ instrumental variables
+
+ \item `cluster`, for fixed-effects regressions like
+ `lfe::felm()`, the cluster specification
+
+ \item `correlation`, for models with correlation-component like
+ `nlme::gls()`, the formula that describes the correlation structure
+
+ \item `slopes`, for fixed-effects individual-slope models like
+ `feisr::feis()`, the formula for the slope parameters
+
+ \item `precision`, for `DirichletRegModel` models from
+ \pkg{DirichletReg}, when parametrization (i.e. `model`) is
+ `"alternative"`.
+</code></pre></li>
 </ul>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>For models of class <code>lme</code> or <code>gls</code> the correlation-component
-  is only returned, when it is explicitly defined as named argument
-  (<code>form</code>), e.g. <code>corAR1(form = ~1 | Mare)</code></p>
+is only returned, when it is explicitly defined as named argument
+(<code>form</code>), e.g. <code>corAR1(form = ~1 | Mare)</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>
@@ -217,7 +225,7 @@
 <span class='r-in'><span class='fu'>find_formula</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $conditional</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> mpg ~ wt + cyl + vs</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: 0x10e0e0be8&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: 0x7f852eab3450&gt;</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "insight_formula" "list"           </span>

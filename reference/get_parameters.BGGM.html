@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="Get model parameters from Bayesian models — get_parameters.BGGM" />
 <meta property="og:description" content="Returns the coefficients (or posterior samples for Bayesian
-   models) from a model." />
+models) from a model." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -144,7 +144,7 @@
 
     <div class="ref-description">
     <p>Returns the coefficients (or posterior samples for Bayesian
-   models) from a model.</p>
+models) from a model.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S3 method for BGGM</span>
@@ -315,8 +315,8 @@ should be returned.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The posterior samples from the requested parameters as data frame.
-  If <code>summary = TRUE</code>, returns a data frame with two columns: the
-  parameter names and the related point estimates (based on <code>centrality</code>).</p>
+If <code>summary = TRUE</code>, returns a data frame with two columns: the
+parameter names and the related point estimates (based on <code>centrality</code>).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>In most cases when models either return different "effects" (fixed,
@@ -331,7 +331,7 @@ package), posteriors are only extracted from the first numerator model (i.e.,
 <code>model[1]</code>). If you want to apply some function <code>foo()</code> to another
 model stored in the <code>BFBayesFactor</code> object, index it directly, e.g.
 <code>foo(model[2])</code>, <code>foo(1/model[5])</code>, etc.
-See also <code><a href='https://easystats.github.io/bayestestR/reference/weighted_posteriors.html'>weighted_posteriors</a></code>.</p>
+See also <code><a href='https://easystats.github.io/bayestestR/reference/weighted_posteriors.html'>bayestestR::weighted_posteriors()</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>

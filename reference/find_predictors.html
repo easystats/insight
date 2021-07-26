@@ -48,10 +48,10 @@
 
 <meta property="og:title" content="Find names of model predictors — find_predictors" />
 <meta property="og:description" content="Returns the names of the predictor variables for the
-   different parts of a model (like fixed or random effects, zero-inflated
-   component, ...). Unlike find_parameters, the names from
-   find_predictors() match the original variable names from the data
-   that was used to fit the model." />
+different parts of a model (like fixed or random effects, zero-inflated
+component, ...). Unlike find_parameters(), the names from
+find_predictors() match the original variable names from the data
+that was used to fit the model." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -147,10 +147,10 @@
 
     <div class="ref-description">
     <p>Returns the names of the predictor variables for the
-   different parts of a model (like fixed or random effects, zero-inflated
-   component, ...). Unlike <code><a href='find_parameters.html'>find_parameters</a></code>, the names from
-   <code>find_predictors()</code> match the original variable names from the data
-   that was used to fit the model.</p>
+different parts of a model (like fixed or random effects, zero-inflated
+component, ...). Unlike <code><a href='find_parameters.html'>find_parameters()</a></code>, the names from
+<code>find_predictors()</code> match the original variable names from the data
+that was used to fit the model.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>find_predictors</span><span class='op'>(</span>
@@ -203,9 +203,9 @@ as character vector, not as list. Duplicated values are removed.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of character vectors that represent the name(s) of the
-   predictor variables. Depending on the combination of the arguments
-   <code>effects</code> and <code>component</code>, the returned list has following
-   elements:</p><ul>
+predictor variables. Depending on the combination of the arguments
+<code>effects</code> and <code>component</code>, the returned list has following
+elements:</p><ul>
 <li><p><code>conditional</code>, the "fixed effects" terms from the model</p></li>
 <li><p><code>random</code>, the "random effects" terms from the model</p></li>
 <li><p><code>zero_inflated</code>, the "fixed effects" terms from the zero-inflation component of the model</p></li>

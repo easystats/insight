@@ -56,7 +56,7 @@ The main purpose of this function is to easily filter and select model parameter
 in particular of - but not limited to - posterior samples from Stan models,
 depending on certain characteristics. This might be useful when only selective
 results should be reported or results from all parameters should be filtered
-to return only certain results (see print_parameters)." />
+to return only certain results (see print_parameters())." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -160,7 +160,7 @@ The main purpose of this function is to easily filter and select model parameter
 in particular of - but not limited to - posterior samples from Stan models,
 depending on certain characteristics. This might be useful when only selective
 results should be reported or results from all parameters should be filtered
-to return only certain results (see <code><a href='print_parameters.html'>print_parameters</a></code>).</p>
+to return only certain results (see <code><a href='print_parameters.html'>print_parameters()</a></code>).</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>clean_parameters</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
@@ -181,10 +181,10 @@ to return only certain results (see <code><a href='print_parameters.html'>print_
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with "cleaned" parameter names and information on
-  effects, component and group where parameters belong to. To be consistent
-  across different models, the returned data frame always has at least four
-  columns <code>Parameter</code>, <code>Effects</code>, <code>Component</code> and
-  <code>Cleaned_Parameter</code>. See 'Details'.</p>
+effects, component and group where parameters belong to. To be consistent
+across different models, the returned data frame always has at least four
+columns <code>Parameter</code>, <code>Effects</code>, <code>Component</code> and
+<code>Cleaned_Parameter</code>. See 'Details'.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <code>Effects</code> column indicate if a parameter is a <em>fixed</em>

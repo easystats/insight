@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="Find names of model parameters from mixed models — find_parameters.glmmTMB" />
 <meta property="og:description" content="Returns the names of model parameters, like they typically
-    appear in the summary() output." />
+appear in the summary() output." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -144,7 +144,7 @@
 
     <div class="ref-description">
     <p>Returns the names of model parameters, like they typically
-    appear in the <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code> output.</p>
+appear in the <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code> output.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S3 method for glmmTMB</span>
@@ -200,13 +200,13 @@ as character vector, not as list. Duplicated values are removed.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of parameter names. The returned list may have following
-  elements:</p><ul>
+elements:</p><ul>
 <li><p><code>conditional</code>, the "fixed effects" part from the model.</p></li>
 <li><p><code>random</code>, the "random effects" part from the model.</p></li>
 <li><p><code>zero_inflated</code>, the "fixed effects" part from the
-     zero-inflation component of the model.</p></li>
+zero-inflation component of the model.</p></li>
 <li><p><code>zero_inflated_random</code>, the "random effects" part from the
-     zero-inflation component of the model.</p></li>
+zero-inflation component of the model.</p></li>
 <li><p><code>dispersion</code>, the dispersion parameters (auxiliary parameter)</p></li>
 </ul>
 

@@ -176,7 +176,7 @@ second argument has to be a model).</p></td>
       <th>predictions</th>
       <td><p>A vector of predicted values (as obtained by
 <code><a href='https://rdrr.io/r/stats/fitted.values.html'>stats::fitted()</a></code>, <code><a href='https://rdrr.io/r/stats/predict.html'>stats::predict()</a></code> or
-<code><a href='get_predicted.html'>get_predicted</a></code>).</p></td>
+<code><a href='get_predicted.html'>get_predicted()</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -189,7 +189,7 @@ to predict. If omitted, the data used to fit the model is used.</p></td>
     </tr>
     <tr>
       <th>ci</th>
-      <td><p>The interval level (default <code>0.95</code>, i.e., 95% CI).</p></td>
+      <td><p>The interval level (default <code>0.95</code>, i.e., <code>95%</code> CI).</p></td>
     </tr>
     <tr>
       <th>ci_type</th>
@@ -213,16 +213,16 @@ vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></td
       <td><p>String, indicating the suffix of the
 <code>vcov*()</code>-function from the <span class="pkg">sandwich</span> or <span class="pkg">clubSandwich</span>
 package, e.g. <code>vcov_estimation = "CL"</code> (which calls
-<code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovCL.html'>vcovCL</a></code> to compute clustered covariance matrix
+<code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovCL.html'>sandwich::vcovCL()</a></code> to compute clustered covariance matrix
 estimators), or <code>vcov_estimation = "HC"</code> (which calls
-<code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC()</a></code> to compute
+<code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC()</a></code> to compute
 heteroskedasticity-consistent covariance matrix estimators).</p></td>
     </tr>
     <tr>
       <th>vcov_type</th>
       <td><p>Character vector, specifying the estimation type for the
 robust covariance matrix estimation (see
-<code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC()</a></code> or <code><a href='https://rdrr.io/pkg/clubSandwich/man/vcovCR.html'>clubSandwich::vcovCR()</a></code>
+<code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC()</a></code> or <code><a href='https://rdrr.io/pkg/clubSandwich/man/vcovCR.html'>clubSandwich::vcovCR()</a></code>
 for details).</p></td>
     </tr>
     <tr>

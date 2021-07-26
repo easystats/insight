@@ -48,9 +48,9 @@
 
 <meta property="og:title" content="Find names of model parameters — find_parameters" />
 <meta property="og:description" content="Returns the names of model parameters, like they typically
-    appear in the summary() output. For Bayesian models, the parameter
-    names equal the column names of the posterior samples after coercion
-    from as.data.frame(). See the documentation for your object's class:
+appear in the summary() output. For Bayesian models, the parameter
+names equal the column names of the posterior samples after coercion
+from as.data.frame(). See the documentation for your object's class:
 Bayesian models (rstanarm, brms, MCMCglmm, ...)
 Generalized additive models (mgcv, VGAM, ...)
 Marginal effects models (mfx)
@@ -155,9 +155,9 @@ Models with special components (betareg, MuMIn, ...)
 
     <div class="ref-description">
     <p>Returns the names of model parameters, like they typically
-    appear in the <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code> output. For Bayesian models, the parameter
-    names equal the column names of the posterior samples after coercion
-    from <code><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame()</a></code>. See the documentation for your object's class:</p><ul>
+appear in the <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code> output. For Bayesian models, the parameter
+names equal the column names of the posterior samples after coercion
+from <code><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame()</a></code>. See the documentation for your object's class:</p><ul>
 <li><p><a href='find_parameters.BGGM.html'>Bayesian models</a> (<span class="pkg">rstanarm</span>, <span class="pkg">brms</span>, <span class="pkg">MCMCglmm</span>, ...)</p></li>
 <li><p><a href='find_parameters.gamlss.html'>Generalized additive models</a> (<span class="pkg">mgcv</span>, <span class="pkg">VGAM</span>, ...)</p></li>
 <li><p><a href='find_parameters.betamfx.html'>Marginal effects models</a> (<span class="pkg">mfx</span>)</p></li>
@@ -199,7 +199,7 @@ as character vector, not as list. Duplicated values are removed.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of parameter names. For simple models, only one list-element,
-   <code>conditional</code>, is returned.</p>
+<code>conditional</code>, is returned.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>

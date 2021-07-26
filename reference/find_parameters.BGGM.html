@@ -48,9 +48,9 @@
 
 <meta property="og:title" content="Find names of model parameters from Bayesian models — find_parameters.BGGM" />
 <meta property="og:description" content="Returns the names of model parameters, like they typically
-    appear in the summary() output. For Bayesian models, the parameter
-    names equal the column names of the posterior samples after coercion
-    from as.data.frame()." />
+appear in the summary() output. For Bayesian models, the parameter
+names equal the column names of the posterior samples after coercion
+from as.data.frame()." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -146,9 +146,9 @@
 
     <div class="ref-description">
     <p>Returns the names of model parameters, like they typically
-    appear in the <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code> output. For Bayesian models, the parameter
-    names equal the column names of the posterior samples after coercion
-    from <code><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame()</a></code>.</p>
+appear in the <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code> output. For Bayesian models, the parameter
+names equal the column names of the posterior samples after coercion
+from <code><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame()</a></code>.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S3 method for BGGM</span>
@@ -268,19 +268,19 @@ should be returned.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of parameter names. For simple models, only one list-element,
-   <code>conditional</code>, is returned. For more complex models, the returned
-   list may have following elements:</p><ul>
+<code>conditional</code>, is returned. For more complex models, the returned
+list may have following elements:</p><ul>
 <li><p><code>conditional</code>, the "fixed effects" part from the model</p></li>
 <li><p><code>random</code>, the "random effects" part from the model</p></li>
 <li><p><code>zero_inflated</code>, the "fixed effects" part from the
-     zero-inflation component of the model</p></li>
+zero-inflation component of the model</p></li>
 <li><p><code>zero_inflated_random</code>, the "random effects" part from the
-     zero-inflation component of the model</p></li>
+zero-inflation component of the model</p></li>
 <li><p><code>smooth_terms</code>, the smooth parameters</p></li>
 </ul>
 
 <p>Furthermore, some models, especially from <span class="pkg">brms</span>, can also return
-   auxiliary parameters. These may be one of the following:</p><ul>
+auxiliary parameters. These may be one of the following:</p><ul>
 <li><p><code>sigma</code>, the residual standard deviation (auxiliary parameter)</p></li>
 <li><p><code>dispersion</code>, the dispersion parameters (auxiliary parameter)</p></li>
 <li><p><code>beta</code>, the beta parameter (auxiliary parameter)</p></li>
