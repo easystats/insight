@@ -728,7 +728,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     if (!is.null(ci_data)) {
       # Transform CI
       se_col <- names(ci_data) == "SE"
-      ci_data[!se_col] <- as.data.frame(sapply(ci_data[!se_col], link_inverse(x)))
+      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inverse(x))
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
       # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
@@ -748,7 +748,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   # Transform to response "type"
   if (args$predict == "response" && model_info(x)$is_binomial) {
     response <- get_response(x)
-    ci_data[!se_col] <- as.data.frame(sapply(ci_data[!se_col], .get_predict_transform_response, response = response))
+    ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
     predictions <- .get_predict_transform_response(predictions, response = response)
     if ("iterations" %in% names(attributes(predictions))) {
       attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, .get_predict_transform_response, response = response))
