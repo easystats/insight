@@ -16,7 +16,7 @@ models is in decreasing or increasing order.
 }
 \description{
 Checks whether a list of models are nested models, strictly
-  following the order they were passed to the function.
+following the order they were passed to the function.
 }
 \examples{
 m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)

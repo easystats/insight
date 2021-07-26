@@ -6,25 +6,25 @@
 #'   Columns are then printed in color in the console.
 #'
 #' @param x A data frame
-#' @param columns Character vector with column names of \code{x} that should be formatted.
-#' @param predicate A function that takes \code{columns} and \code{value} as input
-#'   and which should return \code{TRUE} or \code{FALSE}, based on if the condition
-#'   (in comparison with \code{value}) is met.
-#' @param value The comparator. May be used in conjunction with \code{predicate}
-#'   to quickly set up a function which compares elements in \code{colums} to \code{value}.
-#'   May be ignored when \code{predicate} is a function that internally computes other
+#' @param columns Character vector with column names of `x` that should be formatted.
+#' @param predicate A function that takes `columns` and `value` as input
+#'   and which should return `TRUE` or `FALSE`, based on if the condition
+#'   (in comparison with `value`) is met.
+#' @param value The comparator. May be used in conjunction with `predicate`
+#'   to quickly set up a function which compares elements in `colums` to `value`.
+#'   May be ignored when `predicate` is a function that internally computes other
 #'   comparisons. See 'Examples'.
 #' @param color_if,colour_if Character vector, indicating the color code used to
-#'   format values in \code{x} that meet the condition of \code{predicate} and \code{value}.
-#'   May be one of \code{"red"}, \code{"yellow"}, \code{"green"}, \code{"blue"},
-#'   \code{"violet"}, \code{"cyan"} or \code{"grey"}. Formatting is also possible
-#'   with \code{"bold"} or \code{"italic"}.
-#' @param color_else,colour_else See \code{color_if}, but only for conditions
-#'   that are \emph{not} met.
+#'   format values in `x` that meet the condition of `predicate` and `value`.
+#'   May be one of `"red"`, `"yellow"`, `"green"`, `"blue"`,
+#'   `"violet"`, `"cyan"` or `"grey"`. Formatting is also possible
+#'   with `"bold"` or `"italic"`.
+#' @param color_else,colour_else See `color_if`, but only for conditions
+#'   that are *not* met.
 #' @param digits Digits for rounded values.
 #'
 #' @details The predicate-function simply works like this:
-#' \code{which(predicate(x[, columns], value))}
+#' `which(predicate(x[, columns], value))`
 #'
 #' @return The .
 #'

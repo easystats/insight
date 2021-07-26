@@ -13,11 +13,11 @@
 #'
 #' @return The data that was used to fit the model.
 #'
-#' @note Unlike \code{model.frame()}, which may contain transformed variables
-#'   (e.g. if \code{poly()} or \code{scale()} was used inside the formula to
-#'   specify the model), \code{get_data()} aims at returning the "original",
+#' @note Unlike `model.frame()`, which may contain transformed variables
+#'   (e.g. if `poly()` or `scale()` was used inside the formula to
+#'   specify the model), `get_data()` aims at returning the "original",
 #'   untransformed data (if possible). Consequently, column names are changed
-#'   accordingly, i.e. \code{"log(x)"} will become \code{"x"} etc. for all data
+#'   accordingly, i.e. `"log(x)"` will become `"x"` etc. for all data
 #'   columns with transformed values.
 #'
 #' @examples

@@ -2,7 +2,7 @@
 #' @name get_intercept
 #'
 #' @description Returns the value at the intercept (i.e., the intercept
-#'   parameter), and \code{NA} if there isn't one.
+#'   parameter), and `NA` if there isn't one.
 #'
 #' @param ... Not used.
 #' @inheritParams get_residuals

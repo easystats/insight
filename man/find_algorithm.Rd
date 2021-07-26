@@ -13,30 +13,30 @@ find_algorithm(x, ...)
 }
 \value{
 A list with elements depending on the model.
-  \cr
-  For frequentist models:
-   \itemize{
-     \item \code{algorithm}, for instance \code{"OLS"} or \code{"ML"}
-     \item \code{optimizer}, name of optimizing function, only applies to
-     specific models (like \code{gam})
-   }
-  For frequentist mixed models:
-   \itemize{
-     \item \code{algorithm}, for instance \code{"REML"} or \code{"ML"}
-     \item \code{optimizer}, name of optimizing function
-   }
-  For Bayesian models:
-   \itemize{
-     \item \code{algorithm}, the algorithm
-     \item \code{chains}, number of chains
-     \item \code{iterations}, number of iterations per chain
-     \item \code{warmup}, number of warmups per chain
-   }
+\cr
+For frequentist models:
+\itemize{
+\item \code{algorithm}, for instance \code{"OLS"} or \code{"ML"}
+\item \code{optimizer}, name of optimizing function, only applies to
+specific models (like \code{gam})
+}
+For frequentist mixed models:
+\itemize{
+\item \code{algorithm}, for instance \code{"REML"} or \code{"ML"}
+\item \code{optimizer}, name of optimizing function
+}
+For Bayesian models:
+\itemize{
+\item \code{algorithm}, the algorithm
+\item \code{chains}, number of chains
+\item \code{iterations}, number of iterations per chain
+\item \code{warmup}, number of warmups per chain
+}
 }
 \description{
 Returns information on the sampling or estimation algorithm
-  as well as optimization functions, or for Bayesian model information on
-  chains, iterations and warmup-samples.
+as well as optimization functions, or for Bayesian model information on
+chains, iterations and warmup-samples.
 }
 \examples{
 if (require("lme4")) {

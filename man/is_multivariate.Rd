@@ -11,12 +11,12 @@ is_multivariate(x)
 }
 \value{
 A logical, \code{TRUE} if either \code{x} is a model object and is
-   a multivariate response model, or \code{TRUE} if a return value from a
-   function of \pkg{insight} is from a multivariate response model.
+a multivariate response model, or \code{TRUE} if a return value from a
+function of \pkg{insight} is from a multivariate response model.
 }
 \description{
 Small helper that checks if a model is a multivariate response
-  model, i.e. a model with multiple outcomes.
+model, i.e. a model with multiple outcomes.
 }
 \examples{
 \dontrun{

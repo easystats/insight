@@ -6,7 +6,7 @@
 #'
 #' @param ... Multiple regression model objects.
 #'
-#' @return \code{TRUE} if models are nested, \code{FALSE} otherwise. If models
+#' @return `TRUE` if models are nested, `FALSE` otherwise. If models
 #' are nested, also returns two attributes that indicate whether nesting of
 #' models is in decreasing or increasing order.
 #'

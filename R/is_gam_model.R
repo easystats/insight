@@ -6,13 +6,13 @@
 #'
 #' @param x A model object.
 #'
-#' @return A logical, \code{TRUE} if \code{x} is a generalized additive model
-#' \emph{and} has smooth-terms
+#' @return A logical, `TRUE` if `x` is a generalized additive model
+#' *and* has smooth-terms
 #'
-#' @note This function only returns \code{TRUE} when the model inherits from a
-#' typical GAM model class \emph{and} when smooth terms are present in the model
+#' @note This function only returns `TRUE` when the model inherits from a
+#' typical GAM model class *and* when smooth terms are present in the model
 #' formula. If model has no smooth terms or is not from a typical gam class,
-#' \code{FALSE} is returned.
+#' `FALSE` is returned.
 #'
 #' @examples
 #' if (require("mgcv")) {

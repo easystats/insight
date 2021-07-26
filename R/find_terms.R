@@ -3,8 +3,8 @@
 #'
 #' @description Returns a list with the names of all terms, including
 #'   response value and random effects, "as is". This means, on-the-fly
-#'   tranformations or arithmetic expressions like \code{log()}, \code{I()},
-#'   \code{as.factor()} etc. are preserved.
+#'   tranformations or arithmetic expressions like `log()`, `I()`,
+#'   `as.factor()` etc. are preserved.
 #'
 #' @inheritParams find_formula
 #' @inheritParams find_predictors
@@ -12,20 +12,20 @@
 #' @return A list with (depending on the model) following elements (character
 #'    vectors):
 #'    \itemize{
-#'      \item \code{response}, the name of the response variable
-#'      \item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
-#'      \item \code{random}, the names of the random effects (grouping factors)
-#'      \item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
-#'      \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
-#'      \item \code{dispersion}, the name of the dispersion terms
-#'      \item \code{instruments}, the names of instrumental variables
+#'      \item `response`, the name of the response variable
+#'      \item `conditional`, the names of the predictor variables from the *conditional* model (as opposed to the zero-inflated part of a model)
+#'      \item `random`, the names of the random effects (grouping factors)
+#'      \item `zero_inflated`, the names of the predictor variables from the *zero-inflated* part of the model
+#'      \item `zero_inflated_random`, the names of the random effects (grouping factors)
+#'      \item `dispersion`, the name of the dispersion terms
+#'      \item `instruments`, the names of instrumental variables
 #'    }
-#'    Returns \code{NULL} if no terms could be found (for instance, due to
+#'    Returns `NULL` if no terms could be found (for instance, due to
 #'    problems in accessing the formula).
 #'
-#' @note The difference to \code{\link{find_variables}} is that \code{find_terms()}
+#' @note The difference to [find_variables()] is that `find_terms()`
 #'   may return a variable multiple times in case of multiple transformations
-#'   (see examples below), while \code{find_variables()} returns each variable
+#'   (see examples below), while `find_variables()` returns each variable
 #'   name only once.
 #'
 #' @examples
@@ -167,11 +167,11 @@ find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   error <- utils::capture.output(print(f[[3]][i][[1]]))
   f[[3]][i] <- NULL
   f[[3]] <- f[[3]][[2]]
-  f[[3]] <- as.name(paste0(attr(stats::terms.formula(f), "term.labels"),collapse = "+"))
+  f[[3]] <- as.name(paste0(attr(stats::terms.formula(f), "term.labels"), collapse = "+"))
 
   l <- .get_variables_list(f, resp)
   names(l) <- c("response", "conditional")
-  l$error = error
+  l$error <- error
   l
 }
 

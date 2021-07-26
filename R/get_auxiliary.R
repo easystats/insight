@@ -7,40 +7,40 @@
 #'
 #' @param x A model.
 #' @param type The name of the auxiliary parameter that should be retrieved.
-#' \code{"sigma"} is available for most models, \code{"dispersion"} for models
-#' of class \code{glm}, \code{glmerMod} or \code{glmmTMB} as well as \code{brmsfit}.
-#' \code{"beta"} and other parameters are currently only returned for \code{brmsfit}
+#' `"sigma"` is available for most models, `"dispersion"` for models
+#' of class `glm`, `glmerMod` or `glmmTMB` as well as `brmsfit`.
+#' `"beta"` and other parameters are currently only returned for `brmsfit`
 #' models. See 'Details'.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #' @inheritParams get_parameters.BGGM
 #'
-#' @return The requested auxiliary parameter, or \code{NULL} if this information
+#' @return The requested auxiliary parameter, or `NULL` if this information
 #' could not be accessed.
 #'
 #' @details Currently, only sigma and the dispersion parameter are returned, and
 #' only for a limited set of models.
 #' \subsection{Sigma Parameter}{
-#' See \code{\link{get_sigma}}.
+#' See [get_sigma()].
 #' }
 #' \subsection{Dispersion Parameter}{
 #' There are many different definitions of "dispersion", depending on the context.
-#' \code{get_auxiliary()} returns the dispersion parameters that usually can
+#' `get_auxiliary()` returns the dispersion parameters that usually can
 #' be considered as variance-to-mean ratio for generalized (linear) mixed
-#' models. Exceptions are models of class \code{glmmTMB}, where the dispersion
+#' models. Exceptions are models of class `glmmTMB`, where the dispersion
 #' equals \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
 #' In detail, the computation of the dispersion parameter for generalized linear
 #' models is the ratio of the sum of the squared working-residuals and the
-#' residual degrees of freedom. For mixed models of class \code{glmer}, the
+#' residual degrees of freedom. For mixed models of class `glmer`, the
 #' dispersion parameter is also called \ifelse{html}{\out{&phi;}}{\eqn{\phi}}
 #' and is the ratio of the sum of the squared Pearson-residuals and the residual
-#' degrees of freedom. For models of class \code{glmmTMB}, dispersion is
+#' degrees of freedom. For models of class `glmmTMB`, dispersion is
 #' \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
 #' }
 #' \subsection{\pkg{brms} models}{
-#' For models of class \code{brmsfit}, there are different options for the
-#' \code{type} argument. See a list of supported auxiliary parameters here:
-#' \code{\link{find_parameters.BGGM}}.
+#' For models of class `brmsfit`, there are different options for the
+#' `type` argument. See a list of supported auxiliary parameters here:
+#' [find_parameters.BGGM()].
 #' }
 #'
 #' @examples

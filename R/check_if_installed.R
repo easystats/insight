@@ -7,11 +7,11 @@
 #' @param stop Logical that decides whether the function should stop if the
 #'   needed package is not installed.
 #' @param minimum_version String, representing the minimum package version that
-#'   is required. If \code{NULL}, no check for minimum version is done. Note
-#'   that \code{minimum_version} only works when \code{package} is of length 1.
+#'   is required. If `NULL`, no check for minimum version is done. Note
+#'   that `minimum_version` only works when `package` is of length 1.
 #' @param ... Currently ignored
 #'
-#' @return If \code{stop = TRUE}, and \code{package} is not yet installed, the
+#' @return If `stop = TRUE`, and `package` is not yet installed, the
 #'   function stops and throws an error. Else, a named logical vector is
 #'   returned, indicating which of the packages are installed, and which not.
 #'

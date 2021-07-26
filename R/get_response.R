@@ -10,7 +10,7 @@
 #' @inheritParams find_predictors
 #'
 #' @return The values of the response variable, as vector, or a data frame if
-#'   \code{x} has more than one defined response variable.
+#'   `x` has more than one defined response variable.
 #'
 #' @examples
 #' if (require("lme4")) {

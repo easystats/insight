@@ -6,16 +6,16 @@
 #'
 #' @param text The text to print.
 #' @param color,colour Character vector, indicating the colour for printing.
-#'   May be one of \code{"red"}, \code{"yellow"}, \code{"green"}, \code{"blue"},
-#'   \code{"violet"}, \code{"cyan"} or \code{"grey"}. Formatting is also possible
-#'   with \code{"bold"} or \code{"italic"}.
+#'   May be one of `"red"`, `"yellow"`, `"green"`, `"blue"`,
+#'   `"violet"`, `"cyan"` or `"grey"`. Formatting is also possible
+#'   with `"bold"` or `"italic"`.
 #'
-#' @details This function prints \code{text} directly to the console using
-#'   \code{cat()}, so no string is returned. \code{color_text()}, however,
-#'   returns only the formatted string, without using \code{cat()}.
-#'   \code{color_theme()} either returns \code{"dark"} when RStudio is used
-#'   with dark color scheme, \code{"light"} when it's used with light theme,
-#'   and \code{NULL} if the theme could not be detected.
+#' @details This function prints `text` directly to the console using
+#'   `cat()`, so no string is returned. `color_text()`, however,
+#'   returns only the formatted string, without using `cat()`.
+#'   `color_theme()` either returns `"dark"` when RStudio is used
+#'   with dark color scheme, `"light"` when it's used with light theme,
+#'   and `NULL` if the theme could not be detected.
 #'
 #' @return Nothing.
 #'

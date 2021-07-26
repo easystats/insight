@@ -3,10 +3,10 @@
 #'
 #' @description Returns the link-inverse function from a model object.
 #'
-#' @param what For \code{gamlss} models, indicates for which distribution
+#' @param what For `gamlss` models, indicates for which distribution
 #'   parameter the link (inverse) function should be returned; for
-#'   \code{betareg} or \code{DirichletRegModel}, can be \code{"mean"} or
-#'   \code{"precision"}.
+#'   `betareg` or `DirichletRegModel`, can be `"mean"` or
+#'   `"precision"`.
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
 #'

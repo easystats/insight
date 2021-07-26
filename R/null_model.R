@@ -1,14 +1,14 @@
 #' @title Compute intercept-only model for regression models
 #' @name null_model
 #'
-#' @description This function computes the null-model (i.e. \code{(y ~ 1)}) of
+#' @description This function computes the null-model (i.e. `(y ~ 1)`) of
 #'   a model. For mixed models, the null-model takes random effects into account.
 #'
 #' @param model A (mixed effects) model.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
-#' @return The null-model of \code{x}
+#' @return The null-model of `x`
 #'
 #' @examples
 #' if (require("lme4")) {

@@ -14,7 +14,7 @@ is_nullmodel(x)
 }
 \description{
 Checks if model is a null-model (intercept-only), i.e. if
-  the conditional part of the model has no predictors.
+the conditional part of the model has no predictors.
 }
 \examples{
 model <- lm(mpg ~ 1, data = mtcars)

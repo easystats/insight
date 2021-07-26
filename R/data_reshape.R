@@ -2,7 +2,7 @@
 #'
 #' This function "lengthens" data, increasing the number of rows and decreasing
 #' the number of columns. This is a dependency-free base-R equivalent of
-#' \code{tidyr::pivot_longer()}.
+#' `tidyr::pivot_longer()`.
 #'
 #' @param data A data frame to pivot.
 #' @param cols A vector of column names or indices to pivot into longer format.
@@ -10,16 +10,16 @@
 #' @param values_to The name of the new column that will contain the values of
 #'   the pivoted variables.
 #' @param rows_to The name of the column that will contain the row-number from
-#'   the original data. If \code{NULL}, will be removed.
+#'   the original data. If `NULL`, will be removed.
 #' @param colnames_from The name of the column that contains the levels to be
 #'   used as future columns
 #' @param values_from The name of the column that contains the values of the put
 #'   in the columns.
 #' @param rows_from The name of the column that identifies the rows. If
-#'   \code{NULL}, will use all the unique rows.
+#'   `NULL`, will use all the unique rows.
 #' @param ... Additional arguments passed on to methods.
-#' @param names_to,names_from Same as \code{colnames_to}, is there for
-#'   compatibility with \code{tidyr::pivot_longer()}.
+#' @param names_to,names_from Same as `colnames_to`, is there for
+#'   compatibility with `tidyr::pivot_longer()`.
 #' @param sep The indicating a separating character in the variable names in the
 #'   wide format.
 #'

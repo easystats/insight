@@ -2,7 +2,7 @@
 #'
 #' Reshape CI between wide/long formats.
 #'
-#' @param x A data frame containing columns named \code{CI_low} and \code{CI_high}.
+#' @param x A data frame containing columns named `CI_low` and `CI_high`.
 #'
 #' @examples
 #' x <- data.frame(

@@ -40,8 +40,8 @@ component, depending on the model.}
 }
 \value{
 For models with smooth terms or zero-inflation component, a data
-  frame with three columns: the parameter names, the related point estimates
-  and the component.
+frame with three columns: the parameter names, the related point estimates
+and the component.
 }
 \description{
 Returns the coefficients from a model.

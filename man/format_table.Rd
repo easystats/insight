@@ -52,7 +52,7 @@ significant figures. May also be \code{"signif"} to return significant
 figures or \code{"scientific"} to return scientific notation. Control the
 number of digits by adding the value as suffix, e.g. \code{digits = "scientific4"}
 to have scientific notation with 4 decimal places, or \code{digits = "signif5"}
-for 5 significant figures (see also \code{\link{signif}}).}
+for 5 significant figures (see also \code{\link[=signif]{signif()}}).}
 
 \item{ci_width}{Minimum width of the returned string for confidence
 intervals. If not \code{NULL} and width is larger than the string's length,
@@ -79,10 +79,10 @@ into character vectors!
 }
 \description{
 This functions takes a data frame with model parameters as input
-  and formats certain columns into a more readable layout (like collapsing
-  separate columns for lower and upper confidence interval values). Furthermore,
-  column names are formatted as well. Note that \code{format_table()}
-  converts all columns into character vectors!
+and formats certain columns into a more readable layout (like collapsing
+separate columns for lower and upper confidence interval values). Furthermore,
+column names are formatted as well. Note that \code{format_table()}
+converts all columns into character vectors!
 }
 \examples{
 format_table(head(iris), digits = 1)

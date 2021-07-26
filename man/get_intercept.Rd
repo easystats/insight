@@ -16,7 +16,7 @@ The value of the intercept.
 }
 \description{
 Returns the value at the intercept (i.e., the intercept
-  parameter), and \code{NA} if there isn't one.
+parameter), and \code{NA} if there isn't one.
 }
 \examples{
 get_intercept(lm(Sepal.Length ~ Petal.Width, data = iris))

@@ -13,14 +13,14 @@ find_statistic(x, ...)
 }
 \value{
 A character describing the type of statistic. If there is no
-  statistic available with a distribution, \code{NULL} will be returned.
+statistic available with a distribution, \code{NULL} will be returned.
 }
 \description{
 Returns the statistic for a regression model (\emph{t}-statistic,
-  \emph{z}-statistic, etc.).
+\emph{z}-statistic, etc.).
 
 Small helper that checks if a model is a regression model
-  object and return the statistic used.
+object and return the statistic used.
 }
 \examples{
 # regression model object

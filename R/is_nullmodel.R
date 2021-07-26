@@ -6,7 +6,7 @@
 #'
 #' @param x A model object.
 #'
-#' @return \code{TRUE} if \code{x} is a null-model, \code{FALSE} otherwise.
+#' @return `TRUE` if `x` is a null-model, `FALSE` otherwise.
 #'
 #' @examples
 #' model <- lm(mpg ~ 1, data = mtcars)

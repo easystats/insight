@@ -18,7 +18,7 @@ variable names from the matrix-column are returned. See 'Examples'.}
 }
 \value{
 The name(s) of the response variable(s) from \code{x} as character
-  vector, or \code{NULL} if response variable could not be found.
+vector, or \code{NULL} if response variable could not be found.
 }
 \description{
 Returns the name(s) of the response variable(s) from a model object.

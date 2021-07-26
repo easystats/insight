@@ -30,7 +30,7 @@ print_html(x, ...)
 }
 \value{
 Depending on \code{format}, either an object of class \code{gt_tbl}
-  or a character vector of class \code{knitr_kable}.
+or a character vector of class \code{knitr_kable}.
 }
 \description{
 \code{display()} is a generic function to export data frames
