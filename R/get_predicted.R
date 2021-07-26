@@ -163,7 +163,7 @@ get_predicted.data.frame <- function(x, data = NULL, verbose = TRUE, ...) {
 #' @export
 get_predicted.lm <- function(x,
                              data = NULL,
-                             predict = c("expectation", "link", "prediction", "response", "relation"),
+                             predict = "expectation",
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
@@ -209,7 +209,7 @@ get_predicted.glm <- get_predicted.lm
 #' @export
 get_predicted.lmerMod <- function(x,
                                   data = NULL,
-                                  predict = c("expectation", "link", "prediction", "relation"),
+                                  predict = "expectation",
                                   ci = 0.95,
                                   include_random = TRUE,
                                   iterations = NULL,
@@ -438,7 +438,7 @@ get_predicted.list <- get_predicted.gam # gamm4
 #' @export
 get_predicted.stanreg <- function(x,
                                   data = NULL,
-                                  predict = c("expectation", "link", "prediction", "response", "relation"),
+                                  predict = "expectation",
                                   iterations = NULL,
                                   include_random = TRUE,
                                   include_smooth = TRUE,
