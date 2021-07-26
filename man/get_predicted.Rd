@@ -11,7 +11,7 @@ get_predicted(x, ...)
 \method{get_predicted}{lm}(
   x,
   data = NULL,
-  predict = c("expectation", "link", "prediction", "response", "relation"),
+  predict = "expectation",
   iterations = NULL,
   verbose = TRUE,
   ...
@@ -20,7 +20,7 @@ get_predicted(x, ...)
 \method{get_predicted}{stanreg}(
   x,
   data = NULL,
-  predict = c("expectation", "link", "prediction", "response", "relation"),
+  predict = "expectation",
   iterations = NULL,
   include_random = TRUE,
   include_smooth = TRUE,
