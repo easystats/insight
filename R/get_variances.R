@@ -97,7 +97,7 @@
 #'   from \pkg{blme}), `clmm`, `cpglmm`, `glmmadmb`, `glmmTMB`,
 #'   `MixMod`, `lme`, `mixed`, `rlmerMod`, `stanreg`,
 #'   `brmsfit` or `wbm`. Support for objects of class `MixMod`
-#'   (\pkg{GLMMadaptiv}), `lme` (\pkg{nlme}) or `brmsfit` (\pkg{brms})
+#'   (\pkg{GLMMadaptive}), `lme` (\pkg{nlme}) or `brmsfit` (\pkg{brms})
 #'   is experimental and may not work for all models.
 #'
 #' @references \itemize{
