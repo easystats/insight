@@ -1,10 +1,10 @@
 #' @title Find all model terms
 #' @name find_terms
 #'
-#' @description Returns a list with the names of all terms, including
-#'   response value and random effects, "as is". This means, on-the-fly
-#'   tranformations or arithmetic expressions like \code{log()}, \code{I()},
-#'   \code{as.factor()} etc. are preserved.
+#' @description Returns a list with the names of all terms, including response
+#'   value and random effects, "as is". This means, on-the-fly tranformations
+#'   or arithmetic expressions like `log()`, `I()`, `as.factor()` etc. are
+#'   preserved.
 #'
 #' @inheritParams find_formula
 #' @inheritParams find_predictors
@@ -12,20 +12,20 @@
 #' @return A list with (depending on the model) following elements (character
 #'    vectors):
 #'    \itemize{
-#'      \item \code{response}, the name of the response variable
-#'      \item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
-#'      \item \code{random}, the names of the random effects (grouping factors)
-#'      \item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
-#'      \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
-#'      \item \code{dispersion}, the name of the dispersion terms
-#'      \item \code{instruments}, the names of instrumental variables
+#'      \item `response`, the name of the response variable
+#'      \item `conditional`, the names of the predictor variables from the *conditional* model (as opposed to the zero-inflated part of a model)
+#'      \item `random`, the names of the random effects (grouping factors)
+#'      \item `zero_inflated`, the names of the predictor variables from the *zero-inflated* part of the model
+#'      \item `zero_inflated_random`, the names of the random effects (grouping factors)
+#'      \item `dispersion`, the name of the dispersion terms
+#'      \item `instruments`, the names of instrumental variables
 #'    }
-#'    Returns \code{NULL} if no terms could be found (for instance, due to
+#'    Returns `NULL` if no terms could be found (for instance, due to
 #'    problems in accessing the formula).
 #'
-#' @note The difference to \code{\link{find_variables}} is that \code{find_terms()}
+#' @note The difference to [find_variables()] is that `find_terms()`
 #'   may return a variable multiple times in case of multiple transformations
-#'   (see examples below), while \code{find_variables()} returns each variable
+#'   (see examples below), while `find_variables()` returns each variable
 #'   name only once.
 #'
 #' @examples
@@ -40,6 +40,11 @@
 #' }
 #' @export
 find_terms <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  UseMethod("find_terms")
+}
+
+#' @export
+find_terms.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   f <- find_formula(x, verbose = verbose)
 
   if (is.null(f)) {
@@ -61,6 +66,53 @@ find_terms <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   }
 }
 
+
+.find_terms <- function(f, response) {
+  out <- lapply(f, function(i) {
+    if (is.list(i)) {
+      .find_terms(i, response = NULL)
+    } else {
+      f_terms <- unname(attr(stats::terms(i), "term.labels"))
+      sub("(.*)::(.*)", "\\2", f_terms)
+    }
+  })
+
+  .compact_list(c(list(response = response), out))
+}
+
+
+
+#' @export
+find_terms.aovlist <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  resp <- find_response(x, verbose = FALSE)
+  f <- find_formula(x, verbose = verbose)[[1]]
+
+  l <- .get_variables_list_aovlist(f, resp)
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+#' @export
+find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  resp <- find_response(x, verbose = FALSE)
+
+  if (length(attr(x, "within")) == 0L) {
+    l <- find_terms(x$lm, flatten = FALSE, verbose = TRUE, ...)
+    l$response <- resp
+  } else {
+    f <- find_formula(x, verbose = verbose)[[1]]
+    l <- .get_variables_list_aovlist(f, resp)
+  }
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
 
 
 .get_variables_list <- function(f, resp = NULL) {
@@ -122,7 +174,21 @@ find_terms <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   .compact_list(f[c(length(f), 1:(length(f) - 1))])
 }
 
+.get_variables_list_aovlist <- function(f, resp = NULL) {
+  i <- sapply(f[[3]], function(x) {
+    x <- as.character(x)
+    x[1] == "Error" && length(x) > 1
+  })
+  error <- utils::capture.output(print(f[[3]][i][[1]]))
+  f[[3]][i] <- NULL
+  f[[3]] <- f[[3]][[2]]
+  f[[3]] <- as.name(paste0(attr(stats::terms.formula(f), "term.labels"), collapse = "+"))
 
+  l <- .get_variables_list(f, resp)
+  names(l) <- c("response", "conditional")
+  l$error <- error
+  l
+}
 
 .formula_to_string <- function(f) {
   if (!is.character(f)) f <- .safe_deparse(f)

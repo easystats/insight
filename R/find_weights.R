@@ -7,7 +7,7 @@
 #' @param x A fitted model.
 #' @param ... Currently not used.
 #'
-#' @return The name of the weighting variable as character vector, or \code{NULL}
+#' @return The name of the weighting variable as character vector, or `NULL`
 #'   if no weights were specified.
 #'
 #' @examples

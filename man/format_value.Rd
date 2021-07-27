@@ -40,7 +40,7 @@ be \code{"signif"} to return significant figures or \code{"scientific"}
 to return scientific notation. Control the number of digits by adding the
 value as suffix, e.g. \code{digits = "scientific4"} to have scientific
 notation with 4 decimal places, or \code{digits = "signif5"} for 5
-significant figures (see also \code{\link{signif}}).}
+significant figures (see also \code{\link[=signif]{signif()}}).}
 
 \item{protect_integers}{Should integers be kept as integers (i.e., without
 decimals)?}

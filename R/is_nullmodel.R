@@ -6,7 +6,7 @@
 #'
 #' @param x A model object.
 #'
-#' @return \code{TRUE} if \code{x} is a null-model, \code{FALSE} otherwise.
+#' @return `TRUE` if `x` is a null-model, `FALSE` otherwise.
 #'
 #' @examples
 #' model <- lm(mpg ~ 1, data = mtcars)
@@ -24,11 +24,21 @@
 #' }
 #' @export
 is_nullmodel <- function(x) {
+  UseMethod("is_nullmodel")
+}
+
+#' @export
+is_nullmodel.default <- function(x) {
   if (is_multivariate(x)) {
     unlist(lapply(find_predictors(x, effects = "fixed", component = "conditional"), .check_for_nullmodel))
   } else {
     .check_for_nullmodel(find_predictors(x, effects = "fixed", component = "conditional"))
   }
+}
+
+#' @export
+is_nullmodel.afex_aov <- function(x) {
+  FALSE
 }
 
 .check_for_nullmodel <- function(preds) {

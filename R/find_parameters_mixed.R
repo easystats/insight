@@ -2,19 +2,19 @@
 #' @name find_parameters.glmmTMB
 #'
 #' @description Returns the names of model parameters, like they typically
-#'     appear in the \code{summary()} output.
+#'     appear in the `summary()` output.
 #'
 #' @param component Which type of parameters to return, such as parameters for
 #'   the conditional model, the zero-inflated part of the model or the
 #'   dispersion term? Applies to models with zero-inflated and/or dispersion
-#'   formula. Note that the \emph{conditional} component is also called
-#'   \emph{count} or \emph{mean} component, depending on the model. There are
-#'   three convenient shortcuts: \code{component = "all"} returns all possible
-#'   parameters. If \code{component = "location"}, location parameters such as
-#'   \code{conditional} or \code{zero_inflated} are returned (everything that
-#'   are fixed or random effects - depending on the \code{effects} argument -
-#'   but no auxiliary parameters). For \code{component = "distributional"} (or
-#'   \code{"auxiliary"}), components like \code{sigma} or \code{dispersion} (and
+#'   formula. Note that the *conditional* component is also called
+#'   *count* or *mean* component, depending on the model. There are
+#'   three convenient shortcuts: `component = "all"` returns all possible
+#'   parameters. If `component = "location"`, location parameters such as
+#'   `conditional` or `zero_inflated` are returned (everything that
+#'   are fixed or random effects - depending on the `effects` argument -
+#'   but no auxiliary parameters). For `component = "distributional"` (or
+#'   `"auxiliary"`), components like `sigma` or `dispersion` (and
 #'   other auxiliary parameters) are returned.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
@@ -25,13 +25,13 @@
 #' @return A list of parameter names. The returned list may have following
 #'   elements:
 #'    \itemize{
-#'      \item \code{conditional}, the "fixed effects" part from the model.
-#'      \item \code{random}, the "random effects" part from the model.
-#'      \item \code{zero_inflated}, the "fixed effects" part from the
+#'      \item `conditional`, the "fixed effects" part from the model.
+#'      \item `random`, the "random effects" part from the model.
+#'      \item `zero_inflated`, the "fixed effects" part from the
 #'      zero-inflation component of the model.
-#'      \item \code{zero_inflated_random}, the "random effects" part from the
+#'      \item `zero_inflated_random`, the "random effects" part from the
 #'      zero-inflation component of the model.
-#'      \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
+#'      \item `dispersion`, the dispersion parameters (auxiliary parameter)
 #'    }
 #'
 #' @examples

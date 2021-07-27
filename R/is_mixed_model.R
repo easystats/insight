@@ -6,7 +6,7 @@
 #'
 #' @param x A model object.
 #'
-#' @return A logical, \code{TRUE} if \code{x} is a mixed model.
+#' @return A logical, `TRUE` if `x` is a mixed model.
 #'
 #' @examples
 #' data(mtcars)
@@ -20,5 +20,15 @@
 #' }
 #' @export
 is_mixed_model <- function(x) {
+  UseMethod("is_mixed_model")
+}
+
+#' @export
+is_mixed_model.default <- function(x) {
   !is.null(find_random(x))
+}
+
+#' @export
+is_mixed_model.afex_aov <- function(x) {
+  as.logical(length(attr(x, "within")))
 }

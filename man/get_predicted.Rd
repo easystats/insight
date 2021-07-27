@@ -11,7 +11,7 @@ get_predicted(x, ...)
 \method{get_predicted}{lm}(
   x,
   data = NULL,
-  predict = c("expectation", "link", "prediction", "response", "relation"),
+  predict = "expectation",
   iterations = NULL,
   verbose = TRUE,
   ...
@@ -20,7 +20,7 @@ get_predicted(x, ...)
 \method{get_predicted}{stanreg}(
   x,
   data = NULL,
-  predict = c("expectation", "link", "prediction", "response", "relation"),
+  predict = "expectation",
   iterations = NULL,
   include_random = TRUE,
   include_smooth = TRUE,
@@ -33,7 +33,7 @@ get_predicted(x, ...)
 second argument has to be a model).}
 
 \item{...}{Other argument to be passed for instance to
-\code{\link{get_predicted_ci}}.}
+\code{\link[=get_predicted_ci]{get_predicted_ci()}}.}
 
 \item{data}{An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used.}
@@ -62,11 +62,11 @@ are not depending on it. (default), \code{mean()}, or
 }
 \value{
 The fitted values (i.e. predictions for the response). For Bayesian
-  or bootstrapped models (when \code{iterations != NULL}), iterations (as
-  columns and observations are rows) can be accessed via \code{as.data.frame}.
+or bootstrapped models (when \code{iterations != NULL}), iterations (as
+columns and observations are rows) can be accessed via \code{as.data.frame}.
 }
 \description{
-The \code{get_predicted()} function is a robust, flexible and user-friendly alternative to base R \code{\link{predict}} function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's \code{predict} function. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the \code{Details} section for more information.
+The \code{get_predicted()} function is a robust, flexible and user-friendly alternative to base R \code{\link[=predict]{predict()}} function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's \code{predict} function. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the \code{Details} section for more information.
 }
 \details{
 In \code{insight::get_predicted()}, the \code{predict} argument jointly
@@ -74,24 +74,23 @@ modulates two separate concepts, the \strong{scale} and the \strong{uncertainty 
 
 \subsection{Confidence Interval (CI) vs. Prediction Interval (PI))}{
 \itemize{
-  \item \strong{Linear models} - \code{lm()}: For linear models, Prediction
-  intervals (\code{predict = "prediction"}) show the range that likely
-  contains the value of a new observation (in what range it is likely to
-  fall), whereas confidence intervals (\code{predict = "expectation"} or
-  \code{predict = "link"}) reflect the uncertainty around the estimated
-  parameters (and gives the range of uncertainty of the regression line). In
-  general, Prediction Intervals (PIs) account for both the uncertainty in the
-  model's parameters, plus the random variation of the individual values.
-  Thus, prediction intervals are always wider than confidence intervals.
-  Moreover, prediction intervals will not necessarily become narrower as the
-  sample size increases (as they do not reflect only the quality of the fit,
-  but also the variability within the data).
-  \item \strong{General Linear models} - \code{glm()}: For binomial models,
-  prediction intervals are somewhat useless (for instance, for a binomial
-  (bernoulli) model for which the dependent variable is a vector of 1s and
-  0s, the prediction interval is... \code{[0, 1]}).
+\item \strong{Linear models} - \code{lm()}: For linear models, Prediction
+intervals (\code{predict = "prediction"}) show the range that likely
+contains the value of a new observation (in what range it is likely to
+fall), whereas confidence intervals (\code{predict = "expectation"} or
+\code{predict = "link"}) reflect the uncertainty around the estimated
+parameters (and gives the range of uncertainty of the regression line). In
+general, Prediction Intervals (PIs) account for both the uncertainty in the
+model's parameters, plus the random variation of the individual values.
+Thus, prediction intervals are always wider than confidence intervals.
+Moreover, prediction intervals will not necessarily become narrower as the
+sample size increases (as they do not reflect only the quality of the fit,
+but also the variability within the data).
+\item \strong{General Linear models} - \code{glm()}: For binomial models,
+prediction intervals are somewhat useless (for instance, for a binomial
+(bernoulli) model for which the dependent variable is a vector of 1s and
+0s, the prediction interval is... \verb{[0, 1]}).
 }}
-
 
 \subsection{Link scale vs. Response scale}{
 Having the output is on the scale of the response variable is arguably the
@@ -145,5 +144,5 @@ pred <- get_predicted(x, predict = "response")
 head(as.data.frame(pred))
 }
 \seealso{
-\code{\link{get_predicted_ci}}
+\code{\link[=get_predicted_ci]{get_predicted_ci()}}
 }

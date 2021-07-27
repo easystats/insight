@@ -14,7 +14,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-if (!requireNamespace("dplyr", quietly = TRUE)) {
+if (!requireNamespace("dplyr", quietly = TRUE) ||
+    !requireNamespace("gt", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 

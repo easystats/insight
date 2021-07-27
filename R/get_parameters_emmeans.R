@@ -3,8 +3,8 @@
 #'
 #' @description Returns the coefficients from a model.
 #'
-#' @param merge_parameters Logical, if \code{TRUE} and \code{x} has multiple
-#'   columns for parameter names (like \code{emmGrid} objects may have), these
+#' @param merge_parameters Logical, if `TRUE` and `x` has multiple
+#'   columns for parameter names (like `emmGrid` objects may have), these
 #'   are merged into a single parameter column, with parameters names and values
 #'   as values.
 #' @param ... Currently not used.
@@ -13,11 +13,11 @@
 #' @inheritParams find_predictors
 #' @inheritParams get_parameters.BGGM
 #'
-#' @note Note that \code{emmGrid} or \code{emm_list} objects returned by
+#' @note Note that `emmGrid` or `emm_list` objects returned by
 #'   functions from \pkg{emmeans} have a different structure compared to
-#'   usual regression models. Hence, the \code{Parameter} column does not
-#'   always contain names of \emph{variables}, but may rather contain
-#'   \emph{values}, e.g. for contrasts. See an example for pairwise
+#'   usual regression models. Hence, the `Parameter` column does not
+#'   always contain names of *variables*, but may rather contain
+#'   *values*, e.g. for contrasts. See an example for pairwise
 #'   comparisons below.
 #'
 #' @return A data frame with two columns: the parameter names and the related

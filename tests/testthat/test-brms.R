@@ -181,7 +181,8 @@ if (.runThisTest) {
         list(
           response = "y",
           conditional = "x",
-          random = "id"
+          random = "id",
+          sigma = c("x", "i", "id")
         )
       )
       expect_identical(

@@ -71,7 +71,8 @@ if (require("testthat") &&
   test_that("find_terms", {
     expect_equal(find_terms(m1), list(
       response = "yield",
-      conditional = c("N", "P", "K", "Error(block)")
+      conditional = c("N", "P", "K"),
+      error = "Error(block)"
     ))
     expect_equal(
       find_terms(m1, flatten = TRUE),

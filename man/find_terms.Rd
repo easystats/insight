@@ -18,30 +18,30 @@ as character vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list with (depending on the model) following elements (character
-   vectors):
-   \itemize{
-     \item \code{response}, the name of the response variable
-     \item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
-     \item \code{random}, the names of the random effects (grouping factors)
-     \item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
-     \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
-     \item \code{dispersion}, the name of the dispersion terms
-     \item \code{instruments}, the names of instrumental variables
-   }
-   Returns \code{NULL} if no terms could be found (for instance, due to
-   problems in accessing the formula).
+vectors):
+\itemize{
+\item \code{response}, the name of the response variable
+\item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
+\item \code{random}, the names of the random effects (grouping factors)
+\item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
+\item \code{zero_inflated_random}, the names of the random effects (grouping factors)
+\item \code{dispersion}, the name of the dispersion terms
+\item \code{instruments}, the names of instrumental variables
+}
+Returns \code{NULL} if no terms could be found (for instance, due to
+problems in accessing the formula).
 }
 \description{
-Returns a list with the names of all terms, including
-  response value and random effects, "as is". This means, on-the-fly
-  tranformations or arithmetic expressions like \code{log()}, \code{I()},
-  \code{as.factor()} etc. are preserved.
+Returns a list with the names of all terms, including response
+value and random effects, "as is". This means, on-the-fly tranformations
+or arithmetic expressions like \code{log()}, \code{I()}, \code{as.factor()} etc. are
+preserved.
 }
 \note{
-The difference to \code{\link{find_variables}} is that \code{find_terms()}
-  may return a variable multiple times in case of multiple transformations
-  (see examples below), while \code{find_variables()} returns each variable
-  name only once.
+The difference to \code{\link[=find_variables]{find_variables()}} is that \code{find_terms()}
+may return a variable multiple times in case of multiple transformations
+(see examples below), while \code{find_variables()} returns each variable
+name only once.
 }
 \examples{
 if (require("lme4")) {

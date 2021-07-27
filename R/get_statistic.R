@@ -1,30 +1,30 @@
 #' @title Get statistic associated with estimates
-#' @description Returns the statistic (\emph{t}, \code{z}, ...) for model
+#' @description Returns the statistic (*t*, `z`, ...) for model
 #'   estimates. In most cases, this is the related column from
-#'   \code{coef(summary())}.
+#'   `coef(summary())`.
 #' @name get_statistic
 #'
 #' @param x A model.
 #' @param column_index For model objects that have no defined
-#'   \code{get_statistic()} method yet, the default method is called. This
-#'   method tries to extract the statistic column from \code{coef(summary())},
-#'   where the index of the column that is being pulled is \code{column_index}.
+#'   `get_statistic()` method yet, the default method is called. This
+#'   method tries to extract the statistic column from `coef(summary())`,
+#'   where the index of the column that is being pulled is `column_index`.
 #'   Defaults to 3, which is the default statistic column for most models'
 #'   summary-output.
 #' @param component Should all parameters, parameters for the conditional model,
 #'   or for the zero-inflated part of the model be returned? Applies to models
-#'   with zero-inflated component. \code{component} may be one of
-#'   \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"} or \code{"all"}
-#'   (default). For models with smooth terms, \code{component = "smooth_terms"}
-#'   is also possible. May be abbreviated. Note that the \emph{conditional}
-#'   component is also called \emph{count} or \emph{mean} component, depending
+#'   with zero-inflated component. `component` may be one of
+#'   `"conditional"`, `"zi"`, `"zero-inflated"` or `"all"`
+#'   (default). For models with smooth terms, `component = "smooth_terms"`
+#'   is also possible. May be abbreviated. Note that the *conditional*
+#'   component is also called *count* or *mean* component, depending
 #'   on the model.
-#' @param robust Logical, if \code{TRUE}, test statistic based on robust
+#' @param robust Logical, if `TRUE`, test statistic based on robust
 #'   standard errors is returned.
 #' @param adjust Character value naming the method used to adjust p-values or
-#'   confidence intervals. See \code{?emmeans::summary.emmGrid} for details.
-#' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%). Currently
-#'   only applies to objects of class \code{emmGrid}.
+#'   confidence intervals. See `?emmeans::summary.emmGrid` for details.
+#' @param ci Confidence Interval (CI) level. Default to `0.95` (`95%`).
+#'   Currently only applies to objects of class `emmGrid`.
 #' @param ... Currently not used.
 #' @inheritParams get_parameters
 #' @inheritParams get_parameters.emmGrid
@@ -132,6 +132,20 @@ get_statistic.merModList <- function(x, ...) {
     Parameter = s$fe$term,
     Statistic = s$fe$statistic,
     stringsAsFactors = FALSE
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+#' @export
+get_statistic.afex_aov <- function(x, ...) {
+  out <- data.frame(
+    Parameter = rownames(x$anova_table),
+    Statistic = x$anova_table$"F",
+    stringsAsFactors = FALSE,
+    row.names = NULL
   )
 
   out <- .remove_backticks_from_parameter_names(out)

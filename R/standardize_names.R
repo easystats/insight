@@ -1,40 +1,40 @@
 #' Standardize column names
 #'
 #' Standardize column names from data frames, in particular objects returned
-#' from \code{\link[parameters:model_parameters]{model_parameters()}}, so column
+#' from [parameters::model_parameters()], so column
 #' names are consistent and the same for any model object.
 #'
-#' @param data A data frame. In particular, objects from \emph{easystats}
+#' @param data A data frame. In particular, objects from *easystats*
 #'   package functions like
-#'   \code{\link[parameters:model_parameters]{model_parameters()}} or
-#'   \code{\link[effectsize:effectsize]{effectsize()}} are accepted, but also
-#'   data frames returned by \code{broom::tidy()} are valid objects.
+#'   [parameters::model_parameters()] or
+#'   [effectsize::effectsize()] are accepted, but also
+#'   data frames returned by `broom::tidy()` are valid objects.
 #' @param style Standardization can either be based on the naming conventions
-#'   from the \href{https://easystats.github.io/easystats/}{easystats-project},
+#'   from the [easystats-project](https://easystats.github.io/easystats/),
 #'   or on \pkg{broom}'s naming scheme.
-#' @param ignore_estimate Logical, if \code{TRUE}, column names like
-#'   \code{"mean"} or \code{"median"} will \emph{not} be converted to
-#'   \code{"Coefficient"} resp. \code{"estimate"}.
+#' @param ignore_estimate Logical, if `TRUE`, column names like
+#'   `"mean"` or `"median"` will *not* be converted to
+#'   `"Coefficient"` resp. `"estimate"`.
 #' @param ... Currently not used.
 #'
 #' @return A data frame, with standardized column names.
 #'
 #' @details This method is in particular useful for package developers or users
 #'   who use, e.g.,
-#'   \code{\link[parameters:model_parameters]{model_parameters()}} in their own
+#'   [parameters::model_parameters()] in their own
 #'   code or functions to retrieve model parameters for further processing. As
-#'   \code{model_parameters()} returns a data frame with varying column names
+#'   `model_parameters()` returns a data frame with varying column names
 #'   (depending on the input), accessing the required information is probably
-#'   not quite straightforward. In such cases, \code{standardize_names()} can be
+#'   not quite straightforward. In such cases, `standardize_names()` can be
 #'   used to get consistent, i.e. always the same column names, no matter what
-#'   kind of model was used in \code{model_parameters()}.
+#'   kind of model was used in `model_parameters()`.
 #'   \cr \cr
-#'   For \code{style = "broom"}, column names are renamed to match \pkg{broom}'s
-#'   naming scheme, i.e. \code{Parameter} is renamed to \code{term},
-#'   \code{Coefficient} becomes \code{estimate} and so on.
+#'   For `style = "broom"`, column names are renamed to match \pkg{broom}'s
+#'   naming scheme, i.e. `Parameter` is renamed to `term`,
+#'   `Coefficient` becomes `estimate` and so on.
 #'   \cr \cr
-#'   For \code{style = "easystats"}, when \code{data} is an object from
-#'   \code{broom::tidy()}, column names are converted from "broom"-style into
+#'   For `style = "easystats"`, when `data` is an object from
+#'   `broom::tidy()`, column names are converted from "broom"-style into
 #'   "easystats"-style.
 #'
 #' @examples

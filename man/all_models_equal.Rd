@@ -16,11 +16,11 @@ all_models_same_class(..., verbose = FALSE)
 }
 \value{
 A logical, \code{TRUE} if \code{x} are all supported model objects
-  of same class.
+of same class.
 }
 \description{
 Small helper that checks if all objects are \emph{supported}
- (regression) model objects and of same class.
+(regression) model objects and of same class.
 }
 \examples{
 if (require("lme4")) {

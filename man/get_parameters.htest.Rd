@@ -13,7 +13,7 @@
 }
 \value{
 A data frame with two columns: the parameter names and the related
-  point estimates.
+point estimates.
 }
 \description{
 Returns the parameters from a hypothesis test.

@@ -19,23 +19,23 @@ names are the original values of \code{x}.}
 }
 \value{
 The "cleaned" variable names as character vector, i.e. pattern
-  like \code{s()} for splines or \code{log()} are removed from
-  the model terms.
+like \code{s()} for splines or \code{log()} are removed from
+the model terms.
 }
 \description{
 This function "cleans" names of model terms (or a character
-  vector with such names) by removing patterns like \code{log()} or
-  \code{as.factor()} etc.
+vector with such names) by removing patterns like \code{log()} or
+\code{as.factor()} etc.
 }
 \note{
 Typically, this method is intended to work on character vectors,
-  in order to remove patterns that obscure the variable names. For
-  convenience reasons it is also possible to call \code{clean_names()}
-  also on a model object. If \code{x} is a regression model, this
-  function is (almost) equal to calling \code{find_variables()}. The
-  main difference is that \code{clean_names()} always returns a character
-  vector, while \code{find_variables()} returns a list of character
-  vectors, unless \code{flatten = TRUE}. See 'Examples'.
+in order to remove patterns that obscure the variable names. For
+convenience reasons it is also possible to call \code{clean_names()}
+also on a model object. If \code{x} is a regression model, this
+function is (almost) equal to calling \code{find_variables()}. The
+main difference is that \code{clean_names()} always returns a character
+vector, while \code{find_variables()} returns a list of character
+vectors, unless \code{flatten = TRUE}. See 'Examples'.
 }
 \examples{
 # example from ?stats::glm

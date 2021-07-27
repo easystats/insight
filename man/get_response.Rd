@@ -16,12 +16,12 @@ Can be used in case of regression models with multiple response variables.}
 }
 \value{
 The values of the response variable, as vector, or a data frame if
-  \code{x} has more than one defined response variable.
+\code{x} has more than one defined response variable.
 }
 \description{
 Returns the values the response variable(s) from a model object.
-   If the model is a multivariate response model, a data frame with values
-   from all response variables is returned.
+If the model is a multivariate response model, a data frame with values
+from all response variables is returned.
 }
 \examples{
 if (require("lme4")) {

@@ -13,10 +13,10 @@ clean_parameters(x, ...)
 }
 \value{
 A data frame with "cleaned" parameter names and information on
-  effects, component and group where parameters belong to. To be consistent
-  across different models, the returned data frame always has at least four
-  columns \code{Parameter}, \code{Effects}, \code{Component} and
-  \code{Cleaned_Parameter}. See 'Details'.
+effects, component and group where parameters belong to. To be consistent
+across different models, the returned data frame always has at least four
+columns \code{Parameter}, \code{Effects}, \code{Component} and
+\code{Cleaned_Parameter}. See 'Details'.
 }
 \description{
 This function "cleans" names of model parameters by removing
@@ -28,7 +28,7 @@ The main purpose of this function is to easily filter and select model parameter
 in particular of - but not limited to - posterior samples from Stan models,
 depending on certain characteristics. This might be useful when only selective
 results should be reported or results from all parameters should be filtered
-to return only certain results (see \code{\link{print_parameters}}).
+to return only certain results (see \code{\link[=print_parameters]{print_parameters()}}).
 }
 \details{
 The \code{Effects} column indicate if a parameter is a \emph{fixed}

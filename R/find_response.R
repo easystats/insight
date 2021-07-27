@@ -4,14 +4,14 @@
 #' @description Returns the name(s) of the response variable(s) from a model object.
 #'
 #' @param x A fitted model.
-#' @param combine Logical, if \code{TRUE} and the response is a matrix-column,
+#' @param combine Logical, if `TRUE` and the response is a matrix-column,
 #'    the name of the response matches the notation in formula, and would for
-#'    instance also contain patterns like \code{"cbind(...)"}. Else, the original
+#'    instance also contain patterns like `"cbind(...)"`. Else, the original
 #'    variable names from the matrix-column are returned. See 'Examples'.
 #' @param ... Currently not used.
 #'
-#' @return The name(s) of the response variable(s) from \code{x} as character
-#'   vector, or \code{NULL} if response variable could not be found.
+#' @return The name(s) of the response variable(s) from `x` as character
+#'   vector, or `NULL` if response variable could not be found.
 #'
 #' @examples
 #' if (require("lme4")) {

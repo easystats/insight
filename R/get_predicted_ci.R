@@ -5,10 +5,10 @@
 #'
 #' @inheritParams get_predicted
 #' @param predictions A vector of predicted values (as obtained by
-#'   \code{stats::fitted()}, \code{stats::predict()} or
-#'   \code{\link{get_predicted}}).
-#' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
-#' @param ci_type Can be \code{"prediction"} or \code{"confidence"}. Prediction
+#'   `stats::fitted()`, `stats::predict()` or
+#'   [get_predicted()]).
+#' @param ci The interval level (default `0.95`, i.e., `95%` CI).
+#' @param ci_type Can be `"prediction"` or `"confidence"`. Prediction
 #'   intervals show the range that likely contains the value of a new
 #'   observation (in what range it would fall), whereas confidence intervals
 #'   reflect the uncertainty around the estimated parameters (and gives the
@@ -18,28 +18,28 @@
 #'   Thus, prediction intervals are always wider than confidence intervals.
 #'   Moreover, prediction intervals will not necessarily become narrower as the
 #'   sample size increases (as they do not reflect only the quality of the fit).
-#'   This applies mostly for "simple" linear models (like \code{lm}), as for
-#'   other models (e.g., \code{glm}), prediction intervals are somewhat useless
+#'   This applies mostly for "simple" linear models (like `lm`), as for
+#'   other models (e.g., `glm`), prediction intervals are somewhat useless
 #'   (for instance, for a binomial model for which the dependent variable is a
-#'   vector of 1s and 0s, the prediction interval is... \code{[0, 1]}).
+#'   vector of 1s and 0s, the prediction interval is... `[0, 1]`).
 #' @param vcov_estimation String, indicating the suffix of the
-#'   \code{vcov*()}-function from the \pkg{sandwich} or \pkg{clubSandwich}
-#'   package, e.g. \code{vcov_estimation = "CL"} (which calls
-#'   \code{\link[sandwich]{vcovCL}} to compute clustered covariance matrix
-#'   estimators), or \code{vcov_estimation = "HC"} (which calls
-#'   \code{\link[sandwich:vcovHC]{vcovHC()}} to compute
+#'   `vcov*()`-function from the \pkg{sandwich} or \pkg{clubSandwich}
+#'   package, e.g. `vcov_estimation = "CL"` (which calls
+#'   [sandwich::vcovCL()] to compute clustered covariance matrix
+#'   estimators), or `vcov_estimation = "HC"` (which calls
+#'   [sandwich::vcovHC()] to compute
 #'   heteroskedasticity-consistent covariance matrix estimators).
 #' @param vcov_type Character vector, specifying the estimation type for the
 #'   robust covariance matrix estimation (see
-#'   \code{\link[sandwich:vcovHC]{vcovHC()}} or \code{clubSandwich::vcovCR()}
+#'   [sandwich::vcovHC()] or `clubSandwich::vcovCR()`
 #'   for details).
 #' @param vcov_args List of named vectors, used as additional arguments that are
 #'   passed down to the \pkg{sandwich}-function specified in
-#'   \code{vcov_estimation}.
+#'   `vcov_estimation`.
 #' @param dispersion_method,ci_method These arguments are only used in
 #'   the context of bootstrapped and Bayesian models. Possible values are
-#'   \code{dispersion_method = c("sd", "mad")} and
-#'   \code{ci_method = c("quantile", "hdi", "eti")}. For the latter, the
+#'   `dispersion_method = c("sd", "mad")` and
+#'   `ci_method = c("quantile", "hdi", "eti")`. For the latter, the
 #'   \pkg{bayestestR} package is required.
 #' @param ... Not used for now.
 #'
@@ -89,18 +89,27 @@
 #' ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 #' head(ci_vals)
 #' @export
-get_predicted_ci <- function(x,
-                             predictions = NULL,
-                             data = NULL,
-                             ci = 0.95,
-                             ci_type = "confidence",
-                             vcov_estimation = NULL,
-                             vcov_type = NULL,
-                             vcov_args = NULL,
-                             dispersion_method = "sd",
-                             ci_method = "quantile",
-                             ...) {
+get_predicted_ci <- function(x, predictions = NULL, ...) {
+  UseMethod("get_predicted_ci")
+}
 
+
+
+# General method ----------------------------------------------------------
+
+#' @rdname get_predicted_ci
+#' @export
+get_predicted_ci.default <- function(x,
+                                     predictions = NULL,
+                                     data = NULL,
+                                     ci = 0.95,
+                                     ci_type = "confidence",
+                                     vcov_estimation = NULL,
+                                     vcov_type = NULL,
+                                     vcov_args = NULL,
+                                     dispersion_method = "sd",
+                                     ci_method = "quantile",
+                                     ...) {
   # If draws are present (bootstrapped or Bayesian)
   if ("iterations" %in% names(attributes(predictions))) {
     iter <- attributes(predictions)$iteration
@@ -114,7 +123,15 @@ get_predicted_ci <- function(x,
   # Analytical solution
   # 1. Find appropriate interval function
   if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian")) { # gaussian or CI
-    se <- get_predicted_se(x, predictions, data = data, ci_type = ci_type, vcov_estimation = vcov_estimation, vcov_type = vcov_type, vcov_args = vcov_args)
+    se <- get_predicted_se(
+      x,
+      predictions,
+      data = data,
+      ci_type = ci_type,
+      vcov_estimation = vcov_estimation,
+      vcov_type = vcov_type,
+      vcov_args = vcov_args
+    )
     ci_function <- .get_predicted_se_to_ci
   } else {
     se <- rep(NA, length(predictions))
@@ -140,6 +157,13 @@ get_predicted_ci <- function(x,
 }
 
 
+# Specific definitions ----------------------------------------------------
+
+#' @export
+get_predicted_ci.mlm <- function(x, ...) {
+  stop("TBD")
+}
+
 
 # Get Variance-covariance Matrix ---------------------------------------------------
 
@@ -155,10 +179,12 @@ get_predicted_ci <- function(x,
     if (!grepl("^vcov", vcov_estimation)) {
       vcov_estimation <- paste0("vcov", vcov_estimation)
     }
+
     # set default for clubSandwich
     if (vcov_estimation == "vcovCR" && is.null(vcov_type)) {
       vcov_type <- "CR0"
     }
+
     if (!is.null(vcov_type) && vcov_type %in% c("CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3")) {
       # installed?
       check_if_installed("clubSandwich")
@@ -169,6 +195,7 @@ get_predicted_ci <- function(x,
       check_if_installed("sandwich")
       robust_package <- "sandwich"
     }
+
     # compute robust standard errors based on vcov
     if (robust_package == "sandwich") {
       vcov_estimation <- get(vcov_estimation, asNamespace("sandwich"))
@@ -183,7 +210,6 @@ get_predicted_ci <- function(x,
   }
   vcovmat
 }
-
 
 
 # Get Model matrix ------------------------------------------------------------
@@ -249,7 +275,6 @@ get_predicted_se <- function(x,
                              vcov_estimation = NULL,
                              vcov_type = NULL,
                              vcov_args = NULL) {
-
 
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'

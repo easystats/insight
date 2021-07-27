@@ -305,8 +305,9 @@
     fixed.component.data <- unlist(fixed.component.data)
     random.component.data <- unlist(random.component.data)
   } else {
+    all_elements <- intersect(names(model.terms), .get_elements("fixed", "all"))
     fixed.component.data <- switch(component,
-      all = c(model.terms$conditional, model.terms$zero_inflated, model.terms$dispersion),
+      all = unlist(model.terms[all_elements]),
       conditional = model.terms$conditional,
       zi = ,
       zero_inflated = model.terms$zero_inflated,
@@ -705,7 +706,9 @@
         } else {
           max_len <- max(sapply(columns, length))
           for (i in 1:length(columns)) {
-            columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
+            if (length(columns[[i]]) < max_len) {
+              columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
+            }
           }
           d <- as.data.frame(columns)
         }

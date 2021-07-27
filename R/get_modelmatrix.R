@@ -3,7 +3,7 @@
 #' Creates a design matrix from the description. Any character variables are coerced to factors.
 #'
 #' @param x An object.
-#' @param ... Passed down to other methods (mainly \code{model.matrix()}).
+#' @param ... Passed down to other methods (mainly `model.matrix()`).
 #'
 #' @examples
 #' data(mtcars)
@@ -54,6 +54,10 @@ get_modelmatrix.cpglmm <- function(x, ...) {
   cplm::model.matrix(x, ...)
 }
 
+#' @export
+get_modelmatrix.afex_aov <- function(x, ...) {
+  stats::model.matrix(object = x$lm, ...)
+}
 
 # helper ----------------
 

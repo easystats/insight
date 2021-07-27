@@ -3,7 +3,7 @@ if (require("testthat") && require("insight") && require("lme4")) {
     m <- lm(Sepal.Length ~ -1 + Petal.Width + Species, data = iris)
     expect_equal(
       find_terms(m),
-      list(response = "Sepal.Length", conditional = c("Petal.Width", "Species", "-1"))
+      list(response = "Sepal.Length", conditional = c("Petal.Width", "Species"))
     )
     expect_false(has_intercept(m))
   })
@@ -12,7 +12,7 @@ if (require("testthat") && require("insight") && require("lme4")) {
     m <- lm(Sepal.Length ~ 0 + Petal.Width + Species, data = iris)
     expect_equal(
       find_terms(m),
-      list(response = "Sepal.Length", conditional = c("0", "Petal.Width", "Species"))
+      list(response = "Sepal.Length", conditional = c("Petal.Width", "Species"))
     )
     expect_false(has_intercept(m))
   })
@@ -21,7 +21,7 @@ if (require("testthat") && require("insight") && require("lme4")) {
     m <- lm(Sepal.Length ~ Petal.Width + Species - 1, data = iris)
     expect_equal(
       find_terms(m),
-      list(response = "Sepal.Length", conditional = c("Petal.Width", "Species", "-1"))
+      list(response = "Sepal.Length", conditional = c("Petal.Width", "Species"))
     )
     expect_false(has_intercept(m))
   })

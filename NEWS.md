@@ -4,6 +4,15 @@
 
 * `get_predicted()` gains a new option, `predict = "response"` for binomial models.
 
+## Bug fixes
+
+* Fixed issue in `get_data()` for *brms* models with auxiliary parameters.
+
+* Fixed issue in `find_formula()` for *brms* models with auxiliary parameters.
+
+* Fixed issue where `get_data()` for *htest* objects did not always preserve
+  factors.
+
 # insight 0.14.2
 
 ## Changes to functions

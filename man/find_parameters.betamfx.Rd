@@ -47,15 +47,15 @@ as character vector, not as list. Duplicated values are removed.}
 \value{
 A list of parameter names. The returned list may have following
 elements:
-   \itemize{
-     \item \code{conditional}, the "fixed effects" part from the model.
-     \item \code{marginal}, the marginal effects.
-     \item \code{precision}, the precision parameter.
-   }
+\itemize{
+\item \code{conditional}, the "fixed effects" part from the model.
+\item \code{marginal}, the marginal effects.
+\item \code{precision}, the precision parameter.
+}
 }
 \description{
 Returns the names of model parameters, like they typically
-    appear in the \code{summary()} output.
+appear in the \code{summary()} output.
 }
 \examples{
 data(mtcars)

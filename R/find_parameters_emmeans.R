@@ -9,7 +9,7 @@
 #' @inheritParams get_parameters.emmGrid
 #'
 #' @return A list of parameter names. For simple models, only one list-element,
-#'    \code{conditional}, is returned.
+#'    `conditional`, is returned.
 #'
 #' @examples
 #' data(mtcars)
