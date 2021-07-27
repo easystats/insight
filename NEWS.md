@@ -4,6 +4,9 @@
 
 * `get_predicted()` gains a new option, `predict = "response"` for binomial models.
 
+* Improved stability of `get_variance()` when computing random-slope-intercept
+  correlation with categorical random slopes.
+
 ## Bug fixes
 
 * Fixed issue in `get_data()` for *brms* models with auxiliary parameters.
