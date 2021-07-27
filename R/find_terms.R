@@ -1,10 +1,10 @@
 #' @title Find all model terms
 #' @name find_terms
 #'
-#' @description Returns a list with the names of all terms, including
-#'   response value and random effects, "as is". This means, on-the-fly
-#'   tranformations or arithmetic expressions like `log()`, `I()`,
-#'   `as.factor()` etc. are preserved.
+#' @description Stable implementation of `stats::terms()`. Returns a list with
+#'   the names of all terms, including response value and random effects, "as is".
+#'   This means, on-the-fly tranformations or arithmetic expressions like `log()`,
+#'   `I()`, `as.factor()` etc. are preserved.
 #'
 #' @inheritParams find_formula
 #' @inheritParams find_predictors
@@ -54,9 +54,9 @@ find_terms.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   resp <- find_response(x, verbose = FALSE)
 
   if (is_multivariate(f) || isTRUE(attributes(f)$two_stage)) {
-    l <- lapply(f, .find_terms, resp = resp)
+    l <- lapply(f, .get_variables_list, resp = resp)
   } else {
-    l <- .find_terms(f, resp)
+    l <- .get_variables_list(f, resp)
   }
 
   if (flatten) {
@@ -69,8 +69,12 @@ find_terms.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
 .find_terms <- function(f, response) {
   out <- lapply(f, function(i) {
-    f_terms <- unname(attr(stats::terms(i), "term.labels"))
-    sub("(.*)::(.*)", "\\2", f_terms)
+    if (is.list(i)) {
+      .find_terms(i, response = NULL)
+    } else {
+      f_terms <- unname(attr(stats::terms(i), "term.labels"))
+      sub("(.*)::(.*)", "\\2", f_terms)
+    }
   })
 
   .compact_list(c(list(response = response), out))

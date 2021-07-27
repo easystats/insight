@@ -728,7 +728,7 @@ clean_parameters.mlm <- function(x, ...) {
 # Fix random effects assignment for smooth terms
 #
 # This function checks whether smooth terms were used as random effects,
-# (i.e. s(term, by="re")) and if so, the value in the "effecs" column will
+# (i.e. s(term, by="re")) and if so, the value in the "effects" column will
 # be set to "random".
 #
 .fix_random_effect_smooth <- function(x, out) {
