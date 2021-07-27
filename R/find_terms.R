@@ -54,9 +54,9 @@ find_terms.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   resp <- find_response(x, verbose = FALSE)
 
   if (is_multivariate(f) || isTRUE(attributes(f)$two_stage)) {
-    l <- lapply(f, .get_variables_list, resp = resp)
+    l <- lapply(f, .find_terms, resp = resp)
   } else {
-    l <- .get_variables_list(f, resp)
+    l <- .find_terms(f, resp)
   }
 
   if (flatten) {
@@ -65,6 +65,17 @@ find_terms.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
     l
   }
 }
+
+
+.find_terms <- function(f, response) {
+  out <- lapply(f, function(i) {
+    f_terms <- unname(attr(stats::terms(i), "term.labels"))
+    sub("(.*)::(.*)", "\\2", f_terms)
+  })
+
+  .compact_list(c(list(response = response), out))
+}
+
 
 
 #' @export
