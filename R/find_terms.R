@@ -1,10 +1,10 @@
 #' @title Find all model terms
 #' @name find_terms
 #'
-#' @description Stable implementation of `stats::terms()`. Returns a list with
-#'   the names of all terms, including response value and random effects, "as is".
-#'   This means, on-the-fly tranformations or arithmetic expressions like `log()`,
-#'   `I()`, `as.factor()` etc. are preserved.
+#' @description Returns a list with the names of all terms, including response
+#'   value and random effects, "as is". This means, on-the-fly tranformations
+#'   or arithmetic expressions like `log()`, `I()`, `as.factor()` etc. are
+#'   preserved.
 #'
 #' @inheritParams find_formula
 #' @inheritParams find_predictors

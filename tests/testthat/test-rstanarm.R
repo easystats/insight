@@ -104,8 +104,12 @@ if (.runThisTest) {
     data("Orange", package = "datasets")
     Orange$circumference <- Orange$circumference / 100
     Orange$age <- Orange$age / 100
+
+
+    ## TODO probably re-enable once strange check error is resolved
+
     # m14 <- stan_nlmer(
-    #   circumference ~ stats::SSlogis(age, Asym, xmid, scal) ~ Asym | Tree,
+    #   circumference ~ SSlogis(age, Asym, xmid, scal) ~ Asym | Tree,
     #   data = Orange,
     #   # for speed only
     #   chains = 1,

@@ -32,10 +32,10 @@ Returns \code{NULL} if no terms could be found (for instance, due to
 problems in accessing the formula).
 }
 \description{
-Stable implementation of \code{stats::terms()}. Returns a list with
-the names of all terms, including response value and random effects, "as is".
-This means, on-the-fly tranformations or arithmetic expressions like \code{log()},
-\code{I()}, \code{as.factor()} etc. are preserved.
+Returns a list with the names of all terms, including response
+value and random effects, "as is". This means, on-the-fly tranformations
+or arithmetic expressions like \code{log()}, \code{I()}, \code{as.factor()} etc. are
+preserved.
 }
 \note{
 The difference to \code{\link[=find_variables]{find_variables()}} is that \code{find_terms()}
