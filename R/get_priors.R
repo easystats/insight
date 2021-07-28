@@ -256,6 +256,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   # This function is taken from brms:::print.brmsprior
   # which adds information using private functions upon printing
   # but doesn't return it
+  check_if_installed("brms")
 
   .stan_base_prior <- function(prior) {
     stopifnot(length(unique(prior$class)) <= 1)
@@ -295,7 +296,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   }
 
 
-  stopifnot(is.brmsprior(x))
+  stopifnot(brms::is.brmsprior(x))
   x$source[!nzchar(x$source)] <- "(unknown)"
   # column names to vectorize over
   cols <- c("group", "nlpar", "dpar", "resp", "class")
