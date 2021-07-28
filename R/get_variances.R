@@ -29,6 +29,7 @@
 #'      \item `var.intercept`, the random-intercept-variance, or between-subject-variance (\ifelse{html}{\out{&tau;<sub>00</sub>}}{\eqn{\tau_{00}}})
 #'      \item `var.slope`, the random-slope-variance (\ifelse{html}{\out{&tau;<sub>11</sub>}}{\eqn{\tau_{11}}})
 #'      \item `cor.slope_intercept`, the random-slope-intercept-correlation (\ifelse{html}{\out{&rho;<sub>01</sub>}}{\eqn{\rho_{01}}})
+#'      \item `cor.slopes`, the correlation between random slopes (\ifelse{html}{\out{&rho;<sub>00</sub>}}{\eqn{\rho_{00}}})
 #'    }
 #'
 #' @details This function returns different variance components from mixed models,
@@ -117,13 +118,13 @@
 #' get_variance_residual(m)
 #' }
 #' @export
-get_variance <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
+get_variance <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, ...) {
   UseMethod("get_variance")
 }
 
 
 #' @export
-get_variance.default <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, ...) {
+get_variance.default <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
   }
@@ -132,7 +133,7 @@ get_variance.default <- function(x, component = c("all", "fixed", "random", "res
 
 
 #' @export
-get_variance.merMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, tolerance = 1e-5, ...) {
+get_variance.merMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, tolerance = 1e-5, ...) {
   component <- match.arg(component)
   tryCatch(
     {
@@ -177,7 +178,7 @@ get_variance.brmsfit <- get_variance.merMod
 
 
 #' @export
-get_variance.glmmTMB <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, tolerance = 1e-5, model_component = NULL, ...) {
+get_variance.glmmTMB <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, tolerance = 1e-5, model_component = NULL, ...) {
   component <- match.arg(component)
   tryCatch(
     {
@@ -194,7 +195,7 @@ get_variance.MixMod <- get_variance.glmmTMB
 
 
 #' @export
-get_variance.mixed <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01"), verbose = TRUE, tolerance = 1e-5, ...) {
+get_variance.mixed <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, tolerance = 1e-5, ...) {
   component <- match.arg(component)
   .compute_variances(x$full_model, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose, tolerance = tolerance)
 }
@@ -246,4 +247,10 @@ get_variance_slope <- function(x, verbose = TRUE, ...) {
 #' @export
 get_correlation_slope_intercept <- function(x, verbose = TRUE, ...) {
   unlist(get_variance(x, component = "rho01", verbose = verbose, ...))
+}
+
+#' @rdname get_variance
+#' @export
+get_correlation_slopes <- function(x, verbose = TRUE, ...) {
+  unlist(get_variance(x, component = "rho00", verbose = verbose, ...))
 }

@@ -10,12 +10,13 @@
 \alias{get_variance_intercept}
 \alias{get_variance_slope}
 \alias{get_correlation_slope_intercept}
+\alias{get_correlation_slopes}
 \title{Get variance components from random effects models}
 \usage{
 get_variance(
   x,
   component = c("all", "fixed", "random", "residual", "distribution", "dispersion",
-    "intercept", "slope", "rho01"),
+    "intercept", "slope", "rho01", "rho00"),
   verbose = TRUE,
   ...
 )
@@ -35,6 +36,8 @@ get_variance_intercept(x, verbose = TRUE, ...)
 get_variance_slope(x, verbose = TRUE, ...)
 
 get_correlation_slope_intercept(x, verbose = TRUE, ...)
+
+get_correlation_slopes(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A mixed effects model.}
@@ -65,6 +68,7 @@ A list with following elements:
 \item \code{var.intercept}, the random-intercept-variance, or between-subject-variance (\ifelse{html}{\out{&tau;<sub>00</sub>}}{\eqn{\tau_{00}}})
 \item \code{var.slope}, the random-slope-variance (\ifelse{html}{\out{&tau;<sub>11</sub>}}{\eqn{\tau_{11}}})
 \item \code{cor.slope_intercept}, the random-slope-intercept-correlation (\ifelse{html}{\out{&rho;<sub>01</sub>}}{\eqn{\rho_{01}}})
+\item \code{cor.slopes}, the correlation between random slopes (\ifelse{html}{\out{&rho;<sub>00</sub>}}{\eqn{\rho_{00}}})
 }
 }
 \description{

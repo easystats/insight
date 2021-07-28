@@ -116,7 +116,7 @@
     cor.slope_intercept <- .random_slope_intercept_corr(vals, x)
   }
 
-  if (component %in% c("all")) {
+  if (component %in% c("rho00", "all")) {
     cor.slopes <- .random_slopes_corr(vals, x)
   }
 
