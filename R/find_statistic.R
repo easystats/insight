@@ -86,14 +86,15 @@ find_statistic <- function(x, ...) {
 
   z.mods <- c(
     "aareg", "Arima", "averaging",
-    "betamfx", "betaor", "betareg", "bife", "bglmerMod", "boot_test_mediation",
-    "bracl", "brglm", "brglmFit", "brmultinom", "btergm",
+    "betamfx", "betaor", "betareg", "bife", "bifeAPEs", "bglmerMod",
+    "boot_test_mediation", "bracl", "brglm", "brglmFit", "brmultinom", "btergm",
     "cglm", "cph", "clm", "clm2", "clmm", "clmm2", "clogit", "coxme", "coxph",
     "coxr", "crch", "crr",
     "DirichletRegModel",
     "ergm",
     "feglm", "flexsurvreg",
-    "gee", "glimML", "glmm", "glmmadmb", "glmmLasso", "glmmTMB", "glmx", "gmnl",
+    "gee", "glimML", "glmm", "glmmadmb", "glmmFit", "glmmLasso", "glmmTMB",
+    "glmx", "gmnl",
     "hurdle",
     "lavaan", "loggammacenslmrob", "logitmfx", "logitor", "LORgee", "lrm",
     "margins", "metaplus", "mixor", "MixMod", "mjoint", "mle", "mle2", "mlogit",
@@ -180,7 +181,7 @@ find_statistic <- function(x, ...) {
 
   unsupported.mods <- c(
     "bcplm", "BFBayesFactor", "brmsfit",
-    "gbm",
+    "gbm", "glmmEP",
     "joint",
     "list",
     "MCMCglmm", "mediate", "mlergm",
