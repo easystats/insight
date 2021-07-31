@@ -62,10 +62,10 @@ is_regression_model <- function(x) {
     # b --------------------
     "bamlss", "bamlss.frame", "bayesGAM", "bayesmeta", "bayesx",
     "bayesQR", "BBmm", "BBreg", "bcplm", "betamfx", "betaor",
-    "betareg", "BFBayesFactor", "BGGM", "bglmerMod", "bife",
+    "betareg", "BFBayesFactor", "BGGM", "bglmerMod", "bife", "bifeAPEs",
     "biglm", "bigglm", "blrm", "blavaan", "blmerMod",
     "boot_test_mediation", "bracl", "brglm", "brglmFit", "brmsfit",
-    "brmultinom", "bsem", "btergm",
+    "brmultinom", "bsem", "btergm", "buildmer",
 
     # c --------------------
     "cch", "censReg", "cgam", "cgamm", "cglm", "clm", "clm2",
@@ -87,9 +87,9 @@ is_regression_model <- function(x) {
     "gam", "Gam", "GAMBoost", "gamlr", "gamlss", "gamm", "gamm4",
     "garch", "gbm", "gee", "geeglm", "gjrm", "glht", "glimML", "Glm", "glm",
     "glmaag", "glmbb", "glmboostLSS", "glmc", "glmdm", "glmdisc",
-    "glmerMod", "glmlep", "glmm", "glmmadmb", "glmmEP", "glmmfields",
-    "glmmLasso", "glmmPQL", "glmmTMB", "glmnet", "glmrob", "glmRob",
-    "glmx", "gls", "gmnl", "gmm", "gnls", "gsm",
+    "glmerMod", "glmlep", "glmm", "glmmadmb", "glmmEP", "glmmFit",
+    "glmmfields", "glmmLasso", "glmmPQL", "glmmTMB", "glmnet", "glmrob",
+    "glmRob", "glmx", "gls", "gmnl", "gmm", "gnls", "gsm",
 
     # h --------------------
     "heavyLme", "HLfit", "htest", "hurdle",
