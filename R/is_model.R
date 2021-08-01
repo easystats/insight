@@ -141,6 +141,7 @@ is_regression_model <- function(x) {
     "sarlm", "scam", "selection", "sem", "SemiParBIV", "slm", "speedlm",
     "speedglm", "splmm", "spml", "stanmvreg", "stanreg", "summary.lm",
     "survfit", "survreg", "survPresmooth", "svyglm", "svy_vglm", "svyolr",
+    "systemfit",
 
     # t --------------------
     "t1way", "t2way", "t3way", "test_mediation", "tobit", "trendPMCMR",
