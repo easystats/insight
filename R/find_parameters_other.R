@@ -156,9 +156,9 @@ find_parameters.systemfit <- function(x, flatten = FALSE, ...) {
   for (i in 1:length(s$eq)) {
     p <- list(row.names(stats::coef(s$eq[[i]])))
     l[length(l) + 1] <- p
-    names(l) <- paste0("equation", i)
   }
 
+  names(l) <- paste0("equation", 1:length(l))
   out <- list(conditional = l)
 
   if (flatten) {
