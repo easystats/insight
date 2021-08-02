@@ -1858,13 +1858,16 @@ get_statistic.systemfit <- function(x, ...) {
     params <- grepl(pattern, parameter_names)
     data.frame(
       Parameter = gsub(pattern, "\\1", parameter_names[params]),
-      Estimate = as.vector(cf[params, 3]),
+      Statistic = as.vector(cf[params, 3]),
       Component = i,
       stringsAsFactors = FALSE
     )
   })
 
-  do.call(rbind, out)
+  out <- do.call(rbind, out)
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
 }
 
 
