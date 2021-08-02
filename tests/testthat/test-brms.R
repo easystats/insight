@@ -182,7 +182,8 @@ if (.runThisTest) {
           response = "y",
           conditional = "x",
           random = "id",
-          sigma = c("x", "i", "id")
+          sigma = "x",
+          sigma_random = "id"
         )
       )
       expect_identical(

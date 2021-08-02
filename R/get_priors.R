@@ -224,17 +224,17 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
   # Loop through all parameters and try to retrieve its correct prior
   out <- data.frame()
-  for(p in params) {
+  for (p in params) {
 
     subset <- priors[priors$Parameter == p, ]
 
     # If nothing corresponding directly to the parameter...
-    if(nrow(subset) == 0) {
+    if (nrow(subset) == 0) {
       # Special treatment for cor_*
       subset <- priors[sapply(priors$Parameter, grepl, x = p), ]
 
       # If still empty, make empty df
-      if(nrow(subset) == 0) {
+      if (nrow(subset) == 0) {
         subset <- setNames(data.frame(t(rep(NA, 5))), c("Parameter", "Distribution", "Location", "Scale", "df"))
       }
     }
@@ -297,6 +297,9 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
 
   stopifnot(brms::is.brmsprior(x))
+  if (is.null(x$source)) {
+    x$source <- "(unknown)"
+  }
   x$source[!nzchar(x$source)] <- "(unknown)"
   # column names to vectorize over
   cols <- c("group", "nlpar", "dpar", "resp", "class")
