@@ -41,7 +41,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_predictors(m)
 #' @export
-find_predictors <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+find_predictors <- function(x, ...) {
   UseMethod("find_predictors")
 }
 

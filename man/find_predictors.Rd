@@ -5,7 +5,7 @@
 \alias{find_predictors.default}
 \title{Find names of model predictors}
 \usage{
-find_predictors(x, flatten = FALSE, verbose = TRUE, ...)
+find_predictors(x, ...)
 
 \method{find_predictors}{default}(
   x,
@@ -20,11 +20,6 @@ find_predictors(x, flatten = FALSE, verbose = TRUE, ...)
 \arguments{
 \item{x}{A fitted model.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
-
-\item{verbose}{Toggle warnings.}
-
 \item{...}{Currently not used.}
 
 \item{effects}{Should variables for fixed effects, random effects
@@ -37,6 +32,11 @@ with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
 component, depending on the model.}
+
+\item{flatten}{Logical, if \code{TRUE}, the values are returned
+as character vector, not as list. Duplicated values are removed.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A list of character vectors that represent the name(s) of the
