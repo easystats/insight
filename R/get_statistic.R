@@ -1074,7 +1074,7 @@ get_statistic.model_fit <- function(x, ...) {
 
 
 #' @export
-get_statistic.sarlm <- function(x, ...) {
+get_statistic.Sarlm <- function(x, ...) {
   s <- summary(x)
   # add rho, if present
   if (!is.null(s$rho)) {

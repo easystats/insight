@@ -99,7 +99,7 @@ supported_models <- function() {
     "robtab", "RM", "rma", "rma.uni", "robmixglm", "rq", "rqs", "rqss",
 
     # s ----------------------------
-    "sarlm", "scam", "selection", "sem", "semLm", "semLme", "SemiParBIV", "slm",
+    "Sarlm", "scam", "selection", "sem", "semLm", "semLme", "SemiParBIV", "slm",
     "speedlm", "speedglm", "stanfit", "stanmvreg", "stanreg", "summary.lm",
     "survfit", "survreg", "svy_vglm", "svyglm", "svyolr",
 
