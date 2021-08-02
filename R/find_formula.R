@@ -1483,6 +1483,12 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   f_bias <- f$pforms$bias
   f_bs <- f$pforms$bs
 
+  f_sigmarandom <- NULL
+  f_betarandom <- NULL
+
+
+  # split zero-inflated fixed from zero-inflated random
+
   if (!.is_empty_object(f_zi)) {
     f_zirandom <- lapply(.findbars(f_zi), function(.x) {
       f <- .safe_deparse(.x)
@@ -1497,13 +1503,50 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     f_zi <- stats::as.formula(.get_fixed_effects(f_zi))
   }
 
+
+  # split sigma fixed from sigma random
+
+  if (!.is_empty_object(f_sigma)) {
+    f_sigmarandom <- lapply(.findbars(f_sigma), function(.x) {
+      f <- .safe_deparse(.x)
+      stats::as.formula(paste0("~", f))
+    })
+
+    if (length(f_sigmarandom) == 1) {
+      f_sigmarandom <- f_sigmarandom[[1]]
+    }
+
+    f_sigma <- stats::as.formula(paste0("~", .safe_deparse(f_sigma[[3L]])))
+    f_sigma <- stats::as.formula(.get_fixed_effects(f_sigma))
+  }
+
+
+  # split beta fixed from beta random
+
+  if (!.is_empty_object(f_beta)) {
+    f_betarandom <- lapply(.findbars(f_beta), function(.x) {
+      f <- .safe_deparse(.x)
+      stats::as.formula(paste0("~", f))
+    })
+
+    if (length(f_betarandom) == 1) {
+      f_betarandom <- f_betarandom[[1]]
+    }
+
+    f_beta <- stats::as.formula(paste0("~", .safe_deparse(f_beta[[3L]])))
+    f_beta <- stats::as.formula(.get_fixed_effects(f_beta))
+  }
+
+
   .compact_list(list(
     conditional = f_cond,
     random = f_random,
     zero_inflated = f_zi,
     zero_inflated_random = f_zirandom,
     sigma = f_sigma,
+    sigma_random = f_sigmarandom,
     beta = f_beta,
+    beta_random = f_betarandom,
     shape = f_shape,
     phi = f_phi,
     hurdle = f_hu,

@@ -254,7 +254,7 @@
     "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale",
     "marginal", "alpha", "beta", "survival", "infrequent_purchase", "auxiliary",
     "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi", "aux", "dist",
-    "selection", "outcome", "time_dummies"
+    "selection", "outcome", "time_dummies", "sigma_random", "beta_random"
   )
 }
 
@@ -262,7 +262,10 @@
   c(
     "sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape",
     "phi", "(phi)", "ndt", "hu", "xi", "coi", "zoi", "mix", "shiftprop", "auxiliary",
-    "aux", "dist"
+    "aux", "dist",
+
+    # random parameters
+    "sigma_random", "beta_random"
   )
 }
 
@@ -278,7 +281,7 @@
   auxiliary_parameters <- .aux_elements()
 
   # random parameters
-  random_parameters <- c("random", "zero_inflated_random")
+  random_parameters <- c("random", "zero_inflated_random", "sigma_random", "beta_random")
 
   # conditional component
   conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "smooth_terms"))

@@ -234,7 +234,7 @@ find_parameters.brmsfit <- function(x,
 
   cond <- fe[grepl("^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
   zi <- fe[grepl("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
-  rand <- fe[grepl("(?!.*__zi)(?=.*^r_)", fe, perl = TRUE) & !grepl("^prior_", fe, perl = TRUE)]
+  rand <- fe[grepl("(?!.*__(zi|sigma|beta))(?=.*^r_)", fe, perl = TRUE) & !grepl("^prior_", fe, perl = TRUE)]
   randzi <- fe[grepl("^r_(.*__zi)", fe, perl = TRUE)]
   rand_sd <- fe[grepl("(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
   randzi_sd <- fe[grepl("^sd_(.*_zi)", fe, perl = TRUE)]
@@ -244,7 +244,9 @@ find_parameters.brmsfit <- function(x,
   smooth_terms <- fe[grepl("^sds_", fe, perl = TRUE)]
   priors <- fe[grepl("^prior_", fe, perl = TRUE)]
   sigma <- fe[grepl("^sigma_", fe, perl = TRUE) | grepl("sigma", fe, fixed = TRUE)]
+  randsigma <- fe[grepl("^r_(.*__sigma)", fe, perl = TRUE)]
   beta <- fe[grepl("beta", fe, fixed = TRUE)]
+  randbeta <- fe[grepl("^r_(.*__beta)", fe, perl = TRUE)]
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
   shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
   dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
@@ -253,8 +255,8 @@ find_parameters.brmsfit <- function(x,
   # if auxiliary is modelled directly, we need to remove duplicates here
   # e.g. "b_sigma..." is in "cond" and in "sigma" now, we just need it in "cond".
 
-  sigma <- setdiff(sigma, c(cond, rand, rand_sd, rand_cor, "prior_sigma"))
-  beta <- setdiff(beta, c(cond, rand, rand_sd, rand_cor))
+  sigma <- setdiff(sigma, c(cond, rand, rand_sd, rand_cor, randsigma, "prior_sigma"))
+  beta <- setdiff(beta, c(cond, rand, rand_sd, randbeta, rand_cor))
   auxiliary <- setdiff(auxiliary, c(cond, rand, rand_sd, rand_cor))
 
   l <- .compact_list(list(
@@ -265,7 +267,9 @@ find_parameters.brmsfit <- function(x,
     simplex = simo,
     smooth_terms = smooth_terms,
     sigma = sigma,
+    sigma_random = randsigma,
     beta = beta,
+    beta_random = randbeta,
     dispersion = dispersion,
     mix = mix,
     shiftprop = shiftprop,

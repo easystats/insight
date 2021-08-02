@@ -187,5 +187,15 @@ find_predictors.afex_aov <- function(x,
     f[["zero_inflated_random"]] <- .get_group_factor(x, f[["zero_inflated_random"]])
   }
 
+  # same for sigma-random effects
+  if (.obj_has_name(f, "sigma_random")) {
+    f[["sigma_random"]] <- .get_group_factor(x, f[["sigma_random"]])
+  }
+
+  # same for beta-random effects
+  if (.obj_has_name(f, "beta_random")) {
+    f[["beta_random"]] <- .get_group_factor(x, f[["beta_random"]])
+  }
+
   f
 }
