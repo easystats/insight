@@ -25,7 +25,7 @@ to every aspect of many model objects via consistent syntax and output.
 
 ## Installation
 
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
 [![R
 check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
 
@@ -130,23 +130,23 @@ narrower level of statistical inspection and reporting (`get_*`).
 ![](https://raw.githubusercontent.com/easystats/insight/master/paper/figure1_small.png)
 
 In total, the **insight** package includes 16 core functions:
-[get\_data()](https://easystats.github.io/insight/reference/get_data.html),
-[get\_priors()](https://easystats.github.io/insight/reference/get_priors.html),
-[get\_variance()](https://easystats.github.io/insight/reference/get_variance.html),
-[get\_parameters()](https://easystats.github.io/insight/reference/get_parameters.html),
-[get\_predictors()](https://easystats.github.io/insight/reference/get_predictors.html),
-[get\_random()](https://easystats.github.io/insight/reference/get_random.html),
-[get\_response()](https://easystats.github.io/insight/reference/get_response.html),
-[find\_algorithm()](https://easystats.github.io/insight/reference/find_algorithm.html),
-[find\_formula()](https://easystats.github.io/insight/reference/find_formula.html),
-[find\_variables()](https://easystats.github.io/insight/reference/find_variables.html),
-[find\_terms()](https://easystats.github.io/insight/reference/find_terms.html),
-[find\_parameters()](https://easystats.github.io/insight/reference/find_parameters.html),
-[find\_predictors()](https://easystats.github.io/insight/reference/find_predictors.html),
-[find\_random()](https://easystats.github.io/insight/reference/find_random.html),
-[find\_response()](https://easystats.github.io/insight/reference/find_response.html),
+[get_data()](https://easystats.github.io/insight/reference/get_data.html),
+[get_priors()](https://easystats.github.io/insight/reference/get_priors.html),
+[get_variance()](https://easystats.github.io/insight/reference/get_variance.html),
+[get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html),
+[get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html),
+[get_random()](https://easystats.github.io/insight/reference/get_random.html),
+[get_response()](https://easystats.github.io/insight/reference/get_response.html),
+[find_algorithm()](https://easystats.github.io/insight/reference/find_algorithm.html),
+[find_formula()](https://easystats.github.io/insight/reference/find_formula.html),
+[find_variables()](https://easystats.github.io/insight/reference/find_variables.html),
+[find_terms()](https://easystats.github.io/insight/reference/find_terms.html),
+[find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html),
+[find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html),
+[find_random()](https://easystats.github.io/insight/reference/find_random.html),
+[find_response()](https://easystats.github.io/insight/reference/find_response.html),
 and
-[model\_info()](https://easystats.github.io/insight/reference/model_info.html).
+[model_info()](https://easystats.github.io/insight/reference/model_info.html).
 In all cases, users must supply at a minimum, the name of the model fit
 object. In several functions, there are additional arguments that allow
 for more targeted returns of model information. For example, the
@@ -260,7 +260,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 205 model classes are supported.
+Currently, 206 model classes are supported.
 
 ``` r
 supported_models()
@@ -271,68 +271,68 @@ supported_models()
 #>  [13] "BBmm"              "BBreg"             "bcplm"            
 #>  [16] "betamfx"           "betaor"            "betareg"          
 #>  [19] "BFBayesFactor"     "BGGM"              "bife"             
-#>  [22] "bigglm"            "biglm"             "blavaan"          
-#>  [25] "blrm"              "bracl"             "brglm"            
-#>  [28] "brmsfit"           "brmultinom"        "btergm"           
-#>  [31] "censReg"           "cgam"              "cgamm"            
-#>  [34] "cglm"              "clm"               "clm2"             
-#>  [37] "clmm"              "clmm2"             "clogit"           
-#>  [40] "coeftest"          "complmrob"         "confusionMatrix"  
-#>  [43] "coxme"             "coxph"             "coxph.penal"      
-#>  [46] "coxr"              "cpglm"             "cpglmm"           
-#>  [49] "crch"              "crq"               "crqs"             
-#>  [52] "crr"               "dep.effect"        "DirichletRegModel"
-#>  [55] "drc"               "eglm"              "elm"              
-#>  [58] "epi.2by2"          "ergm"              "feglm"            
-#>  [61] "feis"              "felm"              "fitdistr"         
-#>  [64] "fixest"            "flexsurvreg"       "gam"              
-#>  [67] "Gam"               "gamlss"            "gamm"             
-#>  [70] "gamm4"             "garch"             "gbm"              
-#>  [73] "gee"               "geeglm"            "glht"             
-#>  [76] "glimML"            "glm"               "Glm"              
-#>  [79] "glmm"              "glmmadmb"          "glmmPQL"          
-#>  [82] "glmmTMB"           "glmrob"            "glmRob"           
-#>  [85] "glmx"              "gls"               "gmnl"             
-#>  [88] "HLfit"             "htest"             "hurdle"           
-#>  [91] "iv_robust"         "ivFixed"           "ivprobit"         
-#>  [94] "ivreg"             "lavaan"            "lm"               
-#>  [97] "lm_robust"         "lme"               "lmerMod"          
-#> [100] "lmerModLmerTest"   "lmodel2"           "lmrob"            
-#> [103] "lmRob"             "logistf"           "logitmfx"         
-#> [106] "logitor"           "LORgee"            "lqm"              
-#> [109] "lqmm"              "lrm"               "manova"           
-#> [112] "MANOVA"            "margins"           "maxLik"           
-#> [115] "mclogit"           "mcmc"              "mcmc.list"        
-#> [118] "MCMCglmm"          "mcp1"              "mcp12"            
-#> [121] "mcp2"              "med1way"           "mediate"          
-#> [124] "merMod"            "merModList"        "meta_bma"         
-#> [127] "meta_fixed"        "meta_random"       "metaplus"         
-#> [130] "mhurdle"           "mipo"              "mira"             
-#> [133] "mixed"             "MixMod"            "mixor"            
-#> [136] "mjoint"            "mle"               "mle2"             
-#> [139] "mlm"               "mlogit"            "mmlogit"          
-#> [142] "model_fit"         "multinom"          "mvord"            
-#> [145] "negbinirr"         "negbinmfx"         "ols"              
-#> [148] "onesampb"          "orm"               "pgmm"             
-#> [151] "plm"               "PMCMR"             "poissonirr"       
-#> [154] "poissonmfx"        "polr"              "probitmfx"        
-#> [157] "psm"               "Rchoice"           "ridgelm"          
-#> [160] "riskRegression"    "rjags"             "rlm"              
-#> [163] "rlmerMod"          "RM"                "rma"              
-#> [166] "rma.uni"           "robmixglm"         "robtab"           
-#> [169] "rq"                "rqs"               "rqss"             
-#> [172] "sarlm"             "scam"              "selection"        
-#> [175] "sem"               "SemiParBIV"        "semLm"            
-#> [178] "semLme"            "slm"               "speedglm"         
-#> [181] "speedlm"           "stanfit"           "stanmvreg"        
-#> [184] "stanreg"           "summary.lm"        "survfit"          
-#> [187] "survreg"           "svy_vglm"          "svyglm"           
-#> [190] "svyolr"            "t1way"             "tobit"            
-#> [193] "trimcibt"          "truncreg"          "vgam"             
-#> [196] "vglm"              "wbgee"             "wblm"             
-#> [199] "wbm"               "wmcpAKP"           "yuen"             
-#> [202] "yuend"             "zcpglm"            "zeroinfl"         
-#> [205] "zerotrunc"
+#>  [22] "bifeAPEs"          "bigglm"            "biglm"            
+#>  [25] "blavaan"           "blrm"              "bracl"            
+#>  [28] "brglm"             "brmsfit"           "brmultinom"       
+#>  [31] "btergm"            "censReg"           "cgam"             
+#>  [34] "cgamm"             "cglm"              "clm"              
+#>  [37] "clm2"              "clmm"              "clmm2"            
+#>  [40] "clogit"            "coeftest"          "complmrob"        
+#>  [43] "confusionMatrix"   "coxme"             "coxph"            
+#>  [46] "coxph.penal"       "coxr"              "cpglm"            
+#>  [49] "cpglmm"            "crch"              "crq"              
+#>  [52] "crqs"              "crr"               "dep.effect"       
+#>  [55] "DirichletRegModel" "drc"               "eglm"             
+#>  [58] "elm"               "epi.2by2"          "ergm"             
+#>  [61] "feglm"             "feis"              "felm"             
+#>  [64] "fitdistr"          "fixest"            "flexsurvreg"      
+#>  [67] "gam"               "Gam"               "gamlss"           
+#>  [70] "gamm"              "gamm4"             "garch"            
+#>  [73] "gbm"               "gee"               "geeglm"           
+#>  [76] "glht"              "glimML"            "glm"              
+#>  [79] "Glm"               "glmm"              "glmmadmb"         
+#>  [82] "glmmPQL"           "glmmTMB"           "glmrob"           
+#>  [85] "glmRob"            "glmx"              "gls"              
+#>  [88] "gmnl"              "HLfit"             "htest"            
+#>  [91] "hurdle"            "iv_robust"         "ivFixed"          
+#>  [94] "ivprobit"          "ivreg"             "lavaan"           
+#>  [97] "lm"                "lm_robust"         "lme"              
+#> [100] "lmerMod"           "lmerModLmerTest"   "lmodel2"          
+#> [103] "lmrob"             "lmRob"             "logistf"          
+#> [106] "logitmfx"          "logitor"           "LORgee"           
+#> [109] "lqm"               "lqmm"              "lrm"              
+#> [112] "manova"            "MANOVA"            "margins"          
+#> [115] "maxLik"            "mclogit"           "mcmc"             
+#> [118] "mcmc.list"         "MCMCglmm"          "mcp1"             
+#> [121] "mcp12"             "mcp2"              "med1way"          
+#> [124] "mediate"           "merMod"            "merModList"       
+#> [127] "meta_bma"          "meta_fixed"        "meta_random"      
+#> [130] "metaplus"          "mhurdle"           "mipo"             
+#> [133] "mira"              "mixed"             "MixMod"           
+#> [136] "mixor"             "mjoint"            "mle"              
+#> [139] "mle2"              "mlm"               "mlogit"           
+#> [142] "mmlogit"           "model_fit"         "multinom"         
+#> [145] "mvord"             "negbinirr"         "negbinmfx"        
+#> [148] "ols"               "onesampb"          "orm"              
+#> [151] "pgmm"              "plm"               "PMCMR"            
+#> [154] "poissonirr"        "poissonmfx"        "polr"             
+#> [157] "probitmfx"         "psm"               "Rchoice"          
+#> [160] "ridgelm"           "riskRegression"    "rjags"            
+#> [163] "rlm"               "rlmerMod"          "RM"               
+#> [166] "rma"               "rma.uni"           "robmixglm"        
+#> [169] "robtab"            "rq"                "rqs"              
+#> [172] "rqss"              "sarlm"             "scam"             
+#> [175] "selection"         "sem"               "SemiParBIV"       
+#> [178] "semLm"             "semLme"            "slm"              
+#> [181] "speedglm"          "speedlm"           "stanfit"          
+#> [184] "stanmvreg"         "stanreg"           "summary.lm"       
+#> [187] "survfit"           "survreg"           "svy_vglm"         
+#> [190] "svyglm"            "svyolr"            "t1way"            
+#> [193] "tobit"             "trimcibt"          "truncreg"         
+#> [196] "vgam"              "vglm"              "wbgee"            
+#> [199] "wblm"              "wbm"               "wmcpAKP"          
+#> [202] "yuen"              "yuend"             "zcpglm"           
+#> [205] "zeroinfl"          "zerotrunc"
 ```
 
 -   **Didn’t find a model?** [File an

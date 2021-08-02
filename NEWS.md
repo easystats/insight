@@ -1,5 +1,9 @@
 # insight 0.14.3
 
+## New supported model classes
+
+* `systemfit` (*systemfit*)
+
 ## Changes to functions
 
 * `get_predicted()` gains a new option, `predict = "response"` for binomial models.
