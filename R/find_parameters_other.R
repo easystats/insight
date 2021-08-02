@@ -150,16 +150,18 @@ find_parameters.model_fit <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.systemfit <- function(x, flatten = FALSE, ...) {
-  s <- summary(x)
-  l <- list()
+  cf <- stats::coef(x)
+  f <- find_formula(x)
 
-  for (i in 1:length(s$eq)) {
-    p <- list(row.names(stats::coef(s$eq[[i]])))
-    l[length(l) + 1] <- p
-  }
+  system_names <- names(f)
 
-  names(l) <- paste0("equation", 1:length(l))
-  out <- list(conditional = l)
+  out <- lapply(system_names, function(i) {
+    pattern <- paste0("^", i, "_(.*)")
+    params <- grepl(pattern, names(cf))
+    gsub(pattern, "\\1", names(cf)[params])
+  })
+
+  names(out) <- system_names
 
   if (flatten) {
     unique(unlist(out))

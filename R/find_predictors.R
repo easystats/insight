@@ -102,35 +102,6 @@ find_predictors.default <- function(x,
 
 
 #' @export
-find_predictors.systemfit <- function(x,
-                                      flatten = FALSE,
-                                      verbose = TRUE,
-                                      ...) {
-
-  elements <- .get_elements(effects = "fixed", component = "conditional")
-
-  f <- find_formula(x, verbose = verbose)
-  if (is.list(stats::formula(x))) {
-    f <- lapply(f, function(.x) .prepare_predictors(x, .x, elements))
-  } else {
-    f <- .prepare_predictors(x, f, elements)
-  }
-  l <- .return_vars(f, x)
-
-  if (.is_empty_object(l) || .is_empty_object(.compact_list(l))) {
-    return(NULL)
-  }
-
-  if (flatten) {
-    unique(unlist(l))
-  } else {
-    l
-  }
-}
-
-
-
-#' @export
 find_predictors.afex_aov <- function(x,
                                      effects = c("fixed", "random", "all"),
                                      component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),

@@ -255,14 +255,18 @@ get_parameters.mjoint <- function(x,
 
 #' @export
 get_parameters.systemfit <- function(x, ...) {
-  s <- summary(x)$eq
-  names(s) <- paste0("equation", 1:length(s))
+  cf <- stats::coef(summary(x))
+  f <- find_formula(x)
 
-  out <- lapply(names(s), function(i) {
-    params <- stats::coef(s[[i]])
+  system_names <- names(f)
+  parameter_names <- row.names(cf)
+
+  out <- lapply(system_names, function(i) {
+    pattern <- paste0("^", i, "_(.*)")
+    params <- grepl(pattern, parameter_names)
     data.frame(
-      Parameter = row.names(params),
-      Estimate = as.vector(params[, "Estimate"]),
+      Parameter = gsub(pattern, "\\1", parameter_names[params]),
+      Estimate = as.vector(cf[params, "Estimate"]),
       Component = i,
       stringsAsFactors = FALSE
     )

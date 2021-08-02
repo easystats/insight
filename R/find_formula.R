@@ -306,6 +306,21 @@ find_formula.maxim <- find_formula.default
 
 
 #' @export
+find_formula.systemfit <- function(x, verbose = TRUE, ...) {
+  f <- stats::formula(x)
+  l <- lapply(f, function(i) {
+    list(conditional = i)
+  })
+  f <- .compact_list(l)
+
+  if (length(f) > 1) {
+    attr(f, "is_mv") <- "1"
+  }
+  .find_formula_return(f)
+}
+
+
+#' @export
 find_formula.selection <- function(x, verbose = TRUE, ...) {
   model_call <- parse(text = deparse(get_call(x)))[[1]]
   f <- list(conditional = list(
