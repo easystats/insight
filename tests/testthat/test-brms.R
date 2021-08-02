@@ -475,19 +475,6 @@ if (.runThisTest) {
 
     test_that("get_priors", {
       expect_equal(
-        get_priors(m1),
-        data.frame(
-          Parameter = c("(Intercept)", "Age", "Base", "Base:Trt1", "Trt1"),
-          Distribution = c("student_t", "student_t", "student_t", "student_t", "student_t"),
-          df = c(3, 5, 5, 5, 5),
-          Location = c(1, 0, 0, 0, 0),
-          Scale = c(10, 10, 10, 10, 10),
-          stringsAsFactors = FALSE
-        ),
-        ignore_attr = TRUE
-      )
-
-      expect_equal(
         get_priors(m3),
         data.frame(
           Parameter = c("(Intercept)", "c2", "treat1", "treat1:c2"),
