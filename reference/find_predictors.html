@@ -153,7 +153,7 @@ component, ...). Unlike <code><a href='find_parameters.html'>find_parameters()</
 that was used to fit the model.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>find_predictors</span><span class='op'>(</span><span class='va'>x</span>, flatten <span class='op'>=</span> <span class='cn'>FALSE</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>find_predictors</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
 <span class='fu'>find_predictors</span><span class='op'>(</span>
@@ -174,15 +174,6 @@ that was used to fit the model.</p>
       <td><p>A fitted model.</p></td>
     </tr>
     <tr>
-      <th>flatten</th>
-      <td><p>Logical, if <code>TRUE</code>, the values are returned
-as character vector, not as list. Duplicated values are removed.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Toggle warnings.</p></td>
-    </tr>
-    <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
     </tr>
@@ -200,6 +191,15 @@ with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
 component, depending on the model.</p></td>
+    </tr>
+    <tr>
+      <th>flatten</th>
+      <td><p>Logical, if <code>TRUE</code>, the values are returned
+as character vector, not as list. Duplicated values are removed.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle warnings.</p></td>
     </tr>
     </table>
 
