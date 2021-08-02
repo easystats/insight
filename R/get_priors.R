@@ -24,6 +24,13 @@ get_priors <- function(x, ...) {
 }
 
 
+
+# =========================================================================
+# RSTANARM ----------------------------------------------------------------
+# =========================================================================
+
+
+
 #' @export
 get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   # installed?
@@ -167,118 +174,209 @@ get_priors.stanmvreg <- function(x, ...) {
 }
 
 
+# =========================================================================
+# BRMS ----------------------------------------------------------------
+# =========================================================================
+
 #' @rdname get_priors
 #' @export
 get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
-  # 1. Gather prior info -------------------
-  priors <- as.data.frame(x$prior) # Copy priors info from model
+  info <- as.data.frame(.print_brmsprior_preparation(x$prior))
+  info$Parameter <- .match_brms_priors_to_params(info)
 
-  ## TODO needs testing for edge cases - check if "coef"-column is
-  # always empty for intercept-class
-  priors$coef[priors$class == "Intercept"] <- "(Intercept)"
+  priors <- data.frame(Parameter = info$Parameter)
 
+  # Format the prior string ------------------------------------
+  priors$Distribution <- gsub("(.*)\\(.*", "\\1",
+                              ifelse(info$prior == "(flat)",
+                                     "uniform",
+                                     info$prior))
+  priors$Distribution[priors$Distribution == "lkj_corr_cholesky"] <- "lkj"
 
-  # get default prior for all parameters, if defined
-  def_prior_b <- which(priors$prior != "" & priors$class == "b" & priors$coef == "")
+  # Initialize empty
+  priors$Location <- NA
+  priors$Scale <- NA
+  priors$df <- NA
 
-  # check which parameters have a default prior
-  need_def_prior <- which(priors$prior == "" & priors$class == "b" & priors$coef != "")
+  # student_t(df, location, scale)
+  is_student_t <- priors$Distribution == "student_t"
+  priors$Location[is_student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\3", info$prior[is_student_t])
+  priors$Scale[is_student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\4", info$prior[is_student_t])
+  priors$df[is_student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\2", info$prior[is_student_t])
 
-  if (!.is_empty_object(def_prior_b) && !.is_empty_object(need_def_prior)) {
-    priors$prior[need_def_prior] <- priors$prior[def_prior_b]
+  # normal(location, scale)
+  is_normal <- priors$Distribution == "normal"
+  priors$Location[is_normal] <- gsub("(.*)\\((.*)\\,(.*)\\)", "\\2", info$prior[is_normal])
+  priors$Scale[is_normal] <- gsub("(.*)\\((.*)\\,(.*)\\)", "\\3", info$prior[is_normal])
+
+  # lkj(eta)
+  is_lkj <- priors$Distribution == "lkj"
+  priors$Location[is_lkj] <- gsub("(.*)\\((.*)\\)", "\\2", info$prior[is_lkj])
+
+  # Transform to numeric
+  priors$Location <- as.numeric(priors$Location)
+  priors$Scale <- as.numeric(priors$Scale)
+  priors$df <- as.numeric(priors$df)
+
+  # Get parameters
+  params <- find_parameters(x, ..., flatten = TRUE)
+
+  # Loop through all parameters and try to retrieve its correct prior
+  out <- data.frame()
+  for(p in params) {
+
+    subset <- priors[priors$Parameter == p, ]
+
+    # If nothing corresponding directly to the parameter...
+    if(nrow(subset) == 0) {
+      # Special treatment for cor_*
+      subset <- priors[sapply(priors$Parameter, grepl, x = p), ]
+
+      # If still empty, make empty df
+      if(nrow(subset) == 0) {
+        subset <- setNames(data.frame(t(rep(NA, 5))), c("Parameter", "Distribution", "Location", "Scale", "df"))
+      }
+    }
+
+    # Rbind the stuff
+    subset$Parameter <- p
+    out <- rbind(out, subset)
+  }
+
+  row.names(out) <- NULL
+  attr(out, "priors") <- info
+
+  out
+}
+
+# Utils -------
+
+.print_brmsprior_preparation <- function(x) {
+  # This function is taken from brms:::print.brmsprior
+  # which adds information using private functions upon printing
+  # but doesn't return it
+  check_if_installed("brms")
+
+  .stan_base_prior <- function(prior) {
+    stopifnot(length(unique(prior$class)) <= 1)
+    take <- with(prior, !nzchar(coef) & nzchar(prior))
+    prior <- prior[take, ]
+    if (!NROW(prior)) {
+      return("")
+    }
+    vars <- c("group", "nlpar", "dpar", "resp", "class")
+    for (v in vars) {
+      take <- nzchar(prior[[v]])
+      if (any(take)) {
+        prior <- prior[take, ]
+      }
+    }
+    stopifnot(NROW(prior) == 1)
+    prior$prior
+  }
+
+  .find_rows <- function(x, ..., ls = list(), fun = '%in%') {
+    x <- as.data.frame(x)
+    if (!nrow(x)) {
+      return(logical(0))
+    }
+    out <- rep(TRUE, nrow(x))
+    ls <- c(ls, list(...))
+    if (!length(ls)) {
+      return(out)
+    }
+    if (is.null(names(ls))) {
+      stop("Argument 'ls' must be named.")
+    }
+    for (name in names(ls)) {
+      out <- out & brms::do_call(fun, list(x[[name]], ls[[name]]))
+    }
+    out
   }
 
 
-  # get default prior for all parameters, if defined
-  def_prior_intercept <- which(priors$prior != "" & priors$class == "Intercept" & priors$coef == "")
-
-  # check which parameters have a default prior
-  need_def_prior <- which(priors$prior == "" & priors$class == "Intercept" & priors$coef != "")
-
-  if (!.is_empty_object(def_prior_intercept) && !.is_empty_object(need_def_prior)) {
-    priors$prior[need_def_prior] <- priors$prior[def_prior_intercept]
-  }
-
-  select_priors <- (priors$coef != "" & priors$class %in% c("b", "Intercept", "(Intercept)")) | priors$class %in% c("sigma", "mix", "shiftprop")
-  prior_info <- priors[select_priors, ]
-
-  # 2. Format prior info -------------------
-  # find additional components, avoid duplicated coef-names
-  components <- prior_info$dpar != ""
-  prior_info$dpar[components] <- paste0(prior_info$dpar[components], "_")
-  prior_info$coef <- paste0(prior_info$dpar, prior_info$coef)
-
-  prior_info$Distribution <- gsub("(.*)\\(.*", "\\1", prior_info$prior)
-
-  # fix uniform prior description
-  prior_info$Distribution[grepl("^(U|u)niform(.*)", prior_info$Distribution)] <- "uniform"
-  prior_info$prior[grepl("^(U|u)niform(.*)", prior_info$prior)] <- "uniform"
-
-  student_t <- prior_info$Distribution %in% c("t", "student_t", "Student's t")
-  uniform <- prior_info$Distribution == "uniform"
-
-  if (any(student_t)) {
-    prior_info$Location[student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\3", prior_info$prior[student_t])
-    prior_info$Location[!student_t] <- gsub("(.*)\\(([[:alnum:]]+)\\,(.*)", "\\2", prior_info$prior[!student_t])
-  } else {
-    prior_info$Location <- gsub("(.*)\\(([[:alnum:]]+)\\,(.*)", "\\2", prior_info$prior)
-  }
-  if (any(uniform)) {
-    prior_info$Location[uniform] <- NA
-  }
-
-  if (any(student_t)) {
-    prior_info$Scale[student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\4", prior_info$prior[student_t])
-    prior_info$Scale[!student_t] <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior[!student_t])
-  } else {
-    prior_info$Scale <- gsub("(.*)\\,(.*)\\)(.*)", "\\2", prior_info$prior)
-  }
-  if (any(uniform)) {
-    prior_info$Scale[uniform] <- NA
-  }
-
-  if (any(student_t)) {
-    prior_info$df <- NA
-    prior_info$df[student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\2", prior_info$prior[student_t])
-  }
-  prior_info$Parameter <- prior_info$coef
-  prior_info$Parameter[prior_info$class %in% c("sigma", "mix", "shiftprop")] <- prior_info$class[prior_info$class %in% c("sigma", "mix", "shiftprop")]
-
-  prior_info <- prior_info[, intersect(c("Parameter", "Distribution", "df", "Location", "Scale"), colnames(prior_info))]
-
-  pinfo <- as.data.frame(lapply(prior_info, function(x) {
-    if (.is_numeric_character(x)) {
-      as.numeric(as.character(x))
+  stopifnot(brms::is.brmsprior(x))
+  x$source[!nzchar(x$source)] <- "(unknown)"
+  # column names to vectorize over
+  cols <- c("group", "nlpar", "dpar", "resp", "class")
+  empty_strings <- rep("", 4)
+  for (i in which(!nzchar(x$prior))) {
+    ls <- x[i, cols]
+    ls <- rbind(ls, c(empty_strings, ls$class))
+    ls <- as.list(ls)
+    # sub_prior <- subset2(x, ls = ls)
+    sub_prior <- x[.find_rows(x, ls = ls, fun = '%in%'), , drop = FALSE]
+    base_prior <- .stan_base_prior(sub_prior)
+    if (nzchar(base_prior)) {
+      x$prior[i] <- base_prior
+      x$source[i] <- "(vectorized)"
     } else {
-      as.character(x)
+      x$prior[i] <- "(flat)"
     }
-  }), stringsAsFactors = FALSE)
-
-  # fix uniform
-  pinfo$Distribution[pinfo$Distribution == "" & is.na(pinfo$Location)] <- "uniform"
-
-  # move intercept parameters to top
-  row_order <- c(
-    which(grepl("(Intercept|\\(Intercept\\))", pinfo$Parameter)),
-    which(!grepl("(Intercept|\\(Intercept\\))", pinfo$Parameter))
-  )
-  pinfo <- pinfo[row_order, ]
-  rownames(pinfo) <- NULL
-
-  if (.is_empty_string(pinfo$Distribution)) {
-    if (verbose) {
-      print_color("Model was fitted with uninformative (flat) priors!\n", "red")
-    }
-    pinfo$Distribution <- "uniform"
-    pinfo$Location <- NA
-    pinfo$Scale <- NA
   }
-
-  pinfo
+  x
 }
 
 
+.match_brms_priors_to_params <- function(prior_summary) {
+  # Rename for easier manipulation
+  pr <- prior_summary
+
+  # Initialize empty string
+  p <- rep("", nrow(pr))
+
+  # class == Intercept -------------------------
+  p <- ifelse(pr$class == "Intercept",
+              paste0(
+                "b",
+                ifelse(pr$dpar != "", paste0("_", pr$dpar), ""),
+                "_Intercept"
+              ),
+              p
+  )
+
+  # class == b ------------------------------
+  # Are there other possible parameters?
+  p <- ifelse(
+    pr$class == "b",
+    paste0("b_",
+           ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
+           pr$coef),
+    p)
+
+  # class == L ------------------------------
+  p <- ifelse(pr$class == "L", paste0("cor_", pr$group, "_"), p)
+
+
+  # class == sigma ------------------------------
+  # TODO: I only saw it alone, but possibly can have other parameters
+  p <- ifelse(pr$class == "sigma", "sigma", p)
+
+  # class == sd  -------------------------------
+  p <- ifelse(
+    pr$class == "sd",
+    paste0("sd_",
+           pr$group,
+           "__",
+           ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
+           pr$coef),
+    p)
+
+  # class == sds  -------------------------------
+  # TODO: Fix coef for sds_
+  # TODO: Fix beta for smooth term (bs_coef instead of b_coef)
+  # p <- ifelse(
+  #   pr$class == "sds",
+  #   paste0("sds", ifelse(pr$coef  != "", paste0("_", pr$coef), "")),
+  #   p)
+
+  p
+}
+
+# =========================================================================
+# BCPLM ----------------------------------------------------------------
+# =========================================================================
 
 #' @export
 get_priors.bcplm <- function(x, ...) {
@@ -299,6 +397,10 @@ get_priors.bcplm <- function(x, ...) {
   )
 }
 
+
+# =========================================================================
+# meta -------------------------------------------------------------
+# =========================================================================
 
 
 #' @export
@@ -353,6 +455,18 @@ get_priors.meta_fixed <- function(x, ...) {
   .fix_metabma_priorname(out)
 }
 
+
+.fix_metabma_priorname <- function(x) {
+  x$Distribution <- gsub("t", "Student's t", x$Distribution, fixed = TRUE)
+  x$Distribution <- gsub("norm", "Normal", x$Distribution, fixed = TRUE)
+  x$Distribution <- gsub("invgamma", "Inverse gamma", x$Distribution, fixed = TRUE)
+  x
+}
+
+
+# =========================================================================
+# BayesFactor -------------------------------------------------------------
+# =========================================================================
 
 
 #' @export
@@ -445,6 +559,10 @@ get_priors.BFBayesFactor <- function(x, ...) {
 }
 
 
+# =========================================================================
+# blavaan -------------------------------------------------------------
+# =========================================================================
+
 
 #' @export
 get_priors.blavaan <- function(x, ...) {
@@ -495,60 +613,6 @@ get_priors.mcmc.list <- function(x, ...) {
 
 # Utils -------------------------------------------------------------------
 
-.match_brms_priors_to_params <- function(prior_summary) {
-  # Rename for easier manipulation
-  pr <- prior_summary
-
-  # Initialize empty string
-  p <- rep("", nrow(pr))
-
-  # class == Intercept -------------------------
-  p <- ifelse(pr$class == "Intercept",
-    paste0(
-      "b",
-      ifelse(pr$dpar != "", paste0("_", pr$dpar), ""),
-      "_Intercept"
-    ),
-    p
-  )
-
-  # class == b ------------------------------
-  # Are there other possible parameters?
-  p <- ifelse(
-    pr$class == "b",
-    paste0(
-      "b_",
-      ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
-      pr$coef
-    ),
-    p
-  )
-
-  # class == L ------------------------------
-  p <- ifelse(pr$class == "L", paste0("cor_", pr$group, "_*"), p)
-
-
-  # class == sigma ------------------------------
-  # TODO: I only saw it alone, but possibly can have other parameters
-  p <- ifelse(pr$class == "sigma", "sigma", p)
-
-  # class == sd  -------------------------------
-  p <- ifelse(
-    pr$class == "sd",
-    paste0(
-      "sd_",
-      pr$group,
-      "__",
-      ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
-      pr$coef
-    ),
-    p
-  )
-
-  p
-}
-
-
 
 
 .is_numeric_character <- function(x) {
@@ -558,9 +622,3 @@ get_priors.mcmc.list <- function(x, ...) {
 
 
 
-.fix_metabma_priorname <- function(x) {
-  x$Distribution <- gsub("t", "Student's t", x$Distribution, fixed = TRUE)
-  x$Distribution <- gsub("norm", "Normal", x$Distribution, fixed = TRUE)
-  x$Distribution <- gsub("invgamma", "Inverse gamma", x$Distribution, fixed = TRUE)
-  x
-}
