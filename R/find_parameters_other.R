@@ -140,7 +140,30 @@ find_parameters.glmx <- function(x,
 }
 
 
+
 #' @export
 find_parameters.model_fit <- function(x, flatten = FALSE, ...) {
   find_parameters(x$fit, flatten = flatten, ...)
+}
+
+
+
+#' @export
+find_parameters.systemfit <- function(x, flatten = FALSE, ...) {
+  s <- summary(x)
+  l <- list()
+
+  for (i in 1:length(s$eq)) {
+    p <- list(row.names(stats::coef(s$eq[[i]])))
+    l[length(l) + 1] <- p
+  }
+
+  names(l) <- paste0("equation", 1:length(l))
+  out <- list(conditional = l)
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
 }

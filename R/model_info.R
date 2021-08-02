@@ -301,6 +301,9 @@ model_info.lm_robust <- model_info.mmclogit
 model_info.iv_robust <- model_info.mmclogit
 
 #' @export
+model_info.systemfit <- model_info.mmclogit
+
+#' @export
 model_info.lqmm <- model_info.mmclogit
 
 #' @export
