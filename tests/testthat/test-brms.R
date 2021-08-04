@@ -13,6 +13,7 @@ if (.runThisTest) {
     m4 <- insight::download_model("brms_zi_3")
     m5 <- insight::download_model("brms_mv_5")
     m6 <- insight::download_model("brms_corr_re1")
+    m7 <- insight::download_model("brms_mixed_8")
 
     # Tests -------------------------------------------------------------------
 
@@ -474,6 +475,21 @@ if (.runThisTest) {
 
 
     test_that("get_priors", {
+      expect_equal(
+        get_priors(m7),
+        data.frame(
+          Parameter = c("b_Intercept", "b_Age", "b_Base", "b_Trt1", "b_Base.Trt1",
+                        "b_Base.Trt1", "sd_patient__Intercept", "sd_patient__Age",
+                        "cor_patient__Intercept__Age"),
+          Distribution = c("student_t", "student_t", "student_t", "student_t",
+                           "student_t", "student_t", "cauchy", "cauchy", "lkj"),
+          Location = c(1.4, 0, 0, 0, 0, 0, NA, NA, 1),
+          Scale = c(2.5, 10, 10, 10, 10, 10, NA, NA, NA),
+          df = c(3, 5, 5, 5, 5, 5, NA, NA, NA),
+          stringsAsFactors = FALSE
+        ),
+        ignore_attr = TRUE
+      )
       expect_equal(
         get_priors(m3),
         data.frame(
