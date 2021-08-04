@@ -601,6 +601,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
 .get_predicted_args <- function(x,
                                 data = NULL,
                                 predict = c("expectation", "link", "prediction", "response", "response", "relation"),
+                                type = "auto",
                                 include_random = TRUE,
                                 include_smooth = TRUE,
                                 ci = 0.95,
@@ -642,10 +643,12 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   }
 
   # Type (that's for the initial call to stats::predict)
-  if (info$is_linear) {
-    type <- "response"
-  } else {
-    type <- "link"
+  if (!is.null(type) && all(type == "auto")) {
+    if (info$is_linear) {
+      type <- "response"
+    } else {
+      type <- "link"
+    }
   }
 
   # Transform
