@@ -482,18 +482,14 @@ export_table <- function(x,
   # indent
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
 
-  # find rows that should not be indented
-  non_grp_rows <- 1:nrow(final)
-  non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
-
-  # paste whitespace at end, to ensure equal width for each string
-  final[non_grp_rows, 1] <- paste0(final[non_grp_rows, 1], whitespace)
-
   # remove indent token
   final[, 1] <- gsub(indent_groups, "", final[, 1], fixed = TRUE)
 
+  # trim whitespace at end
+  final[, 1] <- trimws(final[, 1], which = "right")
+
   # move group name (indent header) to left
-  final[grps, 1] <- format(final[grps, 1], justify = "left", width = max(nchar(final[, 1])))
+  final[, 1] <- format(final[, 1], justify = "left", width = max(nchar(final[, 1])))
   final
 }
 
