@@ -238,7 +238,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
       # If still empty, make empty df
       if (nrow(subset) == 0) {
-        subset <- setNames(data.frame(t(rep(NA, 5))), c("Parameter", "Distribution", "Location", "Scale", "df"))
+        subset <- stats::setNames(data.frame(t(rep(NA, 5))), c("Parameter", "Distribution", "Location", "Scale", "df"))
       }
     }
 
