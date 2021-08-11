@@ -73,7 +73,8 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   })
 
   test_that("get_loglikelihood - stanreg", {
-    if (require("rstanarm")) {
+    .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
+    if (require("rstanarm") && .runStanTest) {
       x <- rstanarm::stan_glm(Sepal.Length ~ Petal.Width, data = iris)
       ref <- lm(Sepal.Length ~ Petal.Width, data = iris)
       ll <- loglikelihood(x)

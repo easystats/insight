@@ -61,16 +61,19 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(mean(abs(as.data.frame(ref$fit)$lwr - summary(rez)$CI_low)), 0, tolerance = 0.5)
     # TODO: Is it possible to get "prediction" CIs via bootstrapping?
 
-    # vs. Bayesian
-    xbayes <- rstanarm::stan_glm(mpg ~ cyl + hp, data = mtcars, refresh = 0, seed = 333)
-    rez <- as.data.frame(get_predicted(x, predict = "link"))
-    rezbayes <- summary(get_predicted(xbayes, predict = "link"))
-    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
-    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
-    rez <- as.data.frame(get_predicted(x, predict = "prediction"))
-    rezbayes <- summary(get_predicted(xbayes, predict = "prediction"))
-    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
-    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
+    .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
+    if (.runStanTest) {
+      # vs. Bayesian
+      xbayes <- rstanarm::stan_glm(mpg ~ cyl + hp, data = mtcars, refresh = 0, seed = 333)
+      rez <- as.data.frame(get_predicted(x, predict = "link"))
+      rezbayes <- summary(get_predicted(xbayes, predict = "link"))
+      expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
+      expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
+      rez <- as.data.frame(get_predicted(x, predict = "prediction"))
+      rezbayes <- summary(get_predicted(xbayes, predict = "prediction"))
+      expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
+      expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
+    }
   })
 
   test_that("get_predicted - glm", {
@@ -106,16 +109,19 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     rez <- summary(get_predicted(x, iterations = 800, verbose = FALSE))
     expect_equal(mean(abs(ref$fit - rez$Predicted)), 0, tolerance = 0.1)
 
-    # vs. Bayesian
-    xbayes <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
-    rez <- as.data.frame(get_predicted(x, predict = "link"))
-    rezbayes <- summary(get_predicted(xbayes, predict = "link"))
-    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
-    expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
-    rez <- as.data.frame(get_predicted(x, predict = "prediction"))
-    rezbayes <- summary(get_predicted(xbayes, predict = "prediction"))
-    expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
-    # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
+    .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
+    if (.runStanTest) {
+      # vs. Bayesian
+      xbayes <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
+      rez <- as.data.frame(get_predicted(x, predict = "link"))
+      rezbayes <- summary(get_predicted(xbayes, predict = "link"))
+      expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
+      expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.1)
+      rez <- as.data.frame(get_predicted(x, predict = "prediction"))
+      rezbayes <- summary(get_predicted(xbayes, predict = "prediction"))
+      expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
+      # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
+    }
   })
 
   test_that("get_predicted - lm (log)", {
@@ -168,12 +174,15 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     # expect_equal(mean(abs(as.data.frame(rezrela)$SE - as.data.frame(ref)$SE)), 0, tolerance = 1e-5)
     # expect_equal(mean(abs(as.data.frame(rezrela)$CI_low - as.data.frame(ref)$CI_low)), 0, tolerance = 1e-5)
 
-    # Compare with rstanarm
-    xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
-    rez_stan <- insight::get_predicted(xref, predict = "expectation")
-    expect_equal(mean(abs(rezrela - rez_stan)), 0, tolerance = 0.1)
-    # Different indeed
-    # expect_equal(mean(as.data.frame(rezrela)$CI_low - as.data.frame(rez_stan)$CI_low), 0, tolerance = 0.5)
+    .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
+    if (.runStanTest) {
+      # Compare with rstanarm
+      xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
+      rez_stan <- insight::get_predicted(xref, predict = "expectation")
+      expect_equal(mean(abs(rezrela - rez_stan)), 0, tolerance = 0.1)
+      # Different indeed
+      # expect_equal(mean(as.data.frame(rezrela)$CI_low - as.data.frame(rez_stan)$CI_low), 0, tolerance = 0.5)
+    }
   })
 
 
@@ -302,43 +311,47 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   # Bayesian --------------------------------------------------------------
   # =========================================================================
 
-  test_that("get_predicted - rstanarm", {
-    # LM
-    x <- rstanarm::stan_glm(mpg ~ cyl + hp, data = mtcars, refresh = 0, seed = 333)
-    rezlink <- summary(get_predicted(x, predict = "link"))
-    rezrela <- summary(get_predicted(x, predict = "expectation"))
-    expect_equal(mean(abs(rezlink$Predicted - rezrela$Predicted)), 0, tolerance = 0.1)
-    expect_equal(mean(abs(rezlink$CI_high - rezrela$CI_high)), 0, tolerance = 0.1)
-    rezpred <- summary(get_predicted(x, predict = "prediction"))
-    expect_equal(mean(abs(rezlink$Predicted - rezpred$Predicted)), 0, tolerance = 0.1)
-    expect_true(all(mean(rezlink$CI_high - rezpred$CI_high) < 0))
+  .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
+  if (require("rstanarm") && .runStanTest) {
+
+    test_that("get_predicted - rstanarm", {
+      # LM
+      x <- rstanarm::stan_glm(mpg ~ cyl + hp, data = mtcars, refresh = 0, seed = 333)
+      rezlink <- summary(get_predicted(x, predict = "link"))
+      rezrela <- summary(get_predicted(x, predict = "expectation"))
+      expect_equal(mean(abs(rezlink$Predicted - rezrela$Predicted)), 0, tolerance = 0.1)
+      expect_equal(mean(abs(rezlink$CI_high - rezrela$CI_high)), 0, tolerance = 0.1)
+      rezpred <- summary(get_predicted(x, predict = "prediction"))
+      expect_equal(mean(abs(rezlink$Predicted - rezpred$Predicted)), 0, tolerance = 0.1)
+      expect_true(all(mean(rezlink$CI_high - rezpred$CI_high) < 0))
 
 
 
-    # GLM
-    x <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
-    rezlink <- summary(get_predicted(x, predict = "link"))
-    rezrela <- summary(get_predicted(x, predict = "expectation"))
-    expect_true(min(rezlink$Predicted) < 0)
-    expect_true(min(rezrela$Predicted) > 0)
-    expect_true(min(rezlink$CI_high) < 0)
-    expect_true(min(rezrela$CI_high) > 0)
-    rezpred <- summary(get_predicted(x, predict = "prediction"))
-    expect_equal(mean(abs(rezrela$Predicted - rezpred$Predicted)), 0, tolerance = 0.1)
-    expect_true(all(mean(rezrela$CI_high - rezpred$CI_high) < 0))
+      # GLM
+      x <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
+      rezlink <- summary(get_predicted(x, predict = "link"))
+      rezrela <- summary(get_predicted(x, predict = "expectation"))
+      expect_true(min(rezlink$Predicted) < 0)
+      expect_true(min(rezrela$Predicted) > 0)
+      expect_true(min(rezlink$CI_high) < 0)
+      expect_true(min(rezrela$CI_high) > 0)
+      rezpred <- summary(get_predicted(x, predict = "prediction"))
+      expect_equal(mean(abs(rezrela$Predicted - rezpred$Predicted)), 0, tolerance = 0.1)
+      expect_true(all(mean(rezrela$CI_high - rezpred$CI_high) < 0))
 
-    # Mixed
-    x <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, seed = 333, iter = 500)
-    rezrela <- summary(get_predicted(x, predict = "expectation"))
-    rezpred <- summary(get_predicted(x, predict = "prediction"))
-    rezrela2 <- summary(get_predicted(x, predict = "expectation", include_random = FALSE))
-    rezpred2 <- summary(get_predicted(x, predict = "prediction", include_random = FALSE))
-    expect_true(mean(abs(rezrela$Predicted - rezrela2$Predicted)) > 0)
-    expect_true(mean(abs(rezpred$Predicted - rezpred2$Predicted)) > 0)
-    rezrela3 <- summary(get_predicted(x, predict = "expectation", data = mtcars["am"]))
-    expect_equal(mean(abs(rezrela2$Predicted - rezrela3$Predicted)), 0, tolerance = 0.001)
-  })
+      # Mixed
+      x <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, seed = 333, iter = 500)
+      rezrela <- summary(get_predicted(x, predict = "expectation"))
+      rezpred <- summary(get_predicted(x, predict = "prediction"))
+      rezrela2 <- summary(get_predicted(x, predict = "expectation", include_random = FALSE))
+      rezpred2 <- summary(get_predicted(x, predict = "prediction", include_random = FALSE))
+      expect_true(mean(abs(rezrela$Predicted - rezrela2$Predicted)) > 0)
+      expect_true(mean(abs(rezpred$Predicted - rezpred2$Predicted)) > 0)
+      rezrela3 <- summary(get_predicted(x, predict = "expectation", data = mtcars["am"]))
+      expect_equal(mean(abs(rezrela2$Predicted - rezrela3$Predicted)), 0, tolerance = 0.001)
+    })
 
+  }
 
 
 

@@ -35,17 +35,19 @@ if (!osx && require("testthat") && require("insight") && require("mgcv") && requ
     expect_equal(insight::find_random(model, flatten = TRUE), "Xr")
   })
 
-
-  test_that("find_random - rstanarm::gamm4", {
-    model <-
-      suppressWarnings(rstanarm::stan_gamm4(
-        Petal.Length ~ Petal.Width + s(Sepal.Length),
-        random = ~ (1 | Species),
-        data = iris,
-        iter = 100,
-        chains = 1,
-        refresh = 0
-      ))
-    expect_equal(insight::find_random(model, flatten = TRUE), "Species")
-  })
+  .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
+  if (.runStanTest) {
+    test_that("find_random - rstanarm::gamm4", {
+      model <-
+        suppressWarnings(rstanarm::stan_gamm4(
+          Petal.Length ~ Petal.Width + s(Sepal.Length),
+          random = ~ (1 | Species),
+          data = iris,
+          iter = 100,
+          chains = 1,
+          refresh = 0
+        ))
+      expect_equal(insight::find_random(model, flatten = TRUE), "Species")
+    })
+  }
 }
