@@ -1,6 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+.runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
-if (.runThisTest &&
+if (.runThisTest && .runStanTest &&
   suppressWarnings(require("testthat") &&
     require("insight") &&
     require("rstanarm"))) {

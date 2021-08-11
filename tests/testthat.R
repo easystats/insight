@@ -34,6 +34,9 @@ if (require("testthat")) {
     }
   )
 
+  # disable / enable if needed
+  Sys.setenv("RunAllinsightStanTests" = "no")
+
   if (!osx && !solaris) {
     test_check("insight")
   }

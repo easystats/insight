@@ -1,6 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+.runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
-if (.runThisTest) {
+if (.runThisTest && .runStanTest) {
   if (suppressWarnings(require("testthat") &&
     require("insight") && require("lme4") &&
     require("BayesFactor") &&
