@@ -1,7 +1,9 @@
 if (require("testthat")) {
   library(insight)
 
-  if (length(strsplit(packageDescription("insight")$Version, "\\.")[[1]]) > 3) {
+  is_dev_version <- length(strsplit(packageDescription("insight")$Version, "\\.")[[1]]) > 3
+
+  if (is_dev_version) {
     Sys.setenv("RunAllinsightTests" = "yes")
   } else {
     Sys.setenv("RunAllinsightTests" = "no")
@@ -35,7 +37,7 @@ if (require("testthat")) {
   )
 
   # disable / enable if needed
-  if (.Platform$OS.type == "unix") {
+  if (.Platform$OS.type == "unix" && is_dev_version) {
     Sys.setenv("RunAllinsightStanTests" = "yes")
   } else {
     Sys.setenv("RunAllinsightStanTests" = "no")
