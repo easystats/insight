@@ -35,7 +35,11 @@ if (require("testthat")) {
   )
 
   # disable / enable if needed
-  Sys.setenv("RunAllinsightStanTests" = "no")
+  if (.Platform$OS.type == "unix") {
+    Sys.setenv("RunAllinsightStanTests" = "yes")
+  } else {
+    Sys.setenv("RunAllinsightStanTests" = "no")
+  }
 
   if (!osx && !solaris) {
     test_check("insight")
