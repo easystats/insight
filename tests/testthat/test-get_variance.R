@@ -39,12 +39,12 @@ if (!osx && .runThisTest && require("testthat") && require("insight") && require
   )
   fm6 <- lmer(diameter ~ 0 + sample + (1 | plate), data = Penicillin)
 
-  v1 <- get_variance(fm1)
-  v2 <- get_variance(fm2)
-  v3 <- get_variance(fm3)
-  v4 <- get_variance(fm4)
-  v5 <- get_variance(fm5)
-  v6 <- get_variance(fm6)
+  v1 <- suppressWarnings(get_variance(fm1))
+  v2 <- suppressWarnings(get_variance(fm2))
+  v3 <- suppressWarnings(get_variance(fm3))
+  v4 <- suppressWarnings(get_variance(fm4))
+  v5 <- suppressWarnings(get_variance(fm5))
+  v6 <- suppressWarnings(get_variance(fm6))
 
   test_that("get_variance-1", {
     expect_equal(v1$var.intercept,

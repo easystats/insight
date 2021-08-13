@@ -7,13 +7,13 @@ if (.runThisTest) {
 
     # Model fitting -----------------------------------------------------------
 
-    m1 <- insight::download_model("brms_mixed_6")
+    m1 <- suppressWarnings(insight::download_model("brms_mixed_6"))
     m2 <- insight::download_model("brms_mv_4")
     m3 <- insight::download_model("brms_2")
     m4 <- insight::download_model("brms_zi_3")
     m5 <- insight::download_model("brms_mv_5")
     m6 <- insight::download_model("brms_corr_re1")
-    m7 <- insight::download_model("brms_mixed_8")
+    m7 <- suppressWarnings(insight::download_model("brms_mixed_8"))
 
     # Tests -------------------------------------------------------------------
 
@@ -493,11 +493,11 @@ if (.runThisTest) {
       expect_equal(
         get_priors(m3),
         data.frame(
-          Parameter = c("(Intercept)", "c2", "treat1", "treat1:c2"),
-          Distribution = c("student_t", "uniform", "uniform", "uniform"),
-          df = c(3, NA, NA, NA),
-          Location = c(0, NA, NA, NA),
-          Scale = c(2.5, NA, NA, NA),
+          Parameter = c("b_Intercept", "b_treat1", "b_c2", "b_treat1.c2", "b_treat1.c2"),
+          Distribution = c("student_t", "uniform", "uniform", "uniform", "uniform"),
+          Location = c(0, NA, NA, NA, NA),
+          Scale = c(2.5, NA, NA, NA, NA),
+          df = c(3, NA, NA, NA, NA),
           stringsAsFactors = FALSE
         ),
         ignore_attr = TRUE
