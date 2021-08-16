@@ -48,9 +48,10 @@ get_parameters.BGGM <- function(x,
                                 summary = FALSE, centrality = "mean",
                                 ...) {
   # installed?
-  check_if_installed("BGGM")
-
-  out <- as.data.frame(BGGM::posterior_samples(x))
+  # check_if_installed("BGGM")
+  #
+  # out <- as.data.frame(BGGM::posterior_samples(x))
+  out <- as.data.frame(.bggm_posterior_samples(x))
   intercepts <- grepl("_\\(Intercept\\)$", colnames(out))
   correlations <- grepl("(.*)--(.*)", colnames(out))
   conditional <- !intercepts & !correlations
@@ -484,4 +485,106 @@ get_parameters.sim <- function(x,
 .get_parms_data <- function(x, effects, component, parameters = NULL) {
   elements <- .get_elements(effects, component)
   unlist(find_parameters(x, effects = "all", component = "all", flatten = FALSE, parameters = parameters)[elements])
+}
+
+
+
+
+
+# use temporarily code from BGGM package, as long as that package is archived on CRAN
+
+.bggm_posterior_samples <- function(object, ...) {
+  if (methods::is(object, "estimate") | methods::is(object, "explore")) {
+    if (!methods::is(object, "default")) {
+      stop("object most be from 'estimate' or 'explore'")
+    }
+    p <- object$p
+    pcors_total <- p * (p - 1) * 0.5
+    I_p <- diag(p)
+    iter <- object$iter
+    pcor_samples <- matrix(object$post_samp$pcors[, , 51:(iter + 50)][upper.tri(I_p)],
+                           nrow = iter,
+                           ncol = pcors_total,
+                           byrow = TRUE)
+    cn <- colnames(object$Y)
+    if (is.null(cn)) {
+      col_names <- sapply(1:p, function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+    } else {
+      col_names <- sapply(cn, function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
+    }
+    colnames(pcor_samples) <- col_names
+    posterior_samples <- pcor_samples
+    if (!is.null(object$formula)) {
+      if (ncol(object$X) == 1) {
+        beta_terms <- "(Intercept)"
+      } else {
+        beta_terms <- colnames(object$X)
+      }
+      n_beta_terms <- length(beta_terms)
+      beta_samples <- object$post_samp$beta
+      if (is.null(cn)) {
+        col_names <- 1:p
+      } else {
+        col_names <- cn
+      }
+      beta_start <- matrix(beta_samples[1:n_beta_terms, 1, 51:(iter + 50)],
+                           nrow = iter,
+                           n_beta_terms,
+                           byrow = TRUE)
+      colnames(beta_start) <- paste0(col_names[1], "_",
+                                     beta_terms)
+      for (i in 2:p) {
+        beta_i <- matrix(beta_samples[1:n_beta_terms, i, 51:(iter + 50)],
+                         nrow = iter,
+                         n_beta_terms,
+                         byrow = TRUE)
+        colnames(beta_i) <- paste0(col_names[i], "_", beta_terms)
+        beta_start <- cbind(beta_start, beta_i)
+      }
+      posterior_samples <- cbind(posterior_samples, beta_start)
+    }
+  } else if (methods::is(object, "var_estimate")) {
+    if (!methods::is(object, "default")) {
+      stop("object most be from 'var_estimate'")
+    }
+    p <- object$p
+    pcors_total <- p * (p - 1) * 0.5
+    I_p <- diag(p)
+    iter <- object$iter
+    pcor_samples <- matrix(object$fit$pcors[, , 51:(iter + 50)][upper.tri(I_p)],
+                           nrow = iter,
+                           ncol = pcors_total,
+                           byrow = TRUE)
+    cn <- colnames(object$Y)
+    if (is.null(cn)) {
+      col_names <- sapply(1:p, function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+    }
+    else {
+      col_names <- sapply(cn, function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
+    }
+    colnames(pcor_samples) <- col_names
+    posterior_samples <- pcor_samples
+    n_beta_terms <- nrow(object$beta_mu)
+    beta_samples <- object$fit$beta
+    col_names <- colnames(object$Y)
+    beta_terms <- colnames(object$X)
+    beta_start <- matrix(beta_samples[1:n_beta_terms, 1, 51:(iter + 50)],
+                         nrow = iter,
+                         n_beta_terms,
+                         byrow = TRUE)
+    colnames(beta_start) <- paste0(col_names[1], "_", beta_terms)
+    for (i in 2:p) {
+      beta_i <- matrix(beta_samples[1:n_beta_terms, i, 51:(iter + 50)],
+                       nrow = iter,
+                       n_beta_terms,
+                       byrow = TRUE)
+      colnames(beta_i) <- paste0(col_names[i], "_", beta_terms)
+      beta_start <- cbind(beta_start, beta_i)
+    }
+    posterior_samples <- cbind(posterior_samples, beta_start)
+  } else {
+    stop("object class not currently supported")
+  }
+
+  posterior_samples
 }
