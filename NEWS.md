@@ -4,12 +4,18 @@
 
 * `systemfit` (*systemfit*)
 
+## General
+
+* Minor improvements for functions that support printing outputs.
+
 ## Changes to functions
 
 * `get_predicted()` gains a new option, `predict = "response"` for binomial models.
 
 * Improved stability of `get_variance()` when computing random-slope-intercept
   correlation with categorical random slopes.
+
+* Improved `get_priors()` for *brms* models.
 
 ## Bug fixes
 
