@@ -362,13 +362,13 @@ parameters_table <- format_table
     if (length(ci_low) >= 1 && length(ci_low) == length(ci_high)) {
       if (!is.null(ci_value)) {
         if (length(unique(stats::na.omit(ci_value))) > 1) {
-          ci_colname <- sprintf("%i%% %s", unique(stats::na.omit(ci_value)) * 100, ci_name)
+          ci_colname <- sprintf("%g%% %s", unique(stats::na.omit(ci_value)) * 100, ci_name)
         } else {
-          ci_colname <- sprintf("%i%% %s", unique(stats::na.omit(ci_value))[1] * 100, ci_name)
+          ci_colname <- sprintf("%g%% %s", unique(stats::na.omit(ci_value))[1] * 100, ci_name)
         }
         x$CI <- NULL
       } else if (!is.null(x$CI)) {
-        ci_colname <- sprintf("%i%% %s", unique(stats::na.omit(x$CI))[1] * 100, ci_name)
+        ci_colname <- sprintf("%g%% %s", unique(stats::na.omit(x$CI))[1] * 100, ci_name)
         x$CI <- NULL
       } else {
         # all these edge cases... for some objects in "parameters::model_parameters()",
@@ -376,7 +376,7 @@ parameters_table <- format_table
         # "CI_low_0.95" etc. - this is handled here, if we have no ci-attribute
         if (grepl(paste0(ci_name, "_low_(\\d)\\.(\\d)"), ci_low) && grepl(paste0(ci_name, "_high_(\\d)\\.(\\d)"), ci_high)) {
           ci_levels <- as.numeric(gsub(paste0(ci_name, "_low_(\\d)\\.(\\d)"), "\\1.\\2", ci_low))
-          ci_colname <- sprintf("%i%% %s", unique(stats::na.omit(ci_levels)) * 100, ci_name)
+          ci_colname <- sprintf("%g%% %s", unique(stats::na.omit(ci_levels)) * 100, ci_name)
           x$CI <- NULL
         } else {
           ci_colname <- ci_name
@@ -410,11 +410,11 @@ parameters_table <- format_table
 
     # CI percentage
     if (length(other) == 1 && !is.null(att[[paste0("ci_", other)]])) {
-      other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(att[[paste0("ci_", other)]])) * 100)
+      other_ci_colname <- sprintf("%s %g%% CI", other, unique(stats::na.omit(att[[paste0("ci_", other)]])) * 100)
     } else if (!is.null(att[["ci"]])) {
-      other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(att[["ci"]])) * 100)
+      other_ci_colname <- sprintf("%s %g%% CI", other, unique(stats::na.omit(att[["ci"]])) * 100)
     } else if (length(other == 1) && paste0(other, "_CI") %in% colnames(x)) {
-      other_ci_colname <- sprintf("%s %i%% CI", other, unique(stats::na.omit(x[[paste0(other, "_CI")]])) * 100)
+      other_ci_colname <- sprintf("%s %g%% CI", other, unique(stats::na.omit(x[[paste0(other, "_CI")]])) * 100)
     } else {
       other_ci_colname <- paste(other, " CI")
     }

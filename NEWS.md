@@ -20,6 +20,8 @@
 * Fixed issue where `get_data()` for *htest* objects did not always preserve
   factors.
 
+* Fixed issue in `format_table()` for ci-levels with longer fractional part.
+
 # insight 0.14.2
 
 ## Changes to functions
