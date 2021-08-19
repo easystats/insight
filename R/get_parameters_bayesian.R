@@ -229,11 +229,9 @@ get_parameters.brmsfit <- function(x,
   if (is_multivariate(x)) {
     parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
     elements <- .get_elements(effects, component)
-    ## TODO remove "optional = FALSE" in a future update
-    out <- as.data.frame(x, optional = FALSE)[unlist(lapply(parms, function(i) i[elements]))]
+    out <- as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
   } else {
-    ## TODO remove "optional = FALSE" in a future update
-    out <- as.data.frame(x, optional = FALSE)[.get_parms_data(x, effects, component, parameters)]
+    out <- as.data.frame(x)[.get_parms_data(x, effects, component, parameters)]
   }
 
   if (isTRUE(summary)) {
