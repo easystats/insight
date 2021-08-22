@@ -534,12 +534,12 @@ clean_parameters.mlm <- function(x, ...) {
 
   # extract group-names from random effects and clean random effects
 
-  rand_eff <- grepl("^r_(.*)\\.(.*)\\.", out$Cleaned_Parameter)
+  rand_eff <- grepl("^r_(.*)\\[(.*)\\]", out$Cleaned_Parameter)
   if (any(rand_eff)) {
-    r_pars <- gsub("^r_(.*)\\.(.*)\\.", "\\1", out$Cleaned_Parameter[rand_eff])
-    r_grps <- gsub("^r_(.*)\\.(.*)\\.", "\\2", out$Cleaned_Parameter[rand_eff])
+    r_pars <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\1.\\2", out$Cleaned_Parameter[rand_eff])
+    r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
     r_pars <- gsub("__zi", "", r_pars)
-    r_grps <- sprintf("%s: %s", r_grps, gsub("(.*)\\.(.*)", "\\1", r_pars))
+    r_grps <- gsub("__zi", "", r_grps)
 
     out$Cleaned_Parameter[rand_eff] <- r_pars
     out$Group[rand_eff] <- r_grps
@@ -555,7 +555,7 @@ clean_parameters.mlm <- function(x, ...) {
 
   simplex <- grepl("^simo_", out$Cleaned_Parameter)
   if (length(simplex)) {
-    out$Cleaned_Parameter[simplex] <- gsub("^(simo_|simo_mo)(.*)\\.(\\d)\\.$", "\\2[\\3]", out$Cleaned_Parameter[simplex])
+    out$Cleaned_Parameter[simplex] <- gsub("^(simo_|simo_mo)(.*)\\[(\\d)\\]$", "\\2[\\3]", out$Cleaned_Parameter[simplex])
     out$Component[simplex] <- "simplex"
   }
 
