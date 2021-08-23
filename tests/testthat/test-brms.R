@@ -466,14 +466,14 @@ if (.runThisTest) {
       expect_equal(
         get_priors(m7),
         data.frame(
-          Parameter = c("b_Intercept", "b_Age", "b_Base", "b_Trt1", "b_Base.Trt1",
-                        "b_Base.Trt1", "sd_patient__Intercept", "sd_patient__Age",
+          Parameter = c("b_Intercept", "b_Age", "b_Base", "b_Trt1", "b_Base:Trt1",
+                        "sd_patient__Intercept", "sd_patient__Age",
                         "cor_patient__Intercept__Age"),
-          Distribution = c("student_t", "student_t", "student_t", "student_t",
+          Distribution = c("student_t", "student_t", "student_t",
                            "student_t", "student_t", "cauchy", "cauchy", "lkj"),
-          Location = c(1.4, 0, 0, 0, 0, 0, NA, NA, 1),
-          Scale = c(2.5, 10, 10, 10, 10, 10, NA, NA, NA),
-          df = c(3, 5, 5, 5, 5, 5, NA, NA, NA),
+          Location = c(1.4, 0, 0, 0, 0, NA, NA, 1),
+          Scale = c(2.5, 10, 10, 10, 10, NA, NA, NA),
+          df = c(3, 5, 5, 5, 5, NA, NA, NA),
           stringsAsFactors = FALSE
         ),
         ignore_attr = TRUE
@@ -481,11 +481,11 @@ if (.runThisTest) {
       expect_equal(
         get_priors(m3),
         data.frame(
-          Parameter = c("b_Intercept", "b_treat1", "b_c2", "b_treat1.c2", "b_treat1.c2"),
-          Distribution = c("student_t", "uniform", "uniform", "uniform", "uniform"),
-          Location = c(0, NA, NA, NA, NA),
-          Scale = c(2.5, NA, NA, NA, NA),
-          df = c(3, NA, NA, NA, NA),
+          Parameter = c("b_Intercept", "b_treat1", "b_c2", "b_treat1:c2"),
+          Distribution = c("student_t", "uniform", "uniform", "uniform"),
+          Location = c(0, NA, NA, NA),
+          Scale = c(2.5, NA, NA, NA),
+          df = c(3, NA, NA, NA),
           stringsAsFactors = FALSE
         ),
         ignore_attr = TRUE

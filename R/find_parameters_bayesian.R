@@ -229,7 +229,7 @@ find_parameters.brmsfit <- function(x,
 
   # remove redundant columns. These seem to be new since brms 2.16?
   pattern <- c("^[A-z]_\\d\\.\\d\\.(.*)")
-  fe <- fe[grepl(pattern, fe, perl = TRUE)]
+  fe <- fe[!grepl(pattern, fe, perl = TRUE)]
 
   is_mv <- NULL
 
