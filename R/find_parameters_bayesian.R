@@ -225,8 +225,12 @@ find_parameters.brmsfit <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   component <- match.arg(component, choices = c("all", .all_elements()))
 
-  ## TODO remove "optional = FALSE" in a future update?
   fe <- colnames(as.data.frame(x))
+
+  # remove redundant columns. These seem to be new since brms 2.16?
+  pattern <- c("^[A-z]_\\d\\.\\d\\.(.*)")
+  fe <- fe[grepl(pattern, fe, perl = TRUE)]
+
   is_mv <- NULL
 
   # remove "Intercept"
