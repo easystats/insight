@@ -1,3 +1,9 @@
+# insight 0.14.4
+
+## Bug fixes
+
+* Fixed issues due to latest *brms* update.
+
 # insight 0.14.3
 
 ## New supported model classes
