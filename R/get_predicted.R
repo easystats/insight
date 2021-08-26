@@ -11,7 +11,7 @@
 #'   posterior draws. If `NULL`, will return all the draws (one for each
 #'   iteration of the model). For frequentist models, if not `NULL`, will
 #'   generate bootstrapped draws, from which bootstrapped CIs will be computed.
-#'   Iterations can be accessed via `as.data.frame`.
+#'   Iterations can be accessed by running `as.data.frame()` on the output.
 #' @param include_random If `TRUE` (default), include all random effects in
 #'   the prediction. If `FALSE`, don't take them into account. Can also be
 #'   a formula to specify which random effects to condition on when predicting

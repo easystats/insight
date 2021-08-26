@@ -44,7 +44,7 @@ to predict. If omitted, the data used to fit the model is used.}
 posterior draws. If \code{NULL}, will return all the draws (one for each
 iteration of the model). For frequentist models, if not \code{NULL}, will
 generate bootstrapped draws, from which bootstrapped CIs will be computed.
-Iterations can be accessed via \code{as.data.frame}.}
+Iterations can be accessed by running \code{as.data.frame()} on the output.}
 
 \item{verbose}{Toggle warnings.}
 
