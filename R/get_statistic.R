@@ -1334,105 +1334,58 @@ get_statistic.glht <- function(x, ...) {
 #' @rdname get_statistic
 #' @export
 get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters = FALSE, ...) {
-  s <- summary(x, level = ci, adjust = adjust)
+  s <- summary(x, level = ci, adjust = adjust, infer = TRUE)
 
-  # check if DF exist
-  if (is.null(s$df)) {
+  stat <- s[["t.ratio"]]
+
+  # 2nd try
+  if (.is_empty_object(stat)) {
+    stat <- s[["z.ratio"]]
+  }
+
+  # quit
+  if (.is_empty_object(stat)) {
     return(NULL)
   }
 
-  estimate_pos <- which(colnames(s) == x@misc$estName)
-  ci_level <- .95
-
-  if (length(estimate_pos)) {
-    msg <- attributes(s)$mesg
-    if (!is.null(msg)) {
-      msg <- msg[grepl("^Confidence level", msg)]
-      if (length(msg)) {
-        ci_level <- tryCatch(
-          {
-            as.numeric(trimws(gsub("Confidence level used:", "", msg, fixed = TRUE)))
-          },
-          warning = function(w) {
-            .95
-          },
-          error = function(e) {
-            .95
-          }
-        )
-      }
-    }
-
-    fac <- stats::qt((1 + ci_level) / 2, df = s$df)
-
-    stat <- tryCatch(
-      {
-        if (!"SE" %in% colnames(s)) {
-          if ("asymp.LCL" %in% colnames(s)) {
-            se <- (s$asymp.UCL - s$asymp.LCL) / (2 * fac)
-          } else {
-            se <- (s$upper.CL - s$lower.CL) / (2 * fac)
-          }
-        } else {
-          se <- s$SE
-        }
-        s[[x@misc$estName]] / se
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-
-    # 2nd try
-    if (.is_empty_object(stat)) {
-      stat <- s[["t.ratio"]]
-    }
-
-    # 3rd try
-    if (.is_empty_object(stat)) {
-      stat <- s[["z.ratio"]]
-    }
-
-    # quit
-    if (.is_empty_object(stat)) {
-      return(NULL)
-    }
-
-    if (isTRUE(merge_parameters)) {
-      params <- get_parameters(x, merge_parameters = TRUE)["Parameter"]
-    } else {
-      params <- s[, 1:(estimate_pos - 1), drop = FALSE]
-    }
-
-    out <- data.frame(
-      params,
-      Statistic = as.vector(stat),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
-
-    out <- .remove_backticks_from_parameter_names(out)
-    attr(out, "statistic") <- find_statistic(x)
-    out
+  estimate_pos <- which(colnames(s) == attr(s, "estName"))
+  if (isTRUE(merge_parameters)) {
+    params <- get_parameters(x, merge_parameters = TRUE)["Parameter"]
   } else {
-    return(NULL)
+    params <- s[, seq_len(estimate_pos - 1), drop = FALSE]
   }
+
+  out <- data.frame(
+    params,
+    Statistic = as.vector(stat),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
 }
 
 
 #' @export
 get_statistic.emm_list <- function(x, ci = .95, adjust = "none", ...) {
   params <- get_parameters(x)
-  s <- summary(x, level = ci, adjust = adjust)
-  se <- unlist(lapply(s, function(i) {
-    if (is.null(i$SE)) {
-      rep(NA, nrow(i))
-    } else {
-      i$SE
-    }
-  }))
+  s <- summary(x, level = ci, adjust = adjust, infer = TRUE)
 
-  stat <- params$Estimate / se
+  stat <- lapply(s, "[[", "t.ratio")
+
+  # 2nd try
+  if (.is_empty_object(stat)) {
+    stat <- lapply(s, "[[", "z.ratio")
+  }
+
+  # quit
+  if (.is_empty_object(stat)) {
+    return(NULL)
+  }
+
+  stat <- unlist(stat)
 
   out <- data.frame(
     Parameter = params$Parameter,

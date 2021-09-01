@@ -38,8 +38,8 @@ get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE,
   # check if we have a Bayesian model here
   if (!.is_baysian_emmeans(x) || isTRUE(summary)) {
     s <- summary(x)
-    estimate_pos <- which(colnames(s) == x@misc$estName)
-    params <- s[, 1:(estimate_pos - 1), drop = FALSE]
+    estimate_pos <- which(colnames(s) == attr(s, "estName"))
+    params <- s[, seq_len(estimate_pos - 1), drop = FALSE]
     if (isTRUE(merge_parameters) && ncol(params) > 1) {
       r <- apply(params, 1, function(i) paste0(colnames(params), " [", i, "]"))
       out <- data.frame(
