@@ -188,22 +188,18 @@
 <code class="sourceCode R"><span class="co"># find the response variable</span>
 <span class="fu"><a href="../reference/find_response.html">find_response</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Reaction"</span>
-
 <span class="co"># find all predictors, fixed part by default</span>
 <span class="fu"><a href="../reference/find_predictors.html">find_predictors</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $conditional</span>
 <span class="co">#&gt; [1] "Days"  "Weeks" "cat"</span>
-
 <span class="co"># find random effects, grouping factors only</span>
 <span class="fu"><a href="../reference/find_random.html">find_random</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $random</span>
 <span class="co">#&gt; [1] "mysubgrp:mygrp" "mygrp"          "Subject"</span>
-
 <span class="co"># find random slopes</span>
 <span class="fu"><a href="../reference/find_random_slopes.html">find_random_slopes</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $random</span>
 <span class="co">#&gt; [1] "Days"</span>
-
 <span class="co"># find all predictors, including random effects</span>
 <span class="fu"><a href="../reference/find_predictors.html">find_predictors</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"all"</span>, component <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>
 <span class="co">#&gt; $conditional</span>
@@ -211,7 +207,6 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $random</span>
 <span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Subject"</span>
-
 <span class="co"># find all terms, including response and random effects</span>
 <span class="co"># this is essentially the same as the previous example plus response</span>
 <span class="fu"><a href="../reference/find_terms.html">find_terms</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
@@ -223,7 +218,6 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $random</span>
 <span class="co">#&gt; [1] "mysubgrp" "mygrp"    "Days"     "Subject"</span>
-
 <span class="co"># find all variables, i.e. also quadratic or log-transformed predictors</span>
 <span class="fu"><a href="../reference/find_variables.html">find_variables</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; $response</span>
