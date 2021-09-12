@@ -610,7 +610,14 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
                                 ...) {
 
   # Sanitize input
-  predict <- match.arg(predict, choices = c("expectation", "link", "prediction", "response", "relation"))
+  predict_known <- c("expectation", "link", "prediction", "response", "relation")
+  if (!is.null(predict) && !(is.character(predict) && length(predict) == 1)) {
+      stop(sprintf("The predict argument must be a string. Typical values include: %s", paste(predict_known, collapse = ", ")))
+  }
+  if (!predict %in% predict_known && isTRUE(verbose)) {
+      warning(sprintf('"%s" is not a known prediction type. Intervals and other statistics may not match the scale of the predicted values. Make sure the `predict` method associated to your model object supports this type of prediction. Set `verbose=FALSE` in the `get_predicted` function to silence this warning.', predict))
+  }
+
   # Other names: "response", "expected", "distribution", "observations"
   if (predict == "relation") {
     message(format_message(
@@ -640,6 +647,9 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   } else if (predict %in% c("prediction", "response")) {
     ci_type <- "prediction"
     scale <- "response"
+  } else {
+    ci_type <- "confidence"
+    scale <- predict
   }
 
   # Type (that's for the initial call to stats::predict)
