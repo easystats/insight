@@ -117,12 +117,16 @@ get_predicted <- function(x, ...) {
 
 #' @export
 get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
+  dots <- list(...)
+  # most `predict()` methods use a `type` argument rather than `predict`
+  if (!is.null(dots$predict) && is.null(dots$type)) type <- dots$predict
+
   out <- tryCatch(
     {
       if (!is.null(data)) {
-        stats::predict(x, newdata = data, ...)
+        stats::predict(x, newdata = data, type = type, ...)
       } else {
-        stats::predict(x, ...)
+        stats::predict(x, type = type, ...)
       }
     },
     error = function(e) {
@@ -133,7 +137,7 @@ get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
   if (is.null(out)) {
     out <- tryCatch(
       {
-        stats::fitted(x)
+        stats::fitted(x, ...)
       },
       error = function(e) {
         NULL
