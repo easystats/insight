@@ -102,6 +102,29 @@ find_predictors.default <- function(x,
 
 
 #' @export
+find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  elements <- .get_elements("all", "all")
+
+  f <- lapply(find_formula(x, verbose = verbose), function(i) {
+    .prepare_predictors(x, i, elements = elements)
+  })
+
+  l <- lapply(f, function(.i) .return_vars(.i, x))
+
+  if (.is_empty_object(l) || .is_empty_object(.compact_list(l))) {
+    return(NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
+#' @export
 find_predictors.afex_aov <- function(x,
                                      effects = c("fixed", "random", "all"),
                                      component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
@@ -175,6 +198,16 @@ find_predictors.afex_aov <- function(x,
   # from conditional model, remove response
   if (.obj_has_name(f, "survival")) {
     f[["survival"]] <- f[["survival"]][[3]]
+  }
+
+  # from conditional model, remove response
+  if (inherits(x, "selection")) {
+    if (.obj_has_name(f, "selection")) {
+      f[["selection"]] <- f[["selection"]][[3]]
+    }
+    if (.obj_has_name(f, "outcome")) {
+      f[["outcome"]] <- f[["outcome"]][[3]]
+    }
   }
 
   # if we have random effects, just return grouping variable, not random slopes
