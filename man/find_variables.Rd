@@ -36,25 +36,14 @@ as character vector, not as list. Duplicated values are removed.}
 A list with (depending on the model) following elements (character
 vectors):
 \itemize{
-\item \code{response}, the name of the response variable\preformatted{ \\item `conditional`, the names of the predictor variables from the
- *conditional* model (as opposed to the zero-inflated part of a
- model)
-
- \\item `random`, the names of the random effects (grouping factors)
-
- \\item `zero_inflated`, the names of the predictor variables from
- the *zero-inflated* part of the model
-
- \\item `zero_inflated_random`, the names of the random effects
- (grouping factors)
-
- \\item `dispersion`, the name of the dispersion terms
-
- \\item `instruments`, the names of instrumental variables
-
- \\item `cluster`, the names of cluster or grouping variables
-}
-
+\item \code{response}, the name of the response variable
+\item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
+\item \code{cluster}, the names of cluster or grouping variables
+\item \code{dispersion}, the name of the dispersion terms
+\item \code{instruments}, the names of instrumental variables
+\item \code{random}, the names of the random effects (grouping factors)
+\item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
+\item \code{zero_inflated_random}, the names of the random effects (grouping factors)
 }
 }
 \description{
