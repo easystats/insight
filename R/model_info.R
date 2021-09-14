@@ -12,113 +12,50 @@
 #'   etc. (see 'Details').
 #'
 #' @details `model_info()` returns a list with information about the
-#'   model for many different model objects. Following information
-#'    is returned, where all values starting with `is_` are logicals.
-#'    \itemize{
-#'      \item `is_binomial`: family is binomial (but not negative binomial)
-#'
-#'      \item `is_bernoulli`: special case of binomial models: family is
-#'      Bernoulli
-#'
-#'      \item `is_poisson`: family is poisson
-#'
-#'      \item `is_negbin`: family is negative binomial
-#'
-#'      \item `is_count`: model is a count model (i.e. family is either
-#'      poisson or negative binomial)
-#'
-#'      \item `is_beta`: family is beta
-#'
-#'      \item `is_betabinomial`: family is beta-binomial
-#'
-#'      \item `is_dirichlet`: family is dirichlet
-#'
-#'      \item `is_exponential`: family is exponential (e.g. Gamma or Weibull)
-#'
-#'      \item `is_logit`: model has logit link
-#'
-#'      \item `is_probit`: model has probit link
-#'
-#'      \item `is_linear`: family is gaussian
-#'
-#'      \item `is_tweedie`: family is tweedie
-#'
-#'      \item `is_ordinal`: family is ordinal or cumulative link
-#'
-#'      \item `is_cumulative`: family is ordinal or cumulative link
-#'
-#'      \item `is_multinomial`: family is multinomial or categorical link
-#'
-#'      \item `is_categorical`: family is categorical link
-#'
-#'      \item `is_censored`: model is a censored model (has a censored
-#'      response, including survival models)
-#'
-#'      \item `is_truncated`: model is a truncated model (has a truncated
-#'      response)
-#'
-#'      \item `is_survival`: model is a survival model
-#'
-#'      \item `is_zero_inflated`: model has zero-inflation component
-#'
-#'      \item `is_hurdle`: model has zero-inflation component and is a
-#'      hurdle-model (truncated family distribution)
-#'
-#'      \item `is_dispersion`: model has dispersion component
-#'
-#'      \item `is_mixed`: model is a mixed effects model (with random
-#'      effects)
-#'
-#'      \item `is_multivariate`: model is a multivariate response model
-#'      (currently only works for *brmsfit* objects)
-#'
-#'      \item `is_trial`: model response contains additional information
-#'      about the trials
-#'
-#'      \item `is_bayesian`: model is a Bayesian model
-#'
-#'      \item `is_gam`: model is a generalized additive model
-#'
-#'      \item `is_anova`: model is an Anova object
-#'
-#'      \item `is_ttest`: model is an an object of class `htest`,
-#'      returned by `t.test()`
-#'
-#'      \item `is_correlation`: model is an an object of class
-#'      `htest`, returned by `cor.test()`
-#'
-#'      \item `is_ranktest`: model is an an object of class `htest`,
-#'      returned by `cor.test()` (if Spearman's rank correlation),
-#'      `wilcox.text()` or `kruskal.test()`.
-#'
-#'      \item `is_levenetest`: model is an an object of class `anova`,
-#'      returned by `car::leveneTest()`.
-#'
-#'      \item `is_onewaytest`: model is an an object of class `htest`,
-#'      returned by `oneway.test()`
-#'
-#'      \item `is_proptest`: model is an an object of class `htest`,
-#'      returned by `prop.test()`
-#'
-#'      \item `is_binomtest`: model is an an object of class `htest`,
-#'      returned by `binom.test()`
-#'
-#'      \item `is_chi2test`: model is an an object of class `htest`,
-#'      returned by `chisq.test()`
-#'
-#'      \item `is_xtab`: model is an an object of class `htest` or
-#'      `BFBayesFactor`, and test-statistic stems from a contingency table
-#'      (i.e. `chisq.test()` or `BayesFactor::contingencyTableBF()`).
-#'
-#'      \item `link_function`: the link-function
-#'
-#'      \item `family`: the family-object
-#'
-#'      \item `n_obs`: number of observations
-#'
-#'      \item `model_terms`: a list with all model terms, including terms
-#'      such as random effects or from zero-inflated model parts.
-#'    }
+#' model for many different model objects. Following information
+#' is returned, where all values starting with `is_` are logicals.
+#' * `is_binomial`: family is binomial (but not negative binomial)
+#' * `is_bernoulli`: special case of binomial models: family is Bernoulli
+#' * `is_poisson`: family is poisson
+#' * `is_negbin`: family is negative binomial
+#' * `is_count`: model is a count model (i.e. family is either poisson or negative binomial)
+#' * `is_beta`: family is beta
+#' * `is_betabinomial`: family is beta-binomial
+#' * `is_dirichlet`: family is dirichlet
+#' * `is_exponential`: family is exponential (e.g. Gamma or Weibull)
+#' * `is_logit`: model has logit link
+#' * `is_probit`: model has probit link
+#' * `is_linear`: family is gaussian
+#' * `is_tweedie`: family is tweedie
+#' * `is_ordinal`: family is ordinal or cumulative link
+#' * `is_cumulative`: family is ordinal or cumulative link
+#' * `is_multinomial`: family is multinomial or categorical link
+#' * `is_categorical`: family is categorical link
+#' * `is_censored`: model is a censored model (has a censored response, including survival models)
+#' * `is_truncated`: model is a truncated model (has a truncated response)
+#' * `is_survival`: model is a survival model
+#' * `is_zero_inflated`: model has zero-inflation component
+#' * `is_hurdle`: model has zero-inflation component and is a hurdle-model (truncated family distribution)
+#' * `is_dispersion`: model has dispersion component
+#' * `is_mixed`: model is a mixed effects model (with random effects)
+#' * `is_multivariate`: model is a multivariate response model (currently only works for _brmsfit_ objects)
+#' * `is_trial`: model response contains additional information about the trials
+#' * `is_bayesian`: model is a Bayesian model
+#' * `is_gam`: model is a generalized additive model
+#' * `is_anova`: model is an Anova object
+#' * `is_ttest`: model is an an object of class `htest`, returned by `t.test()`
+#' * `is_correlation`: model is an an object of class `htest`, returned by `cor.test()`
+#' * `is_ranktest`: model is an an object of class `htest`, returned by `cor.test()` (if Spearman's rank correlation), `wilcox.text()` or `kruskal.test()`.
+#' * `is_levenetest`: model is an an object of class `anova`, returned by `car::leveneTest()`.
+#' * `is_onewaytest`: model is an an object of class `htest`, returned by `oneway.test()`
+#' * `is_proptest`: model is an an object of class `htest`, returned by `prop.test()`
+#' * `is_binomtest`: model is an an object of class `htest`, returned by `binom.test()`
+#' * `is_chi2test`: model is an an object of class `htest`, returned by `chisq.test()`
+#' * `is_xtab`: model is an an object of class `htest` or `BFBayesFactor`, and test-statistic stems from a contingency table (i.e. `chisq.test()` or `BayesFactor::contingencyTableBF()`).
+#' * `link_function`: the link-function
+#' * `family`: the family-object
+#' * `n_obs`: number of observations
+#' * `model_terms`: a list with all model terms, including terms such as random effects or from zero-inflated model parts.
 #'
 #' @examples
 #' ldose <- rep(0:5, 2)
