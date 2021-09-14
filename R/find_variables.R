@@ -14,27 +14,14 @@
 #'
 #' @return A list with (depending on the model) following elements (character
 #'    vectors):
-#'    \itemize{
-#'      \item `response`, the name of the response variable
-#'
-#'      \item `conditional`, the names of the predictor variables from the
-#'      *conditional* model (as opposed to the zero-inflated part of a
-#'      model)
-#'
-#'      \item `random`, the names of the random effects (grouping factors)
-#'
-#'      \item `zero_inflated`, the names of the predictor variables from
-#'      the *zero-inflated* part of the model
-#'
-#'      \item `zero_inflated_random`, the names of the random effects
-#'      (grouping factors)
-#'
-#'      \item `dispersion`, the name of the dispersion terms
-#'
-#'      \item `instruments`, the names of instrumental variables
-#' 
-#'      \item `cluster`, the names of cluster or grouping variables
-#'    }
+#' * `response`, the name of the response variable
+#' * `conditional`, the names of the predictor variables from the *conditional* model (as opposed to the zero-inflated part of a model)
+#' * `cluster`, the names of cluster or grouping variables
+#' * `dispersion`, the name of the dispersion terms
+#' * `instruments`, the names of instrumental variables
+#' * `random`, the names of the random effects (grouping factors)
+#' * `zero_inflated`, the names of the predictor variables from the *zero-inflated* part of the model
+#' * `zero_inflated_random`, the names of the random effects (grouping factors)
 #'
 #' @examples
 #' if (require("lme4")) {
