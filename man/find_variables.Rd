@@ -51,6 +51,8 @@ vectors):
  \\item `dispersion`, the name of the dispersion terms
 
  \\item `instruments`, the names of instrumental variables
+
+ \\item `cluster`, the names of cluster or grouping variables
 }
 
 }
