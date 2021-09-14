@@ -88,7 +88,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.4.1</span>
       </span>
     </div>
 
@@ -176,108 +176,48 @@ etc. (see 'Details').</p>
     <p><code>model_info()</code> returns a list with information about the
 model for many different model objects. Following information
 is returned, where all values starting with <code>is_</code> are logicals.</p><ul>
-<li><p><code>is_binomial</code>: family is binomial (but not negative binomial)</p><pre><code> \item `is_bernoulli`: special case of binomial models: family is
- Bernoulli
-
- \item `is_poisson`: family is poisson
-
- \item `is_negbin`: family is negative binomial
-
- \item `is_count`: model is a count model (i.e. family is either
- poisson or negative binomial)
-
- \item `is_beta`: family is beta
-
- \item `is_betabinomial`: family is beta-binomial
-
- \item `is_dirichlet`: family is dirichlet
-
- \item `is_exponential`: family is exponential (e.g. Gamma or Weibull)
-
- \item `is_logit`: model has logit link
-
- \item `is_probit`: model has probit link
-
- \item `is_linear`: family is gaussian
-
- \item `is_tweedie`: family is tweedie
-
- \item `is_ordinal`: family is ordinal or cumulative link
-
- \item `is_cumulative`: family is ordinal or cumulative link
-
- \item `is_multinomial`: family is multinomial or categorical link
-
- \item `is_categorical`: family is categorical link
-
- \item `is_censored`: model is a censored model (has a censored
- response, including survival models)
-
- \item `is_truncated`: model is a truncated model (has a truncated
- response)
-
- \item `is_survival`: model is a survival model
-
- \item `is_zero_inflated`: model has zero-inflation component
-
- \item `is_hurdle`: model has zero-inflation component and is a
- hurdle-model (truncated family distribution)
-
- \item `is_dispersion`: model has dispersion component
-
- \item `is_mixed`: model is a mixed effects model (with random
- effects)
-
- \item `is_multivariate`: model is a multivariate response model
- (currently only works for *brmsfit* objects)
-
- \item `is_trial`: model response contains additional information
- about the trials
-
- \item `is_bayesian`: model is a Bayesian model
-
- \item `is_gam`: model is a generalized additive model
-
- \item `is_anova`: model is an Anova object
-
- \item `is_ttest`: model is an an object of class `htest`,
- returned by `t.test()`
-
- \item `is_correlation`: model is an an object of class
- `htest`, returned by `cor.test()`
-
- \item `is_ranktest`: model is an an object of class `htest`,
- returned by `cor.test()` (if Spearman's rank correlation),
- `wilcox.text()` or `kruskal.test()`.
-
- \item `is_levenetest`: model is an an object of class `anova`,
- returned by `car::leveneTest()`.
-
- \item `is_onewaytest`: model is an an object of class `htest`,
- returned by `oneway.test()`
-
- \item `is_proptest`: model is an an object of class `htest`,
- returned by `prop.test()`
-
- \item `is_binomtest`: model is an an object of class `htest`,
- returned by `binom.test()`
-
- \item `is_chi2test`: model is an an object of class `htest`,
- returned by `chisq.test()`
-
- \item `is_xtab`: model is an an object of class `htest` or
- `BFBayesFactor`, and test-statistic stems from a contingency table
- (i.e. `chisq.test()` or `BayesFactor::contingencyTableBF()`).
-
- \item `link_function`: the link-function
-
- \item `family`: the family-object
-
- \item `n_obs`: number of observations
-
- \item `model_terms`: a list with all model terms, including terms
- such as random effects or from zero-inflated model parts.
-</code></pre></li>
+<li><p><code>is_binomial</code>: family is binomial (but not negative binomial)</p></li>
+<li><p><code>is_bernoulli</code>: special case of binomial models: family is Bernoulli</p></li>
+<li><p><code>is_poisson</code>: family is poisson</p></li>
+<li><p><code>is_negbin</code>: family is negative binomial</p></li>
+<li><p><code>is_count</code>: model is a count model (i.e. family is either poisson or negative binomial)</p></li>
+<li><p><code>is_beta</code>: family is beta</p></li>
+<li><p><code>is_betabinomial</code>: family is beta-binomial</p></li>
+<li><p><code>is_dirichlet</code>: family is dirichlet</p></li>
+<li><p><code>is_exponential</code>: family is exponential (e.g. Gamma or Weibull)</p></li>
+<li><p><code>is_logit</code>: model has logit link</p></li>
+<li><p><code>is_probit</code>: model has probit link</p></li>
+<li><p><code>is_linear</code>: family is gaussian</p></li>
+<li><p><code>is_tweedie</code>: family is tweedie</p></li>
+<li><p><code>is_ordinal</code>: family is ordinal or cumulative link</p></li>
+<li><p><code>is_cumulative</code>: family is ordinal or cumulative link</p></li>
+<li><p><code>is_multinomial</code>: family is multinomial or categorical link</p></li>
+<li><p><code>is_categorical</code>: family is categorical link</p></li>
+<li><p><code>is_censored</code>: model is a censored model (has a censored response, including survival models)</p></li>
+<li><p><code>is_truncated</code>: model is a truncated model (has a truncated response)</p></li>
+<li><p><code>is_survival</code>: model is a survival model</p></li>
+<li><p><code>is_zero_inflated</code>: model has zero-inflation component</p></li>
+<li><p><code>is_hurdle</code>: model has zero-inflation component and is a hurdle-model (truncated family distribution)</p></li>
+<li><p><code>is_dispersion</code>: model has dispersion component</p></li>
+<li><p><code>is_mixed</code>: model is a mixed effects model (with random effects)</p></li>
+<li><p><code>is_multivariate</code>: model is a multivariate response model (currently only works for <em>brmsfit</em> objects)</p></li>
+<li><p><code>is_trial</code>: model response contains additional information about the trials</p></li>
+<li><p><code>is_bayesian</code>: model is a Bayesian model</p></li>
+<li><p><code>is_gam</code>: model is a generalized additive model</p></li>
+<li><p><code>is_anova</code>: model is an Anova object</p></li>
+<li><p><code>is_ttest</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/t.test.html'>t.test()</a></code></p></li>
+<li><p><code>is_correlation</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test()</a></code></p></li>
+<li><p><code>is_ranktest</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test()</a></code> (if Spearman's rank correlation), <code>wilcox.text()</code> or <code><a href='https://rdrr.io/r/stats/kruskal.test.html'>kruskal.test()</a></code>.</p></li>
+<li><p><code>is_levenetest</code>: model is an an object of class <code>anova</code>, returned by <code><a href='https://rdrr.io/pkg/car/man/leveneTest.html'>car::leveneTest()</a></code>.</p></li>
+<li><p><code>is_onewaytest</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/oneway.test.html'>oneway.test()</a></code></p></li>
+<li><p><code>is_proptest</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/prop.test.html'>prop.test()</a></code></p></li>
+<li><p><code>is_binomtest</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/binom.test.html'>binom.test()</a></code></p></li>
+<li><p><code>is_chi2test</code>: model is an an object of class <code>htest</code>, returned by <code><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test()</a></code></p></li>
+<li><p><code>is_xtab</code>: model is an an object of class <code>htest</code> or <code>BFBayesFactor</code>, and test-statistic stems from a contingency table (i.e. <code><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test()</a></code> or <code><a href='https://rdrr.io/pkg/BayesFactor/man/contingencyTableBF.html'>BayesFactor::contingencyTableBF()</a></code>).</p></li>
+<li><p><code>link_function</code>: the link-function</p></li>
+<li><p><code>family</code>: the family-object</p></li>
+<li><p><code>n_obs</code>: number of observations</p></li>
+<li><p><code>model_terms</code>: a list with all model terms, including terms such as random effects or from zero-inflated model parts.</p></li>
 </ul>
 
 
