@@ -576,6 +576,11 @@ parameters_table <- format_table
   if ("Performance_Score" %in% names(x)) names(x)[names(x) == "Performance_Score"] <- "Performance-Score"
   if ("Wu_Hausman" %in% names(x)) names(x)[names(x) == "Wu_Hausman"] <- "Wu & Hausman"
   if ("p(Wu_Hausman)" %in% names(x)) names(x)[names(x) == "p(Wu_Hausman)"] <- "p(Wu & Hausman)"
+  if ("AIC_wt" %in% names(x)) names(x)[names(x) == "AIC_wt"] <- "AIC (weighted)"
+  if ("BIC_wt" %in% names(x)) names(x)[names(x) == "BIC_wt"] <- "BIC (weighted)"
+  if ("AICc_wt" %in% names(x)) names(x)[names(x) == "AICc_wt"] <- "AICc (weighted)"
+  if ("WAIC_wt" %in% names(x)) names(x)[names(x) == "WAIC_wt"] <- "WAIC (weighted)"
+  if ("LOOIC_wt" %in% names(x)) names(x)[names(x) == "LOOIC_wt"] <- "LOOIC (weighted)"
   x
 }
 
