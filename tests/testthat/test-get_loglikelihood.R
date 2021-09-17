@@ -75,7 +75,7 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
   test_that("get_loglikelihood - stanreg", {
     .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
     if (requiet("rstanarm") && .runStanTest) {
-      x <- rstanarm::stan_glm(Sepal.Length ~ Petal.Width, data = iris)
+      x <- rstanarm::stan_glm(Sepal.Length ~ Petal.Width, data = iris, refresh = 0)
       ref <- lm(Sepal.Length ~ Petal.Width, data = iris)
       ll <- loglikelihood(x)
       ll2 <- loglikelihood(ref)
