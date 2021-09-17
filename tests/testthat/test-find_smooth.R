@@ -14,7 +14,9 @@ osx <- tryCatch(
 
 if (requiet("testthat") && requiet("insight") && requiet("mgcv") && requiet("gamm4") && requiet("rstanarm") && !osx) {
   set.seed(2) ## simulate some data...
-  dat <- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
+  void <- capture.output(
+    dat <- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
+  )
 
   bt <- mgcv::gam(y ~ te(x0, x1, k = 7) + s(x2) + s(x3),
     data = dat,

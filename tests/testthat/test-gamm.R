@@ -10,7 +10,8 @@ if (.runThisTest) {
         y ~ s(x0) + s(x1) + s(x2),
         family = poisson,
         data = dat,
-        random = list(fac = ~1)
+        random = list(fac = ~1),
+        verbosePQL = FALSE
       )
 
     test_that("model_info", {
@@ -139,12 +140,16 @@ if (.runThisTest) {
     )
 
     set.seed(0)
-    dat <- gamSim(6, n = 200, scale = .2, dist = "poisson")
+
+    void <- capture.output(
+      dat <- gamSim(6, n = 200, scale = .2, dist = "poisson")
+    )
 
     m2 <- gamm(
       y ~ s(x0) + s(x1) + s(x2),
       family = poisson,
-      data = dat
+      data = dat,
+      verbosePQL = FALSE
     )
 
     dat$g <- dat$fac
@@ -152,7 +157,8 @@ if (.runThisTest) {
       y ~ s(x0) + s(x1) + s(x2),
       family = poisson,
       data = dat,
-      random = list(g = ~1)
+      random = list(g = ~1),
+      verbosePQL = FALSE
     )
 
     test_that("find_formula-gamm-1", {

@@ -6,12 +6,14 @@ if (requiet("testthat") &&
   data(housing, package = "MASS")
 
   dat <- mlogit.data(housing, choice = "Sat", shape = "wide")
-  m1 <-
-    gmnl(Sat ~ Infl + Type + Cont | 1,
-      data = dat,
-      model = "smnl",
-      R = 100
-    )
+  void <- capture.output(
+    m1 <-
+      gmnl(Sat ~ Infl + Type + Cont | 1,
+        data = dat,
+        model = "smnl",
+        R = 100
+      )
+  )
 
   test_that("model_info", {
     expect_false(model_info(m1)$is_ordinal)
