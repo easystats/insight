@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("rms")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("rms")) {
   data(mtcars)
   m1 <- lrm(am ~ mpg + gear, data = mtcars)
 

@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("MASS")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("MASS")) {
   data(housing, package = "MASS")
 
   m1 <- polr(Sat ~ Infl + Type + Cont, data = housing, weights = Freq)

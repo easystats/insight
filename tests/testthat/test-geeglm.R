@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("geepack")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("geepack")) {
   data(warpbreaks)
   m1 <-
     geeglm(

@@ -1,7 +1,7 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("truncreg") &&
-  require("survival")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("truncreg") &&
+  requiet("survival")) {
   data("tobin", package = "survival")
   m1 <- truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
 

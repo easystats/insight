@@ -14,7 +14,7 @@ osx <- tryCatch(
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && !osx && require("testthat") && require("insight") && require("lme4") && require("glmmTMB") && require("mgcv") && require("gamm4") && require("rstanarm") && require("merTools") && require("emmeans") && require("bayestestR") && require("mclust") && require("rstantools") && require("psych") && require("fungible")) {
+if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet("lme4") && requiet("glmmTMB") && requiet("mgcv") && requiet("gamm4") && requiet("rstanarm") && requiet("merTools") && requiet("emmeans") && requiet("bayestestR") && requiet("mclust") && requiet("rstantools") && requiet("psych") && requiet("fungible")) {
   data(mtcars)
 
 
@@ -312,7 +312,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   # =========================================================================
 
   .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
-  if (require("rstanarm") && .runStanTest) {
+  if (requiet("rstanarm") && .runStanTest) {
 
     test_that("get_predicted - rstanarm", {
       # LM

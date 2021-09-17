@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("AER")) {
+if (requiet("testthat") && requiet("insight") && requiet("AER")) {
   data("Affairs", package = "AER")
   m1 <-
     AER::tobit(affairs ~ age + yearsmarried + religiousness + occupation + rating,

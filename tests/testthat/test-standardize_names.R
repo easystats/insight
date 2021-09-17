@@ -1,7 +1,7 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("stats") &&
-  require("parameters")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("stats") &&
+  requiet("parameters")) {
   .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
   if (packageVersion("parameters") >= "0.14.0") {

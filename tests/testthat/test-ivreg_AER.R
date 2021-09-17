@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("AER")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("AER")) {
   data(CigarettesSW)
   CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
   CigarettesSW$rincome <-

@@ -1,9 +1,9 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-  require("testthat") &&
-  require("insight") &&
-  require("lme4")) {
+  requiet("testthat") &&
+  requiet("insight") &&
+  requiet("lme4")) {
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)

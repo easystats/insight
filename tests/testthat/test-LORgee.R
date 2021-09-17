@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("multgee")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("multgee")) {
   data(arthritis)
   m1 <- ordLORgee(
     y ~ factor(time) + factor(trt) + factor(baseline),

@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("survival")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("survival")) {
   lung <- subset(lung, subset = ph.ecog %in% 0:2)
   lung$sex <- factor(lung$sex, labels = c("male", "female"))
   lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
@@ -103,7 +103,7 @@ if (require("testthat") &&
     expect_identical(find_statistic(m1), "z-statistic")
   })
 
-  if (require("JM")) {
+  if (requiet("JM")) {
     data("aids", package = "JM")
     m <- coxph(Surv(start, stop, event) ~ CD4, data = aids)
     test_that("coxph triple response", {

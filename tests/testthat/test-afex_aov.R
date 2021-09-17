@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("afex")) {
+if (requiet("testthat") && requiet("insight") && requiet("afex")) {
   data(obk.long, package = "afex")
 
   obk.long$treatment <- as.character(obk.long$treatment)

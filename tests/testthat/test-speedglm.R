@@ -1,7 +1,7 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("speedglm") &&
-  require("glmmTMB")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("speedglm") &&
+  requiet("glmmTMB")) {
   data(Salamanders)
   Salamanders$cover <- abs(Salamanders$cover)
 

@@ -1,7 +1,7 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("quantreg") &&
-  require("tripack")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("quantreg") &&
+  requiet("tripack")) {
   data("CobarOre")
   set.seed(123)
   CobarOre$w <- rnorm(nrow(CobarOre))

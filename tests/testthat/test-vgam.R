@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-  if (require("testthat") && require("insight") && require("VGAM")) {
+  if (requiet("testthat") && requiet("insight") && requiet("VGAM")) {
     data("hunua")
     m1 <- download_model("vgam_1")
     m2 <- download_model("vgam_2")

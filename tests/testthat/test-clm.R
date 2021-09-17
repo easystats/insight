@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("ordinal")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("ordinal")) {
   data(wine, package = "ordinal")
   m1 <- clm(rating ~ temp * contact, data = wine)
 

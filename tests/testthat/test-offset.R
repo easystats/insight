@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("pscl")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("pscl")) {
   # Generate some zero-inflated data
   set.seed(123)
   N <- 100 # Samples

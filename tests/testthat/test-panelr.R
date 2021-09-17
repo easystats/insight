@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("panelr")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("panelr")) {
   data("WageData")
   wages <- panel_data(WageData, id = id, wave = t)
   m1 <- wbm(lwage ~ lag(union) + wks | blk + fem | blk * lag(union), data = wages)

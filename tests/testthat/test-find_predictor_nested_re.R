@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("lme4")) {
+if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
   set.seed(1984)
   dat <- data.frame(
     y = rnorm(1000 * 5, sd = 1 - .20),

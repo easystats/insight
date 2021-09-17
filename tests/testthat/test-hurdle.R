@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("pscl")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("pscl")) {
   data("bioChemists")
 
   m1 <- hurdle(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)

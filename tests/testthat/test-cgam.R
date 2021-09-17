@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("cgam")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("cgam")) {
   data(cubic, package = "cgam")
   m <- cgam(y ~ incr.conv(x), data = cubic)
 

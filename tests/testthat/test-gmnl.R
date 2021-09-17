@@ -1,8 +1,8 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("gmnl") &&
-  require("mlogit") &&
-  require("MASS")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("gmnl") &&
+  requiet("mlogit") &&
+  requiet("MASS")) {
   data(housing, package = "MASS")
 
   dat <- mlogit.data(housing, choice = "Sat", shape = "wide")

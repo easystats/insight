@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("lme4")) {
+if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
   data("cbpp")
   set.seed(123)
   cbpp$cont <- rnorm(nrow(cbpp))

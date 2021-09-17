@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("quantreg")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("quantreg")) {
   data(stackloss)
   m1 <-
     rq(stack.loss ~ Air.Flow + Water.Temp,

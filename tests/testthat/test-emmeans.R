@@ -1,4 +1,4 @@
-if (require(emmeans) && require(insight) && require(testthat)) {
+if (requiet("emmeans") && requiet("insight") && requiet("testthat")) {
   test_that("emmeans", {
     m <- glm(am ~ factor(cyl),
              family = binomial(), data = mtcars)

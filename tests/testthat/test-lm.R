@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("stats")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("stats")) {
   data(iris)
   data(mtcars)
 

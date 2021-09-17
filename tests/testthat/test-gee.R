@@ -1,8 +1,10 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("gee")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("gee")) {
   data(warpbreaks)
-  m1 <- gee(breaks ~ tension, id = wool, data = warpbreaks)
+  void <- capture.output(suppressMessages(
+    m1 <- gee(breaks ~ tension, id = wool, data = warpbreaks)
+  ))
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)

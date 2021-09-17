@@ -2,10 +2,10 @@
 
 ## TODO enable once it's clear what the problem is...
 
-if (require("testthat") &&
-  require("insight") &&
-  require("lme4") &&
-  suppressPackageStartupMessages(require("afex")) &&
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("lme4") &&
+  suppressPackageStartupMessages(requiet("afex")) &&
   FALSE) {
   data(sleepstudy)
 

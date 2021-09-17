@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("mlogit")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("mlogit")) {
   data("Fishing")
   Fish <-
     mlogit.data(Fishing,

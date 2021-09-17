@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("splines")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("splines")) {
   data(iris)
   m1 <- lm(Sepal.Length ~ splines::bs(Petal.Width, df = 4) + Species, data = iris)
 

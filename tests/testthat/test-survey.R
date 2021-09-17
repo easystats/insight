@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("survey")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("survey")) {
   data(api)
   dstrat <-
     svydesign(

@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("blme")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("blme")) {
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)

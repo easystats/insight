@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if (require("testthat") && require("insight") && require("gbm")) {
+  if (requiet("testthat") && requiet("insight") && requiet("gbm")) {
     set.seed(102) # for reproducibility
     m1 <- gbm(
       mpg ~ gear + cyl + wt,

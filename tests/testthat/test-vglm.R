@@ -1,6 +1,6 @@
 unloadNamespace("gam")
 
-if (require("testthat") && require("insight") && require("VGAM")) {
+if (requiet("testthat") && requiet("insight") && requiet("VGAM")) {
   d.AD <- data.frame(
     treatment = gl(3, 3),
     outcome = gl(3, 1, 9),
@@ -12,7 +12,7 @@ if (require("testthat") && require("insight") && require("VGAM")) {
       counts ~ outcome + treatment,
       family = poissonff,
       data = d.AD,
-      trace = TRUE
+      trace = FALSE
     )
 
   test_that("model_info", {

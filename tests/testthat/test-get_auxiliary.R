@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("MASS")) {
+if (requiet("testthat") && requiet("insight") && requiet("MASS")) {
   data(quine)
   clotting <- data.frame(
     u = c(5, 10, 15, 20, 30, 40, 60, 80, 100),

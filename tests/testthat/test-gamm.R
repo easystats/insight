@@ -2,7 +2,7 @@
 
 if (.runThisTest) {
   unloadNamespace("gam")
-  if (require("testthat") && require("insight") && require("mgcv")) {
+  if (requiet("testthat") && requiet("insight") && requiet("mgcv")) {
     set.seed(0)
     dat <- gamSim(6, n = 200, scale = .2, dist = "poisson")
     m1 <-

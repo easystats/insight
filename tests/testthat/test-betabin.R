@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("aod")) {
+if (requiet("testthat") && requiet("insight") && requiet("aod")) {
   data(dja)
   m1 <- suppressWarnings(betabin(cbind(y, n - y) ~ group * trisk, ~village, data = dja))
 
