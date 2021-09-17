@@ -291,18 +291,19 @@ get_predicted_se <- function(x,
   mm <- .get_predicted_ci_modelmatrix(x, data = data, vcovmat = vcovmat)
 
   # compute vcov for predictions
-  var_matrix <- mm %*% vcovmat %*% t(mm)
+  # Next line equivalent to: diag(M V M')
+  var_diag <- colSums(t(mm %*% vcovmat) * t(mm))
 
   # add sigma to standard errors, i.e. confidence or prediction intervals
   ci_type <- match.arg(ci_type, c("confidence", "prediction"))
   if (ci_type == "prediction") {
     if (is_mixed_model(x)) {
-      se <- sqrt(diag(var_matrix) + get_variance_residual(x))
+      se <- sqrt(var_diag + get_variance_residual(x))
     } else {
-      se <- sqrt(diag(var_matrix) + get_sigma(x)^2)
+      se <- sqrt(var_diag + get_sigma(x)^2)
     }
   } else {
-    se <- sqrt(diag(var_matrix))
+    se <- sqrt(var_diag)
   }
 
   se

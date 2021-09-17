@@ -381,3 +381,12 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     expect_equal(dim(x), c(5, 3))
   })
 }
+
+
+
+test_that("check SE against barebones `predict`", {
+  mod <- lm(mpg ~ hp + factor(cyl), mtcars)
+  known <- predict(mod, se.fit = TRUE)$se.fit
+  unknown <- as.data.frame(get_predicted(mod))$SE
+  expect_equal(known, unknown)
+})
