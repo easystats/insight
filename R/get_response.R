@@ -34,6 +34,18 @@ get_response <- function(x, select = NULL, verbose = TRUE) {
     return(NULL)
   }
 
+  # check if response is a proportion for a binomial glm
+  proportion_response <- combined_rn[!grepl("I\\((.*)\\)", combined_rn)]
+  binom_fam <- tryCatch(
+    {
+      stats::family(x)$family == "binomial"
+    },
+    error = function(x) {
+      FALSE
+    }
+  )
+  glm_proportion <- any(grepl("/", proportion_response, fixed = TRUE)) && binom_fam
+
   # data used to fit the model
   model_data <- get_data(x, verbose = verbose)
 
@@ -42,7 +54,7 @@ get_response <- function(x, select = NULL, verbose = TRUE) {
     rv <- x$Y
     class(rv) <- "matrix"
     data.frame(rv)
-  } else if (length(rn) > 1 && all(rn %in% colnames(model_data)) && !any(grepl("/", combined_rn, fixed = TRUE))) {
+  } else if (length(rn) > 1 && all(rn %in% colnames(model_data)) && !glm_proportion) {
     rv <- model_data[, rn, drop = FALSE]
     colnames(rv) <- rn
     # if user only wants specific response value, return this only
