@@ -227,18 +227,23 @@ get_predicted_ci.mlm <- function(x, ...) {
     # else, model.matrix below fails, e.g. for log-terms
     attr(data, "terms") <- NULL
 
-    # model terms, required for model matrix
-    model_terms <- tryCatch(
-      {
-        stats::terms(x)
-      },
-      error = function(e) {
-        find_formula(x)$conditional
-      }
-    )
-
-    # drop offset from model_terms
+    # In these models we need to drop offset from model_terms. To do this, we
+    # must construct the mm by calling `get_modelmatrix` on modified model
+    # terms.  When we do not need to drop offset terms, we call get_modelmatrix
+    # on the model itself. The latter strategy is safer in cases where `data`
+    # does not include all the levels of a factor variable.
     if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc"))) {
+
+      # model terms, required for model matrix
+      model_terms <- tryCatch(
+        {
+          stats::terms(x)
+        },
+        error = function(e) {
+          find_formula(x)$conditional
+        }
+      )
+  
       all_terms <- find_terms(x)$conditional
       off_terms <- grepl("^offset\\((.*)\\)", all_terms)
       if (any(off_terms)) {
@@ -252,8 +257,10 @@ get_predicted_ci.mlm <- function(x, ...) {
         off_terms <- grepl("^offset\\((.*)\\)", all_terms)
         model_terms <- stats::reformulate(all_terms[!off_terms], response = find_response(x))
       }
+      mm <- get_modelmatrix(model_terms, data = data)
+    } else {
+      mm <- get_modelmatrix(x, data = data)
     }
-    mm <- get_modelmatrix(model_terms, data = data)
   }
 
   # fix rank deficiency
