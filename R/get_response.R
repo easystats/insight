@@ -42,7 +42,7 @@ get_response <- function(x, select = NULL, verbose = TRUE) {
     rv <- x$Y
     class(rv) <- "matrix"
     data.frame(rv)
-  } else if (length(rn) > 1 && all(rn %in% colnames(model_data)) && !grepl("/", combined_rn, fixed = TRUE)) {
+  } else if (length(rn) > 1 && all(rn %in% colnames(model_data)) && !any(grepl("/", combined_rn, fixed = TRUE))) {
     rv <- model_data[, rn, drop = FALSE]
     colnames(rv) <- rn
     # if user only wants specific response value, return this only
