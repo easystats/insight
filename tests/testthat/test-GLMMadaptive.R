@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if (require("testthat") && require("insight") && require("GLMMadaptive") && require("lme4")) {
+  if (requiet("testthat") && requiet("insight") && requiet("GLMMadaptive") && requiet("lme4")) {
     m <- download_model("GLMMadaptive_zi_2")
     m2 <- download_model("GLMMadaptive_zi_1")
 

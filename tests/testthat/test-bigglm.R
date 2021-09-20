@@ -1,8 +1,8 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if (require("testthat") &&
-    require("insight") && require("glmmTMB") && require("biglm")) {
+  if (requiet("testthat") &&
+    requiet("insight") && requiet("glmmTMB") && requiet("biglm")) {
     data(Salamanders)
     Salamanders$cover <- abs(Salamanders$cover)
 

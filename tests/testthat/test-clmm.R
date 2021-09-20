@@ -12,9 +12,9 @@ osx <- tryCatch(
   }
 )
 
-if (require("testthat") &&
-  require("insight") &&
-  require("ordinal")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("ordinal")) {
   data(wine, package = "ordinal")
   data(soup)
 

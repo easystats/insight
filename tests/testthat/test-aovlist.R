@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("stats")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("stats")) {
   data(npk)
   m1 <- aov(yield ~ N * P * K + Error(block), data = npk)
   m2 <- aov(yield ~ N * P * K, data = npk)

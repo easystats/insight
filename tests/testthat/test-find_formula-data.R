@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight")) {
+if (requiet("testthat") && requiet("insight")) {
   data(mtcars)
   d <- mtcars
   m1 <- lm(mtcars$mpg ~ mtcars$hp * mtcars$cyl + poly(mtcars$drat, 2) / mtcars$disp)

@@ -1,10 +1,10 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("survival") &&
-  require("lme4") &&
-  require("nlme") &&
-  require("bdsmatrix") &&
-  require("coxme")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("survival") &&
+  requiet("lme4") &&
+  requiet("nlme") &&
+  requiet("bdsmatrix") &&
+  requiet("coxme")) {
   set.seed(1234)
   lung$inst2 <- sample(1:10, size = nrow(lung), replace = TRUE)
   lung <- subset(lung, subset = ph.ecog %in% 0:2)

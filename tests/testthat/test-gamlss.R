@@ -1,15 +1,17 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("gamlss")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("gamlss")) {
   data(abdom)
-  m1 <-
-    gamlss(
-      y ~ pb(x),
-      sigma.formula =  ~ pb(x),
-      family = BCT,
-      data = abdom,
-      method = mixed(1, 20)
-    )
+  void <- capture.output(
+    m1 <-
+      gamlss(
+        y ~ pb(x),
+        sigma.formula =  ~ pb(x),
+        family = BCT,
+        data = abdom,
+        method = mixed(1, 20)
+      )
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)

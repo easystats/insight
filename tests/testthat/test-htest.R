@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight")) {
+if (requiet("testthat") && requiet("insight")) {
   x <- t.test(1:3, c(1, 1:3))
   test_that("get_data.t-test", {
     expect_equal(get_data(x)$x, c(1, 2, 3, NA))

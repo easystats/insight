@@ -14,7 +14,7 @@ osx <- tryCatch(
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && !osx && require("testthat") && require("insight") && require("nonnest2")) {
+if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet("nonnest2")) {
   data(iris)
   data(mtcars)
 
@@ -57,7 +57,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   })
 
   test_that("get_loglikelihood - (g)lmer", {
-    if (require("lme4")) {
+    if (requiet("lme4")) {
       x <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
       ll <- loglikelihood(x, estimator = "ML")
       ll2 <- stats::logLik(x)
@@ -74,8 +74,8 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
 
   test_that("get_loglikelihood - stanreg", {
     .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
-    if (require("rstanarm") && .runStanTest) {
-      x <- rstanarm::stan_glm(Sepal.Length ~ Petal.Width, data = iris)
+    if (requiet("rstanarm") && .runStanTest) {
+      x <- rstanarm::stan_glm(Sepal.Length ~ Petal.Width, data = iris, refresh = 0)
       ref <- lm(Sepal.Length ~ Petal.Width, data = iris)
       ll <- loglikelihood(x)
       ll2 <- loglikelihood(ref)
@@ -85,7 +85,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   })
 
   test_that("get_loglikelihood - ivreg", {
-    if (require("ivreg")) {
+    if (requiet("ivreg")) {
       data("CigaretteDemand", package = "ivreg")
       x <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome), data = CigaretteDemand)
 
@@ -95,7 +95,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
   })
 
   test_that("get_loglikelihood - plm", {
-    if (require("plm")) {
+    if (requiet("plm")) {
       data("Produc", package = "plm")
       x <- plm::plm(log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp,
         data = Produc, index = c("state", "year")
@@ -106,7 +106,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     }
   })
 
-  if (require("estimatr")) {
+  if (requiet("estimatr")) {
     test_that("get_loglikelihood - iv_robust", {
       data(mtcars)
       x <- estimatr::iv_robust(mpg ~ gear + cyl | carb + wt, data = mtcars)
@@ -116,7 +116,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
     })
   }
 
-  if (require("mgcv")) {
+  if (requiet("mgcv")) {
     test_that("get_loglikelihood - mgcv", {
       x <- mgcv::gam(Sepal.Length ~ s(Petal.Width), data = iris)
       ll <- insight::get_loglikelihood(x)
@@ -129,7 +129,7 @@ if (.runThisTest && !osx && require("testthat") && require("insight") && require
       # Which one to get?
     })
   }
-  if (require("gamm4")) {
+  if (requiet("gamm4")) {
     test_that("get_loglikelihood - gamm4", {
       x <- gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data = iris)
       ll <- insight::get_loglikelihood(x)

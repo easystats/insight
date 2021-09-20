@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight")) {
+if (requiet("testthat") && requiet("insight")) {
   data(iris)
   iris$`a m` <- iris$Species
   iris$`Sepal Width` <- iris$Sepal.Width

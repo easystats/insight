@@ -1,7 +1,7 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("nlme") &&
-  require("lme4")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("nlme") &&
+  requiet("lme4")) {
   data("sleepstudy")
   data(Orthodont)
   m1 <- lme(Reaction ~ Days,

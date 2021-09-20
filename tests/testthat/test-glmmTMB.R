@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("glmmTMB")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("glmmTMB")) {
   # fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
   # fish$nofish <- as.factor(fish$nofish)
   # fish$livebait <- as.factor(fish$livebait)

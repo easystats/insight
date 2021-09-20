@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("survival")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("survival")) {
   m1 <- survfit(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
 
   test_that("model_info", {

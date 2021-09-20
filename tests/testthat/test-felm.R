@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("lfe")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("lfe")) {
   x <- rnorm(1000)
   x2 <- rnorm(length(x))
   id <- factor(sample(20, length(x), replace = TRUE))

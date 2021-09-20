@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("survival")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("survival")) {
   m1 <- survreg(Surv(futime, fustat) ~ ecog.ps + rx,
     data = ovarian,
     dist = "exponential"

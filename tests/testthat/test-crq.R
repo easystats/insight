@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("quantreg")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("quantreg")) {
   set.seed(123)
   n <- 200
   x <- rnorm(n)

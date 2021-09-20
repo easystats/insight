@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight")) {
+if (requiet("testthat") && requiet("insight")) {
   x <- c(0.0000453, 0.12, 1.2, 0.0001234)
   test_that("format_value", {
     f <- format_value(x, zap_small = FALSE)

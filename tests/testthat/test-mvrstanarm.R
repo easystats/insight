@@ -2,9 +2,9 @@
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
 if (.runThisTest && .runStanTest &&
-  suppressWarnings(require("testthat") &&
-    require("insight") &&
-    require("rstanarm"))) {
+  suppressWarnings(requiet("testthat") &&
+    requiet("insight") &&
+    requiet("rstanarm"))) {
   data("pbcLong")
   m1 <- download_model("stanmvreg_1")
 

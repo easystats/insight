@@ -15,7 +15,7 @@ osx <- tryCatch(
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
-if (.runThisTest && .runStanTest && !osx && require("testthat") && require("insight") && require("lme4") && require("rstanarm")) {
+if (.runThisTest && .runStanTest && !osx && requiet("testthat") && requiet("insight") && requiet("lme4") && requiet("rstanarm")) {
   data(mtcars)
 
   test_that("get_deviance - Bayesian lm", {

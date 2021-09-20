@@ -1,4 +1,4 @@
-if (require("testthat") && require("insight") && require("lme4")) {
+if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
   data(mtcars)
   m1 <- lmer(mpg ~ am + (1 | cyl), data = mtcars)
   m2 <- lm(mpg ~ am, data = mtcars)

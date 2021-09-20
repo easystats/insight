@@ -1,7 +1,7 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("nnet") &&
-  require("MASS")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("nnet") &&
+  requiet("MASS")) {
   data("birthwt")
   m1 <- multinom(low ~ age + lwt + race + smoke, data = birthwt)
 

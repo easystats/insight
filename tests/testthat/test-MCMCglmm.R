@@ -13,9 +13,9 @@ osx <- tryCatch(
 )
 
 
-if (!osx && require("testthat") &&
-  require("insight") &&
-  require("MCMCglmm")) {
+if (!osx && requiet("testthat") &&
+  requiet("insight") &&
+  requiet("MCMCglmm")) {
   data(PlodiaPO)
   m1 <- MCMCglmm(
     PO ~ plate,

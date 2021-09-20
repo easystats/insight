@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("robustbase")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("robustbase")) {
   data(carrots)
 
   m1 <- glmrob(

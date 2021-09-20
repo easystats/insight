@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
-if (.runThisTest && .runStanTest && require("testthat") && require("insight") && require("brms")) {
+if (.runThisTest && .runStanTest && requiet("testthat") && requiet("insight") && requiet("brms")) {
   data(mtcars)
   set.seed(123)
 

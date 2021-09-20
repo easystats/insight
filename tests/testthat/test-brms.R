@@ -1,9 +1,9 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if (suppressWarnings(require("testthat") &&
-    require("insight") &&
-    require("brms"))) {
+  if (suppressWarnings(requiet("testthat") &&
+    requiet("insight") &&
+    requiet("brms"))) {
 
     # Model fitting -----------------------------------------------------------
 

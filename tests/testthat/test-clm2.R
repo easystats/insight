@@ -1,7 +1,7 @@
-if (require("testthat") &&
-  require("insight") &&
-  require("ordinal") &&
-  require("MASS")) {
+if (requiet("testthat") &&
+  requiet("insight") &&
+  requiet("ordinal") &&
+  requiet("MASS")) {
   data(housing, package = "MASS")
   m1 <- clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 
