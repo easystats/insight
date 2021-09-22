@@ -78,7 +78,7 @@ check_if_installed <- function(package,
 print.check_if_installed <- function(x, ...) {
   if (any(x)) {
     cat("Following packages are installed:\n")
-    print_color(paste0("v ", names(x)[x], collapse = "\n"), "green")
+    print_color(paste0("- ", names(x)[x], collapse = "\n"), "green")
   }
 
   if (any(!x)) {
@@ -86,6 +86,6 @@ print.check_if_installed <- function(x, ...) {
       cat("\n\n")
     }
     cat("Following packages are not installed:\n")
-    print_color(paste0("x ", names(x)[!x], collapse = "\n"), "red")
+    print_color(paste0("- ", names(x)[!x], collapse = "\n"), "red")
   }
 }
