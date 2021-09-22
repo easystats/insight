@@ -150,6 +150,7 @@
   reason <span class='op'>=</span> <span class='st'>"for this function to work"</span>,
   stop <span class='op'>=</span> <span class='cn'>TRUE</span>,
   minimum_version <span class='op'>=</span> <span class='cn'>NULL</span>,
+  quietly <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></code></pre></div>
 
@@ -176,6 +177,13 @@ needed package is not installed.</p></td>
       <td><p>String, representing the minimum package version that
 is required. If <code>NULL</code>, no check for minimum version is done. Note
 that <code>minimum_version</code> only works when <code>package</code> is of length 1.</p></td>
+    </tr>
+    <tr>
+      <th>quietly</th>
+      <td><p>Logical, if <code>TRUE</code>, invisibly returns either <code>TRUE</code> if all
+packages are installed, <code>FALSE</code> otherwise, and does not stop or throw a
+warning. If <code>quietly = TRUE</code>, argument <code>stop</code> is ignored. Use this argument
+to internally check for package dependencies without stopping or warnings.</p></td>
     </tr>
     <tr>
       <th>...</th>

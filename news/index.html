@@ -139,12 +139,34 @@
       <small>Source: <a href='https://github.com/easystats/insight/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="insight-0144" class="section level1">
-<h1 class="page-header" data-toc-text="0.14.4">
-<a href="#insight-0144" class="anchor" aria-hidden="true"></a>insight 0.14.4<small> 2021-09-02 </small></h1>
+    <div id="insight-0145" class="section level1">
+<h1 class="page-header" data-toc-text="0.14.5">
+<a href="#insight-0145" class="anchor" aria-hidden="true"></a>insight 0.14.5<small> Unreleased </small></h1>
+<div id="general" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general" class="anchor" aria-hidden="true"></a>General</h2>
+<ul><li><p>Improved support for models of class <code>sampleSelection</code>.</p></li>
+<li><p>Improved documentation.</p></li>
+</ul></div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<ul><li>
+<code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> gains a <code>quietly</code> argument, if neither stopping nor a warning message for non-installed packages is requested.</li>
+</ul></div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<ul><li><p>Fixed issue with parameter names from <em>emmeans</em> objects in <code><a href="../reference/get_parameters.html">get_parameters()</a></code>.</p></li>
+<li><p>Fixed issues with unknown arguments in <code><a href="../reference/get_predicted.html">get_predicted()</a></code>.</p></li>
+</ul></div>
+</div>
+    <div id="insight-0144" class="section level1">
+<h1 class="page-header" data-toc-text="0.14.4">
+<a href="#insight-0144" class="anchor" aria-hidden="true"></a>insight 0.14.4<small> 2021-09-02 </small></h1>
+<div id="bug-fixes-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li>Fixed issues due to latest <em>brms</em> update.</li>
 </ul></div>
 </div>
@@ -157,21 +179,21 @@
 <ul><li>
 <code>systemfit</code> (<em>systemfit</em>)</li>
 </ul></div>
-<div id="general" class="section level2">
+<div id="general-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general" class="anchor" aria-hidden="true"></a>General</h2>
+<a href="#general-1" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li>Minor improvements for functions that support printing outputs.</li>
 </ul></div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> gains a new option, <code>predict = "response"</code> for binomial models.</p></li>
 <li><p>Improved stability of <code><a href="../reference/get_variance.html">get_variance()</a></code> when computing random-slope-intercept correlation with categorical random slopes.</p></li>
 <li><p>Improved <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>brms</em> models.</p></li>
 </ul></div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>brms</em> models with auxiliary parameters.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> for <em>brms</em> models with auxiliary parameters.</p></li>
 <li><p>Fixed issue where <code><a href="../reference/get_data.html">get_data()</a></code> for <em>htest</em> objects did not always preserve factors.</p></li>
@@ -181,16 +203,16 @@
     <div id="insight-0142" class="section level1">
 <h1 class="page-header" data-toc-text="0.14.2">
 <a href="#insight-0142" class="anchor" aria-hidden="true"></a>insight 0.14.2<small> 2021-06-22 </small></h1>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> gains a <code>minimum_version</code> argument, to check if an installed package is not older than the specified version number.</p></li>
 <li><p>The <code>package</code> argument in <code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> is now vectorized, so you can check for multiple packages in one function call.</p></li>
 <li><p>Value formatting functions (like <code><a href="../reference/format_value.html">format_value()</a></code> or <code><a href="../reference/format_ci.html">format_ci()</a></code>) can now round to significant digits using <code>digits = "signif"</code>.</p></li>
 </ul></div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Fixed issue in <code><a href="../reference/model_info.html">model_info()</a></code> with <code><a href="https://mc-stan.org/rstanarm/reference/stan_polr.html" class="external-link">stan_polr()</a></code> models.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for <em>brms</em> when model contained parameters for the priors on sigma.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/n_obs.html">n_obs()</a></code> for <code><a href="https://rdrr.io/r/stats4/mle.html" class="external-link">stats4::mle()</a></code> models.</p></li>
@@ -211,14 +233,14 @@
 <a href="#new-supported-model-classes-1" class="anchor" aria-hidden="true"></a>New supported model classes</h2>
 <ul><li>Support for <code>pgmm</code> (<em>plm</em>)</li>
 </ul></div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li>Improved handling of auxiliary parameters for <em>stanreg</em> models.</li>
 </ul></div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Stability improvements to <code><a href="../reference/get_predicted.html">get_predicted()</a></code>.</p></li>
 <li><p>Fixed issues when accessing information from an <code>afex_aov</code> model with an empty <code>aov</code> slot (in anticipation for <a href="http://afex.singmann.science/" class="external-link">afex</a> v.1.0.0).</p></li>
 <li><p>Fixed issue in <code><a href="../reference/model_info.html">model_info()</a></code> for <em>stanreg</em> object with non-standard model-family specification.</p></li>
@@ -227,9 +249,9 @@
     <div id="insight-0140" class="section level1">
 <h1 class="page-header" data-toc-text="0.14.0">
 <a href="#insight-0140" class="anchor" aria-hidden="true"></a>insight 0.14.0<small> 2021-05-07 </small></h1>
-<div id="general-1" class="section level2">
+<div id="general-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-1" class="anchor" aria-hidden="true"></a>General</h2>
+<a href="#general-2" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li>Better support for accessing auxiliary parameters (via <code><a href="../reference/get_sigma.html">get_sigma()</a></code> and <code><a href="../reference/get_auxiliary.html">get_auxiliary()</a></code>, as well as <code>get_parameters(component = "all")</code>) for <code>brmsfit</code> models.</li>
 </ul></div>
 <div id="new-functions-1" class="section level2">
@@ -245,9 +267,9 @@
 <a href="#new-supported-model-classes-2" class="anchor" aria-hidden="true"></a>New supported model classes</h2>
 <ul><li>Support for <code>mvord</code> (<em>mvord</em>), <code>SemiParBIV</code> (<em>GJRM</em>), <code>selection</code> (<em>sampleSelection</em>)</li>
 </ul></div>
-<div id="changes-to-functions-3" class="section level2">
+<div id="changes-to-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-3" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-4" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> now warns when data name is present in formula, since this can result in unexpected behaviour in other package functions.</p></li>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> returns <code>is_bernoulli = TRUE</code> for Bernoulli models.</p></li>
 <li><p>Add <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for <em>lavaan</em> models.</p></li>
@@ -258,9 +280,9 @@
 <li><p>The behaviour and documentation of the <code>effects</code> and <code>component</code> arguments, in particular for <code>brmsfit</code> models, were revised to be more consistent.</p></li>
 <li><p><code><a href="../reference/export_table.html">export_table()</a></code> now correctly prints the footer if the input was a list of data frames.</p></li>
 </ul></div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Fixed issue (warning) in <code><a href="../reference/get_loglikelihood.html">get_loglikelihood()</a></code> for binomial models with non-numeric response variables.</p></li>
 <li><p><code><a href="../reference/find_statistic.html">find_statistic()</a></code> correctly distinguishes t- and z-statistic for <em>emmGrid</em> objects.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/model_info.html">model_info()</a></code> for <code>BGGM</code> and <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">mgcv::gam()</a></code>.</p></li>
@@ -276,9 +298,9 @@
     <div id="insight-0132" class="section level1">
 <h1 class="page-header" data-toc-text="0.13.2">
 <a href="#insight-0132" class="anchor" aria-hidden="true"></a>insight 0.13.2<small> 2021-04-01 </small></h1>
-<div id="general-2" class="section level2">
+<div id="general-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-2" class="anchor" aria-hidden="true"></a>General</h2>
+<a href="#general-3" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> has be revamped with a new API and a stable output form (a vector). In the course of this revision, a new function <code><a href="../reference/get_predicted_ci.html">get_predicted_ci()</a></code> to calculate uncertainty intervals for model predictions.</p></li>
 <li><p>Improved support for <code>orm</code> (<em>rms</em>).</p></li>
 </ul></div>
@@ -293,9 +315,9 @@
 <ul><li>
 <code><a href="../reference/is_gam_model.html">is_gam_model()</a></code> as a small helper to check if a model is a generalized additive model with smooth terms.</li>
 </ul></div>
-<div id="changes-to-functions-4" class="section level2">
+<div id="changes-to-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-4" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-5" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p>Added <code>iterations</code> argument to <code><a href="../reference/get_predicted.html">get_predicted()</a></code> to control the number of draws returned for Bayesian models.</p></li>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_gam</code> if model is generalized additive model with smooth terms.</p></li>
 <li><p><code><a href="../reference/format_table.html">format_table()</a></code> and <code><a href="../reference/export_table.html">export_table()</a></code> now check for valid input (e.g., non-empty data frame) and give an informative message.</p></li>
@@ -303,9 +325,9 @@
 <li><p>Improved <code><a href="../reference/print_parameters.html">print_parameters()</a></code>, to allow more flexibility and better cope with different output formats.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code>, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <em>emmGrid</em> and <em>emm_list</em> objects were revised and now better match the actual parameter names (also for contrasts).</p></li>
 </ul></div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-6" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Fixed issue in <code><a href="../reference/get_variance.html">get_variance()</a></code> for models without intercept.</p></li>
 <li><p>Fixed labelling issue in <code><a href="../reference/get_parameters.html">get_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <code>blavaan</code> models.</p></li>
 <li><p><code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <em>MCMCglmm</em> objects did not include random parameters.</p></li>
@@ -316,9 +338,9 @@
     <div id="insight-0131" class="section level1">
 <h1 class="page-header" data-toc-text="0.13.1">
 <a href="#insight-0131" class="anchor" aria-hidden="true"></a>insight 0.13.1<small> 2021-02-22 </small></h1>
-<div id="general-3" class="section level2">
+<div id="general-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-3" class="anchor" aria-hidden="true"></a>General</h2>
+<a href="#general-4" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li>Improved handling for GAMs.</li>
 </ul></div>
 <div id="new-supported-model-classes-4" class="section level2">
@@ -326,9 +348,9 @@
 <a href="#new-supported-model-classes-4" class="anchor" aria-hidden="true"></a>New supported model classes</h2>
 <ul><li>Support for <code>elm</code>, <code>eglm</code> (<em>eflm</em>)</li>
 </ul></div>
-<div id="changes-to-functions-5" class="section level2">
+<div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-5" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-6" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code>get_residuals(..., weighted = TRUE)</code> doesn’t throw warnings if weights are 1 (no weights specified).</p></li>
 <li><p><code><a href="../reference/n_parameters.html">n_parameters()</a></code> gains a <code>only_estimable</code> argument, to remove non-estimable parameters from counting the number of parameters for models with rank-deficient model matrix.</p></li>
 <li><p><code><a href="../reference/format_ci.html">format_ci()</a></code> also gains a <code>zap_small</code> argument.</p></li>
@@ -343,9 +365,9 @@
     <div id="insight-0130" class="section level1">
 <h1 class="page-header" data-toc-text="0.13.0">
 <a href="#insight-0130" class="anchor" aria-hidden="true"></a>insight 0.13.0<small> 2021-02-15 </small></h1>
-<div id="general-4" class="section level2">
+<div id="general-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-4" class="anchor" aria-hidden="true"></a>General</h2>
+<a href="#general-5" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li>Roll-back R dependency to R &gt;= 3.4.</li>
 </ul></div>
 <div id="new-supported-model-classes-5" class="section level2">
@@ -353,16 +375,16 @@
 <a href="#new-supported-model-classes-5" class="anchor" aria-hidden="true"></a>New supported model classes</h2>
 <ul><li>Support for <code>crr</code> (<em>cmprsk</em>), <code>ergm</code> (<em>ergm</em>), <code>btergm</code> (<em>btergm</em>), <code>Rchoice</code> (<em>Rchoice</em>), <code>garch</code> (<em>tseries</em>)</li>
 </ul></div>
-<div id="changes-to-functions-6" class="section level2">
+<div id="changes-to-functions-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-6" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-7" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p>Slightly improved handling of different CI-columns in <code><a href="../reference/format_table.html">format_table()</a></code>.</p></li>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_leventest</code> if model is an object returned by <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html" class="external-link">car::leveneTest()</a></code>.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> supports <code>htest</code> objects.</p></li>
 </ul></div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-7" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p><code><a href="../reference/get_varcov.html">get_varcov()</a></code> did not properly remove <code>NA</code> from rank-deficient models.</p></li>
 <li><p>Fixed issue/warning in <code><a href="../reference/get_data.html">get_data()</a></code> for some <em>htest</em> objects, where the environment was not properly evaluated.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/format_table.html">format_table()</a></code> with p-value formatting, when input data frame contained a column named <code>"p"</code>, which was not numeric.</p></li>
@@ -401,17 +423,17 @@
 <li><p>Added <code><a href="../reference/is_mixed_model.html">is_mixed_model()</a></code>, to safely check if a model is a mixed effects model. This function also works for multivariate response models.</p></li>
 <li><p><code><a href="../reference/n_parameters.html">n_parameters()</a></code> was moved from <em>parameters</em> to <em>insight</em>.</p></li>
 </ul></div>
-<div id="changes-to-functions-7" class="section level2">
+<div id="changes-to-functions-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-7" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-8" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/find_formula.html">find_formula()</a></code>, <code>find_predictor()</code>, <code><a href="../reference/find_random.html">find_random()</a></code> and related functions now also return names of random effects from generalized additive mixed models (<code>gamm</code>, <code>gamm4</code>, <code>stan_gamm4</code>).</p></li>
 <li><p>Added support for more BFBayesFactor objects.</p></li>
 <li><p><code><a href="../reference/model_info.html">model_info()</a></code> now returns <code>$is_xtab</code> for <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code> and <code><a href="https://rdrr.io/pkg/BayesFactor/man/contingencyTableBF.html" class="external-link">BayesFactor::contingencyTableBF()</a></code>. Furthermore, the <code>$family</code> element for those objects is set to <code>"categorical"</code>.</p></li>
 <li><p><code><a href="../reference/n_obs.html">n_obs()</a></code> now handles number of observations from models with binomial family correctly when these have matrix-columns as response variable.</p></li>
 </ul></div>
-<div id="bug-fixes-7" class="section level2">
+<div id="bug-fixes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-7" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-8" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Fixed issue in <code><a href="../reference/find_statistic.html">find_statistic()</a></code> for <em>fixest</em> models, which did not return the correct value <code>"t-statistic"</code> for <code>feols()</code>.</p></li>
 <li><p>Fixes inconsistencies in <code><a href="../reference/get_priors.html">get_priors()</a></code> for (linear) <code>BFBayesFactor</code> models.</p></li>
 </ul></div>
@@ -419,9 +441,9 @@
     <div id="insight-0111" class="section level1">
 <h1 class="page-header" data-toc-text="0.11.1">
 <a href="#insight-0111" class="anchor" aria-hidden="true"></a>insight 0.11.1<small> 2020-12-08 </small></h1>
-<div id="general-5" class="section level2">
+<div id="general-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-5" class="anchor" aria-hidden="true"></a>General</h2>
+<a href="#general-6" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li>Warnings that formerly were printed using <code><a href="../reference/print_color.html">print_color()</a></code> now use <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>, to better suppress warning messages if required.</li>
 </ul></div>
 <div id="new-functions-4" class="section level2">
@@ -430,17 +452,17 @@
 <ul><li>
 <code><a href="../reference/find_smooth.html">find_smooth()</a></code>, to return in particular smooth terms used in a model.</li>
 </ul></div>
-<div id="changes-to-functions-8" class="section level2">
+<div id="changes-to-functions-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-8" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-9" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> and <code><a href="../reference/get_variance.html">get_variance_random()</a></code> gain a <code>tolerance</code>-argument, to set the tolerance level for singularity checks when computing random effect variances.</p></li>
 <li><p><code><a href="../reference/format_table.html">parameters_table()</a></code> formats more objects from the <em>easystats</em> packages, like ROPE-range or <code><a href="https://easystats.github.io/bayestestR/reference/p_rope.html" class="external-link">p_rope()</a></code>.</p></li>
 <li><p><code><a href="../reference/find_statistic.html">find_statistic()</a></code> now supports models of class <em>scam</em>.</p></li>
 <li><p><code><a href="../reference/get_data.html">get_data()</a></code> now also supports <code>htest</code>-object, where possible.</p></li>
 </ul></div>
-<div id="bug-fixes-8" class="section level2">
+<div id="bug-fixes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-8" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-9" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Fix CRAN check issues.</p></li>
 <li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code><a href="https://mc-stan.org/rstanarm/reference/stan_gamm4.html" class="external-link">stan_gamm4()</a></code> now correctly includes random effects.</p></li>
 </ul></div>
@@ -466,18 +488,18 @@
 <li><p><code><a href="../reference/find_offset.html">find_offset()</a></code>, to find the name of offset-terms.</p></li>
 <li><p>Added generics for <code><a href="../reference/display.html">display()</a></code> and <code><a href="../reference/display.html">print_md()</a></code>, to allow other packages to create tables in other formats when not printing the output to console.</p></li>
 </ul></div>
-<div id="changes-to-functions-9" class="section level2">
+<div id="changes-to-functions-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-9" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-10" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/standardize_names.html">standardize_names()</a></code> tries to be as loyal to the <em>broom</em>-naming conventions as possible.</p></li>
 <li><p>The function of the <code>brackets</code>-argument in <code><a href="../reference/format_ci.html">format_ci()</a></code> was changed. It is now also possible to provide a length-two character vector, to define own brackets that encompass the CI-values.</p></li>
 <li><p>Related to the change in <code><a href="../reference/format_ci.html">format_ci()</a></code>, the function of the <code>brackets</code>-argument in <code><a href="../reference/format_table.html">parameters_table()</a></code> was changed accordingly. Furthermore, <code><a href="../reference/format_table.html">parameters_table()</a></code> gains a <code>preserve_attributes</code>-argument, to preserve any attributes from the input data frame.</p></li>
 <li><p><code><a href="../reference/export_table.html">export_table()</a></code> gains several new arguments that allows to create tables in markdown-format.</p></li>
 <li><p><code><a href="../reference/print_parameters.html">print_parameters()</a></code> gains a <code>keep_parameter_column</code>-argument, to keep (default) both the <code>"Cleaned_Parameter"</code> and <code>"Parameter"</code> columns, or - if <code>FALSE</code> - use <code>"Cleaned_Parameter"</code> as new <code>"Parameter"</code> column.</p></li>
 </ul></div>
-<div id="bug-fixes-9" class="section level2">
+<div id="bug-fixes-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-9" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-10" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <div id="get_data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#get_data" class="anchor" aria-hidden="true"></a><code>get_data()</code>
@@ -509,16 +531,16 @@
 <a href="#new-supported-model-classes-8" class="anchor" aria-hidden="true"></a>New supported model classes</h2>
 <ul><li>Support for <code>maov</code> (<em>stats</em>), <code>HLfit</code> (<em>spaMM</em>), preliminary support for <code>margins</code> (<em>margins</em>), <code>merModList</code> (<em>merTools</em>).</li>
 </ul></div>
-<div id="general-6" class="section level2">
+<div id="general-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-6" class="anchor" aria-hidden="true"></a>General</h2>
+<a href="#general-7" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li><p>Better support for (weighted) multivariate response models of class <code>mlm</code> for functions like <code><a href="../reference/get_varcov.html">get_varcov()</a></code> or <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>.</p></li>
 <li><p>Make <code><a href="../reference/find_formula.html">find_formula()</a></code> work with t-tests from <em>BayesFactor</em>.</p></li>
 <li><p>Improved handling for <em>mira</em> objects.</p></li>
 </ul></div>
-<div id="changes-to-functions-10" class="section level2">
+<div id="changes-to-functions-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-10" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-11" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>na_reference</code> argument, to set the “reference” for Bayes factor values that are <code>NA</code>, and an <code>exact</code> argument for returning scientific formatted extreme values.</p></li>
 <li><p><code><a href="../reference/format_value.html">format_value()</a></code> gains a <code>zap_small</code> argument, to prevent scientific printing of numbers if these have more decimal places than indicated by <code>digits</code>.</p></li>
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> now also returns <code>NULL</code> when all weights were 1.</p></li>
@@ -527,9 +549,9 @@
 <li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code>MuMIn::model.avg()</code> now tries to retrieve the random effects part of a formula, when present.</p></li>
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> gains a <code>na_rm</code> argument to remove possible missing values.</p></li>
 </ul></div>
-<div id="bug-fixes-10" class="section level2">
+<div id="bug-fixes-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-10" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-11" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Fix issues with one-sample Bayesian t-tests ( <a href="https://github.com/easystats/parameters/issues/297" class="external-link uri">https://github.com/easystats/parameters/issues/297</a> ).</p></li>
 <li><p>Fix issue in <code><a href="../reference/format_value.html">format_value()</a></code> that printed <code>"100%"</code> as <code>"1e+02%"</code>.</p></li>
 <li><p>Removed unnecessary white-spaces in <code><a href="../reference/format_ci.html">format_ci()</a></code> when upper or lower interval was larger than 1e+5.</p></li>
@@ -541,18 +563,18 @@
     <div id="insight-096" class="section level1">
 <h1 class="page-header" data-toc-text="0.9.6">
 <a href="#insight-096" class="anchor" aria-hidden="true"></a>insight 0.9.6<small> 2020-09-20 </small></h1>
-<div id="changes-to-functions-11" class="section level2">
+<div id="changes-to-functions-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-11" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-12" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/get_data.html">get_data()</a></code> now works for models from <code>afex_aov()</code>.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> returns a more informative message for <code>BFBayesFactor</code> objects when not the first model is indexed.</p></li>
 <li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp()</a></code>-pattern.</p></li>
 <li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> for character-objects now works with “interaction patterns” (like <code>clean_names("scale(a):scale(b)")</code>).</p></li>
 <li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>protect_ratio</code> argument, to print numbers smaller than 1 as ratios.</p></li>
 </ul></div>
-<div id="bug-fixes-11" class="section level2">
+<div id="bug-fixes-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-11" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-12" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Fix issues in CRAN checks.</p></li>
 <li><p><code><a href="../reference/get_priors.html">get_priors()</a></code> now works for more complex <code>BFBayesFactor</code> objects that have multiple custom priors.</p></li>
 </ul></div>
@@ -566,9 +588,9 @@
 <ul><li>
 <code><a href="../reference/get_data.html">get_data()</a></code> did not always “back-transform” log-transformed or scaled variables to return the original values. Now this bug has been fixed, and <code><a href="../reference/get_data.html">get_data()</a></code> should return all variables on the original scale (as if these variables were not transformed), as stated in the docs.</li>
 </ul></div>
-<div id="bug-fixes-12" class="section level2">
+<div id="bug-fixes-13" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-12" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-13" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p><code><a href="../reference/get_data.html">get_data()</a></code> now returns the correct original data for “empty” polynomials (i.e. <code>poly(x, 1)</code>).</p></li>
 <li><p>Fix CRAN check issues due to latest <em>estimatr</em> update.</p></li>
 </ul></div>
@@ -581,16 +603,16 @@
 <a href="#new-supported-model-classes-9" class="anchor" aria-hidden="true"></a>New supported model classes</h2>
 <ul><li>Support for <code>mipo</code> (<em>mice</em>), <code>lqmm</code> and <code>lqm</code> (<em>lqmm</em>). Preliminary support for <code>semLME</code> (<em>smicd</em>), <code>mle</code> (<em>stats4</em>) and <code>mle2</code> (<em>bbmle</em>).</li>
 </ul></div>
-<div id="changes-to-functions-12" class="section level2">
+<div id="changes-to-functions-13" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-12" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-13" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_meta = TRUE</code> for <em>brms</em>-meta-analysis models.</p></li>
 <li><p>Make <code><a href="../reference/find_statistic.html">find_statistic()</a></code> work with <code><a href="https://rdrr.io/pkg/mgcv/man/bam.html" class="external-link">mgcv::bam()</a></code>.</p></li>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also support <code><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html" class="external-link">truncated_nbinom2()</a></code> family from <em>glmmTMB</em>.</p></li>
 </ul></div>
-<div id="bug-fixes-13" class="section level2">
+<div id="bug-fixes-14" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-13" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-14" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Fixed issue with correctly detecting sigma-parameters in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for multiple-response <code>brmsfit</code>-models.</p></li>
 <li><p>Fixed issue with <code><a href="../reference/find_formula.html">find_formula()</a></code> for models from <code><a href="https://mc-stan.org/rstanarm/reference/stan_nlmer.html" class="external-link">stan_nlmer()</a></code>.</p></li>
 <li><p>Fixed issues with <code><a href="../reference/find_terms.html">find_terms()</a></code> when response variable included a namespace, like <code><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">survival::Surv()</a></code>.</p></li>
@@ -613,17 +635,17 @@
 <a href="#new-functions-5" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li>Value formatting functions <code><a href="../reference/format_bf.html">format_bf()</a></code>, <code><a href="../reference/format_pd.html">format_pd()</a></code>, <code><a href="../reference/format_p.html">format_p()</a></code>, <code><a href="../reference/format_rope.html">format_rope()</a></code> and <code><a href="../reference/format_number.html">format_number()</a></code> were moved from package <em>parameters</em> to <em>insight</em>.</li>
 </ul></div>
-<div id="changes-to-functions-13" class="section level2">
+<div id="changes-to-functions-14" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-13" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
+<a href="#changes-to-functions-14" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
 <ul><li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also returns the correlation among random slopes.</p></li>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also (partially) supports <code>brmsfit</code> models.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for models that return (posterior or simulated) samples of model parameters gains a <code>summary</code>-argument, which - if <code>TRUE</code> - returns a point-estimate (mean of samples) instead of the full samples.</p></li>
 <li><p><code><a href="../reference/format_p.html">format_p()</a></code> returns <code>"&gt; .999"</code> for p-values equal to or greater than 0.999.</p></li>
 </ul></div>
-<div id="bug-fixes-14" class="section level2">
+<div id="bug-fixes-15" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-14" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-15" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li><p>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> that did not properly work for models with random effects in formula (in <em>lme4</em> notation), when random effects were in between fixed effects parts.</p></li>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> did not return variance components for random effects for null-models with random slopes.</p></li>
 <li><p>Fixed issue with <code><a href="../reference/get_variance.html">get_variance()</a></code> for <code>lme</code>-models with categorical random slope.</p></li>
