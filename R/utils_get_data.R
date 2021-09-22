@@ -24,7 +24,7 @@
 
   # clean 1-dimensional matrices
   mf[] <- lapply(mf, function(.x) {
-    if (is.matrix(.x) && dim(.x)[2] == 1 && !inherits(.x, c("ns", "bs", "poly"))) {
+    if (is.matrix(.x) && dim(.x)[2] == 1 && !inherits(.x, c("ns", "bs", "poly", "mSpline"))) {
       as.vector(.x)
     } else {
       .x
