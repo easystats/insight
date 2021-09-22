@@ -1,3 +1,22 @@
+# insight 0.14.5
+
+## General
+
+* Improved support for models of class `sampleSelection`.
+
+* Improved documentation.
+
+## Changes to functions
+
+* `check_if_installed()` gains a `quietly` argument, if neither stopping nor
+  a warning message for non-installed packages is requested.
+
+## Bug fixes
+
+* Fixed issue with parameter names from *emmeans* objects in `get_parameters()`.
+
+* Fixed issues with unknown arguments in `get_predicted()`.
+
 # insight 0.14.4
 
 ## Bug fixes

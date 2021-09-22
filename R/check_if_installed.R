@@ -6,6 +6,10 @@
 #'   generic description.
 #' @param stop Logical that decides whether the function should stop if the
 #'   needed package is not installed.
+#' @param quietly Logical, if `TRUE`, invisibly returns either `TRUE` if all
+#'   packages are installed, `FALSE` otherwise, and does not stop or throw a
+#'   warning. If `quietly = TRUE`, argument `stop` is ignored. Use this argument
+#'   to internally check for package dependencies without stopping or warnings.
 #' @param minimum_version String, representing the minimum package version that
 #'   is required. If `NULL`, no check for minimum version is done. Note
 #'   that `minimum_version` only works when `package` is of length 1.
@@ -29,9 +33,11 @@ check_if_installed <- function(package,
                                reason = "for this function to work",
                                stop = TRUE,
                                minimum_version = NULL,
+                               quietly = FALSE,
                                ...) {
   # does it need to be displayed?
   is_installed <- sapply(package, requireNamespace, quietly = TRUE)
+  message <- NULL
 
   if (!all(is_installed)) {
     # only keep not-installed packages
@@ -49,17 +55,37 @@ check_if_installed <- function(package,
         paste0("Please install it by running install.packages('", package, "').")
       )
     }
-
-    if (stop) stop(message, call. = FALSE) else warning(message, call. = FALSE)
   } else if (!is.null(minimum_version) && utils::packageVersion(package) < package_version(minimum_version)) {
     # prepare the message
     message <- format_message(
       paste0("Package '", package, "' is installed, but package version '", minimum_version, "' is required ", reason, "."),
       paste0("Please update the package by running install.packages('", package, "').")
     )
+  }
 
+  if (!quietly && !is.null(message)) {
     if (stop) stop(message, call. = FALSE) else warning(message, call. = FALSE)
   }
 
+  class(is_installed) <- c("check_if_installed", class(is_installed))
   invisible(is_installed)
+}
+
+
+
+
+#' @export
+print.check_if_installed <- function(x, ...) {
+  if (any(x)) {
+    cat("Following packages are installed:\n")
+    print_color(paste0("v ", names(x)[x], collapse = "\n"), "green")
+  }
+
+  if (any(!x)) {
+    if (any(x)) {
+      cat("\n\n")
+    }
+    cat("Following packages are not installed:\n")
+    print_color(paste0("x ", names(x)[!x], collapse = "\n"), "red")
+  }
 }
