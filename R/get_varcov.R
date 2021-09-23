@@ -486,6 +486,11 @@ get_varcov.rq <- function(x, ...) {
   s <- summary(x, covariance = TRUE)
   vc <- as.matrix(s$cov)
 
+  # add row/column names
+  preds <- find_parameters(x, flatten = TRUE)
+  rownames(vc) <- preds
+  colnames(vc) <- preds
+
   if (.is_negativ_matrix(vc)) {
     vc <- .fix_negative_matrix(vc)
   }
@@ -506,10 +511,16 @@ get_varcov.crr <- function(x, ...) {
 #' @export
 get_varcov.crq <- function(x, ...) {
   sc <- summary(x, covariance = TRUE)
+  preds <- find_parameters(x, flatten = TRUE)
 
   if (all(unlist(lapply(sc, is.list)))) {
     vc <- lapply(sc, function(i) {
       .x <- as.matrix(i$cov)
+
+      # add row/column names
+      rownames(.x) <- preds
+      colnames(.x) <- preds
+
       if (.is_negativ_matrix(.x)) {
         .x <- .fix_negative_matrix(.x)
       }
@@ -528,10 +539,10 @@ get_varcov.crq <- function(x, ...) {
 }
 
 #' @export
-get_varcov.nlrq <- get_varcov.rq
+get_varcov.nlrq <- get_varcov.crq
 
 #' @export
-get_varcov.rqs <- get_varcov.rq
+get_varcov.rqs <- get_varcov.crq
 
 
 #' @export
