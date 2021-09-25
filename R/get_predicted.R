@@ -723,8 +723,8 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     predictions <- as.factor(predictions)
     levels(predictions) <- levels(response)
   } else {
-    predictions[predictions == 0] <- unique(response)[1]
-    predictions[predictions == 1] <- unique(response)[2]
+    resp <- unique(response)
+    predictions <- resp[match(predictions, resp)]
   }
   predictions
 }

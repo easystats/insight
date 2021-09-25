@@ -443,7 +443,6 @@ test_that("`predict()` vs. `get_predicted` link equivalence", {
 })
 
 
-
 test_that("hurdle: get_predicted matches `predict()`", {
     skip_if_not_installed("pscl")
     data("bioChemists", package = "pscl")
@@ -457,18 +456,10 @@ test_that("hurdle: get_predicted matches `predict()`", {
 })
 
 
-
-# bugfix in .get_predict_transform_response ----------
-# ====================================================
-
-test_that("bugfix: predict='response' returns all zeros", {
+test_that("bugfix: used to return all zeros", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
   pred <- expect_warning(get_predicted(mod, predict = "response"))
   expect_false(any(pred == 0))
+  pred <- get_predicted(mod, predict = "original")
+  expect_false(all(pred == 0))
 })
-
-# test_that("bugfix: predict='original' returns all zeros", {
-#   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
-#   pred <- get_predicted(mod, predict = "original")
-#   expect_false(any(pred == 0))
-# })
