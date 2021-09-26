@@ -6,7 +6,14 @@
 #'   second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which
 #'   to predict. If omitted, the data used to fit the model is used.
-#' @param predict Can be `"link"`, `"expectation"` (default), `"prediction"`, or `"response"`. You can see these 4 options for predictions as on a gradient from "close to the model" to "close to the response data". More specifically, the `predict` argument modulates two things; the scale of the output as well as the type of certainty interval (see the details and examples). More specifically, `"link"` returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI). `"expectation"` (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities). `"predict"` also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models). Finally, `"response"` only differs from the previous option for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor). Read more about in the **Details** section below.
+#' @param predict string or `NULL`
+#' * `"link"` returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).
+#' * `"expectation"` (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).
+#' * `"prediction"` also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models).
+#' * `"classification"` only differs from `"predict"` for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor).
+#' * Other strings are passed directly to the `type` argument of the `predict` method supplied by the modelling package.
+#' * When `predict = NULL`, alternative arguments such as `type` will be captured by the `...` ellipsis and passed directly to the `predict` method supplied by the modelling package.
+#' * Notes: You can see the 4 options for predictions as on a gradient from "close to the model" to "close to the response data": "link", "expectation", "prediction", "classification". The `predict` argument modulates two things: the scale of the output and the type of certainty interval. Read more about in the **Details** section below.
 #' @param iterations For Bayesian models, this corresponds to the number of
 #'   posterior draws. If `NULL`, will return all the draws (one for each
 #'   iteration of the model). For frequentist models, if not `NULL`, will
@@ -260,7 +267,7 @@ get_predicted.merMod <- get_predicted.lmerMod
 #' @export
 get_predicted.glmmTMB <- function(x,
                                   data = NULL,
-                                  predict = c("expectation", "link", "prediction", "response", "original"),
+                                  predict = c("expectation", "link", "prediction", "response", "classification"),
                                   ci = 0.95,
                                   include_random = TRUE,
                                   iterations = NULL,
@@ -336,7 +343,7 @@ get_predicted.glmmTMB <- function(x,
 #' @export
 get_predicted.gam <- function(x,
                               data = NULL,
-                              predict = c("expectation", "link", "prediction", "response", "original"),
+                              predict = c("expectation", "link", "prediction", "response", "classification"),
                               ci = 0.95,
                               include_random = TRUE,
                               include_smooth = TRUE,
@@ -588,7 +595,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
 
 .get_predicted_args <- function(x,
                                 data = NULL,
-                                predict = c("expectation", "link", "prediction", "original"),
+                                predict = c("expectation", "link", "prediction", "classification"),
                                 include_random = TRUE,
                                 include_smooth = TRUE,
                                 ci = 0.95,
@@ -607,7 +614,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   if (is.null(ci)) ci <- 0
 
   # check `predict` user-input
-  supported <- c("expectation", "link", "prediction", "original")
+  supported <- c("expectation", "link", "prediction", "classification")
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
     warning(sprintf('"%s" is not officially supported by the `get_predicted` function as a value for the `predict` argument. It will not be processed or validated, and will be passed directly to the `predict` method supplied by the modeling package. Users are encouraged to check the validity and scale of the results. Set `verbose=FALSE` to silence this warning, or use one of the supported values for the `predict` argument: %s.', predict, paste(sprintf('"%s"', supported), collapse = ", ")))
   }
@@ -639,11 +646,11 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   if (predict_arg == "link") {
     ci_type <- "confidence"
     scale <- "link"
-  } else if (predict_arg == "prediction") {
-    ci_type <- "prediction"
-    scale <- "response"
-  } else if (predict_arg %in% c("expectation", "original")) { 
+  } else if (predict_arg == "expectation") {
     ci_type <- "confidence"
+    scale <- "response"
+  } else if (predict_arg %in% c("prediction", "classification")) {
+    ci_type <- "prediction"
     scale <- "response"
   } else if (!is.null(dots$type)) {
     ci_type <- "confidence"
@@ -761,7 +768,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     }
 
     # Transform to response "type"
-    if (args$predict == "original" && model_info(x)$is_binomial) {
+    if (args$predict == "classification" && model_info(x)$is_binomial) {
       response <- get_response(x)
       ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
       predictions <- .get_predict_transform_response(predictions, response = response)
