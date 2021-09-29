@@ -10,9 +10,9 @@
 #' * `"link"` returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).
 #' * `"expectation"` (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).
 #' * `"prediction"` also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models).
-#' * `"classification"` only differs from `"predict"` for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor).
-#' * Other strings are passed directly to the `type` argument of the `predict` method supplied by the modelling package.
-#' * When `predict = NULL`, alternative arguments such as `type` will be captured by the `...` ellipsis and passed directly to the `predict` method supplied by the modelling package.
+#' * `"classification"` only differs from `"prediction"` for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor).
+#' * Other strings are passed directly to the `type` argument of the `predict()` method supplied by the modelling package.
+#' * When `predict = NULL`, alternative arguments such as `type` will be captured by the `...` ellipsis and passed directly to the `predict()` method supplied by the modelling package.
 #' * Notes: You can see the 4 options for predictions as on a gradient from "close to the model" to "close to the response data": "link", "expectation", "prediction", "classification". The `predict` argument modulates two things: the scale of the output and the type of certainty interval. Read more about in the **Details** section below.
 #' @param iterations For Bayesian models, this corresponds to the number of
 #'   posterior draws. If `NULL`, will return all the draws (one for each
@@ -616,7 +616,8 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   # check `predict` user-input
   supported <- c("expectation", "link", "prediction", "classification")
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
-    warning(sprintf('"%s" is not officially supported by the `get_predicted` function as a value for the `predict` argument. It will not be processed or validated, and will be passed directly to the `predict` method supplied by the modeling package. Users are encouraged to check the validity and scale of the results. Set `verbose=FALSE` to silence this warning, or use one of the supported values for the `predict` argument: %s.', predict, paste(sprintf('"%s"', supported), collapse = ", ")))
+    msg <- format_message(sprintf('"%s" is not officially supported by the `get_predicted` function as a value for the `predict` argument. It will not be processed or validated, and will be passed directly to the `predict` method supplied by the modeling package. Users are encouraged to check the validity and scale of the results. Set `verbose=FALSE` to silence this warning, or use one of the supported values for the `predict` argument: %s.', predict, paste(sprintf('"%s"', supported), collapse = ", ")))
+    warning(msg)
   }
 
   # Arbitrate conflicts between the `predict` and `type` from the ellipsis. We
@@ -627,7 +628,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   if (is.null(dots$type)) {
     predict_arg <- predict
     if (is.null(predict)) {
-      stop("Please supply a value for the `predict` argument.")
+      stop(format_message("Please supply a value for the `predict` argument."))
     }
   } else {
     if(is.null(predict)) {

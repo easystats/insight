@@ -43,9 +43,9 @@ to predict. If omitted, the data used to fit the model is used.}
 \item \code{"link"} returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).
 \item \code{"expectation"} (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).
 \item \code{"prediction"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models).
-\item \code{"classification"} only differs from \code{"predict"} for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor).
-\item Other strings are passed directly to the \code{type} argument of the \code{predict} method supplied by the modelling package.
-\item When \code{predict = NULL}, alternative arguments such as \code{type} will be captured by the \code{...} ellipsis and passed directly to the \code{predict} method supplied by the modelling package.
+\item \code{"classification"} only differs from \code{"prediction"} for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor).
+\item Other strings are passed directly to the \code{type} argument of the \code{predict()} method supplied by the modelling package.
+\item When \code{predict = NULL}, alternative arguments such as \code{type} will be captured by the \code{...} ellipsis and passed directly to the \code{predict()} method supplied by the modelling package.
 \item Notes: You can see the 4 options for predictions as on a gradient from "close to the model" to "close to the response data": "link", "expectation", "prediction", "classification". The \code{predict} argument modulates two things: the scale of the output and the type of certainty interval. Read more about in the \strong{Details} section below.
 }}
 
