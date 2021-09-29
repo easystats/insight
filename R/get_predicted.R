@@ -111,8 +111,8 @@
 #' pred <- get_predicted(x, predict = "link")
 #' head(as.data.frame(pred))
 #'
-#' # Response: response "type" + PI
-#' pred <- get_predicted(x, predict = "response")
+#' # Classification: classification "type" + PI
+#' pred <- get_predicted(x, predict = "classification")
 #' head(as.data.frame(pred))
 #' @export
 get_predicted <- function(x, ...) {
@@ -267,7 +267,7 @@ get_predicted.merMod <- get_predicted.lmerMod
 #' @export
 get_predicted.glmmTMB <- function(x,
                                   data = NULL,
-                                  predict = c("expectation", "link", "prediction", "response", "classification"),
+                                  predict = c("expectation", "link", "prediction", "classification"),
                                   ci = 0.95,
                                   include_random = TRUE,
                                   iterations = NULL,
@@ -343,7 +343,7 @@ get_predicted.glmmTMB <- function(x,
 #' @export
 get_predicted.gam <- function(x,
                               data = NULL,
-                              predict = c("expectation", "link", "prediction", "response", "classification"),
+                              predict = c("expectation", "link", "prediction", "classification"),
                               ci = 0.95,
                               include_random = TRUE,
                               include_smooth = TRUE,

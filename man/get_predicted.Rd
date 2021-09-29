@@ -148,8 +148,8 @@ head(as.data.frame(pred))
 pred <- get_predicted(x, predict = "link")
 head(as.data.frame(pred))
 
-# Response: response "type" + PI
-pred <- get_predicted(x, predict = "response")
+# Classification: classification "type" + PI
+pred <- get_predicted(x, predict = "classification")
 head(as.data.frame(pred))
 }
 \seealso{
