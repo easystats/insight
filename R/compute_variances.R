@@ -37,7 +37,7 @@
   if (.is_singular(x, vals, tolerance = tolerance) && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
       warning(format_message(
-        sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singulariy.", name_full),
+        sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see '?lme4::isSingular' and '?performance::check_singularity').", name_full),
         "Solution: Respecify random structure! You may also decrease the 'tolerance' level to enforce the calculation of random effect variances."
       ), call. = FALSE)
     }
