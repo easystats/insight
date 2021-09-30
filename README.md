@@ -222,7 +222,6 @@ print_params <- function(model) {
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 print_params(m1)
 #> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
-
 # obviously, something is missing in the output
 m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
 print_params(m2)
@@ -244,7 +243,6 @@ print_params <- function(model) {
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 print_params(m1)
 #> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
-
 m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
 print_params(m2)
 #> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"
@@ -321,7 +319,7 @@ supported_models()
 #> [163] "rlm"               "rlmerMod"          "RM"               
 #> [166] "rma"               "rma.uni"           "robmixglm"        
 #> [169] "robtab"            "rq"                "rqs"              
-#> [172] "rqss"              "sarlm"             "scam"             
+#> [172] "rqss"              "Sarlm"             "scam"             
 #> [175] "selection"         "sem"               "SemiParBIV"       
 #> [178] "semLm"             "semLme"            "slm"              
 #> [181] "speedglm"          "speedlm"           "stanfit"          
