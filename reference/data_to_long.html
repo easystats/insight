@@ -257,56 +257,56 @@ wide format.</p></td>
 <span class='r-in'><span class='co'># Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))</span></span>
 <span class='r-in'><span class='fu'>data_to_long</span><span class='op'>(</span><span class='va'>wide_data</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>    Name       Value</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    X1  0.12066797</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    X2  0.26348679</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3    X3  1.00752826</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4    X4 -0.88863041</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5    X5 -1.00698597</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6    X1 -0.02058148</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7    X2  0.09735412</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8    X3 -0.91422951</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 9    X4  0.68752679</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 10   X5  0.53153557</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 11   X1 -0.42189123</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 12   X2  0.40147288</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 13   X3 -0.48488726</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 14   X4  0.28038459</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 15   X5  0.49908292</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 16   X1 -0.45922528</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 17   X2  0.12032256</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 18   X3  1.05966848</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 19   X4  0.82585396</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 20   X5 -1.38384902</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 21   X1 -2.17054644</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 22   X2  0.53083752</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 23   X3 -0.26815481</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 24   X4 -0.61387244</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 25   X5  0.54367509</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 26   X1  1.83754673</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 27   X2  0.66113926</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 28   X3  1.48332121</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 29   X4  1.17916829</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 30   X5 -0.22796775</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 31   X1  0.65278196</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 32   X2 -0.60299082</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 33   X3  0.63599924</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 34   X4  1.24711505</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 35   X5 -1.66846688</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 36   X1 -0.48295487</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 37   X2 -0.92723785</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 38   X3 -0.39024255</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 39   X4 -0.02352371</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 40   X5  1.07757934</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 41   X1 -0.14122399</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 42   X2 -1.25467049</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 43   X3 -0.20311173</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 44   X4  0.83196249</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 45   X5 -0.10484153</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 46   X1 -0.25394458</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 47   X2  1.63930742</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 48   X3 -0.74415315</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 49   X4  0.53266952</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 50   X5 -1.74901534</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    X1 -0.19945855</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    X2 -0.96722006</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3    X3  0.87440276</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4    X4  1.94335457</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5    X5 -0.57255956</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6    X1 -0.00435388</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7    X2  1.55063815</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8    X3  0.78031464</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9    X4  0.01410719</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10   X5  0.04218196</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11   X1 -1.31560453</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12   X2  0.47435940</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13   X3 -0.64433277</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14   X4  0.21287725</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15   X5 -0.19968554</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16   X1  0.19045484</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17   X2  2.83694511</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18   X3 -0.80504338</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19   X4  0.65199428</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20   X5 -1.05539678</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21   X1  0.37775828</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22   X2 -0.40655964</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23   X3  0.81990104</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24   X4  0.23008969</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 25   X5  0.53538102</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 26   X1  1.94022326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 27   X2  0.76387372</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 28   X3 -1.21291316</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 29   X4 -1.27823643</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 30   X5 -1.01170579</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 31   X1 -1.21890840</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 32   X2  0.83025263</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 33   X3  0.27227312</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 34   X4 -0.69805540</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 35   X5 -1.11348339</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 36   X1 -0.86356971</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 37   X2  0.25026789</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 38   X3  0.79172610</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 39   X4  1.20650945</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 40   X5 -0.03869885</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 41   X1  2.04698761</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 42   X2  0.02318821</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 43   X3 -0.77555607</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 44   X4  1.22066038</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 45   X5  0.15106757</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 46   X1  0.75169171</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 47   X2 -1.74195705</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 48   X3  1.02309105</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 49   X4 -1.41931914</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 50   X5 -0.35506289</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Customizing the names</span></span>
 <span class='r-in'><span class='fu'>data_to_long</span><span class='op'>(</span><span class='va'>wide_data</span>,</span>
@@ -315,27 +315,27 @@ wide format.</p></td>
 <span class='r-in'>  values_to <span class='op'>=</span> <span class='st'>"Numbers"</span>,</span>
 <span class='r-in'>  rows_to <span class='op'>=</span> <span class='st'>"Row"</span></span>
 <span class='r-in'><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>            X3          X4         X5 Row Column     Numbers</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   1.0075283 -0.88863041 -1.0069860   1     X1  0.12066797</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2   1.0075283 -0.88863041 -1.0069860   1     X2  0.26348679</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  -0.9142295  0.68752679  0.5315356   2     X1 -0.02058148</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  -0.9142295  0.68752679  0.5315356   2     X2  0.09735412</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  -0.4848873  0.28038459  0.4990829   3     X1 -0.42189123</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  -0.4848873  0.28038459  0.4990829   3     X2  0.40147288</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7   1.0596685  0.82585396 -1.3838490   4     X1 -0.45922528</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8   1.0596685  0.82585396 -1.3838490   4     X2  0.12032256</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  -0.2681548 -0.61387244  0.5436751   5     X1 -2.17054644</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 -0.2681548 -0.61387244  0.5436751   5     X2  0.53083752</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 11  1.4833212  1.17916829 -0.2279678   6     X1  1.83754673</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 12  1.4833212  1.17916829 -0.2279678   6     X2  0.66113926</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 13  0.6359992  1.24711505 -1.6684669   7     X1  0.65278196</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 14  0.6359992  1.24711505 -1.6684669   7     X2 -0.60299082</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 15 -0.3902425 -0.02352371  1.0775793   8     X1 -0.48295487</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 16 -0.3902425 -0.02352371  1.0775793   8     X2 -0.92723785</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 17 -0.2031117  0.83196249 -0.1048415   9     X1 -0.14122399</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 18 -0.2031117  0.83196249 -0.1048415   9     X2 -1.25467049</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 19 -0.7441532  0.53266952 -1.7490153  10     X1 -0.25394458</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 20 -0.7441532  0.53266952 -1.7490153  10     X2  1.63930742</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            X3          X4          X5 Row Column     Numbers</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   0.8744028  1.94335457 -0.57255956   1     X1 -0.19945855</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2   0.8744028  1.94335457 -0.57255956   1     X2 -0.96722006</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3   0.7803146  0.01410719  0.04218196   2     X1 -0.00435388</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4   0.7803146  0.01410719  0.04218196   2     X2  1.55063815</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  -0.6443328  0.21287725 -0.19968554   3     X1 -1.31560453</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  -0.6443328  0.21287725 -0.19968554   3     X2  0.47435940</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  -0.8050434  0.65199428 -1.05539678   4     X1  0.19045484</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  -0.8050434  0.65199428 -1.05539678   4     X2  2.83694511</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9   0.8199010  0.23008969  0.53538102   5     X1  0.37775828</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10  0.8199010  0.23008969  0.53538102   5     X2 -0.40655964</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11 -1.2129132 -1.27823643 -1.01170579   6     X1  1.94022326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12 -1.2129132 -1.27823643 -1.01170579   6     X2  0.76387372</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13  0.2722731 -0.69805540 -1.11348339   7     X1 -1.21890840</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14  0.2722731 -0.69805540 -1.11348339   7     X2  0.83025263</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15  0.7917261  1.20650945 -0.03869885   8     X1 -0.86356971</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16  0.7917261  1.20650945 -0.03869885   8     X2  0.25026789</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17 -0.7755561  1.22066038  0.15106757   9     X1  2.04698761</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18 -0.7755561  1.22066038  0.15106757   9     X2  0.02318821</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19  1.0230911 -1.41931914 -0.35506289  10     X1  0.75169171</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20  1.0230911 -1.41931914 -0.35506289  10     X2 -1.74195705</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># From long to wide</span></span>
 <span class='r-in'><span class='co'># -----------------</span></span>
@@ -345,17 +345,17 @@ wide format.</p></td>
 <span class='r-in'>  values_from <span class='op'>=</span> <span class='st'>"Value"</span>,</span>
 <span class='r-in'>  rows_from <span class='op'>=</span> <span class='st'>"Row_ID"</span></span>
 <span class='r-in'><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Row_ID    Value_X1    Value_X2   Value_X3    Value_X4   Value_X5</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       1  0.12066797  0.26348679  1.0075283 -0.88863041 -1.0069860</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       2 -0.02058148  0.09735412 -0.9142295  0.68752679  0.5315356</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       3 -0.42189123  0.40147288 -0.4848873  0.28038459  0.4990829</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4       4 -0.45922528  0.12032256  1.0596685  0.82585396 -1.3838490</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5       5 -2.17054644  0.53083752 -0.2681548 -0.61387244  0.5436751</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6       6  1.83754673  0.66113926  1.4833212  1.17916829 -0.2279678</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7       7  0.65278196 -0.60299082  0.6359992  1.24711505 -1.6684669</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8       8 -0.48295487 -0.92723785 -0.3902425 -0.02352371  1.0775793</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 9       9 -0.14122399 -1.25467049 -0.2031117  0.83196249 -0.1048415</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 10     10 -0.25394458  1.63930742 -0.7441532  0.53266952 -1.7490153</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Row_ID    Value_X1    Value_X2   Value_X3    Value_X4    Value_X5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       1 -0.19945855 -0.96722006  0.8744028  1.94335457 -0.57255956</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       2 -0.00435388  1.55063815  0.7803146  0.01410719  0.04218196</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       3 -1.31560453  0.47435940 -0.6443328  0.21287725 -0.19968554</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4       4  0.19045484  2.83694511 -0.8050434  0.65199428 -1.05539678</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5       5  0.37775828 -0.40655964  0.8199010  0.23008969  0.53538102</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6       6  1.94022326  0.76387372 -1.2129132 -1.27823643 -1.01170579</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7       7 -1.21890840  0.83025263  0.2722731 -0.69805540 -1.11348339</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8       8 -0.86356971  0.25026789  0.7917261  1.20650945 -0.03869885</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9       9  2.04698761  0.02318821 -0.7755561  1.22066038  0.15106757</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10     10  0.75169171 -1.74195705  1.0230911 -1.41931914 -0.35506289</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Full example</span></span>
 <span class='r-in'><span class='co'># ------------------</span></span>
