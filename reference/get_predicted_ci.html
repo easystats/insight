@@ -210,26 +210,27 @@ vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></td
     </tr>
     <tr>
       <th>vcov_estimation</th>
-      <td><p>String, indicating the suffix of the
-<code>vcov*()</code>-function from the <span class="pkg">sandwich</span> or <span class="pkg">clubSandwich</span>
+      <td><p>Either a matrix, or a string, indicating the suffix
+of the <code>vcov*()</code>-function from the <span class="pkg">sandwich</span> or <span class="pkg">clubSandwich</span>
 package, e.g. <code>vcov_estimation = "CL"</code> (which calls
 <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovCL.html'>sandwich::vcovCL()</a></code> to compute clustered covariance matrix
 estimators), or <code>vcov_estimation = "HC"</code> (which calls
-<code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC()</a></code> to compute
-heteroskedasticity-consistent covariance matrix estimators).</p></td>
+<code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC()</a></code> to compute heteroskedasticity-consistent covariance
+matrix estimators).</p></td>
     </tr>
     <tr>
       <th>vcov_type</th>
       <td><p>Character vector, specifying the estimation type for the
 robust covariance matrix estimation (see
 <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC()</a></code> or <code><a href='https://rdrr.io/pkg/clubSandwich/man/vcovCR.html'>clubSandwich::vcovCR()</a></code>
-for details).</p></td>
+for details). Only applies if <code>vcov_estimation</code> is a string, and not a matrix.</p></td>
     </tr>
     <tr>
       <th>vcov_args</th>
       <td><p>List of named vectors, used as additional arguments that are
 passed down to the <span class="pkg">sandwich</span>-function specified in
-<code>vcov_estimation</code>.</p></td>
+<code>vcov_estimation</code>. Only applies if <code>vcov_estimation</code> is a string, and not
+a matrix.</p></td>
     </tr>
     <tr>
       <th>dispersion_method, ci_method</th>
