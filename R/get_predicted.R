@@ -125,13 +125,16 @@ get_predicted <- function(x, ...) {
 #' @export
 get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
 
-
   args <- c(list(x, "data" = data), list(...))
 
   out <- tryCatch(do.call("predict", args), error = function(e) NULL)
 
   if (is.null(out)) {
     out <- tryCatch(do.call("fitted", args), error = function(e) NULL)
+  }
+
+  if (!is.null(out)) {
+    class(out) <- c("get_predicted", class(out))
   }
 
   out
@@ -282,7 +285,8 @@ get_predicted.glmmTMB <- function(x,
         format_message(
           "`predict = 'prediction'` is currently not available for glmmTMB models.",
           "Changing to `predict = 'expectation'`."
-        )
+        ),
+        call. = FALSE
       )
     }
     predict <- "expectation"
@@ -359,7 +363,8 @@ get_predicted.gam <- function(x,
         format_message(
           "`predict = 'prediction'` is currently not available for GAM models.",
           "Changing to `predict = 'expectation'`."
-        )
+        ),
+        call. = FALSE
       )
     }
     predict <- "expectation"
@@ -439,14 +444,8 @@ get_predicted.stanreg <- function(x,
                                   include_smooth = TRUE,
                                   verbose = TRUE,
                                   ...) {
-  if (!requireNamespace("rstantools", quietly = TRUE) || utils::packageVersion("rstantools") < "2.1.0") {
-    stop(
-      format_message(
-        "Package `rstantools` in version 2.1.0 or higher needed for this function to work.",
-        "Please install it."
-      )
-    )
-  }
+
+  check_if_installed("rstantools", minimum_version = "2.1.0")
 
   args <- .get_predicted_args(
     x,
@@ -541,8 +540,10 @@ get_predicted.principal <- function(x, data = NULL, ...) {
   out
 }
 
+
 #' @export
 get_predicted.fa <- get_predicted.principal
+
 
 #' @export
 get_predicted.prcomp <- function(x, data = NULL, ...) {
@@ -554,6 +555,7 @@ get_predicted.prcomp <- function(x, data = NULL, ...) {
   class(out) <- c("get_predicted", class(out))
   out
 }
+
 
 #' @export
 get_predicted.faMain <- function(x, data = NULL, ...) {
@@ -567,6 +569,8 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   class(out) <- c("get_predicted", class(out))
   out
 }
+
+
 
 
 # ====================================================================
@@ -616,8 +620,8 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   # check `predict` user-input
   supported <- c("expectation", "link", "prediction", "classification")
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
-    msg <- format_message(sprintf('"%s" is not officially supported by the `get_predicted` function as a value for the `predict` argument. It will not be processed or validated, and will be passed directly to the `predict` method supplied by the modeling package. Users are encouraged to check the validity and scale of the results. Set `verbose=FALSE` to silence this warning, or use one of the supported values for the `predict` argument: %s.', predict, paste(sprintf('"%s"', supported), collapse = ", ")))
-    warning(msg)
+    msg <- format_message(sprintf('"%s" is not officially supported by the `get_predicted()` function as a value for the `predict` argument. It will not be processed or validated, and will be passed directly to the `predict()` method supplied by the modeling package. Users are encouraged to check the validity and scale of the results. Set `verbose=FALSE` to silence this warning, or use one of the supported values for the `predict` argument: %s.', predict, paste(sprintf('"%s"', supported), collapse = ", ")))
+    warning(msg, call. = FALSE)
   }
 
   # Arbitrate conflicts between the `predict` and `type` from the ellipsis. We
@@ -631,10 +635,10 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
       stop(format_message("Please supply a value for the `predict` argument."))
     }
   } else {
-    if(is.null(predict)) {
+    if (is.null(predict)) {
       predict_arg <- dots$type
     } else {
-      stop('The `predict` and `type` arguments cannot be used simultaneously. The preferred argument for the `get_predicted` function is `predict`. If you need to pass a `type` argument directly to the `predict` method associated with your model type, you must set `predict` to `NULL` explicitly: `get_predicted(model, predict=NULL, type="response")`')
+      stop(format_message('The `predict` and `type` arguments cannot be used simultaneously. The preferred argument for the `get_predicted()` function is `predict`. If you need to pass a `type` argument directly to the `predict()` method associated with your model type, you must set `predict` to `NULL` explicitly: `get_predicted(model, predict=NULL, type="response")`'))
     }
   }
 
