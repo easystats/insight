@@ -72,10 +72,11 @@
 #' scale, and no transformation is applied. For instance, for a logistic
 #' regression model, the response scale corresponds to the predicted
 #' probabilities, whereas the link-scale makes predictions of log-odds
-#' (probabilities on the logit scale). Note that in binomial models, the
-#' `get_predicted()` function will first calculate predictions as if the user
-#' had selected `predict="expectation"`. Then, it will round the responses
-#' in order to return the most likely outcome.
+#' (probabilities on the logit scale). Note that when users select
+#' `predict="classification"` in binomial models, the `get_predicted()`
+#' function will first calculate predictions as if the user had selected
+#' `predict="expectation"`. Then, it will round the responses in order to
+#' return the most likely outcome.
 #' }
 #'
 #' @examples
