@@ -357,7 +357,7 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
 
   # FA / PCA ----------------------------------------------------------------
   # =========================================================================
-  3
+  
   test_that("get_predicted - FA / PCA", {
     # PCA
     x <- get_predicted(psych::principal(mtcars, 3))
@@ -383,10 +383,83 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
 }
 
 
+# arguments: `predict` vs. `type` -----------------------------------------
+# =========================================================================
 
-test_that("check SE against barebones `predict`", {
+test_that("lm: get_predicted vs barebones `predict()`", {
   mod <- lm(mpg ~ hp + factor(cyl), mtcars)
-  known <- predict(mod, se.fit = TRUE)$se.fit
-  unknown <- as.data.frame(get_predicted(mod))$SE
-  expect_equal(known, unknown)
+  known <- predict(mod, se.fit = TRUE, interval = "confidence")
+  unknown1 <- as.data.frame(get_predicted(mod))
+  unknown2 <- as.data.frame(get_predicted(mod, predict = "expectation"))
+  unknown3 <- expect_warning(as.data.frame(get_predicted(mod, predict = "response")))
+  expect_equal(unname(known$fit[, "fit"]), unknown1$Predicted)
+  expect_equal(unname(known$se.fit), unknown1$SE)
+  expect_equal(unname(known$fit[, "lwr"]), unknown1$CI_low)
+  expect_equal(unname(known$fit[, "upr"]), unknown1$CI_high)
+  expect_equal(unname(known$fit[, "fit"]), unknown2$Predicted)
+  expect_equal(unname(known$se.fit), unknown2$SE)
+  expect_equal(unname(known$fit[, "lwr"]), unknown2$CI_low)
+  expect_equal(unname(known$fit[, "upr"]), unknown2$CI_high)
+  expect_equal(unname(known$fit[, "fit"]), unknown3$Predicted)
+  expect_equal(unname(known$se.fit), unknown3$SE)
+  expect_equal(unname(known$fit[, "lwr"]), unknown3$CI_low)
+  expect_equal(unname(known$fit[, "upr"]), unknown3$CI_high)
+})
+
+
+test_that("using both `predict` and `type` raises an informative error", {
+  mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
+  expect_warning(expect_error(
+    get_predicted(mod, predict = "response", type = "response")))
+})
+
+
+test_that("`predict` and `type` are both `NULL`", {
+  mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
+  expect_error(get_predicted(mod, predict = NULL), regexp = "supply")
+})
+
+
+test_that("`predict()` vs. `get_predicted` link equivalence", {
+  # link
+  mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
+  known <- predict(mod, type = "link", interval = "confidence", se.fit = TRUE)
+  unknown <- as.data.frame(get_predicted(mod, predict = NULL, type = "link"))
+  expect_equal(unname(known$fit), unknown$Predicted)
+  expect_equal(unname(known$se.fit), unknown$SE)
+  
+  # response
+  mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
+  known <- predict(mod, type = "response", se.fit = TRUE)
+  unknown1 <- as.data.frame(get_predicted(mod, predict = "expectation"))
+  unknown2 <- as.data.frame(get_predicted(mod, predict = NULL, type = "response"))
+  unknown3 <- expect_warning(as.data.frame(get_predicted(mod, predict = "response")))
+  expect_equal(unname(known$fit), unknown1$Predicted)
+  expect_equal(unname(known$se.fit), unknown1$SE)
+  expect_equal(unname(known$fit), unknown2$Predicted)
+  expect_equal(unname(known$se.fit), unknown2$SE)
+  expect_equal(unname(known$fit), unknown3$Predicted)
+  expect_equal(unname(known$se.fit), unknown3$SE)
+})
+
+
+test_that("hurdle: get_predicted matches `predict()`", {
+    skip_if_not_installed("pscl")
+    data("bioChemists", package = "pscl")
+    mod <- pscl::hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+    known <- predict(mod, type = "response")
+    unknown <- get_predicted(mod, type = "response")
+    expect_equal(known, unknown)
+    known <- predict(mod, type = "zero")
+    unknown <- get_predicted(mod, type = "zero")
+    expect_equal(known, unknown)
+})
+
+
+test_that("bugfix: used to return all zeros", {
+  mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
+  pred <- expect_warning(get_predicted(mod, predict = "response"))
+  expect_false(any(pred == 0))
+  pred <- get_predicted(mod, predict = "original")
+  expect_false(all(pred == 0))
 })
