@@ -636,12 +636,13 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   }
 
   # check aliases
-  if (predict == "expected") {
-    predict <- "expectation"
-  }
-
-  if (predict == "predicted") {
-    predict <- "prediction"
+  if (!is.null(predict)) {
+    if (predict == "expected") {
+      predict <- "expectation"
+    }
+    if (predict == "predicted") {
+      predict <- "prediction"
+    }
   }
 
 
