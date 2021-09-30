@@ -51,22 +51,23 @@ other models (e.g., \code{glm}), prediction intervals are somewhat useless
 (for instance, for a binomial model for which the dependent variable is a
 vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 
-\item{vcov_estimation}{String, indicating the suffix of the
-\verb{vcov*()}-function from the \pkg{sandwich} or \pkg{clubSandwich}
+\item{vcov_estimation}{Either a matrix, or a string, indicating the suffix
+of the \verb{vcov*()}-function from the \pkg{sandwich} or \pkg{clubSandwich}
 package, e.g. \code{vcov_estimation = "CL"} (which calls
 \code{\link[sandwich:vcovCL]{sandwich::vcovCL()}} to compute clustered covariance matrix
 estimators), or \code{vcov_estimation = "HC"} (which calls
-\code{\link[sandwich:vcovHC]{sandwich::vcovHC()}} to compute
-heteroskedasticity-consistent covariance matrix estimators).}
+\code{\link[sandwich:vcovHC]{sandwich::vcovHC()}} to compute heteroskedasticity-consistent covariance
+matrix estimators).}
 
 \item{vcov_type}{Character vector, specifying the estimation type for the
 robust covariance matrix estimation (see
 \code{\link[sandwich:vcovHC]{sandwich::vcovHC()}} or \code{clubSandwich::vcovCR()}
-for details).}
+for details). Only applies if \code{vcov_estimation} is a string, and not a matrix.}
 
 \item{vcov_args}{List of named vectors, used as additional arguments that are
 passed down to the \pkg{sandwich}-function specified in
-\code{vcov_estimation}.}
+\code{vcov_estimation}. Only applies if \code{vcov_estimation} is a string, and not
+a matrix.}
 
 \item{dispersion_method, ci_method}{These arguments are only used in
 the context of bootstrapped and Bayesian models. Possible values are

@@ -22,20 +22,21 @@
 #'   other models (e.g., `glm`), prediction intervals are somewhat useless
 #'   (for instance, for a binomial model for which the dependent variable is a
 #'   vector of 1s and 0s, the prediction interval is... `[0, 1]`).
-#' @param vcov_estimation String, indicating the suffix of the
-#'   `vcov*()`-function from the \pkg{sandwich} or \pkg{clubSandwich}
+#' @param vcov_estimation Either a matrix, or a string, indicating the suffix
+#'   of the `vcov*()`-function from the \pkg{sandwich} or \pkg{clubSandwich}
 #'   package, e.g. `vcov_estimation = "CL"` (which calls
 #'   [sandwich::vcovCL()] to compute clustered covariance matrix
 #'   estimators), or `vcov_estimation = "HC"` (which calls
-#'   [sandwich::vcovHC()] to compute
-#'   heteroskedasticity-consistent covariance matrix estimators).
+#'   [sandwich::vcovHC()] to compute heteroskedasticity-consistent covariance
+#'   matrix estimators).
 #' @param vcov_type Character vector, specifying the estimation type for the
 #'   robust covariance matrix estimation (see
 #'   [sandwich::vcovHC()] or `clubSandwich::vcovCR()`
-#'   for details).
+#'   for details). Only applies if `vcov_estimation` is a string, and not a matrix.
 #' @param vcov_args List of named vectors, used as additional arguments that are
 #'   passed down to the \pkg{sandwich}-function specified in
-#'   `vcov_estimation`.
+#'   `vcov_estimation`. Only applies if `vcov_estimation` is a string, and not
+#'   a matrix.
 #' @param dispersion_method,ci_method These arguments are only used in
 #'   the context of bootstrapped and Bayesian models. Possible values are
 #'   `dispersion_method = c("sd", "mad")` and
