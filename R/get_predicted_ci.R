@@ -207,7 +207,10 @@ get_predicted_ci.mlm <- function(x, ...) {
   } else if (!is.matrix(vcov_estimation)) {
     # get variance-covariance-matrix, depending on model type
     vcovmat <- get_varcov(x, component = "conditional")
+  } else {
+    vcovmat <- vcov_estimation
   }
+
   vcovmat
 }
 
