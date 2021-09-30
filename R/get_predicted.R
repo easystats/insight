@@ -270,21 +270,21 @@ get_predicted.merMod <- get_predicted.lmerMod
 #' @export
 get_predicted.glmmTMB <- function(x,
                                   data = NULL,
-                                  predict = c("expectation", "link", "prediction", "classification"),
+                                  predict = "expectation",
                                   ci = 0.95,
                                   include_random = TRUE,
                                   iterations = NULL,
                                   verbose = TRUE,
                                   ...) {
-  predict <- match.arg(predict)
+  predict <- match.arg(predict, choices = c("expectation", "expected", "link", "prediction", "predicted", "classification"))
 
   # Sanity checks
-  if (predict == "prediction") {
+  if (predict %in% c("prediction", "predicted")) {
     if (verbose) {
       warning(
         format_message(
-          "`predict = 'prediction'` is currently not available for glmmTMB models.",
-          "Changing to `predict = 'expectation'`."
+          "`predict='prediction'` is currently not available for glmmTMB models.",
+          "Changing to `predict='expectation'`."
         ),
         call. = FALSE
       )
@@ -341,28 +341,29 @@ get_predicted.glmmTMB <- function(x,
 
 
 
+
 # GAM -------------------------------------------------------------------
 # =======================================================================
 
 #' @export
 get_predicted.gam <- function(x,
                               data = NULL,
-                              predict = c("expectation", "link", "prediction", "classification"),
+                              predict = "expectation",
                               ci = 0.95,
                               include_random = TRUE,
                               include_smooth = TRUE,
                               iterations = NULL,
                               verbose = TRUE,
                               ...) {
-  predict <- match.arg(predict)
+  predict <- match.arg(predict, choices = c("expectation", "expected", "link", "prediction", "predicted", "classification"))
 
   # Sanity checks
-  if (predict == "prediction") {
+  if (predict %in% c("prediction", "predicted")) {
     if (verbose) {
       warning(
         format_message(
-          "`predict = 'prediction'` is currently not available for GAM models.",
-          "Changing to `predict = 'expectation'`."
+          "`predict='prediction'` is currently not available for GAM models.",
+          "Changing to `predict='expectation'`."
         ),
         call. = FALSE
       )
@@ -427,6 +428,8 @@ get_predicted.gamm <- get_predicted.gam
 
 #' @export
 get_predicted.list <- get_predicted.gam # gamm4
+
+
 
 
 
@@ -599,13 +602,21 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
 
 .get_predicted_args <- function(x,
                                 data = NULL,
-                                predict = c("expectation", "link", "prediction", "classification"),
+                                predict = "expectation",
                                 include_random = TRUE,
                                 include_smooth = TRUE,
                                 ci = 0.95,
                                 newdata = NULL,
                                 verbose = TRUE,
                                 ...) {
+
+  if (length(predict) > 1) {
+    predict <- predict[1]
+    if (isTRUE(verbose)) {
+      msg <- format_message(sprintf("More than one option provided in `predict`. Using first option '%s' now."), predict[1])
+      warning(msg, call. = FALSE)
+    }
+  }
 
   # Get info
   info <- model_info(x)
@@ -618,11 +629,21 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   if (is.null(ci)) ci <- 0
 
   # check `predict` user-input
-  supported <- c("expectation", "link", "prediction", "classification")
+  supported <- c("expectation", "expected", "link", "prediction", "predicted", "classification")
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
     msg <- format_message(sprintf('"%s" is not officially supported by the `get_predicted()` function as a value for the `predict` argument. It will not be processed or validated, and will be passed directly to the `predict()` method supplied by the modeling package. Users are encouraged to check the validity and scale of the results. Set `verbose=FALSE` to silence this warning, or use one of the supported values for the `predict` argument: %s.', predict, paste(sprintf('"%s"', supported), collapse = ", ")))
     warning(msg, call. = FALSE)
   }
+
+  # check aliases
+  if (predict == "expected") {
+    predict <- "expectation"
+  }
+
+  if (predict == "predicted") {
+    predict <- "prediction"
+  }
+
 
   # Arbitrate conflicts between the `predict` and `type` from the ellipsis. We
   # create a new variable called `predict_arg` to resolve conflicts. This avoids
