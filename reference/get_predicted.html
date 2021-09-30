@@ -242,10 +242,10 @@ modulates two separate concepts, the <strong>scale</strong> and the <strong>unce
 
 <ul>
 <li><p><strong>Linear models</strong> - <code><a href='https://rdrr.io/r/stats/lm.html'>lm()</a></code>: For linear models, Prediction
-intervals (<code>predict = "prediction"</code>) show the range that likely
+intervals (<code>predict="prediction"</code>) show the range that likely
 contains the value of a new observation (in what range it is likely to
-fall), whereas confidence intervals (<code>predict = "expectation"</code> or
-<code>predict = "link"</code>) reflect the uncertainty around the estimated
+fall), whereas confidence intervals (<code>predict="expectation"</code> or
+<code>predict="link"</code>) reflect the uncertainty around the estimated
 parameters (and gives the range of uncertainty of the regression line). In
 general, Prediction Intervals (PIs) account for both the uncertainty in the
 model's parameters, plus the random variation of the individual values.
@@ -253,21 +253,24 @@ Thus, prediction intervals are always wider than confidence intervals.
 Moreover, prediction intervals will not necessarily become narrower as the
 sample size increases (as they do not reflect only the quality of the fit,
 but also the variability within the data).</p></li>
-<li><p><strong>General Linear models</strong> - <code><a href='https://rdrr.io/r/stats/glm.html'>glm()</a></code>: For binomial models,
+<li><p><strong>Generalized Linear models</strong> - <code><a href='https://rdrr.io/r/stats/glm.html'>glm()</a></code>: For binomial models,
 prediction intervals are somewhat useless (for instance, for a binomial
-(bernoulli) model for which the dependent variable is a vector of 1s and
+(Bernoulli) model for which the dependent variable is a vector of 1s and
 0s, the prediction interval is... <code>[0, 1]</code>).</p></li>
 </ul>
 
 <h3 class='hasAnchor' id='link-scale-vs-response-scale'><a class='anchor' aria-hidden='true' href='#link-scale-vs-response-scale'></a>Link scale vs. Response scale</h3>
-<p>Having the output is on the scale of the response variable is arguably the
-most convenient to understand and visualize the relationships. If on the
-link-scale, no transformation is applied and the values are on the scale of
-the model. For instance, for a logistic model, the response
-scale corresponds to the predicted probabilities, whereas the link-scale
-makes predictions of log-odds (probabilities on the logit scale). Note that,
-when <code>predict = "response"</code>, the probabilities are rounded (so that the
-prediction corresponds to the most likely outcome).</p>
+<p>When users set the <code>predict</code> argument to <code>"expectation"</code>, the predictions
+are returned on the response scale, which is arguably the most convenient
+way to understand and visualize relationships of interest. When users set
+the <code>predict</code> argument to <code>"link"</code>, predictions are returned on the link
+scale, and no transformation is applied. For instance, for a logistic
+regression model, the response scale corresponds to the predicted
+probabilities, whereas the link-scale makes predictions of log-odds
+(probabilities on the logit scale). Note that in binomial models, the
+<code>get_predicted()</code> function will first calculate predictions as if the user
+had selected <code>predict="expectation"</code>. Then, it will round the responses
+in order to return the most likely outcome.</p>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
