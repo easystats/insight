@@ -204,7 +204,7 @@ get_predicted_ci.mlm <- function(x, ...) {
       vcov_estimation <- clubSandwich::vcovCR
       vcovmat <- as.matrix(do.call(vcov_estimation, c(list(obj = x, type = vcov_type), vcov_args)))
     }
-  } else {
+  } else if (!is.matrix(vcov_estimation)) {
     # get variance-covariance-matrix, depending on model type
     vcovmat <- get_varcov(x, component = "conditional")
   }
