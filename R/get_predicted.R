@@ -137,7 +137,7 @@ get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
   }
 
   if (!is.null(out)) {
-    class(out) <- c("get_predicted", class(out))
+    out <- .get_predicted_out(out, args = list("data" = data))
   }
 
   out
