@@ -122,7 +122,7 @@ get_predicted_ci.default <- function(x,
 
   # Analytical solution
   # 1. Find appropriate interval function
-  if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian")) { # gaussian or CI
+  if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov_estimation) && is.matrix(vcov_estimation))) { # gaussian or CI
     se <- get_predicted_se(
       x,
       predictions,
@@ -174,7 +174,7 @@ get_predicted_ci.mlm <- function(x, ...) {
                                    vcov_args = NULL) {
 
   # (robust) variance-covariance matrix
-  if (!is.null(vcov_estimation)) {
+  if (!is.null(vcov_estimation) && !is.matrix(vcov_estimation)) {
     # check for existing vcov-prefix
     if (!grepl("^vcov", vcov_estimation)) {
       vcov_estimation <- paste0("vcov", vcov_estimation)
@@ -243,7 +243,7 @@ get_predicted_ci.mlm <- function(x, ...) {
           find_formula(x)$conditional
         }
       )
-  
+
       all_terms <- find_terms(x)$conditional
       off_terms <- grepl("^offset\\((.*)\\)", all_terms)
       if (any(off_terms)) {
