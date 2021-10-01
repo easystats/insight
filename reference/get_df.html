@@ -165,11 +165,11 @@ from regression models.</p>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>Can be <code>"residual"</code> or <code>"model"</code>. <code>"residual"</code>
+      <td><p>Can be <code>"residual"</code>, <code>"model"</code> or <code>"analytical"</code>. <code>"residual"</code>
 tries to extract residual degrees of freedoms. If residual degrees of freedom
-could not be extracted, returns <code>n-k</code> (number of observations minus
-number of parameters). <code>"model"</code> returns model-based degrees of freedom,
-i.e. the number of (estimated) parameters.</p></td>
+could not be extracted, returns analytical degrees of freedom, i.e. <code>n-k</code>
+(number of observations minus number of parameters). <code>"model"</code> returns
+model-based degrees of freedom, i.e. the number of (estimated) parameters.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
