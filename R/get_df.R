@@ -279,6 +279,27 @@ get_df.rqs <- function(x, type = "residual", ...) {
 }
 
 
+#' @export
+get_df.systemfit <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  df <- c()
+  s <- summary(x)$eq
+  params <- find_parameters(x)
+  f <- find_formula(x)
+  system_names <- names(f)
+
+  for (i in 1:length(system_names)) {
+    dfs <- rep(s[[i]]$df[2], length(params[[i]]))
+    df_names <- rep(names(params[i]), length(params[[i]]))
+    df <- c(df, stats::setNames(dfs, df_names))
+  }
+
+  df
+}
+
+
+
+
 
 
 # Analytical approach ------------------------------
