@@ -5,11 +5,11 @@
 #'   from regression models.
 #'
 #' @param x A statistical model.
-#' @param type Can be `"residual"` or `"model"`. `"residual"`
+#' @param type Can be `"residual"`, `"model"` or `"analytical"`. `"residual"`
 #' tries to extract residual degrees of freedoms. If residual degrees of freedom
-#' could not be extracted, returns `n-k` (number of observations minus
-#' number of parameters). `"model"` returns model-based degrees of freedom,
-#' i.e. the number of (estimated) parameters.
+#' could not be extracted, returns analytical degrees of freedom, i.e. `n-k`
+#' (number of observations minus number of parameters). `"model"` returns
+#' model-based degrees of freedom, i.e. the number of (estimated) parameters.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
@@ -26,13 +26,15 @@ get_df <- function(x, ...) {
 #' @rdname get_df
 #' @export
 get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical"))
 
   if (type == "residual") {
-    dof <- .degrees_of_freedom_fit(x, verbose = verbose)
+    dof <- .degrees_of_freedom_residual(x, verbose = verbose)
     if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
       dof <- .degrees_of_freedom_analytical(x)
     }
+  } else if (type == "analytical") {
+    dof <- .degrees_of_freedom_analytical(x)
   } else {
     dof <- .model_df(x)
   }
@@ -295,10 +297,13 @@ get_df.rqs <- function(x, type = "residual", ...) {
 }
 
 
+
+
 # Model approach (Residual df) ------------------------------
 
+
 #' @keywords internal
-.degrees_of_freedom_fit <- function(model, verbose = TRUE) {
+.degrees_of_freedom_residual <- function(model, verbose = TRUE) {
   info <- model_info(model, verbose = FALSE)
 
   if (!is.null(info) && is.list(info) && info$is_bayesian && !inherits(model, c("bayesx", "blmerMod", "bglmerMod"))) {
@@ -333,6 +338,10 @@ get_df.rqs <- function(x, type = "residual", ...) {
   dof
 }
 
+
+
+
+# Model approach (model-based / logLik df) ------------------------------
 
 
 .model_df <- function(x) {

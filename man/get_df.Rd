@@ -14,11 +14,11 @@ get_df(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{type}{Can be \code{"residual"} or \code{"model"}. \code{"residual"}
+\item{type}{Can be \code{"residual"}, \code{"model"} or \code{"analytical"}. \code{"residual"}
 tries to extract residual degrees of freedoms. If residual degrees of freedom
-could not be extracted, returns \code{n-k} (number of observations minus
-number of parameters). \code{"model"} returns model-based degrees of freedom,
-i.e. the number of (estimated) parameters.}
+could not be extracted, returns analytical degrees of freedom, i.e. \code{n-k}
+(number of observations minus number of parameters). \code{"model"} returns
+model-based degrees of freedom, i.e. the number of (estimated) parameters.}
 
 \item{verbose}{Toggle warnings.}
 }
