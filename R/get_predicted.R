@@ -129,7 +129,7 @@ get_predicted <- function(x, ...) {
 #' @export
 get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
 
-  args <- c(list(x, "data" = data), list(...))
+  args <- c(list(x, "newdata" = data), list(...))
 
   out <- tryCatch(do.call("predict", args), error = function(e) NULL)
 
