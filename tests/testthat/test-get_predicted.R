@@ -451,10 +451,10 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight")) {
       data("bioChemists", package = "pscl")
       mod <- pscl::hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
       known <- predict(mod, type = "response")
-      unknown <- get_predicted(mod, type = "response")
+      unknown <- get_predicted(mod, predict = NULL, type = "response")
       expect_equal(known, unknown, ignore_attr = TRUE)
       known <- predict(mod, type = "zero")
-      unknown <- get_predicted(mod, type = "zero")
+      unknown <- get_predicted(mod, predict = NULL, type = "zero")
       expect_equal(known, unknown, ignore_attr = TRUE)
   })
 

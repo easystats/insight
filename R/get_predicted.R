@@ -345,6 +345,37 @@ get_predicted.glmmTMB <- function(x,
 
 
 
+# nnet::multinom --------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...) {
+
+  dots <- list(...)
+
+  # `type` argument can be: probs | class
+  if (!is.null(predict)) {
+    type_arg <- match.arg(predict, choices = c("classification", "expectation"))
+    type_arg <- c("class", "probs")[c("classification", "expectation") == type_arg]
+  } else if ("type" %in% names(dots)) {
+    type_arg <- match.arg(dots$type, choices = c("class", "probs"))
+  } else {
+    stop('The `predict` argument must be either "expectation" or "classification".')
+  }
+
+  args <- c(list(x, "data" = data), list(...))
+
+  # predict.multinom doesn't work when `newdata` is explicitly set to NULL (weird)
+  if (is.null(data)) {
+    out <- predict(x, type = type_arg)
+  } else {
+    out <- predict(x, newdata = data, type = type_arg)
+  }
+
+  .get_predicted_out(out, args = args)
+}
+
+
 
 # GAM -------------------------------------------------------------------
 # =======================================================================
@@ -825,6 +856,20 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     attr(predictions, "data") <- args$data
     attr(predictions, "ci") <- args$ci
     attr(predictions, "predict") <- args$predict
+  }
+
+  # multidimensional or "grouped" predictions (e.g., nnet::multinom with `predict(type="probs")`)
+  if (is.matrix(predictions) && ncol(predictions) > 1) {
+    predictions <- as.data.frame(predictions)
+    predictions$Row <- 1:nrow(predictions)
+    predictions <- stats::reshape(predictions,
+                   direction = "long",
+                   varying = setdiff(colnames(predictions), "Row"),
+                   times = setdiff(colnames(predictions), "Row"),
+                   v.names = "Predicted",
+                   timevar = "Response",
+                   idvar = "Row")
+    row.names(predictions) <- NULL
   }
 
   class(predictions) <- c("get_predicted", class(predictions))
