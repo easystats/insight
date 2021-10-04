@@ -351,7 +351,7 @@
 <div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-6" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
-<ul><li><p><code>get_residuals(..., weighted = TRUE)</code> doesn’t throw warnings if weights are 1 (no weights specified).</p></li>
+<ul><li><p><code>get_residuals(..., weighted = TRUE)</code> doesnât throw warnings if weights are 1 (no weights specified).</p></li>
 <li><p><code><a href="../reference/n_parameters.html">n_parameters()</a></code> gains a <code>only_estimable</code> argument, to remove non-estimable parameters from counting the number of parameters for models with rank-deficient model matrix.</p></li>
 <li><p><code><a href="../reference/format_ci.html">format_ci()</a></code> also gains a <code>zap_small</code> argument.</p></li>
 </ul></div>
@@ -409,7 +409,7 @@
 <h2 class="hasAnchor">
 <a href="#new-functions-3" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li><p>Added <code><a href="../reference/get_deviance.html">get_deviance()</a></code> function that returns the model deviance as a robust alternative to <code><a href="https://rdrr.io/r/stats/deviance.html" class="external-link">stats::deviance()</a></code>.</p></li>
-<li><p>Added <code><a href="../reference/model_name.html">model_name()</a></code> function that returns the model’s “name”.</p></li>
+<li><p>Added <code><a href="../reference/model_name.html">model_name()</a></code> function that returns the modelâs ânameâ.</p></li>
 <li><p>Added <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> method for <code><a href="../reference/find_formula.html">find_formula()</a></code> output to flatten it.</p></li>
 <li><p>Added <code>null_as_ones = TRUE</code> argument to <code><a href="../reference/get_weights.html">get_weights()</a></code> to return vector of 1s instead of <code>NULL</code>.</p></li>
 <li><p>Added <code><a href="../reference/get_intercept.html">get_intercept()</a></code> as a helper function to easily retrieve the value at the intercept.</p></li>
@@ -479,7 +479,7 @@
 <div id="new-supported-model-classes-7" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-supported-model-classes-7" class="anchor" aria-hidden="true"></a>New supported model classes</h2>
-<ul><li>Support for <code>scam</code> (<em>scam</em>), <code>meta_random</code> and <code>meta_fixed</code> (<em>metaBMA</em>), <code>Glm</code> (<em>rms</em>), <code>ridgelm</code> (<em>MASS</em>), <code>mediate</code> (<em>mediation</em>). Partial support for <code>mcmc.list</code> (e.g. <em>bayesGARCH</em>)</li>
+<ul><li>Support for <code>scam</code> (<em>scam</em>), <code>meta_random</code> and <code>meta_fixed</code> (<em>metaBMA</em>), <code>Glm</code> (<em>rms</em>), <code>ridgelm</code> (<em>MASS</em>), <code>mediate</code> (<em>mediation</em>). Partial support for <code>mcmc.list</code> (e.g.Â <em>bayesGARCH</em>)</li>
 </ul></div>
 <div id="new-function" class="section level2">
 <h2 class="hasAnchor">
@@ -541,7 +541,7 @@
 <div id="changes-to-functions-11" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-11" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
-<ul><li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>na_reference</code> argument, to set the “reference” for Bayes factor values that are <code>NA</code>, and an <code>exact</code> argument for returning scientific formatted extreme values.</p></li>
+<ul><li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>na_reference</code> argument, to set the âreferenceâ for Bayes factor values that are <code>NA</code>, and an <code>exact</code> argument for returning scientific formatted extreme values.</p></li>
 <li><p><code><a href="../reference/format_value.html">format_value()</a></code> gains a <code>zap_small</code> argument, to prevent scientific printing of numbers if these have more decimal places than indicated by <code>digits</code>.</p></li>
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> now also returns <code>NULL</code> when all weights were 1.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>BFBayesFactor</em> objects gets a <code>verbose</code> argument.</p></li>
@@ -569,7 +569,7 @@
 <ul><li><p><code><a href="../reference/get_data.html">get_data()</a></code> now works for models from <code>afex_aov()</code>.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> returns a more informative message for <code>BFBayesFactor</code> objects when not the first model is indexed.</p></li>
 <li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp()</a></code>-pattern.</p></li>
-<li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> for character-objects now works with “interaction patterns” (like <code>clean_names("scale(a):scale(b)")</code>).</p></li>
+<li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> for character-objects now works with âinteraction patternsâ (like <code>clean_names("scale(a):scale(b)")</code>).</p></li>
 <li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> gains a <code>protect_ratio</code> argument, to print numbers smaller than 1 as ratios.</p></li>
 </ul></div>
 <div id="bug-fixes-12" class="section level2">
@@ -586,12 +586,12 @@
 <h2 class="hasAnchor">
 <a href="#breaking-changes-2" class="anchor" aria-hidden="true"></a>Breaking changes</h2>
 <ul><li>
-<code><a href="../reference/get_data.html">get_data()</a></code> did not always “back-transform” log-transformed or scaled variables to return the original values. Now this bug has been fixed, and <code><a href="../reference/get_data.html">get_data()</a></code> should return all variables on the original scale (as if these variables were not transformed), as stated in the docs.</li>
+<code><a href="../reference/get_data.html">get_data()</a></code> did not always âback-transformâ log-transformed or scaled variables to return the original values. Now this bug has been fixed, and <code><a href="../reference/get_data.html">get_data()</a></code> should return all variables on the original scale (as if these variables were not transformed), as stated in the docs.</li>
 </ul></div>
 <div id="bug-fixes-13" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-13" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
-<ul><li><p><code><a href="../reference/get_data.html">get_data()</a></code> now returns the correct original data for “empty” polynomials (i.e. <code>poly(x, 1)</code>).</p></li>
+<ul><li><p><code><a href="../reference/get_data.html">get_data()</a></code> now returns the correct original data for âemptyâ polynomials (i.e.Â <code>poly(x, 1)</code>).</p></li>
 <li><p>Fix CRAN check issues due to latest <em>estimatr</em> update.</p></li>
 </ul></div>
 </div>
@@ -650,7 +650,7 @@
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> did not return variance components for random effects for null-models with random slopes.</p></li>
 <li><p>Fixed issue with <code><a href="../reference/get_variance.html">get_variance()</a></code> for <code>lme</code>-models with categorical random slope.</p></li>
 <li><p>Fixed issue that occurred since R 4.0.0 in <code><a href="../reference/find_weights.html">find_weights()</a></code> when function call had no <code>weights</code>-argument.</p></li>
-<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>-response variables and matrix-like variables in the model frame (e.g. when using <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly()</a></code>).</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>-response variables and matrix-like variables in the model frame (e.g.Â when using <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly()</a></code>).</p></li>
 <li><p>Fixed issues with <code>PROreg::BBmm()</code>, due to changes in latest package update.</p></li>
 </ul></div>
 </div>
@@ -667,11 +667,11 @@
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by <a href="https://github.com/strengejacke/" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://sites.google.com/view/mattansb/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p></p>
+  <p><p>Developed by <a href="https://github.com/strengejacke/" class="external-link">Daniel LÃ¼decke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://sites.google.com/view/mattansb/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p></p>
 </div>
 
       </footer>

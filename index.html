@@ -144,7 +144,7 @@
 <div id="definition-of-model-components" class="section level3">
 <h3 class="hasAnchor">
 <a href="#definition-of-model-components" class="anchor" aria-hidden="true"></a>Definition of Model Components</h3>
-<p>The functions from <strong>insight</strong> address different components of a model. In an effort to avoid confusion about specific “targets” of each function, in this section we provide a short explanation of <strong>insight</strong>’s definitions of regression model components.</p>
+<p>The functions from <strong>insight</strong> address different components of a model. In an effort to avoid confusion about specific âtargetsâ of each function, in this section we provide a short explanation of <strong>insight</strong>âs definitions of regression model components.</p>
 <div id="data" class="section level4">
 <h4 class="hasAnchor">
 <a href="#data" class="anchor" aria-hidden="true"></a>Data</h4>
@@ -162,13 +162,13 @@
 <li>
 <strong>response</strong>: the outcome or response variable (dependent variable) of a regression model.</li>
 <li>
-<strong>predictor</strong>: independent variables of (the <em>fixed</em> part of) a regression model. For mixed models, variables that are only in the <em>random effects</em> part (i.e. grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are “unique”. As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.</li>
+<strong>predictor</strong>: independent variables of (the <em>fixed</em> part of) a regression model. For mixed models, variables that are only in the <em>random effects</em> part (i.e.Â grouping factors) of the model are not returned as predictors by default. However, these can be included using additional arguments in the function call, treating predictors are âuniqueâ. As such, if a variable appears as a fixed effect and a random slope, it is treated as one (the same) predictor.</li>
 </ul>
 </div>
 <div id="variables" class="section level4">
 <h4 class="hasAnchor">
 <a href="#variables" class="anchor" aria-hidden="true"></a>Variables</h4>
-<p>Any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A “variable” only relates to the unique occurence of a term, or the term name. For instance, the expression <code>x + poly(x, 2)</code> has only the variable <code>x</code>.</p>
+<p>Any unique variable names that appear in a regression model, e.g., response variable, predictors or random effects. A âvariableâ only relates to the unique occurence of a term, or the term name. For instance, the expression <code>x + poly(x, 2)</code> has only the variable <code>x</code>.</p>
 </div>
 <div id="terms" class="section level4">
 <h4 class="hasAnchor">
@@ -184,7 +184,7 @@
 <li>
 <strong>random or grouping factors</strong>: variables that are specified as grouping variables in a mixed effects model.</li>
 </ul>
-<p><em>Aren’t the predictors, terms and parameters the same thing?</em></p>
+<p><em>Arenât the predictors, terms and parameters the same thing?</em></p>
 <p>In some cases, yes. But not in all cases. Find out more by <a href="https://easystats.github.io/insight/articles/insight.html" class="external-link"><strong>clicking here to access the documentation</strong></a>.</p>
 </div>
 </div>
@@ -193,7 +193,7 @@
 <a href="#functions" class="anchor" aria-hidden="true"></a>Functions</h3>
 <p>The package revolves around two key prefixes: <code>get_*</code> and <code>find_*</code>. The <code>get_*</code> prefix extracts <em>values</em> (or <em>data</em>) associated with model-specific objects (e.g., parameters or variables), while the <code>find_*</code> prefix <em>lists</em> model-specific objects (e.g., priors or predictors). These are powerful families of functions allowing for great flexibility in use, whether at a high, descriptive level (<code>find_*</code>) or narrower level of statistical inspection and reporting (<code>get_*</code>).</p>
 <p><img src="https://raw.githubusercontent.com/easystats/insight/master/paper/figure1_small.png"></p>
-<p>In total, the <strong>insight</strong> package includes 16 core functions: <a href="https://easystats.github.io/insight/reference/get_data.html" class="external-link">get_data()</a>, <a href="https://easystats.github.io/insight/reference/get_priors.html" class="external-link">get_priors()</a>, <a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance()</a>, <a href="https://easystats.github.io/insight/reference/get_parameters.html" class="external-link">get_parameters()</a>, <a href="https://easystats.github.io/insight/reference/get_predictors.html" class="external-link">get_predictors()</a>, <a href="https://easystats.github.io/insight/reference/get_random.html" class="external-link">get_random()</a>, <a href="https://easystats.github.io/insight/reference/get_response.html" class="external-link">get_response()</a>, <a href="https://easystats.github.io/insight/reference/find_algorithm.html" class="external-link">find_algorithm()</a>, <a href="https://easystats.github.io/insight/reference/find_formula.html" class="external-link">find_formula()</a>, <a href="https://easystats.github.io/insight/reference/find_variables.html" class="external-link">find_variables()</a>, <a href="https://easystats.github.io/insight/reference/find_terms.html" class="external-link">find_terms()</a>, <a href="https://easystats.github.io/insight/reference/find_parameters.html" class="external-link">find_parameters()</a>, <a href="https://easystats.github.io/insight/reference/find_predictors.html" class="external-link">find_predictors()</a>, <a href="https://easystats.github.io/insight/reference/find_random.html" class="external-link">find_random()</a>, <a href="https://easystats.github.io/insight/reference/find_response.html" class="external-link">find_response()</a>, and <a href="https://easystats.github.io/insight/reference/model_info.html" class="external-link">model_info()</a>. In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the <code><a href="reference/find_terms.html">find_terms()</a></code> function’s <code>effects</code> argument allows for the extraction of “fixed effects” terms, “random effects” terms, or by default, “all” terms in the model object. We point users to the package documentation or the complementary package website, <a href="https://easystats.github.io/insight/" class="external-link uri">https://easystats.github.io/insight/</a>, for a detailed list of the arguments associated with each function as well as the returned values from each function.</p>
+<p>In total, the <strong>insight</strong> package includes 16 core functions: <a href="https://easystats.github.io/insight/reference/get_data.html" class="external-link">get_data()</a>, <a href="https://easystats.github.io/insight/reference/get_priors.html" class="external-link">get_priors()</a>, <a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance()</a>, <a href="https://easystats.github.io/insight/reference/get_parameters.html" class="external-link">get_parameters()</a>, <a href="https://easystats.github.io/insight/reference/get_predictors.html" class="external-link">get_predictors()</a>, <a href="https://easystats.github.io/insight/reference/get_random.html" class="external-link">get_random()</a>, <a href="https://easystats.github.io/insight/reference/get_response.html" class="external-link">get_response()</a>, <a href="https://easystats.github.io/insight/reference/find_algorithm.html" class="external-link">find_algorithm()</a>, <a href="https://easystats.github.io/insight/reference/find_formula.html" class="external-link">find_formula()</a>, <a href="https://easystats.github.io/insight/reference/find_variables.html" class="external-link">find_variables()</a>, <a href="https://easystats.github.io/insight/reference/find_terms.html" class="external-link">find_terms()</a>, <a href="https://easystats.github.io/insight/reference/find_parameters.html" class="external-link">find_parameters()</a>, <a href="https://easystats.github.io/insight/reference/find_predictors.html" class="external-link">find_predictors()</a>, <a href="https://easystats.github.io/insight/reference/find_random.html" class="external-link">find_random()</a>, <a href="https://easystats.github.io/insight/reference/find_response.html" class="external-link">find_response()</a>, and <a href="https://easystats.github.io/insight/reference/model_info.html" class="external-link">model_info()</a>. In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the <code><a href="reference/find_terms.html">find_terms()</a></code> functionâs <code>effects</code> argument allows for the extraction of âfixed effectsâ terms, ârandom effectsâ terms, or by default, âallâ terms in the model object. We point users to the package documentation or the complementary package website, <a href="https://easystats.github.io/insight/" class="external-link uri">https://easystats.github.io/insight/</a>, for a detailed list of the arguments associated with each function as well as the returned values from each function.</p>
 </div>
 <div id="examples-of-use-cases-in-r" class="section level3">
 <h3 class="hasAnchor">
@@ -202,8 +202,8 @@
 <div id="making-predictions-at-specific-values-of-a-term-of-interest" class="section level4">
 <h4 class="hasAnchor">
 <a href="#making-predictions-at-specific-values-of-a-term-of-interest" class="anchor" aria-hidden="true"></a>Making Predictions at Specific Values of a Term of Interest</h4>
-<p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p>
-<p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
+<p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the âconstantâ values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p>
+<p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is âuniversalâ and applies to many different model objects.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span>
 <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
@@ -341,14 +341,14 @@
 <span class="co">#&gt; [205] "zeroinfl"          "zerotrunc"</span></code></pre></div>
 <ul>
 <li>
-<strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues" class="external-link">File an issue</a> and request additional model-support in <em>insight</em>!</li>
+<strong>Didnât find a model?</strong> <a href="https://github.com/easystats/insight/issues" class="external-link">File an issue</a> and request additional model-support in <em>insight</em>!</li>
 </ul>
 </div>
 <div id="credits" class="section level2">
 <h2 class="hasAnchor">
 <a href="#credits" class="anchor" aria-hidden="true"></a>Credits</h2>
 <p>If this package helped you, please consider citing as follows:</p>
-<p>Lüdecke D, Waggoner P, Makowski D. insight: A Unified Interface to Access Information from Model Objects in R. Journal of Open Source Software 2019;4:1412. doi: <a href="https://doi.org/10.21105/joss.01412" class="external-link">10.21105/joss.01412</a></p>
+<p>LÃ¼decke D, Waggoner P, Makowski D. insight: A Unified Interface to Access Information from Model Objects in R. Journal of Open Source Software 2019;4:1412. doi: <a href="https://doi.org/10.21105/joss.01412" class="external-link">10.21105/joss.01412</a></p>
 </div>
 </div>
   </div>
@@ -421,12 +421,12 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="https://github.com/strengejacke/" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://sites.google.com/view/mattansb/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
+<p>Developed by <a href="https://github.com/strengejacke/" class="external-link">Daniel LÃ¼decke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://sites.google.com/view/mattansb/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
       </footer>
