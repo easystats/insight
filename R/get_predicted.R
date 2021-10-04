@@ -205,6 +205,39 @@ get_predicted.glm <- get_predicted.lm
 
 
 
+
+# pscl: hurdle zeroinfl -------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.hurdle <- function(x, data = NULL, verbose = TRUE, ...) {
+
+  # pscl models return the fitted values immediately and ignores the `type`
+  # argument when `data` is NULL
+  if (is.null(data)) {
+    data <- get_data(x)
+  }
+
+  args <- c(list(x, "newdata" = data), list(...))
+
+  out <- tryCatch(do.call("predict", args), error = function(e) NULL)
+
+  if (is.null(out)) {
+    out <- tryCatch(do.call("fitted", args), error = function(e) NULL)
+  }
+
+  if (!is.null(out)) {
+    out <- .get_predicted_out(out, args = list("data" = data))
+  }
+
+  out
+}
+
+#' @export
+get_predicted.zeroinfl <- get_predicted.hurdle
+
+
+
 # Mixed Models (lme4, glmmTMB) ------------------------------------------
 # =======================================================================
 
