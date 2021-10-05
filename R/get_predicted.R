@@ -129,7 +129,12 @@ get_predicted <- function(x, ...) {
 #' @export
 get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
 
-  args <- c(list(x, "newdata" = data), list(...))
+  # many predict.CLASS methods do not work when `newdata` is explicitly specified, even if it is NULL
+  if (is.null(data)) {
+    args <- c(list(x), list(...))
+  } else {
+    args <- c(list(x, "newdata" = data), list(...))
+  }
 
   out <- tryCatch(do.call("predict", args), error = function(e) NULL)
 
