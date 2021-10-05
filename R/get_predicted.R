@@ -205,6 +205,28 @@ get_predicted.glm <- get_predicted.lm
 
 
 
+# MASS ------------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.rlm <- function(x, predict = "expectation", ...) {
+  # only one prediction type supported
+  if (!is.null(predict)) {
+    predict <- match.arg(predict, choices = "expectation")
+    get_predicted.lm(x, predict = predict, ...)
+  } else {
+    dots <- list(...)
+    if (!"type" %in% names(dots)) {
+      stop("Please specify the `predict` argument.")
+    }
+    dots[["type"]] <- match.arg(dots$type, choices = "response")
+    dots[["x"]] <- x
+    dots <- c(dots, list("predict" = NULL))
+    do.call("get_predicted.lm", dots)
+  }
+}
+
+
 # Mixed Models (lme4, glmmTMB) ------------------------------------------
 # =======================================================================
 
