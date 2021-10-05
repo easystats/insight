@@ -345,10 +345,34 @@ get_predicted.glmmTMB <- function(x,
 
 
 
+# bife ------------------------------------------------------------------
+# =======================================================================
+#' @export
+get_predicted.bife <- function(x,
+                               predict = "expectation",
+                               data = NULL,
+                               verbose = TRUE, 
+                               ...) {
+
+  args <- .get_predicted_args(x,
+                              data = data,
+                              predict = predict,
+                              verbose = TRUE,
+                              ...)
+
+  out <- tryCatch(predict(x, type = args$scale, X_new = args$data), error = function(e) NULL)
+
+  if (!is.null(out)) {
+    out <- .get_predicted_out(out, args = list("data" = data))
+  }
+
+  out
+}
+
+
 
 # GAM -------------------------------------------------------------------
 # =======================================================================
-
 #' @export
 get_predicted.gam <- function(x,
                               data = NULL,
