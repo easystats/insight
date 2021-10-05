@@ -3,7 +3,12 @@ if (requiet("testthat") &&
   requiet("nnet") &&
   requiet("MASS")) {
   data("birthwt")
-  m1 <- multinom(low ~ age + lwt + race + smoke, data = birthwt)
+  void <- capture.output({
+    m1 <- nnet::multinom(low ~ age + lwt + race + smoke, data = birthwt)
+  })
+
+
+
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_binomial)
@@ -84,4 +89,42 @@ if (requiet("testthat") &&
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "t-statistic")
   })
+
+  test_that("get_predicted", {
+
+    void <- capture.output({
+      # binary outcome
+      m1 <- nnet::multinom(low ~ age + lwt + race + smoke, data = birthwt)
+      # multinomial outcome
+      m2 <- nnet::multinom(ftv ~ age + lwt + race + smoke, data = birthwt)
+    })
+
+    # binary outcomes produces an atomic vector
+    x <- get_predicted(m1, predict = "classification")
+    expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+    expect_true(all(levels(x) %in% c("0", "1")))
+    x <- get_predicted(m1, predict = "expectation")
+    expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+    x <- get_predicted(m1, predict = NULL, type = "class")
+    expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+    expect_true(all(levels(x) %in% c("0", "1")))
+    x <- get_predicted(m1, predict = NULL, type = "probs")
+    expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+
+    # multinomial outcomes depends on predict type 
+    x <- get_predicted(m2, predict = "classification")
+    expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+    expect_true(all(levels(x) %in% as.character(0:6)))
+    x <- get_predicted(m2, predict = "expectation")
+    expect_s3_class(x, "data.frame")
+    expect_true(all(c("Row", "Response", "Predicted") %in% colnames(x)))
+    x <- get_predicted(m2, predict = NULL, type = "class")
+    expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+    expect_true(all(levels(x) %in% as.character(0:6)))
+    x <- get_predicted(m2, predict = NULL, type = "probs")
+    expect_s3_class(x, "data.frame")
+    expect_true(all(c("Row", "Response", "Predicted") %in% colnames(x)))
+  })
+
+
 }
