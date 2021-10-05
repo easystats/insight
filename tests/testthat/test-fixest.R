@@ -191,3 +191,18 @@ test_that("get_statistic", {
   stat <- get_statistic(m2)
   expect_equal(stat$Statistic, -14.065336, tolerance = 1e-3)
 })
+
+test_that("get_predicted", {
+  pred <- get_predicted(m1)
+  expect_s3_class(pred, "get_predicted")
+  expect_equal(length(pred), nrow(trade))
+  a <- get_predicted(m1)
+  b <- get_predicted(m1, type = "response", predict = NULL)
+  expect_equal(a, b)
+  a <- get_predicted(m1, predict = "link")
+  b <- get_predicted(m1, type = "link", predict = NULL)
+  expect_equal(a, b)
+  # these used to raise warnings
+  expect_warning(get_predicted(m1, ci = .4), NA)
+  expect_warning(get_predicted(m1, predict = NULL, type = "link"), NA)
+})
