@@ -353,6 +353,16 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
 
   }
 
+  # rms ---------------------------------------------------------------------
+  # =========================================================================
+
+  test_that("bugfix: rms does not work w/ get_predicted.glm", {
+    skip_if_not_installed("rms")
+    model <- rms::lrm(am ~ mpg, mtcars)
+    expect_error(get_predicted(model), NA)
+    pred <- get_predicted(model)
+    expect_s3_class(pred, "get_predicted")
+  })
 
 
   # FA / PCA ----------------------------------------------------------------
@@ -468,3 +478,5 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight")) {
   })
 
 }
+
+

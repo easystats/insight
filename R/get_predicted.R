@@ -209,6 +209,17 @@ get_predicted.lm <- function(x,
 get_predicted.glm <- get_predicted.lm
 
 
+# rms -------------------------------------------------------------------
+# =======================================================================
+
+#' the rms::lrm function produces an object of class c("lrm", "rms", glm"). The
+#' `get_predicted.glm` function breaks when trying to calculate standard errors,
+#' so we use the default method.
+#'
+#' @export
+get_predicted.lrm <- get_predicted.default
+
+
 # fixest ----------------------------------------------------------------
 # =======================================================================
 
