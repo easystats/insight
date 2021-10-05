@@ -1,4 +1,3 @@
-skip_on_os("mac")
 run_stan <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
 pkgs <- c(
@@ -394,19 +393,20 @@ test_that("lm: get_predicted vs barebones `predict()`", {
   known <- predict(mod, se.fit = TRUE, interval = "confidence")
   unknown1 <- as.data.frame(get_predicted(mod))
   unknown2 <- as.data.frame(get_predicted(mod, predict = "expectation"))
-  unknown3 <- expect_warning(as.data.frame(get_predicted(mod, predict = "response")))
-  expect_equal(unname(known$fit[, "fit"]), unknown1$Predicted)
-  expect_equal(unname(known$se.fit), unknown1$SE)
-  expect_equal(unname(known$fit[, "lwr"]), unknown1$CI_low)
-  expect_equal(unname(known$fit[, "upr"]), unknown1$CI_high)
-  expect_equal(unname(known$fit[, "fit"]), unknown2$Predicted)
-  expect_equal(unname(known$se.fit), unknown2$SE)
-  expect_equal(unname(known$fit[, "lwr"]), unknown2$CI_low)
-  expect_equal(unname(known$fit[, "upr"]), unknown2$CI_high)
-  expect_equal(unname(known$fit[, "fit"]), unknown3$Predicted)
-  expect_equal(unname(known$se.fit), unknown3$SE)
-  expect_equal(unname(known$fit[, "lwr"]), unknown3$CI_low)
-  expect_equal(unname(known$fit[, "upr"]), unknown3$CI_high)
+  unknown3 <- suppressWarnings(as.data.frame(get_predicted(mod, predict = "response")))
+  expect_warning(as.data.frame(get_predicted(mod, predict = "response")))
+  expect_equal(unknown1$Predicted, known$fit[, "fit"], ignore_attr = TRUE)
+  expect_equal(unknown1$SE, known$se.fit, ignore_attr = TRUE)
+  expect_equal(unknown1$CI_low, known$fit[, "lwr"], ignore_attr = TRUE)
+  expect_equal(unknown1$CI_high, known$fit[, "upr"], ignore_attr = TRUE)
+  expect_equal(unknown2$Predicted, known$fit[, "fit"], ignore_attr = TRUE)
+  expect_equal(unknown2$SE, known$se.fit, ignore_attr = TRUE)
+  expect_equal(unknown2$CI_low, known$fit[, "lwr"], ignore_attr = TRUE)
+  expect_equal(unknown2$CI_high, known$fit[, "upr"], ignore_attr = TRUE)
+  expect_equal(unknown3$Predicted, known$fit[, "fit"], ignore_attr = TRUE)
+  expect_equal(unknown3$SE, known$se.fit, ignore_attr = TRUE)
+  expect_equal(unknown3$CI_low, known$fit[, "lwr"], ignore_attr = TRUE)
+  expect_equal(unknown3$CI_high, known$fit[, "upr"], ignore_attr = TRUE)
 })
 
 
