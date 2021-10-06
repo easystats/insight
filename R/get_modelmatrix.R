@@ -48,6 +48,27 @@ get_modelmatrix.brmsfit <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.rlm <- function(x, ...) {
+  dots <- list(...)
+  # `rlm` objects can inherit to model.matrix.lm, but that function does
+  # not accept the `data` argument for `rlm` objects
+  if (is.null(dots$data)) {
+      mf <- stats::model.frame(x,
+                               xleve = x$xlevels,
+                               ...)
+  } else {
+      mf <- stats::model.frame(x,
+                               xleve = x$xlevels,
+                               data = dots$data,
+                               ...)
+  }
+  mm <- stats::model.matrix.default(x,
+                                    data = mf,
+                                    contrasts.arg = x$contrasts)
+  return(mm)
+}
+
+#' @export
 get_modelmatrix.cpglmm <- function(x, ...) {
   # installed?
   check_if_installed("cplm")

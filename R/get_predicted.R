@@ -129,7 +129,12 @@ get_predicted <- function(x, ...) {
 #' @export
 get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
 
-  args <- c(list(x, "newdata" = data), list(...))
+  # many predict.CLASS methods do not work when `newdata` is explicitly specified, even if it is NULL
+  if (is.null(data)) {
+    args <- c(list(x), list(...))
+  } else {
+    args <- c(list(x, "newdata" = data), list(...))
+  }
 
   out <- tryCatch(do.call("predict", args), error = function(e) NULL)
 
@@ -203,6 +208,77 @@ get_predicted.lm <- function(x,
 #' @export
 get_predicted.glm <- get_predicted.lm
 
+
+# rms -------------------------------------------------------------------
+# =======================================================================
+
+# the rms::lrm function produces an object of class c("lrm", "rms", glm"). The
+# `get_predicted.glm` function breaks when trying to calculate standard errors,
+# so we use the default method.
+
+#' @export
+get_predicted.lrm <- get_predicted.default
+
+
+# fixest ----------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.fixest <- function(x, predict = "expectation", data = NULL, ...) {
+  # Development is ongoing for standard errors. They are too complicated for us
+  # to compute, so we need to wait on the `fixest` developer:
+  # https://github.com/lrberge/fixest/issues/22
+  dots <- list(...)
+
+  # supported prediction types
+  if (!is.null(predict)) {
+    predict <- match.arg(predict, choices = c("expectation", "link"))
+    type_arg <- ifelse(predict == "expectation", "response", "link")
+  } else {
+    if (!"type" %in% names(dots)) {
+      stop("Please specify the `predict` argument.")
+    } else {
+      type_arg <- match.arg(dots$type, choices = c("response", "link"))
+    }
+  }
+
+  # predict.fixest supports: object, newdata, type, na.rm
+  args <- list()
+  args[["type"]] <- type_arg
+  args[["object"]] <- x
+  if ("na.rm" %in% names(dots)) {
+    args[["na.rm"]] <- dots[["na.rm"]]
+  }
+  # newdata=NULL raises error
+  if (!is.null(data)) {
+    args[["newdata"]] <- data
+  }
+
+  out <- do.call("predict", args)
+  .get_predicted_out(out)
+}
+
+
+# MASS ------------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.rlm <- function(x, predict = "expectation", ...) {
+  # only one prediction type supported
+  if (!is.null(predict)) {
+    predict <- match.arg(predict, choices = "expectation")
+    get_predicted.lm(x, predict = predict, ...)
+  } else {
+    dots <- list(...)
+    if (!"type" %in% names(dots)) {
+      stop("Please specify the `predict` argument.")
+    }
+    dots[["type"]] <- match.arg(dots$type, choices = "response")
+    dots[["x"]] <- x
+    dots <- c(dots, list("predict" = NULL))
+    do.call("get_predicted.lm", dots)
+  }
+}
 
 
 
@@ -377,6 +453,30 @@ get_predicted.glmmTMB <- function(x,
 }
 
 
+# bife ------------------------------------------------------------------
+# =======================================================================
+#' @export
+get_predicted.bife <- function(x,
+                               predict = "expectation",
+                               data = NULL,
+                               verbose = TRUE, 
+                               ...) {
+
+  args <- .get_predicted_args(x,
+                              data = data,
+                              predict = predict,
+                              verbose = TRUE,
+                              ...)
+
+  out <- tryCatch(predict(x, type = args$scale, X_new = args$data), error = function(e) NULL)
+
+  if (!is.null(out)) {
+    out <- .get_predicted_out(out, args = list("data" = data))
+  }
+
+  out
+}
+
 
 # nnet::multinom --------------------------------------------------------
 # =======================================================================
@@ -412,7 +512,6 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...)
 
 # GAM -------------------------------------------------------------------
 # =======================================================================
-
 #' @export
 get_predicted.gam <- function(x,
                               data = NULL,
