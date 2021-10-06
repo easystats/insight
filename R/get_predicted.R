@@ -173,7 +173,6 @@ get_predicted.lm <- function(x,
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
-
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   predict_function <- function(x, data, ...) {
@@ -459,14 +458,14 @@ get_predicted.glmmTMB <- function(x,
 get_predicted.bife <- function(x,
                                predict = "expectation",
                                data = NULL,
-                               verbose = TRUE, 
+                               verbose = TRUE,
                                ...) {
-
   args <- .get_predicted_args(x,
-                              data = data,
-                              predict = predict,
-                              verbose = TRUE,
-                              ...)
+    data = data,
+    predict = predict,
+    verbose = TRUE,
+    ...
+  )
 
   out <- tryCatch(predict(x, type = args$scale, X_new = args$data), error = function(e) NULL)
 
@@ -483,7 +482,6 @@ get_predicted.bife <- function(x,
 
 #' @export
 get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...) {
-
   dots <- list(...)
 
   # `type` argument can be: probs | class
@@ -614,7 +612,6 @@ get_predicted.stanreg <- function(x,
                                   include_smooth = TRUE,
                                   verbose = TRUE,
                                   ...) {
-
   check_if_installed("rstantools", minimum_version = "2.1.0")
 
   args <- .get_predicted_args(
@@ -776,7 +773,6 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
                                 newdata = NULL,
                                 verbose = TRUE,
                                 ...) {
-
   if (length(predict) > 1) {
     predict <- predict[1]
     if (isTRUE(verbose)) {
@@ -995,12 +991,13 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     predictions <- as.data.frame(predictions)
     predictions$Row <- 1:nrow(predictions)
     predictions <- stats::reshape(predictions,
-                   direction = "long",
-                   varying = setdiff(colnames(predictions), "Row"),
-                   times = setdiff(colnames(predictions), "Row"),
-                   v.names = "Predicted",
-                   timevar = "Response",
-                   idvar = "Row")
+      direction = "long",
+      varying = setdiff(colnames(predictions), "Row"),
+      times = setdiff(colnames(predictions), "Row"),
+      v.names = "Predicted",
+      timevar = "Response",
+      idvar = "Row"
+    )
     row.names(predictions) <- NULL
   }
 

@@ -181,17 +181,19 @@ get_priors.stanmvreg <- function(x, ...) {
 #' @rdname get_priors
 #' @export
 get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
-
   info <- as.data.frame(.print_brmsprior_preparation(x$prior))
   info$Parameter <- .match_brms_priors_to_params(info)
 
   priors <- data.frame(Parameter = info$Parameter)
 
   # Format the prior string ------------------------------------
-  priors$Distribution <- gsub("(.*)\\(.*", "\\1",
-                              ifelse(info$prior == "(flat)",
-                                     "uniform",
-                                     info$prior))
+  priors$Distribution <- gsub(
+    "(.*)\\(.*", "\\1",
+    ifelse(info$prior == "(flat)",
+      "uniform",
+      info$prior
+    )
+  )
   priors$Distribution[priors$Distribution == "lkj_corr_cholesky"] <- "lkj"
 
   # Initialize empty
@@ -229,7 +231,6 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   # Loop through all parameters and try to retrieve its correct prior
   out <- data.frame()
   for (p in params) {
-
     subset <- priors[priors$Parameter == p, ]
 
     # If nothing corresponding directly to the parameter...
@@ -280,7 +281,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
     prior$prior
   }
 
-  .find_rows <- function(x, ..., ls = list(), fun = '%in%') {
+  .find_rows <- function(x, ..., ls = list(), fun = "%in%") {
     x <- as.data.frame(x)
     if (!nrow(x)) {
       return(logical(0))
@@ -313,7 +314,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
     ls <- rbind(ls, c(empty_strings, ls$class))
     ls <- as.list(ls)
     # sub_prior <- subset2(x, ls = ls)
-    sub_prior <- x[.find_rows(x, ls = ls, fun = '%in%'), , drop = FALSE]
+    sub_prior <- x[.find_rows(x, ls = ls, fun = "%in%"), , drop = FALSE]
     base_prior <- .stan_base_prior(sub_prior)
     if (nzchar(base_prior)) {
       x$prior[i] <- base_prior
@@ -335,22 +336,25 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
   # class == Intercept -------------------------
   p <- ifelse(pr$class == "Intercept",
-              paste0(
-                "b",
-                ifelse(pr$dpar != "", paste0("_", pr$dpar), ""),
-                "_Intercept"
-              ),
-              p
+    paste0(
+      "b",
+      ifelse(pr$dpar != "", paste0("_", pr$dpar), ""),
+      "_Intercept"
+    ),
+    p
   )
 
   # class == b ------------------------------
   # Are there other possible parameters?
   p <- ifelse(
     pr$class == "b",
-    paste0("b_",
-           ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
-           pr$coef),
-    p)
+    paste0(
+      "b_",
+      ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
+      pr$coef
+    ),
+    p
+  )
 
   # class == L ------------------------------
   p <- ifelse(pr$class == "L", paste0("cor_", pr$group, "_"), p)
@@ -363,12 +367,15 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   # class == sd  -------------------------------
   p <- ifelse(
     pr$class == "sd",
-    paste0("sd_",
-           pr$group,
-           "__",
-           ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
-           pr$coef),
-    p)
+    paste0(
+      "sd_",
+      pr$group,
+      "__",
+      ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
+      pr$coef
+    ),
+    p
+  )
 
   # class == sds  -------------------------------
   # TODO: Fix coef for sds_
@@ -626,6 +633,3 @@ get_priors.mcmc.list <- function(x, ...) {
   (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x[nchar(x) > 0]))))) ||
     (is.factor(x) && !anyNA(suppressWarnings(as.numeric(levels(x)))))
 }
-
-
-

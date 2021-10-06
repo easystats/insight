@@ -11,7 +11,8 @@ pkgs <- c(
   "mclust",
   "rstanarm",
   "rstantools",
-  "psych")
+  "psych"
+)
 invisible(sapply(pkgs, requiet))
 
 
@@ -178,8 +179,11 @@ test_that("get_predicted - lmerMod", {
 
   # Compare with rstanarm
   xref <- suppressWarnings(
-    rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, 
-                        refresh = 0, iter = 1000, seed = 333))
+    rstanarm::stan_lmer(mpg ~ am + (1 | cyl),
+      data = mtcars,
+      refresh = 0, iter = 1000, seed = 333
+    )
+  )
   rez_stan <- insight::get_predicted(xref, predict = "expectation")
   expect_equal(mean(abs(rezrela - rez_stan)), 0, tolerance = 0.1)
   # Different indeed
@@ -342,8 +346,11 @@ test_that("get_predicted - rstanarm", {
 
   # Mixed
   x <- suppressWarnings(
-    rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, 
-                        seed = 333, iter = 500))
+    rstanarm::stan_lmer(mpg ~ am + (1 | cyl),
+      data = mtcars, refresh = 0,
+      seed = 333, iter = 500
+    )
+  )
   rezrela <- summary(get_predicted(x, predict = "expectation"))
   rezpred <- summary(get_predicted(x, predict = "prediction"))
   rezrela2 <- summary(get_predicted(x, predict = "expectation", include_random = FALSE))
@@ -413,7 +420,8 @@ test_that("lm: get_predicted vs barebones `predict()`", {
 test_that("using both `predict` and `type` raises an informative error", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
   expect_warning(expect_error(
-    get_predicted(mod, predict = "response", type = "response")))
+    get_predicted(mod, predict = "response", type = "response")
+  ))
 })
 
 
@@ -448,15 +456,15 @@ test_that("`predict()` vs. `get_predicted` link equivalence", {
 
 
 test_that("hurdle: get_predicted matches `predict()`", {
-    skip_if_not_installed("pscl")
-    data("bioChemists", package = "pscl")
-    mod <- pscl::hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
-    known <- predict(mod, type = "response")
-    unknown <- get_predicted(mod, predict = NULL, type = "response")
-    expect_equal(known, unknown, ignore_attr = TRUE)
-    known <- predict(mod, type = "zero")
-    unknown <- get_predicted(mod, predict = NULL, type = "zero")
-    expect_equal(known, unknown, ignore_attr = TRUE)
+  skip_if_not_installed("pscl")
+  data("bioChemists", package = "pscl")
+  mod <- pscl::hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+  known <- predict(mod, type = "response")
+  unknown <- get_predicted(mod, predict = NULL, type = "response")
+  expect_equal(known, unknown, ignore_attr = TRUE)
+  known <- predict(mod, type = "zero")
+  unknown <- get_predicted(mod, predict = NULL, type = "zero")
+  expect_equal(known, unknown, ignore_attr = TRUE)
 })
 
 

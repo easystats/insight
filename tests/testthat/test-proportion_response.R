@@ -4,13 +4,13 @@ if (requiet("testthat") &&
   data(mtcars)
 
   m1 <- glmer(
-    vs/cyl ~ disp  + (1 | cyl),
+    vs / cyl ~ disp + (1 | cyl),
     data = mtcars,
     family = binomial(link = "logit")
   )
 
   m2 <- glmer(
-    I(vs/cyl) ~ disp  + (1 | cyl),
+    I(vs / cyl) ~ disp + (1 | cyl),
     data = mtcars,
     family = binomial(link = "logit")
   )

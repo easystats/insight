@@ -1,11 +1,12 @@
 if (requiet("emmeans") && requiet("insight") && requiet("testthat")) {
   test_that("emmeans", {
     m <- glm(am ~ factor(cyl),
-             family = binomial(), data = mtcars)
+      family = binomial(), data = mtcars
+    )
 
     EList <- emmeans::emmeans(m, pairwise ~ cyl, type = "resp")
 
-    E <- emmeans::emmeans(m, ~ cyl, type = "resp")
+    E <- emmeans::emmeans(m, ~cyl, type = "resp")
 
     C <- emmeans::contrast(E, method = "pairwise")
 

@@ -370,20 +370,25 @@ if (.runThisTest) {
       )
       expect_equal(
         colnames(get_parameters(m4, effects = "all")),
-        c("b_Intercept", "b_child", "b_camper", "r_persons[1,Intercept]",
+        c(
+          "b_Intercept", "b_child", "b_camper", "r_persons[1,Intercept]",
           "r_persons[2,Intercept]", "r_persons[3,Intercept]", "r_persons[4,Intercept]",
           "sd_persons__Intercept", "b_zi_Intercept", "b_zi_child", "b_zi_camper",
           "r_persons__zi[1,Intercept]", "r_persons__zi[2,Intercept]", "r_persons__zi[3,Intercept]",
-          "r_persons__zi[4,Intercept]", "sd_persons__zi_Intercept")
+          "r_persons__zi[4,Intercept]", "sd_persons__zi_Intercept"
+        )
       )
       expect_equal(
         colnames(get_parameters(m4, effects = "random", component = "conditional")),
-        c("r_persons[1,Intercept]", "r_persons[2,Intercept]", "r_persons[3,Intercept]",
-          "r_persons[4,Intercept]", "sd_persons__Intercept")
+        c(
+          "r_persons[1,Intercept]", "r_persons[2,Intercept]", "r_persons[3,Intercept]",
+          "r_persons[4,Intercept]", "sd_persons__Intercept"
+        )
       )
       expect_equal(
         colnames(get_parameters(m5, effects = "random", component = "conditional")),
-        c("r_persons__count[1,Intercept]", "r_persons__count[2,Intercept]",
+        c(
+          "r_persons__count[1,Intercept]", "r_persons__count[2,Intercept]",
           "r_persons__count[3,Intercept]", "r_persons__count[4,Intercept]",
           "sd_persons__count_Intercept", "r_persons__count2[1,Intercept]",
           "r_persons__count2[2,Intercept]", "r_persons__count2[3,Intercept]",
@@ -393,7 +398,8 @@ if (.runThisTest) {
 
       expect_equal(
         colnames(get_parameters(m5, effects = "all", component = "all")),
-        c("b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count[1,Intercept]",
+        c(
+          "b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count[1,Intercept]",
           "r_persons__count[2,Intercept]", "r_persons__count[3,Intercept]",
           "r_persons__count[4,Intercept]", "sd_persons__count_Intercept",
           "b_zi_count_Intercept", "b_zi_count_camper", "r_persons__zi_count[1,Intercept]",
@@ -405,7 +411,8 @@ if (.runThisTest) {
           "sd_persons__count2_Intercept", "b_zi_count2_Intercept", "b_zi_count2_child",
           "r_persons__zi_count2[1,Intercept]", "r_persons__zi_count2[2,Intercept]",
           "r_persons__zi_count2[3,Intercept]", "r_persons__zi_count2[4,Intercept]",
-          "sd_persons__zi_count2_Intercept")
+          "sd_persons__zi_count2_Intercept"
+        )
       )
     })
 
@@ -466,11 +473,15 @@ if (.runThisTest) {
       expect_equal(
         get_priors(m7),
         data.frame(
-          Parameter = c("b_Intercept", "b_Age", "b_Base", "b_Trt1", "b_Base:Trt1",
-                        "sd_patient__Intercept", "sd_patient__Age",
-                        "cor_patient__Intercept__Age"),
-          Distribution = c("student_t", "student_t", "student_t",
-                           "student_t", "student_t", "cauchy", "cauchy", "lkj"),
+          Parameter = c(
+            "b_Intercept", "b_Age", "b_Base", "b_Trt1", "b_Base:Trt1",
+            "sd_patient__Intercept", "sd_patient__Age",
+            "cor_patient__Intercept__Age"
+          ),
+          Distribution = c(
+            "student_t", "student_t", "student_t",
+            "student_t", "student_t", "cauchy", "cauchy", "lkj"
+          ),
           Location = c(1.4, 0, 0, 0, 0, NA, NA, 1),
           Scale = c(2.5, 10, 10, 10, 10, NA, NA, NA),
           df = c(3, 5, 5, 5, 5, NA, NA, NA),

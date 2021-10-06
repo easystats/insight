@@ -91,7 +91,6 @@ if (requiet("testthat") &&
   })
 
   test_that("get_predicted", {
-
     void <- capture.output({
       # binary outcome
       m1 <- nnet::multinom(low ~ age + lwt + race + smoke, data = birthwt)
@@ -111,7 +110,7 @@ if (requiet("testthat") &&
     x <- get_predicted(m1, predict = NULL, type = "probs")
     expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
 
-    # multinomial outcomes depends on predict type 
+    # multinomial outcomes depends on predict type
     x <- get_predicted(m2, predict = "classification")
     expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
     expect_true(all(levels(x) %in% as.character(0:6)))
@@ -125,6 +124,4 @@ if (requiet("testthat") &&
     expect_s3_class(x, "data.frame")
     expect_true(all(c("Row", "Response", "Predicted") %in% colnames(x)))
   })
-
-
 }

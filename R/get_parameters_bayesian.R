@@ -501,9 +501,10 @@ get_parameters.sim <- function(x,
     I_p <- diag(p)
     iter <- object$iter
     pcor_samples <- matrix(object$post_samp$pcors[, , 51:(iter + 50)][upper.tri(I_p)],
-                           nrow = iter,
-                           ncol = pcors_total,
-                           byrow = TRUE)
+      nrow = iter,
+      ncol = pcors_total,
+      byrow = TRUE
+    )
     cn <- colnames(object$Y)
     if (is.null(cn)) {
       col_names <- sapply(1:p, function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
@@ -526,16 +527,20 @@ get_parameters.sim <- function(x,
         col_names <- cn
       }
       beta_start <- matrix(beta_samples[1:n_beta_terms, 1, 51:(iter + 50)],
-                           nrow = iter,
-                           n_beta_terms,
-                           byrow = TRUE)
-      colnames(beta_start) <- paste0(col_names[1], "_",
-                                     beta_terms)
+        nrow = iter,
+        n_beta_terms,
+        byrow = TRUE
+      )
+      colnames(beta_start) <- paste0(
+        col_names[1], "_",
+        beta_terms
+      )
       for (i in 2:p) {
         beta_i <- matrix(beta_samples[1:n_beta_terms, i, 51:(iter + 50)],
-                         nrow = iter,
-                         n_beta_terms,
-                         byrow = TRUE)
+          nrow = iter,
+          n_beta_terms,
+          byrow = TRUE
+        )
         colnames(beta_i) <- paste0(col_names[i], "_", beta_terms)
         beta_start <- cbind(beta_start, beta_i)
       }
@@ -550,14 +555,14 @@ get_parameters.sim <- function(x,
     I_p <- diag(p)
     iter <- object$iter
     pcor_samples <- matrix(object$fit$pcors[, , 51:(iter + 50)][upper.tri(I_p)],
-                           nrow = iter,
-                           ncol = pcors_total,
-                           byrow = TRUE)
+      nrow = iter,
+      ncol = pcors_total,
+      byrow = TRUE
+    )
     cn <- colnames(object$Y)
     if (is.null(cn)) {
       col_names <- sapply(1:p, function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
-    }
-    else {
+    } else {
       col_names <- sapply(cn, function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
     }
     colnames(pcor_samples) <- col_names
@@ -567,15 +572,17 @@ get_parameters.sim <- function(x,
     col_names <- colnames(object$Y)
     beta_terms <- colnames(object$X)
     beta_start <- matrix(beta_samples[1:n_beta_terms, 1, 51:(iter + 50)],
-                         nrow = iter,
-                         n_beta_terms,
-                         byrow = TRUE)
+      nrow = iter,
+      n_beta_terms,
+      byrow = TRUE
+    )
     colnames(beta_start) <- paste0(col_names[1], "_", beta_terms)
     for (i in 2:p) {
       beta_i <- matrix(beta_samples[1:n_beta_terms, i, 51:(iter + 50)],
-                       nrow = iter,
-                       n_beta_terms,
-                       byrow = TRUE)
+        nrow = iter,
+        n_beta_terms,
+        byrow = TRUE
+      )
       colnames(beta_i) <- paste0(col_names[i], "_", beta_terms)
       beta_start <- cbind(beta_start, beta_i)
     }

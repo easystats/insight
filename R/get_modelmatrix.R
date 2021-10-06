@@ -53,18 +53,21 @@ get_modelmatrix.rlm <- function(x, ...) {
   # `rlm` objects can inherit to model.matrix.lm, but that function does
   # not accept the `data` argument for `rlm` objects
   if (is.null(dots$data)) {
-      mf <- stats::model.frame(x,
-                               xleve = x$xlevels,
-                               ...)
+    mf <- stats::model.frame(x,
+      xleve = x$xlevels,
+      ...
+    )
   } else {
-      mf <- stats::model.frame(x,
-                               xleve = x$xlevels,
-                               data = dots$data,
-                               ...)
+    mf <- stats::model.frame(x,
+      xleve = x$xlevels,
+      data = dots$data,
+      ...
+    )
   }
   mm <- stats::model.matrix.default(x,
-                                    data = mf,
-                                    contrasts.arg = x$contrasts)
+    data = mf,
+    contrasts.arg = x$contrasts
+  )
   return(mm)
 }
 
