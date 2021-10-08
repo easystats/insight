@@ -258,28 +258,6 @@ get_predicted.fixest <- function(x, predict = "expectation", data = NULL, ...) {
 }
 
 
-# MASS ------------------------------------------------------------------
-# =======================================================================
-
-#' @export
-get_predicted.rlm <- function(x, predict = "expectation", ...) {
-  # only one prediction type supported
-  if (!is.null(predict)) {
-    predict <- match.arg(predict, choices = "expectation")
-    get_predicted.lm(x, predict = predict, ...)
-  } else {
-    dots <- list(...)
-    if (!"type" %in% names(dots)) {
-      stop("Please specify the `predict` argument.")
-    }
-    dots[["type"]] <- match.arg(dots$type, choices = "response")
-    dots[["x"]] <- x
-    dots <- c(dots, list("predict" = NULL))
-    do.call("get_predicted.lm", dots)
-  }
-}
-
-
 
 # pscl: hurdle zeroinfl -------------------------------------------------
 # =======================================================================
@@ -506,6 +484,34 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...)
   .get_predicted_out(out, args = args)
 }
 
+
+# MASS ------------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.rlm <- function(x, predict = "expectation", ...) {
+  # only one prediction type supported
+  if (!is.null(predict)) {
+    predict <- match.arg(predict, choices = "expectation")
+    get_predicted.lm(x, predict = predict, ...)
+  } else {
+    dots <- list(...)
+    if (!"type" %in% names(dots)) {
+      stop("Please specify the `predict` argument.")
+    }
+    dots[["type"]] <- match.arg(dots$type, choices = "response")
+    dots[["x"]] <- x
+    dots <- c(dots, list("predict" = NULL))
+    do.call("get_predicted.lm", dots)
+  }
+}
+
+# MASS::polr accepts only "class" or "probs" types, and "expectation"
+# corresponds to "probs". These are the same as nnet::multinom.
+# Make sure this is below get_predicted.multinom in the file.
+
+#' @export
+get_predicted.polr <- get_predicted.multinom
 
 
 # GAM -------------------------------------------------------------------

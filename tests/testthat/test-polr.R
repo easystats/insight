@@ -116,4 +116,24 @@ if (requiet("testthat") &&
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "t-statistic")
   })
+
+  test_that("get_predicted", {
+    p1 <- get_predicted(m1, predict = "expectation")
+    p2 <- get_predicted(m1, predict = "classification")
+    p3 <- get_predicted(m1, predict = NULL, type = "probs")
+    p4 <- get_predicted(m1, predict = NULL, type = "class")
+    expect_s3_class(p1, "get_predicted")
+    expect_s3_class(p2, "get_predicted")
+    expect_s3_class(p3, "get_predicted")
+    expect_s3_class(p4, "get_predicted")
+    expect_equal(p1, p3)
+    expect_equal(p2, p4)
+    expect_true(inherits(p1, "data.frame"))
+    expect_true(inherits(p2, "factor"))
+    expect_true(inherits(p3, "data.frame"))
+    expect_true(inherits(p4, "factor"))
+    expect_true(all(c("Row", "Response", "Predicted") %in% colnames(p1)))
+    expect_true(all(c("Row", "Response", "Predicted") %in% colnames(p3)))
+  })
+
 }
