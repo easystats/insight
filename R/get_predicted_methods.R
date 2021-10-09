@@ -3,7 +3,8 @@
 #' @export
 print.get_predicted <- function(x, ...) {
   print_colour("Predicted values:\n\n", "blue")
-  if (is.null(ncol(x))) {
+  # vectors have NULL columns; 1-dimensional arrays have NA columns (e.g., mgcv::gam predict() output)
+  if (is.null(ncol(x)) || is.na(ncol(x))) {
     print.default(as.vector(x))
   } else {
     print.data.frame(x)

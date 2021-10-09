@@ -193,5 +193,12 @@ if (.runThisTest) {
     test_that("find_statistic", {
       expect_identical(find_statistic(m1), "t-statistic")
     })
+
+    test_that("get_predicted", {
+      tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = head(dat, 30))
+      pred <- get_predicted(tmp)
+      expect_s3_class(pred, "get_predicted")
+      expect_snapshot(print(pred))
+    })
   }
 }
