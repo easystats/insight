@@ -199,6 +199,21 @@ if (.runThisTest) {
       pred <- get_predicted(tmp)
       expect_s3_class(pred, "get_predicted")
       expect_snapshot(print(pred))
+
+      x <- get_predicted(tmp, predict = NULL, type = "link")
+      y <- get_predicted(tmp, predict = "link")
+      z <- predict(tmp, type = "link", se.fit = TRUE)
+      expect_equal(x, y)
+      expect_equal(x, z$fit, ignore_attr = TRUE)
+      expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
+
+      x <- get_predicted(tmp, predict = NULL, type = "response")
+      y <- get_predicted(tmp, predict = "expectation")
+      z <- predict(tmp, type = "response", se.fit = TRUE)
+      expect_equal(x, y, ignore_attr = TRUE)
+      expect_equal(x, z$fit, ignore_attr = TRUE)
+      expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
     })
+
   }
 }

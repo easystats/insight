@@ -520,25 +520,29 @@ get_predicted.gam <- function(x,
                               iterations = NULL,
                               verbose = TRUE,
                               ...) {
-  predict <- match.arg(predict, choices = c("expectation", "expected", "link", "prediction", "predicted", "classification"))
 
-  # Sanity checks
-  if (predict %in% c("prediction", "predicted")) {
-    if (verbose) {
-      warning(
-        format_message(
-          "`predict='prediction'` is currently not available for GAM models.",
-          "Changing to `predict='expectation'`."
-        ),
-        call. = FALSE
-      )
+  # allow users to set `predict=NULL` and specify `type` directly
+  if (!is.null(predict)) {
+    predict <- match.arg(predict, choices = c("expectation", "expected", "link", "prediction", "predicted", "classification"))
+
+    # Sanity checks
+    if (predict %in% c("prediction", "predicted")) {
+      if (verbose) {
+        warning(
+          format_message(
+            "`predict='prediction'` is currently not available for GAM models.",
+            "Changing to `predict='expectation'`."
+          ),
+          call. = FALSE
+        )
+      }
+      predict <- "expectation"
     }
-    predict <- "expectation"
+    # TODO: check this for prediction intervals:
+    # https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/
+    # https://github.com/gavinsimpson/gratia/blob/master/R/confint-methods.R
+    # https://github.com/gavinsimpson/gratia/blob/master/R/posterior-samples.R
   }
-  # TODO: check this for prediction intervals:
-  # https://fromthebottomoftheheap.net/2016/12/15/simultaneous-interval-revisited/
-  # https://github.com/gavinsimpson/gratia/blob/master/R/confint-methods.R
-  # https://github.com/gavinsimpson/gratia/blob/master/R/posterior-samples.R
 
   # Sanitize input
   args <- .get_predicted_args(
