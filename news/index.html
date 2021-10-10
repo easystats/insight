@@ -68,12 +68,19 @@
 <a href="#general" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li><p>Improved support for models of class <code>sampleSelection</code>.</p></li>
 <li><p>Improved documentation.</p></li>
+<li><p><code>get_modelmatrix</code> now supports: <code><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">rms::lrm</a></code></p></li>
+<li><p><code>get_predicted</code> supports: <code><a href="https://rdrr.io/pkg/MASS/man/polr.html" class="external-link">MASS::polr</a></code>, <code><a href="https://rdrr.io/pkg/MASS/man/rlm.html" class="external-link">MASS::rlm</a></code>, <code><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">rms::lrm</a></code>, <code>fixest</code>, <code><a href="https://rdrr.io/pkg/bife/man/bife.html" class="external-link">bife::bife</a></code>.</p></li>
+<li><p><code>get_predicted</code> standard errors are often much faster to compute.</p></li>
+<li><p><code>get_predicted</code> supports models with “grouped” or “level” outcomes (e.g., multinomial logit).</p></li>
+<li><p><code>get_predicted</code> handles factors better.</p></li>
+<li><p>Improved documentation</p></li>
 </ul></div>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor" aria-hidden="true"></a>Changes to functions</h2>
-<ul><li>
-<code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> gains a <code>quietly</code> argument, if neither stopping nor a warning message for non-installed packages is requested.</li>
+<ul><li><p><code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> gains a <code>quietly</code> argument, if neither stopping nor a warning message for non-installed packages is requested.</p></li>
+<li><p><code>get_predicted</code>’s <code>predict</code> argument now accepts these values: “link”, “expectation”, “prediction”, “classification”, or NULL.</p></li>
+<li><p><code>get_predicted</code> accepts <code>predict=NULL</code>, which allows users to push a <code>type</code> argument through the <code>...</code> ellipsis, forward to the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method of the modelling package.</p></li>
 </ul></div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
