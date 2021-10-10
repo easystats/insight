@@ -110,4 +110,31 @@ if (requiet("testthat") &&
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "z-statistic")
   })
+
+  test_that("get_predicted", {
+    nd <- wine
+    nd$rating <- NULL
+    x <- as.data.frame(get_predicted(m1))
+    y <- as.data.frame(get_predicted(m1, predict = NULL, type = "prob"))
+    z <- predict(m1, type = "prob", newdata = nd, se.fit = TRUE)
+    expect_true(all(c("Row", "Response", "Predicted", "SE") %in% colnames(x)))
+    expect_equal(x, y)
+    for (i in 1:5) {
+      expect_equal(x$Predicted[x$Response == i], unname(z$fit[, i]), ignore_attr = FALSE)
+      expect_equal(x$SE[x$Response == i], unname(z$se.fit[, i]), ignore_attr = FALSE)
+    }
+    x <- as.data.frame(get_predicted(m1, predict = "classification"))
+    y <- as.data.frame(get_predicted(m1, predict = NULL, type = "class"))
+    z <- predict(m1, type = "class", newdata = nd)
+    expect_equal(x, y)
+    expect_equal(as.character(x$Predicted), as.character(z$fit), ignore_attr = FALSE)
+
+    # we use a hack to handle in-formula factors
+    tmp <- wine
+    tmp$rating <- as.numeric(tmp$rating)
+    tmp <- clm(factor(rating) ~ temp * contact, data = tmp)
+    expect_s3_class(get_predicted(tmp), "get_predicted")
+
+  })
+
 }

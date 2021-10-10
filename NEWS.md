@@ -8,7 +8,7 @@
 
 * `get_modelmatrix` now supports: `rms::lrm`
 
-* `get_predicted` supports: `MASS::polr`, `MASS::rlm`, `rms::lrm`, `fixest`, `bife::bife`.
+* `get_predicted` supports: `MASS::polr`, `MASS::rlm`, `rms::lrm`, `fixest`, `bife::bife`, `ordinal::clm`.
 
 * `get_predicted` standard errors are often much faster to compute.
 
