@@ -433,15 +433,14 @@ get_predicted.glmmTMB <- function(x,
                                   iterations = NULL,
                                   verbose = TRUE,
                                   ...) {
-  predict <- match.arg(predict, choices = c("expectation", "expected", "link", "prediction", "predicted", "classification"))
 
   # Sanity checks
-  if (predict %in% c("prediction", "predicted")) {
+  if (!is.null(predict) && predict %in% c("prediction", "predicted", "classification")) {
     if (verbose) {
       warning(
         format_message(
-          "`predict='prediction'` is currently not available for glmmTMB models.",
-          "Changing to `predict='expectation'`."
+          '"prediction" and "classification" are not currently not available in the `predict`',
+          'argument for glmmTMB models. Changing to `predict="expectation"`.'
         ),
         call. = FALSE
       )
@@ -467,7 +466,7 @@ get_predicted.glmmTMB <- function(x,
     stats::predict(
       x,
       newdata = data,
-      type = args$type,
+      type = args$scale,
       re.form = args$re.form,
       unconditional = FALSE,
       ...
@@ -492,8 +491,7 @@ get_predicted.glmmTMB <- function(x,
 
   # Get CI
   ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
-  out <- .get_predicted_transform(x, predictions, args, ci_data)
-  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+  .get_predicted_out(predictions, args = args, ci_data = ci_data)
 }
 
 

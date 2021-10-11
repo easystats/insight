@@ -760,6 +760,39 @@ if (requiet("testthat") &&
     )
   })
 
+  test_that("get_predicted", {
+
+    # response
+    x <- get_predicted(m1, predict = "expectation")
+    y <- get_predicted(m1, predict = NULL, type = "response")
+    z <- predict(m1, type = "response")
+    expect_equal(x, y, ignore_attr = TRUE)
+    expect_equal(y, z, ignore_attr = TRUE)
+    expect_equal(x, z, ignore_attr = TRUE)
+
+    # link
+    x <- get_predicted(m1, predict = "link")
+    y <- get_predicted(m1, predict = NULL, type = "link")
+    z <- predict(m1, type = "link")
+    expect_equal(x, y, ignore_attr = TRUE)
+    expect_equal(y, z, ignore_attr = TRUE)
+    expect_equal(x, z, ignore_attr = TRUE)
+
+    # unsupported: zprob
+    x <- suppressWarnings(get_predicted(m1, predict = "zprob"))
+    y <- get_predicted(m1, predict = NULL, type = "zprob")
+    z <- predict(m1, type = "zprob")
+    expect_equal(x, y)
+    expect_equal(x, z, ignore_attr = TRUE)
+
+    # not official supported raise warning
+    expect_warning(get_predicted(m1, predict = "prediction"))
+    expect_warning(get_predicted(m1, predict = "classification"))
+    expect_warning(get_predicted(m1, predict = "zprob"))
+    expect_warning(get_predicted(m1, predict = "zprob", verbose = FALSE), NA)
+
+  })
+
   test_that("clean_parameters", {
     expect_equal(
       clean_parameters(m1),
