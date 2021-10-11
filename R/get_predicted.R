@@ -433,21 +433,23 @@ get_predicted.glmmTMB <- function(x,
                                   iterations = NULL,
                                   verbose = TRUE,
                                   ...) {
-  predict <- match.arg(predict, choices = c("expectation", "expected", "link", "prediction", "predicted", "classification"))
+
+  dots <- list(...)
 
   # Sanity checks
-  if (predict %in% c("prediction", "predicted")) {
+  if (!is.null(predict) && predict %in% c("prediction", "predicted", "classification")) {
+    predict <- "expectation"
     if (verbose) {
       warning(
         format_message(
-          "`predict='prediction'` is currently not available for glmmTMB models.",
-          "Changing to `predict='expectation'`."
+          '"prediction" and "classification" are currently not supported by the',
+          '`predict` argument for glmmTMB models. Changing to `predict="expectation"`.'
         ),
         call. = FALSE
       )
     }
-    predict <- "expectation"
   }
+
   # TODO: prediction intervals
   # https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#predictions-andor-confidence-or-prediction-intervals-on-predictions
 
@@ -461,6 +463,16 @@ get_predicted.glmmTMB <- function(x,
     verbose = verbose,
     ...
   )
+
+  # predict.glmmTMB has many `type` values which do not map on to our standard
+  # `predict` argument. We don't know how to transform those.
+  if (is.null(predict) && "type" %in% names(dots)) {
+    args$transform <- FALSE
+    args$type <- dots$type
+  } else if (!predict %in% c("expectation", "link")) {
+    args$transform <- FALSE
+    args$type <- predict
+  }
 
   # Prediction function
   predict_function <- function(x, data, ...) {
