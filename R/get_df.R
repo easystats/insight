@@ -137,6 +137,7 @@ get_df.lqmm <- function(x, type = "residual", ...) {
 get_df.lqm <- get_df.lqmm
 
 
+#' @export
 get_df.cgam <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "model") {
