@@ -870,7 +870,7 @@ if (requiet("testthat") &&
  test_that("get_predicted", {
 
     # response
-    x <- get_predicted(m1, predict = "expectation")
+    x <- get_predicted(m1, predict = "expectation", verbose = FALSE)
     y <- get_predicted(m1, predict = NULL, type = "response")
     z <- predict(m1, type = "response")
     # expect_equal(x, y, ignore_attr = TRUE)
@@ -893,11 +893,12 @@ if (requiet("testthat") &&
     expect_equal(x, z, ignore_attr = TRUE)
 
     # not official supported raise warning
-    expect_warning(get_predicted(m1, predict = "prediction"))
-    expect_warning(get_predicted(m1, predict = "classification"))
     expect_warning(get_predicted(m1, predict = "zprob"))
     expect_warning(get_predicted(m1, predict = "zprob", verbose = FALSE), NA)
-
+    # the second warning is raised for zero-inflation models only. remove when
+    # the zprob correction is implemented
+    expect_warning(expect_warning(get_predicted(m1, predict = "prediction")))
+    expect_warning(expect_warning(get_predicted(m1, predict = "classification")))
   })
 
 }

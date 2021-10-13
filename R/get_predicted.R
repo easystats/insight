@@ -474,6 +474,18 @@ get_predicted.glmmTMB <- function(x,
     args$type <- predict
   }
 
+  # TODO: adjust predicted values for zero inflation
+  # mu * (1 - p), where p = predict(model, type = "zprob")
+  if (isTRUE(verbose) &&
+      (!is.null(predict) && predict == "expectation") &&
+      (isTRUE(args$info$is_zero_inflated) || isTRUE(args$info$is_zeroinf))) {
+    warning(format_message(
+      'The `get_predicted()` function does not adjust predictions to account',
+      'for zero-inflation in `glmmTMB` models. This behavior will change in',
+      'future versions of `insight`.'
+      ), call. = FALSE)
+  }
+
   # Prediction function
   predict_function <- function(x, data, ...) {
     stats::predict(
