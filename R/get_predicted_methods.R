@@ -44,8 +44,8 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
     out <- as.data.frame.data.frame(x)
   # grouped response level (e.g., polr or multinom)
   } else if (inherits(x, "data.frame") && "Response" %in% colnames(x)) {
+    out <- as.data.frame.data.frame(x)
     if ("ci_data" %in% names(attributes(x))) {
-      out <- as.data.frame.data.frame(x)
       out <- merge(out, attributes(x)$ci_data, by = c("Row", "Response"), sort = FALSE)
     }
   } else {
