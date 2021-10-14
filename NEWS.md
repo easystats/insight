@@ -6,15 +6,17 @@
 
 * Improved documentation.
 
-* `get_modelmatrix` now supports: `rms::lrm`
+* `get_modelmatrix()` now supports: `rms::lrm`
 
-* `get_predicted` supports: `MASS::polr`, `MASS::rlm`, `rms::lrm`, `fixest`, `bife::bife`, `ordinal::clm`.
+* `get_predicted()` supports: `MASS::polr`, `MASS::rlm`, `rms::lrm`, `fixest`, 
+  `bife::bife`, `ordinal::clm`.
 
-* `get_predicted` standard errors are often much faster to compute.
+* `get_predicted()` standard errors are often much faster to compute.
 
-* `get_predicted` supports models with "grouped" or "level" outcomes (e.g., multinomial logit).
+* `get_predicted()` supports models with "grouped" or "level" outcomes (e.g., 
+  multinomial logit).
 
-* `get_predicted` handles factors better.
+* `get_predicted()` handles factors better.
 
 * Improved documentation
 
@@ -23,10 +25,10 @@
 * `check_if_installed()` gains a `quietly` argument, if neither stopping nor a
   warning message for non-installed packages is requested.
 
-* `get_predicted`'s `predict` argument now accepts these values: "link",
+* `get_predicted()`'s `predict` argument now accepts these values: "link",
   "expectation", "prediction", "classification", or NULL.
 
-* `get_predicted` accepts `predict=NULL`, which allows users to push a `type`
+* `get_predicted()` accepts `predict=NULL`, which allows users to push a `type`
   argument through the `...` ellipsis, forward to the `predict()` method of the
   modelling package.
 
