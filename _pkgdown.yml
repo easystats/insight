@@ -69,6 +69,8 @@ reference:
   - get_response
   - find_statistic
   - get_statistic
+  - find_transformation
+  - get_transformation
   - find_weights
   - get_weights
 

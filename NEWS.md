@@ -1,5 +1,11 @@
 # insight 0.14.5
 
+## New functions
+
+* `find_transformation()` and `get_transformation()` to find or get any
+  function that was used to transform the response variable in a regression
+  model.
+
 ## General
 
 * Improved support for models of class `sampleSelection`.
