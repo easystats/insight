@@ -160,6 +160,17 @@ get_df.glht <- function(x, type = "residual", ...) {
 
 
 #' @export
+get_df.rlm <- function(model, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "residual") {
+    .degrees_of_freedom_analytical(model)
+  } else {
+    .model_df(model)
+  }
+}
+
+
+#' @export
 get_df.selection <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "model") {
@@ -343,12 +354,12 @@ get_df.systemfit <- function(x, type = "residual", ...) {
   dof <- try(stats::df.residual(model), silent = TRUE)
 
   # 2nd try
-  if (inherits(dof, "try-error") || is.null(dof)) {
+  if (inherits(dof, "try-error") || is.null(dof) || all(is.na(dof))) {
     junk <- utils::capture.output(dof = try(summary(model)$df[2], silent = TRUE))
   }
 
   # 3rd try, nlme
-  if (inherits(dof, "try-error") || is.null(dof)) {
+  if (inherits(dof, "try-error") || is.null(dof) || all(is.na(dof))) {
     dof <- try(unname(model$fixDF$X), silent = TRUE)
   }
 
