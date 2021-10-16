@@ -67,7 +67,8 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">data_relocate</span><span class="op">(</span><span class="va">data</span>, <span class="va">cols</span>, before <span class="op">=</span> <span class="cn">NULL</span>, after <span class="op">=</span> <span class="cn">NULL</span>, safe <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
       <td><p>A data frame to pivot.</p></td>
     </tr><tr><th>cols</th>
@@ -77,11 +78,15 @@
 columns to the left-hand side; specifying both is an error.</p></td>
     </tr><tr><th>safe</th>
       <td><p>If <code>TRUE</code>, will disregard non-existing columns.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame with reordered columns.</p>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Reorder columns</span></span>
 <span class="r-in"><span class="fu">data_relocate</span><span class="op">(</span><span class="va">iris</span>, cols <span class="op">=</span> <span class="st">"Species"</span>, before <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
@@ -692,6 +697,7 @@ columns to the left-hand side; specifying both is an error.</p></td>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 149          6.2         3.4  virginica          5.4         2.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 150          5.9         3.0  virginica          5.1         1.8</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

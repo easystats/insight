@@ -70,7 +70,8 @@
 <span class="co"># S3 method for default</span>
 <span class="fu">get_residuals</span><span class="op">(</span><span class="va">x</span>, weighted <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A model.</p></td>
     </tr><tr><th>...</th>
@@ -79,12 +80,15 @@
       <td><p>Logical, if <code>TRUE</code>, returns weighted residuals.</p></td>
     </tr><tr><th>verbose</th>
       <td><p>Toggle warnings and messages.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The residuals, or <code>NULL</code> if this information could not be
 accessed.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
+    </div>
+    <div id="note">
+    <h2>Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>This function returns the default type of residuals, i.e. for the
 response from linear models, the deviance residuals for models of class
 <code>glm</code> etc. To access different types, pass down the <code>type</code>
@@ -93,8 +97,10 @@ argument (see 'Examples').
 This function is a robust alternative to <code><a href="https://rdrr.io/r/stats/residuals.html">residuals()</a></code>, as it works for
 some special model objects that otherwise do not respond properly to calling
 <code><a href="https://rdrr.io/r/stats/residuals.html">residuals()</a></code>.</p>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">get_residuals</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
@@ -151,6 +157,7 @@ some special model objects that otherwise do not respond properly to calling
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        -0.002035975        -0.221984564        -0.004753484         0.011360719 </span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

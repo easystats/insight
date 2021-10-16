@@ -130,6 +130,9 @@
     <loc>/reference/find_terms.html</loc>
   </url>
   <url>
+    <loc>/reference/find_transformation.html</loc>
+  </url>
+  <url>
     <loc>/reference/find_variables.html</loc>
   </url>
   <url>
@@ -248,6 +251,9 @@
   </url>
   <url>
     <loc>/reference/get_statistic.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_transformation.html</loc>
   </url>
   <url>
     <loc>/reference/get_varcov.html</loc>

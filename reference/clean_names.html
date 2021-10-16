@@ -74,7 +74,8 @@ vector with such names) by removing patterns like <code><a href="https://rdrr.io
 <span class="co"># S3 method for character</span>
 <span class="fu">clean_names</span><span class="op">(</span><span class="va">x</span>, include_names <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A fitted model, or a character vector.</p></td>
     </tr><tr><th>...</th>
@@ -82,13 +83,16 @@ vector with such names) by removing patterns like <code><a href="https://rdrr.io
     </tr><tr><th>include_names</th>
       <td><p>Logical, if <code>TRUE</code>, returns a named vector where
 names are the original values of <code>x</code>.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The "cleaned" variable names as character vector, i.e. pattern
 like <code>s()</code> for splines or <code><a href="https://rdrr.io/r/base/Log.html">log()</a></code> are removed from
 the model terms.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
+    </div>
+    <div id="note">
+    <h2>Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Typically, this method is intended to work on character vectors,
 in order to remove patterns that obscure the variable names. For
 convenience reasons it is also possible to call <code>clean_names()</code>
@@ -97,8 +101,10 @@ function is (almost) equal to calling <code><a href="find_variables.html">find_v
 main difference is that <code>clean_names()</code> always returns a character
 vector, while <code><a href="find_variables.html">find_variables()</a></code> returns a list of character
 vectors, unless <code>flatten = TRUE</code>. See 'Examples'.</p>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># example from ?stats::glm</span></span>
 <span class="r-in"><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">17</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">13</span>, <span class="fl">12</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/gl.html">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span>
@@ -121,6 +127,7 @@ vectors, unless <code>flatten = TRUE</code>. See 'Examples'.</p>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "incidence" "size"      "period"    "herd"     </span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

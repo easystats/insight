@@ -73,7 +73,8 @@ preserved.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">find_terms</span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A fitted model.</p></td>
     </tr><tr><th>flatten</th>
@@ -83,8 +84,10 @@ as character vector, not as list. Duplicated values are removed.</p></td>
       <td><p>Toggle warnings.</p></td>
     </tr><tr><th>...</th>
       <td><p>Currently not used.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with (depending on the model) following elements (character
 vectors):</p><ul><li><p><code>response</code>, the name of the response variable</p></li>
 <li><p><code>conditional</code>, the names of the predictor variables from the <em>conditional</em> model (as opposed to the zero-inflated part of a model)</p></li>
@@ -95,14 +98,17 @@ vectors):</p><ul><li><p><code>response</code>, the name of the response variable
 <li><p><code>instruments</code>, the names of instrumental variables</p></li>
 </ul><p>Returns <code>NULL</code> if no terms could be found (for instance, due to
 problems in accessing the formula).</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
+    </div>
+    <div id="note">
+    <h2>Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>The difference to <code><a href="find_variables.html">find_variables()</a></code> is that <code>find_terms()</code>
 may return a variable multiple times in case of multiple transformations
 (see examples below), while <code><a href="find_variables.html">find_variables()</a></code> returns each variable
 name only once.</p>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span></span>
@@ -126,6 +132,7 @@ name only once.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Days"      "exp(Days)" "Subject"  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

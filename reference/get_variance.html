@@ -97,7 +97,8 @@ for <code>get_variance(x, component = "residual")</code> etc.</p>
 
 <span class="fu">get_correlation_slopes</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A mixed effects model.</p></td>
     </tr><tr><th>component</th>
@@ -115,8 +116,10 @@ take a few seconds to calculate.</p></td>
 whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
 stricter the test will be. See <code><a href="https://easystats.github.io/performance/reference/check_singularity.html">performance::check_singularity()</a></code>.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with following elements:</p><ul><li><p><code>var.fixed</code>, variance attributable to the fixed effects</p></li>
 <li><p><code>var.random</code>, (mean) variance of random effects</p></li>
 <li><p><code>var.residual</code>, residual variance (sum of dispersion and distribution)</p></li>
@@ -126,15 +129,28 @@ stricter the test will be. See <code><a href="https://easystats.github.io/perfor
 <li><p><code>var.slope</code>, the random-slope-variance (τ<sub>11</sub>)</p></li>
 <li><p><code>cor.slope_intercept</code>, the random-slope-intercept-correlation (ρ<sub>01</sub>)</p></li>
 <li><p><code>cor.slopes</code>, the correlation between random slopes (ρ<sub>00</sub>)</p></li>
-</ul><h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+</ul></div>
+    <div id="details">
+    <h2>Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function returns different variance components from mixed models,
 which are needed, for instance, to calculate r-squared measures or the
-intraclass-correlation coefficient (ICC).</p><h3 class="hasAnchor" id="fixed-effects-variance"><a class="anchor" aria-hidden="true" href="#fixed-effects-variance"></a>Fixed effects variance</h3>
+intraclass-correlation coefficient (ICC).</p><div id="fixed-effects-variance">
+<h3></h3><p>The fixed effects variance, σ<sup>2</sup><sub>f</sub>,
+is the variance of the matrix-multiplication β∗X
+(parameter vector by model matrix).</p>
 <p>The fixed effects variance, σ<sup>2</sup><sub>f</sub>,
 is the variance of the matrix-multiplication β∗X
 (parameter vector by model matrix).</p>
-<h3 class="hasAnchor" id="random-effects-variance"><a class="anchor" aria-hidden="true" href="#random-effects-variance"></a>Random effects variance</h3>
+</div>
+<div id="random-effects-variance">
+<h3></h3><p>The random effect variance, σ<sup>2</sup><sub>i</sub>,
+represents the <em>mean</em> random effect variance of the model. Since
+this variance reflect the "average" random effects variance for mixed
+models, it is also appropriate for models with more complex random
+effects structures, like random slopes or nested random effects.
+Details can be found in <cite>Johnson 2014</cite>, in particular equation 10.
+For simple random-intercept models, the random effects variance equals
+the random-intercept variance.</p>
 <p>The random effect variance, σ<sup>2</sup><sub>i</sub>,
 represents the <em>mean</em> random effect variance of the model. Since
 this variance reflect the "average" random effects variance for mixed
@@ -143,7 +159,19 @@ effects structures, like random slopes or nested random effects.
 Details can be found in <cite>Johnson 2014</cite>, in particular equation 10.
 For simple random-intercept models, the random effects variance equals
 the random-intercept variance.</p>
-<h3 class="hasAnchor" id="distribution-specific-variance"><a class="anchor" aria-hidden="true" href="#distribution-specific-variance"></a>Distribution-specific variance</h3>
+</div>
+<div id="distribution-specific-variance">
+<h3></h3><p>The distribution-specific variance,
+σ<sup>2</sup><sub>d</sub>,
+depends on the model family. For Gaussian models, it is
+σ<sup>2</sup> (i.e.
+<code>sigma(model)^2</code>). For models with binary outcome, it is
+\(\pi^2 / 3\) for logit-link, <code>1</code> for probit-link, and \(\pi^2 / 6\)
+for cloglog-links. Models from Gamma-families use \(\mu^2\) (as obtained
+from <code>family$variance()</code>). For all other models, the distribution-specific
+variance is based on lognormal approximation, \(log(1 + var(x) / \mu^2)\)
+(see <cite>Nakagawa et al. 2017</cite>). The expected variance of a zero-inflated
+model is computed according to <cite>Zuur et al. 2012, p277</cite>.</p>
 <p>The distribution-specific variance,
 σ<sup>2</sup><sub>d</sub>,
 depends on the model family. For Gaussian models, it is
@@ -155,47 +183,78 @@ from <code>family$variance()</code>). For all other models, the distribution-spe
 variance is based on lognormal approximation, \(log(1 + var(x) / \mu^2)\)
 (see <cite>Nakagawa et al. 2017</cite>). The expected variance of a zero-inflated
 model is computed according to <cite>Zuur et al. 2012, p277</cite>.</p>
-<h3 class="hasAnchor" id="variance-for-the-additive-overdispersion-term"><a class="anchor" aria-hidden="true" href="#variance-for-the-additive-overdispersion-term"></a>Variance for the additive overdispersion term</h3>
+</div>
+<div id="variance-for-the-additive-overdispersion-term">
+<h3></h3><p>The variance for the additive overdispersion term,
+σ<sup>2</sup><sub><em>e</em></sub>,
+represents “the excess variation relative to what is expected
+from a certain distribution” (Nakagawa et al. 2017). In (most? many?)
+cases, this will be <code>0</code>.</p>
 <p>The variance for the additive overdispersion term,
 σ<sup>2</sup><sub><em>e</em></sub>,
 represents “the excess variation relative to what is expected
 from a certain distribution” (Nakagawa et al. 2017). In (most? many?)
 cases, this will be <code>0</code>.</p>
-<h3 class="hasAnchor" id="residual-variance"><a class="anchor" aria-hidden="true" href="#residual-variance"></a>Residual variance</h3>
+</div>
+<div id="residual-variance">
+<h3></h3><p>The residual variance, σ<sup>2</sup><sub>ε</sub>,
+is simply σ<sup>2</sup><sub>d</sub> + σ<sup>2</sup><sub><em>e</em></sub>.</p>
 <p>The residual variance, σ<sup>2</sup><sub>ε</sub>,
 is simply σ<sup>2</sup><sub>d</sub> + σ<sup>2</sup><sub><em>e</em></sub>.</p>
-<h3 class="hasAnchor" id="random-intercept-variance"><a class="anchor" aria-hidden="true" href="#random-intercept-variance"></a>Random intercept variance</h3>
+</div>
+<div id="random-intercept-variance">
+<h3></h3><p>The random intercept variance, or <em>between-subject</em> variance
+(τ<sub>00</sub>),
+is obtained from <code><a href="https://rdrr.io/pkg/lme4/man/VarCorr.html">VarCorr()</a></code>. It indicates how much groups
+or subjects differ from each other, while the residual variance
+σ<sup>2</sup><sub>ε</sub>
+indicates the <em>within-subject variance</em>.</p>
 <p>The random intercept variance, or <em>between-subject</em> variance
 (τ<sub>00</sub>),
 is obtained from <code><a href="https://rdrr.io/pkg/lme4/man/VarCorr.html">VarCorr()</a></code>. It indicates how much groups
 or subjects differ from each other, while the residual variance
 σ<sup>2</sup><sub>ε</sub>
 indicates the <em>within-subject variance</em>.</p>
-<h3 class="hasAnchor" id="random-slope-variance"><a class="anchor" aria-hidden="true" href="#random-slope-variance"></a>Random slope variance</h3>
+</div>
+<div id="random-slope-variance">
+<h3></h3><p>The random slope variance (τ<sub>11</sub>)
+is obtained from <code><a href="https://rdrr.io/pkg/lme4/man/VarCorr.html">VarCorr()</a></code>. This measure is only available
+for mixed models with random slopes.</p>
 <p>The random slope variance (τ<sub>11</sub>)
 is obtained from <code><a href="https://rdrr.io/pkg/lme4/man/VarCorr.html">VarCorr()</a></code>. This measure is only available
 for mixed models with random slopes.</p>
-<h3 class="hasAnchor" id="random-slope-intercept-correlation"><a class="anchor" aria-hidden="true" href="#random-slope-intercept-correlation"></a>Random slope-intercept correlation</h3>
+</div>
+<div id="random-slope-intercept-correlation">
+<h3></h3><p>The random slope-intercept correlation
+(ρ<sub>01</sub>)
+is obtained from <code><a href="https://rdrr.io/pkg/lme4/man/VarCorr.html">VarCorr()</a></code>. This measure is only available
+for mixed models with random intercepts and slopes.</p>
 <p>The random slope-intercept correlation
 (ρ<sub>01</sub>)
 is obtained from <code><a href="https://rdrr.io/pkg/lme4/man/VarCorr.html">VarCorr()</a></code>. This measure is only available
 for mixed models with random intercepts and slopes.</p>
+</div>
 
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
+    </div>
+    <div id="note">
+    <h2>Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>This function supports models of class <code>merMod</code> (including models
 from <span class="pkg">blme</span>), <code>clmm</code>, <code>cpglmm</code>, <code>glmmadmb</code>, <code>glmmTMB</code>,
 <code>MixMod</code>, <code>lme</code>, <code>mixed</code>, <code>rlmerMod</code>, <code>stanreg</code>,
 <code>brmsfit</code> or <code>wbm</code>. Support for objects of class <code>MixMod</code>
 (<span class="pkg">GLMMadaptive</span>), <code>lme</code> (<span class="pkg">nlme</span>) or <code>brmsfit</code> (<span class="pkg">brms</span>)
 is experimental and may not work for all models.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     
 <ul><li><p>Johnson, P. C. D. (2014). Extension of Nakagawa &amp; Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. doi: <a href="https://doi.org/10.1111/2041-210X.12225">10.1111/2041-210X.12225</a></p></li>
 <li><p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. doi: <a href="https://doi.org/10.1098/rsif.2017.0213">10.1098/rsif.2017.0213</a></p></li>
 <li><p>Zuur, A. F., Savel'ev, A. A., &amp; Ieno, E. N. (2012). Zero inflated models and generalized linear mixed models with R. Newburgh, United Kingdom: Highland Statistics.</p></li>
-</ul><h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+</ul></div>
+
+    <div id="examples">
+    <h2>Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/">lme4</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span></span>
@@ -206,6 +265,7 @@ is experimental and may not work for all models.</p>
 <span class="r-in"><span class="fu">get_variance_residual</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
