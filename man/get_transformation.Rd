@@ -12,13 +12,15 @@ get_transformation(x)
 \value{
 A list of two functions: \verb{$transformation}, the function that was
 used to transform the response variable; \verb{$inverse}, the inverse-function
-of \verb{$transformation} (can be used for "back-transformation").
+of \verb{$transformation} (can be used for "back-transformation"). If no
+transformation was applied, both list-elements \verb{$transformation} and
+\verb{$inverse} just return \code{function(x) x}.
 }
 \description{
 This functions checks whether any transformation, such as log-
 or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula, and returns the related function that
-was for transformation.
+was used for transformation.
 }
 \examples{
 # identity, no transformation
@@ -28,4 +30,12 @@ get_transformation(model)
 # log-transformation
 model <- lm(log(Sepal.Length) ~ Species, data = iris)
 get_transformation(model)
+
+# log-function
+get_transformation(model)$transformation(.3)
+log(.3)
+
+# inverse function is exp()
+get_transformation(model)$invserse(.3)
+exp(.3)
 }
