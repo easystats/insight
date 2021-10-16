@@ -22,6 +22,19 @@ get_modelmatrix.default <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.merMod <- function(x, ...) {
+  dots <- list(...)
+  if ("data" %in% names(dots)) {
+    model_terms <- stats::terms(x)
+    mm <- stats::model.matrix(model_terms, ...)
+  } else {
+    mm <- stats::model.matrix(object = x, ...)
+  }
+
+  mm
+}
+
+#' @export
 get_modelmatrix.lme <- function(x, ...) {
   # we check the dots for a "data" argument. To make model.matrix work
   # for certain objects, we need to specify the data-argument explicitly,
