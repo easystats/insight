@@ -36,6 +36,6 @@ get_transformation(model)$transformation(.3)
 log(.3)
 
 # inverse function is exp()
-get_transformation(model)$invserse(.3)
+get_transformation(model)$inverse(.3)
 exp(.3)
 }
