@@ -160,12 +160,12 @@ get_df.glht <- function(x, type = "residual", ...) {
 
 
 #' @export
-get_df.rlm <- function(model, type = "residual", ...) {
+get_df.rlm <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "residual") {
-    .degrees_of_freedom_analytical(model)
+    .degrees_of_freedom_analytical(x)
   } else {
-    .model_df(model)
+    .model_df(x)
   }
 }
 
