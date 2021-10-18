@@ -90,7 +90,7 @@
 <span class="op">)</span></code></pre></div>
 
     <div id="arguments">
-    <h2>Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).</p></td>
@@ -132,34 +132,17 @@ are not depending on it. (default), <code><a href="https://rdrr.io/r/base/mean.h
     </tr></table></div>
 
     <div id="value">
-    <h2>Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <h2>Value</h2>
     <p>The fitted values (i.e. predictions for the response). For Bayesian
 or bootstrapped models (when <code>iterations != NULL</code>), iterations (as
 columns and observations are rows) can be accessed via <code>as.data.frame</code>.</p>
     </div>
     <div id="details">
-    <h2>Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <h2>Details</h2>
     <p>In <code>insight::get_predicted()</code>, the <code>predict</code> argument jointly
 modulates two separate concepts, the <strong>scale</strong> and the <strong>uncertainty interval</strong>.</p>
 <div id="confidence-interval-ci-vs-prediction-interval-pi-">
-<h3>
-<ul><li><p><strong>Linear models</strong> - <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>: For linear models, Prediction
-intervals (<code>predict="prediction"</code>) show the range that likely
-contains the value of a new observation (in what range it is likely to
-fall), whereas confidence intervals (<code>predict="expectation"</code> or
-<code>predict="link"</code>) reflect the uncertainty around the estimated
-parameters (and gives the range of uncertainty of the regression line). In
-general, Prediction Intervals (PIs) account for both the uncertainty in the
-model's parameters, plus the random variation of the individual values.
-Thus, prediction intervals are always wider than confidence intervals.
-Moreover, prediction intervals will not necessarily become narrower as the
-sample size increases (as they do not reflect only the quality of the fit,
-but also the variability within the data).</p></li>
-<li><p><strong>Generalized Linear models</strong> - <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code>: For binomial models,
-prediction intervals are somewhat useless (for instance, for a binomial
-(Bernoulli) model for which the dependent variable is a vector of 1s and
-0s, the prediction interval is... <code>[0, 1]</code>).</p></li>
-</ul><a class="anchor" aria-label="anchor" href="#confidence-interval-ci-vs-prediction-interval-pi-"></a></h3>
+<h3>Confidence Interval (CI) vs. Prediction Interval (PI))</h3>
 
 <ul><li><p><strong>Linear models</strong> - <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>: For linear models, Prediction
 intervals (<code>predict="prediction"</code>) show the range that likely
@@ -180,18 +163,7 @@ prediction intervals are somewhat useless (for instance, for a binomial
 </ul></div>
 
 <div id="link-scale-vs-response-scale">
-<h3></h3><p>When users set the <code>predict</code> argument to <code>"expectation"</code>, the predictions
-are returned on the response scale, which is arguably the most convenient
-way to understand and visualize relationships of interest. When users set
-the <code>predict</code> argument to <code>"link"</code>, predictions are returned on the link
-scale, and no transformation is applied. For instance, for a logistic
-regression model, the response scale corresponds to the predicted
-probabilities, whereas the link-scale makes predictions of log-odds
-(probabilities on the logit scale). Note that when users select
-<code>predict="classification"</code> in binomial models, the <code>get_predicted()</code>
-function will first calculate predictions as if the user had selected
-<code>predict="expectation"</code>. Then, it will round the responses in order to
-return the most likely outcome.</p>
+<h3>Link scale vs. Response scale</h3>
 <p>When users set the <code>predict</code> argument to <code>"expectation"</code>, the predictions
 are returned on the response scale, which is arguably the most convenient
 way to understand and visualize relationships of interest. When users set
@@ -208,12 +180,12 @@ return the most likely outcome.</p>
 
     </div>
     <div id="see-also">
-    <h2>See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <h2>See also</h2>
     <div class="dont-index"><p><code><a href="get_predicted_ci.html">get_predicted_ci()</a></code></p></div>
     </div>
 
     <div id="examples">
-    <h2>Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"></span>

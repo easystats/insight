@@ -77,7 +77,7 @@ dispersion, sigma, or beta...</p>
 <span class="op">)</span></code></pre></div>
 
     <div id="arguments">
-    <h2>Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A model.</p></td>
     </tr><tr><th>type</th>
@@ -104,30 +104,19 @@ measure of central tendency.</p></td>
     </tr></table></div>
 
     <div id="value">
-    <h2>Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <h2>Value</h2>
     <p>The requested auxiliary parameter, or <code>NULL</code> if this information
 could not be accessed.</p>
     </div>
     <div id="details">
-    <h2>Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <h2>Details</h2>
     <p>Currently, only sigma and the dispersion parameter are returned, and
 only for a limited set of models.</p><div id="sigma-parameter">
-<h3></h3><p>See <code><a href="get_sigma.html">get_sigma()</a></code>.</p>
+<h3>Sigma Parameter</h3>
 <p>See <code><a href="get_sigma.html">get_sigma()</a></code>.</p>
 </div>
 <div id="dispersion-parameter">
-<h3></h3><p>There are many different definitions of "dispersion", depending on the context.
-<code>get_auxiliary()</code> returns the dispersion parameters that usually can
-be considered as variance-to-mean ratio for generalized (linear) mixed
-models. Exceptions are models of class <code>glmmTMB</code>, where the dispersion
-equals σ<sup>2</sup>.
-In detail, the computation of the dispersion parameter for generalized linear
-models is the ratio of the sum of the squared working-residuals and the
-residual degrees of freedom. For mixed models of class <code>glmer</code>, the
-dispersion parameter is also called φ
-and is the ratio of the sum of the squared Pearson-residuals and the residual
-degrees of freedom. For models of class <code>glmmTMB</code>, dispersion is
-σ<sup>2</sup>.</p>
+<h3>Dispersion Parameter</h3>
 <p>There are many different definitions of "dispersion", depending on the context.
 <code>get_auxiliary()</code> returns the dispersion parameters that usually can
 be considered as variance-to-mean ratio for generalized (linear) mixed
@@ -142,9 +131,7 @@ degrees of freedom. For models of class <code>glmmTMB</code>, dispersion is
 σ<sup>2</sup>.</p>
 </div>
 <div id="brms-models">
-<h3></h3><p>For models of class <code>brmsfit</code>, there are different options for the
-<code>type</code> argument. See a list of supported auxiliary parameters here:
-<code><a href="find_parameters.BGGM.html">find_parameters.BGGM()</a></code>.</p>
+<h3><span class="pkg">brms</span> models</h3>
 <p>For models of class <code>brmsfit</code>, there are different options for the
 <code>type</code> argument. See a list of supported auxiliary parameters here:
 <code><a href="find_parameters.BGGM.html">find_parameters.BGGM()</a></code>.</p>
@@ -153,7 +140,7 @@ degrees of freedom. For models of class <code>glmmTMB</code>, dispersion is
     </div>
 
     <div id="examples">
-    <h2>Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># from ?glm</span></span>
 <span class="r-in"><span class="va">clotting</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
 <span class="r-in">  u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">60</span>, <span class="fl">80</span>, <span class="fl">100</span><span class="op">)</span>,</span>

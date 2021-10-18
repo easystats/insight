@@ -76,7 +76,7 @@
 <span class="op">)</span></code></pre></div>
 
     <div id="arguments">
-    <h2>Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>bf</th>
       <td><p>Bayes Factor.</p></td>
     </tr><tr><th>stars</th>
@@ -96,12 +96,12 @@ scientific format (e.g., 4.24e5), or as truncated values (as "&gt; 1000" and
     </tr></table></div>
 
     <div id="value">
-    <h2>Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <h2>Value</h2>
     <p>A formatted string.</p>
     </div>
 
     <div id="examples">
-    <h2>Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">format_bf</span><span class="op">(</span><span class="va">bfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.000045</span>, <span class="fl">0.033</span>, <span class="cn">NA</span>, <span class="fl">1557</span>, <span class="fl">3.54</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "BF &lt; 0.001" "BF = 0.033" ""           "BF &gt; 1000"  "BF = 3.54" </span>
 <span class="r-in"><span class="fu">format_bf</span><span class="op">(</span><span class="va">bfs</span>, exact <span class="op">=</span> <span class="cn">TRUE</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
