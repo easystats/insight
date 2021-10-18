@@ -192,13 +192,15 @@ find_statistic <- function(x, ...) {
 
   # edge cases ---------------------------------------------------------------
 
+  m_info <- model_info(x)
+
   # tweedie-check needs to come first, because glm can also have tweedie
   # family, so this exception needs to be caught before checking for g.mods
 
   tryCatch(
     {
       suppressWarnings(
-        if (!is_multivariate(x) && model_info(x)$is_tweedie) {
+        if (!is_multivariate(x) && m_info$is_tweedie) {
           return("t-statistic")
         }
       )
@@ -246,7 +248,7 @@ find_statistic <- function(x, ...) {
         }
       )
       return(stat)
-    } else if (model_info(x)$family %in% g.t.mods) {
+    } else if (m_info$family %in% g.t.mods) {
       return("t-statistic")
     } else {
       return("z-statistic")

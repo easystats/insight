@@ -9,6 +9,12 @@
                          verbose = TRUE,
                          ...) {
 
+  dot_args <- list(...)
+  if (isTRUE(dot_args$return_family_only)) {
+    list(family = fitfam, link_function = link.fun)
+
+  }
+
   # create logical for family
 
   # binomial family --------
