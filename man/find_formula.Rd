@@ -21,9 +21,11 @@ A list of formulas that describe the model. For simple models,
 only one list-element, \code{conditional}, is returned. For more complex
 models, the returned list may have following elements:
 \itemize{
-\item \code{conditional}, the "fixed effects" part from the model. One
-exception are \code{DirichletRegModel} models from \pkg{DirichletReg},
-which has two or three components, depending on \code{model}.\preformatted{ \\item `random`, the "random effects" part from the model (or the
+\item \code{conditional}, the "fixed effects" part from the model (in the
+context of fixed-effects or instrumental variable regression, also
+called \emph{regressors}) . One exception are \code{DirichletRegModel} models
+from \pkg{DirichletReg}, which has two or three components,
+depending on \code{model}.\preformatted{ \\item `random`, the "random effects" part from the model (or the
  `id` for gee-models and similar)
 
  \\item `zero_inflated`, the "fixed effects" part from the
@@ -34,9 +36,9 @@ which has two or three components, depending on \code{model}.\preformatted{ \\it
 
  \\item `dispersion`, the dispersion formula
 
- \\item `instruments`, for fixed-effects regressions like
- `ivreg::ivreg()`, `lfe::felm()` or `plm::plm()`, the
- instrumental variables
+ \\item `instruments`, for fixed-effects or instrumental variable
+ regressions like `ivreg::ivreg()`, `lfe::felm()` or `plm::plm()`,
+ the instrumental variables
 
  \\item `cluster`, for fixed-effects regressions like
  `lfe::felm()`, the cluster specification
