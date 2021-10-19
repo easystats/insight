@@ -141,8 +141,8 @@ columns and observations are rows) can be accessed via <code>as.data.frame</code
     <h2>Details</h2>
     <p>In <code>insight::get_predicted()</code>, the <code>predict</code> argument jointly
 modulates two separate concepts, the <strong>scale</strong> and the <strong>uncertainty interval</strong>.</p>
-<div id="confidence-interval-ci-vs-prediction-interval-pi-">
-<h3>Confidence Interval (CI) vs. Prediction Interval (PI))</h3>
+<div class="section">
+<h3 id="confidence-interval-ci-vs-prediction-interval-pi-">Confidence Interval (CI) vs. Prediction Interval (PI))<a class="anchor" aria-label="anchor" href="#confidence-interval-ci-vs-prediction-interval-pi-"></a></h3>
 
 <ul><li><p><strong>Linear models</strong> - <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>: For linear models, Prediction
 intervals (<code>predict="prediction"</code>) show the range that likely
@@ -162,8 +162,8 @@ prediction intervals are somewhat useless (for instance, for a binomial
 0s, the prediction interval is... <code>[0, 1]</code>).</p></li>
 </ul></div>
 
-<div id="link-scale-vs-response-scale">
-<h3>Link scale vs. Response scale</h3>
+<div class="section">
+<h3 id="link-scale-vs-response-scale">Link scale vs. Response scale<a class="anchor" aria-label="anchor" href="#link-scale-vs-response-scale"></a></h3>
 <p>When users set the <code>predict</code> argument to <code>"expectation"</code>, the predictions
 are returned on the response scale, which is arguably the most convenient
 way to understand and visualize relationships of interest. When users set
