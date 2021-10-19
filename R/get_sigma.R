@@ -120,8 +120,12 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
     {
       dat <- as.data.frame(x)
       sigma_column <- grep("sigma", colnames(dat), fixed = TRUE)
-      if (length(sigma_column)) {
+      if (length(sigma_column) == 1) {
         mean(dat[[sigma_column]][1])
+      } else if (length(sigma_column)) {
+        # if more than one sigma column,
+        # there isn't a traditional sigma for the model
+        NA
       } else {
         NULL
       }
