@@ -337,9 +337,7 @@ get_df.systemfit <- function(x, type = "residual", ...) {
 
 #' @keywords internal
 .degrees_of_freedom_residual <- function(model, verbose = TRUE) {
-  info <- model_info(model, verbose = FALSE)
-
-  if (!is.null(info) && is.list(info) && info$is_bayesian && !inherits(model, c("bayesx", "blmerMod", "bglmerMod"))) {
+  if (.is_bayesian_model(model) && !inherits(model, c("bayesx", "blmerMod", "bglmerMod"))) {
     if (requireNamespace("bayestestR", quietly = TRUE)) {
       model <- bayestestR::bayesian_as_frequentist(model)
     } else {
