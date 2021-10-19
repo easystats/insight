@@ -125,7 +125,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
       } else if (length(sigma_column)) {
         # if more than one sigma column,
         # there isn't a traditional sigma for the model
-        NA
+        return(NULL)
       } else {
         NULL
       }
@@ -194,7 +194,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   if (.is_empty_object(s)) {
     info <- model_info(x)
     if (!is.null(info) && info$is_dispersion) {
-      s <- NA
+      return(NULL)
     }
   }
 
