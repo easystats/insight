@@ -9,8 +9,8 @@
                          verbose = TRUE,
                          ...) {
 
-  dot_args <- list(...)
-  if (isTRUE(dot_args$return_family_only)) {
+  dots <- list(...)
+  if (isTRUE(dots$return_family_only)) {
     return(list(family = fitfam, link_function = link.fun))
   }
 
@@ -206,8 +206,7 @@
 
   # save model terms --------
 
-  dots <- list(...)
-  if (.obj_has_name(dots, "no_terms") && isTRUE(dots$no_terms)) {
+  if (isTRUE(dots$no_terms)) {
     model_terms <- NULL
   } else {
     if (inherits(x, "mcmc")) {
