@@ -120,8 +120,12 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
     {
       dat <- as.data.frame(x)
       sigma_column <- grep("sigma", colnames(dat), fixed = TRUE)
-      if (length(sigma_column)) {
+      if (length(sigma_column) == 1) {
         mean(dat[[sigma_column]][1])
+      } else if (length(sigma_column)) {
+        # if more than one sigma column,
+        # there isn't a traditional sigma for the model
+        return(NULL)
       } else {
         NULL
       }
@@ -188,17 +192,10 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
   # compute sigma manually ---------------
   if (.is_empty_object(s)) {
-    s <- tryCatch(
-      {
-        sqrt(get_deviance(x, verbose = verbose) / get_df(x,
-          type = "residual",
-          verbose = verbose
-        ))
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    info <- model_info(x)
+    if (!is.null(info) && info$is_dispersion) {
+      return(NULL)
+    }
   }
 
   if (.is_empty_object(s)) {
@@ -213,6 +210,20 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
         }
       )
     }
+  }
+
+  if (.is_empty_object(s)) {
+    s <- tryCatch(
+      {
+        sqrt(get_deviance(x, verbose = verbose) / get_df(x,
+          type = "residual",
+          verbose = verbose
+        ))
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
   if (.is_empty_object(s)) {
