@@ -192,7 +192,7 @@ find_statistic <- function(x, ...) {
 
   # edge cases ---------------------------------------------------------------
 
-  m_info <- model_info(x)
+  m_info <- model_info(x, return_family_only = TRUE)
 
   # tweedie-check needs to come first, because glm can also have tweedie
   # family, so this exception needs to be caught before checking for g.mods
@@ -200,7 +200,7 @@ find_statistic <- function(x, ...) {
   tryCatch(
     {
       suppressWarnings(
-        if (!is_multivariate(x) && m_info$is_tweedie) {
+        if (!is_multivariate(x) && .is_tweedie(x, m_info)) {
           return("t-statistic")
         }
       )
@@ -305,4 +305,18 @@ find_statistic <- function(x, ...) {
       return("chi-squared statistic")
     }
   }
+}
+
+
+
+
+
+# helper ---------------
+
+.is_tweedie <- function(model, info) {
+  if (info$family %in% c("Student's-t", "t Family", "gaussian", "Gaussian") || grepl("(\\st)$", info$family)) {
+    linear_model <- TRUE
+  }
+  tweedie_fam <- grepl("^(tweedie|Tweedie)", info$family) | grepl("^(tweedie|Tweedie)", info$link_function)
+  (linear_model && tweedie_fam) || inherits(model, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
 }
