@@ -189,7 +189,14 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   # compute sigma manually ---------------
   if (.is_empty_object(s)) {
     info <- model_info(x)
-    if (!is.null(info) && (info$is_mixed || info$is_dispersion)) {
+    if (!is.null(info) && info$is_dispersion) {
+      s <- NA
+    }
+  }
+
+  if (.is_empty_object(s)) {
+    info <- model_info(x)
+    if (!is.null(info) && info$is_mixed) {
       s <- tryCatch(
         {
           sqrt(get_variance_residual(x, verbose = FALSE))
