@@ -1,3 +1,16 @@
+# insight 0.14.6
+
+## General
+
+* Improved speed performance for some functions.
+
+* Added more `get_df()` methods.
+
+## Bug fixes
+
+* Fixed issues with manual sigma computation to handle dispersion models 
+  in `get_sigma()`.
+
 # insight 0.14.5
 
 ## New functions
