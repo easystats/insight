@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -42,7 +42,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,22 +57,23 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Model Deviance</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_deviance.R"><code>R/get_deviance.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_deviance.R" class="external-link"><code>R/get_deviance.R</code></a></small>
     <div class="hidden name"><code>get_deviance.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns model deviance (see <code><a href="https://rdrr.io/r/stats/deviance.html">stats::deviance()</a></code>).</p>
+    <p>Returns model deviance (see <code><a href="https://rdrr.io/r/stats/deviance.html" class="external-link">stats::deviance()</a></code>).</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">get_deviance</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/get_deviance.html">get_deviance</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu">get_deviance</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/get_deviance.html">get_deviance</a></span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A model.</p></td>
     </tr><tr><th>...</th>
       <td><p>Not used.</p></td>
@@ -90,17 +91,18 @@
 the <em>absolute unconditional</em> deviance is returned (see 'Details' in
 <code>?lme4::</code>merMod-class``), i.e. minus twice the log-likelihood. To get
 the <em>relative conditional</em> deviance (relative to a saturated model,
-conditioned on the conditional modes of random effects), use <code><a href="https://rdrr.io/r/stats/deviance.html">deviance()</a></code>.
+conditioned on the conditional modes of random effects), use <code><a href="https://rdrr.io/r/stats/deviance.html" class="external-link">deviance()</a></code>.
 The value returned `get_deviance()` usually equals the deviance-value
 from the `summary()`.</p>
     </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_deviance</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 308.3342</span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+<span class="fu"><a href="../reference/get_deviance.html">get_deviance</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+<span class="co">#&gt; [1] 308.3342</span>
 </code></pre></div>
     </div>
   </div>

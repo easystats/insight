@@ -21,7 +21,7 @@ model. See details below."><meta property="og:image" content="/logo.png"><!-- ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@ model. See details below."><meta property="og:image" content="/logo.png"><!-- ma
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -61,22 +61,23 @@ model. See details below."><meta property="og:image" content="/logo.png"><!-- ma
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Prepare summary statistics of model parameters for printing</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/print_parameters.R"><code>R/print_parameters.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/print_parameters.R" class="external-link"><code>R/print_parameters.R</code></a></small>
     <div class="hidden name"><code>print_parameters.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>This function takes a data frame, typically a data frame with
-information on summaries of model parameters like <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html">bayestestR::describe_posterior()</a></code>,
-<code><a href="https://easystats.github.io/bayestestR/reference/hdi.html">bayestestR::hdi()</a></code> or <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters::model_parameters()</a></code>,
+information on summaries of model parameters like <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>,
+<code><a href="https://easystats.github.io/bayestestR/reference/hdi.html" class="external-link">bayestestR::hdi()</a></code> or <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>,
 as input and splits this information into several parts, depending on the
 model. See details below.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">print_parameters</span><span class="op">(</span>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/print_parameters.html">print_parameters</a></span><span class="op">(</span>
   <span class="va">x</span>,
   <span class="va">...</span>,
-  split_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Effects"</span>, <span class="st">"Component"</span>, <span class="st">"Group"</span>, <span class="st">"Response"</span><span class="op">)</span>,
+  split_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Effects"</span>, <span class="st">"Component"</span>, <span class="st">"Group"</span>, <span class="st">"Response"</span><span class="op">)</span>,
   format <span class="op">=</span> <span class="st">"text"</span>,
   parameter_column <span class="op">=</span> <span class="st">"Parameter"</span>,
   keep_parameter_column <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -87,7 +88,7 @@ model. See details below.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A fitted model, or a data frame returned by <code><a href="clean_parameters.html">clean_parameters()</a></code>.</p></td>
     </tr><tr><th>...</th>
       <td><p>One or more objects (data frames), which contain information about
@@ -123,7 +124,7 @@ empty character values will be removed.</p></td>
       <td><p>By default, the names of the model components (like
 fixed or random effects, count or zero-inflated model part) are added as
 attributes <code>"table_title"</code> and <code>"table_subtitle"</code> to each list
-element returned by <code>print_parameters()</code>. These attributes are then
+element returned by <code><a href="../reference/print_parameters.html">print_parameters()</a></code>. These attributes are then
 extracted and used as table (sub) titles in <code><a href="export_table.html">export_table()</a></code>.
 Use <code>titles</code> and <code>subtitles</code> to override the default attribute
 values for <code>"table_title"</code> and <code>"table_subtitle"</code>. <code>titles</code>
@@ -154,14 +155,14 @@ are associated.
 Then, <code>...</code> take one or more data frames that also contain information
 about parameters from the same model, but also have additional information
 provided by other methods. For instance, a data frame in <code>...</code> might
-be the result of, for instance, <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html">bayestestR::describe_posterior()</a></code>,
-or <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters::model_parameters()</a></code>, where we have a) a
+be the result of, for instance, <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>,
+or <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>, where we have a) a
 <code>Parameter</code> column and b) columns with other parameter values (like
 CI, HDI, test statistic, etc.).
 <br><br>
 Now we have a data frame with model parameters and information about the
 association to the different model components, a data frame with model
-parameters, and some summary statistics. <code>print_parameters()</code>
+parameters, and some summary statistics. <code><a href="../reference/print_parameters.html">print_parameters()</a></code>
 then merges these data frames, so the parameters or statistics of interest
 are also associated with the different model components. The data
 frame is split into a list, so for a clear printing. Users can loop over this
@@ -171,26 +172,27 @@ names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/bayestestR/">bayestestR</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="download_model.html">download_model</a></span><span class="op">(</span><span class="st">"brms_zi_2"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html">hdi</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"all"</span>, component <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># hdi() returns a data frame; here we use only the</span></span>
-<span class="r-in"><span class="co"># information on parameter names and HDI values</span></span>
-<span class="r-in"><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">tmp</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Based on the "split_by" argument, we get a list of data frames that</span></span>
-<span class="r-in"><span class="co"># is split into several parts that reflect the model components.</span></span>
-<span class="r-in"><span class="fu">print_parameters</span><span class="op">(</span><span class="va">model</span>, <span class="va">tmp</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># This is the standard print()-method for "bayestestR::hdi"-objects.</span></span>
-<span class="r-in"><span class="co"># For printing methods, it is easy to print complex summary statistics</span></span>
-<span class="r-in"><span class="co"># in a clean way to the console by splitting the information into</span></span>
-<span class="r-in"><span class="co"># different model components.</span></span>
-<span class="r-in"><span class="va">x</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/bayestestR/" class="external-link">bayestestR</a></span><span class="op">)</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_model.html">download_model</a></span><span class="op">(</span><span class="st">"brms_zi_2"</span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html" class="external-link">hdi</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"all"</span>, component <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>
+
+<span class="co"># hdi() returns a data frame; here we use only the</span>
+<span class="co"># information on parameter names and HDI values</span>
+<span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>
+<span class="va">tmp</span>
+
+<span class="co"># Based on the "split_by" argument, we get a list of data frames that</span>
+<span class="co"># is split into several parts that reflect the model components.</span>
+<span class="fu"><a href="../reference/print_parameters.html">print_parameters</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">tmp</span><span class="op">)</span>
+
+<span class="co"># This is the standard print()-method for "bayestestR::hdi"-objects.</span>
+<span class="co"># For printing methods, it is easy to print complex summary statistics</span>
+<span class="co"># in a clean way to the console by splitting the information into</span>
+<span class="co"># different model components.</span>
+<span class="va">x</span>
+<span class="op">}</span>
 </code></pre></div>
     </div>
   </div>

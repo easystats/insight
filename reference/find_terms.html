@@ -20,7 +20,7 @@ preserved.'><meta property="og:image" content="/logo.png"><!-- mathjax --><scrip
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -45,7 +45,7 @@ preserved.'><meta property="og:image" content="/logo.png"><!-- mathjax --><scrip
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -60,22 +60,23 @@ preserved.'><meta property="og:image" content="/logo.png"><!-- mathjax --><scrip
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find all model terms</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/find_terms.R"><code>R/find_terms.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/find_terms.R" class="external-link"><code>R/find_terms.R</code></a></small>
     <div class="hidden name"><code>find_terms.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Returns a list with the names of all terms, including response
 value and random effects, "as is". This means, on-the-fly tranformations
-or arithmetic expressions like <code><a href="https://rdrr.io/r/base/Log.html">log()</a></code>, <code><a href="https://rdrr.io/r/base/AsIs.html">I()</a></code>, <code><a href="https://rdrr.io/r/base/factor.html">as.factor()</a></code> etc. are
+or arithmetic expressions like <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code>, <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code>, <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor()</a></code> etc. are
 preserved.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">find_terms</span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/find_terms.html">find_terms</a></span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A fitted model.</p></td>
     </tr><tr><th>flatten</th>
       <td><p>Logical, if <code>TRUE</code>, the values are returned
@@ -101,7 +102,7 @@ problems in accessing the formula).</p>
     </div>
     <div id="note">
     <h2>Note</h2>
-    <p>The difference to <code><a href="find_variables.html">find_variables()</a></code> is that <code>find_terms()</code>
+    <p>The difference to <code><a href="find_variables.html">find_variables()</a></code> is that <code><a href="../reference/find_terms.html">find_terms()</a></code>
 may return a variable multiple times in case of multiple transformations
 (see examples below), while <code><a href="find_variables.html">find_variables()</a></code> returns each variable
 name only once.</p>
@@ -109,28 +110,29 @@ name only once.</p>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">Reaction</span><span class="op">)</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">Days</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">Days</span><span class="op">)</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>,</span>
-<span class="r-in">    data <span class="op">=</span> <span class="va">sleepstudy</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="fu">find_terms</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model failed to converge with max|grad| = 14.7145 (tol = 0.002, component 1)</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model is nearly unidentifiable: very large eigenvalue</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  - Rescale variables?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $response</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "log(Reaction)"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Days"      "I(Days^2)"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $random</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Days"      "exp(Days)" "Subject"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span>
+  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">Reaction</span><span class="op">)</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">Days</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">Days</span><span class="op">)</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>,
+    data <span class="op">=</span> <span class="va">sleepstudy</span>
+  <span class="op">)</span>
+
+  <span class="fu"><a href="../reference/find_terms.html">find_terms</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="co">#&gt; Warning: Model failed to converge with max|grad| = 14.7145 (tol = 0.002, component 1)</span>
+<span class="co">#&gt; Warning: Model is nearly unidentifiable: very large eigenvalue</span>
+<span class="co">#&gt;  - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio</span>
+<span class="co">#&gt;  - Rescale variables?</span>
+<span class="co">#&gt; $response</span>
+<span class="co">#&gt; [1] "log(Reaction)"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $conditional</span>
+<span class="co">#&gt; [1] "Days"      "I(Days^2)"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $random</span>
+<span class="co">#&gt; [1] "Days"      "exp(Days)" "Subject"  </span>
+<span class="co">#&gt; </span>
 </code></pre></div>
     </div>
   </div>

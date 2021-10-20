@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -42,7 +42,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Count number of parameters in a model</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/n_parameters.R"><code>R/n_parameters.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/n_parameters.R" class="external-link"><code>R/n_parameters.R</code></a></small>
     <div class="hidden name"><code>n_parameters.Rd</code></div>
     </div>
 
@@ -65,50 +65,51 @@
     <p>Returns the number of parameters (coefficients) of a model.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">n_parameters</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/n_parameters.html">n_parameters</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu">n_parameters</span><span class="op">(</span><span class="va">x</span>, remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu"><a href="../reference/n_parameters.html">n_parameters</a></span><span class="op">(</span><span class="va">x</span>, remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for merMod</span>
-<span class="fu">n_parameters</span><span class="op">(</span>
+<span class="fu"><a href="../reference/n_parameters.html">n_parameters</a></span><span class="op">(</span>
   <span class="va">x</span>,
-  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,
+  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,
   remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for glmmTMB</span>
-<span class="fu">n_parameters</span><span class="op">(</span>
+<span class="fu"><a href="../reference/n_parameters.html">n_parameters</a></span><span class="op">(</span>
   <span class="va">x</span>,
-  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,
-  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span><span class="op">)</span>,
+  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,
+  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span><span class="op">)</span>,
   remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for zeroinfl</span>
-<span class="fu">n_parameters</span><span class="op">(</span>
+<span class="fu"><a href="../reference/n_parameters.html">n_parameters</a></span><span class="op">(</span>
   <span class="va">x</span>,
-  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span><span class="op">)</span>,
+  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span><span class="op">)</span>,
   remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for gam</span>
-<span class="fu">n_parameters</span><span class="op">(</span>
+<span class="fu"><a href="../reference/n_parameters.html">n_parameters</a></span><span class="op">(</span>
   <span class="va">x</span>,
-  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"smooth_terms"</span><span class="op">)</span>,
+  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"smooth_terms"</span><span class="op">)</span>,
   remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for brmsfit</span>
-<span class="fu">n_parameters</span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="st">"all"</span>, component <span class="op">=</span> <span class="st">"all"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/n_parameters.html">n_parameters</a></span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="st">"all"</span>, component <span class="op">=</span> <span class="st">"all"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A statistical model.</p></td>
     </tr><tr><th>...</th>
       <td><p>Arguments passed to or from other methods.</p></td>
@@ -142,10 +143,11 @@ parameters like sigma or dispersion are not counted. To get the number of
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">n_parameters</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="fu"><a href="../reference/n_parameters.html">n_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="co">#&gt; [1] 6</span>
 </code></pre></div>
     </div>
   </div>

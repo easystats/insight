@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -42,7 +42,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find model parameters from estimated marginal means objects</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/find_parameters_emmeans.R"><code>R/find_parameters_emmeans.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/find_parameters_emmeans.R" class="external-link"><code>R/find_parameters_emmeans.R</code></a></small>
     <div class="hidden name"><code>find_parameters.emmGrid.Rd</code></div>
     </div>
 
@@ -65,12 +65,13 @@
     <p>Returns the parameter names from a model.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for emmGrid</span>
-<span class="fu"><a href="find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, merge_parameters <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># S3 method for emmGrid</span>
+<span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, merge_parameters <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A fitted model.</p></td>
     </tr><tr><th>flatten</th>
       <td><p>Logical, if <code>TRUE</code>, the values are returned
@@ -92,15 +93,16 @@ as values.</p></td>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/rvlenth/emmeans">"emmeans"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">emm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html">emmeans</a></span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"wt"</span>, <span class="st">"cyl"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">emm</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emmeans</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.21725 3.21725 3.21725</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+<span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/rvlenth/emmeans" class="external-link">"emmeans"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">emm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html" class="external-link">emmeans</a></span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wt"</span>, <span class="st">"cyl"</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">emm</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="co">#&gt; $emmeans</span>
+<span class="co">#&gt; [1] 3.21725 3.21725 3.21725</span>
+<span class="co">#&gt; </span>
 </code></pre></div>
     </div>
   </div>

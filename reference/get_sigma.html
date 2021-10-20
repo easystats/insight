@@ -25,7 +25,7 @@ information about its interpretation and calculation."><meta property="og:image"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -50,7 +50,7 @@ information about its interpretation and calculation."><meta property="og:image"
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -65,13 +65,13 @@ information about its interpretation and calculation."><meta property="og:image"
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get residual standard deviation from models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_sigma.R"><code>R/get_sigma.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_sigma.R" class="external-link"><code>R/get_sigma.R</code></a></small>
     <div class="hidden name"><code>get_sigma.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Returns <code>sigma</code>, which corresponds the estimated standard
-deviation of the residuals. This function extends the <code><a href="https://rdrr.io/pkg/lme4/man/sigma.html">sigma()</a></code> base R
+deviation of the residuals. This function extends the <code><a href="https://rdrr.io/pkg/lme4/man/sigma.html" class="external-link">sigma()</a></code> base R
 generic for models that don't have implemented it. It also computes the
 confidence interval (CI), which is stored as an attribute.</p>
 <p>Sigma is a key-component of regression models, and part of the so-called
@@ -81,11 +81,12 @@ standard deviation <code>sigma</code>. See the details section below for more
 information about its interpretation and calculation.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">get_sigma</span><span class="op">(</span><span class="va">x</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/get_sigma.html">get_sigma</a></span><span class="op">(</span><span class="va">x</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A model.</p></td>
     </tr><tr><th>ci</th>
       <td><p>Scalar, the CI level. The default (<code>NULL</code>) returns no CI.</p></td>
@@ -118,8 +119,8 @@ precision of inferences about regression coefficients.</p>
 
 <div class="section">
 <h3 id="calculation-of-sigma">Calculation of Sigma<a class="anchor" aria-label="anchor" href="#calculation-of-sigma"></a></h3>
-<p>By default, <code>get_sigma()</code> tries to extract sigma by calling
-<code><a href="https://rdrr.io/r/stats/sigma.html">stats::sigma()</a></code>. If the model-object has no <code><a href="https://rdrr.io/pkg/lme4/man/sigma.html">sigma()</a></code> method,
+<p>By default, <code><a href="../reference/get_sigma.html">get_sigma()</a></code> tries to extract sigma by calling
+<code><a href="https://rdrr.io/r/stats/sigma.html" class="external-link">stats::sigma()</a></code>. If the model-object has no <code><a href="https://rdrr.io/pkg/lme4/man/sigma.html" class="external-link">sigma()</a></code> method,
 the next step is calculating sigma as square-root of the model-deviance
 divided by the residual degrees of freedom. Finally, if even this approach
 fails, and <code>x</code> is a mixed model, the residual standard deviation is
@@ -135,12 +136,13 @@ Stories. Cambridge University Press.</p>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_sigma</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.608133</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_aux" "numeric"    </span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
+<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+<span class="fu"><a href="../reference/get_sigma.html">get_sigma</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
+<span class="co">#&gt; [1] 2.608133</span>
+<span class="co">#&gt; attr(,"class")</span>
+<span class="co">#&gt; [1] "insight_aux" "numeric"    </span>
 </code></pre></div>
     </div>
   </div>

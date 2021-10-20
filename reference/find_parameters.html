@@ -29,7 +29,7 @@ Models with special components (betareg, MuMIn, ...)
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -54,7 +54,7 @@ Models with special components (betareg, MuMIn, ...)
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -69,15 +69,15 @@ Models with special components (betareg, MuMIn, ...)
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find names of model parameters</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/find_parameters.R"><code>R/find_parameters.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/find_parameters.R" class="external-link"><code>R/find_parameters.R</code></a></small>
     <div class="hidden name"><code>find_parameters.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Returns the names of model parameters, like they typically
-appear in the <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> output. For Bayesian models, the parameter
+appear in the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> output. For Bayesian models, the parameter
 names equal the column names of the posterior samples after coercion
-from <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code>. See the documentation for your object's class:</p><ul><li><p><a href="find_parameters.BGGM.html">Bayesian models</a> (<span class="pkg">rstanarm</span>, <span class="pkg">brms</span>, <span class="pkg">MCMCglmm</span>, ...)</p></li>
+from <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code>. See the documentation for your object's class:</p><ul><li><p><a href="find_parameters.BGGM.html">Bayesian models</a> (<span class="pkg">rstanarm</span>, <span class="pkg">brms</span>, <span class="pkg">MCMCglmm</span>, ...)</p></li>
 <li><p><a href="find_parameters.gamlss.html">Generalized additive models</a> (<span class="pkg">mgcv</span>, <span class="pkg">VGAM</span>, ...)</p></li>
 <li><p><a href="find_parameters.betamfx.html">Marginal effects models</a> (<span class="pkg">mfx</span>)</p></li>
 <li><p><a href="find_parameters.emmGrid.html">Estimated marginal means</a> (<span class="pkg">emmeans</span>)</p></li>
@@ -86,14 +86,15 @@ from <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</
 <li><p><a href="find_parameters.averaging.html">Models with special components</a> (<span class="pkg">betareg</span>, <span class="pkg">MuMIn</span>, ...)</p></li>
 </ul></div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">find_parameters</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu">find_parameters</span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A fitted model.</p></td>
     </tr><tr><th>...</th>
       <td><p>Currently not used.</p></td>
@@ -112,12 +113,13 @@ as character vector, not as list. Duplicated values are removed.</p></td>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">find_parameters</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "(Intercept)" "wt"          "cyl"         "vs"         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
+<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+<span class="fu"><a href="../reference/find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
+<span class="co">#&gt; $conditional</span>
+<span class="co">#&gt; [1] "(Intercept)" "wt"          "cyl"         "vs"         </span>
+<span class="co">#&gt; </span>
 </code></pre></div>
     </div>
   </div>

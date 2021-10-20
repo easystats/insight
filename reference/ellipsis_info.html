@@ -19,7 +19,7 @@ assigning different classes to the list of objects."><meta property="og:image" c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -44,7 +44,7 @@ assigning different classes to the list of objects."><meta property="og:image" c
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -59,7 +59,7 @@ assigning different classes to the list of objects."><meta property="og:image" c
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Gather information about objects in ellipsis (dot dot dot)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/ellipsis_info.R"><code>R/ellipsis_info.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/ellipsis_info.R" class="external-link"><code>R/ellipsis_info.R</code></a></small>
     <div class="hidden name"><code>ellipsis_info.Rd</code></div>
     </div>
 
@@ -69,14 +69,15 @@ It detects whether all are models, regressions, nested regressions etc.,
 assigning different classes to the list of objects.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">ellipsis_info</span><span class="op">(</span><span class="va">objects</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/ellipsis_info.html">ellipsis_info</a></span><span class="op">(</span><span class="va">objects</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu">ellipsis_info</span><span class="op">(</span><span class="va">...</span>, only_models <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/ellipsis_info.html">ellipsis_info</a></span><span class="op">(</span><span class="va">...</span>, only_models <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>objects, ...</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>objects, ...</th>
       <td><p>Arbitrary number of objects.</p></td>
     </tr><tr><th>only_models</th>
       <td><p>Only keep supported models (default to <code>TRUE</code>).</p></td>
@@ -91,24 +92,25 @@ are nested).</p>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Petal.Width</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">objects</span> <span class="op">&lt;-</span> <span class="fu">ellipsis_info</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">objects</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ListNonNestedRegressions" "ListRegressions"         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "ListModels"               "list"                    </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">objects</span> <span class="op">&lt;-</span> <span class="fu">ellipsis_info</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m4</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span><span class="op">(</span><span class="va">objects</span><span class="op">)</span><span class="op">$</span><span class="va">is_nested</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">objects</span> <span class="op">&lt;-</span> <span class="fu">ellipsis_info</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m5</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span><span class="op">(</span><span class="va">objects</span><span class="op">)</span><span class="op">$</span><span class="va">same_response</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">m5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Width</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+
+<span class="va">objects</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ellipsis_info.html">ellipsis_info</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">objects</span><span class="op">)</span>
+<span class="co">#&gt; [1] "ListNonNestedRegressions" "ListRegressions"         </span>
+<span class="co">#&gt; [3] "ListModels"               "list"                    </span>
+
+<span class="va">objects</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ellipsis_info.html">ellipsis_info</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m4</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">objects</span><span class="op">)</span><span class="op">$</span><span class="va">is_nested</span>
+<span class="co">#&gt; [1] TRUE</span>
+
+<span class="va">objects</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ellipsis_info.html">ellipsis_info</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m5</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">objects</span><span class="op">)</span><span class="op">$</span><span class="va">same_response</span>
+<span class="co">#&gt; [1] FALSE</span>
 </code></pre></div>
     </div>
   </div>

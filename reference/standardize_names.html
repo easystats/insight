@@ -19,7 +19,7 @@ names are consistent and the same for any model object."><meta property="og:imag
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -44,7 +44,7 @@ names are consistent and the same for any model object."><meta property="og:imag
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -59,39 +59,40 @@ names are consistent and the same for any model object."><meta property="og:imag
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Standardize column names</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/standardize_names.R"><code>R/standardize_names.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/standardize_names.R" class="external-link"><code>R/standardize_names.R</code></a></small>
     <div class="hidden name"><code>standardize_names.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Standardize column names from data frames, in particular objects returned
-from <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters::model_parameters()</a></code>, so column
+from <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>, so column
 names are consistent and the same for any model object.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">standardize_names</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/standardize_names.html">standardize_names</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for parameters_model</span>
-<span class="fu">standardize_names</span><span class="op">(</span>
+<span class="fu"><a href="../reference/standardize_names.html">standardize_names</a></span><span class="op">(</span>
   <span class="va">data</span>,
-  style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"easystats"</span>, <span class="st">"broom"</span><span class="op">)</span>,
+  style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"easystats"</span>, <span class="st">"broom"</span><span class="op">)</span>,
   ignore_estimate <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
       <td><p>A data frame. In particular, objects from <em>easystats</em>
 package functions like
-<code><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters::model_parameters()</a></code> or
-<code><a href="https://easystats.github.io/effectsize/reference/effectsize.html">effectsize::effectsize()</a></code> are accepted, but also
-data frames returned by <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> are valid objects.</p></td>
+<code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code> or
+<code><a href="https://easystats.github.io/effectsize/reference/effectsize.html" class="external-link">effectsize::effectsize()</a></code> are accepted, but also
+data frames returned by <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code> are valid objects.</p></td>
     </tr><tr><th>...</th>
       <td><p>Currently not used.</p></td>
     </tr><tr><th>style</th>
       <td><p>Standardization can either be based on the naming conventions
-from the <a href="https://easystats.github.io/easystats/">easystats-project</a>,
+from the <a href="https://easystats.github.io/easystats/" class="external-link">easystats-project</a>,
 or on <span class="pkg">broom</span>'s naming scheme.</p></td>
     </tr><tr><th>ignore_estimate</th>
       <td><p>Logical, if <code>TRUE</code>, column names like
@@ -107,41 +108,42 @@ or on <span class="pkg">broom</span>'s naming scheme.</p></td>
     <h2>Details</h2>
     <p>This method is in particular useful for package developers or users
 who use, e.g.,
-<code><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters::model_parameters()</a></code> in their own
+<code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code> in their own
 code or functions to retrieve model parameters for further processing. As
-<code><a href="https://easystats.github.io/parameters/reference/model_parameters.html">model_parameters()</a></code> returns a data frame with varying column names
+<code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters()</a></code> returns a data frame with varying column names
 (depending on the input), accessing the required information is probably
-not quite straightforward. In such cases, <code>standardize_names()</code> can be
+not quite straightforward. In such cases, <code><a href="../reference/standardize_names.html">standardize_names()</a></code> can be
 used to get consistent, i.e. always the same column names, no matter what
-kind of model was used in <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html">model_parameters()</a></code>.
+kind of model was used in <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters()</a></code>.
 <br><br>
 For <code>style = "broom"</code>, column names are renamed to match <span class="pkg">broom</span>'s
 naming scheme, i.e. <code>Parameter</code> is renamed to <code>term</code>,
 <code>Coefficient</code> becomes <code>estimate</code> and so on.
 <br><br>
 For <code>style = "easystats"</code>, when <code>data</code> is an object from
-<code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code>, column names are converted from "broom"-style into
+<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code>, column names are converted from "broom"-style into
 "easystats"-style.</p>
     </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/parameters/">"parameters"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">mp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html">model_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">mp</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">standardize_names</span><span class="op">(</span><span class="va">mp</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">standardize_names</span><span class="op">(</span><span class="va">mp</span>, style <span class="op">=</span> <span class="st">"broom"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          term  estimate std.error conf.level  conf.low  conf.high statistic</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 (Intercept) 39.686261 1.7149840       0.95 36.178725 43.1937976 23.140893</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          wt -3.190972 0.7569065       0.95 -4.739020 -1.6429245 -4.215808</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         cyl -1.507795 0.4146883       0.95 -2.355928 -0.6596622 -3.635972</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   df.error      p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       29 3.043182e-20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       29 2.220200e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       29 1.064282e-03</span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/parameters/" class="external-link">"parameters"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+  <span class="va">mp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+
+  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">mp</span><span class="op">)</span>
+  <span class="fu"><a href="../reference/standardize_names.html">standardize_names</a></span><span class="op">(</span><span class="va">mp</span><span class="op">)</span>
+  <span class="fu"><a href="../reference/standardize_names.html">standardize_names</a></span><span class="op">(</span><span class="va">mp</span>, style <span class="op">=</span> <span class="st">"broom"</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="co">#&gt;          term  estimate std.error conf.level  conf.low  conf.high statistic</span>
+<span class="co">#&gt; 1 (Intercept) 39.686261 1.7149840       0.95 36.178725 43.1937976 23.140893</span>
+<span class="co">#&gt; 2          wt -3.190972 0.7569065       0.95 -4.739020 -1.6429245 -4.215808</span>
+<span class="co">#&gt; 3         cyl -1.507795 0.4146883       0.95 -2.355928 -0.6596622 -3.635972</span>
+<span class="co">#&gt;   df.error      p.value</span>
+<span class="co">#&gt; 1       29 3.043182e-20</span>
+<span class="co">#&gt; 2       29 2.220200e-04</span>
+<span class="co">#&gt; 3       29 1.064282e-03</span>
 </code></pre></div>
     </div>
   </div>

@@ -28,7 +28,7 @@ Hypothesis tests (htest)
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -53,7 +53,7 @@ Hypothesis tests (htest)
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -68,7 +68,7 @@ Hypothesis tests (htest)
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get model parameters</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_parameters.R"><code>R/get_parameters.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_parameters.R" class="external-link"><code>R/get_parameters.R</code></a></small>
     <div class="hidden name"><code>get_parameters.Rd</code></div>
     </div>
 
@@ -84,14 +84,15 @@ models) from a model. See the documentation for your object's class:</p><ul><li>
 <li><p><a href="get_parameters.htest.html">Hypothesis tests</a> (<code>htest</code>)</p></li>
 </ul></div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">get_parameters</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu">get_parameters</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A fitted model.</p></td>
     </tr><tr><th>...</th>
       <td><p>Currently not used.</p></td>
@@ -103,14 +104,14 @@ models) from a model. See the documentation for your object's class:</p><ul><li>
     <h2>Value</h2>
     
 <ul><li><p>for non-Bayesian models, a data frame with two columns: the parameter names and the related point estimates.</p></li>
-<li><p>for Anova (<code><a href="https://rdrr.io/r/stats/aov.html">aov()</a></code>) with error term, a list of parameters for the conditional and the random effects parameters</p></li>
+<li><p>for Anova (<code><a href="https://rdrr.io/r/stats/aov.html" class="external-link">aov()</a></code>) with error term, a list of parameters for the conditional and the random effects parameters</p></li>
 </ul></div>
     <div id="details">
     <h2>Details</h2>
     <p>In most cases when models either return different "effects" (fixed,
 random) or "components" (conditional, zero-inflated, ...), the arguments
 <code>effects</code> and <code>component</code> can be used.
-<br><br><code>get_parameters()</code> is comparable to <code><a href="https://rdrr.io/r/stats/coef.html">coef()</a></code>, however, the coefficients
+<br><br><code><a href="../reference/get_parameters.html">get_parameters()</a></code> is comparable to <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code>, however, the coefficients
 are returned as data frame (with columns for names and point estimates of
 coefficients). For Bayesian models, the posterior samples of parameters are
 returned.</p>
@@ -118,14 +119,15 @@ returned.</p>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_parameters</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Parameter   Estimate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 (Intercept) 38.7460642</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          wt -3.2463673</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         cyl -1.3641033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          vs  0.5241721</span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
+<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+<span class="fu"><a href="../reference/get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
+<span class="co">#&gt;     Parameter   Estimate</span>
+<span class="co">#&gt; 1 (Intercept) 38.7460642</span>
+<span class="co">#&gt; 2          wt -3.2463673</span>
+<span class="co">#&gt; 3         cyl -1.3641033</span>
+<span class="co">#&gt; 4          vs  0.5241721</span>
 </code></pre></div>
     </div>
   </div>

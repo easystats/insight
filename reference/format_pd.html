@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -42,7 +42,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Probability of direction (pd) formatting</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/format_pd.R"><code>R/format_pd.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/format_pd.R" class="external-link"><code>R/format_pd.R</code></a></small>
     <div class="hidden name"><code>format_pd.Rd</code></div>
     </div>
 
@@ -65,11 +65,12 @@
     <p>Probability of direction (pd) formatting</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">format_pd</span><span class="op">(</span><span class="va">pd</span>, stars <span class="op">=</span> <span class="cn">FALSE</span>, stars_only <span class="op">=</span> <span class="cn">FALSE</span>, name <span class="op">=</span> <span class="st">"pd"</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/format_pd.html">format_pd</a></span><span class="op">(</span><span class="va">pd</span>, stars <span class="op">=</span> <span class="cn">FALSE</span>, stars_only <span class="op">=</span> <span class="cn">FALSE</span>, name <span class="op">=</span> <span class="st">"pd"</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>pd</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>pd</th>
       <td><p>Probability of direction (pd).</p></td>
     </tr><tr><th>stars</th>
       <td><p>Add significance stars (e.g., p &lt; .001***).</p></td>
@@ -86,13 +87,14 @@
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">format_pd</span><span class="op">(</span><span class="fl">0.12</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "pd = 12.00%"</span>
-<span class="r-in"><span class="fu">format_pd</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.12</span>, <span class="fl">1</span>, <span class="fl">0.9999</span>, <span class="fl">0.98</span>, <span class="fl">0.995</span>, <span class="fl">0.96</span><span class="op">)</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "12.00%" "100%"   "99.99%" "98.00%" "99.50%" "96.00%"</span>
-<span class="r-in"><span class="fu">format_pd</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.12</span>, <span class="fl">1</span>, <span class="fl">0.9999</span>, <span class="fl">0.98</span>, <span class="fl">0.995</span>, <span class="fl">0.96</span><span class="op">)</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "pd = 12.00%"    "pd = 100%***"   "pd = 99.99%***" "pd = 98.00%*"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "pd = 99.50%**"  "pd = 96.00%"   </span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/format_pd.html">format_pd</a></span><span class="op">(</span><span class="fl">0.12</span><span class="op">)</span>
+<span class="co">#&gt; [1] "pd = 12.00%"</span>
+<span class="fu"><a href="../reference/format_pd.html">format_pd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.12</span>, <span class="fl">1</span>, <span class="fl">0.9999</span>, <span class="fl">0.98</span>, <span class="fl">0.995</span>, <span class="fl">0.96</span><span class="op">)</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
+<span class="co">#&gt; [1] "12.00%" "100%"   "99.99%" "98.00%" "99.50%" "96.00%"</span>
+<span class="fu"><a href="../reference/format_pd.html">format_pd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.12</span>, <span class="fl">1</span>, <span class="fl">0.9999</span>, <span class="fl">0.98</span>, <span class="fl">0.995</span>, <span class="fl">0.96</span><span class="op">)</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; [1] "pd = 12.00%"    "pd = 100%***"   "pd = 99.99%***" "pd = 98.00%*"  </span>
+<span class="co">#&gt; [5] "pd = 99.50%**"  "pd = 96.00%"   </span>
 </code></pre></div>
     </div>
   </div>

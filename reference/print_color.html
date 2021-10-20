@@ -18,7 +18,7 @@ Mainly implemented to reduce package dependencies."><meta property="og:image" co
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@ Mainly implemented to reduce package dependencies."><meta property="og:image" co
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -58,7 +58,7 @@ Mainly implemented to reduce package dependencies."><meta property="og:image" co
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Coloured console output</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/print_color.R"><code>R/print_color.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/print_color.R" class="external-link"><code>R/print_color.R</code></a></small>
     <div class="hidden name"><code>print_color.Rd</code></div>
     </div>
 
@@ -67,19 +67,20 @@ Mainly implemented to reduce package dependencies."><meta property="og:image" co
 Mainly implemented to reduce package dependencies.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">print_color</span><span class="op">(</span><span class="va">text</span>, <span class="va">color</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/print_color.html">print_color</a></span><span class="op">(</span><span class="va">text</span>, <span class="va">color</span><span class="op">)</span>
 
-<span class="fu">print_colour</span><span class="op">(</span><span class="va">text</span>, <span class="va">colour</span><span class="op">)</span>
+<span class="fu"><a href="../reference/print_color.html">print_colour</a></span><span class="op">(</span><span class="va">text</span>, <span class="va">colour</span><span class="op">)</span>
 
-<span class="fu">color_text</span><span class="op">(</span><span class="va">text</span>, <span class="va">color</span><span class="op">)</span>
+<span class="fu"><a href="../reference/print_color.html">color_text</a></span><span class="op">(</span><span class="va">text</span>, <span class="va">color</span><span class="op">)</span>
 
-<span class="fu">colour_text</span><span class="op">(</span><span class="va">text</span>, <span class="va">colour</span><span class="op">)</span>
+<span class="fu"><a href="../reference/print_color.html">colour_text</a></span><span class="op">(</span><span class="va">text</span>, <span class="va">colour</span><span class="op">)</span>
 
-<span class="fu">color_theme</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/print_color.html">color_theme</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>text</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>text</th>
       <td><p>The text to print.</p></td>
     </tr><tr><th>color, colour</th>
       <td><p>Character vector, indicating the colour for printing.
@@ -95,17 +96,18 @@ with <code>"bold"</code> or <code>"italic"</code>.</p></td>
     <div id="details">
     <h2>Details</h2>
     <p>This function prints <code>text</code> directly to the console using
-<code><a href="https://rdrr.io/r/base/cat.html">cat()</a></code>, so no string is returned. <code>color_text()</code>, however,
-returns only the formatted string, without using <code><a href="https://rdrr.io/r/base/cat.html">cat()</a></code>.
-<code>color_theme()</code> either returns <code>"dark"</code> when RStudio is used
+<code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>, so no string is returned. <code><a href="../reference/print_color.html">color_text()</a></code>, however,
+returns only the formatted string, without using <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>.
+<code><a href="../reference/print_color.html">color_theme()</a></code> either returns <code>"dark"</code> when RStudio is used
 with dark color scheme, <code>"light"</code> when it's used with light theme,
 and <code>NULL</code> if the theme could not be detected.</p>
     </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">print_color</span><span class="op">(</span><span class="st">"I'm blue dabedi dabedei"</span>, <span class="st">"blue"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">I'm blue dabedi dabedei</span></span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/print_color.html">print_color</a></span><span class="op">(</span><span class="st">"I'm blue dabedi dabedei"</span>, <span class="st">"blue"</span><span class="op">)</span>
+<span class="co">#&gt; I'm blue dabedi dabedei</span>
 </code></pre></div>
     </div>
   </div>

@@ -20,7 +20,7 @@ was used for transformation."><meta property="og:image" content="/logo.png"><!--
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">insight</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.14.5.1</span>
       </span>
     </div>
 
@@ -45,7 +45,7 @@ was used for transformation."><meta property="og:image" content="/logo.png"><!--
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/insight/">
+  <a href="https://github.com/easystats/insight/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -60,7 +60,7 @@ was used for transformation."><meta property="og:image" content="/logo.png"><!--
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Return function of transformed response variables</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_transformation.R"><code>R/get_transformation.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_transformation.R" class="external-link"><code>R/get_transformation.R</code></a></small>
     <div class="hidden name"><code>get_transformation.Rd</code></div>
     </div>
 
@@ -71,11 +71,12 @@ variable) in a regression formula, and returns the related function that
 was used for transformation.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">get_transformation</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/get_transformation.html">get_transformation</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A regression model.</p></td>
     </tr></table></div>
 
@@ -90,43 +91,44 @@ transformation was applied, both list-elements <code>$transformation</code> and
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># identity, no transformation</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_transformation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $transformation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x1242108a0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x1242100c0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inverse</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x1242108a0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x1242100c0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># log-transformation</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_transformation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $transformation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x, base = exp(1))  .Primitive("log")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inverse</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x)  .Primitive("exp")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># log-function</span></span>
-<span class="r-in"><span class="fu">get_transformation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="fu">transformation</span><span class="op">(</span><span class="fl">.3</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.203973</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">.3</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.203973</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># inverse function is exp()</span></span>
-<span class="r-in"><span class="fu">get_transformation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="fu">inverse</span><span class="op">(</span><span class="fl">.3</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.349859</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">.3</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.349859</span>
+    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># identity, no transformation</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="fu"><a href="../reference/get_transformation.html">get_transformation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="co">#&gt; $transformation</span>
+<span class="co">#&gt; function (x) </span>
+<span class="co">#&gt; x</span>
+<span class="co">#&gt; &lt;bytecode: 0x7ff3822b3270&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x7ff3822bbf30&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $inverse</span>
+<span class="co">#&gt; function (x) </span>
+<span class="co">#&gt; x</span>
+<span class="co">#&gt; &lt;bytecode: 0x7ff3822b3270&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x7ff3822bbf30&gt;</span>
+<span class="co">#&gt; </span>
+
+<span class="co"># log-transformation</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="fu"><a href="../reference/get_transformation.html">get_transformation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="co">#&gt; $transformation</span>
+<span class="co">#&gt; function (x, base = exp(1))  .Primitive("log")</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $inverse</span>
+<span class="co">#&gt; function (x)  .Primitive("exp")</span>
+<span class="co">#&gt; </span>
+
+<span class="co"># log-function</span>
+<span class="fu"><a href="../reference/get_transformation.html">get_transformation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="fu">transformation</span><span class="op">(</span><span class="fl">.3</span><span class="op">)</span>
+<span class="co">#&gt; [1] -1.203973</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">.3</span><span class="op">)</span>
+<span class="co">#&gt; [1] -1.203973</span>
+
+<span class="co"># inverse function is exp()</span>
+<span class="fu"><a href="../reference/get_transformation.html">get_transformation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="fu">inverse</span><span class="op">(</span><span class="fl">.3</span><span class="op">)</span>
+<span class="co">#&gt; [1] 1.349859</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">.3</span><span class="op">)</span>
+<span class="co">#&gt; [1] 1.349859</span>
 </code></pre></div>
     </div>
   </div>
