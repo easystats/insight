@@ -1409,9 +1409,13 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
     frand <- names(dt)[which(dt == "random")]
 
     if (!.is_empty_object(frand)) {
-      f.random <- stats::as.formula(paste0("~", frand))
-      fcond <- sub(frand, "", fcond, fixed = TRUE)
-      fcond <- gsub("(.*)\\+$", "\\1", .trim(fcond))
+      f.random <- stats::as.formula(paste0("~", paste(frand, collapse = " + ")))
+      for (i in frand) {
+        fcond <- sub(i, "", fcond, fixed = TRUE)
+      }
+      while (grepl("\\+$", .trim(fcond))) {
+        fcond <- gsub("(.*)\\+$", "\\1", .trim(fcond))
+      }
       # random effects only?
       if (grepl("~$", fcond)) {
         fcond <- paste(fcond, "1")
