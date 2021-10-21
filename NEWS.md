@@ -11,6 +11,9 @@
 * Fixed issues with manual sigma computation to handle dispersion models 
   in `get_sigma()`.
 
+* Fixed issue in `find_formula()` for `BayesFactor::lmBF()` with multiple
+  random effects.
+
 # insight 0.14.5
 
 ## New functions
