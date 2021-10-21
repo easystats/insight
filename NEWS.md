@@ -14,6 +14,9 @@
 * Fixed issue in `find_formula()` for `BayesFactor::lmBF()` with multiple
   random effects.
 
+* Fixed issue in `get_parameters.BFBayesFactor()` with wrong sign of difference
+  estimate for t-tests.
+
 # insight 0.14.5
 
 ## New functions
