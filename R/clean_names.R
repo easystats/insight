@@ -74,6 +74,9 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
     return(x)
   }
   out <- sapply(x, function(.x) {
+    # in case we have ranges, like [2:5], remove those first, so it's not
+    # treated as "interaction"
+    .x <- sub("\\[(\\d+):(\\d+)\\]", "", .x)
     if (grepl(":", .x, fixed = TRUE) && !grepl("::", .x, fixed = TRUE)) {
       paste(sapply(
         strsplit(.x, ":", fixed = TRUE),
