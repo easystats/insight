@@ -69,56 +69,55 @@ estimates. In most cases, this is the related column from
 <code>coef(summary())</code>.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span><span class="va">x</span>, column_index <span class="op">=</span> <span class="fl">3</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, column_index <span class="op">=</span> <span class="fl">3</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for glmmTMB</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span>
+<span class="fu">get_statistic</span><span class="op">(</span>
   <span class="va">x</span>,
   component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"dispersion"</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for clm2</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"scale"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"scale"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for betamfx</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span>
+<span class="fu">get_statistic</span><span class="op">(</span>
   <span class="va">x</span>,
   component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"precision"</span>, <span class="st">"marginal"</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for logitmfx</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"marginal"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"marginal"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for mjoint</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"survival"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"survival"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for emmGrid</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span><span class="va">x</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, adjust <span class="op">=</span> <span class="st">"none"</span>, merge_parameters <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, adjust <span class="op">=</span> <span class="st">"none"</span>, merge_parameters <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for gee</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span><span class="va">x</span>, robust <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, robust <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for betareg</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"precision"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"precision"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for DirichletRegModel</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"precision"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"precision"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A model.</p></td>
     </tr><tr><th>...</th>
       <td><p>Currently not used.</p></td>
     </tr><tr><th>column_index</th>
       <td><p>For model objects that have no defined
-<code><a href="../reference/get_statistic.html">get_statistic()</a></code> method yet, the default method is called. This
+<code>get_statistic()</code> method yet, the default method is called. This
 method tries to extract the statistic column from <code>coef(summary())</code>,
 where the index of the column that is being pulled is <code>column_index</code>.
 Defaults to 3, which is the default statistic column for most models'
@@ -150,23 +149,24 @@ as values.</p></td>
 standard errors is returned.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A data frame with the model's parameter names and the related test
 statistic.</p>
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
-<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
-<span class="fu"><a href="../reference/get_statistic.html">get_statistic</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
-<span class="co">#&gt;     Parameter  Statistic</span>
-<span class="co">#&gt; 1 (Intercept) 11.3994647</span>
-<span class="co">#&gt; 2          wt -4.1204121</span>
-<span class="co">#&gt; 3         cyl -2.2234114</span>
-<span class="co">#&gt; 4          vs  0.3221477</span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">get_statistic</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Parameter  Statistic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 (Intercept) 11.3994647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          wt -4.1204121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         cyl -2.2234114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          vs  0.3221477</span>
 </code></pre></div>
     </div>
   </div>

@@ -65,36 +65,36 @@
     <p>Reshape CI between wide/long formats.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/reshape_ci.html">reshape_ci</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">reshape_ci</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A data frame containing columns named <code>CI_low</code> and <code>CI_high</code>.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
-  Parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Term 1"</span>, <span class="st">"Term 2"</span>, <span class="st">"Term 1"</span>, <span class="st">"Term 2"</span><span class="op">)</span>,
-  CI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.8</span>, <span class="fl">.9</span>, <span class="fl">.9</span><span class="op">)</span>,
-  CI_low <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.3</span>, <span class="fl">.1</span>, <span class="fl">.15</span><span class="op">)</span>,
-  CI_high <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.6</span>, <span class="fl">.8</span>, <span class="fl">.85</span><span class="op">)</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-<span class="fu"><a href="../reference/reshape_ci.html">reshape_ci</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="co">#&gt;   Parameter CI_low_0.8 CI_high_0.8 CI_low_0.9 CI_high_0.9</span>
-<span class="co">#&gt; 1    Term 1        0.2         0.5       0.10        0.80</span>
-<span class="co">#&gt; 2    Term 2        0.3         0.6       0.15        0.85</span>
-<span class="fu"><a href="../reference/reshape_ci.html">reshape_ci</a></span><span class="op">(</span><span class="fu"><a href="../reference/reshape_ci.html">reshape_ci</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;   Parameter  CI CI_low CI_high</span>
-<span class="co">#&gt; 1    Term 1 0.8   0.20    0.50</span>
-<span class="co">#&gt; 2    Term 1 0.9   0.10    0.80</span>
-<span class="co">#&gt; 3    Term 2 0.8   0.30    0.60</span>
-<span class="co">#&gt; 4    Term 2 0.9   0.15    0.85</span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span class="r-in">  Parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Term 1"</span>, <span class="st">"Term 2"</span>, <span class="st">"Term 1"</span>, <span class="st">"Term 2"</span><span class="op">)</span>,</span>
+<span class="r-in">  CI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.8</span>, <span class="fl">.9</span>, <span class="fl">.9</span><span class="op">)</span>,</span>
+<span class="r-in">  CI_low <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.3</span>, <span class="fl">.1</span>, <span class="fl">.15</span><span class="op">)</span>,</span>
+<span class="r-in">  CI_high <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.6</span>, <span class="fl">.8</span>, <span class="fl">.85</span><span class="op">)</span>,</span>
+<span class="r-in">  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="fu">reshape_ci</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Parameter CI_low_0.8 CI_high_0.8 CI_low_0.9 CI_high_0.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Term 1        0.2         0.5       0.10        0.80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    Term 2        0.3         0.6       0.15        0.85</span>
+<span class="r-in"><span class="fu">reshape_ci</span><span class="op">(</span><span class="fu">reshape_ci</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Parameter  CI CI_low CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Term 1 0.8   0.20    0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    Term 1 0.9   0.10    0.80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    Term 2 0.8   0.30    0.60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    Term 2 0.9   0.15    0.85</span>
 </code></pre></div>
     </div>
   </div>

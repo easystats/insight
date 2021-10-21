@@ -65,12 +65,11 @@
     <p>Convert number to words</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/format_number.html">format_number</a></span><span class="op">(</span><span class="va">x</span>, textual <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, textual <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>Number.</p></td>
     </tr><tr><th>textual</th>
       <td><p>Return words. If <code>FALSE</code>, will run <code><a href="format_value.html">format_value()</a></code>.</p></td>
@@ -78,6 +77,7 @@
       <td><p>Arguments to be passed to <code><a href="format_value.html">format_value()</a></code> if <code>textual</code> is <code>FALSE</code>.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A formatted string.</p>
@@ -86,16 +86,16 @@
     <h2>Note</h2>
     <p>The code has been adapted from here https://github.com/ateucher/useful_code/blob/master/R/numbers2words.r</p>
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/format_number.html">format_number</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
-<span class="co">#&gt; [1] "two"</span>
-<span class="fu"><a href="../reference/format_number.html">format_number</a></span><span class="op">(</span><span class="fl">45</span><span class="op">)</span>
-<span class="co">#&gt; [1] "forty five"</span>
-<span class="fu"><a href="../reference/format_number.html">format_number</a></span><span class="op">(</span><span class="fl">324.68765</span><span class="op">)</span>
-<span class="co">#&gt; [1] "three hundred and twenty five"</span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">format_number</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "two"</span>
+<span class="r-in"><span class="fu">format_number</span><span class="op">(</span><span class="fl">45</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "forty five"</span>
+<span class="r-in"><span class="fu">format_number</span><span class="op">(</span><span class="fl">324.68765</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "three hundred and twenty five"</span>
 </code></pre></div>
     </div>
   </div>

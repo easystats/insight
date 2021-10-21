@@ -69,12 +69,11 @@ Line length is adjusted to maximum length of the console, if the width
 can be accessed. By default, new lines are indented by two whitespace.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/format_message.html">format_message</a></span><span class="op">(</span><span class="va">string</span>, <span class="va">...</span>, line_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">width</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">format_message</span><span class="op">(</span><span class="va">string</span>, <span class="va">...</span>, line_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">width</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>string</th>
+    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>string</th>
       <td><p>A string.</p></td>
     </tr><tr><th>...</th>
       <td><p>Further strings that will be concatenated as indented new lines.</p></td>
@@ -82,35 +81,36 @@ can be accessed. By default, new lines are indented by two whitespace.</p>
       <td><p>Numeric, the maximum length of a line.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A formatted string.</p>
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_message.html">format_message</a></span><span class="op">(</span><span class="st">"Much too long string for just one line, I guess!"</span>,
-  line_length <span class="op">=</span> <span class="fl">15</span>
-<span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span>
-<span class="co">#&gt; Much too long</span>
-<span class="co">#&gt;   string for just</span>
-<span class="co">#&gt;   one line, I</span>
-<span class="co">#&gt;   guess!</span>
-
-<span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_message.html">format_message</a></span><span class="op">(</span><span class="st">"Much too long string for just one line, I guess!"</span>,
-  <span class="st">"First new line"</span>,
-  <span class="st">"Second new line"</span>,
-  <span class="st">"(both indented)"</span>,
-  line_length <span class="op">=</span> <span class="fl">30</span>
-<span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span>
-<span class="co">#&gt; Much too long string for just</span>
-<span class="co">#&gt;   one line, I guess!</span>
-<span class="co">#&gt;   First new line</span>
-<span class="co">#&gt;   Second new line</span>
-<span class="co">#&gt;   (both indented)</span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">format_message</span><span class="op">(</span><span class="st">"Much too long string for just one line, I guess!"</span>,</span>
+<span class="r-in">  line_length <span class="op">=</span> <span class="fl">15</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Much too long</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   string for just</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   one line, I</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   guess!</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">format_message</span><span class="op">(</span><span class="st">"Much too long string for just one line, I guess!"</span>,</span>
+<span class="r-in">  <span class="st">"First new line"</span>,</span>
+<span class="r-in">  <span class="st">"Second new line"</span>,</span>
+<span class="r-in">  <span class="st">"(both indented)"</span>,</span>
+<span class="r-in">  line_length <span class="op">=</span> <span class="fl">30</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Much too long string for just</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   one line, I guess!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   First new line</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   Second new line</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   (both indented)</span>
 </code></pre></div>
     </div>
   </div>

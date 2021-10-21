@@ -62,14 +62,13 @@
     </div>
 
     <div class="ref-description">
-    <p>The <code><a href="../reference/get_predicted.html">get_predicted()</a></code> function is a robust, flexible and user-friendly alternative to base R <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's <code>predict</code> function. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the <code>Details</code> section for more information.</p>
+    <p>The <code>get_predicted()</code> function is a robust, flexible and user-friendly alternative to base R <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's <code>predict</code> function. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the <code>Details</code> section for more information.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for lm</span>
-<span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span>
+<span class="fu">get_predicted</span><span class="op">(</span>
   <span class="va">x</span>,
   data <span class="op">=</span> <span class="cn">NULL</span>,
   predict <span class="op">=</span> <span class="st">"expectation"</span>,
@@ -79,7 +78,7 @@
 <span class="op">)</span>
 
 <span class="co"># S3 method for stanreg</span>
-<span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span>
+<span class="fu">get_predicted</span><span class="op">(</span>
   <span class="va">x</span>,
   data <span class="op">=</span> <span class="cn">NULL</span>,
   predict <span class="op">=</span> <span class="st">"expectation"</span>,
@@ -92,7 +91,7 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).</p></td>
     </tr><tr><th>...</th>
@@ -132,6 +131,7 @@ are not depending on it. (default), <code><a href="https://rdrr.io/r/base/mean.h
 <code><a href="https://easystats.github.io/bayestestR/reference/map_estimate.html" class="external-link">bayestestR::map_estimate()</a></code>.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>The fitted values (i.e. predictions for the response). For Bayesian
@@ -140,7 +140,7 @@ columns and observations are rows) can be accessed via <code>as.data.frame</code
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>In <code><a href="../reference/get_predicted.html">insight::get_predicted()</a></code>, the <code>predict</code> argument jointly
+    <p>In <code>insight::get_predicted()</code>, the <code>predict</code> argument jointly
 modulates two separate concepts, the <strong>scale</strong> and the <strong>uncertainty interval</strong>.</p>
 <div class="section">
 <h3 id="confidence-interval-ci-vs-prediction-interval-pi-">Confidence Interval (CI) vs. Prediction Interval (PI))<a class="anchor" aria-label="anchor" href="#confidence-interval-ci-vs-prediction-interval-pi-"></a></h3>
@@ -173,7 +173,7 @@ scale, and no transformation is applied. For instance, for a logistic
 regression model, the response scale corresponds to the predicted
 probabilities, whereas the link-scale makes predictions of log-odds
 (probabilities on the logit scale). Note that when users select
-<code>predict="classification"</code> in binomial models, the <code><a href="../reference/get_predicted.html">get_predicted()</a></code>
+<code>predict="classification"</code> in binomial models, the <code>get_predicted()</code>
 function will first calculate predictions as if the user had selected
 <code>predict="expectation"</code>. Then, it will round the responses in order to
 return the most likely outcome.</p>
@@ -184,191 +184,191 @@ return the most likely outcome.</p>
     <h2>See also</h2>
     <div class="dont-index"><p><code><a href="get_predicted_ci.html">get_predicted_ci()</a></code></p></div>
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
-
-<span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="va">predictions</span>
-<span class="co">#&gt; Predicted values:</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  [1] 21.21678 21.21678 26.07124 21.21678 15.44448 21.31239 14.10597 26.66401</span>
-<span class="co">#&gt;  [9] 26.03299 20.96820 20.96820 15.34888 15.34888 15.34888 14.87083 14.67962</span>
-<span class="co">#&gt; [17] 14.39279 26.58752 26.85523 26.60665 25.99475 15.92253 15.92253 14.10597</span>
-<span class="co">#&gt; [25] 15.44448 26.58752 26.10948 25.68880 13.74265 19.97387 12.38501 25.76529</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; NOTE: Confidence intervals, if available, are stored as attributes and can be accessed using `as.data.frame()` on this output.</span>
-
-<span class="co"># Options and methods ---------------------</span>
-<span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span>
-<span class="co">#&gt; Predicted values:</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  [1] 21.21678 21.21678 26.07124 21.21678 15.44448 21.31239 14.10597 26.66401</span>
-<span class="co">#&gt;  [9] 26.03299 20.96820 20.96820 15.34888 15.34888 15.34888 14.87083 14.67962</span>
-<span class="co">#&gt; [17] 14.39279 26.58752 26.85523 26.60665 25.99475 15.92253 15.92253 14.10597</span>
-<span class="co">#&gt; [25] 15.44448 26.58752 26.10948 25.68880 13.74265 19.97387 12.38501 25.76529</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; NOTE: Confidence intervals, if available, are stored as attributes and can be accessed using `as.data.frame()` on this output.</span>
-
-<span class="co"># Get CI</span>
-<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span>
-<span class="co">#&gt;                     Predicted        SE    CI_low  CI_high</span>
-<span class="co">#&gt; Mazda RX4            21.21678 0.7281647 19.727518 22.70605</span>
-<span class="co">#&gt; Mazda RX4 Wag        21.21678 0.7281647 19.727518 22.70605</span>
-<span class="co">#&gt; Datsun 710           26.07124 0.9279509 24.173366 27.96911</span>
-<span class="co">#&gt; Hornet 4 Drive       21.21678 0.7281647 19.727518 22.70605</span>
-<span class="co">#&gt; Hornet Sportabout    15.44448 0.9200310 13.562810 17.32616</span>
-<span class="co">#&gt; Valiant              21.31239 0.7777664 19.721680 22.90310</span>
-<span class="co">#&gt; Duster 360           14.10597 1.0080670 12.044237 16.16769</span>
-<span class="co">#&gt; Merc 240D            26.66401 0.9225132 24.777260 28.55076</span>
-<span class="co">#&gt; Merc 230             26.03299 0.9362657 24.118117 27.94787</span>
-<span class="co">#&gt; Merc 280             20.96820 0.6234320 19.693139 22.24326</span>
-<span class="co">#&gt; Merc 280C            20.96820 0.6234320 19.693139 22.24326</span>
-<span class="co">#&gt; Merc 450SE           15.34888 0.8862558 13.536280 17.16147</span>
-<span class="co">#&gt; Merc 450SL           15.34888 0.8862558 13.536280 17.16147</span>
-<span class="co">#&gt; Merc 450SLC          15.34888 0.8862558 13.536280 17.16147</span>
-<span class="co">#&gt; Cadillac Fleetwood   14.87083 0.8057154 13.222961 16.51871</span>
-<span class="co">#&gt; Lincoln Continental  14.67962 0.8206255 13.001249 16.35798</span>
-<span class="co">#&gt; Chrysler Imperial    14.39279 0.8911693 12.570146 16.21544</span>
-<span class="co">#&gt; Fiat 128             26.58752 0.9099596 24.726448 28.44860</span>
-<span class="co">#&gt; Honda Civic          26.85523 0.9695585 24.872258 28.83820</span>
-<span class="co">#&gt; Toyota Corolla       26.60665 0.9127445 24.739874 28.47342</span>
-<span class="co">#&gt; Toyota Corona        25.99475 0.9454598 24.061069 27.92843</span>
-<span class="co">#&gt; Dodge Challenger     15.92253 1.1490264 13.572504 18.27255</span>
-<span class="co">#&gt; AMC Javelin          15.92253 1.1490264 13.572504 18.27255</span>
-<span class="co">#&gt; Camaro Z28           14.10597 1.0080670 12.044237 16.16769</span>
-<span class="co">#&gt; Pontiac Firebird     15.44448 0.9200310 13.562810 17.32616</span>
-<span class="co">#&gt; Fiat X1-9            26.58752 0.9099596 24.726448 28.44860</span>
-<span class="co">#&gt; Porsche 914-2        26.10948 0.9205392 24.226768 27.99220</span>
-<span class="co">#&gt; Lotus Europa         25.68880 1.0474287 23.546572 27.83104</span>
-<span class="co">#&gt; Ford Pantera L       13.74265 1.2011595 11.286007 16.19930</span>
-<span class="co">#&gt; Ferrari Dino         19.97387 0.7635547 18.412227 21.53552</span>
-<span class="co">#&gt; Maserati Bora        12.38501 2.1153615  8.058613 16.71141</span>
-<span class="co">#&gt; Volvo 142E           25.76529 1.0175965 23.684073 27.84651</span>
-
-<span class="co"># Bootstrapped</span>
-<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    Predicted        SE    CI_low  CI_high   iter_1   iter_2    iter_3   iter_4</span>
-<span class="co">#&gt; 1   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465</span>
-<span class="co">#&gt; 2   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465</span>
-<span class="co">#&gt; 3   26.68824 2.1071592 23.923281 28.45535 27.17221 28.54269 23.659855 27.37819</span>
-<span class="co">#&gt; 4   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465</span>
-<span class="co">#&gt; 5   15.13788 0.6993607 14.449638 16.00809 15.17414 14.88754 16.075708 14.41413</span>
-<span class="co">#&gt; 6   21.50666 0.2661665 21.218778 21.82150 21.44688 21.84475 21.200284 21.53475</span>
-<span class="co">#&gt; 7   13.70504 0.9691530 12.860329 14.57005 14.51349 14.57464 12.859324 12.87272</span>
-<span class="co">#&gt; 8   27.32278 1.5728255 25.262793 28.63473 27.46478 28.68126 25.084254 28.06082</span>
-<span class="co">#&gt; 9   26.64730 2.1423408 23.836861 28.44378 27.15333 28.53375 23.567958 27.33415</span>
-<span class="co">#&gt; 10  21.13822 0.5763256 20.430601 21.72774 21.27699 21.76429 20.373213 21.13838</span>
-<span class="co">#&gt; 11  21.13822 0.5763256 20.430601 21.72774 21.27699 21.76429 20.373213 21.13838</span>
-<span class="co">#&gt; 12  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403</span>
-<span class="co">#&gt; 13  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403</span>
-<span class="co">#&gt; 14  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403</span>
-<span class="co">#&gt; 15  14.52381 0.5199296 13.824308 14.88069 14.89101 14.75344 14.697258 13.75353</span>
-<span class="co">#&gt; 16  14.31912 0.5784758 13.586160 14.79003 14.79663 14.70874 14.237774 13.53333</span>
-<span class="co">#&gt; 17  14.01208 0.7481657 13.228939 14.65405 14.65506 14.64169 13.548549 13.20302</span>
-<span class="co">#&gt; 18  27.24090 1.6402586 25.089953 28.61158 27.42703 28.66338 24.900460 27.97274</span>
-<span class="co">#&gt; 19  27.52747 1.4071749 25.694894 28.69259 27.55916 28.72596 25.543737 28.28102</span>
-<span class="co">#&gt; 20  27.26137 1.6233459 25.133163 28.61737 27.43647 28.66785 24.946409 27.99476</span>
-<span class="co">#&gt; 21  26.60636 2.1775842 23.750441 28.43221 27.13446 28.52481 23.476061 27.29011</span>
-<span class="co">#&gt; 22  15.64961 1.0691873 14.967235 17.08834 15.41009 14.99929 17.224417 14.96464</span>
-<span class="co">#&gt; 23  15.64961 1.0691873 14.967235 17.08834 15.41009 14.99929 17.224417 14.96464</span>
-<span class="co">#&gt; 24  13.70504 0.9691530 12.860329 14.57005 14.51349 14.57464 12.859324 12.87272</span>
-<span class="co">#&gt; 25  15.13788 0.6993607 14.449638 16.00809 15.17414 14.88754 16.075708 14.41413</span>
-<span class="co">#&gt; 26  27.24090 1.6402586 25.089953 28.61158 27.42703 28.66338 24.900460 27.97274</span>
-<span class="co">#&gt; 27  26.72917 2.0720426 24.009701 28.46693 27.19108 28.55163 23.751752 27.42223</span>
-<span class="co">#&gt; 28  26.27885 2.4614371 23.055655 28.34305 26.98345 28.45329 22.740888 26.93779</span>
-<span class="co">#&gt; 29  13.31613 1.2812482 12.021408 14.47804 14.33417 14.48970 11.986305 12.45434</span>
-<span class="co">#&gt; 30  20.07382 1.5283530 18.134607 21.47592 20.78622 21.53184 17.983899 19.99334</span>
-<span class="co">#&gt; 31  11.86282 2.5413452  8.886492 14.13421 13.66407 14.17233  8.723972 10.89091</span>
-<span class="co">#&gt; 32  26.36073 2.3901892 23.231920 28.36277 27.02120 28.47117 22.924681 27.02587</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="co"># Same as as.data.frame(..., keep_iterations = F)</span>
-<span class="co">#&gt;    Predicted        SE   CI_low  CI_high</span>
-<span class="co">#&gt; 1   20.79277 0.4191720 20.40466 21.32894</span>
-<span class="co">#&gt; 2   20.79277 0.4191720 20.40466 21.32894</span>
-<span class="co">#&gt; 3   25.80472 1.6752669 24.17555 27.89555</span>
-<span class="co">#&gt; 4   20.79277 0.4191720 20.40466 21.32894</span>
-<span class="co">#&gt; 5   15.02221 1.4760667 13.08730 16.25470</span>
-<span class="co">#&gt; 6   20.87179 0.4824623 20.39369 21.47334</span>
-<span class="co">#&gt; 7   13.91592 0.8563141 13.18083 14.97353</span>
-<span class="co">#&gt; 8   26.29465 1.4076209 24.74293 27.85412</span>
-<span class="co">#&gt; 9   25.77311 1.6949509 24.13895 27.89822</span>
-<span class="co">#&gt; 10  20.58731 0.2716659 20.41033 20.95349</span>
-<span class="co">#&gt; 11  20.58731 0.2716659 20.41033 20.95349</span>
-<span class="co">#&gt; 12  14.94319 1.4180929 13.09398 16.16318</span>
-<span class="co">#&gt; 13  14.94319 1.4180929 13.09398 16.16318</span>
-<span class="co">#&gt; 14  14.94319 1.4180929 13.09398 16.16318</span>
-<span class="co">#&gt; 15  14.54809 1.1493426 13.12739 15.70562</span>
-<span class="co">#&gt; 16  14.39005 1.0556934 13.14075 15.52260</span>
-<span class="co">#&gt; 17  14.15298 0.9376581 13.16079 15.24806</span>
-<span class="co">#&gt; 18  26.23143 1.4375043 24.66972 27.85947</span>
-<span class="co">#&gt; 19  26.45269 1.3403888 24.92595 27.84076</span>
-<span class="co">#&gt; 20  26.24724 1.4298837 24.68802 27.85813</span>
-<span class="co">#&gt; 21  25.74151 1.7148722 24.10235 27.90089</span>
-<span class="co">#&gt; 22  15.41732 1.7795023 13.03686 16.72929</span>
-<span class="co">#&gt; 23  15.41732 1.7795023 13.03686 16.72929</span>
-<span class="co">#&gt; 24  13.91592 0.8563141 13.18083 14.97353</span>
-<span class="co">#&gt; 25  15.02221 1.4760667 13.08730 16.25470</span>
-<span class="co">#&gt; 26  26.23143 1.4375043 24.66972 27.85947</span>
-<span class="co">#&gt; 27  25.83633 1.6558286 24.21216 27.89287</span>
-<span class="co">#&gt; 28  25.48864 1.8818604 23.80951 27.92227</span>
-<span class="co">#&gt; 29  13.61564 0.8226222 12.81194 14.62578</span>
-<span class="co">#&gt; 30  19.76550 0.5808276 19.44717 20.55177</span>
-<span class="co">#&gt; 31  12.49355 1.3168882 10.79937 13.50598</span>
-<span class="co">#&gt; 32  25.55186 1.8389438 23.88272 27.91693</span>
-
-<span class="co"># Different predicttion types ------------------------</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span><span class="op">)</span>
-
-<span class="co"># Fit a logistic model</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span>
-
-<span class="co"># Expectation (default): response scale + CI</span>
-<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"expectation"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    Predicted         SE      CI_low    CI_high</span>
-<span class="co">#&gt; 1 0.16579367 0.05943589 0.078854431 0.31573138</span>
-<span class="co">#&gt; 2 0.06637193 0.03625646 0.022083989 0.18286787</span>
-<span class="co">#&gt; 3 0.02479825 0.01843411 0.005675609 0.10175666</span>
-<span class="co">#&gt; 4 0.01498061 0.01261461 0.002839122 0.07513285</span>
-<span class="co">#&gt; 5 0.10623680 0.04779474 0.042437982 0.24173444</span>
-<span class="co">#&gt; 6 0.48159935 0.07901420 0.333158095 0.63336131</span>
-
-<span class="co"># Prediction: response scale + PI</span>
-<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    Predicted       CI_low      CI_high</span>
-<span class="co">#&gt; 1 0.16579367 2.220446e-16 1.000000e+00</span>
-<span class="co">#&gt; 2 0.06637193 2.220446e-16 1.000000e+00</span>
-<span class="co">#&gt; 3 0.02479825 2.220446e-16 2.220446e-16</span>
-<span class="co">#&gt; 4 0.01498061 2.220446e-16 2.220446e-16</span>
-<span class="co">#&gt; 5 0.10623680 2.220446e-16 1.000000e+00</span>
-<span class="co">#&gt; 6 0.48159935 2.220446e-16 1.000000e+00</span>
-
-<span class="co"># Link: link scale + CI</span>
-<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;     Predicted        SE     CI_low    CI_high</span>
-<span class="co">#&gt; 1 -1.61573668 0.4297415 -2.4580146 -0.7734588</span>
-<span class="co">#&gt; 2 -2.64380391 0.5850960 -3.7905709 -1.4970369</span>
-<span class="co">#&gt; 3 -3.67187114 0.7622663 -5.1658856 -2.1778567</span>
-<span class="co">#&gt; 4 -4.18590475 0.8548690 -5.8614172 -2.5103923</span>
-<span class="co">#&gt; 5 -2.12977030 0.5033646 -3.1163467 -1.1431939</span>
-<span class="co">#&gt; 6 -0.07363584 0.3164854 -0.6939359  0.5466642</span>
-
-<span class="co"># Classification: classification "type" + PI</span>
-<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;   Predicted CI_low    CI_high</span>
-<span class="co">#&gt; 1    setosa setosa versicolor</span>
-<span class="co">#&gt; 2    setosa setosa versicolor</span>
-<span class="co">#&gt; 3    setosa setosa     setosa</span>
-<span class="co">#&gt; 4    setosa setosa     setosa</span>
-<span class="co">#&gt; 5    setosa setosa versicolor</span>
-<span class="co">#&gt; 6    setosa setosa versicolor</span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">predictions</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predicted values:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 21.21678 21.21678 26.07124 21.21678 15.44448 21.31239 14.10597 26.66401</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 26.03299 20.96820 20.96820 15.34888 15.34888 15.34888 14.87083 14.67962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] 14.39279 26.58752 26.85523 26.60665 25.99475 15.92253 15.92253 14.10597</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 15.44448 26.58752 26.10948 25.68880 13.74265 19.97387 12.38501 25.76529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">NOTE: Confidence intervals, if available, are stored as attributes and can be accessed using `as.data.frame()` on this output.</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Options and methods ---------------------</span></span>
+<span class="r-in"><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predicted values:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 21.21678 21.21678 26.07124 21.21678 15.44448 21.31239 14.10597 26.66401</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 26.03299 20.96820 20.96820 15.34888 15.34888 15.34888 14.87083 14.67962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] 14.39279 26.58752 26.85523 26.60665 25.99475 15.92253 15.92253 14.10597</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 15.44448 26.58752 26.10948 25.68880 13.74265 19.97387 12.38501 25.76529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">NOTE: Confidence intervals, if available, are stored as attributes and can be accessed using `as.data.frame()` on this output.</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Get CI</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Predicted        SE    CI_low  CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4            21.21678 0.7281647 19.727518 22.70605</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag        21.21678 0.7281647 19.727518 22.70605</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710           26.07124 0.9279509 24.173366 27.96911</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Hornet 4 Drive       21.21678 0.7281647 19.727518 22.70605</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Hornet Sportabout    15.44448 0.9200310 13.562810 17.32616</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Valiant              21.31239 0.7777664 19.721680 22.90310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360           14.10597 1.0080670 12.044237 16.16769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D            26.66401 0.9225132 24.777260 28.55076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 230             26.03299 0.9362657 24.118117 27.94787</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280             20.96820 0.6234320 19.693139 22.24326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280C            20.96820 0.6234320 19.693139 22.24326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SE           15.34888 0.8862558 13.536280 17.16147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SL           15.34888 0.8862558 13.536280 17.16147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SLC          15.34888 0.8862558 13.536280 17.16147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cadillac Fleetwood   14.87083 0.8057154 13.222961 16.51871</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  14.67962 0.8206255 13.001249 16.35798</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial    14.39279 0.8911693 12.570146 16.21544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat 128             26.58752 0.9099596 24.726448 28.44860</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic          26.85523 0.9695585 24.872258 28.83820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla       26.60665 0.9127445 24.739874 28.47342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona        25.99475 0.9454598 24.061069 27.92843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dodge Challenger     15.92253 1.1490264 13.572504 18.27255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AMC Javelin          15.92253 1.1490264 13.572504 18.27255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28           14.10597 1.0080670 12.044237 16.16769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird     15.44448 0.9200310 13.562810 17.32616</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9            26.58752 0.9099596 24.726448 28.44860</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Porsche 914-2        26.10948 0.9205392 24.226768 27.99220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lotus Europa         25.68880 1.0474287 23.546572 27.83104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Ford Pantera L       13.74265 1.2011595 11.286007 16.19930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Ferrari Dino         19.97387 0.7635547 18.412227 21.53552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora        12.38501 2.1153615  8.058613 16.71141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Volvo 142E           25.76529 1.0175965 23.684073 27.84651</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Bootstrapped</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted        SE    CI_low  CI_high   iter_1   iter_2    iter_3   iter_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   26.68824 2.1071592 23.923281 28.45535 27.17221 28.54269 23.659855 27.37819</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   15.13788 0.6993607 14.449638 16.00809 15.17414 14.88754 16.075708 14.41413</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   21.50666 0.2661665 21.218778 21.82150 21.44688 21.84475 21.200284 21.53475</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   13.70504 0.9691530 12.860329 14.57005 14.51349 14.57464 12.859324 12.87272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   27.32278 1.5728255 25.262793 28.63473 27.46478 28.68126 25.084254 28.06082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   26.64730 2.1423408 23.836861 28.44378 27.15333 28.53375 23.567958 27.33415</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  21.13822 0.5763256 20.430601 21.72774 21.27699 21.76429 20.373213 21.13838</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  21.13822 0.5763256 20.430601 21.72774 21.27699 21.76429 20.373213 21.13838</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  14.52381 0.5199296 13.824308 14.88069 14.89101 14.75344 14.697258 13.75353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  14.31912 0.5784758 13.586160 14.79003 14.79663 14.70874 14.237774 13.53333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  14.01208 0.7481657 13.228939 14.65405 14.65506 14.64169 13.548549 13.20302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  27.24090 1.6402586 25.089953 28.61158 27.42703 28.66338 24.900460 27.97274</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  27.52747 1.4071749 25.694894 28.69259 27.55916 28.72596 25.543737 28.28102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  27.26137 1.6233459 25.133163 28.61737 27.43647 28.66785 24.946409 27.99476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  26.60636 2.1775842 23.750441 28.43221 27.13446 28.52481 23.476061 27.29011</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  15.64961 1.0691873 14.967235 17.08834 15.41009 14.99929 17.224417 14.96464</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  15.64961 1.0691873 14.967235 17.08834 15.41009 14.99929 17.224417 14.96464</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  13.70504 0.9691530 12.860329 14.57005 14.51349 14.57464 12.859324 12.87272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  15.13788 0.6993607 14.449638 16.00809 15.17414 14.88754 16.075708 14.41413</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  27.24090 1.6402586 25.089953 28.61158 27.42703 28.66338 24.900460 27.97274</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  26.72917 2.0720426 24.009701 28.46693 27.19108 28.55163 23.751752 27.42223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  26.27885 2.4614371 23.055655 28.34305 26.98345 28.45329 22.740888 26.93779</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  13.31613 1.2812482 12.021408 14.47804 14.33417 14.48970 11.986305 12.45434</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  20.07382 1.5283530 18.134607 21.47592 20.78622 21.53184 17.983899 19.99334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  11.86282 2.5413452  8.886492 14.13421 13.66407 14.17233  8.723972 10.89091</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  26.36073 2.3901892 23.231920 28.36277 27.02120 28.47117 22.924681 27.02587</span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="co"># Same as as.data.frame(..., keep_iterations = F)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted        SE   CI_low  CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   20.79277 0.4191720 20.40466 21.32894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   20.79277 0.4191720 20.40466 21.32894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   25.80472 1.6752669 24.17555 27.89555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   20.79277 0.4191720 20.40466 21.32894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   15.02221 1.4760667 13.08730 16.25470</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   20.87179 0.4824623 20.39369 21.47334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   13.91592 0.8563141 13.18083 14.97353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   26.29465 1.4076209 24.74293 27.85412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   25.77311 1.6949509 24.13895 27.89822</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  20.58731 0.2716659 20.41033 20.95349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  20.58731 0.2716659 20.41033 20.95349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  14.94319 1.4180929 13.09398 16.16318</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  14.94319 1.4180929 13.09398 16.16318</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  14.94319 1.4180929 13.09398 16.16318</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  14.54809 1.1493426 13.12739 15.70562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  14.39005 1.0556934 13.14075 15.52260</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  14.15298 0.9376581 13.16079 15.24806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  26.23143 1.4375043 24.66972 27.85947</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  26.45269 1.3403888 24.92595 27.84076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  26.24724 1.4298837 24.68802 27.85813</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  25.74151 1.7148722 24.10235 27.90089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  15.41732 1.7795023 13.03686 16.72929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  15.41732 1.7795023 13.03686 16.72929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  13.91592 0.8563141 13.18083 14.97353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  15.02221 1.4760667 13.08730 16.25470</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  26.23143 1.4375043 24.66972 27.85947</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  25.83633 1.6558286 24.21216 27.89287</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  25.48864 1.8818604 23.80951 27.92227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  13.61564 0.8226222 12.81194 14.62578</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  19.76550 0.5808276 19.44717 20.55177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  12.49355 1.3168882 10.79937 13.50598</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  25.55186 1.8389438 23.88272 27.91693</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Different predicttion types ------------------------</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Fit a logistic model</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Expectation (default): response scale + CI</span></span>
+<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"expectation"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted         SE      CI_low    CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.16579367 0.05943589 0.078854431 0.31573138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.06637193 0.03625646 0.022083989 0.18286787</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.02479825 0.01843411 0.005675609 0.10175666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.01498061 0.01261461 0.002839122 0.07513285</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.10623680 0.04779474 0.042437982 0.24173444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.48159935 0.07901420 0.333158095 0.63336131</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Prediction: response scale + PI</span></span>
+<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted       CI_low      CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.16579367 2.220446e-16 1.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.06637193 2.220446e-16 1.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.02479825 2.220446e-16 2.220446e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.01498061 2.220446e-16 2.220446e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.10623680 2.220446e-16 1.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.48159935 2.220446e-16 1.000000e+00</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Link: link scale + CI</span></span>
+<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Predicted        SE     CI_low    CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.61573668 0.4297415 -2.4580146 -0.7734588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -2.64380391 0.5850960 -3.7905709 -1.4970369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -3.67187114 0.7622663 -5.1658856 -2.1778567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -4.18590475 0.8548690 -5.8614172 -2.5103923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -2.12977030 0.5033646 -3.1163467 -1.1431939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 -0.07363584 0.3164854 -0.6939359  0.5466642</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Classification: classification "type" + PI</span></span>
+<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Predicted CI_low    CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    setosa setosa versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    setosa setosa versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    setosa setosa     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    setosa setosa     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    setosa setosa versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    setosa setosa versicolor</span>
 </code></pre></div>
     </div>
   </div>

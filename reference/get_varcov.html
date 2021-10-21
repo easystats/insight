@@ -69,14 +69,13 @@ don't provide a vcov()-method."><meta property="og:image" content="/logo.png"><!
 don't provide a <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code>-method.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for betareg</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span>
+<span class="fu">get_varcov</span><span class="op">(</span>
   <span class="va">x</span>,
   component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"precision"</span>, <span class="st">"all"</span><span class="op">)</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -84,7 +83,7 @@ don't provide a <code><a href="https://rdrr.io/r/stats/vcov.html" class="externa
 <span class="op">)</span>
 
 <span class="co"># S3 method for DirichletRegModel</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span>
+<span class="fu">get_varcov</span><span class="op">(</span>
   <span class="va">x</span>,
   component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"precision"</span>, <span class="st">"all"</span><span class="op">)</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -92,45 +91,45 @@ don't provide a <code><a href="https://rdrr.io/r/stats/vcov.html" class="externa
 <span class="op">)</span>
 
 <span class="co"># S3 method for clm2</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"scale"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"scale"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for truncreg</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for gamlss</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for hurdle</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for zcpglm</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for MixMod</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for glmmTMB</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span>
+<span class="fu">get_varcov</span><span class="op">(</span>
   <span class="va">x</span>,
   component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"dispersion"</span>, <span class="st">"all"</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for brmsfit</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="st">"conditional"</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="st">"conditional"</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for betamfx</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"precision"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"precision"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for aov</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, complete <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, complete <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for mixor</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A model.</p></td>
     </tr><tr><th>...</th>
       <td><p>Currently not used.</p></td>
@@ -154,27 +153,28 @@ be returned, or only for specific model parameters only? Currently only
 applies to models of class <code>mixor</code>.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>The variance-covariance matrix, as <code>matrix</code>-object.</p>
     </div>
     <div id="note">
     <h2>Note</h2>
-    <p><code><a href="../reference/get_varcov.html">get_varcov()</a></code> tries to return the nearest positive definite matrix
+    <p><code>get_varcov()</code> tries to return the nearest positive definite matrix
 in case of a negative variance-covariance matrix.</p>
+    </div>
     </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
-<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
-<span class="fu"><a href="../reference/get_varcov.html">get_varcov</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
-<span class="co">#&gt;             (Intercept)         wt        cyl         vs</span>
-<span class="co">#&gt; (Intercept)   11.552774  0.1680680 -1.5843752 -4.7487893</span>
-<span class="co">#&gt; wt             0.168068  0.6207461 -0.3301421 -0.2797924</span>
-<span class="co">#&gt; cyl           -1.584375 -0.3301421  0.3764045  0.7257641</span>
-<span class="co">#&gt; vs            -4.748789 -0.2797924  0.7257641  2.6475113</span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">get_varcov</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             (Intercept)         wt        cyl         vs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   11.552774  0.1680680 -1.5843752 -4.7487893</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> wt             0.168068  0.6207461 -0.3301421 -0.2797924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl           -1.584375 -0.3301421  0.3764045  0.7257641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> vs            -4.748789 -0.2797924  0.7257641  2.6475113</span>
 </code></pre></div>
     </div>
   </div>

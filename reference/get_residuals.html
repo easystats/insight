@@ -65,15 +65,14 @@
     <p>Returns the residuals from regression models.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_residuals.html">get_residuals</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">get_residuals</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu"><a href="../reference/get_residuals.html">get_residuals</a></span><span class="op">(</span><span class="va">x</span>, weighted <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">get_residuals</span><span class="op">(</span><span class="va">x</span>, weighted <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A model.</p></td>
     </tr><tr><th>...</th>
       <td><p>Passed down to <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code>, if possible.</p></td>
@@ -83,6 +82,7 @@
       <td><p>Toggle warnings and messages.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>The residuals, or <code>NULL</code> if this information could not be
@@ -99,65 +99,65 @@ This function is a robust alternative to <code><a href="https://rdrr.io/r/stats/
 some special model objects that otherwise do not respond properly to calling
 <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code>.</p>
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
-<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
-<span class="fu"><a href="../reference/get_residuals.html">get_residuals</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
-<span class="co">#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive </span>
-<span class="co">#&gt;          -1.0559619          -0.2281383          -3.4822509           0.7514545 </span>
-<span class="co">#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D </span>
-<span class="co">#&gt;           2.0342659          -1.7531855          -1.9437064           0.9420887 </span>
-<span class="co">#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE </span>
-<span class="co">#&gt;          -0.7877660          -0.7181129          -2.1181129           1.7794773 </span>
-<span class="co">#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental </span>
-<span class="co">#&gt;           1.5757124          -0.3619692          -0.3898093           0.1750587 </span>
-<span class="co">#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla </span>
-<span class="co">#&gt;           4.2185956           5.7281850           1.8290601           6.0432610 </span>
-<span class="co">#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 </span>
-<span class="co">#&gt;          -4.3115276          -0.9060247          -1.4819660          -2.0671872 </span>
-<span class="co">#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa </span>
-<span class="co">#&gt;           3.8490446          -0.2321023          -0.3424249           1.4979307 </span>
-<span class="co">#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E </span>
-<span class="co">#&gt;          -1.7422533          -1.8690068          -1.2437064          -3.3889219 </span>
-
-<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/get_residuals.html">get_residuals</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="co"># type = "deviance" by default</span>
-<span class="co">#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive </span>
-<span class="co">#&gt;         -0.63287224         -0.81557679          0.24153475          1.23515879 </span>
-<span class="co">#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D </span>
-<span class="co">#&gt;         -0.09537483          1.09436219         -0.09536895          0.08620842 </span>
-<span class="co">#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE </span>
-<span class="co">#&gt;          0.09512715          1.08274703          1.12137225         -0.17947784 </span>
-<span class="co">#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental </span>
-<span class="co">#&gt;         -0.12620688         -0.12450351         -0.53935361         -0.64596525 </span>
-<span class="co">#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla </span>
-<span class="co">#&gt;         -0.67827839          0.20117929          0.40994430          0.28751494 </span>
-<span class="co">#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 </span>
-<span class="co">#&gt;          0.21446014         -0.09381913         -0.08439431         -0.12504287 </span>
-<span class="co">#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa </span>
-<span class="co">#&gt;         -0.15299615          0.31935163         -2.59315645          0.45762007 </span>
-<span class="co">#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E </span>
-<span class="co">#&gt;         -0.06384435         -0.70853216         -0.09761985          0.15116709 </span>
-<span class="fu"><a href="../reference/get_residuals.html">get_residuals</a></span><span class="op">(</span><span class="va">m</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span>
-<span class="co">#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive </span>
-<span class="co">#&gt;        -0.181485065        -0.282930670         0.028748195         0.533645229 </span>
-<span class="co">#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D </span>
-<span class="co">#&gt;        -0.004537852         0.450537255        -0.004537293         0.003709050 </span>
-<span class="co">#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE </span>
-<span class="co">#&gt;         0.004514367         0.443545885         0.466735567        -0.015977138 </span>
-<span class="co">#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental </span>
-<span class="co">#&gt;        -0.007932459        -0.007720604        -0.135367880        -0.188308998 </span>
-<span class="co">#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla </span>
-<span class="co">#&gt;        -0.205490858         0.020033170         0.080593721         0.040489884 </span>
-<span class="co">#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 </span>
-<span class="co">#&gt;         0.022734170        -0.004391345        -0.003554867        -0.007787380 </span>
-<span class="co">#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa </span>
-<span class="co">#&gt;        -0.011635687         0.049714423        -0.965342121         0.099412603 </span>
-<span class="co">#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E </span>
-<span class="co">#&gt;        -0.002035975        -0.221984564        -0.004753484         0.011360719 </span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">get_residuals</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          -1.0559619          -0.2281383          -3.4822509           0.7514545 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Hornet Sportabout             Valiant          Duster 360           Merc 240D </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2.0342659          -1.7531855          -1.9437064           0.9420887 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Merc 230            Merc 280           Merc 280C          Merc 450SE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          -0.7877660          -0.7181129          -2.1181129           1.7794773 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1.5757124          -0.3619692          -0.3898093           0.1750587 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           4.2185956           5.7281850           1.8290601           6.0432610 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          -4.3115276          -0.9060247          -1.4819660          -2.0671872 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           3.8490446          -0.2321023          -0.3424249           1.4979307 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          -1.7422533          -1.8690068          -1.2437064          -3.3889219 </span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">get_residuals</span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="co"># type = "deviance" by default</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         -0.63287224         -0.81557679          0.24153475          1.23515879 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Hornet Sportabout             Valiant          Duster 360           Merc 240D </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         -0.09537483          1.09436219         -0.09536895          0.08620842 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Merc 230            Merc 280           Merc 280C          Merc 450SE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          0.09512715          1.08274703          1.12137225         -0.17947784 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         -0.12620688         -0.12450351         -0.53935361         -0.64596525 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         -0.67827839          0.20117929          0.40994430          0.28751494 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          0.21446014         -0.09381913         -0.08439431         -0.12504287 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         -0.15299615          0.31935163         -2.59315645          0.45762007 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         -0.06384435         -0.70853216         -0.09761985          0.15116709 </span>
+<span class="r-in"><span class="fu">get_residuals</span><span class="op">(</span><span class="va">m</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        -0.181485065        -0.282930670         0.028748195         0.533645229 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Hornet Sportabout             Valiant          Duster 360           Merc 240D </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        -0.004537852         0.450537255        -0.004537293         0.003709050 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Merc 230            Merc 280           Merc 280C          Merc 450SE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         0.004514367         0.443545885         0.466735567        -0.015977138 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        -0.007932459        -0.007720604        -0.135367880        -0.188308998 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        -0.205490858         0.020033170         0.080593721         0.040489884 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         0.022734170        -0.004391345        -0.003554867        -0.007787380 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        -0.011635687         0.049714423        -0.965342121         0.099412603 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        -0.002035975        -0.221984564        -0.004753484         0.011360719 </span>
 </code></pre></div>
     </div>
   </div>

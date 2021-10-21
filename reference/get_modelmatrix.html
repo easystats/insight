@@ -65,60 +65,60 @@
     <p>Creates a design matrix from the description. Any character variables are coerced to factors.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_modelmatrix.html">get_modelmatrix</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">get_modelmatrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="table ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
+    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>An object.</p></td>
     </tr><tr><th>...</th>
       <td><p>Passed down to other methods (mainly <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code>).</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
-
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
-<span class="fu"><a href="../reference/get_modelmatrix.html">get_modelmatrix</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="co">#&gt;                     (Intercept) vs</span>
-<span class="co">#&gt; Mazda RX4                     1  0</span>
-<span class="co">#&gt; Mazda RX4 Wag                 1  0</span>
-<span class="co">#&gt; Datsun 710                    1  1</span>
-<span class="co">#&gt; Hornet 4 Drive                1  1</span>
-<span class="co">#&gt; Hornet Sportabout             1  0</span>
-<span class="co">#&gt; Valiant                       1  1</span>
-<span class="co">#&gt; Duster 360                    1  0</span>
-<span class="co">#&gt; Merc 240D                     1  1</span>
-<span class="co">#&gt; Merc 230                      1  1</span>
-<span class="co">#&gt; Merc 280                      1  1</span>
-<span class="co">#&gt; Merc 280C                     1  1</span>
-<span class="co">#&gt; Merc 450SE                    1  0</span>
-<span class="co">#&gt; Merc 450SL                    1  0</span>
-<span class="co">#&gt; Merc 450SLC                   1  0</span>
-<span class="co">#&gt; Cadillac Fleetwood            1  0</span>
-<span class="co">#&gt; Lincoln Continental           1  0</span>
-<span class="co">#&gt; Chrysler Imperial             1  0</span>
-<span class="co">#&gt; Fiat 128                      1  1</span>
-<span class="co">#&gt; Honda Civic                   1  1</span>
-<span class="co">#&gt; Toyota Corolla                1  1</span>
-<span class="co">#&gt; Toyota Corona                 1  1</span>
-<span class="co">#&gt; Dodge Challenger              1  0</span>
-<span class="co">#&gt; AMC Javelin                   1  0</span>
-<span class="co">#&gt; Camaro Z28                    1  0</span>
-<span class="co">#&gt; Pontiac Firebird              1  0</span>
-<span class="co">#&gt; Fiat X1-9                     1  1</span>
-<span class="co">#&gt; Porsche 914-2                 1  0</span>
-<span class="co">#&gt; Lotus Europa                  1  1</span>
-<span class="co">#&gt; Ford Pantera L                1  0</span>
-<span class="co">#&gt; Ferrari Dino                  1  0</span>
-<span class="co">#&gt; Maserati Bora                 1  0</span>
-<span class="co">#&gt; Volvo 142E                    1  1</span>
-<span class="co">#&gt; attr(,"assign")</span>
-<span class="co">#&gt; [1] 0 1</span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">get_modelmatrix</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     (Intercept) vs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4                     1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag                 1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710                    1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Hornet 4 Drive                1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Hornet Sportabout             1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Valiant                       1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360                    1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D                     1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 230                      1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280                      1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280C                     1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SE                    1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SL                    1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SLC                   1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cadillac Fleetwood            1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental           1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial             1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat 128                      1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic                   1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla                1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona                 1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dodge Challenger              1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AMC Javelin                   1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28                    1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird              1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9                     1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Porsche 914-2                 1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lotus Europa                  1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Ford Pantera L                1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Ferrari Dino                  1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora                 1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Volvo 142E                    1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"assign")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0 1</span>
 </code></pre></div>
     </div>
   </div>
