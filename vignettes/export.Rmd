@@ -14,7 +14,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   warning = FALSE,
-  message = FALSE
+  message = FALSE,
+  dpi = 150
 )
 ```
 
@@ -65,7 +66,7 @@ cat(export_table(out))
 
 Since the coloured text is not renderes, we provide a screenshot as example here:
 
-```{r}
+```{r echo=FALSE}
 knitr::include_graphics("export_table.png")
 ```
 
