@@ -96,3 +96,90 @@ attr(out, "table_caption") <- c("*A green title*", "green")
 attr(out, "table_footer") <- c("Footer line in blue", "blue")
 cat(export_table(out))
 ```
+
+## Adding subtitles
+
+Subtitles can be added using the `subtitle` argument, or the `table_subtitle` attribute. Note that you must take care of adding new-line characters.
+
+```{r}
+# colored caption, subtitle and footer
+cat(export_table(
+  x, 
+  caption = c("# Title", "red"),
+  subtitle = c("\n   A subtitle in yellow", "yellow"),
+  footer = c("Footer line in blue", "blue")
+))
+
+# as attribute
+out <- x
+attr(out, "table_caption") <- c("*A green title*", "green")
+attr(out, "table_subtitle") <- c("\nA yellow subtitle", "yellow")
+attr(out, "table_footer") <- c("Footer line in blue", "blue")
+cat(export_table(out))
+```
+
+## Exporting multiple data frames into multiple tables
+
+Multiple data frames saved in a `list()` can be used to create multiple tables at once.
+
+```{r}
+x <- list(
+  data.frame(iris[1:3, c(1, 2, 5)]),
+  data.frame(iris[51:53, c(1, 3, 5)]),
+  data.frame(iris[111:113, c(1, 4, 5)])
+)
+
+# three different tables
+cat(export_table(x))
+```
+
+## Adding table captions and footers
+
+For multiple tables, it is also possible to add a caption for each table. Simply use a `list()` of strings for the `caption` argument, or add a `table_caption` attribute. to *each* data frame in the list.
+
+```{r}
+# one caption for each table
+cat(export_table(x, caption = list("Table 1", "Table 2", "Table 3")))
+
+# add attribute to *each* data frame
+out <- x
+for (i in 1:length(out)) {
+  attr(out[[i]], "table_caption") <- paste("Table", i)
+}
+cat(export_table(out))
+```
+
+In the same way you can add multiple footers. Note, however, that you have to take care about adding new-line characters.
+
+```{r}
+# add captions and footers for each table
+cat(export_table(
+  x, 
+  caption = list("Table 1", "Table 2", "Table 3"),
+  footer = list("Footer 1\n\n", "Footer 2\n\n", "Footer 3\n\n")
+))
+
+out <- x
+for (i in 1:length(out)) {
+  attr(out[[i]], "table_caption") <- paste("Table", i)
+  attr(out[[i]], "table_footer") <- paste("Footer", i, "\n\n")
+}
+cat(export_table(out))
+```
+
+Finally, you can even add multiple footer lines to each table, giving each a different color. In this case, each list element has to be a character vector of length 2 (the first element being the caption, and the second being the name of a colour).
+
+```{r}
+# Colored table captions and multiple footers per table
+cat(export_table(
+  x, 
+  caption = list(c("Red Table 1", "red"),
+                 c("Blue Table 2", "bue"),
+                 c("Green Table 3", "green")),
+  footer = list(
+    list(c("Footer line 1\n", "green"), c("Second line\n\n", "red")),
+    list(c("Footer line A\n", "blue"), c("Second line\n\n", "green")),
+    list(c("Footer line I\n", "yellow"), c("Second line\n\n", "blue"))
+  )
+))
+```

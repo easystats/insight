@@ -1,6 +1,7 @@
 #' Data frame and Tables Pretty Formatting
 #'
-#' @param x A data frame.
+#' @param x A data frame. May also be a list of data frames, to export multiple
+#'   data frames into multiple tables.
 #' @param sep Column separator.
 #' @param header Header separator. Can be `NULL`.
 #' @param empty_line Separator used for empty lines. If `NULL`, line remains
@@ -11,10 +12,12 @@
 #'   `"md"`) for markdown and `"html"` for HTML output.
 #' @param title,caption,subtitle Table title (same as caption) and subtitle, as strings. If `NULL`,
 #'   no title or subtitle is printed, unless it is stored as attributes (`table_title`,
-#'   or its alias `table_caption`, and `table_subtitle`).
+#'   or its alias `table_caption`, and `table_subtitle`). If `x` is a list of
+#'   data frames, `caption` may be a list of table captions, one for each table.
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
-#'   new text line under the table.
+#'   new text line under the table. If `x` is a list of data frames, `footer`
+#'   may be a list of table captions, one for each table.
 #' @param align Column alignment. For markdown-formatted tables, the default
 #'   `align = NULL` will right-align numeric columns, while all other
 #'   columns will be left-aligned. If `format = "html"`, the default is
@@ -168,9 +171,15 @@ export_table <- function(x,
 
       # ...unless we have a footer-argument.
       # Then use this as last (final) footer
-      if (element == length(l) && is.null(attributes(i)$table_footer) && !is.null(footer)) {
+      if (element == length(l) && is.null(attributes(i)$table_footer) && !is.null(footer) && !is.list(footer)) {
         t_footer <- footer
       }
+
+      # if we still have no footer, check if user provided a list of titles
+      if (is.null(t_footer) && !is.null(footer) && is.list(footer) && length(footer) == length(l)) {
+        t_footer <- footer[[element]]
+      }
+
 
       # for lists of data frame, each list element may have
       # an own attribute for the title, to have "subheadings"
@@ -178,13 +187,23 @@ export_table <- function(x,
 
       attr_name <- .check_caption_attr_name(i)
 
+      # if only alias "title" is provided, copy it to caption-variable
+      if (!is.null(title) && is.null(caption)) {
+        caption <- title
+      }
+
       # use individual title for each list element...
       t_title <- attributes(i)[[attr_name]]
 
       # ...unless we have a title-argument.
       # Then use this as first (main) header
-      if (element == 1 && is.null(attributes(i)[[attr_name]]) && !is.null(caption)) {
+      if (element == 1 && is.null(attributes(i)[[attr_name]]) && !is.null(caption) && !is.list(caption)) {
         t_title <- caption
+      }
+
+      # if we still have no title, check if user provided a list of titles
+      if (is.null(t_title) && !is.null(caption) && is.list(caption) && length(caption) == length(l)) {
+        t_title <- caption[[element]]
       }
 
       # convert data frame into specified output format
