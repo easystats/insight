@@ -65,7 +65,7 @@ cat(export_table(out))
 
 Since the coloured text is not rendered, we provide a screenshot as example here:
 
-```{r echo=FALSE, out.width="80%"}
+```{r echo=FALSE, out.width="50%"}
 knitr::include_graphics("export_table.png", dpi = 72)
 ```
 
