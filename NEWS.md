@@ -4,6 +4,10 @@
 
 * Improved speed performance for some functions.
 
+* Improved handling of table captions and footers in `export_table()`. See
+  also the new vignette on exporting data frames into human readable tables
+  here: https://easystats.github.io/insight/articles/export.html
+
 * Added more `get_df()` methods.
 
 ## Bug fixes
