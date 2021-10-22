@@ -168,9 +168,7 @@ export_table <- function(x,
 
       # ...unless we have a footer-argument.
       # Then use this as last (final) footer
-      if (element == length(l) &&
-        is.null(attributes(i)$table_footer) &&
-        !is.null(footer)) {
+      if (element == length(l) && is.null(attributes(i)$table_footer) && !is.null(footer)) {
         t_footer <- footer
       }
 
@@ -179,6 +177,15 @@ export_table <- function(x,
       # for each table
 
       attr_name <- .check_caption_attr_name(i)
+
+      # use individual title for each list element...
+      t_title <- attributes(i)[[attr_name]]
+
+      # ...unless we have a title-argument.
+      # Then use this as first (main) header
+      if (element == 1 && is.null(attributes(i)[[attr_name]]) && !is.null(caption)) {
+        t_title <- caption
+      }
 
       # convert data frame into specified output format
       .export_table(
@@ -190,7 +197,7 @@ export_table <- function(x,
         missing = missing,
         width = width,
         format = format,
-        caption = attributes(i)[[attr_name]],
+        caption = t_title,
         subtitle = attributes(i)$table_subtitle,
         footer = t_footer,
         align = align,

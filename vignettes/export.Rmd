@@ -1,0 +1,98 @@
+---
+title: "Exporting tables with captions and footers"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Exporting tables with captions and footers}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+## Exporting data frames into nice tables
+
+The `export_table()` functions creates nicely formatted tables in text, markdown or HTML format. You can add (coloured) captions or footer lines to the table as well, and you can even create multiple tables from a *list* of data frames.
+
+This vignette shows some examples how to do this (focusing on text output). Note that `export_table()` returns a *formatted string*. To print the formatted table, you must also use `cat()`.
+
+```{r}
+library(insight)
+x <- data.frame(iris[1:3, c(1, 2, 5)])
+
+# just the string
+export_table(x)
+
+# the table as "readable" output
+cat(export_table(x))
+```
+
+## Adding (coloured) titles
+
+A title can be added by either using the `caption` argument, or by adding a string as `table_caption` attribute.
+
+```{r}
+# a simple caption
+cat(export_table(x, caption = "Title"))
+
+# we use a new object, so "x" has no attributes yet
+out <- x
+attr(out, "table_caption") <- "Another title"
+cat(export_table(out))
+```
+
+`caption` can also be character vector of length 2, with the first element being the caption, and the second being the name of a colour (see `?print_colour` for available options). This is helpful for printing coloured table captions.
+
+```{r}
+# A red caption
+cat(export_table(x, caption = c("# Title", "red")))
+
+# same for attribute
+out <- x
+attr(out, "table_caption") <- c("*A green title*", "green")
+cat(export_table(out))
+```
+
+## Adding (coloured) table footers
+
+Use the `footer` argument to add a footer line to the table. It is also possible to add a string as `table_footer` attribute. 
+
+```{r}
+# colored caption, simple footer
+cat(export_table(
+  x, 
+  caption = c("# Title", "red"),
+  footer = "Footer line"
+))
+
+# as attribute
+out <- x
+attr(out, "table_caption") <- c("*A green title*", "green")
+attr(out, "table_footer") <- "A simple footer"
+cat(export_table(out))
+```
+
+Coloured footers can be added in the same way as for captions.
+
+```{r}
+# colored caption and footer
+cat(export_table(
+  x, 
+  caption = c("# Title", "red"),
+  footer = c("Footer line in blue", "blue")
+))
+
+# as attribute
+out <- x
+attr(out, "table_caption") <- c("*A green title*", "green")
+attr(out, "table_footer") <- c("Footer line in blue", "blue")
+cat(export_table(out))
+```
