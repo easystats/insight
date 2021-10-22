@@ -91,7 +91,8 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A data frame.</p></td>
+      <td><p>A data frame. May also be a list of data frames, to export multiple
+data frames into multiple tables.</p></td>
     </tr><tr><th>sep</th>
       <td><p>Column separator.</p></td>
     </tr><tr><th>header</th>
@@ -124,11 +125,13 @@ default) resp. <code>"text"</code> for plain text, <code>"markdown"</code> (or
     </tr><tr><th>title, caption, subtitle</th>
       <td><p>Table title (same as caption) and subtitle, as strings. If <code>NULL</code>,
 no title or subtitle is printed, unless it is stored as attributes (<code>table_title</code>,
-or its alias <code>table_caption</code>, and <code>table_subtitle</code>).</p></td>
+or its alias <code>table_caption</code>, and <code>table_subtitle</code>). If <code>x</code> is a list of
+data frames, <code>caption</code> may be a list of table captions, one for each table.</p></td>
     </tr><tr><th>footer</th>
       <td><p>Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a
-new text line under the table.</p></td>
+new text line under the table. If <code>x</code> is a list of data frames, <code>footer</code>
+may be a list of table captions, one for each table.</p></td>
     </tr><tr><th>align</th>
       <td><p>Column alignment. For markdown-formatted tables, the default
 <code>align = NULL</code> will right-align numeric columns, while all other
