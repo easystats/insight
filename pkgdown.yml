@@ -1,8 +1,9 @@
 pandoc: 2.7.3
 pkgdown: 1.9000.9000.9000
-pkgdown_sha: 5b814ed8e64649b97f2bb0ee6939a00f44fa71eb
+pkgdown_sha: cc7d19b14b349f8c1387b6454cc26753074a62a0
 articles:
   display: display.html
+  export: export.html
   insight: insight.html
-last_built: 2021-10-21T17:21Z
+last_built: 2021-10-22T09:31Z
 
