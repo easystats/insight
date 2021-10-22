@@ -25,7 +25,8 @@ export_table(
 )
 }
 \arguments{
-\item{x}{A data frame.}
+\item{x}{A data frame. May also be a list of data frames, to export multiple
+data frames into multiple tables.}
 
 \item{sep}{Column separator.}
 
@@ -58,11 +59,13 @@ default) resp. \code{"text"} for plain text, \code{"markdown"} (or
 
 \item{title, caption, subtitle}{Table title (same as caption) and subtitle, as strings. If \code{NULL},
 no title or subtitle is printed, unless it is stored as attributes (\code{table_title},
-or its alias \code{table_caption}, and \code{table_subtitle}).}
+or its alias \code{table_caption}, and \code{table_subtitle}). If \code{x} is a list of
+data frames, \code{caption} may be a list of table captions, one for each table.}
 
 \item{footer}{Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a
-new text line under the table.}
+new text line under the table. If \code{x} is a list of data frames, \code{footer}
+may be a list of table captions, one for each table.}
 
 \item{align}{Column alignment. For markdown-formatted tables, the default
 \code{align = NULL} will right-align numeric columns, while all other

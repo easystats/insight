@@ -443,7 +443,7 @@ export_table <- function(x,
   }
 
   # if caption is available, add a row with a headline
-  if (!is.null(caption) && caption != "") {
+  if (!is.null(caption) && caption[1] != "") {
     if (length(caption) == 2 && .is_valid_colour(caption[2])) {
       caption <- .colour(caption[2], caption[1])
     }
