@@ -236,6 +236,252 @@
 <span class="co">#&gt;         4.70 |        3.20 |  setosa</span>
 <span class="co">#&gt; Footer line in blue</span></code></pre></div>
 </div>
+<div class="section level2">
+<h2 id="adding-subtitles">Adding subtitles<a class="anchor" aria-label="anchor" href="#adding-subtitles"></a>
+</h2>
+<p>Subtitles can be added using the <code>subtitle</code> argument, or the <code>table_subtitle</code> attribute. Note that you must take care of adding new-line characters.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># colored caption, subtitle and footer</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
+  <span class="va">x</span>, 
+  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span>,
+  subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"\n   A subtitle in yellow"</span>, <span class="st">"yellow"</span><span class="op">)</span>,
+  footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line in blue"</span>, <span class="st">"blue"</span><span class="op">)</span>
+<span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; # Title </span>
+<span class="co">#&gt;   A subtitle in yellow</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
+<span class="co">#&gt; ------------------------------------</span>
+<span class="co">#&gt;         5.10 |        3.50 |  setosa</span>
+<span class="co">#&gt;         4.90 |        3.00 |  setosa</span>
+<span class="co">#&gt;         4.70 |        3.20 |  setosa</span>
+<span class="co">#&gt; Footer line in blue</span>
+
+<span class="co"># as attribute</span>
+<span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*A green title*"</span>, <span class="st">"green"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_subtitle"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"\nA yellow subtitle"</span>, <span class="st">"yellow"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_footer"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line in blue"</span>, <span class="st">"blue"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; *A green title* </span>
+<span class="co">#&gt; A yellow subtitle</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
+<span class="co">#&gt; ------------------------------------</span>
+<span class="co">#&gt;         5.10 |        3.50 |  setosa</span>
+<span class="co">#&gt;         4.90 |        3.00 |  setosa</span>
+<span class="co">#&gt;         4.70 |        3.20 |  setosa</span>
+<span class="co">#&gt; Footer line in blue</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="exporting-multiple-data-frames-into-multiple-tables">Exporting multiple data frames into multiple tables<a class="anchor" aria-label="anchor" href="#exporting-multiple-data-frames-into-multiple-tables"></a>
+</h2>
+<p>Multiple data frames saved in a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> can be used to create multiple tables at once.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">51</span><span class="op">:</span><span class="fl">53</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">111</span><span class="op">:</span><span class="fl">113</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="co"># three different tables</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
+<span class="co">#&gt; ------------------------------------</span>
+<span class="co">#&gt;         5.10 |        3.50 |  setosa</span>
+<span class="co">#&gt;         4.90 |        3.00 |  setosa</span>
+<span class="co">#&gt;         4.70 |        3.20 |  setosa</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span>
+<span class="co">#&gt; ----------------------------------------</span>
+<span class="co">#&gt;         7.00 |         4.70 | versicolor</span>
+<span class="co">#&gt;         6.40 |         4.50 | versicolor</span>
+<span class="co">#&gt;         6.90 |         4.90 | versicolor</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span>
+<span class="co">#&gt; --------------------------------------</span>
+<span class="co">#&gt;         6.50 |        2.00 | virginica</span>
+<span class="co">#&gt;         6.40 |        1.90 | virginica</span>
+<span class="co">#&gt;         6.80 |        2.10 | virginica</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="adding-table-captions-and-footers">Adding table captions and footers<a class="anchor" aria-label="anchor" href="#adding-table-captions-and-footers"></a>
+</h2>
+<p>For multiple tables, it is also possible to add a caption for each table. Simply use a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of strings for the <code>caption</code> argument, or add a <code>table_caption</code> attribute. to <em>each</em> data frame in the list.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># one caption for each table</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Table 1"</span>, <span class="st">"Table 2"</span>, <span class="st">"Table 3"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Table 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
+<span class="co">#&gt; ------------------------------------</span>
+<span class="co">#&gt;         5.10 |        3.50 |  setosa</span>
+<span class="co">#&gt;         4.90 |        3.00 |  setosa</span>
+<span class="co">#&gt;         4.70 |        3.20 |  setosa</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Table 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span>
+<span class="co">#&gt; ----------------------------------------</span>
+<span class="co">#&gt;         7.00 |         4.70 | versicolor</span>
+<span class="co">#&gt;         6.40 |         4.50 | versicolor</span>
+<span class="co">#&gt;         6.90 |         4.90 | versicolor</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Table 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span>
+<span class="co">#&gt; --------------------------------------</span>
+<span class="co">#&gt;         6.50 |        2.00 | virginica</span>
+<span class="co">#&gt;         6.40 |        1.90 | virginica</span>
+<span class="co">#&gt;         6.80 |        2.10 | virginica</span>
+
+<span class="co"># add attribute to *each* data frame</span>
+<span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Table"</span>, <span class="va">i</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Table 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
+<span class="co">#&gt; ------------------------------------</span>
+<span class="co">#&gt;         5.10 |        3.50 |  setosa</span>
+<span class="co">#&gt;         4.90 |        3.00 |  setosa</span>
+<span class="co">#&gt;         4.70 |        3.20 |  setosa</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Table 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span>
+<span class="co">#&gt; ----------------------------------------</span>
+<span class="co">#&gt;         7.00 |         4.70 | versicolor</span>
+<span class="co">#&gt;         6.40 |         4.50 | versicolor</span>
+<span class="co">#&gt;         6.90 |         4.90 | versicolor</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Table 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span>
+<span class="co">#&gt; --------------------------------------</span>
+<span class="co">#&gt;         6.50 |        2.00 | virginica</span>
+<span class="co">#&gt;         6.40 |        1.90 | virginica</span>
+<span class="co">#&gt;         6.80 |        2.10 | virginica</span></code></pre></div>
+<p>In the same way you can add multiple footers. Note, however, that you have to take care about adding new-line characters.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># add captions and footers for each table</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
+  <span class="va">x</span>, 
+  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Table 1"</span>, <span class="st">"Table 2"</span>, <span class="st">"Table 3"</span><span class="op">)</span>,
+  footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Footer 1\n\n"</span>, <span class="st">"Footer 2\n\n"</span>, <span class="st">"Footer 3\n\n"</span><span class="op">)</span>
+<span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Table 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
+<span class="co">#&gt; ------------------------------------</span>
+<span class="co">#&gt;         5.10 |        3.50 |  setosa</span>
+<span class="co">#&gt;         4.90 |        3.00 |  setosa</span>
+<span class="co">#&gt;         4.70 |        3.20 |  setosa</span>
+<span class="co">#&gt; Footer 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Table 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span>
+<span class="co">#&gt; ----------------------------------------</span>
+<span class="co">#&gt;         7.00 |         4.70 | versicolor</span>
+<span class="co">#&gt;         6.40 |         4.50 | versicolor</span>
+<span class="co">#&gt;         6.90 |         4.90 | versicolor</span>
+<span class="co">#&gt; Footer 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Table 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span>
+<span class="co">#&gt; --------------------------------------</span>
+<span class="co">#&gt;         6.50 |        2.00 | virginica</span>
+<span class="co">#&gt;         6.40 |        1.90 | virginica</span>
+<span class="co">#&gt;         6.80 |        2.10 | virginica</span>
+<span class="co">#&gt; Footer 3</span>
+
+<span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Table"</span>, <span class="va">i</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="st">"table_footer"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Footer"</span>, <span class="va">i</span>, <span class="st">"\n\n"</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Table 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
+<span class="co">#&gt; ------------------------------------</span>
+<span class="co">#&gt;         5.10 |        3.50 |  setosa</span>
+<span class="co">#&gt;         4.90 |        3.00 |  setosa</span>
+<span class="co">#&gt;         4.70 |        3.20 |  setosa</span>
+<span class="co">#&gt; Footer 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Table 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span>
+<span class="co">#&gt; ----------------------------------------</span>
+<span class="co">#&gt;         7.00 |         4.70 | versicolor</span>
+<span class="co">#&gt;         6.40 |         4.50 | versicolor</span>
+<span class="co">#&gt;         6.90 |         4.90 | versicolor</span>
+<span class="co">#&gt; Footer 2 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Table 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span>
+<span class="co">#&gt; --------------------------------------</span>
+<span class="co">#&gt;         6.50 |        2.00 | virginica</span>
+<span class="co">#&gt;         6.40 |        1.90 | virginica</span>
+<span class="co">#&gt;         6.80 |        2.10 | virginica</span>
+<span class="co">#&gt; Footer 3</span></code></pre></div>
+<p>Finally, you can even add multiple footer lines to each table, giving each a different color. In this case, each list element has to be a character vector of length 2 (the first element being the caption, and the second being the name of a colour).</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Colored table captions and multiple footers per table</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
+  <span class="va">x</span>, 
+  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Red Table 1"</span>, <span class="st">"red"</span><span class="op">)</span>,
+                 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Blue Table 2"</span>, <span class="st">"bue"</span><span class="op">)</span>,
+                 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Green Table 3"</span>, <span class="st">"green"</span><span class="op">)</span><span class="op">)</span>,
+  footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line 1\n"</span>, <span class="st">"green"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Second line\n\n"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line A\n"</span>, <span class="st">"blue"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Second line\n\n"</span>, <span class="st">"green"</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line I\n"</span>, <span class="st">"yellow"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Second line\n\n"</span>, <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Red Table 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
+<span class="co">#&gt; ------------------------------------</span>
+<span class="co">#&gt;         5.10 |        3.50 |  setosa</span>
+<span class="co">#&gt;         4.90 |        3.00 |  setosa</span>
+<span class="co">#&gt;         4.70 |        3.20 |  setosa</span>
+<span class="co">#&gt; Footer line 1</span>
+<span class="co">#&gt; Second line</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Blue Table 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span>
+<span class="co">#&gt; ----------------------------------------</span>
+<span class="co">#&gt;         7.00 |         4.70 | versicolor</span>
+<span class="co">#&gt;         6.40 |         4.50 | versicolor</span>
+<span class="co">#&gt;         6.90 |         4.90 | versicolor</span>
+<span class="co">#&gt; Footer line A</span>
+<span class="co">#&gt; Second line</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Green Table 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span>
+<span class="co">#&gt; --------------------------------------</span>
+<span class="co">#&gt;         6.50 |        2.00 | virginica</span>
+<span class="co">#&gt;         6.40 |        1.90 | virginica</span>
+<span class="co">#&gt;         6.80 |        2.10 | virginica</span>
+<span class="co">#&gt; Footer line I</span>
+<span class="co">#&gt; Second line</span></code></pre></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
