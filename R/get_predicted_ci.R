@@ -359,7 +359,7 @@ get_predicted_se <- function(x,
 
   # Return NA
   if (is.null(se)) {
-    ci_low <- ci_high <- rep(NA, length(predictions))
+    se <- ci_low <- ci_high <- rep(NA, length(predictions))
 
     # Get CI
     # TODO: Does this cover all the model families?
