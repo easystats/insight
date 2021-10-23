@@ -334,6 +334,7 @@ get_predicted.hurdle <- function(x,
                                  data = NULL,
                                  predict = "expectation",
                                  ci = 0.95,
+                                 iterations = NULL,
                                  verbose = TRUE,
                                  ...) {
 
@@ -392,7 +393,7 @@ get_predicted.hurdle <- function(x,
       ...
     )
     predictions <- predictions * (1 - as.vector(zi_predictions))
-    ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = 100, ci = ci)
+    ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
   } else {
     # Get CI
     ci_data <- get_predicted_ci(x, predictions = predictions, data = args$data, ci = ci, ci_type = args$ci_type)
@@ -538,7 +539,7 @@ get_predicted.glmmTMB <- function(x,
   # Get prediction
   rez <- predict_function(x, data = args$data, se.fit = TRUE)
 
-  if (is.null(iterations)) {
+  if (is.null(iterations) || predict == "expectation") {
     predictions <- as.numeric(rez$fit)
   } else {
     predictions <- .get_predicted_boot(
@@ -565,7 +566,7 @@ get_predicted.glmmTMB <- function(x,
       ...
     )
     predictions <- link_inverse(x)(predictions) * (1 - as.vector(zi_predictions))
-    ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = 100, ci = ci)
+    ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
     out <- list(predictions = predictions, ci_data = ci_data)
   } else {
     # Get CI

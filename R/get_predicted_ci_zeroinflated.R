@@ -1,4 +1,4 @@
-.simulate_zi_predictions <- function(model, newdata, predictions, nsim = 1000, ci = .95) {
+.simulate_zi_predictions <- function(model, newdata, predictions, nsim = NULL, ci = .95) {
 
   # Since the zero inflation and the conditional model are working in "opposite
   # directions", confidence intervals can not be derived directly  from the
@@ -8,6 +8,10 @@
 
   if (is.null(newdata)) {
     newdata <- get_data(model)
+  }
+
+  if (is.null(nsim)) {
+    nsim <- 1000
   }
 
   if (inherits(model, "glmmTMB")) {
@@ -124,6 +128,14 @@
 
 
 .simulate_predictions_zeroinfl <- function(model, newdata, nsim = 1000) {
+
+  # check for at least to factor levels, in order to build contrasts
+  single_factor_levels <- sapply(newdata, function(i) is.factor(i) && nlevels(i) == 1)
+  if (any(single_factor_levels)) {
+    warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
+    return(NULL)
+  }
+
   tryCatch(
     {
       condformula <- stats::as.formula(paste0("~", .safe_deparse(stats::formula(model)[[3]][[2]])))
