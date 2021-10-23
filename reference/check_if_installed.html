@@ -77,31 +77,26 @@
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>package</th>
-      <td><p>A string (vector) naming the package, whose installation needs
-to be checked in any of the libraries.</p></td>
-    </tr><tr><th>reason</th>
-      <td><p>A phrase describing why the package is needed. The default is a
-generic description.</p></td>
-    </tr><tr><th>stop</th>
-      <td><p>Logical that decides whether the function should stop if the
-needed package is not installed.</p></td>
-    </tr><tr><th>minimum_version</th>
-      <td><p>String, representing the minimum package version that
+    
+
+<dl><dt>package</dt><dd><p>A string (vector) naming the package, whose installation needs
+to be checked in any of the libraries.</p></dd>
+</dl><dl><dt>reason</dt><dd><p>A phrase describing why the package is needed. The default is a
+generic description.</p></dd>
+</dl><dl><dt>stop</dt><dd><p>Logical that decides whether the function should stop if the
+needed package is not installed.</p></dd>
+</dl><dl><dt>minimum_version</dt><dd><p>String, representing the minimum package version that
 is required. If <code>NULL</code>, no check for minimum version is done. Note
-that <code>minimum_version</code> only works when <code>package</code> is of length 1.</p></td>
-    </tr><tr><th>quietly</th>
-      <td><p>Logical, if <code>TRUE</code>, invisibly returns either <code>TRUE</code> if all
+that <code>minimum_version</code> only works when <code>package</code> is of length 1.</p></dd>
+</dl><dl><dt>quietly</dt><dd><p>Logical, if <code>TRUE</code>, invisibly returns either <code>TRUE</code> if all
 packages are installed, <code>FALSE</code> otherwise, and does not stop or throw a
 warning. If <code>quietly = TRUE</code>, argument <code>stop</code> is ignored. Use this argument
-to internally check for package dependencies without stopping or warnings.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently ignored</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+to internally check for package dependencies without stopping or warnings.</p></dd>
+</dl><dl><dt>...</dt><dd><p>Currently ignored</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>If <code>stop = TRUE</code>, and <code>package</code> is not yet installed, the

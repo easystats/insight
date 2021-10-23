@@ -107,12 +107,13 @@ appear in the <code><a href="https://rdrr.io/r/base/summary.html" class="externa
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr><tr><th>component</th>
-      <td><p>Which type of parameters to return, such as parameters for the
+    
+
+<dl><dt>x</dt><dd><p>A fitted model.</p></dd>
+</dl><dl><dt>component</dt><dd><p>Which type of parameters to return, such as parameters for the
 conditional model, the zero-inflated part of the model, the dispersion
 term, the instrumental variables or marginal effects be returned? Applies
 to models with zero-inflated and/or dispersion formula, or to models with
@@ -126,15 +127,11 @@ If <code>component = "location"</code>, location parameters such as <code>condit
 (everything that are fixed or random effects - depending on the <code>effects</code>
 argument - but no auxiliary parameters). For <code>component = "distributional"</code>
 (or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
-<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></td>
-    </tr><tr><th>flatten</th>
-      <td><p>Logical, if <code>TRUE</code>, the values are returned
-as character vector, not as list. Duplicated values are removed.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></dd>
+</dl><dl><dt>flatten</dt><dd><p>Logical, if <code>TRUE</code>, the values are returned
+as character vector, not as list. Duplicated values are removed.</p></dd>
+</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A list of parameter names. The returned list may have following

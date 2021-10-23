@@ -73,25 +73,22 @@
 <span class="co"># S3 method for character</span>
 <span class="fu">format_string</span><span class="op">(</span><span class="va">x</span>, length <span class="op">=</span> <span class="cn">NULL</span>, abbreviate <span class="op">=</span> <span class="st">"..."</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>String value.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
-    </tr><tr><th>length</th>
-      <td><p>Numeric, maximum length of the returned string. If not
+    
+
+<dl><dt>x</dt><dd><p>String value.</p></dd>
+</dl><dl><dt>...</dt><dd><p>Arguments passed to or from other methods.</p></dd>
+</dl><dl><dt>length</dt><dd><p>Numeric, maximum length of the returned string. If not
 <code>NULL</code>, will shorten the string to a maximum <code>length</code>, however,
 it will not truncate inside words. I.e. if the string length happens to be
 inside a word, this word is removed from the returned string, so the
 returned string has a <em>maximum</em> length of <code>length</code>, but might be
-shorter.</p></td>
-    </tr><tr><th>abbreviate</th>
-      <td><p>String that will be used as suffix, if <code>x</code> was
-shortened.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+shorter.</p></dd>
+</dl><dl><dt>abbreviate</dt><dd><p>String that will be used as suffix, if <code>x</code> was
+shortened.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A formatted string.</p>

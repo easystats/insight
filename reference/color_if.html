@@ -92,35 +92,29 @@ Columns are then printed in color in the console.</p>
   digits <span class="op">=</span> <span class="fl">2</span>
 <span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A data frame</p></td>
-    </tr><tr><th>columns</th>
-      <td><p>Character vector with column names of <code>x</code> that should be formatted.</p></td>
-    </tr><tr><th>predicate</th>
-      <td><p>A function that takes <code>columns</code> and <code>value</code> as input
+    
+
+<dl><dt>x</dt><dd><p>A data frame</p></dd>
+</dl><dl><dt>columns</dt><dd><p>Character vector with column names of <code>x</code> that should be formatted.</p></dd>
+</dl><dl><dt>predicate</dt><dd><p>A function that takes <code>columns</code> and <code>value</code> as input
 and which should return <code>TRUE</code> or <code>FALSE</code>, based on if the condition
-(in comparison with <code>value</code>) is met.</p></td>
-    </tr><tr><th>value</th>
-      <td><p>The comparator. May be used in conjunction with <code>predicate</code>
+(in comparison with <code>value</code>) is met.</p></dd>
+</dl><dl><dt>value</dt><dd><p>The comparator. May be used in conjunction with <code>predicate</code>
 to quickly set up a function which compares elements in <code>colums</code> to <code>value</code>.
 May be ignored when <code>predicate</code> is a function that internally computes other
-comparisons. See 'Examples'.</p></td>
-    </tr><tr><th>color_if, colour_if</th>
-      <td><p>Character vector, indicating the color code used to
+comparisons. See 'Examples'.</p></dd>
+</dl><dl><dt>color_if, colour_if</dt><dd><p>Character vector, indicating the color code used to
 format values in <code>x</code> that meet the condition of <code>predicate</code> and <code>value</code>.
 May be one of <code>"red"</code>, <code>"yellow"</code>, <code>"green"</code>, <code>"blue"</code>,
 <code>"violet"</code>, <code>"cyan"</code> or <code>"grey"</code>. Formatting is also possible
-with <code>"bold"</code> or <code>"italic"</code>.</p></td>
-    </tr><tr><th>color_else, colour_else</th>
-      <td><p>See <code>color_if</code>, but only for conditions
-that are <em>not</em> met.</p></td>
-    </tr><tr><th>digits</th>
-      <td><p>Digits for rounded values.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+with <code>"bold"</code> or <code>"italic"</code>.</p></dd>
+</dl><dl><dt>color_else, colour_else</dt><dd><p>See <code>color_if</code>, but only for conditions
+that are <em>not</em> met.</p></dd>
+</dl><dl><dt>digits</dt><dd><p>Digits for rounded values.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>The .</p>

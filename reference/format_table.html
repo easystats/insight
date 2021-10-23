@@ -108,46 +108,37 @@ converts all columns into character vectors!</p>
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A data frame of model's parameters, as returned by various functions
+    
+
+<dl><dt>x</dt><dd><p>A data frame of model's parameters, as returned by various functions
 of the <strong>easystats</strong>-packages. May also be a result from
-<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code>.</p></td>
-    </tr><tr><th>pretty_names</th>
-      <td><p>Return "pretty" (i.e. more human readable) parameter
-names.</p></td>
-    </tr><tr><th>stars</th>
-      <td><p>Add significance stars (e.g., p &lt; .001***).</p></td>
-    </tr><tr><th>digits, ci_digits, p_digits, rope_digits</th>
-      <td><p>Number of digits for rounding or
+<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code>.</p></dd>
+</dl><dl><dt>pretty_names</dt><dd><p>Return "pretty" (i.e. more human readable) parameter
+names.</p></dd>
+</dl><dl><dt>stars</dt><dd><p>Add significance stars (e.g., p &lt; .001***).</p></dd>
+</dl><dl><dt>digits, ci_digits, p_digits, rope_digits</dt><dd><p>Number of digits for rounding or
 significant figures. May also be <code>"signif"</code> to return significant
 figures or <code>"scientific"</code> to return scientific notation. Control the
 number of digits by adding the value as suffix, e.g. <code>digits = "scientific4"</code>
 to have scientific notation with 4 decimal places, or <code>digits = "signif5"</code>
-for 5 significant figures (see also <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code>).</p></td>
-    </tr><tr><th>ci_width</th>
-      <td><p>Minimum width of the returned string for confidence
+for 5 significant figures (see also <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code>).</p></dd>
+</dl><dl><dt>ci_width</dt><dd><p>Minimum width of the returned string for confidence
 intervals. If not <code>NULL</code> and width is larger than the string's length,
 leading whitespaces are added to the string. If <code>width="auto"</code>, width
-will be set to the length of the longest string.</p></td>
-    </tr><tr><th>ci_brackets</th>
-      <td><p>Logical, if <code>TRUE</code> (default), CI-values are
-encompassed in square brackets (else in parentheses).</p></td>
-    </tr><tr><th>zap_small</th>
-      <td><p>Logical, if <code>TRUE</code>, small values are rounded after
+will be set to the length of the longest string.</p></dd>
+</dl><dl><dt>ci_brackets</dt><dd><p>Logical, if <code>TRUE</code> (default), CI-values are
+encompassed in square brackets (else in parentheses).</p></dd>
+</dl><dl><dt>zap_small</dt><dd><p>Logical, if <code>TRUE</code>, small values are rounded after
 <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal
-places than <code>digits</code> are printed in scientific notation.</p></td>
-    </tr><tr><th>preserve_attributes</th>
-      <td><p>Logical, if <code>TRUE</code>, preserves all attributes
-from the input data frame.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle messages and warnings.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+places than <code>digits</code> are printed in scientific notation.</p></dd>
+</dl><dl><dt>preserve_attributes</dt><dd><p>Logical, if <code>TRUE</code>, preserves all attributes
+from the input data frame.</p></dd>
+</dl><dl><dt>verbose</dt><dd><p>Toggle messages and warnings.</p></dd>
+</dl><dl><dt>...</dt><dd><p>Arguments passed to or from other methods.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame. Note that <code>format_table()</code> converts all columns

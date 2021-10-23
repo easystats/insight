@@ -82,15 +82,15 @@ appear in the <code><a href="https://rdrr.io/r/base/summary.html" class="externa
 <span class="co"># S3 method for merMod</span>
 <span class="fu"><a href="find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr><tr><th>effects</th>
-      <td><p>Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
-    </tr><tr><th>component</th>
-      <td><p>Which type of parameters to return, such as parameters for
+    
+
+<dl><dt>x</dt><dd><p>A fitted model.</p></dd>
+</dl><dl><dt>effects</dt><dd><p>Should parameters for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
+</dl><dl><dt>component</dt><dd><p>Which type of parameters to return, such as parameters for
 the conditional model, the zero-inflated part of the model or the
 dispersion term? Applies to models with zero-inflated and/or dispersion
 formula. Note that the <em>conditional</em> component is also called
@@ -101,15 +101,11 @@ parameters. If <code>component = "location"</code>, location parameters such as
 are fixed or random effects - depending on the <code>effects</code> argument -
 but no auxiliary parameters). For <code>component = "distributional"</code> (or
 <code>"auxiliary"</code>), components like <code>sigma</code> or <code>dispersion</code> (and
-other auxiliary parameters) are returned.</p></td>
-    </tr><tr><th>flatten</th>
-      <td><p>Logical, if <code>TRUE</code>, the values are returned
-as character vector, not as list. Duplicated values are removed.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+other auxiliary parameters) are returned.</p></dd>
+</dl><dl><dt>flatten</dt><dd><p>Logical, if <code>TRUE</code>, the values are returned
+as character vector, not as list. Duplicated values are removed.</p></dd>
+</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A list of parameter names. The returned list may have following

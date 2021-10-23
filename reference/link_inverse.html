@@ -82,20 +82,18 @@
 <span class="co"># S3 method for gamlss</span>
 <span class="fu">link_inverse</span><span class="op">(</span><span class="va">x</span>, what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span>, <span class="st">"nu"</span>, <span class="st">"tau"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr><tr><th>what</th>
-      <td><p>For <code>gamlss</code> models, indicates for which distribution
+    
+
+<dl><dt>x</dt><dd><p>A fitted model.</p></dd>
+</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
+</dl><dl><dt>what</dt><dd><p>For <code>gamlss</code> models, indicates for which distribution
 parameter the link (inverse) function should be returned; for
 <code>betareg</code> or <code>DirichletRegModel</code>, can be <code>"mean"</code> or
-<code>"precision"</code>.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+<code>"precision"</code>.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A function, describing the inverse-link function from a model-object.

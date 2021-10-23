@@ -88,42 +88,37 @@ model. See details below.</p>
   subtitles <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A fitted model, or a data frame returned by <code><a href="clean_parameters.html">clean_parameters()</a></code>.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>One or more objects (data frames), which contain information about
+    
+
+<dl><dt>x</dt><dd><p>A fitted model, or a data frame returned by <code><a href="clean_parameters.html">clean_parameters()</a></code>.</p></dd>
+</dl><dl><dt>...</dt><dd><p>One or more objects (data frames), which contain information about
 the model parameters and related statistics (like confidence intervals, HDI,
-ROPE, ...).</p></td>
-    </tr><tr><th>split_by</th>
-      <td><p><code>split_by</code> should be a character vector with one or
+ROPE, ...).</p></dd>
+</dl><dl><dt>split_by</dt><dd><p><code>split_by</code> should be a character vector with one or
 more of the following elements: <code>"Effects"</code>, <code>"Component"</code>,
 <code>"Response"</code> and <code>"Group"</code>. These are the column names returned
 by <code><a href="clean_parameters.html">clean_parameters()</a></code>, which is used to extract the information
 from which the group or component model parameters belong. If <code>NULL</code>, the
 merged data frame is returned. Else, the data frame is split into a list,
-split by the values from those columns defined in <code>split_by</code>.</p></td>
-    </tr><tr><th>format</th>
-      <td><p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
+split by the values from those columns defined in <code>split_by</code>.</p></dd>
+</dl><dl><dt>format</dt><dd><p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
 assumed use for output is basic printing. If <code>"markdown"</code>, markdown-format
 is assumed. This only affects the style of title- and table-caption attributes,
-which are used in <code><a href="export_table.html">export_table()</a></code>.</p></td>
-    </tr><tr><th>parameter_column</th>
-      <td><p>String, name of the column that contains the
+which are used in <code><a href="export_table.html">export_table()</a></code>.</p></dd>
+</dl><dl><dt>parameter_column</dt><dd><p>String, name of the column that contains the
 parameter names. Usually, for data frames returned by functions the
-easystats-packages, this will be <code>"Parameter"</code>.</p></td>
-    </tr><tr><th>keep_parameter_column</th>
-      <td><p>Logical, if <code>TRUE</code>, the data frames in the
+easystats-packages, this will be <code>"Parameter"</code>.</p></dd>
+</dl><dl><dt>keep_parameter_column</dt><dd><p>Logical, if <code>TRUE</code>, the data frames in the
 returned list have both a <code>"Cleaned_Parameter"</code> and <code>"Parameter"</code>
 column. If <code>FALSE</code>, the (unformatted) <code>"Parameter"</code> is removed,
 and the column with cleaned parameter names (<code>"Cleaned_Parameter"</code>) is
-renamed into <code>"Parameter"</code>.</p></td>
-    </tr><tr><th>remove_empty_column</th>
-      <td><p>Logical, if <code>TRUE</code>, columns with completely
-empty character values will be removed.</p></td>
-    </tr><tr><th>titles, subtitles</th>
-      <td><p>By default, the names of the model components (like
+renamed into <code>"Parameter"</code>.</p></dd>
+</dl><dl><dt>remove_empty_column</dt><dd><p>Logical, if <code>TRUE</code>, columns with completely
+empty character values will be removed.</p></dd>
+</dl><dl><dt>titles, subtitles</dt><dd><p>By default, the names of the model components (like
 fixed or random effects, count or zero-inflated model part) are added as
 attributes <code>"table_title"</code> and <code>"table_subtitle"</code> to each list
 element returned by <code>print_parameters()</code>. These attributes are then
@@ -132,10 +127,8 @@ Use <code>titles</code> and <code>subtitles</code> to override the default attri
 values for <code>"table_title"</code> and <code>"table_subtitle"</code>. <code>titles</code>
 and <code>subtitles</code> may be any length from 1 to same length as returned
 list elements. If <code>titles</code> and <code>subtitles</code> are shorter than
-existing elements, only the first default attributes are overwritten.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+existing elements, only the first default attributes are overwritten.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame or a list of data frames (if <code>split_by</code> is not <code>NULL</code>).

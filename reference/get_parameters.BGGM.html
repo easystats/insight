@@ -167,12 +167,13 @@ models) from a model.</p>
 <span class="co"># S3 method for sim</span>
 <span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">x</span>, parameters <span class="op">=</span> <span class="cn">NULL</span>, summary <span class="op">=</span> <span class="cn">FALSE</span>, centrality <span class="op">=</span> <span class="st">"mean"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A fitted model.</p></td>
-    </tr><tr><th>component</th>
-      <td><p>Which type of parameters to return, such as parameters for the
+    
+
+<dl><dt>x</dt><dd><p>A fitted model.</p></dd>
+</dl><dl><dt>component</dt><dd><p>Which type of parameters to return, such as parameters for the
 conditional model, the zero-inflated part of the model, the dispersion
 term, the instrumental variables or marginal effects be returned? Applies
 to models with zero-inflated and/or dispersion formula, or to models with
@@ -186,35 +187,25 @@ If <code>component = "location"</code>, location parameters such as <code>condit
 (everything that are fixed or random effects - depending on the <code>effects</code>
 argument - but no auxiliary parameters). For <code>component = "distributional"</code>
 (or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
-<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></td>
-    </tr><tr><th>summary</th>
-      <td><p>Logical, indicates whether the full posterior samples
+<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></dd>
+</dl><dl><dt>summary</dt><dd><p>Logical, indicates whether the full posterior samples
 (<code>summary = FALSE</code>)) or the summarized centrality indices of
 the posterior samples (<code>summary = TRUE</code>)) should be returned as
-estimates.</p></td>
-    </tr><tr><th>centrality</th>
-      <td><p>Only for models with posterior samples, and when
+estimates.</p></dd>
+</dl><dl><dt>centrality</dt><dd><p>Only for models with posterior samples, and when
 <code>summary = TRUE</code>. In this case, <code>centrality = "mean"</code> would
 calculate means of posterior samples for each parameter, while
 <code>centrality = "median"</code> would use the more robust median value as
-measure of central tendency.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr><tr><th>effects</th>
-      <td><p>Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></td>
-    </tr><tr><th>iterations</th>
-      <td><p>Number of posterior draws.</p></td>
-    </tr><tr><th>progress</th>
-      <td><p>Display progress.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle messages and warnings.</p></td>
-    </tr><tr><th>parameters</th>
-      <td><p>Regular expression pattern that describes the parameters that
-should be returned.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+measure of central tendency.</p></dd>
+</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
+</dl><dl><dt>effects</dt><dd><p>Should parameters for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
+</dl><dl><dt>iterations</dt><dd><p>Number of posterior draws.</p></dd>
+</dl><dl><dt>progress</dt><dd><p>Display progress.</p></dd>
+</dl><dl><dt>verbose</dt><dd><p>Toggle messages and warnings.</p></dd>
+</dl><dl><dt>parameters</dt><dd><p>Regular expression pattern that describes the parameters that
+should be returned.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>The posterior samples from the requested parameters as data frame.

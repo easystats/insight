@@ -70,20 +70,17 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">data_relocate</span><span class="op">(</span><span class="va">data</span>, <span class="va">cols</span>, before <span class="op">=</span> <span class="cn">NULL</span>, after <span class="op">=</span> <span class="cn">NULL</span>, safe <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
-      <td><p>A data frame to pivot.</p></td>
-    </tr><tr><th>cols</th>
-      <td><p>A character vector indicating the names of the columns to move.</p></td>
-    </tr><tr><th>before, after</th>
-      <td><p>Destination of columns. Supplying neither will move
-columns to the left-hand side; specifying both is an error.</p></td>
-    </tr><tr><th>safe</th>
-      <td><p>If <code>TRUE</code>, will disregard non-existing columns.</p></td>
-    </tr></table></div>
+    
 
-    <div id="ref-sections">
+<dl><dt>data</dt><dd><p>A data frame to pivot.</p></dd>
+</dl><dl><dt>cols</dt><dd><p>A character vector indicating the names of the columns to move.</p></dd>
+</dl><dl><dt>before, after</dt><dd><p>Destination of columns. Supplying neither will move
+columns to the left-hand side; specifying both is an error.</p></dd>
+</dl><dl><dt>safe</dt><dd><p>If <code>TRUE</code>, will disregard non-existing columns.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame with reordered columns.</p>
