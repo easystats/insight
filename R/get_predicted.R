@@ -515,15 +515,15 @@ get_predicted.glmmTMB <- function(x,
       unconditional = FALSE,
       ...
     )
-    predictions * (1 - as.vector(zi_predictions))
-
-    ## TODO get CI
+    predictions <- link_inverse(x)(predictions) * (1 - as.vector(zi_predictions))
+    ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = 100, ci = ci)
+    out <- list(predictions = predictions, ci_data = ci_data)
   } else {
     # Get CI
     ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
+    out <- .get_predicted_transform(x, predictions, args, ci_data)
   }
 
-  out <- .get_predicted_transform(x, predictions, args, ci_data)
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
@@ -1041,7 +1041,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
                                      ...) {
 
   # Transform to response scale
-  if (args$transform == TRUE) {
+  if (isTRUE(args$transform)) {
     if (!is.null(ci_data)) {
       # Transform CI
       se_col <- names(ci_data) == "SE"
