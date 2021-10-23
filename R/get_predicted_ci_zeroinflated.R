@@ -18,6 +18,10 @@
     out <- .simulate_predictions_zeroinfl(model, newdata, nsim)
   }
 
+  if (is.null(out)) {
+    return(NULL)
+  }
+
   sims <- link_inverse(model)(out$cond) * (1 - stats::plogis(out$zi))
   ci <- (1 + ci) / 2
 
@@ -77,9 +81,7 @@
 
       .get_simulation_from_zi(model, nsim, beta.conditional, beta.zero_inflated, matrix.conditional, matrix.zero_inflated)
     },
-    error = function(x) { x },
-    warning = function(x) { NULL },
-    finally = function(x) { NULL }
+    error = function(x) { NULL }
   )
 }
 
@@ -109,9 +111,7 @@
 
       .get_simulation_from_zi(model, nsim, beta.conditional, beta.zero_inflated, matrix.conditional, matrix.zero_inflated)
     },
-    error = function(x) { x },
-    warning = function(x) { NULL },
-    finally = function(x) { NULL }
+    error = function(x) { NULL }
   )
 }
 
@@ -137,9 +137,7 @@
 
       .get_simulation_from_zi(model, nsim, beta.conditional, beta.zero_inflated, matrix.conditional, matrix.zero_inflated)
     },
-    error = function(x) { x },
-    warning = function(x) { NULL },
-    finally = function(x) { NULL }
+    error = function(x) { NULL }
   )
 }
 
@@ -176,9 +174,7 @@
 
       list(cond = pred.cond, zi = pred.zi)
     },
-    error = function(x) { x },
-    warning = function(x) { NULL },
-    finally = function(x) { NULL }
+    error = function(x) { NULL }
   )
 }
 
