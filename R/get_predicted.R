@@ -474,18 +474,6 @@ get_predicted.glmmTMB <- function(x,
     args$type <- predict
   }
 
-  # TODO: adjust predicted values for zero inflation
-  # mu * (1 - p), where p = predict(model, type = "zprob")
-  if (isTRUE(verbose) &&
-      (!is.null(predict) && predict == "expectation") &&
-      (isTRUE(args$info$is_zero_inflated) || isTRUE(args$info$is_zeroinf))) {
-    warning(format_message(
-      'The `get_predicted()` function does not adjust predictions to account',
-      'for zero-inflation in `glmmTMB` models. This behavior will change in',
-      'future versions of `insight`.'
-      ), call. = FALSE)
-  }
-
   # Prediction function
   predict_function <- function(x, data, ...) {
     stats::predict(
@@ -514,8 +502,27 @@ get_predicted.glmmTMB <- function(x,
     )
   }
 
-  # Get CI
-  ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
+
+  # "expectation" for zero-inflated? we need a special handling
+  # for predictions and CIs here.
+
+  if (identical(predict, "expectation") && args$info$is_zero_inflated) {
+    zi_predictions <- stats::predict(
+      x,
+      newdata = data,
+      type = "zprob",
+      re.form = args$re.form,
+      unconditional = FALSE,
+      ...
+    )
+    predictions * (1 - as.vector(zi_predictions))
+
+    ## TODO get CI
+  } else {
+    # Get CI
+    ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
+  }
+
   out <- .get_predicted_transform(x, predictions, args, ci_data)
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
