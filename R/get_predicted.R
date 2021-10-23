@@ -330,7 +330,12 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
 # =======================================================================
 
 #' @export
-get_predicted.hurdle <- function(x, data = NULL, verbose = TRUE, ...) {
+get_predicted.hurdle <- function(x,
+                                 data = NULL,
+                                 predict = "expectation",
+                                 ci = 0.95,
+                                 verbose = TRUE,
+                                 ...) {
 
   # pscl models return the fitted values immediately and ignores the `type`
   # argument when `data` is NULL
@@ -338,19 +343,63 @@ get_predicted.hurdle <- function(x, data = NULL, verbose = TRUE, ...) {
     data <- get_data(x)
   }
 
-  args <- c(list(x, "newdata" = data), list(...))
+  dots <- list(...)
 
-  out <- tryCatch(do.call("predict", args), error = function(e) NULL)
+  # Sanitize input
+  args <- .get_predicted_args(
+    x,
+    data = data,
+    predict = predict,
+    ci = ci,
+    verbose = verbose,
+    ...
+  )
 
-  if (is.null(out)) {
-    out <- tryCatch(do.call("fitted", args), error = function(e) NULL)
+  if (!is.null(predict) && predict != "expectation") {
+    warning(format_message("Currently, only `predict='expectation'` is supported."), call. = FALSE)
+    predict <- "expectation"
   }
 
-  if (!is.null(out)) {
-    out <- .get_predicted_out(out, args = list("data" = data))
+  # predict.glmmTMB has many `type` values which do not map on to our standard
+  # `predict` argument. We don't know how to transform those.
+  if (is.null(predict) && "type" %in% names(dots)) {
+    args$type <- dots$type
+  } else {
+    args$type <- "count"
   }
 
-  out
+  # Prediction function
+  predict_function <- function(x, data, ...) {
+    stats::predict(
+      x,
+      newdata = data,
+      type = args$type,
+      ...
+    )
+  }
+
+  # Get prediction
+  predictions <- as.vector(predict_function(x, data = args$data))
+
+  # "expectation" for zero-inflated? we need a special handling
+  # for predictions and CIs here.
+
+  if (identical(predict, "expectation")) {
+    zi_predictions <- stats::predict(
+      x,
+      newdata = args$data,
+      type = "zero",
+      ...
+    )
+    predictions <- predictions * (1 - as.vector(zi_predictions))
+    ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = 100, ci = ci)
+  } else {
+    # Get CI
+    ci_data <- get_predicted_ci(x, predictions = predictions, data = args$data, ci = ci, ci_type = args$ci_type)
+  }
+
+  out <- list(predictions = predictions, ci_data = ci_data)
+  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
 #' @export

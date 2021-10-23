@@ -261,6 +261,14 @@ get_predicted_ci.mlm <- function(x, ...) {
         off_terms <- grepl("^offset\\((.*)\\)", all_terms)
         model_terms <- stats::reformulate(all_terms[!off_terms], response = find_response(x))
       }
+
+      # check for at least to factor levels, in order to build contrasts
+      single_factor_levels <- sapply(data, function(i) is.factor(i) && nlevels(i) == 1)
+      if (any(single_factor_levels)) {
+        warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
+        return(NULL)
+      }
+
       mm <- get_modelmatrix(model_terms, data = data)
     } else {
       mm <- get_modelmatrix(x, data = data)
@@ -300,6 +308,11 @@ get_predicted_se <- function(x,
     vcov_args = vcov_args
   )
   mm <- .get_predicted_ci_modelmatrix(x, data = data, vcovmat = vcovmat)
+
+  # return NULL for fail
+  if (is.null(mm)) {
+    return(NULL)
+  }
 
   # compute vcov for predictions
   # Next line equivalent to: diag(M V M')
