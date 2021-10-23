@@ -6,6 +6,10 @@
   # of simulated draws from a multivariate normal distribution
   # (see also _Brooks et al. 2017, pp.391-392_ for details).
 
+  if (is.null(newdata)) {
+    newdata <- get_data(model)
+  }
+
   if (inherits(model, "glmmTMB")) {
     out <- .simulate_predictions_glmmTMB(model, newdata, nsim)
   } else if (inherits(model, "MixMod")) {
