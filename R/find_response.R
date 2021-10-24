@@ -56,7 +56,7 @@ find_response.model_fit <- function(x, combine = TRUE, ...) {
 
 #' @export
 find_response.bfsl <- function(x, combine = TRUE, ...) {
-  resp <- find_response(x, combine = combine)
+  resp <- find_response.default(x, combine = combine)
   if (is.null(resp)) {
     resp <- "y"
   }
