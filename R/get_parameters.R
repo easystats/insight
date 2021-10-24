@@ -125,7 +125,7 @@ get_parameters.model_fit <- function(x, ...) {
 
 
 #' @export
-get_parameters.bsfl <- function(x, ...) {
+get_parameters.bfsl <- function(x, ...) {
   cf <- stats::coef(x)
 
   params <- data.frame(
