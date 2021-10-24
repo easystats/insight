@@ -242,7 +242,7 @@ test_that("get_predicted - glmmTMB", {
 
   # Bootstrap
   set.seed(333)
-  rez <- as.data.frame(get_predicted(x, iterations = 5))
+  rez <- as.data.frame(get_predicted(x, iterations = 5, predict = "link"))
   expect_equal(c(nrow(rez), ncol(rez)), c(32, 9))
 
   # Binomial

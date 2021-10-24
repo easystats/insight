@@ -897,8 +897,8 @@ if (requiet("testthat") &&
     expect_warning(get_predicted(m1, predict = "zprob", verbose = FALSE), NA)
     # the second warning is raised for zero-inflation models only. remove when
     # the zprob correction is implemented
-    expect_warning(expect_warning(get_predicted(m1, predict = "prediction")))
-    expect_warning(expect_warning(get_predicted(m1, predict = "classification")))
+    expect_warning(get_predicted(m1, predict = "prediction"))
+    expect_warning(get_predicted(m1, predict = "classification"))
   })
 
 }
