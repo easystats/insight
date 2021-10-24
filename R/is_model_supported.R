@@ -43,8 +43,8 @@ supported_models <- function() {
 
     # b ----------------------------
     "bamlss", "bamlss.frame", "bayesx", "bayesQR", "BBmm", "BBreg", "bcplm",
-    "betamfx", "betaor", "betareg", "BFBayesFactor", "BGGM", "bife", "bifeAPEs",
-    "biglm", "bigglm", "blavaan", "blrm", "bracl", "brglm", "brmsfit",
+    "betamfx", "betaor", "betareg", "bfsl", "BFBayesFactor", "BGGM", "bife",
+    "bifeAPEs", "biglm", "bigglm", "blavaan", "blrm", "bracl", "brglm", "brmsfit",
     "brmultinom", "btergm",
 
     # c ----------------------------

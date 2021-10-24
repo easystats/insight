@@ -115,6 +115,34 @@ find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 }
 
 
+
+#' @export
+find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  resp <- find_response(x, verbose = FALSE)
+  f <- find_formula(x, verbose = verbose)
+
+  if (!is.null(f)) {
+    fx <- f[[1]][[3]]
+  } else {
+    fx <- "x"
+  }
+  l <- list(conditional = c(resp, fx))
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
+
+
+
+# helper -----------------------
+
+
 .get_variables_list <- function(f, resp = NULL) {
   # exception for formula w/o response
   if (is.null(resp) || !.is_empty_object(resp)) {

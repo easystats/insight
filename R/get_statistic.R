@@ -2265,3 +2265,20 @@ get_statistic.coeftest <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
+
+
+#' @export
+get_statistic.bfsl <- function(x, ...) {
+  cs <- stats::coef(x)
+
+  out <- data.frame(
+    Parameter = rownames(cs),
+    Statistic = as.vector(cs[, "Estimate"] / cs[, "Std. Error"]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- .remove_backticks_from_parameter_names(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}

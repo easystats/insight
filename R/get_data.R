@@ -1431,6 +1431,12 @@ get_data.ivFixed <- get_data.rma
 
 
 #' @export
+get_data.bfsl <- function(x, ...) {
+  as.data.frame(x$data[c("x", "y", "sd_x", "sd_y")])
+}
+
+
+#' @export
 get_data.mipo <- function(x, ...) {
   tryCatch(
     {

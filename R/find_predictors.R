@@ -125,6 +125,18 @@ find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
 
 #' @export
+find_predictors.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  l <- list(conditional = "x")
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+
+#' @export
 find_predictors.afex_aov <- function(x,
                                      effects = c("fixed", "random", "all"),
                                      component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),

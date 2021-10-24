@@ -54,6 +54,8 @@ get_response <- function(x, select = NULL, verbose = TRUE) {
     rv <- x$Y
     class(rv) <- "matrix"
     data.frame(rv)
+  } else if (inherits(x, "bfsl")) {
+    model_data[["y"]]
   } else if (length(rn) > 1 && all(rn %in% colnames(model_data)) && !glm_proportion) {
     rv <- model_data[, rn, drop = FALSE]
     colnames(rv) <- rn

@@ -1,5 +1,9 @@
 # insight 0.14.6
 
+## New supported model classes
+
+* Support for `bfsl` (*bfsl*)
+
 ## General
 
 * Improved speed performance for some functions.

@@ -61,8 +61,8 @@ is_regression_model <- function(x) {
 
     # b --------------------
     "bamlss", "bamlss.frame", "bayesGAM", "bayesmeta", "bayesx",
-    "bayesQR", "BBmm", "BBreg", "bcplm", "betamfx", "betaor",
-    "betareg", "BFBayesFactor", "BGGM", "bglmerMod", "bife", "bifeAPEs",
+    "bayesQR", "BBmm", "BBreg", "bcplm", "betamfx", "betaor", "betareg",
+    "bfsl", "BFBayesFactor", "BGGM", "bglmerMod", "bife", "bifeAPEs",
     "biglm", "bigglm", "blrm", "blavaan", "blmerMod",
     "boot_test_mediation", "bracl", "brglm", "brglmFit", "brmsfit",
     "brmultinom", "bsem", "btergm", "buildmer",

@@ -1225,6 +1225,19 @@ model_info.poissonirr <- model_info.logitmfx
 model_info.negbinirr <- model_info.logitmfx
 
 
+#' @export
+model_info.bfsl <- function(x, verbose = TRUE, ...) {
+  .make_family(
+    x = x,
+    fitfam = "gaussian",
+    logit.link = FALSE,
+    link.fun = "identity",
+    verbose = verbose,
+    ...
+  )
+}
+
+
 
 
 # not yet supported -------------------------------

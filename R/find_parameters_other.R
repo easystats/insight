@@ -169,3 +169,17 @@ find_parameters.systemfit <- function(x, flatten = FALSE, ...) {
     out
   }
 }
+
+
+
+#' @export
+find_parameters.bsfl <- function(x, flatten = FALSE, ...) {
+  cf <- stats::coef(x)
+  out <- list(conditional = rownames(cf))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}

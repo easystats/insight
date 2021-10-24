@@ -194,6 +194,17 @@ get_df.rlm <- function(x, type = "residual", ...) {
 
 
 #' @export
+get_df.bfsl <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "residual") {
+    x$df.residual
+  } else {
+    .model_df(x)
+  }
+}
+
+
+#' @export
 get_df.plm <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "residual") {
