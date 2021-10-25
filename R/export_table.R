@@ -249,6 +249,8 @@ export_table <- function(x,
   if (format == "markdown") {
     attr(out, "format") <- "pipe"
     class(out) <- c("knitr_kable", "character")
+  } else if (format == "text") {
+    class(out) <- c("insight_table", class(out))
   }
   out
 }
@@ -476,6 +478,12 @@ export_table <- function(x,
   }
 
   rows
+}
+
+#' @export
+print.insight_table <- function(x, ...) {
+  cat(x)
+  invisible(x)
 }
 
 
