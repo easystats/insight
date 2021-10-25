@@ -105,13 +105,13 @@
 <h2 id="exporting-data-frames-into-nice-tables">Exporting data frames into nice tables<a class="anchor" aria-label="anchor" href="#exporting-data-frames-into-nice-tables"></a>
 </h2>
 <p>The <code><a href="../reference/export_table.html">export_table()</a></code> functions creates nicely formatted tables in text, markdown or HTML format. You can add (coloured) captions or footer lines to the table as well, and you can even create multiple tables from a <em>list</em> of data frames.</p>
-<p>This vignette shows some examples how to do this (focusing on text output). Note that <code><a href="../reference/export_table.html">export_table()</a></code> returns a <em>formatted string</em>. To print the formatted table, you must also use <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>.</p>
+<p>This vignette shows some examples how to do this (focusing on text output). Note that <code><a href="../reference/export_table.html">export_table()</a></code> returns a <em>formatted string</em>, which prints nicely (which essentially just uses <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>).</p>
 <p><strong><em>Note:</em></strong> The vignettes includes example with coloured text output. The coloured text is not rendered in this vignette. Rather, try out these examples and look at the results in your console!</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span>
 
-<span class="co"># just the string</span>
+<span class="co"># the table as "readable" output</span>
 <span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
 <span class="co">#&gt; ------------------------------------</span>
@@ -119,13 +119,9 @@
 <span class="co">#&gt;         4.90 |        3.00 |  setosa</span>
 <span class="co">#&gt;         4.70 |        3.20 |  setosa</span>
 
-<span class="co"># the table as "readable" output</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
-<span class="co">#&gt; ------------------------------------</span>
-<span class="co">#&gt;         5.10 |        3.50 |  setosa</span>
-<span class="co">#&gt;         4.90 |        3.00 |  setosa</span>
-<span class="co">#&gt;         4.70 |        3.20 |  setosa</span></code></pre></div>
+<span class="co"># see the underlying string</span>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">unclass</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] "Sepal.Length | Sepal.Width | Species\n------------------------------------\n        5.10 |        3.50 |  setosa\n        4.90 |        3.00 |  setosa\n        4.70 |        3.20 |  setosa\n"</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="adding-coloured-titles">Adding (coloured) titles<a class="anchor" aria-label="anchor" href="#adding-coloured-titles"></a>
@@ -133,7 +129,7 @@
 <p>A title can be added by either using the <code>caption</code> argument, or by adding a string as <code>table_caption</code> attribute.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># a simple caption</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="st">"Title"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="st">"Title"</span><span class="op">)</span>
 <span class="co">#&gt; Title</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -145,7 +141,7 @@
 <span class="co"># we use a new object, so "x" has no attributes yet</span>
 <span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Another title"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="co">#&gt; Another title</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -156,7 +152,7 @@
 <p><code>caption</code> can also be character vector of length 2, with the first element being the caption, and the second being the name of a colour (see <code><a href="../reference/print_color.html">?print_colour</a></code> for available options). This is helpful for printing coloured table captions.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># A red caption</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # Title</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -168,7 +164,7 @@
 <span class="co"># same for attribute</span>
 <span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*A green title*"</span>, <span class="st">"green"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="co">#&gt; *A green title*</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -185,11 +181,11 @@
 <p>Use the <code>footer</code> argument to add a footer line to the table. It is also possible to add a string as <code>table_footer</code> attribute.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># colored caption, simple footer</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
   <span class="va">x</span>, 
   caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span>,
   footer <span class="op">=</span> <span class="st">"Footer line"</span>
-<span class="op">)</span><span class="op">)</span>
+<span class="op">)</span>
 <span class="co">#&gt; # Title</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -203,7 +199,7 @@
 <span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*A green title*"</span>, <span class="st">"green"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_footer"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"A simple footer"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="co">#&gt; *A green title*</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -215,11 +211,11 @@
 <p>Coloured footers can be added in the same way as for captions.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># colored caption and footer</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
   <span class="va">x</span>, 
   caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span>,
   footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line in blue"</span>, <span class="st">"blue"</span><span class="op">)</span>
-<span class="op">)</span><span class="op">)</span>
+<span class="op">)</span>
 <span class="co">#&gt; # Title</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -233,7 +229,7 @@
 <span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*A green title*"</span>, <span class="st">"green"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_footer"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line in blue"</span>, <span class="st">"blue"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="co">#&gt; *A green title*</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -249,12 +245,12 @@
 <p>Subtitles can be added using the <code>subtitle</code> argument, or the <code>table_subtitle</code> attribute. Note that you must take care of adding new-line characters.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># colored caption, subtitle and footer</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
   <span class="va">x</span>, 
   caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span>,
   subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"\n   A subtitle in yellow"</span>, <span class="st">"yellow"</span><span class="op">)</span>,
   footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line in blue"</span>, <span class="st">"blue"</span><span class="op">)</span>
-<span class="op">)</span><span class="op">)</span>
+<span class="op">)</span>
 <span class="co">#&gt; # Title </span>
 <span class="co">#&gt;   A subtitle in yellow</span>
 <span class="co">#&gt; </span>
@@ -270,7 +266,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*A green title*"</span>, <span class="st">"green"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_subtitle"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"\nA yellow subtitle"</span>, <span class="st">"yellow"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_footer"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line in blue"</span>, <span class="st">"blue"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="co">#&gt; *A green title* </span>
 <span class="co">#&gt; A yellow subtitle</span>
 <span class="co">#&gt; </span>
@@ -293,7 +289,7 @@
 <span class="op">)</span>
 
 <span class="co"># three different tables</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
 <span class="co">#&gt; ------------------------------------</span>
 <span class="co">#&gt;         5.10 |        3.50 |  setosa</span>
@@ -318,7 +314,7 @@
 <p>For multiple tables, it is also possible to add a caption for each table. Simply use a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of strings for the <code>caption</code> argument, or add a <code>table_caption</code> attribute. to <em>each</em> data frame in the list.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># one caption for each table</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Table 1"</span>, <span class="st">"Table 2"</span>, <span class="st">"Table 3"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Table 1"</span>, <span class="st">"Table 2"</span>, <span class="st">"Table 3"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Table 1</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -348,7 +344,7 @@
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Table"</span>, <span class="va">i</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="co">#&gt; Table 1</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -375,11 +371,11 @@
 <p>In the same way you can add multiple footers. Note, however, that you have to take care about adding new-line characters.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># add captions and footers for each table</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
   <span class="va">x</span>, 
   caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Table 1"</span>, <span class="st">"Table 2"</span>, <span class="st">"Table 3"</span><span class="op">)</span>,
   footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Footer 1\n\n"</span>, <span class="st">"Footer 2\n\n"</span>, <span class="st">"Footer 3\n\n"</span><span class="op">)</span>
-<span class="op">)</span><span class="op">)</span>
+<span class="op">)</span>
 <span class="co">#&gt; Table 1</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -414,7 +410,7 @@
   <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Table"</span>, <span class="va">i</span><span class="op">)</span>
   <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="st">"table_footer"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Footer"</span>, <span class="va">i</span>, <span class="st">"\n\n"</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="co">#&gt; Table 1</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
@@ -446,7 +442,7 @@
 <p>Finally, you can even add multiple footer lines to each table, giving each a different color. In this case, each list element has to be a character vector of length 2 (the first element being the caption, and the second being the name of a colour).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Colored table captions and multiple footers per table</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
+<span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
   <span class="va">x</span>, 
   caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Red Table 1"</span>, <span class="st">"red"</span><span class="op">)</span>,
                  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Blue Table 2"</span>, <span class="st">"bue"</span><span class="op">)</span>,
@@ -456,7 +452,7 @@
     <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line A\n"</span>, <span class="st">"blue"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Second line\n\n"</span>, <span class="st">"green"</span><span class="op">)</span><span class="op">)</span>,
     <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line I\n"</span>, <span class="st">"yellow"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Second line\n\n"</span>, <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>
-<span class="op">)</span><span class="op">)</span>
+<span class="op">)</span>
 <span class="co">#&gt; Red Table 1</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span>
