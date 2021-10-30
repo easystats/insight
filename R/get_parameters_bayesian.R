@@ -156,7 +156,7 @@ get_parameters.BFBayesFactor <- function(x,
     colnames(posteriors) <- "p"
     out <- posteriors
   } else if (bf_type == "xtable") {
-    data <- get_data(x)
+    data <- get_data(x, verbose = verbose)
     N <- sum(data)
     cells <- prod(dim(data))
     posts <- as.data.frame(as.matrix(suppressMessages(

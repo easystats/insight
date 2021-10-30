@@ -79,7 +79,7 @@ get_data(x, ...)
 
 \method{get_data}{stanreg}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 
-\method{get_data}{MCMCglmm}(x, effects = c("all", "fixed", "random"), ...)
+\method{get_data}{MCMCglmm}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}

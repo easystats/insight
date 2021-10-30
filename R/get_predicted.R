@@ -286,9 +286,9 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
 
   # hack to get predictions for all response levels
   if (is.null(data)) {
-    data <- insight::get_data(x)
+    data <- get_data(x)
   }
-  resp <- insight::find_response(x)
+  resp <- find_response(x)
   data <- data[, setdiff(colnames(data), resp), drop = FALSE]
   vars <- as.character(attr(x$terms, "variables"))[-1]
   vars[attr(x$terms, "response")] <- resp

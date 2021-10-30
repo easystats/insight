@@ -446,7 +446,7 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
     fff$conditional[2] <- call(attr(x, "dv")) # need to fix LHS
     fff
   } else {
-    d <- insight::get_data(x, shape = "long")
+    d <- get_data(x, shape = "long")
 
     dv <- attr(x, "dv")
     id <- attr(x, "id")
