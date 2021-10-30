@@ -654,7 +654,7 @@ get_data.MixMod <- function(x,
 
 
 #' @export
-get_data.BBmm <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.BBmm <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
   mf <- tryCatch(
     {
@@ -670,12 +670,12 @@ get_data.BBmm <- function(x, effects = c("all", "fixed", "random"), ...) {
     }
   )
 
-  .prepare_get_data(x, stats::na.omit(mf), effects)
+  .prepare_get_data(x, stats::na.omit(mf), effects, verbose = verbose)
 }
 
 
 #' @export
-get_data.glimML <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.glimML <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
   dat <- x@data
   mf <- switch(effects,
@@ -684,14 +684,14 @@ get_data.glimML <- function(x, effects = c("all", "fixed", "random"), ...) {
     random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
   )
 
-  .prepare_get_data(x, stats::na.omit(mf), effects)
+  .prepare_get_data(x, stats::na.omit(mf), effects, verbose = verbose)
 }
 
 
 # sem models -------------------------------------
 
 #' @export
-get_data.lavaan <- function(x, ...) {
+get_data.lavaan <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       .get_S4_data_from_env(x)
@@ -701,7 +701,7 @@ get_data.lavaan <- function(x, ...) {
     }
   )
 
-  .prepare_get_data(x, stats::na.omit(mf))
+  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
 #' @export
@@ -711,7 +711,7 @@ get_data.blavaan <- get_data.lavaan
 # additive models (gam) -------------------------------------
 
 #' @export
-get_data.vgam <- function(x, ...) {
+get_data.vgam <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       get(x@misc$dataname, envir = parent.frame())[, find_variables(x, flatten = TRUE), drop = FALSE]
@@ -721,21 +721,21 @@ get_data.vgam <- function(x, ...) {
     }
   )
 
-  .prepare_get_data(x, mf)
+  .prepare_get_data(x, mf, verbose = verbose)
 }
 
 
 #' @export
-get_data.gamm <- function(x, ...) {
+get_data.gamm <- function(x, verbose = TRUE, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
   mf <- stats::model.frame(x)
-  .prepare_get_data(x, mf)
+  .prepare_get_data(x, mf, verbose = verbose)
 }
 
 
 #' @export
-get_data.gamlss <- function(x, ...) {
+get_data.gamlss <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       elements <- c("mu", "sigma", "nu", "tau")
@@ -763,7 +763,7 @@ get_data.gamlss <- function(x, ...) {
     }
   )
 
-  .prepare_get_data(x, mf, effects = "all")
+  .prepare_get_data(x, mf, effects = "all", verbose = verbose)
 }
 
 
@@ -772,9 +772,9 @@ get_data.gamlss <- function(x, ...) {
 # fixed effects and panel regression --------------------------------------
 
 #' @export
-get_data.felm <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.felm <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
-  .get_data_from_modelframe(x, stats::model.frame(x), effects)
+  .get_data_from_modelframe(x, stats::model.frame(x), effects, verbose = verbose)
 }
 
 
@@ -824,7 +824,7 @@ get_data.pgmm <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-get_data.plm <- function(x, ...) {
+get_data.plm <- function(x, verbose = TRUE, ...) {
   mf <- stats::model.frame(x)
   model_terms <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
   cn <- colnames(mf)
@@ -844,12 +844,12 @@ get_data.plm <- function(x, ...) {
     }
   }
 
-  .prepare_get_data(x, mf[, model_terms, drop = FALSE])
+  .prepare_get_data(x, mf[, model_terms, drop = FALSE], verbose = verbose)
 }
 
 
 #' @export
-get_data.wbm <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.wbm <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
   mf <- stats::model.frame(x)
 
@@ -862,7 +862,7 @@ get_data.wbm <- function(x, effects = c("all", "fixed", "random"), ...) {
   resp.col <- which(colnames(mf) == find_response(x))
   mf <- mf[, c(resp.col, (1:ncol(mf))[-resp.col])]
 
-  .prepare_get_data(x, stats::na.omit(mf), effects)
+  .prepare_get_data(x, stats::na.omit(mf), effects, verbose = verbose)
 }
 
 
@@ -871,7 +871,7 @@ get_data.wbgee <- get_data.wbm
 
 
 #' @export
-get_data.ivreg <- function(x, ...) {
+get_data.ivreg <- function(x, verbose = TRUE, ...) {
   mf <- stats::model.frame(x)
   cn <- clean_names(colnames(mf))
   ft <- find_variables(x, flatten = TRUE)
@@ -892,7 +892,7 @@ get_data.ivreg <- function(x, ...) {
     )
   }
 
-  .prepare_get_data(x, stats::na.omit(final_mf))
+  .prepare_get_data(x, stats::na.omit(final_mf), verbose = verbose)
 }
 
 #' @export
@@ -900,13 +900,13 @@ get_data.iv_robust <- get_data.ivreg
 
 
 #' @export
-get_data.ivprobit <- function(x, ...) {
-  .prepare_get_data(x, stats::na.omit(as.data.frame(x$mr1)))
+get_data.ivprobit <- function(x, verbose = TRUE, ...) {
+  .prepare_get_data(x, stats::na.omit(as.data.frame(x$mr1)), verbose = verbose)
 }
 
 
 #' @export
-get_data.bife <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.bife <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
   mf <- as.data.frame(x$data)
 
@@ -916,7 +916,7 @@ get_data.bife <- function(x, effects = c("all", "fixed", "random"), ...) {
     mf <- mf[, setdiff(colnames(mf), unique(find_random(x, split_nested = TRUE, flatten = TRUE))), drop = FALSE]
   }
 
-  .prepare_get_data(x, stats::na.omit(mf), effects)
+  .prepare_get_data(x, stats::na.omit(mf), effects, verbose = verbose)
 }
 
 
@@ -951,7 +951,7 @@ get_data.brmsfit <- function(x,
 
   .return_data(
     x,
-    .prepare_get_data(x, mf, effects = effects),
+    .prepare_get_data(x, mf, effects = effects, verbose = verbose),
     effects,
     component,
     model.terms,
@@ -1000,7 +1000,7 @@ get_data.BFBayesFactor <- function(x, ...) {
 
 #' @rdname get_data
 #' @export
-get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
+get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
   effects <- match.arg(effects)
   mf <- tryCatch(
     {
@@ -1027,13 +1027,13 @@ get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), ...) {
     }
   )
 
-  .prepare_get_data(x, mf, effects = effects)
+  .prepare_get_data(x, mf, effects = effects, verbose = verbose)
 }
 
 
 
 #' @export
-get_data.stanmvreg <- function(x, ...) {
+get_data.stanmvreg <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       out <- data.frame()
@@ -1048,7 +1048,7 @@ get_data.stanmvreg <- function(x, ...) {
     }
   )
 
-  .prepare_get_data(x, mf)
+  .prepare_get_data(x, mf, verbose = verbose)
 }
 
 
@@ -1192,10 +1192,10 @@ get_data.mcmc.list <- function(x, ...) {
 
 
 #' @export
-get_data.DirichletRegModel <- function(x, ...) {
+get_data.DirichletRegModel <- function(x, verbose = TRUE, ...) {
   mf <- x$data
   resp <- sapply(x$data, inherits, "DirichletRegData")
-  .prepare_get_data(x, mf[!resp])
+  .prepare_get_data(x, mf[!resp], verbose = verbose)
 }
 
 
@@ -1350,15 +1350,15 @@ get_data.clm2 <- function(x, ...) {
 
 
 #' @export
-get_data.bracl <- function(x, ...) {
+get_data.bracl <- function(x, verbose = TRUE, ...) {
   mf <- stats::model.frame(x)
-  suppressWarnings(.prepare_get_data(x, mf))
+  suppressWarnings(.prepare_get_data(x, mf, verbose = verbose))
 }
 
 
 
 #' @export
-get_data.mlogit <- function(x, ...) {
+get_data.mlogit <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       as.data.frame(stats::model.frame(x))
@@ -1368,13 +1368,13 @@ get_data.mlogit <- function(x, ...) {
     }
   )
 
-  .prepare_get_data(x, mf)
+  .prepare_get_data(x, mf, verbose = verbose)
 }
 
 
 
 #' @export
-get_data.rma <- function(x, ...) {
+get_data.rma <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       .get_data_from_env(x)
@@ -1384,7 +1384,7 @@ get_data.rma <- function(x, ...) {
     }
   )
 
-  .prepare_get_data(x, stats::na.omit(mf))
+  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
 
@@ -1393,7 +1393,7 @@ get_data.metaplus <- get_data.rma
 
 
 #' @export
-get_data.meta_random <- function(x, ...) {
+get_data.meta_random <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       x$data$data
@@ -1403,12 +1403,12 @@ get_data.meta_random <- function(x, ...) {
     }
   )
 
-  .prepare_get_data(x, stats::na.omit(mf))
+  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
 
 #' @export
-get_data.meta_bma <- function(x, ...) {
+get_data.meta_bma <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       x$meta$fixed$data$data
@@ -1418,7 +1418,7 @@ get_data.meta_bma <- function(x, ...) {
     }
   )
 
-  .prepare_get_data(x, stats::na.omit(mf))
+  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
 

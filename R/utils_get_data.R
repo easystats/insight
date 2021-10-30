@@ -443,7 +443,7 @@
 
 # here we have a model frame with many variables, so just extract the important ones...
 #
-.get_data_from_modelframe <- function(x, dat, effects) {
+.get_data_from_modelframe <- function(x, dat, effects, verbose = TRUE) {
   if (.is_empty_object(dat)) {
     warning("Could not get model data.", call. = FALSE)
     return(NULL)
@@ -467,7 +467,7 @@
     }
   )
 
-  .prepare_get_data(x, mf, effects)
+  .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
 
