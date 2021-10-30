@@ -13,7 +13,7 @@
   ## Major revisions and adaption to more complex models and other packages
   ## by Daniel Lüdecke
 
-  faminfo <- model_info(x)
+  faminfo <- model_info(x, verbose = FALSE)
 
   if (faminfo$family %in% c("truncated_nbinom1")) {
     if (verbose) {

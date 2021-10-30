@@ -173,7 +173,7 @@ get_loglikelihood.lm <- function(x,
     x <- x$gam
   }
 
-  info <- model_info(x)
+  info <- model_info(x, verbose = FALSE)
   if (info$is_linear) {
     ll <- .get_loglikelihood_lm(x,
       estimator = estimator,

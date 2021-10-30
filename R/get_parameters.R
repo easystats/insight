@@ -207,7 +207,7 @@ get_parameters.btergm <- function(x, ...) {
 
 #' @export
 get_parameters.mediate <- function(x, ...) {
-  info <- model_info(x$model.y)
+  info <- model_info(x$model.y, verbose = FALSE)
   if (info$is_linear && !x$INT) {
     out <- data.frame(
       Parameter = c("ACME", "ADE", "Total Effect", "Prop. Mediated"),

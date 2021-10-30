@@ -940,7 +940,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   }
 
   # Get info
-  info <- model_info(x)
+  info <- model_info(x, verbose = FALSE)
 
   # Data
   if (!is.null(newdata) && is.null(data)) data <- newdata
@@ -1116,7 +1116,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     }
 
     # Transform to response "type"
-    if (args$predict == "classification" && model_info(x)$is_binomial) {
+    if (args$predict == "classification" && model_info(x, verbose = FALSE)$is_binomial) {
       response <- get_response(x)
       ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
       predictions <- .get_predict_transform_response(predictions, response = response)

@@ -150,7 +150,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   }
 
   if (.is_empty_object(s)) {
-    info <- model_info(x)
+    info <- model_info(x, verbose = FALSE)
     if (!is.null(info) && info$is_mixed) {
       s <- tryCatch(
         {
@@ -192,14 +192,14 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
   # compute sigma manually ---------------
   if (.is_empty_object(s)) {
-    info <- model_info(x)
+    info <- model_info(x, verbose = FALSE)
     if (!is.null(info) && info$is_dispersion) {
       return(NULL)
     }
   }
 
   if (.is_empty_object(s)) {
-    info <- model_info(x)
+    info <- model_info(x, verbose = FALSE)
     if (!is.null(info) && info$is_mixed) {
       s <- tryCatch(
         {

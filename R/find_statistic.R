@@ -192,7 +192,7 @@ find_statistic <- function(x, ...) {
 
   # edge cases ---------------------------------------------------------------
 
-  m_info <- model_info(x, return_family_only = TRUE)
+  m_info <- model_info(x, verbose = FALSE, return_family_only = TRUE)
 
   # tweedie-check needs to come first, because glm can also have tweedie
   # family, so this exception needs to be caught before checking for g.mods

@@ -84,8 +84,8 @@ get_dispersion.model_fit <- function(x, ...) {
 }
 
 
-get_dispersion.glm <- function(x, ...) {
-  info <- model_info(x)
+get_dispersion.glm <- function(x, verbose = TRUE, ...) {
+  info <- model_info(x, verbose = verbose)
   disp <- NULL
 
   if (info$is_poisson || info$is_binomial || info$is_negbin) {
@@ -99,8 +99,8 @@ get_dispersion.glm <- function(x, ...) {
 }
 
 
-get_dispersion.glmerMod <- function(x, ...) {
-  info <- model_info(x)
+get_dispersion.glmerMod <- function(x, verbose = TRUE, ...) {
+  info <- model_info(x, verbose = verbose)
   disp <- NULL
 
   if (info$is_poisson || info$is_binomial || info$is_negbin) {
@@ -118,8 +118,8 @@ get_dispersion.glmerMod <- function(x, ...) {
 }
 
 
-get_dispersion.glmmTMB <- function(x, ...) {
-  info <- model_info(x)
+get_dispersion.glmmTMB <- function(x, verbose = TRUE, ...) {
+  info <- model_info(x, verbose = verbose)
   disp <- NULL
 
   if (info$is_poisson || info$is_binomial || info$is_negbin) {

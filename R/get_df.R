@@ -436,7 +436,7 @@ get_df.systemfit <- function(x, type = "residual", ...) {
     } else {
       n <- n_parameters(x)
       extra <- 0
-      mi <- model_info(x)
+      mi <- model_info(x, verbose = FALSE)
 
       if (mi$is_linear || mi$is_negbin) {
         extra <- extra + 1
