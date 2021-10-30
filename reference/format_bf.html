@@ -60,7 +60,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Bayes Factor formatting</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/format_bf.R" class="external-link"><code>R/format_bf.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/format_bf.R" class="external-link"><code>R/format_bf.R</code></a></small>
     <div class="hidden name"><code>format_bf.Rd</code></div>
     </div>
 
@@ -81,15 +81,20 @@
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>bf</dt><dd><p>Bayes Factor.</p></dd>
-</dl><dl><dt>stars</dt><dd><p>Add significance stars (e.g., p &lt; .001***).</p></dd>
-</dl><dl><dt>stars_only</dt><dd><p>Return only significance stars.</p></dd>
-</dl><dl><dt>name</dt><dd><p>Name prefixing the text. Can be <code>NULL</code>.</p></dd>
-</dl><dl><dt>protect_ratio</dt><dd><p>Should values smaller than 1 be represented as ratios?</p></dd>
-</dl><dl><dt>na_reference</dt><dd><p>How to format missing values (<code>NA</code>).</p></dd>
-</dl><dl><dt>exact</dt><dd><p>Should very large or very small values be reported with a
+    <dl><dt>bf</dt>
+<dd><p>Bayes Factor.</p></dd>
+<dt>stars</dt>
+<dd><p>Add significance stars (e.g., p &lt; .001***).</p></dd>
+<dt>stars_only</dt>
+<dd><p>Return only significance stars.</p></dd>
+<dt>name</dt>
+<dd><p>Name prefixing the text. Can be <code>NULL</code>.</p></dd>
+<dt>protect_ratio</dt>
+<dd><p>Should values smaller than 1 be represented as ratios?</p></dd>
+<dt>na_reference</dt>
+<dd><p>How to format missing values (<code>NA</code>).</p></dd>
+<dt>exact</dt>
+<dd><p>Should very large or very small values be reported with a
 scientific format (e.g., 4.24e5), or as truncated values (as "&gt; 1000" and
 "&lt; 1/1000").</p></dd>
 </dl></div>

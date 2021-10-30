@@ -60,7 +60,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Checking if needed package is installed</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/check_if_installed.R" class="external-link"><code>R/check_if_installed.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/check_if_installed.R" class="external-link"><code>R/check_if_installed.R</code></a></small>
     <div class="hidden name"><code>check_if_installed.Rd</code></div>
     </div>
 
@@ -80,22 +80,26 @@
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>package</dt><dd><p>A string (vector) naming the package, whose installation needs
+    <dl><dt>package</dt>
+<dd><p>A string (vector) naming the package, whose installation needs
 to be checked in any of the libraries.</p></dd>
-</dl><dl><dt>reason</dt><dd><p>A phrase describing why the package is needed. The default is a
+<dt>reason</dt>
+<dd><p>A phrase describing why the package is needed. The default is a
 generic description.</p></dd>
-</dl><dl><dt>stop</dt><dd><p>Logical that decides whether the function should stop if the
+<dt>stop</dt>
+<dd><p>Logical that decides whether the function should stop if the
 needed package is not installed.</p></dd>
-</dl><dl><dt>minimum_version</dt><dd><p>String, representing the minimum package version that
+<dt>minimum_version</dt>
+<dd><p>String, representing the minimum package version that
 is required. If <code>NULL</code>, no check for minimum version is done. Note
 that <code>minimum_version</code> only works when <code>package</code> is of length 1.</p></dd>
-</dl><dl><dt>quietly</dt><dd><p>Logical, if <code>TRUE</code>, invisibly returns either <code>TRUE</code> if all
+<dt>quietly</dt>
+<dd><p>Logical, if <code>TRUE</code>, invisibly returns either <code>TRUE</code> if all
 packages are installed, <code>FALSE</code> otherwise, and does not stop or throw a
 warning. If <code>quietly = TRUE</code>, argument <code>stop</code> is ignored. Use this argument
 to internally check for package dependencies without stopping or warnings.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Currently ignored</p></dd>
+<dt>...</dt>
+<dd><p>Currently ignored</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

@@ -61,7 +61,7 @@ from regression models."><meta property="og:image" content="/logo.png"><!-- math
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Extract degrees of freedom</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_df.R" class="external-link"><code>R/get_df.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/get_df.R" class="external-link"><code>R/get_df.R</code></a></small>
     <div class="hidden name"><code>get_df.Rd</code></div>
     </div>
 
@@ -78,16 +78,18 @@ from regression models.</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A statistical model.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
-</dl><dl><dt>type</dt><dd><p>Can be <code>"residual"</code>, <code>"model"</code> or <code>"analytical"</code>. <code>"residual"</code>
+    <dl><dt>x</dt>
+<dd><p>A statistical model.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+<dt>type</dt>
+<dd><p>Can be <code>"residual"</code>, <code>"model"</code> or <code>"analytical"</code>. <code>"residual"</code>
 tries to extract residual degrees of freedoms. If residual degrees of freedom
 could not be extracted, returns analytical degrees of freedom, i.e. <code>n-k</code>
 (number of observations minus number of parameters). <code>"model"</code> returns
 model-based degrees of freedom, i.e. the number of (estimated) parameters.</p></dd>
-</dl><dl><dt>verbose</dt><dd><p>Toggle warnings.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings.</p></dd>
 </dl></div>
     </div>
 

@@ -64,7 +64,7 @@ default)."><meta property="og:image" content="/logo.png"><!-- mathjax --><script
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Log-Likelihood</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_loglikelihood.R" class="external-link"><code>R/get_loglikelihood.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/get_loglikelihood.R" class="external-link"><code>R/get_loglikelihood.R</code></a></small>
     <div class="hidden name"><code>get_loglikelihood.Rd</code></div>
     </div>
 
@@ -86,22 +86,25 @@ default).</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A model.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Passed down to <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code>, if possible.</p></dd>
-</dl><dl><dt>estimator</dt><dd><p>Corresponds to the different estimators for the standard
+    <dl><dt>x</dt>
+<dd><p>A model.</p></dd>
+<dt>...</dt>
+<dd><p>Passed down to <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code>, if possible.</p></dd>
+<dt>estimator</dt>
+<dd><p>Corresponds to the different estimators for the standard
 deviation of the errors. If <code>estimator="ML"</code> (default), the scaling is
 done by n (the biased ML estimator), which is then equivalent to using
 <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">stats::logLik()</a></code>. If <code>estimator="OLS"</code>, it returns the unbiased
 OLS estimator.</p></dd>
-</dl><dl><dt>REML</dt><dd><p>Only for linear models. This argument is present for
+<dt>REML</dt>
+<dd><p>Only for linear models. This argument is present for
 compatibility with <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">stats::logLik()</a></code>. Setting it to <code>TRUE</code> will
 overwrite the <code>estimator</code> argument and is thus equivalent to setting
 <code>estimator="REML"</code>. It will give the same results as
 <code>stats::logLik(..., REML=TRUE)</code>. Note that individual log-likelihoods
 are not available under REML.</p></dd>
-</dl><dl><dt>verbose</dt><dd><p>Toggle warnings and messages.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings and messages.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

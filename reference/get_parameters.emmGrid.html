@@ -60,7 +60,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get model parameters from estimated marginal means objects</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_parameters_emmeans.R" class="external-link"><code>R/get_parameters_emmeans.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/get_parameters_emmeans.R" class="external-link"><code>R/get_parameters_emmeans.R</code></a></small>
     <div class="hidden name"><code>get_parameters.emmGrid.Rd</code></div>
     </div>
 
@@ -77,18 +77,20 @@
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A fitted model.</p></dd>
-</dl><dl><dt>summary</dt><dd><p>Logical, indicates whether the full posterior samples
+    <dl><dt>x</dt>
+<dd><p>A fitted model.</p></dd>
+<dt>summary</dt>
+<dd><p>Logical, indicates whether the full posterior samples
 (<code>summary = FALSE</code>)) or the summarized centrality indices of
 the posterior samples (<code>summary = TRUE</code>)) should be returned as
 estimates.</p></dd>
-</dl><dl><dt>merge_parameters</dt><dd><p>Logical, if <code>TRUE</code> and <code>x</code> has multiple
+<dt>merge_parameters</dt>
+<dd><p>Logical, if <code>TRUE</code> and <code>x</code> has multiple
 columns for parameter names (like <code>emmGrid</code> objects may have), these
 are merged into a single parameter column, with parameters names and values
 as values.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

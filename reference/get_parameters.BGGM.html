@@ -61,7 +61,7 @@ models) from a model."><meta property="og:image" content="/logo.png"><!-- mathja
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get model parameters from Bayesian models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_parameters_bayesian.R" class="external-link"><code>R/get_parameters_bayesian.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/get_parameters_bayesian.R" class="external-link"><code>R/get_parameters_bayesian.R</code></a></small>
     <div class="hidden name"><code>get_parameters.BGGM.Rd</code></div>
     </div>
 
@@ -170,10 +170,10 @@ models) from a model.</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A fitted model.</p></dd>
-</dl><dl><dt>component</dt><dd><p>Which type of parameters to return, such as parameters for the
+    <dl><dt>x</dt>
+<dd><p>A fitted model.</p></dd>
+<dt>component</dt>
+<dd><p>Which type of parameters to return, such as parameters for the
 conditional model, the zero-inflated part of the model, the dispersion
 term, the instrumental variables or marginal effects be returned? Applies
 to models with zero-inflated and/or dispersion formula, or to models with
@@ -188,22 +188,30 @@ If <code>component = "location"</code>, location parameters such as <code>condit
 argument - but no auxiliary parameters). For <code>component = "distributional"</code>
 (or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
 <code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></dd>
-</dl><dl><dt>summary</dt><dd><p>Logical, indicates whether the full posterior samples
+<dt>summary</dt>
+<dd><p>Logical, indicates whether the full posterior samples
 (<code>summary = FALSE</code>)) or the summarized centrality indices of
 the posterior samples (<code>summary = TRUE</code>)) should be returned as
 estimates.</p></dd>
-</dl><dl><dt>centrality</dt><dd><p>Only for models with posterior samples, and when
+<dt>centrality</dt>
+<dd><p>Only for models with posterior samples, and when
 <code>summary = TRUE</code>. In this case, <code>centrality = "mean"</code> would
 calculate means of posterior samples for each parameter, while
 <code>centrality = "median"</code> would use the more robust median value as
 measure of central tendency.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
-</dl><dl><dt>effects</dt><dd><p>Should parameters for fixed effects, random effects
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+<dt>effects</dt>
+<dd><p>Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
-</dl><dl><dt>iterations</dt><dd><p>Number of posterior draws.</p></dd>
-</dl><dl><dt>progress</dt><dd><p>Display progress.</p></dd>
-</dl><dl><dt>verbose</dt><dd><p>Toggle messages and warnings.</p></dd>
-</dl><dl><dt>parameters</dt><dd><p>Regular expression pattern that describes the parameters that
+<dt>iterations</dt>
+<dd><p>Number of posterior draws.</p></dd>
+<dt>progress</dt>
+<dd><p>Display progress.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle messages and warnings.</p></dd>
+<dt>parameters</dt>
+<dd><p>Regular expression pattern that describes the parameters that
 should be returned.</p></dd>
 </dl></div>
     <div id="value">

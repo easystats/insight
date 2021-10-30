@@ -64,7 +64,7 @@ model. See details below."><meta property="og:image" content="/logo.png"><!-- ma
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Prepare summary statistics of model parameters for printing</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/print_parameters.R" class="external-link"><code>R/print_parameters.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/print_parameters.R" class="external-link"><code>R/print_parameters.R</code></a></small>
     <div class="hidden name"><code>print_parameters.Rd</code></div>
     </div>
 
@@ -91,34 +91,40 @@ model. See details below.</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A fitted model, or a data frame returned by <code><a href="clean_parameters.html">clean_parameters()</a></code>.</p></dd>
-</dl><dl><dt>...</dt><dd><p>One or more objects (data frames), which contain information about
+    <dl><dt>x</dt>
+<dd><p>A fitted model, or a data frame returned by <code><a href="clean_parameters.html">clean_parameters()</a></code>.</p></dd>
+<dt>...</dt>
+<dd><p>One or more objects (data frames), which contain information about
 the model parameters and related statistics (like confidence intervals, HDI,
 ROPE, ...).</p></dd>
-</dl><dl><dt>split_by</dt><dd><p><code>split_by</code> should be a character vector with one or
+<dt>split_by</dt>
+<dd><p><code>split_by</code> should be a character vector with one or
 more of the following elements: <code>"Effects"</code>, <code>"Component"</code>,
 <code>"Response"</code> and <code>"Group"</code>. These are the column names returned
 by <code><a href="clean_parameters.html">clean_parameters()</a></code>, which is used to extract the information
 from which the group or component model parameters belong. If <code>NULL</code>, the
 merged data frame is returned. Else, the data frame is split into a list,
 split by the values from those columns defined in <code>split_by</code>.</p></dd>
-</dl><dl><dt>format</dt><dd><p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
+<dt>format</dt>
+<dd><p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
 assumed use for output is basic printing. If <code>"markdown"</code>, markdown-format
 is assumed. This only affects the style of title- and table-caption attributes,
 which are used in <code><a href="export_table.html">export_table()</a></code>.</p></dd>
-</dl><dl><dt>parameter_column</dt><dd><p>String, name of the column that contains the
+<dt>parameter_column</dt>
+<dd><p>String, name of the column that contains the
 parameter names. Usually, for data frames returned by functions the
 easystats-packages, this will be <code>"Parameter"</code>.</p></dd>
-</dl><dl><dt>keep_parameter_column</dt><dd><p>Logical, if <code>TRUE</code>, the data frames in the
+<dt>keep_parameter_column</dt>
+<dd><p>Logical, if <code>TRUE</code>, the data frames in the
 returned list have both a <code>"Cleaned_Parameter"</code> and <code>"Parameter"</code>
 column. If <code>FALSE</code>, the (unformatted) <code>"Parameter"</code> is removed,
 and the column with cleaned parameter names (<code>"Cleaned_Parameter"</code>) is
 renamed into <code>"Parameter"</code>.</p></dd>
-</dl><dl><dt>remove_empty_column</dt><dd><p>Logical, if <code>TRUE</code>, columns with completely
+<dt>remove_empty_column</dt>
+<dd><p>Logical, if <code>TRUE</code>, columns with completely
 empty character values will be removed.</p></dd>
-</dl><dl><dt>titles, subtitles</dt><dd><p>By default, the names of the model components (like
+<dt>titles, subtitles</dt>
+<dd><p>By default, the names of the model components (like
 fixed or random effects, count or zero-inflated model part) are added as
 attributes <code>"table_title"</code> and <code>"table_subtitle"</code> to each list
 element returned by <code>print_parameters()</code>. These attributes are then

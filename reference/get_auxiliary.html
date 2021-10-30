@@ -61,7 +61,7 @@ dispersion, sigma, or beta..."><meta property="og:image" content="/logo.png"><!-
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get auxiliary parameters from models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_auxiliary.R" class="external-link"><code>R/get_auxiliary.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/get_auxiliary.R" class="external-link"><code>R/get_auxiliary.R</code></a></small>
     <div class="hidden name"><code>get_auxiliary.Rd</code></div>
     </div>
 
@@ -82,25 +82,29 @@ dispersion, sigma, or beta...</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A model.</p></dd>
-</dl><dl><dt>type</dt><dd><p>The name of the auxiliary parameter that should be retrieved.
+    <dl><dt>x</dt>
+<dd><p>A model.</p></dd>
+<dt>type</dt>
+<dd><p>The name of the auxiliary parameter that should be retrieved.
 <code>"sigma"</code> is available for most models, <code>"dispersion"</code> for models
 of class <code>glm</code>, <code>glmerMod</code> or <code>glmmTMB</code> as well as <code>brmsfit</code>.
 <code>"beta"</code> and other parameters are currently only returned for <code>brmsfit</code>
 models. See 'Details'.</p></dd>
-</dl><dl><dt>summary</dt><dd><p>Logical, indicates whether the full posterior samples
+<dt>summary</dt>
+<dd><p>Logical, indicates whether the full posterior samples
 (<code>summary = FALSE</code>)) or the summarized centrality indices of
 the posterior samples (<code>summary = TRUE</code>)) should be returned as
 estimates.</p></dd>
-</dl><dl><dt>centrality</dt><dd><p>Only for models with posterior samples, and when
+<dt>centrality</dt>
+<dd><p>Only for models with posterior samples, and when
 <code>summary = TRUE</code>. In this case, <code>centrality = "mean"</code> would
 calculate means of posterior samples for each parameter, while
 <code>centrality = "median"</code> would use the more robust median value as
 measure of central tendency.</p></dd>
-</dl><dl><dt>verbose</dt><dd><p>Toggle warnings.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

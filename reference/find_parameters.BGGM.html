@@ -63,7 +63,7 @@ from as.data.frame()."><meta property="og:image" content="/logo.png"><!-- mathja
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find names of model parameters from Bayesian models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/find_parameters_bayesian.R" class="external-link"><code>R/find_parameters_bayesian.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/find_parameters_bayesian.R" class="external-link"><code>R/find_parameters_bayesian.R</code></a></small>
     <div class="hidden name"><code>find_parameters.BGGM.Rd</code></div>
     </div>
 
@@ -145,10 +145,10 @@ from <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-l
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A fitted model.</p></dd>
-</dl><dl><dt>component</dt><dd><p>Which type of parameters to return, such as parameters for the
+    <dl><dt>x</dt>
+<dd><p>A fitted model.</p></dd>
+<dt>component</dt>
+<dd><p>Which type of parameters to return, such as parameters for the
 conditional model, the zero-inflated part of the model, the dispersion
 term, the instrumental variables or marginal effects be returned? Applies
 to models with zero-inflated and/or dispersion formula, or to models with
@@ -163,12 +163,16 @@ If <code>component = "location"</code>, location parameters such as <code>condit
 argument - but no auxiliary parameters). For <code>component = "distributional"</code>
 (or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
 <code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></dd>
-</dl><dl><dt>flatten</dt><dd><p>Logical, if <code>TRUE</code>, the values are returned
+<dt>flatten</dt>
+<dd><p>Logical, if <code>TRUE</code>, the values are returned
 as character vector, not as list. Duplicated values are removed.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
-</dl><dl><dt>effects</dt><dd><p>Should parameters for fixed effects, random effects
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+<dt>effects</dt>
+<dd><p>Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
-</dl><dl><dt>parameters</dt><dd><p>Regular expression pattern that describes the parameters that
+<dt>parameters</dt>
+<dd><p>Regular expression pattern that describes the parameters that
 should be returned.</p></dd>
 </dl></div>
     <div id="value">

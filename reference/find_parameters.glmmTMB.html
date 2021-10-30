@@ -61,7 +61,7 @@ appear in the summary() output."><meta property="og:image" content="/logo.png"><
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find names of model parameters from mixed models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/find_parameters_mixed.R" class="external-link"><code>R/find_parameters_mixed.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/find_parameters_mixed.R" class="external-link"><code>R/find_parameters_mixed.R</code></a></small>
     <div class="hidden name"><code>find_parameters.glmmTMB.Rd</code></div>
     </div>
 
@@ -85,12 +85,13 @@ appear in the <code><a href="https://rdrr.io/r/base/summary.html" class="externa
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A fitted model.</p></dd>
-</dl><dl><dt>effects</dt><dd><p>Should parameters for fixed effects, random effects
+    <dl><dt>x</dt>
+<dd><p>A fitted model.</p></dd>
+<dt>effects</dt>
+<dd><p>Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
-</dl><dl><dt>component</dt><dd><p>Which type of parameters to return, such as parameters for
+<dt>component</dt>
+<dd><p>Which type of parameters to return, such as parameters for
 the conditional model, the zero-inflated part of the model or the
 dispersion term? Applies to models with zero-inflated and/or dispersion
 formula. Note that the <em>conditional</em> component is also called
@@ -102,9 +103,11 @@ are fixed or random effects - depending on the <code>effects</code> argument -
 but no auxiliary parameters). For <code>component = "distributional"</code> (or
 <code>"auxiliary"</code>), components like <code>sigma</code> or <code>dispersion</code> (and
 other auxiliary parameters) are returned.</p></dd>
-</dl><dl><dt>flatten</dt><dd><p>Logical, if <code>TRUE</code>, the values are returned
+<dt>flatten</dt>
+<dd><p>Logical, if <code>TRUE</code>, the values are returned
 as character vector, not as list. Duplicated values are removed.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

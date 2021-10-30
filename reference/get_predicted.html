@@ -60,7 +60,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Model Predictions (robust)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_predicted.R" class="external-link"><code>R/get_predicted.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/get_predicted.R" class="external-link"><code>R/get_predicted.R</code></a></small>
     <div class="hidden name"><code>get_predicted.Rd</code></div>
     </div>
 
@@ -95,16 +95,17 @@
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A statistical model (can also be a data.frame, in which case the
+    <dl><dt>x</dt>
+<dd><p>A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).</p></dd>
-</dl><dl><dt>...</dt><dd><p>Other argument to be passed for instance to
+<dt>...</dt>
+<dd><p>Other argument to be passed for instance to
 <code><a href="get_predicted_ci.html">get_predicted_ci()</a></code>.</p></dd>
-</dl><dl><dt>data</dt><dd><p>An optional data frame in which to look for variables with which
+<dt>data</dt>
+<dd><p>An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used.</p></dd>
-</dl><dl><dt>predict</dt><dd><p>string or <code>NULL</code>
-</p><ul><li><p><code>"link"</code> returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).</p></li>
+<dt>predict</dt>
+<dd><p>string or <code>NULL</code></p><ul><li><p><code>"link"</code> returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).</p></li>
 <li><p><code>"expectation"</code> (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).</p></li>
 <li><p><code>"prediction"</code> also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models).</p></li>
 <li><p><code>"classification"</code> only differs from <code>"prediction"</code> for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor).</p></li>
@@ -112,19 +113,23 @@ to predict. If omitted, the data used to fit the model is used.</p></dd>
 <li><p>When <code>predict = NULL</code>, alternative arguments such as <code>type</code> will be captured by the <code>...</code> ellipsis and passed directly to the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method supplied by the modelling package.</p></li>
 <li><p>Notes: You can see the 4 options for predictions as on a gradient from "close to the model" to "close to the response data": "link", "expectation", "prediction", "classification". The <code>predict</code> argument modulates two things: the scale of the output and the type of certainty interval. Read more about in the <strong>Details</strong> section below.</p></li>
 </ul></dd>
-</dl><dl><dt>iterations</dt><dd><p>For Bayesian models, this corresponds to the number of
+<dt>iterations</dt>
+<dd><p>For Bayesian models, this corresponds to the number of
 posterior draws. If <code>NULL</code>, will return all the draws (one for each
 iteration of the model). For frequentist models, if not <code>NULL</code>, will
 generate bootstrapped draws, from which bootstrapped CIs will be computed.
 Iterations can be accessed by running <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> on the output.</p></dd>
-</dl><dl><dt>verbose</dt><dd><p>Toggle warnings.</p></dd>
-</dl><dl><dt>include_random</dt><dd><p>If <code>TRUE</code> (default), include all random effects in
+<dt>verbose</dt>
+<dd><p>Toggle warnings.</p></dd>
+<dt>include_random</dt>
+<dd><p>If <code>TRUE</code> (default), include all random effects in
 the prediction. If <code>FALSE</code>, don't take them into account. Can also be
 a formula to specify which random effects to condition on when predicting
 (passed to the <code>re.form</code> argument). If <code>include_random = TRUE</code>
 and <code>newdata</code> is provided, make sure to include the random effect
 variables in <code>newdata</code> as well.</p></dd>
-</dl><dl><dt>include_smooth</dt><dd><p>For General Additive Models (GAMs). If <code>FALSE</code>,
+<dt>include_smooth</dt>
+<dd><p>For General Additive Models (GAMs). If <code>FALSE</code>,
 will fix the value of the smooth to its average, so that the predictions
 are not depending on it. (default), <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>, or
 <code><a href="https://easystats.github.io/bayestestR/reference/map_estimate.html" class="external-link">bayestestR::map_estimate()</a></code>.</p></dd>

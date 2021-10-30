@@ -61,7 +61,7 @@ model and returns it as data frame."><meta property="og:image" content="/logo.pn
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get the data that was used to fit the model</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_data.R" class="external-link"><code>R/get_data.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/get_data.R" class="external-link"><code>R/get_data.R</code></a></small>
     <div class="hidden name"><code>get_data.Rd</code></div>
     </div>
 
@@ -150,21 +150,25 @@ model and returns it as data frame.</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A fitted model.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
-</dl><dl><dt>effects</dt><dd><p>Should model data for fixed effects, random effects
+    <dl><dt>x</dt>
+<dd><p>A fitted model.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+<dt>effects</dt>
+<dd><p>Should model data for fixed effects, random effects
 or both be returned? Only applies to mixed models.</p></dd>
-</dl><dl><dt>verbose</dt><dd><p>Toggle messages and warnings.</p></dd>
-</dl><dl><dt>component</dt><dd><p>Should all predictor variables, predictor variables for the
+<dt>verbose</dt>
+<dd><p>Toggle messages and warnings.</p></dd>
+<dt>component</dt>
+<dd><p>Should all predictor variables, predictor variables for the
 conditional model, the zero-inflated part of the model, the dispersion
 term or the instrumental variables be returned? Applies to models
 with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
 component, depending on the model.</p></dd>
-</dl><dl><dt>shape</dt><dd><p>Return long or wide data? Only applicable in repeated measures
+<dt>shape</dt>
+<dd><p>Return long or wide data? Only applicable in repeated measures
 designs.</p></dd>
 </dl></div>
     <div id="value">

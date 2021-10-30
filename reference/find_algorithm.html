@@ -62,7 +62,7 @@ chains, iterations and warmup-samples."><meta property="og:image" content="/logo
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find sampling algorithm and optimizers</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/find_algorithm.R" class="external-link"><code>R/find_algorithm.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/find_algorithm.R" class="external-link"><code>R/find_algorithm.R</code></a></small>
     <div class="hidden name"><code>find_algorithm.Rd</code></div>
     </div>
 
@@ -77,16 +77,15 @@ chains, iterations and warmup-samples.</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A fitted model.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
+    <dl><dt>x</dt>
+<dd><p>A fitted model.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A list with elements depending on the model.
-<br>
-For frequentist models:</p><ul><li><p><code>algorithm</code>, for instance <code>"OLS"</code> or <code>"ML"</code></p></li>
+<br>For frequentist models:</p><ul><li><p><code>algorithm</code>, for instance <code>"OLS"</code> or <code>"ML"</code></p></li>
 <li><p><code>optimizer</code>, name of optimizing function, only applies to
 specific models (like <code>gam</code>)</p></li>
 </ul><p>For frequentist mixed models:</p><ul><li><p><code>algorithm</code>, for instance <code>"REML"</code> or <code>"ML"</code></p></li>

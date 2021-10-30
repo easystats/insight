@@ -61,7 +61,7 @@ predictions made by a model."><meta property="og:image" content="/logo.png"><!--
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Confidence and Prediction Interval for Model Predictions</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_predicted_ci.R" class="external-link"><code>R/get_predicted_ci.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/get_predicted_ci.R" class="external-link"><code>R/get_predicted_ci.R</code></a></small>
     <div class="hidden name"><code>get_predicted_ci.Rd</code></div>
     </div>
 
@@ -90,18 +90,22 @@ predictions made by a model.</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A statistical model (can also be a data.frame, in which case the
+    <dl><dt>x</dt>
+<dd><p>A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).</p></dd>
-</dl><dl><dt>predictions</dt><dd><p>A vector of predicted values (as obtained by
+<dt>predictions</dt>
+<dd><p>A vector of predicted values (as obtained by
 <code><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">stats::fitted()</a></code>, <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">stats::predict()</a></code> or
 <code><a href="get_predicted.html">get_predicted()</a></code>).</p></dd>
-</dl><dl><dt>...</dt><dd><p>Not used for now.</p></dd>
-</dl><dl><dt>data</dt><dd><p>An optional data frame in which to look for variables with which
+<dt>...</dt>
+<dd><p>Not used for now.</p></dd>
+<dt>data</dt>
+<dd><p>An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used.</p></dd>
-</dl><dl><dt>ci</dt><dd><p>The interval level (default <code>0.95</code>, i.e., <code>95%</code> CI).</p></dd>
-</dl><dl><dt>ci_type</dt><dd><p>Can be <code>"prediction"</code> or <code>"confidence"</code>. Prediction
+<dt>ci</dt>
+<dd><p>The interval level (default <code>0.95</code>, i.e., <code>95%</code> CI).</p></dd>
+<dt>ci_type</dt>
+<dd><p>Can be <code>"prediction"</code> or <code>"confidence"</code>. Prediction
 intervals show the range that likely contains the value of a new
 observation (in what range it would fall), whereas confidence intervals
 reflect the uncertainty around the estimated parameters (and gives the
@@ -115,22 +119,26 @@ This applies mostly for "simple" linear models (like <code>lm</code>), as for
 other models (e.g., <code>glm</code>), prediction intervals are somewhat useless
 (for instance, for a binomial model for which the dependent variable is a
 vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd>
-</dl><dl><dt>vcov_estimation</dt><dd><p>Either a matrix, or a string, indicating the suffix
+<dt>vcov_estimation</dt>
+<dd><p>Either a matrix, or a string, indicating the suffix
 of the <code>vcov*()</code>-function from the <span class="pkg">sandwich</span> or <span class="pkg">clubSandwich</span>
 package, e.g. <code>vcov_estimation = "CL"</code> (which calls
 <code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovCL.html" class="external-link">sandwich::vcovCL()</a></code> to compute clustered covariance matrix
 estimators), or <code>vcov_estimation = "HC"</code> (which calls
 <code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovHC.html" class="external-link">sandwich::vcovHC()</a></code> to compute heteroskedasticity-consistent covariance
 matrix estimators).</p></dd>
-</dl><dl><dt>vcov_type</dt><dd><p>Character vector, specifying the estimation type for the
+<dt>vcov_type</dt>
+<dd><p>Character vector, specifying the estimation type for the
 robust covariance matrix estimation (see
 <code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovHC.html" class="external-link">sandwich::vcovHC()</a></code> or <code><a href="https://rdrr.io/pkg/clubSandwich/man/vcovCR.html" class="external-link">clubSandwich::vcovCR()</a></code>
 for details). Only applies if <code>vcov_estimation</code> is a string, and not a matrix.</p></dd>
-</dl><dl><dt>vcov_args</dt><dd><p>List of named vectors, used as additional arguments that are
+<dt>vcov_args</dt>
+<dd><p>List of named vectors, used as additional arguments that are
 passed down to the <span class="pkg">sandwich</span>-function specified in
 <code>vcov_estimation</code>. Only applies if <code>vcov_estimation</code> is a string, and not
 a matrix.</p></dd>
-</dl><dl><dt>dispersion_method, ci_method</dt><dd><p>These arguments are only used in
+<dt>dispersion_method, ci_method</dt>
+<dd><p>These arguments are only used in
 the context of bootstrapped and Bayesian models. Possible values are
 <code>dispersion_method = c("sd", "mad")</code> and
 <code>ci_method = c("quantile", "hdi", "eti")</code>. For the latter, the

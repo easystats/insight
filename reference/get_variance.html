@@ -63,7 +63,7 @@ for get_variance(x, component = "residual") etc.'><meta property="og:image" cont
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get variance components from random effects models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/master/R/get_variances.R" class="external-link"><code>R/get_variances.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/get_variances.R" class="external-link"><code>R/get_variances.R</code></a></small>
     <div class="hidden name"><code>get_variance.Rd</code></div>
     </div>
 
@@ -103,17 +103,20 @@ for <code>get_variance(x, component = "residual")</code> etc.</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>x</dt><dd><p>A mixed effects model.</p></dd>
-</dl><dl><dt>component</dt><dd><p>Character value, indicating the variance component that should
+    <dl><dt>x</dt>
+<dd><p>A mixed effects model.</p></dd>
+<dt>component</dt>
+<dd><p>Character value, indicating the variance component that should
 be returned. By default, all variance components are returned. The
 distribution-specific (<code>"distribution"</code>) and residual (<code>"residual"</code>)
 variance are the most computational intensive components, and hence may
 take a few seconds to calculate.</p></dd>
-</dl><dl><dt>verbose</dt><dd><p>Toggle off warnings.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Currently not used.</p></dd>
-</dl><dl><dt>tolerance</dt><dd><p>Tolerance for singularity check of random effects, to decide
+<dt>verbose</dt>
+<dd><p>Toggle off warnings.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+<dt>tolerance</dt>
+<dd><p>Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
 stricter the test will be. See <code><a href="https://easystats.github.io/performance/reference/check_singularity.html" class="external-link">performance::check_singularity()</a></code>.</p></dd>
