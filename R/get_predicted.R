@@ -953,7 +953,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   predict_method <- lapply(
     class(x), function(i) {
       tryCatch(utils::getS3method("predict", i),
-               error = function(c), NULL)
+               error = function(e) NULL)
     }
   )
   predict_method <- predict_method[!sapply(predict_method, is.null)][[1]]
