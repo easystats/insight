@@ -1032,7 +1032,9 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   }
 
   # Type (that's for the initial call to stats::predict)
-  if (info$is_linear) {
+  if (predict_arg == "terms") {
+    type_arg <- "terms"
+  } else if (info$is_linear) {
     type_arg <- "response"
   } else {
     type_arg <- "link"
