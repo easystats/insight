@@ -950,7 +950,10 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   if (is.null(ci)) ci <- 0
 
   # check `predict` user-input
-  supported <- c("expectation", "expected", "link", "prediction", "predicted", "classification")
+  supported <- c(
+    c("expectation", "expected", "link", "prediction", "predicted", "classification"),
+    eval(formals(getS3method("predict", class(x)))$type)
+  )
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
     msg <- format_message(sprintf('"%s" is not officially supported by the `get_predicted()` function as a value for the `predict` argument. It will not be processed or validated, and will be passed directly to the `predict()` method supplied by the modeling package. Users are encouraged to check the validity and scale of the results. Set `verbose=FALSE` to silence this warning, or use one of the supported values for the `predict` argument: %s.', predict, paste(sprintf('"%s"', setdiff(supported, c("expected", "predicted"))), collapse = ", ")))
     warning(msg, call. = FALSE)
