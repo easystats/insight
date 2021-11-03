@@ -957,14 +957,6 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     }
   )
   predict_method <- predict_method[!sapply(predict_method, is.null)][[1]]
-  supported <- c(
-    c("expectation", "expected", "link", "prediction", "predicted", "classification"),
-    eval(formals(predict_method)$type)
-  )
-  if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
-    msg <- format_message(sprintf('"%s" is not officially supported by the `get_predicted()` function as a value for the `predict` argument. It will not be processed or validated, and will be passed directly to the `predict()` method supplied by the modeling package. Users are encouraged to check the validity and scale of the results. Set `verbose=FALSE` to silence this warning, or use one of the supported values for the `predict` argument: %s.', predict, paste(sprintf('"%s"', setdiff(supported, c("expected", "predicted"))), collapse = ", ")))
-    warning(msg, call. = FALSE)
-  }
 
   # check aliases
   if (!is.null(predict)) {
@@ -976,6 +968,27 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     }
   }
 
+  # backward compatibility
+  if (predict == "relation") {
+    message(format_message(
+      '`predict = "relation" is deprecated.',
+      'Please use `predict = "expectation" instead.'
+    ))
+    predict <- "expectation"
+  }
+
+  easystats_methods <- c("expectation", "link", "prediction", "classification")
+  supported <- c(easystats_methods, eval(formals(predict_method)$type))
+  if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
+    msg <- format_message(
+      sprintf('`predict` = "%s"` is not officially supported by `get_predicted()`.', predict),
+      '`predict` will be passed directly to the `predict()` method for the model and not validated.',
+      'Please check the validity and scale of the results.',
+      'Set `verbose = FALSE` to silence this warning, or use one of the supported values for the `predict` argument:',
+      paste(" ", paste(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted"))), collapse = ", "))
+    )
+    warning(msg, call. = FALSE)
+  }
 
   # Arbitrate conflicts between the `predict` and `type` from the ellipsis. We
   # create a new variable called `predict_arg` to resolve conflicts. This avoids
@@ -991,13 +1004,13 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     if (is.null(predict)) {
       predict_arg <- dots$type
     } else {
-      stop(format_message('The `predict` and `type` arguments cannot be used simultaneously. The preferred argument for the `get_predicted()` function is `predict`. If you need to pass a `type` argument directly to the `predict()` method associated with your model type, you must set `predict` to `NULL` explicitly: `get_predicted(model, predict=NULL, type="response")`'))
+      stop(format_message(
+        '`predict` and `type` cannot both be given.',
+        'The preferred argument for `get_predicted()` is `predict`.',
+        'To use the `type` argument, set `predict = NULL` explicitly, e.g.,:',
+        '  `get_predicted(model, predict = NULL, type="response")`'
+      ))
     }
-  }
-
-  # sanity: `predict` argument (backward compatibility -- we already warned above)
-  if (predict_arg == "relation") {
-    predict_arg <- "expectation"
   }
 
   # Prediction and CI type
