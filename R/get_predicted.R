@@ -969,7 +969,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   }
 
   # backward compatibility
-  if (predict == "relation") {
+  if (identical(predict, "relation")) {
     message(format_message(
       '`predict = "relation" is deprecated.',
       'Please use `predict = "expectation" instead.'
