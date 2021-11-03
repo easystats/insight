@@ -419,9 +419,7 @@ test_that("lm: get_predicted vs barebones `predict()`", {
 
 test_that("using both `predict` and `type` raises an informative error", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
-  expect_warning(expect_error(
-    get_predicted(mod, predict = "response", type = "response")
-  ))
+  expect_error(get_predicted(mod, predict = "response", type = "response"))
 })
 
 
@@ -444,8 +442,7 @@ test_that("`predict()` vs. `get_predicted` link equivalence", {
   known <- predict(mod, type = "response", se.fit = TRUE)
   unknown1 <- as.data.frame(get_predicted(mod, predict = "expectation"))
   unknown2 <- as.data.frame(get_predicted(mod, predict = NULL, type = "response"))
-  unknown3 <- suppressWarnings(as.data.frame(get_predicted(mod, predict = "response")))
-  expect_warning(as.data.frame(get_predicted(mod, predict = "response")))
+  unknown3 <- as.data.frame(get_predicted(mod, predict = "response"))
   expect_equal(unname(known$fit), unknown1$Predicted)
   expect_equal(unname(known$se.fit), unknown1$SE)
   expect_equal(unname(known$fit), unknown2$Predicted)
