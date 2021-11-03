@@ -178,7 +178,7 @@ is_regression_model <- function(x) {
     "bamlss", "bamlss.frame", "brms",
     "cgam", "cgamm",
     "gam", "Gam", "GAMBoost", "gamlr", "gamlss", "gamm", "gamm4",
-    "stanmvreg", "stanreg"
+    "stanmvreg", "stanreg", "brmsfit"
   )
   out
 }
