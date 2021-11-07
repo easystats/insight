@@ -254,7 +254,7 @@
     "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale",
     "marginal", "alpha", "beta", "survival", "infrequent_purchase", "auxiliary",
     "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi", "aux", "dist",
-    "selection", "outcome", "time_dummies", "sigma_random", "beta_random"
+    "selection", "outcome", "time_dummies", "sigma_random", "beta_random", "car"
   )
 }
 
@@ -280,11 +280,14 @@
   # auxiliary parameters
   auxiliary_parameters <- .aux_elements()
 
+  # conditional autoregressive (car)
+  car_parameters <- "car"
+
   # random parameters
   random_parameters <- c("random", "zero_inflated_random", "sigma_random", "beta_random")
 
   # conditional component
-  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "smooth_terms"))
+  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "car", "smooth_terms"))
 
   # location parameters
   location_parameters <- if (effects == "fixed") {

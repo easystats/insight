@@ -245,6 +245,7 @@ find_parameters.brmsfit <- function(x,
   rand_cor <- fe[grepl("(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
   randzi_cor <- fe[grepl("^cor_(.*_zi)", fe, perl = TRUE)]
   simo <- fe[grepl("^simo_", fe, perl = TRUE)]
+  car_struc <- fe[grepl("^rcar\\[", fe, perl = TRUE)]
   smooth_terms <- fe[grepl("^sds_", fe, perl = TRUE)]
   priors <- fe[grepl("^prior_", fe, perl = TRUE)]
   sigma <- fe[grepl("^sigma_", fe, perl = TRUE) | grepl("sigma", fe, fixed = TRUE)]
@@ -278,7 +279,8 @@ find_parameters.brmsfit <- function(x,
     mix = mix,
     shiftprop = shiftprop,
     auxiliary = auxiliary,
-    priors = priors
+    priors = priors,
+    car = car_struc
   ))
 
   elements <- .get_elements(effects = effects, component = component)
