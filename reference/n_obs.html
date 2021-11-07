@@ -72,6 +72,9 @@ to fit the model, as numeric value.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">n_obs</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
+<span class="co"># S3 method for glm</span>
+<span class="fu">n_obs</span><span class="op">(</span><span class="va">x</span>, disaggregate <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
+
 <span class="co"># S3 method for svyolr</span>
 <span class="fu">n_obs</span><span class="op">(</span><span class="va">x</span>, weighted <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
 
@@ -88,6 +91,13 @@ to fit the model, as numeric value.</p>
 <dd><p>A fitted model.</p></dd>
 <dt>...</dt>
 <dd><p>Currently not used.</p></dd>
+<dt>disaggregate</dt>
+<dd><p>For binomial models with aggregated data, <code>n_obs()</code>
+returns the number of data rows by default. If <code>disaggregate = TRUE</code>,
+the total number of trials is returned instead (determined by summing the
+results of <code><a href="https://rdrr.io/r/stats/weights.html" class="external-link">weights()</a></code> for aggregated data, which will be either the
+weights input for proportion success response or the row sums of the
+response matrix if matrix response, see 'Examples').</p></dd>
 <dt>weighted</dt>
 <dd><p>For survey designs, returns the weighted sample size.</p></dd>
 <dt>shape</dt>
@@ -110,6 +120,18 @@ this information is not available.</p>
 <span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">n_obs</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 32</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cbpp</span>, package <span class="op">=</span> <span class="st">"lme4"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span></span>
+<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">incidence</span>, <span class="va">size</span> <span class="op">-</span> <span class="va">incidence</span><span class="op">)</span> <span class="op">~</span> <span class="va">period</span>,</span>
+<span class="r-in">    data <span class="op">=</span> <span class="va">cbpp</span>,</span>
+<span class="r-in">    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in">  <span class="fu">n_obs</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">n_obs</span><span class="op">(</span><span class="va">m</span>, disaggregate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 842</span>
 </code></pre></div>
     </div>
   </div>
