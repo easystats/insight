@@ -27,6 +27,8 @@ to every aspect of many model objects via consistent syntax and output.
 ## Installation
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
+[![insight status
+badge](https://easystats.r-universe.dev/badges/insight)](https://easystats.r-universe.dev)
 [![R
 check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
 
