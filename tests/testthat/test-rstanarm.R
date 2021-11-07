@@ -269,7 +269,8 @@ if (.runThisTest && .runStanTest) {
     })
 
     test_that("n_obs", {
-      expect_equal(n_obs(m1), 842)
+      expect_equal(n_obs(m1), 56)
+      expect_equal(n_obs(m1, disaggregate = TRUE), 842)
     })
 
     test_that("find_paramaters", {
@@ -346,7 +347,7 @@ if (.runThisTest && .runStanTest) {
         get_variance(m1),
         list(
           var.fixed = 0.36274,
-          var.random = 0.03983,
+          var.random = 0.5988885,
           var.residual = 3.28987,
           var.distribution = 3.28987,
           var.dispersion = 0,
@@ -360,7 +361,7 @@ if (.runThisTest && .runStanTest) {
         tolerance = 1e-4
       )
       expect_equal(get_variance_random(m1),
-        c(var.random = 0.03983106),
+        c(var.random = 0.5988885),
         tolerance = 1e-4
       )
       expect_equal(get_variance_residual(m1),

@@ -133,7 +133,7 @@
       [1] "binomial"
       
       $n_obs
-      [1] 842
+      [1] 56
       
       $model_terms
       $model_terms$response
