@@ -4,6 +4,7 @@
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.01412/status.svg)](https://doi.org/10.21105/joss.01412)
 [![downloads](https://cranlogs.r-pkg.org/badges/insight)](https://cranlogs.r-pkg.org/)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/insight)](https://cranlogs.r-pkg.org/)
+[![status](https://tinyverse.netlify.com/badge/insight)](https://CRAN.R-project.org/package=insight)
 
 **Gain insight into your models!**
 
@@ -11,8 +12,8 @@ When fitting any statistical model, there are many useful pieces of
 information that are simultaneously calculated and stored beyond
 coefficient estimates and general model fit statistics. Although there
 exist some generic functions to obtain model information and data, many
-package-specific modeling functions do not provide such methods to allow
-users to access such valuable information.
+package-specific modelling functions do not provide such methods to
+allow users to access such valuable information.
 
 **insight** is an R-package that fills this important gap by providing a
 suite of functions to support almost any model (see a list of the many
