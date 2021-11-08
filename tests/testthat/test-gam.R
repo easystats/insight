@@ -198,7 +198,7 @@ if (.runThisTest) {
       tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = head(dat, 30))
       pred <- get_predicted(tmp)
       expect_s3_class(pred, "get_predicted")
-      expect_snapshot(print(pred))
+      # expect_snapshot(print(pred))
 
       x <- get_predicted(tmp, predict = NULL, type = "link")
       y <- get_predicted(tmp, predict = "link")
