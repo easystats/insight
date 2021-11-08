@@ -1000,9 +1000,17 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     if (is.null(predict)) {
       stop(format_message("Please supply a value for the `predict` argument."))
     }
+    # Type (that's for the initial call to stats::predict)
+    if (predict_arg == "terms") {
+      type_arg <- "terms"
+    } else if (info$is_linear) {
+      type_arg <- "response"
+    } else {
+      type_arg <- "link"
+    }
   } else {
     if (is.null(predict)) {
-      predict_arg <- dots$type
+      type_arg <- predict_arg <- dots$type
     } else {
       stop(format_message(
         '`predict` and `type` cannot both be given.',
@@ -1029,15 +1037,6 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   } else {
     ci_type <- "confidence"
     scale <- predict_arg
-  }
-
-  # Type (that's for the initial call to stats::predict)
-  if (predict_arg == "terms") {
-    type_arg <- "terms"
-  } else if (info$is_linear) {
-    type_arg <- "response"
-  } else {
-    type_arg <- "link"
   }
 
   # Transform

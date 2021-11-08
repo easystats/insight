@@ -94,7 +94,8 @@ if (requiet("testthat") &&
   })
 
   test_that("n_obs", {
-    expect_equal(n_obs(m1), 900)
+    expect_equal(n_obs(m1), 24)
+    expect_equal(n_obs(m1, disaggregate = TRUE), 900)
   })
 
   test_that("link_function", {

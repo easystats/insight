@@ -434,6 +434,8 @@ clean_parameters.mlm <- function(x, ...) {
       "sigma"
     } else if (grepl("priors", i, fixed = TRUE)) {
       "priors"
+    } else if (i %in% c("car", "sdcar")) {
+      "car"
     } else if (grepl("smooth_terms", i, fixed = TRUE)) {
       "smooth_terms"
     } else if (grepl("alpha", i, fixed = TRUE)) {

@@ -1417,7 +1417,7 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
         fcond <- gsub("(.*)\\+$", "\\1", .trim(fcond))
       }
       # random effects only?
-      if (grepl("~$", fcond)) {
+      if (grepl("~$", .trim(fcond))) {
         fcond <- paste(fcond, "1")
       }
       f.cond <- stats::as.formula(.trim(fcond))

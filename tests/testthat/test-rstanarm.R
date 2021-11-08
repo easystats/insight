@@ -36,10 +36,10 @@ if (.runThisTest && .runStanTest) {
       )
     m6 <- insight::download_model("stanreg_gamm4_1")
 
-    m7 <- stan_lm(mpg ~ wt + qsec + am,
+    m7 <- suppressWarnings(stan_lm(mpg ~ wt + qsec + am,
       data = mtcars, prior = R2(0.75),
       chains = 1, iter = 300, refresh = 0
-    )
+    ))
 
     m8 <- stan_lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy, refresh = 0)
 
@@ -58,6 +58,7 @@ if (.runThisTest && .runStanTest) {
       data = fake_dat,
       link = "logit",
       link.phi = "log",
+      refresh = 0,
       algorithm = "optimizing" # just for speed of example
     )
 
@@ -74,32 +75,32 @@ if (.runThisTest && .runStanTest) {
     y <- mtcars$mpg[not_NA]
     ybar <- mean(y)
     s_y <- sd(y)
-    m11 <- stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
+    m11 <- suppressWarnings(stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
       prior = R2(.75),
       # the next line is only to make the example go fast
       chains = 1, iter = 500, seed = 12345
-    )
+    ))
 
     dat <- infert[order(infert$stratum), ] # order by strata
-    m12 <- stan_clogit(case ~ spontaneous + induced + (1 | education),
+    m12 <- suppressWarnings(stan_clogit(case ~ spontaneous + induced + (1 | education),
       strata = stratum,
       data = dat,
       subset = parity <= 2,
       QR = TRUE,
-      chains = 2, iter = 500
-    ) # for speed only
+      chains = 2, iter = 500, refresh = 0
+    )) # for speed only
 
     if (.Platform$OS.type != "windows" || .Platform$r_arch != "i386") {
-      m13 <- stan_jm(
+      m13 <- suppressWarnings(stan_jm(
         formulaLong = logBili ~ year + (1 | id),
         dataLong = pbcLong,
         formulaEvent = Surv(futimeYears, death) ~ sex + trt,
         dataEvent = pbcSurv,
         time_var = "year",
         # this next line is only to keep the example small in size!
-        chains = 1, cores = 1, seed = 12345, iter = 1000
-      )
-      expect_snapshot(model_info(m13))
+        chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
+      ))
+      # expect_snapshot(model_info(m13))
     }
 
     data("Orange", package = "datasets")
@@ -117,31 +118,76 @@ if (.runThisTest && .runStanTest) {
     #   iter = 1000
     # )
 
-    m15 <- stan_mvmer(
+    m15 <- suppressWarnings(stan_mvmer(
       formula = list(
         logBili ~ year + (1 | id),
         albumin ~ sex + year + (year | id)
       ),
       data = pbcLong,
       # this next line is only to keep the example small in size!
-      chains = 1, cores = 1, seed = 12345, iter = 1000
-    )
+      chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
+    ))
 
     test_that("model_info-stanreg-glm", {
-      expect_snapshot(model_info(m1))
-      expect_snapshot(model_info(m2))
-      expect_snapshot(model_info(m3))
-      expect_snapshot(model_info(m4))
-      expect_snapshot(model_info(m5))
-      expect_snapshot(model_info(m6))
-      expect_snapshot(model_info(m7))
-      expect_snapshot(model_info(m8))
-      expect_snapshot(model_info(m9))
-      expect_snapshot(model_info(m10))
-      expect_snapshot(model_info(m11))
-      expect_snapshot(model_info(m12))
-      # expect_snapshot(model_info(m14))
-      expect_snapshot(model_info(m15))
+      expect_equal(
+        model_info(m1),
+        list(is_binomial = TRUE, is_bernoulli = FALSE, is_count = FALSE,
+             is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
+             is_dirichlet = FALSE, is_exponential = FALSE, is_logit = TRUE,
+             is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
+             is_survival = FALSE, is_linear = FALSE, is_tweedie = FALSE,
+             is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
+             is_hurdle = FALSE, is_ordinal = FALSE, is_cumulative = FALSE,
+             is_multinomial = FALSE, is_categorical = FALSE, is_mixed = TRUE,
+             is_multivariate = FALSE, is_trial = TRUE, is_bayesian = TRUE,
+             is_gam = FALSE, is_anova = FALSE, is_timeseries = FALSE,
+             is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
+             is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
+             is_xtab = FALSE, is_proptest = FALSE, is_binomtest = FALSE,
+             is_meta = FALSE, link_function = "logit", family = "binomial",
+             n_obs = 56L, model_terms = list(response = c("incidence", "size"), conditional = c("size", "period"), random = "herd"))
+      )
+
+      expect_equal(
+        model_info(m2),
+        list(is_binomial = FALSE, is_bernoulli = FALSE, is_count = FALSE,
+             is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
+             is_dirichlet = FALSE, is_exponential = FALSE, is_logit = FALSE,
+             is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
+             is_survival = FALSE, is_linear = TRUE, is_tweedie = FALSE,
+             is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
+             is_hurdle = FALSE, is_ordinal = FALSE, is_cumulative = FALSE,
+             is_multinomial = FALSE, is_categorical = FALSE, is_mixed = FALSE,
+             is_multivariate = FALSE, is_trial = FALSE, is_bayesian = TRUE,
+             is_gam = FALSE, is_anova = FALSE, is_timeseries = FALSE,
+             is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
+             is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
+             is_xtab = FALSE, is_proptest = FALSE, is_binomtest = FALSE,
+             is_meta = FALSE, link_function = "identity", family = "gaussian",
+             n_obs = 150L, model_terms = list(response = "Sepal.Width", conditional = c("Species", "Petal.Length")))
+      )
+
+      expect_equal(
+        model_info(m3),
+        list(is_binomial = TRUE, is_bernoulli = TRUE, is_count = FALSE,
+             is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
+             is_dirichlet = FALSE, is_exponential = FALSE, is_logit = TRUE,
+             is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
+             is_survival = FALSE, is_linear = FALSE, is_tweedie = FALSE,
+             is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
+             is_hurdle = FALSE, is_ordinal = FALSE, is_cumulative = FALSE,
+             is_multinomial = FALSE, is_categorical = FALSE, is_mixed = FALSE,
+             is_multivariate = FALSE, is_trial = FALSE, is_bayesian = TRUE,
+             is_gam = FALSE, is_anova = FALSE, is_timeseries = FALSE,
+             is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
+             is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
+             is_xtab = FALSE, is_proptest = FALSE, is_binomtest = FALSE,
+             is_meta = FALSE, link_function = "logit", family = "binomial",
+             n_obs = 32L, model_terms = list(response = "vs", conditional = "wt"))
+      )
+
+      ## TODO add model m4 to m15
+
     })
 
     test_that("n_parameters", {
@@ -269,7 +315,8 @@ if (.runThisTest && .runStanTest) {
     })
 
     test_that("n_obs", {
-      expect_equal(n_obs(m1), 842)
+      expect_equal(n_obs(m1), 56)
+      expect_equal(n_obs(m1, disaggregate = TRUE), 842)
     })
 
     test_that("find_paramaters", {
@@ -346,7 +393,7 @@ if (.runThisTest && .runStanTest) {
         get_variance(m1),
         list(
           var.fixed = 0.36274,
-          var.random = 0.03983,
+          var.random = 0.5988885,
           var.residual = 3.28987,
           var.distribution = 3.28987,
           var.dispersion = 0,
@@ -360,7 +407,7 @@ if (.runThisTest && .runStanTest) {
         tolerance = 1e-4
       )
       expect_equal(get_variance_random(m1),
-        c(var.random = 0.03983106),
+        c(var.random = 0.5988885),
         tolerance = 1e-4
       )
       expect_equal(get_variance_residual(m1),

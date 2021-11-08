@@ -5,6 +5,12 @@
 #'   to fit the model, as numeric value.
 #'
 #' @param weighted For survey designs, returns the weighted sample size.
+#' @param disaggregate For binomial models with aggregated data, `n_obs()`
+#'   returns the number of data rows by default. If `disaggregate = TRUE`,
+#'   the total number of trials is returned instead (determined by summing the
+#'   results of `weights()` for aggregated data, which will be either the
+#'   weights input for proportion success response or the row sums of the
+#'   response matrix if matrix response, see 'Examples').
 #' @inheritParams find_predictors
 #' @inheritParams get_response
 #' @inheritParams find_formula
@@ -16,6 +22,17 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' n_obs(m)
+#'
+#' if (require("lme4")) {
+#'   data(cbpp, package = "lme4")
+#'   m <- glm(
+#'     cbind(incidence, size - incidence) ~ period,
+#'     data = cbpp,
+#'     family = binomial(link = "logit")
+#'   )
+#'   n_obs(m)
+#'   n_obs(m, disaggregate = TRUE)
+#' }
 #' @export
 n_obs <- function(x, ...) {
   UseMethod("n_obs")
@@ -49,8 +66,9 @@ n_obs.default <- function(x, ...) {
 }
 
 
+#' @rdname n_obs
 #' @export
-n_obs.glm <- function(x, ...) {
+n_obs.glm <- function(x, disaggregate = FALSE, ...) {
   is_binomial <- tryCatch(
     {
       fam <- stats::family(x)
@@ -63,7 +81,7 @@ n_obs.glm <- function(x, ...) {
 
   .nobs <- stats::nobs(x)
 
-  if (isTRUE(is_binomial)) {
+  if (isTRUE(is_binomial) && isTRUE(disaggregate)) {
     resp <- deparse(stats::formula(x)[[2]])
     resp_data <- get_response(x, verbose = FALSE)
 

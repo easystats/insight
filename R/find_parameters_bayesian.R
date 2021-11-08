@@ -245,6 +245,7 @@ find_parameters.brmsfit <- function(x,
   rand_cor <- fe[grepl("(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
   randzi_cor <- fe[grepl("^cor_(.*_zi)", fe, perl = TRUE)]
   simo <- fe[grepl("^simo_", fe, perl = TRUE)]
+  car_struc <- fe[fe %in% c("car", "sdcar")]
   smooth_terms <- fe[grepl("^sds_", fe, perl = TRUE)]
   priors <- fe[grepl("^prior_", fe, perl = TRUE)]
   sigma <- fe[grepl("^sigma_", fe, perl = TRUE) | grepl("sigma", fe, fixed = TRUE)]
@@ -259,13 +260,13 @@ find_parameters.brmsfit <- function(x,
   # if auxiliary is modelled directly, we need to remove duplicates here
   # e.g. "b_sigma..." is in "cond" and in "sigma" now, we just need it in "cond".
 
-  sigma <- setdiff(sigma, c(cond, rand, rand_sd, rand_cor, randsigma, "prior_sigma"))
-  beta <- setdiff(beta, c(cond, rand, rand_sd, randbeta, rand_cor))
-  auxiliary <- setdiff(auxiliary, c(cond, rand, rand_sd, rand_cor))
+  sigma <- setdiff(sigma, c(cond, rand, rand_sd, rand_cor, randsigma, car_struc, "prior_sigma"))
+  beta <- setdiff(beta, c(cond, rand, rand_sd, randbeta, rand_cor, car_struc))
+  auxiliary <- setdiff(auxiliary, c(cond, rand, rand_sd, rand_cor, car_struc))
 
   l <- .compact_list(list(
     conditional = cond,
-    random = c(rand, rand_sd, rand_cor),
+    random = c(rand, rand_sd, rand_cor, car_struc),
     zero_inflated = zi,
     zero_inflated_random = c(randzi, randzi_sd, randzi_cor),
     simplex = simo,
@@ -295,8 +296,9 @@ find_parameters.brmsfit <- function(x,
 
       if (.obj_has_name(l, "random")) {
         random <- l$random[grepl(sprintf("__\\Q%s\\E\\[", i), l$random) |
-          grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
-          grepl("^cor_", l$random)]
+                             grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
+                             grepl("^cor_", l$random) |
+                             l$random %in% c("car", "sdcar")]
       } else {
         random <- NULL
       }

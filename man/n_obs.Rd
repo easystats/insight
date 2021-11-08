@@ -2,12 +2,15 @@
 % Please edit documentation in R/n_obs.R
 \name{n_obs}
 \alias{n_obs}
+\alias{n_obs.glm}
 \alias{n_obs.svyolr}
 \alias{n_obs.afex_aov}
 \alias{n_obs.stanmvreg}
 \title{Get number of observations from a model}
 \usage{
 n_obs(x, ...)
+
+\method{n_obs}{glm}(x, disaggregate = FALSE, ...)
 
 \method{n_obs}{svyolr}(x, weighted = FALSE, ...)
 
@@ -19,6 +22,13 @@ n_obs(x, ...)
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
+
+\item{disaggregate}{For binomial models with aggregated data, \code{n_obs()}
+returns the number of data rows by default. If \code{disaggregate = TRUE},
+the total number of trials is returned instead (determined by summing the
+results of \code{weights()} for aggregated data, which will be either the
+weights input for proportion success response or the row sums of the
+response matrix if matrix response, see 'Examples').}
 
 \item{weighted}{For survey designs, returns the weighted sample size.}
 
@@ -40,4 +50,15 @@ to fit the model, as numeric value.
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 n_obs(m)
+
+if (require("lme4")) {
+  data(cbpp, package = "lme4")
+  m <- glm(
+    cbind(incidence, size - incidence) ~ period,
+    data = cbpp,
+    family = binomial(link = "logit")
+  )
+  n_obs(m)
+  n_obs(m, disaggregate = TRUE)
+}
 }

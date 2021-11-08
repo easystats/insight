@@ -644,6 +644,7 @@ model_info.brmsfit <- function(x, ...) {
         logit.link = .x$link == "logit",
         multi.var = TRUE,
         link.fun = .x$link,
+        dispersion = !.is_empty_object(insight::find_formula(x)$sigma),
         ...
       )
     })
@@ -654,6 +655,7 @@ model_info.brmsfit <- function(x, ...) {
       logit.link = faminfo$link == "logit",
       multi.var = FALSE,
       link.fun = faminfo$link,
+      dispersion = !.is_empty_object(insight::find_formula(x)$sigma),
       ...
     )
   }

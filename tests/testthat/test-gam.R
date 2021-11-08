@@ -198,7 +198,15 @@ if (.runThisTest) {
       tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = head(dat, 30))
       pred <- get_predicted(tmp)
       expect_s3_class(pred, "get_predicted")
-      expect_snapshot(print(pred))
+      out <- utils::capture.output(pred)
+      expect_equal(
+        out,
+        c("Predicted values:", "", " [1] 11.993411  5.580984 10.892516  7.103348  5.948357  6.572402  8.505405  5.471466  5.934300",
+          "[10]  8.270014  5.711991  9.949986  5.699792  6.635317  6.004750  5.586335 11.548477  6.108301",
+          "[19]  6.615100  5.371642  6.862361  7.807262  7.380880  5.706640 10.606541  7.628470  5.859598",
+          "[28]  6.067436  5.815709 10.460602", "", "NOTE: Confidence intervals, if available, are stored as attributes and can be accessed using `as.data.frame()` on this output."
+        )
+      )
 
       x <- get_predicted(tmp, predict = NULL, type = "link")
       y <- get_predicted(tmp, predict = "link")

@@ -175,7 +175,7 @@ is_regression_model <- function(x) {
 
 .get_gam_classes <- function() {
   out <- c(
-    "bamlss", "bamlss.frame", "brms",
+    "bamlss", "bamlss.frame", "brmsfit",
     "cgam", "cgamm",
     "gam", "Gam", "GAMBoost", "gamlr", "gamlss", "gamm", "gamm4",
     "stanmvreg", "stanreg"
