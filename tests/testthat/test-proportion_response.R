@@ -3,17 +3,17 @@ if (requiet("testthat") &&
   requiet("lme4")) {
   data(mtcars)
 
-  m1 <- glmer(
+  m1 <- suppressWarnings(glmer(
     vs / cyl ~ disp + (1 | cyl),
     data = mtcars,
     family = binomial(link = "logit")
-  )
+  ))
 
-  m2 <- glmer(
+  m2 <- suppressWarnings(glmer(
     I(vs / cyl) ~ disp + (1 | cyl),
     data = mtcars,
     family = binomial(link = "logit")
-  )
+  ))
 
   test_that("get_response", {
     expect_equal(head(get_response(m1)), c(0, 0, 0.25, 0.16667, 0, 0.16667), tolerance = 1e-2)
