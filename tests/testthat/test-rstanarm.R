@@ -185,17 +185,9 @@ if (.runThisTest && .runStanTest) {
              is_meta = FALSE, link_function = "logit", family = "binomial",
              n_obs = 32L, model_terms = list(response = "vs", conditional = "wt"))
       )
-      # expect_snapshot(model_info(m4))
-      # expect_snapshot(model_info(m5))
-      # expect_snapshot(model_info(m6))
-      # expect_snapshot(model_info(m7))
-      # expect_snapshot(model_info(m8))
-      # expect_snapshot(model_info(m9))
-      # expect_snapshot(model_info(m10))
-      # expect_snapshot(model_info(m11))
-      # expect_snapshot(model_info(m12))
-      # # expect_snapshot(model_info(m14))
-      # expect_snapshot(model_info(m15))
+
+      ## TODO add model m4 to m15
+
     })
 
     test_that("n_parameters", {
