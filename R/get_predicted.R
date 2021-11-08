@@ -593,7 +593,7 @@ get_predicted.bife <- function(x,
     ...
   )
 
-  out <- tryCatch(predict(x, type = args$scale, X_new = args$data), error = function(e) NULL)
+  out <- tryCatch(stats::predict(x, type = args$scale, X_new = args$data), error = function(e) NULL)
 
   if (!is.null(out)) {
     out <- .get_predicted_out(out, args = list("data" = data))
@@ -624,9 +624,9 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...)
 
   # predict.multinom doesn't work when `newdata` is explicitly set to NULL (weird)
   if (is.null(data)) {
-    out <- predict(x, type = type_arg)
+    out <- stats::predict(x, type = type_arg)
   } else {
-    out <- predict(x, newdata = data, type = type_arg)
+    out <- stats::predict(x, newdata = data, type = type_arg)
   }
 
   .get_predicted_out(out, args = args)
