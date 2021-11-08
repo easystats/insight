@@ -280,14 +280,11 @@
   # auxiliary parameters
   auxiliary_parameters <- .aux_elements()
 
-  # conditional autoregressive (car)
-  car_parameters <- "car"
-
   # random parameters
-  random_parameters <- c("random", "zero_inflated_random", "sigma_random", "beta_random")
+  random_parameters <- c("random", "zero_inflated_random", "sigma_random", "beta_random", "car")
 
   # conditional component
-  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "car", "smooth_terms"))
+  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "smooth_terms"))
 
   # location parameters
   location_parameters <- if (effects == "fixed") {
