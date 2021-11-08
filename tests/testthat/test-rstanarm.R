@@ -128,10 +128,63 @@ if (.runThisTest && .runStanTest) {
       chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
     ))
 
-    # test_that("model_info-stanreg-glm", {
-      # expect_snapshot(model_info(m1))
-      # expect_snapshot(model_info(m2))
-      # expect_snapshot(model_info(m3))
+    test_that("model_info-stanreg-glm", {
+      expect_equal(
+        model_info(m1),
+        list(is_binomial = TRUE, is_bernoulli = FALSE, is_count = FALSE,
+             is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
+             is_dirichlet = FALSE, is_exponential = FALSE, is_logit = TRUE,
+             is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
+             is_survival = FALSE, is_linear = FALSE, is_tweedie = FALSE,
+             is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
+             is_hurdle = FALSE, is_ordinal = FALSE, is_cumulative = FALSE,
+             is_multinomial = FALSE, is_categorical = FALSE, is_mixed = TRUE,
+             is_multivariate = FALSE, is_trial = TRUE, is_bayesian = TRUE,
+             is_gam = FALSE, is_anova = FALSE, is_timeseries = FALSE,
+             is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
+             is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
+             is_xtab = FALSE, is_proptest = FALSE, is_binomtest = FALSE,
+             is_meta = FALSE, link_function = "logit", family = "binomial",
+             n_obs = 56L, model_terms = list(response = c("incidence", "size"), conditional = c("size", "period"), random = "herd"))
+      )
+
+      expect_equal(
+        model_info(m2),
+        list(is_binomial = FALSE, is_bernoulli = FALSE, is_count = FALSE,
+             is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
+             is_dirichlet = FALSE, is_exponential = FALSE, is_logit = FALSE,
+             is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
+             is_survival = FALSE, is_linear = TRUE, is_tweedie = FALSE,
+             is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
+             is_hurdle = FALSE, is_ordinal = FALSE, is_cumulative = FALSE,
+             is_multinomial = FALSE, is_categorical = FALSE, is_mixed = FALSE,
+             is_multivariate = FALSE, is_trial = FALSE, is_bayesian = TRUE,
+             is_gam = FALSE, is_anova = FALSE, is_timeseries = FALSE,
+             is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
+             is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
+             is_xtab = FALSE, is_proptest = FALSE, is_binomtest = FALSE,
+             is_meta = FALSE, link_function = "identity", family = "gaussian",
+             n_obs = 150L, model_terms = list(response = "Sepal.Width", conditional = c("Species", "Petal.Length")))
+      )
+
+      expect_equal(
+        model_info(m3),
+        list(is_binomial = TRUE, is_bernoulli = TRUE, is_count = FALSE,
+             is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
+             is_dirichlet = FALSE, is_exponential = FALSE, is_logit = TRUE,
+             is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
+             is_survival = FALSE, is_linear = FALSE, is_tweedie = FALSE,
+             is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
+             is_hurdle = FALSE, is_ordinal = FALSE, is_cumulative = FALSE,
+             is_multinomial = FALSE, is_categorical = FALSE, is_mixed = FALSE,
+             is_multivariate = FALSE, is_trial = FALSE, is_bayesian = TRUE,
+             is_gam = FALSE, is_anova = FALSE, is_timeseries = FALSE,
+             is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
+             is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
+             is_xtab = FALSE, is_proptest = FALSE, is_binomtest = FALSE,
+             is_meta = FALSE, link_function = "logit", family = "binomial",
+             n_obs = 32L, model_terms = list(response = "vs", conditional = "wt"))
+      )
       # expect_snapshot(model_info(m4))
       # expect_snapshot(model_info(m5))
       # expect_snapshot(model_info(m6))
@@ -143,7 +196,7 @@ if (.runThisTest && .runStanTest) {
       # expect_snapshot(model_info(m12))
       # # expect_snapshot(model_info(m14))
       # expect_snapshot(model_info(m15))
-    # })
+    })
 
     test_that("n_parameters", {
       expect_equal(n_parameters(m1), 21)
