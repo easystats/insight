@@ -782,6 +782,17 @@ get_predicted.stanreg <- function(x,
     ...
   )
 
+  # when the `type` argument is passed through ellipsis, we need to manually set
+  # the `args$predict` value, because this is what determines which `rstantools`
+  # function we will use to draw from the posterior predictions.
+  dots <- list(...)
+  if (is.null(predict) && "type" %in% names(dots)) {
+    if (dots$type == "link") {
+      args$predict <- "link"
+    } else if (dots$type == "response") {
+      args$predict <- "expectation"
+    }
+  }
 
   # Get draws
   if (args$predict %in% c("link")) {
