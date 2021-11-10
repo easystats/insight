@@ -329,23 +329,6 @@ get_varcov.zcpglm <- function(x,
 
 #' @rdname get_varcov
 #' @export
-get_varcov.MixMod <- function(x,
-                              component = c("conditional", "zero_inflated", "zi", "all"),
-                              ...) {
-  component <- match.arg(component)
-
-  vc <- switch(component,
-    "conditional" = stats::vcov(x, parm = "fixed-effects"),
-    "zi" = ,
-    "zero_inflated" = stats::vcov(x, parm = "zero_part"),
-    stats::vcov(x)
-  )
-  .process_vcov(vc)
-}
-
-
-#' @rdname get_varcov
-#' @export
 get_varcov.glmmTMB <- function(x,
                                component = c("conditional", "zero_inflated", "zi", "dispersion", "all"),
                                ...) {
@@ -360,6 +343,40 @@ get_varcov.glmmTMB <- function(x,
   )
   .process_vcov(vc)
 }
+
+
+#' @rdname get_varcov
+#' @export
+get_varcov.MixMod <- function(x,
+                              effects = c("fixed", "random"),
+                              component = c("conditional", "zero_inflated", "zi", "dispersion", "auxiliary", "all"),
+                              robust = FALSE,
+                              verbose = TRUE,
+                              ...) {
+  component <- match.arg(component)
+  effects <- match.arg(effects)
+
+  if (effects == "random") {
+    vc <- stats::vcov(x, parm = "var-cov", sandwich = robust)
+  } else {
+    vc <- switch(component,
+                 "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
+                 "zero_inflated" = ,
+                 "zi" = stats::vcov(x, parm = "all", sandwich = robust),
+                 "auxiliary" = ,
+                 "dispersion" = stats::vcov(x, parm = "extra", sandwich = robust),
+                 stats::vcov(x, parm = "all", sandwich = robust)
+    )
+
+    if (component %in% c("zi", "zero_inflated")) {
+      zi_parms <- grepl("^zi_", colnames(vc))
+      vc <- vc[zi_parms, zi_parms, drop = FALSE]
+    }
+  }
+
+  .process_vcov(vc)
+}
+
 
 
 
