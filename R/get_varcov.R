@@ -356,8 +356,10 @@ get_varcov.MixMod <- function(x,
   component <- match.arg(component)
   effects <- match.arg(effects)
 
+  random_vc <- stats::vcov(x, parm = "var-cov", sandwich = robust)
+
   if (effects == "random") {
-    vc <- stats::vcov(x, parm = "var-cov", sandwich = robust)
+    vc <- random_vc
   } else {
     vc <- switch(component,
                  "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
@@ -368,6 +370,11 @@ get_varcov.MixMod <- function(x,
                  stats::vcov(x, parm = "all", sandwich = robust)
     )
 
+    # drop random parameters
+    random_parms <- colnames(random_vc)
+    vc <- vc[!random_parms, !random_parms, drop = FALSE]
+
+    # filter ZI
     if (component %in% c("zi", "zero_inflated")) {
       zi_parms <- grepl("^zi_", colnames(vc))
       vc <- vc[zi_parms, zi_parms, drop = FALSE]
