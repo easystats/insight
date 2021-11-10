@@ -48,9 +48,10 @@ decimals)?}
 \item{missing}{Value by which \code{NA} values are replaced. By default, an
 empty string (i.e. \code{""}) is returned for \code{NA}.}
 
-\item{width}{Minimum width of the returned string. If not \code{NULL} and
-\code{width} is larger than the string's length, leading whitespaces are
-added to the string.}
+\item{width}{Numeric, minimum width for column with numeric values. Hence,
+applies to all "numeric" columns in the formatted table. If \code{NULL},
+column width for is adjusted to the maximum width of the header or
+values of each numeric column.}
 
 \item{format}{Name of output-format, as string. If \code{NULL} (or \code{"text"}),
 returned output is used for basic printing. Can be one of \code{NULL} (the

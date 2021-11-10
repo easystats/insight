@@ -33,6 +33,10 @@
 #' @param group_by Name of column in `x` that indicates grouping for tables.
 #'   Only applies when `format = "html"`. `group_by` is passed down
 #'   to `gt::gt(groupname_col = group_by)`.
+#' @param width Numeric, minimum width for column with numeric values. Hence,
+#'   applies to all "numeric" columns in the formatted table. If `NULL`,
+#'   column width for is adjusted to the maximum width of the header or
+#'   values of each numeric column.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
