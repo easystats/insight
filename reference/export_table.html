@@ -115,9 +115,10 @@ decimals)?</p></dd>
 <dd><p>Value by which <code>NA</code> values are replaced. By default, an
 empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p></dd>
 <dt>width</dt>
-<dd><p>Minimum width of the returned string. If not <code>NULL</code> and
-<code>width</code> is larger than the string's length, leading whitespaces are
-added to the string.</p></dd>
+<dd><p>Numeric, minimum width for column with numeric values. Hence,
+applies to all "numeric" columns in the formatted table. If <code>NULL</code>,
+column width for is adjusted to the maximum width of the header or
+values of each numeric column.</p></dd>
 <dt>format</dt>
 <dd><p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
 returned output is used for basic printing. Can be one of <code>NULL</code> (the
