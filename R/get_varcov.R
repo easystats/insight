@@ -371,8 +371,10 @@ get_varcov.MixMod <- function(x,
     )
 
     # drop random parameters
-    random_parms <- colnames(random_vc)
-    vc <- vc[!random_parms, !random_parms, drop = FALSE]
+    random_parms <- stats::na.omit(match(colnames(random_vc), colnames(vc)))
+    if (length(random_parms)) {
+      vc <- vc[-random_parms, -random_parms, drop = FALSE]
+    }
 
     # filter ZI
     if (component %in% c("zi", "zero_inflated")) {
