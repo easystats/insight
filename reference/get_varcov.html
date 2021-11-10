@@ -108,13 +108,20 @@ don't provide a <code><a href="https://rdrr.io/r/stats/vcov.html" class="externa
 <span class="co"># S3 method for zcpglm</span>
 <span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="co"># S3 method for MixMod</span>
-<span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"all"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
-
 <span class="co"># S3 method for glmmTMB</span>
 <span class="fu">get_varcov</span><span class="op">(</span>
   <span class="va">x</span>,
   component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"dispersion"</span>, <span class="st">"all"</span><span class="op">)</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
+
+<span class="co"># S3 method for MixMod</span>
+<span class="fu">get_varcov</span><span class="op">(</span>
+  <span class="va">x</span>,
+  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,
+  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"dispersion"</span>, <span class="st">"auxiliary"</span>, <span class="st">"all"</span><span class="op">)</span>,
+  robust <span class="op">=</span> <span class="cn">FALSE</span>,
+  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -148,13 +155,13 @@ may be one of <code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflate
 <code>"dispersion"</code>, <code>"precision"</code>, or <code>"all"</code>. May be abbreviated.
 Note that the <em>conditional</em> component is also called <em>count</em> or
 <em>mean</em> component, depending on the model.</p></dd>
-<dt>complete</dt>
-<dd><p>Logical, if <code>TRUE</code>, for <code>aov</code>, returns the full
-variance-covariance matrix.</p></dd>
 <dt>effects</dt>
 <dd><p>Should the complete variance-covariance matrix of the model
 be returned, or only for specific model parameters only? Currently only
 applies to models of class <code>mixor</code>.</p></dd>
+<dt>complete</dt>
+<dd><p>Logical, if <code>TRUE</code>, for <code>aov</code>, returns the full
+variance-covariance matrix.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
