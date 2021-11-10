@@ -12,6 +12,9 @@
   also the new vignette on exporting data frames into human readable tables
   here: https://easystats.github.io/insight/articles/export.html
 
+* `get_varcov()` for `MixMod` (package *GLMMadaptive*) was revised, and now
+  allows to return a robust variance-covariance matrix.
+
 * Added more `get_df()` methods.
 
 ## Bug fixes
