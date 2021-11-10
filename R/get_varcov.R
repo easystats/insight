@@ -19,6 +19,8 @@
 #'   applies to models of class `mixor`.
 #' @param complete Logical, if `TRUE`, for `aov`, returns the full
 #'   variance-covariance matrix.
+#' @param robust Logical, if `TRUE`, returns a robust variance-covariance matrix
+#'   using sandwich estimation.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'

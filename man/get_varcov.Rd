@@ -89,6 +89,9 @@ Note that the \emph{conditional} component is also called \emph{count} or
 be returned, or only for specific model parameters only? Currently only
 applies to models of class \code{mixor}.}
 
+\item{robust}{Logical, if \code{TRUE}, returns a robust variance-covariance matrix
+using sandwich estimation.}
+
 \item{complete}{Logical, if \code{TRUE}, for \code{aov}, returns the full
 variance-covariance matrix.}
 }
