@@ -12,6 +12,9 @@
   also the new vignette on exporting data frames into human readable tables
   here: https://easystats.github.io/insight/articles/export.html
 
+* Revised `width` argument in `export_table()`, which now allows to set different
+  column widths across table columns. See examples in `?export_table`.
+
 * `get_varcov()` for `MixMod` (package *GLMMadaptive*) was revised, and now
   allows to return a robust variance-covariance matrix.
 
@@ -27,6 +30,9 @@
 
 * Fixed issue in `get_parameters.BFBayesFactor()` with wrong sign of difference
   estimate for t-tests.
+
+* Argument `width` in `format_value()` was ignored when formatting integer
+  values and `protect_integers` was set to `TRUE`.
 
 # insight 0.14.5
 
