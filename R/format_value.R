@@ -45,7 +45,7 @@
 #' format_value(3)
 #' format_value(3, protect_integers = TRUE)
 #'
-#' format_value(iris)
+#' format_value(head(iris))
 #' @export
 format_value <- function(x, ...) {
   UseMethod("format_value")

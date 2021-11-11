@@ -53,8 +53,8 @@
 #'
 #' @return A data frame in character format.
 #' @examples
-#' export_table(iris)
-#' export_table(iris, sep = " ", header = "*", digits = 1)
+#' export_table(head(iris))
+#' export_table(head(iris), sep = " ", header = "*", digits = 1)
 #'
 #' \dontrun{
 #' # colored footers
