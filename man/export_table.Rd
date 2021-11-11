@@ -48,10 +48,13 @@ decimals)?}
 \item{missing}{Value by which \code{NA} values are replaced. By default, an
 empty string (i.e. \code{""}) is returned for \code{NA}.}
 
-\item{width}{Numeric, minimum width for column with numeric values. Hence,
-applies to all "numeric" columns in the formatted table. If \code{NULL},
-column width for is adjusted to the maximum width of the header or
-values of each numeric column.}
+\item{width}{Refers to the width of columns (with numeric values). Can be
+either \code{NULL}, a number or a named numeric vector. If \code{NULL}, the width for
+each column is adjusted to the minimum required width. If a number, columns
+with numeric values will have the minimum width specified in \code{width}. If
+a named numeric vector, value names are matched against column names, and
+for each match, the specified width is used (see 'Examples'). Only applies
+to text-format (see \code{format}).}
 
 \item{format}{Name of output-format, as string. If \code{NULL} (or \code{"text"}),
 returned output is used for basic printing. Can be one of \code{NULL} (the
@@ -105,29 +108,41 @@ attribute will be used as table caption. \code{table_subtitle} is the
 attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
 }
 \examples{
-cat(export_table(iris))
-cat(export_table(iris, sep = " ", header = "*", digits = 1))
+export_table(iris)
+export_table(iris, sep = " ", header = "*", digits = 1)
+
 \dontrun{
 # colored footers
 data(iris)
 x <- as.data.frame(iris[1:5, ])
 attr(x, "table_footer") <- c("This is a yellow footer line.", "yellow")
-cat(export_table(x))
+export_table(x)
 
 attr(x, "table_footer") <- list(
   c("\nA yellow line", "yellow"),
   c("\nAnd a red line", "red"),
   c("\nAnd a blue line", "blue")
 )
-cat(export_table(x))
+export_table(x)
 
 attr(x, "table_footer") <- list(
   c("Without the ", "yellow"),
   c("new-line character ", "red"),
   c("we can have multiple colors per line.", "blue")
 )
-cat(export_table(x))
+export_table(x)
 }
+
+# column-width
+d <- data.frame(
+  x = c(1, 2, 3),
+  y = c(100, 200, 300),
+  z = c(10000, 20000, 30000)
+)
+export_table(d)
+export_table(d, width = 8)
+export_table(d, width = c(x = 5, z = 10))
+export_table(d, width = c(x = 5, y = 5, z = 10), align = "lcr")
 }
 \seealso{
 Vignettes \href{https://easystats.github.io/insight/articles/display.html}{Formatting, printing and exporting tables}

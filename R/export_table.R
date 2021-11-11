@@ -33,10 +33,13 @@
 #' @param group_by Name of column in `x` that indicates grouping for tables.
 #'   Only applies when `format = "html"`. `group_by` is passed down
 #'   to `gt::gt(groupname_col = group_by)`.
-#' @param width Numeric, minimum width for column with numeric values. Hence,
-#'   applies to all "numeric" columns in the formatted table. If `NULL`,
-#'   column width for is adjusted to the maximum width of the header or
-#'   values of each numeric column.
+#' @param width Refers to the width of columns (with numeric values). Can be
+#'   either `NULL`, a number or a named numeric vector. If `NULL`, the width for
+#'   each column is adjusted to the minimum required width. If a number, columns
+#'   with numeric values will have the minimum width specified in `width`. If
+#'   a named numeric vector, value names are matched against column names, and
+#'   for each match, the specified width is used (see 'Examples'). Only applies
+#'   to text-format (see `format`).
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
@@ -50,29 +53,41 @@
 #'
 #' @return A data frame in character format.
 #' @examples
-#' cat(export_table(iris))
-#' cat(export_table(iris, sep = " ", header = "*", digits = 1))
+#' export_table(iris)
+#' export_table(iris, sep = " ", header = "*", digits = 1)
+#'
 #' \dontrun{
 #' # colored footers
 #' data(iris)
 #' x <- as.data.frame(iris[1:5, ])
 #' attr(x, "table_footer") <- c("This is a yellow footer line.", "yellow")
-#' cat(export_table(x))
+#' export_table(x)
 #'
 #' attr(x, "table_footer") <- list(
 #'   c("\nA yellow line", "yellow"),
 #'   c("\nAnd a red line", "red"),
 #'   c("\nAnd a blue line", "blue")
 #' )
-#' cat(export_table(x))
+#' export_table(x)
 #'
 #' attr(x, "table_footer") <- list(
 #'   c("Without the ", "yellow"),
 #'   c("new-line character ", "red"),
 #'   c("we can have multiple colors per line.", "blue")
 #' )
-#' cat(export_table(x))
+#' export_table(x)
 #' }
+#'
+#' # column-width
+#' d <- data.frame(
+#'   x = c(1, 2, 3),
+#'   y = c(100, 200, 300),
+#'   z = c(10000, 20000, 30000)
+#' )
+#' export_table(d)
+#' export_table(d, width = 8)
+#' export_table(d, width = c(x = 5, z = 10))
+#' export_table(d, width = c(x = 5, y = 5, z = 10), align = "lcr")
 #' @export
 export_table <- function(x,
                          sep = " | ",
@@ -294,13 +309,21 @@ export_table <- function(x,
                           indent_rows = NULL) {
   df <- as.data.frame(x)
 
+  # check width argument, for format value. cannot have
+  # named vector of length > 1 here
+  if (is.null(width) || length(width) == 1) {
+    col_width <- width
+  } else {
+    col_width <- NULL
+  }
+
   # round all numerics
   col_names <- names(df)
   df <- as.data.frame(sapply(df, function(i) {
     if (is.numeric(i)) {
       format_value(i,
         digits = digits, protect_integers = protect_integers,
-        missing = missing, width = width, zap_small = zap_small
+        missing = missing, width = col_width, zap_small = zap_small
       )
     } else {
       i
@@ -312,6 +335,7 @@ export_table <- function(x,
   df <- as.data.frame(sapply(df, as.character, simplify = FALSE), stringsAsFactors = FALSE)
   names(df) <- col_names
   df[is.na(df)] <- as.character(missing)
+
 
   if (identical(format, "html")) {
     # html formatting starts here, needs less preparation of table matrix
@@ -334,6 +358,9 @@ export_table <- function(x,
     # Align
     aligned <- format(df, justify = "right")
 
+    # default alignment
+    col_align <- rep("right", ncol(df))
+
     # Center first row
     first_row <- as.character(aligned[1, ])
     for (i in 1:length(first_row)) {
@@ -345,9 +372,12 @@ export_table <- function(x,
     # left-align first column (if a character or a factor)
     if (!is.numeric(x[, 1])) {
       final[, 1] <- format(trimws(final[, 1]), justify = "left")
+      col_align[1] <- "left"
     }
 
     if (format == "text") {
+
+      # go for simple text output
       out <- .format_basic_table(
         final,
         header,
@@ -358,9 +388,14 @@ export_table <- function(x,
         align = align,
         empty_line = empty_line,
         indent_groups = indent_groups,
-        indent_rows = indent_rows
+        indent_rows = indent_rows,
+        col_names = col_names,
+        col_width = width,
+        col_align = col_align
       )
     } else if (format == "markdown") {
+
+      # markdown is a bit different...
       out <- .format_markdown_table(
         final,
         x,
@@ -394,7 +429,10 @@ export_table <- function(x,
                                 align = NULL,
                                 empty_line = NULL,
                                 indent_groups = NULL,
-                                indent_rows = NULL) {
+                                indent_rows = NULL,
+                                col_names = NULL,
+                                col_width = NULL,
+                                col_align = NULL) {
 
   # align table, if requested
   if (!is.null(align) && length(align) == 1) {
@@ -409,14 +447,18 @@ export_table <- function(x,
       # left alignment, or at least first line only left?
       if (align == "left" || (align == "firstleft" && i == 1) || align_char == "l") {
         final[, i] <- format(trimws(final[, i]), justify = "left")
+        col_align[i] <- "left"
 
         # right-alignment
       } else if (align == "right" || align_char == "r") {
         final[, i] <- format(trimws(final[, i]), justify = "right")
+        col_align[i] <- "right"
 
         # else, center
       } else {
         final[, i] <- format(trimws(final[, i]), justify = "centre")
+        col_align[i] <- "centre"
+
       }
     }
   }
@@ -426,6 +468,17 @@ export_table <- function(x,
     final <- .indent_groups(final, indent_groups)
   } else if (!is.null(indent_rows) && any(grepl("# ", final[, 1], fixed = TRUE))) {
     final <- .indent_rows(final, indent_rows)
+  }
+
+  # check for fixed column widths
+  if (!is.null(col_width) && length(col_width) > 1 && !is.null(names(col_width))) {
+    matching_columns <- stats::na.omit(match(names(col_width), col_names))
+    if (length(matching_columns)) {
+      for (i in matching_columns) {
+        w <- as.vector(col_width[col_names[i]])
+        final[, i] <- format(trimws(final[, i]), width = w, justify = col_align[i])
+      }
+    }
   }
 
   # Transform to character
