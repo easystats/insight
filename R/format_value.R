@@ -100,8 +100,8 @@ format_value.logical <- format_value.numeric
     .format_value(x, digits = digits, .missing = .missing, .width = .width, .as_percent = .as_percent, .zap_small = .zap_small)
   } else if (anyNA(x)) {
     .convert_missing(x, .missing)
-  } else if (is.numeric(x) && all(.is.int(stats::na.omit(x)))) {
-    .format_value(x, digits = 0, .missing = .missing, .width = .width, .as_percent = FALSE, .zap_small = FALSE)
+  } else if (is.numeric(x) && all(.is.int(stats::na.omit(x))) && !is.null(.width)) {
+    format(x, justify = "right", width = .width)
   } else {
     as.character(x)
   }
