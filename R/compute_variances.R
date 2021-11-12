@@ -104,21 +104,30 @@
     var.residual <- var.distribution + var.dispersion
   }
 
-  if (component %in% c("intercept", "all")) {
-    var.intercept <- .between_subject_variance(vals, x)
+  if (isTRUE(faminfo$is_mixed)) {
+    if (component %in% c("intercept", "all")) {
+      var.intercept <- .between_subject_variance(vals, x)
+    }
+
+    if (component %in% c("slope", "all")) {
+      var.slope <- .random_slope_variance(vals, x)
+    }
+
+    if (component %in% c("rho01", "all")) {
+      cor.slope_intercept <- .random_slope_intercept_corr(vals, x)
+    }
+
+    if (component %in% c("rho00", "all")) {
+      cor.slopes <- .random_slopes_corr(vals, x)
+    }
+  } else {
+    var.intercept <- NULL
+    var.slope <- NULL
+    cor.slope_intercept <- NULL
+    cor.slopes <- NULL
   }
 
-  if (component %in% c("slope", "all")) {
-    var.slope <- .random_slope_variance(vals, x)
-  }
 
-  if (component %in% c("rho01", "all")) {
-    cor.slope_intercept <- .random_slope_intercept_corr(vals, x)
-  }
-
-  if (component %in% c("rho00", "all")) {
-    cor.slopes <- .random_slopes_corr(vals, x)
-  }
 
   # if we only need residual variance, we can delete those
   # values again...
