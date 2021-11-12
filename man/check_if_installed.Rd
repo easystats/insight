@@ -14,8 +14,8 @@ check_if_installed(
 )
 }
 \arguments{
-\item{package}{A string (vector) naming the package, whose installation needs
-to be checked in any of the libraries.}
+\item{package}{A character vector naming the package(s), whose installation
+needs to be checked in any of the libraries.}
 
 \item{reason}{A phrase describing why the package is needed. The default is a
 generic description.}

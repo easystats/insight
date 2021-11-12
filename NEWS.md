@@ -1,5 +1,10 @@
 # insight 0.14.6
 
+## Breaking changes
+
+* Data management functions (like `reshape_longer()`, or `data_match()`) have
+  been moved to the *datawizard* package.
+
 ## New supported model classes
 
 * Support for `bfsl` (*bfsl*)

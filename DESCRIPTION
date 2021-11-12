@@ -83,6 +83,7 @@ Suggests:
     coxme,
     cplm,
     crch,
+    datawizard,
     effectsize,
     emmeans,
     epiR,

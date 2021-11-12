@@ -94,7 +94,7 @@ if (require("parameters")) {
 }
 \donttest{
 if (require("rstanarm", warn.conflicts = FALSE) &&
-    require("parameters", , warn.conflicts = FALSE)) {
+  require("parameters", , warn.conflicts = FALSE)) {
   model <- stan_glm(Sepal.Length ~ Species, data = iris, refresh = 0, seed = 123)
   x <- model_parameters(model, ci = c(0.69, 0.89, 0.95))
   as.data.frame(format_table(x))

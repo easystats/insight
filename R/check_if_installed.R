@@ -1,7 +1,7 @@
 #' Checking if needed package is installed
 
-#' @param package A string (vector) naming the package, whose installation needs
-#'   to be checked in any of the libraries.
+#' @param package A character vector naming the package(s), whose installation
+#'   needs to be checked in any of the libraries.
 #' @param reason A phrase describing why the package is needed. The default is a
 #'   generic description.
 #' @param stop Logical that decides whether the function should stop if the

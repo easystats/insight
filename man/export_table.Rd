@@ -110,7 +110,6 @@ attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
 \examples{
 export_table(head(iris))
 export_table(head(iris), sep = " ", header = "*", digits = 1)
-
 \dontrun{
 # colored footers
 data(iris)
