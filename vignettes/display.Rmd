@@ -14,12 +14,13 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
 if (!requireNamespace("poorman", quietly = TRUE) ||
     !requireNamespace("gt", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
+} else {
+  requireNamespace("poorman", quietly = TRUE)
 }
-
-library(poorman)
 ```
 
 ## The difference between a dataframe and its render
