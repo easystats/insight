@@ -364,12 +364,12 @@ get_varcov.MixMod <- function(x,
     vc <- random_vc
   } else {
     vc <- switch(component,
-                 "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
-                 "zero_inflated" = ,
-                 "zi" = stats::vcov(x, parm = "all", sandwich = robust),
-                 "auxiliary" = ,
-                 "dispersion" = stats::vcov(x, parm = "extra", sandwich = robust),
-                 stats::vcov(x, parm = "all", sandwich = robust)
+      "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
+      "zero_inflated" = ,
+      "zi" = stats::vcov(x, parm = "all", sandwich = robust),
+      "auxiliary" = ,
+      "dispersion" = stats::vcov(x, parm = "extra", sandwich = robust),
+      stats::vcov(x, parm = "all", sandwich = robust)
     )
 
     # drop random parameters

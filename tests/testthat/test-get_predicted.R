@@ -485,8 +485,10 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   skip_if_not_installed("brms")
   library(brms)
   void <- capture.output(
-    mod <- brm(am ~ hp + mpg, family = bernoulli, data = mtcars,
-               chains = 2, iter = 1000, seed = 1024, silent = 2)
+    mod <- brm(am ~ hp + mpg,
+      family = bernoulli, data = mtcars,
+      chains = 2, iter = 1000, seed = 1024, silent = 2
+    )
   )
   x <- get_predicted(mod, predict = "link")
   y <- get_predicted(mod, predict = "expectation")

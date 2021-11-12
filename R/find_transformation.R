@@ -27,7 +27,6 @@
 #' find_transformation(model)
 #' @export
 find_transformation <- function(x) {
-
   rv <- find_terms(x)[["response"]]
   transform_fun <- "identity"
 

@@ -867,7 +867,7 @@ if (requiet("testthat") &&
     )
   })
 
- test_that("get_predicted", {
+  test_that("get_predicted", {
 
     # response
     x <- get_predicted(m1, predict = "expectation", verbose = FALSE)
@@ -900,5 +900,4 @@ if (requiet("testthat") &&
     expect_warning(get_predicted(m1, predict = "prediction"))
     expect_warning(get_predicted(m1, predict = "classification"))
   })
-
 }

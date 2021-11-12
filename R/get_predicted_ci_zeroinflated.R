@@ -68,7 +68,6 @@
 
 
 .simulate_predictions_glmmTMB <- function(model, newdata, nsim) {
-
   check_if_installed("lme4")
   check_if_installed("MASS")
 
@@ -85,7 +84,9 @@
 
       .get_simulation_from_zi(model, nsim, beta.conditional, beta.zero_inflated, matrix.conditional, matrix.zero_inflated)
     },
-    error = function(x) { NULL }
+    error = function(x) {
+      NULL
+    }
   )
 }
 
@@ -98,7 +99,6 @@
 
 
 .simulate_predictions_MixMod <- function(model, newdata, nsim) {
-
   check_if_installed("lme4")
   check_if_installed("MASS")
 
@@ -115,7 +115,9 @@
 
       .get_simulation_from_zi(model, nsim, beta.conditional, beta.zero_inflated, matrix.conditional, matrix.zero_inflated)
     },
-    error = function(x) { NULL }
+    error = function(x) {
+      NULL
+    }
   )
 }
 
@@ -149,7 +151,9 @@
 
       .get_simulation_from_zi(model, nsim, beta.conditional, beta.zero_inflated, matrix.conditional, matrix.zero_inflated)
     },
-    error = function(x) { NULL }
+    error = function(x) {
+      NULL
+    }
   )
 }
 
@@ -186,7 +190,9 @@
 
       list(cond = pred.cond, zi = pred.zi)
     },
-    error = function(x) { NULL }
+    error = function(x) {
+      NULL
+    }
   )
 }
 

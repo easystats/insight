@@ -297,10 +297,12 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
   attr(x$terms, "variables") <- new_call
 
   # compute predictions
-  args <- list(object = x,
-               newdata = data,
-               type = type_arg,
-               se.fit = (type_arg == "prob"))
+  args <- list(
+    object = x,
+    newdata = data,
+    type = type_arg,
+    se.fit = (type_arg == "prob")
+  )
   pred <- do.call("predict", args)
 
   out <- .get_predicted_out(pred$fit)
@@ -311,12 +313,13 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
     se <- as.data.frame(se)
     se$Row <- 1:nrow(se)
     se <- stats::reshape(se,
-                         direction = "long",
-                         varying = setdiff(colnames(se), "Row"),
-                         times = setdiff(colnames(se), "Row"),
-                         v.names = "SE",
-                         timevar = "Response",
-                         idvar = "Row")
+      direction = "long",
+      varying = setdiff(colnames(se), "Row"),
+      times = setdiff(colnames(se), "Row"),
+      v.names = "SE",
+      timevar = "Response",
+      idvar = "Row"
+    )
     row.names(se) <- NULL
     attr(out, "ci_data") <- se
   }
@@ -483,7 +486,6 @@ get_predicted.glmmTMB <- function(x,
                                   iterations = NULL,
                                   verbose = TRUE,
                                   ...) {
-
   dots <- list(...)
 
   # Sanity checks

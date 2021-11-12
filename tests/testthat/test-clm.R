@@ -134,7 +134,5 @@ if (requiet("testthat") &&
     tmp$rating <- as.numeric(tmp$rating)
     tmp <- clm(factor(rating) ~ temp * contact, data = tmp)
     expect_s3_class(get_predicted(tmp), "get_predicted")
-
   })
-
 }
