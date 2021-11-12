@@ -8,7 +8,6 @@
                          dispersion = FALSE,
                          verbose = TRUE,
                          ...) {
-
   dots <- list(...)
   if (isTRUE(dots$return_family_only)) {
     return(list(family = fitfam, link_function = link.fun))

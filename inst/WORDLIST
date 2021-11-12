@@ -31,11 +31,12 @@ bayesGARCH
 bayestestR
 bbmle
 behaviour
-bernoulli
+bfsl
 blavaan
 brms
 brmsfit
 btergm
+ci
 cloglog
 cmprsk
 colour
@@ -48,6 +49,8 @@ easystats
 eflm
 emm
 emmGrid
+emmeans
+epiR
 ergm
 estimatr
 et
@@ -76,6 +79,7 @@ lmtest
 logloss
 lqmm
 md
+merMod
 merTools
 metaBMA
 metaplus
@@ -92,6 +96,7 @@ poisson
 pre
 pscl
 quantreg
+rOpenSci
 riskRegression
 rms
 rstanarm
@@ -103,6 +108,8 @@ spatialreg
 specificities
 stanreg
 svyVGAM
+systemfit
+th
 tidymodels
 tranformations
 tseries

@@ -135,5 +135,4 @@ if (requiet("testthat") &&
     expect_true(all(c("Row", "Response", "Predicted") %in% colnames(p1)))
     expect_true(all(c("Row", "Response", "Predicted") %in% colnames(p3)))
   })
-
 }

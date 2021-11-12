@@ -55,7 +55,6 @@
 #' @examples
 #' export_table(head(iris))
 #' export_table(head(iris), sep = " ", header = "*", digits = 1)
-#'
 #' \dontrun{
 #' # colored footers
 #' data(iris)
@@ -458,7 +457,6 @@ export_table <- function(x,
       } else {
         final[, i] <- format(trimws(final[, i]), justify = "centre")
         col_align[i] <- "centre"
-
       }
     }
   }

@@ -31,7 +31,6 @@
 #' exp(.3)
 #' @export
 get_transformation <- function(x) {
-
   transform_fun <- find_transformation(x)
 
   if (transform_fun == "identity") {
@@ -43,12 +42,14 @@ get_transformation <- function(x) {
   } else if (transform_fun == "exp") {
     out <- list(transformation = exp, inverse = log)
   } else if (transform_fun == "sqrt") {
-    out <- list(transformation = sqrt, inverse = function(x) x ^ 2)
+    out <- list(transformation = sqrt, inverse = function(x) x^2)
   } else if (transform_fun == "expm1") {
     out <- list(transformation = expm1, inverse = log1p)
   } else if (transform_fun == "log-log") {
-    out <- list(transformation = function(x) log(log(x)),
-                inverse = function(x) exp(exp(x)))
+    out <- list(
+      transformation = function(x) log(log(x)),
+      inverse = function(x) exp(exp(x))
+    )
   }
 
 
