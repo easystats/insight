@@ -1036,12 +1036,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
       type_arg <- "link"
     }
   } else {
-    if (identical(dots$type, "response")) {
-      predict_arg <- "expectation"
-      type_arg <- "response"
-    } else {
-      type_arg <- predict_arg <- dots$type
-    }
+    type_arg <- predict_arg <- dots$type
   }
 
   # Prediction and CI type
