@@ -1052,8 +1052,8 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     scale <- predict_arg
   }
 
-  # Transform
-  if (info$is_linear == FALSE && scale == "response") {
+  # Transform, but not if user provided a "type" argument
+  if (info$is_linear == FALSE && scale == "response" && !is.null(dots$type)) {
     transform <- TRUE
     type_arg <- "link" # set from response to link, because we back-transform
   } else {
