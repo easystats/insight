@@ -1003,16 +1003,30 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     warning(msg, call. = FALSE)
   }
 
+  # check whether user possibly used the "type" instead of "predict" argument
+  dots <- list(...)
+
+  # check that only one of "type" and "predict" is provided
+  if (is.null(dots$type) && is.null(predict)) {
+    stop(format_message("Please supply a value for the `predict` argument."))
+  }
+
+  if (!is.null(dots$type) && !is.null(predict)) {
+    stop(format_message(
+      '`predict` and `type` cannot both be given.',
+      'The preferred argument for `get_predicted()` is `predict`.',
+      'To use the `type` argument, set `predict = NULL` explicitly, e.g.,:',
+      '  `get_predicted(model, predict = NULL, type="response")`'
+    ))
+  }
+
   # Arbitrate conflicts between the `predict` and `type` from the ellipsis. We
   # create a new variable called `predict_arg` to resolve conflicts. This avoids
   # modifying the values of `type` and `predict` on the fly, which allows us to
   # keep track of the original user input.
-  dots <- list(...)
+
   if (is.null(dots$type)) {
     predict_arg <- predict
-    if (is.null(predict)) {
-      stop(format_message("Please supply a value for the `predict` argument."))
-    }
     # Type (that's for the initial call to stats::predict)
     if (predict_arg == "terms") {
       type_arg <- "terms"
@@ -1022,19 +1036,11 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
       type_arg <- "link"
     }
   } else {
-    if (is.null(predict)) {
-      if (identical(dots$type, "response")) {
-        type_arg <- predict_arg <- "expectation"
-      } else {
-        type_arg <- predict_arg <- dots$type
-      }
+    if (identical(dots$type, "response")) {
+      predict_arg <- "expectation"
+      type_arg <- "response"
     } else {
-      stop(format_message(
-        '`predict` and `type` cannot both be given.',
-        'The preferred argument for `get_predicted()` is `predict`.',
-        'To use the `type` argument, set `predict = NULL` explicitly, e.g.,:',
-        '  `get_predicted(model, predict = NULL, type="response")`'
-      ))
+      type_arg <- predict_arg <- dots$type
     }
   }
 
