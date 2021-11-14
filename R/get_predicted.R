@@ -963,13 +963,13 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   if (is.null(ci)) ci <- 0
 
   # check `predict` user-input
-  predict_method <- lapply(
+  predict_method <- .compact_list(lapply(
     class(x), function(i) {
       tryCatch(utils::getS3method("predict", i),
                error = function(e) NULL)
     }
-  )
-  predict_method <- predict_method[!sapply(predict_method, is.null)][[1]]
+  ))
+  predict_method <- tryCatch(predict_method[[1]], error = function(e) NULL)
 
   # check aliases
   if (!is.null(predict)) {
@@ -991,7 +991,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   }
 
   easystats_methods <- c("expectation", "link", "prediction", "classification")
-  supported <- c(easystats_methods, eval(formals(predict_method)$type))
+  supported <- c(easystats_methods, suppressWarnings(eval(formals(predict_method)$type)))
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
     msg <- format_message(
       sprintf('`predict` = "%s"` is not officially supported by `get_predicted()`.', predict),
@@ -1023,7 +1023,11 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     }
   } else {
     if (is.null(predict)) {
-      type_arg <- predict_arg <- dots$type
+      if (identical(dots$type, "response")) {
+        type_arg <- predict_arg <- "link"
+      } else {
+        type_arg <- predict_arg <- dots$type
+      }
     } else {
       stop(format_message(
         '`predict` and `type` cannot both be given.',
@@ -1053,7 +1057,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   }
 
   # Transform, but not if user provided a "type" argument
-  if (info$is_linear == FALSE && scale == "response" && !is.null(dots$type)) {
+  if (info$is_linear == FALSE && scale == "response" && (is.null(dots$type) || dots$type == "response")) {
     transform <- TRUE
     type_arg <- "link" # set from response to link, because we back-transform
   } else {
