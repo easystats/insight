@@ -944,6 +944,26 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
                                 newdata = NULL,
                                 verbose = TRUE,
                                 ...) {
+
+  # check whether user possibly used the "type" instead of "predict" argument
+  dots <- list(...)
+
+  # one of "type" or "predict" must be provided...
+  if (is.null(dots$type) && is.null(predict)) {
+    stop(format_message("Please supply a value for the `predict` argument."))
+  }
+
+  # ...but not both
+  if (!is.null(dots$type) && !is.null(predict)) {
+    stop(format_message(
+      '`predict` and `type` cannot both be given.',
+      'The preferred argument for `get_predicted()` is `predict`.',
+      'To use the `type` argument, set `predict = NULL` explicitly, e.g.,:',
+      '  `get_predicted(model, predict = NULL, type="response")`'
+    ))
+  }
+
+
   if (length(predict) > 1) {
     predict <- predict[1]
     if (isTRUE(verbose)) {
@@ -1003,23 +1023,6 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
       paste(" ", paste(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted"))), collapse = ", "))
     )
     warning(msg, call. = FALSE)
-  }
-
-  # check whether user possibly used the "type" instead of "predict" argument
-  dots <- list(...)
-
-  # check that only one of "type" and "predict" is provided
-  if (is.null(dots$type) && is.null(predict)) {
-    stop(format_message("Please supply a value for the `predict` argument."))
-  }
-
-  if (!is.null(dots$type) && !is.null(predict)) {
-    stop(format_message(
-      '`predict` and `type` cannot both be given.',
-      'The preferred argument for `get_predicted()` is `predict`.',
-      'To use the `type` argument, set `predict = NULL` explicitly, e.g.,:',
-      '  `get_predicted(model, predict = NULL, type="response")`'
-    ))
   }
 
   # Arbitrate conflicts between the `predict` and `type` from the ellipsis. We
