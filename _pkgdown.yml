@@ -132,17 +132,6 @@ reference:
   - standardize_names
   - check_if_installed
 
-- title: "Data management"
-  desc: >
-    Utility functions (mostly for managing or preparing data)
-  contents:
-  - data_to_long
-  - data_match
-  - data_relocate
-  - data_restoretype
-  - to_numeric
-  - reshape_ci
-
 - title: "Example Datasets"
   desc: >
     Used in examples or for testing

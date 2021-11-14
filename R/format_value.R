@@ -45,7 +45,7 @@
 #' format_value(3)
 #' format_value(3, protect_integers = TRUE)
 #'
-#' format_value(iris)
+#' format_value(head(iris))
 #' @export
 format_value <- function(x, ...) {
   UseMethod("format_value")
@@ -100,6 +100,8 @@ format_value.logical <- format_value.numeric
     .format_value(x, digits = digits, .missing = .missing, .width = .width, .as_percent = .as_percent, .zap_small = .zap_small)
   } else if (anyNA(x)) {
     .convert_missing(x, .missing)
+  } else if (is.numeric(x) && all(.is.int(stats::na.omit(x))) && !is.null(.width)) {
+    format(x, justify = "right", width = .width)
   } else {
     as.character(x)
   }

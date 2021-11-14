@@ -186,14 +186,19 @@ many different model objects.
 
 ``` r
 library(insight)
-m <- lm(Sepal.Length ~ Species + Petal.Width + Sepal.Width, data = iris)
+m <- lm(
+  Sepal.Length ~ Species + Petal.Width + Sepal.Width, 
+  data = iris
+)
 
 dat <- get_data(m)
 pred <- find_predictors(m, flatten = TRUE)
 
 l <- lapply(pred, function(x) {
-    if (is.numeric(dat[[x]]))
-        mean(dat[[x]]) else unique(dat[[x]])
+  if (is.numeric(dat[[x]]))
+    mean(dat[[x]])
+  else
+    unique(dat[[x]])
 })
 
 names(l) <- pred
@@ -217,9 +222,12 @@ obviously not for all models, to access the information about model
 coefficients.
 
 ``` r
-print_params <- function(model) {
-    paste0("My parameters are ", paste0(row.names(summary(model)$coefficients), collapse = ", "),
-        ", thank you for your attention!")
+print_params <- function(model){
+  paste0(
+    "My parameters are ",
+    paste0(row.names(summary(model)$coefficients),  collapse = ", "),
+    ", thank you for your attention!"
+  )
 }
 
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
@@ -239,9 +247,12 @@ need to create specific functions for all models types. With
 the model type.
 
 ``` r
-print_params <- function(model) {
-    paste0("My parameters are ", paste0(insight::find_parameters(model, flatten = TRUE),
-        collapse = ", "), ", thank you for your attention!")
+print_params <- function(model){
+  paste0(
+    "My parameters are ",
+    paste0(insight::find_parameters(model, flatten = TRUE),  collapse = ", "),
+    ", thank you for your attention!"
+  )
 }
 
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)

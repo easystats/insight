@@ -296,9 +296,9 @@ find_parameters.brmsfit <- function(x,
 
       if (.obj_has_name(l, "random")) {
         random <- l$random[grepl(sprintf("__\\Q%s\\E\\[", i), l$random) |
-                             grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
-                             grepl("^cor_", l$random) |
-                             l$random %in% c("car", "sdcar")]
+          grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
+          grepl("^cor_", l$random) |
+          l$random %in% c("car", "sdcar")]
       } else {
         random <- NULL
       }

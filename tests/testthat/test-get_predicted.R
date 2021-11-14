@@ -2,6 +2,7 @@ run_stan <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
 pkgs <- c(
   "lme4",
+  "brms",
   "glmmTMB",
   "mgcv",
   "gamm4",
@@ -473,4 +474,23 @@ test_that("bugfix: used to return all zeros", {
   pred <- suppressWarnings(get_predicted(mod, predict = "original"))
   expect_warning(get_predicted(mod, predict = "original"))
   expect_false(all(pred == 0))
+})
+
+
+test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
+  skip_if(isFALSE(run_stan))
+  skip_if_not_installed("brms")
+  library(brms)
+  void <- capture.output(
+    mod <- brm(am ~ hp + mpg,
+      family = bernoulli, data = mtcars,
+      chains = 2, iter = 1000, seed = 1024, silent = 2
+    )
+  )
+  x <- get_predicted(mod, predict = "link")
+  y <- get_predicted(mod, predict = "expectation")
+  z <- get_predicted(mod, predict = NULL, type = "response")
+  expect_equal(round(x[1], 1), -1.4)
+  expect_equal(round(y[1], 1), .2)
+  expect_identical(y, z)
 })

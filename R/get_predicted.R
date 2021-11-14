@@ -297,10 +297,12 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
   attr(x$terms, "variables") <- new_call
 
   # compute predictions
-  args <- list(object = x,
-               newdata = data,
-               type = type_arg,
-               se.fit = (type_arg == "prob"))
+  args <- list(
+    object = x,
+    newdata = data,
+    type = type_arg,
+    se.fit = (type_arg == "prob")
+  )
   pred <- do.call("predict", args)
 
   out <- .get_predicted_out(pred$fit)
@@ -311,12 +313,13 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
     se <- as.data.frame(se)
     se$Row <- 1:nrow(se)
     se <- stats::reshape(se,
-                         direction = "long",
-                         varying = setdiff(colnames(se), "Row"),
-                         times = setdiff(colnames(se), "Row"),
-                         v.names = "SE",
-                         timevar = "Response",
-                         idvar = "Row")
+      direction = "long",
+      varying = setdiff(colnames(se), "Row"),
+      times = setdiff(colnames(se), "Row"),
+      v.names = "SE",
+      timevar = "Response",
+      idvar = "Row"
+    )
     row.names(se) <- NULL
     attr(out, "ci_data") <- se
   }
@@ -483,7 +486,6 @@ get_predicted.glmmTMB <- function(x,
                                   iterations = NULL,
                                   verbose = TRUE,
                                   ...) {
-
   dots <- list(...)
 
   # Sanity checks
@@ -593,7 +595,7 @@ get_predicted.bife <- function(x,
     ...
   )
 
-  out <- tryCatch(predict(x, type = args$scale, X_new = args$data), error = function(e) NULL)
+  out <- tryCatch(stats::predict(x, type = args$scale, X_new = args$data), error = function(e) NULL)
 
   if (!is.null(out)) {
     out <- .get_predicted_out(out, args = list("data" = data))
@@ -624,9 +626,9 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...)
 
   # predict.multinom doesn't work when `newdata` is explicitly set to NULL (weird)
   if (is.null(data)) {
-    out <- predict(x, type = type_arg)
+    out <- stats::predict(x, type = type_arg)
   } else {
-    out <- predict(x, newdata = data, type = type_arg)
+    out <- stats::predict(x, newdata = data, type = type_arg)
   }
 
   .get_predicted_out(out, args = args)
@@ -782,6 +784,17 @@ get_predicted.stanreg <- function(x,
     ...
   )
 
+  # when the `type` argument is passed through ellipsis, we need to manually set
+  # the `args$predict` value, because this is what determines which `rstantools`
+  # function we will use to draw from the posterior predictions.
+  dots <- list(...)
+  if (is.null(predict) && "type" %in% names(dots)) {
+    if (dots$type == "link") {
+      args$predict <- "link"
+    } else if (dots$type == "response") {
+      args$predict <- "expectation"
+    }
+  }
 
   # Get draws
   if (args$predict %in% c("link")) {
@@ -1042,6 +1055,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   # Transform
   if (info$is_linear == FALSE && scale == "response") {
     transform <- TRUE
+    type_arg <- "link" # set from response to link, because we back-transform
   } else {
     transform <- FALSE
   }

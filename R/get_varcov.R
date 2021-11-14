@@ -19,6 +19,8 @@
 #'   applies to models of class `mixor`.
 #' @param complete Logical, if `TRUE`, for `aov`, returns the full
 #'   variance-covariance matrix.
+#' @param robust Logical, if `TRUE`, returns a robust variance-covariance matrix
+#'   using sandwich estimation.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
@@ -329,23 +331,6 @@ get_varcov.zcpglm <- function(x,
 
 #' @rdname get_varcov
 #' @export
-get_varcov.MixMod <- function(x,
-                              component = c("conditional", "zero_inflated", "zi", "all"),
-                              ...) {
-  component <- match.arg(component)
-
-  vc <- switch(component,
-    "conditional" = stats::vcov(x, parm = "fixed-effects"),
-    "zi" = ,
-    "zero_inflated" = stats::vcov(x, parm = "zero_part"),
-    stats::vcov(x)
-  )
-  .process_vcov(vc)
-}
-
-
-#' @rdname get_varcov
-#' @export
 get_varcov.glmmTMB <- function(x,
                                component = c("conditional", "zero_inflated", "zi", "dispersion", "all"),
                                ...) {
@@ -360,6 +345,49 @@ get_varcov.glmmTMB <- function(x,
   )
   .process_vcov(vc)
 }
+
+
+#' @rdname get_varcov
+#' @export
+get_varcov.MixMod <- function(x,
+                              effects = c("fixed", "random"),
+                              component = c("conditional", "zero_inflated", "zi", "dispersion", "auxiliary", "all"),
+                              robust = FALSE,
+                              verbose = TRUE,
+                              ...) {
+  component <- match.arg(component)
+  effects <- match.arg(effects)
+
+  random_vc <- stats::vcov(x, parm = "var-cov", sandwich = robust)
+
+  if (effects == "random") {
+    vc <- random_vc
+  } else {
+    vc <- switch(component,
+      "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
+      "zero_inflated" = ,
+      "zi" = stats::vcov(x, parm = "all", sandwich = robust),
+      "auxiliary" = ,
+      "dispersion" = stats::vcov(x, parm = "extra", sandwich = robust),
+      stats::vcov(x, parm = "all", sandwich = robust)
+    )
+
+    # drop random parameters
+    random_parms <- stats::na.omit(match(colnames(random_vc), colnames(vc)))
+    if (length(random_parms)) {
+      vc <- vc[-random_parms, -random_parms, drop = FALSE]
+    }
+
+    # filter ZI
+    if (component %in% c("zi", "zero_inflated")) {
+      zi_parms <- grepl("^zi_", colnames(vc))
+      vc <- vc[zi_parms, zi_parms, drop = FALSE]
+    }
+  }
+
+  .process_vcov(vc)
+}
+
 
 
 

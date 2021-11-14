@@ -104,21 +104,30 @@
     var.residual <- var.distribution + var.dispersion
   }
 
-  if (component %in% c("intercept", "all")) {
-    var.intercept <- .between_subject_variance(vals, x)
+  if (isTRUE(faminfo$is_mixed)) {
+    if (component %in% c("intercept", "all")) {
+      var.intercept <- .between_subject_variance(vals, x)
+    }
+
+    if (component %in% c("slope", "all")) {
+      var.slope <- .random_slope_variance(vals, x)
+    }
+
+    if (component %in% c("rho01", "all")) {
+      cor.slope_intercept <- .random_slope_intercept_corr(vals, x)
+    }
+
+    if (component %in% c("rho00", "all")) {
+      cor.slopes <- .random_slopes_corr(vals, x)
+    }
+  } else {
+    var.intercept <- NULL
+    var.slope <- NULL
+    cor.slope_intercept <- NULL
+    cor.slopes <- NULL
   }
 
-  if (component %in% c("slope", "all")) {
-    var.slope <- .random_slope_variance(vals, x)
-  }
 
-  if (component %in% c("rho01", "all")) {
-    cor.slope_intercept <- .random_slope_intercept_corr(vals, x)
-  }
-
-  if (component %in% c("rho00", "all")) {
-    cor.slopes <- .random_slopes_corr(vals, x)
-  }
 
   # if we only need residual variance, we can delete those
   # values again...
@@ -894,7 +903,7 @@
         d[upper.tri(d, diag = TRUE)] <- NA
         d <- as.data.frame(d)
 
-        d <- reshape_longer(d, colnames_to = "Parameter1", rows_to = "Parameter2")
+        d <- .reshape_longer(d, colnames_to = "Parameter1", rows_to = "Parameter2")
         d <- d[stats::complete.cases(d), ]
         d <- d[!d$Parameter1 %in% c("Intercept", "(Intercept)"), ]
 
@@ -927,4 +936,60 @@
   # )
 
   unlist(rho01)
+}
+
+
+
+
+.reshape_longer <- function(data,
+                            colnames_to = "Name",
+                            rows_to = NULL) {
+  cols <- names(data)
+  values_to <- "Value"
+
+  # save attribute of each variable
+  variable_attr <- lapply(data, attributes)
+
+  # Create Index column as needed by reshape
+  data[["_Row"]] <- .to_numeric(row.names(data))
+
+  # Reshape
+  long <- stats::reshape(data,
+                         varying = cols,
+                         idvar = "_Row",
+                         v.names = values_to,
+                         timevar = colnames_to,
+                         direction = "long"
+  )
+
+  # Sort the dataframe (to match pivot_longer's output)
+  long <- long[order(long[["_Row"]], long[[colnames_to]]), ]
+
+  # Remove or rename the row index
+  if (is.null(rows_to)) {
+    long[["_Row"]] <- NULL
+  } else {
+    names(long)[names(long) == "_Row"] <- rows_to
+  }
+
+  # Re-insert col names as levels
+  long[[colnames_to]] <- cols[long[[colnames_to]]]
+
+  # Reset row names
+  row.names(long) <- NULL
+
+  # Remove reshape attributes
+  attributes(long)$reshapeLong <- NULL
+
+  # add back attributes where possible
+  for (i in colnames(long)) {
+    attributes(long[[i]]) <- variable_attr[[i]]
+  }
+
+  long
+}
+
+
+.to_numeric <- function(x) {
+  tryCatch(as.numeric(as.character(x)), error = function(e) x, warning = function(w) x)
 }
