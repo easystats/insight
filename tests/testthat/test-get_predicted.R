@@ -402,7 +402,6 @@ test_that("lm: get_predicted vs barebones `predict()`", {
   unknown1 <- as.data.frame(get_predicted(mod))
   unknown2 <- as.data.frame(get_predicted(mod, predict = "expectation"))
   unknown3 <- suppressWarnings(as.data.frame(get_predicted(mod, predict = "response")))
-  expect_warning(as.data.frame(get_predicted(mod, predict = "response")))
   expect_equal(unknown1$Predicted, known$fit[, "fit"], ignore_attr = TRUE)
   expect_equal(unknown1$SE, known$se.fit, ignore_attr = TRUE)
   expect_equal(unknown1$CI_low, known$fit[, "lwr"], ignore_attr = TRUE)
@@ -468,8 +467,7 @@ test_that("hurdle: get_predicted matches `predict()`", {
 
 test_that("bugfix: used to return all zeros", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
-  expect_warning(get_predicted(mod, predict = "response"))
-  pred <- suppressWarnings(get_predicted(mod, predict = "response"))
+  pred <- get_predicted(mod, predict = "response")
   expect_false(any(pred == 0))
   pred <- suppressWarnings(get_predicted(mod, predict = "original"))
   expect_warning(get_predicted(mod, predict = "original"))

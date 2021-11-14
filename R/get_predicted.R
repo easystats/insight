@@ -990,6 +990,8 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     predict <- "expectation"
   }
 
+  # Warn if get_predicted() is not called with an easystats- or
+  # model-supported predicted type
   easystats_methods <- c("expectation", "link", "prediction", "classification")
   supported <- c(easystats_methods, suppressWarnings(eval(formals(predict_method)$type)))
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
