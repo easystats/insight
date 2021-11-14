@@ -1024,7 +1024,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   } else {
     if (is.null(predict)) {
       if (identical(dots$type, "response")) {
-        type_arg <- predict_arg <- "link"
+        type_arg <- predict_arg <- "expectation"
       } else {
         type_arg <- predict_arg <- dots$type
       }
