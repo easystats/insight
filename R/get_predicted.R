@@ -1035,7 +1035,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     # Type (that's for the initial call to stats::predict)
     if (predict_arg == "terms") {
       type_arg <- "terms"
-    } else if (info$is_linear) {
+    } else if (info$is_linear || predict_arg == "response") {
       type_arg <- "response"
     } else {
       type_arg <- "link"
@@ -1048,7 +1048,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   if (predict_arg == "link") {
     ci_type <- "confidence"
     scale <- "link"
-  } else if (predict_arg == "expectation") {
+  } else if (predict_arg %in% c("expectation", "response")) {
     ci_type <- "confidence"
     scale <- "response"
   } else if (predict_arg %in% c("prediction", "classification")) {
