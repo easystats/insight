@@ -963,13 +963,13 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   if (is.null(ci)) ci <- 0
 
   # check `predict` user-input
-  predict_method <- .compact_list(lapply(
+  predict_method <- lapply(
     class(x), function(i) {
       tryCatch(utils::getS3method("predict", i),
                error = function(e) NULL)
     }
-  ))
-  predict_method <- tryCatch(predict_method[[1]], error = function(e) NULL)
+  )
+  predict_method <- tryCatch(predict_method[!sapply(predict_method, is.null)][[1]], error = function(e) NULL)
 
   # check aliases
   if (!is.null(predict)) {
