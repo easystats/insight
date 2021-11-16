@@ -104,7 +104,7 @@
     var.residual <- var.distribution + var.dispersion
   }
 
-  if (isTRUE(faminfo$is_mixed)) {
+  if (isTRUE(faminfo$is_mixed) || inherits(x, c("wblm", "wbgee"))) {
     if (component %in% c("intercept", "all")) {
       var.intercept <- .between_subject_variance(vals, x)
     }
