@@ -179,6 +179,10 @@
   mos_eisly <- grepl(pattern = "^mo\\(([^,)]*).*", x = colnames(mf))
   if (any(mos_eisly)) mf <- mf[!mos_eisly]
 
+  # are there any factor variables that have been coerced "on-the-fly",
+  # using "factor()" or "as.factor()"?
+  factors <- colnames(mf)[grepl("^(as\\.factor|factor)\\((.*)\\)", colnames(mf))]
+
   # clean variable names
   cvn <- .remove_pattern_from_names(colnames(mf), ignore_lag = TRUE)
 
@@ -228,14 +232,14 @@
     if (!.is_empty_string(new.cols)) mf <- cbind(mf, trials.data[, new.cols, drop = FALSE])
   }
 
-  .add_remaining_missing_variables(x, mf, effects, component = "all")
+  .add_remaining_missing_variables(x, mf, effects, component = "all", factors = factors)
 }
 
 
 
 # add remainng variables with special pattern -------------------------------
 
-.add_remaining_missing_variables <- function(model, mf, effects, component) {
+.add_remaining_missing_variables <- function(model, mf, effects, component, factors = NULL) {
   # check if data argument was used
   model_call <- get_call(model)
   if (!is.null(model_call)) {
@@ -261,6 +265,18 @@
         mf <- cbind(mf, env_data[missing_vars])
       }
     }
+  }
+
+  # add attributes for those that were factors
+  if (length(factors)) {
+    factors <- gsub("^(as\\.factor|factor)\\((.*)\\)", "\\2", factors)
+    for (i in factors) {
+      if (.is_numeric_character(mf[[i]])) {
+        mf[[i]] <- as.numeric(mf[[i]])
+        attr(mf[[i]], "factor") <- TRUE
+      }
+    }
+    attr(mf, "factors") <- factors
   }
 
   mf
