@@ -1624,7 +1624,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     {
       if (as.character(zi.form[2]) == ".") {
         resp <- .safe_deparse(c.form[2])
-        pred <- setdiff(colnames(.get_data_from_env(x)), resp)
+        pred <- setdiff(colnames(.recover_data_from_environment(x)), resp)
         zi.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
       }
       zi.form
@@ -1649,7 +1649,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     {
       if (as.character(f[[3]])[1] == ".") {
         resp <- .safe_deparse(f[[2]])
-        pred <- setdiff(colnames(.get_data_from_env(model)), resp)
+        pred <- setdiff(colnames(.recover_data_from_environment(model)), resp)
         f <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
       }
       f
