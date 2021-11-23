@@ -272,7 +272,7 @@
     factors <- gsub("^(as\\.factor|factor)\\((.*)\\)", "\\2", factors)
     for (i in factors) {
       if (.is_numeric_character(mf[[i]])) {
-        mf[[i]] <- as.numeric(mf[[i]])
+        mf[[i]] <- .to_numeric(mf[[i]])
         attr(mf[[i]], "factor") <- TRUE
       }
     }
