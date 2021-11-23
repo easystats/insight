@@ -345,6 +345,9 @@
     random = unique(random.component.data)
   )
 
+  # add offset
+  vars <- c(vars, find_offset(x))
+
   still_missing <- setdiff(vars, colnames(mf))
   vars <- intersect(vars, colnames(mf))
   dat <- mf[, vars, drop = FALSE]
