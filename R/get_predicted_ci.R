@@ -114,11 +114,16 @@ get_predicted_ci.default <- function(x,
   # If draws are present (bootstrapped or Bayesian)
   if ("iterations" %in% names(attributes(predictions))) {
     iter <- attributes(predictions)$iteration
-
     se <- .get_predicted_se_from_iter(iter = iter, dispersion_method)
     out <- .get_predicted_ci_from_iter(iter = iter, ci = ci, ci_method)
-
-    return(cbind(se, out))
+    out <- cbind(se, out)
+    # outcome is multinomial/ordinal/cumulative
+    if (inherits(predictions, "data.frame") && 
+        "Response" %in% colnames(predictions) &&
+        "Row" %in% colnames(predictions)) {
+      out <- cbind(predictions[, c("Row", "Response")], out)
+    }
+    return(out)
   }
 
   # Analytical solution

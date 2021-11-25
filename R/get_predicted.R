@@ -554,7 +554,6 @@ get_predicted.glmmTMB <- function(x,
     )
   }
 
-
   # "expectation" for zero-inflated? we need a special handling
   # for predictions and CIs here.
 
@@ -825,11 +824,9 @@ get_predicted.stanreg <- function(x,
       ...
     )
   }
-  draws <- as.data.frame(t(draws))
-  names(draws) <- gsub("^V(\\d+)$", "iter_\\1", names(draws))
 
   # Get predictions (summarize)
-  predictions <- .get_predicted_centrality_from_draws(x, draws, ...)
+  predictions <- .get_predicted_centrality_from_draws(x, iter = draws, ...)
 
   # Output
   ci_data <- get_predicted_ci(
@@ -1225,7 +1222,32 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
                                                  iter,
                                                  centrality_function = base::mean,
                                                  ...) {
-  predictions <- apply(iter, 1, centrality_function)
+
+  # outcome: ordinal/multinomial/multivariate produce a 3D array of predictions,
+  # which we stack in "long" format
+  if (length(dim(iter)) == 3) {
+    # 3rd dimension of the array is the response level. This stacks the draws into:
+    # Rows * Response ~ Draws
+    iter_stacked <- apply(iter, 1, c)
+    predictions <- data.frame(
+      # rows repeated for each response level
+      Row = rep(1:ncol(iter), times = dim(iter)[3]),
+      # response levels repeated for each row
+      Response = rep(dimnames(iter)[[3]], each = dim(iter)[2]),
+      Predicted = apply(iter_stacked, 1, centrality_function),
+      stringsAsFactors = FALSE
+    )
+    iter <- as.data.frame(iter_stacked)
+    names(iter) <- paste0("iter_", names(iter))
+  # outcome with a single level
+  } else {
+    # .get_predicted_boot already gives us the correct observation ~ draws format
+    if (is.null(colnames(iter)) || !all(grepl("^iter", colnames(iter)))) {
+      iter <- as.data.frame(t(iter))
+      names(iter) <- gsub("^V(\\d+)$", "iter_\\1", names(iter))
+    }
+    predictions <- apply(iter, 1, centrality_function)
+  }
   attr(predictions, "iterations") <- iter
   predictions
 }

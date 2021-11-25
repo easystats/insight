@@ -14,8 +14,38 @@ if (.runThisTest) {
     m5 <- insight::download_model("brms_mv_5")
     m6 <- insight::download_model("brms_corr_re1")
     m7 <- suppressWarnings(insight::download_model("brms_mixed_8"))
+    m8 <- insight::download_model("brms_ordinal_1")
 
     # Tests -------------------------------------------------------------------
+    test_that("get_predicted.brmsfit: ordinal dv", {
+      skip_if_not_installed("bayestestR")
+
+      pred1 <- get_predicted(m8)
+      pred2 <- get_predicted(m8, ci_method = "hdi")
+      expect_true(inherits(pred1, "get_predicted"))
+      expect_true(inherits(pred1, "data.frame"))
+      expect_true(all(c("Row", "Response") %in% colnames(pred1)))
+
+      # ci_method changes intervals but not se or predicted
+      pred1 <- data.frame(pred1)
+      pred2 <- data.frame(pred2)
+      expect_equal(pred1$Row, pred2$Row)
+      expect_equal(pred1$Response, pred2$Response)
+      expect_equal(pred1$Predicted, pred2$Predicted)
+      expect_equal(pred1$SE, pred2$SE)
+      expect_false(mean(pred1$CI_low == pred2$CI_low) > 0.1) # most CI bounds are different
+      expect_false(mean(pred1$CI_high == pred2$CI_high) > 0.1) # most CI bounds are different
+
+      # compare to manual predictions
+      pred3 <- get_predicted(m8, centrality_function = stats::median)
+      manual <- rstantools::posterior_epred(m8)
+      manual <- apply(manual[, , 1], 2, median)
+      expect_equal(pred3$Predicted[1:32], manual)
+      manual <- rstantools::posterior_epred(m8)
+      manual <- apply(manual[, , 1], 2, mean)
+      expect_equal(pred1$Predicted[1:32], manual)
+
+    })
 
     test_that("find_statistic", {
       expect_null(find_statistic(m1))
