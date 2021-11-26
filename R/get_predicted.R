@@ -1239,7 +1239,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     )
     iter <- as.data.frame(iter_stacked)
     names(iter) <- paste0("iter_", names(iter))
-  # outcome with a single level
+    # outcome with a single level
   } else {
     # .get_predicted_boot already gives us the correct observation ~ draws format
     if (is.null(colnames(iter)) || !all(grepl("^iter", colnames(iter)))) {

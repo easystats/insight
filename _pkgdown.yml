@@ -130,6 +130,7 @@ reference:
   - null_model
   - print_parameters
   - standardize_names
+  - standardize_column_order
   - check_if_installed
 
 - title: "Example Datasets"

@@ -44,7 +44,6 @@ if (.runThisTest) {
       manual <- rstantools::posterior_epred(m8)
       manual <- apply(manual[, , 1], 2, mean)
       expect_equal(pred1$Predicted[1:32], manual)
-
     })
 
     test_that("find_statistic", {
