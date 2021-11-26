@@ -175,7 +175,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   }
 
   # name of coefficient column htest
-  cn[cn %in% c("Dxy", "rho", "r", "tau", "r2")] <- "estimate"
+  cn[cn %in% c("Dxy", "rho", "r", "tau", "R2")] <- "estimate"
 
   if (("Difference" %in% cn) && !("estimate" %in% cn)) {
     cn[cn == "Difference"] <- "estimate"
