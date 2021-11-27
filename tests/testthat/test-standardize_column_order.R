@@ -35,4 +35,22 @@ test_that("get_predicted", {
       "statistic", "df", "p.value"
     )
   )
+
+  # deliberately misspecify column names
+  # the misspecified columns should be pushed to the end
+  df3 <- cbind.data.frame(
+    CI_Low      = -2.873,
+    t           = 5.494,
+    CI_High     = -1.088,
+    p           = 0.00001,
+    Parameter   = -1.980,
+    CI          = 0.95,
+    df          = 29.234,
+    Method      = "Student's t-test"
+  )
+
+  expect_equal(
+    names(standardize_column_order(df3, style = "easystats")),
+    c("Parameter", "CI", "Method", "t", "df", "p", "CI_Low", "CI_High")
+  )
 })
