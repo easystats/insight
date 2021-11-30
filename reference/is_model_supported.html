@@ -75,11 +75,10 @@ of currently supported model classes."><meta property="og:image" content="/logo.
 of currently supported model classes.</p>
     </div>
 
-    <div class="ref-usage sourceCode">Usage,<pre class="sourceCode r"><code><span class="fu">is_model_supported</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+    <div id="ref-usage">Usage,<div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">is_model_supported</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
 
-<span class="fu">supported_models</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="fu">supported_models</span><span class="op">(</span><span class="op">)</span></code></pre></div></div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
@@ -95,11 +94,10 @@ of currently supported model classes.</p>
 that works with the package's functions. A list of supported models can
 also be found here: <a href="https://github.com/easystats/insight" class="external-link">https://github.com/easystats/insight</a>.</p>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">is_model_supported</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
