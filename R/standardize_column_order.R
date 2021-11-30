@@ -138,9 +138,7 @@ standardize_column_order.parameters_model <- function(data,
     )
   }
 
-  data <- data[union(intersect(col_order, names(data)), names(data))]
-
-  data
+  data[union(intersect(col_order, names(data)), names(data))]
 }
 
 #' @export
