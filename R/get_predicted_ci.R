@@ -118,9 +118,9 @@ get_predicted_ci.default <- function(x,
     out <- .get_predicted_ci_from_iter(iter = iter, ci = ci, ci_method)
     out <- cbind(se, out)
     # outcome is multinomial/ordinal/cumulative
-    if (inherits(predictions, "data.frame") && 
-        "Response" %in% colnames(predictions) &&
-        "Row" %in% colnames(predictions)) {
+    if (inherits(predictions, "data.frame") &&
+      "Response" %in% colnames(predictions) &&
+      "Row" %in% colnames(predictions)) {
       out <- cbind(predictions[, c("Row", "Response")], out)
     }
     return(out)

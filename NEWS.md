@@ -9,16 +9,22 @@
 
 * Support for `bfsl` (*bfsl*)
 
+## New functions
+
+* New `standardize_column_order()` function can be used to standardize the
+  column order in output dataframes.
+
 ## General
 
 * Improved speed performance for some functions.
 
-* Improved handling of table captions and footers in `export_table()`. See
-  also the new vignette on exporting data frames into human readable tables
-  here: https://easystats.github.io/insight/articles/export.html
+* Improved handling of table captions and footers in `export_table()`. See also
+  the new vignette on exporting data frames into human readable tables here:
+  https://easystats.github.io/insight/articles/export.html
 
-* Revised `width` argument in `export_table()`, which now allows to set different
-  column widths across table columns. See examples in `?export_table`.
+* Revised `width` argument in `export_table()`, which now allows to set
+  different column widths across table columns. See examples in
+  `?export_table`.
 
 * `get_varcov()` for `MixMod` (package *GLMMadaptive*) was revised, and now
   allows to return a robust variance-covariance matrix.
@@ -27,11 +33,11 @@
 
 ## Bug fixes
 
-* Fixed issues with manual sigma computation to handle dispersion models 
-  in `get_sigma()`.
+* Fixed issues with manual sigma computation to handle dispersion models in
+  `get_sigma()`.
 
-* Fixed issue in `find_formula()` for `BayesFactor::lmBF()` with multiple
-  random effects.
+* Fixed issue in `find_formula()` for `BayesFactor::lmBF()` with multiple random
+  effects.
 
 * Fixed issue in `get_parameters.BFBayesFactor()` with wrong sign of difference
   estimate for t-tests.
@@ -43,9 +49,8 @@
 
 ## New functions
 
-* `find_transformation()` and `get_transformation()` to find or get any
-  function that was used to transform the response variable in a regression
-  model.
+* `find_transformation()` and `get_transformation()` to find or get any function
+  that was used to transform the response variable in a regression model.
 
 ## General
 
@@ -55,12 +60,12 @@
 
 * `get_modelmatrix()` now supports: `rms::lrm`
 
-* `get_predicted()` supports: `MASS::polr`, `MASS::rlm`, `rms::lrm`, `fixest`, 
+* `get_predicted()` supports: `MASS::polr`, `MASS::rlm`, `rms::lrm`, `fixest`,
   `bife::bife`, `ordinal::clm`.
 
 * `get_predicted()` standard errors are often much faster to compute.
 
-* `get_predicted()` supports models with "grouped" or "level" outcomes (e.g., 
+* `get_predicted()` supports models with "grouped" or "level" outcomes (e.g.,
   multinomial logit).
 
 * `get_predicted()` handles factors better.
@@ -81,7 +86,8 @@
 
 ## Bug fixes
 
-* Fixed issue with parameter names from *emmeans* objects in `get_parameters()`.
+* Fixed issue with parameter names from *emmeans* objects in
+  `get_parameters()`.
 
 * Fixed issues with unknown arguments in `get_predicted()`.
 
@@ -103,7 +109,8 @@
 
 ## Changes to functions
 
-* `get_predicted()` gains a new option, `predict = "response"` for binomial models.
+* `get_predicted()` gains a new option, `predict = "response"` for binomial
+  models.
 
 * Improved stability of `get_variance()` when computing random-slope-intercept
   correlation with categorical random slopes.
@@ -128,8 +135,8 @@
 * `check_if_installed()` gains a `minimum_version` argument, to check if an
   installed package is not older than the specified version number.
 
-* The `package` argument in `check_if_installed()` is now vectorized, so you
-  can check for multiple packages in one function call.
+* The `package` argument in `check_if_installed()` is now vectorized, so you can
+  check for multiple packages in one function call.
 
 * Value formatting functions (like `format_value()` or `format_ci()`) can now
   round to significant digits using `digits = "signif"`.
@@ -151,9 +158,9 @@
 
 ## New functions
 
-* Added several data management and preparation functions: `data_to_long()`, 
+* Added several data management and preparation functions: `data_to_long()`,
   `data_match()`, `data_relocate()`, `data_restoretype()`, `force_numeric()`.
-  
+
 ## New supported model classes
 
 * Support for `pgmm` (*plm*)
@@ -166,8 +173,8 @@
 
 * Stability improvements to `get_predicted()`.
 
-* Fixed issues when accessing information from an `afex_aov` model with an 
-  empty `aov` slot (in anticipation for `{afex}` v.1.0.0).
+* Fixed issues when accessing information from an `afex_aov` model with an empty
+  `aov` slot (in anticipation for `{afex}` v.1.0.0).
 
 * Fixed issue in `model_info()` for *stanreg* object with non-standard
   model-family specification.
@@ -176,14 +183,14 @@
 
 ## General
 
-* Better support for accessing auxiliary parameters (via `get_sigma()` and 
-  `get_auxiliary()`, as well as `get_parameters(component = "all")`) for 
+* Better support for accessing auxiliary parameters (via `get_sigma()` and
+  `get_auxiliary()`, as well as `get_parameters(component = "all")`) for
   `brmsfit` models.
 
 ## New functions
 
-* `get_modelmatrix()` as a robust alternative to `model.matrix()` for
-  different model classes.
+* `get_modelmatrix()` as a robust alternative to `model.matrix()` for different
+  model classes.
 
 * `format_message()` to format warnings and messages by adjusting the maximum
   line_length, possibly to the width of the console window.
@@ -194,8 +201,8 @@
 
 ## New supported model classes
 
-* Support for `mvord` (*mvord*), `SemiParBIV` (*GJRM*), 
-  `selection` (*sampleSelection*)
+* Support for `mvord` (*mvord*), `SemiParBIV` (*GJRM*), `selection`
+  (*sampleSelection*)
 
 ## Changes to functions
 
@@ -211,12 +218,13 @@
 * `get_sigma()` supports more models/objects.
 
 * `get_sigma()` and `get_deviance()` for `lrm` models (package *rms*) now only
-  return one value, sigma or deviance for the model with intercept and predictors.
+  return one value, sigma or deviance for the model with intercept and
+  predictors.
 
 * `get_deviance()` now works for `glmerMod`, `MixMod` and `glmmTMB` models.
 
-* The behaviour and documentation of the `effects` and `component` arguments,
-  in particular for `brmsfit` models, were revised to be more consistent.
+* The behaviour and documentation of the `effects` and `component` arguments, in
+  particular for `brmsfit` models, were revised to be more consistent.
 
 * `export_table()` now correctly prints the footer if the input was a list of
   data frames.
@@ -237,36 +245,35 @@
 * Fixed issue with `find_parameters()` for *brmsfit* models when auxiliary
   parameters are directly modelled.
 
-* Fixed issue with `get_parameters()` and `find_parameters()` for 
-  multi-group *blavaan* models.
+* Fixed issue with `get_parameters()` and `find_parameters()` for multi-group
+  *blavaan* models.
 
-* Fixed issue in `ellipsis_info()` when detecting nested models with 
+* Fixed issue in `ellipsis_info()` when detecting nested models with
   poly-terms.
 
 * Fixed issue in `find_response()` for *brmsfit* models that used the
   `resp_thres()` function in the model formula.
-  
-* Fixed issue in `get_predicted_ci()` for models with rank-deficient 
-  model matrix.
-  
-* Argument `zap_small` in `format_value()` did not work properly over 
-  vectorized vectors.
+
+* Fixed issue in `get_predicted_ci()` for models with rank-deficient model
+  matrix.
+
+* Argument `zap_small` in `format_value()` did not work properly over vectorized
+  vectors.
 
 # insight 0.13.2
 
 ## General
 
-* `get_predicted()` has be revamped with a new API and a stable output form
-  (a vector). In the course of this revision, a new function
-  `get_predicted_ci()` to calculate uncertainty intervals for model
-  predictions.
+* `get_predicted()` has be revamped with a new API and a stable output form (a
+  vector). In the course of this revision, a new function `get_predicted_ci()`
+  to calculate uncertainty intervals for model predictions.
 
 * Improved support for `orm` (*rms*).
 
 ## New supported model classes
 
-* Support for `svy_vglm` (*svyVGAM*), `mjoint` (*joineRML*),
-  `mhurdle` (*mhurdle*), `sarlm` (*spatialreg*), `model_fit` (*tidymodels*)
+* Support for `svy_vglm` (*svyVGAM*), `mjoint` (*joineRML*), `mhurdle`
+  (*mhurdle*), `sarlm` (*spatialreg*), `model_fit` (*tidymodels*)
 
 ## New functions
 
@@ -275,8 +282,8 @@
 
 ## Changes to functions
 
-* Added `iterations` argument to `get_predicted()` to control the
-  number of draws returned for Bayesian models.
+* Added `iterations` argument to `get_predicted()` to control the number of
+  draws returned for Bayesian models.
 
 * `model_info()` now returns `$is_gam` if model is generalized additive model
   with smooth terms.
@@ -289,18 +296,19 @@
 * Improved `print_parameters()`, to allow more flexibility and better cope with
   different output formats.
 
-* `get_parameters()`, `find_parameters()` and `clean_parameters()` for 
-  *emmGrid* and *emm_list* objects were revised and now better match the
-  actual parameter names (also for contrasts).
+* `get_parameters()`, `find_parameters()` and `clean_parameters()` for *emmGrid*
+  and *emm_list* objects were revised and now better match the actual parameter
+  names (also for contrasts).
 
 ## Bug fixes
 
 * Fixed issue in `get_variance()` for models without intercept.
 
-* Fixed labelling issue in `get_parameters()` and `clean_parameters()` for 
+* Fixed labelling issue in `get_parameters()` and `clean_parameters()` for
   `blavaan` models.
 
-* `clean_parameters()` for *MCMCglmm* objects did not include random parameters.
+* `clean_parameters()` for *MCMCglmm* objects did not include random
+  parameters.
 
 * Fixed minor issue with unintended sub-titles for `print_html()`.
 
@@ -331,9 +339,8 @@
 
 * Fix or disable failing tests on Mac OS.
 
-* Fixed issues in `get_variance()` with non-correlated
-  random-slope-intercepts for *lme4* models.
-
+* Fixed issues in `get_variance()` with non-correlated random-slope-intercepts
+  for *lme4* models.
 
 # insight 0.13.0
 
@@ -723,3 +730,4 @@
   matrix-like variables in the model frame (e.g. when using `poly()`).
 
 * Fixed issues with `PROreg::BBmm()`, due to changes in latest package update.
+

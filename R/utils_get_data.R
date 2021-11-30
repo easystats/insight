@@ -123,7 +123,6 @@
       mf_list <- lapply(mf_matrix, as.data.frame, stringsAsFactors = FALSE)
       mf_matrix <- do.call(cbind, mf_list)
       mf <- cbind(mf_nonmatrix, mf_matrix)
-
     } else {
 
       # fix NA in column names

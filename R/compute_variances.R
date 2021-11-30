@@ -955,11 +955,11 @@
 
   # Reshape
   long <- stats::reshape(data,
-                         varying = cols,
-                         idvar = "_Row",
-                         v.names = values_to,
-                         timevar = colnames_to,
-                         direction = "long"
+    varying = cols,
+    idvar = "_Row",
+    v.names = values_to,
+    timevar = colnames_to,
+    direction = "long"
   )
 
   # Sort the dataframe (to match pivot_longer's output)
