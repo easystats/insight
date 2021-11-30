@@ -44,6 +44,7 @@ standardize_column_order <- function(data, ...) {
 #' @export
 standardize_column_order.default <- function(data, ...) {
   print_color(sprintf("Objects of class '%s' are currently not supported.\n", class(data)[1]), "red")
+  invisible(data)
 }
 
 #' @rdname standardize_column_order
