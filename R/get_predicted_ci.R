@@ -70,7 +70,7 @@
 #' if (require("bayestestR")) {
 #'   ci_vals <- get_predicted_ci(x, predictions, ci = c(0.80, 0.95))
 #'   head(ci_vals)
-#'   bayestestR::reshape_ci(ci_vals)
+#'   datawizard::reshape_ci(ci_vals)
 #'
 #'   ci_vals <- get_predicted_ci(x,
 #'     predictions,
