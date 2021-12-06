@@ -95,11 +95,9 @@ reference:
     Functions to access specific information from model objects.
   contents:
   - get_call
-  - link_function
-  - link_inverse
+  - starts_with("link_")
   - model_name
-  - n_obs
-  - n_parameters
+  - starts_with("n_")
 
 - title: "Test Model Properties"
   desc: >
@@ -107,28 +105,14 @@ reference:
   contents:
   - all_models_same_class
   - has_intercept
-  - is_gam_model
-  - is_mixed_model
-  - is_model
-  - is_model_supported
-  - is_multivariate
-  - is_nested_models
-  - is_nullmodel
+  - starts_with("is_")
 
 - title: "Value Formatting"
   desc: >
     Functions for formatting (summary) output for printing
   contents:
   - color_if
-  - format_bf
-  - format_ci
-  - format_message
-  - format_number
-  - format_p
-  - format_pd
-  - format_rope
-  - format_string
-  - format_value
+  - starts_with("format_")
   - parameters_table
   - print_color
 
@@ -137,16 +121,14 @@ reference:
     Functions that are not specifically related to access model information,
     but rather small utility functions (mostly for printing)
   contents:
-  - clean_names
-  - clean_parameters
+  - starts_with("clean_")
   - display
   - download_model
   - ellipsis_info
   - export_table
   - null_model
   - print_parameters
-  - standardize_names
-  - standardize_column_order
+  - starts_with("standardize_")
   - check_if_installed
 
 - title: "Example Datasets"
