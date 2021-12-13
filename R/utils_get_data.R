@@ -355,6 +355,9 @@
 .return_data <- function(x, mf, effects, component, model.terms, is_mv = FALSE, verbose = TRUE) {
   response <- unlist(model.terms$response)
 
+  # save factors attribute
+  factors <-  attr(mf, "factors", exact = TRUE)
+
   if (is_mv) {
     fixed.component.data <- switch(component,
       all = c(
@@ -443,7 +446,7 @@
     dat <- cbind(dat, mf[["(offset"]])
   }
 
-
+  attr(dat, "factors") <- factors
   dat
 }
 
