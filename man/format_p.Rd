@@ -8,8 +8,10 @@ format_p(
   p,
   stars = FALSE,
   stars_only = FALSE,
+  whitespace = TRUE,
   name = "p",
   missing = "",
+  decimal_separator = NULL,
   digits = 3,
   ...
 )
@@ -21,10 +23,16 @@ format_p(
 
 \item{stars_only}{Return only significance stars.}
 
+\item{whitespace}{Logical, if \code{TRUE} (default), preserves whitespaces. Else,
+all whitespace characters are removed from the returned string.}
+
 \item{name}{Name prefixing the text. Can be \code{NULL}.}
 
 \item{missing}{Value by which \code{NA} values are replaced. By default, an
 empty string (i.e. \code{""}) is returned for \code{NA}.}
+
+\item{decimal_separator}{Character, if not \code{NULL}, will be used as
+decimal separator.}
 
 \item{digits}{Number of significant digits. May also be \code{"scientific"}
 to return exact p-values in scientific notation, or \code{"apa"} to use
