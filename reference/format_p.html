@@ -71,8 +71,10 @@
   <span class="va">p</span>,
   stars <span class="op">=</span> <span class="cn">FALSE</span>,
   stars_only <span class="op">=</span> <span class="cn">FALSE</span>,
+  whitespace <span class="op">=</span> <span class="cn">TRUE</span>,
   name <span class="op">=</span> <span class="st">"p"</span>,
   missing <span class="op">=</span> <span class="st">""</span>,
+  decimal_separator <span class="op">=</span> <span class="cn">NULL</span>,
   digits <span class="op">=</span> <span class="fl">3</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -86,11 +88,17 @@
 <dd><p>Add significance stars (e.g., p &lt; .001***).</p></dd>
 <dt>stars_only</dt>
 <dd><p>Return only significance stars.</p></dd>
+<dt>whitespace</dt>
+<dd><p>Logical, if <code>TRUE</code> (default), preserves whitespaces. Else,
+all whitespace characters are removed from the returned string.</p></dd>
 <dt>name</dt>
 <dd><p>Name prefixing the text. Can be <code>NULL</code>.</p></dd>
 <dt>missing</dt>
 <dd><p>Value by which <code>NA</code> values are replaced. By default, an
 empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p></dd>
+<dt>decimal_separator</dt>
+<dd><p>Character, if not <code>NULL</code>, will be used as
+decimal separator.</p></dd>
 <dt>digits</dt>
 <dd><p>Number of significant digits. May also be <code>"scientific"</code>
 to return exact p-values in scientific notation, or <code>"apa"</code> to use
