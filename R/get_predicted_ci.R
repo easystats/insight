@@ -67,10 +67,10 @@
 #' predictions <- get_predicted(x, iterations = 500)
 #' get_predicted_ci(x, predictions)
 #'
-#' if (require("bayestestR")) {
+#' if (require("datawizard")) {
 #'   ci_vals <- get_predicted_ci(x, predictions, ci = c(0.80, 0.95))
 #'   head(ci_vals)
-#'   bayestestR::reshape_ci(ci_vals)
+#'   datawizard::reshape_ci(ci_vals)
 #'
 #'   ci_vals <- get_predicted_ci(x,
 #'     predictions,
@@ -114,11 +114,16 @@ get_predicted_ci.default <- function(x,
   # If draws are present (bootstrapped or Bayesian)
   if ("iterations" %in% names(attributes(predictions))) {
     iter <- attributes(predictions)$iteration
-
     se <- .get_predicted_se_from_iter(iter = iter, dispersion_method)
     out <- .get_predicted_ci_from_iter(iter = iter, ci = ci, ci_method)
-
-    return(cbind(se, out))
+    out <- cbind(se, out)
+    # outcome is multinomial/ordinal/cumulative
+    if (inherits(predictions, "data.frame") &&
+      "Response" %in% colnames(predictions) &&
+      "Row" %in% colnames(predictions)) {
+      out <- cbind(predictions[, c("Row", "Response")], out)
+    }
+    return(out)
   }
 
   # Analytical solution

@@ -104,7 +104,7 @@
     var.residual <- var.distribution + var.dispersion
   }
 
-  if (isTRUE(faminfo$is_mixed)) {
+  if (isTRUE(faminfo$is_mixed) || inherits(x, c("wblm", "wbgee"))) {
     if (component %in% c("intercept", "all")) {
       var.intercept <- .between_subject_variance(vals, x)
     }
@@ -955,11 +955,11 @@
 
   # Reshape
   long <- stats::reshape(data,
-                         varying = cols,
-                         idvar = "_Row",
-                         v.names = values_to,
-                         timevar = colnames_to,
-                         direction = "long"
+    varying = cols,
+    idvar = "_Row",
+    v.names = values_to,
+    timevar = colnames_to,
+    direction = "long"
   )
 
   # Sort the dataframe (to match pivot_longer's output)

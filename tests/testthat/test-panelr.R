@@ -263,4 +263,11 @@ if (requiet("testthat") &&
     expect_identical(find_statistic(m1), "t-statistic")
     expect_identical(find_statistic(m2), "t-statistic")
   })
+
+  .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+  if (.runThisTest) {
+    v <- get_variance(m1)
+    expect_equal(v$var.intercept, c(id = 0.125306895731005), tolerance = 1e-4)
+    expect_equal(v$var.fixed, 0.0273792999320531, tolerance = 1e-4)
+  }
 }

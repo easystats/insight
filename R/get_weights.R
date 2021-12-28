@@ -70,7 +70,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   if (is.null(w)) {
     tryCatch(
       {
-        w <- .get_data_from_env(x)[[find_weights(x)]]
+        w <- .recover_data_from_environment(x)[[find_weights(x)]]
       },
       error = function(e) {
         NULL

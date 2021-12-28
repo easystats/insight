@@ -178,7 +178,7 @@ if (requiet("testthat") &&
     expect_false(is_multivariate(m2))
   })
 
-  if (getRversion() >= "3.6.0" && !isTRUE(osx)) {
+  if (getRversion() > "3.6.3" && !isTRUE(osx)) {
     test_that("get_variance", {
       expect_equal(
         get_variance(m1),

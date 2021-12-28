@@ -136,7 +136,7 @@ if (requiet("testthat") &&
     expect_false(is_multivariate(m1))
   })
 
-  if (getRversion() >= "3.6.0") {
+  if (getRversion() > "3.6.3") {
     test_that("get_variance", {
       skip_on_cran()
       expect_equal(

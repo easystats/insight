@@ -112,31 +112,33 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn %in% c("df_residual", "df.residual", "Resid..Df", "df.error", "df_error")] <- "df"
 
   # convert broom-style to easystats
-  cn[cn == "term"] <- "Parameter"
-  cn[cn == "estimate"] <- "Coefficient"
-  cn[cn == "std.error"] <- "SE"
-  cn[cn == "std.dev"] <- "SD"
-  cn[cn == "p.value"] <- "p"
+  # styler: off
+  cn[cn == "term"]         <- "Parameter"
+  cn[cn == "estimate"]     <- "Coefficient"
+  cn[cn == "std.error"]    <- "SE"
+  cn[cn == "std.dev"]      <- "SD"
+  cn[cn == "p.value"]      <- "p"
   cn[cn == "bayes.factor"] <- "BF"
-  cn[cn == "component"] <- "Component"
-  cn[cn == "effect"] <- "Effects"
-  cn[cn == "response"] <- "Response"
-  cn[cn == "statistic"] <- "Statistic"
-  cn[cn == "conf.low"] <- "CI_low"
-  cn[cn == "conf.high"] <- "CI_high"
-  cn[cn == "conf.level"] <- "CI"
-  cn[cn == "n.obs"] <- "n_Obs"
+  cn[cn == "component"]    <- "Component"
+  cn[cn == "effect"]       <- "Effects"
+  cn[cn == "response"]     <- "Response"
+  cn[cn == "statistic"]    <- "Statistic"
+  cn[cn == "conf.low"]     <- "CI_low"
+  cn[cn == "conf.high"]    <- "CI_high"
+  cn[cn == "conf.level"]   <- "CI"
+  cn[cn == "n.obs"]        <- "n_Obs"
   # anova
-  cn[cn == "sumsq"] <- "Sum_Squares"
-  cn[cn == "meansq"] <- "Mean_Square"
-  cn[cn == "Resid..Dev"] <- "Deviance_error"
+  cn[cn == "sumsq"]        <- "Sum_Squares"
+  cn[cn == "meansq"]       <- "Mean_Square"
+  cn[cn == "Resid..Dev"]   <- "Deviance_error"
   # convert classic summary
-  cn[cn == "Estimate"] <- "Coefficient"
-  cn[cn == "Std. Error"] <- "SE"
-  cn[cn == "t value"] <- "Statistic"
-  cn[cn == "z value"] <- "Statistic"
-  cn[cn == "Pr(>|t|)"] <- "p"
-  cn[cn == "Pr(>|z|)"] <- "p"
+  cn[cn == "Estimate"]     <- "Coefficient"
+  cn[cn == "Std. Error"]   <- "SE"
+  cn[cn == "t value"]      <- "Statistic"
+  cn[cn == "z value"]      <- "Statistic"
+  cn[cn == "Pr(>|t|)"]     <- "p"
+  cn[cn == "Pr(>|z|)"]     <- "p"
+  # styler: on
 
   cn
 }
@@ -147,25 +149,27 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   # TO DO: currently `htest` object output naming differs from `broom`
   # needs further discussion
 
+  # styler: off
   # easy replacements
-  cn[cn == "Parameter"] <- "term"
-  cn[cn == "SE"] <- "std.error"
-  cn[cn == "SD"] <- "std.dev"
-  cn[cn == "p"] <- "p.value"
-  cn[cn == "BF"] <- "bayes.factor"
-  cn[cn == "log_BF"] <- "log(bayes.factor)"
-  cn[cn == "Component"] <- "component"
-  cn[cn == "Effects"] <- "effect"
-  cn[cn == "Response"] <- "response"
-  cn[cn == "CI"] <- "conf.level"
-  cn[cn == "df_error"] <- "df.error"
-  cn[cn == "df_residual"] <- "df.residual"
-  cn[cn == "n_Obs"] <- "n.obs"
+  cn[cn == "Parameter"]      <- "term"
+  cn[cn == "SE"]             <- "std.error"
+  cn[cn == "SD"]             <- "std.dev"
+  cn[cn == "p"]              <- "p.value"
+  cn[cn == "BF"]             <- "bayes.factor"
+  cn[cn == "log_BF"]         <- "log(bayes.factor)"
+  cn[cn == "Component"]      <- "component"
+  cn[cn == "Effects"]        <- "effect"
+  cn[cn == "Response"]       <- "response"
+  cn[cn == "CI"]             <- "conf.level"
+  cn[cn == "df_error"]       <- "df.error"
+  cn[cn == "df_residual"]    <- "df.residual"
+  cn[cn == "n_Obs"]          <- "n.obs"
 
   # anova
-  cn[cn == "Sum_Squares"] <- "sumsq"
-  cn[cn == "Mean_Square"] <- "meansq"
+  cn[cn == "Sum_Squares"]    <- "sumsq"
+  cn[cn == "Mean_Square"]    <- "meansq"
   cn[cn == "Deviance_error"] <- "Resid..Dev"
+  # styler: on
 
   # name of coefficient column for (Bayesian) models
   if (isFALSE(ignore_estimate)) {
@@ -173,7 +177,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   }
 
   # name of coefficient column htest
-  cn[cn %in% c("Dxy", "rho", "r", "tau")] <- "estimate"
+  cn[cn %in% c("Dxy", "rho", "r", "tau", "R2")] <- "estimate"
 
   if (("Difference" %in% cn) && !("estimate" %in% cn)) {
     cn[cn == "Difference"] <- "estimate"
@@ -196,11 +200,13 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   }
 
   # convert classic summary
+  # styler: off
   cn[cn == "Std. Error"] <- "std.error"
-  cn[cn == "t value"] <- "statistic"
-  cn[cn == "z value"] <- "statistic"
-  cn[cn == "Pr(>|t|)"] <- "p.value"
-  cn[cn == "Pr(>|z|)"] <- "p.value"
+  cn[cn == "t value"]    <- "statistic"
+  cn[cn == "z value"]    <- "statistic"
+  cn[cn == "Pr(>|t|)"]   <- "p.value"
+  cn[cn == "Pr(>|z|)"]   <- "p.value"
+  # styler: on
 
   # lowercase for everything
   cn <- gsub(tolower(cn), pattern = "_", replacement = ".", fixed = TRUE)

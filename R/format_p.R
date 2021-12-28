@@ -5,7 +5,11 @@
 #' @param p value or vector of p-values.
 #' @param stars Add significance stars (e.g., p < .001***).
 #' @param stars_only Return only significance stars.
+#' @param whitespace Logical, if `TRUE` (default), preserves whitespaces. Else,
+#'   all whitespace characters are removed from the returned string.
 #' @param name Name prefixing the text. Can be `NULL`.
+#' @param decimal_separator Character, if not `NULL`, will be used as
+#'   decimal separator.
 #' @param digits Number of significant digits. May also be `"scientific"`
 #'   to return exact p-values in scientific notation, or `"apa"` to use
 #'   an APA 7th edition-style for p-values (equivalent to `digits = 3`).
@@ -27,7 +31,15 @@
 #' format_p(p, digits = "scientific")
 #' format_p(p, digits = "scientific2")
 #' @export
-format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing = "", digits = 3, ...) {
+format_p <- function(p,
+                     stars = FALSE,
+                     stars_only = FALSE,
+                     whitespace = TRUE,
+                     name = "p",
+                     missing = "",
+                     decimal_separator = NULL,
+                     digits = 3,
+                     ...) {
 
   # only convert p if it's a valid numeric, or at least coercible to
   # valid numeric values...
@@ -96,12 +108,12 @@ format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing =
     )
   }
 
-  .add_prefix_and_remove_stars(text, stars, stars_only, name, missing)
+  .add_prefix_and_remove_stars(text, stars, stars_only, name, missing, whitespace, decimal_separator)
 }
 
 
 #' @keywords internal
-.add_prefix_and_remove_stars <- function(text, stars, stars_only, name, missing = "") {
+.add_prefix_and_remove_stars <- function(text, stars, stars_only, name, missing = "", whitespace = TRUE, decimal_separator = NULL) {
   missing_index <- is.na(text)
 
   if (is.null(name)) {
@@ -116,6 +128,18 @@ format_p <- function(p, stars = FALSE, stars_only = FALSE, name = "p", missing =
     text <- gsub("\\*", "", text)
   }
 
+  # replace missing with related string
   text[missing_index] <- missing
+
+  # remove whitespace around < and >
+  if (isFALSE(whitespace)) {
+    text <- gsub(" ", "", text, fixed = TRUE)
+  }
+
+  # replace decimal separator
+  if (!is.null(decimal_separator)) {
+    text <- gsub(".", decimal_separator, text, fixed = TRUE)
+  }
+
   text
 }
