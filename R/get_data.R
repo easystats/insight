@@ -186,19 +186,6 @@ get_data.rqss <- function(x,
 
 
 #' @export
-get_data.selection <- function(x, verbose = TRUE, ...) {
-  if ("lm" %in% names(x)) {
-    suppressWarnings(get_data(x$lm, verbose = verbose))
-  } else if (!is.null(x$twoStep$lm)) {
-    suppressWarnings(get_data(x$twoStep$lm, verbose = verbose))
-  } else {
-    NULL
-  }
-}
-
-
-
-#' @export
 get_data.gls <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
@@ -231,6 +218,17 @@ get_data.nlrq <- get_data.gls
 
 #' @export
 get_data.robmixglm <- get_data.gls
+
+#' @export
+get_data.selection <- get_data.gls
+
+# if ("lm" %in% names(x)) {
+#   suppressWarnings(get_data(x$lm, verbose = verbose))
+# } else if (!is.null(x$twoStep$lm)) {
+#   suppressWarnings(get_data(x$twoStep$lm, verbose = verbose))
+# } else {
+#   NULL
+# }
 
 
 #' @export
