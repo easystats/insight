@@ -40,6 +40,12 @@
 #'   a named numeric vector, value names are matched against column names, and
 #'   for each match, the specified width is used (see 'Examples'). Only applies
 #'   to text-format (see `format`).
+#' @param table_width Numeric, or `"auto"`, indicating the width of the complete
+#'   table. If `table_width = "auto"` and the table is wider than the current
+#'   width (i.e. line length) of the console (or any other source for textual
+#'   output, like markdown files), the table is split into two parts. Else,
+#'   if `table_width` is numeric and table rows are larger than `table_width`,
+#'   the table is split into two parts.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
@@ -55,6 +61,10 @@
 #' @examples
 #' export_table(head(iris))
 #' export_table(head(iris), sep = " ", header = "*", digits = 1)
+#'
+#' # split longer tables
+#' export_table(head(iris), table_width = 30)
+#'
 #' \dontrun{
 #' # colored footers
 #' data(iris)
@@ -104,6 +114,7 @@ export_table <- function(x,
                          align = NULL,
                          group_by = NULL,
                          zap_small = FALSE,
+                         table_width = NULL,
                          verbose = TRUE) {
 
   # check args
@@ -173,7 +184,8 @@ export_table <- function(x,
       zap_small = zap_small,
       empty_line = empty_line,
       indent_groups = indent_groups,
-      indent_rows = indent_rows
+      indent_rows = indent_rows,
+      table_width = table_width
     )
   } else if (is.list(x)) {
 
@@ -242,7 +254,8 @@ export_table <- function(x,
         zap_small = zap_small,
         empty_line = empty_line,
         indent_groups = indent_groups,
-        indent_rows = indent_rows
+        indent_rows = indent_rows,
+        table_width = table_width
       )
     })
 
@@ -305,7 +318,8 @@ export_table <- function(x,
                           zap_small = FALSE,
                           empty_line = NULL,
                           indent_groups = NULL,
-                          indent_rows = NULL) {
+                          indent_rows = NULL,
+                          table_width = NULL) {
   df <- as.data.frame(x)
 
   # check width argument, for format value. cannot have
@@ -390,7 +404,8 @@ export_table <- function(x,
         indent_rows = indent_rows,
         col_names = col_names,
         col_width = width,
-        col_align = col_align
+        col_align = col_align,
+        table_width = table_width
       )
     } else if (format == "markdown") {
 
@@ -431,7 +446,8 @@ export_table <- function(x,
                                 indent_rows = NULL,
                                 col_names = NULL,
                                 col_width = NULL,
-                                col_align = NULL) {
+                                col_align = NULL,
+                                table_width = NULL) {
 
   # align table, if requested
   if (!is.null(align) && length(align) == 1) {
@@ -479,6 +495,28 @@ export_table <- function(x,
     }
   }
 
+  # save first column we may need this when table is wrapped into multiple
+  # parts due to over-lengthy lines
+  final2 <- NULL
+  if (identical(table_width, "auto") || (!is.null(table_width) && is.numeric(table_width))) {
+    # check current line width in console and width of table rows
+    if (is.numeric(table_width)) {
+      line_width <- table_width
+    } else {
+      line_width <- options()$width
+    }
+    row_width <- nchar(paste0(final[1, ], collapse = sep))
+    # if wider, save first column - we need to repeat this later
+    if (row_width > line_width) {
+      i <- 1
+      while (nchar(paste0(final[1, 1:i], collapse = sep)) < line_width) {
+        i <- i + 1
+      }
+      final2 <- final[, c(1, (i + 1):ncol(final))]
+      final <- final[, 1:i]
+    }
+  }
+
   # Transform to character
   rows <- c()
   for (row in 1:nrow(final)) {
@@ -495,6 +533,29 @@ export_table <- function(x,
     if (row == 1) {
       if (!is.null(header)) {
         rows <- paste0(rows, paste0(rep_len(header, nchar(final_row)), collapse = ""), sep = "\n")
+      }
+    }
+  }
+
+  # if we have over-lengthy tables that are split into two pars, print second
+  # table here
+  if (!is.null(final2)) {
+    rows <- paste0(rows, "\n")
+    for (row in 1:nrow(final2)) {
+      final_row <- paste0(final2[row, ], collapse = sep)
+
+      # check if we have an empty row
+      if (!is.null(empty_line) && all(nchar(trimws(final2[row, ])) == 0)) {
+        rows <- paste0(rows, paste0(rep_len(empty_line, nchar(final_row)), collapse = ""), sep = "\n")
+      } else {
+        rows <- paste0(rows, final_row, sep = "\n")
+      }
+
+      # First row separation
+      if (row == 1) {
+        if (!is.null(header)) {
+          rows <- paste0(rows, paste0(rep_len(header, nchar(final_row)), collapse = ""), sep = "\n")
+        }
       }
     }
   }

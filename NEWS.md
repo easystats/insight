@@ -26,6 +26,9 @@
   different column widths across table columns. See examples in
   `?export_table`.
 
+* `export_table()` gets a `table_width` argument to split wide tables into
+  two parts.
+
 * `get_varcov()` for `MixMod` (package *GLMMadaptive*) was revised, and now
   allows to return a robust variance-covariance matrix.
 
