@@ -495,9 +495,14 @@ export_table <- function(x,
     }
   }
 
+  # we can split very wide table into maximum three parts
+  # this is currently hardcoded, not flexible, so we cannot allow
+  # more than three parts of one wide table
+  final2 <- NULL
+  final3 <- NULL
+
   # save first column we may need this when table is wrapped into multiple
   # parts due to over-lengthy lines
-  final2 <- NULL
   if (identical(table_width, "auto") || (!is.null(table_width) && is.numeric(table_width))) {
     # check current line width in console and width of table rows
     if (is.numeric(table_width)) {
@@ -505,6 +510,8 @@ export_table <- function(x,
     } else {
       line_width <- options()$width
     }
+    # first split - table columns longer than "line_width" go
+    # into a second string
     row_width <- nchar(paste0(final[1, ], collapse = sep))
     # if wider, save first column - we need to repeat this later
     if (row_width > line_width) {
@@ -512,52 +519,40 @@ export_table <- function(x,
       while (nchar(paste0(final[1, 1:i], collapse = sep)) < line_width) {
         i <- i + 1
       }
-      final2 <- final[, c(1, (i + 1):ncol(final))]
-      final <- final[, 1:i]
+      if (i > 2 && i < ncol(final)) {
+        final2 <- final[, c(1, i:ncol(final))]
+        final <- final[, 1:(i - 1)]
+      }
+    }
+    # second split - table columns longer than "line_width" go
+    # into a third string
+    row_width <- nchar(paste0(final2[1, ], collapse = sep))
+    # if wider, save first column - we need to repeat this later
+    if (row_width > line_width) {
+      i <- 1
+      while (nchar(paste0(final2[1, 1:i], collapse = sep)) < line_width) {
+        i <- i + 1
+      }
+      if (i > 2 && i < ncol(final2)) {
+        final3 <- final2[, c(1, i:ncol(final2))]
+        final2 <- final2[, 1:(i - 1)]
+      }
     }
   }
 
   # Transform to character
-  rows <- c()
-  for (row in 1:nrow(final)) {
-    final_row <- paste0(final[row, ], collapse = sep)
+  rows <- .table_parts(c(), final, header, sep, empty_line)
 
-    # check if we have an empty row
-    if (!is.null(empty_line) && all(nchar(trimws(final[row, ])) == 0)) {
-      rows <- paste0(rows, paste0(rep_len(empty_line, nchar(final_row)), collapse = ""), sep = "\n")
-    } else {
-      rows <- paste0(rows, final_row, sep = "\n")
-    }
-
-    # First row separation
-    if (row == 1) {
-      if (!is.null(header)) {
-        rows <- paste0(rows, paste0(rep_len(header, nchar(final_row)), collapse = ""), sep = "\n")
-      }
-    }
+  # if we have over-lengthy tables that are split into two parts,
+  # print second table here
+  if (!is.null(final2)) {
+    rows <- .table_parts(paste0(rows, "\n"), final2, header, sep, empty_line)
   }
 
-  # if we have over-lengthy tables that are split into two pars, print second
-  # table here
-  if (!is.null(final2)) {
-    rows <- paste0(rows, "\n")
-    for (row in 1:nrow(final2)) {
-      final_row <- paste0(final2[row, ], collapse = sep)
-
-      # check if we have an empty row
-      if (!is.null(empty_line) && all(nchar(trimws(final2[row, ])) == 0)) {
-        rows <- paste0(rows, paste0(rep_len(empty_line, nchar(final_row)), collapse = ""), sep = "\n")
-      } else {
-        rows <- paste0(rows, final_row, sep = "\n")
-      }
-
-      # First row separation
-      if (row == 1) {
-        if (!is.null(header)) {
-          rows <- paste0(rows, paste0(rep_len(header, nchar(final_row)), collapse = ""), sep = "\n")
-        }
-      }
-    }
+  # if we have over-lengthy tables that are split into two parts,
+  # print second table here
+  if (!is.null(final3)) {
+    rows <- .table_parts(paste0(rows, "\n"), final3, header, sep, empty_line)
   }
 
   # if caption is available, add a row with a headline
@@ -595,6 +590,33 @@ export_table <- function(x,
 
   rows
 }
+
+
+
+.table_parts <- function(rows, final, header, sep, empty_line) {
+  for (row in 1:nrow(final)) {
+    final_row <- paste0(final[row, ], collapse = sep)
+
+    # check if we have an empty row
+    if (!is.null(empty_line) && all(nchar(trimws(final[row, ])) == 0)) {
+      rows <- paste0(rows, paste0(rep_len(empty_line, nchar(final_row)), collapse = ""), sep = "\n")
+    } else {
+      rows <- paste0(rows, final_row, sep = "\n")
+    }
+
+    # First row separation
+    if (row == 1) {
+      if (!is.null(header)) {
+        rows <- paste0(rows, paste0(rep_len(header, nchar(final_row)), collapse = ""), sep = "\n")
+      }
+    }
+  }
+
+  rows
+}
+
+
+
 
 #' @export
 print.insight_table <- function(x, ...) {
