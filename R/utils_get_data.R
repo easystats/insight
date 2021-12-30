@@ -279,6 +279,12 @@
     if (!.is_empty_string(new.cols)) mf <- cbind(mf, trials.data[, new.cols, drop = FALSE])
   }
 
+  # remove "trial response"
+  # see https://github.com/easystats/modelbased/issues/164
+  # if (rn == colnames(mf)[1] && is.matrix(mf[[1]])) {
+  #   mf[[1]] <- NULL
+  # }
+
   .add_remaining_missing_variables(x, mf, effects, component = "all", factors = factors)
 }
 
@@ -352,7 +358,7 @@
 # This helper functions ensures that data from different model components
 # are included in the returned data frame
 #
-.return_data <- function(x, mf, effects, component, model.terms, is_mv = FALSE, verbose = TRUE) {
+.return_combined_data <- function(x, mf, effects, component, model.terms, is_mv = FALSE, verbose = TRUE) {
   response <- unlist(model.terms$response)
 
   # save factors attribute
