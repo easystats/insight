@@ -192,7 +192,7 @@ check_cbind <- function(resp, combine, model) {
       }
     }
     resp <- c(r1, r2)
-  } else if (any(grepl("+", resp, fixed = TRUE))) {
+  } else if (!combine && any(grepl("+", resp, fixed = TRUE))) {
     resp <- strsplit(resp, split = "+", fixed = TRUE)
     resp <- gsub("(I|\\(|\\))", "", .trim(unlist(resp)))
   }
