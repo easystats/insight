@@ -122,6 +122,7 @@ reference:
     but rather small utility functions (mostly for printing)
   contents:
   - starts_with("clean_")
+  - data_restoretype
   - display
   - download_model
   - ellipsis_info
