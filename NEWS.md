@@ -5,6 +5,12 @@
 * Data management functions (like `reshape_longer()`, or `data_match()`) have
   been moved to the *datawizard* package.
 
+* `get_data()` no longer returns factor types for numeric variables that have
+  been converted to factors on-the-fly within formulas (like `y ~ as.factor(x)`).
+  Instead, for each numeric variable that was coerced to factor within a formula
+  gets a `factor` attribute (set to `TRUE`), and the returned data frame gets
+  a `factors` attribute including all names of affected variables.
+
 ## New supported model classes
 
 * Support for `bfsl` (*bfsl*)
