@@ -64,7 +64,8 @@
 <h2 class="pkg-version" data-toc-text="0.14.6" id="insight-0146">insight 0.14.6<a class="anchor" aria-label="anchor" href="#insight-0146"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-0-14-6">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-14-6"></a></h3>
-<ul><li>Data management functions (like <code><a href="https://easystats.github.io/datawizard/reference/data_to_long.html" class="external-link">reshape_longer()</a></code>, or <code><a href="../reference/data_match.html">data_match()</a></code>) have been moved to the <em>datawizard</em> package.</li>
+<ul><li><p>Data management functions (like <code><a href="https://easystats.github.io/datawizard/reference/data_to_long.html" class="external-link">reshape_longer()</a></code>, or <code><a href="../reference/data_match.html">data_match()</a></code>) have been moved to the <em>datawizard</em> package.</p></li>
+<li><p><code><a href="../reference/get_data.html">get_data()</a></code> no longer returns factor types for numeric variables that have been converted to factors on-the-fly within formulas (like <code>y ~ as.factor(x)</code>). Instead, for each numeric variable that was coerced to factor within a formula gets a <code>factor</code> attribute (set to <code>TRUE</code>), and the returned data frame gets a <code>factors</code> attribute including all names of affected variables.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-14-6">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-14-6"></a></h3>
