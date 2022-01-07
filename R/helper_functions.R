@@ -44,7 +44,7 @@
     x <- as.data.frame(x)
     if (nrow(x) > 0 && ncol(x) > 0) {
       x <- x[!sapply(x, function(i) all(is.na(i)))]
-      x <- stats::na.omit(x) # faster than checking each row and indexing
+      x <- x[!apply(x, 1, function(i) all(is.na(i))), ]
     }
   # a list but not a data.frame
   } else if (is.list(x) && length(x) > 0) {
