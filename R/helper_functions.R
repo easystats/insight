@@ -40,11 +40,15 @@
 
 # is object empty?
 .is_empty_object <- function(x) {
+  flag_empty <- FALSE
   if (inherits(x, "data.frame")) {
     x <- as.data.frame(x)
     if (nrow(x) > 0 && ncol(x) > 0) {
-      x <- x[!sapply(x, function(i) all(is.na(i)))]
-      x <- x[!apply(x, 1, function(i) all(is.na(i))), ]
+      x <- x[, !sapply(x, function(i) all(is.na(i))), drop = FALSE]
+      # this is much faster than apply(x, 1, FUN)
+      flag_empty <- all(rowSums(is.na(x)) == ncol(x))
+    } else {
+      flag_empty <- TRUE
     }
   # a list but not a data.frame
   } else if (is.list(x) && length(x) > 0) {
@@ -60,7 +64,11 @@
     x <- stats::na.omit(x)
   }
   # need to check for is.null for R 3.4
-  length(x) == 0 || is.null(x) || isTRUE(nrow(x) == 0) || isTRUE(ncol(x) == 0)
+  isTRUE(flag_empty) ||
+    length(x) == 0 ||
+    is.null(x) ||
+    isTRUE(nrow(x) == 0) ||
+    isTRUE(ncol(x) == 0)
 }
 
 
