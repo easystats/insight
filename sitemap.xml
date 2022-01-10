@@ -49,18 +49,6 @@
     <loc>/reference/color_if.html</loc>
   </url>
   <url>
-    <loc>/reference/data_match.html</loc>
-  </url>
-  <url>
-    <loc>/reference/data_relocate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/data_restoretype.html</loc>
-  </url>
-  <url>
-    <loc>/reference/data_to_long.html</loc>
-  </url>
-  <url>
     <loc>/reference/display.html</loc>
   </url>
   <url>
@@ -326,8 +314,5 @@
   </url>
   <url>
     <loc>/reference/standardize_names.html</loc>
-  </url>
-  <url>
-    <loc>/reference/to_numeric.html</loc>
   </url>
 </urlset>
