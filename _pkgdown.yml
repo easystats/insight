@@ -122,7 +122,6 @@ reference:
     but rather small utility functions (mostly for printing)
   contents:
   - starts_with("clean_")
-  - starts_with("data_")
   - display
   - download_model
   - ellipsis_info
@@ -131,7 +130,6 @@ reference:
   - print_parameters
   - starts_with("standardize_")
   - check_if_installed
-  - to_numeric
 
 - title: "Example Datasets"
   desc: >
