@@ -43,7 +43,9 @@ if (require("testthat")) {
     Sys.setenv("RunAllinsightStanTests" = "no")
   }
 
-  if (!osx && !solaris) {
-    test_check("insight")
-  }
+  # if (!osx && !solaris) {
+  #   test_check("insight")
+  # }
+
+  test_check("insight")
 }
