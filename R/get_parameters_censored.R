@@ -119,7 +119,7 @@ get_parameters.lqmm <- function(x, ...) {
   cs <- stats::coef(x)
 
   if (is.matrix(cs)) {
-    params <- .gather(as.data.frame(cs), names_to = "Component", values_to = "Estimate")
+    params <- datawizard::data_to_long(as.data.frame(cs), colnames_to = "Component", values_to = "Estimate")
     params$Component <- sprintf("tau (%s)", params$Component)
     params$Parameter <- rep(rownames(cs), length.out = nrow(params))
     params <- params[c("Parameter", "Estimate", "Component")]

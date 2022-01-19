@@ -487,7 +487,6 @@
     # ----------------------
 
     dist.variance <- sig^2
-
   } else {
     if (faminfo$is_betabinomial) {
 
@@ -501,7 +500,6 @@
         clogloglink = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
-
     } else if (faminfo$is_binomial) {
 
       # binomial / bernoulli  ----
@@ -514,7 +512,6 @@
         clogloglink = pi^2 / 6,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
-
     } else if (faminfo$is_count) {
 
       # count  ----
@@ -525,7 +522,6 @@
         sqrt = 0.25,
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
-
     } else if (faminfo$family %in% c("Gamma", "gamma")) {
 
       # Gamma  ----
@@ -539,7 +535,6 @@
         # log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
-
     } else if (faminfo$family == "beta") {
 
       # Beta  ----
@@ -549,7 +544,6 @@
         logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
-
     } else if (faminfo$is_tweedie) {
 
       # Tweedie  ----
@@ -559,7 +553,6 @@
         log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
-
     } else {
       dist.variance <- sig
     }
@@ -636,24 +629,20 @@
 
         # (zero-inflated) poisson ----
         # ----------------------------
-
         `zero-inflated poisson` = ,
         poisson = .variance_family_poisson(x, mu, faminfo),
 
         # hurdle-poisson ----
         # -------------------
-
         `hurdle poisson` = ,
         truncated_poisson = stats::family(x)$variance(sig),
 
         # Gamma, exponential ----
         # -----------------------
-
         Gamma = stats::family(x)$variance(sig),
 
         # (zero-inflated) negative binomial ----
         # --------------------------------------
-
         `zero-inflated negative binomial` = ,
         `negative binomial` = ,
         genpois = ,
@@ -663,7 +652,6 @@
 
         # other distributions ----
         # ------------------------
-
         tweedie = .variance_family_tweedie(x, mu, sig),
         beta = .variance_family_beta(x, mu, sig),
         # betabinomial = stats::family(x)$variance(mu, sig),
@@ -671,7 +659,6 @@
 
         # default variance for non-captured distributions ----
         # ----------------------------------------------------
-
         .variance_family_default(x, mu, verbose)
       )
 

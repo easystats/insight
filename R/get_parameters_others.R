@@ -61,8 +61,8 @@ get_parameters.DirichletRegModel <- function(x,
       row.names = NULL
     )
   } else {
-    out1 <- .gather(data.frame(do.call(cbind, cf$beta)), names_to = "Response", values_to = "Estimate")
-    out2 <- .gather(data.frame(do.call(cbind, cf$gamma)), names_to = "Component", values_to = "Estimate")
+    out1 <- datawizard::data_to_long(data.frame(do.call(cbind, cf$beta)), colnames_to = "Response", values_to = "Estimate")
+    out2 <- datawizard::data_to_long(data.frame(do.call(cbind, cf$gamma)), colnames_to = "Component", values_to = "Estimate")
     out1$Component <- "conditional"
     out2$Component <- "precision"
     out2$Response <- NA
