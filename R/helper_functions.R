@@ -50,7 +50,7 @@
     } else {
       flag_empty <- TRUE
     }
-    # a list but not a data.frame
+  # a list but not a data.frame
   } else if (is.list(x) && length(x) > 0) {
     x <- tryCatch(
       {
@@ -569,6 +569,36 @@
   }
   x
 }
+
+
+
+
+
+#' @keywords internal
+.gather <- function(x,
+                    names_to = "key",
+                    values_to = "value",
+                    columns = colnames(x)) {
+  if (is.numeric(columns)) columns <- colnames(x)[columns]
+
+  dat <- stats::reshape(
+    x,
+    idvar = "id",
+    ids = row.names(x),
+    times = columns,
+    timevar = names_to,
+    v.names = values_to,
+    varying = list(columns),
+    direction = "long"
+  )
+
+  if (is.factor(dat[[values_to]])) {
+    dat[[values_to]] <- as.character(dat[[values_to]])
+  }
+
+  dat[, 1:(ncol(dat) - 1), drop = FALSE]
+}
+
 
 
 .is_baysian_emmeans <- function(x) {

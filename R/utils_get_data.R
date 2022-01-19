@@ -362,7 +362,7 @@
   response <- unlist(model.terms$response)
 
   # save factors attribute
-  factors <- attr(mf, "factors", exact = TRUE)
+  factors <-  attr(mf, "factors", exact = TRUE)
 
   if (is_mv) {
     fixed.component.data <- switch(component,
