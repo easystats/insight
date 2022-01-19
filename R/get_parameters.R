@@ -706,7 +706,7 @@ get_parameters.aovlist <- function(x, ...) {
 #' @export
 get_parameters.manova <- function(x, ...) {
   params <- stats::na.omit(stats::coef(x))
-  out <- datawizard::data_to_long(as.data.frame(params), colnames_to = "Response", values_to = "Estimate")
+  out <- .gather(as.data.frame(params), names_to = "Response", values_to = "Estimate")
   out$Parameter <- rownames(out)
 
   out <- out[c("Parameter", "Estimate", "Response")]
