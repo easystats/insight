@@ -1,3 +1,14 @@
+# insight 0.15.1
+
+## General
+
+* Improved speed performance, especially for `get_data()`.
+
+## Changes to functions
+
+* `get_data()` for `coxph` models now returns the original factor levels for
+  variables transformed with `strata()` inside formulas.
+
 # insight 0.15.0
 
 ## Breaking changes

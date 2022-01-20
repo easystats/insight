@@ -217,6 +217,16 @@
     mf <- mf[!mos_eisly]
   }
 
+  # strata-variables in coxph() -----------------------------------------------
+
+  strata_columns <- grepl("^strata\\((.*)\\)", colnames(mf))
+  if (any(strata_columns)) {
+    for (sc in colnames(mf)[strata_columns]) {
+      strata_variable <- gsub("strata\\((.*)\\)", "\\1", sc)
+      levels(mf[[sc]]) <- gsub(paste0("\\Q", strata_variable, "=", "\\E"), "", levels(mf[[sc]]))
+    }
+  }
+
   # restore original data for factors -----------------------------------------
 
   # are there any factor variables that have been coerced "on-the-fly",
