@@ -106,24 +106,23 @@ to return only certain results (see <code><a href="print_parameters.html">print_
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with "cleaned" parameter names and information on
-effects, component and group where parameters belong to. To be consistent
-across different models, the returned data frame always has at least four
-columns <code>Parameter</code>, <code>Effects</code>, <code>Component</code> and
-<code>Cleaned_Parameter</code>. See 'Details'.</p>
+    <p>A data frame with "cleaned" parameter names and information on effects,
+component and group where parameters belong to. To be consistent across
+different models, the returned data frame always has at least four columns
+<code>Parameter</code>, <code>Effects</code>, <code>Component</code> and <code>Cleaned_Parameter</code>. See 'Details'.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The <code>Effects</code> column indicate if a parameter is a <em>fixed</em>
-or <em>random</em> effect. The <code>Component</code> can either be <em>conditional</em>
-or <em>zero_inflated</em>. For models with random effects, the <code>Group</code>
-column indicates the grouping factor of the random effects. For multivariate
-response models from <span class="pkg">brms</span> or <span class="pkg">rstanarm</span>, an additional <em>Response</em>
-column is included, to indicate which parameters belong to which response
-formula. Furthermore, <em>Cleaned_Parameter</em> column is returned that
-contains "human readable" parameter names (which are mostly identical to
-<code>Parameter</code>, except for for models from <span class="pkg">brms</span> or <span class="pkg">rstanarm</span>,
-or for specific terms like smooth- or spline-terms).</p>
+    <p>The <code>Effects</code> column indicate if a parameter is a <em>fixed</em> or <em>random</em> effect.
+The <code>Component</code> can either be <em>conditional</em> or <em>zero_inflated</em>. For models
+with random effects, the <code>Group</code> column indicates the grouping factor of the
+random effects. For multivariate response models from <span class="pkg">brms</span> or
+<span class="pkg">rstanarm</span>, an additional <em>Response</em> column is included, to indicate
+which parameters belong to which response formula. Furthermore,
+<em>Cleaned_Parameter</em> column is returned that contains "human readable"
+parameter names (which are mostly identical to <code>Parameter</code>, except for for
+models from <span class="pkg">brms</span> or <span class="pkg">rstanarm</span>, or for specific terms like smooth-
+or spline-terms).</p>
     </div>
 
     <div class="section level2">

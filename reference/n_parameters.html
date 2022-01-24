@@ -124,9 +124,9 @@ rank-deficient model matrix).</p></dd>
 or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
 <dt>component</dt>
 <dd><p>Should total number of parameters, number parameters for the
-conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
+conditional model, the zero-inflated part of the model, the dispersion term
+or the instrumental variables be returned? Applies to models with
+zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated.</p></dd>
 </dl></div>
     <div class="section level2">
@@ -135,11 +135,11 @@ variable (so called fixed-effects regressions). May be abbreviated.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>This function returns the number of parameters for the fixed effects
-by default, as returned by <code>find_parameters(x, effects = "fixed")</code>.
-It does not include <em>all</em> estimated model parameters, i.e. auxiliary
-parameters like sigma or dispersion are not counted. To get the number of
-<em>all estimated</em> parameters, use <code>get_df(x, type = "model")</code>.</p>
+    <p>This function returns the number of parameters for the fixed effects by
+default, as returned by <code>find_parameters(x, effects = "fixed")</code>. It does not
+include <em>all</em> estimated model parameters, i.e. auxiliary parameters like
+sigma or dispersion are not counted. To get the number of <em>all estimated</em>
+parameters, use <code>get_df(x, type = "model")</code>.</p>
     </div>
 
     <div class="section level2">
