@@ -1,12 +1,14 @@
 #' @title Color-formatting for data columns based on condition
 #' @name color_if
 #'
-#' @description Convenient function that formats columns in data frames
-#'   with color codes, where the color is chosen based on certain conditions.
-#'   Columns are then printed in color in the console.
+#' @description
+#' Convenient function that formats columns in data frames with color codes,
+#' where the color is chosen based on certain conditions. Columns are then
+#' printed in color in the console.
 #'
 #' @param x A data frame
-#' @param columns Character vector with column names of `x` that should be formatted.
+#' @param columns Character vector with column names of `x` that should be
+#'   formatted.
 #' @param predicate A function that takes `columns` and `value` as input
 #'   and which should return `TRUE` or `FALSE`, based on if the condition
 #'   (in comparison with `value`) is met.
@@ -46,7 +48,13 @@
 #' x <- color_if(iris[1:10, ], columns = "Sepal.Length", predicate = p)
 #' cat(x$Sepal.Length)
 #' @export
-color_if <- function(x, columns, predicate = `>`, value = 0, color_if = "green", color_else = "red", digits = 2) {
+color_if <- function(x,
+                     columns,
+                     predicate = `>`,
+                     value = 0,
+                     color_if = "green",
+                     color_else = "red",
+                     digits = 2) {
   xnew <- x
 
   if (columns %in% names(x)) {
@@ -95,6 +103,20 @@ color_if <- function(x, columns, predicate = `>`, value = 0, color_if = "green",
 
 #' @rdname color_if
 #' @export
-colour_if <- function(x, columns, predicate = `>`, value = 0, colour_if = "green", colour_else = "red", digits = 2) {
-  color_if(x = x, columns = columns, predicate = predicate, value = value, color_if = colour_if, color_else = colour_else, digits = digits)
+colour_if <- function(x,
+                      columns,
+                      predicate = `>`,
+                      value = 0,
+                      colour_if = "green",
+                      colour_else = "red",
+                      digits = 2) {
+  color_if(
+    x = x,
+    columns = columns,
+    predicate = predicate,
+    value = value,
+    color_if = colour_if,
+    color_else = colour_else,
+    digits = digits
+  )
 }

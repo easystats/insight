@@ -15,22 +15,25 @@
 #' @param x A fitted model.
 #' @inheritParams find_parameters
 #'
-#' @return A data frame with "cleaned" parameter names and information on
-#'   effects, component and group where parameters belong to. To be consistent
-#'   across different models, the returned data frame always has at least four
-#'   columns `Parameter`, `Effects`, `Component` and
-#'   `Cleaned_Parameter`. See 'Details'.
+#' @return
 #'
-#' @details The `Effects` column indicate if a parameter is a *fixed*
-#' or *random* effect. The `Component` can either be *conditional*
-#' or *zero_inflated*. For models with random effects, the `Group`
-#' column indicates the grouping factor of the random effects. For multivariate
-#' response models from \pkg{brms} or \pkg{rstanarm}, an additional *Response*
-#' column is included, to indicate which parameters belong to which response
-#' formula. Furthermore, *Cleaned_Parameter* column is returned that
-#' contains "human readable" parameter names (which are mostly identical to
-#' `Parameter`, except for for models from \pkg{brms} or \pkg{rstanarm},
-#' or for specific terms like smooth- or spline-terms).
+#' A data frame with "cleaned" parameter names and information on effects,
+#' component and group where parameters belong to. To be consistent across
+#' different models, the returned data frame always has at least four columns
+#' `Parameter`, `Effects`, `Component` and `Cleaned_Parameter`. See 'Details'.
+#'
+#' @details
+#'
+#' The `Effects` column indicate if a parameter is a *fixed* or *random* effect.
+#' The `Component` can either be *conditional* or *zero_inflated*. For models
+#' with random effects, the `Group` column indicates the grouping factor of the
+#' random effects. For multivariate response models from \pkg{brms} or
+#' \pkg{rstanarm}, an additional *Response* column is included, to indicate
+#' which parameters belong to which response formula. Furthermore,
+#' *Cleaned_Parameter* column is returned that contains "human readable"
+#' parameter names (which are mostly identical to `Parameter`, except for for
+#' models from \pkg{brms} or \pkg{rstanarm}, or for specific terms like smooth-
+#' or spline-terms).
 #'
 #' @examples
 #' \dontrun{

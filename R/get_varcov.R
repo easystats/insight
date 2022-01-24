@@ -1,19 +1,21 @@
 #' @title Get variance-covariance matrix from models
-#'
-#' @description Returns the variance-covariance, as retrieved by
-#'   `stats::vcov()`, but works for more model objects that probably
-#'   don't provide a `vcov()`-method.
 #' @name get_varcov
+#'
+#' @description
+#'
+#' Returns the variance-covariance, as retrieved by `stats::vcov()`, but works
+#' for more model objects that probably don't provide a `vcov()`-method.
+#'
 #'
 #' @param x A model.
 #' @param component Should the complete variance-covariance matrix of the model
 #'   be returned, or only for specific model components only (like count or
 #'   zero-inflated model parts)? Applies to models with zero-inflated component,
-#'   or models with precision (e.g. `betareg`) component. `component`
-#'   may be one of `"conditional"`, `"zi"`, `"zero-inflated"`,
-#'   `"dispersion"`, `"precision"`, or `"all"`. May be abbreviated.
-#'   Note that the *conditional* component is also called *count* or
-#'   *mean* component, depending on the model.
+#'   or models with precision (e.g. `betareg`) component. `component` may be one
+#'   of `"conditional"`, `"zi"`, `"zero-inflated"`, `"dispersion"`,
+#'   `"precision"`, or `"all"`. May be abbreviated. Note that the *conditional*
+#'   component is also called *count* or *mean* component, depending on the
+#'   model.
 #' @param effects Should the complete variance-covariance matrix of the model
 #'   be returned, or only for specific model parameters only? Currently only
 #'   applies to models of class `mixor`.

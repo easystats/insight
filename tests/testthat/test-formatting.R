@@ -13,6 +13,5 @@ if (requiet("testthat") && requiet("insight")) {
     expect_equal(format_p(p, name = NULL), c("> .999", "0.900", "0.050", "0.010", "0.001", "< .001"))
     expect_equal(format_p(p, name = NULL, whitespace = FALSE), c(">.999", "0.900", "0.050", "0.010", "0.001", "<.001"))
     expect_equal(format_p(p, name = NULL, whitespace = FALSE, decimal_separator = ","), c(">,999", "0,900", "0,050", "0,010", "0,001", "<,001"))
-
   })
 }

@@ -28,7 +28,8 @@ colour_if(
 \arguments{
 \item{x}{A data frame}
 
-\item{columns}{Character vector with column names of \code{x} that should be formatted.}
+\item{columns}{Character vector with column names of \code{x} that should be
+formatted.}
 
 \item{predicate}{A function that takes \code{columns} and \code{value} as input
 and which should return \code{TRUE} or \code{FALSE}, based on if the condition
@@ -54,9 +55,9 @@ that are \emph{not} met.}
 The .
 }
 \description{
-Convenient function that formats columns in data frames
-with color codes, where the color is chosen based on certain conditions.
-Columns are then printed in color in the console.
+Convenient function that formats columns in data frames with color codes,
+where the color is chosen based on certain conditions. Columns are then
+printed in color in the console.
 }
 \details{
 The predicate-function simply works like this:

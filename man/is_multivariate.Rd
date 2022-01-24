@@ -7,12 +7,13 @@
 is_multivariate(x)
 }
 \arguments{
-\item{x}{A model object, or an object returned by a function from this package.}
+\item{x}{A model object, or an object returned by a function from this
+package.}
 }
 \value{
-A logical, \code{TRUE} if either \code{x} is a model object and is
-a multivariate response model, or \code{TRUE} if a return value from a
-function of \pkg{insight} is from a multivariate response model.
+A logical, \code{TRUE} if either \code{x} is a model object and is a multivariate
+response model, or \code{TRUE} if a return value from a function of \pkg{insight}
+is from a multivariate response model.
 }
 \description{
 Small helper that checks if a model is a multivariate response

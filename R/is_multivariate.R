@@ -4,11 +4,13 @@
 #' @description Small helper that checks if a model is a multivariate response
 #'   model, i.e. a model with multiple outcomes.
 #'
-#' @param x A model object, or an object returned by a function from this package.
+#' @param x A model object, or an object returned by a function from this
+#'   package.
 #'
-#' @return A logical, `TRUE` if either `x` is a model object and is
-#'    a multivariate response model, or `TRUE` if a return value from a
-#'    function of \pkg{insight} is from a multivariate response model.
+#' @return
+#' A logical, `TRUE` if either `x` is a model object and is a multivariate
+#' response model, or `TRUE` if a return value from a function of \pkg{insight}
+#' is from a multivariate response model.
 #'
 #' @examples
 #' \dontrun{

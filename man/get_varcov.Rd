@@ -79,11 +79,11 @@ get_varcov(x, ...)
 \item{component}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model components only (like count or
 zero-inflated model parts)? Applies to models with zero-inflated component,
-or models with precision (e.g. \code{betareg}) component. \code{component}
-may be one of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"},
-\code{"dispersion"}, \code{"precision"}, or \code{"all"}. May be abbreviated.
-Note that the \emph{conditional} component is also called \emph{count} or
-\emph{mean} component, depending on the model.}
+or models with precision (e.g. \code{betareg}) component. \code{component} may be one
+of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"}, \code{"dispersion"},
+\code{"precision"}, or \code{"all"}. May be abbreviated. Note that the \emph{conditional}
+component is also called \emph{count} or \emph{mean} component, depending on the
+model.}
 
 \item{effects}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model parameters only? Currently only
@@ -99,9 +99,8 @@ variance-covariance matrix.}
 The variance-covariance matrix, as \code{matrix}-object.
 }
 \description{
-Returns the variance-covariance, as retrieved by
-\code{stats::vcov()}, but works for more model objects that probably
-don't provide a \code{vcov()}-method.
+Returns the variance-covariance, as retrieved by \code{stats::vcov()}, but works
+for more model objects that probably don't provide a \code{vcov()}-method.
 }
 \note{
 \code{get_varcov()} tries to return the nearest positive definite matrix

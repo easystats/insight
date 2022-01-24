@@ -1,17 +1,22 @@
 #' @title Return function of transformed response variables
 #' @name get_transformation
 #'
-#' @description This functions checks whether any transformation, such as log-
-#'   or exp-transforming, was applied to the response variable (dependent
-#'   variable) in a regression formula, and returns the related function that
-#'   was used for transformation.
+#' @description
+#'
+#' This functions checks whether any transformation, such as log- or
+#' exp-transforming, was applied to the response variable (dependent variable)
+#' in a regression formula, and returns the related function that was used for
+#' transformation.
 #'
 #' @param x A regression model.
-#' @return A list of two functions: `$transformation`, the function that was
-#'   used to transform the response variable; `$inverse`, the inverse-function
-#'   of `$transformation` (can be used for "back-transformation"). If no
-#'   transformation was applied, both list-elements `$transformation` and
-#'   `$inverse` just return `function(x) x`.
+#'
+#' @return
+#'
+#' A list of two functions: `$transformation`, the function that was used to
+#' transform the response variable; `$inverse`, the inverse-function of
+#' `$transformation` (can be used for "back-transformation"). If no
+#' transformation was applied, both list-elements `$transformation` and
+#' `$inverse` just return `function(x) x`.
 #'
 #' @examples
 #' # identity, no transformation
@@ -51,7 +56,6 @@ get_transformation <- function(x) {
       inverse = function(x) exp(exp(x))
     )
   }
-
 
   out
 }

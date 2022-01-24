@@ -1,10 +1,12 @@
 #' @title Get variance components from random effects models
 #' @name get_variance
 #'
-#' @description This function extracts the different variance components of a
-#'   mixed model and returns the result as list. Functions like
-#'   `get_variance_residual(x)` or `get_variance_fixed(x)` are shortcuts
-#'   for `get_variance(x, component = "residual")` etc.
+#' @description
+#'
+#' This function extracts the different variance components of a mixed model and
+#' returns the result as list. Functions like `get_variance_residual(x)` or
+#' `get_variance_fixed(x)` are shortcuts for `get_variance(x, component =
+#' "residual")` etc.
 #'
 #' @param x A mixed effects model.
 #' @param component Character value, indicating the variance component that should
@@ -101,11 +103,19 @@
 #'   (\pkg{GLMMadaptive}), `lme` (\pkg{nlme}) or `brmsfit` (\pkg{brms})
 #'   is experimental and may not work for all models.
 #'
-#' @references \itemize{
-#'  \item Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. \doi{10.1111/2041-210X.12225}
-#'  \item Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
-#'  \item Zuur, A. F., Savel'ev, A. A., & Ieno, E. N. (2012). Zero inflated models and generalized linear mixed models with R. Newburgh, United Kingdom: Highland Statistics.
-#'  }
+#' @references
+#'  - Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to
+#'  random slopes models. Methods in Ecology and Evolution, 5(9), 944–946.
+#'  \doi{10.1111/2041-210X.12225}
+#'
+#'  - Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The coefficient
+#'  of determination R2 and intra-class correlation coefficient from generalized
+#'  linear mixed-effects models revisited and expanded. Journal of The Royal
+#'  Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
+#'
+#'  - Zuur, A. F., Savel'ev, A. A., & Ieno, E. N. (2012). Zero inflated models
+#'  and generalized linear mixed models with R. Newburgh, United Kingdom:
+#'  Highland Statistics.
 #'
 #' @examples
 #' \dontrun{

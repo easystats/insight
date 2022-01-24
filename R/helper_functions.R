@@ -50,7 +50,7 @@
     } else {
       flag_empty <- TRUE
     }
-  # a list but not a data.frame
+    # a list but not a data.frame
   } else if (is.list(x) && length(x) > 0) {
     x <- tryCatch(
       {

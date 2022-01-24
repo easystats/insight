@@ -16,8 +16,10 @@ format_rope <- function(rope_percentage, name = "in ROPE", digits = 2) {
       format_value(rope_percentage, digits = digits, as_percent = TRUE)
     )
   )
+
   if (!is.null(name)) {
     text <- paste(text, name)
   }
+
   text
 }
