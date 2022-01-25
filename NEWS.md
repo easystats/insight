@@ -1,3 +1,10 @@
+# insight 0.16.0
+
+## New functions
+
+* `get_datagrid()`, to generate a reference grid, usually used when computing
+  adjusted predictions or marginal means from regression models.
+
 # insight 0.15.1
 
 ## General
