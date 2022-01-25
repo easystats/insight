@@ -94,19 +94,19 @@
 <dt>...</dt>
 <dd><p>Arguments passed to or from other methods (for instance, <code>length</code> or <code>range</code> to control the spread of numeric variables.).</p></dd>
 <dt>at</dt>
-<dd><p>Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. <code>at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))</code>, or as string, e.g. <code>at = "Sepal.Length = 2"</code> or <code>at = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (<code>target</code> is the deprecated name of that argument).</p></dd>
+<dd><p>Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. <code>at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))</code>, or as string, e.g. <code>at = "Sepal.Length = 2"</code> or <code>at = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.</p></dd>
 <dt>factors</dt>
-<dd><p>Type of summary for factors. Can be "reference" (set at the reference level), "mode" (set at the most common level) or "all" to keep all levels.</p></dd>
+<dd><p>Type of summary for factors. Can be <code>"reference"</code> (set at the reference level), <code>"mode"</code> (set at the most common level) or <code>"all"</code> to keep all levels.</p></dd>
 <dt>numerics</dt>
-<dd><p>Type of summary for numeric values. Can be "all" (will duplicate the grid for all unique values), any function ("mean", "median", ...) or a value (e.g., <code>numerics = 0</code>).</p></dd>
+<dd><p>Type of summary for numeric values. Can be <code>"all"</code> (will duplicate the grid for all unique values), any function (<code>"mean"</code>, <code>"median"</code>, ...) or a value (e.g., <code>numerics = 0</code>).</p></dd>
 <dt>preserve_range</dt>
 <dd><p>In the case of combinations between numeric variables and factors, setting <code>preserve_range = TRUE</code> will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the <code>length</code> argument.</p></dd>
 <dt>reference</dt>
 <dd><p>The reference vector from which to compute the mean and SD.</p></dd>
 <dt>length</dt>
-<dd><p>Length of numeric "at" variables.</p></dd>
+<dd><p>Length of numeric <code>"at"</code> variables.</p></dd>
 <dt>range</dt>
-<dd><p>Can be one of <code>c("range", "iqr", "ci", "hdi", "eti")</code>. If <code>"range"</code> (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is <code>95%</code> but this can be changed by setting something else, e.g., <code>ci = 0.90</code>). See <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR()</a></code> and <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code>.</p></dd>
+<dd><p>Can be one of <code>"range"</code>, <code>"iqr"</code>, <code>"ci"</code>, <code>"hdi"</code> or <code>"eti"</code>. If <code>"range"</code> (default), will use the minimum and maximun of the original vector as end-points. If any other interval, will spread within the range (the default CI width is <code>95%</code> but this can be changed by setting something else, e.g., <code>ci = 0.90</code>). See <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR()</a></code> and <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
