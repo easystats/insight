@@ -28,19 +28,19 @@ get_datagrid(x, ...)
 
 \item{...}{Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).}
 
-\item{at}{Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}, or as string, e.g. \code{at = "Sepal.Length = 2"} or \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (\code{target} is the deprecated name of that argument).}
+\item{at}{Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}, or as string, e.g. \code{at = "Sepal.Length = 2"} or \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.}
 
-\item{factors}{Type of summary for factors. Can be "reference" (set at the reference level), "mode" (set at the most common level) or "all" to keep all levels.}
+\item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the reference level), \code{"mode"} (set at the most common level) or \code{"all"} to keep all levels.}
 
-\item{numerics}{Type of summary for numeric values. Can be "all" (will duplicate the grid for all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).}
+\item{numerics}{Type of summary for numeric values. Can be \code{"all"} (will duplicate the grid for all unique values), any function (\code{"mean"}, \code{"median"}, ...) or a value (e.g., \code{numerics = 0}).}
 
 \item{preserve_range}{In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the \code{length} argument.}
 
 \item{reference}{The reference vector from which to compute the mean and SD.}
 
-\item{length}{Length of numeric "at" variables.}
+\item{length}{Length of numeric \code{"at"} variables.}
 
-\item{range}{Can be one of \code{c("range", "iqr", "ci", "hdi", "eti")}. If \code{"range"} (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is \verb{95\%} but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}.}
+\item{range}{Can be one of \code{"range"}, \code{"iqr"}, \code{"ci"}, \code{"hdi"} or \code{"eti"}. If \code{"range"} (default), will use the minimum and maximun of the original vector as end-points. If any other interval, will spread within the range (the default CI width is \verb{95\%} but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}.}
 }
 \value{
 Reference grid data frame.

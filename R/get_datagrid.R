@@ -3,11 +3,11 @@
 #' Create a reference matrix, useful for visualisation, with evenly spread and combined values.
 #'
 #' @param x An object from which to construct the reference grid.
-#' @param at Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. `at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))`, or as string, e.g. `at = "Sepal.Length = 2"` or `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (`target` is the deprecated name of that argument).
-#' @param length Length of numeric "at" variables.
-#' @param range Can be one of `c("range", "iqr", "ci", "hdi", "eti")`. If `"range"` (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is `95%` but this can be changed by setting something else, e.g., `ci = 0.90`). See [IQR()] and [bayestestR::ci()].
-#' @param factors Type of summary for factors. Can be "reference" (set at the reference level), "mode" (set at the most common level) or "all" to keep all levels.
-#' @param numerics Type of summary for numeric values. Can be "all" (will duplicate the grid for all unique values), any function ("mean", "median", ...) or a value (e.g., `numerics = 0`).
+#' @param at Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. `at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))`, or as string, e.g. `at = "Sepal.Length = 2"` or `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.
+#' @param length Length of numeric `"at"` variables.
+#' @param range Can be one of `"range"`, `"iqr"`, `"ci"`, `"hdi"` or `"eti"`. If `"range"` (default), will use the minimum and maximun of the original vector as end-points. If any other interval, will spread within the range (the default CI width is `95%` but this can be changed by setting something else, e.g., `ci = 0.90`). See [IQR()] and [bayestestR::ci()].
+#' @param factors Type of summary for factors. Can be `"reference"` (set at the reference level), `"mode"` (set at the most common level) or `"all"` to keep all levels.
+#' @param numerics Type of summary for numeric values. Can be `"all"` (will duplicate the grid for all unique values), any function (`"mean"`, `"median"`, ...) or a value (e.g., `numerics = 0`).
 #' @param preserve_range In the case of combinations between numeric variables and factors, setting `preserve_range = TRUE` will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the `length` argument.
 #' @param reference The reference vector from which to compute the mean and SD.
 #' @param ... Arguments passed to or from other methods (for instance, `length` or `range` to control the spread of numeric variables.).
