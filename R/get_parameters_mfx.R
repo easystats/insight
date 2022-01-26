@@ -37,7 +37,7 @@ get_parameters.betamfx <- function(x,
     params <- params[params$Component == component, , drop = FALSE]
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -76,7 +76,7 @@ get_parameters.logitmfx <- function(x,
     params <- params[params$Component == component, , drop = FALSE]
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 #' @export

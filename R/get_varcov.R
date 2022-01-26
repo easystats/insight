@@ -146,7 +146,7 @@ get_varcov.clm2 <- function(x,
   # fix possible missings due to rank deficient model matrix
   vc <- .fix_rank_deficiency(vc)
 
-  .remove_backticks_from_matrix_names(as.matrix(vc))
+  text_remove_backticks(as.matrix(vc))
 }
 
 #' @export
@@ -197,7 +197,7 @@ get_varcov.selection <- function(x,
   if (.is_negativ_matrix(vc)) {
     vc <- .fix_negative_matrix(vc)
   }
-  .remove_backticks_from_matrix_names(as.matrix(vc))
+  text_remove_backticks(as.matrix(vc))
 }
 
 
@@ -525,7 +525,7 @@ get_varcov.rq <- function(x, ...) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  .remove_backticks_from_matrix_names(as.matrix(vc))
+  text_remove_backticks(as.matrix(vc))
 }
 
 
@@ -562,7 +562,7 @@ get_varcov.crq <- function(x, ...) {
     if (.is_negativ_matrix(vc)) {
       vc <- .fix_negative_matrix(vc)
     }
-    vc <- .remove_backticks_from_matrix_names(as.matrix(vc))
+    vc <- text_remove_backticks(as.matrix(vc))
   }
 
   vc
@@ -667,7 +667,7 @@ get_varcov.lqmm <- function(x, ...) {
     if (.is_negativ_matrix(vc)) {
       vc <- .fix_negative_matrix(vc)
     }
-    vc <- .remove_backticks_from_matrix_names(as.matrix(vc))
+    vc <- text_remove_backticks(as.matrix(vc))
   }
 
   vc
@@ -786,7 +786,7 @@ get_varcov.LORgee <- get_varcov.gee
   }
   # fix possible missings due to rank deficient model matrix
   vc <- .fix_rank_deficiency(vc, verbose)
-  .remove_backticks_from_matrix_names(as.matrix(vc))
+  text_remove_backticks(as.matrix(vc))
 }
 
 

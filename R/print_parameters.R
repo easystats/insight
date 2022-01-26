@@ -247,8 +247,8 @@ print_parameters <- function(x,
       title_prefix <- ""
     }
 
-    title1 <- .capitalize(title1)
-    title2 <- .capitalize(title2)
+    title1 <- format_capitalize(title1)
+    title2 <- format_capitalize(title2)
 
     # add attributes
     attr(element, "main_title") <- .trim(title1)

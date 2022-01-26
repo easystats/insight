@@ -11,7 +11,7 @@ get_parameters.flexsurvreg <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -26,7 +26,7 @@ get_parameters.aareg <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -41,7 +41,7 @@ get_parameters.crr <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -76,7 +76,7 @@ get_parameters.rqs <- function(x, ...) {
   } else {
     get_parameters.default(x, ...)
   }
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -107,7 +107,7 @@ get_parameters.crq <- function(x, ...) {
     )
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 #' @export
@@ -133,7 +133,7 @@ get_parameters.lqmm <- function(x, ...) {
     )
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 #' @export

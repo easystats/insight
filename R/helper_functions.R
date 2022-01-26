@@ -537,43 +537,6 @@
 
 
 
-# capitalizes the first letter in a string
-.capitalize <- function(x) {
-  capped <- grep("^[A-Z]", x, invert = TRUE)
-  substr(x[capped], 1, 1) <- toupper(substr(x[capped], 1, 1))
-  x
-}
-
-
-
-.remove_backticks_from_parameter_names <- function(x) {
-  if (is.data.frame(x) && "Parameter" %in% colnames(x)) {
-    x$Parameter <- gsub("`", "", x$Parameter, fixed = TRUE)
-  }
-  x
-}
-
-
-.remove_backticks_from_string <- function(x) {
-  if (is.character(x)) {
-    x <- gsub("`", "", x, fixed = TRUE)
-  }
-  x
-}
-
-
-.remove_backticks_from_matrix_names <- function(x) {
-  if (is.matrix(x)) {
-    colnames(x) <- gsub("`", "", colnames(x), fixed = TRUE)
-    rownames(x) <- gsub("`", "", colnames(x), fixed = TRUE)
-  }
-  x
-}
-
-
-
-
-
 #' @keywords internal
 .gather <- function(x,
                     names_to = "key",

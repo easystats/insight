@@ -46,7 +46,7 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   } else {
     pars <- tryCatch(
       {
-        p <- .remove_backticks_from_string(names(stats::coef(x)))
+        p <- text_remove_backticks(names(stats::coef(x)))
         list(conditional = p)
       },
       error = function(x) {
@@ -83,7 +83,7 @@ find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.summary.lm <- function(x, flatten = FALSE, ...) {
   cf <- stats::coef(x)
-  l <- list(conditional = .remove_backticks_from_string(rownames(cf)))
+  l <- list(conditional = text_remove_backticks(rownames(cf)))
 
   if (flatten) {
     unique(unlist(l))
@@ -100,7 +100,7 @@ find_parameters.summary.lm <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.polr <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = c(sprintf("Intercept: %s", names(x$zeta)), names(stats::coef(x))))
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -120,13 +120,13 @@ find_parameters.clm2 <- function(x, flatten = FALSE, ...) {
 
   if (n_scale == 0) {
     pars <- list(conditional = names(cf))
-    pars$conditional <- .remove_backticks_from_string(pars$conditional)
+    pars$conditional <- text_remove_backticks(pars$conditional)
   } else {
     pars <- .compact_list(list(
       conditional = names(cf)[1:(n_intercepts + n_location)],
       scale = names(cf)[(1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)]
     ))
-    pars <- rapply(pars, .remove_backticks_from_string, how = "list")
+    pars <- rapply(pars, text_remove_backticks, how = "list")
   }
 
   if (flatten) {
@@ -144,7 +144,7 @@ find_parameters.clmm2 <- find_parameters.clm2
 #' @export
 find_parameters.bracl <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -166,7 +166,7 @@ find_parameters.multinom <- function(x, flatten = FALSE, ...) {
     list(conditional = names(params))
   }
 
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -285,7 +285,7 @@ find_parameters.wbm <- function(x, flatten = FALSE, ...) {
     random = rownames(s$ints_table)
   ))
 
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -494,7 +494,7 @@ find_parameters.glht <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.manova <- function(x, flatten = FALSE, ...) {
-  out <- list(conditional = .remove_backticks_from_string(rownames(stats::na.omit(stats::coef(x)))))
+  out <- list(conditional = text_remove_backticks(rownames(stats::na.omit(stats::coef(x)))))
 
   if (flatten) {
     unique(unlist(out))
@@ -523,7 +523,7 @@ find_parameters.mlm <- function(x, flatten = FALSE, ...) {
   cs <- stats::coef(summary(x))
 
   out <- lapply(cs, function(i) {
-    list(conditional = .remove_backticks_from_string(rownames(i)))
+    list(conditional = text_remove_backticks(rownames(i)))
   })
 
   names(out) <- gsub("^Response (.*)", "\\1", names(cs))
@@ -543,9 +543,9 @@ find_parameters.mvord <- function(x, flatten = FALSE, ...) {
   junk <- utils::capture.output(s <- summary(x))
 
   out <- list(
-    thresholds = .remove_backticks_from_string(rownames(s$thresholds)),
-    conditional = .remove_backticks_from_string(rownames(s$coefficients)),
-    correlation = .remove_backticks_from_string(rownames(s$error.structure))
+    thresholds = text_remove_backticks(rownames(s$thresholds)),
+    conditional = text_remove_backticks(rownames(s$coefficients)),
+    correlation = text_remove_backticks(rownames(s$error.structure))
   )
   attr(out, "is_mv") <- TRUE
 
@@ -562,7 +562,7 @@ find_parameters.mvord <- function(x, flatten = FALSE, ...) {
 find_parameters.gbm <- function(x, flatten = FALSE, ...) {
   s <- summary(x, plotit = FALSE)
   pars <- list(conditional = as.character(s$var))
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -576,7 +576,7 @@ find_parameters.gbm <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = rownames(stats::coef(x)))
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -590,7 +590,7 @@ find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.lrm <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -606,7 +606,7 @@ find_parameters.flexsurvreg <- find_parameters.lrm
 
 #' @export
 find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
-  l <- list(conditional = unname(.remove_backticks_from_string(unlist(lapply(stats::coef(x), names)))))
+  l <- list(conditional = unname(text_remove_backticks(unlist(lapply(stats::coef(x), names)))))
 
   if (flatten) {
     unique(unlist(l))
@@ -626,7 +626,7 @@ find_parameters.rqs <- function(x, flatten = FALSE, ...) {
   } else {
     return(find_parameters.default(x, flatten = flatten, ...))
   }
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -645,7 +645,7 @@ find_parameters.crq <- function(x, flatten = FALSE, ...) {
   } else {
     pars <- list(conditional = rownames(sc$coefficients))
   }
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -668,7 +668,7 @@ find_parameters.lqmm <- function(x, flatten = FALSE, ...) {
   } else {
     pars <- list(conditional = names(cs))
   }
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -688,7 +688,7 @@ find_parameters.aareg <- function(x, flatten = FALSE, ...) {
   sc <- summary(x)
 
   pars <- list(conditional = rownames(sc$table))
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -707,7 +707,7 @@ find_parameters.rma <- function(x, flatten = FALSE, ...) {
       pars <- list(conditional = names(cf))
 
       pars$conditional[grepl("intrcpt", pars$conditional)] <- "(Intercept)"
-      pars$conditional <- .remove_backticks_from_string(pars$conditional)
+      pars$conditional <- text_remove_backticks(pars$conditional)
 
       if (flatten) {
         unique(unlist(pars))
@@ -756,7 +756,7 @@ find_parameters.meta_bma <- find_parameters.meta_random
 find_parameters.metaplus <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = rownames(x$results))
   pars$conditional[grepl("muhat", pars$conditional)] <- "(Intercept)"
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -770,7 +770,7 @@ find_parameters.metaplus <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.mipo <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = as.vector(summary(x)$term))
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
     unique(unlist(pars))
@@ -805,9 +805,9 @@ find_parameters.nls <- function(x, flatten = FALSE, ...) {
 .filter_parameters <- function(l, effects, component = "all", flatten, recursive = TRUE) {
   if (isTRUE(recursive)) {
     # recursively remove back-ticks from all list-elements parameters
-    l <- rapply(l, .remove_backticks_from_string, how = "list")
+    l <- rapply(l, text_remove_backticks, how = "list")
   } else {
-    l <- lapply(l, .remove_backticks_from_string)
+    l <- lapply(l, text_remove_backticks)
   }
 
   # keep only requested effects

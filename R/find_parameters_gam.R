@@ -23,7 +23,7 @@
 #' @export
 find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
   pars <- lapply(x$parameters, function(i) {
-    .remove_backticks_from_string(names(stats::na.omit(stats::coef(x, what = i))))
+    text_remove_backticks(names(stats::na.omit(stats::coef(x, what = i))))
   })
 
   names(pars) <- x$parameters
@@ -47,7 +47,7 @@ find_parameters.gam <- function(x,
                                 flatten = FALSE,
                                 ...) {
   pars <- list(conditional = names(stats::coef(x)))
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   st <- summary(x)$s.table
 
@@ -136,7 +136,7 @@ find_parameters.cgam <- function(x,
     smooth_terms = rownames(smooth_terms)
   ))
 
-  l <- lapply(l, .remove_backticks_from_string)
+  l <- lapply(l, text_remove_backticks)
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
@@ -183,8 +183,8 @@ find_parameters.rqss <- function(x,
     smooth_terms = rownames(sc$qsstab)
   )
 
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
-  pars$smooth_terms <- .remove_backticks_from_string(pars$smooth_terms)
+  pars$conditional <- text_remove_backticks(pars$conditional)
+  pars$smooth_terms <- text_remove_backticks(pars$smooth_terms)
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component)

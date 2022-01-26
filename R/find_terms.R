@@ -172,7 +172,7 @@ find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
     if (any(nchar(f_parts) == 0)) {
       f_parts <- f_parts[-which(nchar(f_parts) == 0)]
     }
-    .remove_backticks_from_string(unique(f_parts))
+    text_remove_backticks(unique(f_parts))
   })
 
 

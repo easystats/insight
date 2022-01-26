@@ -94,7 +94,7 @@ get_parameters.gamlss <- function(x, ...) {
       row.names = NULL
     )
 
-    .remove_backticks_from_parameter_names(params)
+    text_remove_backticks(params)
   }))
 
   # data.frame(
@@ -160,7 +160,7 @@ get_parameters.SemiParBIV <- function(x, ...) {
   }))
   colnames(params)[1] <- "Estimate"
   rownames(params) <- NULL
-  .remove_backticks_from_parameter_names(params[c("Parameter", "Estimate", "Component")])
+  text_remove_backticks(params[c("Parameter", "Estimate", "Component")])
 }
 
 
@@ -201,5 +201,5 @@ get_parameters.SemiParBIV <- function(x, ...) {
     pars <- .remove_column(pars, "Component")
   }
 
-  .remove_backticks_from_parameter_names(pars)
+  text_remove_backticks(pars)
 }

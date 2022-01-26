@@ -119,7 +119,7 @@ clean_parameters.default <- function(x, group = "", ...) {
     }
   })
 
-  out <- .remove_backticks_from_parameter_names(do.call(rbind, l))
+  out <- text_remove_backticks(do.call(rbind, l))
   out <- .remove_empty_columns_from_pars(out)
   .fix_random_effect_smooth(x, out)
 }
@@ -140,7 +140,7 @@ clean_parameters.emmGrid <- function(x, ...) {
     )
   })
 
-  out <- .remove_backticks_from_parameter_names(do.call(rbind, l))
+  out <- text_remove_backticks(do.call(rbind, l))
   out <- .remove_empty_columns_from_pars(out)
   out
 }
@@ -181,7 +181,7 @@ clean_parameters.BFBayesFactor <- function(x, ...) {
     )
   })
 
-  out <- .remove_backticks_from_parameter_names(do.call(rbind, l))
+  out <- text_remove_backticks(do.call(rbind, l))
   out <- .remove_empty_columns_from_pars(.clean_bfbayesfactor_params(out))
   .fix_random_effect_smooth(x, out)
 }
@@ -223,7 +223,7 @@ clean_parameters.wbm <- function(x, ...) {
     )
   })
 
-  out <- .remove_backticks_from_parameter_names(do.call(rbind, l))
+  out <- text_remove_backticks(do.call(rbind, l))
   out <- .remove_empty_columns_from_pars(out)
   .fix_random_effect_smooth(x, out)
 }
@@ -266,7 +266,7 @@ clean_parameters.glmm <- function(x, ...) {
     )
   })
 
-  out <- .remove_backticks_from_parameter_names(do.call(rbind, l))
+  out <- text_remove_backticks(do.call(rbind, l))
   .remove_empty_columns_from_pars(out)
 }
 
@@ -413,7 +413,7 @@ clean_parameters.mlm <- function(x, ...) {
     )
   })
 
-  out <- .remove_backticks_from_parameter_names(do.call(rbind, l))
+  out <- text_remove_backticks(do.call(rbind, l))
   out <- .remove_empty_columns_from_pars(out)
   .fix_random_effect_smooth(x, out)
 }

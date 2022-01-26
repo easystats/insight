@@ -27,7 +27,7 @@ find_parameters.averaging <- function(x,
                                       ...) {
   component <- match.arg(component)
   cf <- stats::coef(x, full = component == "full")
-  out <- list(conditional = .remove_backticks_from_string(names(cf)))
+  out <- list(conditional = text_remove_backticks(names(cf)))
 
   if (flatten) {
     unique(unlist(out))
@@ -50,7 +50,7 @@ find_parameters.betareg <- function(x,
     precision = names(x$coefficients$precision)
   )
 
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
   .filter_parameters(
     pars,
     effects = "all",
@@ -76,10 +76,10 @@ find_parameters.DirichletRegModel <- function(x,
       conditional = names(unlist(stats::coef(x)[["beta"]])),
       precision = names(unlist(stats::coef(x)[["gamma"]]))
     ))
-    pars$precision <- .remove_backticks_from_string(pars$precision)
+    pars$precision <- text_remove_backticks(pars$precision)
   }
 
-  pars$conditional <- .remove_backticks_from_string(pars$conditional)
+  pars$conditional <- text_remove_backticks(pars$conditional)
 
   .filter_parameters(
     pars,
@@ -102,8 +102,8 @@ find_parameters.mjoint <- function(x,
   s <- summary(x)
 
   out <- list(
-    conditional = .remove_backticks_from_string(rownames(s$coefs.long)),
-    survival = .remove_backticks_from_string(rownames(s$coefs.surv))
+    conditional = text_remove_backticks(rownames(s$coefs.long)),
+    survival = text_remove_backticks(rownames(s$coefs.surv))
   )
 
   .filter_parameters(
@@ -126,8 +126,8 @@ find_parameters.glmx <- function(x,
   cf <- stats::coef(summary(x))
 
   out <- list(
-    conditional = .remove_backticks_from_string(names(cf$glm[, 1])),
-    extra = .remove_backticks_from_string(rownames(cf$extra))
+    conditional = text_remove_backticks(names(cf$glm[, 1])),
+    extra = text_remove_backticks(rownames(cf$extra))
   )
 
   .filter_parameters(

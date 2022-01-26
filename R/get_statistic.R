@@ -71,7 +71,7 @@ get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -88,7 +88,7 @@ get_statistic.summary.lm <- function(x, ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -109,7 +109,7 @@ get_statistic.mlm <- function(x, ...) {
     )
   })
 
-  out <- .remove_backticks_from_parameter_names(do.call(rbind, out))
+  out <- text_remove_backticks(do.call(rbind, out))
   attr(out, "statistic") <- find_statistic(x)
 
   out
@@ -134,7 +134,7 @@ get_statistic.merModList <- function(x, ...) {
     stringsAsFactors = FALSE
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -148,7 +148,7 @@ get_statistic.afex_aov <- function(x, ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -226,7 +226,7 @@ get_statistic.mhurdle <- function(x,
 
   params <- merge(params, stats, sort = FALSE)
   params <- .filter_component(params, component)[intersect(c("Parameter", "Statistic", "Component"), colnames(params))]
-  params <- .remove_backticks_from_parameter_names(params)
+  params <- text_remove_backticks(params)
   attr(params, "statistic") <- find_statistic(x)
 
   params
@@ -257,7 +257,7 @@ get_statistic.glmmTMB <- function(x,
   stat$Component <- .rename_values(stat$Component, "disp", "dispersion")
 
   stat <- .filter_component(stat, component)
-  stat <- .remove_backticks_from_parameter_names(stat)
+  stat <- text_remove_backticks(stat)
   attr(stat, "statistic") <- find_statistic(x)
 
   stat
@@ -299,7 +299,7 @@ get_statistic.zeroinfl <- function(x,
   stat$Component <- .rename_values(stat$Component, "zi", "zero_inflated")
 
   stat <- .filter_component(stat, component)
-  stat <- .remove_backticks_from_parameter_names(stat)
+  stat <- text_remove_backticks(stat)
   attr(stat, "statistic") <- find_statistic(x)
 
   stat
@@ -337,7 +337,7 @@ get_statistic.MixMod <- function(x,
   })
 
   stat <- .filter_component(do.call(rbind, out), component)
-  stat <- .remove_backticks_from_parameter_names(stat)
+  stat <- text_remove_backticks(stat)
   attr(stat, "statistic") <- find_statistic(x)
 
   stat
@@ -358,7 +358,7 @@ get_statistic.Gam <- function(x, ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -377,7 +377,7 @@ get_statistic.gam <- function(x, ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -401,7 +401,7 @@ get_statistic.SemiParBIV <- function(x, ...) {
 
   colnames(params)[3] <- "Statistic"
   rownames(params) <- NULL
-  out <- .remove_backticks_from_parameter_names(params[c("Parameter", "Statistic", "Component")])
+  out <- text_remove_backticks(params[c("Parameter", "Statistic", "Component")])
 
   attr(out, "statistic") <- find_statistic(x)
   out
@@ -461,7 +461,7 @@ get_statistic.vglm <- function(x, ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -481,7 +481,7 @@ get_statistic.vgam <- function(x, ...) {
   out <- merge(params, out, all.x = TRUE)
   out <- out[order(out$Parameter, params$Parameter), ]
 
-  out <- .remove_backticks_from_parameter_names(out[c("Parameter", "Statistic", "Component")])
+  out <- text_remove_backticks(out[c("Parameter", "Statistic", "Component")])
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -577,7 +577,7 @@ get_statistic.coxme <- function(x, ...) {
       row.names = NULL
     )
 
-    out <- .remove_backticks_from_parameter_names(out)
+    out <- text_remove_backticks(out)
     attr(out, "statistic") <- find_statistic(x)
   }
 
@@ -597,7 +597,7 @@ get_statistic.riskRegression <- function(x, ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -761,7 +761,7 @@ get_statistic.mvord <- function(x,
   }
 
   attr(params, "statistic") <- find_statistic(x)
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -869,7 +869,7 @@ get_statistic.mlogit <- function(x, ...) {
       row.names = NULL
     )
 
-    out <- .remove_backticks_from_parameter_names(out)
+    out <- text_remove_backticks(out)
     attr(out, "statistic") <- find_statistic(x)
     out
   } else {
@@ -1005,7 +1005,7 @@ get_statistic.pgmm <- function(x,
     out <- .remove_column(out, "Component")
   }
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1033,7 +1033,7 @@ get_statistic.selection <- function(x,
     params <- params[params$Component == component, , drop = FALSE]
   }
 
-  params <- .remove_backticks_from_parameter_names(params)
+  params <- text_remove_backticks(params)
   attr(params, "statistic") <- find_statistic(x)
   params
 }
@@ -1061,7 +1061,7 @@ get_statistic.lavaan <- function(x, ...) {
     stringsAsFactors = FALSE
   )
 
-  params <- .remove_backticks_from_parameter_names(params)
+  params <- text_remove_backticks(params)
   attr(params, "statistic") <- find_statistic(x)
   params
 }
@@ -1089,7 +1089,7 @@ get_statistic.Sarlm <- function(x, ...) {
     row.names = NULL
   )
 
-  stat <- .remove_backticks_from_parameter_names(stat)
+  stat <- text_remove_backticks(stat)
   attr(stat, "statistic") <- find_statistic(x)
 
   stat
@@ -1213,7 +1213,7 @@ get_statistic.ivprobit <- function(x, ...) {
     Statistic = as.vector(x$tval),
     stringsAsFactors = FALSE
   )
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1228,7 +1228,7 @@ get_statistic.HLfit <- function(x, ...) {
     Statistic = as.vector(s$beta_table[, "t-value"]),
     stringsAsFactors = FALSE
   )
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1241,7 +1241,7 @@ get_statistic.margins <- function(x, ...) {
     Statistic = as.vector(summary(x)$z),
     stringsAsFactors = FALSE
   )
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1261,7 +1261,7 @@ get_statistic.lqmm <- function(x, ...) {
     params <- params[c("Parameter", "Statistic")]
   }
 
-  out <- .remove_backticks_from_parameter_names(params)
+  out <- text_remove_backticks(params)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1277,7 +1277,7 @@ get_statistic.mipo <- function(x, ...) {
     Statistic = as.vector(summary(x)$statistic),
     stringsAsFactors = FALSE
   )
-  out <- .remove_backticks_from_parameter_names(params)
+  out <- text_remove_backticks(params)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1303,7 +1303,7 @@ get_statistic.mle2 <- function(x, ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(params)
+  out <- text_remove_backticks(params)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1325,7 +1325,7 @@ get_statistic.glht <- function(x, ...) {
     Statistic = unname(s$test$tstat),
     stringsAsFactors = FALSE
   )
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1362,7 +1362,7 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1395,7 +1395,7 @@ get_statistic.emm_list <- function(x, ci = .95, adjust = "none", ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1414,7 +1414,7 @@ get_statistic.robmixglm <- function(x, ...) {
   )
 
   out <- out[!is.na(out$Statistic), ]
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1437,7 +1437,7 @@ get_statistic.averaging <- function(x, component = c("conditional", "full"), ...
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1452,7 +1452,7 @@ get_statistic.bayesx <- function(x, ...) {
     stringsAsFactors = FALSE
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1468,7 +1468,7 @@ get_statistic.Arima <- function(x, ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -1608,7 +1608,7 @@ get_statistic.zcpglm <- function(x,
   )
 
   out <- .filter_component(rbind(tweedie, zero), component)
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
 
   attr(out, "statistic") <- find_statistic(x)
   out
@@ -2278,7 +2278,7 @@ get_statistic.bfsl <- function(x, ...) {
     row.names = NULL
   )
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
 }

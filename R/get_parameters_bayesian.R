@@ -314,7 +314,7 @@ get_parameters.bayesx <- function(x,
     "smooth_terms" = smooth_dat
   )
 
-  out <- .remove_backticks_from_parameter_names(params)
+  out <- text_remove_backticks(params)
 
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality)

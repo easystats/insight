@@ -134,7 +134,7 @@ find_parameters.BFBayesFactor <- function(x,
   }
 
   elements <- .get_elements(effects, component = component)
-  l <- lapply(.compact_list(list(conditional = conditional, random = random, extra = extra)), .remove_backticks_from_string)
+  l <- lapply(.compact_list(list(conditional = conditional, random = random, extra = extra)), text_remove_backticks)
   l <- .compact_list(l[elements])
 
   if (flatten) {

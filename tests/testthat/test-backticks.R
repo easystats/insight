@@ -3,6 +3,15 @@ if (requiet("testthat") && requiet("insight")) {
   iris$`a m` <- iris$Species
   iris$`Sepal Width` <- iris$Sepal.Width
   m <- lm(`Sepal Width` ~ Petal.Length + `a m` * log(Sepal.Length), data = iris)
+  m2 <- lm(`Sepal Width` ~ Petal.Length + `a m`, data = iris)
+
+  test_that("text_remove_backticks", {
+    d <- data.frame(Parameter = names(coef(m2)), Estimate = unname(coef(m2)))
+    expect_equal(
+      text_remove_backticks(d)$Parameter,
+      c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica")
+    )
+  })
 
   test_that("backticks", {
     expect_equal(
