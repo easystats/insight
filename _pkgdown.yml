@@ -116,6 +116,7 @@ reference:
   - starts_with("format_")
   - parameters_table
   - print_color
+  - text_remove_backticks
 
 - title: "Utilities"
   desc: >
