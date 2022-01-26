@@ -136,6 +136,9 @@
     <loc>/reference/format_bf.html</loc>
   </url>
   <url>
+    <loc>/reference/format_capitalize.html</loc>
+  </url>
+  <url>
     <loc>/reference/format_ci.html</loc>
   </url>
   <url>
@@ -317,5 +320,8 @@
   </url>
   <url>
     <loc>/reference/standardize_names.html</loc>
+  </url>
+  <url>
+    <loc>/reference/text_remove_backticks.html</loc>
   </url>
 </urlset>
