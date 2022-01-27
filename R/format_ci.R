@@ -79,7 +79,7 @@ format_ci <- function(CI_low,
       }
     }
 
-    if (all(is.na(CI_low))) {
+    if (all(is.na(CI_low) | is.infinite(CI_low))) {
       width_low <- 1
     } else {
       width_low <- max(unlist(lapply(stats::na.omit(CI_low), function(.i) {
@@ -91,7 +91,7 @@ format_ci <- function(CI_low,
       })))
     }
 
-    if (all(is.na(CI_high))) {
+    if (all(is.na(CI_high) | is.infinite(CI_high))) {
       width_high <- 1
     } else {
       width_high <- max(unlist(lapply(stats::na.omit(CI_high), function(.i) {
