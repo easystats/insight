@@ -112,19 +112,27 @@ and therefore are manipulated then.</p>
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">`Sepal Width`</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="va">`a m`</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># remove backticks from string</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in coef(m):</span> object 'm' not found</span>
-<span class="r-in"><span class="fu">text_remove_backticks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in coef(m):</span> object 'm' not found</span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "(Intercept)"     "Petal.Length"    "`a m`versicolor" "`a m`virginica" </span>
+<span class="r-in"><span class="fu">text_remove_backticks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "(Intercept)"   "Petal.Length"  "a mversicolor" "a mvirginica" </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># remove backticks from character variable in a data frame</span></span>
 <span class="r-in"><span class="co"># column defaults to "Parameter".</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span>, Estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in coef(m):</span> object 'm' not found</span>
+<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span>,</span>
+<span class="r-in">                Estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">d</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'd' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         Parameter  Estimate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     (Intercept)  2.991869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    Petal.Length  0.298311</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 `a m`versicolor -1.492674</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  `a m`virginica -1.674092</span>
 <span class="r-in"><span class="fu">text_remove_backticks</span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in text_remove_backticks(d):</span> object 'd' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Parameter  Estimate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   (Intercept)  2.991869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Petal.Length  0.298311</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 a mversicolor -1.492674</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  a mvirginica -1.674092</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
