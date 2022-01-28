@@ -45,12 +45,13 @@ iris$`Sepal Width` <- iris$Sepal.Width
 model <- lm(`Sepal Width` ~ Petal.Length + `a m`, data = iris)
 
 # remove backticks from string
-names(coef(m))
-text_remove_backticks(names(coef(m)))
+names(coef(model))
+text_remove_backticks(names(coef(model)))
 
 # remove backticks from character variable in a data frame
 # column defaults to "Parameter".
-d <- data.frame(Parameter = names(coef(m)), Estimate = unname(coef(m)))
+d <- data.frame(Parameter = names(coef(model)),
+                Estimate = unname(coef(model)))
 d
 text_remove_backticks(d)
 }
