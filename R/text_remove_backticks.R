@@ -47,7 +47,7 @@ text_remove_backticks <- function(x, ...) {
 
 #' @export
 text_remove_backticks.default <- function(x, verbose = TRUE, ...) {
-  if (verbose) {
+  if (isTRUE(verbose)) {
     warning(format_message(paste0("Removing backticks currently not supported for objects of class '", class(x)[1], "'.")), call. = FALSE)
   }
   x
