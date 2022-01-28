@@ -17,8 +17,14 @@ if (requiet("testthat") && requiet("insight")) {
     expect_equal(x$Parameter, c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"))
     expect_equal(x$Term, c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"))
 
-    d <- list(Parameter = names(coef(m2)), Term = names(coef(m2)), Estimate = unname(coef(m2)))
-    expect_warning(text_remove_backticks(d, column = c("Parameter", "Term")))
+    d <- list(Parameter = names(coef(m2)), Estimate = unname(coef(m2)))
+    expect_warning(text_remove_backticks(d, verbose = TRUE))
+    expect_equal(
+      text_remove_backticks(d),
+      list(Parameter = c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"),
+           Estimate = c(2.99186937324135, 0.298310962215218, -1.49267407227818, -1.67409183546024)),
+      tolerance = 1e-3
+    )
   })
 
   test_that("backticks", {

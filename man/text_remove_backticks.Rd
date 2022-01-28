@@ -7,7 +7,7 @@
 \usage{
 text_remove_backticks(x, ...)
 
-\method{text_remove_backticks}{data.frame}(x, column = "Parameter", verbose = TRUE, ...)
+\method{text_remove_backticks}{data.frame}(x, column = "Parameter", verbose = FALSE, ...)
 }
 \arguments{
 \item{x}{A character vector, a data frame or a matrix. If a matrix,
