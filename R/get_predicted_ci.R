@@ -319,6 +319,11 @@ get_predicted_se <- function(x,
     return(NULL)
   }
 
+  if (ncol(mm) != ncol(vcovmat)) {
+      warning("Could not compute standard errors or confidence intervals because the model and variance-covariance matrices are non-conformable. This can sometimes happen when the `data` used to make predictions fails to include all the levels of a factor variable or all the interaction components.")
+      return(NULL)
+  }
+
   # compute vcov for predictions
   # Next line equivalent to: diag(M V M')
   var_diag <- colSums(t(mm %*% vcovmat) * t(mm))
