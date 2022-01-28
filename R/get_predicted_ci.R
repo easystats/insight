@@ -320,8 +320,21 @@ get_predicted_se <- function(x,
   }
 
   if (ncol(mm) != ncol(vcovmat)) {
-      warning("Could not compute standard errors or confidence intervals because the model and variance-covariance matrices are non-conformable. This can sometimes happen when the `data` used to make predictions fails to include all the levels of a factor variable or all the interaction components.")
+    # last desperate try
+    mm_full <- get_modelmatrix(x)
+    mm <- tryCatch(
+      {
+        mm_full[as.numeric(row.names(get_modelmatrix(x, data = data))), , drop = FALSE]
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+    # still no match?
+    if (isTRUE(ncol(mm) != ncol(vcovmat))) {
+      warning(format_message("Could not compute standard errors or confidence intervals because the model and variance-covariance matrices are non-conformable. This can sometimes happen when the `data` used to make predictions fails to include all the levels of a factor variable or all the interaction components."), call. = FALSE)
       return(NULL)
+    }
   }
 
   # compute vcov for predictions
