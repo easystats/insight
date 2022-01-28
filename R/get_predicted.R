@@ -450,6 +450,7 @@ get_predicted.lmerMod <- function(x,
       type = args$type,
       re.form = args$re.form,
       random.only = random.only,
+      allow.new.levels = args$allow_new_levels,
       ...
     )
   }
@@ -1074,7 +1075,8 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     predict = predict_arg,
     scale = scale,
     transform = transform,
-    info = info
+    info = info,
+    allow_new_levels = isTRUE(list(...)$allow.new.levels)
   )
 }
 
