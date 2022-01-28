@@ -438,4 +438,21 @@ if (.runThisTest &&
     expect_equal(class(get_call(m1)), "call")
     expect_equal(class(get_call(m2)), "call")
   })
+
+  test_that("get_predicted_ci: warning when model matrix and varcovmat do not match", {
+      mod <- lmer(
+        weight ~ 1 + Time + I(Time^2) + Diet + Time:Diet + I(Time^2):Diet + (1 + Time + I(Time^2) | Chick),
+        data = ChickWeight)
+      newdata <- ChickWeight[ChickWeight$Time %in% 0:10 & ChickWeight$Chick %in% c(1, 40),]
+      newdata$Chick[newdata$Chick == "1"] <- NA
+      expect_equal(
+        head(as.data.frame(get_predicted(mod, data = newdata, include_random = FALSE))),
+        data.frame(Predicted = c(37.53433, 47.95719, 58.78866, 70.02873, 81.67742, 93.73472),
+                   SE = c(1.68687, 0.82574, 1.52747, 2.56109, 3.61936, 4.76178),
+                   CI_low = c(34.22096, 46.33525, 55.78837, 64.99819, 74.56822, 84.38154),
+                   CI_high = c(40.84771, 49.57913, 61.78894, 75.05927, 88.78662, 103.08789)),
+        tolerance = 1e-3,
+        ignore_attr = TRUE
+      )
+  })
 }
