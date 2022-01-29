@@ -370,7 +370,8 @@ get_predicted.hurdle <- function(x,
     ...
   )
 
-  # "response" scale is type = "count" here...
+  # "response" scale is type = "count" here... we back-transform later,
+  # when we multiply with the zi-predictions
   if (predict %in% c("expectation", "response", "count")) {
     args$type <- "count"
   }
@@ -388,9 +389,7 @@ get_predicted.hurdle <- function(x,
   # Get prediction
   predictions <- as.vector(predict_function(x, data = args$data))
 
-  # "expectation" for zero-inflated? we need a special handling
-  # for predictions and CIs here.
-
+  # on the response scale, we simulate predictions for CIs...
   if (!is.null(predict) && predict %in% c("expectation", "response")) {
     zi_predictions <- stats::predict(
       x,

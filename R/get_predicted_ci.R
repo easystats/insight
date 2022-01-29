@@ -212,8 +212,6 @@ get_predicted_ci.hurdle <- function(x,
       out <- cbind(out, temp)
     }
   }
-
-  out$predictions <- linv(out$predictions)
   out
 }
 
