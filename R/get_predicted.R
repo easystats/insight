@@ -208,6 +208,8 @@ get_predicted.lm <- function(x,
 get_predicted.glm <- get_predicted.lm
 
 
+
+
 # rms -------------------------------------------------------------------
 # =======================================================================
 
@@ -217,6 +219,8 @@ get_predicted.glm <- get_predicted.lm
 
 #' @export
 get_predicted.lrm <- get_predicted.default
+
+
 
 
 # fixest ----------------------------------------------------------------
@@ -253,9 +257,15 @@ get_predicted.fixest <- function(x, predict = "expectation", data = NULL, ...) {
     args[["newdata"]] <- data
   }
 
-  out <- do.call("predict", args)
-  .get_predicted_out(out)
+  predictions <- do.call("predict", args)
+
+  # ci_data <- get_predicted_ci(x, predictions, data = args$data, ci = ci, ci_type = "confidence", ...)
+  # out <- .get_predicted_transform(x, predictions, args, ci_data)
+  # .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+  .get_predicted_out(predictions, args = args, ci_data = NULL)
 }
+
+
 
 
 # ordinal ---------------------------------------------------------------
@@ -326,6 +336,7 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
 
   return(out)
 }
+
 
 
 
@@ -408,6 +419,7 @@ get_predicted.hurdle <- function(x,
 
 #' @export
 get_predicted.zeroinfl <- get_predicted.hurdle
+
 
 
 
@@ -580,6 +592,8 @@ get_predicted.glmmTMB <- function(x,
 }
 
 
+
+
 # bife ------------------------------------------------------------------
 # =======================================================================
 #' @export
@@ -603,6 +617,8 @@ get_predicted.bife <- function(x,
 
   out
 }
+
+
 
 
 # nnet::multinom --------------------------------------------------------
@@ -635,6 +651,8 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...)
 }
 
 
+
+
 # MASS ------------------------------------------------------------------
 # =======================================================================
 
@@ -662,6 +680,8 @@ get_predicted.rlm <- function(x, predict = "expectation", ...) {
 
 #' @export
 get_predicted.polr <- get_predicted.multinom
+
+
 
 
 # GAM -------------------------------------------------------------------
@@ -930,8 +950,9 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
 }
 
 
-# -------------------------------------------------------------------------
 
+
+# process predict-specific arguments ------------------------------------------
 
 .get_predicted_args <- function(x,
                                 data = NULL,
@@ -1081,7 +1102,10 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
 }
 
 
-# -------------------------------------------------------------------------
+
+
+# back-transformation ------------------------------------------------------
+
 .get_predict_transform_response <- function(predictions, response) {
   predictions <- round(predictions)
   if (is.factor(response)) {
@@ -1095,6 +1119,7 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   }
   predictions
 }
+
 
 .get_predicted_transform <- function(x,
                                      predictions,
@@ -1143,8 +1168,8 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
 
 
 
-# -------------------------------------------------------------------------
 
+# -------------------------------------------------------------------------
 
 .get_predicted_out <- function(predictions, args = NULL, ci_data = NULL, ...) {
   if (!is.null(ci_data)) {
@@ -1174,6 +1199,9 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   class(predictions) <- c("get_predicted", class(predictions))
   predictions
 }
+
+
+
 
 # Bootstrap ==============================================================
 
@@ -1217,8 +1245,9 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
 }
 
 
-# -------------------------------------------------------------------------
 
+
+# -------------------------------------------------------------------------
 
 .get_predicted_centrality_from_draws <- function(x,
                                                  iter,
