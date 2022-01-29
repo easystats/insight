@@ -62,6 +62,8 @@ get_datagrid(x, ...)
 \item{include_random}{If \code{x} is a mixed model object, decide whether random effect terms should be included in the data grid or not. If \code{include_random} is \code{FALSE}, but \code{x} is a mixed model with random effects, these will still be included in the returned grid, but set to their "population level" value (e.g., \code{NA} for \emph{glmmTMB} or \code{0} for \emph{merMod}). This ensures that common \code{predict()} methods work properly, as these usually need data with all variables in the model included.}
 
 \item{include_response}{If \code{x} is a model object, decide whether the response variable should be included in the data grid or not.}
+
+\item{data}{Optional, the data frame that was used to fit the model. Usually, the data is retrieved via \code{get_data()}.}
 }
 \value{
 Reference grid data frame.
