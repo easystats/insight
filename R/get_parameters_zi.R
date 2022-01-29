@@ -66,7 +66,7 @@ get_parameters.zcpglm <- function(x,
     pars <- .remove_column(pars, "Component")
   }
 
-  .remove_backticks_from_parameter_names(pars)
+  text_remove_backticks(pars)
 }
 
 
@@ -108,7 +108,7 @@ get_parameters.zcpglm <- function(x,
     pars <- .remove_column(pars, "Component")
   }
 
-  .remove_backticks_from_parameter_names(pars)
+  text_remove_backticks(pars)
 }
 
 
@@ -183,5 +183,5 @@ get_parameters.mhurdle <- function(x,
   }
 
   # pars$Parameter <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", pars$Parameter)
-  .remove_backticks_from_parameter_names(pars)
+  text_remove_backticks(pars)
 }

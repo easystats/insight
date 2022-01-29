@@ -27,6 +27,34 @@ find_statistic <- function(x, ...) {
     stop("The entered object is not a model object.", call. = FALSE)
   }
 
+  # handle 'htest' objects specifically
+  if (inherits(x, "htest")) {
+    if (x$method == "Fisher's Exact Test for Count Data") {
+      stat <- "p-value"
+    } else if (x$method == "Wilcoxon signed rank test with continuity correction") {
+      stat <- "z-statistic"
+    } else {
+      stat <- switch(
+        names(x$statistic),
+        t = "t-statistic",
+        Z = "z-statistic",
+        `Quade F` = ,
+        `F` = "F-statistic",
+        `Bartlett's K-squared` = ,
+        `Fligner-Killeen:med chi-squared` = ,
+        `Friedman chi-squared` = ,
+        `Kruskal-Wallis chi-squared` = ,
+        `Cochran-Mantel-Haenszel M^2` = ,
+        `McNemar's chi-squared` = ,
+        `X-squared` = "chi-squared statistic",
+        `number of successes` = "number of successes",
+        `number of events` = "number of events",
+        paste(names(x$statistic), "statistic")
+      )
+    }
+    return(stat)
+  }
+
   if (inherits(x, "mipo")) {
     x <- tryCatch(
       {

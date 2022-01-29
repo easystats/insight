@@ -110,7 +110,7 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   }), stringsAsFactors = FALSE)
 
   string <- strsplit(names(priors), "_", fixed = TRUE)
-  string <- lapply(string, .capitalize)
+  string <- lapply(string, format_capitalize)
   names(priors) <- unlist(lapply(string, paste0, collapse = "_"))
 
   priors
@@ -164,7 +164,7 @@ get_priors.stanmvreg <- function(x, ...) {
   }), stringsAsFactors = FALSE)
 
   string <- strsplit(names(priors), "_", fixed = TRUE)
-  string <- lapply(string, .capitalize)
+  string <- lapply(string, format_capitalize)
   names(priors) <- unlist(lapply(string, paste0, collapse = "_"))
 
   # minor fixes

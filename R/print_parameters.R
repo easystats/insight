@@ -1,11 +1,13 @@
 #' @title Prepare summary statistics of model parameters for printing
 #' @name print_parameters
 #'
-#' @description This function takes a data frame, typically a data frame with
-#' information on summaries of model parameters like [bayestestR::describe_posterior()],
-#' [bayestestR::hdi()] or [parameters::model_parameters()],
-#' as input and splits this information into several parts, depending on the
-#' model. See details below.
+#' @description
+#'
+#' This function takes a data frame, typically a data frame with information on
+#' summaries of model parameters like [bayestestR::describe_posterior()],
+#' [bayestestR::hdi()] or [parameters::model_parameters()], as input and splits
+#' this information into several parts, depending on the model. See details
+#' below.
 #'
 #' @param x A fitted model, or a data frame returned by [clean_parameters()].
 #' @param ... One or more objects (data frames), which contain information about
@@ -20,8 +22,8 @@
 #'   split by the values from those columns defined in `split_by`.
 #' @param format Name of output-format, as string. If `NULL` (or `"text"`),
 #'   assumed use for output is basic printing. If `"markdown"`, markdown-format
-#'   is assumed. This only affects the style of title- and table-caption attributes,
-#'   which are used in [export_table()].
+#'   is assumed. This only affects the style of title- and table-caption
+#'   attributes, which are used in [export_table()].
 #' @param parameter_column String, name of the column that contains the
 #'   parameter names. Usually, for data frames returned by functions the
 #'   easystats-packages, this will be `"Parameter"`.
@@ -43,11 +45,14 @@
 #'   list elements. If `titles` and `subtitles` are shorter than
 #'   existing elements, only the first default attributes are overwritten.
 #'
-#' @return A data frame or a list of data frames (if `split_by` is not `NULL`).
-#' If a list is returned, the element names reflect the model components where the
-#' extracted information in the data frames belong to, e.g. ``random.zero_inflated.Intercept: persons``.
-#' This is the data frame that contains the parameters for the random effects from
-#' group-level "persons" from the zero-inflated model component.
+#' @return
+#'
+#' A data frame or a list of data frames (if `split_by` is not `NULL`). If a
+#' list is returned, the element names reflect the model components where the
+#' extracted information in the data frames belong to, e.g.
+#' `random.zero_inflated.Intercept: persons`. This is the data frame that
+#' contains the parameters for the random effects from group-level "persons"
+#' from the zero-inflated model component.
 #'
 #' @details This function prepares data frames that contain information
 #' about model parameters for clear printing.
@@ -68,12 +73,12 @@
 #' \cr \cr
 #' Now we have a data frame with model parameters and information about the
 #' association to the different model components, a data frame with model
-#' parameters, and some summary statistics. `print_parameters()`
-#' then merges these data frames, so the parameters or statistics of interest
-#' are also associated with the different model components. The data
-#' frame is split into a list, so for a clear printing. Users can loop over this
-#' list and print each component for a better overview. Further, parameter
-#' names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'.
+#' parameters, and some summary statistics. `print_parameters()` then merges
+#' these data frames, so the parameters or statistics of interest are also
+#' associated with the different model components. The data frame is split into
+#' a list, so for a clear printing. Users can loop over this list and print each
+#' component for a better overview. Further, parameter names are "cleaned", if
+#' necessary, also for a cleaner print. See also 'Examples'.
 #'
 #' @examples
 #' \dontrun{
@@ -242,8 +247,8 @@ print_parameters <- function(x,
       title_prefix <- ""
     }
 
-    title1 <- .capitalize(title1)
-    title2 <- .capitalize(title2)
+    title1 <- format_capitalize(title1)
+    title2 <- format_capitalize(title2)
 
     # add attributes
     attr(element, "main_title") <- .trim(title1)

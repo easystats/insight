@@ -40,10 +40,18 @@
 
 # is object empty?
 .is_empty_object <- function(x) {
+  flag_empty <- FALSE
   if (inherits(x, "data.frame")) {
     x <- as.data.frame(x)
-  }
-  if (is.list(x) && length(x) > 0) {
+    if (nrow(x) > 0 && ncol(x) > 0) {
+      x <- x[, !sapply(x, function(i) all(is.na(i))), drop = FALSE]
+      # this is much faster than apply(x, 1, FUN)
+      flag_empty <- all(rowSums(is.na(x)) == ncol(x))
+    } else {
+      flag_empty <- TRUE
+    }
+    # a list but not a data.frame
+  } else if (is.list(x) && length(x) > 0) {
     x <- tryCatch(
       {
         .compact_list(x)
@@ -52,17 +60,15 @@
         x
       }
     )
-  }
-  if (inherits(x, "data.frame")) {
-    if (nrow(x) > 0 && ncol(x) > 0) {
-      x <- x[!sapply(x, function(i) all(is.na(i)))]
-      x <- x[!apply(x, 1, function(i) all(is.na(i))), ]
-      # need to check for is.null for R 3.4
-    }
   } else if (!is.null(x)) {
     x <- stats::na.omit(x)
   }
-  length(x) == 0 || is.null(x) || isTRUE(nrow(x) == 0) || isTRUE(ncol(x) == 0)
+  # need to check for is.null for R 3.4
+  isTRUE(flag_empty) ||
+    length(x) == 0 ||
+    is.null(x) ||
+    isTRUE(nrow(x) == 0) ||
+    isTRUE(ncol(x) == 0)
 }
 
 
@@ -527,43 +533,6 @@
     dat
   )
 }
-
-
-
-
-# capitalizes the first letter in a string
-.capitalize <- function(x) {
-  capped <- grep("^[A-Z]", x, invert = TRUE)
-  substr(x[capped], 1, 1) <- toupper(substr(x[capped], 1, 1))
-  x
-}
-
-
-
-.remove_backticks_from_parameter_names <- function(x) {
-  if (is.data.frame(x) && "Parameter" %in% colnames(x)) {
-    x$Parameter <- gsub("`", "", x$Parameter, fixed = TRUE)
-  }
-  x
-}
-
-
-.remove_backticks_from_string <- function(x) {
-  if (is.character(x)) {
-    x <- gsub("`", "", x, fixed = TRUE)
-  }
-  x
-}
-
-
-.remove_backticks_from_matrix_names <- function(x) {
-  if (is.matrix(x)) {
-    colnames(x) <- gsub("`", "", colnames(x), fixed = TRUE)
-    rownames(x) <- gsub("`", "", colnames(x), fixed = TRUE)
-  }
-  x
-}
-
 
 
 

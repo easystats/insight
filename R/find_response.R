@@ -28,6 +28,7 @@ find_response <- function(x, combine = TRUE, ...) {
 }
 
 
+
 #' @export
 find_response.default <- function(x, combine = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
@@ -48,10 +49,14 @@ find_response.default <- function(x, combine = TRUE, ...) {
 }
 
 
+
+
 #' @export
 find_response.model_fit <- function(x, combine = TRUE, ...) {
   find_response(x$fit, combine = combine, ...)
 }
+
+
 
 
 #' @export
@@ -62,6 +67,8 @@ find_response.bfsl <- function(x, combine = TRUE, ...) {
   }
   resp
 }
+
+
 
 
 #' @export
@@ -75,6 +82,8 @@ find_response.selection <- function(x, combine = TRUE, ...) {
 }
 
 
+
+
 #' @export
 find_response.mediate <- function(x, combine = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
@@ -86,6 +95,8 @@ find_response.mediate <- function(x, combine = TRUE, ...) {
   resp <- c(.safe_deparse(f$mediator$conditional[[2L]]), .safe_deparse(f$outcome$conditional[[2L]]))
   check_cbind(resp, combine, model = x)
 }
+
+
 
 
 #' @export
@@ -108,6 +119,8 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
 
   unlist(lapply(resp, check_cbind, combine = combine, model = x))
 }
+
+
 
 
 #' @export
@@ -133,6 +146,8 @@ find_response.joint <- function(x,
 
   unlist(lapply(resp, check_cbind, combine = combine, model = x))
 }
+
+
 
 
 # utils ---------------------
@@ -177,6 +192,9 @@ check_cbind <- function(resp, combine, model) {
       }
     }
     resp <- c(r1, r2)
+  } else if (!combine && any(grepl("+", resp, fixed = TRUE))) {
+    resp <- strsplit(resp, split = "+", fixed = TRUE)
+    resp <- gsub("(I|\\(|\\))", "", .trim(unlist(resp)))
   }
 
   # exception

@@ -215,10 +215,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   if (.is_empty_object(s)) {
     s <- tryCatch(
       {
-        sqrt(get_deviance(x, verbose = verbose) / get_df(x,
-          type = "residual",
-          verbose = verbose
-        ))
+        sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
       },
       error = function(e) {
         NULL
@@ -229,6 +226,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   if (.is_empty_object(s)) {
     return(NULL)
   }
+
   class(s) <- c("insight_aux", class(s))
   s
 }

@@ -34,7 +34,7 @@ get_parameters.betareg <- function(x,
     params <- params[params$Component == component, , drop = FALSE]
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -75,7 +75,7 @@ get_parameters.DirichletRegModel <- function(x,
     params <- params[params$Component == component, , drop = FALSE]
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -94,7 +94,7 @@ get_parameters.averaging <- function(x,
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -127,7 +127,7 @@ get_parameters.glmx <- function(x,
     params <- params[params$Component == component, , drop = FALSE]
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -155,7 +155,7 @@ get_parameters.clm2 <- function(x,
     params <- params[params$Component == component, , drop = FALSE]
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -214,7 +214,7 @@ get_parameters.mvord <- function(x,
     params <- params[params$Component == component, , drop = FALSE]
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -248,7 +248,7 @@ get_parameters.mjoint <- function(x,
     params <- params[params$Component == component, , drop = FALSE]
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 

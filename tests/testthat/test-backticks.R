@@ -3,6 +3,29 @@ if (requiet("testthat") && requiet("insight")) {
   iris$`a m` <- iris$Species
   iris$`Sepal Width` <- iris$Sepal.Width
   m <- lm(`Sepal Width` ~ Petal.Length + `a m` * log(Sepal.Length), data = iris)
+  m2 <- lm(`Sepal Width` ~ Petal.Length + `a m`, data = iris)
+
+  test_that("text_remove_backticks", {
+    d <- data.frame(Parameter = names(coef(m2)), Estimate = unname(coef(m2)), stringsAsFactors = FALSE)
+    expect_equal(
+      text_remove_backticks(d)$Parameter,
+      c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica")
+    )
+
+    d <- data.frame(Parameter = names(coef(m2)), Term = names(coef(m2)), Estimate = unname(coef(m2)), stringsAsFactors = FALSE)
+    x <- text_remove_backticks(d, c("Parameter", "Term"))
+    expect_equal(x$Parameter, c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"))
+    expect_equal(x$Term, c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"))
+
+    d <- list(Parameter = names(coef(m2)), Estimate = unname(coef(m2)))
+    expect_warning(text_remove_backticks(d, verbose = TRUE))
+    expect_equal(
+      text_remove_backticks(d),
+      list(Parameter = c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"),
+           Estimate = c(2.99186937324135, 0.298310962215218, -1.49267407227818, -1.67409183546024)),
+      tolerance = 1e-3
+    )
+  })
 
   test_that("backticks", {
     expect_equal(

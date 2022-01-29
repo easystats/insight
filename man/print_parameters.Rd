@@ -33,8 +33,8 @@ split by the values from those columns defined in \code{split_by}.}
 
 \item{format}{Name of output-format, as string. If \code{NULL} (or \code{"text"}),
 assumed use for output is basic printing. If \code{"markdown"}, markdown-format
-is assumed. This only affects the style of title- and table-caption attributes,
-which are used in \code{\link[=export_table]{export_table()}}.}
+is assumed. This only affects the style of title- and table-caption
+attributes, which are used in \code{\link[=export_table]{export_table()}}.}
 
 \item{parameter_column}{String, name of the column that contains the
 parameter names. Usually, for data frames returned by functions the
@@ -61,18 +61,19 @@ list elements. If \code{titles} and \code{subtitles} are shorter than
 existing elements, only the first default attributes are overwritten.}
 }
 \value{
-A data frame or a list of data frames (if \code{split_by} is not \code{NULL}).
-If a list is returned, the element names reflect the model components where the
-extracted information in the data frames belong to, e.g. \code{random.zero_inflated.Intercept: persons}.
-This is the data frame that contains the parameters for the random effects from
-group-level "persons" from the zero-inflated model component.
+A data frame or a list of data frames (if \code{split_by} is not \code{NULL}). If a
+list is returned, the element names reflect the model components where the
+extracted information in the data frames belong to, e.g.
+\code{random.zero_inflated.Intercept: persons}. This is the data frame that
+contains the parameters for the random effects from group-level "persons"
+from the zero-inflated model component.
 }
 \description{
-This function takes a data frame, typically a data frame with
-information on summaries of model parameters like \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}},
-\code{\link[bayestestR:hdi]{bayestestR::hdi()}} or \code{\link[parameters:model_parameters]{parameters::model_parameters()}},
-as input and splits this information into several parts, depending on the
-model. See details below.
+This function takes a data frame, typically a data frame with information on
+summaries of model parameters like \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}},
+\code{\link[bayestestR:hdi]{bayestestR::hdi()}} or \code{\link[parameters:model_parameters]{parameters::model_parameters()}}, as input and splits
+this information into several parts, depending on the model. See details
+below.
 }
 \details{
 This function prepares data frames that contain information
@@ -94,12 +95,12 @@ CI, HDI, test statistic, etc.).
 \cr \cr
 Now we have a data frame with model parameters and information about the
 association to the different model components, a data frame with model
-parameters, and some summary statistics. \code{print_parameters()}
-then merges these data frames, so the parameters or statistics of interest
-are also associated with the different model components. The data
-frame is split into a list, so for a clear printing. Users can loop over this
-list and print each component for a better overview. Further, parameter
-names are "cleaned", if necessary, also for a cleaner print. See also 'Examples'.
+parameters, and some summary statistics. \code{print_parameters()} then merges
+these data frames, so the parameters or statistics of interest are also
+associated with the different model components. The data frame is split into
+a list, so for a clear printing. Users can loop over this list and print each
+component for a better overview. Further, parameter names are "cleaned", if
+necessary, also for a cleaner print. See also 'Examples'.
 }
 \examples{
 \dontrun{

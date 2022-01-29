@@ -72,10 +72,9 @@ A list with following elements:
 }
 }
 \description{
-This function extracts the different variance components of a
-mixed model and returns the result as list. Functions like
-\code{get_variance_residual(x)} or \code{get_variance_fixed(x)} are shortcuts
-for \code{get_variance(x, component = "residual")} etc.
+This function extracts the different variance components of a mixed model and
+returns the result as list. Functions like \code{get_variance_residual(x)} or
+\code{get_variance_fixed(x)} are shortcuts for \code{get_variance(x, component = "residual")} etc.
 }
 \details{
 This function returns different variance components from mixed models,
@@ -161,8 +160,15 @@ get_variance_residual(m)
 }
 \references{
 \itemize{
-\item Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. \doi{10.1111/2041-210X.12225}
-\item Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
-\item Zuur, A. F., Savel'ev, A. A., & Ieno, E. N. (2012). Zero inflated models and generalized linear mixed models with R. Newburgh, United Kingdom: Highland Statistics.
+\item Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to
+random slopes models. Methods in Ecology and Evolution, 5(9), 944–946.
+\doi{10.1111/2041-210X.12225}
+\item Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The coefficient
+of determination R2 and intra-class correlation coefficient from generalized
+linear mixed-effects models revisited and expanded. Journal of The Royal
+Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
+\item Zuur, A. F., Savel'ev, A. A., & Ieno, E. N. (2012). Zero inflated models
+and generalized linear mixed models with R. Newburgh, United Kingdom:
+Highland Statistics.
 }
 }

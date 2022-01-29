@@ -21,6 +21,7 @@ export_table(
   align = NULL,
   group_by = NULL,
   zap_small = FALSE,
+  table_width = NULL,
   verbose = TRUE
 )
 }
@@ -92,6 +93,13 @@ to \code{gt::gt(groupname_col = group_by)}.}
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
 places than \code{digits} are printed in scientific notation.}
 
+\item{table_width}{Numeric, or \code{"auto"}, indicating the width of the complete
+table. If \code{table_width = "auto"} and the table is wider than the current
+width (i.e. line length) of the console (or any other source for textual
+output, like markdown files), the table is split into two parts. Else,
+if \code{table_width} is numeric and table rows are larger than \code{table_width},
+the table is split into two parts.}
+
 \item{verbose}{Toggle messages and warnings.}
 }
 \value{
@@ -110,6 +118,10 @@ attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
 \examples{
 export_table(head(iris))
 export_table(head(iris), sep = " ", header = "*", digits = 1)
+
+# split longer tables
+export_table(head(iris), table_width = 30)
+
 \dontrun{
 # colored footers
 data(iris)

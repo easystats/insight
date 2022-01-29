@@ -58,9 +58,9 @@ rank-deficient model matrix).}
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
 \item{component}{Should total number of parameters, number parameters for the
-conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
+conditional model, the zero-inflated part of the model, the dispersion term
+or the instrumental variables be returned? Applies to models with
+zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated.}
 }
 \value{
@@ -70,11 +70,11 @@ The number of parameters in the model.
 Returns the number of parameters (coefficients) of a model.
 }
 \note{
-This function returns the number of parameters for the fixed effects
-by default, as returned by \code{find_parameters(x, effects = "fixed")}.
-It does not include \emph{all} estimated model parameters, i.e. auxiliary
-parameters like sigma or dispersion are not counted. To get the number of
-\emph{all estimated} parameters, use \code{get_df(x, type = "model")}.
+This function returns the number of parameters for the fixed effects by
+default, as returned by \code{find_parameters(x, effects = "fixed")}. It does not
+include \emph{all} estimated model parameters, i.e. auxiliary parameters like
+sigma or dispersion are not counted. To get the number of \emph{all estimated}
+parameters, use \code{get_df(x, type = "model")}.
 }
 \examples{
 data(iris)

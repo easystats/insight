@@ -186,19 +186,6 @@ get_data.rqss <- function(x,
 
 
 #' @export
-get_data.selection <- function(x, verbose = TRUE, ...) {
-  if ("lm" %in% names(x)) {
-    suppressWarnings(get_data(x$lm, verbose = verbose))
-  } else if (!is.null(x$twoStep$lm)) {
-    suppressWarnings(get_data(x$twoStep$lm, verbose = verbose))
-  } else {
-    NULL
-  }
-}
-
-
-
-#' @export
 get_data.gls <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
@@ -231,6 +218,17 @@ get_data.nlrq <- get_data.gls
 
 #' @export
 get_data.robmixglm <- get_data.gls
+
+#' @export
+get_data.selection <- get_data.gls
+
+# if ("lm" %in% names(x)) {
+#   suppressWarnings(get_data(x$lm, verbose = verbose))
+# } else if (!is.null(x$twoStep$lm)) {
+#   suppressWarnings(get_data(x$twoStep$lm, verbose = verbose))
+# } else {
+#   NULL
+# }
 
 
 #' @export
@@ -344,7 +342,7 @@ get_data.glmmTMB <- function(x,
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated_random)
 
-  .return_data(x, mf, effects, component, model.terms, verbose = verbose)
+  .return_combined_data(x, mf, effects, component, model.terms, verbose = verbose)
 }
 
 
@@ -643,7 +641,7 @@ get_data.MixMod <- function(x,
         verbose = FALSE
       )
 
-      .return_data(x, mf = fitfram, effects, component, model.terms, verbose = verbose)
+      .return_combined_data(x, mf = fitfram, effects, component, model.terms, verbose = verbose)
     },
     error = function(x) {
       NULL
@@ -949,7 +947,7 @@ get_data.brmsfit <- function(x,
     if (!.is_empty_object(rs)) model.terms$random <- c(rs, model.terms$random)
   }
 
-  .return_data(
+  .return_combined_data(
     x,
     .prepare_get_data(x, mf, effects = effects, verbose = verbose),
     effects,
@@ -978,7 +976,7 @@ get_data.stanreg <- function(x,
 
   mf <- stats::model.frame(x)
 
-  .return_data(
+  .return_combined_data(
     x,
     .prepare_get_data(x, mf, effects = effects, verbose = verbose),
     effects,

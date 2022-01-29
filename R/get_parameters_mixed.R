@@ -40,7 +40,7 @@ get_parameters.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
     params$Effects <- NULL
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -69,7 +69,7 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    .remove_backticks_from_parameter_names(fixed)
+    text_remove_backticks(fixed)
   } else {
     l$random
   }
@@ -113,7 +113,7 @@ get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
       stringsAsFactors = FALSE
     )
 
-    .remove_backticks_from_parameter_names(out)
+    text_remove_backticks(out)
   } else {
     # installed?
     check_if_installed("lme4")
@@ -166,7 +166,7 @@ get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    .remove_backticks_from_parameter_names(fixed)
+    text_remove_backticks(fixed)
   } else {
     l$random
   }
@@ -198,7 +198,7 @@ get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    .remove_backticks_from_parameter_names(fixed)
+    text_remove_backticks(fixed)
   } else {
     l$random
   }
@@ -222,7 +222,7 @@ get_parameters.merModList <- function(x, ...) {
     stringsAsFactors = FALSE
   )
 
-  .remove_backticks_from_parameter_names(fixed)
+  text_remove_backticks(fixed)
 }
 
 #' @export
@@ -249,7 +249,7 @@ get_parameters.HLfit <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    .remove_backticks_from_parameter_names(fixed)
+    text_remove_backticks(fixed)
   } else {
     l$random
   }
@@ -281,7 +281,7 @@ get_parameters.sem <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    .remove_backticks_from_parameter_names(fixed)
+    text_remove_backticks(fixed)
   } else {
     l$random
   }
@@ -312,7 +312,7 @@ get_parameters.cpglmm <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    .remove_backticks_from_parameter_names(fixed)
+    text_remove_backticks(fixed)
   } else {
     l$random
   }
@@ -343,7 +343,7 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    .remove_backticks_from_parameter_names(fixed)
+    text_remove_backticks(fixed)
   } else {
     l$random
   }
@@ -414,7 +414,7 @@ get_parameters.MixMod <- function(x,
       zi = ,
       zero_inflated = fixedzi
     )
-    .remove_backticks_from_parameter_names(params)
+    text_remove_backticks(params)
   } else if (effects == "random") {
     switch(component,
       all = .compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
@@ -499,7 +499,7 @@ get_parameters.glmmTMB <- function(x,
       zero_inflated = fixedzi,
       dispersion = fixeddisp
     )
-    .remove_backticks_from_parameter_names(out)
+    text_remove_backticks(out)
   } else if (effects == "random") {
     switch(component,
       all = .compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
@@ -563,7 +563,7 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
   )
 
   if (effects == "fixed") {
-    .remove_backticks_from_parameter_names(fixed)
+    text_remove_backticks(fixed)
   } else {
     l$random
   }
@@ -588,7 +588,7 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
     row.names = NULL
   )
 
-  fixed <- .remove_backticks_from_parameter_names(fixed)
+  fixed <- text_remove_backticks(fixed)
 
   random <- data.frame(
     Parameter = names(l$random),
@@ -597,7 +597,7 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
     row.names = NULL
   )
 
-  random <- .remove_backticks_from_parameter_names(random)
+  random <- text_remove_backticks(random)
 
   all <- rbind(
     cbind(fixed, data.frame(Effects = "fixed", stringsAsFactors = FALSE)),

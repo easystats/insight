@@ -107,7 +107,7 @@ find_parameters.MixMod <- function(x,
     zero_inflated_random = z_inflated_random
   ))
 
-  l <- lapply(l, .remove_backticks_from_string)
+  l <- lapply(l, text_remove_backticks)
 
   effects <- match.arg(effects)
   component <- match.arg(component)

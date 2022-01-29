@@ -59,7 +59,7 @@ get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE,
         colnames(out)[1] <- "Parameter"
       }
     }
-    .remove_backticks_from_parameter_names(out)
+    text_remove_backticks(out)
   } else {
     .clean_emmeans_draws(x)
   }

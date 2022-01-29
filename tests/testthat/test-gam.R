@@ -52,7 +52,7 @@ if (.runThisTest) {
     })
 
     test_that("find_smooth", {
-      expect_identical(find_smooth(m1), list(conditional = c("s(x0)", "s(x1)", "s(x2)", "s(x3)")))
+      expect_identical(find_smooth(m1), list(smooth_terms = c("s(x0)", "s(x1)", "s(x2)", "s(x3)")))
     })
 
     test_that("get_call", {

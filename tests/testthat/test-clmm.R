@@ -12,8 +12,12 @@ osx <- tryCatch(
   }
 )
 
-if (requiet("testthat") &&
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
+if (.runThisTest &&
+  requiet("testthat") &&
   requiet("insight") &&
+  requiet("lme4") &&
   requiet("ordinal")) {
   data(wine, package = "ordinal")
   data(soup)

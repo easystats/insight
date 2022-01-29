@@ -217,6 +217,16 @@
     mf <- mf[!mos_eisly]
   }
 
+  # strata-variables in coxph() -----------------------------------------------
+
+  strata_columns <- grepl("^strata\\((.*)\\)", colnames(mf))
+  if (any(strata_columns)) {
+    for (sc in colnames(mf)[strata_columns]) {
+      strata_variable <- gsub("strata\\((.*)\\)", "\\1", sc)
+      levels(mf[[sc]]) <- gsub(paste0("\\Q", strata_variable, "=", "\\E"), "", levels(mf[[sc]]))
+    }
+  }
+
   # restore original data for factors -----------------------------------------
 
   # are there any factor variables that have been coerced "on-the-fly",
@@ -278,6 +288,12 @@
     new.cols <- setdiff(colnames(trials.data), colnames(mf))
     if (!.is_empty_string(new.cols)) mf <- cbind(mf, trials.data[, new.cols, drop = FALSE])
   }
+
+  # remove "trial response"
+  # see https://github.com/easystats/modelbased/issues/164
+  # if (rn == colnames(mf)[1] && is.matrix(mf[[1]])) {
+  #   mf[[1]] <- NULL
+  # }
 
   .add_remaining_missing_variables(x, mf, effects, component = "all", factors = factors)
 }
@@ -352,11 +368,11 @@
 # This helper functions ensures that data from different model components
 # are included in the returned data frame
 #
-.return_data <- function(x, mf, effects, component, model.terms, is_mv = FALSE, verbose = TRUE) {
+.return_combined_data <- function(x, mf, effects, component, model.terms, is_mv = FALSE, verbose = TRUE) {
   response <- unlist(model.terms$response)
 
   # save factors attribute
-  factors <-  attr(mf, "factors", exact = TRUE)
+  factors <- attr(mf, "factors", exact = TRUE)
 
   if (is_mv) {
     fixed.component.data <- switch(component,

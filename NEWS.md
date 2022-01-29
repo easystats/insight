@@ -1,9 +1,33 @@
-# insight 0.14.6
+# insight 0.16.0
+
+## New functions
+
+* `get_datagrid()`, to generate a reference grid, usually used when computing
+  adjusted predictions or marginal means from regression models.
+
+# insight 0.15.1
+
+## General
+
+* Improved speed performance, especially for `get_data()`.
+
+## Changes to functions
+
+* `get_data()` for `coxph` models now returns the original factor levels for
+  variables transformed with `strata()` inside formulas.
+
+# insight 0.15.0
 
 ## Breaking changes
 
 * Data management functions (like `reshape_longer()`, or `data_match()`) have
   been moved to the *datawizard* package.
+
+* `get_data()` no longer returns factor types for numeric variables that have
+  been converted to factors on-the-fly within formulas (like `y ~ as.factor(x)`).
+  Instead, for each numeric variable that was coerced to factor within a formula
+  gets a `factor` attribute (set to `TRUE`), and the returned data frame gets
+  a `factors` attribute including all names of affected variables.
 
 ## New supported model classes
 
@@ -25,6 +49,9 @@
 * Revised `width` argument in `export_table()`, which now allows to set
   different column widths across table columns. See examples in
   `?export_table`.
+
+* `export_table()` gets a `table_width` argument to split wide tables into
+  two parts.
 
 * `get_varcov()` for `MixMod` (package *GLMMadaptive*) was revised, and now
   allows to return a robust variance-covariance matrix.

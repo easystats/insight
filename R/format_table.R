@@ -146,6 +146,7 @@ format_table <- function(x,
   names(x)[names(x) == "Cohens_d"] <- "Cohen's d"
   names(x)[names(x) == "Cramers_v"] <- "Cramer's V"
   names(x)[names(x) == "phi_adjusted"] <- "phi (adj.)"
+  names(x)[names(x) == "r_rank_biserial"] <- "r (rank biserial)"
   names(x)[names(x) == "Cramers_v_adjusted"] <- "Cramer's V (adj.)"
 
 
@@ -547,7 +548,7 @@ parameters_table <- format_table
   }
   if (all(c("Prior_Distribution", "Prior_Location", "Prior_Scale") %in% names(x))) {
     x$Prior <- paste0(
-      .capitalize(x$Prior_Distribution),
+      format_capitalize(x$Prior_Distribution),
       " (",
       x$Prior_Location,
       " +- ",

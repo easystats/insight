@@ -24,7 +24,7 @@ if (requiet("testthat") && requiet("insight") && requiet("mgcv") && requiet("gam
   )
 
   test_that("find_smooth - gam", {
-    expect_equal(find_smooth(bt), list(conditional = c("te(x0, x1, k = 7)", "s(x2)", "s(x3)")))
+    expect_equal(find_smooth(bt), list(smooth_terms = c("te(x0, x1, k = 7)", "s(x2)", "s(x3)")))
     expect_equal(find_smooth(bt, flatten = TRUE), c("te(x0, x1, k = 7)", "s(x2)", "s(x3)"))
   })
 

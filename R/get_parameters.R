@@ -72,7 +72,7 @@ get_parameters.default <- function(x, verbose = TRUE, ...) {
         row.names = NULL
       )
 
-      .remove_backticks_from_parameter_names(params)
+      text_remove_backticks(params)
     },
     error = function(x) {
       if (isTRUE(verbose)) {
@@ -95,7 +95,7 @@ get_parameters.summary.lm <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -135,7 +135,7 @@ get_parameters.bfsl <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -159,7 +159,7 @@ get_parameters.selection <- function(x, component = c("all", "selection", "outco
     params <- params[params$Component == component, , drop = FALSE]
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -175,7 +175,7 @@ get_parameters.epi.2by2 <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -188,7 +188,7 @@ get_parameters.Rchoice <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -201,7 +201,7 @@ get_parameters.btergm <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -226,7 +226,7 @@ get_parameters.mediate <- function(x, ...) {
       stringsAsFactors = FALSE
     )
   }
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 
@@ -237,7 +237,7 @@ get_parameters.ridgelm <- function(x, ...) {
     Estimate = as.vector(x$coef),
     stringsAsFactors = FALSE
   )
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 
@@ -248,7 +248,7 @@ get_parameters.ivFixed <- function(x, ...) {
     Estimate = as.vector(x$coefficients),
     stringsAsFactors = FALSE
   )
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 
@@ -259,7 +259,7 @@ get_parameters.ivprobit <- function(x, ...) {
     Estimate = as.vector(x$coefficients),
     stringsAsFactors = FALSE
   )
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 
@@ -271,7 +271,7 @@ get_parameters.survreg <- function(x, ...) {
     Estimate = as.vector(s$table[, 1]),
     stringsAsFactors = FALSE
   )
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 
@@ -283,7 +283,7 @@ get_parameters.riskRegression <- function(x, ...) {
     Estimate = as.numeric(cs[, 2]),
     stringsAsFactors = FALSE
   )
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 
@@ -294,7 +294,7 @@ get_parameters.mipo <- function(x, ...) {
     Estimate = as.vector(summary(x)$estimate),
     stringsAsFactors = FALSE
   )
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 
@@ -323,7 +323,7 @@ get_parameters.margins <- function(x, ...) {
     Estimate = as.vector(summary(x)$AME),
     stringsAsFactors = FALSE
   )
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 
@@ -340,7 +340,7 @@ get_parameters.glht <- function(x, ...) {
     Estimate = unname(s$test$coefficients),
     stringsAsFactors = FALSE
   )
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 
@@ -357,7 +357,7 @@ get_parameters.mle2 <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 #' @export
@@ -378,7 +378,7 @@ get_parameters.lrm <- function(x, ...) {
         row.names = NULL
       )
 
-      .remove_backticks_from_parameter_names(params)
+      text_remove_backticks(params)
     },
     error = function(x) {
       NULL
@@ -415,7 +415,7 @@ get_parameters.multinom <- function(x, ...) {
     )
   }
 
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 
@@ -438,7 +438,7 @@ get_parameters.mlm <- function(x, ...) {
       row.names = NULL
     )
 
-    .remove_backticks_from_parameter_names(params)
+    text_remove_backticks(params)
   })
 
   do.call(rbind, out)
@@ -456,7 +456,7 @@ get_parameters.gbm <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -472,7 +472,7 @@ get_parameters.BBreg <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -490,7 +490,7 @@ get_parameters.rma <- function(x, ...) {
       )
 
       params$Parameter[grepl("intrcpt", params$Parameter)] <- "(Intercept)"
-      .remove_backticks_from_parameter_names(params)
+      text_remove_backticks(params)
     },
     error = function(x) {
       NULL
@@ -513,7 +513,7 @@ get_parameters.meta_random <- function(x, ...) {
       )
 
       params$Parameter[grepl("d", params$Parameter)] <- "(Intercept)"
-      .remove_backticks_from_parameter_names(params)
+      text_remove_backticks(params)
     },
     error = function(x) {
       NULL
@@ -539,7 +539,7 @@ get_parameters.metaplus <- function(x, ...) {
   )
 
   params$Parameter[grepl("muhat", params$Parameter)] <- "(Intercept)"
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -619,7 +619,7 @@ get_parameters.lavaan <- function(x, ...) {
     stringsAsFactors = FALSE
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -639,7 +639,7 @@ get_parameters.polr <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -655,7 +655,7 @@ get_parameters.bracl <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -680,7 +680,7 @@ get_parameters.aov <- function(x, ...) {
     row.names = NULL
   )
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 
@@ -695,7 +695,7 @@ get_parameters.aovlist <- function(x, ...) {
       Group = i,
       stringsAsFactors = FALSE
     )
-    .remove_backticks_from_parameter_names(params)
+    text_remove_backticks(params)
   }))
   rownames(out) <- NULL
   out
@@ -715,7 +715,7 @@ get_parameters.manova <- function(x, ...) {
   pattern <- paste0("(", paste0(paste0(".", unique(out$Response)), collapse = "|"), ")$")
   out$Parameter <- gsub(pattern, "", out$Parameter)
 
-  .remove_backticks_from_parameter_names(out)
+  text_remove_backticks(out)
 }
 
 #' @export
@@ -752,7 +752,7 @@ get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
     params <- .remove_column(params, "Component")
   }
 
-  .remove_backticks_from_parameter_names(params)
+  text_remove_backticks(params)
 }
 
 

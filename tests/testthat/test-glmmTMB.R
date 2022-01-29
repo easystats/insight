@@ -1,3 +1,17 @@
+osx <- tryCatch(
+  {
+    si <- Sys.info()
+    if (!is.null(si["sysname"])) {
+      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+    } else {
+      FALSE
+    }
+  },
+  error = function(e) {
+    FALSE
+  }
+)
+
 if (requiet("testthat") &&
   requiet("insight") &&
   requiet("glmmTMB")) {
@@ -867,37 +881,39 @@ if (requiet("testthat") &&
     )
   })
 
-  test_that("get_predicted", {
+  if (!osx) {
+    test_that("get_predicted", {
 
-    # response
-    x <- get_predicted(m1, predict = "expectation", verbose = FALSE)
-    y <- get_predicted(m1, predict = NULL, type = "response")
-    z <- predict(m1, type = "response")
-    expect_equal(x, y, ignore_attr = TRUE)
-    expect_equal(x, z, ignore_attr = TRUE)
-    expect_equal(y, z, ignore_attr = TRUE)
+      # response
+      x <- get_predicted(m1, predict = "expectation", verbose = FALSE)
+      y <- get_predicted(m1, predict = NULL, type = "response")
+      z <- predict(m1, type = "response")
+      expect_equal(x, y, ignore_attr = TRUE)
+      expect_equal(x, z, ignore_attr = TRUE)
+      expect_equal(y, z, ignore_attr = TRUE)
 
-    # link
-    x <- get_predicted(m1, predict = "link")
-    y <- get_predicted(m1, predict = NULL, type = "link")
-    z <- predict(m1, type = "link")
-    expect_equal(x, y, ignore_attr = TRUE)
-    expect_equal(y, z, ignore_attr = TRUE)
-    expect_equal(x, z, ignore_attr = TRUE)
+      # link
+      x <- get_predicted(m1, predict = "link")
+      y <- get_predicted(m1, predict = NULL, type = "link")
+      z <- predict(m1, type = "link")
+      expect_equal(x, y, ignore_attr = TRUE)
+      expect_equal(y, z, ignore_attr = TRUE)
+      expect_equal(x, z, ignore_attr = TRUE)
 
-    # unsupported: zprob
-    x <- suppressWarnings(get_predicted(m1, predict = "zprob"))
-    y <- get_predicted(m1, predict = NULL, type = "zprob")
-    z <- predict(m1, type = "zprob")
-    expect_equal(x, y)
-    expect_equal(x, z, ignore_attr = TRUE)
+      # unsupported: zprob
+      x <- suppressWarnings(get_predicted(m1, predict = "zprob"))
+      y <- get_predicted(m1, predict = NULL, type = "zprob")
+      z <- predict(m1, type = "zprob")
+      expect_equal(x, y)
+      expect_equal(x, z, ignore_attr = TRUE)
 
-    # not official supported raise warning
-    expect_warning(get_predicted(m1, predict = "zprob"))
-    expect_warning(get_predicted(m1, predict = "zprob", verbose = FALSE), NA)
-    # the second warning is raised for zero-inflation models only. remove when
-    # the zprob correction is implemented
-    expect_warning(get_predicted(m1, predict = "prediction"))
-    expect_warning(get_predicted(m1, predict = "classification"))
-  })
+      # not official supported raise warning
+      expect_warning(get_predicted(m1, predict = "zprob"))
+      expect_warning(get_predicted(m1, predict = "zprob", verbose = FALSE), NA)
+      # the second warning is raised for zero-inflation models only. remove when
+      # the zprob correction is implemented
+      expect_warning(get_predicted(m1, predict = "prediction"))
+      expect_warning(get_predicted(m1, predict = "classification"))
+    })
+  }
 }

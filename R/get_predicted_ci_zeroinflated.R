@@ -1,4 +1,9 @@
-.simulate_zi_predictions <- function(model, newdata, predictions, nsim = NULL, ci = .95) {
+.simulate_zi_predictions <- function(model,
+                                     newdata,
+                                     predictions,
+                                     nsim = NULL,
+                                     ci = .95) {
+
 
   # Since the zero inflation and the conditional model are working in "opposite
   # directions", confidence intervals can not be derived directly  from the
@@ -82,15 +87,20 @@
       matrix.zero_inflated <- stats::model.matrix(ziformula, newdata)
       beta.zero_inflated <- lme4::fixef(model)$zi
 
-      .get_simulation_from_zi(model, nsim, beta.conditional, beta.zero_inflated, matrix.conditional, matrix.zero_inflated)
+      .get_simulation_from_zi(
+        model,
+        nsim,
+        beta.conditional,
+        beta.zero_inflated,
+        matrix.conditional,
+        matrix.zero_inflated
+      )
     },
     error = function(x) {
       NULL
     }
   )
 }
-
-
 
 
 
@@ -113,16 +123,20 @@
       matrix.zero_inflated <- stats::model.matrix(ziformula, newdata)
       beta.zero_inflated <- lme4::fixef(model, sub_model = "zero_part")
 
-      .get_simulation_from_zi(model, nsim, beta.conditional, beta.zero_inflated, matrix.conditional, matrix.zero_inflated)
+      .get_simulation_from_zi(
+        model,
+        nsim,
+        beta.conditional,
+        beta.zero_inflated,
+        matrix.conditional,
+        matrix.zero_inflated
+      )
     },
     error = function(x) {
       NULL
     }
   )
 }
-
-
-
 
 
 
@@ -149,7 +163,14 @@
       matrix.zero_inflated <- stats::model.matrix(ziformula, model = "zero", data = newdata)
       beta.zero_inflated <- stats::coef(model, model = "zero")
 
-      .get_simulation_from_zi(model, nsim, beta.conditional, beta.zero_inflated, matrix.conditional, matrix.zero_inflated)
+      .get_simulation_from_zi(
+        model,
+        nsim,
+        beta.conditional,
+        beta.zero_inflated,
+        matrix.conditional,
+        matrix.zero_inflated
+      )
     },
     error = function(x) {
       NULL
@@ -198,19 +219,31 @@
 
 
 
-
-
 # helper -----------------
 
 
-.get_simulation_from_zi <- function(model, nsim, beta.conditional, beta.zero_inflated, matrix.conditional, matrix.zero_inflated) {
+.get_simulation_from_zi <- function(model,
+                                    nsim,
+                                    beta.conditional,
+                                    beta.zero_inflated,
+                                    matrix.conditional,
+                                    matrix.zero_inflated) {
+
 
   # if formula has a polynomial term, and this term is one that is held
   # constant, model.matrix() with "newdata" will throw an error - so we
   # re-build the newdata-argument by including all values for poly-terms, if
   # these are hold constant.
 
-  # fixes <- .rows_to_keep(model, newdata, condformula, ziformula, terms, value_adjustment, condition)
+  # fixes <- .rows_to_keep(
+  #   model,
+  #   newdata,
+  #   condformula,
+  #   ziformula,
+  #   terms,
+  #   value_adjustment,
+  #   condition
+  # )
   #
   # if (!is.null(fixes)) {
   #   keep <- fixes$keep

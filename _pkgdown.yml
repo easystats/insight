@@ -56,6 +56,7 @@ reference:
   contents:
   - get_auxiliary
   - get_data
+  - get_datagrid
   - get_df
   - get_intercept
   - get_loglikelihood
@@ -115,6 +116,7 @@ reference:
   - starts_with("format_")
   - parameters_table
   - print_color
+  - text_remove_backticks
 
 - title: "Utilities"
   desc: >
