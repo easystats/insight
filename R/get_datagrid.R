@@ -13,6 +13,7 @@
 #' @param include_smooth If `x` is a model object, decide whether smooth terms should be included in the data grid or not.
 #' @param include_random If `x` is a mixed model object, decide whether random effect terms should be included in the data grid or not. If `include_random` is `FALSE`, but `x` is a mixed model with random effects, these will still be included in the returned grid, but set to their "population level" value (e.g., `NA` for *glmmTMB* or `0` for *merMod*). This ensures that common `predict()` methods work properly, as these usually need data with all variables in the model included.
 #' @param include_response If `x` is a model object, decide whether the response variable should be included in the data grid or not.
+#' @param data Optional, the data frame that was used to fit the model. Usually, the data is retrieved via `get_data()`.
 #' @param ... Arguments passed to or from other methods (for instance, `length` or `range` to control the spread of numeric variables.).
 #'
 #' @return Reference grid data frame.
