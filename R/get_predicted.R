@@ -975,10 +975,9 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   # ...but not both
   if (!is.null(dots$type) && !is.null(predict)) {
     stop(format_message(
-      '`predict` and `type` cannot both be given.',
-      'The preferred argument for `get_predicted()` is `predict`.',
+      '`predict` and `type` cannot both be given. The preferred argument for `get_predicted()` is `predict`.',
       'To use the `type` argument, set `predict = NULL` explicitly, e.g.,:',
-      '  `get_predicted(model, predict = NULL, type="response")`'
+      '`get_predicted(model, predict = NULL, type = "response")`'
     ))
   }
 
