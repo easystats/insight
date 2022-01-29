@@ -370,16 +370,8 @@ get_predicted.hurdle <- function(x,
     ...
   )
 
-  if (!is.null(predict) && predict != "expectation") {
-    warning(format_message("Currently, only `predict='expectation'` is supported."), call. = FALSE)
-    predict <- "expectation"
-  }
-
-  # predict.glmmTMB has many `type` values which do not map on to our standard
-  # `predict` argument. We don't know how to transform those.
-  if (is.null(predict) && "type" %in% names(dots)) {
-    args$type <- dots$type
-  } else {
+  # "response" scale is type = "count" here...
+  if (predict %in% c("expectation", "response", "count")) {
     args$type <- "count"
   }
 
@@ -399,7 +391,7 @@ get_predicted.hurdle <- function(x,
   # "expectation" for zero-inflated? we need a special handling
   # for predictions and CIs here.
 
-  if (identical(predict, "expectation")) {
+  if (!is.null(predict) && predict %in% c("expectation", "response")) {
     zi_predictions <- stats::predict(
       x,
       newdata = args$data,
@@ -410,7 +402,7 @@ get_predicted.hurdle <- function(x,
     ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
   } else {
     # Get CI
-    ci_data <- get_predicted_ci(x, predictions = predictions, data = args$data, ci = ci, ci_type = args$ci_type)
+    ci_data <- get_predicted_ci(x, predictions = predictions, data = args$data, ci = ci, ci_type = args$ci_type, predict_arg = predict)
   }
 
   out <- list(predictions = predictions, ci_data = ci_data)
@@ -1031,7 +1023,8 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   # Warn if get_predicted() is not called with an easystats- or
   # model-supported predicted type
   easystats_methods <- c("expectation", "link", "prediction", "classification")
-  supported <- c(easystats_methods, suppressWarnings(eval(formals(predict_method)$type)))
+  type_methods <- suppressWarnings(eval(formals(predict_method)$type))
+  supported <- c(easystats_methods, type_methods)
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
     msg <- format_message(
       sprintf('`predict` = "%s"` is not officially supported by `get_predicted()`.', predict),
@@ -1055,6 +1048,9 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
       type_arg <- "terms"
     } else if (info$is_linear || predict_arg == "response") {
       type_arg <- "response"
+      # user provided a valid "type" value, which is not one of our "predict" values
+    } else if (predict_arg %in% type_methods) {
+      type_arg <- predict_arg
     } else {
       type_arg <- "link"
     }
