@@ -45,7 +45,7 @@ to predict. If omitted, the data used to fit the model is used.}
 \item \code{"prediction"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models).
 \item \code{"classification"} only differs from \code{"prediction"} for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor).
 \item Other strings are passed directly to the \code{type} argument of the \code{predict()} method supplied by the modelling package.
-\item When \code{predict = NULL}, alternative arguments such as \code{type} will be captured by the \code{...} ellipsis and passed directly to the \code{predict()} method supplied by the modelling package.
+\item When \code{predict = NULL}, alternative arguments such as \code{type} will be captured by the \code{...} ellipsis and passed directly to the \code{predict()} method supplied by the modelling package. Note that this might result in conflicts with multiple matching \code{type} arguments - thus, the recommendation is to use the \code{predict} argument for those values.
 \item Notes: You can see the 4 options for predictions as on a gradient from "close to the model" to "close to the response data": "link", "expectation", "prediction", "classification". The \code{predict} argument modulates two things: the scale of the output and the type of certainty interval. Read more about in the \strong{Details} section below.
 }}
 
@@ -133,7 +133,7 @@ as.data.frame(predictions)
 as.data.frame(get_predicted(x, iterations = 4))
 summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
 
-# Different predicttion types ------------------------
+# Different prediction types ------------------------
 data(iris)
 data <- droplevels(iris[1:100, ])
 
