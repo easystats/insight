@@ -335,7 +335,7 @@ get_predicted.bife <- function(x,
   predict_method <- tryCatch(predict_method[!sapply(predict_method, is.null)][[1]], error = function(e) NULL)
 
   # check aliases
-  if (predict == "expected") {
+  if (predict %in% c("expected", "response")) {
     predict <- "expectation"
   }
   if (predict == "predicted") {
