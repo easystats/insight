@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,7 +109,7 @@ to predict. If omitted, the data used to fit the model is used.</p></dd>
 <li><p><code>"prediction"</code> also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models).</p></li>
 <li><p><code>"classification"</code> only differs from <code>"prediction"</code> for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor).</p></li>
 <li><p>Other strings are passed directly to the <code>type</code> argument of the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method supplied by the modelling package.</p></li>
-<li><p>When <code>predict = NULL</code>, alternative arguments such as <code>type</code> will be captured by the <code>...</code> ellipsis and passed directly to the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method supplied by the modelling package.</p></li>
+<li><p>When <code>predict = NULL</code>, alternative arguments such as <code>type</code> will be captured by the <code>...</code> ellipsis and passed directly to the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method supplied by the modelling package. Note that this might result in conflicts with multiple matching <code>type</code> arguments - thus, the recommendation is to use the <code>predict</code> argument for those values.</p></li>
 <li><p>Notes: You can see the 4 options for predictions as on a gradient from "close to the model" to "close to the response data": "link", "expectation", "prediction", "classification". The <code>predict</code> argument modulates two things: the scale of the output and the type of certainty interval. Read more about in the <strong>Details</strong> section below.</p></li>
 </ul></dd>
 <dt>iterations</dt>
@@ -321,7 +321,7 @@ return the most likely outcome.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 31  12.49355 1.3168882 10.79937 13.50598</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 32  25.55186 1.8389438 23.88272 27.91693</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># Different predicttion types ------------------------</span></span>
+<span class="r-in"><span class="co"># Different prediction types ------------------------</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span><span class="op">)</span></span>
 <span class="r-in"></span>

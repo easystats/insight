@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,22 @@
 <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">x</span>, length <span class="op">=</span> <span class="fl">10</span>, range <span class="op">=</span> <span class="st">"range"</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for factor</span>
-<span class="fu">get_datagrid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">get_datagrid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+
+<span class="co"># S3 method for default</span>
+<span class="fu">get_datagrid</span><span class="op">(</span>
+  <span class="va">x</span>,
+  at <span class="op">=</span> <span class="st">"all"</span>,
+  factors <span class="op">=</span> <span class="st">"reference"</span>,
+  numerics <span class="op">=</span> <span class="st">"mean"</span>,
+  preserve_range <span class="op">=</span> <span class="cn">TRUE</span>,
+  reference <span class="op">=</span> <span class="va">x</span>,
+  include_smooth <span class="op">=</span> <span class="cn">TRUE</span>,
+  include_random <span class="op">=</span> <span class="cn">FALSE</span>,
+  include_response <span class="op">=</span> <span class="cn">FALSE</span>,
+  data <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -107,6 +122,14 @@
 <dd><p>Length of numeric <code>"at"</code> variables.</p></dd>
 <dt>range</dt>
 <dd><p>Can be one of <code>"range"</code>, <code>"iqr"</code>, <code>"ci"</code>, <code>"hdi"</code> or <code>"eti"</code>. If <code>"range"</code> (default), will use the minimum and maximun of the original vector as end-points. If any other interval, will spread within the range (the default CI width is <code>95%</code> but this can be changed by setting something else, e.g., <code>ci = 0.90</code>). See <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR()</a></code> and <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code>.</p></dd>
+<dt>include_smooth</dt>
+<dd><p>If <code>x</code> is a model object, decide whether smooth terms should be included in the data grid or not.</p></dd>
+<dt>include_random</dt>
+<dd><p>If <code>x</code> is a mixed model object, decide whether random effect terms should be included in the data grid or not. If <code>include_random</code> is <code>FALSE</code>, but <code>x</code> is a mixed model with random effects, these will still be included in the returned grid, but set to their "population level" value (e.g., <code>NA</code> for <em>glmmTMB</em> or <code>0</code> for <em>merMod</em>). This ensures that common <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> methods work properly, as these usually need data with all variables in the model included.</p></dd>
+<dt>include_response</dt>
+<dd><p>If <code>x</code> is a model object, decide whether the response variable should be included in the data grid or not.</p></dd>
+<dt>data</dt>
+<dd><p>Optional, the data frame that was used to fit the model. Usually, the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
