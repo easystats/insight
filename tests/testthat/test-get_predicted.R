@@ -510,11 +510,10 @@ test_that("zero-inflation stuff works", {
     dist = "poisson"
   )
 
-  p1 <- predict(m1, type = "response") |> head()
-  p2 <- predict(m2, type = "response") |> head()
-
-  p3 <- get_predicted(m1) |> head()
-  p4 <- get_predicted(m2) |> head()
+  p1 <- head(predict(m1, type = "response"))
+  p2 <- head(predict(m2, type = "response"))
+  p3 <- head(get_predicted(m1))
+  p4 <- head(get_predicted(m2))
 
   expect_equal(p1, p2, tolerance = 1e-1, ignore_attr = TRUE)
   expect_equal(p1, p3, tolerance = 1e-1, ignore_attr = TRUE)
@@ -536,10 +535,10 @@ test_that("zero-inflation stuff works", {
     dist = "poisson"
   )
 
-  p1 <- predict(m1, type = "response") |> head()
-  p2 <- predict(m2, type = "response") |> head()
-  p3 <- get_predicted(m1) |> head()
-  p4 <- get_predicted(m2) |> head()
+  p1 <- head(predict(m1, type = "response"))
+  p2 <- head(predict(m2, type = "response"))
+  p3 <- head(get_predicted(m1))
+  p4 <- head(get_predicted(m2))
 
   expect_equal(p1, p2, tolerance = 1e-1, ignore_attr = TRUE)
   expect_equal(p1, p3, tolerance = 1e-1, ignore_attr = TRUE)
