@@ -95,7 +95,7 @@ get_statistic.htest <- function(x, ...) {
     )
   }
 
-  out <- .remove_backticks_from_parameter_names(out)
+  out <- text_remove_backticks(out)
   attr(out, "method") <- x$method[1]
   attr(out, "statistic") <- find_statistic(x)
 

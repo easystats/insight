@@ -5,6 +5,7 @@
 \alias{get_datagrid.data.frame}
 \alias{get_datagrid.numeric}
 \alias{get_datagrid.factor}
+\alias{get_datagrid.default}
 \title{Create a reference grid}
 \usage{
 get_datagrid(x, ...)
@@ -22,6 +23,20 @@ get_datagrid(x, ...)
 \method{get_datagrid}{numeric}(x, length = 10, range = "range", ...)
 
 \method{get_datagrid}{factor}(x, ...)
+
+\method{get_datagrid}{default}(
+  x,
+  at = "all",
+  factors = "reference",
+  numerics = "mean",
+  preserve_range = TRUE,
+  reference = x,
+  include_smooth = TRUE,
+  include_random = FALSE,
+  include_response = FALSE,
+  data = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{An object from which to construct the reference grid.}
@@ -41,6 +56,14 @@ get_datagrid(x, ...)
 \item{length}{Length of numeric \code{"at"} variables.}
 
 \item{range}{Can be one of \code{"range"}, \code{"iqr"}, \code{"ci"}, \code{"hdi"} or \code{"eti"}. If \code{"range"} (default), will use the minimum and maximun of the original vector as end-points. If any other interval, will spread within the range (the default CI width is \verb{95\%} but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}.}
+
+\item{include_smooth}{If \code{x} is a model object, decide whether smooth terms should be included in the data grid or not.}
+
+\item{include_random}{If \code{x} is a mixed model object, decide whether random effect terms should be included in the data grid or not. If \code{include_random} is \code{FALSE}, but \code{x} is a mixed model with random effects, these will still be included in the returned grid, but set to their "population level" value (e.g., \code{NA} for \emph{glmmTMB} or \code{0} for \emph{merMod}). This ensures that common \code{predict()} methods work properly, as these usually need data with all variables in the model included.}
+
+\item{include_response}{If \code{x} is a model object, decide whether the response variable should be included in the data grid or not.}
+
+\item{data}{Optional, the data frame that was used to fit the model. Usually, the data is retrieved via \code{get_data()}.}
 }
 \value{
 Reference grid data frame.

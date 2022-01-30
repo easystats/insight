@@ -4,6 +4,7 @@ pkgs <- c(
   "lme4",
   "brms",
   "glmmTMB",
+  "pscl",
   "mgcv",
   "gamm4",
   "merTools",
@@ -402,7 +403,6 @@ test_that("lm: get_predicted vs barebones `predict()`", {
   unknown1 <- as.data.frame(get_predicted(mod))
   unknown2 <- as.data.frame(get_predicted(mod, predict = "expectation"))
   unknown3 <- suppressWarnings(as.data.frame(get_predicted(mod, predict = "response")))
-  expect_warning(as.data.frame(get_predicted(mod, predict = "response")))
   expect_equal(unknown1$Predicted, known$fit[, "fit"], ignore_attr = TRUE)
   expect_equal(unknown1$SE, known$se.fit, ignore_attr = TRUE)
   expect_equal(unknown1$CI_low, known$fit[, "lwr"], ignore_attr = TRUE)
@@ -420,9 +420,7 @@ test_that("lm: get_predicted vs barebones `predict()`", {
 
 test_that("using both `predict` and `type` raises an informative error", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
-  expect_warning(expect_error(
-    get_predicted(mod, predict = "response", type = "response")
-  ))
+  expect_error(get_predicted(mod, predict = "response", type = "response"))
 })
 
 
@@ -445,8 +443,7 @@ test_that("`predict()` vs. `get_predicted` link equivalence", {
   known <- predict(mod, type = "response", se.fit = TRUE)
   unknown1 <- as.data.frame(get_predicted(mod, predict = "expectation"))
   unknown2 <- as.data.frame(get_predicted(mod, predict = NULL, type = "response"))
-  unknown3 <- suppressWarnings(as.data.frame(get_predicted(mod, predict = "response")))
-  expect_warning(as.data.frame(get_predicted(mod, predict = "response")))
+  unknown3 <- as.data.frame(get_predicted(mod, predict = "response"))
   expect_equal(unname(known$fit), unknown1$Predicted)
   expect_equal(unname(known$se.fit), unknown1$SE)
   expect_equal(unname(known$fit), unknown2$Predicted)
@@ -461,18 +458,17 @@ test_that("hurdle: get_predicted matches `predict()`", {
   data("bioChemists", package = "pscl")
   mod <- pscl::hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
   known <- predict(mod, type = "response")
-  unknown <- get_predicted(mod, predict = NULL, type = "response")
+  unknown <- get_predicted(mod, predict = "response")
   expect_equal(known, unknown, ignore_attr = TRUE)
   known <- predict(mod, type = "zero")
-  unknown <- get_predicted(mod, predict = NULL, type = "zero")
+  unknown <- get_predicted(mod, predict = "zero")
   expect_equal(known, unknown, ignore_attr = TRUE)
 })
 
 
 test_that("bugfix: used to return all zeros", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
-  expect_warning(get_predicted(mod, predict = "response"))
-  pred <- suppressWarnings(get_predicted(mod, predict = "response"))
+  pred <- get_predicted(mod, predict = "response")
   expect_false(any(pred == 0))
   pred <- suppressWarnings(get_predicted(mod, predict = "original"))
   expect_warning(get_predicted(mod, predict = "original"))
@@ -492,8 +488,65 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   )
   x <- get_predicted(mod, predict = "link")
   y <- get_predicted(mod, predict = "expectation")
-  z <- get_predicted(mod, predict = NULL, type = "response")
-  expect_equal(round(x[1], 1), -1.4)
-  expect_equal(round(y[1], 1), .2)
-  expect_identical(y, z)
+  z <- get_predicted(mod, predict = NULL, type = "response", verbose = FALSE)
+  expect_equal(round(x[1], 1), -1.5, tolerance = 1e-1)
+  expect_equal(round(y[1], 1), .2, tolerance = 1e-1)
+  expect_equal(y, z, ignore_attr = TRUE)
+})
+
+
+test_that("zero-inflation stuff works", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("pscl")
+
+  data("fish")
+  m1 <- glmmTMB(
+    count ~ child + camper,
+    ziformula = ~ child + camper,
+    data = fish,
+    family = poisson()
+  )
+
+  m2 <- zeroinfl(
+    count ~ child + camper | child + camper,
+    data = fish,
+    dist = "poisson"
+  )
+
+  p1 <- head(predict(m1, type = "response"))
+  p2 <- head(predict(m2, type = "response"))
+  p3 <- head(get_predicted(m1))
+  p4 <- head(get_predicted(m2))
+
+  expect_equal(p1, p2, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p1, p3, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p1, p4, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p2, p3, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p2, p4, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p3, p4, tolerance = 1e-1, ignore_attr = TRUE)
+
+  m1 <- glmmTMB(
+    count ~ child + camper,
+    ziformula = ~ child + camper,
+    data = fish,
+    family = truncated_poisson()
+  )
+
+  m2 <- hurdle(
+    count ~ child + camper | child + camper,
+    data = fish,
+    dist = "poisson"
+  )
+
+  p1 <- head(predict(m1, type = "response"))
+  p2 <- head(predict(m2, type = "response"))
+  p3 <- head(get_predicted(m1))
+  p4 <- head(get_predicted(m2))
+
+  expect_equal(p1, p2, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p1, p3, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p1, p4, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p2, p3, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p2, p4, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p3, p4, tolerance = 1e-1, ignore_attr = TRUE)
 })

@@ -10,6 +10,10 @@
 #' @param numerics Type of summary for numeric values. Can be `"all"` (will duplicate the grid for all unique values), any function (`"mean"`, `"median"`, ...) or a value (e.g., `numerics = 0`).
 #' @param preserve_range In the case of combinations between numeric variables and factors, setting `preserve_range = TRUE` will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the `length` argument.
 #' @param reference The reference vector from which to compute the mean and SD.
+#' @param include_smooth If `x` is a model object, decide whether smooth terms should be included in the data grid or not.
+#' @param include_random If `x` is a mixed model object, decide whether random effect terms should be included in the data grid or not. If `include_random` is `FALSE`, but `x` is a mixed model with random effects, these will still be included in the returned grid, but set to their "population level" value (e.g., `NA` for *glmmTMB* or `0` for *merMod*). This ensures that common `predict()` methods work properly, as these usually need data with all variables in the model included.
+#' @param include_response If `x` is a model object, decide whether the response variable should be included in the data grid or not.
+#' @param data Optional, the data frame that was used to fit the model. Usually, the data is retrieved via `get_data()`.
 #' @param ... Arguments passed to or from other methods (for instance, `length` or `range` to control the spread of numeric variables.).
 #'
 #' @return Reference grid data frame.
@@ -441,6 +445,7 @@ get_datagrid.logical <- get_datagrid.character
 # Below are get_datagrid functions that work on statistical models
 # -------------------------------------------------------------------------
 
+#' @rdname get_datagrid
 #' @export
 get_datagrid.default <- function(x,
                                  at = "all",
@@ -467,11 +472,13 @@ get_datagrid.default <- function(x,
   }
 
   # Drop random factors
-  if (include_random == FALSE) {
+  random_factors <- find_random(x, flatten = TRUE)
+  if (include_random == FALSE && !is.null(random_factors)) {
     keep <- find_predictors(x, effects = "fixed", flatten = TRUE)
     if (!is.null(keep)) {
       if (all(at != "all")) {
-        keep <- c(keep, at[at %in% find_random(x, flatten = TRUE)])
+        keep <- c(keep, at[at %in% random_factors])
+        random_factors <- setdiff(random_factors, at)
       }
       data <- data[names(data) %in% keep]
     }
@@ -494,6 +501,16 @@ get_datagrid.default <- function(x,
     reference = data,
     ...
   )
+
+  # we still need random factors in data grid. we set these to
+  # "population level" if not conditioned on via "at"
+  if (include_random == FALSE && !is.null(random_factors)) {
+    if (inherits(x, c("glmmTMB", "brmsfit", "MixMod"))) {
+      vm[random_factors] <- NA
+    } else if (inherits(x, c("merMod", "rlmerMod", "lme"))) {
+      vm[random_factors] <- 0
+    }
+  }
 
   if (include_smooth == FALSE) {
     vm[names(vm) %in% clean_names(find_smooth(x, flatten = TRUE))] <- NULL
