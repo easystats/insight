@@ -479,6 +479,7 @@ get_predicted.bife <- function(x,
                                      predictions,
                                      args = NULL,
                                      ci_data = NULL,
+                                     link_inv = NULL,
                                      ...) {
 
   # Transform to response scale
@@ -498,12 +499,19 @@ get_predicted.bife <- function(x,
       ci_data[se_col] <- ci_data[se_col] * mu_eta
     }
 
+    if (is.null(link_inv)) {
+      link_inv <- link_inverse
+    }
+
     # Transform predictions
-    predictions <- link_inverse(x)(predictions)
+    predictions <- link_inv(x)(predictions)
+
+    ## TODO Transform CI
+
 
     # Transform iterations
     if ("iterations" %in% names(attributes(predictions))) {
-      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inverse(x)))
+      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv(x)))
     }
 
     # Transform to response "type"
