@@ -833,7 +833,7 @@ get_predicted.stanreg <- function(x,
       draws = iterations,
       ...
     )
-  } else if (args$predict == "expectation") {
+  } else if (args$predict %in% c("expectation", "response")) {
     draws <- rstantools::posterior_epred(
       x,
       newdata = args$data,
