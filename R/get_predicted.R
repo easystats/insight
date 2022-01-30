@@ -373,11 +373,16 @@ get_predicted.bife <- function(x,
   # keep track of the original user input.
 
   predict_arg <- predict
+  transform <- FALSE
+
   # Type (that's for the initial call to stats::predict)
   if (predict_arg == "terms") {
     type_arg <- "terms"
-  } else if (info$is_linear || predict_arg == "response") {
+  } else if (info$is_linear) {
     type_arg <- "response"
+    # response always on link-scale - for later back-transformation
+  } else if (predict_arg %in% c("expectation", "response")) {
+    type_arg <- "link"
     # user provided a valid "type" value, which is not one of our "predict" values
   } else if (predict_arg %in% type_methods) {
     type_arg <- predict_arg
@@ -392,20 +397,15 @@ get_predicted.bife <- function(x,
   } else if (predict_arg %in% c("expectation", "response")) {
     ci_type <- "confidence"
     scale <- "response"
+    transform <- TRUE
   } else if (predict_arg %in% c("prediction", "classification")) {
     ci_type <- "prediction"
     scale <- "response"
+    transform <- TRUE
   } else {
+    ## TODO need to check for exceptions
     ci_type <- "confidence"
     scale <- predict_arg
-  }
-
-  # Transform, but not if user provided a "type" argument
-  if (info$is_linear == FALSE && scale == "response") {
-    transform <- TRUE
-    type_arg <- "link" # set from response to link, because we back-transform
-  } else {
-    transform <- FALSE
   }
 
   # Smooth
