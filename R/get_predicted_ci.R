@@ -177,7 +177,10 @@ get_predicted_ci.hurdle <- function(x,
                                     predict_arg = "count",
                                     ...) {
 
-  if (predict_arg == "zero") {
+  if (inherits(x, "hurdle") && predict_arg == "zero") {
+    # nothing...
+    linv <- function(x) x
+  } else if (predict_arg == "zero") {
     linv <- stats::plogis
     # need back-transformation
     predictions <- stats::qlogis(as.vector(predictions))
