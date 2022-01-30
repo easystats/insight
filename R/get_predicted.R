@@ -176,11 +176,20 @@ get_predicted.lm <- function(x,
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   predict_function <- function(x, data, ...) {
-    stats::predict(x, newdata = data, interval = "none", type = args$type, ...)
+    stats::predict(x, newdata = data, interval = "none", type = args$type, se.fit = TRUE, ...)
   }
 
+  # init value
+  se <- NULL
+
+  # 1. step: predictions
   if (is.null(iterations)) {
     predictions <- predict_function(x, data = args$data)
+    # SE's also returned?
+    if (is.list(predictions)) {
+      se <- as.vector(predictions$se.fit)
+      predictions <- as.vector(predictions$fit)
+    }
   } else {
     predictions <- .get_predicted_boot(
       x,
@@ -192,15 +201,20 @@ get_predicted.lm <- function(x,
     )
   }
 
-  ci_data <- get_predicted_ci(x,
+  # 2. step: confidence intervals
+  ci_data <- get_predicted_ci(
+    x,
     predictions,
     data = args$data,
+    se = se,
     ci_type = args$ci_type,
     ...
   )
 
+  # 3. step: back-transform
   out <- .get_predicted_transform(x, predictions, args, ci_data)
 
+  # 4. step: final preparation
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
@@ -342,6 +356,7 @@ get_predicted.bife <- function(x,
     predict <- "prediction"
   }
 
+  ## TODO remove in a later update
   # backward compatibility
   if (identical(predict, "relation")) {
     message(format_message(
@@ -367,45 +382,43 @@ get_predicted.bife <- function(x,
     warning(msg, call. = FALSE)
   }
 
-  # Arbitrate conflicts between the `predict` and `type` from the ellipsis. We
-  # create a new variable called `predict_arg` to resolve conflicts. This avoids
-  # modifying the values of `type` and `predict` on the fly, which allows us to
-  # keep track of the original user input.
 
-  predict_arg <- predict
   transform <- FALSE
 
-  # Type (that's for the initial call to stats::predict)
-  if (predict_arg == "terms") {
+  # 1. step: define prediction type (that's for the initial call to stats::predict)
+  if (predict == "terms") {
     type_arg <- "terms"
+    # linear models are always on response scale (there is no other)
   } else if (info$is_linear) {
     type_arg <- "response"
-    # response always on link-scale - for later back-transformation
-  } else if (predict_arg %in% c("expectation", "response")) {
+    # type = "response" always on link-scale - for later back-transformation
+  } else if (predict %in% c("expectation", "response")) {
     type_arg <- "link"
     # user provided a valid "type" value, which is not one of our "predict" values
-  } else if (predict_arg %in% type_methods) {
-    type_arg <- predict_arg
+  } else if (predict %in% type_methods) {
+    type_arg <- predict
   } else {
+    # default is "link"
     type_arg <- "link"
   }
 
-  # Prediction and CI type
-  if (predict_arg == "link") {
+  # 2. step: define target scale of predictions and CI type
+  if (predict == "link") {
     ci_type <- "confidence"
     scale <- "link"
-  } else if (predict_arg %in% c("expectation", "response")) {
+  } else if (predict %in% c("expectation", "response")) {
     ci_type <- "confidence"
     scale <- "response"
     transform <- TRUE
-  } else if (predict_arg %in% c("prediction", "classification")) {
+  } else if (predict %in% c("prediction", "classification")) {
     ci_type <- "prediction"
     scale <- "response"
     transform <- TRUE
+  } else if (predict %in% type_methods) {
   } else {
     ## TODO need to check for exceptions
     ci_type <- "confidence"
-    scale <- predict_arg
+    scale <- predict
   }
 
   # Smooth
@@ -447,7 +460,7 @@ get_predicted.bife <- function(x,
     ci_type = ci_type,
     ci = ci,
     type = type_arg,
-    predict = predict_arg,
+    predict = predict,
     scale = scale,
     transform = transform,
     info = info,
@@ -484,6 +497,12 @@ get_predicted.bife <- function(x,
 
   # Transform to response scale
   if (isTRUE(args$transform)) {
+
+    # retrieve link-inverse, for back transformation...
+    if (is.null(link_inv)) {
+      link_inv <- link_inverse
+    }
+
     if (!is.null(ci_data)) {
       # Transform CI
       se_col <- names(ci_data) == "SE"
@@ -491,7 +510,7 @@ get_predicted.bife <- function(x,
       # fix for R 3.4
       row.names(ci_data) <- NULL
 
-      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inverse(x))
+      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inv(x))
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
       # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
@@ -499,15 +518,12 @@ get_predicted.bife <- function(x,
       ci_data[se_col] <- ci_data[se_col] * mu_eta
     }
 
-    if (is.null(link_inv)) {
-      link_inv <- link_inverse
-    }
-
     # Transform predictions
     predictions <- link_inv(x)(predictions)
 
-    ## TODO Transform CI
-
+    ## Transform CI
+    ci_columns <- grepl("CI_", colnames(ci_data), fixed = TRUE)
+    ci_data[ci_columns] <- lapply(ci_data[ci_columns], link_inv(x))
 
     # Transform iterations
     if ("iterations" %in% names(attributes(predictions))) {

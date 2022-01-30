@@ -22,6 +22,8 @@
 #'   other models (e.g., `glm`), prediction intervals are somewhat useless
 #'   (for instance, for a binomial model for which the dependent variable is a
 #'   vector of 1s and 0s, the prediction interval is... `[0, 1]`).
+#' @param se Numeric vector of standard error of predicted values. If `NULL`,
+#'   standard errors are calculated based on the variance-covariance matrix.
 #' @param vcov_estimation Either a matrix, or a string, indicating the suffix
 #'   of the `vcov*()`-function from the \pkg{sandwich} or \pkg{clubSandwich}
 #'   package, e.g. `vcov_estimation = "CL"` (which calls
@@ -104,13 +106,14 @@ get_predicted_ci <- function(x, predictions = NULL, ...) {
 get_predicted_ci.default <- function(x,
                                      predictions = NULL,
                                      data = NULL,
+                                     se = NULL,
                                      ci = 0.95,
                                      ci_type = "confidence",
+                                     ci_method = "quantile",
+                                     dispersion_method = "sd",
                                      vcov_estimation = NULL,
                                      vcov_type = NULL,
                                      vcov_args = NULL,
-                                     dispersion_method = "sd",
-                                     ci_method = "quantile",
                                      ...) {
   # If draws are present (bootstrapped or Bayesian)
   if ("iterations" %in% names(attributes(predictions))) {
@@ -129,7 +132,9 @@ get_predicted_ci.default <- function(x,
 
   # Analytical solution
   # 1. Find appropriate interval function
-  if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov_estimation) && is.matrix(vcov_estimation))) { # gaussian or CI
+  if (!is.null(se)) {
+    ci_function <- .get_predicted_se_to_ci
+  } else if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov_estimation) && is.matrix(vcov_estimation))) { # gaussian or CI
     se <- get_predicted_se(
       x,
       data = data,
@@ -173,6 +178,7 @@ get_predicted_ci.hurdle <- function(x,
                                     data = NULL,
                                     ci = 0.95,
                                     ci_type = "confidence",
+                                    se = NULL,
                                     vcov_estimation = NULL,
                                     vcov_type = NULL,
                                     vcov_args = NULL,

@@ -11,13 +11,14 @@ get_predicted_ci(x, predictions = NULL, ...)
   x,
   predictions = NULL,
   data = NULL,
+  se = NULL,
   ci = 0.95,
   ci_type = "confidence",
+  ci_method = "quantile",
+  dispersion_method = "sd",
   vcov_estimation = NULL,
   vcov_type = NULL,
   vcov_args = NULL,
-  dispersion_method = "sd",
-  ci_method = "quantile",
   ...
 )
 }
@@ -33,6 +34,9 @@ second argument has to be a model).}
 
 \item{data}{An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used.}
+
+\item{se}{Numeric vector of standard error of predicted values. If \code{NULL},
+standard errors are calculated based on the variance-covariance matrix.}
 
 \item{ci}{The interval level (default \code{0.95}, i.e., \verb{95\%} CI).}
 
@@ -51,6 +55,12 @@ other models (e.g., \code{glm}), prediction intervals are somewhat useless
 (for instance, for a binomial model for which the dependent variable is a
 vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 
+\item{dispersion_method, ci_method}{These arguments are only used in
+the context of bootstrapped and Bayesian models. Possible values are
+\code{dispersion_method = c("sd", "mad")} and
+\code{ci_method = c("quantile", "hdi", "eti")}. For the latter, the
+\pkg{bayestestR} package is required.}
+
 \item{vcov_estimation}{Either a matrix, or a string, indicating the suffix
 of the \verb{vcov*()}-function from the \pkg{sandwich} or \pkg{clubSandwich}
 package, e.g. \code{vcov_estimation = "CL"} (which calls
@@ -68,12 +78,6 @@ for details). Only applies if \code{vcov_estimation} is a string, and not a matr
 passed down to the \pkg{sandwich}-function specified in
 \code{vcov_estimation}. Only applies if \code{vcov_estimation} is a string, and not
 a matrix.}
-
-\item{dispersion_method, ci_method}{These arguments are only used in
-the context of bootstrapped and Bayesian models. Possible values are
-\code{dispersion_method = c("sd", "mad")} and
-\code{ci_method = c("quantile", "hdi", "eti")}. For the latter, the
-\pkg{bayestestR} package is required.}
 }
 \value{
 The Confidence (or Prediction) Interval (CI).
