@@ -531,17 +531,6 @@ get_predicted.glmmTMB <- function(x,
 
   # we have now a validated "predict"...
   predict <- args$predict
-  dots[["type"]] <- NULL
-
-  # # predict.glmmTMB has many `type` values which do not map on to our standard
-  # # `predict` argument. We don't know how to transform those.
-  # if (is.null(predict) && "type" %in% names(dots)) {
-  #   args$transform <- FALSE
-  #   args$type <- dots$type
-  # } else if (!predict %in% c("expectation", "link")) {
-  #   args$transform <- FALSE
-  #   args$type <- predict
-  # }
 
   # Prediction function
   predict_function <- function(x, data, ...) {
