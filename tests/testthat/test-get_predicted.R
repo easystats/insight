@@ -4,6 +4,7 @@ pkgs <- c(
   "lme4",
   "brms",
   "glmmTMB",
+  "pscl",
   "mgcv",
   "gamm4",
   "merTools",
@@ -491,4 +492,59 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   expect_equal(round(x[1], 1), -1.4)
   expect_equal(round(y[1], 1), .2)
   expect_identical(y, z)
+})
+
+
+test_that("zero-inflation stuff works", {
+  data("fish")
+  m1 <- glmmTMB(
+    count ~ child + camper,
+    ziformula = ~ child + camper,
+    data = fish,
+    family = poisson()
+  )
+
+  m2 <- zeroinfl(
+    count ~ child + camper | child + camper,
+    data = fish,
+    dist = "poisson"
+  )
+
+  p1 <- predict(m1, type = "response") |> head()
+  p2 <- predict(m2, type = "response") |> head()
+
+  p3 <- get_predicted(m1) |> head()
+  p4 <- get_predicted(m2) |> head()
+
+  expect_equal(p1, p2, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p1, p3, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p1, p4, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p2, p3, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p2, p4, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p3, p4, tolerance = 1e-1, ignore_attr = TRUE)
+
+  m1 <- glmmTMB(
+    count ~ child + camper,
+    ziformula = ~ child + camper,
+    data = fish,
+    family = truncated_poisson()
+  )
+
+  m2 <- hurdle(
+    count ~ child + camper | child + camper,
+    data = fish,
+    dist = "poisson"
+  )
+
+  p1 <- predict(m1, type = "response") |> head()
+  p2 <- predict(m2, type = "response") |> head()
+  p3 <- get_predicted(m1) |> head()
+  p4 <- get_predicted(m2) |> head()
+
+  expect_equal(p1, p2, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p1, p3, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p1, p4, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p2, p3, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p2, p4, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(p3, p4, tolerance = 1e-1, ignore_attr = TRUE)
 })
