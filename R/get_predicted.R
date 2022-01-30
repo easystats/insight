@@ -370,6 +370,9 @@ get_predicted.hurdle <- function(x,
     ...
   )
 
+  # we have now a validated "predict"...
+  predict <- args$predict
+
   # "response" scale is type = "count" here...
   if (predict %in% c("expectation", "response", "count")) {
     args$type <- "count"
@@ -438,6 +441,9 @@ get_predicted.lmerMod <- function(x,
     verbose = verbose,
     ...
   )
+
+  # we have now a validated "predict"...
+  predict <- args$predict
 
   # Make prediction only using random if only random
   if (all(names(args$data) %in% find_random(x, flatten = TRUE))) {
@@ -521,15 +527,18 @@ get_predicted.glmmTMB <- function(x,
     ...
   )
 
-  # predict.glmmTMB has many `type` values which do not map on to our standard
-  # `predict` argument. We don't know how to transform those.
-  if (is.null(predict) && "type" %in% names(dots)) {
-    args$transform <- FALSE
-    args$type <- dots$type
-  } else if (!predict %in% c("expectation", "link")) {
-    args$transform <- FALSE
-    args$type <- predict
-  }
+  # we have now a validated "predict"...
+  predict <- args$predict
+
+  # # predict.glmmTMB has many `type` values which do not map on to our standard
+  # # `predict` argument. We don't know how to transform those.
+  # if (is.null(predict) && "type" %in% names(dots)) {
+  #   args$transform <- FALSE
+  #   args$type <- dots$type
+  # } else if (!predict %in% c("expectation", "link")) {
+  #   args$transform <- FALSE
+  #   args$type <- predict
+  # }
 
   # Prediction function
   predict_function <- function(x, data, ...) {
@@ -796,20 +805,23 @@ get_predicted.stanreg <- function(x,
     ...
   )
 
+  # we have now a validated "predict"...
+  predict <- args$predict
+
   # when the `type` argument is passed through ellipsis, we need to manually set
   # the `args$predict` value, because this is what determines which `rstantools`
   # function we will use to draw from the posterior predictions.
-  dots <- list(...)
-  if (is.null(predict) && "type" %in% names(dots)) {
-    if (dots$type == "link") {
-      args$predict <- "link"
-    } else if (dots$type == "response") {
-      args$predict <- "expectation"
-    }
-  }
+  # dots <- list(...)
+  # if (is.null(predict) && "type" %in% names(dots)) {
+  #   if (dots$type == "link") {
+  #     args$predict <- "link"
+  #   } else if (dots$type == "response") {
+  #     args$predict <- "expectation"
+  #   }
+  # }
 
   # Get draws
-  if (args$predict %in% c("link")) {
+  if (args$predict == "link") {
     draws <- rstantools::posterior_linpred(
       x,
       newdata = args$data,
@@ -818,7 +830,7 @@ get_predicted.stanreg <- function(x,
       draws = iterations,
       ...
     )
-  } else if (args$predict %in% c("expectation")) {
+  } else if (args$predict == "expectation") {
     draws <- rstantools::posterior_epred(
       x,
       newdata = args$data,
@@ -973,6 +985,10 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
     ))
   }
 
+  # copy "type" to "predict"
+  if (!is.null(dots$type)) {
+    predict <- dots$type
+  }
 
   if (length(predict) > 1) {
     predict <- predict[1]
@@ -1002,13 +1018,11 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   predict_method <- tryCatch(predict_method[!sapply(predict_method, is.null)][[1]], error = function(e) NULL)
 
   # check aliases
-  if (!is.null(predict)) {
-    if (predict == "expected") {
-      predict <- "expectation"
-    }
-    if (predict == "predicted") {
-      predict <- "prediction"
-    }
+  if (predict == "expected") {
+    predict <- "expectation"
+  }
+  if (predict == "predicted") {
+    predict <- "prediction"
   }
 
   # backward compatibility
@@ -1041,21 +1055,17 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   # modifying the values of `type` and `predict` on the fly, which allows us to
   # keep track of the original user input.
 
-  if (is.null(dots$type)) {
-    predict_arg <- predict
-    # Type (that's for the initial call to stats::predict)
-    if (predict_arg == "terms") {
-      type_arg <- "terms"
-    } else if (info$is_linear || predict_arg == "response") {
-      type_arg <- "response"
-      # user provided a valid "type" value, which is not one of our "predict" values
-    } else if (predict_arg %in% type_methods) {
-      type_arg <- predict_arg
-    } else {
-      type_arg <- "link"
-    }
+  predict_arg <- predict
+  # Type (that's for the initial call to stats::predict)
+  if (predict_arg == "terms") {
+    type_arg <- "terms"
+  } else if (info$is_linear || predict_arg == "response") {
+    type_arg <- "response"
+    # user provided a valid "type" value, which is not one of our "predict" values
+  } else if (predict_arg %in% type_methods) {
+    type_arg <- predict_arg
   } else {
-    type_arg <- predict_arg <- dots$type
+    type_arg <- "link"
   }
 
   # Prediction and CI type
@@ -1068,16 +1078,13 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   } else if (predict_arg %in% c("prediction", "classification")) {
     ci_type <- "prediction"
     scale <- "response"
-  } else if (!is.null(dots$type)) {
-    ci_type <- "confidence"
-    scale <- dots$type
   } else {
     ci_type <- "confidence"
     scale <- predict_arg
   }
 
   # Transform, but not if user provided a "type" argument
-  if (info$is_linear == FALSE && scale == "response" && (is.null(dots$type) || dots$type == "response")) {
+  if (info$is_linear == FALSE && scale == "response") {
     transform <- TRUE
     type_arg <- "link" # set from response to link, because we back-transform
   } else {
