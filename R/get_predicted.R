@@ -176,20 +176,12 @@ get_predicted.lm <- function(x,
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   predict_function <- function(x, data, ...) {
-    stats::predict(x, newdata = data, interval = "none", type = args$type, se.fit = TRUE, ...)
+    stats::predict(x, newdata = data, interval = "none", type = args$type, se.fit = FALSE, ...)
   }
-
-  # init value
-  se <- NULL
 
   # 1. step: predictions
   if (is.null(iterations)) {
     predictions <- predict_function(x, data = args$data)
-    # SE's also returned?
-    if (is.list(predictions)) {
-      se <- as.vector(predictions$se.fit)
-      predictions <- as.vector(predictions$fit)
-    }
   } else {
     predictions <- .get_predicted_boot(
       x,
@@ -206,7 +198,6 @@ get_predicted.lm <- function(x,
     x,
     predictions,
     data = args$data,
-    se = se,
     ci_type = args$ci_type,
     ...
   )
