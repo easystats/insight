@@ -132,7 +132,6 @@ get_predicted_ci.default <- function(x,
   if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov_estimation) && is.matrix(vcov_estimation))) { # gaussian or CI
     se <- get_predicted_se(
       x,
-      predictions,
       data = data,
       ci_type = ci_type,
       vcov_estimation = vcov_estimation,
@@ -196,7 +195,6 @@ get_predicted_ci.hurdle <- function(x,
   # Analytical solution
   se <- get_predicted_se(
     x,
-    predictions,
     data = data,
     ci_type = ci_type,
     vcov_estimation = vcov_estimation,

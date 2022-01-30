@@ -1,7 +1,6 @@
 # Get SE ------------------------------------------------------------------
 
 get_predicted_se <- function(x,
-                             predictions = NULL,
                              data = NULL,
                              ci_type = "confidence",
                              vcov_estimation = NULL,
