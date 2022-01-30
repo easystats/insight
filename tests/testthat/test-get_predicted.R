@@ -496,6 +496,9 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
 
 
 test_that("zero-inflation stuff works", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("pscl")
+
   data("fish")
   m1 <- glmmTMB(
     count ~ child + camper,
