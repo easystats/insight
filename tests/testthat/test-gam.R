@@ -196,7 +196,7 @@ if (.runThisTest) {
 
     test_that("get_predicted", {
       tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = head(dat, 30))
-      pred <- get_predicted(tmp)
+      pred <- get_predicted(tmp, verbose = FALSE)
       expect_s3_class(pred, "get_predicted")
       expect_equal(
         as.vector(pred),
@@ -217,7 +217,7 @@ if (.runThisTest) {
       expect_equal(x, z$fit, ignore_attr = TRUE)
       expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
 
-      x <- get_predicted(tmp, predict = NULL, type = "response")
+      x <- get_predicted(tmp, predict = NULL, type = "response", verbose = FALSE)
       y <- get_predicted(tmp, predict = "expectation")
       z <- predict(tmp, type = "response", se.fit = TRUE)
       expect_equal(x, y, ignore_attr = TRUE)

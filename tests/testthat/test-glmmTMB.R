@@ -886,11 +886,12 @@ if (requiet("testthat") &&
 
       # response
       x <- get_predicted(m1, predict = "expectation", verbose = FALSE)
-      y <- get_predicted(m1, predict = NULL, type = "response")
+      y <- get_predicted(m1, predict = "response")
       z <- predict(m1, type = "response")
       expect_equal(x, y, ignore_attr = TRUE)
       expect_equal(x, z, ignore_attr = TRUE)
       expect_equal(y, z, ignore_attr = TRUE)
+      expect_error(get_predicted(m1, predict = NULL, type = "response"))
 
       # link
       x <- get_predicted(m1, predict = "link")

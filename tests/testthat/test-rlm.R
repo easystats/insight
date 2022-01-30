@@ -13,7 +13,7 @@ test_that("model.matrix.rlm accepts `data` argument", {
 test_that("predict.rlm", {
   mod <- MASS::rlm(mpg ~ hp + factor(cyl), mtcars)
   a <- get_predicted(mod)
-  b <- get_predicted(mod, predict = NULL, type = "response")
+  b <- get_predicted(mod, predict = NULL, type = "response", verbose = FALSE)
   expect_s3_class(a, "get_predicted")
   expect_s3_class(b, "get_predicted")
   expect_equal(a, b, ignore_attr = TRUE)

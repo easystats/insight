@@ -392,14 +392,18 @@ get_predicted.hurdle <- function(x,
   predictions <- as.vector(predict_function(x, data = args$data))
 
   # on the response scale, we simulate predictions for CIs...
-  if (!is.null(predict) && predict %in% c("expectation", "response")) {
+  if (predict %in% c("expectation", "response")) {
     zi_predictions <- stats::predict(
       x,
       newdata = args$data,
       type = "zero",
       ...
     )
-    predictions <- predictions * (1 - as.vector(zi_predictions))
+    if (inherits(x, "hurdle")) {
+      predictions <- predictions * as.vector(zi_predictions)
+    } else {
+      predictions <- predictions * (1 - as.vector(zi_predictions))
+    }
     ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
   } else {
     # Get CI
@@ -527,6 +531,7 @@ get_predicted.glmmTMB <- function(x,
 
   # we have now a validated "predict"...
   predict <- args$predict
+  dots[["type"]] <- NULL
 
   # # predict.glmmTMB has many `type` values which do not map on to our standard
   # # `predict` argument. We don't know how to transform those.
@@ -553,7 +558,7 @@ get_predicted.glmmTMB <- function(x,
   # Get prediction
   rez <- predict_function(x, data = args$data, se.fit = TRUE)
 
-  if (is.null(iterations) || identical(predict, "expectation")) {
+  if (is.null(iterations) || predict %in% c("expectation", "response")) {
     predictions <- as.numeric(rez$fit)
   } else {
     predictions <- .get_predicted_boot(
@@ -569,7 +574,7 @@ get_predicted.glmmTMB <- function(x,
   # "expectation" for zero-inflated? we need a special handling
   # for predictions and CIs here.
 
-  if (identical(predict, "expectation") && args$info$is_zero_inflated) {
+  if (predict %in% c("expectation", "response") && args$info$is_zero_inflated) {
     zi_predictions <- stats::predict(
       x,
       newdata = data,
