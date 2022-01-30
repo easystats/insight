@@ -414,7 +414,6 @@ get_predicted.bife <- function(x,
     ci_type <- "prediction"
     scale <- "response"
     transform <- TRUE
-  } else if (predict %in% type_methods) {
   } else {
     ## TODO need to check for exceptions
     ci_type <- "confidence"
