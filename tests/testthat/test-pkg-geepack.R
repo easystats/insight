@@ -1,0 +1,92 @@
+requiet("insight")
+requiet("geepack")
+
+test_that("geeglm()", {
+  data(warpbreaks)
+  m1 <-
+  geeglm(
+    breaks ~ tension,
+    id = wool,
+    data = warpbreaks,
+    family = poisson,
+    corstr = "ar1")
+
+  # model_info
+  expect_true(model_info(m1)$is_count)
+  expect_false(model_info(m1)$is_linear)
+
+  # find_predictors
+  expect_identical(find_predictors(m1), list(conditional = "tension"))
+  expect_identical(find_predictors(m1, flatten = TRUE), "tension")
+  expect_identical(
+    find_predictors(m1, effects = "random"),
+    list(random = "wool"))
+  expect_identical(
+    find_predictors(m1, effects = "all", flatten = TRUE),
+    c("tension", "wool"))
+
+  # find_response
+  expect_identical(find_response(m1), "breaks")
+
+  # get_response
+  expect_equal(get_response(m1), warpbreaks$breaks)
+
+  # find_random
+  expect_equal(find_random(m1), list(random = "wool"))
+
+  # get_random
+  expect_equal(get_random(m1), warpbreaks[, "wool", drop = FALSE])
+
+  # get_predictors
+  expect_equal(get_predictors(m1), warpbreaks[, "tension", drop = FALSE])
+
+  # link_inverse
+  expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+
+  # get_data
+  expect_equal(nrow(get_data(m1)), 54)
+  expect_equal(colnames(get_data(m1)), c("breaks", "tension", "wool"))
+
+  # find_formula
+  expect_length(find_formula(m1), 2)
+  expect_equal(
+    find_formula(m1),
+    list(conditional = as.formula("breaks ~ tension"),
+         random = as.formula("~wool")),
+    ignore_attr = TRUE)
+
+  # find_terms
+  expect_equal(
+    find_terms(m1),
+    list(response = "breaks",
+         conditional = "tension",
+         random = "wool"))
+  expect_equal(
+    find_terms(m1, flatten = TRUE),
+    c("breaks", "tension", "wool"))
+
+  # n_obs
+  expect_equal(n_obs(m1), 54)
+
+  # linkfun
+  expect_false(is.null(link_function(m1)))
+
+  # find_parameters
+  expect_equal(
+    find_parameters(m1),
+    list(conditional = c(
+      "(Intercept)", "tensionM", "tensionH")))
+  expect_equal(nrow(get_parameters(m1)), 3)
+  expect_equal(
+    get_parameters(m1)$Parameter,
+    c("(Intercept)", "tensionM", "tensionH"))
+
+  # is_multivariate
+  expect_false(is_multivariate(m1))
+
+  # find_algorithm
+  expect_equal(find_algorithm(m1), list(algorithm = "ML"))
+
+  # find_statistic
+  expect_identical(find_statistic(m1), "chi-squared statistic")
+})
