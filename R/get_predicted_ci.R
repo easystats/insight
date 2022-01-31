@@ -167,68 +167,6 @@ get_predicted_ci.default <- function(x,
   out
 }
 
-
-
-
-# Specific definitions ----------------------------------------------------
-
-#' @export
-get_predicted_ci.hurdle <- function(x,
-                                    predictions = NULL,
-                                    data = NULL,
-                                    ci = 0.95,
-                                    ci_type = "confidence",
-                                    se = NULL,
-                                    vcov_estimation = NULL,
-                                    vcov_type = NULL,
-                                    vcov_args = NULL,
-                                    predict_arg = "count",
-                                    ...) {
-
-  if (inherits(x, "hurdle") && predict_arg == "zero") {
-    # nothing...
-    linv <- function(x) x
-  } else if (predict_arg == "zero") {
-    linv <- stats::plogis
-    # need back-transformation
-    predictions <- stats::qlogis(as.vector(predictions))
-  } else {
-    linv <- exp
-    # need back-transformation
-    predictions <- log(as.vector(predictions))
-  }
-
-  # Analytical solution
-  se <- get_predicted_se(
-    x,
-    data = data,
-    ci_type = ci_type,
-    vcov_estimation = vcov_estimation,
-    vcov_type = vcov_type,
-    vcov_args = vcov_args
-  )
-
-  # 2. Run it once or multiple times if multiple CI levels are requested
-  if (is.null(ci)) {
-    out <- data.frame(SE = se)
-  } else if (length(ci) == 1) {
-    out <- .get_predicted_se_to_ci_zeroinfl(x, predictions, ci = ci, se = se, link_inv = linv)
-  } else {
-    out <- data.frame(SE = se)
-    for (ci_val in ci) {
-      temp <- .get_predicted_se_to_ci_zeroinfl(x, predictions, ci = ci, se = se, link_inv = linv)
-      temp$SE <- NULL
-      names(temp) <- paste0(names(temp), "_", ci_val)
-      out <- cbind(out, temp)
-    }
-  }
-  out
-}
-
-#' @export
-get_predicted_ci.zeroinfl <- get_predicted_ci.hurdle
-
-
 #' @export
 get_predicted_ci.mlm <- function(x, ...) {
   stop("TBD")
