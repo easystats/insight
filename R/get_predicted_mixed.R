@@ -45,6 +45,7 @@ get_predicted.lmerMod <- function(x,
     )
   }
 
+  # 1. step: predictions
   if (is.null(iterations)) {
     predictions <- predict_function(x)
   } else {
@@ -58,13 +59,19 @@ get_predicted.lmerMod <- function(x,
     )
   }
 
+  # 2. step: confidence intervals
   ci_data <- get_predicted_ci(x, predictions, data = args$data, ci = ci, ci_type = args$ci_type, ...)
+
+  # 3. step: back-transform
   out <- .get_predicted_transform(x, predictions, args, ci_data)
+
+  # 4. step: final preparation
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
 #' @export
 get_predicted.merMod <- get_predicted.lmerMod
+
 
 
 
@@ -122,10 +129,10 @@ get_predicted.glmmTMB <- function(x,
     )
   }
 
-  # Get prediction
+  # 1. step: predictions
   rez <- predict_function(x, data = args$data, se.fit = TRUE)
 
-  if (is.null(iterations) || predict %in% c("expectation", "response")) {
+  if (is.null(iterations) || args$scale == "response") {
     predictions <- as.numeric(rez$fit)
   } else {
     predictions <- .get_predicted_boot(
@@ -141,7 +148,9 @@ get_predicted.glmmTMB <- function(x,
   # "expectation" for zero-inflated? we need a special handling
   # for predictions and CIs here.
 
-  if (predict %in% c("expectation", "response") && args$info$is_zero_inflated) {
+  if (args$scale == "response" && args$info$is_zero_inflated) {
+
+    # intermediate step: prediction from ZI model
     zi_predictions <- stats::predict(
       x,
       newdata = data,
@@ -151,13 +160,19 @@ get_predicted.glmmTMB <- function(x,
       ...
     )
     predictions <- link_inverse(x)(predictions) * (1 - as.vector(zi_predictions))
+
+    # 2. and 3. step: confidence intervals and back-transform
     ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
     out <- list(predictions = predictions, ci_data = ci_data)
+
   } else {
-    # Get CI
+    # 2. step: confidence intervals
     ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
+
+    # 3. step: back-transform
     out <- .get_predicted_transform(x, predictions, args, ci_data)
   }
 
+  # 4. step: final preparation
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
