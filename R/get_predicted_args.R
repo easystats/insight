@@ -116,7 +116,7 @@
     transform <- FALSE
 
     # type = "response" always on link-scale - for later back-transformation
-  } else if (predict %in% c("expectation", "response")) {
+  } else if (predict %in% c("expectation", "response", "prediction", "classification")) {
 
     if (inherits(x, c("hurdle", "zeroinfl", "zerotrunc"))) {
       # pscl: hurdle/zeroinfl and countreg
