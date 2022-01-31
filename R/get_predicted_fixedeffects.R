@@ -34,8 +34,5 @@ get_predicted.fixest <- function(x, predict = "expectation", data = NULL, ...) {
 
   predictions <- do.call("predict", args)
 
-  # ci_data <- get_predicted_ci(x, predictions, data = args$data, ci = ci, ci_type = "confidence", ...)
-  # out <- .get_predicted_transform(x, predictions, args, ci_data)
-  # .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
   .get_predicted_out(predictions, args = args, ci_data = NULL)
 }
