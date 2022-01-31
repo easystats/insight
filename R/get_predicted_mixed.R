@@ -132,7 +132,7 @@ get_predicted.glmmTMB <- function(x,
   # 1. step: predictions
   rez <- predict_function(x, data = args$data, se.fit = TRUE)
 
-  if (is.null(iterations) || args$scale == "response") {
+  if (is.null(iterations)) {
     predictions <- as.numeric(rez$fit)
   } else {
     predictions <- .get_predicted_boot(
