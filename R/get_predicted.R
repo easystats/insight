@@ -328,10 +328,6 @@ get_predicted.bife <- function(x,
     # Transform predictions
     predictions <- link_inv(x)(predictions)
 
-    ## Transform CI
-    ci_columns <- grepl("CI_", colnames(ci_data), fixed = TRUE)
-    ci_data[ci_columns] <- lapply(ci_data[ci_columns], link_inv(x))
-
     # Transform iterations
     if ("iterations" %in% names(attributes(predictions))) {
       attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv(x)))
