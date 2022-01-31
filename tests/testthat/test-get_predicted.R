@@ -470,9 +470,7 @@ test_that("bugfix: used to return all zeros", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
   pred <- get_predicted(mod, predict = "response")
   expect_false(any(pred == 0))
-  pred <- suppressWarnings(get_predicted(mod, predict = "original"))
-  expect_warning(get_predicted(mod, predict = "original"))
-  expect_false(all(pred == 0))
+  expect_error(expect_warning(get_predicted(mod, predict = "original")))
 })
 
 

@@ -109,12 +109,6 @@
     scale_arg <- "terms"
     transform <- FALSE
 
-    # linear models are always on response scale (there is no other)
-  } else if (info$is_linear) {
-    type_arg <- "response"
-    scale_arg <- "response"
-    transform <- FALSE
-
     # type = "response" always on link-scale - for later back-transformation
   } else if (predict %in% c("expectation", "response")) {
 
@@ -132,6 +126,12 @@
   } else if (predict == "link") {
     type_arg <- "link"
     scale_arg <- "link"
+    transform <- FALSE
+
+    # linear models are always on response scale (there is no other)
+  } else if (info$is_linear) {
+    type_arg <- "response"
+    scale_arg <- "response"
     transform <- FALSE
 
     # user provided a valid "type" value, which is not one of our "predict" values
