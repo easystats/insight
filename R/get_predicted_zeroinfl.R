@@ -31,11 +31,6 @@ get_predicted.hurdle <- function(x,
   # we have now a validated "predict"...
   predict <- args$predict
 
-  # "response" scale is type = "count" here...
-  if (predict %in% c("expectation", "response", "count")) {
-    args$type <- "count"
-  }
-
   # Prediction function
   predict_function <- function(x, data, ...) {
     stats::predict(
@@ -50,7 +45,7 @@ get_predicted.hurdle <- function(x,
   predictions <- as.vector(predict_function(x, data = args$data))
 
   # on the response scale, we simulate predictions for CIs...
-  if (predict %in% c("expectation", "response")) {
+  if (args$scale == "response") {
     zi_predictions <- stats::predict(
       x,
       newdata = args$data,
