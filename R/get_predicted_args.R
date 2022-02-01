@@ -6,7 +6,6 @@
                                 include_random = TRUE,
                                 include_smooth = TRUE,
                                 ci = 0.95,
-                                newdata = NULL,
                                 verbose = TRUE,
                                 ...) {
 
@@ -44,7 +43,7 @@
   info <- model_info(x, verbose = FALSE)
 
   # Data
-  if (!is.null(newdata) && is.null(data)) data <- newdata
+  if (!is.null(dots$newdata) && is.null(data)) data <- dots$newdata
   if (is.null(data)) data <- get_data(x, verbose = verbose)
 
   # CI
