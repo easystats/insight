@@ -212,7 +212,7 @@ get_predicted.lm <- function(x,
   )
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(x, predictions, args, ci_data)
+  out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
 
   # 4. step: final preparation
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
@@ -309,6 +309,7 @@ get_predicted.bife <- function(x,
                                      args = NULL,
                                      ci_data = NULL,
                                      link_inv = NULL,
+                                     verbose = FALSE,
                                      ...) {
 
   # Transform to response scale
@@ -330,8 +331,15 @@ get_predicted.bife <- function(x,
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
       # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
-      mu_eta <- abs(get_family(x)$mu.eta(predictions))
-      ci_data[se_col] <- ci_data[se_col] * mu_eta
+      mu_eta <- tryCatch(abs(get_family(x)$mu.eta(predictions)), error = function(e) NULL)
+      if (is.null(mu_eta)) {
+        if (isTRUE(verbose)) {
+          warning(format_message("Could not apply Delta method to transform standard errors.",
+                                 "These are returned on the link-scale."), call. = FALSE)
+        }
+      } else {
+        ci_data[se_col] <- ci_data[se_col] * mu_eta
+      }
     }
 
     # Transform predictions
