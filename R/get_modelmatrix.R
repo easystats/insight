@@ -59,11 +59,11 @@ get_modelmatrix.svyglm <- function(x, ...) {
   if ("data" %in% names(dots)) {
     data <- tryCatch(
       {
-        d <- dots$data
+        d <- as.data.frame(dots$data)
         d[[find_response(x)]] <- mean(get_response(m1))
         d
       },
-      function(e) {
+      error = function(e) {
         dots$data
       }
     )
