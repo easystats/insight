@@ -115,6 +115,11 @@ get_predicted_ci.default <- function(x,
                                      vcov_type = NULL,
                                      vcov_args = NULL,
                                      ...) {
+  # sanity check, if CI should be skipped
+  if (is.null(ci)) {
+    return(ci)
+  }
+
   # If draws are present (bootstrapped or Bayesian)
   if ("iterations" %in% names(attributes(predictions))) {
     iter <- attributes(predictions)$iteration

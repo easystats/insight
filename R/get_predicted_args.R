@@ -46,9 +46,6 @@
   if (!is.null(dots$newdata) && is.null(data)) data <- dots$newdata
   if (is.null(data)) data <- get_data(x, verbose = verbose)
 
-  # CI
-  if (is.null(ci)) ci <- 0
-
   # check `predict` user-input
   predict_method <- lapply(
     class(x), function(i) {
