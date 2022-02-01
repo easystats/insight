@@ -181,6 +181,10 @@
   # In case include_random is TRUE, but there's actually no random factors in data
   if (include_random && !is.null(data) && !is.null(x) && !all(find_random(x, flatten = TRUE) %in% names(data))) {
     include_random <- FALSE
+    if (isTRUE(verbose)) {
+      warning(format_message("`include_random` was set to `TRUE`, but no random effects were found.",
+                              "Setting `include_random = FALSE` now."))
+    }
   }
 
   # Add (or set) random variables to "NA"
