@@ -60,7 +60,7 @@ get_predicted.lmerMod <- function(x,
   ci_data <- get_predicted_ci(x, predictions, data = args$data, ci = ci, ci_type = args$ci_type, ...)
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(x, predictions, args, ci_data)
+  out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
 
   # 4. step: final preparation
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
@@ -165,7 +165,7 @@ get_predicted.glmmTMB <- function(x,
     ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
 
     # 3. step: back-transform
-    out <- .get_predicted_transform(x, predictions, args, ci_data)
+    out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
   }
 
   # 4. step: final preparation
