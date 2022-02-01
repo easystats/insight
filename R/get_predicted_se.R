@@ -137,7 +137,7 @@ get_predicted_se <- function(x,
     # terms.  When we do not need to drop offset terms, we call get_modelmatrix
     # on the model itself. The latter strategy is safer in cases where `data`
     # does not include all the levels of a factor variable.
-    if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc"))) {
+    if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc", "MixMod"))) {
 
       # model terms, required for model matrix
       model_terms <- tryCatch(

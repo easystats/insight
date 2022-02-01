@@ -1,4 +1,4 @@
-# Mixed Models (lme4, glmmTMB) ------------------------------------------
+# Mixed Models (lme4, glmmTMB, MixMod, ...) -----------------------------
 # =======================================================================
 
 #' @export
@@ -21,9 +21,6 @@ get_predicted.lmerMod <- function(x,
     verbose = verbose,
     ...
   )
-
-  # we have now a validated "predict"...
-  predict <- args$predict
 
   # Make prediction only using random if only random
   if (all(names(args$data) %in% find_random(x, flatten = TRUE))) {
@@ -75,6 +72,9 @@ get_predicted.merMod <- get_predicted.lmerMod
 
 
 
+# glmmTMB ---------------------------------------------------------------
+# =======================================================================
+
 #' @export
 get_predicted.glmmTMB <- function(x,
                                   data = NULL,
@@ -84,8 +84,6 @@ get_predicted.glmmTMB <- function(x,
                                   iterations = NULL,
                                   verbose = TRUE,
                                   ...) {
-  dots <- list(...)
-
   # Sanity checks
   if (!is.null(predict) && predict %in% c("prediction", "predicted", "classification")) {
     predict <- "expectation"
@@ -113,9 +111,6 @@ get_predicted.glmmTMB <- function(x,
     verbose = verbose,
     ...
   )
-
-  # we have now a validated "predict"...
-  predict <- args$predict
 
   # Prediction function
   predict_function <- function(x, data, ...) {

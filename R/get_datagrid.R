@@ -464,8 +464,9 @@ get_datagrid.default <- function(x,
   }
 
   # Deal with intercept-only models
+  response <- find_response(x)
   if (include_response == FALSE) {
-    data <- data[!names(data) %in% find_response(x)]
+    data <- data[!names(data) %in% response]
     if (ncol(data) < 1) {
       stop(format_message("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."), call. = FALSE)
     }
@@ -474,7 +475,7 @@ get_datagrid.default <- function(x,
   # Drop random factors
   random_factors <- find_random(x, flatten = TRUE)
   if (include_random == FALSE && !is.null(random_factors)) {
-    keep <- find_predictors(x, effects = "fixed", flatten = TRUE)
+    keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
     if (!is.null(keep)) {
       if (all(at != "all")) {
         keep <- c(keep, at[at %in% random_factors])
