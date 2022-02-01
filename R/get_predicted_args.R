@@ -92,7 +92,7 @@
 
   transform <- FALSE
 
-  # type_arg  = what we pass own to type
+  # type_arg  = what we pass down to type
   # scale_arg = the scale of the predictions (link, response, terms, ...)
   #             this may differ from type_arg, because we back-transform
   # transform = whether we back-transform predictions, SE and CI
