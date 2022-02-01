@@ -79,7 +79,7 @@ get_predicted.hurdle <- function(x,
     ci_data <- get_predicted_ci(x, predictions = predictions, data = args$data, ci = ci, ci_type = args$ci_type, predict_arg = predict)
 
     # 3. step: back-transform
-    out <- .get_predicted_transform(x, predictions, args, ci_data, link_inv = linv)
+    out <- .get_predicted_transform(x, predictions, args, ci_data, link_inv = linv, verbose = verbose)
   }
 
   # 4. step: final preparation

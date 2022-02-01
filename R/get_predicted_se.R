@@ -26,17 +26,33 @@ get_predicted_se <- function(x,
     return(NULL)
   }
 
+  # last desperate try
   if (ncol(mm) != ncol(vcovmat)) {
-    # last desperate try
-    mm_full <- get_modelmatrix(x)
-    mm <- tryCatch(
-      {
-        mm_full[as.numeric(row.names(get_modelmatrix(x, data = data))), , drop = FALSE]
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+
+    if (ncol(mm) == nrow(mm) && ncol(vcovmat) > ncol(mm) && all(colnames(mm) %in% colnames(vcovmat))) {
+
+      # we might have a correct model matrix, but the vcov matrix contains values
+      # from specific model parameters that do not appear in the model matrix
+      # we then need to reduce the vcov matrix.
+
+      matching_parameters <- stats::na.omit(match(colnames(vcovmat), colnames(mm)))
+      vcovmat <- vcovmat[matching_parameters, matching_parameters, drop = FALSE]
+    } else {
+
+      # model matrix rows might mismatch. we need a larger model matrix and
+      # then filter those rows that match the vcov matrix.
+
+      mm_full <- get_modelmatrix(x)
+      mm <- tryCatch(
+        {
+          mm_full[as.numeric(row.names(get_modelmatrix(x, data = data))), , drop = FALSE]
+        },
+        error = function(e) {
+          NULL
+        }
+      )
+    }
+
     # still no match?
     if (isTRUE(ncol(mm) != ncol(vcovmat))) {
       warning(format_message("Could not compute standard errors or confidence intervals because the model and variance-covariance matrices are non-conformable. This can sometimes happen when the `data` used to make predictions fails to include all the levels of a factor variable or all the interaction components."), call. = FALSE)
