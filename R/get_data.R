@@ -809,14 +809,8 @@ get_data.feglm <- function(x, ...) {
 #' @export
 get_data.pgmm <- function(x, verbose = TRUE, ...) {
   model_terms <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
-  mf <- tryCatch(
-    {
-      .recover_data_from_environment(x)[, model_terms, drop = FALSE]
-    },
-    error = function(x) {
-      NULL
-    }
-  )
+  mf <- tryCatch(.recover_data_from_environment(x)[, model_terms, drop = FALSE],
+                 error = function(x) NULL)
   .prepare_get_data(x, mf, verbose = verbose)
 }
 
@@ -1152,25 +1146,11 @@ get_data.averaging <- function(x, ...) {
 #' @export
 get_data.Arima <- function(x, ...) {
   # first try, parent frame
-  dat <- tryCatch(
-    {
-      eval(x$call$x, envir = parent.frame())
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  dat <- tryCatch(eval(x$call$x, envir = parent.frame()), error = function(e) NULL)
 
   if (is.null(dat)) {
     # second try, global env
-    dat <- tryCatch(
-      {
-        eval(x$call$x, envir = globalenv())
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    dat <- tryCatch(eval(x$call$x, envir = globalenv()), error = function(e) NULL)
   }
 
   dat
@@ -1256,15 +1236,7 @@ get_data.LORgee <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 #' @export
 get_data.gmnl <- function(x, ...) {
-  mf <- tryCatch(
-    {
-      x$mf
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  mf <- tryCatch(x$mf, error = function(x) NULL)
   .prepare_get_data(x, mf)
 }
 
@@ -1357,15 +1329,7 @@ get_data.bracl <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_data.mlogit <- function(x, verbose = TRUE, ...) {
-  mf <- tryCatch(
-    {
-      as.data.frame(stats::model.frame(x))
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  mf <- tryCatch(as.data.frame(stats::model.frame(x)), error = function(x) NULL)
   .prepare_get_data(x, mf, verbose = verbose)
 }
 
@@ -1373,15 +1337,7 @@ get_data.mlogit <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_data.rma <- function(x, verbose = TRUE, ...) {
-  mf <- tryCatch(
-    {
-      .recover_data_from_environment(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  mf <- tryCatch(.recover_data_from_environment(x), error = function(x) NULL)
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
@@ -1392,30 +1348,14 @@ get_data.metaplus <- get_data.rma
 
 #' @export
 get_data.meta_random <- function(x, verbose = TRUE, ...) {
-  mf <- tryCatch(
-    {
-      x$data$data
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  mf <- tryCatch(x$data$data, error = function(x) NULL)
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 
 
 #' @export
 get_data.meta_bma <- function(x, verbose = TRUE, ...) {
-  mf <- tryCatch(
-    {
-      x$meta$fixed$data$data
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  mf <- tryCatch(x$meta$fixed$data$data, error = function(x) NULL)
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
 

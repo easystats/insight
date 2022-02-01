@@ -94,14 +94,7 @@ formula_ok <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.default <- function(x, verbose = TRUE, ...) {
-  f <- tryCatch(
-    {
-      list(conditional = stats::formula(x))
-    },
-    error = function(x) {
-      NULL
-    }
-  )
+  f <- tryCatch(list(conditional = stats::formula(x)), error = function(x) NULL)
   .find_formula_return(f, verbose = verbose)
 }
 
@@ -161,14 +154,7 @@ find_formula.SemiParBIV <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.gam <- function(x, verbose = TRUE, ...) {
-  f <- tryCatch(
-    {
-      stats::formula(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
+  f <- tryCatch(stats::formula(x), error = function(x) NULL)
 
   if (!is.null(f)) {
     if (is.list(f)) {
@@ -948,12 +934,8 @@ find_formula.glimML <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.tobit <- function(x, verbose = TRUE, ...) {
   f <- tryCatch(
-    {
-      list(conditional = parse(text = .safe_deparse(x$call))[[1]]$formula)
-    },
-    error = function(x) {
-      NULL
-    }
+    list(conditional = parse(text = .safe_deparse(x$call))[[1]]$formula),
+    error = function(x) NULL
   )
   .find_formula_return(f, verbose = verbose)
 }
@@ -1425,14 +1407,8 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
       f.cond <- stats::as.formula(fcond)
     }
   } else if (.classify_BFBayesFactor(x) %in% c("ttest1", "ttest2")) {
-    f.cond <- tryCatch(
-      {
-        stats::as.formula(x@numerator[[1]]@identifier$formula)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    f.cond <- tryCatch(stats::as.formula(x@numerator[[1]]@identifier$formula),
+                       error = function(e) NULL)
     f.random <- NULL
   } else {
     return(NULL)
@@ -1591,14 +1567,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 # Find formula for zero-inflated regressions, where
 # zero-inflated part is separated by | from count part
 .zeroinf_formula <- function(x, separator = "\\|", verbose = TRUE) {
-  f <- tryCatch(
-    {
-      stats::formula(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
+  f <- tryCatch(stats::formula(x), error = function(x) NULL)
 
   if (is.null(f)) {
     return(NULL)
