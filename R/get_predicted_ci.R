@@ -192,6 +192,9 @@ get_predicted_ci.mlm <- function(x, ...) {
   # TODO: Prediction interval for poisson: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-ii/
 
   # Sanity checks
+  if (!is.null(se)) {
+    se <- as.numeric(se)
+  }
   if (is.null(predictions)) {
     return(data.frame(SE = se))
   }
@@ -227,8 +230,8 @@ get_predicted_ci.mlm <- function(x, ...) {
       }
     }
 
-    ci_low <- predictions - (se * crit_val)
-    ci_high <- predictions + (se * crit_val)
+    ci_low <- as.numeric(predictions - (se * crit_val))
+    ci_high <- as.numeric(predictions + (se * crit_val))
   }
 
   data.frame(SE = se, CI_low = ci_low, CI_high = ci_high)

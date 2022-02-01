@@ -60,7 +60,13 @@ get_modelmatrix.svyglm <- function(x, ...) {
     data <- tryCatch(
       {
         d <- as.data.frame(dots$data)
-        d[[find_response(x)]] <- mean(get_response(m1))
+        response_name <- find_response(x)
+        response_variable <- get_response(x)
+        if (is.factor(response_variable)) {
+          d[[response_name]] <- levels(response_variable)[1]
+        } else {
+          d[[response_name]] <- mean(response_variable)
+        }
         d
       },
       error = function(e) {
