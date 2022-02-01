@@ -29,8 +29,10 @@
 #'   will fix the value of the smooth to its average, so that the predictions
 #'   are not depending on it. (default), `mean()`, or
 #'   `bayestestR::map_estimate()`.
-#' @param ... Other argument to be passed for instance to
-#'   [get_predicted_ci()].
+#' @param ... Other argument to be passed, for instance to [get_predicted_ci()].
+#'   This can be used to request confidence intervals based on robust standard
+#'   errors, e.g. by specifying the `vcov_*` arguments from [get_predicted_ci()]
+#'   directly in the call to `get_predicted()`.
 #' @inheritParams get_df
 #'
 #' @seealso [get_predicted_ci()]
@@ -63,7 +65,6 @@
 #'   0s, the prediction interval is... `[0, 1]`).
 #' }}
 #'
-#'
 #' \subsection{Link scale vs. Response scale}{
 #' When users set the `predict` argument to `"expectation"`, the predictions
 #' are returned on the response scale, which is arguably the most convenient
@@ -77,6 +78,14 @@
 #' function will first calculate predictions as if the user had selected
 #' `predict="expectation"`. Then, it will round the responses in order to
 #' return the most likely outcome.
+#' }
+#'
+#' \subsection{Heteroscedasticity consistent standard errors}{
+#' The argument `vcov_estimation`, `vcov_type` and `vcov_args` can be used
+#' to calculate robust standard errors for confidence intervals of predictions.
+#' These arguments, when provided in `get_predicted()`, are passed down to
+#' [get_predicted_ci()], thus, see the related documentation there for more
+#' details.
 #' }
 #'
 #' @examples
