@@ -241,7 +241,7 @@ get_predicted.lrm <- get_predicted.default
 # =======================================================================
 
 #' @export
-get_predicted.survreg <- get_predicted.default
+get_predicted.survreg <- get_predicted.lm
 
 
 
