@@ -7,6 +7,9 @@ data(trade)
 m1 <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
 m2 <- femlm(log1p(Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")
 m3 <- feglm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "poisson")
+m4 <- feols(
+    Sepal.Width ~ Petal.Length | Species | Sepal.Length ~ Petal.Width,
+    data = iris)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_count)
@@ -30,6 +33,11 @@ test_that("find_predictors", {
     find_predictors(m3, component = "all"),
     list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
   )
+  expect_identical(
+    find_predictors(m4, component = "all"),
+    list(conditional = c("Petal.Length", "Sepal.Length"),
+         cluster = "Species",
+         instruments = "Petal.Width"))
 })
 
 test_that("find_random", {
@@ -77,6 +85,12 @@ test_that("get_data", {
   expect_equal(colnames(get_data(m1)), c("Euros", "dist_km", "Origin", "Destination", "Product"))
   expect_equal(nrow(get_data(m2)), 38325)
   expect_equal(colnames(get_data(m2)), c("Euros", "dist_km", "Origin", "Destination", "Product"))
+
+  # old bug: m4 uses a complex formula and we need to extract all relevant
+  # variables in order to compute predictions.
+  nd <- get_data(m4)
+  tmp <- predict(m4, newdata = nd)
+  expect_true(is.numeric(tmp) && length(tmp) == nrow(iris))
 })
 
 test_that("find_formula", {
@@ -137,6 +151,7 @@ test_that("find_variables", {
     find_variables(m1, flatten = TRUE),
     c("Euros", "dist_km", "Origin", "Destination", "Product")
   )
+
 })
 
 
