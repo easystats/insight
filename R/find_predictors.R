@@ -123,6 +123,23 @@ find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 }
 
 
+#' @export
+find_predictors.fixest <- function(x, flatten = FALSE, ...) {
+  response <- find_response(x)
+  instruments <- x$iv_inst_names
+  cluster <- x$fixef_vars
+  conditional <- all.vars(stats::formula(x))
+  conditional <- setdiff(conditional, c(instruments, cluster, find_response(x)))
+  l <- list("conditional" = conditional,
+            "cluster" = cluster,
+            "instruments" = instruments)
+  l <- Filter(function(x) length(x) > 0, l)
+  if (isTRUE(flatten)) {
+    l <- unlist(l)
+  }
+  l
+}
+
 
 #' @export
 find_predictors.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
