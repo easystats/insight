@@ -310,7 +310,8 @@
   # check if data argument was used
   model_call <- get_call(model)
   if (!is.null(model_call)) {
-    data_arg <- parse(text = .safe_deparse(model_call))[[1]]$data
+    data_arg <- tryCatch(parse(text = .safe_deparse(model_call))[[1]]$data,
+                         error = function(e) NULL)
   } else {
     data_arg <- NULL
   }
