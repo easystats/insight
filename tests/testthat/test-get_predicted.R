@@ -100,11 +100,16 @@ test_that("get_predicted - glm", {
   ref <- predict(x, se.fit = TRUE, type = "response")
   rez <- as.data.frame(get_predicted(x, predict = "expectation"))
   expect_equal(nrow(rez), 32)
-  expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-10)
-  expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
+  expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-4)
+  expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-4)
   ref <- as.data.frame(suppressWarnings(insight::link_inverse(x)(predict.lm(x, interval = "confidence"))))
   expect_equal(max(abs(ref$lwr - rez$CI_low)), 0, tolerance = 1e-2)
 
+  ref <- predict(x, se.fit = TRUE, type = "link")
+  rez <- as.data.frame(get_predicted(x, predict = "link"))
+  expect_equal(nrow(rez), 32)
+  expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-4)
+  expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-4)
 
   # Bootstrap
   set.seed(333)
@@ -470,9 +475,7 @@ test_that("bugfix: used to return all zeros", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
   pred <- get_predicted(mod, predict = "response")
   expect_false(any(pred == 0))
-  pred <- suppressWarnings(get_predicted(mod, predict = "original"))
-  expect_warning(get_predicted(mod, predict = "original"))
-  expect_false(all(pred == 0))
+  expect_error(expect_warning(get_predicted(mod, predict = "original")))
 })
 
 

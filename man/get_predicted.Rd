@@ -32,8 +32,10 @@ get_predicted(x, ...)
 \item{x}{A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).}
 
-\item{...}{Other argument to be passed for instance to
-\code{\link[=get_predicted_ci]{get_predicted_ci()}}.}
+\item{...}{Other argument to be passed, for instance to \code{\link[=get_predicted_ci]{get_predicted_ci()}}.
+This can be used to request confidence intervals based on robust standard
+errors, e.g. by specifying the \verb{vcov_*} arguments from \code{\link[=get_predicted_ci]{get_predicted_ci()}}
+directly in the call to \code{get_predicted()}.}
 
 \item{data}{An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used.}
@@ -114,6 +116,14 @@ probabilities, whereas the link-scale makes predictions of log-odds
 function will first calculate predictions as if the user had selected
 \code{predict="expectation"}. Then, it will round the responses in order to
 return the most likely outcome.
+}
+
+\subsection{Heteroscedasticity consistent standard errors}{
+The arguments \code{vcov_estimation}, \code{vcov_type} and \code{vcov_args} can be used
+to calculate robust standard errors for confidence intervals of predictions.
+These arguments, when provided in \code{get_predicted()}, are passed down to
+\code{\link[=get_predicted_ci]{get_predicted_ci()}}, thus, see the related documentation there for more
+details.
 }
 }
 \examples{

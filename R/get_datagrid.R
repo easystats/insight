@@ -460,12 +460,25 @@ get_datagrid.default <- function(x,
                                  ...) {
   # Retrieve data from model
   if (is.null(data)) {
-    data <- get_data(x)[find_variables(x, "all", flatten = TRUE)]
+    data <- tryCatch(get_data(x)[find_variables(x, "all", flatten = TRUE)], error = function(e) NULL)
+  }
+
+  # For models with transformed parameters, "find_variables" may not return
+  # matching column names - then try retrieving terms instead
+  if (is.null(data)) {
+    data <- tryCatch(get_data(x)[find_terms(x, "all", flatten = TRUE)], error = function(e) NULL)
+  }
+
+  # still found no data - stop here
+  if (is.null(data)) {
+    stop(format_message("Can't access data that was used to fit the model in order to create the reference grid.",
+                        "Please use the `data` argument."))
   }
 
   # Deal with intercept-only models
+  response <- find_response(x)
   if (include_response == FALSE) {
-    data <- data[!names(data) %in% find_response(x)]
+    data <- data[!names(data) %in% response]
     if (ncol(data) < 1) {
       stop(format_message("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."), call. = FALSE)
     }
@@ -474,7 +487,7 @@ get_datagrid.default <- function(x,
   # Drop random factors
   random_factors <- find_random(x, flatten = TRUE)
   if (include_random == FALSE && !is.null(random_factors)) {
-    keep <- find_predictors(x, effects = "fixed", flatten = TRUE)
+    keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
     if (!is.null(keep)) {
       if (all(at != "all")) {
         keep <- c(keep, at[at %in% random_factors])
@@ -521,6 +534,55 @@ get_datagrid.default <- function(x,
 }
 
 
+
+
+#' @export
+get_datagrid.wbm <- function(x,
+                             at = "all",
+                             factors = "reference",
+                             numerics = "mean",
+                             preserve_range = TRUE,
+                             reference = x,
+                             include_smooth = TRUE,
+                             include_random = FALSE,
+                             data = NULL,
+                             ...) {
+  # Retrieve data from model
+  if (is.null(data)) {
+    data <- tryCatch(get_data(x)[find_variables(x, "all", flatten = TRUE)], error = function(e) NULL)
+  }
+
+  # For models with transformed parameters, "find_variables" may not return
+  # matching column names - then try retrieving terms instead
+  if (is.null(data)) {
+    data <- tryCatch(get_data(x)[find_terms(x, "all", flatten = TRUE)], error = function(e) NULL)
+  }
+
+  # still found no data - stop here
+  if (is.null(data)) {
+    stop(format_message("Can't access data that was used to fit the model in order to create the reference grid.",
+                        "Please use the `data` argument."))
+  }
+
+  # add id and time variables
+  data[[x@call_info$id]] <- levels(stats::model.frame(x)[[x@call_info$id]])[1]
+  wave <- stats::model.frame(x)[[x@call_info$wave]]
+  if (is.factor(wave)) {
+    data[[x@call_info$wave]] <- levels(wave)[1]
+  } else {
+    data[[x@call_info$wave]] <- mean(wave)
+  }
+
+  # clean variable names
+  colnames(data) <- clean_names(colnames(data))
+
+  get_datagrid.default(
+    x = x, at = at, factors = factors, numerics = numerics,
+    preserve_range = preserve_range, reference = reference,
+    include_smooth = include_smooth, include_random = include_random,
+    include_response = TRUE, data = data, ...
+  )
+}
 
 
 

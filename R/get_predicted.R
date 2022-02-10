@@ -29,8 +29,10 @@
 #'   will fix the value of the smooth to its average, so that the predictions
 #'   are not depending on it. (default), `mean()`, or
 #'   `bayestestR::map_estimate()`.
-#' @param ... Other argument to be passed for instance to
-#'   [get_predicted_ci()].
+#' @param ... Other argument to be passed, for instance to [get_predicted_ci()].
+#'   This can be used to request confidence intervals based on robust standard
+#'   errors, e.g. by specifying the `vcov_*` arguments from [get_predicted_ci()]
+#'   directly in the call to `get_predicted()`.
 #' @inheritParams get_df
 #'
 #' @seealso [get_predicted_ci()]
@@ -63,7 +65,6 @@
 #'   0s, the prediction interval is... `[0, 1]`).
 #' }}
 #'
-#'
 #' \subsection{Link scale vs. Response scale}{
 #' When users set the `predict` argument to `"expectation"`, the predictions
 #' are returned on the response scale, which is arguably the most convenient
@@ -77,6 +78,14 @@
 #' function will first calculate predictions as if the user had selected
 #' `predict="expectation"`. Then, it will round the responses in order to
 #' return the most likely outcome.
+#' }
+#'
+#' \subsection{Heteroscedasticity consistent standard errors}{
+#' The arguments `vcov_estimation`, `vcov_type` and `vcov_args` can be used
+#' to calculate robust standard errors for confidence intervals of predictions.
+#' These arguments, when provided in `get_predicted()`, are passed down to
+#' [get_predicted_ci()], thus, see the related documentation there for more
+#' details.
 #' }
 #'
 #' @examples
@@ -176,9 +185,10 @@ get_predicted.lm <- function(x,
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   predict_function <- function(x, data, ...) {
-    stats::predict(x, newdata = data, interval = "none", type = args$type, ...)
+    stats::predict(x, newdata = data, interval = "none", type = args$type, se.fit = FALSE, ...)
   }
 
+  # 1. step: predictions
   if (is.null(iterations)) {
     predictions <- predict_function(x, data = args$data)
   } else {
@@ -192,15 +202,19 @@ get_predicted.lm <- function(x,
     )
   }
 
-  ci_data <- get_predicted_ci(x,
+  # 2. step: confidence intervals
+  ci_data <- get_predicted_ci(
+    x,
     predictions,
     data = args$data,
     ci_type = args$ci_type,
     ...
   )
 
-  out <- .get_predicted_transform(x, predictions, args, ci_data)
+  # 3. step: back-transform
+  out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
 
+  # 4. step: final preparation
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
@@ -219,6 +233,15 @@ get_predicted.glm <- get_predicted.lm
 
 #' @export
 get_predicted.lrm <- get_predicted.default
+
+
+
+
+# survival: survreg -----------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.survreg <- get_predicted.lm
 
 
 
@@ -273,191 +296,6 @@ get_predicted.bife <- function(x,
 
 
 
-# process predict-specific arguments ------------------------------------------
-
-.get_predicted_args <- function(x,
-                                data = NULL,
-                                predict = "expectation",
-                                include_random = TRUE,
-                                include_smooth = TRUE,
-                                ci = 0.95,
-                                newdata = NULL,
-                                verbose = TRUE,
-                                ...) {
-
-  # check whether user possibly used the "type" instead of "predict" argument
-  dots <- list(...)
-
-  # one of "type" or "predict" must be provided...
-  if (is.null(dots$type) && is.null(predict)) {
-    stop(format_message("Please supply a value for the `predict` argument."))
-  }
-
-  # ...but not both
-  if (!is.null(dots$type) && !is.null(predict)) {
-    stop(format_message(
-      '`predict` and `type` cannot both be given. The preferred argument for `get_predicted()` is `predict`.',
-      'To use the `type` argument, set `predict = NULL` explicitly, e.g.,:',
-      '`get_predicted(model, predict = NULL, type = "response")`'
-    ))
-  }
-
-  # copy "type" to "predict"
-  if (!is.null(dots$type)) {
-    predict <- dots$type
-  }
-
-  if (length(predict) > 1) {
-    predict <- predict[1]
-    if (isTRUE(verbose)) {
-      msg <- format_message(sprintf("More than one option provided in `predict`. Using first option '%s' now."), predict[1])
-      warning(msg, call. = FALSE)
-    }
-  }
-
-  # Get info
-  info <- model_info(x, verbose = FALSE)
-
-  # Data
-  if (!is.null(newdata) && is.null(data)) data <- newdata
-  if (is.null(data)) data <- get_data(x, verbose = verbose)
-
-  # CI
-  if (is.null(ci)) ci <- 0
-
-  # check `predict` user-input
-  predict_method <- lapply(
-    class(x), function(i) {
-      tryCatch(utils::getS3method("predict", i),
-               error = function(e) NULL)
-    }
-  )
-  predict_method <- tryCatch(predict_method[!sapply(predict_method, is.null)][[1]], error = function(e) NULL)
-
-  # check aliases
-  if (predict == "expected") {
-    predict <- "expectation"
-  }
-  if (predict == "predicted") {
-    predict <- "prediction"
-  }
-
-  # backward compatibility
-  if (identical(predict, "relation")) {
-    message(format_message(
-      '`predict = "relation" is deprecated.',
-      'Please use `predict = "expectation" instead.'
-    ))
-    predict <- "expectation"
-  }
-
-  # Warn if get_predicted() is not called with an easystats- or
-  # model-supported predicted type
-  easystats_methods <- c("expectation", "link", "prediction", "classification")
-  type_methods <- suppressWarnings(eval(formals(predict_method)$type))
-  supported <- c(easystats_methods, type_methods)
-  if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
-    msg <- format_message(
-      sprintf('`predict` = "%s"` is not officially supported by `get_predicted()`.', predict),
-      '`predict` will be passed directly to the `predict()` method for the model and not validated.',
-      'Please check the validity and scale of the results.',
-      'Set `verbose = FALSE` to silence this warning, or use one of the supported values for the `predict` argument:',
-      paste(" ", paste(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted"))), collapse = ", "))
-    )
-    warning(msg, call. = FALSE)
-  }
-
-  # Arbitrate conflicts between the `predict` and `type` from the ellipsis. We
-  # create a new variable called `predict_arg` to resolve conflicts. This avoids
-  # modifying the values of `type` and `predict` on the fly, which allows us to
-  # keep track of the original user input.
-
-  predict_arg <- predict
-  # Type (that's for the initial call to stats::predict)
-  if (predict_arg == "terms") {
-    type_arg <- "terms"
-  } else if (info$is_linear || predict_arg == "response") {
-    type_arg <- "response"
-    # user provided a valid "type" value, which is not one of our "predict" values
-  } else if (predict_arg %in% type_methods) {
-    type_arg <- predict_arg
-  } else {
-    type_arg <- "link"
-  }
-
-  # Prediction and CI type
-  if (predict_arg == "link") {
-    ci_type <- "confidence"
-    scale <- "link"
-  } else if (predict_arg %in% c("expectation", "response")) {
-    ci_type <- "confidence"
-    scale <- "response"
-  } else if (predict_arg %in% c("prediction", "classification")) {
-    ci_type <- "prediction"
-    scale <- "response"
-  } else {
-    ci_type <- "confidence"
-    scale <- predict_arg
-  }
-
-  # Transform, but not if user provided a "type" argument
-  if (info$is_linear == FALSE && scale == "response") {
-    transform <- TRUE
-    type_arg <- "link" # set from response to link, because we back-transform
-  } else {
-    transform <- FALSE
-  }
-
-  # Smooth
-  smooths <- clean_names(find_smooth(x, flatten = TRUE))
-  if (!is.null(smooths)) {
-    for (smooth in smooths) {
-      # Fix smooth to average value
-      if (!smooth %in% names(data) || include_smooth == FALSE) {
-        include_smooth <- FALSE
-        data[[smooth]] <- mean(get_data(x)[[smooth]], na.rm = TRUE)
-      }
-    }
-  }
-
-  # Random
-  # In case include_random is TRUE, but there's actually no random factors in data
-  if (include_random && !is.null(data) && !is.null(x) && !all(find_random(x, flatten = TRUE) %in% names(data))) {
-    include_random <- FALSE
-  }
-
-  # Add (or set) random variables to "NA"
-  if (include_random == FALSE) {
-    if (inherits(x, c("stanreg", "brmsfit"))) {
-      # rstantools predictions doens't allow for NaNs in newdata
-      data[find_variables(x, effects = "random", verbose = FALSE)$random] <- NULL
-    } else {
-      data[find_variables(x, effects = "random", verbose = FALSE)$random] <- NA
-    }
-  }
-
-  re.form <- .format_reform(include_random)
-
-  # Return all args
-  list(
-    data = data,
-    include_random = include_random,
-    re.form = re.form,
-    include_smooth = include_smooth,
-    ci_type = ci_type,
-    ci = ci,
-    type = type_arg,
-    predict = predict_arg,
-    scale = scale,
-    transform = transform,
-    info = info,
-    allow_new_levels = isTRUE(list(...)$allow.new.levels)
-  )
-}
-
-
-
-
 # back-transformation ------------------------------------------------------
 
 .get_predict_transform_response <- function(predictions, response) {
@@ -479,10 +317,18 @@ get_predicted.bife <- function(x,
                                      predictions,
                                      args = NULL,
                                      ci_data = NULL,
+                                     link_inv = NULL,
+                                     verbose = FALSE,
                                      ...) {
 
   # Transform to response scale
   if (isTRUE(args$transform)) {
+
+    # retrieve link-inverse, for back transformation...
+    if (is.null(link_inv)) {
+      link_inv <- link_inverse
+    }
+
     if (!is.null(ci_data)) {
       # Transform CI
       se_col <- names(ci_data) == "SE"
@@ -490,20 +336,27 @@ get_predicted.bife <- function(x,
       # fix for R 3.4
       row.names(ci_data) <- NULL
 
-      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inverse(x))
+      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inv(x))
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
       # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
-      mu_eta <- abs(get_family(x)$mu.eta(predictions))
-      ci_data[se_col] <- ci_data[se_col] * mu_eta
+      mu_eta <- tryCatch(abs(get_family(x)$mu.eta(predictions)), error = function(e) NULL)
+      if (is.null(mu_eta)) {
+        if (isTRUE(verbose)) {
+          warning(format_message("Could not apply Delta method to transform standard errors.",
+                                 "These are returned on the link-scale."), call. = FALSE)
+        }
+      } else {
+        ci_data[se_col] <- ci_data[se_col] * mu_eta
+      }
     }
 
     # Transform predictions
-    predictions <- link_inverse(x)(predictions)
+    predictions <- link_inv(x)(predictions)
 
     # Transform iterations
     if ("iterations" %in% names(attributes(predictions))) {
-      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inverse(x)))
+      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv(x)))
     }
 
     # Transform to response "type"

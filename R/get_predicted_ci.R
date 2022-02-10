@@ -22,6 +22,8 @@
 #'   other models (e.g., `glm`), prediction intervals are somewhat useless
 #'   (for instance, for a binomial model for which the dependent variable is a
 #'   vector of 1s and 0s, the prediction interval is... `[0, 1]`).
+#' @param se Numeric vector of standard error of predicted values. If `NULL`,
+#'   standard errors are calculated based on the variance-covariance matrix.
 #' @param vcov_estimation Either a matrix, or a string, indicating the suffix
 #'   of the `vcov*()`-function from the \pkg{sandwich} or \pkg{clubSandwich}
 #'   package, e.g. `vcov_estimation = "CL"` (which calls
@@ -104,14 +106,20 @@ get_predicted_ci <- function(x, predictions = NULL, ...) {
 get_predicted_ci.default <- function(x,
                                      predictions = NULL,
                                      data = NULL,
+                                     se = NULL,
                                      ci = 0.95,
                                      ci_type = "confidence",
+                                     ci_method = "quantile",
+                                     dispersion_method = "sd",
                                      vcov_estimation = NULL,
                                      vcov_type = NULL,
                                      vcov_args = NULL,
-                                     dispersion_method = "sd",
-                                     ci_method = "quantile",
                                      ...) {
+  # sanity check, if CI should be skipped
+  if (is.null(ci)) {
+    return(ci)
+  }
+
   # If draws are present (bootstrapped or Bayesian)
   if ("iterations" %in% names(attributes(predictions))) {
     iter <- attributes(predictions)$iteration
@@ -129,7 +137,9 @@ get_predicted_ci.default <- function(x,
 
   # Analytical solution
   # 1. Find appropriate interval function
-  if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov_estimation) && is.matrix(vcov_estimation))) { # gaussian or CI
+  if (!is.null(se)) {
+    ci_function <- .get_predicted_se_to_ci
+  } else if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov_estimation) && is.matrix(vcov_estimation))) { # gaussian or CI
     se <- get_predicted_se(
       x,
       data = data,
@@ -161,67 +171,6 @@ get_predicted_ci.default <- function(x,
 
   out
 }
-
-
-
-
-# Specific definitions ----------------------------------------------------
-
-#' @export
-get_predicted_ci.hurdle <- function(x,
-                                    predictions = NULL,
-                                    data = NULL,
-                                    ci = 0.95,
-                                    ci_type = "confidence",
-                                    vcov_estimation = NULL,
-                                    vcov_type = NULL,
-                                    vcov_args = NULL,
-                                    predict_arg = "count",
-                                    ...) {
-
-  if (inherits(x, "hurdle") && predict_arg == "zero") {
-    # nothing...
-    linv <- function(x) x
-  } else if (predict_arg == "zero") {
-    linv <- stats::plogis
-    # need back-transformation
-    predictions <- stats::qlogis(as.vector(predictions))
-  } else {
-    linv <- exp
-    # need back-transformation
-    predictions <- log(as.vector(predictions))
-  }
-
-  # Analytical solution
-  se <- get_predicted_se(
-    x,
-    data = data,
-    ci_type = ci_type,
-    vcov_estimation = vcov_estimation,
-    vcov_type = vcov_type,
-    vcov_args = vcov_args
-  )
-
-  # 2. Run it once or multiple times if multiple CI levels are requested
-  if (is.null(ci)) {
-    out <- data.frame(SE = se)
-  } else if (length(ci) == 1) {
-    out <- .get_predicted_se_to_ci_zeroinfl(x, predictions, ci = ci, se = se, link_inv = linv)
-  } else {
-    out <- data.frame(SE = se)
-    for (ci_val in ci) {
-      temp <- .get_predicted_se_to_ci_zeroinfl(x, predictions, ci = ci, se = se, link_inv = linv)
-      temp$SE <- NULL
-      names(temp) <- paste0(names(temp), "_", ci_val)
-      out <- cbind(out, temp)
-    }
-  }
-  out
-}
-
-#' @export
-get_predicted_ci.zeroinfl <- get_predicted_ci.hurdle
-
 
 #' @export
 get_predicted_ci.mlm <- function(x, ...) {

@@ -78,7 +78,7 @@ get_predicted.gam <- function(x,
 
   # Get CI
   ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
-  out <- .get_predicted_transform(x, predictions, args, ci_data)
+  out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
