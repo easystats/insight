@@ -12,7 +12,7 @@ predictions made by a model."><meta property="og:image" content="/reference/figu
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,13 +77,14 @@ predictions made by a model.</p>
   <span class="va">x</span>,
   predictions <span class="op">=</span> <span class="cn">NULL</span>,
   data <span class="op">=</span> <span class="cn">NULL</span>,
+  se <span class="op">=</span> <span class="cn">NULL</span>,
   ci <span class="op">=</span> <span class="fl">0.95</span>,
   ci_type <span class="op">=</span> <span class="st">"confidence"</span>,
+  ci_method <span class="op">=</span> <span class="st">"quantile"</span>,
+  dispersion_method <span class="op">=</span> <span class="st">"sd"</span>,
   vcov_estimation <span class="op">=</span> <span class="cn">NULL</span>,
   vcov_type <span class="op">=</span> <span class="cn">NULL</span>,
   vcov_args <span class="op">=</span> <span class="cn">NULL</span>,
-  dispersion_method <span class="op">=</span> <span class="st">"sd"</span>,
-  ci_method <span class="op">=</span> <span class="st">"quantile"</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -102,6 +103,9 @@ second argument has to be a model).</p></dd>
 <dt>data</dt>
 <dd><p>An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used.</p></dd>
+<dt>se</dt>
+<dd><p>Numeric vector of standard error of predicted values. If <code>NULL</code>,
+standard errors are calculated based on the variance-covariance matrix.</p></dd>
 <dt>ci</dt>
 <dd><p>The interval level (default <code>0.95</code>, i.e., <code>95%</code> CI).</p></dd>
 <dt>ci_type</dt>
@@ -119,6 +123,12 @@ This applies mostly for "simple" linear models (like <code>lm</code>), as for
 other models (e.g., <code>glm</code>), prediction intervals are somewhat useless
 (for instance, for a binomial model for which the dependent variable is a
 vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd>
+<dt>dispersion_method, ci_method</dt>
+<dd><p>These arguments are only used in
+the context of bootstrapped and Bayesian models. Possible values are
+<code>dispersion_method = c("sd", "mad")</code> and
+<code>ci_method = c("quantile", "hdi", "eti")</code>. For the latter, the
+<span class="pkg">bayestestR</span> package is required.</p></dd>
 <dt>vcov_estimation</dt>
 <dd><p>Either a matrix, or a string, indicating the suffix
 of the <code>vcov*()</code>-function from the <span class="pkg">sandwich</span> or <span class="pkg">clubSandwich</span>
@@ -137,12 +147,6 @@ for details). Only applies if <code>vcov_estimation</code> is a string, and not 
 passed down to the <span class="pkg">sandwich</span>-function specified in
 <code>vcov_estimation</code>. Only applies if <code>vcov_estimation</code> is a string, and not
 a matrix.</p></dd>
-<dt>dispersion_method, ci_method</dt>
-<dd><p>These arguments are only used in
-the context of bootstrapped and Bayesian models. Possible values are
-<code>dispersion_method = c("sd", "mad")</code> and
-<code>ci_method = c("quantile", "hdi", "eti")</code>. For the latter, the
-<span class="pkg">bayestestR</span> package is required.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

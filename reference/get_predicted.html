@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,8 +98,10 @@
 <dd><p>A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).</p></dd>
 <dt>...</dt>
-<dd><p>Other argument to be passed for instance to
-<code><a href="get_predicted_ci.html">get_predicted_ci()</a></code>.</p></dd>
+<dd><p>Other argument to be passed, for instance to <code><a href="get_predicted_ci.html">get_predicted_ci()</a></code>.
+This can be used to request confidence intervals based on robust standard
+errors, e.g. by specifying the <code>vcov_*</code> arguments from <code><a href="get_predicted_ci.html">get_predicted_ci()</a></code>
+directly in the call to <code>get_predicted()</code>.</p></dd>
 <dt>data</dt>
 <dd><p>An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used.</p></dd>
@@ -178,6 +180,15 @@ probabilities, whereas the link-scale makes predictions of log-odds
 function will first calculate predictions as if the user had selected
 <code>predict="expectation"</code>. Then, it will round the responses in order to
 return the most likely outcome.</p>
+</div>
+
+<div class="section">
+<h3 id="heteroscedasticity-consistent-standard-errors">Heteroscedasticity consistent standard errors<a class="anchor" aria-label="anchor" href="#heteroscedasticity-consistent-standard-errors"></a></h3>
+<p>The arguments <code>vcov_estimation</code>, <code>vcov_type</code> and <code>vcov_args</code> can be used
+to calculate robust standard errors for confidence intervals of predictions.
+These arguments, when provided in <code>get_predicted()</code>, are passed down to
+<code><a href="get_predicted_ci.html">get_predicted_ci()</a></code>, thus, see the related documentation there for more
+details.</p>
 </div>
 
     </div>
