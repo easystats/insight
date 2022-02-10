@@ -54,6 +54,35 @@ get_modelmatrix.clmm <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.svyglm <- function(x, ...) {
+  dots <- list(...)
+  if ("data" %in% names(dots)) {
+    data <- tryCatch(
+      {
+        d <- as.data.frame(dots$data)
+        response_name <- find_response(x)
+        response_variable <- get_response(x)
+        if (is.factor(response_variable)) {
+          d[[response_name]] <- levels(response_variable)[1]
+        } else {
+          d[[response_name]] <- mean(response_variable)
+        }
+        d
+      },
+      error = function(e) {
+        dots$data
+      }
+    )
+    model_terms <- stats::terms(x)
+    mm <- stats::model.matrix(model_terms, data = data)
+  } else {
+    mm <- stats::model.matrix(object = x, ...)
+  }
+
+  mm
+}
+
+#' @export
 get_modelmatrix.brmsfit <- function(x, ...) {
   formula_rhs <- .safe_deparse(find_formula(x)$conditional[[3]])
   formula_rhs <- stats::as.formula(paste0("~", formula_rhs))
