@@ -7,9 +7,25 @@
 
 ## Changes to functions
 
+### `get_predicted()`
+
 * `get_predicted()` was revised. Beside the four core options for the `predict`
   argument, it is now also possible to use any value that is valid for the
   model's `predict()` method's `type` argument.
+
+* `get_predicted()` now supports more models (e.g., from packages like 
+  _GLMMadaptive_ or _survival_).
+
+* `get_predicted()` is now more robust when calculating standard errors of
+  predictions.
+
+### Other functions
+
+* `get_statistic()` and `find_statistic()` now support *htest* objects.
+
+## General
+
+* Various minor improvements.
 
 # insight 0.15.1
 
