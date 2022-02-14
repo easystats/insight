@@ -210,7 +210,7 @@ test_that("get_predicted - lmerMod (log)", {
   expect_equal(nrow(as.data.frame(rez)), 32)
 
   # No random
-  rez2 <- insight::get_predicted(x, newdata = mtcars[c("am", "hp")])
+  rez2 <- insight::get_predicted(x, newdata = mtcars[c("am", "hp")], verbose = FALSE)
   expect_true(!all(is.na(as.data.frame(rez2))))
 })
 
@@ -265,7 +265,7 @@ test_that("get_predicted - glmmTMB", {
   expect_equal(nrow(as.data.frame(rez)), 32)
 
   # No random
-  rez <- insight::get_predicted(x, newdata = mtcars[c("am")])
+  rez <- insight::get_predicted(x, newdata = mtcars[c("am")], verbose = FALSE)
   expect_true(!all(is.na(as.data.frame(rez))))
   x <- glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
   rez <- insight::get_predicted(x, data = data.frame(Petal.Width = c(0, 1, 2)))

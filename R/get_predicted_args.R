@@ -66,10 +66,12 @@
   ## TODO remove in a later update
   # backward compatibility
   if (identical(predict, "relation")) {
-    message(format_message(
-      '`predict = "relation" is deprecated.',
-      'Please use `predict = "expectation" instead.'
-    ))
+    if (isTRUE(verbose)) {
+      message(format_message(
+        '`predict = "relation" is deprecated.',
+        'Please use `predict = "expectation" instead.'
+      ))
+    }
     predict <- "expectation"
   }
 
