@@ -5,6 +5,12 @@
 * `get_datagrid()`, to generate a reference grid, usually used when computing
   adjusted predictions or marginal means from regression models.
 
+## Changes to functions
+
+* `get_predicted()` was revised. Beside the four core options for the `predict`
+  argument, it is now also possible to use any value that is valid for the
+  model's `predict()` method's `type` argument.
+
 # insight 0.15.1
 
 ## General
