@@ -14,6 +14,7 @@ osx <- tryCatch(
 
 if (!osx && requiet("testthat") &&
   requiet("insight") &&
+  requiet("plm") &&
   requiet("feisr")) {
   data(mwp)
   m1 <- feis(
