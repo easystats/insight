@@ -4,27 +4,27 @@ if (requiet("testthat") && requiet("insight") && requiet("afex")) {
   obk.long$treatment <- as.character(obk.long$treatment)
   obk.long$phase <- as.character(obk.long$phase)
 
-  Mc <- afex::aov_car(value ~ treatment * gender + age + Error(id / (phase * hour)),
+  Mc <- suppressWarnings(afex::aov_car(value ~ treatment * gender + age + Error(id / (phase * hour)),
     factorize = FALSE,
     data = obk.long, include_aov = FALSE
-  )
+  ))
 
-  Mc2 <- afex::aov_car(value ~ treatment * gender + exp(age) + Error(id / (phase * hour)),
+  Mc2 <- suppressWarnings(afex::aov_car(value ~ treatment * gender + exp(age) + Error(id / (phase * hour)),
     factorize = FALSE,
     data = obk.long, include_aov = FALSE
-  )
+  ))
 
-  M <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
+  M <- suppressWarnings(afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
     data = obk.long, include_aov = FALSE
-  )
+  ))
 
-  B <- afex::aov_car(value ~ treatment * gender + Error(id),
+  B <- suppressWarnings(afex::aov_car(value ~ treatment * gender + Error(id),
     data = obk.long, include_aov = FALSE
-  )
+  ))
 
-  W <- afex::aov_car(value ~ Error(id / (phase * hour)),
+  W <- suppressWarnings(afex::aov_car(value ~ Error(id / (phase * hour)),
     data = obk.long, include_aov = FALSE
-  )
+  ))
 
   mods <- list(Mc, Mc2, M, B, W)
 
