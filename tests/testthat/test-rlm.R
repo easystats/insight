@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (requiet("MASS")) {
+if (requiet("MASS") && requiet("testthat")) {
   test_that("model.matrix.rlm accepts `data` argument", {
     mod <- MASS::rlm(mpg ~ hp + factor(cyl), mtcars)
     mm <- get_modelmatrix(mod)
@@ -20,8 +20,8 @@ if (requiet("MASS")) {
       expect_s3_class(b, "get_predicted")
       expect_equal(a, b, ignore_attr = TRUE)
       expect_equal(as.vector(a), as.vector(b))
-      expect_error(get_predicted(mod, predict = "link"), regexp = "should be one")
-      expect_error(get_predicted(mod, predict = NULL, type = "link"), regexp = "should be one")
+      expect_error(get_predicted(mod, predict = "link"))
+      expect_error(get_predicted(mod, predict = NULL, type = "link"))
     })
   }
 }
