@@ -265,16 +265,16 @@ if (.runThisTest) {
       expect_equal(
         get_variance(m1),
         list(
-          var.fixed = 972.98333873885542288917,
-          var.random = 1909.82627106414997797401,
-          var.residual = 401.79840084390571064432,
-          var.distribution = 401.79840084390571064432,
+          var.fixed = 972.98333873889,
+          var.random = 1909.82627106496,
+          var.residual = 401.798400843892,
+          var.distribution = 401.798400843892,
           var.dispersion = 0,
-          var.intercept = c(Subject = 750.51639089692923789698),
-          var.slope = c(Subject.Days = 41.06728604073937560770),
-          cor.slope_intercept = c(Subject = -0.00703001666895963079)
+          var.intercept = c(Subject = 750.516390897556),
+          var.slope = c(Subject.Days = 41.0672860407478),
+          cor.slope_intercept = c(Subject = -0.0070300166689934))
         ),
-        tolerance = 1e-4
+        tolerance = 1e-3
       )
 
       expect_equal(

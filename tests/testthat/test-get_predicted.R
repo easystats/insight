@@ -268,7 +268,7 @@ test_that("get_predicted - glmmTMB", {
   rez <- insight::get_predicted(x, newdata = mtcars[c("am")], verbose = FALSE)
   expect_true(!all(is.na(as.data.frame(rez))))
   x <- glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
-  rez <- insight::get_predicted(x, data = data.frame(Petal.Width = c(0, 1, 2)))
+  rez <- insight::get_predicted(x, data = data.frame(Petal.Width = c(0, 1, 2)), verbose = FALSE)
   expect_equal(length(rez), 3)
 
   # vs. Bayesian
