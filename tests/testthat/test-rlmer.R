@@ -272,7 +272,7 @@ if (.runThisTest) {
           var.dispersion = 0,
           var.intercept = c(Subject = 750.516390897556),
           var.slope = c(Subject.Days = 41.0672860407478),
-          cor.slope_intercept = c(Subject = -0.0070300166689934))
+          cor.slope_intercept = c(Subject = -0.0070300166689934)
         ),
         tolerance = 1e-3
       )
