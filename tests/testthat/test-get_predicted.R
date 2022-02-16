@@ -364,7 +364,7 @@ test_that("get_predicted - rstanarm", {
   rezpred2 <- summary(get_predicted(x, predict = "prediction", include_random = FALSE))
   expect_true(mean(abs(rezrela$Predicted - rezrela2$Predicted)) > 0)
   expect_true(mean(abs(rezpred$Predicted - rezpred2$Predicted)) > 0)
-  rezrela3 <- summary(get_predicted(x, predict = "expectation", data = mtcars["am"]))
+  rezrela3 <- summary(get_predicted(x, predict = "expectation", data = mtcars["am"]), verbose = FALSE)
   expect_equal(mean(abs(rezrela2$Predicted - rezrela3$Predicted)), 0, tolerance = 0.001)
 })
 

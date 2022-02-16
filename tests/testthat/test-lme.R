@@ -26,7 +26,6 @@ if (requiet("testthat") &&
   )
 
   test_that("nested_varCorr", {
-    skip_on_travis()
     skip_on_cran()
 
     expect_equal(
@@ -43,7 +42,7 @@ if (requiet("testthat") &&
           .Dimnames = list("(Intercept)", "(Intercept)")
         )
       ),
-      tolerance = 1e-4
+      tolerance = 1e-3
     )
   })
 
@@ -188,7 +187,7 @@ if (requiet("testthat") &&
         var.slope = c(Subject.Days = 35.07130179308116169068),
         cor.slope_intercept = c(Subject = 0.06600000000000000311)
       ),
-      tolerance = 1e-4
+      tolerance = 1e-3
     )
   })
 
