@@ -24,13 +24,12 @@ if (.runThisTest) {
       rho.sigma.b = chgDefaults(smoothPsi, k = 5.11, s = 10)
     )
 
-    m2 <-
-      rlmer(
-        Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-        data = sleepstudy,
-        rho.sigma.e = psi2propII(smoothPsi, k = 2.28),
-        rho.sigma.b = chgDefaults(smoothPsi, k = 5.11, s = 10)
-      )
+    m2 <- rlmer(
+      Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+      data = sleepstudy,
+      rho.sigma.e = psi2propII(smoothPsi, k = 2.28),
+      rho.sigma.b = chgDefaults(smoothPsi, k = 5.11, s = 10)
+    )
 
     test_that("model_info", {
       expect_true(model_info(m1)$is_linear)
@@ -260,38 +259,24 @@ if (.runThisTest) {
 
     test_that("get_variance", {
       skip_on_cran()
-      skip_on_travis()
 
       expect_equal(
         get_variance(m1),
-        list(
-          var.fixed = 972.98333873889,
-          var.random = 1909.82627106496,
-          var.residual = 401.798400843892,
-          var.distribution = 401.798400843892,
-          var.dispersion = 0,
-          var.intercept = c(Subject = 750.516390897556),
-          var.slope = c(Subject.Days = 41.0672860407478),
-          cor.slope_intercept = c(Subject = -0.0070300166689934)
-        ),
+        list(var.fixed = 996.527014102253, var.random = 1900.02213435247,
+            var.residual = 406.64157297696, var.distribution = 406.64157297696,
+            var.dispersion = 0, var.intercept = c(Subject = 709.851005030477),
+            var.slope = c(Subject.Days = 39.9364799454489),
+            cor.slope_intercept = c(Subject = 0.0343034180029383)),
         tolerance = 1e-3
       )
 
       expect_equal(
         get_variance(m2),
-        list(
-          var.fixed = 914.841369525452,
-          var.random = 1406.78220090082,
-          var.residual = 809.318117324236,
-          var.distribution = 809.318117324236,
-          var.dispersion = 0,
-          var.intercept = c(
-            `mysubgrp:mygrp` = 0,
-            Subject = 1390.66848951126,
-            mygrp = 16.113711389561
-          )
-        ),
-        tolerance = 1e-4
+        list(var.fixed = 914.841369705921, var.random = 1406.78220075798,
+             var.residual = 809.318117542254, var.distribution = 809.318117542254,
+             var.dispersion = 0,
+             var.intercept = c(`mysubgrp:mygrp` = 0, Subject = 1390.66848960835, mygrp = 16.1137111496379)),
+        tolerance = 1e-3
       )
     })
 
