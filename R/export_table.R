@@ -939,6 +939,44 @@ print.insight_table <- function(x, ...) {
     final <- .indent_rows_html(final, indent_rows)
   }
 
+
+  # sanity check - clean caption, subtitle and footer from ansi-colour codes,
+  # which only work for text format... But if user occidentally provides colours
+  # for HTML format as well, remove those colour codes, so they don't appear as
+  # text in the table header and footer. Furthermore, in footers, we need to
+  # remove newline-characters
+
+  if (!is.null(caption)) {
+    if (is.list(caption)) {
+      caption <- lapply(caption, function(i) {
+        i[1]
+      })
+    } else {
+      caption <- caption[1]
+    }
+  }
+
+  if (!is.null(subtitle)) {
+    if (is.list(subtitle)) {
+      subtitle <- lapply(subtitle, function(i) {
+        i[1]
+      })
+    } else {
+      subtitle <- subtitle[1]
+    }
+  }
+
+  if (!is.null(footer)) {
+    if (is.list(footer)) {
+      footer <- lapply(footer, function(i) {
+        gsub("\n", "", i[1])
+      })
+    } else {
+      footer <- footer[1]
+    }
+  }
+
+
   tab <- gt::gt(final, groupname_col = group_by_columns)
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
   footer <- gt::tab_source_note(header, source_note = footer)
