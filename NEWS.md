@@ -1,3 +1,11 @@
+# insight 0.16.1
+
+## Changes to functions
+
+* `export_table()` now better checks for invalid values of caption and footer
+  for tables in HTML format, and silently removes, e.g., ansi-colour codes that
+  only work for text-format.
+
 # insight 0.16.0
 
 ## New functions
