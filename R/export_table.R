@@ -517,7 +517,7 @@ print.insight_table <- function(x, ...) {
 
   # indent groups? export_table() allows to indent specific rows,
   # which might be useful when we have tables of regression coefficients,
-  # and some coeffifients are grouped together, which is visually emphasized
+  # and some coefficients are grouped together, which is visually emphasized
   # by indention...
 
   if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
@@ -562,7 +562,7 @@ print.insight_table <- function(x, ...) {
     # define the length of a table line. if specific table width is defined
     # (i.e. table_width is numeric), use that to define length of table lines.
     # else, if "auto", check the current width of the user console and use that
-    # to flexibly adjuste table width to the width of the console window.
+    # to flexibly adjust table width to the width of the console window.
 
     if (is.numeric(table_width)) {
       line_width <- table_width
@@ -570,7 +570,8 @@ print.insight_table <- function(x, ...) {
       line_width <- options()$width
     }
 
-    # width of first table row of complete table
+    # width of first table row of complete table. Currently, "final" is still
+    # a matrix, so we need to paste the columns of the first row into a string
     row_width <- nchar(paste0(final[1, ], collapse = sep))
 
     # possibly first split - all table columns longer than "line_width"
@@ -620,10 +621,12 @@ print.insight_table <- function(x, ...) {
 
   # if caption is available, add a row with a headline
   if (!is.null(caption) && caption[1] != "") {
+    # if we have a colour value, make coloured ansi-string
     if (length(caption) == 2 && .is_valid_colour(caption[2])) {
       caption <- .colour(caption[2], caption[1])
     }
     if (!is.null(subtitle)) {
+      # if we have a colour value, make coloured ansi-string
       if (length(subtitle) == 2 && .is_valid_colour(subtitle[2])) {
         subtitle <- .colour(subtitle[2], subtitle[1])
       }
@@ -659,6 +662,8 @@ print.insight_table <- function(x, ...) {
 # helper to prepare table body for text output ---------------------
 
 .table_parts <- function(rows, final, header, sep, cross, empty_line) {
+  # "final" is a matrix here. we now paste each row into a character string,
+  # add separator chars etc.
   for (row in 1:nrow(final)) {
     final_row <- paste0(final[row, ], collapse = sep)
 
@@ -669,16 +674,21 @@ print.insight_table <- function(x, ...) {
       rows <- paste0(rows, final_row, sep = "\n")
     }
 
-    # First row separation
+    # After first row, we might have a separator row
     if (row == 1) {
+      # check if we have any separator for the header row
       if (!is.null(header)) {
         header_line <- paste0(rep_len(header, nchar(final_row)), collapse = "")
+        # check if at places where row and column "lines" cross, we need a
+        # special char. E.g., if columns are separated with "|" and header line
+        # with "-", we might have a "+" to have properly "crossed lines"
         if (!is.null(cross)) {
           cross_position <- unlist(gregexpr(trimws(sep), final_row, fixed = TRUE))
           for (pp in cross_position) {
             substr(header_line, pp, pp) <- cross
           }
         }
+        # add separator row after header line
         rows <- paste0(rows, header_line, sep = "\n")
       }
     }
@@ -695,6 +705,7 @@ print.insight_table <- function(x, ...) {
   if (.is_empty_string(footer)) {
     return(rows)
   }
+  # if we have a colour value, make coloured ansi-string
   if (length(footer) == 2 && .is_valid_colour(footer[2])) {
     footer <- .colour(footer[2], footer[1])
   }
