@@ -8,6 +8,7 @@ export_table(
   x,
   sep = " | ",
   header = "-",
+  cross = NULL,
   empty_line = NULL,
   digits = 2,
   protect_integers = TRUE,
@@ -32,6 +33,8 @@ data frames into multiple tables.}
 \item{sep}{Column separator.}
 
 \item{header}{Header separator. Can be \code{NULL}.}
+
+\item{cross}{Character that is used where separator and header lines cross.}
 
 \item{empty_line}{Separator used for empty lines. If \code{NULL}, line remains
 empty (i.e. filled with whitespaces).}
@@ -117,6 +120,7 @@ attribute for \code{subtitle}, and \code{table_footer} for \code{footer}.
 }
 \examples{
 export_table(head(iris))
+export_table(head(iris), cross = "+")
 export_table(head(iris), sep = " ", header = "*", digits = 1)
 
 # split longer tables

@@ -4,6 +4,7 @@
 #'   data frames into multiple tables.
 #' @param sep Column separator.
 #' @param header Header separator. Can be `NULL`.
+#' @param cross Character that is used where separator and header lines cross.
 #' @param empty_line Separator used for empty lines. If `NULL`, line remains
 #'   empty (i.e. filled with whitespaces).
 #' @param format Name of output-format, as string. If `NULL` (or `"text"`),
@@ -60,6 +61,7 @@
 #' @return A data frame in character format.
 #' @examples
 #' export_table(head(iris))
+#' export_table(head(iris), cross = "+")
 #' export_table(head(iris), sep = " ", header = "*", digits = 1)
 #'
 #' # split longer tables
@@ -101,6 +103,7 @@
 export_table <- function(x,
                          sep = " | ",
                          header = "-",
+                         cross = NULL,
                          empty_line = NULL,
                          digits = 2,
                          protect_integers = TRUE,
@@ -171,6 +174,7 @@ export_table <- function(x,
       x = x,
       sep = sep,
       header = header,
+      cross = cross,
       digits = digits,
       protect_integers = protect_integers,
       missing = missing,
@@ -241,6 +245,7 @@ export_table <- function(x,
         x = i,
         sep = sep,
         header = header,
+        cross = cross,
         digits = digits,
         protect_integers = protect_integers,
         missing = missing,
@@ -305,6 +310,7 @@ export_table <- function(x,
 .export_table <- function(x,
                           sep = " | ",
                           header = "-",
+                          cross = NULL,
                           digits = 2,
                           protect_integers = TRUE,
                           missing = "",
@@ -395,6 +401,7 @@ export_table <- function(x,
         final,
         header,
         sep,
+        cross,
         caption = caption,
         subtitle = subtitle,
         footer = footer,
@@ -437,6 +444,7 @@ export_table <- function(x,
 .format_basic_table <- function(final,
                                 header,
                                 sep,
+                                cross = NULL,
                                 caption = NULL,
                                 subtitle = NULL,
                                 footer = NULL,
@@ -541,18 +549,18 @@ export_table <- function(x,
   }
 
   # Transform to character
-  rows <- .table_parts(c(), final, header, sep, empty_line)
+  rows <- .table_parts(c(), final, header, sep, cross, empty_line)
 
   # if we have over-lengthy tables that are split into two parts,
   # print second table here
   if (!is.null(final2)) {
-    rows <- .table_parts(paste0(rows, "\n"), final2, header, sep, empty_line)
+    rows <- .table_parts(paste0(rows, "\n"), final2, header, sep, cross, empty_line)
   }
 
   # if we have over-lengthy tables that are split into two parts,
   # print second table here
   if (!is.null(final3)) {
-    rows <- .table_parts(paste0(rows, "\n"), final3, header, sep, empty_line)
+    rows <- .table_parts(paste0(rows, "\n"), final3, header, sep, cross, empty_line)
   }
 
   # if caption is available, add a row with a headline
@@ -593,7 +601,7 @@ export_table <- function(x,
 
 
 
-.table_parts <- function(rows, final, header, sep, empty_line) {
+.table_parts <- function(rows, final, header, sep, cross, empty_line) {
   for (row in 1:nrow(final)) {
     final_row <- paste0(final[row, ], collapse = sep)
 
@@ -607,7 +615,14 @@ export_table <- function(x,
     # First row separation
     if (row == 1) {
       if (!is.null(header)) {
-        rows <- paste0(rows, paste0(rep_len(header, nchar(final_row)), collapse = ""), sep = "\n")
+        header_line <- paste0(rep_len(header, nchar(final_row)), collapse = "")
+        if (!is.null(cross)) {
+          cross_position <- unlist(gregexpr(trimws(sep), final_row, fixed = TRUE))
+          for (pp in cross_position) {
+            substr(header_line, pp, pp) <- cross
+          }
+        }
+        rows <- paste0(rows, header_line, sep = "\n")
       }
     }
   }
