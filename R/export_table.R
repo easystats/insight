@@ -308,6 +308,18 @@ export_table <- function(x,
 
 
 
+# methods -----------------------------------
+
+#' @export
+print.insight_table <- function(x, ...) {
+  cat(x)
+  invisible(x)
+}
+
+
+
+# small helper ----------------------
+
 # check whether "table_caption" or its alias "table_title" is used as attribute
 .check_caption_attr_name <- function(x) {
   attr_name <- "table_caption"
@@ -320,7 +332,7 @@ export_table <- function(x,
 
 
 
-# create matrix of raw table layout --------------------
+# work horse: create matrix of raw table layout --------------------
 
 .export_table <- function(x,
                           sep = " | ",
@@ -541,19 +553,28 @@ export_table <- function(x,
   final2 <- NULL
   final3 <- NULL
 
-  # save first column we may need this when table is wrapped into multiple
-  # parts due to over-lengthy lines
+
+  # check if user requested automatic width-adjustment of tables, or if a
+  # given width is required
+
   if (identical(table_width, "auto") || (!is.null(table_width) && is.numeric(table_width))) {
-    # check current line width in console and width of table rows
+
+    # define the length of a table line. if specific table width is defined
+    # (i.e. table_width is numeric), use that to define length of table lines.
+    # else, if "auto", check the current width of the user console and use that
+    # to flexibly adjuste table width to the width of the console window.
+
     if (is.numeric(table_width)) {
       line_width <- table_width
     } else {
       line_width <- options()$width
     }
-    # first split - table columns longer than "line_width" go
-    # into a second string
+
+    # width of first table row of complete table
     row_width <- nchar(paste0(final[1, ], collapse = sep))
-    # if wider, save first column - we need to repeat this later
+
+    # possibly first split - all table columns longer than "line_width"
+    # (i.e. first table row) go into a second string
     if (row_width > line_width) {
       i <- 1
       while (nchar(paste0(final[1, 1:i], collapse = sep)) < line_width) {
@@ -564,10 +585,12 @@ export_table <- function(x,
         final <- final[, 1:(i - 1)]
       }
     }
-    # second split - table columns longer than "line_width" go
-    # into a third string
+
+    # width of first table row of remaing second table part
     row_width <- nchar(paste0(final2[1, ], collapse = sep))
-    # if wider, save first column - we need to repeat this later
+
+    # possibly second split - all table columns longer than "line_width"
+    # (i.e. first table row) go into a third string
     if (row_width > line_width) {
       i <- 1
       while (nchar(paste0(final2[1, 1:i], collapse = sep)) < line_width) {
@@ -580,7 +603,7 @@ export_table <- function(x,
     }
   }
 
-  # Transform to character
+  # Transform table matrix into a string value that can be printed
   rows <- .table_parts(c(), final, header, sep, cross, empty_line)
 
   # if we have over-lengthy tables that are split into two parts,
@@ -633,6 +656,8 @@ export_table <- function(x,
 
 
 
+# helper to prepare table body for text output ---------------------
+
 .table_parts <- function(rows, final, header, sep, cross, empty_line) {
   for (row in 1:nrow(final)) {
     final_row <- paste0(final[row, ], collapse = sep)
@@ -664,16 +689,7 @@ export_table <- function(x,
 
 
 
-
-#' @export
-print.insight_table <- function(x, ...) {
-  cat(x)
-  invisible(x)
-}
-
-
 # helper ----------------
-
 
 .paste_footers <- function(footer, rows) {
   if (.is_empty_string(footer)) {
@@ -711,6 +727,7 @@ print.insight_table <- function(x, ...) {
   final[, 1] <- format(final[, 1], justify = "left", width = max(nchar(final[, 1])))
   final
 }
+
 
 
 .indent_rows <- function(final, indent_rows, whitespace = "  ") {
@@ -756,8 +773,9 @@ print.insight_table <- function(x, ...) {
 }
 
 
-# markdown formatting -------------------
 
+
+# markdown formatting -------------------
 
 .format_markdown_table <- function(final,
                                    x,
@@ -869,6 +887,7 @@ print.insight_table <- function(x, ...) {
 
   rows
 }
+
 
 
 
