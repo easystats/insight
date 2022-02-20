@@ -222,6 +222,19 @@ find_predictors.afex_aov <- function(x,
   # from conditional model, remove response
   if (.obj_has_name(f, "conditional")) {
     f[["conditional"]] <- f[["conditional"]][[3]]
+
+    # for survival models, separate out strata element
+    if (inherits(x, "coxph")) {
+      f_cond <- .safe_deparse(f[["conditional"]])
+
+      ## TODO wait for https://github.com/easystats/insight/issues/507
+      if (FALSE && grepl("strata(", f_cond, fixed = TRUE)) {
+        strata <- gsub("(.*)strata\\((.*)\\)(.*)", "\\2", f_cond)
+        non_strata <- gsub("(.*)strata\\((.*)\\)(.*)", "\\1\\3", f_cond)
+        f$strata <- stats::reformulate(strata)
+        f$condtional <- stats::reformulate(non_strata)
+      }
+    }
   }
 
   # from conditional model, remove response
