@@ -125,6 +125,7 @@ export_table <- function(x,
     format <- "text"
   }
 
+  # handle alias
   if (format == "md") {
     format <- "markdown"
   }
@@ -137,8 +138,12 @@ export_table <- function(x,
     return(NULL)
   }
 
-  # if we have a list of data frame and HTML format, create a single
-  # data frame now...
+
+  # if we have a list of data frames and HTML format, create a single
+  # data frame now. HTML format needs a single data frame. Sub tables
+  # are split by their group-column later, see code below
+  # "gt(final, groupname_col = group_by_columns)".
+
   if (identical(format, "html") && !is.data.frame(x) && is.list(x)) {
     x <- do.call(rbind, lapply(x, function(i) {
       attr_name <- .check_caption_attr_name(i)
@@ -147,11 +152,14 @@ export_table <- function(x,
     }))
   }
 
+
   # check for indention
   indent_groups <- attributes(x)$indent_groups
   indent_rows <- attributes(x)$indent_rows
 
-  # single data frame
+
+  # table from single data frame --------------------------------------------
+
   if (is.data.frame(x)) {
 
     # check default attributes for caption, sub-title and footer
@@ -192,6 +200,8 @@ export_table <- function(x,
       table_width = table_width
     )
   } else if (is.list(x)) {
+
+    # table from list of data frames -----------------------------------------
 
     # remove empty elements
     l <- .compact_list(x)
@@ -264,7 +274,9 @@ export_table <- function(x,
       )
     })
 
-    # insert new lines between tables
+    # insert new lines between tables, but this is only needed
+    # for text or markdown tables
+
     out <- c()
     if (format == "text") {
       for (i in 1:length(tmp)) {
@@ -277,7 +289,9 @@ export_table <- function(x,
       }
       out <- out[1:(length(out) - 1)]
     }
+
   } else {
+    # for all invalid inputs, return NULL
     return(NULL)
   }
 
@@ -288,6 +302,7 @@ export_table <- function(x,
   } else if (format == "text") {
     class(out) <- c("insight_table", class(out))
   }
+
   out
 }
 
@@ -304,8 +319,8 @@ export_table <- function(x,
 
 
 
-# create matrix of raw table layout --------------------
 
+# create matrix of raw table layout --------------------
 
 .export_table <- function(x,
                           sep = " | ",
@@ -350,7 +365,7 @@ export_table <- function(x,
   }, simplify = FALSE), stringsAsFactors = FALSE)
 
 
-  # Convert to character
+  # Convert to character.
   df <- as.data.frame(sapply(df, as.character, simplify = FALSE), stringsAsFactors = FALSE)
   names(df) <- col_names
   df[is.na(df)] <- as.character(missing)
@@ -371,16 +386,16 @@ export_table <- function(x,
 
     # text and markdown go here...
   } else {
-    # Add colnames as row
+    # Add colnames as first row to the data frame
     df <- rbind(colnames(df), df)
 
-    # Align
+    # Initial alignment for complete data frame is right-alignment
     aligned <- format(df, justify = "right")
 
     # default alignment
     col_align <- rep("right", ncol(df))
 
-    # Center first row
+    # first column definitely right alignment, fixed width
     first_row <- as.character(aligned[1, ])
     for (i in 1:length(first_row)) {
       aligned[1, i] <- format(trimws(first_row[i]), width = nchar(first_row[i]), justify = "right")
@@ -457,7 +472,9 @@ export_table <- function(x,
                                 col_align = NULL,
                                 table_width = NULL) {
 
-  # align table, if requested
+  # align table, if requested. unlike the generic aligments that have
+  # been done previously, we now look for column-specific alignments
+
   if (!is.null(align) && length(align) == 1) {
     for (i in 1:ncol(final)) {
       align_char <- ""
@@ -485,14 +502,28 @@ export_table <- function(x,
     }
   }
 
-  # indent groups?
+
+  # indent groups? export_table() allows to indent specific rows,
+  # which might be useful when we have tables of regression coefficients,
+  # and some coeffifients are grouped together, which is visually emphasized
+  # by indention...
+
   if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
     final <- .indent_groups(final, indent_groups)
   } else if (!is.null(indent_rows) && any(grepl("# ", final[, 1], fixed = TRUE))) {
     final <- .indent_rows(final, indent_rows)
   }
 
-  # check for fixed column widths
+
+  # check for fixed column widths. usually, column widht is aligned to the
+  # widest element in that column. for multiple tables, this may result in
+  # columns which do not have the the same width across tables, despite
+  # having the same "meaning" (e.g., zero-inflated models that have a table
+  # for the count and the zero-inflated model components: both have columns
+  # for SE or CI, but one column may be 10 chars wide, the same column in
+  # the other table could be 9 or 11 chars) - with this option, we can set a
+  # fixed width for specific columns across all tables.
+
   if (!is.null(col_width) && length(col_width) > 1 && !is.null(names(col_width))) {
     matching_columns <- stats::na.omit(match(names(col_width), col_names))
     if (length(matching_columns)) {
@@ -502,6 +533,7 @@ export_table <- function(x,
       }
     }
   }
+
 
   # we can split very wide table into maximum three parts
   # this is currently hardcoded, not flexible, so we cannot allow
