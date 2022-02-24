@@ -1159,6 +1159,20 @@ get_data.Arima <- function(x, ...) {
 
 
 #' @export
+get_data.coxph <- function(x, ...) {
+  # first try, parent frame
+  dat <- tryCatch(eval(x$call$data, envir = parent.frame()), error = function(e) NULL)
+
+  # second try, default extractor. Less good because of coercion to other types
+  if (is.null(dat)) {
+    # second try, global env
+    dat <- tryCatch(eval(x$call$x, envir = globalenv()), error = function(e) NULL)
+  }
+
+  dat
+}
+
+#' @export
 get_data.BGGM <- function(x, ...) {
   x$Y
 }
