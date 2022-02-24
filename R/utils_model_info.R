@@ -7,6 +7,7 @@
                          link.fun = "identity",
                          dispersion = FALSE,
                          verbose = TRUE,
+                         glmmtmb_zeroinf = FALSE, # needed for edge cases
                          ...) {
   dots <- list(...)
   if (isTRUE(dots$return_family_only)) {
@@ -97,6 +98,11 @@
     grepl("\\Qhurdle\\E", fitfam, ignore.case = TRUE) |
     grepl("^(zt|zi|za|hu)", fitfam, perl = TRUE) |
     grepl("^truncated", fitfam, perl = TRUE)
+
+  # overwrite for glmmTMB exceptions
+  if (inherits(x, "glmmTMB")) {
+    zero.inf <- glmmtmb_zeroinf
+  }
 
 
   # only hurdle component --------

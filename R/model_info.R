@@ -1035,14 +1035,17 @@ model_info.glmmTMB <- function(x, ...) {
   check_if_installed("lme4")
 
   faminfo <- stats::family(x)
+  zero_inflated <- !.is_empty_object(lme4::fixef(x)$zi)
+
   .make_family(
     x = x,
     fitfam = faminfo$family,
-    zero.inf = !.is_empty_object(lme4::fixef(x)$zi),
+    zero.inf = zero_inflated,
     hurdle = grepl("truncated", faminfo$family),
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
     dispersion = !.is_empty_object(lme4::fixef(x)$disp),
+    glmmtmb_zeroinf = zero_inflated,
     ...
   )
 }
