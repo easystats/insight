@@ -146,9 +146,6 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
 
 
 .names_to_broom <- function(cn, ignore_estimate) {
-  # TO DO: currently `htest` object output naming differs from `broom`
-  # needs further discussion
-
   # styler: off
   # easy replacements
   cn[cn == "Parameter"]      <- "term"
@@ -178,6 +175,9 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
 
   # name of coefficient column htest
   cn[cn %in% c("Dxy", "rho", "r", "tau")] <- "estimate"
+
+  # for glance
+  cn[cn %in% c("R2")] <- "r2.squared"
 
   if (("Difference" %in% cn) && !("estimate" %in% cn)) {
     cn[cn == "Difference"] <- "estimate"

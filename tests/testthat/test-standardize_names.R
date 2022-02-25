@@ -68,6 +68,6 @@ test_that("standardize_names works as expected with performance", {
 
   expect_equal(
     names(standardize_names(x, style = "broom")),
-    c("aic", "bic", "r2", "r2.adjusted", "rmse", "sigma")
+    c("aic", "bic", "r2.squared", "r2.adjusted", "rmse", "sigma")
   )
 })
