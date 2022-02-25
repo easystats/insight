@@ -177,7 +177,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn %in% c("Dxy", "rho", "r", "tau")] <- "estimate"
 
   # for glance
-  cn[cn %in% c("R2")] <- "r2.squared"
+  cn[cn %in% c("R2")] <- "r.squared"
   cn[cn %in% c("R2_adjusted")] <- "adj.r.squared"
 
   if (("Difference" %in% cn) && !("estimate" %in% cn)) {
