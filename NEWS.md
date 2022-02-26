@@ -10,6 +10,11 @@
   has a log-transformed response variable, and if so, returns a corrected
   log-likelihood.
 
+## Bug fixes
+
+* Fixed incorrect column name conversion in `standardize_names()` for certain
+  columns returned by `broom::glance()`.
+
 # insight 0.16.0
 
 ## New functions
