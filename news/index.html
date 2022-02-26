@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,6 +66,10 @@
 <h3 id="changes-to-functions-0-16-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-16-1"></a></h3>
 <ul><li><p><code><a href="../reference/export_table.html">export_table()</a></code> now better checks for invalid values of caption and footer for tables in HTML format, and silently removes, e.g., ansi-colour codes that only work for text-format.</p></li>
 <li><p><code><a href="../reference/get_loglikelihood.html">get_loglikelihood()</a></code> gets a <code>check_response</code> argument, to check if a model has a log-transformed response variable, and if so, returns a corrected log-likelihood.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-16-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-16-1"></a></h3>
+<ul><li>Fixed incorrect column name conversion in <code><a href="../reference/standardize_names.html">standardize_names()</a></code> for certain columns returned by <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">broom::glance()</a></code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
