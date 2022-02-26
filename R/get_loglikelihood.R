@@ -285,7 +285,7 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
 
 # Helpers -----------------------------------------------------------------
 
-.loglikelihood_prep_output <- function(x, lls = NA, df = NULL, ...) {
+.loglikelihood_prep_output <- function(x, lls = NA, df = NULL, log_transform = FALSE, ...) {
   # Prepare output
   if (all(is.na(lls))) {
     out <- stats::logLik(x, ...)
@@ -295,6 +295,15 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
   } else {
     out <- sum(lls)
     attr(out, "per_obs") <- lls # This is useful for some models comparison tests
+  }
+
+  if (isTRUE(log_transform)) {
+    out[1] <- sum(stats::dlnorm(
+      x = get_response(x),
+      meanlog = stats::fitted(x),
+      sdlog = get_sigma(x, ci = NULL, verbose = FALSE),
+      log = TRUE
+    ))
   }
 
   # Some attributes present in stats::logLik (not sure what nall does)
