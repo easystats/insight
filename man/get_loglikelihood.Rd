@@ -10,7 +10,14 @@ get_loglikelihood(x, ...)
 
 loglikelihood(x, ...)
 
-\method{get_loglikelihood}{lm}(x, estimator = "ML", REML = FALSE, verbose = TRUE, ...)
+\method{get_loglikelihood}{lm}(
+  x,
+  estimator = "ML",
+  REML = FALSE,
+  check_response = FALSE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{A model.}
@@ -29,6 +36,9 @@ overwrite the \code{estimator} argument and is thus equivalent to setting
 \code{estimator="REML"}. It will give the same results as
 \code{stats::logLik(..., REML=TRUE)}. Note that individual log-likelihoods
 are not available under REML.}
+
+\item{check_response}{Logical, if \code{TRUE}, checks if the response variable
+is log-transformed, and if so, returns a corrected log-likelihood.}
 
 \item{verbose}{Toggle warnings and messages.}
 }

@@ -6,6 +6,10 @@
   for tables in HTML format, and silently removes, e.g., ansi-colour codes that
   only work for text-format.
 
+* `get_loglikelihood()` gets a `check_response` argument, to check if a model
+  has a log-transformed response variable, and if so, returns a corrected
+  log-likelihood.
+
 # insight 0.16.0
 
 ## New functions

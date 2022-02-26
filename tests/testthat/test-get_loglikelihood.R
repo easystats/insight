@@ -36,6 +36,14 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
     ll <- loglikelihood(x, estimator = "ML")
     ll2 <- stats::logLik(x)
     expect_equal(as.numeric(ll), as.numeric(ll2))
+
+    # log-response
+    x <- lm(mpg ~ wt, data = mtcars)
+    expect_equal(as.numeric(get_loglikelihood(x)), -80.01471, tolerance = 1e-3)
+
+    x <- lm(log(mpg) ~ wt, data = mtcars)
+    expect_equal(as.numeric(get_loglikelihood(x)), 19.42433, tolerance = 1e-3)
+    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -75.24875, tolerance = 1e-3)
   })
 
   test_that("get_loglikelihood - glm", {

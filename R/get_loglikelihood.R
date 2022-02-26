@@ -17,6 +17,8 @@
 #'   `estimator="REML"`. It will give the same results as
 #'   `stats::logLik(..., REML=TRUE)`. Note that individual log-likelihoods
 #'   are not available under REML.
+#' @param check_response Logical, if `TRUE`, checks if the response variable
+#'   is log-transformed, and if so, returns a corrected log-likelihood.
 #' @param ... Passed down to `logLik()`, if possible.
 #' @inheritParams get_residuals
 #'
@@ -48,8 +50,14 @@ get_loglikelihood.default <- function(x, ...) {
 }
 
 #' @export
-get_loglikelihood.model_fit <- function(x, ...) {
-  get_loglikelihood(x$fit, ...)
+get_loglikelihood.model_fit <- function(x,
+                                        estimator = "ML",
+                                        REML = FALSE,
+                                        check_response = FALSE,
+                                        verbose = TRUE,
+                                        ...) {
+
+  get_loglikelihood(x$fit, estimator = estimator, REML = REML, check_response = check_response, verbose = verbose, ...)
 }
 
 #' @export
@@ -69,6 +77,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
 .get_loglikelihood_lm <- function(x,
                                   estimator = "ML",
                                   REML = FALSE,
+                                  check_response = FALSE,
                                   verbose = TRUE,
                                   ...) {
 
@@ -92,7 +101,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
     val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x, verbose = verbose)^2))))
     p <- n_parameters(x, remove_nonestimable = TRUE)
     ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
-    return(.loglikelihood_prep_output(x, ll))
+    return(.loglikelihood_prep_output(x, ll, log_transform = check_response, verbose = verbose))
   }
 
   # Get S2
@@ -107,7 +116,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   # Get individual log-likelihoods
   lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = verbose)^2) / s2))
 
-  .loglikelihood_prep_output(x, lls)
+  .loglikelihood_prep_output(x, lls, log_transform = check_response, verbose = verbose)
 }
 
 
@@ -167,6 +176,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
 get_loglikelihood.lm <- function(x,
                                  estimator = "ML",
                                  REML = FALSE,
+                                 check_response = FALSE,
                                  verbose = TRUE,
                                  ...) {
   if (inherits(x, "list") && .obj_has_name(x, "gam")) {
@@ -178,6 +188,7 @@ get_loglikelihood.lm <- function(x,
     ll <- .get_loglikelihood_lm(x,
       estimator = estimator,
       REML = REML,
+      check_response = check_response,
       verbose = verbose,
       ...
     )
@@ -285,7 +296,7 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
 
 # Helpers -----------------------------------------------------------------
 
-.loglikelihood_prep_output <- function(x, lls = NA, df = NULL, log_transform = FALSE, ...) {
+.loglikelihood_prep_output <- function(x, lls = NA, df = NULL, log_transform = FALSE, verbose = FALSE, ...) {
   # Prepare output
   if (all(is.na(lls))) {
     out <- stats::logLik(x, ...)
@@ -297,13 +308,31 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
     attr(out, "per_obs") <- lls # This is useful for some models comparison tests
   }
 
+
   if (isTRUE(log_transform)) {
-    out[1] <- sum(stats::dlnorm(
-      x = get_response(x),
-      meanlog = stats::fitted(x),
-      sdlog = get_sigma(x, ci = NULL, verbose = FALSE),
-      log = TRUE
-    ))
+    # check if we have transformed response, and if so, adjust LogLik
+    response_transform <- find_transformation(x)
+    if (!is.null(response_transform) && !identical(response_transform, "identity")) {
+      ll_transform <- tryCatch(
+        {
+          sum(stats::dlnorm(
+            x = get_response(x),
+            meanlog = stats::fitted(x),
+            sdlog = get_sigma(x, ci = NULL, verbose = FALSE),
+            log = TRUE
+          ))
+        },
+        error = function(e) {
+          NULL
+        }
+      )
+
+      if (is.null(ll_transform) && isTRUE(verbose)) {
+        warning(insight::format_message("Could not compute AIC for models with transformed response. AIC value is probably inaccurate."), call. = FALSE)
+      } else {
+        out[1] <- ll_transform
+      }
+    }
   }
 
   # Some attributes present in stats::logLik (not sure what nall does)
