@@ -84,7 +84,14 @@ default).</p>
 <span class="fu">loglikelihood</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for lm</span>
-<span class="fu">get_loglikelihood</span><span class="op">(</span><span class="va">x</span>, estimator <span class="op">=</span> <span class="st">"ML"</span>, REML <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">get_loglikelihood</span><span class="op">(</span>
+  <span class="va">x</span>,
+  estimator <span class="op">=</span> <span class="st">"ML"</span>,
+  REML <span class="op">=</span> <span class="cn">FALSE</span>,
+  check_response <span class="op">=</span> <span class="cn">FALSE</span>,
+  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -106,6 +113,9 @@ overwrite the <code>estimator</code> argument and is thus equivalent to setting
 <code>estimator="REML"</code>. It will give the same results as
 <code>stats::logLik(..., REML=TRUE)</code>. Note that individual log-likelihoods
 are not available under REML.</p></dd>
+<dt>check_response</dt>
+<dd><p>Logical, if <code>TRUE</code>, checks if the response variable
+is log-transformed, and if so, returns a corrected log-likelihood.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings and messages.</p></dd>
 </dl></div>
