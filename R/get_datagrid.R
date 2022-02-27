@@ -486,7 +486,7 @@ get_datagrid.default <- function(x,
 
   # Drop random factors
   random_factors <- find_random(x, flatten = TRUE)
-  if (include_random == FALSE && !is.null(random_factors)) {
+  if (isFALSE(include_random) && !is.null(random_factors)) {
     keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
     if (!is.null(keep)) {
       if (all(at != "all")) {
@@ -517,7 +517,7 @@ get_datagrid.default <- function(x,
 
   # we still need random factors in data grid. we set these to
   # "population level" if not conditioned on via "at"
-  if (include_random == FALSE && !is.null(random_factors)) {
+  if (isFALSE(include_random) && !is.null(random_factors)) {
     if (inherits(x, c("glmmTMB", "brmsfit", "MixMod"))) {
       vm[random_factors] <- NA
     } else if (inherits(x, c("merMod", "rlmerMod", "lme"))) {

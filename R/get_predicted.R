@@ -283,9 +283,9 @@ get_predicted.bife <- function(x,
   # Format re.form
   if (is.null(include_random) || is.na(include_random)) {
     re.form <- include_random
-  } else if (include_random == TRUE) {
+  } else if (isTRUE(include_random)) {
     re.form <- NULL
-  } else if (include_random == FALSE) {
+  } else if (isFALSE(include_random)) {
     re.form <- NA
   } else {
     re.form <- include_random

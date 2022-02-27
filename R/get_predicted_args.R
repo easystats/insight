@@ -181,7 +181,7 @@
 
   # Random
   # In case include_random is TRUE, but there's actually no random factors in data
-  if (include_random && !is.null(data) && !is.null(x) && !all(find_random(x, flatten = TRUE) %in% names(data))) {
+  if (isTRUE(include_random) && !is.null(data) && !is.null(x) && !all(find_random(x, flatten = TRUE) %in% names(data))) {
     include_random <- FALSE
     if (isTRUE(verbose)) {
       warning(format_message("`include_random` was set to `TRUE`, but no random effects were found.",
@@ -190,7 +190,7 @@
   }
 
   # Add (or set) random variables to "NA"
-  if (include_random == FALSE) {
+  if (isFALSE(include_random)) {
     if (inherits(x, c("stanreg", "brmsfit"))) {
       # rstantools predictions doens't allow for NaNs in newdata
       data[find_variables(x, effects = "random", verbose = FALSE)$random] <- NULL
