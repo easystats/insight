@@ -179,13 +179,33 @@
     }
   }
 
-  # Random
-  # In case include_random is TRUE, but there's actually no random factors in data
-  if (isTRUE(include_random) && !is.null(data) && !is.null(x) && !all(find_random(x, flatten = TRUE) %in% names(data))) {
-    include_random <- FALSE
-    if (isTRUE(verbose)) {
-      warning(format_message("`include_random` was set to `TRUE`, but no random effects were found.",
-                              "Setting `include_random = FALSE` now."))
+
+  # process random effects -------
+
+  allow_new_levels <- isTRUE(list(...)$allow.new.levels)
+  if (isTRUE(include_random) && !is.null(data) && !is.null(x)) {
+    # In case include_random is TRUE, but there's actually no random factors in data
+    re_terms <- find_random(x, flatten = TRUE)
+    if (!all(re_terms %in% names(data))) {
+      include_random <- FALSE
+      if (isTRUE(verbose)) {
+        warning(format_message("`include_random` was set to `TRUE`, but not all random effects were found in 'data'.",
+                               "Setting `include_random = FALSE` now."), call. = FALSE)
+      }
+    } else if (!allow_new_levels) {
+      # we have random effects in data, but do we also have new levels?
+      re_data <- get_random(x)
+      all_levels_found <- sapply(re_terms, function(i) {
+        all(unique(data[[i]]) %in% re_data[[i]])
+      })
+      if (!all_levels_found) {
+        include_random <- FALSE
+        if (isTRUE(verbose)) {
+          warning(format_message("`include_random` was set to `TRUE`, but grouping factor(s) in 'data' has new levels not in the original data.",
+                                 "Either use `allow.new.levels=TRUE`, or make sure to include only valid values for grouping factor(s).",
+                                 "Setting `include_random = FALSE` now."), call. = FALSE)
+        }
+      }
     }
   }
 
@@ -214,6 +234,6 @@
     scale = scale_arg,
     transform = transform,
     info = info,
-    allow_new_levels = isTRUE(list(...)$allow.new.levels)
+    allow_new_levels = allow_new_levels
   )
 }
