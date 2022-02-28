@@ -1336,18 +1336,47 @@ get_data.mlogit <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-get_data.rma <- function(x, verbose = TRUE, ...) {
+get_data.rma <- function(x, verbose = TRUE, include_interval = FALSE, transf = NULL, transf_args = NULL, ci = .95, ...) {
   mf <- tryCatch(.recover_data_from_environment(x), error = function(x) NULL)
-  model_call <- get_call(x)
+  if (isTRUE(include_interval)) {
+    model_call <-  get_call(x)
+    model_response <- tryCatch(mf[[find_response(x)]], error = function(x) NULL)
+    sei <- tryCatch(mf[[model_call$sei]], error = function(x) NULL)
+    if (is.null(sei)) {
+      sei <- tryCatch(sqrt(mf[[model_call$vi]]), error = function(x) NULL)
+    }
+    if (is.null(sei)) {
+      stop("Could not find `sei` or `vi` for this model.", call. = FALSE)
+    }
+    mf$ci <- ci
+    mf$CI_low <- model_response - qnorm((1 - ci) / 2, lower.tail = FALSE) * sei
+    mf$CI_high <- model_response + qnorm((1 - ci) / 2, lower.tail = FALSE) * sei
+    if (!is.null(transf)) {
+      if (!is.function(transf)) {
+        stop("`transf` must be a function.")
+      }
+      if (!is.null(transf_args)) {
+        mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf, transf_args)
+        mf$CI_low <- sapply(mf$CI_low, transf, transf_args)
+        mf$CI_high <- sapply(mf$CI_high, transf, transf_args)
+      } else {
+        mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf)
+        mf$CI_low <- sapply(mf$CI_low, transf)
+        mf$CI_high <- sapply(mf$CI_high, transf)
+      }
+    }
+  }
   .prepare_get_data(x, mf[rownames(x$X),], verbose = verbose)
 }
 
 
 #' @export
+# TODO: Check these
 get_data.metaplus <- get_data.rma
 
 
 #' @export
+# TODO: Check these
 get_data.meta_random <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(x$data$data, error = function(x) NULL)
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
@@ -1355,6 +1384,7 @@ get_data.meta_random <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+# TODO: Check these
 get_data.meta_bma <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(x$meta$fixed$data$data, error = function(x) NULL)
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
@@ -1362,6 +1392,7 @@ get_data.meta_bma <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+# TODO: Check these
 get_data.meta_fixed <- get_data.meta_random
 
 
