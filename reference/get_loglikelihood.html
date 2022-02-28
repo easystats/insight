@@ -18,7 +18,7 @@ default)."><meta property="og:image" content="/reference/figures/card.png"><meta
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,7 +115,9 @@ overwrite the <code>estimator</code> argument and is thus equivalent to setting
 are not available under REML.</p></dd>
 <dt>check_response</dt>
 <dd><p>Logical, if <code>TRUE</code>, checks if the response variable
-is log-transformed, and if so, returns a corrected log-likelihood.</p></dd>
+is transformed (like <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code> or <code><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt()</a></code>), and if so, returns a corrected
+log-likelihood. To get back to the original scale, the likelihood of the
+model is multiplied by the Jacobian/derivative of the transformation.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings and messages.</p></dd>
 </dl></div>
