@@ -262,19 +262,42 @@ find_formula.gamm <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.rma <- function(x, verbose = TRUE, ...) {
-  NULL
+  formula.yi <- `attributes<-`(formula(x, type = "yi"), NULL)
+  formula.mods <- `attributes<-`(formula(x, type = "mods"), NULL)
+  formula.scale <- `attributes<-`(
+    tryCatch(formula(x, type = "scale"), error = function(e) NULL),
+    NULL)
+  model_call <- get_call(x)
+  if (is.null(formula.yi)) {
+    if (is.null(formula.mods)) {
+      formula.yi <- as.formula(paste(model_call$yi, "~ 1"))
+    } else {
+      formula.mods[3] <- formula.mods[2]
+      formula.mods[2] <- model_call$yi
+      formula.yi <- formula.mods
+    }
+  }
+  f <- .compact_list(list(
+    conditional = formula.yi,
+    dispersion = formula.mods
+  ))
+  .find_formula_return(f, verbose = verbose)
 }
 
 #' @export
+# TODO: Check these
 find_formula.metaplus <- find_formula.rma
 
 #' @export
+# TODO: Check these
 find_formula.meta_random <- find_formula.rma
 
 #' @export
+# TODO: Check these
 find_formula.meta_fixed <- find_formula.rma
 
 #' @export
+# TODO: Check these
 find_formula.meta_bma <- find_formula.rma
 
 
