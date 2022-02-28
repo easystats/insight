@@ -1347,6 +1347,7 @@ get_data.mlogit <- function(x, verbose = TRUE, ...) {
 #'   `include_interval = TRUE`. Default to 0.95 (95%).
 get_data.rma <- function(x, verbose = TRUE, include_interval = FALSE, transf = NULL, transf_args = NULL, ci = .95, ...) {
   mf <- tryCatch(.recover_data_from_environment(x), error = function(x) NULL)
+  mf$Weight <- get_weights(mod)
   if (isTRUE(include_interval)) {
     model_call <-  get_call(x)
     model_response <- tryCatch(mf[[find_response(x)]], error = function(x) NULL)
@@ -1406,6 +1407,7 @@ get_data.meta_fixed <- get_data.meta_random
 
 
 #' @export
+# TODO: Check these
 get_data.ivFixed <- get_data.rma
 
 
