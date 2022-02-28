@@ -59,12 +59,14 @@ Iterations can be accessed by running \code{as.data.frame()} on the output.}
 
 \item{verbose}{Toggle warnings.}
 
-\item{include_random}{If \code{TRUE} (default), include all random effects in
-the prediction. If \code{FALSE}, don't take them into account. Can also be
-a formula to specify which random effects to condition on when predicting
-(passed to the \code{re.form} argument). If \code{include_random = TRUE}
-and \code{newdata} is provided, make sure to include the random effect
-variables in \code{newdata} as well.}
+\item{include_random}{If \code{"default"}, include all random effects in the
+prediction, unless random effect variables are not in the data.  If \code{TRUE},
+include all random effects in the prediction (in this case, it will be
+checked if actually all random effect variables are in \code{data}). If \code{FALSE},
+don't take them into account. Can also be a formula to specify which random
+effects to condition on when predicting (passed to the \code{re.form} argument).
+If \code{include_random = TRUE} and \code{data} is provided, make sure to include
+the random effect variables in \code{data} as well.}
 
 \item{include_smooth}{For General Additive Models (GAMs). If \code{FALSE},
 will fix the value of the smooth to its average, so that the predictions

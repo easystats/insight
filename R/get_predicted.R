@@ -19,12 +19,14 @@
 #'   iteration of the model). For frequentist models, if not `NULL`, will
 #'   generate bootstrapped draws, from which bootstrapped CIs will be computed.
 #'   Iterations can be accessed by running `as.data.frame()` on the output.
-#' @param include_random If `TRUE` (default), include all random effects in
-#'   the prediction. If `FALSE`, don't take them into account. Can also be
-#'   a formula to specify which random effects to condition on when predicting
-#'   (passed to the `re.form` argument). If `include_random = TRUE`
-#'   and `newdata` is provided, make sure to include the random effect
-#'   variables in `newdata` as well.
+#' @param include_random If `"default"`, include all random effects in the
+#'   prediction, unless random effect variables are not in the data.  If `TRUE`,
+#'   include all random effects in the prediction (in this case, it will be
+#'   checked if actually all random effect variables are in `data`). If `FALSE`,
+#'   don't take them into account. Can also be a formula to specify which random
+#'   effects to condition on when predicting (passed to the `re.form` argument).
+#'   If `include_random = TRUE` and `data` is provided, make sure to include
+#'   the random effect variables in `data` as well.
 #' @param include_smooth For General Additive Models (GAMs). If `FALSE`,
 #'   will fix the value of the smooth to its average, so that the predictions
 #'   are not depending on it. (default), `mean()`, or

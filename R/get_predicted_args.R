@@ -182,16 +182,29 @@
 
   # process random effects -------
 
-  allow_new_levels <- isTRUE(list(...)$allow.new.levels)
-  if (isTRUE(include_random) && !is.null(data) && !is.null(x)) {
+  allow_new_levels <- isTRUE(dots$allow.new.levels)
+
+  # check whether "include_random" is NULL (i.e. include random effects)
+  # or NA (i.e. don't include random effects) and then set to TRUE/FALSE
+  # respectively. This allows us checking the data to see if RE variables
+  # are in the data or not.
+
+  if (is.null(include_random)) {
+    include_random <- TRUE
+  } else if (is.na(include_random)) {
+    include_random <- FALSE
+  }
+
+  # only check and yield warnings when random effects are requested.
+  if ((isTRUE(include_random) || identical(include_random, "default")) && !is.null(data) && !is.null(x)) {
     # In case include_random is TRUE, but there's actually no random factors in data
     re_terms <- find_random(x, flatten = TRUE)
     if (!all(re_terms %in% names(data))) {
-      include_random <- FALSE
-      if (isTRUE(verbose)) {
+      if (isTRUE(verbose) && isTRUE(include_random)) {
         warning(format_message("`include_random` was set to `TRUE`, but not all random effects were found in 'data'.",
                                "Setting `include_random = FALSE` now."), call. = FALSE)
       }
+      include_random <- FALSE
     } else if (!allow_new_levels) {
       # we have random effects in data, but do we also have new levels?
       re_data <- get_random(x)
@@ -199,14 +212,17 @@
         all(unique(data[[i]]) %in% re_data[[i]])
       })
       if (!all_levels_found) {
-        include_random <- FALSE
-        if (isTRUE(verbose)) {
+        if (isTRUE(verbose) && isTRUE(include_random)) {
           warning(format_message("`include_random` was set to `TRUE`, but grouping factor(s) in 'data' has new levels not in the original data.",
                                  "Either use `allow.new.levels=TRUE`, or make sure to include only valid values for grouping factor(s).",
                                  "Setting `include_random = FALSE` now."), call. = FALSE)
         }
+        include_random <- FALSE
       }
     }
+    # else, we might have a formula. if so, do not change include_random
+  } else if (!inherits(include_random, "formula")) {
+    include_random <- FALSE
   }
 
   # Add (or set) random variables to "NA"
