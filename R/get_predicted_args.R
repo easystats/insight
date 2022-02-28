@@ -3,7 +3,7 @@
 .get_predicted_args <- function(x,
                                 data = NULL,
                                 predict = "expectation",
-                                include_random = TRUE,
+                                include_random = "default",
                                 include_smooth = TRUE,
                                 ci = 0.95,
                                 verbose = TRUE,
