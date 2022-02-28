@@ -184,6 +184,11 @@
 
   allow_new_levels <- isTRUE(dots$allow.new.levels)
 
+  # if we have no mixed model, don't process random effects
+  if (!is_mixed_model(x)) {
+    include_random <- FALSE
+  }
+
   # check whether "include_random" is NULL (i.e. include random effects)
   # or NA (i.e. don't include random effects) and then set to TRUE/FALSE
   # respectively. This allows us checking the data to see if RE variables
@@ -211,7 +216,7 @@
       all_levels_found <- sapply(re_terms, function(i) {
         all(unique(data[[i]]) %in% re_data[[i]])
       })
-      if (!all_levels_found) {
+      if (!all(all_levels_found)) {
         if (isTRUE(verbose) && isTRUE(include_random)) {
           warning(format_message("`include_random` was set to `TRUE`, but grouping factor(s) in 'data' has new levels not in the original data.",
                                  "Either use `allow.new.levels=TRUE`, or make sure to include only valid values for grouping factor(s).",
