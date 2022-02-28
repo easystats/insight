@@ -105,9 +105,9 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
   test_that("get_loglikelihood - plm", {
     if (requiet("plm")) {
       data("Produc", package = "plm")
-      x <- plm::plm(log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp,
+      x <- suppressWarnings(plm::plm(log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp,
         data = Produc, index = c("state", "year")
-      )
+      ))
 
       ll <- loglikelihood(x)
       expect_equal(as.numeric(ll), 1534.532, tolerance = 1e-3)

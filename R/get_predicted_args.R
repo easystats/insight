@@ -9,6 +9,9 @@
                                 verbose = TRUE,
                                 ...) {
 
+  # First step, check whether "predict" or type argument is used -------------
+  ############################################################################
+
   # check whether user possibly used the "type" instead of "predict" argument
   dots <- list(...)
 
@@ -39,12 +42,20 @@
     }
   }
 
+
+  # Intermediate step, get model information and evaluate data argument ------
+  ############################################################################
+
   # Get info
   info <- model_info(x, verbose = FALSE)
 
   # Data
   if (!is.null(dots$newdata) && is.null(data)) data <- dots$newdata
   if (is.null(data)) data <- get_data(x, verbose = verbose)
+
+
+  # Second step, evaluate "predict" argument                      ------------
+  ############################################################################
 
   # check `predict` user-input
   predict_method <- lapply(
@@ -91,6 +102,9 @@
     warning(msg, call. = FALSE)
   }
 
+
+  # Third step, prepare arguments that define the type/scale of predictions --
+  ############################################################################
 
   transform <- FALSE
 
@@ -180,7 +194,8 @@
   }
 
 
-  # process random effects -------
+  # Fourth step, evaluate random effects                       ---------------
+  ############################################################################
 
   allow_new_levels <- isTRUE(dots$allow.new.levels)
 
@@ -202,20 +217,32 @@
 
   # only check and yield warnings when random effects are requested.
   if ((isTRUE(include_random) || identical(include_random, "default")) && !is.null(data) && !is.null(x)) {
-    # In case include_random is TRUE, but there's actually no random factors in data
+
+    # get random effect terms
     re_terms <- find_random(x, flatten = TRUE)
+
+    # In case include_random is TRUE, but there's actually no
+    # or not all random factors in data, set include_random to FALSE
     if (!all(re_terms %in% names(data))) {
       if (isTRUE(verbose) && isTRUE(include_random)) {
         warning(format_message("`include_random` was set to `TRUE`, but not all random effects were found in 'data'.",
                                "Setting `include_random = FALSE` now."), call. = FALSE)
       }
       include_random <- FALSE
+
     } else if (!allow_new_levels) {
+
       # we have random effects in data, but do we also have new levels?
+      # get data of random effects from the model, and compare random effect
+      # variables with data provided by the user - all values/levels need to
+      # be present in the data, if user did not set argument "allow.new.levels"
+      # to TRUE.
+
       re_data <- get_random(x)
       all_levels_found <- sapply(re_terms, function(i) {
         all(unique(data[[i]]) %in% re_data[[i]])
       })
+
       if (!all(all_levels_found)) {
         if (isTRUE(verbose) && isTRUE(include_random)) {
           warning(format_message("`include_random` was set to `TRUE`, but grouping factor(s) in 'data' has new levels not in the original data.",
@@ -223,14 +250,23 @@
                                  "Setting `include_random = FALSE` now."), call. = FALSE)
         }
         include_random <- FALSE
+      } else {
+        # include_random still might be "default" - change to TRUE here
+        include_random <- TRUE
       }
+    } else {
+      # include_random still might be "default" - change to TRUE here
+      include_random <- TRUE
     }
+
     # else, we might have a formula. if so, do not change include_random.
     # also, do not change if predictions for each observation are requested
     # (i.e. data = NULL)
+
   } else if (!inherits(include_random, "formula") && !is.null(data)) {
     include_random <- FALSE
   }
+
 
   # Add (or set) random variables to "NA"
   if (isFALSE(include_random)) {
@@ -244,7 +280,10 @@
 
   re.form <- .format_reform(include_random)
 
-  # Return all args
+
+  # Return all args                                            ---------------
+  ############################################################################
+
   list(
     data = data,
     include_random = include_random,
