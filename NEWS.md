@@ -7,8 +7,8 @@
   only work for text-format.
 
 * `get_loglikelihood()` gets a `check_response` argument, to check if a model
-  has a log-transformed response variable, and if so, returns a corrected
-  log-likelihood.
+  has a transformed response variable (like `log()` or `sqrt()` transformation), 
+  and if so, returns a corrected log-likelihood.
 
 ## Bug fixes
 

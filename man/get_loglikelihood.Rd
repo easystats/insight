@@ -38,7 +38,9 @@ overwrite the \code{estimator} argument and is thus equivalent to setting
 are not available under REML.}
 
 \item{check_response}{Logical, if \code{TRUE}, checks if the response variable
-is log-transformed, and if so, returns a corrected log-likelihood.}
+is transformed (like \code{log()} or \code{sqrt()}), and if so, returns a corrected
+log-likelihood. To get back to the original scale, the likelihood of the
+model is multiplied by the Jacobian/derivative of the transformation.}
 
 \item{verbose}{Toggle warnings and messages.}
 }

@@ -18,7 +18,9 @@
 #'   `stats::logLik(..., REML=TRUE)`. Note that individual log-likelihoods
 #'   are not available under REML.
 #' @param check_response Logical, if `TRUE`, checks if the response variable
-#'   is log-transformed, and if so, returns a corrected log-likelihood.
+#'   is transformed (like `log()` or `sqrt()`), and if so, returns a corrected
+#'   log-likelihood. To get back to the original scale, the likelihood of the
+#'   model is multiplied by the Jacobian/derivative of the transformation.
 #' @param ... Passed down to `logLik()`, if possible.
 #' @inheritParams get_residuals
 #'
@@ -101,7 +103,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
     val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x, verbose = verbose)^2))))
     p <- n_parameters(x, remove_nonestimable = TRUE)
     ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
-    return(.loglikelihood_prep_output(x, ll, log_transform = check_response, verbose = verbose))
+    return(.loglikelihood_prep_output(x, ll, check_response = check_response, verbose = verbose))
   }
 
   # Get S2
@@ -116,7 +118,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   # Get individual log-likelihoods
   lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = verbose)^2) / s2))
 
-  .loglikelihood_prep_output(x, lls, log_transform = check_response, verbose = verbose)
+  .loglikelihood_prep_output(x, lls, check_response = check_response, verbose = verbose)
 }
 
 
@@ -296,7 +298,7 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
 
 # Helpers -----------------------------------------------------------------
 
-.loglikelihood_prep_output <- function(x, lls = NA, df = NULL, log_transform = FALSE, verbose = FALSE, ...) {
+.loglikelihood_prep_output <- function(x, lls = NA, df = NULL, check_response = FALSE, verbose = FALSE, ...) {
   # Prepare output
   if (all(is.na(lls))) {
     out <- stats::logLik(x, ...)
@@ -309,26 +311,18 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
   }
 
 
-  if (isTRUE(log_transform)) {
+  if (isTRUE(check_response)) {
     # check if we have transformed response, and if so, adjust LogLik
     response_transform <- find_transformation(x)
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-      ll_transform <- tryCatch(
-        {
-          sum(stats::dlnorm(
-            x = get_response(x),
-            meanlog = stats::fitted(x),
-            sdlog = get_sigma(x, ci = NULL, verbose = FALSE),
-            log = TRUE
-          ))
-        },
-        error = function(e) {
-          NULL
-        }
+      ll_transform <- switch(
+        response_transform,
+        "log" = .ll_log_adjustment(x),
+        .ll_jacobian_adjustment(x)
       )
 
       if (is.null(ll_transform) && isTRUE(verbose)) {
-        warning(insight::format_message("Could not compute AIC for models with transformed response. AIC value is probably inaccurate."), call. = FALSE)
+        warning(insight::format_message("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate."), call. = FALSE)
       } else {
         out[1] <- ll_transform
       }
@@ -345,4 +339,46 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
   # Make of same class as returned by stats::logLik(x)
   class(out) <- c("logLik", class(x))
   out
+}
+
+
+
+
+.ll_log_adjustment <- function(x) {
+  tryCatch(
+    {
+      sum(stats::dlnorm(
+        x = get_response(x),
+        meanlog = stats::fitted(x),
+        sdlog = get_sigma(x, ci = NULL, verbose = FALSE),
+        log = TRUE
+      ))
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
+
+
+.ll_jacobian_adjustment <- function(model) {
+  tryCatch(
+    {
+      trans <- get_transformation(model)$transformation
+      sum(log(
+        diag(attr(with(
+          get_data(model),
+          stats::numericDeriv(
+            expr = quote(trans(
+              get(find_response(model))
+            )),
+            theta = find_response(model)
+          )
+        ), "gradient"))
+      ))
+    },
+    error = function(e) {
+      NULL
+    }
+  )
 }
