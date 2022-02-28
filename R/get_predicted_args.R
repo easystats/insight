@@ -220,8 +220,10 @@
         include_random <- FALSE
       }
     }
-    # else, we might have a formula. if so, do not change include_random
-  } else if (!inherits(include_random, "formula")) {
+    # else, we might have a formula. if so, do not change include_random.
+    # also, do not change if predictions for each observation are requested
+    # (i.e. data = NULL)
+  } else if (!inherits(include_random, "formula") && !is.null(data)) {
     include_random <- FALSE
   }
 
