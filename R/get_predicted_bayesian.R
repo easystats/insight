@@ -8,7 +8,7 @@ get_predicted.stanreg <- function(x,
                                   data = NULL,
                                   predict = "expectation",
                                   iterations = NULL,
-                                  include_random = TRUE,
+                                  include_random = "default",
                                   include_smooth = TRUE,
                                   verbose = TRUE,
                                   ...) {
