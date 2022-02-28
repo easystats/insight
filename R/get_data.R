@@ -1338,7 +1338,8 @@ get_data.mlogit <- function(x, verbose = TRUE, ...) {
 #' @export
 get_data.rma <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(.recover_data_from_environment(x), error = function(x) NULL)
-  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
+  model_call <- get_call(x)
+  .prepare_get_data(x, mf[rownames(x$X),], verbose = verbose)
 }
 
 
