@@ -18,6 +18,7 @@
 \alias{get_data.brmsfit}
 \alias{get_data.stanreg}
 \alias{get_data.MCMCglmm}
+\alias{get_data.rma}
 \title{Get the data that was used to fit the model}
 \usage{
 get_data(x, ...)
@@ -80,6 +81,16 @@ get_data(x, ...)
 \method{get_data}{stanreg}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 
 \method{get_data}{MCMCglmm}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
+
+\method{get_data}{rma}(
+  x,
+  verbose = TRUE,
+  include_interval = FALSE,
+  transf = NULL,
+  transf_args = NULL,
+  ci = 0.95,
+  ...
+)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -101,6 +112,18 @@ component, depending on the model.}
 
 \item{shape}{Return long or wide data? Only applicable in repeated measures
 designs.}
+
+\item{include_interval}{For meta-analysis models, should normal-approximation
+confidence intervals be added for each response effect size?}
+
+\item{transf}{For meta-analysis models, if intervals are included, a function
+applied to each response effect size and its interval.}
+
+\item{transf_args}{For meta-analysis models, an optional list of arguments
+passed to the \code{transf} function.}
+
+\item{ci}{For meta-analysis models, the Confidence Interval (CI) level if
+\code{include_interval = TRUE}. Default to 0.95 (95\%).}
 }
 \value{
 The data that was used to fit the model.
