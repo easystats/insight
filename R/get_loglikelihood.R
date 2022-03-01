@@ -122,8 +122,8 @@ get_loglikelihood.afex_aov <- function(x, ...) {
 }
 
 
-.get_loglikelihood_glm <- function(x, verbose = TRUE, ...) {
-  fam <- stats::family(x)$family
+.get_loglikelihood_glm <- function(x, info, verbose = TRUE, ...) {
+  fam <- info$family
   resp <- get_response(x, verbose = verbose)
   w <- get_weights(x, null_as_ones = TRUE)
   dev <- stats::deviance(x)
@@ -131,7 +131,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   predicted <- get_predicted(x, verbose = verbose)
 
   # Make adjustment for binomial models with matrix as input
-  if (fam == "binomial") {
+  if (info$is_binomial) {
     resp <- .factor_to_numeric(resp, lowest = 0)
     if (!is.null(ncol(resp))) {
       n <- apply(resp, 1, sum)
@@ -195,7 +195,7 @@ get_loglikelihood.lm <- function(x,
       ...
     )
   } else {
-    ll <- .get_loglikelihood_glm(x, verbose = verbose, ...)
+    ll <- .get_loglikelihood_glm(x, info = info, verbose = verbose, ...)
   }
   ll
 }
