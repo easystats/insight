@@ -66,11 +66,13 @@
 <h3 id="changes-to-functions-0-16-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-16-1"></a></h3>
 <ul><li><p><code><a href="../reference/export_table.html">export_table()</a></code> now better checks for invalid values of caption and footer for tables in HTML format, and silently removes, e.g., ansi-colour codes that only work for text-format.</p></li>
 <li><p><code><a href="../reference/get_loglikelihood.html">get_loglikelihood()</a></code> gets a <code>check_response</code> argument, to check if a model has a transformed response variable (like <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code> or <code><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt()</a></code> transformation), and if so, returns a corrected log-likelihood.</p></li>
-<li><p><code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> Now support <code>BayesFactor</code>.</p></li>
+<li><p><code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> now supports <em>BayesFactor</em> models.</p></li>
+<li><p><code><a href="../reference/get_loglikelihood.html">get_loglikelihood()</a></code> and <code><a href="../reference/get_df.html">get_df()</a></code> now support more model classes.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-16-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-16-1"></a></h3>
-<ul><li>Fixed incorrect column name conversion in <code><a href="../reference/standardize_names.html">standardize_names()</a></code> for certain columns returned by <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">broom::glance()</a></code>.</li>
+<ul><li><p>Fixed incorrect column name conversion in <code><a href="../reference/standardize_names.html">standardize_names()</a></code> for certain columns returned by <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">broom::glance()</a></code>.</p></li>
+<li><p>Fixed issue with correctly detecting Tweedie-models in <code><a href="../reference/model_info.html">model_info()</a></code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
