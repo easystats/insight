@@ -28,8 +28,10 @@ if (.runThisTest &&
   })
 
   test_that("loglik", {
-    expect_equal(get_loglikelihood(m1), logLik(m1), ignore_attr = TRUE)
-    expect_equal(get_loglikelihood(m2), logLik(m2), ignore_attr = TRUE)
+    expect_equal(get_loglikelihood(m1, estimator = "REML"), logLik(m1), ignore_attr = TRUE)
+    expect_equal(get_loglikelihood(m2, estimator = "REML"), logLik(m2), ignore_attr = TRUE)
+    expect_equal(get_loglikelihood(m1), logLik(m1, REML = FALSE), ignore_attr = TRUE)
+    expect_equal(get_loglikelihood(m2), logLik(m2, REML = FALSE), ignore_attr = TRUE)
   })
 
   test_that("get_df", {

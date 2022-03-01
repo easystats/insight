@@ -10,7 +10,8 @@
 #'   deviation of the errors. If `estimator="ML"` (default), the scaling is
 #'   done by n (the biased ML estimator), which is then equivalent to using
 #'   `stats::logLik()`. If `estimator="OLS"`, it returns the unbiased
-#'   OLS estimator.
+#'   OLS estimator. `estimator="REML"` wil lgive same results as
+#'   `logLik(..., REML=TRUE)`.
 #' @param REML Only for linear models. This argument is present for
 #'   compatibility with `stats::logLik()`. Setting it to `TRUE` will
 #'   overwrite the `estimator` argument and is thus equivalent to setting
@@ -28,6 +29,11 @@
 #'   log-likelihoods for each observation as a `per_observation` attribute
 #'   (`attributes(get_loglikelihood(x))$per_observation`) when possible.
 #'   The code was partly inspired from the \CRANpkg{nonnest2} package.
+#'
+#' @details By default, `estimator = "ML"`, which means that `get_loglikelihood()`
+#'   has a different default-behaviour for some models, like from package *lme4*.
+#'   Explicitly set `estimator = "REML"` to return the same values as from the
+#'   defaults in `logLik.merMod()`.
 #'
 #' @examples
 #' x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
