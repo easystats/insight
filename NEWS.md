@@ -9,6 +9,8 @@
 * `get_loglikelihood()` gets a `check_response` argument, to check if a model
   has a transformed response variable (like `log()` or `sqrt()` transformation), 
   and if so, returns a corrected log-likelihood.
+  
+* `get_modelmatrix()` Now support `BayesFactor`.
 
 ## Bug fixes
 
