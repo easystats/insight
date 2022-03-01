@@ -83,13 +83,13 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
   test_that("get_loglikelihood - (g)lmer", {
     if (requiet("lme4")) {
       x <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
-      ll <- loglikelihood(x, estimator = "ML")
+      ll <- loglikelihood(x)
       ll2 <- stats::logLik(x)
       expect_equal(as.numeric(ll), as.numeric(ll2))
       expect_equal(attributes(ll)$df, attributes(ll2)$df)
 
       x <- lme4::glmer(vs ~ mpg + (1 | cyl), data = mtcars, family = "binomial")
-      ll <- loglikelihood(x, estimator = "ML")
+      ll <- loglikelihood(x)
       ll2 <- stats::logLik(x)
       expect_equal(as.numeric(ll), as.numeric(ll2))
       expect_equal(attributes(ll)$df, attributes(ll2)$df)
