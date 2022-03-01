@@ -125,6 +125,13 @@ get_modelmatrix.afex_aov <- function(x, ...) {
   stats::model.matrix(object = x$lm, ...)
 }
 
+
+#' @export
+get_modelmatrix.BFBayesFactor <- function(x, ...) {
+  check_if_installed("BayesFactor")
+  BayesFactor::model.matrix(x, ...)
+}
+
 # helper ----------------
 
 .data_in_dots <- function(..., object = NULL, default_data = NULL) {
