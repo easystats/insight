@@ -52,6 +52,38 @@ get_loglikelihood.default <- function(x, ...) {
 }
 
 #' @export
+get_loglikelihood.lmerMod <- function(x,
+                                     estimator = "ML",
+                                     REML = FALSE,
+                                     check_response = FALSE,
+                                     verbose = TRUE,
+                                     ...) {
+  if (identical(estimator, "REML")) {
+    REML <- TRUE
+  }
+  .loglikelihood_prep_output(
+    x,
+    lls = stats::logLik(x, REML = REML),
+    check_response = check_response,
+    verbose = verbose,
+    REML = REML,
+    ...
+  )
+}
+
+#' @export
+get_loglikelihood.gmerMod <- function(x, check_response = FALSE, verbose = TRUE, ...) {
+  .loglikelihood_prep_output(
+    x,
+    lls = stats::logLik(x),
+    check_response = check_response,
+    verbose = verbose,
+    REML = FALSE,
+    ...
+  )
+}
+
+#' @export
 get_loglikelihood.model_fit <- function(x,
                                         estimator = "ML",
                                         REML = FALSE,
@@ -302,7 +334,6 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
                                        lls = NA,
                                        df = NULL,
                                        check_response = FALSE,
-                                       REML = FALSE,
                                        verbose = FALSE,
                                        ...) {
   # Prepare output
@@ -332,7 +363,7 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
         warning(format_message("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate."), call. = FALSE)
       } else {
         out[1] <- ll_transform
-        if (isTRUE(REML) && isTRUE(verbose)) {
+        if (isTRUE(list(...)$REML) && isTRUE(verbose)) {
           warning(format_message("Log-likelihood is corrected for models with transformed response. However, this ignores 'REML=TRUE'. Log-likelihood value is probably inaccurate."), call. = FALSE)
         }
       }
