@@ -207,7 +207,7 @@ get_loglikelihood.ivreg <- get_loglikelihood.lm
 get_loglikelihood.glm <- get_loglikelihood.lm
 
 #' @export
-get_loglikelihood.glmer <- get_loglikelihood.lm
+get_loglikelihood.merMod <- get_loglikelihood.lm
 
 #' @export
 get_loglikelihood.gam <- get_loglikelihood.lm

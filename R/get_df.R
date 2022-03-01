@@ -72,6 +72,23 @@ get_df.ivprobit <- get_df.ivFixed
 
 
 #' @export
+get_df.fixest <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "residual") {
+    s <- summary(x)
+    vcov_scaled <- s$cov.scaled
+    if (is.null(vcov_scaled)) {
+      s$nobs - s$nparams
+    } else {
+      max(s$nobs - attr(vcov_scaled, "dof.K"), 1)
+    }
+  } else {
+    .model_df(x)
+  }
+}
+
+
+#' @export
 get_df.multinom <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "model") {
@@ -182,11 +199,67 @@ get_df.BBmm <- get_df.glht
 get_df.BBreg <- get_df.glht
 
 
+# methods for models w/o df.residual() method --------------
+
 #' @export
 get_df.rlm <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "residual") {
     .degrees_of_freedom_analytical(x)
+  } else {
+    .model_df(x)
+  }
+}
+
+#' @export
+get_df.bigglm <- get_df.rlm
+
+#' @export
+get_df.biglm <- get_df.rlm
+
+#' @export
+get_df.complmrob <- get_df.rlm
+
+#' @export
+get_df.gls <- get_df.rlm
+
+#' @export
+get_df.garch <- get_df.rlm
+
+#' @export
+get_df.mhurdle <- get_df.rlm
+
+#' @export
+get_df.nlrq <- get_df.rlm
+
+#' @export
+get_df.truncreg <- get_df.rlm
+
+
+
+
+#' @export
+get_df.rq <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "residual") {
+    tryCatch({
+      s <- suppressWarnings(summary(x, covariance = TRUE))
+      cs <- lapply(s, function(i) i$rdf)
+      unique(unlist(cs))
+    }, error = function(e) {
+      NULL
+    })
+  } else {
+    .model_df(x)
+  }
+}
+
+
+#' @export
+get_df.rqss <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "residual") {
+    n_obs(x) - x$edf
   } else {
     .model_df(x)
   }
@@ -357,6 +430,15 @@ get_df.systemfit <- function(x, type = "residual", ...) {
 
 
 
+# not yet supported --------------------
+
+#' @export
+get_df.mediate <- function(x, ...) {
+  NULL
+}
+
+
+
 
 
 # Analytical approach ------------------------------
@@ -413,6 +495,7 @@ get_df.systemfit <- function(x, type = "residual", ...) {
 
   dof
 }
+
 
 
 
