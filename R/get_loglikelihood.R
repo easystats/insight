@@ -186,7 +186,10 @@ get_loglikelihood.lm <- function(x,
   }
 
   info <- model_info(x, verbose = FALSE)
-  if (info$is_linear) {
+  if (info$is_tweedie) {
+    check_if_installed("tweedie")
+    ll <- .loglikelihood_prep_output(x, lls = tweedie::logLiktweedie(x))
+  } else if (info$is_linear) {
     ll <- .get_loglikelihood_lm(x,
       estimator = estimator,
       REML = REML,

@@ -10,12 +10,16 @@
   has a transformed response variable (like `log()` or `sqrt()` transformation), 
   and if so, returns a corrected log-likelihood.
   
-* `get_modelmatrix()` Now support `BayesFactor`.
+* `get_modelmatrix()` now supports *BayesFactor* models.
+
+* `get_loglikelihood()` and `get_df()` now support more model classes.
 
 ## Bug fixes
 
 * Fixed incorrect column name conversion in `standardize_names()` for certain
   columns returned by `broom::glance()`.
+
+* Fixed issue with correctly detecting Tweedie-models in `model_info()`.
 
 # insight 0.16.0
 

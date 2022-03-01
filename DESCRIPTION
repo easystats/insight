@@ -150,6 +150,7 @@ Suggests:
     testthat,
     tripack,
     truncreg,
+    tweedie,
     VGAM
 VignetteBuilder: 
     knitr
