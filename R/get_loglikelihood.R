@@ -324,12 +324,13 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
     # check if we have transformed response, and if so, adjust LogLik
     response_transform <- find_transformation(x)
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-      ll_transform <- switch(
-        response_transform,
-        "log" = .ll_log_adjustment(x),
-        .ll_jacobian_adjustment(x)
-      )
-
+      # check if we have weights. If so, call Jacobian method, that can handle weights
+      model_weights <- get_weights(x, na_rm = TRUE)
+      if (!is.null(model_weights)) {
+        ll_transform <- .ll_jacobian_adjustment(x, model_weights)
+      } else {
+        ll_transform <- .ll_log_adjustment(x)
+      }
       if (is.null(ll_transform) && isTRUE(verbose)) {
         warning(format_message("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate."), call. = FALSE)
       } else {
@@ -373,11 +374,11 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
 }
 
 
-.ll_jacobian_adjustment <- function(model) {
+.ll_jacobian_adjustment <- function(model, weights = NULL) {
   tryCatch(
     {
       trans <- get_transformation(model)$transformation
-      sum(log(
+      .weighted_sum(log(
         diag(attr(with(
           get_data(model),
           stats::numericDeriv(
@@ -387,10 +388,18 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
             theta = find_response(model)
           )
         ), "gradient"))
-      ))
+      ), weights)
     },
     error = function(e) {
       NULL
     }
   )
+}
+
+.weighted_sum <- function(x, w = NULL, ...) {
+  if (is.null(w)) {
+    mean(x) * length(x)
+  } else {
+    stats::weighted.mean(x, w) * length(x)
+  }
 }
