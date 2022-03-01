@@ -101,6 +101,14 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
       ll <- loglikelihood(x, estimator = "ML")
       ll2 <- stats::logLik(x, REML = FALSE)
       expect_equal(as.numeric(ll), as.numeric(ll2))
+
+      model <- download_model("lmerMod_1")
+      expect_equal(get_loglikelihood(model, estimator = "REML"), logLik(model, REML = TRUE), tolerance = 0.01, ignore_attr = TRUE)
+      expect_equal(get_loglikelihood(model, estimator = "ML"), logLik(model, REML = FALSE), tolerance = 0.01, ignore_attr = TRUE)
+
+      model <- download_model("merMod_1")
+      expect_equal(get_loglikelihood(model, estimator = "REML"), logLik(model, REML = FALSE), tolerance = 0.01, ignore_attr = TRUE)
+      expect_equal(get_loglikelihood(model, estimator = "ML"), logLik(model, REML = FALSE), tolerance = 0.01, ignore_attr = TRUE)
     }
   })
 

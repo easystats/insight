@@ -78,7 +78,7 @@ get_loglikelihood.lmerMod <- function(x,
 }
 
 #' @export
-get_loglikelihood.gmerMod <- function(x, check_response = FALSE, verbose = TRUE, ...) {
+get_loglikelihood.glmerMod <- function(x, check_response = FALSE, verbose = TRUE, ...) {
   .loglikelihood_prep_output(
     x,
     lls = stats::logLik(x),
