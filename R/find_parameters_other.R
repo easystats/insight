@@ -183,3 +183,14 @@ find_parameters.bfsl <- function(x, flatten = FALSE, ...) {
     out
   }
 }
+
+
+#' @export
+find_parameters.marginaleffects <- function(x, ...) {
+  # Recover dataframe
+  params <- x[!names(x) %in% c("rowid", "type", "std.error", "contrast", "term", "dydx")]
+  # Remove fixed variables
+  params <- params[sapply(params, function(x) length(unique(x)) > 1)]
+  # Transform to list
+  as.list(params)
+}

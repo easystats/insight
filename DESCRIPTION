@@ -111,6 +111,7 @@ Suggests:
     lmtest,
     logistf,
     MASS,
+    marginaleffects,
     Matrix,
     mclust,
     MCMCglmm,
