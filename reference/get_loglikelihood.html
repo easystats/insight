@@ -105,7 +105,8 @@ default).</p>
 deviation of the errors. If <code>estimator="ML"</code> (default), the scaling is
 done by n (the biased ML estimator), which is then equivalent to using
 <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">stats::logLik()</a></code>. If <code>estimator="OLS"</code>, it returns the unbiased
-OLS estimator.</p></dd>
+OLS estimator. <code>estimator="REML"</code> wil lgive same results as
+<code>logLik(..., REML=TRUE)</code>.</p></dd>
 <dt>REML</dt>
 <dd><p>Only for linear models. This argument is present for
 compatibility with <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">stats::logLik()</a></code>. Setting it to <code>TRUE</code> will
@@ -127,6 +128,13 @@ model is multiplied by the Jacobian/derivative of the transformation.</p></dd>
 log-likelihoods for each observation as a <code>per_observation</code> attribute
 (<code>attributes(get_loglikelihood(x))$per_observation</code>) when possible.
 The code was partly inspired from the <a href="https://CRAN.R-project.org/package=nonnest2" class="external-link"><span class="pkg">nonnest2</span></a> package.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>By default, <code>estimator = "ML"</code>, which means that <code>get_loglikelihood()</code>
+has a different default-behaviour for some models, like from package <em>lme4</em>.
+Explicitly set <code>estimator = "REML"</code> to return the same values as from the
+defaults in <code><a href="https://rdrr.io/pkg/lme4/man/merMod-class.html" class="external-link">logLik.merMod()</a></code>.</p>
     </div>
 
     <div class="section level2">
