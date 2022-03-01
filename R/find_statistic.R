@@ -145,6 +145,7 @@ find_statistic <- function(x, ...) {
     "afex_aov", "Anova.mlm", "aov", "aovlist", "anova",
     "Gam",
     "manova", "maov",
+    "svychisq", "svytable",
     "t1way"
   )
 
