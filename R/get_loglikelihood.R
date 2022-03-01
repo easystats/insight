@@ -358,17 +358,14 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
     # check if we have transformed response, and if so, adjust LogLik
     response_transform <- find_transformation(x)
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-      # check if we have weights. If so, call Jacobian method, that can handle weights
+      # we only use the jacobian adjustment, because it can handle weights
       model_weights <- get_weights(x, na_rm = TRUE)
-      if (!is.null(model_weights) || response_transform != "log") {
-        ll_transform <- .ll_jacobian_adjustment(x, model_weights)
-      } else {
-        ll_transform <- .ll_log_adjustment(x)
-      }
-      if (is.null(ll_transform) && isTRUE(verbose)) {
+      ll_adjustment <- .ll_jacobian_adjustment(x, model_weights)
+
+      if (is.null(ll_adjustment) && isTRUE(verbose)) {
         warning(format_message("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate."), call. = FALSE)
       } else {
-        out[1] <- ll_transform
+        out[1] <- out[1] + ll_adjustment
         if (isTRUE(list(...)$REML) && isTRUE(verbose)) {
           warning(format_message("Log-likelihood is corrected for models with transformed response. However, this ignores 'REML=TRUE'. Log-likelihood value is probably inaccurate."), call. = FALSE)
         }

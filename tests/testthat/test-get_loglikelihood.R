@@ -43,7 +43,7 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
 
     x <- lm(log(mpg) ~ wt, data = mtcars)
     expect_equal(as.numeric(get_loglikelihood(x)), 19.42433, tolerance = 1e-3)
-    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -75.24875, tolerance = 1e-3)
+    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -75.21614, tolerance = 1e-3)
 
     set.seed(123)
     mtcars$wg <- abs(rnorm(nrow(mtcars), mean = 1))
@@ -52,13 +52,13 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
 
     x <- lm(log(mpg) ~ wt, weights = wg, data = mtcars)
     expect_equal(as.numeric(get_loglikelihood(x)), 18.4205, tolerance = 1e-3)
-    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -94.00719, tolerance = 1e-3)
+    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -75.58669, tolerance = 1e-3)
 
 
     # sqrt-response
     x <- lm(sqrt(mpg) ~ wt, data = mtcars)
     expect_equal(as.numeric(get_loglikelihood(x)), -7.395031, tolerance = 1e-3)
-    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -69.50094, tolerance = 1e-3)
+    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -76.89597, tolerance = 1e-3)
 
   })
 
