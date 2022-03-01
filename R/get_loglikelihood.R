@@ -354,7 +354,7 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
       # check if we have weights. If so, call Jacobian method, that can handle weights
       model_weights <- get_weights(x, na_rm = TRUE)
-      if (!is.null(model_weights)) {
+      if (!is.null(model_weights) || response_transform != "log") {
         ll_transform <- .ll_jacobian_adjustment(x, model_weights)
       } else {
         ll_transform <- .ll_log_adjustment(x)
