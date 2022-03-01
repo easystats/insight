@@ -118,7 +118,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   # Get individual log-likelihoods
   lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = verbose)^2) / s2))
 
-  .loglikelihood_prep_output(x, lls, check_response = check_response, verbose = verbose)
+  .loglikelihood_prep_output(x, lls, check_response = check_response, REML = REML, verbose = verbose)
 }
 
 
@@ -298,7 +298,13 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
 
 # Helpers -----------------------------------------------------------------
 
-.loglikelihood_prep_output <- function(x, lls = NA, df = NULL, check_response = FALSE, verbose = FALSE, ...) {
+.loglikelihood_prep_output <- function(x,
+                                       lls = NA,
+                                       df = NULL,
+                                       check_response = FALSE,
+                                       REML = FALSE,
+                                       verbose = FALSE,
+                                       ...) {
   # Prepare output
   if (all(is.na(lls))) {
     out <- stats::logLik(x, ...)
@@ -322,9 +328,12 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
       )
 
       if (is.null(ll_transform) && isTRUE(verbose)) {
-        warning(insight::format_message("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate."), call. = FALSE)
+        warning(format_message("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate."), call. = FALSE)
       } else {
         out[1] <- ll_transform
+        if (isTRUE(REML) && isTRUE(verbose)) {
+          warning(format_message("Log-likelihood is corrected for models with transformed response. However, this ignores 'REML=TRUE'. Log-likelihood value is probably inaccurate."), call. = FALSE)
+        }
       }
     }
   }
