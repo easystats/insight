@@ -132,15 +132,20 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   attr(objects, "same_response") <- isTRUE(same_response)
 
   # Check if nested
-  is_nested_increasing <- is_nested_decreasing <- c()
+  is_nested_increasing <- is_nested_decreasing <- same_fixef <- c()
   len <- length(objects)
 
   for (i in 2:len) {
-    is_nested_decreasing <- c(is_nested_decreasing, .nested_regressions(objects[[i - 1]], objects[[i]])$is_nested)
-    is_nested_increasing <- c(is_nested_increasing, .nested_regressions(objects[[len + 2 - i]], objects[[len + 1 - i]])$is_nested)
+    nested_decreasing <- .nested_regressions(objects[[i - 1]], objects[[i]])
+    nested_increasing <- .nested_regressions(objects[[len + 2 - i]], objects[[len + 1 - i]])
+
+    is_nested_decreasing <- c(is_nested_decreasing, nested_decreasing$is_nested)
+    is_nested_increasing <- c(is_nested_increasing, nested_increasing$is_nested)
+    same_fixef <- c(same_fixef, nested_decreasing$same_fixef)
   }
 
   is_nested <- all(is_nested_decreasing) || all(is_nested_increasing)
+  all_same_fixef <- all(same_fixef)
 
   if (isTRUE(same_response) & is_nested) {
     class(objects) <- c("ListNestedRegressions", class(objects))
@@ -148,18 +153,21 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
     # order of df from models
     model_df <- sapply(objects, n_parameters)
+    identical_models <- is_nested && any(duplicated(model_df)) && length(unique(sapply(objects, model_name, include_formula = FALSE))) == 1
 
-    if (is_nested && any(duplicated(model_df)) && length(unique(sapply(objects, model_name, include_formula = FALSE))) == 1 && verbose) {
+    if (identical_models && verbose) {
       message("Some of the nested models seem to be identical.")
     }
 
     attr(objects, "is_nested_increasing") <- all(is_nested_increasing)
     attr(objects, "is_nested_decreasing") <- all(is_nested_decreasing)
+    attr(objects, "identical_nested_models") <- isTRUE(identical_models)
   } else {
     class(objects) <- c("ListNonNestedRegressions", class(objects))
     attr(objects, "is_nested") <- FALSE
   }
 
+  attr(objects, "same_fixef") <- all_same_fixef
   objects
 }
 
@@ -196,6 +204,6 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
   list(
     is_nested = all(params %in% params_base),
-    same_fixedeffects = all(params %in% params_base) && all(params_base %in% params)
+    same_fixef = all(params %in% params_base) && all(params_base %in% params)
   )
 }
