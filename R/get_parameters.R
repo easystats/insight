@@ -551,12 +551,17 @@ get_parameters.metaplus <- function(x, ...) {
 
 
 #' @export
-get_parameters.blavaan <- function(x, summary = FALSE, centrality = "mean", ...) {
+get_parameters.blavaan <- function(x, summary = FALSE, centrality = "mean",
+                                   standardize = FALSE, ...) {
   # installed?
   check_if_installed("lavaan")
   check_if_installed("blavaan")
 
-  draws <- blavaan::blavInspect(x, "draws")
+  if (standardize) {
+    draws <- blavaan::standardizedPosterior(x)
+  } else {
+    draws <- blavaan::blavInspect(x, "draws")
+  }
   posteriors <- as.data.frame(as.matrix(draws))
 
   param_tab <- lavaan::parameterEstimates(x)
@@ -598,11 +603,15 @@ get_parameters.blavaan <- function(x, summary = FALSE, centrality = "mean", ...)
 
 
 #' @export
-get_parameters.lavaan <- function(x, ...) {
+get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   # installed?
   check_if_installed("lavaan")
 
-  params <- lavaan::parameterEstimates(x)
+  if (standardize) {
+    params <- lavaan::standardizedSolution(x)
+  } else {
+    params <- lavaan::parameterEstimates(x)
+  }
 
   params$parameter <- paste0(params$lhs, params$op, params$rhs)
   params$comp <- NA
