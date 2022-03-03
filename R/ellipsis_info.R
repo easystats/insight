@@ -153,6 +153,8 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   # Check if all models are null models
   attr(objects, "all_nullmodels") <- all(sapply(objects, is_nullmodel))
 
+  # if we have nested models, check if models are provided in
+  # increasing or decreasing order (according to number of DFs)
   if (isTRUE(same_response) & is_nested) {
     class(objects) <- c("ListNestedRegressions", class(objects))
     attr(objects, "is_nested") <- TRUE
@@ -171,6 +173,26 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   } else {
     class(objects) <- c("ListNonNestedRegressions", class(objects))
     attr(objects, "is_nested") <- FALSE
+  }
+
+  # if we have mixed models, check for nested random effects
+  if (all(sapply(objects, is_mixed_model))) {
+    re_nested_increasing <- re_nested_decreasing <- same_ranef <- c()
+    len <- length(objects)
+
+    for (i in 2:len) {
+      nested_decreasing <- .nested_random_effects(objects[[i - 1]], objects[[i]])
+      nested_increasing <- .nested_random_effects(objects[[len + 2 - i]], objects[[len + 1 - i]])
+
+      re_nested_decreasing <- c(re_nested_decreasing, nested_decreasing$is_nested)
+      re_nested_increasing <- c(re_nested_increasing, nested_increasing$is_nested)
+      same_ranef <- c(same_ranef, nested_decreasing$same_ranef)
+    }
+
+    attr(objects, "re_nested_increasing") <- all(re_nested_increasing)
+    attr(objects, "re_nested_decreasing") <- all(re_nested_decreasing)
+    attr(objects, "re_nested") <- (all(re_nested_increasing) || all(re_nested_decreasing))
+    attr(objects, "same_ranef") <- all(same_ranef)
   }
 
   objects
