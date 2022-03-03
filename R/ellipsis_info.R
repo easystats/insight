@@ -136,8 +136,8 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   len <- length(objects)
 
   for (i in 2:len) {
-    is_nested_decreasing <- c(is_nested_decreasing, .nested_regressions(objects[[i - 1]], objects[[i]]))
-    is_nested_increasing <- c(is_nested_increasing, .nested_regressions(objects[[len + 2 - i]], objects[[len + 1 - i]]))
+    is_nested_decreasing <- c(is_nested_decreasing, .nested_regressions(objects[[i - 1]], objects[[i]])$is_nested)
+    is_nested_increasing <- c(is_nested_increasing, .nested_regressions(objects[[len + 2 - i]], objects[[len + 1 - i]])$is_nested)
   }
 
   is_nested <- all(is_nested_decreasing) || all(is_nested_increasing)
@@ -168,7 +168,7 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 # Helpers -----------------------------------------------------------------
 
 #' @keywords internal
-.nested_regressions <- function(basemodel, model, check_same_params = FALSE) {
+.nested_regressions <- function(basemodel, model) {
   params_base <- find_parameters(basemodel,
     effects = "fixed",
     component = "conditional",
@@ -194,15 +194,8 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     params_base[poly_terms] <- gsub(pattern, "\\1\\3", params_base[poly_terms])
   }
 
-  if (isTRUE(check_same_params)) {
-    all(params %in% params_base) && all(params_base %in% params)
-  } else {
-    all(params %in% params_base)
-  }
-}
-
-
-#' @keywords internal
-.same_fixed_effects <- function(basemodel, model) {
-  .nested_regressions(basemodel, model, check_same_params = TRUE)
+  list(
+    is_nested = all(params %in% params_base),
+    same_fixedeffects = all(params %in% params_base) && all(params_base %in% params)
+  )
 }
