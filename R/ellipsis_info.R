@@ -145,7 +145,13 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   }
 
   is_nested <- all(is_nested_decreasing) || all(is_nested_increasing)
+
+  # Check if all fixed effects are the same across models
   all_same_fixef <- all(same_fixef)
+  attr(objects, "same_fixef") <- all_same_fixef
+
+  # Check if all models are null models
+  attr(objects, "all_nullmodels") <- all(sapply(objects, is_nullmodel))
 
   if (isTRUE(same_response) & is_nested) {
     class(objects) <- c("ListNestedRegressions", class(objects))
@@ -167,7 +173,6 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     attr(objects, "is_nested") <- FALSE
   }
 
-  attr(objects, "same_fixef") <- all_same_fixef
   objects
 }
 
@@ -205,5 +210,21 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   list(
     is_nested = all(params %in% params_base),
     same_fixef = all(params %in% params_base) && all(params_base %in% params)
+  )
+}
+
+
+#' @keywords internal
+.nested_random_effects <- function(basemodel, model) {
+  re_basemodel <- find_random(basemodel, flatten = TRUE)
+  re_model <- find_random(model, flatten = TRUE)
+
+  if (is.null(re_basemodel) || is.null(re_model)) {
+    return(NULL)
+  }
+
+  list(
+    is_nested = all(re_model %in% re_basemodel),
+    same_ranef = all(re_model %in% re_basemodel) && all(re_basemodel %in% re_model)
   )
 }
