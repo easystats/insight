@@ -1,12 +1,20 @@
-requiet("testthat")
-requiet("insight")
 requiet("survival")
 
-lung <- subset(lung, subset = ph.ecog %in% 0:2)
+lung <- subset(survival::lung, subset = ph.ecog %in% 0:2)
 lung$sex <- factor(lung$sex, labels = c("male", "female"))
 lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
 
 m1 <- coxph(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
+
+# get_data: regression test for previous bug
+# this does not seem to work when I put it inside a `test_that()` call (VAB)
+dat_regression_test <- data.frame(time = c(4, 3, 1, 1, 2, 2, 3),
+                                  status = c(1, 1, 1, 0, 1, 1, 0),
+                                  x = c(0, 2, 1, 1, 1, 0, 0),
+                                  sex = c(0, 0, 0, 0, 1, 1, 1))
+mod <- coxph(Surv(time, status) ~ x + strata(sex),
+             data = dat_regression_test,
+             ties = "breslow")
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_logit)
@@ -29,16 +37,11 @@ test_that("link_inverse", {
 
 test_that("get_data", {
   expect_s3_class(get_data(m1), "data.frame")
-  expect_equal(dim(get_data(m1)), c(226, 10))
-  # regression test: revdep against {marginaleffects}
-  testdat <- data.frame(time = c(4, 3, 1, 1, 2, 2, 3),
-                        status = c(1, 1, 1, 0, 1, 1, 0),
-                        x = c(0, 2, 1, 1, 1, 0, 0),
-                        sex = c(0, 0, 0, 0, 1, 1, 1))
-  mod <- coxph(Surv(time, status) ~ x + strata(sex),
-               data = testdat,
-               ties = "breslow")
-  expect_equal(get_data(mod), testdat)
+  expect_equal(dim(get_data(m1)), c(166, 10))
+})
+
+test_that("get_data: regression test for previous bug", {
+  expect_equal(get_data(mod), dat_regression_test)
 })
 
 test_that("find_formula", {
@@ -103,11 +106,10 @@ test_that("find_statistic", {
   expect_identical(find_statistic(m1), "z-statistic")
 })
 
-if (requiet("JM")) {
+test_that("JM", {
   data("aids", package = "JM")
   m <- coxph(Surv(start, stop, event) ~ CD4, data = aids)
-  test_that("coxph triple response", {
-    expect_equal(colnames(get_data(m)), c("start", "stop", "event", "Surv(start, stop, event)", "CD4"))
-    expect_equal(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
-  })
-}
+  d <- get_data(m)
+  expect_equal(dim(d), c(1405, 12))
+  expect_equal(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
+})
