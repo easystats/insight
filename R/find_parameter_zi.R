@@ -29,7 +29,7 @@ find_parameters.zeroinfl <- function(x,
   cf <- names(stats::coef(x))
   component <- match.arg(component)
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = cf[grepl("^count_", cf, perl = TRUE)],
     zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
   ))
@@ -55,7 +55,7 @@ find_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", 
   cf <- stats::coef(x)
   component <- match.arg(component)
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = names(cf$tweedie),
     zero_inflated = names(cf$zero)
   ))
@@ -86,7 +86,7 @@ find_parameters.mhurdle <- function(x,
 
   # names(cf) <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", names(cf))
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = names(cf)[cond_pars],
     zero_inflated = names(cf)[zi_pars],
     infrequent_purchase = names(cf)[ip_pars],

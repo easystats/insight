@@ -51,7 +51,7 @@ get_parameters <- function(x, ...) {
 #' @rdname get_parameters
 #' @export
 get_parameters.default <- function(x, verbose = TRUE, ...) {
-  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
+  if (inherits(x, "list") && object_has_names(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
     return(get_parameters.gam(x, ...))

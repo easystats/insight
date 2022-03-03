@@ -72,7 +72,7 @@ find_parameters.DirichletRegModel <- function(x,
   if (x$parametrization == "common") {
     pars <- list(conditional = names(unlist(stats::coef(x))))
   } else {
-    pars <- .compact_list(list(
+    pars <- compact_list(list(
       conditional = names(unlist(stats::coef(x)[["beta"]])),
       precision = names(unlist(stats::coef(x)[["gamma"]]))
     ))

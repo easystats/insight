@@ -1,5 +1,11 @@
 # insight 0.16.1
 
+## New functions
+
+* To check for names: `object_has_names()` and `object_has_rownames()`
+* To work with lists: `is_empty_object()` and `compact_list()`
+* To work with strings: `compact_character()`
+
 ## Changes to functions
 
 * `export_table()` now better checks for invalid values of caption and footer

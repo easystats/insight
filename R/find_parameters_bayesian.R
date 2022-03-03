@@ -60,7 +60,7 @@ find_parameters.BGGM <- function(x,
     )
   )
 
-  l <- .compact_list(l)
+  l <- compact_list(l)
 
   if (flatten) {
     unique(unlist(l))
@@ -134,8 +134,8 @@ find_parameters.BFBayesFactor <- function(x,
   }
 
   elements <- .get_elements(effects, component = component)
-  l <- lapply(.compact_list(list(conditional = conditional, random = random, extra = extra)), text_remove_backticks)
-  l <- .compact_list(l[elements])
+  l <- lapply(compact_list(list(conditional = conditional, random = random, extra = extra)), text_remove_backticks)
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -154,7 +154,7 @@ find_parameters.MCMCglmm <- function(x,
   sc <- summary(x)
   effects <- match.arg(effects)
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = rownames(sc$solutions),
     random = rownames(sc$Gcovariances)
   ))
@@ -196,7 +196,7 @@ find_parameters.bamlss <- function(x,
   alpha <- cn[grepl("\\.alpha$", cn)]
 
   elements <- .get_elements(effects = "all", component = component)
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = cond,
     smooth_terms = smooth_terms,
     sigma = sigma,
@@ -264,7 +264,7 @@ find_parameters.brmsfit <- function(x,
   beta <- setdiff(beta, c(cond, rand, rand_sd, randbeta, rand_cor, car_struc))
   auxiliary <- setdiff(auxiliary, c(cond, rand, rand_sd, rand_cor, car_struc))
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = cond,
     random = c(rand, rand_sd, rand_cor, car_struc),
     zero_inflated = zi,
@@ -288,13 +288,13 @@ find_parameters.brmsfit <- function(x,
   if (is_multivariate(x)) {
     rn <- names(find_response(x))
     l <- lapply(rn, function(i) {
-      if (.obj_has_name(l, "conditional")) {
+      if (object_has_names(l, "conditional")) {
         conditional <- l$conditional[grepl(sprintf("^(b_|bs_|bsp_|bcs_)\\Q%s\\E_", i), l$conditional)]
       } else {
         conditional <- NULL
       }
 
-      if (.obj_has_name(l, "random")) {
+      if (object_has_names(l, "random")) {
         random <- l$random[grepl(sprintf("__\\Q%s\\E\\[", i), l$random) |
           grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
           grepl("^cor_", l$random) |
@@ -303,13 +303,13 @@ find_parameters.brmsfit <- function(x,
         random <- NULL
       }
 
-      if (.obj_has_name(l, "zero_inflated")) {
+      if (object_has_names(l, "zero_inflated")) {
         zero_inflated <- l$zero_inflated[grepl(sprintf("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)\\Q%s\\E_", i), l$zero_inflated)]
       } else {
         zero_inflated <- NULL
       }
 
-      if (.obj_has_name(l, "zero_inflated_random")) {
+      if (object_has_names(l, "zero_inflated_random")) {
         zero_inflated_random <- l$zero_inflated_random[grepl(sprintf("__zi_\\Q%s\\E\\[", i), l$zero_inflated_random) |
           grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$zero_inflated_random) |
           grepl("^cor_", l$zero_inflated_random)]
@@ -317,55 +317,55 @@ find_parameters.brmsfit <- function(x,
         zero_inflated_random <- NULL
       }
 
-      if (.obj_has_name(l, "simplex")) {
+      if (object_has_names(l, "simplex")) {
         simplex <- l$simplex
       } else {
         simplex <- NULL
       }
 
-      if (.obj_has_name(l, "sigma")) {
+      if (object_has_names(l, "sigma")) {
         sigma <- l$sigma[grepl(sprintf("^sigma_\\Q%s\\E$", i), l$sigma)]
       } else {
         sigma <- NULL
       }
 
-      if (.obj_has_name(l, "beta")) {
+      if (object_has_names(l, "beta")) {
         beta <- l$beta[grepl(sprintf("^beta_\\Q%s\\E$", i), l$sigma)]
       } else {
         beta <- NULL
       }
 
-      if (.obj_has_name(l, "dispersion")) {
+      if (object_has_names(l, "dispersion")) {
         dispersion <- l$dispersion[grepl(sprintf("^dispersion_\\Q%s\\E$", i), l$dispersion)]
       } else {
         dispersion <- NULL
       }
 
-      if (.obj_has_name(l, "mix")) {
+      if (object_has_names(l, "mix")) {
         mix <- l$mix[grepl(sprintf("^mix_\\Q%s\\E$", i), l$mix)]
       } else {
         mix <- NULL
       }
 
-      if (.obj_has_name(l, "shape") || .obj_has_name(l, "precision")) {
+      if (object_has_names(l, "shape") || object_has_names(l, "precision")) {
         aux <- l$aux[grepl(sprintf("^(shape|precision)_\\Q%s\\E$", i), l$aux)]
       } else {
         aux <- NULL
       }
 
-      if (.obj_has_name(l, "smooth_terms")) {
+      if (object_has_names(l, "smooth_terms")) {
         smooth_terms <- l$smooth_terms
       } else {
         smooth_terms <- NULL
       }
 
-      if (.obj_has_name(l, "priors")) {
+      if (object_has_names(l, "priors")) {
         priors <- l$priors
       } else {
         priors <- NULL
       }
 
-      pars <- .compact_list(list(
+      pars <- compact_list(list(
         conditional = conditional,
         random = random,
         zero_inflated = zero_inflated,
@@ -380,13 +380,13 @@ find_parameters.brmsfit <- function(x,
         auxiliary = aux
       ))
 
-      .compact_list(pars[elements])
+      compact_list(pars[elements])
     })
 
     names(l) <- rn
     is_mv <- "1"
   } else {
-    l <- .compact_list(l[elements])
+    l <- compact_list(l[elements])
   }
 
   l <- .filter_pars(l, parameters, !is.null(is_mv) && is_mv == "1")
@@ -411,7 +411,7 @@ find_parameters.bayesx <- function(x,
   cond <- rownames(stats::coef(x))
   smooth_terms <- rownames(x$smooth.hyp)
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = cond,
     smooth_terms = smooth_terms
   ))
@@ -420,7 +420,7 @@ find_parameters.bayesx <- function(x,
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component)
-  l <- .compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -451,7 +451,7 @@ find_parameters.stanreg <- function(x,
   # remove auxiliary from conditional
   cond <- setdiff(cond, auxiliary)
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = cond,
     random = c(rand, rand_sd),
     smooth_terms = smooth_terms,
@@ -464,7 +464,7 @@ find_parameters.stanreg <- function(x,
   effects <- match.arg(effects)
   component <- match.arg(component)
   elements <- .get_elements(effects, component)
-  l <- .compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -504,14 +504,14 @@ find_parameters.stanmvreg <- function(x,
   rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
   sigma <- fe[grepl("\\|sigma$", fe, perl = TRUE) & .grep_non_smoothers(fe)]
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = cond,
     random = rand,
     sigma = sigma
   ))
 
 
-  if (.obj_has_name(l, "conditional")) {
+  if (object_has_names(l, "conditional")) {
     x1 <- sub("(.*)(\\|)(.*)", "\\1", l$conditional)
     x2 <- sub("(.*)(\\|)(.*)", "\\3", l$conditional)
 
@@ -524,7 +524,7 @@ find_parameters.stanmvreg <- function(x,
   }
 
 
-  if (.obj_has_name(l, "random")) {
+  if (object_has_names(l, "random")) {
     x1 <- sub("b\\[(.*)(\\|)(.*)", "\\1", l$random)
     x2 <- sub("(b\\[).*(.*)(\\|)(.*)", "\\1\\4", l$random)
 
@@ -537,7 +537,7 @@ find_parameters.stanmvreg <- function(x,
   }
 
 
-  if (.obj_has_name(l, "sigma")) {
+  if (object_has_names(l, "sigma")) {
     l.sigma <- lapply(rn, function(i) {
       list(sigma = "sigma")
     })
@@ -553,7 +553,7 @@ find_parameters.stanmvreg <- function(x,
   effects <- match.arg(effects)
   component <- match.arg(component)
   elements <- .get_elements(effects, component)
-  l <- lapply(l, function(i) .compact_list(i[elements]))
+  l <- lapply(l, function(i) compact_list(i[elements]))
 
   attr(l, "is_mv") <- "1"
 
@@ -580,7 +580,7 @@ find_parameters.sim.merMod <- function(x,
   fe <- colnames(.get_armsim_fixef_parms(x))
   re <- colnames(.get_armsim_ranef_parms(x))
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = fe,
     random = re
   ))
@@ -589,7 +589,7 @@ find_parameters.sim.merMod <- function(x,
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  l <- .compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -653,7 +653,7 @@ find_parameters.stanfit <- function(x,
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma|lp__))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = cond,
     random = rand
   ))
@@ -662,7 +662,7 @@ find_parameters.stanfit <- function(x,
 
   effects <- match.arg(effects)
   elements <- .get_elements(effects, component = "all")
-  l <- .compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))

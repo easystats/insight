@@ -145,7 +145,7 @@ n_obs.gam <- function(x, ...) {
 
 #' @export
 n_obs.gamm <- function(x, ...) {
-  if (.obj_has_name(x, "gam")) {
+  if (object_has_names(x, "gam")) {
     n_obs(x$gam, ...)
   } else {
     stop("Cannot find n_obs for this object. Please an open an issue!")
@@ -466,7 +466,7 @@ n_obs.BBmm <- n_obs.BBreg
 #' @export
 n_obs.crq <- function(x, ...) {
   n <- nrow(x$residuals)
-  if (.is_empty_object(n)) {
+  if (is_empty_object(n)) {
     n <- nrow(x$fitted.values)
   }
   n

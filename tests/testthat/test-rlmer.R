@@ -262,20 +262,24 @@ if (.runThisTest) {
 
       expect_equal(
         get_variance(m1),
-        list(var.fixed = 996.527014102253, var.random = 1900.02213435247,
-            var.residual = 406.64157297696, var.distribution = 406.64157297696,
-            var.dispersion = 0, var.intercept = c(Subject = 709.851005030477),
-            var.slope = c(Subject.Days = 39.9364799454489),
-            cor.slope_intercept = c(Subject = 0.0343034180029383)),
+        list(
+          var.fixed = 996.527014102253, var.random = 1900.02213435247,
+          var.residual = 406.64157297696, var.distribution = 406.64157297696,
+          var.dispersion = 0, var.intercept = c(Subject = 709.851005030477),
+          var.slope = c(Subject.Days = 39.9364799454489),
+          cor.slope_intercept = c(Subject = 0.0343034180029383)
+        ),
         tolerance = 1e-3
       )
 
       expect_equal(
         get_variance(m2),
-        list(var.fixed = 914.841369705921, var.random = 1406.78220075798,
-             var.residual = 809.318117542254, var.distribution = 809.318117542254,
-             var.dispersion = 0,
-             var.intercept = c(`mysubgrp:mygrp` = 0, Subject = 1390.66848960835, mygrp = 16.1137111496379)),
+        list(
+          var.fixed = 914.841369705921, var.random = 1406.78220075798,
+          var.residual = 809.318117542254, var.distribution = 809.318117542254,
+          var.dispersion = 0,
+          var.intercept = c(`mysubgrp:mygrp` = 0, Subject = 1390.66848960835, mygrp = 16.1137111496379)
+        ),
         tolerance = 1e-3
       )
     })

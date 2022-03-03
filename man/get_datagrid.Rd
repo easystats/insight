@@ -43,33 +43,59 @@ get_datagrid(x, ...)
 
 \item{...}{Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).}
 
-\item{at}{Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}, or as string, e.g. \code{at = "Sepal.Length = 2"} or \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.}
+\item{at}{Can be "all" or list of characters indicating columns of interest.
+Can also contain assignments (as named list, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}, or as string, e.g. \code{at = "Sepal.Length = 2"} or \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage
+of single and double quotes to assign strings within strings). The
+remaining variables will be fixed.}
 
-\item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the reference level), \code{"mode"} (set at the most common level) or \code{"all"} to keep all levels.}
+\item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the
+reference level), \code{"mode"} (set at the most common level) or \code{"all"} to
+keep all levels.}
 
-\item{numerics}{Type of summary for numeric values. Can be \code{"all"} (will duplicate the grid for all unique values), any function (\code{"mean"}, \code{"median"}, ...) or a value (e.g., \code{numerics = 0}).}
+\item{numerics}{Type of summary for numeric values. Can be \code{"all"} (will
+duplicate the grid for all unique values), any function (\code{"mean"},
+\code{"median"}, ...) or a value (e.g., \code{numerics = 0}).}
 
-\item{preserve_range}{In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the \code{length} argument.}
+\item{preserve_range}{In the case of combinations between numeric variables
+and factors, setting \code{preserve_range = TRUE} will drop the observations
+where the value of the numeric variable is originally not present in the
+range of its factor level. This leads to an unbalanced grid. Also, if you
+want the minimum and the maximum to closely match the actual ranges, you
+should increase the \code{length} argument.}
 
 \item{reference}{The reference vector from which to compute the mean and SD.}
 
 \item{length}{Length of numeric \code{"at"} variables.}
 
-\item{range}{Can be one of \code{"range"}, \code{"iqr"}, \code{"ci"}, \code{"hdi"} or \code{"eti"}. If \code{"range"} (default), will use the minimum and maximun of the original vector as end-points. If any other interval, will spread within the range (the default CI width is \verb{95\%} but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}.}
+\item{range}{Can be one of \code{"range"}, \code{"iqr"}, \code{"ci"}, \code{"hdi"} or \code{"eti"}. If
+\code{"range"} (default), will use the minimum and maximum of the original
+vector as end-points. If any other interval, will spread within the range
+(the default CI width is \verb{95\%} but this can be changed by setting something
+else, e.g., \code{ci = 0.90}). See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}.}
 
-\item{include_smooth}{If \code{x} is a model object, decide whether smooth terms should be included in the data grid or not.}
+\item{include_smooth}{If \code{x} is a model object, decide whether smooth terms
+should be included in the data grid or not.}
 
-\item{include_random}{If \code{x} is a mixed model object, decide whether random effect terms should be included in the data grid or not. If \code{include_random} is \code{FALSE}, but \code{x} is a mixed model with random effects, these will still be included in the returned grid, but set to their "population level" value (e.g., \code{NA} for \emph{glmmTMB} or \code{0} for \emph{merMod}). This ensures that common \code{predict()} methods work properly, as these usually need data with all variables in the model included.}
+\item{include_random}{If \code{x} is a mixed model object, decide whether random
+effect terms should be included in the data grid or not. If
+\code{include_random} is \code{FALSE}, but \code{x} is a mixed model with random effects,
+these will still be included in the returned grid, but set to their
+"population level" value (e.g., \code{NA} for \emph{glmmTMB} or \code{0} for \emph{merMod}).
+This ensures that common \code{predict()} methods work properly, as these
+usually need data with all variables in the model included.}
 
-\item{include_response}{If \code{x} is a model object, decide whether the response variable should be included in the data grid or not.}
+\item{include_response}{If \code{x} is a model object, decide whether the response
+variable should be included in the data grid or not.}
 
-\item{data}{Optional, the data frame that was used to fit the model. Usually, the data is retrieved via \code{get_data()}.}
+\item{data}{Optional, the data frame that was used to fit the model. Usually,
+the data is retrieved via \code{get_data()}.}
 }
 \value{
 Reference grid data frame.
 }
 \description{
-Create a reference matrix, useful for visualisation, with evenly spread and combined values.
+Create a reference matrix, useful for visualisation, with evenly spread and
+combined values.
 }
 \examples{
 # Add one row to change the "mode" of Species

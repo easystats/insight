@@ -35,8 +35,10 @@
 #'
 #' # remove backticks from character variable in a data frame
 #' # column defaults to "Parameter".
-#' d <- data.frame(Parameter = names(coef(model)),
-#'                 Estimate = unname(coef(model)))
+#' d <- data.frame(
+#'   Parameter = names(coef(model)),
+#'   Estimate = unname(coef(model))
+#' )
 #' d
 #' text_remove_backticks(d)
 #' @export
@@ -70,8 +72,10 @@ text_remove_backticks.data.frame <- function(x, column = "Parameter", verbose = 
     }
   }
   if (verbose && length(not_found)) {
-    warning(format_message("Following columns were not found or were no character vectors:",
-                           paste0(not_found, collapse = ", ")), call. = FALSE)
+    warning(format_message(
+      "Following columns were not found or were no character vectors:",
+      paste0(not_found, collapse = ", ")
+    ), call. = FALSE)
   }
   x
 }

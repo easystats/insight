@@ -52,13 +52,13 @@ find_random.default <- function(x, split_nested = FALSE, flatten = FALSE) {
     rn <- names(find_response(x))
     l <- lapply(rn, function(i) .find_random_effects(x, f[[i]], split_nested))
     names(l) <- rn
-    l <- .compact_list(l)
+    l <- compact_list(l)
   } else {
     l <- .find_random_effects(x, f, split_nested)
   }
 
 
-  if (.is_empty_object(l)) {
+  if (is_empty_object(l)) {
     return(NULL)
   }
 
@@ -81,11 +81,11 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
 
 
 .find_random_effects <- function(x, f, split_nested) {
-  if (!.obj_has_name(f, "random") && !.obj_has_name(f, "zero_inflated_random")) {
+  if (!object_has_names(f, "random") && !object_has_names(f, "zero_inflated_random")) {
     return(NULL)
   }
 
-  if (.obj_has_name(f, "random")) {
+  if (object_has_names(f, "random")) {
     if (is.list(f$random)) {
       r1 <- unique(unlist(lapply(f$random, function(.x) .get_model_random(.x, split_nested, x))))
     } else {
@@ -96,7 +96,7 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 
 
-  if (.obj_has_name(f, "zero_inflated_random")) {
+  if (object_has_names(f, "zero_inflated_random")) {
     if (is.list(f$zero_inflated_random)) {
       r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) .get_model_random(.x, split_nested, x))))
     } else {
@@ -107,5 +107,5 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 
 
-  .compact_list(list(random = r1, zero_inflated_random = r2))
+  compact_list(list(random = r1, zero_inflated_random = r2))
 }

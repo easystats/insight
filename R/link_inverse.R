@@ -35,7 +35,7 @@ link_inverse <- function(x, ...) {
 
 #' @export
 link_inverse.default <- function(x, ...) {
-  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
+  if (inherits(x, "list") && object_has_names(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
   }
@@ -656,8 +656,8 @@ link_inverse.gam <- function(x, ...) {
 
   if (is.null(li)) {
     mi <- .gam_family(x)
-    if (.obj_has_name(mi, "linfo")) {
-      if (.obj_has_name(mi$linfo, "linkinv")) {
+    if (object_has_names(mi, "linfo")) {
+      if (object_has_names(mi$linfo, "linkinv")) {
         li <- mi$linfo$linkinv
       } else {
         li <- mi$linfo[[1]]$linkinv

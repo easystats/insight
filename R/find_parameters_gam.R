@@ -29,7 +29,7 @@ find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
   names(pars) <- x$parameters
   if ("mu" %in% names(pars)) names(pars)[1] <- "conditional"
 
-  pars <- .compact_list(pars)
+  pars <- compact_list(pars)
 
   if (flatten) {
     unique(unlist(pars))
@@ -54,11 +54,11 @@ find_parameters.gam <- function(x,
   pars$conditional <- pars$conditional[.grep_non_smoothers(pars$conditional)]
   pars$smooth_terms <- row.names(st)
 
-  pars <- .compact_list(pars)
+  pars <- compact_list(pars)
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  pars <- .compact_list(pars[elements])
+  pars <- compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))
@@ -81,7 +81,7 @@ find_parameters.Gam <- function(x,
   pars <- names(stats::coef(x))
   component <- match.arg(component)
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = pars[.grep_non_smoothers(pars)],
     smooth_terms = pars[.grep_smoothers(pars)]
   ))
@@ -131,7 +131,7 @@ find_parameters.cgam <- function(x,
   estimates <- sc$coefficients
   smooth_terms <- sc$coefficients2
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = rownames(estimates),
     smooth_terms = rownames(smooth_terms)
   ))
@@ -140,7 +140,7 @@ find_parameters.cgam <- function(x,
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  l <- .compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))
@@ -188,7 +188,7 @@ find_parameters.rqss <- function(x,
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component)
-  pars <- .compact_list(pars[elements])
+  pars <- compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))

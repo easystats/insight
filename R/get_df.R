@@ -242,13 +242,16 @@ get_df.truncreg <- get_df.rlm
 get_df.rq <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "residual") {
-    tryCatch({
-      s <- suppressWarnings(summary(x, covariance = TRUE))
-      cs <- lapply(s, function(i) i$rdf)
-      unique(unlist(cs))
-    }, error = function(e) {
-      NULL
-    })
+    tryCatch(
+      {
+        s <- suppressWarnings(summary(x, covariance = TRUE))
+        cs <- lapply(s, function(i) i$rdf)
+        unique(unlist(cs))
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   } else {
     .model_df(x)
   }

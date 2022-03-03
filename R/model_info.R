@@ -96,7 +96,7 @@ model_info.data.frame <- function(x, ...) {
 #' @rdname model_info
 #' @export
 model_info.default <- function(x, verbose = TRUE, ...) {
-  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
+  if (inherits(x, "list") && object_has_names(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
   }
@@ -644,7 +644,7 @@ model_info.brmsfit <- function(x, ...) {
         logit.link = .x$link == "logit",
         multi.var = TRUE,
         link.fun = .x$link,
-        dispersion = !.is_empty_object(insight::find_formula(x)$sigma),
+        dispersion = !is_empty_object(insight::find_formula(x)$sigma),
         ...
       )
     })
@@ -655,7 +655,7 @@ model_info.brmsfit <- function(x, ...) {
       logit.link = faminfo$link == "logit",
       multi.var = FALSE,
       link.fun = faminfo$link,
-      dispersion = !.is_empty_object(insight::find_formula(x)$sigma),
+      dispersion = !is_empty_object(insight::find_formula(x)$sigma),
       ...
     )
   }
@@ -1035,7 +1035,7 @@ model_info.glmmTMB <- function(x, ...) {
   check_if_installed("lme4")
 
   faminfo <- stats::family(x)
-  zero_inflated <- !.is_empty_object(lme4::fixef(x)$zi)
+  zero_inflated <- !is_empty_object(lme4::fixef(x)$zi)
 
   .make_family(
     x = x,
@@ -1044,7 +1044,7 @@ model_info.glmmTMB <- function(x, ...) {
     hurdle = grepl("truncated", faminfo$family),
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
-    dispersion = !.is_empty_object(lme4::fixef(x)$disp),
+    dispersion = !is_empty_object(lme4::fixef(x)$disp),
     glmmtmb_zeroinf = zero_inflated,
     ...
   )

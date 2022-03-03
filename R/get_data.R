@@ -38,7 +38,7 @@ get_data <- function(x, ...) {
 
 #' @export
 get_data.default <- function(x, verbose = TRUE, ...) {
-  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
+  if (inherits(x, "list") && object_has_names(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
   }
@@ -295,7 +295,7 @@ get_data.zcpglm <- function(x,
   }
 
   mf <- switch(component,
-    "all" = do.call(cbind, .compact_list(list(mf_tweedie, mf_zero))),
+    "all" = do.call(cbind, compact_list(list(mf_tweedie, mf_zero))),
     "conditional" = mf_tweedie,
     "zi" = ,
     "zero_inflated" = mf_zero
@@ -613,15 +613,15 @@ get_data.MixMod <- function(x,
       fitfram_zi <- stats::model.frame(x, type = "zi_fixed")
       fitfram_zi_re <- stats::model.frame(x, type = "zi_random")
 
-      if (!.is_empty_object(fitfram_re)) {
+      if (!is_empty_object(fitfram_re)) {
         for (i in 1:length(fitfram_re)) {
           fitfram <- .merge_dataframes(fitfram_re[[i]], fitfram, replace = TRUE)
         }
       }
-      if (!.is_empty_object(fitfram_zi)) {
+      if (!is_empty_object(fitfram_zi)) {
         fitfram <- .merge_dataframes(fitfram_zi, fitfram, replace = TRUE)
       }
-      if (!.is_empty_object(fitfram_zi_re)) {
+      if (!is_empty_object(fitfram_zi_re)) {
         for (i in 1:length(fitfram_zi_re)) {
           fitfram <- .merge_dataframes(fitfram_zi_re[[i]], fitfram, replace = TRUE)
         }
@@ -737,7 +737,7 @@ get_data.gamlss <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     {
       elements <- c("mu", "sigma", "nu", "tau")
-      mf_list <- .compact_list(lapply(elements, function(e) {
+      mf_list <- compact_list(lapply(elements, function(e) {
         if (paste0(e, ".x") %in% names(x)) {
           stats::model.frame(x, what = e)
         } else {
@@ -810,7 +810,8 @@ get_data.feglm <- function(x, ...) {
 get_data.pgmm <- function(x, verbose = TRUE, ...) {
   model_terms <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
   mf <- tryCatch(.recover_data_from_environment(x)[, model_terms, drop = FALSE],
-                 error = function(x) NULL)
+    error = function(x) NULL
+  )
   .prepare_get_data(x, mf, verbose = verbose)
 }
 
@@ -870,7 +871,7 @@ get_data.ivreg <- function(x, verbose = TRUE, ...) {
 
   remain <- setdiff(ft, cn)
 
-  if (.is_empty_object(remain)) {
+  if (is_empty_object(remain)) {
     final_mf <- mf
   } else {
     final_mf <- tryCatch(
@@ -938,7 +939,7 @@ get_data.brmsfit <- function(x,
   if (.is_multi_membership(x)) {
     model.terms <- lapply(model.terms, .clean_brms_mm)
     rs <- setdiff(unname(unlist(find_random_slopes(x))), unname(unlist(model.terms)))
-    if (!.is_empty_object(rs)) model.terms$random <- c(rs, model.terms$random)
+    if (!is_empty_object(rs)) model.terms$random <- c(rs, model.terms$random)
   }
 
   .return_combined_data(

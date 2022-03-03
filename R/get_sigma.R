@@ -137,7 +137,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 
   # compute sigma manually ---------------
-  if (.is_empty_object(s)) {
+  if (is_empty_object(s)) {
     # default sigma ---------------
     s <- tryCatch(
       {
@@ -149,7 +149,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
     )
   }
 
-  if (.is_empty_object(s)) {
+  if (is_empty_object(s)) {
     info <- model_info(x, verbose = FALSE)
     if (!is.null(info) && info$is_mixed) {
       s <- tryCatch(
@@ -163,7 +163,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
     }
   }
 
-  if (.is_empty_object(s)) {
+  if (is_empty_object(s)) {
     return(NULL)
   }
   class(s) <- c("insight_aux", class(s))
@@ -191,14 +191,14 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 
   # compute sigma manually ---------------
-  if (.is_empty_object(s)) {
+  if (is_empty_object(s)) {
     info <- model_info(x, verbose = FALSE)
     if (!is.null(info) && info$is_dispersion) {
       return(NULL)
     }
   }
 
-  if (.is_empty_object(s)) {
+  if (is_empty_object(s)) {
     info <- model_info(x, verbose = FALSE)
     if (!is.null(info) && info$is_mixed) {
       s <- tryCatch(
@@ -212,7 +212,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
     }
   }
 
-  if (.is_empty_object(s)) {
+  if (is_empty_object(s)) {
     s <- tryCatch(
       {
         sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
@@ -223,7 +223,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
     )
   }
 
-  if (.is_empty_object(s)) {
+  if (is_empty_object(s)) {
     return(NULL)
   }
 
