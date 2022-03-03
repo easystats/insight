@@ -63,6 +63,15 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.16.1" id="insight-0161">insight 0.16.1<a class="anchor" aria-label="anchor" href="#insight-0161"></a></h2>
 <div class="section level3">
+<h3 id="new-functions-0-16-1">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-16-1"></a></h3>
+<ul><li>To check for names: <code><a href="../reference/object_has_names.html">object_has_names()</a></code> and <code><a href="../reference/object_has_names.html">object_has_rownames()</a></code>
+</li>
+<li>To work with lists: <code><a href="../reference/is_empty_object.html">is_empty_object()</a></code> and <code><a href="../reference/compact_list.html">compact_list()</a></code>
+</li>
+<li>To work with strings: <code><a href="../reference/compact_character.html">compact_character()</a></code>
+</li>
+</ul></div>
+<div class="section level3">
 <h3 id="changes-to-functions-0-16-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-16-1"></a></h3>
 <ul><li><p><code><a href="../reference/export_table.html">export_table()</a></code> now better checks for invalid values of caption and footer for tables in HTML format, and silently removes, e.g., ansi-colour codes that only work for text-format.</p></li>
 <li><p><code><a href="../reference/get_loglikelihood.html">get_loglikelihood()</a></code> gets a <code>check_response</code> argument, to check if a model has a transformed response variable (like <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code> or <code><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt()</a></code> transformation), and if so, returns a corrected log-likelihood.</p></li>

@@ -49,6 +49,12 @@
     <loc>/reference/color_if.html</loc>
   </url>
   <url>
+    <loc>/reference/compact_character.html</loc>
+  </url>
+  <url>
+    <loc>/reference/compact_list.html</loc>
+  </url>
+  <url>
     <loc>/reference/display.html</loc>
   </url>
   <url>
@@ -268,6 +274,9 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/is_empty_object.html</loc>
+  </url>
+  <url>
     <loc>/reference/is_gam_model.html</loc>
   </url>
   <url>
@@ -308,6 +317,9 @@
   </url>
   <url>
     <loc>/reference/null_model.html</loc>
+  </url>
+  <url>
+    <loc>/reference/object_has_names.html</loc>
   </url>
   <url>
     <loc>/reference/print_color.html</loc>
