@@ -200,3 +200,9 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     all(params %in% params_base)
   }
 }
+
+
+#' @keywords internal
+.same_fixed_effects <- function(basemodel, model) {
+  .nested_regressions(basemodel, model, check_same_params = TRUE)
+}
