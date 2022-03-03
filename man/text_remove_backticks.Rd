@@ -50,8 +50,10 @@ text_remove_backticks(names(coef(model)))
 
 # remove backticks from character variable in a data frame
 # column defaults to "Parameter".
-d <- data.frame(Parameter = names(coef(model)),
-                Estimate = unname(coef(model)))
+d <- data.frame(
+  Parameter = names(coef(model)),
+  Estimate = unname(coef(model))
+)
 d
 text_remove_backticks(d)
 }
