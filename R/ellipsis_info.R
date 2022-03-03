@@ -123,7 +123,12 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
   # Check if same outcome
   outcome <- get_response(objects[[1]], verbose = FALSE)
-  same_response <- all(sapply(objects[2:length(object_names)], function(i) isTRUE(all.equal(get_response(i, verbose = FALSE), outcome))))
+  same_response <- TRUE
+  i <- 2
+  while (same_response && i <= length(objects)) {
+    same_response <- isTRUE(all.equal(get_response(objects[[i]], verbose = FALSE), outcome))
+    i <- i + 1
+  }
   attr(objects, "same_response") <- isTRUE(same_response)
 
   # Check if nested
@@ -163,7 +168,7 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 # Helpers -----------------------------------------------------------------
 
 #' @keywords internal
-.nested_regressions <- function(basemodel, model) {
+.nested_regressions <- function(basemodel, model, check_same_params = FALSE) {
   params_base <- find_parameters(basemodel,
     effects = "fixed",
     component = "conditional",
@@ -189,5 +194,15 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     params_base[poly_terms] <- gsub(pattern, "\\1\\3", params_base[poly_terms])
   }
 
-  all(params %in% params_base)
+  if (isTRUE(check_same_params)) {
+    all(params %in% params_base) && all(params_base %in% params)
+  } else {
+    all(params %in% params_base)
+  }
+}
+
+
+#' @keywords internal
+.same_fixed_effects <- function(basemodel, model) {
+  .nested_regressions(basemodel, model, check_same_params = TRUE)
 }
