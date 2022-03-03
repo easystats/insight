@@ -8,12 +8,11 @@
 #' compact_list(c(1, NA, NA))
 #' compact_list(c(1, NA, NA), remove_na = TRUE)
 #' @export
-
 compact_list <- function(x, remove_na = FALSE) {
   if (remove_na) {
-    x[!sapply(x, function(i) length(i) == 0L || is.null(i) || (length(i) == 1L & is.na(i)) || any(i == "NULL", na.rm = TRUE))]
+    x[!sapply(x, function(i) !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1L & is.na(i)) || any(i == "NULL", na.rm = TRUE)))]
   } else {
-    x[!sapply(x, function(i) length(i) == 0L || is.null(i) || any(i == "NULL", na.rm = TRUE))]
+    x[!sapply(x, function(i) !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || any(i == "NULL", na.rm = TRUE)))]
   }
 }
 
@@ -30,7 +29,6 @@ compact_list <- function(x, remove_na = FALSE) {
 #' compact_character(c("x", "NULL", "", "y"))
 #'
 #' @export
-
 compact_character <- function(x) {
   x[!sapply(x, function(i) nchar(i) == 0 || all(is.na(i)) || any(i == "NULL", na.rm = TRUE))]
 }
