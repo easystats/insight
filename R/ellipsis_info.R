@@ -193,6 +193,9 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     attr(objects, "re_nested_decreasing") <- all(re_nested_decreasing)
     attr(objects, "re_nested") <- (all(re_nested_increasing) || all(re_nested_decreasing))
     attr(objects, "same_ranef") <- all(same_ranef)
+    attr(objects, "all_mixed_models") <- TRUE
+  } else {
+    attr(objects, "all_mixed_models") <- FALSE
   }
 
   objects
