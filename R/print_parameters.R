@@ -114,7 +114,7 @@ print_parameters <- function(x,
   obj <- list(...)
 
   # save attributes of original object
-  att <- do.call(c, .compact_list(lapply(obj, function(i) {
+  att <- do.call(c, compact_list(lapply(obj, function(i) {
     a <- attributes(i)
     a$names <- a$class <- a$row.names <- NULL
     a
@@ -142,7 +142,7 @@ print_parameters <- function(x,
   )
 
   # return merged data frame if no splitting requested
-  if (.is_empty_object(split_by)) {
+  if (is_empty_object(split_by)) {
     return(obj)
   }
 
@@ -155,7 +155,7 @@ print_parameters <- function(x,
 
   # split into groups, remove empty elements
   out <- split(obj, f)
-  out <- .compact_list(lapply(out, function(i) {
+  out <- compact_list(lapply(out, function(i) {
     if (nrow(i) > 0) i
   }))
 

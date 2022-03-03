@@ -34,8 +34,7 @@ find_statistic <- function(x, ...) {
     } else if (x$method == "Wilcoxon signed rank test with continuity correction") {
       stat <- "z-statistic"
     } else {
-      stat <- switch(
-        names(x$statistic),
+      stat <- switch(names(x$statistic),
         t = "t-statistic",
         Z = "z-statistic",
         `Quade F` = ,

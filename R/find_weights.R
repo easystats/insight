@@ -34,7 +34,7 @@ find_weights.default <- function(x, ...) {
           w <- eval(parse(text = .trim(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
         }
 
-        if (.is_empty_object(w) || w == "NULL") w <- NULL
+        if (is_empty_object(w) || w == "NULL") w <- NULL
       } else {
         w <- NULL
       }
@@ -57,7 +57,7 @@ find_weights.brmsfit <- function(x, ...) {
     resp <- .safe_deparse(f$conditional[[2L]])
   }
 
-  resp <- .compact_character(unname(sapply(resp, function(i) {
+  resp <- compact_character(unname(sapply(resp, function(i) {
     if (grepl("(.*)\\|(\\s+)weights\\((.*)\\)", i)) {
       i
     } else {
@@ -66,7 +66,7 @@ find_weights.brmsfit <- function(x, ...) {
   })))
 
   w <- .trim(sub("(.*)\\|(\\s+)weights\\((.*)\\)", "\\3", resp))
-  if (.is_empty_object(w)) w <- NULL
+  if (is_empty_object(w)) w <- NULL
   w
 }
 
@@ -88,7 +88,7 @@ find_weights.merMod <- function(x, ...) {
         w <- eval(parse(text = .trim(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
       }
 
-      if (.is_empty_object(w) || w == "NULL") w <- NULL
+      if (is_empty_object(w) || w == "NULL") w <- NULL
       w
     },
     error = function(e) {

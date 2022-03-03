@@ -32,7 +32,7 @@ link_function <- function(x, ...) {
 
 #' @export
 link_function.default <- function(x, ...) {
-  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
+  if (inherits(x, "list") && object_has_names(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
   }
@@ -491,8 +491,8 @@ link_function.gam <- function(x, ...) {
 
   if (is.null(lf)) {
     mi <- .gam_family(x)
-    if (.obj_has_name(mi, "linfo")) {
-      if (.obj_has_name(mi$linfo, "linkfun")) {
+    if (object_has_names(mi, "linfo")) {
+      if (object_has_names(mi$linfo, "linkfun")) {
         lf <- mi$linfo$linkfun
       } else {
         lf <- mi$linfo[[1]]$linkfun

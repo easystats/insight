@@ -137,7 +137,7 @@
   }
 
 
-  .compact_list(list(
+  compact_list(list(
     "var.fixed" = var.fixed,
     "var.random" = var.random,
     "var.residual" = var.residual,
@@ -224,7 +224,7 @@
       attr(vc2, "sc") <- sqrt(get_deviance(x, verbose = FALSE) / get_df(x, type = "residual", verbose = FALSE))
     }
 
-    vcorr <- .compact_list(list(vc1, vc2))
+    vcorr <- compact_list(list(vc1, vc2))
     names(vcorr) <- c("cond", "zi")[1:length(vcorr)]
 
     vals <- list(
@@ -320,7 +320,7 @@
       }
       out
     })
-    vc <- .compact_list(vc)
+    vc <- compact_list(vc)
     names(vc) <- setdiff(names(lme4::VarCorr(x)), "residual__")
     attr(vc, "sc") <- lme4::VarCorr(x)$residual__$sd[1, 1]
     vals <- list(
@@ -883,7 +883,7 @@
 
   # make sure we have identical subcomponents between random and
   # fixed effects
-  fe <- .compact_list(fe[c("conditional", "zero_inflated")])
+  fe <- compact_list(fe[c("conditional", "zero_inflated")])
   if (length(rs) > length(fe)) rs <- rs[1:length(fe)]
   if (length(fe) > length(rs)) fe <- fe[1:length(rs)]
 

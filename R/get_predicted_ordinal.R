@@ -53,12 +53,12 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
     se <- as.data.frame(se)
     se$Row <- 1:nrow(se)
     se <- stats::reshape(se,
-                         direction = "long",
-                         varying = setdiff(colnames(se), "Row"),
-                         times = setdiff(colnames(se), "Row"),
-                         v.names = "SE",
-                         timevar = "Response",
-                         idvar = "Row"
+      direction = "long",
+      varying = setdiff(colnames(se), "Row"),
+      times = setdiff(colnames(se), "Row"),
+      v.names = "SE",
+      timevar = "Response",
+      idvar = "Row"
     )
     row.names(se) <- NULL
     attr(out, "ci_data") <- se

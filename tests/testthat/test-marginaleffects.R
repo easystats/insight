@@ -3,10 +3,11 @@ if (requiet("marginaleffects") && requiet("insight") && requiet("testthat")) {
     m <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
     x <- marginaleffects(m,
-                         variables = "Petal.Length",
-                         newdata = insight::get_datagrid(m, at = "Species"))
+      variables = "Petal.Length",
+      newdata = insight::get_datagrid(m, at = "Species")
+    )
     # Equivalent in emmeans
-    x2 <- emmeans::emtrends(m, var = "Petal.Length", specs = ~Species + Petal.Length)
+    x2 <- emmeans::emtrends(m, var = "Petal.Length", specs = ~ Species + Petal.Length)
 
     # Get parameters
     p1 <- insight::get_parameters(x)

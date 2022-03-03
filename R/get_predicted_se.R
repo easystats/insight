@@ -28,7 +28,6 @@ get_predicted_se <- function(x,
 
   # last desperate try
   if (ncol(mm) != ncol(vcovmat)) {
-
     if (ncol(mm) == nrow(mm) && ncol(vcovmat) > ncol(mm) && all(colnames(mm) %in% colnames(vcovmat))) {
 
       # we might have a correct model matrix, but the vcov matrix contains values

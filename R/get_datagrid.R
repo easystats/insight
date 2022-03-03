@@ -1,19 +1,47 @@
 #' Create a reference grid
 #'
-#' Create a reference matrix, useful for visualisation, with evenly spread and combined values.
+#' Create a reference matrix, useful for visualisation, with evenly spread and
+#' combined values.
 #'
 #' @param x An object from which to construct the reference grid.
-#' @param at Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. `at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))`, or as string, e.g. `at = "Sepal.Length = 2"` or `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.
+#' @param at Can be "all" or list of characters indicating columns of interest.
+#'   Can also contain assignments (as named list, e.g. `at = list(c(Sepal.Length
+#'   = c(2, 4), Species = "setosa"))`, or as string, e.g. `at = "Sepal.Length =
+#'   2"` or `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage
+#'   of single and double quotes to assign strings within strings). The
+#'   remaining variables will be fixed.
 #' @param length Length of numeric `"at"` variables.
-#' @param range Can be one of `"range"`, `"iqr"`, `"ci"`, `"hdi"` or `"eti"`. If `"range"` (default), will use the minimum and maximun of the original vector as end-points. If any other interval, will spread within the range (the default CI width is `95%` but this can be changed by setting something else, e.g., `ci = 0.90`). See [IQR()] and [bayestestR::ci()].
-#' @param factors Type of summary for factors. Can be `"reference"` (set at the reference level), `"mode"` (set at the most common level) or `"all"` to keep all levels.
-#' @param numerics Type of summary for numeric values. Can be `"all"` (will duplicate the grid for all unique values), any function (`"mean"`, `"median"`, ...) or a value (e.g., `numerics = 0`).
-#' @param preserve_range In the case of combinations between numeric variables and factors, setting `preserve_range = TRUE` will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the `length` argument.
+#' @param range Can be one of `"range"`, `"iqr"`, `"ci"`, `"hdi"` or `"eti"`. If
+#'   `"range"` (default), will use the minimum and maximum of the original
+#'   vector as end-points. If any other interval, will spread within the range
+#'   (the default CI width is `95%` but this can be changed by setting something
+#'   else, e.g., `ci = 0.90`). See [IQR()] and [bayestestR::ci()].
+#' @param factors Type of summary for factors. Can be `"reference"` (set at the
+#'   reference level), `"mode"` (set at the most common level) or `"all"` to
+#'   keep all levels.
+#' @param numerics Type of summary for numeric values. Can be `"all"` (will
+#'   duplicate the grid for all unique values), any function (`"mean"`,
+#'   `"median"`, ...) or a value (e.g., `numerics = 0`).
+#' @param preserve_range In the case of combinations between numeric variables
+#'   and factors, setting `preserve_range = TRUE` will drop the observations
+#'   where the value of the numeric variable is originally not present in the
+#'   range of its factor level. This leads to an unbalanced grid. Also, if you
+#'   want the minimum and the maximum to closely match the actual ranges, you
+#'   should increase the `length` argument.
 #' @param reference The reference vector from which to compute the mean and SD.
-#' @param include_smooth If `x` is a model object, decide whether smooth terms should be included in the data grid or not.
-#' @param include_random If `x` is a mixed model object, decide whether random effect terms should be included in the data grid or not. If `include_random` is `FALSE`, but `x` is a mixed model with random effects, these will still be included in the returned grid, but set to their "population level" value (e.g., `NA` for *glmmTMB* or `0` for *merMod*). This ensures that common `predict()` methods work properly, as these usually need data with all variables in the model included.
-#' @param include_response If `x` is a model object, decide whether the response variable should be included in the data grid or not.
-#' @param data Optional, the data frame that was used to fit the model. Usually, the data is retrieved via `get_data()`.
+#' @param include_smooth If `x` is a model object, decide whether smooth terms
+#'   should be included in the data grid or not.
+#' @param include_random If `x` is a mixed model object, decide whether random
+#'   effect terms should be included in the data grid or not. If
+#'   `include_random` is `FALSE`, but `x` is a mixed model with random effects,
+#'   these will still be included in the returned grid, but set to their
+#'   "population level" value (e.g., `NA` for *glmmTMB* or `0` for *merMod*).
+#'   This ensures that common `predict()` methods work properly, as these
+#'   usually need data with all variables in the model included.
+#' @param include_response If `x` is a model object, decide whether the response
+#'   variable should be included in the data grid or not.
+#' @param data Optional, the data frame that was used to fit the model. Usually,
+#'   the data is retrieved via `get_data()`.
 #' @param ... Arguments passed to or from other methods (for instance, `length` or `range` to control the spread of numeric variables.).
 #'
 #' @return Reference grid data frame.
@@ -107,9 +135,10 @@ get_datagrid.data.frame <- function(x,
       nums <- list()
       for (num in specs[specs$is_factor == FALSE, "varname"]) {
         nums[[num]] <- get_datagrid(x[[num]],
-                                    target = specs[specs$varname == num, "expression"],
-                                    reference = reference[[num]],
-                                    ...)
+          target = specs[specs$varname == num, "expression"],
+          reference = reference[[num]],
+          ...
+        )
       }
     } else if (is.list(target)) {
 
@@ -471,8 +500,10 @@ get_datagrid.default <- function(x,
 
   # still found no data - stop here
   if (is.null(data)) {
-    stop(format_message("Can't access data that was used to fit the model in order to create the reference grid.",
-                        "Please use the `data` argument."))
+    stop(format_message(
+      "Can't access data that was used to fit the model in order to create the reference grid.",
+      "Please use the `data` argument."
+    ))
   }
 
   # Deal with intercept-only models
@@ -560,8 +591,10 @@ get_datagrid.wbm <- function(x,
 
   # still found no data - stop here
   if (is.null(data)) {
-    stop(format_message("Can't access data that was used to fit the model in order to create the reference grid.",
-                        "Please use the `data` argument."))
+    stop(format_message(
+      "Can't access data that was used to fit the model in order to create the reference grid.",
+      "Please use the `data` argument."
+    ))
   }
 
   # add id and time variables

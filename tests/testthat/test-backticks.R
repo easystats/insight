@@ -21,8 +21,10 @@ if (requiet("testthat") && requiet("insight")) {
     expect_warning(text_remove_backticks(d, verbose = TRUE))
     expect_equal(
       text_remove_backticks(d),
-      list(Parameter = c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"),
-           Estimate = c(2.99186937324135, 0.298310962215218, -1.49267407227818, -1.67409183546024)),
+      list(
+        Parameter = c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"),
+        Estimate = c(2.99186937324135, 0.298310962215218, -1.49267407227818, -1.67409183546024)
+      ),
       tolerance = 1e-3
     )
   })

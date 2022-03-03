@@ -6,7 +6,7 @@
 .prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
 
   # check if we have any data yet
-  if (.is_empty_object(mf)) {
+  if (is_empty_object(mf)) {
     if (isTRUE(verbose)) {
       warning("Could not get model data.", call. = FALSE)
     }
@@ -21,7 +21,7 @@
 
   # do we have an offset, not specified in the formula?
   offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
-  if (length(offcol) && .obj_has_name(x, "call") && .obj_has_name(x$call, "offset")) {
+  if (length(offcol) && object_has_names(x, "call") && object_has_names(x$call, "offset")) {
     colnames(mf)[offcol] <- clean_names(.safe_deparse(x$call$offset))
   }
 
@@ -150,7 +150,7 @@
       }
 
       # check model weights
-      if ("(weights)" %in% needed.vars && !.obj_has_name(md, "(weights)")) {
+      if ("(weights)" %in% needed.vars && !object_has_names(md, "(weights)")) {
         needed.vars <- needed.vars[-which(needed.vars == "(weights)")]
         mw <- mf[["(weights)"]]
         fw <- find_weights(x)
@@ -166,7 +166,7 @@
 
         # get cleaned variable names for those variables
         # that we still need from the original model frame
-        needed.vars <- .compact_character(unique(clean_names(needed.vars)))
+        needed.vars <- compact_character(unique(clean_names(needed.vars)))
         mf <- md[, needed.vars, drop = FALSE]
 
         # we need this hack to save variable and value label attributes, if any
@@ -311,7 +311,8 @@
   model_call <- get_call(model)
   if (!is.null(model_call)) {
     data_arg <- tryCatch(parse(text = .safe_deparse(model_call))[[1]]$data,
-                         error = function(e) NULL)
+      error = function(e) NULL
+    )
   } else {
     data_arg <- NULL
   }
@@ -421,11 +422,11 @@
 
   # this is to remove the "1" from intercept-ony-models
 
-  if (!.is_empty_object(fixed.component.data)) {
+  if (!is_empty_object(fixed.component.data)) {
     fixed.component.data <- .remove_values(fixed.component.data, c("1", "0"))
     fixed.component.data <- .remove_values(fixed.component.data, c(1, 0))
   }
-  if (!.is_empty_object(random.component.data)) {
+  if (!is_empty_object(random.component.data)) {
     random.component.data <- .remove_values(random.component.data, c("1", "0"))
     random.component.data <- .remove_values(random.component.data, c(1, 0))
   }
@@ -448,7 +449,7 @@
   vars <- intersect(vars, colnames(mf))
   dat <- mf[, vars, drop = FALSE]
 
-  if (.is_empty_object(dat)) {
+  if (is_empty_object(dat)) {
     if (isTRUE(verbose)) {
       warning(format_message(sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)), call. = FALSE)
     }
@@ -481,7 +482,7 @@
   tryCatch(
     {
       env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
-      if (.obj_has_name(x$call, "subset")) {
+      if (object_has_names(x$call, "subset")) {
         env_data <- subset(env_data, subset = eval(x$call$subset))
       }
 
@@ -543,7 +544,7 @@
 # here we have a model frame with many variables, so just extract the important ones...
 #
 .get_data_from_modelframe <- function(x, dat, effects, verbose = TRUE) {
-  if (.is_empty_object(dat)) {
+  if (is_empty_object(dat)) {
     warning("Could not get model data.", call. = FALSE)
     return(NULL)
   }
@@ -601,7 +602,7 @@
   }
 
 
-  if (!is.null(dat) && .obj_has_name(model_call, "subset")) {
+  if (!is.null(dat) && object_has_names(model_call, "subset")) {
     dat <- subset(dat, subset = eval(model_call$subset))
   }
 
@@ -638,7 +639,7 @@
   }
 
 
-  if (!is.null(dat) && .obj_has_name(x@call, "subset")) {
+  if (!is.null(dat) && object_has_names(x@call, "subset")) {
     dat <- subset(dat, subset = eval(x@call$subset))
   }
 

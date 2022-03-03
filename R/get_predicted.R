@@ -345,8 +345,10 @@ get_predicted.bife <- function(x,
       mu_eta <- tryCatch(abs(get_family(x)$mu.eta(predictions)), error = function(e) NULL)
       if (is.null(mu_eta)) {
         if (isTRUE(verbose)) {
-          warning(format_message("Could not apply Delta method to transform standard errors.",
-                                 "These are returned on the link-scale."), call. = FALSE)
+          warning(format_message(
+            "Could not apply Delta method to transform standard errors.",
+            "These are returned on the link-scale."
+          ), call. = FALSE)
         }
       } else {
         ci_data[se_col] <- ci_data[se_col] * mu_eta

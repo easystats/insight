@@ -64,7 +64,6 @@ get_predicted.hurdle <- function(x,
     # 2. and 3. step: confidence intervals and backtransform
     ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
     out <- list(predictions = predictions, ci_data = ci_data)
-
   } else {
     if (inherits(x, "hurdle") && args$scale == "zero") {
       # nothing...

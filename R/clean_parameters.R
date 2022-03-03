@@ -575,7 +575,7 @@ clean_parameters.mlm <- function(x, ...) {
 
   intercepts <- which(out$Cleaned_Parameter %in% c("Intercept", "zi_Intercept"))
 
-  if (!.is_empty_object(intercepts)) {
+  if (!is_empty_object(intercepts)) {
     out$Cleaned_Parameter[intercepts] <- "(Intercept)"
   }
 
@@ -711,17 +711,17 @@ clean_parameters.mlm <- function(x, ...) {
 
 
 .remove_empty_columns_from_pars <- function(x) {
-  if (.obj_has_name(x, "Response") && all(is.na(x$Response))) {
+  if (object_has_names(x, "Response") && all(is.na(x$Response))) {
     pos <- which(colnames(x) == "Response")
     x <- x[, -pos]
   }
 
-  if (.obj_has_name(x, "Group") && .is_empty_string(x$Group)) {
+  if (object_has_names(x, "Group") && .is_empty_string(x$Group)) {
     pos <- which(colnames(x) == "Group")
     x <- x[, -pos]
   }
 
-  if (.obj_has_name(x, "Function") && .is_empty_string(x$Function)) {
+  if (object_has_names(x, "Function") && .is_empty_string(x$Function)) {
     pos <- which(colnames(x) == "Function")
     x <- x[, -pos]
   }

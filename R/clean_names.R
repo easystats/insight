@@ -188,7 +188,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 
   # extract terms from mm() / mmc() functions, i.e. get
   # multimembership-terms
-  unname(.compact_character(unlist(sapply(c("mmc", "mm"), function(j) {
+  unname(compact_character(unlist(sapply(c("mmc", "mm"), function(j) {
     if (grepl(paste0("^", j, "\\("), x = x)) {
       p <- paste0("^", j, "\\((.*)\\).*")
       g <- .trim(sub(p, "\\1", x))

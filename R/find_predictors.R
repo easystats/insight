@@ -75,7 +75,7 @@ find_predictors.default <- function(x,
     l <- .return_vars(f, x)
   }
 
-  if (.is_empty_object(l) || .is_empty_object(.compact_list(l))) {
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
     return(NULL)
   }
 
@@ -84,7 +84,7 @@ find_predictors.default <- function(x,
   # as fixed effect predictor. In such cases, we have to add the random slope term
   # manually, so other functions like "get_data()" work as expected...
 
-  if (.obj_has_name(l, "random") && effects == "all") {
+  if (object_has_names(l, "random") && effects == "all") {
     random_slope <- unname(unlist(find_random_slopes(x)))
     all_predictors <- unlist(unique(l))
     rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
@@ -111,7 +111,7 @@ find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
   l <- lapply(f, function(.i) .return_vars(.i, x))
 
-  if (.is_empty_object(l) || .is_empty_object(.compact_list(l))) {
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
     return(NULL)
   }
 
@@ -130,9 +130,11 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
   cluster <- x$fixef_vars
   conditional <- all.vars(stats::formula(x))
   conditional <- setdiff(conditional, c(instruments, cluster, find_response(x)))
-  l <- list("conditional" = conditional,
-            "cluster" = cluster,
-            "instruments" = instruments)
+  l <- list(
+    "conditional" = conditional,
+    "cluster" = cluster,
+    "instruments" = instruments
+  )
   l <- Filter(function(x) length(x) > 0, l)
   if (isTRUE(flatten)) {
     l <- unlist(l)
@@ -194,13 +196,13 @@ find_predictors.afex_aov <- function(x,
     }
   })
 
-  empty_elements <- sapply(l, .is_empty_object)
-  l <- .compact_list(l)
+  empty_elements <- sapply(l, is_empty_object)
+  l <- compact_list(l)
 
   # here we handle special cases for non-linear model in brms
   if (inherits(x, "brmsfit")) {
     nf <- stats::formula(x)
-    if (!is.null(attr(nf$formula, "nl", exact = TRUE)) && .obj_has_name(nf, "pforms")) {
+    if (!is.null(attr(nf$formula, "nl", exact = TRUE)) && object_has_names(nf, "pforms")) {
       nl_parms <- names(nf$pforms)
       l <- lapply(l, .remove_values, nl_parms)
     }
@@ -220,7 +222,7 @@ find_predictors.afex_aov <- function(x,
   f <- f[names(f) %in% elements]
 
   # from conditional model, remove response
-  if (.obj_has_name(f, "conditional")) {
+  if (object_has_names(f, "conditional")) {
     f[["conditional"]] <- f[["conditional"]][[3]]
 
     # for survival models, separate out strata element
@@ -238,37 +240,37 @@ find_predictors.afex_aov <- function(x,
   }
 
   # from conditional model, remove response
-  if (.obj_has_name(f, "survival")) {
+  if (object_has_names(f, "survival")) {
     f[["survival"]] <- f[["survival"]][[3]]
   }
 
   # from conditional model, remove response
   if (inherits(x, "selection")) {
-    if (.obj_has_name(f, "selection")) {
+    if (object_has_names(f, "selection")) {
       f[["selection"]] <- f[["selection"]][[3]]
     }
-    if (.obj_has_name(f, "outcome")) {
+    if (object_has_names(f, "outcome")) {
       f[["outcome"]] <- f[["outcome"]][[3]]
     }
   }
 
   # if we have random effects, just return grouping variable, not random slopes
-  if (.obj_has_name(f, "random")) {
+  if (object_has_names(f, "random")) {
     f[["random"]] <- .get_group_factor(x, f[["random"]])
   }
 
   # same for zi-random effects
-  if (.obj_has_name(f, "zero_inflated_random")) {
+  if (object_has_names(f, "zero_inflated_random")) {
     f[["zero_inflated_random"]] <- .get_group_factor(x, f[["zero_inflated_random"]])
   }
 
   # same for sigma-random effects
-  if (.obj_has_name(f, "sigma_random")) {
+  if (object_has_names(f, "sigma_random")) {
     f[["sigma_random"]] <- .get_group_factor(x, f[["sigma_random"]])
   }
 
   # same for beta-random effects
-  if (.obj_has_name(f, "beta_random")) {
+  if (object_has_names(f, "beta_random")) {
     f[["beta_random"]] <- .get_group_factor(x, f[["beta_random"]])
   }
 

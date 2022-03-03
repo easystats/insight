@@ -59,11 +59,11 @@ get_loglikelihood.default <- function(x, ...) {
 
 #' @export
 get_loglikelihood.lmerMod <- function(x,
-                                     estimator = "ML",
-                                     REML = FALSE,
-                                     check_response = FALSE,
-                                     verbose = TRUE,
-                                     ...) {
+                                      estimator = "ML",
+                                      REML = FALSE,
+                                      check_response = FALSE,
+                                      verbose = TRUE,
+                                      ...) {
   if (identical(estimator, "REML")) {
     REML <- TRUE
   }
@@ -96,7 +96,6 @@ get_loglikelihood.model_fit <- function(x,
                                         check_response = FALSE,
                                         verbose = TRUE,
                                         ...) {
-
   get_loglikelihood(x$fit, estimator = estimator, REML = REML, check_response = check_response, verbose = verbose, ...)
 }
 
@@ -219,7 +218,7 @@ get_loglikelihood.lm <- function(x,
                                  check_response = FALSE,
                                  verbose = TRUE,
                                  ...) {
-  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
+  if (inherits(x, "list") && object_has_names(x, "gam")) {
     x <- x$gam
   }
 

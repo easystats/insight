@@ -59,7 +59,6 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
     x <- lm(sqrt(mpg) ~ wt, data = mtcars)
     expect_equal(as.numeric(get_loglikelihood(x)), -7.395031, tolerance = 1e-3)
     expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -76.89597, tolerance = 1e-3)
-
   })
 
   test_that("get_loglikelihood - glm", {
