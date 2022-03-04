@@ -551,12 +551,19 @@ get_parameters.metaplus <- function(x, ...) {
 
 
 #' @export
-get_parameters.blavaan <- function(x, summary = FALSE, centrality = "mean", ...) {
+get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...) {
+  if (isTRUE(summary)) {
+    return(get_parameters.lavaan(x, standardize = standardize, ...))
+  }
   # installed?
   check_if_installed("lavaan")
   check_if_installed("blavaan")
 
-  draws <- blavaan::blavInspect(x, "draws")
+  if (isTRUE(standardize)) {
+    draws <- blavaan::standardizedPosterior(x)
+  } else {
+    draws <- blavaan::blavInspect(x, "draws")
+  }
   posteriors <- as.data.frame(as.matrix(draws))
 
   param_tab <- lavaan::parameterEstimates(x)
@@ -582,27 +589,21 @@ get_parameters.blavaan <- function(x, summary = FALSE, centrality = "mean", ...)
 
   colnames(posteriors) <- coef_labels
 
-  if (isTRUE(summary)) {
-    posteriors <- .summary_of_posteriors(posteriors, centrality = centrality)
-    posteriors$Component <- NA
-
-    posteriors$Component[grepl("=~", posteriors$Parameter, fixed = TRUE)] <- "latent"
-    posteriors$Component[grepl("~~", posteriors$Parameter, fixed = TRUE)] <- "residual"
-    posteriors$Component[grepl("~1", posteriors$Parameter, fixed = TRUE)] <- "intercept"
-    posteriors$Component[is.na(posteriors$Component)] <- "regression"
-  }
-
   posteriors
 }
 
 
 
 #' @export
-get_parameters.lavaan <- function(x, ...) {
+get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   # installed?
   check_if_installed("lavaan")
 
-  params <- lavaan::parameterEstimates(x)
+  if (standardize) {
+    params <- lavaan::standardizedSolution(x)
+  } else {
+    params <- lavaan::parameterEstimates(x)
+  }
 
   params$parameter <- paste0(params$lhs, params$op, params$rhs)
   params$comp <- NA
