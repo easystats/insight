@@ -186,14 +186,19 @@ many different model objects.
 
 ``` r
 library(insight)
-m <- lm(Sepal.Length ~ Species + Petal.Width + Sepal.Width, data = iris)
+m <- lm(
+  Sepal.Length ~ Species + Petal.Width + Sepal.Width, 
+  data = iris
+)
 
 dat <- get_data(m)
 pred <- find_predictors(m, flatten = TRUE)
 
 l <- lapply(pred, function(x) {
-    if (is.numeric(dat[[x]]))
-        mean(dat[[x]]) else unique(dat[[x]])
+  if (is.numeric(dat[[x]]))
+    mean(dat[[x]])
+  else
+    unique(dat[[x]])
 })
 
 names(l) <- pred
@@ -217,9 +222,12 @@ obviously not for all models, to access the information about model
 coefficients.
 
 ``` r
-print_params <- function(model) {
-    paste0("My parameters are ", paste0(row.names(summary(model)$coefficients), collapse = ", "),
-        ", thank you for your attention!")
+print_params <- function(model){
+  paste0(
+    "My parameters are ",
+    paste0(row.names(summary(model)$coefficients),  collapse = ", "),
+    ", thank you for your attention!"
+  )
 }
 
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
@@ -239,9 +247,12 @@ need to create specific functions for all models types. With
 the model type.
 
 ``` r
-print_params <- function(model) {
-    paste0("My parameters are ", paste0(insight::find_parameters(model, flatten = TRUE),
-        collapse = ", "), ", thank you for your attention!")
+print_params <- function(model){
+  paste0(
+    "My parameters are ",
+    paste0(insight::find_parameters(model, flatten = TRUE),  collapse = ", "),
+    ", thank you for your attention!"
+  )
 }
 
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
@@ -263,7 +274,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 207 model classes are supported.
+Currently, 208 model classes are supported.
 
 ``` r
 supported_models()
@@ -330,12 +341,13 @@ supported_models()
 #> [181] "slm"               "speedglm"          "speedlm"          
 #> [184] "stanfit"           "stanmvreg"         "stanreg"          
 #> [187] "summary.lm"        "survfit"           "survreg"          
-#> [190] "svy_vglm"          "svyglm"            "svyolr"           
-#> [193] "t1way"             "tobit"             "trimcibt"         
-#> [196] "truncreg"          "vgam"              "vglm"             
-#> [199] "wbgee"             "wblm"              "wbm"              
-#> [202] "wmcpAKP"           "yuen"              "yuend"            
-#> [205] "zcpglm"            "zeroinfl"          "zerotrunc"
+#> [190] "svy_vglm"          "svychisq"          "svyglm"           
+#> [193] "svyolr"            "t1way"             "tobit"            
+#> [196] "trimcibt"          "truncreg"          "vgam"             
+#> [199] "vglm"              "wbgee"             "wblm"             
+#> [202] "wbm"               "wmcpAKP"           "yuen"             
+#> [205] "yuend"             "zcpglm"            "zeroinfl"         
+#> [208] "zerotrunc"
 ```
 
 -   **Didn’t find a model?** [File an
@@ -350,3 +362,10 @@ Lüdecke D, Waggoner P, Makowski D. insight: A Unified Interface to
 Access Information from Model Objects in R. Journal of Open Source
 Software 2019;4:1412. doi:
 [10.21105/joss.01412](https://doi.org/10.21105/joss.01412)
+
+## Code of Conduct
+
+Please note that the insight project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
