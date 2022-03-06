@@ -143,6 +143,22 @@ test_that("get_predicted - lm (log)", {
 })
 
 
+test_that("robust vcov", {
+  requiet("sandwich")
+  mod <- lm(mpg ~ hp, data = mtcars)
+  se0 <- get_predicted_se(mod)
+  se1 <- get_predicted_se(mod, vcov_estimation = "HC")
+  se2 <- get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC3")
+  # hardcoded values obtained before vcov_estimation was deprecated
+  expect_equal(head(se1), c(0.862974605863594, 0.862974605863594,
+                            1.04476534302177, 0.862974605863594,
+                            0.942213270105983, 0.911147902473696),
+               ignore_attr = TRUE)
+  expect_true(all(se0 != se1))
+  expect_true(all(se1 == se2))
+})
+
+
 # Mixed --------------------------------------------------------------
 # =========================================================================
 
