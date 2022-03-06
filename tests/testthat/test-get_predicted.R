@@ -147,14 +147,27 @@ test_that("robust vcov", {
   requiet("sandwich")
   mod <- lm(mpg ~ hp, data = mtcars)
   se0 <- get_predicted_se(mod)
-  se1 <- get_predicted_se(mod, vcov_estimation = "HC")
-  se2 <- get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC3")
+  se1 <- suppressWarnings(get_predicted_se(mod, vcov_estimation = "HC"))
+  se2 <- suppressWarnings(get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC3"))
+  se3 <- get_predicted_se(mod, vcov = "HC", vcov_args = list(type = "HC3"))
+  expect_true(all(se0 != se1))
+  expect_true(all(se1 == se2))
+  expect_true(all(se1 == se3))
   # hardcoded values obtained before vcov_estimation was deprecated
   expect_equal(head(se1), c(0.862974605863594, 0.862974605863594,
                             1.04476534302177, 0.862974605863594,
                             0.942213270105983, 0.911147902473696),
                ignore_attr = TRUE)
-  expect_true(all(se0 != se1))
+  # various user inputs
+  se1 <- suppressWarnings(get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC2"))
+  se2 <- get_predicted_se(mod, vcov = "HC2")
+  se3 <- get_predicted_se(mod, vcov = "vcovHC", vcov_args = list(type = "HC2"))
+  se4 <- get_predicted_se(mod, vcov = sandwich::vcovHC, vcov_args = list(type = "HC2"))
+  expect_true(all(se1 == se2))
+  expect_true(all(se1 == se3))
+  expect_true(all(se1 == se4))
+  se1 <- get_predicted_se(mod, vcov = "HC1")
+  se2 <- get_predicted_se(mod, vcov = sandwich::vcovHC, vcov_args = list(type = "HC1"))
   expect_true(all(se1 == se2))
 })
 

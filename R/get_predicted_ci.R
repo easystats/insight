@@ -24,21 +24,18 @@
 #'   vector of 1s and 0s, the prediction interval is... `[0, 1]`).
 #' @param se Numeric vector of standard error of predicted values. If `NULL`,
 #'   standard errors are calculated based on the variance-covariance matrix.
-#' @param vcov_estimation Either a matrix, or a string, indicating the suffix
-#'   of the `vcov*()`-function from the \pkg{sandwich} or \pkg{clubSandwich}
-#'   package, e.g. `vcov_estimation = "CL"` (which calls
-#'   [sandwich::vcovCL()] to compute clustered covariance matrix
-#'   estimators), or `vcov_estimation = "HC"` (which calls
-#'   [sandwich::vcovHC()] to compute heteroskedasticity-consistent covariance
-#'   matrix estimators).
-#' @param vcov_type Character vector, specifying the estimation type for the
-#'   robust covariance matrix estimation (see
-#'   [sandwich::vcovHC()] or `clubSandwich::vcovCR()`
-#'   for details). Only applies if `vcov_estimation` is a string, and not a matrix.
-#' @param vcov_args List of named vectors, used as additional arguments that are
-#'   passed down to the \pkg{sandwich}-function specified in
-#'   `vcov_estimation`. Only applies if `vcov_estimation` is a string, and not
-#'   a matrix.
+#' @param vcov Variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors). This argument accepts a covariance matrix, a function which returns a covariance matrix, or a string which identifies the function to be used to compute the covariance matrix.
+#'  * A covariance matrix
+#'  * A function which returns a covariance matrix (e.g., `stats::vcov()`)
+#'  * A string which indicates the kind of uncertainty estimates to return.
+#'    - Heteroskedasticity-consistent: "vcovHC", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5". See `?sandwich::vcovHC`
+#'    - Cluster-robust: "vcovCR", "CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3". See `?clubSandwich::vcovCR()`
+#'    - Bootstrap: "vcovBS", "xy", "residual", "wild", "mammen", "webb". See `?sandwich::vcovBS`
+#'    - Other `sandwich` package functions: "vcovHAC", "vcovPC", "vcovCL", "vcovPL"
+#' @param vcov_args List of arguments to be passed to the function identified by
+#'   the `vcov` argument. This function is typically supplied by the `sandwich`
+#'   or `clubSandwich` packages. Please refer to their documentation (e.g.,
+#'   `?sandwich::vcovHAC`) to see the list of available arguments.
 #' @param dispersion_method,ci_method These arguments are only used in
 #'   the context of bootstrapped and Bayesian models. Possible values are
 #'   `dispersion_method = c("sd", "mad")` and
@@ -111,8 +108,7 @@ get_predicted_ci.default <- function(x,
                                      ci_type = "confidence",
                                      ci_method = "quantile",
                                      dispersion_method = "sd",
-                                     vcov_estimation = NULL,
-                                     vcov_type = NULL,
+                                     vcov = NULL,
                                      vcov_args = NULL,
                                      ...) {
   # sanity check, if CI should be skipped
@@ -139,14 +135,14 @@ get_predicted_ci.default <- function(x,
   # 1. Find appropriate interval function
   if (!is.null(se)) {
     ci_function <- .get_predicted_se_to_ci
-  } else if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov_estimation) && is.matrix(vcov_estimation))) { # gaussian or CI
+  } else if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov) && is.matrix(vcov))) { # gaussian or CI
     se <- get_predicted_se(
       x,
       data = data,
       ci_type = ci_type,
-      vcov_estimation = vcov_estimation,
-      vcov_type = vcov_type,
-      vcov_args = vcov_args
+      vcov = vcov,
+      vcov_args = vcov_args,
+      ...
     )
     ci_function <- .get_predicted_se_to_ci
   } else {

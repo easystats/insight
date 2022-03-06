@@ -3,9 +3,9 @@
 get_predicted_se <- function(x,
                              data = NULL,
                              ci_type = "confidence",
-                             vcov_estimation = NULL,
-                             vcov_type = NULL,
-                             vcov_args = NULL) {
+                             vcov = NULL,
+                             vcov_args = NULL,
+                             ...) {
 
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'
@@ -15,9 +15,9 @@ get_predicted_se <- function(x,
 
   vcovmat <- .get_predicted_ci_vcov(
     x,
-    vcov_estimation = vcov_estimation,
-    vcov_type = vcov_type,
-    vcov_args = vcov_args
+    vcov_fun = vcov,
+    vcov_args = vcov_args,
+    ...
   )
   mm <- .get_predicted_ci_modelmatrix(x, data = data, vcovmat = vcovmat)
 
@@ -83,54 +83,106 @@ get_predicted_se <- function(x,
 
 # Get Variance-covariance Matrix ---------------------------------------------------
 
-
 .get_predicted_ci_vcov <- function(x,
-                                   vcov_estimation = NULL,
-                                   vcov_type = NULL,
-                                   vcov_args = NULL) {
+                                   vcov_fun = NULL,
+                                   vcov_args = NULL,
+                                   verbose = TRUE,
+                                   ...) {
 
-  # (robust) variance-covariance matrix
-  if (!is.null(vcov_estimation) && !is.matrix(vcov_estimation)) {
-    # check for existing vcov-prefix
-    if (!grepl("^vcov", vcov_estimation)) {
-      vcov_estimation <- paste0("vcov", vcov_estimation)
-    }
+  dots <- list(...)
 
-    # set default for clubSandwich
-    if (vcov_estimation == "vcovCR" && is.null(vcov_type)) {
-      vcov_type <- "CR0"
-    }
-
-    if (!is.null(vcov_type) && vcov_type %in% c("CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3")) {
-      # installed?
-      check_if_installed("clubSandwich")
-      robust_package <- "clubSandwich"
-      vcov_estimation <- "vcovCR"
-    } else {
-      # installed?
-      check_if_installed("sandwich")
-      robust_package <- "sandwich"
-    }
-
-    # compute robust standard errors based on vcov
-    if (robust_package == "sandwich") {
-      vcov_estimation <- get(vcov_estimation, asNamespace("sandwich"))
-      vcovmat <- as.matrix(do.call(vcov_estimation, c(list(x = x, type = vcov_type), vcov_args)))
-    } else {
-      vcov_estimation <- clubSandwich::vcovCR
-      vcovmat <- as.matrix(do.call(vcov_estimation, c(list(obj = x, type = vcov_type), vcov_args)))
-    }
-  } else if (!is.matrix(vcov_estimation)) {
-    # get variance-covariance-matrix, depending on model type
-    vcovmat <- get_varcov(x, component = "conditional")
-  } else {
-    vcovmat <- vcov_estimation
+  # deprecated
+  if (isTRUE(verbose) && "vcov_type" %in% names(dots)) {
+    warning(format_message("The `vcov_type` argument is superseded by the `vcov_args` argument."), call. = FALSE)
+  }
+  if (isTRUE(verbose) && "robust" %in% names(dots)) {
+    warning(format_message("The `robust` argument is superseded by the `vcov` argument."), call. = FALSE)
   }
 
-  vcovmat
+  if (is.null(vcov_args)) {
+    vcov_args <- list()
+  }
+
+  # deprecated: `vcov_estimation`
+  if (is.null(vcov_fun) && "vcov_estimation" %in% names(dots)) {
+    vcov_fun <- dots[["vcov_estimation"]]
+  }
+
+  # deprecated: `robust`
+  if (isTRUE(dots[["robust"]]) && is.null(vcov_fun)) {
+    dots[["robust"]] <- NULL
+    vcov_fun <- "HC3"
+  }
+
+  # deprecated: `vcov_type`
+  if ("vcov_type" %in% names(dots)) {
+    if (!"type" %in% names(vcov_args)) {
+      vcov_args[["type"]] <- dots[["vcov_type"]]
+    }
+  }
+
+  # vcov_fun is a matrix
+  if (is.matrix(vcov_fun)) {
+    return(vcov_fun)
+  }
+
+  # vcov_fun is a function
+  if (is.function(vcov_fun)) {
+    if (is.null(vcov_args) || !is.list(vcov_args)) {
+      args <- list(x)
+    } else {
+      args <- c(list(x), vcov_args)
+    }
+    .vcov <- do.call("vcov_fun", args)
+    return(.vcov)
+  }
+
+  # type shortcuts: overwrite only if not supplied explicitly by the user
+  if (!"type" %in% names(vcov_args)) {
+    if (isTRUE(vcov_fun %in% c("HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5",
+                               "CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3", "xy",
+                               "residual", "wild", "mammen", "webb"))) {
+      vcov_args[["type"]] <- vcov_fun
+    }
+  }
+
+  # default vcov matrix
+  if (is.null(vcov_fun)) {
+    .vcov <- get_varcov(x, ...)
+    return(.vcov)
+  }
+
+  if (!grepl("^(vcov|kernHAC|NeweyWest)", vcov_fun)) {
+    vcov_fun <- switch(
+      vcov_fun,
+      "HC0" = , "HC1" = , "HC2" = , "HC3" = , "HC4" = , "HC4m" = , "HC5" = , "HC" = "vcovHC",
+      "CR0" = , "CR1" = , "CR1p" = , "CR1S" = , "CR2" = , "CR3" = , "CR" = "vcovCR",
+      "xy" = , "residual" = , "wild" = , "mammen" = , "webb" = , "BS" = "vcovBS",
+      "OPG" = "vcovOPG",
+      "HAC" = "vcovHAC",
+      "PC" = "vcovPC",
+      "CL" = "vcovCL",
+      "PL" = "vcovPL"
+    )
+  }
+
+  # check if required package is available
+  if (vcov_fun == "vcovCR") {
+    check_if_installed("clubSandwich", reason = "to get cluster-robust standard errors")
+    fun <- get(vcov_fun, asNamespace("clubSandwich"))
+  } else {
+    check_if_installed("sandwich", reason = "to get robust standard errors")
+    fun  <- try(get(vcov_fun, asNamespace("sandwich")), silent = TRUE)
+    if (!is.function(fun)) {
+      stop(sprintf("`%s` is not a function exported by the `sandwich` package.", vcov_fun))
+    }
+  }
+
+  # extract variance-covariance matrix
+  .vcov <- do.call(fun, c(list(x), vcov_args))
+
+  .vcov
 }
-
-
 
 
 # Get Model matrix ------------------------------------------------------------

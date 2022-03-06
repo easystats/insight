@@ -121,10 +121,10 @@ return the most likely outcome.
 }
 
 \subsection{Heteroscedasticity consistent standard errors}{
-The arguments \code{vcov_estimation}, \code{vcov_type} and \code{vcov_args} can be used
-to calculate robust standard errors for confidence intervals of predictions.
-These arguments, when provided in \code{get_predicted()}, are passed down to
-\code{\link[=get_predicted_ci]{get_predicted_ci()}}, thus, see the related documentation there for more
+The arguments \code{vcov} and \code{vcov_args} can be used to calculate robust
+standard errors for confidence intervals of predictions. These arguments,
+when provided in \code{get_predicted()}, are passed down to \code{\link[=get_predicted_ci]{get_predicted_ci()}},
+thus, see the related documentation there for more
 details.
 }
 }
