@@ -11,6 +11,8 @@
 * `export_table()` now better checks for invalid values of caption and footer
   for tables in HTML format, and silently removes, e.g., ansi-colour codes that
   only work for text-format.
+* `get_data.coxph()` returns the original data frame instead of data with type 
+   coercion.
 
 * `get_loglikelihood()` gets a `check_response` argument, to check if a model
   has a transformed response variable (like `log()` or `sqrt()` transformation), 
@@ -26,6 +28,8 @@
   columns returned by `broom::glance()`.
 
 * Fixed issue with correctly detecting Tweedie-models in `model_info()`.
+
+* Fixed issue with `get_datagrid()` for *brms* models with monotonic factors.
 
 # insight 0.16.0
 
