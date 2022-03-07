@@ -29,6 +29,8 @@
 
 * Fixed issue with correctly detecting Tweedie-models in `model_info()`.
 
+* Fixed issue with `get_datagrid()` for *brms* models with monotonic factors.
+
 # insight 0.16.0
 
 ## New functions
