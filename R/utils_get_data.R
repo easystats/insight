@@ -364,7 +364,9 @@
       if (.is_numeric_character(mf[[i]])) {
         mf[[i]] <- .to_numeric(mf[[i]])
       }
-      attr(mf[[i]], "factor") <- TRUE
+      if (is.numeric(mf[[i]])) {
+        attr(mf[[i]], "factor") <- TRUE
+      }
     }
     attr(mf, "factors") <- factors
   }
