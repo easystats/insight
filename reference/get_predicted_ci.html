@@ -82,8 +82,7 @@ predictions made by a model.</p>
   ci_type <span class="op">=</span> <span class="st">"confidence"</span>,
   ci_method <span class="op">=</span> <span class="st">"quantile"</span>,
   dispersion_method <span class="op">=</span> <span class="st">"sd"</span>,
-  vcov_estimation <span class="op">=</span> <span class="cn">NULL</span>,
-  vcov_type <span class="op">=</span> <span class="cn">NULL</span>,
+  vcov <span class="op">=</span> <span class="cn">NULL</span>,
   vcov_args <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -129,24 +128,20 @@ the context of bootstrapped and Bayesian models. Possible values are
 <code>dispersion_method = c("sd", "mad")</code> and
 <code>ci_method = c("quantile", "hdi", "eti")</code>. For the latter, the
 <span class="pkg">bayestestR</span> package is required.</p></dd>
-<dt>vcov_estimation</dt>
-<dd><p>Either a matrix, or a string, indicating the suffix
-of the <code>vcov*()</code>-function from the <span class="pkg">sandwich</span> or <span class="pkg">clubSandwich</span>
-package, e.g. <code>vcov_estimation = "CL"</code> (which calls
-<code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovCL.html" class="external-link">sandwich::vcovCL()</a></code> to compute clustered covariance matrix
-estimators), or <code>vcov_estimation = "HC"</code> (which calls
-<code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovHC.html" class="external-link">sandwich::vcovHC()</a></code> to compute heteroskedasticity-consistent covariance
-matrix estimators).</p></dd>
-<dt>vcov_type</dt>
-<dd><p>Character vector, specifying the estimation type for the
-robust covariance matrix estimation (see
-<code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovHC.html" class="external-link">sandwich::vcovHC()</a></code> or <code><a href="https://rdrr.io/pkg/clubSandwich/man/vcovCR.html" class="external-link">clubSandwich::vcovCR()</a></code>
-for details). Only applies if <code>vcov_estimation</code> is a string, and not a matrix.</p></dd>
+<dt>vcov</dt>
+<dd><p>Variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors). This argument accepts a covariance matrix, a function which returns a covariance matrix, or a string which identifies the function to be used to compute the covariance matrix.</p><ul><li><p>A covariance matrix</p></li>
+<li><p>A function which returns a covariance matrix (e.g., <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">stats::vcov()</a></code>)</p></li>
+<li><p>A string which indicates the kind of uncertainty estimates to return.</p><ul><li><p>Heteroskedasticity-consistent: "vcovHC", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5". See <code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovHC.html" class="external-link">?sandwich::vcovHC</a></code></p></li>
+<li><p>Cluster-robust: "vcovCR", "CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3". See <code>?clubSandwich::vcovCR()</code></p></li>
+<li><p>Bootstrap: "vcovBS", "xy", "residual", "wild", "mammen", "webb". See <code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovBS.html" class="external-link">?sandwich::vcovBS</a></code></p></li>
+<li><p>Other <code>sandwich</code> package functions: "vcovHAC", "vcovPC", "vcovCL", "vcovPL"</p></li>
+</ul></li>
+</ul></dd>
 <dt>vcov_args</dt>
-<dd><p>List of named vectors, used as additional arguments that are
-passed down to the <span class="pkg">sandwich</span>-function specified in
-<code>vcov_estimation</code>. Only applies if <code>vcov_estimation</code> is a string, and not
-a matrix.</p></dd>
+<dd><p>List of arguments to be passed to the function identified by
+the <code>vcov</code> argument. This function is typically supplied by the <code>sandwich</code>
+or <code>clubSandwich</code> packages. Please refer to their documentation (e.g.,
+<code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovHAC.html" class="external-link">?sandwich::vcovHAC</a></code>) to see the list of available arguments.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
