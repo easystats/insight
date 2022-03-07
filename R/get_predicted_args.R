@@ -269,11 +269,14 @@
 
   # Add (or set) random variables to "NA"
   if (isFALSE(include_random)) {
-    if (inherits(x, c("stanreg", "brmsfit"))) {
-      # rstantools predictions doens't allow for NaNs in newdata
-      data[find_variables(x, effects = "random", verbose = FALSE)$random] <- NULL
-    } else {
-      data[find_variables(x, effects = "random", verbose = FALSE)$random] <- NA
+    ran_effects <- find_variables(x, effects = "random", verbose = FALSE)$random
+    if (!is.null(ran_effects)) {
+      if (inherits(x, c("stanreg", "brmsfit"))) {
+        # rstantools predictions doens't allow for NaNs in newdata
+        data[ran_effects] <- NULL
+      } else {
+        data[ran_effects] <- NA
+      }
     }
   }
 

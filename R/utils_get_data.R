@@ -232,7 +232,19 @@
   # are there any factor variables that have been coerced "on-the-fly",
   # using "factor()" or "as.factor()"? if so, get names and convert back
   # to numeric later
-  factors <- colnames(mf)[grepl("^(as\\.factor|factor)\\((.*)\\)", colnames(mf))]
+  factors <- colnames(mf)[grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", colnames(mf))]
+
+  # check for monotonic terms and valid values. In case 'mo()' is used,
+  # and predictor is numeric, prettyfied values in the data grid are based
+  # on the range of the numeric variable, although only those values are allowed
+  # in the data grid that actually appear in the data
+  if (inherits(x, "brmsfit")) {
+    model_terms <- find_terms(x, flatten = TRUE)
+    monotonics <- grepl("mo\\((.*)\\)", model_terms)
+    if (any(monotonics)) {
+      factors <- union(factors, gsub("mo\\((.*)\\)", "\\1", model_terms[monotonics]))
+    }
+  }
 
   # clean variable names
   cvn <- .remove_pattern_from_names(colnames(mf), ignore_lag = TRUE)
@@ -347,12 +359,12 @@
 
   # add attributes for those that were factors
   if (length(factors)) {
-    factors <- gsub("^(as\\.factor|factor)\\((.*)\\)", "\\2", factors)
+    factors <- gsub("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", "\\2", factors)
     for (i in factors) {
       if (.is_numeric_character(mf[[i]])) {
         mf[[i]] <- .to_numeric(mf[[i]])
-        attr(mf[[i]], "factor") <- TRUE
       }
+      attr(mf[[i]], "factor") <- TRUE
     }
     attr(mf, "factors") <- factors
   }
