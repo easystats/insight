@@ -524,6 +524,25 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   expect_equal(round(x[1], 1), -1.5, tolerance = 1e-1)
   expect_equal(round(y[1], 1), .2, tolerance = 1e-1)
   expect_equal(y, z, ignore_attr = TRUE)
+
+  data <- mtcars
+  data$cyl <- as.character(data$cyl)
+  void <- capture.output(
+    model <- brm(cyl ~ mpg * vs + (1 | carb),
+                 data = data,
+                 iter = 1000,
+                 seed = 1024,
+                 algorithm = "meanfield",
+                 refresh=0,
+                 family = categorical(link = "logit", refcat = "4")
+    )
+  )
+  x <- as.data.frame(get_predicted(model))
+  # Test shape
+  expect_equal(c(nrow(x), ncol(x)), c(32 * 3, 1006))
+  # Test whether median point-estimate indeed different from default (mean)
+  expect_true(max(x$Predicted - get_predicted(model, centrality_function = stats::median)$Predicted) > 0)
+
 })
 
 
