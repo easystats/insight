@@ -43,7 +43,7 @@ get_predicted.stanreg <- function(x,
   fun_args <- list(x,
                    newdata = args$data,
                    re.form = args$re.form,
-                   nsamples = iterations,
+                   ndraws = iterations,
                    draws = iterations)
 
   dots <- list(...)
