@@ -42,6 +42,10 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
 
   # If only one object was provided, check if it is a list of models, like "list(m1, m2)"
   if (length(objects) == 1) {
+    # single model?
+    if (is_model(objects[[1]])) {
+      return(objects[[1]])
+    }
     # only proceed if we have at least one valid model object in that list
     if (any(sapply(objects[[1]], insight::is_model))) {
       # unlist
