@@ -64,12 +64,21 @@ get_loglikelihood.lmerMod <- function(x,
                                       check_response = FALSE,
                                       verbose = TRUE,
                                       ...) {
-  if (identical(estimator, "REML")) {
-    REML <- TRUE
+
+  # use defaults for REML?
+  if (missing(estimator) && missing(REML)) {
+    lls <- stats::logLik(x)
+  } else {
+    # else, explicitly set REML for lme4 models
+    if (identical(estimator, "REML")) {
+      REML <- TRUE
+    }
+    lls <- stats::logLik(x, REML = REML)
   }
+
   .loglikelihood_prep_output(
     x,
-    lls = stats::logLik(x, REML = REML),
+    lls,
     check_response = check_response,
     verbose = verbose,
     REML = REML,
@@ -88,6 +97,9 @@ get_loglikelihood.glmerMod <- function(x, check_response = FALSE, verbose = TRUE
     ...
   )
 }
+
+#' @export
+get_loglikelihood.glmmTMB <- get_loglikelihood.lmerMod
 
 #' @export
 get_loglikelihood.model_fit <- function(x,
