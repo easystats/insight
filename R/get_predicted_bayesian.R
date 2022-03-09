@@ -43,9 +43,18 @@ get_predicted.stanreg <- function(x,
   fun_args <- list(x,
                    newdata = args$data,
                    re.form = args$re.form,
-                   nsamples = iterations,
+                   ndraws = iterations,
                    draws = iterations)
 
+  # The following makes the argument passed to predict "nsamples" or "ndraws",
+  # as it got changed in recent brms versions (but we want to preserve compatibility)
+  if ("nsamples" %in% names(formals(utils::getS3method("posterior_predict", class(x))))) {
+    fun_args <- c(fun_args, nsamples = iterations)
+  } else {
+    fun_args <- c(fun_args, ndraws = iterations)
+  }
+
+  # Fix dots content
   dots <- list(...)
   dots[["newdata"]] <- NULL
   fun_args <- c(fun_args, dots)
