@@ -4,7 +4,7 @@
 #' It detects whether all are models, regressions, nested regressions etc.,
 #' assigning different classes to the list of objects.
 #'
-#' @param objects,... Arbitrary number of objects.
+#' @param objects,... Arbitrary number of objects. May also be a list of model objects.
 #' @param only_models Only keep supported models (default to `TRUE`).
 #'
 #' @return The list with objects that were passed to the function, including
@@ -39,9 +39,27 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
   object_names <- match.call(expand.dots = FALSE)$`...`
   names(objects) <- object_names
 
-  # If only one objects was provided
+  # If only one object was provided, check if it is a list of models, like "list(m1, m2)"
   if (length(objects) == 1) {
-    return(objects[[1]])
+    # only proceed if we have at least one model object in that list
+    if (any(sapply(objects[[1]], insight::is_model))) {
+      # unlist
+      object_names <- object_names[[1]]
+      # make sure objects-names is a character vector
+      if (!is.character(object_names)) {
+        # we now should have something like "list(m1, m2)"
+        object_names <- .safe_deparse(object_names)
+      }
+      if (all(grepl("^list\\(", object_names))) {
+        object_names <- .trim(unlist(strsplit(gsub("list\\((.*)\\)", "\\1", object_names), ",")))
+        objects <- objects[[1]]
+        names(objects) <- object_names
+      } else {
+        return(objects[[1]])
+      }
+    } else {
+      return(objects[[1]])
+    }
   }
 
   # Check whether all are models
