@@ -119,7 +119,8 @@ to predict. If omitted, the data used to fit the model is used.</p></dd>
 posterior draws. If <code>NULL</code>, will return all the draws (one for each
 iteration of the model). For frequentist models, if not <code>NULL</code>, will
 generate bootstrapped draws, from which bootstrapped CIs will be computed.
-Iterations can be accessed by running <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> on the output.</p></dd>
+Iterations can be accessed by running <code>as.data.frame(..., keep_iterations = TRUE)</code>
+on the output.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
 <dt>include_random</dt>
@@ -191,6 +192,12 @@ standard errors for confidence intervals of predictions. These arguments,
 when provided in <code>get_predicted()</code>, are passed down to <code><a href="get_predicted_ci.html">get_predicted_ci()</a></code>,
 thus, see the related documentation there for more
 details.</p>
+</div>
+
+<div class="section">
+<h3 id="bayesian-and-bootstrapped-models-and-iterations">Bayesian and Bootstrapped models and iterations<a class="anchor" aria-label="anchor" href="#bayesian-and-bootstrapped-models-and-iterations"></a></h3>
+<p>For predictions based on multiple iterations, for instance in the case of Bayesian models and bootstrapped predictions, the function used to compute the centrality (point-estimate predictions) can be modified via the <code>centrality_function</code> argument. For instance, <code>get_predicted(model, centrality_function = stats::median)</code>. The default is <code>mean</code>.
+Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_predicted(model))</code>, and their iterations can be reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>.</p>
 </div>
 
     </div>

@@ -76,15 +76,17 @@ assigning different classes to the list of objects.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ellipsis_info</span><span class="op">(</span><span class="va">objects</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu">ellipsis_info</span><span class="op">(</span><span class="va">...</span>, only_models <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<span class="fu">ellipsis_info</span><span class="op">(</span><span class="va">...</span>, only_models <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>objects, ...</dt>
-<dd><p>Arbitrary number of objects.</p></dd>
+<dd><p>Arbitrary number of objects. May also be a list of model objects.</p></dd>
 <dt>only_models</dt>
 <dd><p>Only keep supported models (default to <code>TRUE</code>).</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
