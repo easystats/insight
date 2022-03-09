@@ -47,16 +47,18 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
       object_names <- object_names[[1]]
       # make sure objects-names is a character vector
       if (!is.character(object_names)) {
-        # we now should have something like "list(m1, m2)"
         object_names <- .safe_deparse(object_names)
       }
       if (all(grepl("^list\\(", object_names))) {
+        # we now should have something like "list(m1, m2)" ...
         object_names <- .trim(unlist(strsplit(gsub("list\\((.*)\\)", "\\1", object_names), ",")))
-        objects <- objects[[1]]
-        names(objects) <- object_names
       } else {
-        return(objects[[1]])
+        # ... or a variable/object name, in which case we can use the names
+        # of the list-elements directly
+        object_names <- names(objects[[1]])
       }
+      objects <- objects[[1]]
+      names(objects) <- object_names
     } else {
       return(objects[[1]])
     }
