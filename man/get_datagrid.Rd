@@ -41,12 +41,16 @@ get_datagrid(x, ...)
 \arguments{
 \item{x}{An object from which to construct the reference grid.}
 
-\item{...}{Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).}
+\item{...}{Arguments passed to or from other methods (for instance, \code{length}
+or \code{range} to control the spread of numeric variables.).}
 
-\item{at}{Can be "all" or list of characters indicating columns of interest.
-Can also contain assignments (as named list, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}, or as string, e.g. \code{at = "Sepal.Length = 2"} or \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage
-of single and double quotes to assign strings within strings). The
-remaining variables will be fixed.}
+\item{at}{Can be \code{"all"}, a character vector or list of named elements, indicating
+the predictors of interest (focal predictors). Can also contain assignments
+(as named list, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))},
+or as string, e.g. \code{at = "Sepal.Length = 2"} or
+\code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
+and double quotes to assign strings within strings). The remaining variables
+will be fixed.}
 
 \item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the
 reference level), \code{"mode"} (set at the most common level) or \code{"all"} to

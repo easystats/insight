@@ -1,9 +1,18 @@
 # insight 0.16.1
 
+## Breaking changes
+
+* Arguments `vcov_estimation` and `vcov_type` in `get_predicted()`, 
+  `get_predicted_se()` and `get_predicted_ci()` are replaced by `vcov` and
+  `vcov_args`, to have a more simplified and common interface to control
+  robust covariance matrix estimation.
+
 ## New functions
 
 * To check for names: `object_has_names()` and `object_has_rownames()`
+
 * To work with lists: `is_empty_object()` and `compact_list()`
+
 * To work with strings: `compact_character()`
 
 ## Changes to functions
@@ -11,6 +20,7 @@
 * `export_table()` now better checks for invalid values of caption and footer
   for tables in HTML format, and silently removes, e.g., ansi-colour codes that
   only work for text-format.
+  
 * `get_data.coxph()` returns the original data frame instead of data with type 
    coercion.
 
@@ -21,6 +31,13 @@
 * `get_modelmatrix()` now supports *BayesFactor* models.
 
 * `get_loglikelihood()` and `get_df()` now support more model classes.
+
+* `get_predicted()` was improved for multinominal models from *brms*.
+
+* `ellipses_info()` now also accepts a list of model objects, is more stable
+  and returns more information about the provided models (like if all fixed 
+  or random effects are the same across models, if all models are mixed models
+  or null-models, etc.)
 
 ## Bug fixes
 

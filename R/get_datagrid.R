@@ -4,12 +4,13 @@
 #' combined values.
 #'
 #' @param x An object from which to construct the reference grid.
-#' @param at Can be "all" or list of characters indicating columns of interest.
-#'   Can also contain assignments (as named list, e.g. `at = list(c(Sepal.Length
-#'   = c(2, 4), Species = "setosa"))`, or as string, e.g. `at = "Sepal.Length =
-#'   2"` or `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage
-#'   of single and double quotes to assign strings within strings). The
-#'   remaining variables will be fixed.
+#' @param at Can be `"all"`, a character vector or list of named elements, indicating
+#'   the predictors of interest (focal predictors). Can also contain assignments
+#'   (as named list, e.g. `at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))`,
+#'   or as string, e.g. `at = "Sepal.Length = 2"` or
+#'   `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
+#'   and double quotes to assign strings within strings). The remaining variables
+#'   will be fixed.
 #' @param length Length of numeric `"at"` variables.
 #' @param range Can be one of `"range"`, `"iqr"`, `"ci"`, `"hdi"` or `"eti"`. If
 #'   `"range"` (default), will use the minimum and maximum of the original
@@ -42,7 +43,8 @@
 #'   variable should be included in the data grid or not.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
-#' @param ... Arguments passed to or from other methods (for instance, `length` or `range` to control the spread of numeric variables.).
+#' @param ... Arguments passed to or from other methods (for instance, `length`
+#'   or `range` to control the spread of numeric variables.).
 #'
 #' @return Reference grid data frame.
 #'
