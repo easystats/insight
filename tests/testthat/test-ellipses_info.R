@@ -38,6 +38,15 @@ if (requiet("testthat") && requiet("insight")) {
     expect_equal(length(out), 3L)
   })
 
+  test_that("ellipses_info - names of models for lists", {
+    models <- list(m1, m2, m3)
+    out <- ellipsis_info(models, verbose = FALSE)
+    expect_true(attributes(out)$is_nested)
+    expect_equal(names(out), c("Model 1", "Model 2", "Model 3"))
+    expect_equal(length(out), 3L)
+  })
+
+
   m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
   m2 <- lm(Sepal.Width ~ Petal.Width + Species, data = iris)
   m3 <- lm(Petal.Length ~ Petal.Width + Species, data = iris)

@@ -6,6 +6,7 @@
 #'
 #' @param objects,... Arbitrary number of objects. May also be a list of model objects.
 #' @param only_models Only keep supported models (default to `TRUE`).
+#' @param verbose Toggle warnings.
 #'
 #' @return The list with objects that were passed to the function, including
 #' additional information as attributes (e.g. if models have same response or
@@ -33,7 +34,7 @@ ellipsis_info <- function(objects, ...) {
 
 #' @rdname ellipsis_info
 #' @export
-ellipsis_info.default <- function(..., only_models = TRUE) {
+ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
   # Create list with names
   objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
@@ -41,7 +42,7 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
 
   # If only one object was provided, check if it is a list of models, like "list(m1, m2)"
   if (length(objects) == 1) {
-    # only proceed if we have at least one model object in that list
+    # only proceed if we have at least one valid model object in that list
     if (any(sapply(objects[[1]], insight::is_model))) {
       # unlist
       object_names <- object_names[[1]]
@@ -57,7 +58,12 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
         # of the list-elements directly
         object_names <- names(objects[[1]])
       }
+      # unlist model objects, so "objects" contains the list of models
       objects <- objects[[1]]
+      # sanity check
+      if (is.null(object_names)) {
+        object_names <- paste("Model", seq_along(objects), sep = " ")
+      }
       names(objects) <- object_names
     } else {
       return(objects[[1]])
@@ -69,10 +75,12 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
 
   # Drop non-models if need be
   if (only_models && any(is_model == FALSE)) {
-    warning(paste(
-      paste0(object_names[is_model == FALSE], collapse = ", "),
-      "are not supported models and have been dropped."
-    ))
+    if (isTRUE(verbose)) {
+      warning(paste(
+        paste0(object_names[is_model == FALSE], collapse = ", "),
+        "are not supported models and have been dropped."
+      ))
+    }
     objects <- objects[is_model]
     object_names <- object_names[is_model]
   }
@@ -85,7 +93,7 @@ ellipsis_info.default <- function(..., only_models = TRUE) {
   }
 
   # Now objects is of class ListObjects or ListModels, so dispatching on the appropriate method
-  ellipsis_info(objects)
+  ellipsis_info(objects, verbose = verbose)
 }
 
 
@@ -99,7 +107,7 @@ ellipsis_info.ListObjects <- function(objects, ...) {
 
 
 #' @export
-ellipsis_info.ListModels <- function(objects, ...) {
+ellipsis_info.ListModels <- function(objects, ..., verbose = TRUE) {
 
   # Lavaan
   if (all(sapply(objects, inherits, what = "lavaan"))) {
@@ -115,7 +123,7 @@ ellipsis_info.ListModels <- function(objects, ...) {
   }
 
   # Dispatch on the next appropriate method
-  ellipsis_info(objects)
+  ellipsis_info(objects, verbose = verbose)
 }
 
 
