@@ -28,7 +28,7 @@ loglikelihood(x, ...)
 deviation of the errors. If \code{estimator="ML"} (default), the scaling is
 done by n (the biased ML estimator), which is then equivalent to using
 \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased
-OLS estimator. \code{estimator="REML"} wil lgive same results as
+OLS estimator. \code{estimator="REML"} will give same results as
 \code{logLik(..., REML=TRUE)}.}
 
 \item{REML}{Only for linear models. This argument is present for
@@ -57,12 +57,6 @@ individual log-likelihoods (for each observation) whenever possible. Can be
 used as a replacement for \code{stats::logLik()} out of the box, as the
 returned object is of the same class (and it gives the same results by
 default).
-}
-\details{
-By default, \code{estimator = "ML"}, which means that \code{get_loglikelihood()}
-has a different default-behaviour for some models, like from package \emph{lme4}.
-Explicitly set \code{estimator = "REML"} to return the same values as from the
-defaults in \code{logLik.merMod()}.
 }
 \examples{
 x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
