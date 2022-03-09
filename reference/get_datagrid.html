@@ -12,7 +12,7 @@ combined values."><meta property="og:image" content="/reference/figures/card.png
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,12 +110,16 @@ combined values.</p>
     <dl><dt>x</dt>
 <dd><p>An object from which to construct the reference grid.</p></dd>
 <dt>...</dt>
-<dd><p>Arguments passed to or from other methods (for instance, <code>length</code> or <code>range</code> to control the spread of numeric variables.).</p></dd>
+<dd><p>Arguments passed to or from other methods (for instance, <code>length</code>
+or <code>range</code> to control the spread of numeric variables.).</p></dd>
 <dt>at</dt>
-<dd><p>Can be "all" or list of characters indicating columns of interest.
-Can also contain assignments (as named list, e.g. <code>at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))</code>, or as string, e.g. <code>at = "Sepal.Length = 2"</code> or <code>at = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage
-of single and double quotes to assign strings within strings). The
-remaining variables will be fixed.</p></dd>
+<dd><p>Can be <code>"all"</code>, a character vector or list of named elements, indicating
+the predictors of interest (focal predictors). Can also contain assignments
+(as named list, e.g. <code>at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))</code>,
+or as string, e.g. <code>at = "Sepal.Length = 2"</code> or
+<code>at = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single
+and double quotes to assign strings within strings). The remaining variables
+will be fixed.</p></dd>
 <dt>factors</dt>
 <dd><p>Type of summary for factors. Can be <code>"reference"</code> (set at the
 reference level), <code>"mode"</code> (set at the most common level) or <code>"all"</code> to

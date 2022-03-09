@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,13 +63,14 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.16.1" id="insight-0161">insight 0.16.1<a class="anchor" aria-label="anchor" href="#insight-0161"></a></h2>
 <div class="section level3">
+<h3 id="breaking-changes-0-16-1">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-16-1"></a></h3>
+<ul><li>Arguments <code>vcov_estimation</code> and <code>vcov_type</code> in <code><a href="../reference/get_predicted.html">get_predicted()</a></code>, <code>get_predicted_se()</code> and <code><a href="../reference/get_predicted_ci.html">get_predicted_ci()</a></code> are replaced by <code>vcov</code> and <code>vcov_args</code>, to have a more simplified and common interface to control robust covariance matrix estimation.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="new-functions-0-16-1">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-16-1"></a></h3>
-<ul><li>To check for names: <code><a href="../reference/object_has_names.html">object_has_names()</a></code> and <code><a href="../reference/object_has_names.html">object_has_rownames()</a></code>
-</li>
-<li>To work with lists: <code><a href="../reference/is_empty_object.html">is_empty_object()</a></code> and <code><a href="../reference/compact_list.html">compact_list()</a></code>
-</li>
-<li>To work with strings: <code><a href="../reference/compact_character.html">compact_character()</a></code>
-</li>
+<ul><li><p>To check for names: <code><a href="../reference/object_has_names.html">object_has_names()</a></code> and <code><a href="../reference/object_has_names.html">object_has_rownames()</a></code></p></li>
+<li><p>To work with lists: <code><a href="../reference/is_empty_object.html">is_empty_object()</a></code> and <code><a href="../reference/compact_list.html">compact_list()</a></code></p></li>
+<li><p>To work with strings: <code><a href="../reference/compact_character.html">compact_character()</a></code></p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-16-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-16-1"></a></h3>
@@ -78,6 +79,8 @@
 <li><p><code><a href="../reference/get_loglikelihood.html">get_loglikelihood()</a></code> gets a <code>check_response</code> argument, to check if a model has a transformed response variable (like <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code> or <code><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt()</a></code> transformation), and if so, returns a corrected log-likelihood.</p></li>
 <li><p><code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> now supports <em>BayesFactor</em> models.</p></li>
 <li><p><code><a href="../reference/get_loglikelihood.html">get_loglikelihood()</a></code> and <code><a href="../reference/get_df.html">get_df()</a></code> now support more model classes.</p></li>
+<li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> was improved for multinominal models from <em>brms</em>.</p></li>
+<li><p><code>ellipses_info()</code> now also accepts a list of model objects, is more stable and returns more information about the provided models (like if all fixed or random effects are the same across models, if all models are mixed models or null-models, etc.)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-16-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-16-1"></a></h3>
