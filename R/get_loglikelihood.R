@@ -71,12 +71,25 @@ get_loglikelihood.lmerMod <- function(x,
     lls <- stats::logLik(x, REML = REML)
   }
 
+  # per observation lls
+  lls2 <- tryCatch(
+    {
+      w <- get_weights(x, null_as_ones = TRUE)
+      s2 <- (get_sigma(x) * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
+      0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = verbose)^2) / s2))
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
   .loglikelihood_prep_output(
     x,
     lls,
     check_response = check_response,
     verbose = verbose,
     REML = REML,
+    lls2 = lls2,
     ...
   )
 }
@@ -348,11 +361,16 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
                                        df = NULL,
                                        check_response = FALSE,
                                        verbose = FALSE,
+                                       lls2 = NULL,
                                        ...) {
   # Prepare output
   if (all(is.na(lls))) {
     out <- stats::logLik(x, ...)
-    attr(out, "per_obs") <- NA
+    if (is.null(lls2)) {
+      attr(out, "per_obs") <- NA
+    } else {
+      attr(out, "per_obs") <- lls2
+    }
   } else if (length(lls) == 1) {
     out <- lls
   } else {
