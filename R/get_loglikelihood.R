@@ -71,25 +71,13 @@ get_loglikelihood.lmerMod <- function(x,
     lls <- stats::logLik(x, REML = REML)
   }
 
-  # per observation lls
-  lls2 <- tryCatch(
-    {
-      w <- get_weights(x, null_as_ones = TRUE)
-      s2 <- (get_sigma(x) * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
-      0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = verbose)^2) / s2))
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-
   .loglikelihood_prep_output(
     x,
     lls,
     check_response = check_response,
     verbose = verbose,
     REML = REML,
-    lls2 = lls2,
+    lls2 = .per_observation_ll(x),
     ...
   )
 }
@@ -102,6 +90,7 @@ get_loglikelihood.glmerMod <- function(x, check_response = FALSE, verbose = TRUE
     check_response = check_response,
     verbose = verbose,
     REML = FALSE,
+    lls2 = .per_observation_ll(x),
     ...
   )
 }
@@ -458,4 +447,19 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
   } else {
     stats::weighted.mean(x, w) * length(x)
   }
+}
+
+
+.per_observation_ll <- function(x) {
+  # per observation lls
+  tryCatch(
+    {
+      w <- get_weights(x, null_as_ones = TRUE)
+      s2 <- (get_sigma(x) * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
+      0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = FALSE)^2) / s2))
+    },
+    error = function(e) {
+      NULL
+    }
+  )
 }
