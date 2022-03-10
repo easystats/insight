@@ -87,8 +87,7 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
     }
     objects <- objects[is_model]
     object_names <- object_names[is_model]
-    # revisit check whether all are models
-    is_model <- sapply(objects, insight::is_model)
+    is_model <- is_model[is_model]
   }
 
   # Add class
