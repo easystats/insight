@@ -468,7 +468,7 @@ get_df.mediate <- function(x, ...) {
 #' @keywords internal
 .degrees_of_freedom_residual <- function(model, verbose = TRUE) {
   if (.is_bayesian_model(model) && !inherits(model, c("bayesx", "blmerMod", "bglmerMod"))) {
-    if (requireNamespace("bayestestR", quietly = TRUE)) {
+    if (check_if_installed("bayestestR", quietly = TRUE)) {
       model <- bayestestR::bayesian_as_frequentist(model)
     } else {
       if (isTRUE(verbose)) {

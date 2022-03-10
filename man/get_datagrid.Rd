@@ -102,23 +102,25 @@ Create a reference matrix, useful for visualisation, with evenly spread and
 combined values.
 }
 \examples{
-# Add one row to change the "mode" of Species
-data <- rbind(iris, iris[149, ], make.row.names = FALSE)
+if (require("bayestestR", quietly = TRUE)) {
+  # Add one row to change the "mode" of Species
+  data <- rbind(iris, iris[149, ], make.row.names = FALSE)
 
-# Single variable is of interest; all others are "fixed"
-get_datagrid(data, at = "Sepal.Length")
-get_datagrid(data, at = "Sepal.Length", length = 3)
-get_datagrid(data, at = "Sepal.Length", range = "ci", ci = 0.90)
-get_datagrid(data, at = "Sepal.Length", factors = "mode")
+  # Single variable is of interest; all others are "fixed"
+  get_datagrid(data, at = "Sepal.Length")
+  get_datagrid(data, at = "Sepal.Length", length = 3)
+  get_datagrid(data, at = "Sepal.Length", range = "ci", ci = 0.90)
+  get_datagrid(data, at = "Sepal.Length", factors = "mode")
 
-# Multiple variables are of interest, creating a combination
-get_datagrid(data, at = c("Sepal.Length", "Species"), length = 3)
-get_datagrid(data, at = c(1, 3), length = 3)
-get_datagrid(data, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
-get_datagrid(data, at = c("Sepal.Length", "Species"), numerics = 0)
-get_datagrid(data, at = c("Sepal.Length = 3", "Species"))
-get_datagrid(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+  # Multiple variables are of interest, creating a combination
+  get_datagrid(data, at = c("Sepal.Length", "Species"), length = 3)
+  get_datagrid(data, at = c(1, 3), length = 3)
+  get_datagrid(data, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
+  get_datagrid(data, at = c("Sepal.Length", "Species"), numerics = 0)
+  get_datagrid(data, at = c("Sepal.Length = 3", "Species"))
+  get_datagrid(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 
-# with list-style at-argument
-get_datagrid(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+  # with list-style at-argument
+  get_datagrid(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+}
 }
