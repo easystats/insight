@@ -49,7 +49,7 @@ get_statistic <- function(x, ...) {
 #' @rdname get_statistic
 #' @export
 get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
-  cs <- stats::coef(summary(x))
+  cs <- suppressWarnings(stats::coef(summary(x)))
 
   if (column_index > ncol(cs)) {
     if (isTRUE(verbose)) {
