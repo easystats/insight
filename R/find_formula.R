@@ -1177,7 +1177,11 @@ find_formula.lme <- function(x, verbose = TRUE, ...) {
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
   if (!is.null(fcorr)) {
-    fc <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
+    if (class(fcorr) == "name") {
+      fc <- attributes(eval(fcorr))$formula
+    } else {
+      fc <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
+    }
   } else {
     fc <- NULL
   }
