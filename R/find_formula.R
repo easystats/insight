@@ -516,7 +516,7 @@ find_formula.gls <- function(x, verbose = TRUE, ...) {
   }
   if (is.symbol(f_corr)) {
     f_corr <- paste("~", .safe_deparse(f_corr))
-  } else if (class(f_corr) != "formula") {
+  } else if (!inherits(f_corr, "formula")) {
     f_corr <- f_corr$form
   }
 
@@ -1181,7 +1181,7 @@ find_formula.lme <- function(x, verbose = TRUE, ...) {
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
   if (!is.null(fcorr)) {
-    if (class(fcorr) == "name") {
+    if (inherits(fcorr, "name")) {
       fc <- attributes(eval(fcorr))$formula
     } else {
       fc <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
