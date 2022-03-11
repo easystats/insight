@@ -177,6 +177,9 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     same_fixef <- c(same_fixef, nested_decreasing$same_fixef)
   }
 
+  # init here, needed later for warning
+  identical_models <- FALSE
+
   is_nested <- all(is_nested_decreasing) || all(is_nested_increasing)
 
   # Check if all fixed effects are the same across models
@@ -196,10 +199,6 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     model_df <- sapply(objects, n_parameters)
     identical_models <- is_nested && any(duplicated(model_df)) && length(unique(sapply(objects, model_name, include_formula = FALSE))) == 1
 
-    if (identical_models && verbose) {
-      message("Some of the nested models seem to be identical.")
-    }
-
     attr(objects, "is_nested_increasing") <- all(is_nested_increasing)
     attr(objects, "is_nested_decreasing") <- all(is_nested_decreasing)
     attr(objects, "identical_nested_models") <- isTRUE(identical_models)
@@ -208,8 +207,11 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     attr(objects, "is_nested") <- FALSE
   }
 
+  # check which models are mixed models
+  mixed_models <- sapply(objects, is_mixed_model)
+
   # if we have mixed models, check for nested random effects
-  if (all(sapply(objects, is_mixed_model))) {
+  if (all(mixed_models)) {
     re_nested_increasing <- re_nested_decreasing <- same_ranef <- c()
     len <- length(objects)
 
@@ -229,6 +231,15 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     attr(objects, "all_mixed_models") <- TRUE
   } else {
     attr(objects, "all_mixed_models") <- FALSE
+  }
+
+  if (identical_models && verbose) {
+    if (any(mixed_models)) {
+      msg <- "Some of the nested models seem to be identical and probably only vary in their random effects."
+    } else {
+      msg <- "Some of the nested models seem to be identical"
+    }
+    message(insight::format_message(msg))
   }
 
   objects
