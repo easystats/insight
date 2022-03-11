@@ -49,7 +49,7 @@
 * Fixed issue with `get_datagrid()` for *brms* models with monotonic factors.
 
 * Fixed issue in `find_formula()` when argument `correlation` was defined 
-outside of `lme()` (@etiennebacher).
+outside of `lme()` (@etiennebacher, #525).
 
 # insight 0.16.0
 
