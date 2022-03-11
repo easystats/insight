@@ -8,7 +8,7 @@ if (requiet("testthat") &&
   )
 
   cr <- corAR1(form = ~ 1 | Mare)
-  m2 <- lme(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary,
+  m2 <- gls(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary,
              correlation = cr)
 
   test_that("model_info", {
