@@ -921,7 +921,9 @@
     out <- unlist(lapply(vals$vc, function(x) diag(x)[-1]))
     # check for uncorrelated random slopes-intercept
     non_intercepts <- which(sapply(vals$vc, function(i) !grepl("^\\(Intercept\\)", dimnames(i)[[1]][1])))
-    if (length(non_intercepts)) {
+    if (length(non_intercepts) == length(vals$vc)) {
+      out <- unlist(lapply(vals$vc, function(x) diag(x)))
+    } else {
       dn <- unlist(lapply(vals$vc, function(i) dimnames(i)[1])[non_intercepts])
       rndslopes <- unlist(lapply(vals$vc, function(i) i[1])[non_intercepts])
       names(rndslopes) <- gsub("(.*)\\.\\d+$", "\\1", names(rndslopes))
