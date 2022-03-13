@@ -1347,7 +1347,10 @@ get_data.mlogit <- function(x, verbose = TRUE, ...) {
 #'   `include_interval = TRUE`. Default to 0.95 (95%).
 get_data.rma <- function(x, verbose = TRUE, include_interval = FALSE, transf = NULL, transf_args = NULL, ci = .95, ...) {
   mf <- tryCatch(.recover_data_from_environment(x), error = function(x) NULL)
-  mf$Weight <- get_weights(mod)
+  mf_attr <- attributes(mf)
+  mf <- merge(mf, data.frame(Weight = get_weights(mod)), by = "row.names", all = TRUE)
+  mostattributes(mf) <- c(attributes(mf)[c("names", "row.names")],
+                          mf_attr[c("yi.names", "vi.names", "digits", "class")])
   if (isTRUE(include_interval)) {
     model_call <-  get_call(x)
     model_response <- tryCatch(mf[[find_response(x)]], error = function(x) NULL)
