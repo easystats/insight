@@ -343,9 +343,8 @@ parameters_table <- format_table
       # all these edge cases... for some objects in "parameters::model_parameters()",
       # when we have multiple ci-levels, column names can be "CI_low_0.8" or
       # "CI_low_0.95" etc. - this is handled here, if we have no ci-attribute
-      ptrn <- paste0("(?<=", ci_name, "_low_)\\d*\\.?\\d*")
-      if (grepl(ptrn, ci_low, perl = TRUE) &&
-          grepl(paste0("(?<=", ci_name, "_high_)\\d*\\.?\\d*"), ci_high, perl = TRUE)) {
+      ptrn <- paste0("((?<=", ci_name, "_low_)|(?<=", ci_name, "_high_))\\d*\\.?\\d*")
+      if (all(grepl(ptrn, ci_low, perl = TRUE)) && all(grepl(ptrn, ci_high, perl = TRUE))) {
         m <- regexpr(ptrn, ci_low, perl = TRUE)
         ci_value <- as.numeric(regmatches(ci_low, m))
 
@@ -360,7 +359,7 @@ parameters_table <- format_table
     } else if (isTRUE(tolower(ci_method) %in% "si")) {
       ci_colname <- sprintf("BF = %.5g SI", ci_value)
     } else {
-      ci_colname <- sprintf("%g%% %s", unique(stats::na.omit(ci_value)) * 100, ci_name)
+      ci_colname <- sprintf("%g%% %s", ci_value * 100, ci_name)
     }
 
 
