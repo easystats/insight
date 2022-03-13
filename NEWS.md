@@ -34,6 +34,9 @@
 
 * `get_predicted()` was improved for multinominal models from *brms*.
 
+* `get_variance()` was improved to cover more edge cases of (more complex)
+  random effect structures.
+
 * `ellipses_info()` now also accepts a list of model objects, is more stable
   and returns more information about the provided models (like if all fixed 
   or random effects are the same across models, if all models are mixed models
@@ -47,6 +50,9 @@
 * Fixed issue with correctly detecting Tweedie-models in `model_info()`.
 
 * Fixed issue with `get_datagrid()` for *brms* models with monotonic factors.
+
+* Fixed issue with `get_data()` when back-transforming data from predictors 
+  that used `cos()`, `sin()` or `tan()` transformations.
 
 # insight 0.16.0
 
