@@ -38,10 +38,10 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
 
   ps <- rstanarm::prior_summary(x)
 
-  l <- .compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) {
+  l <- compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) {
     if (!is.null(.x)) {
       # quick and dirty fix for flat priors
-      # else, .compact_list() will set this item as "NA"
+      # else, compact_list() will set this item as "NA"
       if (is.na(.x$dist)) {
         .x$dist <- "uniform"
         .x$location <- 0
@@ -125,7 +125,7 @@ get_priors.stanmvreg <- function(x, ...) {
 
   ps <- rstanarm::prior_summary(x)
 
-  l <- .compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) {
+  l <- compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) {
     lapply(.x, function(.i) {
       if (!is.null(.i)) do.call(cbind, .i)
     })
@@ -485,7 +485,7 @@ get_priors.meta_fixed <- function(x, ...) {
 
 #' @export
 get_priors.BFBayesFactor <- function(x, ...) {
-  prior <- .compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
+  prior <- compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
   bf_type <- .classify_BFBayesFactor(x)
 
   prior_names <- switch(bf_type,

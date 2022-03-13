@@ -28,7 +28,8 @@ loglikelihood(x, ...)
 deviation of the errors. If \code{estimator="ML"} (default), the scaling is
 done by n (the biased ML estimator), which is then equivalent to using
 \code{stats::logLik()}. If \code{estimator="OLS"}, it returns the unbiased
-OLS estimator.}
+OLS estimator. \code{estimator="REML"} will give same results as
+\code{logLik(..., REML=TRUE)}.}
 
 \item{REML}{Only for linear models. This argument is present for
 compatibility with \code{stats::logLik()}. Setting it to \code{TRUE} will

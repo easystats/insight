@@ -34,7 +34,7 @@ get_random <- function(x) {
 
 #' @export
 get_random.default <- function(x) {
-  if (.is_empty_object(find_random(x))) {
+  if (is_empty_object(find_random(x))) {
     warning("No random effects found in model.")
     return(NULL)
   }

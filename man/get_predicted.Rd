@@ -55,7 +55,8 @@ to predict. If omitted, the data used to fit the model is used.}
 posterior draws. If \code{NULL}, will return all the draws (one for each
 iteration of the model). For frequentist models, if not \code{NULL}, will
 generate bootstrapped draws, from which bootstrapped CIs will be computed.
-Iterations can be accessed by running \code{as.data.frame()} on the output.}
+Iterations can be accessed by running \code{as.data.frame(..., keep_iterations = TRUE)}
+on the output.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -121,11 +122,16 @@ return the most likely outcome.
 }
 
 \subsection{Heteroscedasticity consistent standard errors}{
-The arguments \code{vcov_estimation}, \code{vcov_type} and \code{vcov_args} can be used
-to calculate robust standard errors for confidence intervals of predictions.
-These arguments, when provided in \code{get_predicted()}, are passed down to
-\code{\link[=get_predicted_ci]{get_predicted_ci()}}, thus, see the related documentation there for more
+The arguments \code{vcov} and \code{vcov_args} can be used to calculate robust
+standard errors for confidence intervals of predictions. These arguments,
+when provided in \code{get_predicted()}, are passed down to \code{\link[=get_predicted_ci]{get_predicted_ci()}},
+thus, see the related documentation there for more
 details.
+}
+
+\subsection{Bayesian and Bootstrapped models and iterations}{
+For predictions based on multiple iterations, for instance in the case of Bayesian models and bootstrapped predictions, the function used to compute the centrality (point-estimate predictions) can be modified via the \code{centrality_function} argument. For instance, \code{get_predicted(model, centrality_function = stats::median)}. The default is \code{mean}.
+Individual draws can be accessed by running \code{iter <- as.data.frame(get_predicted(model))}, and their iterations can be reshaped into a long format by \code{bayestestR::reshape_iterations(iter)}.
 }
 }
 \examples{

@@ -43,13 +43,22 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
 
     x <- lm(log(mpg) ~ wt, data = mtcars)
     expect_equal(as.numeric(get_loglikelihood(x)), 19.42433, tolerance = 1e-3)
-    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -75.24875, tolerance = 1e-3)
+    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -75.21614, tolerance = 1e-3)
+
+    set.seed(123)
+    mtcars$wg <- abs(rnorm(nrow(mtcars), mean = 1))
+    x <- lm(mpg ~ wt, weights = wg, data = mtcars)
+    expect_equal(as.numeric(get_loglikelihood(x)), -82.03376, tolerance = 1e-3)
+
+    x <- lm(log(mpg) ~ wt, weights = wg, data = mtcars)
+    expect_equal(as.numeric(get_loglikelihood(x)), 18.4205, tolerance = 1e-3)
+    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -75.58669, tolerance = 1e-3)
+
 
     # sqrt-response
     x <- lm(sqrt(mpg) ~ wt, data = mtcars)
     expect_equal(as.numeric(get_loglikelihood(x)), -7.395031, tolerance = 1e-3)
-    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -69.50094, tolerance = 1e-3)
-
+    expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -76.89597, tolerance = 1e-3)
   })
 
   test_that("get_loglikelihood - glm", {
@@ -73,16 +82,41 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
   test_that("get_loglikelihood - (g)lmer", {
     if (requiet("lme4")) {
       x <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
+
+      # REML
+      ll <- loglikelihood(x, estimator = "REML")
+      ll2 <- stats::logLik(x)
+      expect_equal(as.numeric(ll), as.numeric(ll2))
+      expect_equal(attributes(ll)$df, attributes(ll2)$df)
+
+      # ML
       ll <- loglikelihood(x, estimator = "ML")
+      ll2 <- stats::logLik(x, REML = FALSE)
+      expect_equal(as.numeric(ll), as.numeric(ll2))
+
+      # default
+      ll <- loglikelihood(x)
       ll2 <- stats::logLik(x)
       expect_equal(as.numeric(ll), as.numeric(ll2))
       expect_equal(attributes(ll)$df, attributes(ll2)$df)
 
       x <- lme4::glmer(vs ~ mpg + (1 | cyl), data = mtcars, family = "binomial")
-      ll <- loglikelihood(x, estimator = "ML")
+      ll <- loglikelihood(x, estimator = "REML") # no REML for glmer
       ll2 <- stats::logLik(x)
       expect_equal(as.numeric(ll), as.numeric(ll2))
       expect_equal(attributes(ll)$df, attributes(ll2)$df)
+
+      ll <- loglikelihood(x, estimator = "ML")
+      ll2 <- stats::logLik(x, REML = FALSE)
+      expect_equal(as.numeric(ll), as.numeric(ll2))
+
+      model <- download_model("lmerMod_1")
+      expect_equal(get_loglikelihood(model, estimator = "REML"), logLik(model, REML = TRUE), tolerance = 0.01, ignore_attr = TRUE)
+      expect_equal(get_loglikelihood(model, estimator = "ML"), logLik(model, REML = FALSE), tolerance = 0.01, ignore_attr = TRUE)
+
+      model <- download_model("merMod_1")
+      expect_equal(get_loglikelihood(model, estimator = "REML"), logLik(model, REML = FALSE), tolerance = 0.01, ignore_attr = TRUE)
+      expect_equal(get_loglikelihood(model, estimator = "ML"), logLik(model, REML = FALSE), tolerance = 0.01, ignore_attr = TRUE)
     }
   })
 

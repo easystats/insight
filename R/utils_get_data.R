@@ -6,7 +6,7 @@
 .prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
 
   # check if we have any data yet
-  if (.is_empty_object(mf)) {
+  if (is_empty_object(mf)) {
     if (isTRUE(verbose)) {
       warning("Could not get model data.", call. = FALSE)
     }
@@ -21,13 +21,13 @@
 
   # do we have an offset, not specified in the formula?
   offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
-  if (length(offcol) && .obj_has_name(x, "call") && .obj_has_name(x$call, "offset")) {
+  if (length(offcol) && object_has_names(x, "call") && object_has_names(x$call, "offset")) {
     colnames(mf)[offcol] <- clean_names(.safe_deparse(x$call$offset))
   }
 
   # backtransform variables, such as log, sqrt etc ----------------------------
 
-  mf <- .backtransform(mf)
+  mf <- .backtransform(mf, x)
 
   # clean 1-dimensional matrices ---------------------------------------------
 
@@ -150,7 +150,7 @@
       }
 
       # check model weights
-      if ("(weights)" %in% needed.vars && !.obj_has_name(md, "(weights)")) {
+      if ("(weights)" %in% needed.vars && !object_has_names(md, "(weights)")) {
         needed.vars <- needed.vars[-which(needed.vars == "(weights)")]
         mw <- mf[["(weights)"]]
         fw <- find_weights(x)
@@ -166,7 +166,7 @@
 
         # get cleaned variable names for those variables
         # that we still need from the original model frame
-        needed.vars <- .compact_character(unique(clean_names(needed.vars)))
+        needed.vars <- compact_character(unique(clean_names(needed.vars)))
         mf <- md[, needed.vars, drop = FALSE]
 
         # we need this hack to save variable and value label attributes, if any
@@ -232,7 +232,19 @@
   # are there any factor variables that have been coerced "on-the-fly",
   # using "factor()" or "as.factor()"? if so, get names and convert back
   # to numeric later
-  factors <- colnames(mf)[grepl("^(as\\.factor|factor)\\((.*)\\)", colnames(mf))]
+  factors <- colnames(mf)[grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", colnames(mf))]
+
+  # check for monotonic terms and valid values. In case 'mo()' is used,
+  # and predictor is numeric, prettyfied values in the data grid are based
+  # on the range of the numeric variable, although only those values are allowed
+  # in the data grid that actually appear in the data
+  if (inherits(x, "brmsfit")) {
+    model_terms <- find_terms(x, flatten = TRUE)
+    monotonics <- grepl("mo\\((.*)\\)", model_terms)
+    if (any(monotonics)) {
+      factors <- union(factors, gsub("mo\\((.*)\\)", "\\1", model_terms[monotonics]))
+    }
+  }
 
   # clean variable names
   cvn <- .remove_pattern_from_names(colnames(mf), ignore_lag = TRUE)
@@ -311,7 +323,8 @@
   model_call <- get_call(model)
   if (!is.null(model_call)) {
     data_arg <- tryCatch(parse(text = .safe_deparse(model_call))[[1]]$data,
-                         error = function(e) NULL)
+      error = function(e) NULL
+    )
   } else {
     data_arg <- NULL
   }
@@ -346,10 +359,12 @@
 
   # add attributes for those that were factors
   if (length(factors)) {
-    factors <- gsub("^(as\\.factor|factor)\\((.*)\\)", "\\2", factors)
+    factors <- gsub("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", "\\2", factors)
     for (i in factors) {
       if (.is_numeric_character(mf[[i]])) {
         mf[[i]] <- .to_numeric(mf[[i]])
+      }
+      if (is.numeric(mf[[i]])) {
         attr(mf[[i]], "factor") <- TRUE
       }
     }
@@ -421,11 +436,11 @@
 
   # this is to remove the "1" from intercept-ony-models
 
-  if (!.is_empty_object(fixed.component.data)) {
+  if (!is_empty_object(fixed.component.data)) {
     fixed.component.data <- .remove_values(fixed.component.data, c("1", "0"))
     fixed.component.data <- .remove_values(fixed.component.data, c(1, 0))
   }
-  if (!.is_empty_object(random.component.data)) {
+  if (!is_empty_object(random.component.data)) {
     random.component.data <- .remove_values(random.component.data, c("1", "0"))
     random.component.data <- .remove_values(random.component.data, c(1, 0))
   }
@@ -448,7 +463,7 @@
   vars <- intersect(vars, colnames(mf))
   dat <- mf[, vars, drop = FALSE]
 
-  if (.is_empty_object(dat)) {
+  if (is_empty_object(dat)) {
     if (isTRUE(verbose)) {
       warning(format_message(sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)), call. = FALSE)
     }
@@ -481,7 +496,7 @@
   tryCatch(
     {
       env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
-      if (.obj_has_name(x$call, "subset")) {
+      if (object_has_names(x$call, "subset")) {
         env_data <- subset(env_data, subset = eval(x$call$subset))
       }
 
@@ -543,7 +558,7 @@
 # here we have a model frame with many variables, so just extract the important ones...
 #
 .get_data_from_modelframe <- function(x, dat, effects, verbose = TRUE) {
-  if (.is_empty_object(dat)) {
+  if (is_empty_object(dat)) {
     warning("Could not get model data.", call. = FALSE)
     return(NULL)
   }
@@ -601,7 +616,7 @@
   }
 
 
-  if (!is.null(dat) && .obj_has_name(model_call, "subset")) {
+  if (!is.null(dat) && object_has_names(model_call, "subset")) {
     dat <- subset(dat, subset = eval(model_call$subset))
   }
 
@@ -638,7 +653,7 @@
   }
 
 
-  if (!is.null(dat) && .obj_has_name(x@call, "subset")) {
+  if (!is.null(dat) && object_has_names(x@call, "subset")) {
     dat <- subset(dat, subset = eval(x@call$subset))
   }
 
@@ -670,15 +685,16 @@
 
 # backtransform variables -------------------------------
 
-.backtransform <- function(mf) {
+.backtransform <- function(mf, x) {
   tryCatch(
     {
       patterns <- c(
         "scale\\(log", "exp\\(scale", "log\\(log", "log", "log1p",
-        "log10", "log2", "sqrt", "exp", "expm1", "scale"
+        "log10", "log2", "sqrt", "exp", "expm1", "scale", "cos", "sin",
+        "tan", "acos", "asin", "atan"
       )
       for (i in patterns) {
-        mf <- .backtransform_helper(mf, i)
+        mf <- .backtransform_helper(mf, i, x)
       }
       mf
     },
@@ -689,7 +705,7 @@
 }
 
 
-.backtransform_helper <- function(mf, type) {
+.backtransform_helper <- function(mf, type, model) {
   cn <- .get_transformed_names(colnames(mf), type)
   if (!.is_empty_string(cn)) {
     for (i in cn) {
@@ -715,6 +731,8 @@
         mf[[i]] <- log1p(mf[[i]])
       } else if (type == "scale") {
         mf[[i]] <- .unscale(mf[[i]])
+      } else if (type %in% c("cos", "sin", "tan", "acos", "asin", "atan")) {
+        mf[[i]] <- .recover_data_from_environment(model)[[i]]
       }
       colnames(mf)[colnames(mf) == i] <- .get_transformed_terms(i, type)
     }

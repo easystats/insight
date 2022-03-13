@@ -101,7 +101,7 @@ find_formula.default <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.list <- function(x, verbose = TRUE, ...) {
-  if (.obj_has_name(x, "gam")) {
+  if (object_has_names(x, "gam")) {
     if ("mer" %in% names(x)) {
       f.random <- .fix_gamm4_random_effect(find_formula(x$mer)$random)
       if (length(f.random) == 1) {
@@ -112,7 +112,7 @@ find_formula.list <- function(x, verbose = TRUE, ...) {
     }
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
-    f <- .compact_list(list(conditional = stats::formula(x), random = f.random))
+    f <- compact_list(list(conditional = stats::formula(x), random = f.random))
   } else {
     f <- find_formula.default(x, ...)
   }
@@ -198,7 +198,7 @@ find_formula.gamlss <- function(x, verbose = TRUE, ...) {
         f.cond <- stats::update.formula(f.cond, stats::as.formula(paste0(". ~ . - random(", re, ")")))
       }
 
-      .compact_list(list(
+      compact_list(list(
         conditional = f.cond,
         random = f.random,
         sigma = x$sigma.formula,
@@ -231,7 +231,7 @@ find_formula.bamlss <- function(x, verbose = TRUE, ...) {
     f.sigma <- NULL
   }
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::as.formula(.safe_deparse(f.cond)),
     sigma = f.sigma
   ))
@@ -242,7 +242,7 @@ find_formula.bamlss <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.gamm <- function(x, verbose = TRUE, ...) {
-  f <- .compact_list(find_formula(x$gam))
+  f <- compact_list(find_formula(x$gam))
   random <- .fix_gamm_random_effect(names(x$lme$groups))
 
   if (length(random) == 0) {
@@ -253,7 +253,7 @@ find_formula.gamm <- function(x, verbose = TRUE, ...) {
     f.random <- stats::as.formula(paste0("~1|", random))
   }
 
-  .find_formula_return(.compact_list(c(f, list(random = f.random))))
+  .find_formula_return(compact_list(c(f, list(random = f.random))))
 }
 
 
@@ -321,7 +321,7 @@ find_formula.systemfit <- function(x, verbose = TRUE, ...) {
   l <- lapply(f, function(i) {
     list(conditional = i)
   })
-  f <- .compact_list(l)
+  f <- compact_list(l)
 
   if (length(f) > 1) {
     attr(f, "is_mv") <- "1"
@@ -408,7 +408,7 @@ find_formula.averaging <- function(x, verbose = TRUE, ...) {
   )
 
   f <- find_formula.default(x)
-  if (!.obj_has_name(f, "random") && .obj_has_name(f_random, "random")) {
+  if (!object_has_names(f, "random") && object_has_names(f_random, "random")) {
     f$random <- f_random$random
   }
 
@@ -512,7 +512,7 @@ find_formula.gee <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.MANOVA <- function(x, verbose = TRUE, ...) {
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = x$input$formula,
     random = stats::as.formula(paste0("~", x$input$subject))
   ))
@@ -551,7 +551,7 @@ find_formula.gls <- function(x, verbose = TRUE, ...) {
     }
   )
 
-  .find_formula_return(.compact_list(l))
+  .find_formula_return(compact_list(l))
 }
 
 
@@ -734,7 +734,7 @@ find_formula.felm <- function(x, verbose = TRUE, ...) {
     f.clus <- NULL
   }
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
     random = stats::as.formula(f.rand),
     instruments = stats::as.formula(f.instr),
@@ -772,7 +772,7 @@ find_formula.mhurdle <- function(x, verbose = TRUE, ...) {
     f.ip <- NULL
   }
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
     zero_inflated = stats::as.formula(f.zi),
     infrequent_purchase = stats::as.formula(f.ip)
@@ -801,7 +801,7 @@ find_formula.feglm <- function(x, verbose = TRUE, ...) {
     f.clus <- NULL
   }
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
     instruments = stats::as.formula(f.instr),
     cluster = stats::as.formula(f.clus)
@@ -827,7 +827,7 @@ find_formula.fixest <- function(x, verbose = TRUE, ...) {
     }
   }
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
     cluster = stats::as.formula(f.clus)
   ))
@@ -854,7 +854,7 @@ find_formula.feis <- function(x, verbose = TRUE, ...) {
     f.slopes <- NULL
   }
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
     slopes = stats::as.formula(f.slopes),
     random = stats::as.formula(paste0("~", id))
@@ -877,7 +877,7 @@ find_formula.bife <- function(x, verbose = TRUE, ...) {
     f.rand <- NULL
   }
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
     random = stats::as.formula(f.rand)
   ))
@@ -930,7 +930,7 @@ find_formula.wbm <- function(x, verbose = TRUE, ...) {
     f.clint <- NULL
   }
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
     instruments = stats::as.formula(f.instr),
     interactions = stats::as.formula(f.clint),
@@ -945,7 +945,7 @@ find_formula.wbgee <- find_formula.wbm
 
 #' @export
 find_formula.glimML <- function(x, verbose = TRUE, ...) {
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = x@formula,
     random = x@random
   ))
@@ -990,7 +990,7 @@ find_formula.zcpglm <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.clmm2 <- function(x, verbose = TRUE, ...) {
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::as.formula(.safe_deparse(attr(x$location, "terms", exact = TRUE))),
     scale = stats::as.formula(.safe_deparse(attr(x$scale, "terms", exact = TRUE))),
     random = stats::as.formula(paste0("~", parse(text = .safe_deparse(x$call))[[1]]$random))
@@ -1001,7 +1001,7 @@ find_formula.clmm2 <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.clm2 <- function(x, verbose = TRUE, ...) {
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::formula(attr(x$location, "terms", exact = TRUE)),
     scale = stats::formula(attr(x$scale, "terms", exact = TRUE))
   ))
@@ -1028,7 +1028,7 @@ find_formula.DirichletRegModel <- function(x, verbose = TRUE, ...) {
     f.cond3 <- NULL
   }
 
-  out <- .compact_list(list(
+  out <- compact_list(list(
     conditional = stats::as.formula(f.cond),
     conditional2 = stats::as.formula(f.cond2),
     conditional3 = stats::as.formula(f.cond3)
@@ -1087,7 +1087,7 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
   f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
   if (!is.null(f.zi)) f.zi <- stats::as.formula(.get_fixed_effects(f.zi))
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = f.cond,
     random = f.random,
     zero_inflated = f.zi,
@@ -1113,7 +1113,7 @@ find_formula.nlmerMod <- function(x, verbose = TRUE, ...) {
   f.cond <- .nobars(stats::as.formula(gsub("(.*)(~)(.*)~(.*)", "\\1\\2\\4", .safe_deparse(stats::formula(x)))))
   f.nonlin <- stats::as.formula(paste0("~", .trim(gsub("(.*)~(.*)~(.*)", "\\2", .safe_deparse(stats::formula(x))))))
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = f.cond,
     nonlinear = f.nonlin,
     random = f.random
@@ -1136,7 +1136,7 @@ find_formula.merMod <- function(x, verbose = TRUE, ...) {
   }
 
   f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
-  f <- .compact_list(list(conditional = f.cond, random = f.random))
+  f <- compact_list(list(conditional = f.cond, random = f.random))
   .find_formula_return(f, verbose = verbose)
 }
 
@@ -1188,7 +1188,7 @@ find_formula.sem <- function(x, verbose = TRUE, ...) {
   }
 
   f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
-  f <- .compact_list(list(conditional = f.cond, random = f.random))
+  f <- compact_list(list(conditional = f.cond, random = f.random))
   .find_formula_return(f, verbose = verbose)
 }
 
@@ -1205,7 +1205,7 @@ find_formula.lme <- function(x, verbose = TRUE, ...) {
     fc <- NULL
   }
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = fm,
     random = fmr,
     correlation = stats::as.formula(fc)
@@ -1220,7 +1220,7 @@ find_formula.lqmm <- function(x, verbose = TRUE, ...) {
   fmr <- .safe_deparse(x$call$random)
   fmg <- .safe_deparse(x$call$group)
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = fm,
     random = stats::as.formula(paste0(fmr, "|", fmg))
   ))
@@ -1245,7 +1245,7 @@ find_formula.mixor <- function(x, verbose = TRUE, ...) {
 
   fmr <- stats::as.formula(paste("~", fmr))
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = fm,
     random = fmr
   ))
@@ -1261,7 +1261,7 @@ find_formula.MixMod <- function(x, verbose = TRUE, ...) {
   f.random <- stats::formula(x, type = "random")
   f.zirandom <- stats::formula(x, type = "zi_random")
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = f.cond,
     random = f.random,
     zero_inflated = f.zi,
@@ -1277,7 +1277,7 @@ find_formula.BBmm <- function(x, verbose = TRUE, ...) {
   f.cond <- parse(text = .safe_deparse(x$call))[[1]]$fixed.formula
   f.rand <- parse(text = .safe_deparse(x$call))[[1]]$random.formula
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
     random = stats::as.formula(f.rand)
   ))
@@ -1315,7 +1315,7 @@ find_formula.glmm <- function(x, verbose = TRUE, ...) {
     f.random <- f.random[[1]]
   }
 
-  f <- .compact_list(list(conditional = f.cond, random = f.random))
+  f <- compact_list(list(conditional = f.cond, random = f.random))
   .find_formula_return(f, verbose = verbose)
 }
 
@@ -1365,7 +1365,7 @@ find_formula.stanreg <- function(x, verbose = TRUE, ...) {
     }
 
     f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
-    f <- .compact_list(list(conditional = f.cond, random = f.random))
+    f <- compact_list(list(conditional = f.cond, random = f.random))
     .find_formula_return(f, verbose = verbose)
   }
 }
@@ -1375,7 +1375,7 @@ find_formula.stanreg <- function(x, verbose = TRUE, ...) {
 find_formula.brmsfit <- function(x, verbose = TRUE, ...) {
   f <- stats::formula(x)
 
-  if (.obj_has_name(f, "forms")) {
+  if (object_has_names(f, "forms")) {
     mv_formula <- lapply(f$forms, .get_brms_formula)
     attr(mv_formula, "is_mv") <- "1"
     f <- mv_formula
@@ -1400,7 +1400,7 @@ find_formula.MCMCglmm <- function(x, verbose = TRUE, ...) {
   fm <- x$Fixed$formula
   fmr <- x$Random$formula
 
-  f <- .compact_list(list(conditional = fm, random = fmr))
+  f <- compact_list(list(conditional = fm, random = fmr))
   .find_formula_return(f, verbose = verbose)
 }
 
@@ -1412,7 +1412,7 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
     dt <- utils::tail(x@numerator, 1)[[1]]@dataTypes
     frand <- names(dt)[which(dt == "random")]
 
-    if (!.is_empty_object(frand)) {
+    if (!is_empty_object(frand)) {
       f.random <- stats::as.formula(paste0("~", paste(frand, collapse = " + ")))
       for (i in frand) {
         fcond <- sub(i, "", fcond, fixed = TRUE)
@@ -1431,13 +1431,14 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
     }
   } else if (.classify_BFBayesFactor(x) %in% c("ttest1", "ttest2")) {
     f.cond <- tryCatch(stats::as.formula(x@numerator[[1]]@identifier$formula),
-                       error = function(e) NULL)
+      error = function(e) NULL
+    )
     f.random <- NULL
   } else {
     return(NULL)
   }
 
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = f.cond,
     random = f.random
   ))
@@ -1493,7 +1494,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   # split zero-inflated fixed from zero-inflated random
 
-  if (!.is_empty_object(f_zi)) {
+  if (!is_empty_object(f_zi)) {
     f_zirandom <- lapply(.findbars(f_zi), function(.x) {
       f <- .safe_deparse(.x)
       stats::as.formula(paste0("~", f))
@@ -1510,7 +1511,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   # split sigma fixed from sigma random
 
-  if (!.is_empty_object(f_sigma)) {
+  if (!is_empty_object(f_sigma)) {
     f_sigmarandom <- lapply(.findbars(f_sigma), function(.x) {
       f <- .safe_deparse(.x)
       stats::as.formula(paste0("~", f))
@@ -1527,7 +1528,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   # split beta fixed from beta random
 
-  if (!.is_empty_object(f_beta)) {
+  if (!is_empty_object(f_beta)) {
     f_betarandom <- lapply(.findbars(f_beta), function(.x) {
       f <- .safe_deparse(.x)
       stats::as.formula(paste0("~", f))
@@ -1542,7 +1543,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   }
 
 
-  .compact_list(list(
+  compact_list(list(
     conditional = f_cond,
     random = f_random,
     zero_inflated = f_zi,
@@ -1579,7 +1580,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   f_cond <- stats::as.formula(.get_fixed_effects(f_cond))
 
-  .compact_list(list(
+  compact_list(list(
     conditional = f_cond,
     random = f_random
   ))
@@ -1626,7 +1627,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   )
 
 
-  f <- .compact_list(list(conditional = c.form, zero_inflated = zi.form))
+  f <- compact_list(list(conditional = c.form, zero_inflated = zi.form))
   .find_formula_return(f, verbose = verbose)
 }
 
@@ -1676,7 +1677,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     i <- gsub("(~1| | \\|)", "", deparse(i))
     !any(grepl("(Xr\\.\\d|g\\.\\d)", i) | i %in% c("Xr", "g"))
   })
-  f <- .compact_list(f[keep])
+  f <- compact_list(f[keep])
   # exceptions, if random effect is named Xr
   if (!length(f) && len > 1) {
     f <- list(stats::as.formula("~1 | Xr"))
@@ -1709,7 +1710,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 .check_formula_for_T <- function(f, verbose = TRUE) {
   f <- .safe_deparse(f[[1]])
 
-  if (.is_empty_object(f)) {
+  if (is_empty_object(f)) {
     return(TRUE)
   }
 
@@ -1733,7 +1734,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 # here...
 
 .check_formula_for_dollar <- function(f, verbose = TRUE) {
-  if (.is_empty_object(f)) {
+  if (is_empty_object(f)) {
     return(TRUE)
   }
 

@@ -23,8 +23,8 @@
   # ...but not both
   if (!is.null(dots$type) && !is.null(predict)) {
     stop(format_message(
-      '`predict` and `type` cannot both be given. The preferred argument for `get_predicted()` is `predict`.',
-      'To use the `type` argument, set `predict = NULL` explicitly, e.g.,:',
+      "`predict` and `type` cannot both be given. The preferred argument for `get_predicted()` is `predict`.",
+      "To use the `type` argument, set `predict = NULL` explicitly, e.g.,:",
       '`get_predicted(model, predict = NULL, type = "response")`'
     ))
   }
@@ -61,7 +61,8 @@
   predict_method <- lapply(
     class(x), function(i) {
       tryCatch(utils::getS3method("predict", i),
-               error = function(e) NULL)
+        error = function(e) NULL
+      )
     }
   )
   predict_method <- tryCatch(predict_method[!sapply(predict_method, is.null)][[1]], error = function(e) NULL)
@@ -94,9 +95,9 @@
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
     msg <- format_message(
       sprintf('`predict` = "%s"` is not officially supported by `get_predicted()`.', predict),
-      '`predict` will be passed directly to the `predict()` method for the model and not validated.',
-      'Please check the validity and scale of the results.',
-      'Set `verbose = FALSE` to silence this warning, or use one of the supported values for the `predict` argument:',
+      "`predict` will be passed directly to the `predict()` method for the model and not validated.",
+      "Please check the validity and scale of the results.",
+      "Set `verbose = FALSE` to silence this warning, or use one of the supported values for the `predict` argument:",
       paste(" ", paste(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted"))), collapse = ", "))
     )
     warning(msg, call. = FALSE)
@@ -129,7 +130,6 @@
 
     # type = "response" always on link-scale - for later back-transformation
   } else if (predict %in% c("expectation", "response", "prediction", "classification")) {
-
     if (inherits(x, c("hurdle", "zeroinfl", "zerotrunc"))) {
       # pscl: hurdle/zeroinfl and countreg
       type_arg <- "count"
@@ -148,19 +148,16 @@
 
     # user provided a valid "type" value, which is not one of our "predict" values
   } else if (predict %in% type_methods) {
-
     if (predict == "count") {
       # pscl
       type_arg <- "count"
       scale_arg <- "link"
       transform <- FALSE
-
     } else if (predict == "zero") {
       # pscl
       type_arg <- "zero"
       scale_arg <- "link"
       transform <- FALSE
-
     } else {
       # unknown / default
       type_arg <- scale_arg <- predict
@@ -225,11 +222,12 @@
     # or not all random factors in data, set include_random to FALSE
     if (!all(re_terms %in% names(data))) {
       if (isTRUE(verbose) && isTRUE(include_random)) {
-        warning(format_message("`include_random` was set to `TRUE`, but not all random effects were found in 'data'.",
-                               "Setting `include_random = FALSE` now."), call. = FALSE)
+        warning(format_message(
+          "`include_random` was set to `TRUE`, but not all random effects were found in 'data'.",
+          "Setting `include_random = FALSE` now."
+        ), call. = FALSE)
       }
       include_random <- FALSE
-
     } else if (!allow_new_levels) {
 
       # we have random effects in data, but do we also have new levels?
@@ -245,9 +243,11 @@
 
       if (!all(all_levels_found)) {
         if (isTRUE(verbose) && isTRUE(include_random)) {
-          warning(format_message("`include_random` was set to `TRUE`, but grouping factor(s) in 'data' has new levels not in the original data.",
-                                 "Either use `allow.new.levels=TRUE`, or make sure to include only valid values for grouping factor(s).",
-                                 "Setting `include_random = FALSE` now."), call. = FALSE)
+          warning(format_message(
+            "`include_random` was set to `TRUE`, but grouping factor(s) in 'data' has new levels not in the original data.",
+            "Either use `allow.new.levels=TRUE`, or make sure to include only valid values for grouping factor(s).",
+            "Setting `include_random = FALSE` now."
+          ), call. = FALSE)
         }
         include_random <- FALSE
       } else {
@@ -262,7 +262,6 @@
     # else, we might have a formula. if so, do not change include_random.
     # also, do not change if predictions for each observation are requested
     # (i.e. data = NULL)
-
   } else if (!inherits(include_random, "formula") && !is.null(data)) {
     include_random <- FALSE
   }
@@ -270,11 +269,14 @@
 
   # Add (or set) random variables to "NA"
   if (isFALSE(include_random)) {
-    if (inherits(x, c("stanreg", "brmsfit"))) {
-      # rstantools predictions doens't allow for NaNs in newdata
-      data[find_variables(x, effects = "random", verbose = FALSE)$random] <- NULL
-    } else {
-      data[find_variables(x, effects = "random", verbose = FALSE)$random] <- NA
+    ran_effects <- find_variables(x, effects = "random", verbose = FALSE)$random
+    if (!is.null(ran_effects)) {
+      if (inherits(x, c("stanreg", "brmsfit"))) {
+        # rstantools predictions doens't allow for NaNs in newdata
+        data[ran_effects] <- NULL
+      } else {
+        data[ran_effects] <- NA
+      }
     }
   }
 

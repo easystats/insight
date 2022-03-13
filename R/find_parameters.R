@@ -39,7 +39,7 @@ find_parameters <- function(x, ...) {
 #' @rdname find_parameters
 #' @export
 find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
-  if (inherits(x, "list") && .obj_has_name(x, "gam")) {
+  if (inherits(x, "list") && object_has_names(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
     pars <- find_parameters.gam(x)
@@ -122,7 +122,7 @@ find_parameters.clm2 <- function(x, flatten = FALSE, ...) {
     pars <- list(conditional = names(cf))
     pars$conditional <- text_remove_backticks(pars$conditional)
   } else {
-    pars <- .compact_list(list(
+    pars <- compact_list(list(
       conditional = names(cf)[1:(n_intercepts + n_location)],
       scale = names(cf)[(1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)]
     ))
@@ -221,7 +221,7 @@ find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
 
   pars$comp <- factor(pars$comp, levels = unique(pars$comp))
   pars <- split(pars, pars$comp)
-  pars <- .compact_list(lapply(pars, function(i) i$pars))
+  pars <- compact_list(lapply(pars, function(i) i$pars))
 
   if (flatten) {
     unique(unlist(pars))
@@ -279,7 +279,7 @@ find_parameters.pgmm <- function(x,
 find_parameters.wbm <- function(x, flatten = FALSE, ...) {
   s <- summary(x)
 
-  pars <- .compact_list(list(
+  pars <- compact_list(list(
     conditional = rownames(s$within_table),
     instruments = rownames(s$between_table),
     random = rownames(s$ints_table)
@@ -814,7 +814,7 @@ find_parameters.nls <- function(x, flatten = FALSE, ...) {
   elements <- .get_elements(effects, component = component)
 
   # remove empty list-elements
-  l <- .compact_list(l[elements])
+  l <- compact_list(l[elements])
 
   if (flatten) {
     unique(unlist(l))

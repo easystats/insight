@@ -7,12 +7,14 @@
 \usage{
 ellipsis_info(objects, ...)
 
-\method{ellipsis_info}{default}(..., only_models = TRUE)
+\method{ellipsis_info}{default}(..., only_models = TRUE, verbose = TRUE)
 }
 \arguments{
-\item{objects, ...}{Arbitrary number of objects.}
+\item{objects, ...}{Arbitrary number of objects. May also be a list of model objects.}
 
 \item{only_models}{Only keep supported models (default to \code{TRUE}).}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 The list with objects that were passed to the function, including

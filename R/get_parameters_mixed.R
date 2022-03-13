@@ -56,7 +56,7 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
   if (effects == "fixed") {
     l <- list(conditional = lme4::fixef(x))
   } else {
-    l <- .compact_list(list(
+    l <- compact_list(list(
       conditional = lme4::fixef(x),
       random = lme4::ranef(x)
     ))
@@ -139,12 +139,12 @@ get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
   fx <- lme4::fixef(x)
 
   if (effects == "fixed") {
-    l <- .compact_list(list(
+    l <- compact_list(list(
       conditional = fx[setdiff(names(fx), startvectors)],
       nonlinear = fx[startvectors]
     ))
   } else {
-    l <- .compact_list(list(
+    l <- compact_list(list(
       conditional = fx[setdiff(names(fx), startvectors)],
       nonlinear = fx[startvectors],
       random = lapply(lme4::ranef(x), colnames)
@@ -185,7 +185,7 @@ get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
   if (effects == "fixed") {
     l <- list(conditional = lme4::fixef(x))
   } else {
-    l <- .compact_list(list(
+    l <- compact_list(list(
       conditional = lme4::fixef(x),
       random = lme4::ranef(x)
     ))
@@ -236,7 +236,7 @@ get_parameters.HLfit <- function(x, effects = c("fixed", "random"), ...) {
     l <- list(conditional = lme4::fixef(x))
   } else {
     utils::capture.output(s <- summary(x))
-    l <- .compact_list(list(
+    l <- compact_list(list(
       conditional = lme4::fixef(x),
       random = lme4::ranef(x)
     ))
@@ -268,7 +268,7 @@ get_parameters.sem <- function(x, effects = c("fixed", "random"), ...) {
   if (effects == "fixed") {
     l <- list(conditional = x$coef)
   } else {
-    l <- .compact_list(list(
+    l <- compact_list(list(
       conditional = x$coef,
       random = x$ranef
     ))
@@ -299,7 +299,7 @@ get_parameters.cpglmm <- function(x, effects = c("fixed", "random"), ...) {
   if (effects == "fixed") {
     l <- list(conditional = cplm::fixef(x))
   } else {
-    l <- .compact_list(list(
+    l <- compact_list(list(
       conditional = cplm::fixef(x),
       random = cplm::ranef(x)
     ))
@@ -330,7 +330,7 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
   if (effects == "fixed") {
     l <- list(conditional = lme4::fixef(x$full_model))
   } else {
-    l <- .compact_list(list(
+    l <- compact_list(list(
       conditional = lme4::fixef(x$full_model),
       random = lme4::ranef(x$full_model)
     ))
@@ -382,7 +382,7 @@ get_parameters.MixMod <- function(x,
   }
 
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = lme4::fixef(x, sub_model = "main"),
     random = re[grepl("^(?!zi_)", re.names, perl = TRUE)],
     zero_inflated = z_inflated,
@@ -417,7 +417,7 @@ get_parameters.MixMod <- function(x,
     text_remove_backticks(params)
   } else if (effects == "random") {
     switch(component,
-      all = .compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
+      all = compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
       conditional = list(random = l$random),
       zi = ,
       zero_inflated = list(zero_inflated_random = l$zero_inflated_random)
@@ -439,13 +439,13 @@ get_parameters.glmmTMB <- function(x,
   component <- match.arg(component)
 
   if (effects == "fixed") {
-    l <- .compact_list(list(
+    l <- compact_list(list(
       conditional = lme4::fixef(x)$cond,
       zero_inflated = lme4::fixef(x)$zi,
       dispersion = lme4::fixef(x)$disp
     ))
   } else {
-    l <- .compact_list(list(
+    l <- compact_list(list(
       conditional = lme4::fixef(x)$cond,
       random = lme4::ranef(x)$cond,
       zero_inflated = lme4::fixef(x)$zi,
@@ -465,7 +465,7 @@ get_parameters.glmmTMB <- function(x,
 
   # ---- fixed effects (zero_inflated model)
 
-  if (.obj_has_name(l, "zero_inflated")) {
+  if (object_has_names(l, "zero_inflated")) {
     fixedzi <- data.frame(
       Parameter = names(l$zero_inflated),
       Estimate = unname(l$zero_inflated),
@@ -478,7 +478,7 @@ get_parameters.glmmTMB <- function(x,
 
   # ---- fixed effects (dispersion model)
 
-  if (.obj_has_name(l, "dispersion")) {
+  if (object_has_names(l, "dispersion")) {
     fixeddisp <- data.frame(
       Parameter = names(l$dispersion),
       Estimate = unname(l$dispersion),
@@ -502,7 +502,7 @@ get_parameters.glmmTMB <- function(x,
     text_remove_backticks(out)
   } else if (effects == "random") {
     switch(component,
-      all = .compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
+      all = compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
       conditional = l$random,
       zi = ,
       zero_inflated = l$zero_inflated_random
@@ -550,7 +550,7 @@ get_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), ...) 
 get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
   effects <- match.arg(effects)
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = x$fixed.coef,
     random = x$random.coef
   ))
@@ -576,7 +576,7 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
 get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...) {
   effects <- match.arg(effects)
 
-  l <- .compact_list(list(
+  l <- compact_list(list(
     conditional = x@fixed.param,
     random = x@random.param
   ))

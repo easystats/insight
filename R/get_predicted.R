@@ -18,7 +18,8 @@
 #'   posterior draws. If `NULL`, will return all the draws (one for each
 #'   iteration of the model). For frequentist models, if not `NULL`, will
 #'   generate bootstrapped draws, from which bootstrapped CIs will be computed.
-#'   Iterations can be accessed by running `as.data.frame()` on the output.
+#'   Iterations can be accessed by running `as.data.frame(..., keep_iterations = TRUE)`
+#'   on the output.
 #' @param include_random If `"default"`, include all random effects in the
 #'   prediction, unless random effect variables are not in the data.  If `TRUE`,
 #'   include all random effects in the prediction (in this case, it will be
@@ -83,11 +84,16 @@
 #' }
 #'
 #' \subsection{Heteroscedasticity consistent standard errors}{
-#' The arguments `vcov_estimation`, `vcov_type` and `vcov_args` can be used
-#' to calculate robust standard errors for confidence intervals of predictions.
-#' These arguments, when provided in `get_predicted()`, are passed down to
-#' [get_predicted_ci()], thus, see the related documentation there for more
+#' The arguments `vcov` and `vcov_args` can be used to calculate robust
+#' standard errors for confidence intervals of predictions. These arguments,
+#' when provided in `get_predicted()`, are passed down to [get_predicted_ci()],
+#' thus, see the related documentation there for more
 #' details.
+#' }
+#'
+#' \subsection{Bayesian and Bootstrapped models and iterations}{
+#' For predictions based on multiple iterations, for instance in the case of Bayesian models and bootstrapped predictions, the function used to compute the centrality (point-estimate predictions) can be modified via the `centrality_function` argument. For instance, `get_predicted(model, centrality_function = stats::median)`. The default is `mean`.
+#' Individual draws can be accessed by running `iter <- as.data.frame(get_predicted(model))`, and their iterations can be reshaped into a long format by `bayestestR::reshape_iterations(iter)`.
 #' }
 #'
 #' @examples
@@ -345,8 +351,10 @@ get_predicted.bife <- function(x,
       mu_eta <- tryCatch(abs(get_family(x)$mu.eta(predictions)), error = function(e) NULL)
       if (is.null(mu_eta)) {
         if (isTRUE(verbose)) {
-          warning(format_message("Could not apply Delta method to transform standard errors.",
-                                 "These are returned on the link-scale."), call. = FALSE)
+          warning(format_message(
+            "Could not apply Delta method to transform standard errors.",
+            "These are returned on the link-scale."
+          ), call. = FALSE)
         }
       } else {
         ci_data[se_col] <- ci_data[se_col] * mu_eta
@@ -478,16 +486,18 @@ get_predicted.bife <- function(x,
       stringsAsFactors = FALSE
     )
     iter <- as.data.frame(iter_stacked)
-    names(iter) <- paste0("iter_", names(iter))
     # outcome with a single level
   } else {
     # .get_predicted_boot already gives us the correct observation ~ draws format
     if (is.null(colnames(iter)) || !all(grepl("^iter", colnames(iter)))) {
       iter <- as.data.frame(t(iter))
-      names(iter) <- gsub("^V(\\d+)$", "iter_\\1", names(iter))
+
     }
     predictions <- apply(iter, 1, centrality_function)
   }
+  # Rename iterations
+  names(iter) <- paste0("iter_", 1:ncol(iter))
+  # Store as attribute
   attr(predictions, "iterations") <- iter
   predictions
 }

@@ -16,8 +16,7 @@ get_predicted_ci(x, predictions = NULL, ...)
   ci_type = "confidence",
   ci_method = "quantile",
   dispersion_method = "sd",
-  vcov_estimation = NULL,
-  vcov_type = NULL,
+  vcov = NULL,
   vcov_args = NULL,
   ...
 )
@@ -61,23 +60,23 @@ the context of bootstrapped and Bayesian models. Possible values are
 \code{ci_method = c("quantile", "hdi", "eti")}. For the latter, the
 \pkg{bayestestR} package is required.}
 
-\item{vcov_estimation}{Either a matrix, or a string, indicating the suffix
-of the \verb{vcov*()}-function from the \pkg{sandwich} or \pkg{clubSandwich}
-package, e.g. \code{vcov_estimation = "CL"} (which calls
-\code{\link[sandwich:vcovCL]{sandwich::vcovCL()}} to compute clustered covariance matrix
-estimators), or \code{vcov_estimation = "HC"} (which calls
-\code{\link[sandwich:vcovHC]{sandwich::vcovHC()}} to compute heteroskedasticity-consistent covariance
-matrix estimators).}
+\item{vcov}{Variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors). This argument accepts a covariance matrix, a function which returns a covariance matrix, or a string which identifies the function to be used to compute the covariance matrix.
+\itemize{
+\item A covariance matrix
+\item A function which returns a covariance matrix (e.g., \code{stats::vcov()})
+\item A string which indicates the kind of uncertainty estimates to return.
+\itemize{
+\item Heteroskedasticity-consistent: "vcovHC", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5". See \code{?sandwich::vcovHC}
+\item Cluster-robust: "vcovCR", "CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3". See \code{?clubSandwich::vcovCR()}
+\item Bootstrap: "vcovBS", "xy", "residual", "wild", "mammen", "webb". See \code{?sandwich::vcovBS}
+\item Other \code{sandwich} package functions: "vcovHAC", "vcovPC", "vcovCL", "vcovPL"
+}
+}}
 
-\item{vcov_type}{Character vector, specifying the estimation type for the
-robust covariance matrix estimation (see
-\code{\link[sandwich:vcovHC]{sandwich::vcovHC()}} or \code{clubSandwich::vcovCR()}
-for details). Only applies if \code{vcov_estimation} is a string, and not a matrix.}
-
-\item{vcov_args}{List of named vectors, used as additional arguments that are
-passed down to the \pkg{sandwich}-function specified in
-\code{vcov_estimation}. Only applies if \code{vcov_estimation} is a string, and not
-a matrix.}
+\item{vcov_args}{List of arguments to be passed to the function identified by
+the \code{vcov} argument. This function is typically supplied by the \code{sandwich}
+or \code{clubSandwich} packages. Please refer to their documentation (e.g.,
+\code{?sandwich::vcovHAC}) to see the list of available arguments.}
 }
 \value{
 The Confidence (or Prediction) Interval (CI).

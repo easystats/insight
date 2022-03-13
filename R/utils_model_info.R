@@ -346,7 +346,7 @@
   # tweedie family --------
 
   tweedie_fam <- grepl("^(tweedie|Tweedie)", fitfam) | grepl("^(tweedie|Tweedie)", link.fun)
-  tweedie_model <- (linear_model && tweedie_fam) || inherits(x, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
+  tweedie_model <- tweedie_fam | inherits(x, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
 
 
   # return...

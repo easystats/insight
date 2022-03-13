@@ -143,6 +143,35 @@ test_that("get_predicted - lm (log)", {
 })
 
 
+test_that("robust vcov", {
+  requiet("sandwich")
+  mod <- lm(mpg ~ hp, data = mtcars)
+  se0 <- get_predicted_se(mod)
+  se1 <- suppressWarnings(get_predicted_se(mod, vcov_estimation = "HC"))
+  se2 <- suppressWarnings(get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC3"))
+  se3 <- get_predicted_se(mod, vcov = "HC", vcov_args = list(type = "HC3"))
+  expect_true(all(se0 != se1))
+  expect_true(all(se1 == se2))
+  expect_true(all(se1 == se3))
+  # hardcoded values obtained before vcov_estimation was deprecated
+  expect_equal(head(se1), c(0.862974605863594, 0.862974605863594,
+                            1.04476534302177, 0.862974605863594,
+                            0.942213270105983, 0.911147902473696),
+               ignore_attr = TRUE)
+  # various user inputs
+  se1 <- suppressWarnings(get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC2"))
+  se2 <- get_predicted_se(mod, vcov = "HC2")
+  se3 <- get_predicted_se(mod, vcov = "vcovHC", vcov_args = list(type = "HC2"))
+  se4 <- get_predicted_se(mod, vcov = sandwich::vcovHC, vcov_args = list(type = "HC2"))
+  expect_true(all(se1 == se2))
+  expect_true(all(se1 == se3))
+  expect_true(all(se1 == se4))
+  se1 <- get_predicted_se(mod, vcov = "HC1")
+  se2 <- get_predicted_se(mod, vcov = sandwich::vcovHC, vcov_args = list(type = "HC1"))
+  expect_true(all(se1 == se2))
+})
+
+
 # Mixed --------------------------------------------------------------
 # =========================================================================
 
@@ -495,6 +524,25 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   expect_equal(round(x[1], 1), -1.5, tolerance = 1e-1)
   expect_equal(round(y[1], 1), .2, tolerance = 1e-1)
   expect_equal(y, z, ignore_attr = TRUE)
+
+  data <- mtcars
+  data$cyl <- as.character(data$cyl)
+  void <- capture.output(
+    model <- brm(cyl ~ mpg * vs + (1 | carb),
+                 data = data,
+                 iter = 1000,
+                 seed = 1024,
+                 algorithm = "meanfield",
+                 refresh=0,
+                 family = categorical(link = "logit", refcat = "4")
+    )
+  )
+  x <- as.data.frame(get_predicted(model))
+  # Test shape
+  expect_equal(c(nrow(x), ncol(x)), c(32 * 3, 1006))
+  # Test whether median point-estimate indeed different from default (mean)
+  expect_true(max(x$Predicted - get_predicted(model, centrality_function = stats::median)$Predicted) > 0)
+
 })
 
 

@@ -204,7 +204,7 @@ get_parameters.stanmvreg <- function(x,
     parms[[i]]$sigma <- NULL
   }
 
-  out <- as.data.frame(x)[unlist(lapply(.compact_list(parms), function(i) i[elements]))]
+  out <- as.data.frame(x)[unlist(lapply(compact_list(parms), function(i) i[elements]))]
 
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality)
@@ -424,7 +424,7 @@ get_parameters.sim.merMod <- function(x,
   if (effects %in% c("fixed", "all")) fe <- .get_armsim_fixef_parms(x)
   if (effects %in% c("random", "all")) re <- .get_armsim_ranef_parms(x)
 
-  dat <- do.call(cbind, .compact_list(list(fe, re)))
+  dat <- do.call(cbind, compact_list(list(fe, re)))
 
   out <- as.data.frame(dat)[.get_parms_data(x, effects, "all", parameters)]
 

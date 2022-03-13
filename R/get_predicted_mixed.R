@@ -159,7 +159,6 @@ get_predicted.glmmTMB <- function(x,
     # 2. and 3. step: confidence intervals and back-transform
     ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
     out <- list(predictions = predictions, ci_data = ci_data)
-
   } else {
     # 2. step: confidence intervals
     ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
@@ -247,7 +246,6 @@ get_predicted.MixMod <- function(x,
     # 2. and 3. step: confidence intervals and back-transform
     ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
     out <- list(predictions = predictions, ci_data = ci_data)
-
   } else {
 
     # 2. step: confidence intervals

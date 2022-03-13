@@ -49,7 +49,7 @@ get_statistic <- function(x, ...) {
 #' @rdname get_statistic
 #' @export
 get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
-  cs <- stats::coef(summary(x))
+  cs <- suppressWarnings(stats::coef(summary(x)))
 
   if (column_index > ncol(cs)) {
     if (isTRUE(verbose)) {
@@ -78,7 +78,6 @@ get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
 
 #' @export
 get_statistic.htest <- function(x, ...) {
-
   if (x$method == "Fisher's Exact Test for Count Data") {
     out <- data.frame(
       Parameter = x$data.name,
@@ -266,7 +265,7 @@ get_statistic.glmmTMB <- function(x,
                                   ...) {
   component <- match.arg(component)
 
-  cs <- .compact_list(stats::coef(summary(x)))
+  cs <- compact_list(stats::coef(summary(x)))
   out <- lapply(names(cs), function(i) {
     data.frame(
       Parameter = find_parameters(x, effects = "fixed", component = i, flatten = TRUE),
@@ -296,7 +295,7 @@ get_statistic.zeroinfl <- function(x,
                                    ...) {
   component <- match.arg(component)
 
-  cs <- .compact_list(stats::coef(summary(x)))
+  cs <- compact_list(stats::coef(summary(x)))
   out <- lapply(names(cs), function(i) {
     comp <- ifelse(i == "count", "conditional", "zi")
     stats <- cs[[i]]
@@ -346,7 +345,7 @@ get_statistic.MixMod <- function(x,
   s <- summary(x)
   cs <- list(s$coef_table, s$coef_table_zi)
   names(cs) <- c("conditional", "zero_inflated")
-  cs <- .compact_list(cs)
+  cs <- compact_list(cs)
 
   out <- lapply(names(cs), function(i) {
     data.frame(
@@ -416,7 +415,7 @@ get_statistic.scam <- get_statistic.gam
 #' @export
 get_statistic.SemiParBIV <- function(x, ...) {
   s <- summary(x)
-  s <- .compact_list(s[grepl("^tableP", names(s))])
+  s <- compact_list(s[grepl("^tableP", names(s))])
 
   params <- do.call(rbind, lapply(1:length(s), function(i) {
     out <- as.data.frame(s[[i]])
@@ -1365,12 +1364,12 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters
   stat <- s[["t.ratio"]]
 
   # 2nd try
-  if (.is_empty_object(stat)) {
+  if (is_empty_object(stat)) {
     stat <- s[["z.ratio"]]
   }
 
   # quit
-  if (.is_empty_object(stat)) {
+  if (is_empty_object(stat)) {
     return(NULL)
   }
 
@@ -1402,12 +1401,12 @@ get_statistic.emm_list <- function(x, ci = .95, adjust = "none", ...) {
   stat <- lapply(s, "[[", "t.ratio")
 
   # 2nd try
-  if (.is_empty_object(stat)) {
+  if (is_empty_object(stat)) {
     stat <- lapply(s, "[[", "z.ratio")
   }
 
   # quit
-  if (.is_empty_object(stat)) {
+  if (is_empty_object(stat)) {
     return(NULL)
   }
 

@@ -20,4 +20,17 @@ if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
   test_that("get_data", {
     expect_equal(colnames(get_data(m)), c("sum", "time", "group"))
   })
+
+  set.seed(1023)
+  x <- rnorm(1000, sd = 4)
+  y <- cos(x) + rnorm(1000)
+  dat <- data.frame(x, y)
+  mod1 <- lm(y ~ x, data = dat)
+  mod2 <- lm(y ~ cos(x), data = dat)
+
+  test_that("get_data", {
+    expect_equal(get_data(mod1), get_data(mod2), ignore_attr = TRUE)
+    expect_equal(get_data(mod1)$x, dat$x, ignore_attr = TRUE)
+    expect_equal(get_data(mod2)$x, dat$x, ignore_attr = TRUE)
+  })
 }

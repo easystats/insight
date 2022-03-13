@@ -131,6 +131,9 @@ reference:
   - null_model
   - print_parameters
   - starts_with("standardize_")
+  - is_empty_object
+  - starts_with("object_has_")
+  - starts_with("compact_")
   - check_if_installed
 
 - title: "Example Datasets"

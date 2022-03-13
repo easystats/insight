@@ -39,34 +39,34 @@ get_predicted.stanreg <- function(x,
   #   }
   # }
 
+  # prepare arguments, avoid possible matching by multiple actual arguments
+  fun_args <- list(x,
+                   newdata = args$data,
+                   re.form = args$re.form,
+                   ndraws = iterations,
+                   draws = iterations)
+
+  # The following makes the argument passed to predict "nsamples" or "ndraws",
+  # as it got changed in recent brms versions (but we want to preserve compatibility)
+  check_s3_method <- tryCatch(names(formals(utils::getS3method("posterior_predict", class(x)[1]))), error = function(e) NULL)
+  if (!is.null(check_s3_method) && "nsamples" %in% check_s3_method) {
+    fun_args <- c(fun_args, nsamples = iterations)
+  } else {
+    fun_args <- c(fun_args, ndraws = iterations)
+  }
+
+  # Fix dots content
+  dots <- list(...)
+  dots[["newdata"]] <- NULL
+  fun_args <- c(fun_args, dots)
+
   # Get draws
   if (args$predict == "link") {
-    draws <- rstantools::posterior_linpred(
-      x,
-      newdata = args$data,
-      re.form = args$re.form,
-      nsamples = iterations,
-      draws = iterations,
-      ...
-    )
+    draws <- do.call(rstantools::posterior_linpred, fun_args)
   } else if (args$predict %in% c("expectation", "response")) {
-    draws <- rstantools::posterior_epred(
-      x,
-      newdata = args$data,
-      re.form = args$re.form,
-      nsamples = iterations,
-      draws = iterations,
-      ...
-    )
+    draws <- do.call(rstantools::posterior_epred, fun_args)
   } else {
-    draws <- rstantools::posterior_predict(
-      x,
-      newdata = args$data,
-      re.form = args$re.form,
-      draws = iterations,
-      nsamples = iterations,
-      ...
-    )
+    draws <- do.call(rstantools::posterior_predict, fun_args)
   }
 
   # Get predictions (summarize)

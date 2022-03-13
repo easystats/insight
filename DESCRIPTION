@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.16.0.3
+Version: 0.16.0.10
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -111,6 +111,7 @@ Suggests:
     lmtest,
     logistf,
     MASS,
+    marginaleffects,
     Matrix,
     mclust,
     MCMCglmm,
@@ -150,6 +151,7 @@ Suggests:
     testthat,
     tripack,
     truncreg,
+    tweedie,
     VGAM
 VignetteBuilder: 
     knitr

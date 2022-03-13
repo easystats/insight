@@ -48,6 +48,9 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
     if ("ci_data" %in% names(attributes(x))) {
       out <- merge(out, attributes(x)$ci_data, by = c("Row", "Response"), sort = FALSE)
     }
+    if ("iterations" %in% names(attributes(x)) && keep_iterations == TRUE) {
+      out <- cbind(out, attributes(x)$iterations)
+    }
   } else {
     # Then it must be predictions from a regression model
     out <- data.frame("Predicted" = as.vector(x))

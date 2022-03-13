@@ -131,7 +131,7 @@ export_table <- function(x,
   }
 
   # sanity check
-  if (is.null(x) || (is.data.frame(x) && nrow(x) == 0) || .is_empty_object(x)) {
+  if (is.null(x) || (is.data.frame(x) && nrow(x) == 0) || is_empty_object(x)) {
     if (isTRUE(verbose)) {
       message(paste0("Can't export table to ", format, ", data frame is empty."))
     }
@@ -204,7 +204,7 @@ export_table <- function(x,
     # table from list of data frames -----------------------------------------
 
     # remove empty elements
-    l <- .compact_list(x)
+    l <- compact_list(x)
 
     # list of data frames
     tmp <- lapply(1:length(l), function(element) {
@@ -289,7 +289,6 @@ export_table <- function(x,
       }
       out <- out[1:(length(out) - 1)]
     }
-
   } else {
     # for all invalid inputs, return NULL
     return(NULL)

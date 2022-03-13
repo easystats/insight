@@ -45,7 +45,7 @@ find_parameters.betamfx <- function(x, component = c("all", "conditional", "prec
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  pars <- .compact_list(pars[elements])
+  pars <- compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))
@@ -65,7 +65,7 @@ find_parameters.betaor <- function(x, component = c("all", "conditional", "preci
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  pars <- .compact_list(pars[elements])
+  pars <- compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))
@@ -83,7 +83,7 @@ find_parameters.logitmfx <- function(x, component = c("all", "conditional", "mar
 
   component <- match.arg(component)
   elements <- .get_elements(effects = "all", component = component)
-  pars <- .compact_list(pars[elements])
+  pars <- compact_list(pars[elements])
 
   if (flatten) {
     unique(unlist(pars))
