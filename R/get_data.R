@@ -1348,7 +1348,9 @@ get_data.mlogit <- function(x, verbose = TRUE, ...) {
 get_data.rma <- function(x, verbose = TRUE, include_interval = FALSE, transf = NULL, transf_args = NULL, ci = .95, ...) {
   mf <- tryCatch(.recover_data_from_environment(x), error = function(x) NULL)
   mf_attr <- attributes(mf)
-  mf <- merge(mf, data.frame(Weight = get_weights(mod)), by = "row.names", all = TRUE)
+  mf <- merge(mf, data.frame(Weight = get_weights(mod)), by = "row.names", all = TRUE, sort = FALSE)
+  rownames(mf) <- mf$Row.names
+  mf$Row.names <- NULL
   mostattributes(mf) <- c(attributes(mf)[c("names", "row.names")],
                           mf_attr[c("yi.names", "vi.names", "digits", "class")])
   if (isTRUE(include_interval)) {
