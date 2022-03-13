@@ -29,8 +29,10 @@ format_message <- function(string, ..., line_length = options()$width) {
     line_length <- 70
   }
 
-  string <- .wrap_message_line(string, line_length)
-  further_lines <- list(...)
+  all_lines <- c(string, ...)
+
+  string <- .wrap_message_line(all_lines[1], line_length)
+  further_lines <- all_lines[-1]
 
   if (length(further_lines)) {
     further_lines <- lapply(further_lines, function(i) {

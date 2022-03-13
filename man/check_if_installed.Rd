@@ -10,6 +10,7 @@ check_if_installed(
   stop = TRUE,
   minimum_version = NULL,
   quietly = FALSE,
+  prompt = interactive(),
   ...
 )
 }
