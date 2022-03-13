@@ -925,9 +925,16 @@
       out <- unlist(lapply(vals$vc, function(x) diag(x)))
     } else if (length(non_intercepts)) {
       dn <- unlist(lapply(vals$vc, function(i) dimnames(i)[1])[non_intercepts])
-      rndslopes <- unlist(lapply(vals$vc, function(i) i[1])[non_intercepts])
+      rndslopes <- unlist(lapply(vals$vc, function(i) {
+        if (is.null(dim(i)) || identical(dim(i), c(1, 1))) {
+          as.vector(i)
+        } else {
+          as.vector(diag(i))
+        }
+      })[non_intercepts])
+
       names(rndslopes) <- gsub("(.*)\\.\\d+$", "\\1", names(rndslopes))
-      out <- c(out, stats::setNames(rndslopes, paste0(names(rndslopes), ".", dn)))
+      out <- stats::setNames(rndslopes, paste0(names(rndslopes), ".", dn))
     }
     out
   }
