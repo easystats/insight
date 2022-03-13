@@ -48,7 +48,8 @@ get_predicted.stanreg <- function(x,
 
   # The following makes the argument passed to predict "nsamples" or "ndraws",
   # as it got changed in recent brms versions (but we want to preserve compatibility)
-  if ("nsamples" %in% names(formals(utils::getS3method("posterior_predict", class(x)[1])))) {
+  check_s3_method <- tryCatch(names(formals(utils::getS3method("posterior_predict", class(x)[1]))), error = function(e) NULL)
+  if (!is.null(check_s3_method) && "nsamples" %in% check_s3_method) {
     fun_args <- c(fun_args, nsamples = iterations)
   } else {
     fun_args <- c(fun_args, ndraws = iterations)
