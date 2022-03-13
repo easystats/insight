@@ -279,6 +279,89 @@ get_predicted.bife <- function(x,
 }
 
 
+# rma -------------------------------------------------------------------
+# =======================================================================
+#' @export
+get_predicted.rma <- function(x,
+                              predict = "expectation",
+                              data = NULL,
+                              verbose = TRUE,
+                              transf = NULL,
+                              transf_args = NULL,
+                              ...) {
+  args <- .get_predicted_args(x,
+                              data = data,
+                              predict = predict,
+                              verbose = TRUE,
+                              ...
+  )
+
+  has_scale_model <- inherits(x, "rma.ls")
+  # TODO: Handle tau2.levels and gamma2.levels arguments for rma.mv()
+
+  # metafor requires data for predict to be a model matrix (with no intercept)
+  if (!is.null(data)) {
+    newmods <- .create_newmods_rma(x, data)
+    if (has_scale_model) {
+      newscale <- .create_newscale_rma(x, data)
+    }
+  }
+
+  if (predict %in% c("link", "expectation", "prediction")) {
+    if (!is.null(data)) {
+      out <- tryCatch(stats::predict(x, transf = transf, targs = transf_args), error = function(e) NULL)
+    } else if (has_scale_model) {
+      out <- tryCatch(stats::predict(x, newmods = newmods, newscale = newscale, transf = transf, targs = transf_args),
+                      error = function(e) NULL)
+    } else {
+      out <- tryCatch(stats::predict(x, newmods = newmods, transf = transf, targs = transf_args),
+                      error = function(e) NULL)
+    }
+    if (predict == "prediction") {
+      out <- setNames(
+        as.data.frame(out)[,c("pred", "se", "pi.lb", "pi.ub")],
+        c("Predicted", "SE", "CI_low", "CI_high")
+      )
+    } else {
+      out <- setNames(
+        as.data.frame(out)[,c("pred", "se", "ci.lb", "ci.ub")],
+        c("Predicted", "SE", "CI_low", "CI_high")
+      )
+    }
+  } else if (predict == "blup") {
+    if (!is.null(data)) {
+      out <- tryCatch(metafor::blup(x, transf = transf, targs = transf_args), error = function(e) NULL)
+    } else if (has_scale_model) {
+      # TODO: Remove this helper function if metafor adds support for newmods/newscale in metafor::blup()
+      out <- tryCatch(.get_blup_rma(x, newmods = newmods, newscale = newscale, transf = transf, targs = transf_args),
+                      error = function(e) NULL)
+    } else {
+      # TODO: Remove this helper function if metafor adds support for newmods in metafor::blup()
+      out <- tryCatch(.get_blup_rma(x, newmods = newmods, transf = transf, targs = transf_args),
+                      error = function(e) NULL)
+    }
+    out <- setNames(
+      as.data.frame(out),
+      c("Predicted", "SE", "CI_low", "CI_high")
+    )
+  } else {
+    stop(format_message(
+      "`predict` must be one of 'link', 'expectation', 'prediction', or 'blup'."
+    ), call. = FALSE)
+  }
+
+  if (!is.null(out)) {
+    # Handle single-row output from intercept-only models
+    if (nrow(out) == 1) {
+      out <- do.call(rbind, lapply(seq_along(x$slab), function(i) out))
+    }
+    out <- .get_predicted_out(out, args = list("data" = data))
+  }
+
+  out
+}
+
+
 
 
 # ====================================================================
@@ -501,3 +584,33 @@ get_predicted.bife <- function(x,
   attr(predictions, "iterations") <- iter
   predictions
 }
+
+
+
+# -------------------------------------------------------------------------
+
+.create_newmods_rma <- function(x, data, ...) {
+
+}
+
+.create_newscale_rma <- function(x, data, ...) {
+
+}
+
+.get_blup_rma <- function(x, data, ...) {
+
+
+
+  if (is.element(x$test, c("knha", "adhoc", "t"))) {
+    crit <- qt(level/2, df = x$ddf, lower.tail = FALSE)
+  }
+  else {
+    crit <- qnorm(level/2, lower.tail = FALSE)
+  }
+
+
+}
+
+
+
+
