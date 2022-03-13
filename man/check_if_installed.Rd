@@ -33,6 +33,9 @@ packages are installed, \code{FALSE} otherwise, and does not stop or throw a
 warning. If \code{quietly = TRUE}, argument \code{stop} is ignored. Use this argument
 to internally check for package dependencies without stopping or warnings.}
 
+\item{prompt}{If \code{TRUE}, will prompt the user to install needed package(s).
+Ignored if \code{quietly = TRUE}.}
+
 \item{...}{Currently ignored}
 }
 \value{
