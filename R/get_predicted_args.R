@@ -65,10 +65,17 @@
       )
     }
   )
+  # check whether model class has a predict method
   predict_method <- tryCatch(predict_method[!sapply(predict_method, is.null)][[1]], error = function(e) NULL)
+  # define easystats prediction-types
+  easystats_methods <- c("expectation", "link", "prediction", "classification")
+  # retrieve model object's predict-method prediction-types (if any)
+  type_methods <- suppressWarnings(eval(formals(predict_method)$type))
+  # and together, these prediction-types are supported...
+  supported <- c(easystats_methods, type_methods)
 
-  # check aliases
-  if (predict %in% c("expected", "response")) {
+  # check aliases - ignore "expected" when this is a valid type-argument (e.g. coxph)
+  if (predict %in% c("expected", "response") && !"expected" %in% supported) {
     predict <- "expectation"
   }
   if (predict == "predicted") {
@@ -89,9 +96,6 @@
 
   # Warn if get_predicted() is not called with an easystats- or
   # model-supported predicted type
-  easystats_methods <- c("expectation", "link", "prediction", "classification")
-  type_methods <- suppressWarnings(eval(formals(predict_method)$type))
-  supported <- c(easystats_methods, type_methods)
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
     msg <- format_message(
       sprintf('`predict` = "%s"` is not officially supported by `get_predicted()`.', predict),
@@ -135,7 +139,7 @@
       type_arg <- "count"
     } else if (inherits(x, "coxph")) {
       # survival: coxph
-      type_arg <- "risk"
+      type_arg <- "lp"
     } else {
       # default behaviour for "response"
       type_arg <- "link"
@@ -145,7 +149,12 @@
 
     # link-scale
   } else if (predict == "link") {
-    type_arg <- "link"
+    if (inherits(x, "coxph")) {
+      # survival: coxph
+      type_arg <- "lp"
+    } else {
+      type_arg <- "link"
+    }
     scale_arg <- "link"
     transform <- FALSE
 
@@ -159,6 +168,16 @@
     } else if (predict == "zero") {
       # pscl
       type_arg <- "zero"
+      scale_arg <- "link"
+      transform <- FALSE
+    } else if (predict %in% c("risk", "lp")) {
+      # cosph
+      type_arg <- "lp"
+      scale_arg <- "link"
+      transform <- predict == "risk"
+    } else if (predict == "lp") {
+      # coxph
+      type_arg <- "lp"
       scale_arg <- "link"
       transform <- FALSE
     } else {
