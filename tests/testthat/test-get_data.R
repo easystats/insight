@@ -24,7 +24,7 @@ if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
   set.seed(1023)
   x <- rnorm(1000, sd = 4)
   y <- cos(x) + rnorm(1000)
-  dat <- data.frame(x, y)
+  dat <<- data.frame(x, y)
   mod1 <- lm(y ~ x, data = dat)
   mod2 <- lm(y ~ cos(x), data = dat)
 
