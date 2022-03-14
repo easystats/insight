@@ -27,7 +27,7 @@
 
   # backtransform variables, such as log, sqrt etc ----------------------------
 
-  mf <- .backtransform(mf)
+  mf <- .backtransform(mf, x)
 
   # clean 1-dimensional matrices ---------------------------------------------
 
@@ -685,15 +685,16 @@
 
 # backtransform variables -------------------------------
 
-.backtransform <- function(mf) {
+.backtransform <- function(mf, x) {
   tryCatch(
     {
       patterns <- c(
         "scale\\(log", "exp\\(scale", "log\\(log", "log", "log1p",
-        "log10", "log2", "sqrt", "exp", "expm1", "scale"
+        "log10", "log2", "sqrt", "exp", "expm1", "scale", "cos", "sin",
+        "tan", "acos", "asin", "atan"
       )
       for (i in patterns) {
-        mf <- .backtransform_helper(mf, i)
+        mf <- .backtransform_helper(mf, i, x)
       }
       mf
     },
@@ -704,7 +705,7 @@
 }
 
 
-.backtransform_helper <- function(mf, type) {
+.backtransform_helper <- function(mf, type, model) {
   cn <- .get_transformed_names(colnames(mf), type)
   if (!.is_empty_string(cn)) {
     for (i in cn) {
@@ -730,6 +731,8 @@
         mf[[i]] <- log1p(mf[[i]])
       } else if (type == "scale") {
         mf[[i]] <- .unscale(mf[[i]])
+      } else if (type %in% c("cos", "sin", "tan", "acos", "asin", "atan")) {
+        mf[[i]] <- .recover_data_from_environment(model)[[i]]
       }
       colnames(mf)[colnames(mf) == i] <- .get_transformed_terms(i, type)
     }
