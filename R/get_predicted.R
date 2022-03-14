@@ -144,23 +144,51 @@ get_predicted <- function(x, ...) {
 # default methods ---------------------------
 
 #' @export
-get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
+get_predicted.default <- function(x, data = NULL, predict = NULL, verbose = TRUE, ...) {
 
-  # many predict.CLASS methods do not work when `newdata` is explicitly specified, even if it is NULL
-  if (is.null(data)) {
-    args <- c(list(x), list(...))
+  # evaluate arguments
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+
+  # evaluate dots, remove some arguments that might be duplicated else
+  dot_args <- list(...)
+  dot_args[["newdata"]] <- NULL
+  dot_args[["type"]] <- NULL
+
+
+  # 1. step: predictions
+  predict_args <- compact_list(list(x, newdata = args$data, type = args$type, dot_args))
+  predictions <- tryCatch(do.call("predict", predict_args), error = function(e) NULL)
+
+  if (is.null(predictions)) {
+    predictions <- tryCatch(do.call("fitted", predict_args), error = function(e) NULL)
+  }
+
+  # 2. step: confidence intervals
+  ci_data <- tryCatch(
+    {
+      get_predicted_ci(
+        x,
+        predictions,
+        data = args$data,
+        ci_type = args$ci_type,
+        ...
+      )
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  # 3. step: back-transform
+  if (!is.null(predictions)) {
+    out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
   } else {
-    args <- c(list(x, "newdata" = data), list(...))
+    out <- NULL
   }
 
-  out <- tryCatch(do.call("predict", args), error = function(e) NULL)
-
-  if (is.null(out)) {
-    out <- tryCatch(do.call("fitted", args), error = function(e) NULL)
-  }
-
+  # 4. step: final preparation
   if (!is.null(out)) {
-    out <- .get_predicted_out(out, args = list("data" = data))
+    out <- .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
   }
 
   out
@@ -254,8 +282,60 @@ get_predicted.survreg <- get_predicted.lm
 
 
 
+# survival: coxph -------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterations = NULL, verbose = TRUE, ...) {
+
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+  se <- NULL
+
+  predict_function <- function(x, data, ...) {
+    stats::predict(x, newdata = data, type = args$type, ...)
+  }
+
+  # 1. step: predictions
+  if (is.null(iterations)) {
+    predictions <- predict_function(x, data = args$data, se.fit = TRUE)
+    if (is.list(predictions)) {
+      se <- as.vector(predictions$se.fit)
+      predictions <- as.vector(predictions$fit)
+    }
+  } else {
+    predictions <- .get_predicted_boot(
+      x,
+      data = args$data,
+      predict_function = predict_function,
+      iterations = iterations,
+      verbose = verbose,
+      ...
+    )
+  }
+
+  # 2. step: confidence intervals
+  ci_data <- get_predicted_ci(
+    x,
+    predictions,
+    data = args$data,
+    ci_type = args$ci_type,
+    se = se,
+    ...
+  )
+
+  # 3. step: back-transform
+  out <- .get_predicted_transform(x, predictions, args, ci_data, link_inv = exp, verbose = verbose)
+
+  # 4. step: final preparation
+  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+}
+
+
+
+
 # bife ------------------------------------------------------------------
 # =======================================================================
+
 #' @export
 get_predicted.bife <- function(x,
                                predict = "expectation",
@@ -270,6 +350,33 @@ get_predicted.bife <- function(x,
   )
 
   out <- tryCatch(stats::predict(x, type = args$scale, X_new = args$data), error = function(e) NULL)
+
+  if (!is.null(out)) {
+    out <- .get_predicted_out(out, args = list("data" = data))
+  }
+
+  out
+}
+
+
+
+
+# afex ------------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.afex_aov <- function(x, data = NULL, ...) {
+  if (is.null(data)) {
+    args <- c(list(x), list(...))
+  } else {
+    args <- c(list(x, "newdata" = data), list(...))
+  }
+
+  out <- tryCatch(do.call("predict", args), error = function(e) NULL)
+
+  if (is.null(out)) {
+    out <- tryCatch(do.call("fitted", args), error = function(e) NULL)
+  }
 
   if (!is.null(out)) {
     out <- .get_predicted_out(out, args = list("data" = data))
@@ -334,7 +441,7 @@ get_predicted.bife <- function(x,
 
     # retrieve link-inverse, for back transformation...
     if (is.null(link_inv)) {
-      link_inv <- link_inverse
+      link_inv <- link_inverse(x)
     }
 
     if (!is.null(ci_data)) {
@@ -344,7 +451,7 @@ get_predicted.bife <- function(x,
       # fix for R 3.4
       row.names(ci_data) <- NULL
 
-      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inv(x))
+      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inv)
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
       # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
@@ -362,11 +469,11 @@ get_predicted.bife <- function(x,
     }
 
     # Transform predictions
-    predictions <- link_inv(x)(predictions)
+    predictions <- link_inv(predictions)
 
     # Transform iterations
     if ("iterations" %in% names(attributes(predictions))) {
-      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv(x)))
+      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv))
     }
 
     # Transform to response "type"
