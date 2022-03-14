@@ -133,6 +133,9 @@
     if (inherits(x, c("hurdle", "zeroinfl", "zerotrunc"))) {
       # pscl: hurdle/zeroinfl and countreg
       type_arg <- "count"
+    } else if (inherits(x, "coxph")) {
+      # survival: coxph
+      type_arg <- "risk"
     } else {
       # default behaviour for "response"
       type_arg <- "link"
