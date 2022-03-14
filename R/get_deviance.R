@@ -9,7 +9,7 @@
 #'
 #' @details For GLMMs of class `glmerMod`, `glmmTMB` or `MixMod`,
 #' the *absolute unconditional* deviance is returned (see 'Details' in
-#' `?lme4::`merMod-class``), i.e. minus twice the log-likelihood. To get
+#' `?lme4::merMod-class`), i.e. minus twice the log-likelihood. To get
 #' the *relative conditional* deviance (relative to a saturated model,
 #' conditioned on the conditional modes of random effects), use `deviance()`.
 #' The value returned `get_deviance()` usually equals the deviance-value
@@ -92,8 +92,8 @@ get_deviance.stanreg <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-get_deviance.lmerMod <- function(x, ...) {
-  stats::deviance(x, REML = FALSE, ...)
+get_deviance.lmerMod <- function(x, REML = FALSE, ...) {
+  stats::deviance(x, REML = REML, ...)
 }
 
 

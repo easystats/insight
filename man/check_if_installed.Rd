@@ -10,6 +10,7 @@ check_if_installed(
   stop = TRUE,
   minimum_version = NULL,
   quietly = FALSE,
+  prompt = interactive(),
   ...
 )
 }
@@ -23,14 +24,17 @@ generic description.}
 \item{stop}{Logical that decides whether the function should stop if the
 needed package is not installed.}
 
-\item{minimum_version}{String, representing the minimum package version that
-is required. If \code{NULL}, no check for minimum version is done. Note
-that \code{minimum_version} only works when \code{package} is of length 1.}
+\item{minimum_version}{A character vector, representing the minimum package
+version that is required for each package. Should be of same length as
+\code{package}. If \code{NULL}, no check for minimum version is done.}
 
 \item{quietly}{Logical, if \code{TRUE}, invisibly returns either \code{TRUE} if all
 packages are installed, \code{FALSE} otherwise, and does not stop or throw a
 warning. If \code{quietly = TRUE}, argument \code{stop} is ignored. Use this argument
 to internally check for package dependencies without stopping or warnings.}
+
+\item{prompt}{If \code{TRUE}, will prompt the user to install needed package(s).
+Ignored if \code{quietly = TRUE}.}
 
 \item{...}{Currently ignored}
 }

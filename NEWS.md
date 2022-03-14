@@ -42,6 +42,9 @@
   or random effects are the same across models, if all models are mixed models
   or null-models, etc.)
 
+* `check_if_installed()` now works interactively and lets the user prompt
+  whether to automatically update or install packages.
+
 ## Bug fixes
 
 * Fixed incorrect column name conversion in `standardize_names()` for certain

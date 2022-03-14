@@ -25,11 +25,11 @@ Returns model deviance (see \code{stats::deviance()}).
 \details{
 For GLMMs of class \code{glmerMod}, \code{glmmTMB} or \code{MixMod},
 the \emph{absolute unconditional} deviance is returned (see 'Details' in
-\verb{?lme4::}merMod-class``), i.e. minus twice the log-likelihood. To get
+\code{?lme4::merMod-class}), i.e. minus twice the log-likelihood. To get
 the \emph{relative conditional} deviance (relative to a saturated model,
 conditioned on the conditional modes of random effects), use \code{deviance()}.
-The value returned `get_deviance()` usually equals the deviance-value
-from the `summary()`.
+The value returned \code{get_deviance()} usually equals the deviance-value
+from the \code{summary()}.
 }
 \examples{
 data(mtcars)

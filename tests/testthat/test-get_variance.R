@@ -109,6 +109,7 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
 
   test_that("get_variance-7", {
     expect_equal(
+      vmodel,
       list(var.fixed = 908.95336, var.random = 627.56905, var.residual = 653.5835,
            var.distribution = 653.5835, var.dispersion = 0, var.intercept = c(Subject = 627.56905),
            var.slope = c(Subject.Days = 35.85838)),
@@ -121,6 +122,7 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
 
   test_that("get_variance-8", {
     expect_equal(
+      vmodel,
       list(var.fixed = 908.95336, var.random = 1502.179, var.residual = 842.02962,
            var.distribution = 842.02962, var.dispersion = 0, var.slope = c(Subject.Days = 52.70804)),
       tolerance = 1e-2
@@ -156,10 +158,11 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
       vmodel,
       list(var.fixed = 807.08545355676, var.residual = 740.875581179784,
            var.distribution = 740.875581179784, var.dispersion = 0,
-           var.intercept = c(Subject = 738.635155172211), var.slope = c(`Subject.Days2(-1,3]` = 0,
-                                                                        `Subject.Days2(3,6]` = 994.015865559888, `Subject.Days2(6,10]` = 1545.72576115283
-           ), cor.slope_intercept = c(`Subject.1.Days2(3,6]` = NaN,
-                                      `Subject.1.Days2(6,10]` = NaN)),
+           var.intercept = c(Subject = 738.635155172211),
+           var.slope = c(`Subject.Days2(-1,3]` = 0,
+                         `Subject.Days2(3,6]` = 994.015865559888,
+                         `Subject.Days2(6,10]` = 1545.72576115283),
+           cor.slope_intercept = c(`Subject.1.Days2(3,6]` = NaN, `Subject.1.Days2(6,10]` = NaN)),
       tolerance = 1e-2
     )
   })

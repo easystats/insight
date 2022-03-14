@@ -242,6 +242,9 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     message(insight::format_message(msg))
   }
 
+  # determine which is linear model
+  attr(objects, "is_linear") <- sapply(objects, function(i) isTRUE(model_info(i)$is_linear))
+
   objects
 }
 

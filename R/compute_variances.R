@@ -918,6 +918,7 @@
   if (inherits(x, "lme")) {
     unlist(lapply(vals$vc, function(x) diag(x)[-1]))
   } else {
+    # random slopes for correlated slope-intercept
     out <- unlist(lapply(vals$vc, function(x) diag(x)[-1]))
     # check for uncorrelated random slopes-intercept
     non_intercepts <- which(sapply(vals$vc, function(i) !grepl("^\\(Intercept\\)", dimnames(i)[[1]][1])))
@@ -932,9 +933,31 @@
           as.vector(diag(i))
         }
       })[non_intercepts])
-
+      # random slopes for uncorrelated slope-intercept
       names(rndslopes) <- gsub("(.*)\\.\\d+$", "\\1", names(rndslopes))
-      out <- stats::setNames(rndslopes, paste0(names(rndslopes), ".", dn))
+      rndslopes <- stats::setNames(rndslopes, paste0(names(rndslopes), ".", dn))
+      # anything missing? (i.e. correlated slope-intercept slopes)
+      missig_rnd_slope <- setdiff(names(out), names(rndslopes))
+      if (length(missig_rnd_slope)) {
+        # sanity check
+        to_remove <- c()
+        for (j in 1:length(out)) {
+          # identical random slopes might have different names, so
+          # we here check if random slopes from correlated and uncorrelated
+          # are duplicated (i.e. their difference is 0 - including a tolerance)
+          # and then remove duplicated elements
+          the_same <- which(abs(outer(out[j], rndslopes, `-`)) < .0001)
+          if (length(the_same) && grepl(dn[the_same], names(out[j]), fixed = TRUE)) {
+            to_remove <- c(to_remove, j)
+          }
+        }
+        if (length(to_remove)) {
+          out <- out[-to_remove]
+        }
+        out <- c(out, rndslopes)
+      } else {
+        out <- rndslopes
+      }
     }
     out
   }
