@@ -54,6 +54,9 @@
 
 * Fixed issue with `get_datagrid()` for *brms* models with monotonic factors.
 
+* Fixed issue in `find_formula()` when argument `correlation` was defined 
+outside of `lme()` and `gls()` (@etiennebacher, #525).
+
 * Fixed issue with `get_data()` when back-transforming data from predictors 
   that used `cos()`, `sin()` or `tan()` transformations.
 
