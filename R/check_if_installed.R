@@ -31,6 +31,7 @@
 #' x
 #' }
 #' @export
+#' @importFrom utils install.packages
 check_if_installed <- function(package,
                                reason = "for this function to work",
                                stop = TRUE,
@@ -69,7 +70,7 @@ check_if_installed <- function(package,
                                  if (grepl("them", what_you_can_do)) "them" else "it")
       should_install <- readline(format_message(what_is_wrong, what_you_can_do))
       if (tolower(should_install) == "y") {
-        install.packages(package)
+        utils::install.packages(package, ...)
         return(invisible(is_installed))
       }
     } else {
