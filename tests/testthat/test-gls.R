@@ -7,7 +7,7 @@ if (requiet("testthat") &&
     correlation = corAR1(form = ~ 1 | Mare)
   )
 
-  cr <- corAR1(form = ~ 1 | Mare)
+  cr <<- corAR1(form = ~ 1 | Mare)
   m2 <- gls(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary,
              correlation = cr)
 
