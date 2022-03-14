@@ -518,7 +518,6 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
       idvar = "Row"
     )
     row.names(predictions) <- NULL
-    predictions$Row <- NULL
   }
 
   class(predictions) <- c("get_predicted", class(predictions))
