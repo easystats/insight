@@ -506,13 +506,17 @@ find_formula.gls <- function(x, verbose = TRUE, ...) {
   ## TODO this is an intermediate fix to return the correlation variables from gls-objects
   fcorr <- x$call$correlation
   if (!is.null(fcorr)) {
-    f_corr <- parse(text = .safe_deparse(x$call$correlation))[[1]]
+    if (inherits(fcorr, "name")) {
+      f_corr <- attributes(eval(fcorr))$formula
+    } else {
+      f_corr <- parse(text = .safe_deparse(fcorr))[[1]]
+    }
   } else {
     f_corr <- NULL
   }
   if (is.symbol(f_corr)) {
     f_corr <- paste("~", .safe_deparse(f_corr))
-  } else {
+  } else if (!inherits(f_corr, "formula")) {
     f_corr <- f_corr$form
   }
 
@@ -1177,7 +1181,11 @@ find_formula.lme <- function(x, verbose = TRUE, ...) {
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
   if (!is.null(fcorr)) {
-    fc <- parse(text = .safe_deparse(x$call$correlation))[[1]]$form
+    if (inherits(fcorr, "name")) {
+      fc <- attributes(eval(fcorr))$formula
+    } else {
+      fc <- parse(text = .safe_deparse(fcorr))[[1]]$form
+    }
   } else {
     fc <- NULL
   }
