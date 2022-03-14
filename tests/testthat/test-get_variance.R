@@ -109,6 +109,7 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
 
   test_that("get_variance-7", {
     expect_equal(
+      vmodel,
       list(var.fixed = 908.95336, var.random = 627.56905, var.residual = 653.5835,
            var.distribution = 653.5835, var.dispersion = 0, var.intercept = c(Subject = 627.56905),
            var.slope = c(Subject.Days = 35.85838)),
@@ -121,6 +122,7 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
 
   test_that("get_variance-8", {
     expect_equal(
+      vmodel,
       list(var.fixed = 908.95336, var.random = 1502.179, var.residual = 842.02962,
            var.distribution = 842.02962, var.dispersion = 0, var.slope = c(Subject.Days = 52.70804)),
       tolerance = 1e-2
