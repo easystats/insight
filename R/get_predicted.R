@@ -411,6 +411,7 @@ get_predicted.bife <- function(x,
       idvar = "Row"
     )
     row.names(predictions) <- NULL
+    predictions$Row <- NULL
   }
 
   class(predictions) <- c("get_predicted", class(predictions))
