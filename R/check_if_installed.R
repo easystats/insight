@@ -31,7 +31,6 @@
 #' x
 #' }
 #' @export
-#' @importFrom utils install.packages
 check_if_installed <- function(package,
                                reason = "for this function to work",
                                stop = TRUE,
