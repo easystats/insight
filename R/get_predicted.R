@@ -144,23 +144,51 @@ get_predicted <- function(x, ...) {
 # default methods ---------------------------
 
 #' @export
-get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
+get_predicted.default <- function(x, data = NULL, predict = NULL, verbose = TRUE, ...) {
 
-  # many predict.CLASS methods do not work when `newdata` is explicitly specified, even if it is NULL
-  if (is.null(data)) {
-    args <- c(list(x), list(...))
+  # evaluate arguments
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+
+  # evaluate dots, remove some arguments that might be duplicated else
+  dot_args <- list(...)
+  dot_args[["newdata"]] <- NULL
+  dot_args[["type"]] <- NULL
+
+
+  # 1. step: predictions
+  predict_args <- compact_list(list(x, newdata = args$data, type = args$type, dot_args))
+  predictions <- tryCatch(do.call("predict", predict_args), error = function(e) NULL)
+
+  if (is.null(predictions)) {
+    predictions <- tryCatch(do.call("fitted", predict_args), error = function(e) NULL)
+  }
+
+  # 2. step: confidence intervals
+  ci_data <- tryCatch(
+    {
+      get_predicted_ci(
+        x,
+        predictions,
+        data = args$data,
+        ci_type = args$ci_type,
+        ...
+      )
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  # 3. step: back-transform
+  if (!is.null(predictions)) {
+    out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
   } else {
-    args <- c(list(x, "newdata" = data), list(...))
+    out <- NULL
   }
 
-  out <- tryCatch(do.call("predict", args), error = function(e) NULL)
-
-  if (is.null(out)) {
-    out <- tryCatch(do.call("fitted", args), error = function(e) NULL)
-  }
-
+  # 4. step: final preparation
   if (!is.null(out)) {
-    out <- .get_predicted_out(out, args = list("data" = data))
+    out <- .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
   }
 
   out
