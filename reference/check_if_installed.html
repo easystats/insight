@@ -73,6 +73,7 @@
   stop <span class="op">=</span> <span class="cn">TRUE</span>,
   minimum_version <span class="op">=</span> <span class="cn">NULL</span>,
   quietly <span class="op">=</span> <span class="cn">FALSE</span>,
+  prompt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -97,6 +98,9 @@ that <code>minimum_version</code> only works when <code>package</code> is of len
 packages are installed, <code>FALSE</code> otherwise, and does not stop or throw a
 warning. If <code>quietly = TRUE</code>, argument <code>stop</code> is ignored. Use this argument
 to internally check for package dependencies without stopping or warnings.</p></dd>
+<dt>prompt</dt>
+<dd><p>If <code>TRUE</code>, will prompt the user to install needed package(s).
+Ignored if <code>quietly = TRUE</code>.</p></dd>
 <dt>...</dt>
 <dd><p>Currently ignored</p></dd>
 </dl></div>
