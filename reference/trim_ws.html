@@ -106,7 +106,10 @@ only processes character vectors.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>(tbd)</p>
+    <p>For a vector, <code>n_unique</code> always returns an integer value, even if the
+input is <code>NULL</code> (the return value will be <code>0</code> then). For data frames or lists,
+<code>n_unique()</code> returns a named numeric vector, with the number of unique values
+for each element.</p>
     </div>
 
     <div class="section level2">
