@@ -229,12 +229,13 @@ find_predictors.afex_aov <- function(x,
     if (inherits(x, "coxph")) {
       f_cond <- safe_deparse(f[["conditional"]])
 
-      ## TODO wait for https://github.com/easystats/insight/issues/507
-      if (FALSE && grepl("strata(", f_cond, fixed = TRUE)) {
-        strata <- gsub("(.*)strata\\((.*)\\)(.*)", "\\2", f_cond)
-        non_strata <- gsub("(.*)strata\\((.*)\\)(.*)", "\\1\\3", f_cond)
+      if (grepl("strata(", f_cond, fixed = TRUE)) {
+        yes_strata <- ".*strata\\((.*)\\).*"
+        no_strata <- "strata\\(.*\\)\\s*[\\+|\\*]*|[\\+|\\*]\\s*strata\\(.*\\)"
+        strata <- gsub(yes_strata, "\\1", f_cond)
+        non_strata <- trim_ws(gsub("~", "", gsub(no_strata, "\\1", f_cond), fixed = TRUE))
         f$strata <- stats::reformulate(strata)
-        f$condtional <- stats::reformulate(non_strata)
+        f$conditional <- stats::reformulate(non_strata)
       }
     }
   }
