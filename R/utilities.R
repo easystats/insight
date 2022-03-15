@@ -13,7 +13,10 @@
 #' only processes character vectors.
 #' @param ... Currently not used.
 #'
-#' @return (tbd)
+#' @return For a vector, `n_unique` always returns an integer value, even if the
+#' input is `NULL` (the return value will be `0` then). For data frames or lists,
+#' `n_unique()` returns a named numeric vector, with the number of unique values
+#' for each element.
 #'
 #' @examples
 #' trim_ws("  no space!  ")

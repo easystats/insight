@@ -927,7 +927,7 @@ print.insight_table <- function(x, ...) {
     # remove, but we may check if all printed sub titles look like intended
 
     for (i in group_by_columns) {
-      if (.n_unique(final[[i]]) <= 1) {
+      if (n_unique(final[[i]]) <= 1) {
         final[[i]] <- NULL
       }
     }

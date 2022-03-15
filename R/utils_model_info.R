@@ -138,7 +138,7 @@
 
   if (inherits(x, c("lrm", "blrm"))) {
     resp <- get_response(x, verbose = FALSE)
-    if (.n_unique(resp) == 2) {
+    if (n_unique(resp) == 2) {
       binom_fam <- TRUE
     } else {
       is.ordinal <- TRUE

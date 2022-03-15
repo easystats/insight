@@ -1757,7 +1757,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   parts <- trim_ws(unlist(strsplit(split = pattern, x = RHS, perl = TRUE)))
   d_RHS <- unique(gsub("(.*)\\$(.*)", "\\1", parts[grepl("(.*)\\$(.*)", parts)]))
 
-  if (.n_unique(c(d_LHS, d_RHS)) > 1) {
+  if (n_unique(c(d_LHS, d_RHS)) > 1) {
     stop("Multiple data objects present in formula. Specify your model using the `data` argument instead.", call. = FALSE)
   } else {
     d <- unique(d_RHS)

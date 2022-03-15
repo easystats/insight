@@ -29,7 +29,10 @@ only processes character vectors.}
 \item{na.rm}{Logical, if missing values should be removed from the input.}
 }
 \value{
-(tbd)
+For a vector, \code{n_unique} always returns an integer value, even if the
+input is \code{NULL} (the return value will be \code{0} then). For data frames or lists,
+\code{n_unique()} returns a named numeric vector, with the number of unique values
+for each element.
 }
 \description{
 Collection of small helper functions. \code{trim_ws()} is an

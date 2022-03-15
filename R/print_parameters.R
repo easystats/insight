@@ -210,7 +210,7 @@ print_parameters <- function(x,
     # we don't need "Effects" and "Component" column any more, and probably
     # also no longer the "Group" column
     columns_to_remove <- c("Effects", "Component", "Cleaned_Parameter")
-    if (.n_unique(.group) == 1) {
+    if (n_unique(.group) == 1) {
       columns_to_remove <- c(columns_to_remove, "Group")
     } else {
       .group <- NULL
