@@ -508,11 +508,21 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
   # multidimensional or "grouped" predictions (e.g., nnet::multinom with `predict(type="probs")`)
   if (is.matrix(predictions) && ncol(predictions) > 1) {
     predictions <- as.data.frame(predictions)
+    vary <- colnames(predictions)
     predictions$Row <- 1:nrow(predictions)
+    # if we have any focal predictors, add those as well, so we have
+    # the associated levels/values for "Row"
+    if (!is.null(args$data)) {
+      focal_predictors <- tryCatch(names(which(n_unique(args$data) > 1)),
+                                   error = function(e) NULL)
+      if (!is.null(focal_predictors)) {
+        predictions <- cbind(predictions, args$data[focal_predictors])
+      }
+    }
     predictions <- stats::reshape(predictions,
       direction = "long",
-      varying = setdiff(colnames(predictions), "Row"),
-      times = setdiff(colnames(predictions), "Row"),
+      varying = vary,
+      times = vary,
       v.names = "Predicted",
       timevar = "Response",
       idvar = "Row"
