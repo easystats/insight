@@ -62,7 +62,6 @@ reference:
   - get_loglikelihood
   - get_modelmatrix
   - get_predicted
-  - get_predicted_ci
   - get_priors
   - get_residuals
   - get_sigma

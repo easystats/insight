@@ -1,8 +1,3 @@
-#' Confidence and Prediction Interval for Model Predictions
-#'
-#' Returns the Confidence (or Prediction) Interval (CI) associated with
-#' predictions made by a model.
-#'
 #' @inheritParams get_predicted
 #' @param predictions A vector of predicted values (as obtained by
 #'   `stats::fitted()`, `stats::predict()` or
@@ -28,26 +23,24 @@
 #'  * A covariance matrix
 #'  * A function which returns a covariance matrix (e.g., `stats::vcov()`)
 #'  * A string which indicates the kind of uncertainty estimates to return.
-#'    - Heteroskedasticity-consistent: "vcovHC", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5". See `?sandwich::vcovHC`
-#'    - Cluster-robust: "vcovCR", "CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3". See `?clubSandwich::vcovCR()`
-#'    - Bootstrap: "vcovBS", "xy", "residual", "wild", "mammen", "webb". See `?sandwich::vcovBS`
-#'    - Other `sandwich` package functions: "vcovHAC", "vcovPC", "vcovCL", "vcovPL"
+#'    - Heteroskedasticity-consistent: `"vcovHC"`, `"HC"`, `"HC0"`, `"HC1"`, `"HC2"`, `"HC3"`, `"HC4"`, `"HC4m"`, `"HC5"`. See `?sandwich::vcovHC`
+#'    - Cluster-robust: `"vcovCR"`, `"CR0"`, `"CR1"`, `"CR1p"`, `"CR1S"`, `"CR2"`, `"CR3"`. See `?clubSandwich::vcovCR()`
+#'    - Bootstrap: `"vcovBS"`, `"xy"`, `"residual"`, `"wild"`, `"mammen"`, `"webb"`. See `?sandwich::vcovBS`
+#'    - Other `sandwich` package functions: `"vcovHAC"`, `"vcovPC"`, `"vcovCL"`, `"vcovPL"`.
 #' @param vcov_args List of arguments to be passed to the function identified by
-#'   the `vcov` argument. This function is typically supplied by the `sandwich`
-#'   or `clubSandwich` packages. Please refer to their documentation (e.g.,
+#'   the `vcov` argument. This function is typically supplied by the **sandwich**
+#'   or **clubSandwich** packages. Please refer to their documentation (e.g.,
 #'   `?sandwich::vcovHAC`) to see the list of available arguments.
 #' @param dispersion_method,ci_method These arguments are only used in
 #'   the context of bootstrapped and Bayesian models. Possible values are
 #'   `dispersion_method = c("sd", "mad")` and
 #'   `ci_method = c("quantile", "hdi", "eti")`. For the latter, the
-#'   \pkg{bayestestR} package is required.
-#' @param ... Not used for now.
-#'
-#'
-#' @return The Confidence (or Prediction) Interval (CI).
-#'
+#'   **bayestestR** package is required.
 #'
 #' @examples
+#' # Confidence Intervals for Model Predictions
+#' # ------------------------------------------
+#'
 #' data(mtcars)
 #'
 #' # Linear model
@@ -88,6 +81,7 @@
 #' head(ci_vals)
 #' ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 #' head(ci_vals)
+#' @rdname get_predicted
 #' @export
 get_predicted_ci <- function(x, predictions = NULL, ...) {
   UseMethod("get_predicted_ci")
@@ -98,7 +92,7 @@ get_predicted_ci <- function(x, predictions = NULL, ...) {
 
 # General method ----------------------------------------------------------
 
-#' @rdname get_predicted_ci
+#' @rdname get_predicted
 #' @export
 get_predicted_ci.default <- function(x,
                                      predictions = NULL,

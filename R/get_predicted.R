@@ -1,6 +1,22 @@
-#' Model Predictions (robust)
+#' @title Model predictions (robust) and their confidence intervals
+#' @name get_predicted
 #'
-#' The `get_predicted()` function is a robust, flexible and user-friendly alternative to base R [predict()] function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's `predict` function. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the `Details` section for more information.
+#' @description
+#' The `get_predicted()` function is a robust, flexible and user-friendly
+#' alternative to base R [predict()] function. Additional features and
+#' advantages include availability of uncertainty intervals (CI), bootstrapping,
+#' a more intuitive API and the support of more models than base R's `predict()`
+#' function. However, although the interface are simplified, it is still very
+#' important to read the documentation of the arguments. This is because making
+#' "predictions" (a lose term for a variety of things) is a non-trivial process,
+#' with lots of caveats and complications. Read the 'Details' section for more
+#' information.
+#' \cr \cr
+#' `get_predicted_ci()` returns the confidence (or prediction) interval (CI)
+#' associated with predictions made by a model. This function can be called
+#' separately on a vector of predicted values. `get_predicted()` usually
+#' returns confidence intervals (included as attribute, and accessible via the
+#' `as.data.frame()` method) by default.
 #'
 #' @param x A statistical model (can also be a data.frame, in which case the
 #'   second argument has to be a model).
@@ -32,17 +48,15 @@
 #'   will fix the value of the smooth to its average, so that the predictions
 #'   are not depending on it. (default), `mean()`, or
 #'   `bayestestR::map_estimate()`.
-#' @param ... Other argument to be passed, for instance to [get_predicted_ci()].
+#' @param ... Other argument to be passed, for instance to `get_predicted_ci()`.
 #'   This can be used to request confidence intervals based on robust standard
-#'   errors, e.g. by specifying the `vcov_*` arguments from [get_predicted_ci()]
-#'   directly in the call to `get_predicted()`.
+#'   errors, e.g. by specifying the `vcov` and `vcov_args` arguments from
+#'   `get_predicted_ci()` directly in the call to `get_predicted()`.
 #' @inheritParams get_df
-#'
-#' @seealso [get_predicted_ci()]
 #'
 #' @return The fitted values (i.e. predictions for the response). For Bayesian
 #'   or bootstrapped models (when `iterations != NULL`), iterations (as
-#'   columns and observations are rows) can be accessed via `as.data.frame`.
+#'   columns and observations are rows) can be accessed via `as.data.frame()`.
 #'
 #' @details
 #' In `insight::get_predicted()`, the `predict` argument jointly
@@ -135,6 +149,7 @@
 #' # Classification: classification "type" + PI
 #' pred <- get_predicted(x, predict = "classification")
 #' head(as.data.frame(pred))
+#'
 #' @export
 get_predicted <- function(x, ...) {
   UseMethod("get_predicted")
