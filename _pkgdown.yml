@@ -135,6 +135,9 @@ reference:
   - starts_with("object_has_")
   - starts_with("compact_")
   - check_if_installed
+  - safe_deparse
+  - trim_ws
+  - n_unique
 
 - title: "Example Datasets"
   desc: >

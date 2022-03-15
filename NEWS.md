@@ -15,6 +15,8 @@
 
 * To work with strings: `compact_character()`
 
+* Further utility functions are `safe_deparse()`, `trim_ws()` and `n_unique()`.
+
 ## Changes to functions
 
 * `export_table()` now better checks for invalid values of caption and footer
