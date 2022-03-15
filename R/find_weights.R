@@ -31,7 +31,7 @@ find_weights.default <- function(x, ...) {
 
         # edge case, users use "eval(parse())" to parse weight variables
         if (grepl("^eval\\(parse\\(", w)) {
-          w <- eval(parse(text = .trim(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
+          w <- eval(parse(text = trim_ws(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
         }
 
         if (is_empty_object(w) || w == "NULL") w <- NULL
@@ -65,7 +65,7 @@ find_weights.brmsfit <- function(x, ...) {
     }
   })))
 
-  w <- .trim(sub("(.*)\\|(\\s+)weights\\((.*)\\)", "\\3", resp))
+  w <- trim_ws(sub("(.*)\\|(\\s+)weights\\((.*)\\)", "\\3", resp))
   if (is_empty_object(w)) w <- NULL
   w
 }
@@ -85,7 +85,7 @@ find_weights.merMod <- function(x, ...) {
 
       # edge case, users use "eval(parse())" to parse weight variables
       if (grepl("^eval\\(parse\\(", w)) {
-        w <- eval(parse(text = .trim(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
+        w <- eval(parse(text = trim_ws(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
       }
 
       if (is_empty_object(w) || w == "NULL") w <- NULL

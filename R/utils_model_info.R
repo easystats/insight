@@ -190,7 +190,7 @@
     )
 
     if (!is.null(rv)) {
-      is.trial <- .trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
+      is.trial <- trim_ws(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
       is.censored <- grepl("(.*)\\|(.*)cens\\(", rv)
       is.truncated <- grepl("(.*)\\|(.*)trunc\\(", rv)
     }

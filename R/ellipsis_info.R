@@ -56,7 +56,7 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
       }
       if (all(grepl("^list\\(", object_names))) {
         # we now should have something like "list(m1, m2)" ...
-        object_names <- .trim(unlist(strsplit(gsub("list\\((.*)\\)", "\\1", object_names), ",")))
+        object_names <- trim_ws(unlist(strsplit(gsub("list\\((.*)\\)", "\\1", object_names), ",")))
       } else {
         # ... or a variable/object name, in which case we can use the names
         # of the list-elements directly

@@ -1,7 +1,3 @@
-# remove trailing/leading spaces from character vectors
-.trim <- function(x) gsub("^\\s+|\\s+$", "", x)
-
-
 # remove values from vector
 .remove_values <- function(x, values) {
   remove <- x %in% values
@@ -126,13 +122,13 @@
       split_nested <- FALSE
     }
   } else {
-    re <- .trim(substring(re, max(gregexpr(pattern = "\\|", re)[[1]]) + 1))
+    re <- trim_ws(substring(re, max(gregexpr(pattern = "\\|", re)[[1]]) + 1))
   }
 
   # check for multi-membership models
   if (inherits(model, "brmsfit")) {
     if (grepl("mm\\((.*)\\)", re)) {
-      re <- trimws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",")))
+      re <- trim_ws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",")))
     }
   }
 
@@ -430,7 +426,7 @@
   if (is.null(string)) {
     return(NULL)
   }
-  paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = " ")
+  paste0(sapply(deparse(string, width.cutoff = 500), trim_ws, simplify = TRUE), collapse = " ")
 }
 
 

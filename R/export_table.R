@@ -634,7 +634,7 @@ print.insight_table <- function(x, ...) {
     }
 
     # paste everything together and remove unnecessary double spaces
-    title_line <- .trim(paste0(caption[1], " ", subtitle[1]))
+    title_line <- trim_ws(paste0(caption[1], " ", subtitle[1]))
     title_line <- gsub("  ", " ", title_line, fixed = TRUE)
     rows <- paste0(title_line, "\n\n", rows)
   }
@@ -880,7 +880,7 @@ print.insight_table <- function(x, ...) {
     if (!is.null(subtitle)) {
       caption[1] <- paste0(caption[1], " ", subtitle[1])
     }
-    rows <- c(paste0("Table: ", .trim(caption[1])), "", rows)
+    rows <- c(paste0("Table: ", trim_ws(caption[1])), "", rows)
   }
 
   if (!is.null(footer)) {

@@ -173,15 +173,15 @@ check_cbind <- function(resp, combine, model) {
     resp <- .extract_combined_response(resp, "MMO2")
   } else if (!combine && any(grepl("/", resp, fixed = TRUE))) {
     resp <- strsplit(resp, split = "/", fixed = TRUE)
-    resp <- gsub("(I|\\(|\\))", "", .trim(unlist(resp)))
+    resp <- gsub("(I|\\(|\\))", "", trim_ws(unlist(resp)))
   } else if (any(.string_contains("|", resp))) {
     # check for brms Additional Response Information
-    r1 <- .trim(sub("(.*)\\|(.*)", "\\1", resp))
-    r2 <- .trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
+    r1 <- trim_ws(sub("(.*)\\|(.*)", "\\1", resp))
+    r2 <- trim_ws(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
     # check for "resp_thres" pattern
-    r_resp <- .trim(unlist(strsplit(resp, "|", fixed = TRUE))[2])
+    r_resp <- trim_ws(unlist(strsplit(resp, "|", fixed = TRUE))[2])
     if (grepl("^resp_thres", r_resp)) {
-      r3 <- .trim(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp)))
+      r3 <- trim_ws(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp)))
       names(r3) <- r3
       numeric_values <- suppressWarnings(as.numeric(r2))
       r2 <- r2[is.na(numeric_values)]
@@ -194,7 +194,7 @@ check_cbind <- function(resp, combine, model) {
     resp <- c(r1, r2)
   } else if (!combine && any(grepl("+", resp, fixed = TRUE))) {
     resp <- strsplit(resp, split = "+", fixed = TRUE)
-    resp <- gsub("(I|\\(|\\))", "", .trim(unlist(resp)))
+    resp <- gsub("(I|\\(|\\))", "", trim_ws(unlist(resp)))
   }
 
   # exception
@@ -212,11 +212,11 @@ check_cbind <- function(resp, combine, model) {
   } else {
     resp <- sub(sprintf("%s\\(([^,].*)([\\)].*)", pattern), "\\1", resp)
     resp <- strsplit(resp, split = ",", fixed = TRUE)
-    resp <- .trim(unlist(resp))
+    resp <- trim_ws(unlist(resp))
   }
 
   if (any(.string_contains("-", resp[2]))) {
-    resp[2] <- .trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
+    resp[2] <- trim_ws(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
   }
 
   resp
