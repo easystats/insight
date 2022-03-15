@@ -5,7 +5,7 @@
 #' efficient function to trim leading and trailing whitespaces from character
 #' vectors or strings. `n_unique()` returns the number of unique values in a
 #' vector. `safe_deparse()` is comparable to `deparse1()`, i.e. it can safely
-#' deparse deparse very long expressions into a single string.
+#' deparse very long expressions into a single string.
 #'
 #' @param x A (character) vector, or for some functions may also be a data frame.
 #' @param na.rm Logical, if missing values should be removed from the input.

@@ -30,7 +30,7 @@ Collection of small helper functions. \code{trim_ws()} is an
 efficient function to trim leading and trailing whitespaces from character
 vectors or strings. \code{n_unique()} returns the number of unique values in a
 vector. \code{safe_deparse()} is comparable to \code{deparse1()}, i.e. it can safely
-deparse deparse very long expressions into a single string.
+deparse very long expressions into a single string.
 }
 \examples{
 trim_ws("  no space!  ")
