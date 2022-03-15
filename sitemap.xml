@@ -336,4 +336,7 @@
   <url>
     <loc>/reference/text_remove_backticks.html</loc>
   </url>
+  <url>
+    <loc>/reference/trim_ws.html</loc>
+  </url>
 </urlset>
