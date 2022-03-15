@@ -146,17 +146,17 @@ find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 .get_variables_list <- function(f, resp = NULL) {
   # exception for formula w/o response
   if (is.null(resp) || !is_empty_object(resp)) {
-    f$response <- sub("(.*)::(.*)", "\\2", .safe_deparse(f$conditional[[2L]]))
-    f$conditional <- .safe_deparse(f$conditional[[3L]])
+    f$response <- sub("(.*)::(.*)", "\\2", safe_deparse(f$conditional[[2L]]))
+    f$conditional <- safe_deparse(f$conditional[[3L]])
   } else {
-    f$conditional <- .safe_deparse(f$conditional[[2L]])
+    f$conditional <- safe_deparse(f$conditional[[2L]])
   }
 
   f <- lapply(f, function(.x) {
     if (is.list(.x)) {
       .x <- sapply(.x, .formula_to_string)
     } else {
-      if (!is.character(.x)) .x <- .safe_deparse(.x)
+      if (!is.character(.x)) .x <- safe_deparse(.x)
     }
     .x
   })
@@ -219,6 +219,6 @@ find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 }
 
 .formula_to_string <- function(f) {
-  if (!is.character(f)) f <- .safe_deparse(f)
+  if (!is.character(f)) f <- safe_deparse(f)
   f
 }

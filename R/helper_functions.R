@@ -109,11 +109,11 @@
     )
   )
 
-  if (identical(.safe_deparse(f), "~0") || identical(.safe_deparse(f), "~1")) {
+  if (identical(safe_deparse(f), "~0") || identical(safe_deparse(f), "~1")) {
     return(NULL)
   }
 
-  re <- sapply(.findbars(f), .safe_deparse)
+  re <- sapply(.findbars(f), safe_deparse)
 
   if (is_special && is_empty_object(re)) {
     re <- all.vars(f[[2L]])
@@ -403,7 +403,7 @@
 #   else
 #     f[[2L]]
 #
-#   lapply(.extract_formula_parts(rhs), .safe_deparse)
+#   lapply(.extract_formula_parts(rhs), safe_deparse)
 # }
 #
 #
@@ -419,15 +419,6 @@
 #   }
 #   c(x, rval)
 # }
-
-
-
-.safe_deparse <- function(string) {
-  if (is.null(string)) {
-    return(NULL)
-  }
-  paste0(sapply(deparse(string, width.cutoff = 500), trim_ws, simplify = TRUE), collapse = " ")
-}
 
 
 

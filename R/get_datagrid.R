@@ -410,7 +410,7 @@ get_datagrid.logical <- get_datagrid.character
     if (grepl("length.out =", target)) {
       expression <- target # This is an edgecase
     } else if (grepl("=", target)) {
-      parts <- trimws(unlist(strsplit(target, "=", fixed = TRUE))) # Split and clean
+      parts <- trim_ws(unlist(strsplit(target, "=", fixed = TRUE))) # Split and clean
       varname <- parts[1] # left-hand part is probably the name of the variable
       target <- parts[2] # right-hand part is the real target
     }
@@ -428,11 +428,11 @@ get_datagrid.logical <- get_datagrid.character
 
       # Clean --------------------
       # Keep the content
-      parts <- trimws(unlist(regmatches(target, gregexpr("\\[.+?\\]", target))))
+      parts <- trim_ws(unlist(regmatches(target, gregexpr("\\[.+?\\]", target))))
       # Drop the brackets
       parts <- gsub("\\[|\\]", "", parts)
       # Split by a separator like ','
-      parts <- trimws(unlist(strsplit(parts, ",")))
+      parts <- trim_ws(unlist(strsplit(parts, ",")))
       # If the elements have quotes around them, drop them
       if (all(grepl("\\'.*\\'", parts))) parts <- gsub("'", "", parts)
       if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts)

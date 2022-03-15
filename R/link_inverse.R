@@ -97,7 +97,7 @@ link_inverse.psm <- link_inverse.tobit
 
 #' @export
 link_inverse.flexsurvreg <- function(x, ...) {
-  dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
+  dist <- parse(text = safe_deparse(x$call))[[1]]$dist
   .make_tobit_family(x, dist)$linkinv
 }
 
@@ -393,8 +393,8 @@ link_inverse.robmixglm <- function(x, ...) {
 
 #' @export
 link_inverse.cglm <- function(x, ...) {
-  link <- parse(text = .safe_deparse(x$call))[[1]]$link
-  method <- parse(text = .safe_deparse(x$call))[[1]]$method
+  link <- parse(text = safe_deparse(x$call))[[1]]$link
+  method <- parse(text = safe_deparse(x$call))[[1]]$method
 
   if (!is.null(method) && method == "clm") {
     link <- "identiy"
@@ -707,7 +707,7 @@ link_inverse.mira <- function(x, ...) {
 
 
 .get_cplm_family <- function(x) {
-  link <- parse(text = .safe_deparse(x@call))[[1]]$link
+  link <- parse(text = safe_deparse(x@call))[[1]]$link
 
   if (is.null(link)) link <- "log"
 

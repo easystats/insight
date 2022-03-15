@@ -75,7 +75,7 @@ color_if <- function(x,
     )
 
     # remove NA
-    xnew[, columns][trimws(xnew[, columns]) == "NA"] <- ""
+    xnew[, columns][trim_ws(xnew[, columns]) == "NA"] <- ""
 
     if (!is.null(color_if) && length(x_if)) {
       xnew[, columns][x_if] <- .colour(color_if, xnew[, columns][x_if])

@@ -186,14 +186,14 @@ find_formula.gamlss <- function(x, verbose = TRUE, ...) {
       f.cond <- stats::as.formula(.get_fixed_effects(x$mu.formula))
 
       f.random <- lapply(.findbars(x$mu.formula), function(.x) {
-        f <- .safe_deparse(.x)
+        f <- safe_deparse(.x)
         stats::as.formula(paste0("~", f))
       })
 
       if (length(f.random) == 1) {
         f.random <- f.random[[1]]
-      } else if (grepl("random\\((.*)\\)", .safe_deparse(f.cond))) {
-        re <- gsub("(.*)random\\((.*)\\)", "\\2", .safe_deparse(f.cond))
+      } else if (grepl("random\\((.*)\\)", safe_deparse(f.cond))) {
+        re <- gsub("(.*)random\\((.*)\\)", "\\2", safe_deparse(f.cond))
         f.random <- stats::as.formula(paste0("~1|", re))
         f.cond <- stats::update.formula(f.cond, stats::as.formula(paste0(". ~ . - random(", re, ")")))
       }
@@ -232,7 +232,7 @@ find_formula.bamlss <- function(x, verbose = TRUE, ...) {
   }
 
   f <- compact_list(list(
-    conditional = stats::as.formula(.safe_deparse(f.cond)),
+    conditional = stats::as.formula(safe_deparse(f.cond)),
     sigma = f.sigma
   ))
   .find_formula_return(f, verbose = verbose)
@@ -409,10 +409,10 @@ find_formula.joint <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.betareg <- function(x, verbose = TRUE, ...) {
   f <- stats::formula(x)
-  fs <- .safe_deparse(f)
+  fs <- safe_deparse(f)
 
   if (grepl("|", fs, fixed = TRUE)) {
-    fs <- trimws(unlist(strsplit(fs, "|", fixed = TRUE)))
+    fs <- trim_ws(unlist(strsplit(fs, "|", fixed = TRUE)))
     f <- list(
       conditional = stats::as.formula(fs[1]),
       precision = stats::as.formula(paste0("~", fs[2]))
@@ -467,11 +467,11 @@ find_formula.mira <- function(x, verbose = TRUE, ...) {
 find_formula.gee <- function(x, verbose = TRUE, ...) {
   f <- tryCatch(
     {
-      id <- parse(text = .safe_deparse(x$call))[[1]]$id
+      id <- parse(text = safe_deparse(x$call))[[1]]$id
 
       # alternative regex-patterns that also work:
-      # sub(".*id ?= ?(.*?),.*", "\\1", .safe_deparse(x$call), perl = TRUE)
-      # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", .safe_deparse(x$call), perl = TRUE)
+      # sub(".*id ?= ?(.*?),.*", "\\1", safe_deparse(x$call), perl = TRUE)
+      # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", safe_deparse(x$call), perl = TRUE)
 
       list(
         conditional = stats::formula(x),
@@ -509,13 +509,13 @@ find_formula.gls <- function(x, verbose = TRUE, ...) {
     if (inherits(fcorr, "name")) {
       f_corr <- attributes(eval(fcorr))$formula
     } else {
-      f_corr <- parse(text = .safe_deparse(fcorr))[[1]]
+      f_corr <- parse(text = safe_deparse(fcorr))[[1]]
     }
   } else {
     f_corr <- NULL
   }
   if (is.symbol(f_corr)) {
-    f_corr <- paste("~", .safe_deparse(f_corr))
+    f_corr <- paste("~", safe_deparse(f_corr))
   } else if (!inherits(f_corr, "formula")) {
     f_corr <- f_corr$form
   }
@@ -541,11 +541,11 @@ find_formula.gls <- function(x, verbose = TRUE, ...) {
 find_formula.LORgee <- function(x, verbose = TRUE, ...) {
   f <- tryCatch(
     {
-      id <- parse(text = .safe_deparse(x$call))[[1]]$id
+      id <- parse(text = safe_deparse(x$call))[[1]]$id
 
       # alternative regex-patterns that also work:
-      # sub(".*id ?= ?(.*?),.*", "\\1", .safe_deparse(x$call), perl = TRUE)
-      # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", .safe_deparse(x$call), perl = TRUE)
+      # sub(".*id ?= ?(.*?),.*", "\\1", safe_deparse(x$call), perl = TRUE)
+      # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", safe_deparse(x$call), perl = TRUE)
 
       list(
         conditional = stats::formula(x),
@@ -565,11 +565,11 @@ find_formula.LORgee <- function(x, verbose = TRUE, ...) {
 find_formula.cglm <- function(x, verbose = TRUE, ...) {
   f <- tryCatch(
     {
-      id <- parse(text = .safe_deparse(x$call))[[1]]$id
+      id <- parse(text = safe_deparse(x$call))[[1]]$id
 
       # alternative regex-patterns that also work:
-      # sub(".*id ?= ?(.*?),.*", "\\1", .safe_deparse(x$call), perl = TRUE)
-      # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", .safe_deparse(x$call), perl = TRUE)
+      # sub(".*id ?= ?(.*?),.*", "\\1", safe_deparse(x$call), perl = TRUE)
+      # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", safe_deparse(x$call), perl = TRUE)
 
       list(
         conditional = stats::formula(x),
@@ -626,7 +626,7 @@ find_formula.probitmfx <- find_formula.logitmfx
 find_formula.ivreg <- function(x, verbose = TRUE, ...) {
   f <- tryCatch(
     {
-      f <- .safe_deparse(stats::formula(x))
+      f <- safe_deparse(stats::formula(x))
       cond <- trim_ws(substr(f, start = 0, stop = regexpr(pattern = "\\|", f) - 1))
       instr <- trim_ws(substr(f, regexpr(pattern = "\\|", f) + 1, stop = 10000L))
 
@@ -655,7 +655,7 @@ find_formula.ivFixed <- find_formula.ivreg
 find_formula.plm <- function(x, verbose = TRUE, ...) {
   f <- tryCatch(
     {
-      f <- .safe_deparse(stats::formula(x))
+      f <- safe_deparse(stats::formula(x))
       bar_pos <- regexpr(pattern = "\\|", f)
 
       if (bar_pos == -1) {
@@ -692,7 +692,7 @@ find_formula.pgmm <- find_formula.plm
 
 #' @export
 find_formula.felm <- function(x, verbose = TRUE, ...) {
-  f <- .safe_deparse(stats::formula(x))
+  f <- safe_deparse(stats::formula(x))
   f_parts <- trim_ws(unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE)))
 
   f.cond <- f_parts[1]
@@ -728,13 +728,13 @@ find_formula.felm <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.mhurdle <- function(x, verbose = TRUE, ...) {
-  f <- .safe_deparse(stats::formula(x)[[3]])
+  f <- safe_deparse(stats::formula(x)[[3]])
   f_parts <- trim_ws(unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE)))
 
   f.zi <- paste0("~", f_parts[1])
 
   if (length(f_parts) > 1) {
-    f.cond <- paste0(.safe_deparse(stats::formula(x)[[2]]), "~", f_parts[2])
+    f.cond <- paste0(safe_deparse(stats::formula(x)[[2]]), "~", f_parts[2])
   } else {
     f.cond <- NULL
   }
@@ -765,7 +765,7 @@ find_formula.mhurdle <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.feglm <- function(x, verbose = TRUE, ...) {
-  f <- .safe_deparse(stats::formula(x))
+  f <- safe_deparse(stats::formula(x))
   f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
 
   f.cond <- trim_ws(f_parts[1])
@@ -794,7 +794,7 @@ find_formula.feglm <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.fixest <- function(x, verbose = TRUE, ...) {
-  f <- .safe_deparse(stats::formula(x))
+  f <- safe_deparse(stats::formula(x))
   f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
 
   f.cond <- trim_ws(f_parts[1])
@@ -819,15 +819,15 @@ find_formula.fixest <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.feis <- function(x, verbose = TRUE, ...) {
-  f <- .safe_deparse(stats::formula(x))
+  f <- safe_deparse(stats::formula(x))
   f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
 
   f.cond <- trim_ws(f_parts[1])
-  id <- parse(text = .safe_deparse(x$call))[[1]]$id
+  id <- parse(text = safe_deparse(x$call))[[1]]$id
 
   # alternative regex-patterns that also work:
-  # sub(".*id ?= ?(.*?),.*", "\\1", .safe_deparse(x$call), perl = TRUE)
-  # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", .safe_deparse(x$call), perl = TRUE)
+  # sub(".*id ?= ?(.*?),.*", "\\1", safe_deparse(x$call), perl = TRUE)
+  # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", safe_deparse(x$call), perl = TRUE)
 
   if (length(f_parts) > 1) {
     f.slopes <- paste0("~", trim_ws(f_parts[2]))
@@ -847,7 +847,7 @@ find_formula.feis <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.bife <- function(x, verbose = TRUE, ...) {
-  f <- .safe_deparse(stats::formula(x))
+  f <- safe_deparse(stats::formula(x))
   f_parts <- unlist(strsplit(f, "|", fixed = TRUE))
 
   f.cond <- trim_ws(f_parts[1])
@@ -876,7 +876,7 @@ find_formula.ivprobit <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.wbm <- function(x, verbose = TRUE, ...) {
-  f <- .safe_deparse(stats::formula(x))
+  f <- safe_deparse(stats::formula(x))
   f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
 
   f.cond <- trim_ws(f_parts[1])
@@ -938,7 +938,7 @@ find_formula.glimML <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.tobit <- function(x, verbose = TRUE, ...) {
   f <- tryCatch(
-    list(conditional = parse(text = .safe_deparse(x$call))[[1]]$formula),
+    list(conditional = parse(text = safe_deparse(x$call))[[1]]$formula),
     error = function(x) NULL
   )
   .find_formula_return(f, verbose = verbose)
@@ -972,9 +972,9 @@ find_formula.zcpglm <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.clmm2 <- function(x, verbose = TRUE, ...) {
   f <- compact_list(list(
-    conditional = stats::as.formula(.safe_deparse(attr(x$location, "terms", exact = TRUE))),
-    scale = stats::as.formula(.safe_deparse(attr(x$scale, "terms", exact = TRUE))),
-    random = stats::as.formula(paste0("~", parse(text = .safe_deparse(x$call))[[1]]$random))
+    conditional = stats::as.formula(safe_deparse(attr(x$location, "terms", exact = TRUE))),
+    scale = stats::as.formula(safe_deparse(attr(x$scale, "terms", exact = TRUE))),
+    random = stats::as.formula(paste0("~", parse(text = safe_deparse(x$call))[[1]]$random))
   ))
   .find_formula_return(f, verbose = verbose)
 }
@@ -992,7 +992,7 @@ find_formula.clm2 <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.DirichletRegModel <- function(x, verbose = TRUE, ...) {
-  f <- .safe_deparse(stats::formula(x))
+  f <- safe_deparse(stats::formula(x))
   f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
 
   f.cond <- trim_ws(f_parts[1])
@@ -1032,19 +1032,19 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
   f.zi <- stats::formula(x, component = "zi")
   f.disp <- stats::formula(x, component = "disp")
 
-  if (identical(.safe_deparse(f.zi), "~0") ||
-    identical(.safe_deparse(f.zi), "~1")) {
+  if (identical(safe_deparse(f.zi), "~0") ||
+    identical(safe_deparse(f.zi), "~1")) {
     f.zi <- NULL
   }
 
-  if (identical(.safe_deparse(f.disp), "~0") ||
-    identical(.safe_deparse(f.disp), "~1")) {
+  if (identical(safe_deparse(f.disp), "~0") ||
+    identical(safe_deparse(f.disp), "~1")) {
     f.disp <- NULL
   }
 
 
   f.random <- lapply(.findbars(f.cond), function(.x) {
-    f <- .safe_deparse(.x)
+    f <- safe_deparse(.x)
     stats::as.formula(paste0("~", f))
   })
 
@@ -1053,7 +1053,7 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
   }
 
   f.zirandom <- lapply(.findbars(f.zi), function(.x) {
-    f <- .safe_deparse(.x)
+    f <- safe_deparse(.x)
     if (f == "NULL") {
       return(NULL)
     }
@@ -1083,7 +1083,7 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.nlmerMod <- function(x, verbose = TRUE, ...) {
   f.random <- lapply(.findbars(stats::formula(x)), function(.x) {
-    f <- .safe_deparse(.x)
+    f <- safe_deparse(.x)
     stats::as.formula(paste0("~", f))
   })
 
@@ -1091,8 +1091,8 @@ find_formula.nlmerMod <- function(x, verbose = TRUE, ...) {
     f.random <- f.random[[1]]
   }
 
-  f.cond <- .nobars(stats::as.formula(gsub("(.*)(~)(.*)~(.*)", "\\1\\2\\4", .safe_deparse(stats::formula(x)))))
-  f.nonlin <- stats::as.formula(paste0("~", trim_ws(gsub("(.*)~(.*)~(.*)", "\\2", .safe_deparse(stats::formula(x))))))
+  f.cond <- .nobars(stats::as.formula(gsub("(.*)(~)(.*)~(.*)", "\\1\\2\\4", safe_deparse(stats::formula(x)))))
+  f.nonlin <- stats::as.formula(paste0("~", trim_ws(gsub("(.*)~(.*)~(.*)", "\\2", safe_deparse(stats::formula(x))))))
 
   f <- compact_list(list(
     conditional = f.cond,
@@ -1108,7 +1108,7 @@ find_formula.nlmerMod <- function(x, verbose = TRUE, ...) {
 find_formula.merMod <- function(x, verbose = TRUE, ...) {
   f.cond <- stats::formula(x)
   f.random <- lapply(.findbars(f.cond), function(.x) {
-    f <- .safe_deparse(.x)
+    f <- safe_deparse(.x)
     stats::as.formula(paste0("~", f))
   })
 
@@ -1160,7 +1160,7 @@ find_formula.sem <- function(x, verbose = TRUE, ...) {
 
   f.cond <- x$formula
   f.random <- lapply(.findbars(f.cond), function(.x) {
-    f <- .safe_deparse(.x)
+    f <- safe_deparse(.x)
     stats::as.formula(paste0("~", f))
   })
 
@@ -1184,7 +1184,7 @@ find_formula.lme <- function(x, verbose = TRUE, ...) {
     if (inherits(fcorr, "name")) {
       fc <- attributes(eval(fcorr))$formula
     } else {
-      fc <- parse(text = .safe_deparse(fcorr))[[1]]$form
+      fc <- parse(text = safe_deparse(fcorr))[[1]]$form
     }
   } else {
     fc <- NULL
@@ -1202,8 +1202,8 @@ find_formula.lme <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.lqmm <- function(x, verbose = TRUE, ...) {
   fm <- eval(x$call$fixed)
-  fmr <- .safe_deparse(x$call$random)
-  fmg <- .safe_deparse(x$call$group)
+  fmr <- safe_deparse(x$call$random)
+  fmg <- safe_deparse(x$call$group)
 
   f <- compact_list(list(
     conditional = fm,
@@ -1222,7 +1222,7 @@ find_formula.mixor <- function(x, verbose = TRUE, ...) {
   f_rs <- x$call$which.random.slope
 
   if (!is.null(f_rs)) {
-    f_rs <- trimws(unlist(strsplit(.safe_deparse(x$call$formula[[3]]), "\\+")))[f_rs]
+    f_rs <- trim_ws(unlist(strsplit(safe_deparse(x$call$formula[[3]]), "\\+")))[f_rs]
     fmr <- paste(f_rs, "|", f_id)
   } else {
     fmr <- f_id
@@ -1259,8 +1259,8 @@ find_formula.MixMod <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.BBmm <- function(x, verbose = TRUE, ...) {
-  f.cond <- parse(text = .safe_deparse(x$call))[[1]]$fixed.formula
-  f.rand <- parse(text = .safe_deparse(x$call))[[1]]$random.formula
+  f.cond <- parse(text = safe_deparse(x$call))[[1]]$fixed.formula
+  f.rand <- parse(text = safe_deparse(x$call))[[1]]$random.formula
 
   f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
@@ -1277,7 +1277,7 @@ find_formula.mmclogit <- function(x, verbose = TRUE, ...) {
     {
       list(
         conditional = stats::formula(x),
-        random = stats::as.formula(parse(text = .safe_deparse(x$call))[[1]]$random)
+        random = stats::as.formula(parse(text = safe_deparse(x$call))[[1]]$random)
       )
     },
     error = function(x) {
@@ -1330,7 +1330,7 @@ find_formula.stanreg <- function(x, verbose = TRUE, ...) {
       f.random <- tryCatch(
         {
           lapply(.findbars(stats::formula(x$glmod)), function(.x) {
-            f <- .safe_deparse(.x)
+            f <- safe_deparse(.x)
             stats::as.formula(paste0("~", f))
           })
         },
@@ -1340,7 +1340,7 @@ find_formula.stanreg <- function(x, verbose = TRUE, ...) {
       )
     } else {
       f.random <- lapply(.findbars(f.cond), function(.x) {
-        f <- .safe_deparse(.x)
+        f <- safe_deparse(.x)
         stats::as.formula(paste0("~", f))
       })
     }
@@ -1445,7 +1445,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 .get_brms_formula <- function(f) {
   f_cond <- f$formula
   f_random <- lapply(.findbars(f_cond), function(.x) {
-    fm <- .safe_deparse(.x)
+    fm <- safe_deparse(.x)
     stats::as.formula(paste0("~", fm))
   })
 
@@ -1481,7 +1481,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   if (!is_empty_object(f_zi)) {
     f_zirandom <- lapply(.findbars(f_zi), function(.x) {
-      f <- .safe_deparse(.x)
+      f <- safe_deparse(.x)
       stats::as.formula(paste0("~", f))
     })
 
@@ -1489,7 +1489,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       f_zirandom <- f_zirandom[[1]]
     }
 
-    f_zi <- stats::as.formula(paste0("~", .safe_deparse(f_zi[[3L]])))
+    f_zi <- stats::as.formula(paste0("~", safe_deparse(f_zi[[3L]])))
     f_zi <- stats::as.formula(.get_fixed_effects(f_zi))
   }
 
@@ -1498,7 +1498,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   if (!is_empty_object(f_sigma)) {
     f_sigmarandom <- lapply(.findbars(f_sigma), function(.x) {
-      f <- .safe_deparse(.x)
+      f <- safe_deparse(.x)
       stats::as.formula(paste0("~", f))
     })
 
@@ -1506,7 +1506,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       f_sigmarandom <- f_sigmarandom[[1]]
     }
 
-    f_sigma <- stats::as.formula(paste0("~", .safe_deparse(f_sigma[[3L]])))
+    f_sigma <- stats::as.formula(paste0("~", safe_deparse(f_sigma[[3L]])))
     f_sigma <- stats::as.formula(.get_fixed_effects(f_sigma))
   }
 
@@ -1515,7 +1515,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   if (!is_empty_object(f_beta)) {
     f_betarandom <- lapply(.findbars(f_beta), function(.x) {
-      f <- .safe_deparse(.x)
+      f <- safe_deparse(.x)
       stats::as.formula(paste0("~", f))
     })
 
@@ -1523,7 +1523,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       f_betarandom <- f_betarandom[[1]]
     }
 
-    f_beta <- stats::as.formula(paste0("~", .safe_deparse(f_beta[[3L]])))
+    f_beta <- stats::as.formula(paste0("~", safe_deparse(f_beta[[3L]])))
     f_beta <- stats::as.formula(.get_fixed_effects(f_beta))
   }
 
@@ -1555,7 +1555,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 .get_stanmv_formula <- function(f) {
   f_cond <- f
   f_random <- lapply(.findbars(f_cond), function(.x) {
-    fm <- .safe_deparse(.x)
+    fm <- safe_deparse(.x)
     stats::as.formula(paste0("~", fm))
   })
 
@@ -1582,7 +1582,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  f <- trim_ws(unlist(strsplit(.safe_deparse(f), separator)))
+  f <- trim_ws(unlist(strsplit(safe_deparse(f), separator)))
 
   c.form <- stats::as.formula(f[1])
   if (length(f) == 2) {
@@ -1600,7 +1600,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   zi.form <- tryCatch(
     {
       if (as.character(zi.form[2]) == ".") {
-        resp <- .safe_deparse(c.form[2])
+        resp <- safe_deparse(c.form[2])
         pred <- setdiff(colnames(.recover_data_from_environment(x)), resp)
         zi.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
       }
@@ -1625,7 +1625,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   tryCatch(
     {
       if (as.character(f[[3]])[1] == ".") {
-        resp <- .safe_deparse(f[[2]])
+        resp <- safe_deparse(f[[2]])
         pred <- setdiff(colnames(.recover_data_from_environment(model)), resp)
         f <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
       }
@@ -1693,7 +1693,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
 
 .check_formula_for_T <- function(f, verbose = TRUE) {
-  f <- .safe_deparse(f[[1]])
+  f <- safe_deparse(f[[1]])
 
   if (is_empty_object(f)) {
     return(TRUE)
@@ -1723,7 +1723,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     return(TRUE)
   }
 
-  if (any(grepl("\\$", .safe_deparse(f[[1]])))) {
+  if (any(grepl("\\$", safe_deparse(f[[1]])))) {
     fc <- try(.formula_clean(f[[1]]), silent = TRUE)
     if (inherits(fc, "try-error")) {
       stop(attributes(fc)$condition$message, call. = FALSE)
@@ -1751,10 +1751,10 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   pattern <- "[\\s*+:()|^,\\-\\/]" # was: "[\\s\\*\\+:\\-\\|/\\(\\)\\^,]"
 
-  parts <- trimws(unlist(strsplit(split = pattern, x = LHS, perl = TRUE)))
+  parts <- trim_ws(unlist(strsplit(split = pattern, x = LHS, perl = TRUE)))
   d_LHS <- unique(gsub("(.*)\\$(.*)", "\\1", parts[grepl("(.*)\\$(.*)", parts)]))
 
-  parts <- trimws(unlist(strsplit(split = pattern, x = RHS, perl = TRUE)))
+  parts <- trim_ws(unlist(strsplit(split = pattern, x = RHS, perl = TRUE)))
   d_RHS <- unique(gsub("(.*)\\$(.*)", "\\1", parts[grepl("(.*)\\$(.*)", parts)]))
 
   if (.n_unique(c(d_LHS, d_RHS)) > 1) {

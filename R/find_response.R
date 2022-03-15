@@ -40,9 +40,9 @@ find_response.default <- function(x, combine = TRUE, ...) {
   # this is for multivariate response models,
   # where we have a list of formulas
   if (is_multivariate(f)) {
-    resp <- unlist(lapply(f, function(i) .safe_deparse(i$conditional[[2L]])))
+    resp <- unlist(lapply(f, function(i) safe_deparse(i$conditional[[2L]])))
   } else {
-    resp <- .safe_deparse(f$conditional[[2L]])
+    resp <- safe_deparse(f$conditional[[2L]])
   }
 
   check_cbind(resp, combine, model = x)
@@ -75,8 +75,8 @@ find_response.bfsl <- function(x, combine = TRUE, ...) {
 find_response.selection <- function(x, combine = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
   resp <- c(
-    .safe_deparse(f$conditional$selection[[2L]]),
-    .safe_deparse(f$conditional$outcome[[2L]])
+    safe_deparse(f$conditional$selection[[2L]]),
+    safe_deparse(f$conditional$outcome[[2L]])
   )
   check_cbind(resp, combine, model = x)
 }
@@ -92,7 +92,7 @@ find_response.mediate <- function(x, combine = TRUE, ...) {
     return(NULL)
   }
 
-  resp <- c(.safe_deparse(f$mediator$conditional[[2L]]), .safe_deparse(f$outcome$conditional[[2L]]))
+  resp <- c(safe_deparse(f$mediator$conditional[[2L]]), safe_deparse(f$outcome$conditional[[2L]]))
   check_cbind(resp, combine, model = x)
 }
 
@@ -108,8 +108,8 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
     return(NULL)
   }
 
-  conditional <- unlist(lapply(f[grepl("^conditional", names(f))], function(i) .safe_deparse(i[[2L]])))
-  survial <- .safe_deparse(f$survival[[2L]])
+  conditional <- unlist(lapply(f[grepl("^conditional", names(f))], function(i) safe_deparse(i[[2L]])))
+  survial <- safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
     "conditional" = conditional,
@@ -135,8 +135,8 @@ find_response.joint <- function(x,
     return(NULL)
   }
 
-  conditional <- .safe_deparse(f$conditional[[2L]])
-  survial <- .safe_deparse(f$survival[[2L]])
+  conditional <- safe_deparse(f$conditional[[2L]])
+  survial <- safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
     "conditional" = conditional,

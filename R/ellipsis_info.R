@@ -52,7 +52,7 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
       object_names <- object_names[[1]]
       # make sure objects-names is a character vector
       if (!is.character(object_names)) {
-        object_names <- .safe_deparse(object_names)
+        object_names <- safe_deparse(object_names)
       }
       if (all(grepl("^list\\(", object_names))) {
         # we now should have something like "list(m1, m2)" ...

@@ -227,7 +227,7 @@ find_predictors.afex_aov <- function(x,
 
     # for survival models, separate out strata element
     if (inherits(x, "coxph")) {
-      f_cond <- .safe_deparse(f[["conditional"]])
+      f_cond <- safe_deparse(f[["conditional"]])
 
       ## TODO wait for https://github.com/easystats/insight/issues/507
       if (FALSE && grepl("strata(", f_cond, fixed = TRUE)) {
