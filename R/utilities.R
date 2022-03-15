@@ -48,9 +48,10 @@ n_unique.data.frame <- function(x, na.rm = TRUE, ...) {
 
 
 
-# safe_depars ---------------------------------------
+# safe_deparse ---------------------------------------
 
 #' @rdname trim_ws
+#' @export
 safe_deparse <- function(x, ...) {
   if (is.null(x)) {
     return(NULL)
