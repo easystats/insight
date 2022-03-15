@@ -81,6 +81,9 @@ deparse very long expressions into a single string.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">trim_ws</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
+<span class="co"># S3 method for data.frame</span>
+<span class="fu">trim_ws</span><span class="op">(</span><span class="va">x</span>, character_only <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
+
 <span class="fu">n_unique</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
@@ -95,6 +98,9 @@ deparse very long expressions into a single string.</p>
 <dd><p>A (character) vector, or for some functions may also be a data frame.</p></dd>
 <dt>...</dt>
 <dd><p>Currently not used.</p></dd>
+<dt>character_only</dt>
+<dd><p>Logical, if <code>TRUE</code> and <code>x</code> is a data frame or list,
+only processes character vectors.</p></dd>
 <dt>na.rm</dt>
 <dd><p>Logical, if missing values should be removed from the input.</p></dd>
 </dl></div>
