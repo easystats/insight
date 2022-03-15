@@ -9,6 +9,8 @@
 #'
 #' @param x A (character) vector, or for some functions may also be a data frame.
 #' @param na.rm Logical, if missing values should be removed from the input.
+#' @param character_only Logical, if `TRUE` and `x` is a data frame or list,
+#' only processes character vectors.
 #' @param ... Currently not used.
 #'
 #' @return (tbd)
@@ -18,7 +20,39 @@
 #' n_unique(iris$Species)
 #' @export
 trim_ws <- function(x, ...) {
+  UseMethod("trim_ws")
+}
+
+#' @export
+trim_ws.default <- function(x, ...) {
   gsub("^\\s+|\\s+$", "", x)
+}
+
+#' @rdname trim_ws
+#' @export
+trim_ws.data.frame <- function(x, character_only = TRUE, ...) {
+  if (character_only) {
+    chars <- which(sapply(x, is.character))
+  } else {
+    chars <- seq_len(ncol(x))
+  }
+  if (length(chars)) {
+    x[chars] <- lapply(x[chars], trim_ws)
+  }
+  x
+}
+
+#' @export
+trim_ws.list <- function(x, character_only = TRUE, ...) {
+  if (character_only) {
+    chars <- which(sapply(x, is.character))
+  } else {
+    chars <- seq_len(length(x))
+  }
+  if (length(chars)) {
+    x[chars] <- lapply(x[chars], trim_ws)
+  }
+  x
 }
 
 
@@ -44,6 +78,11 @@ n_unique.default <- function(x, na.rm = TRUE, ...) {
 #' @export
 n_unique.data.frame <- function(x, na.rm = TRUE, ...) {
   sapply(x, n_unique, na.rm = na.rm)
+}
+
+#' @export
+n_unique.list <- function(x, na.rm = TRUE, ...) {
+  lapply(x, n_unique, na.rm = na.rm)
 }
 
 

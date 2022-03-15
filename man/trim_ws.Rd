@@ -2,12 +2,15 @@
 % Please edit documentation in R/utilities.R
 \name{trim_ws}
 \alias{trim_ws}
+\alias{trim_ws.data.frame}
 \alias{n_unique}
 \alias{n_unique.default}
 \alias{safe_deparse}
 \title{Small helper functions}
 \usage{
 trim_ws(x, ...)
+
+\method{trim_ws}{data.frame}(x, character_only = TRUE, ...)
 
 n_unique(x, ...)
 
@@ -19,6 +22,9 @@ safe_deparse(x, ...)
 \item{x}{A (character) vector, or for some functions may also be a data frame.}
 
 \item{...}{Currently not used.}
+
+\item{character_only}{Logical, if \code{TRUE} and \code{x} is a data frame or list,
+only processes character vectors.}
 
 \item{na.rm}{Logical, if missing values should be removed from the input.}
 }
