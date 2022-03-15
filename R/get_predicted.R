@@ -100,7 +100,7 @@
 #' \subsection{Heteroscedasticity consistent standard errors}{
 #' The arguments `vcov` and `vcov_args` can be used to calculate robust
 #' standard errors for confidence intervals of predictions. These arguments,
-#' when provided in `get_predicted()`, are passed down to [get_predicted_ci()],
+#' when provided in `get_predicted()`, are passed down to `get_predicted_ci()`,
 #' thus, see the related documentation there for more
 #' details.
 #' }
