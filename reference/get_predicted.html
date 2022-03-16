@@ -162,7 +162,7 @@ errors, e.g. by specifying the <code>vcov</code> and <code>vcov_args</code> argu
 <code>get_predicted_ci()</code> directly in the call to <code>get_predicted()</code>.</p></dd>
 <dt>data</dt>
 <dd><p>An optional data frame in which to look for variables with which
-to predict. If omitted, the data used to fit the model is used.</p></dd>
+to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using <code><a href="get_datagrid.html">get_datagrid()</a></code>.</p></dd>
 <dt>predict</dt>
 <dd><p>string or <code>NULL</code></p><ul><li><p><code>"link"</code> returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).</p></li>
 <li><p><code>"expectation"</code> (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).</p></li>
@@ -302,6 +302,10 @@ details.</p>
 Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_predicted(model))</code>, and their iterations can be reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>.</p>
 </div>
 
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="get_datagrid.html">get_datagrid()</a></code></p></div>
     </div>
 
     <div class="section level2">
