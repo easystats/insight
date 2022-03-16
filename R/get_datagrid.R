@@ -138,21 +138,23 @@ get_datagrid.data.frame <- function(x,
       }
 
       # Create target list of numerics ----------------------------------------
-      numvars <- specs[specs$is_factor == FALSE, "varname"]
-      if(length(length) == 1) {
-        length <- rep(length, length(numvars))
-      } else if(length(length) != length(numvars)) {
-        stop("The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ").")
-      }
       nums <- list()
-      for (i in 1:length(numvars)) {
-        num <- numvars[i]
-        nums[[num]] <- get_datagrid(x[[num]],
-          target = specs[specs$varname == num, "expression"],
-          reference = reference[[num]],
-          length = length[i],
-          ...
-        )
+      numvars <- specs[specs$is_factor == FALSE, "varname"]
+      if (length(numvars)) {
+        if (length(length) == 1) {
+          length <- rep(length, length(numvars))
+        } else if (length(length) != length(numvars)) {
+          stop("The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ").")
+        }
+        for (i in 1:length(numvars)) {
+          num <- numvars[i]
+          nums[[num]] <- get_datagrid(x[[num]],
+                                      target = specs[specs$varname == num, "expression"],
+                                      reference = reference[[num]],
+                                      length = length[i],
+                                      ...
+          )
+        }
       }
     } else if (is.list(target)) {
 
