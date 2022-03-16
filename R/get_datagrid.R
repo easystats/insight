@@ -1,7 +1,7 @@
 #' Create a reference grid
 #'
 #' Create a reference matrix, useful for visualisation, with evenly spread and
-#' combined values.
+#' combined values. Usually used to make generate predictions using [get_predicted()].
 #'
 #' @param x An object from which to construct the reference grid.
 #' @param at Can be `"all"`, a character vector or list of named elements, indicating
@@ -47,6 +47,8 @@
 #'   or `range` to control the spread of numeric variables.).
 #'
 #' @return Reference grid data frame.
+#'
+#' @seealso [get_predicted()]
 #'
 #' @examples
 #' if (require("bayestestR", quietly = TRUE)) {

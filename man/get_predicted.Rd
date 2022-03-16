@@ -57,7 +57,7 @@ errors, e.g. by specifying the \code{vcov} and \code{vcov_args} arguments from
 \code{get_predicted_ci()} directly in the call to \code{get_predicted()}.}
 
 \item{data}{An optional data frame in which to look for variables with which
-to predict. If omitted, the data used to fit the model is used.}
+to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
 
 \item{predict}{string or \code{NULL}
 \itemize{
@@ -298,4 +298,7 @@ ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")
 head(ci_vals)
 ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 head(ci_vals)
+}
+\seealso{
+\code{\link[=get_datagrid]{get_datagrid()}}
 }
