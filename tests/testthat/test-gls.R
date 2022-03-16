@@ -7,6 +7,10 @@ if (requiet("testthat") &&
     correlation = corAR1(form = ~ 1 | Mare)
   )
 
+  cr <<- corAR1(form = ~ 1 | Mare)
+  m2 <- gls(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary,
+             correlation = cr)
+
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
   })
@@ -37,6 +41,14 @@ if (requiet("testthat") &&
     expect_length(find_formula(m1), 2)
     expect_equal(
       find_formula(m1),
+      list(
+        conditional = as.formula("follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time)"),
+        correlation = as.formula("~1 | Mare")
+      ),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      find_formula(m2),
       list(
         conditional = as.formula("follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time)"),
         correlation = as.formula("~1 | Mare")

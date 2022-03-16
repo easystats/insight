@@ -142,25 +142,25 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
       # remove possible namespace
       x[i] <- sub("(.*)::(.*)", "\\2", x[i])
       if (pattern[j] == "offset") {
-        x[i] <- .trim(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
+        x[i] <- trim_ws(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
       } else if (pattern[j] == "I") {
-        if (!ignore_asis) x[i] <- .trim(unique(sub("I\\(((\\w|\\.)*).*", "\\1", x[i])))
+        if (!ignore_asis) x[i] <- trim_ws(unique(sub("I\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] == "asis") {
-        if (!ignore_asis) x[i] <- .trim(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", x[i])))
+        if (!ignore_asis) x[i] <- trim_ws(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] == "log-log") {
-        x[i] <- .trim(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
+        x[i] <- trim_ws(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] == "scale-log") {
-        x[i] <- .trim(unique(sub("^scale\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
-        x[i] <- .trim(unique(sub("^scale\\(log1p\\(((\\w|\\.)*).*", "\\1", x[i])))
-        x[i] <- .trim(unique(sub("^scale\\(log2\\(((\\w|\\.)*).*", "\\1", x[i])))
-        x[i] <- .trim(unique(sub("^scale\\(log10\\(((\\w|\\.)*).*", "\\1", x[i])))
+        x[i] <- trim_ws(unique(sub("^scale\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
+        x[i] <- trim_ws(unique(sub("^scale\\(log1p\\(((\\w|\\.)*).*", "\\1", x[i])))
+        x[i] <- trim_ws(unique(sub("^scale\\(log2\\(((\\w|\\.)*).*", "\\1", x[i])))
+        x[i] <- trim_ws(unique(sub("^scale\\(log10\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] == "scale-poly") {
-        x[i] <- .trim(unique(sub("^scale\\(poly\\(((\\w|\\.)*).*", "\\1", x[i])))
+        x[i] <- trim_ws(unique(sub("^scale\\(poly\\(((\\w|\\.)*).*", "\\1", x[i])))
       } else if (pattern[j] %in% c("mmc", "mm")) {
         ## TODO multimembership-models need to be fixed
         p <- paste0("^", pattern[j], "\\((.*)\\).*")
-        g <- .trim(sub(p, "\\1", x[i]))
-        x[i] <- .trim(unlist(strsplit(g, ",")))
+        g <- trim_ws(sub(p, "\\1", x[i]))
+        x[i] <- trim_ws(unlist(strsplit(g, ",")))
       } else {
         # p <- paste0("^", pattern[j], "\\(([^,/)]*).*")
         # this one should be more generic...
@@ -169,7 +169,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
       }
     }
     # for coxme-models, remove random-effect things...
-    .trim(sub("^(.*)\\|(.*)", "\\2", x[i]))
+    trim_ws(sub("^(.*)\\|(.*)", "\\2", x[i]))
   })
 
   # remove for random intercept only models
@@ -191,8 +191,8 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
   unname(compact_character(unlist(sapply(c("mmc", "mm"), function(j) {
     if (grepl(paste0("^", j, "\\("), x = x)) {
       p <- paste0("^", j, "\\((.*)\\).*")
-      g <- .trim(sub(p, "\\1", x))
-      .trim(unlist(strsplit(g, ",")))
+      g <- trim_ws(sub(p, "\\1", x))
+      trim_ws(unlist(strsplit(g, ",")))
     } else {
       ""
     }

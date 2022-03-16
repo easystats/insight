@@ -154,8 +154,8 @@
 
   tryCatch(
     {
-      condformula <- stats::as.formula(paste0("~", .safe_deparse(stats::formula(model)[[3]][[2]])))
-      ziformula <- stats::as.formula(paste0("~", .safe_deparse(stats::formula(model)[[3]][[3]])))
+      condformula <- stats::as.formula(paste0("~", safe_deparse(stats::formula(model)[[3]][[2]])))
+      ziformula <- stats::as.formula(paste0("~", safe_deparse(stats::formula(model)[[3]][[3]])))
 
       matrix.conditional <- stats::model.matrix(condformula, model = "count", data = newdata)
       beta.conditional <- stats::coef(model, model = "count")

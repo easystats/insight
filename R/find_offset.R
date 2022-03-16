@@ -36,7 +36,7 @@ find_offset <- function(x) {
   }
 
   if (is.null(offset) && object_has_names(x, "call") && object_has_names(x$call, "offset")) {
-    offset <- clean_names(.safe_deparse(x$call$offset))
+    offset <- clean_names(safe_deparse(x$call$offset))
   }
 
   offset

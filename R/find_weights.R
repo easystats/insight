@@ -25,13 +25,13 @@ find_weights <- function(x, ...) {
 find_weights.default <- function(x, ...) {
   tryCatch(
     {
-      call_string <- .safe_deparse(x$call)
+      call_string <- safe_deparse(x$call)
       if (!is.null(call_string)) {
-        w <- .safe_deparse(parse(text = call_string)[[1]]$weights)
+        w <- safe_deparse(parse(text = call_string)[[1]]$weights)
 
         # edge case, users use "eval(parse())" to parse weight variables
         if (grepl("^eval\\(parse\\(", w)) {
-          w <- eval(parse(text = .trim(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
+          w <- eval(parse(text = trim_ws(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
         }
 
         if (is_empty_object(w) || w == "NULL") w <- NULL
@@ -52,9 +52,9 @@ find_weights.brmsfit <- function(x, ...) {
   f <- find_formula(x, verbose = FALSE)
 
   if (is_multivariate(f)) {
-    resp <- unlist(lapply(f, function(i) .safe_deparse(i$conditional[[2L]])))
+    resp <- unlist(lapply(f, function(i) safe_deparse(i$conditional[[2L]])))
   } else {
-    resp <- .safe_deparse(f$conditional[[2L]])
+    resp <- safe_deparse(f$conditional[[2L]])
   }
 
   resp <- compact_character(unname(sapply(resp, function(i) {
@@ -65,7 +65,7 @@ find_weights.brmsfit <- function(x, ...) {
     }
   })))
 
-  w <- .trim(sub("(.*)\\|(\\s+)weights\\((.*)\\)", "\\3", resp))
+  w <- trim_ws(sub("(.*)\\|(\\s+)weights\\((.*)\\)", "\\3", resp))
   if (is_empty_object(w)) w <- NULL
   w
 }
@@ -81,11 +81,11 @@ find_weights.model_fit <- function(x, ...) {
 find_weights.merMod <- function(x, ...) {
   tryCatch(
     {
-      w <- .safe_deparse(parse(text = .safe_deparse(x@call))[[1]]$weights)
+      w <- safe_deparse(parse(text = safe_deparse(x@call))[[1]]$weights)
 
       # edge case, users use "eval(parse())" to parse weight variables
       if (grepl("^eval\\(parse\\(", w)) {
-        w <- eval(parse(text = .trim(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
+        w <- eval(parse(text = trim_ws(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
       }
 
       if (is_empty_object(w) || w == "NULL") w <- NULL

@@ -46,12 +46,12 @@ find_random_slopes <- function(x) {
   if (!is.list(fr)) fr <- list(fr)
 
   random_slope <- lapply(fr, function(forms) {
-    if (grepl("(.*)\\|(.*)\\|(.*)", .safe_deparse(forms))) {
+    if (grepl("(.*)\\|(.*)\\|(.*)", safe_deparse(forms))) {
       pattern <- "(.*)\\|(.*)\\|(.*)"
     } else {
       pattern <- "(.*)\\|(.*)"
     }
-    pattern <- gsub(pattern, "\\1", .safe_deparse(forms))
+    pattern <- gsub(pattern, "\\1", safe_deparse(forms))
     re <- all.vars(forms)
     re[sapply(re, function(x) {
       grepl(x, pattern, fixed = TRUE)

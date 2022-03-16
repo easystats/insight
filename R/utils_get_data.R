@@ -22,7 +22,7 @@
   # do we have an offset, not specified in the formula?
   offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
   if (length(offcol) && object_has_names(x, "call") && object_has_names(x$call, "offset")) {
-    colnames(mf)[offcol] <- clean_names(.safe_deparse(x$call$offset))
+    colnames(mf)[offcol] <- clean_names(safe_deparse(x$call$offset))
   }
 
   # backtransform variables, such as log, sqrt etc ----------------------------
@@ -322,7 +322,7 @@
   # check if data argument was used
   model_call <- get_call(model)
   if (!is.null(model_call)) {
-    data_arg <- tryCatch(parse(text = .safe_deparse(model_call))[[1]]$data,
+    data_arg <- tryCatch(parse(text = safe_deparse(model_call))[[1]]$data,
       error = function(e) NULL
     )
   } else {
@@ -669,7 +669,7 @@
 .get_startvector_from_env <- function(x) {
   tryCatch(
     {
-      sv <- eval(parse(text = .safe_deparse(x@call))[[1]]$start)
+      sv <- eval(parse(text = safe_deparse(x@call))[[1]]$start)
       if (is.list(sv)) sv <- sv[["nlpars"]]
       names(sv)
     },
@@ -764,7 +764,7 @@
     x <- find_terms(model, flatten = TRUE)
   }
   pattern <- sprintf("%s\\(([^,\\+)]*).*", type)
-  .trim(gsub(pattern, "\\1", x[grepl(pattern, x)]))
+  trim_ws(gsub(pattern, "\\1", x[grepl(pattern, x)]))
 }
 
 
@@ -788,7 +788,7 @@
       } else {
         # split by "and" and "by". E.g., for t.test(1:3, c(1,1:3)), we have
         # x$data.name = "1:3 and c(1, 1:3)"
-        data_name <- trimws(unlist(strsplit(x$data.name, "(and|by)")))
+        data_name <- trim_ws(unlist(strsplit(x$data.name, "(and|by)")))
 
         # now we may have exceptions, e.g. for friedman.test(wb$x, wb$w, wb$t)
         # x$data.name is "wb$x, wb$w and wb$t" and we now have "wb$x, wb$w" and
@@ -799,7 +799,7 @@
 
         # any comma not inside parentheses?
         if (any(grepl(",", data_comma, fixed = TRUE))) {
-          data_name <- trimws(unlist(strsplit(data_comma, ", ", fixed = TRUE)))
+          data_name <- trim_ws(unlist(strsplit(data_comma, ", ", fixed = TRUE)))
         }
 
         # exeception: list for kruskal-wallis
@@ -853,7 +853,7 @@
     for (parent_level in 1:5) {
       out <- tryCatch(
         {
-          data_name <- trimws(unlist(strsplit(x$data.name, "(and|,|by)")))
+          data_name <- trim_ws(unlist(strsplit(x$data.name, "(and|,|by)")))
           as.table(get(data_name, envir = parent.frame(n = parent_level)))
         },
         error = function(e) {

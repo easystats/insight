@@ -138,7 +138,7 @@
 
   if (inherits(x, c("lrm", "blrm"))) {
     resp <- get_response(x, verbose = FALSE)
-    if (.n_unique(resp) == 2) {
+    if (n_unique(resp) == 2) {
       binom_fam <- TRUE
     } else {
       is.ordinal <- TRUE
@@ -182,7 +182,7 @@
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {
     rv <- tryCatch(
       {
-        .safe_deparse(stats::formula(x)$formula[[2L]])
+        safe_deparse(stats::formula(x)$formula[[2L]])
       },
       error = function(x) {
         NULL
@@ -190,7 +190,7 @@
     )
 
     if (!is.null(rv)) {
-      is.trial <- .trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
+      is.trial <- trim_ws(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
       is.censored <- grepl("(.*)\\|(.*)cens\\(", rv)
       is.truncated <- grepl("(.*)\\|(.*)trunc\\(", rv)
     }
@@ -199,7 +199,7 @@
   if (binom_fam && !inherits(x, "brmsfit")) {
     is.trial <- tryCatch(
       {
-        rv <- .safe_deparse(stats::formula(x)[[2L]])
+        rv <- safe_deparse(stats::formula(x)[[2L]])
         grepl("cbind\\((.*)\\)", rv)
       },
       error = function(x) {
@@ -324,7 +324,7 @@
   }
 
   if (inherits(x, "brmsfit") && !is_multivariate(x)) {
-    is_meta <- grepl("(.*)\\|(.*)se\\((.*)\\)", .safe_deparse(find_formula(x, verbose = FALSE)$conditional[[2]]))
+    is_meta <- grepl("(.*)\\|(.*)se\\((.*)\\)", safe_deparse(find_formula(x, verbose = FALSE)$conditional[[2]]))
   }
 
 
@@ -412,7 +412,7 @@
 .make_tobit_family <- function(x, dist = NULL) {
   if (is.null(dist)) {
     if (inherits(x, "flexsurvreg")) {
-      dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
+      dist <- parse(text = safe_deparse(x$call))[[1]]$dist
     } else {
       dist <- x$dist
     }

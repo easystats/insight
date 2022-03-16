@@ -47,4 +47,23 @@ if (requiet("testthat") && requiet("insight")) {
     ft <- insight::format_table(d)
     expect_equal(colnames(ft), c("BF = 3 SI", "BF = 0.2 SI"))
   })
+
+  .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+  if (.runThisTest && requiet("bayestestR")) {
+    set.seed(1234)
+    test_that("format_table with multiple si-levels", {
+      d <- bayestestR::distribution_normal(1000)
+      x <- bayestestR::hdi(d, ci = c(.80, .90))
+      out <- capture.output(print(x))
+      expect_equal(
+        out,
+        c("Highest Density Interval",
+          "",
+          "80% HDI       |       90% HDI",
+          "-----------------------------",
+          "[-1.28, 1.28] | [-1.65, 1.64]"
+        )
+      )
+    })
+  }
 }

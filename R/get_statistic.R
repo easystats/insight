@@ -777,7 +777,7 @@ get_statistic.mvord <- function(x,
 
   params <- rbind(params, params_error)
 
-  if (.n_unique(params$Response) == 1) {
+  if (n_unique(params$Response) == 1) {
     params$Response <- NULL
   }
 

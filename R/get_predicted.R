@@ -1,11 +1,27 @@
-#' Model Predictions (robust)
+#' @title Model predictions (robust) and their confidence intervals
+#' @name get_predicted
 #'
-#' The `get_predicted()` function is a robust, flexible and user-friendly alternative to base R [predict()] function. Additional features and advantages include availability of uncertainty intervals (CI), bootstrapping, a more intuitive API and the support of more models than base R's `predict` function. However, although the interface are simplified, it is still very important to read the documentation of the arguments. This is because making "predictions" (a lose term for a variety of things) is a non-trivial process, with lots of caveats and complications. Read the `Details` section for more information.
+#' @description
+#' The `get_predicted()` function is a robust, flexible and user-friendly
+#' alternative to base R [predict()] function. Additional features and
+#' advantages include availability of uncertainty intervals (CI), bootstrapping,
+#' a more intuitive API and the support of more models than base R's `predict()`
+#' function. However, although the interface are simplified, it is still very
+#' important to read the documentation of the arguments. This is because making
+#' "predictions" (a lose term for a variety of things) is a non-trivial process,
+#' with lots of caveats and complications. Read the 'Details' section for more
+#' information.
+#' \cr \cr
+#' `get_predicted_ci()` returns the confidence (or prediction) interval (CI)
+#' associated with predictions made by a model. This function can be called
+#' separately on a vector of predicted values. `get_predicted()` usually
+#' returns confidence intervals (included as attribute, and accessible via the
+#' `as.data.frame()` method) by default.
 #'
 #' @param x A statistical model (can also be a data.frame, in which case the
 #'   second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which
-#'   to predict. If omitted, the data used to fit the model is used.
+#'   to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using [get_datagrid()].
 #' @param predict string or `NULL`
 #' * `"link"` returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).
 #' * `"expectation"` (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).
@@ -32,17 +48,15 @@
 #'   will fix the value of the smooth to its average, so that the predictions
 #'   are not depending on it. (default), `mean()`, or
 #'   `bayestestR::map_estimate()`.
-#' @param ... Other argument to be passed, for instance to [get_predicted_ci()].
+#' @param ... Other argument to be passed, for instance to `get_predicted_ci()`.
 #'   This can be used to request confidence intervals based on robust standard
-#'   errors, e.g. by specifying the `vcov_*` arguments from [get_predicted_ci()]
-#'   directly in the call to `get_predicted()`.
+#'   errors, e.g. by specifying the `vcov` and `vcov_args` arguments from
+#'   `get_predicted_ci()` directly in the call to `get_predicted()`.
 #' @inheritParams get_df
-#'
-#' @seealso [get_predicted_ci()]
 #'
 #' @return The fitted values (i.e. predictions for the response). For Bayesian
 #'   or bootstrapped models (when `iterations != NULL`), iterations (as
-#'   columns and observations are rows) can be accessed via `as.data.frame`.
+#'   columns and observations are rows) can be accessed via `as.data.frame()`.
 #'
 #' @details
 #' In `insight::get_predicted()`, the `predict` argument jointly
@@ -86,7 +100,7 @@
 #' \subsection{Heteroscedasticity consistent standard errors}{
 #' The arguments `vcov` and `vcov_args` can be used to calculate robust
 #' standard errors for confidence intervals of predictions. These arguments,
-#' when provided in `get_predicted()`, are passed down to [get_predicted_ci()],
+#' when provided in `get_predicted()`, are passed down to `get_predicted_ci()`,
 #' thus, see the related documentation there for more
 #' details.
 #' }
@@ -95,6 +109,8 @@
 #' For predictions based on multiple iterations, for instance in the case of Bayesian models and bootstrapped predictions, the function used to compute the centrality (point-estimate predictions) can be modified via the `centrality_function` argument. For instance, `get_predicted(model, centrality_function = stats::median)`. The default is `mean`.
 #' Individual draws can be accessed by running `iter <- as.data.frame(get_predicted(model))`, and their iterations can be reshaped into a long format by `bayestestR::reshape_iterations(iter)`.
 #' }
+#'
+#' @seealso [get_datagrid()]
 #'
 #' @examples
 #' data(mtcars)
@@ -135,6 +151,7 @@
 #' # Classification: classification "type" + PI
 #' pred <- get_predicted(x, predict = "classification")
 #' head(as.data.frame(pred))
+#'
 #' @export
 get_predicted <- function(x, ...) {
   UseMethod("get_predicted")
@@ -144,23 +161,51 @@ get_predicted <- function(x, ...) {
 # default methods ---------------------------
 
 #' @export
-get_predicted.default <- function(x, data = NULL, verbose = TRUE, ...) {
+get_predicted.default <- function(x, data = NULL, predict = NULL, verbose = TRUE, ...) {
 
-  # many predict.CLASS methods do not work when `newdata` is explicitly specified, even if it is NULL
-  if (is.null(data)) {
-    args <- c(list(x), list(...))
+  # evaluate arguments
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+
+  # evaluate dots, remove some arguments that might be duplicated else
+  dot_args <- list(...)
+  dot_args[["newdata"]] <- NULL
+  dot_args[["type"]] <- NULL
+
+
+  # 1. step: predictions
+  predict_args <- compact_list(list(x, newdata = args$data, type = args$type, dot_args))
+  predictions <- tryCatch(do.call("predict", predict_args), error = function(e) NULL)
+
+  if (is.null(predictions)) {
+    predictions <- tryCatch(do.call("fitted", predict_args), error = function(e) NULL)
+  }
+
+  # 2. step: confidence intervals
+  ci_data <- tryCatch(
+    {
+      get_predicted_ci(
+        x,
+        predictions,
+        data = args$data,
+        ci_type = args$ci_type,
+        ...
+      )
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  # 3. step: back-transform
+  if (!is.null(predictions)) {
+    out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
   } else {
-    args <- c(list(x, "newdata" = data), list(...))
+    out <- NULL
   }
 
-  out <- tryCatch(do.call("predict", args), error = function(e) NULL)
-
-  if (is.null(out)) {
-    out <- tryCatch(do.call("fitted", args), error = function(e) NULL)
-  }
-
+  # 4. step: final preparation
   if (!is.null(out)) {
-    out <- .get_predicted_out(out, args = list("data" = data))
+    out <- .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
   }
 
   out
@@ -254,8 +299,60 @@ get_predicted.survreg <- get_predicted.lm
 
 
 
+# survival: coxph -------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterations = NULL, verbose = TRUE, ...) {
+
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+  se <- NULL
+
+  predict_function <- function(x, data, ...) {
+    stats::predict(x, newdata = data, type = args$type, ...)
+  }
+
+  # 1. step: predictions
+  if (is.null(iterations)) {
+    predictions <- predict_function(x, data = args$data, se.fit = TRUE)
+    if (is.list(predictions)) {
+      se <- as.vector(predictions$se.fit)
+      predictions <- as.vector(predictions$fit)
+    }
+  } else {
+    predictions <- .get_predicted_boot(
+      x,
+      data = args$data,
+      predict_function = predict_function,
+      iterations = iterations,
+      verbose = verbose,
+      ...
+    )
+  }
+
+  # 2. step: confidence intervals
+  ci_data <- get_predicted_ci(
+    x,
+    predictions,
+    data = args$data,
+    ci_type = args$ci_type,
+    se = se,
+    ...
+  )
+
+  # 3. step: back-transform
+  out <- .get_predicted_transform(x, predictions, args, ci_data, link_inv = exp, verbose = verbose)
+
+  # 4. step: final preparation
+  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+}
+
+
+
+
 # bife ------------------------------------------------------------------
 # =======================================================================
+
 #' @export
 get_predicted.bife <- function(x,
                                predict = "expectation",
@@ -364,6 +461,33 @@ get_predicted.rma <- function(x,
 
 
 
+# afex ------------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.afex_aov <- function(x, data = NULL, ...) {
+  if (is.null(data)) {
+    args <- c(list(x), list(...))
+  } else {
+    args <- c(list(x, "newdata" = data), list(...))
+  }
+
+  out <- tryCatch(do.call("predict", args), error = function(e) NULL)
+
+  if (is.null(out)) {
+    out <- tryCatch(do.call("fitted", args), error = function(e) NULL)
+  }
+
+  if (!is.null(out)) {
+    out <- .get_predicted_out(out, args = list("data" = data))
+  }
+
+  out
+}
+
+
+
+
 # ====================================================================
 # Utils --------------------------------------------------------------
 # ====================================================================
@@ -417,7 +541,7 @@ get_predicted.rma <- function(x,
 
     # retrieve link-inverse, for back transformation...
     if (is.null(link_inv)) {
-      link_inv <- link_inverse
+      link_inv <- link_inverse(x)
     }
 
     if (!is.null(ci_data)) {
@@ -427,7 +551,7 @@ get_predicted.rma <- function(x,
       # fix for R 3.4
       row.names(ci_data) <- NULL
 
-      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inv(x))
+      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inv)
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
       # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
@@ -445,11 +569,11 @@ get_predicted.rma <- function(x,
     }
 
     # Transform predictions
-    predictions <- link_inv(x)(predictions)
+    predictions <- link_inv(predictions)
 
     # Transform iterations
     if ("iterations" %in% names(attributes(predictions))) {
-      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv(x)))
+      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv))
     }
 
     # Transform to response "type"
@@ -484,11 +608,21 @@ get_predicted.rma <- function(x,
   # multidimensional or "grouped" predictions (e.g., nnet::multinom with `predict(type="probs")`)
   if (is.matrix(predictions) && ncol(predictions) > 1) {
     predictions <- as.data.frame(predictions)
+    vary <- colnames(predictions)
     predictions$Row <- 1:nrow(predictions)
+    # if we have any focal predictors, add those as well, so we have
+    # the associated levels/values for "Row"
+    if (!is.null(args$data)) {
+      focal_predictors <- tryCatch(names(which(n_unique(args$data) > 1)),
+                                   error = function(e) NULL)
+      if (!is.null(focal_predictors)) {
+        predictions <- cbind(predictions, args$data[focal_predictors])
+      }
+    }
     predictions <- stats::reshape(predictions,
       direction = "long",
-      varying = setdiff(colnames(predictions), "Row"),
-      times = setdiff(colnames(predictions), "Row"),
+      varying = vary,
+      times = vary,
       v.names = "Predicted",
       timevar = "Response",
       idvar = "Row"

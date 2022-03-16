@@ -25,6 +25,10 @@ if (requiet("testthat") &&
     data = sleepstudy
   )
 
+  # from easystats/insight/482
+  cr <- corAR1(form = ~ 1 | Mare)
+  m4 <- lme(follicles ~ Time, Ovary, correlation = cr)
+
   test_that("nested_varCorr", {
     skip_on_cran()
 
@@ -111,6 +115,15 @@ if (requiet("testthat") &&
       list(
         conditional = as.formula("distance ~ age + Sex"),
         random = as.formula("~1")
+      ),
+      ignore_attr = TRUE
+    )
+    expect_length(find_formula(m4), 2)
+    expect_equal(
+      find_formula(m4),
+      list(
+        conditional = as.formula("follicles ~ Time"),
+        correlation = as.formula("~1 | Mare")
       ),
       ignore_attr = TRUE
     )

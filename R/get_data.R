@@ -484,7 +484,7 @@ get_data.mixor <- function(x,
   )
 
   fix_cn <- which(colnames(mf) %in% c("x.id", "x$id"))
-  colnames(mf)[fix_cn] <- .safe_deparse(x$call$id)
+  colnames(mf)[fix_cn] <- safe_deparse(x$call$id)
 
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
@@ -825,7 +825,7 @@ get_data.plm <- function(x, verbose = TRUE, ...) {
   colnames(mf) <- clean_names(cn)
 
   # find index variables
-  index <- eval(parse(text = .safe_deparse(x$call))[[1]]$index)
+  index <- eval(parse(text = safe_deparse(x$call))[[1]]$index)
 
   # try to get index variables from orignal data
   if (!is.null(index)) {
@@ -1265,7 +1265,7 @@ get_data.gmnl <- function(x, ...) {
 get_data.gbm <- function(x, ...) {
   mf <- tryCatch(
     {
-      get(.safe_deparse(x$call$data), envir = parent.frame())[, find_variables(x, flatten = TRUE), drop = FALSE]
+      get(safe_deparse(x$call$data), envir = parent.frame())[, find_variables(x, flatten = TRUE), drop = FALSE]
     },
     error = function(x) {
       stats::model.frame(x)

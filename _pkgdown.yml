@@ -62,7 +62,6 @@ reference:
   - get_loglikelihood
   - get_modelmatrix
   - get_predicted
-  - get_predicted_ci
   - get_priors
   - get_residuals
   - get_sigma
@@ -135,6 +134,9 @@ reference:
   - starts_with("object_has_")
   - starts_with("compact_")
   - check_if_installed
+  - safe_deparse
+  - trim_ws
+  - n_unique
 
 - title: "Example Datasets"
   desc: >

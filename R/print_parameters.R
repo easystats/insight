@@ -210,7 +210,7 @@ print_parameters <- function(x,
     # we don't need "Effects" and "Component" column any more, and probably
     # also no longer the "Group" column
     columns_to_remove <- c("Effects", "Component", "Cleaned_Parameter")
-    if (.n_unique(.group) == 1) {
+    if (n_unique(.group) == 1) {
       columns_to_remove <- c(columns_to_remove, "Group")
     } else {
       .group <- NULL
@@ -251,14 +251,14 @@ print_parameters <- function(x,
     title2 <- format_capitalize(title2)
 
     # add attributes
-    attr(element, "main_title") <- .trim(title1)
-    attr(element, "sub_title") <- .trim(title2)
+    attr(element, "main_title") <- trim_ws(title1)
+    attr(element, "sub_title") <- trim_ws(title2)
     if (is.null(format) || format == "text") {
-      attr(element, "table_caption") <- c(paste0(title_prefix, .trim(title1)), "blue")
-      attr(element, "table_subtitle") <- c(.trim(title2), "blue")
+      attr(element, "table_caption") <- c(paste0(title_prefix, trim_ws(title1)), "blue")
+      attr(element, "table_subtitle") <- c(trim_ws(title2), "blue")
     } else {
-      attr(element, "table_caption") <- .trim(title1)
-      attr(element, "table_subtitle") <- .trim(title2)
+      attr(element, "table_caption") <- trim_ws(title1)
+      attr(element, "table_subtitle") <- trim_ws(title2)
     }
     attr(element, "Effects") <- .effects
     attr(element, "Component") <- .component

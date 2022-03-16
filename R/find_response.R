@@ -40,9 +40,9 @@ find_response.default <- function(x, combine = TRUE, ...) {
   # this is for multivariate response models,
   # where we have a list of formulas
   if (is_multivariate(f)) {
-    resp <- unlist(lapply(f, function(i) .safe_deparse(i$conditional[[2L]])))
+    resp <- unlist(lapply(f, function(i) safe_deparse(i$conditional[[2L]])))
   } else {
-    resp <- .safe_deparse(f$conditional[[2L]])
+    resp <- safe_deparse(f$conditional[[2L]])
   }
 
   check_cbind(resp, combine, model = x)
@@ -75,8 +75,8 @@ find_response.bfsl <- function(x, combine = TRUE, ...) {
 find_response.selection <- function(x, combine = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
   resp <- c(
-    .safe_deparse(f$conditional$selection[[2L]]),
-    .safe_deparse(f$conditional$outcome[[2L]])
+    safe_deparse(f$conditional$selection[[2L]]),
+    safe_deparse(f$conditional$outcome[[2L]])
   )
   check_cbind(resp, combine, model = x)
 }
@@ -92,7 +92,7 @@ find_response.mediate <- function(x, combine = TRUE, ...) {
     return(NULL)
   }
 
-  resp <- c(.safe_deparse(f$mediator$conditional[[2L]]), .safe_deparse(f$outcome$conditional[[2L]]))
+  resp <- c(safe_deparse(f$mediator$conditional[[2L]]), safe_deparse(f$outcome$conditional[[2L]]))
   check_cbind(resp, combine, model = x)
 }
 
@@ -108,8 +108,8 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
     return(NULL)
   }
 
-  conditional <- unlist(lapply(f[grepl("^conditional", names(f))], function(i) .safe_deparse(i[[2L]])))
-  survial <- .safe_deparse(f$survival[[2L]])
+  conditional <- unlist(lapply(f[grepl("^conditional", names(f))], function(i) safe_deparse(i[[2L]])))
+  survial <- safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
     "conditional" = conditional,
@@ -135,8 +135,8 @@ find_response.joint <- function(x,
     return(NULL)
   }
 
-  conditional <- .safe_deparse(f$conditional[[2L]])
-  survial <- .safe_deparse(f$survival[[2L]])
+  conditional <- safe_deparse(f$conditional[[2L]])
+  survial <- safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
     "conditional" = conditional,
@@ -173,15 +173,15 @@ check_cbind <- function(resp, combine, model) {
     resp <- .extract_combined_response(resp, "MMO2")
   } else if (!combine && any(grepl("/", resp, fixed = TRUE))) {
     resp <- strsplit(resp, split = "/", fixed = TRUE)
-    resp <- gsub("(I|\\(|\\))", "", .trim(unlist(resp)))
+    resp <- gsub("(I|\\(|\\))", "", trim_ws(unlist(resp)))
   } else if (any(.string_contains("|", resp))) {
     # check for brms Additional Response Information
-    r1 <- .trim(sub("(.*)\\|(.*)", "\\1", resp))
-    r2 <- .trim(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
+    r1 <- trim_ws(sub("(.*)\\|(.*)", "\\1", resp))
+    r2 <- trim_ws(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
     # check for "resp_thres" pattern
-    r_resp <- .trim(unlist(strsplit(resp, "|", fixed = TRUE))[2])
+    r_resp <- trim_ws(unlist(strsplit(resp, "|", fixed = TRUE))[2])
     if (grepl("^resp_thres", r_resp)) {
-      r3 <- .trim(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp)))
+      r3 <- trim_ws(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp)))
       names(r3) <- r3
       numeric_values <- suppressWarnings(as.numeric(r2))
       r2 <- r2[is.na(numeric_values)]
@@ -194,7 +194,7 @@ check_cbind <- function(resp, combine, model) {
     resp <- c(r1, r2)
   } else if (!combine && any(grepl("+", resp, fixed = TRUE))) {
     resp <- strsplit(resp, split = "+", fixed = TRUE)
-    resp <- gsub("(I|\\(|\\))", "", .trim(unlist(resp)))
+    resp <- gsub("(I|\\(|\\))", "", trim_ws(unlist(resp)))
   }
 
   # exception
@@ -212,11 +212,11 @@ check_cbind <- function(resp, combine, model) {
   } else {
     resp <- sub(sprintf("%s\\(([^,].*)([\\)].*)", pattern), "\\1", resp)
     resp <- strsplit(resp, split = ",", fixed = TRUE)
-    resp <- .trim(unlist(resp))
+    resp <- trim_ws(unlist(resp))
   }
 
   if (any(.string_contains("-", resp[2]))) {
-    resp[2] <- .trim(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
+    resp[2] <- trim_ws(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
   }
 
   resp

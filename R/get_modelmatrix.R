@@ -84,7 +84,7 @@ get_modelmatrix.svyglm <- function(x, ...) {
 
 #' @export
 get_modelmatrix.brmsfit <- function(x, ...) {
-  formula_rhs <- .safe_deparse(find_formula(x)$conditional[[3]])
+  formula_rhs <- safe_deparse(find_formula(x)$conditional[[3]])
   formula_rhs <- stats::as.formula(paste0("~", formula_rhs))
   .data_in_dots(..., object = formula_rhs, default_data = get_data(x))
 }

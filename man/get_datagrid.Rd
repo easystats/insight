@@ -99,7 +99,7 @@ Reference grid data frame.
 }
 \description{
 Create a reference matrix, useful for visualisation, with evenly spread and
-combined values.
+combined values. Usually used to make generate predictions using \code{\link[=get_predicted]{get_predicted()}}.
 }
 \examples{
 if (require("bayestestR", quietly = TRUE)) {
@@ -123,4 +123,7 @@ if (require("bayestestR", quietly = TRUE)) {
   # with list-style at-argument
   get_datagrid(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 }
+}
+\seealso{
+\code{\link[=get_predicted]{get_predicted()}}
 }

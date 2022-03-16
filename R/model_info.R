@@ -406,7 +406,7 @@ model_info.brmultinom <- model_info.speedglm
 
 #' @export
 model_info.flexsurvreg <- function(x, verbose = TRUE, ...) {
-  dist <- parse(text = .safe_deparse(x$call))[[1]]$dist
+  dist <- parse(text = safe_deparse(x$call))[[1]]$dist
   faminfo <- .make_tobit_family(x, dist)
 
   .make_family(
@@ -820,8 +820,8 @@ model_info.merModList <- function(x, ...) {
 
 #' @export
 model_info.cglm <- function(x, ...) {
-  link <- parse(text = .safe_deparse(x$call))[[1]]$link
-  method <- parse(text = .safe_deparse(x$call))[[1]]$method
+  link <- parse(text = safe_deparse(x$call))[[1]]$link
+  method <- parse(text = safe_deparse(x$call))[[1]]$method
 
   if (!is.null(method) && method == "clm") {
     .make_family(x, ...)
@@ -925,7 +925,7 @@ model_info.glmmadmb <- function(x, ...) {
 
 #' @export
 model_info.cpglmm <- function(x, ...) {
-  link <- parse(text = .safe_deparse(x@call))[[1]]$link
+  link <- parse(text = safe_deparse(x@call))[[1]]$link
   if (is.null(link)) link <- "log"
   if (is.numeric(link)) link <- "tweedie"
   .make_family(
@@ -940,7 +940,7 @@ model_info.cpglmm <- function(x, ...) {
 
 #' @export
 model_info.zcpglm <- function(x, ...) {
-  link <- parse(text = .safe_deparse(x@call))[[1]]$link
+  link <- parse(text = safe_deparse(x@call))[[1]]$link
   if (is.null(link)) link <- "log"
   if (is.numeric(link)) link <- "tweedie"
   .make_family(
@@ -1240,6 +1240,13 @@ model_info.bfsl <- function(x, verbose = TRUE, ...) {
     verbose = verbose,
     ...
   )
+}
+
+# marginaleffects objects -------------------------------
+
+#' @export
+model_info.marginaleffects <- function(x, ...) {
+  model_info(attributes(x)$model)
 }
 
 

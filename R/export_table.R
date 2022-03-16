@@ -409,14 +409,14 @@ print.insight_table <- function(x, ...) {
     # first column definitely right alignment, fixed width
     first_row <- as.character(aligned[1, ])
     for (i in 1:length(first_row)) {
-      aligned[1, i] <- format(trimws(first_row[i]), width = nchar(first_row[i]), justify = "right")
+      aligned[1, i] <- format(trim_ws(first_row[i]), width = nchar(first_row[i]), justify = "right")
     }
 
     final <- as.matrix(aligned)
 
     # left-align first column (if a character or a factor)
     if (!is.numeric(x[, 1])) {
-      final[, 1] <- format(trimws(final[, 1]), justify = "left")
+      final[, 1] <- format(trim_ws(final[, 1]), justify = "left")
       col_align[1] <- "left"
     }
 
@@ -497,17 +497,17 @@ print.insight_table <- function(x, ...) {
 
       # left alignment, or at least first line only left?
       if (align == "left" || (align == "firstleft" && i == 1) || align_char == "l") {
-        final[, i] <- format(trimws(final[, i]), justify = "left")
+        final[, i] <- format(trim_ws(final[, i]), justify = "left")
         col_align[i] <- "left"
 
         # right-alignment
       } else if (align == "right" || align_char == "r") {
-        final[, i] <- format(trimws(final[, i]), justify = "right")
+        final[, i] <- format(trim_ws(final[, i]), justify = "right")
         col_align[i] <- "right"
 
         # else, center
       } else {
-        final[, i] <- format(trimws(final[, i]), justify = "centre")
+        final[, i] <- format(trim_ws(final[, i]), justify = "centre")
         col_align[i] <- "centre"
       }
     }
@@ -540,7 +540,7 @@ print.insight_table <- function(x, ...) {
     if (length(matching_columns)) {
       for (i in matching_columns) {
         w <- as.vector(col_width[col_names[i]])
-        final[, i] <- format(trimws(final[, i]), width = w, justify = col_align[i])
+        final[, i] <- format(trim_ws(final[, i]), width = w, justify = col_align[i])
       }
     }
   }
@@ -634,7 +634,7 @@ print.insight_table <- function(x, ...) {
     }
 
     # paste everything together and remove unnecessary double spaces
-    title_line <- .trim(paste0(caption[1], " ", subtitle[1]))
+    title_line <- trim_ws(paste0(caption[1], " ", subtitle[1]))
     title_line <- gsub("  ", " ", title_line, fixed = TRUE)
     rows <- paste0(title_line, "\n\n", rows)
   }
@@ -667,7 +667,7 @@ print.insight_table <- function(x, ...) {
     final_row <- paste0(final[row, ], collapse = sep)
 
     # check if we have an empty row
-    if (!is.null(empty_line) && all(nchar(trimws(final[row, ])) == 0)) {
+    if (!is.null(empty_line) && all(nchar(trim_ws(final[row, ])) == 0)) {
       rows <- paste0(rows, paste0(rep_len(empty_line, nchar(final_row)), collapse = ""), sep = "\n")
     } else {
       rows <- paste0(rows, final_row, sep = "\n")
@@ -682,7 +682,7 @@ print.insight_table <- function(x, ...) {
         # special char. E.g., if columns are separated with "|" and header line
         # with "-", we might have a "+" to have properly "crossed lines"
         if (!is.null(cross)) {
-          cross_position <- unlist(gregexpr(trimws(sep), final_row, fixed = TRUE))
+          cross_position <- unlist(gregexpr(trim_ws(sep), final_row, fixed = TRUE))
           for (pp in cross_position) {
             substr(header_line, pp, pp) <- cross
           }
@@ -880,7 +880,7 @@ print.insight_table <- function(x, ...) {
     if (!is.null(subtitle)) {
       caption[1] <- paste0(caption[1], " ", subtitle[1])
     }
-    rows <- c(paste0("Table: ", .trim(caption[1])), "", rows)
+    rows <- c(paste0("Table: ", trim_ws(caption[1])), "", rows)
   }
 
   if (!is.null(footer)) {
@@ -927,7 +927,7 @@ print.insight_table <- function(x, ...) {
     # remove, but we may check if all printed sub titles look like intended
 
     for (i in group_by_columns) {
-      if (.n_unique(final[[i]]) <= 1) {
+      if (n_unique(final[[i]]) <= 1) {
         final[[i]] <- NULL
       }
     }

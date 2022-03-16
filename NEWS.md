@@ -15,6 +15,8 @@
 
 * To work with strings: `compact_character()`
 
+* Further utility functions are `safe_deparse()`, `trim_ws()` and `n_unique()`.
+
 ## Changes to functions
 
 * `export_table()` now better checks for invalid values of caption and footer
@@ -53,6 +55,9 @@
 * Fixed issue with correctly detecting Tweedie-models in `model_info()`.
 
 * Fixed issue with `get_datagrid()` for *brms* models with monotonic factors.
+
+* Fixed issue in `find_formula()` when argument `correlation` was defined 
+outside of `lme()` and `gls()` (@etiennebacher, #525).
 
 * Fixed issue with `get_data()` when back-transforming data from predictors 
   that used `cos()`, `sin()` or `tan()` transformations.

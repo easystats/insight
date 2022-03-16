@@ -396,10 +396,10 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 get_priors.bcplm <- function(x, ...) {
   params <- setdiff(find_parameters(x, flatten = TRUE), c("phi", "p"))
 
-  location <- eval(parse(text = .safe_deparse(x@call))[[1]]$prior.beta.mean)
+  location <- eval(parse(text = safe_deparse(x@call))[[1]]$prior.beta.mean)
   if (is.null(location)) location <- 0
 
-  scale <- eval(parse(text = .safe_deparse(x@call))[[1]]$prior.beta.var)
+  scale <- eval(parse(text = safe_deparse(x@call))[[1]]$prior.beta.var)
   if (is.null(scale)) scale <- 10000
 
   data.frame(

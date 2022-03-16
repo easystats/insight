@@ -97,7 +97,7 @@ find_statistic <- function(x, ...) {
     "ivreg", "ivFixed", "iv_robust", "ivprobit",
     "lm", "lm_robust", "lm.beta", "lme", "lmerMod", "lmerModLmerTest",
     "lmodel2", "lmRob", "lmrob", "lqm", "lqmm",
-    "maxLik", "mixed", "mhurdle", "mlm", "multinom",
+    "maxLik", "mixed", "mhurdle", "mlm", "multinom", "marginaleffects", "marginaleffects.summary",
     "nlmerMod", "nlrq", "nls",
     "ols", "orcutt",
     "pb1", "pb2", "polr",

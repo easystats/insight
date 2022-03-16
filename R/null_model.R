@@ -41,7 +41,7 @@ null_model <- function(model, verbose = TRUE, ...) {
   } else {
     f <- stats::formula(model)
     resp <- find_response(model)
-    re.terms <- paste0("(", sapply(.findbars(f), .safe_deparse), ")")
+    re.terms <- paste0("(", sapply(.findbars(f), safe_deparse), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
     null.model <- tryCatch(
       {

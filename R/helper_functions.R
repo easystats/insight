@@ -1,7 +1,3 @@
-# remove trailing/leading spaces from character vectors
-.trim <- function(x) gsub("^\\s+|\\s+$", "", x)
-
-
 # remove values from vector
 .remove_values <- function(x, values) {
   remove <- x %in% values
@@ -113,11 +109,11 @@
     )
   )
 
-  if (identical(.safe_deparse(f), "~0") || identical(.safe_deparse(f), "~1")) {
+  if (identical(safe_deparse(f), "~0") || identical(safe_deparse(f), "~1")) {
     return(NULL)
   }
 
-  re <- sapply(.findbars(f), .safe_deparse)
+  re <- sapply(.findbars(f), safe_deparse)
 
   if (is_special && is_empty_object(re)) {
     re <- all.vars(f[[2L]])
@@ -126,13 +122,13 @@
       split_nested <- FALSE
     }
   } else {
-    re <- .trim(substring(re, max(gregexpr(pattern = "\\|", re)[[1]]) + 1))
+    re <- trim_ws(substring(re, max(gregexpr(pattern = "\\|", re)[[1]]) + 1))
   }
 
   # check for multi-membership models
   if (inherits(model, "brmsfit")) {
     if (grepl("mm\\((.*)\\)", re)) {
-      re <- trimws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",")))
+      re <- trim_ws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",")))
     }
   }
 
@@ -407,7 +403,7 @@
 #   else
 #     f[[2L]]
 #
-#   lapply(.extract_formula_parts(rhs), .safe_deparse)
+#   lapply(.extract_formula_parts(rhs), safe_deparse)
 # }
 #
 #
@@ -423,15 +419,6 @@
 #   }
 #   c(x, rval)
 # }
-
-
-
-.safe_deparse <- function(string) {
-  if (is.null(string)) {
-    return(NULL)
-  }
-  paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = " ")
-}
 
 
 
@@ -754,17 +741,6 @@
   }
   FALSE
 }
-
-
-
-.n_unique <- function(x, na.rm = TRUE) {
-  if (is.null(x)) {
-    return(0)
-  }
-  if (isTRUE(na.rm)) x <- stats::na.omit(x)
-  length(unique(x))
-}
-
 
 
 
