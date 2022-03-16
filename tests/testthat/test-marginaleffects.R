@@ -18,5 +18,8 @@ if (requiet("marginaleffects") && requiet("insight") && requiet("testthat")) {
 
     # Find parameters
     expect_equal(insight::find_parameters(x)$Species, unique(iris$Species))
+
+    # Find statistic
+    expect_equal(insight::find_statistic(x), "t-statistic")
   })
 }

@@ -1242,6 +1242,13 @@ model_info.bfsl <- function(x, verbose = TRUE, ...) {
   )
 }
 
+# marginaleffects objects -------------------------------
+
+#' @export
+model_info.marginaleffects <- function(x, ...) {
+  model_info(attributes(x)$model)
+}
+
 
 
 
