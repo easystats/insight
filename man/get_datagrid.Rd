@@ -17,6 +17,7 @@ get_datagrid(x, ...)
   numerics = "mean",
   preserve_range = FALSE,
   reference = x,
+  length = 10,
   ...
 )
 
@@ -103,25 +104,24 @@ combined values. Usually used to make generate predictions using \code{\link[=ge
 }
 \examples{
 if (require("bayestestR", quietly = TRUE)) {
-  # Add one row to change the "mode" of Species
-  data <- rbind(iris, iris[149, ], make.row.names = FALSE)
 
   # Single variable is of interest; all others are "fixed"
-  get_datagrid(data, at = "Sepal.Length")
-  get_datagrid(data, at = "Sepal.Length", length = 3)
-  get_datagrid(data, at = "Sepal.Length", range = "ci", ci = 0.90)
-  get_datagrid(data, at = "Sepal.Length", factors = "mode")
+  get_datagrid(iris, at = "Sepal.Length")
+  get_datagrid(iris, at = "Sepal.Length", length = 3)
+  get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90)
+  get_datagrid(iris[149, ], at = "Sepal.Length", factors = "mode") # change the mode
 
   # Multiple variables are of interest, creating a combination
-  get_datagrid(data, at = c("Sepal.Length", "Species"), length = 3)
-  get_datagrid(data, at = c(1, 3), length = 3)
-  get_datagrid(data, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
-  get_datagrid(data, at = c("Sepal.Length", "Species"), numerics = 0)
-  get_datagrid(data, at = c("Sepal.Length = 3", "Species"))
-  get_datagrid(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+  get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
+  get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
+  get_datagrid(iris, at = c(1, 3), length = 3)
+  get_datagrid(iris, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
+  get_datagrid(iris, at = c("Sepal.Length", "Species"), numerics = 0)
+  get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
+  get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 
   # with list-style at-argument
-  get_datagrid(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+  get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 }
 }
 \seealso{

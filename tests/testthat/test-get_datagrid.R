@@ -43,6 +43,10 @@ if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
     expect_equal(nrow(get_datagrid(iris, length = 2)), 48)
     expect_equal(nrow(get_datagrid(iris, at = "Species", length = 2, numerics = 0)), 3)
     expect_equal(nrow(get_datagrid(iris, at = "Sepal.Length", length = 3)), 3)
+    expect_equal(dim(get_datagrid(iris, at = 1:2, length = 3)), c(9, 5))
+    expect_equal(dim(get_datagrid(iris, at = 1:2, length = c(3, 2))), c(6, 5))
+    expect_error(get_datagrid(iris, at = 1:2, length = c(3, 2, 4)))
+
 
     expect_equal(nrow(get_datagrid(data.frame(
       X = c("A", "A", "B"),
