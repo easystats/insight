@@ -140,7 +140,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
     }
     for (j in 1:length(pattern)) {
       # check if we find pattern at all
-      if (grepl(pattern[j], x, fixed = TRUE)) {
+      if (grepl(pattern[j], x[i], fixed = TRUE)) {
         # remove possible namespace
         if (grepl("::", x[i], fixed = TRUE)) {
           x[i] <- sub("(.*)::(.*)", "\\2", x[i])
