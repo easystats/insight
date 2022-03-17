@@ -150,8 +150,8 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
     )
   })
 
-  model <- lmer(Reaction ~ Days2 + (1 + Days2 || Subject), data = sleepstudy)
-  vmodel <- get_variance(model)
+  model <- suppressWarnings(lmer(Reaction ~ Days2 + (1 + Days2 || Subject), data = sleepstudy))
+  vmodel <- suppressWarnings(get_variance(model))
 
   test_that("get_variance-10", {
     expect_equal(
