@@ -180,7 +180,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># colored caption, simple footer</span>
 <span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
-  <span class="va">x</span>, 
+  <span class="va">x</span>,
   caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span>,
   footer <span class="op">=</span> <span class="st">"Footer line"</span>
 <span class="op">)</span>
@@ -210,7 +210,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># colored caption and footer</span>
 <span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
-  <span class="va">x</span>, 
+  <span class="va">x</span>,
   caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span>,
   footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line in blue"</span>, <span class="st">"blue"</span><span class="op">)</span>
 <span class="op">)</span>
@@ -244,7 +244,7 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># colored caption, subtitle and footer</span>
 <span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
-  <span class="va">x</span>, 
+  <span class="va">x</span>,
   caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span>,
   subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"\n   A subtitle in yellow"</span>, <span class="st">"yellow"</span><span class="op">)</span>,
   footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line in blue"</span>, <span class="st">"blue"</span><span class="op">)</span>
@@ -370,7 +370,7 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># add captions and footers for each table</span>
 <span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
-  <span class="va">x</span>, 
+  <span class="va">x</span>,
   caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Table 1"</span>, <span class="st">"Table 2"</span>, <span class="st">"Table 3"</span><span class="op">)</span>,
   footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Footer 1\n\n"</span>, <span class="st">"Footer 2\n\n"</span>, <span class="st">"Footer 3\n\n"</span><span class="op">)</span>
 <span class="op">)</span>
@@ -441,10 +441,12 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Colored table captions and multiple footers per table</span>
 <span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>
-  <span class="va">x</span>, 
-  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Red Table 1"</span>, <span class="st">"red"</span><span class="op">)</span>,
-                 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Blue Table 2"</span>, <span class="st">"bue"</span><span class="op">)</span>,
-                 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Green Table 3"</span>, <span class="st">"green"</span><span class="op">)</span><span class="op">)</span>,
+  <span class="va">x</span>,
+  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Red Table 1"</span>, <span class="st">"red"</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Blue Table 2"</span>, <span class="st">"bue"</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Green Table 3"</span>, <span class="st">"green"</span><span class="op">)</span>
+  <span class="op">)</span>,
   footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line 1\n"</span>, <span class="st">"green"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Second line\n\n"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span>,
     <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer line A\n"</span>, <span class="st">"blue"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Second line\n\n"</span>, <span class="st">"green"</span><span class="op">)</span><span class="op">)</span>,
