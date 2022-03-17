@@ -1044,7 +1044,7 @@ model_info.glmmTMB <- function(x, ...) {
     hurdle = grepl("truncated", faminfo$family),
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
-    dispersion = !is_empty_object(lme4::fixef(x)$disp),
+    dispersion = !is.null(find_formula(x)$dispersion),
     glmmtmb_zeroinf = zero_inflated,
     ...
   )
