@@ -320,13 +320,8 @@ get_datagrid.data.frame <- function(x,
 #' @export
 get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
 
-  # If NA, return all unique
-  if(is.na(length)) {
-    return(sort(unique(x)))
-  }
-
   # Sanity check
-  if (!is.numeric(length)) {
+  if (!is.numeric(length) & !is.na(length)) {
     stop("`length` argument should be an number.")
   }
 
@@ -334,6 +329,10 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
   specs <- .get_datagrid_clean_target(x, ...)
 
   if (is.na(specs$expression)) {
+    # If NA, return all unique
+    if(is.na(length)) {
+      return(sort(unique(x)))
+    }
     # Create a spread
     out <- .create_spread(x, length = length, range = range, ...)
   } else {
