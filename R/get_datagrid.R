@@ -18,11 +18,16 @@
 #'   substantially increase the size of the datagrid (especially in case of interactions).
 #'   If `NA`, will return all the unique values. In case of multiple continuous target
 #'   variables, `length` can also be a vector of different values (see examples).
-#' @param range Can be one of `"range"`, `"iqr"`, `"ci"`, `"hdi"` or `"eti"`. If
-#'   `"range"` (default), will use the minimum and maximum of the original
-#'   vector as end-points. If any other interval, will spread within the range
-#'   (the default CI width is `95%` but this can be changed by setting something
-#'   else, e.g., `ci = 0.90`). See [IQR()] and [bayestestR::ci()].
+#' @param range If `"range"` (default), will use the minimum and maximum of the
+#'   original data vector as end-points (min and max). If an interval type is specified,
+#'   such as [`"iqr"`][IQR()], [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or [`"eti"`][bayestestR::eti()], it will spread the values within
+#'   that range (the default CI width is `95%` but this can be changed by adding for instance
+#'   `ci = 0.90`. See [IQR()] and [bayestestR::ci()]. This can be useful to have
+#'   more robust change and skipping extreme values. If [`"sd"`][sd()] or [`"mad"`][mad()], it will
+#'   spread by this dispersion index around the mean or the median, respectively.
+#'   If the `length` argument is an even number (e.g., `4`), it will have one more
+#'   step on the positive side (i.e., `-1, 0, +1, +2`). The result is a named vector.
+#'   See examples.
 #' @param factors Type of summary for factors. Can be `"reference"` (set at the
 #'   reference level), `"mode"` (set at the most common level) or `"all"` to
 #'   keep all levels.
@@ -36,6 +41,7 @@
 #'   want the minimum and the maximum to closely match the actual ranges, you
 #'   should increase the `length` argument.
 #' @param reference The reference vector from which to compute the mean and SD.
+#'   Used when standardizing or unstandardizing the grid using `effectsize::standardize`.
 #' @param include_smooth If `x` is a model object, decide whether smooth terms
 #'   should be included in the data grid or not.
 #' @param include_random If `x` is a mixed model object, decide whether random
@@ -57,16 +63,33 @@
 #' @seealso [get_predicted()]
 #'
 #' @examples
-#' if (require("bayestestR", quietly = TRUE)) {
+#' # Datagrids of variables and dataframes =====================================
+#' if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE)) {
 #'
-#'   # Single variable is of interest; all others are "fixed"
+#'   # Single variable is of interest; all others are "fixed" ------------------
+#'   # Factors
+#'   get_datagrid(iris, at = "Species") # Returns all the levels
+#'   get_datagrid(iris, at = "Species = c('setosa', 'versicolor')") # Specify an expression
+#'
+#'   # Numeric variables
 #'   get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
-#'   get_datagrid(iris, at = "Sepal.Length", length = 3)
-#'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90)
-#'   get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3) # -1 SD, mean, +1 SD
-#'   get_datagrid(iris[149, ], at = "Sepal.Length", factors = "mode") # change the mode
+#'   get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
+#'   get_datagrid(iris[149, ], at = "Sepal.Length",
+#'                factors = "mode", numerics = "median") # change non-targets
+#'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
+#'   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
 #'
-#'   # Multiple variables are of interest, creating a combination
+#'
+#'   # Standardization and unstandardization
+#'   data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
+#'   data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
+#'   # datawizard::standardize(data, select = "Sepal.Length")
+#'   # data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+#'   # data
+#'   # datawizard::unstandardize(data, select = "Sepal.Length")
+#'
+#'
+#'   # Multiple variables are of interest, creating a combination --------------
 #'   get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
 #'   get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
 #'   get_datagrid(iris, at = c(1, 3), length = 3)
@@ -78,6 +101,11 @@
 #'   # With list-style at-argument
 #'   get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 #' }
+#'
+#' # With models ===============================================================
+#' model <- lm(Sepal.Length ~ Species, data = iris)
+#' get_datagrid(model)
+#'
 #' @export
 get_datagrid <- function(x, ...) {
   UseMethod("get_datagrid")
@@ -296,7 +324,7 @@ get_datagrid.data.frame <- function(x,
         stop(paste0(
           "Argument is not numeric nor factor but ",
           class(x),
-          ". Please report the bug at https://github.com/easystats/modelbased/issues"
+          ". Please report the bug at https://github.com/easystats/insight/issues"
         ))
       }
     }
@@ -357,21 +385,27 @@ get_datagrid.double <- get_datagrid.numeric
     check_if_installed("bayestestR")
   }
 
+  # If Range is a dispersion (e.g., SD or MAD)
   if (range %in% c("sd", "mad")) {
+    spread <- -floor((length - 1) / 2):ceiling((length - 1) / 2)
     if(range %in% c("sd")) {
       disp <- sd(x, na.rm = TRUE)
       center <- mean(x, na.rm = TRUE)
+      labs <- ifelse(sign(spread) == -1, paste(spread, "SD"),
+                     ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean"))
     } else {
       disp <- mad(x, na.rm = TRUE)
       center <- median(x, na.rm = TRUE)
+      labs <- ifelse(sign(spread) == -1, paste(spread, "MAD"),
+                     ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median"))
     }
-    mini <- center - floor((length - 1) / 2) * disp
-    maxi <- center + ceiling((length - 1) / 2) * disp
+    out <- center + spread * disp
+    names(out) <- labs
 
-    out <- seq(mini, maxi, by = disp)
     return(out)
   }
 
+  # If Range is an interval
   if (range == "iqr") {
     mini <- stats::quantile(x, (1 - ci) / 2, ...)
     maxi <- stats::quantile(x, (1 + ci) / 2, ...)
