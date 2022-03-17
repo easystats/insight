@@ -370,12 +370,12 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
   specs <- .get_datagrid_clean_target(x, ...)
 
   # If an expression is detected, run it and return it
-  if(!is.na(specs$expression)) {
+  if (!is.na(specs$expression)) {
     return(eval(parse(text = specs$expression)))
   }
 
   # If NA, return all unique
-  if(is.na(length)) {
+  if (is.na(length)) {
     return(sort(unique(x)))
   }
 
@@ -405,14 +405,14 @@ get_datagrid.double <- get_datagrid.numeric
   # If Range is a dispersion (e.g., SD or MAD)
   if (range %in% c("sd", "mad")) {
     spread <- -floor((length - 1) / 2):ceiling((length - 1) / 2)
-    if(range %in% c("sd")) {
-      disp <- sd(x, na.rm = TRUE)
+    if (range %in% c("sd")) {
+      disp <- stats::sd(x, na.rm = TRUE)
       center <- mean(x, na.rm = TRUE)
       labs <- ifelse(sign(spread) == -1, paste(spread, "SD"),
                      ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean"))
     } else {
-      disp <- mad(x, na.rm = TRUE)
-      center <- median(x, na.rm = TRUE)
+      disp <- stats::mad(x, na.rm = TRUE)
+      center <- stats::median(x, na.rm = TRUE)
       labs <- ifelse(sign(spread) == -1, paste(spread, "MAD"),
                      ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median"))
     }
