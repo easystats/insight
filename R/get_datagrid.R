@@ -74,8 +74,8 @@
 #'   # Numeric variables
 #'   get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
 #'   get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
-#'   get_datagrid(iris[149, ], at = "Sepal.Length",
-#'                factors = "mode", numerics = "median") # change non-targets
+#'   get_datagrid(iris[2:150, ], at = "Sepal.Length",
+#'                factors = "mode", numerics = "median") # change non-targets fixing
 #'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
 #'   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
 #'
@@ -83,6 +83,7 @@
 #'   # Standardization and unstandardization
 #'   data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
 #'   data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
+#'   # TODO: uncomment when datawizard > 0.3.1 is out
 #'   # datawizard::standardize(data, select = "Sepal.Length")
 #'   # data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
 #'   # data
