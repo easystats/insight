@@ -70,7 +70,12 @@ should increase the \code{length} argument.}
 
 \item{reference}{The reference vector from which to compute the mean and SD.}
 
-\item{length}{Length of numeric \code{"at"} variables.}
+\item{length}{Length of numeric target variables selected in \code{"at"}. This arguments
+controls the number of (equally spread) values that will be taken to represent the
+continuous variables. A longer length will increase precision, but can also
+substantially increase the size of the datagrid (especially in case of interactions).
+If \code{NA}, will return all the unique values. In case of multiple continuous target
+variables, \code{length} can also be a vector of different values (see examples).}
 
 \item{range}{Can be one of \code{"range"}, \code{"iqr"}, \code{"ci"}, \code{"hdi"} or \code{"eti"}. If
 \code{"range"} (default), will use the minimum and maximum of the original
@@ -101,12 +106,13 @@ Reference grid data frame.
 \description{
 Create a reference matrix, useful for visualisation, with evenly spread and
 combined values. Usually used to make generate predictions using \code{\link[=get_predicted]{get_predicted()}}.
+See this \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{vignette} for a tutorial on how to create a visualisation matrix using this function.
 }
 \examples{
 if (require("bayestestR", quietly = TRUE)) {
 
   # Single variable is of interest; all others are "fixed"
-  get_datagrid(iris, at = "Sepal.Length")
+  get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
   get_datagrid(iris, at = "Sepal.Length", length = 3)
   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90)
   get_datagrid(iris[149, ], at = "Sepal.Length", factors = "mode") # change the mode
@@ -120,7 +126,7 @@ if (require("bayestestR", quietly = TRUE)) {
   get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
   get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 
-  # with list-style at-argument
+  # With list-style at-argument
   get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 }
 }

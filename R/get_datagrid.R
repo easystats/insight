@@ -2,6 +2,7 @@
 #'
 #' Create a reference matrix, useful for visualisation, with evenly spread and
 #' combined values. Usually used to make generate predictions using [get_predicted()].
+#' See this [vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) for a tutorial on how to create a visualisation matrix using this function.
 #'
 #' @param x An object from which to construct the reference grid.
 #' @param at Can be `"all"`, a character vector or list of named elements, indicating
@@ -11,7 +12,12 @@
 #'   `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
 #'   and double quotes to assign strings within strings). The remaining variables
 #'   will be fixed.
-#' @param length Length of numeric `"at"` variables.
+#' @param length Length of numeric target variables selected in `"at"`. This arguments
+#'   controls the number of (equally spread) values that will be taken to represent the
+#'   continuous variables. A longer length will increase precision, but can also
+#'   substantially increase the size of the datagrid (especially in case of interactions).
+#'   If `NA`, will return all the unique values. In case of multiple continuous target
+#'   variables, `length` can also be a vector of different values (see examples).
 #' @param range Can be one of `"range"`, `"iqr"`, `"ci"`, `"hdi"` or `"eti"`. If
 #'   `"range"` (default), will use the minimum and maximum of the original
 #'   vector as end-points. If any other interval, will spread within the range
@@ -54,7 +60,7 @@
 #' if (require("bayestestR", quietly = TRUE)) {
 #'
 #'   # Single variable is of interest; all others are "fixed"
-#'   get_datagrid(iris, at = "Sepal.Length")
+#'   get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
 #'   get_datagrid(iris, at = "Sepal.Length", length = 3)
 #'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90)
 #'   get_datagrid(iris[149, ], at = "Sepal.Length", factors = "mode") # change the mode
@@ -68,7 +74,7 @@
 #'   get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
 #'   get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #'
-#'   # with list-style at-argument
+#'   # With list-style at-argument
 #'   get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 #' }
 #' @export
@@ -313,6 +319,11 @@ get_datagrid.data.frame <- function(x,
 #' @rdname get_datagrid
 #' @export
 get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
+
+  # If NA, return all unique
+  if(is.na(length)) {
+    return(sort(unique(x)))
+  }
 
   # Sanity check
   if (!is.numeric(length)) {

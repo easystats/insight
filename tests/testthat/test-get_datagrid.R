@@ -31,6 +31,7 @@ if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
     # Numerics
     expect_equal(length(get_datagrid(x = iris$Sepal.Length)), 10)
     expect_equal(length(get_datagrid(x = iris$Sepal.Length, length = 5)), 5)
+    expect_equal(length(get_datagrid(x = iris$Sepal.Length, length = NA)), length(unique(iris$Sepal.Length)))
     expect_equal(min(get_datagrid(x = iris$Sepal.Length, range = "iqr")), as.numeric(quantile(iris$Sepal.Length, 0.025)))
     expect_equal(min(get_datagrid(x = iris$Sepal.Length, range = "hdi")), as.numeric(bayestestR::hdi(iris$Sepal.Length, ci = 0.95))[2])
     expect_equal(min(get_datagrid(x = iris$Sepal.Length, range = "eti")), as.numeric(bayestestR::eti(iris$Sepal.Length, ci = 0.95))[2])
