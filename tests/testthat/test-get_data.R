@@ -37,7 +37,7 @@ if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
   if (requiet("mgcv")) {
     d <- iris
     d$NewFac <- rep(c(1, 2), length.out = 150)
-    model <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = data)
+    model <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
 
     test_that("get_data", {
       expect_equal(
