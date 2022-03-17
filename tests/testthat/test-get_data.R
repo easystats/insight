@@ -35,7 +35,7 @@ if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
   })
 
   if (requiet("mgcv")) {
-    d <- iris
+    d <<- iris
     d$NewFac <- rep(c(1, 2), length.out = 150)
     model <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
 
