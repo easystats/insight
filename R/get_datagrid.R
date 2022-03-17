@@ -52,25 +52,24 @@
 #'
 #' @examples
 #' if (require("bayestestR", quietly = TRUE)) {
-#'   # Add one row to change the "mode" of Species
-#'   data <- rbind(iris, iris[149, ], make.row.names = FALSE)
 #'
 #'   # Single variable is of interest; all others are "fixed"
-#'   get_datagrid(data, at = "Sepal.Length")
-#'   get_datagrid(data, at = "Sepal.Length", length = 3)
-#'   get_datagrid(data, at = "Sepal.Length", range = "ci", ci = 0.90)
-#'   get_datagrid(data, at = "Sepal.Length", factors = "mode")
+#'   get_datagrid(iris, at = "Sepal.Length")
+#'   get_datagrid(iris, at = "Sepal.Length", length = 3)
+#'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90)
+#'   get_datagrid(iris[149, ], at = "Sepal.Length", factors = "mode") # change the mode
 #'
 #'   # Multiple variables are of interest, creating a combination
-#'   get_datagrid(data, at = c("Sepal.Length", "Species"), length = 3)
-#'   get_datagrid(data, at = c(1, 3), length = 3)
-#'   get_datagrid(data, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
-#'   get_datagrid(data, at = c("Sepal.Length", "Species"), numerics = 0)
-#'   get_datagrid(data, at = c("Sepal.Length = 3", "Species"))
-#'   get_datagrid(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
+#'   get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
+#'   get_datagrid(iris, at = c(1, 3), length = 3)
+#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
+#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), numerics = 0)
+#'   get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
+#'   get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #'
 #'   # with list-style at-argument
-#'   get_datagrid(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+#'   get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 #' }
 #' @export
 get_datagrid <- function(x, ...) {
@@ -90,6 +89,7 @@ get_datagrid.data.frame <- function(x,
                                     numerics = "mean",
                                     preserve_range = FALSE,
                                     reference = x,
+                                    length = 10,
                                     ...) {
   target <- at
 
@@ -139,12 +139,22 @@ get_datagrid.data.frame <- function(x,
 
       # Create target list of numerics ----------------------------------------
       nums <- list()
-      for (num in specs[specs$is_factor == FALSE, "varname"]) {
-        nums[[num]] <- get_datagrid(x[[num]],
-          target = specs[specs$varname == num, "expression"],
-          reference = reference[[num]],
-          ...
-        )
+      numvars <- specs[specs$is_factor == FALSE, "varname"]
+      if (length(numvars)) {
+        if (length(length) == 1) {
+          length <- rep(length, length(numvars))
+        } else if (length(length) != length(numvars)) {
+          stop("The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ").")
+        }
+        for (i in 1:length(numvars)) {
+          num <- numvars[i]
+          nums[[num]] <- get_datagrid(x[[num]],
+                                      target = specs[specs$varname == num, "expression"],
+                                      reference = reference[[num]],
+                                      length = length[i],
+                                      ...
+          )
+        }
       }
     } else if (is.list(target)) {
 
