@@ -42,7 +42,7 @@ if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
     test_that("get_data", {
       expect_equal(
         head(insight::get_data(model)),
-        head(d[find_variables(model, flatten = TRUE)]),
+        head(d[c("Sepal.Length", "Petal.Length", "Species", "NewFac")]),
         ignore_attr = TRUE
       )
     })
