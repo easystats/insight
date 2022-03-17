@@ -24,7 +24,7 @@
   # This is a bit slower - restore if tests fail...
   # offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
 
-  offcol <- grep("(offset)", colnames(mf), fixed = TRUE) | grep("offset(", colnames(mf), fixed = TRUE)
+  offcol <- grepl("(offset)", colnames(mf), fixed = TRUE) | grepl("offset(", colnames(mf), fixed = TRUE)
   if (length(offcol) && object_has_names(x, "call") && object_has_names(x$call, "offset")) {
     colnames(mf)[offcol] <- clean_names(safe_deparse(x$call$offset))
   }
