@@ -144,7 +144,7 @@ model_info.model_fit <- function(x, verbose = TRUE, ...) {
 #' @export
 model_info.anova <- function(x, verbose = TRUE, ...) {
   if (!is.null(attributes(x)$heading) && grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
-    .make_family(x, verbose = verbose)
+    .make_family(x, verbose = verbose, ...)
   } else {
     NULL
   }
