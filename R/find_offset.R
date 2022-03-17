@@ -27,10 +27,10 @@
 #' }
 #' @export
 find_offset <- function(x) {
-  terms <- find_terms(x, flatten = TRUE)
+  terms <- as.character(unlist(find_formula(x)))
   offset <- NULL
 
-  offcol <- grep("^offset\\((.*)\\)", terms)
+  offcol <- grep("offset(", terms, fixed = TRUE)
   if (length(offcol)) {
     offset <- clean_names(terms[offcol])
   }
