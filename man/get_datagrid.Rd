@@ -18,6 +18,7 @@ get_datagrid(x, ...)
   preserve_range = FALSE,
   reference = x,
   length = 10,
+  range = "range",
   ...
 )
 
@@ -156,9 +157,15 @@ if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE
 }
 
 # With models ===============================================================
-model <- lm(Sepal.Length ~ Species, data = iris)
-get_datagrid(model)
-
+# Fit a linear regression
+model <- lm(Sepal.Length ~ Sepal.Width * Petal.Length, data = iris)
+# Get datagrid of predictors
+data <- get_datagrid(model, length = c(20, 3), range = c("range", "sd"))
+# Add predictions
+data$Sepal.Length <- get_predicted(model, data = data)
+# Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)
+plot(data$Sepal.Width, data$Sepal.Length, col = data$Petal.Length,
+     main="Relationship between predicted Sepal.Length and Sepal.Width at -1 SD, Mean, and + 1 SD of Petal.Length")
 }
 \seealso{
 \code{\link[=get_predicted]{get_predicted()}}

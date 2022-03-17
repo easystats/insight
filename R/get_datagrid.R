@@ -104,9 +104,15 @@
 #' }
 #'
 #' # With models ===============================================================
-#' model <- lm(Sepal.Length ~ Species, data = iris)
-#' get_datagrid(model)
-#'
+#' # Fit a linear regression
+#' model <- lm(Sepal.Length ~ Sepal.Width * Petal.Length, data = iris)
+#' # Get datagrid of predictors
+#' data <- get_datagrid(model, length = c(20, 3), range = c("range", "sd"))
+#' # Add predictions
+#' data$Sepal.Length <- get_predicted(model, data = data)
+#' # Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)
+#' plot(data$Sepal.Width, data$Sepal.Length, col = data$Petal.Length,
+#'      main="Relationship between predicted Sepal.Length and Sepal.Width at -1 SD, Mean, and + 1 SD of Petal.Length")
 #' @export
 get_datagrid <- function(x, ...) {
   UseMethod("get_datagrid")
@@ -126,6 +132,7 @@ get_datagrid.data.frame <- function(x,
                                     preserve_range = FALSE,
                                     reference = x,
                                     length = 10,
+                                    range = "range",
                                     ...) {
   target <- at
 
@@ -177,17 +184,26 @@ get_datagrid.data.frame <- function(x,
       nums <- list()
       numvars <- specs[specs$is_factor == FALSE, "varname"]
       if (length(numvars)) {
+        # Sanitize 'length' argument
         if (length(length) == 1) {
           length <- rep(length, length(numvars))
         } else if (length(length) != length(numvars)) {
           stop("The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ").")
         }
+        # Sanitize 'range' argument
+        if (length(range) == 1) {
+          range <- rep(range, length(numvars))
+        } else if (length(range) != length(numvars)) {
+          stop("The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ").")
+        }
+        # Get datagrids
         for (i in 1:length(numvars)) {
           num <- numvars[i]
           nums[[num]] <- get_datagrid(x[[num]],
                                       target = specs[specs$varname == num, "expression"],
                                       reference = reference[[num]],
                                       length = length[i],
+                                      range = range[i],
                                       ...
           )
         }
