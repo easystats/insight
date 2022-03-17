@@ -18,6 +18,7 @@ get_datagrid(x, ...)
   preserve_range = FALSE,
   reference = x,
   length = 10,
+  range = "range",
   ...
 )
 
@@ -68,7 +69,8 @@ range of its factor level. This leads to an unbalanced grid. Also, if you
 want the minimum and the maximum to closely match the actual ranges, you
 should increase the \code{length} argument.}
 
-\item{reference}{The reference vector from which to compute the mean and SD.}
+\item{reference}{The reference vector from which to compute the mean and SD.
+Used when standardizing or unstandardizing the grid using \code{effectsize::standardize}.}
 
 \item{length}{Length of numeric target variables selected in \code{"at"}. This arguments
 controls the number of (equally spread) values that will be taken to represent the
@@ -77,11 +79,16 @@ substantially increase the size of the datagrid (especially in case of interacti
 If \code{NA}, will return all the unique values. In case of multiple continuous target
 variables, \code{length} can also be a vector of different values (see examples).}
 
-\item{range}{Can be one of \code{"range"}, \code{"iqr"}, \code{"ci"}, \code{"hdi"} or \code{"eti"}. If
-\code{"range"} (default), will use the minimum and maximum of the original
-vector as end-points. If any other interval, will spread within the range
-(the default CI width is \verb{95\%} but this can be changed by setting something
-else, e.g., \code{ci = 0.90}). See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}.}
+\item{range}{If \code{"range"} (default), will use the minimum and maximum of the
+original data vector as end-points (min and max). If an interval type is specified,
+such as \code{\link[=IQR]{"iqr"}}, \code{\link[bayestestR:ci]{"ci"}}, \code{\link[bayestestR:hdi]{"hdi"}} or \code{\link[bayestestR:eti]{"eti"}}, it will spread the values within
+that range (the default CI width is \verb{95\%} but this can be changed by adding for instance
+\code{ci = 0.90}. See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}. This can be useful to have
+more robust change and skipping extreme values. If \code{\link[=sd]{"sd"}} or \code{\link[=mad]{"mad"}}, it will
+spread by this dispersion index around the mean or the median, respectively.
+If the \code{length} argument is an even number (e.g., \code{4}), it will have one more
+step on the positive side (i.e., \verb{-1, 0, +1, +2}). The result is a named vector.
+See examples.}
 
 \item{include_smooth}{If \code{x} is a model object, decide whether smooth terms
 should be included in the data grid or not.}
@@ -109,15 +116,34 @@ combined values. Usually used to make generate predictions using \code{\link[=ge
 See this \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{vignette} for a tutorial on how to create a visualisation matrix using this function.
 }
 \examples{
-if (require("bayestestR", quietly = TRUE)) {
+# Datagrids of variables and dataframes =====================================
+if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE)) {
 
-  # Single variable is of interest; all others are "fixed"
+  # Single variable is of interest; all others are "fixed" ------------------
+  # Factors
+  get_datagrid(iris, at = "Species") # Returns all the levels
+  get_datagrid(iris, at = "Species = c('setosa', 'versicolor')") # Specify an expression
+
+  # Numeric variables
   get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
-  get_datagrid(iris, at = "Sepal.Length", length = 3)
-  get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90)
-  get_datagrid(iris[149, ], at = "Sepal.Length", factors = "mode") # change the mode
+  get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
+  get_datagrid(iris[2:150, ], at = "Sepal.Length",
+               factors = "mode", numerics = "median") # change non-targets fixing
+  get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
+  get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
 
-  # Multiple variables are of interest, creating a combination
+
+  # Standardization and unstandardization
+  data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
+  data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
+  # TODO: uncomment when datawizard > 0.3.1 is out
+  # datawizard::standardize(data, select = "Sepal.Length")
+  # data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+  # data
+  # datawizard::unstandardize(data, select = "Sepal.Length")
+
+
+  # Multiple variables are of interest, creating a combination --------------
   get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
   get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
   get_datagrid(iris, at = c(1, 3), length = 3)
@@ -129,6 +155,17 @@ if (require("bayestestR", quietly = TRUE)) {
   # With list-style at-argument
   get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 }
+
+# With models ===============================================================
+# Fit a linear regression
+model <- lm(Sepal.Length ~ Sepal.Width * Petal.Length, data = iris)
+# Get datagrid of predictors
+data <- get_datagrid(model, length = c(20, 3), range = c("range", "sd"))
+# Add predictions
+data$Sepal.Length <- get_predicted(model, data = data)
+# Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)
+plot(data$Sepal.Width, data$Sepal.Length, col = data$Petal.Length,
+     main="Relationship between predicted Sepal.Length and Sepal.Width at -1 SD, Mean, and + 1 SD of Petal.Length")
 }
 \seealso{
 \code{\link[=get_predicted]{get_predicted()}}
