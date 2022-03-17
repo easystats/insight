@@ -84,6 +84,7 @@ See this <a href="https://easystats.github.io/modelbased/articles/visualisation_
   preserve_range <span class="op">=</span> <span class="cn">FALSE</span>,
   reference <span class="op">=</span> <span class="va">x</span>,
   length <span class="op">=</span> <span class="fl">10</span>,
+  range <span class="op">=</span> <span class="st">"range"</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -140,7 +141,8 @@ range of its factor level. This leads to an unbalanced grid. Also, if you
 want the minimum and the maximum to closely match the actual ranges, you
 should increase the <code>length</code> argument.</p></dd>
 <dt>reference</dt>
-<dd><p>The reference vector from which to compute the mean and SD.</p></dd>
+<dd><p>The reference vector from which to compute the mean and SD.
+Used when standardizing or unstandardizing the grid using <code><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">effectsize::standardize</a></code>.</p></dd>
 <dt>length</dt>
 <dd><p>Length of numeric target variables selected in <code>"at"</code>. This arguments
 controls the number of (equally spread) values that will be taken to represent the
@@ -149,11 +151,16 @@ substantially increase the size of the datagrid (especially in case of interacti
 If <code>NA</code>, will return all the unique values. In case of multiple continuous target
 variables, <code>length</code> can also be a vector of different values (see examples).</p></dd>
 <dt>range</dt>
-<dd><p>Can be one of <code>"range"</code>, <code>"iqr"</code>, <code>"ci"</code>, <code>"hdi"</code> or <code>"eti"</code>. If
-<code>"range"</code> (default), will use the minimum and maximum of the original
-vector as end-points. If any other interval, will spread within the range
-(the default CI width is <code>95%</code> but this can be changed by setting something
-else, e.g., <code>ci = 0.90</code>). See <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR()</a></code> and <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code>.</p></dd>
+<dd><p>If <code>"range"</code> (default), will use the minimum and maximum of the
+original data vector as end-points (min and max). If an interval type is specified,
+such as <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">"iqr"</a></code>, <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">"ci"</a></code>, <code><a href="https://easystats.github.io/bayestestR/reference/hdi.html" class="external-link">"hdi"</a></code> or <code><a href="https://easystats.github.io/bayestestR/reference/eti.html" class="external-link">"eti"</a></code>, it will spread the values within
+that range (the default CI width is <code>95%</code> but this can be changed by adding for instance
+<code>ci = 0.90</code>. See <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR()</a></code> and <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code>. This can be useful to have
+more robust change and skipping extreme values. If <code><a href="https://rdrr.io/r/stats/sd.html" class="external-link">"sd"</a></code> or <code><a href="https://rdrr.io/r/stats/mad.html" class="external-link">"mad"</a></code>, it will
+spread by this dispersion index around the mean or the median, respectively.
+If the <code>length</code> argument is an even number (e.g., <code>4</code>), it will have one more
+step on the positive side (i.e., <code>-1, 0, +1, +2</code>). The result is a named vector.
+See examples.</p></dd>
 <dt>include_smooth</dt>
 <dd><p>If <code>x</code> is a model object, decide whether smooth terms
 should be included in the data grid or not.</p></dd>
@@ -183,15 +190,34 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/bayestestR/" class="external-link">"bayestestR"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Datagrids of variables and dataframes =====================================</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/bayestestR/" class="external-link">"bayestestR"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/datawizard/" class="external-link">"datawizard"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"></span>
-<span class="r-in">  <span class="co"># Single variable is of interest; all others are "fixed"</span></span>
+<span class="r-in">  <span class="co"># Single variable is of interest; all others are "fixed" ------------------</span></span>
+<span class="r-in">  <span class="co"># Factors</span></span>
+<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span> <span class="co"># Returns all the levels</span></span>
+<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Species = c('setosa', 'versicolor')"</span><span class="op">)</span> <span class="co"># Specify an expression</span></span>
+<span class="r-in"></span>
+<span class="r-in">  <span class="co"># Numeric variables</span></span>
 <span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span> <span class="co"># default spread length = 10</span></span>
-<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"ci"</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">149</span>, <span class="op">]</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, factors <span class="op">=</span> <span class="st">"mode"</span><span class="op">)</span> <span class="co"># change the mode</span></span>
+<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="co"># change length</span></span>
+<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>,</span>
+<span class="r-in">               factors <span class="op">=</span> <span class="st">"mode"</span>, numerics <span class="op">=</span> <span class="st">"median"</span><span class="op">)</span> <span class="co"># change non-targets fixing</span></span>
+<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"ci"</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span> <span class="co"># change min/max of target</span></span>
+<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [0, 1]"</span><span class="op">)</span> <span class="co"># Manually change min/max</span></span>
 <span class="r-in"></span>
-<span class="r-in">  <span class="co"># Multiple variables are of interest, creating a combination</span></span>
+<span class="r-in"></span>
+<span class="r-in">  <span class="co"># Standardization and unstandardization</span></span>
+<span class="r-in">  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"sd"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span> <span class="co"># It is a named vector (extract names with `names(out$Sepal.Length)`)</span></span>
+<span class="r-in">  <span class="co"># TODO: uncomment when datawizard &gt; 0.3.1 is out</span></span>
+<span class="r-in">  <span class="co"># datawizard::standardize(data, select = "Sepal.Length")</span></span>
+<span class="r-in">  <span class="co"># data &lt;- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values</span></span>
+<span class="r-in">  <span class="co"># data</span></span>
+<span class="r-in">  <span class="co"># datawizard::unstandardize(data, select = "Sepal.Length")</span></span>
+<span class="r-in"></span>
+<span class="r-in"></span>
+<span class="r-in">  <span class="co"># Multiple variables are of interest, creating a combination --------------</span></span>
 <span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
@@ -203,9 +229,27 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
 <span class="r-in">  <span class="co"># With list-style at-argument</span></span>
 <span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, Species <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘datawizard’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:insight’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     compact_character, compact_list, is_empty_object, object_has_names,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     object_has_rownames</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Species Sepal.Width Petal.Length Petal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1            1  setosa    3.057333        3.758    1.199333</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2            3  setosa    3.057333        3.758    1.199333</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># With models ===============================================================</span></span>
+<span class="r-in"><span class="co"># Fit a linear regression</span></span>
+<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in"><span class="co"># Get datagrid of predictors</span></span>
+<span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">3</span><span class="op">)</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"range"</span>, <span class="st">"sd"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="co"># Add predictions</span></span>
+<span class="r-in"><span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">model</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<span class="r-in"><span class="co"># Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">Sepal.Width</span>, <span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span>, col <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Petal.Length</span>,</span>
+<span class="r-in">     main<span class="op">=</span><span class="st">"Relationship between predicted Sepal.Length and Sepal.Width at -1 SD, Mean, and + 1 SD of Petal.Length"</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="get_datagrid-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
