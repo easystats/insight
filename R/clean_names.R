@@ -139,33 +139,38 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
       x[i] <- gsub("^([0-9]+)[^(\\.|[:alnum:])]+(.*)", "\\2", x[i])
     }
     for (j in 1:length(pattern)) {
-      # remove possible namespace
-      x[i] <- sub("(.*)::(.*)", "\\2", x[i])
-      if (pattern[j] == "offset") {
-        x[i] <- trim_ws(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
-      } else if (pattern[j] == "I") {
-        if (!ignore_asis) x[i] <- trim_ws(unique(sub("I\\(((\\w|\\.)*).*", "\\1", x[i])))
-      } else if (pattern[j] == "asis") {
-        if (!ignore_asis) x[i] <- trim_ws(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", x[i])))
-      } else if (pattern[j] == "log-log") {
-        x[i] <- trim_ws(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
-      } else if (pattern[j] == "scale-log") {
-        x[i] <- trim_ws(unique(sub("^scale\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
-        x[i] <- trim_ws(unique(sub("^scale\\(log1p\\(((\\w|\\.)*).*", "\\1", x[i])))
-        x[i] <- trim_ws(unique(sub("^scale\\(log2\\(((\\w|\\.)*).*", "\\1", x[i])))
-        x[i] <- trim_ws(unique(sub("^scale\\(log10\\(((\\w|\\.)*).*", "\\1", x[i])))
-      } else if (pattern[j] == "scale-poly") {
-        x[i] <- trim_ws(unique(sub("^scale\\(poly\\(((\\w|\\.)*).*", "\\1", x[i])))
-      } else if (pattern[j] %in% c("mmc", "mm")) {
-        ## TODO multimembership-models need to be fixed
-        p <- paste0("^", pattern[j], "\\((.*)\\).*")
-        g <- trim_ws(sub(p, "\\1", x[i]))
-        x[i] <- trim_ws(unlist(strsplit(g, ",")))
-      } else {
-        # p <- paste0("^", pattern[j], "\\(([^,/)]*).*")
-        # this one should be more generic...
-        p <- paste0("^", pattern[j], "\\(((\\w|\\.)*).*")
-        x[i] <- unique(sub(p, "\\1", x[i]))
+      # check if we find pattern at all
+      if (grepl(pattern, x, fixed = TRUE)) {
+        # remove possible namespace
+        if (grepl("::", x[i], fixed = TRUE)) {
+          x[i] <- sub("(.*)::(.*)", "\\2", x[i])
+        }
+        if (pattern[j] == "offset") {
+          x[i] <- trim_ws(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
+        } else if (pattern[j] == "I") {
+          if (!ignore_asis) x[i] <- trim_ws(unique(sub("I\\(((\\w|\\.)*).*", "\\1", x[i])))
+        } else if (pattern[j] == "asis") {
+          if (!ignore_asis) x[i] <- trim_ws(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", x[i])))
+        } else if (pattern[j] == "log-log") {
+          x[i] <- trim_ws(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
+        } else if (pattern[j] == "scale-log") {
+          x[i] <- trim_ws(unique(sub("^scale\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
+          x[i] <- trim_ws(unique(sub("^scale\\(log1p\\(((\\w|\\.)*).*", "\\1", x[i])))
+          x[i] <- trim_ws(unique(sub("^scale\\(log2\\(((\\w|\\.)*).*", "\\1", x[i])))
+          x[i] <- trim_ws(unique(sub("^scale\\(log10\\(((\\w|\\.)*).*", "\\1", x[i])))
+        } else if (pattern[j] == "scale-poly") {
+          x[i] <- trim_ws(unique(sub("^scale\\(poly\\(((\\w|\\.)*).*", "\\1", x[i])))
+        } else if (pattern[j] %in% c("mmc", "mm")) {
+          ## TODO multimembership-models need to be fixed
+          p <- paste0("^", pattern[j], "\\((.*)\\).*")
+          g <- trim_ws(sub(p, "\\1", x[i]))
+          x[i] <- trim_ws(unlist(strsplit(g, ",")))
+        } else {
+          # p <- paste0("^", pattern[j], "\\(([^,/)]*).*")
+          # this one should be more generic...
+          p <- paste0("^", pattern[j], "\\(((\\w|\\.)*).*")
+          x[i] <- unique(sub(p, "\\1", x[i]))
+        }
       }
     }
     # for coxme-models, remove random-effect things...
