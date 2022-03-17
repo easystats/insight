@@ -36,7 +36,7 @@
 #' * `is_survival`: model is a survival model
 #' * `is_zero_inflated`: model has zero-inflation component
 #' * `is_hurdle`: model has zero-inflation component and is a hurdle-model (truncated family distribution)
-#' * `is_dispersion`: model has dispersion component
+#' * `is_dispersion`: model has dispersion component (not only dispersion _parameter_)
 #' * `is_mixed`: model is a mixed effects model (with random effects)
 #' * `is_multivariate`: model is a multivariate response model (currently only works for _brmsfit_ objects)
 #' * `is_trial`: model response contains additional information about the trials
@@ -55,7 +55,6 @@
 #' * `link_function`: the link-function
 #' * `family`: the family-object
 #' * `n_obs`: number of observations
-#' * `model_terms`: a list with all model terms, including terms such as random effects or from zero-inflated model parts.
 #'
 #' @examples
 #' ldose <- rep(0:5, 2)

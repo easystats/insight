@@ -50,7 +50,7 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{is_survival}: model is a survival model
 \item \code{is_zero_inflated}: model has zero-inflation component
 \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
-\item \code{is_dispersion}: model has dispersion component
+\item \code{is_dispersion}: model has dispersion component (not only dispersion \emph{parameter})
 \item \code{is_mixed}: model is a mixed effects model (with random effects)
 \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
 \item \code{is_trial}: model response contains additional information about the trials
@@ -69,7 +69,6 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{link_function}: the link-function
 \item \code{family}: the family-object
 \item \code{n_obs}: number of observations
-\item \code{model_terms}: a list with all model terms, including terms such as random effects or from zero-inflated model parts.
 }
 }
 \examples{
