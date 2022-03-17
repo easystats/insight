@@ -39,6 +39,9 @@ if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
     expect_equal(length(get_datagrid(iris$Sepal.Length, target = "A = c(1, 3, 4)")), 3)
     expect_equal(length(get_datagrid(iris$Sepal.Length, target = "[1, 3, 4]")), 3)
     expect_equal(length(get_datagrid(iris$Sepal.Length, target = "[1, 4]")), 10)
+    expect_equal(length(get_datagrid(iris$Sepal.Length, range = "sd", length = 10)), 10)
+    expect_equal(get_datagrid(iris$Sepal.Length, range = "sd", length = 3)[2], mean(iris$Sepal.Length))
+    expect_equal(get_datagrid(iris$Sepal.Length, range = "mad", length = 4)[2], median(iris$Sepal.Length))
 
     # Dataframes
     expect_equal(nrow(get_datagrid(iris, length = 2)), 48)

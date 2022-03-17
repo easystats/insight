@@ -63,6 +63,7 @@
 #'   get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
 #'   get_datagrid(iris, at = "Sepal.Length", length = 3)
 #'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90)
+#'   get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3) # -1 SD, mean, +1 SD
 #'   get_datagrid(iris[149, ], at = "Sepal.Length", factors = "mode") # change the mode
 #'
 #'   # Multiple variables are of interest, creating a combination
@@ -320,26 +321,26 @@ get_datagrid.data.frame <- function(x,
 #' @export
 get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
 
-  # Sanity check
-  if (!is.numeric(length) & !is.na(length)) {
-    stop("`length` argument should be an number.")
-  }
-
   # Check and clean the target argument
   specs <- .get_datagrid_clean_target(x, ...)
 
-  if (is.na(specs$expression)) {
-    # If NA, return all unique
-    if(is.na(length)) {
-      return(sort(unique(x)))
-    }
-    # Create a spread
-    out <- .create_spread(x, length = length, range = range, ...)
-  } else {
-    # Run the expression cleaned from target
-    out <- eval(parse(text = specs$expression))
+  # If an expression is detected, run it and return it
+  if(!is.na(specs$expression)) {
+    return(eval(parse(text = specs$expression)))
   }
 
+  # If NA, return all unique
+  if(is.na(length)) {
+    return(sort(unique(x)))
+  }
+
+  # Sanity check
+  if (!is.numeric(length)) {
+    stop("`length` argument should be an number.")
+  }
+
+  # Create a spread
+  out <- .create_spread(x, length = length, range = range, ...)
   out
 }
 
@@ -347,7 +348,51 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
 get_datagrid.double <- get_datagrid.numeric
 
 
+#' @keywords internal
+.create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
+  range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti", "sd", "mad"))
 
+  # bayestestR only for some options
+  if (range %in% c("ci", "hdi", "eti")) {
+    check_if_installed("bayestestR")
+  }
+
+  if (range %in% c("sd", "mad")) {
+    if(range %in% c("sd")) {
+      disp <- sd(x, na.rm = TRUE)
+      center <- mean(x, na.rm = TRUE)
+    } else {
+      disp <- mad(x, na.rm = TRUE)
+      center <- median(x, na.rm = TRUE)
+    }
+    mini <- center - floor((length - 1) / 2) * disp
+    maxi <- center + ceiling((length - 1) / 2) * disp
+
+    out <- seq(mini, maxi, by = disp)
+    return(out)
+  }
+
+  if (range == "iqr") {
+    mini <- stats::quantile(x, (1 - ci) / 2, ...)
+    maxi <- stats::quantile(x, (1 + ci) / 2, ...)
+  } else if (range == "ci") {
+    out <- bayestestR::ci(x, ci = ci, ...)
+    mini <- out$CI_low
+    maxi <- out$CI_high
+  } else if (range == "eti") {
+    out <- bayestestR::eti(x, ci = ci, ...)
+    mini <- out$CI_low
+    maxi <- out$CI_high
+  } else if (range == "hdi") {
+    out <- bayestestR::hdi(x, ci = ci, ...)
+    mini <- out$CI_low
+    maxi <- out$CI_high
+  } else {
+    mini <- min(x, na.rm = TRUE)
+    maxi <- max(x, na.rm = TRUE)
+  }
+  seq(mini, maxi, length.out = length)
+}
 
 
 # Factors & Characters ----------------------------------------------------
@@ -382,37 +427,6 @@ get_datagrid.character <- get_datagrid.factor
 get_datagrid.logical <- get_datagrid.character
 
 
-
-#' @keywords internal
-.create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
-  range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti"))
-
-  # bayestestR only for some options
-  if (range %in% c("ci", "hdi", "eti")) {
-    check_if_installed("bayestestR")
-  }
-
-  if (range == "iqr") {
-    mini <- stats::quantile(x, (1 - ci) / 2, ...)
-    maxi <- stats::quantile(x, (1 + ci) / 2, ...)
-  } else if (range == "ci") {
-    out <- bayestestR::ci(x, ci = ci, ...)
-    mini <- out$CI_low
-    maxi <- out$CI_high
-  } else if (range == "eti") {
-    out <- bayestestR::eti(x, ci = ci, ...)
-    mini <- out$CI_low
-    maxi <- out$CI_high
-  } else if (range == "hdi") {
-    out <- bayestestR::hdi(x, ci = ci, ...)
-    mini <- out$CI_low
-    maxi <- out$CI_high
-  } else {
-    mini <- min(x, na.rm = TRUE)
-    maxi <- max(x, na.rm = TRUE)
-  }
-  seq(mini, maxi, length.out = length)
-}
 
 
 # Utilities -----------------------------------------------------------------
