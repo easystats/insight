@@ -113,7 +113,7 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <li><p><code>is_survival</code>: model is a survival model</p></li>
 <li><p><code>is_zero_inflated</code>: model has zero-inflation component</p></li>
 <li><p><code>is_hurdle</code>: model has zero-inflation component and is a hurdle-model (truncated family distribution)</p></li>
-<li><p><code>is_dispersion</code>: model has dispersion component</p></li>
+<li><p><code>is_dispersion</code>: model has dispersion component (not only dispersion <em>parameter</em>)</p></li>
 <li><p><code>is_mixed</code>: model is a mixed effects model (with random effects)</p></li>
 <li><p><code>is_multivariate</code>: model is a multivariate response model (currently only works for <em>brmsfit</em> objects)</p></li>
 <li><p><code>is_trial</code>: model response contains additional information about the trials</p></li>
@@ -132,7 +132,6 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <li><p><code>link_function</code>: the link-function</p></li>
 <li><p><code>family</code>: the family-object</p></li>
 <li><p><code>n_obs</code>: number of observations</p></li>
-<li><p><code>model_terms</code>: a list with all model terms, including terms such as random effects or from zero-inflated model parts.</p></li>
 </ul></div>
 
     <div class="section level2">
