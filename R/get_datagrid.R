@@ -2,6 +2,7 @@
 #'
 #' Create a reference matrix, useful for visualisation, with evenly spread and
 #' combined values. Usually used to make generate predictions using [get_predicted()].
+#' See this [vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) for a tutorial on how to create a visualisation matrix using this function.
 #'
 #' @param x An object from which to construct the reference grid.
 #' @param at Can be `"all"`, a character vector or list of named elements, indicating
@@ -11,12 +12,22 @@
 #'   `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
 #'   and double quotes to assign strings within strings). The remaining variables
 #'   will be fixed.
-#' @param length Length of numeric `"at"` variables.
-#' @param range Can be one of `"range"`, `"iqr"`, `"ci"`, `"hdi"` or `"eti"`. If
-#'   `"range"` (default), will use the minimum and maximum of the original
-#'   vector as end-points. If any other interval, will spread within the range
-#'   (the default CI width is `95%` but this can be changed by setting something
-#'   else, e.g., `ci = 0.90`). See [IQR()] and [bayestestR::ci()].
+#' @param length Length of numeric target variables selected in `"at"`. This arguments
+#'   controls the number of (equally spread) values that will be taken to represent the
+#'   continuous variables. A longer length will increase precision, but can also
+#'   substantially increase the size of the datagrid (especially in case of interactions).
+#'   If `NA`, will return all the unique values. In case of multiple continuous target
+#'   variables, `length` can also be a vector of different values (see examples).
+#' @param range If `"range"` (default), will use the minimum and maximum of the
+#'   original data vector as end-points (min and max). If an interval type is specified,
+#'   such as [`"iqr"`][IQR()], [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or [`"eti"`][bayestestR::eti()], it will spread the values within
+#'   that range (the default CI width is `95%` but this can be changed by adding for instance
+#'   `ci = 0.90`. See [IQR()] and [bayestestR::ci()]. This can be useful to have
+#'   more robust change and skipping extreme values. If [`"sd"`][sd()] or [`"mad"`][mad()], it will
+#'   spread by this dispersion index around the mean or the median, respectively.
+#'   If the `length` argument is an even number (e.g., `4`), it will have one more
+#'   step on the positive side (i.e., `-1, 0, +1, +2`). The result is a named vector.
+#'   See examples.
 #' @param factors Type of summary for factors. Can be `"reference"` (set at the
 #'   reference level), `"mode"` (set at the most common level) or `"all"` to
 #'   keep all levels.
@@ -30,6 +41,7 @@
 #'   want the minimum and the maximum to closely match the actual ranges, you
 #'   should increase the `length` argument.
 #' @param reference The reference vector from which to compute the mean and SD.
+#'   Used when standardizing or unstandardizing the grid using `effectsize::standardize`.
 #' @param include_smooth If `x` is a model object, decide whether smooth terms
 #'   should be included in the data grid or not.
 #' @param include_random If `x` is a mixed model object, decide whether random
@@ -51,27 +63,56 @@
 #' @seealso [get_predicted()]
 #'
 #' @examples
-#' if (require("bayestestR", quietly = TRUE)) {
-#'   # Add one row to change the "mode" of Species
-#'   data <- rbind(iris, iris[149, ], make.row.names = FALSE)
+#' # Datagrids of variables and dataframes =====================================
+#' if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE)) {
 #'
-#'   # Single variable is of interest; all others are "fixed"
-#'   get_datagrid(data, at = "Sepal.Length")
-#'   get_datagrid(data, at = "Sepal.Length", length = 3)
-#'   get_datagrid(data, at = "Sepal.Length", range = "ci", ci = 0.90)
-#'   get_datagrid(data, at = "Sepal.Length", factors = "mode")
+#'   # Single variable is of interest; all others are "fixed" ------------------
+#'   # Factors
+#'   get_datagrid(iris, at = "Species") # Returns all the levels
+#'   get_datagrid(iris, at = "Species = c('setosa', 'versicolor')") # Specify an expression
 #'
-#'   # Multiple variables are of interest, creating a combination
-#'   get_datagrid(data, at = c("Sepal.Length", "Species"), length = 3)
-#'   get_datagrid(data, at = c(1, 3), length = 3)
-#'   get_datagrid(data, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
-#'   get_datagrid(data, at = c("Sepal.Length", "Species"), numerics = 0)
-#'   get_datagrid(data, at = c("Sepal.Length = 3", "Species"))
-#'   get_datagrid(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+#'   # Numeric variables
+#'   get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
+#'   get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
+#'   get_datagrid(iris[2:150, ], at = "Sepal.Length",
+#'                factors = "mode", numerics = "median") # change non-targets fixing
+#'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
+#'   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
 #'
-#'   # with list-style at-argument
-#'   get_datagrid(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+#'
+#'   # Standardization and unstandardization
+#'   data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
+#'   data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
+#'   # TODO: uncomment when datawizard > 0.3.1 is out
+#'   # datawizard::standardize(data, select = "Sepal.Length")
+#'   # data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+#'   # data
+#'   # datawizard::unstandardize(data, select = "Sepal.Length")
+#'
+#'
+#'   # Multiple variables are of interest, creating a combination --------------
+#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
+#'   get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
+#'   get_datagrid(iris, at = c(1, 3), length = 3)
+#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
+#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), numerics = 0)
+#'   get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
+#'   get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+#'
+#'   # With list-style at-argument
+#'   get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 #' }
+#'
+#' # With models ===============================================================
+#' # Fit a linear regression
+#' model <- lm(Sepal.Length ~ Sepal.Width * Petal.Length, data = iris)
+#' # Get datagrid of predictors
+#' data <- get_datagrid(model, length = c(20, 3), range = c("range", "sd"))
+#' # Add predictions
+#' data$Sepal.Length <- get_predicted(model, data = data)
+#' # Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)
+#' plot(data$Sepal.Width, data$Sepal.Length, col = data$Petal.Length,
+#'      main="Relationship between predicted Sepal.Length and Sepal.Width at -1 SD, Mean, and + 1 SD of Petal.Length")
 #' @export
 get_datagrid <- function(x, ...) {
   UseMethod("get_datagrid")
@@ -90,6 +131,8 @@ get_datagrid.data.frame <- function(x,
                                     numerics = "mean",
                                     preserve_range = FALSE,
                                     reference = x,
+                                    length = 10,
+                                    range = "range",
                                     ...) {
   target <- at
 
@@ -139,12 +182,31 @@ get_datagrid.data.frame <- function(x,
 
       # Create target list of numerics ----------------------------------------
       nums <- list()
-      for (num in specs[specs$is_factor == FALSE, "varname"]) {
-        nums[[num]] <- get_datagrid(x[[num]],
-          target = specs[specs$varname == num, "expression"],
-          reference = reference[[num]],
-          ...
-        )
+      numvars <- specs[specs$is_factor == FALSE, "varname"]
+      if (length(numvars)) {
+        # Sanitize 'length' argument
+        if (length(length) == 1) {
+          length <- rep(length, length(numvars))
+        } else if (length(length) != length(numvars)) {
+          stop("The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ").")
+        }
+        # Sanitize 'range' argument
+        if (length(range) == 1) {
+          range <- rep(range, length(numvars))
+        } else if (length(range) != length(numvars)) {
+          stop("The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ").")
+        }
+        # Get datagrids
+        for (i in 1:length(numvars)) {
+          num <- numvars[i]
+          nums[[num]] <- get_datagrid(x[[num]],
+                                      target = specs[specs$varname == num, "expression"],
+                                      reference = reference[[num]],
+                                      length = length[i],
+                                      range = range[i],
+                                      ...
+          )
+        }
       }
     } else if (is.list(target)) {
 
@@ -279,7 +341,7 @@ get_datagrid.data.frame <- function(x,
         stop(paste0(
           "Argument is not numeric nor factor but ",
           class(x),
-          ". Please report the bug at https://github.com/easystats/modelbased/issues"
+          ". Please report the bug at https://github.com/easystats/insight/issues"
         ))
       }
     }
@@ -304,22 +366,26 @@ get_datagrid.data.frame <- function(x,
 #' @export
 get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
 
+  # Check and clean the target argument
+  specs <- .get_datagrid_clean_target(x, ...)
+
+  # If an expression is detected, run it and return it
+  if (!is.na(specs$expression)) {
+    return(eval(parse(text = specs$expression)))
+  }
+
+  # If NA, return all unique
+  if (is.na(length)) {
+    return(sort(unique(x)))
+  }
+
   # Sanity check
   if (!is.numeric(length)) {
     stop("`length` argument should be an number.")
   }
 
-  # Check and clean the target argument
-  specs <- .get_datagrid_clean_target(x, ...)
-
-  if (is.na(specs$expression)) {
-    # Create a spread
-    out <- .create_spread(x, length = length, range = range, ...)
-  } else {
-    # Run the expression cleaned from target
-    out <- eval(parse(text = specs$expression))
-  }
-
+  # Create a spread
+  out <- .create_spread(x, length = length, range = range, ...)
   out
 }
 
@@ -327,7 +393,57 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
 get_datagrid.double <- get_datagrid.numeric
 
 
+#' @keywords internal
+.create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
+  range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti", "sd", "mad"))
 
+  # bayestestR only for some options
+  if (range %in% c("ci", "hdi", "eti")) {
+    check_if_installed("bayestestR")
+  }
+
+  # If Range is a dispersion (e.g., SD or MAD)
+  if (range %in% c("sd", "mad")) {
+    spread <- -floor((length - 1) / 2):ceiling((length - 1) / 2)
+    if (range %in% c("sd")) {
+      disp <- stats::sd(x, na.rm = TRUE)
+      center <- mean(x, na.rm = TRUE)
+      labs <- ifelse(sign(spread) == -1, paste(spread, "SD"),
+                     ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean"))
+    } else {
+      disp <- stats::mad(x, na.rm = TRUE)
+      center <- stats::median(x, na.rm = TRUE)
+      labs <- ifelse(sign(spread) == -1, paste(spread, "MAD"),
+                     ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median"))
+    }
+    out <- center + spread * disp
+    names(out) <- labs
+
+    return(out)
+  }
+
+  # If Range is an interval
+  if (range == "iqr") {
+    mini <- stats::quantile(x, (1 - ci) / 2, ...)
+    maxi <- stats::quantile(x, (1 + ci) / 2, ...)
+  } else if (range == "ci") {
+    out <- bayestestR::ci(x, ci = ci, ...)
+    mini <- out$CI_low
+    maxi <- out$CI_high
+  } else if (range == "eti") {
+    out <- bayestestR::eti(x, ci = ci, ...)
+    mini <- out$CI_low
+    maxi <- out$CI_high
+  } else if (range == "hdi") {
+    out <- bayestestR::hdi(x, ci = ci, ...)
+    mini <- out$CI_low
+    maxi <- out$CI_high
+  } else {
+    mini <- min(x, na.rm = TRUE)
+    maxi <- max(x, na.rm = TRUE)
+  }
+  seq(mini, maxi, length.out = length)
+}
 
 
 # Factors & Characters ----------------------------------------------------
@@ -362,37 +478,6 @@ get_datagrid.character <- get_datagrid.factor
 get_datagrid.logical <- get_datagrid.character
 
 
-
-#' @keywords internal
-.create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
-  range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti"))
-
-  # bayestestR only for some options
-  if (range %in% c("ci", "hdi", "eti")) {
-    check_if_installed("bayestestR")
-  }
-
-  if (range == "iqr") {
-    mini <- stats::quantile(x, (1 - ci) / 2, ...)
-    maxi <- stats::quantile(x, (1 + ci) / 2, ...)
-  } else if (range == "ci") {
-    out <- bayestestR::ci(x, ci = ci, ...)
-    mini <- out$CI_low
-    maxi <- out$CI_high
-  } else if (range == "eti") {
-    out <- bayestestR::eti(x, ci = ci, ...)
-    mini <- out$CI_low
-    maxi <- out$CI_high
-  } else if (range == "hdi") {
-    out <- bayestestR::hdi(x, ci = ci, ...)
-    mini <- out$CI_low
-    maxi <- out$CI_high
-  } else {
-    mini <- min(x, na.rm = TRUE)
-    maxi <- max(x, na.rm = TRUE)
-  }
-  seq(mini, maxi, length.out = length)
-}
 
 
 # Utilities -----------------------------------------------------------------
