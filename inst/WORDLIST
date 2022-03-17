@@ -25,6 +25,7 @@ Schielzeth’s
 Vehtari
 Zuur
 al
+ansi
 ateucher
 bamlss
 bayesGARCH
@@ -38,11 +39,13 @@ brmsfit
 btergm
 ci
 cloglog
+clubSandwich
 cmprsk
 colour
 coloured
 comparator
 coxrobust
+datagrid
 datawizard
 dirichlet
 doi
@@ -116,9 +119,11 @@ tranformations
 tseries
 tweedie
 unformatted
+unstandardizing
 untransformed
 variates
 vectorized
+visualisation
 vgam
 warmup
 warmups

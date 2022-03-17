@@ -27,7 +27,7 @@
 #' }
 #' @export
 find_offset <- function(x) {
-  terms <- as.character(unlist(find_formula(x)))
+  terms <- as.character(attributes(stats::terms(find_formula(x)[[1]]))$variables)
   offset <- NULL
 
   offcol <- grep("offset(", terms, fixed = TRUE)
