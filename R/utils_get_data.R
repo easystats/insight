@@ -259,7 +259,6 @@
   # add names of 2nd interaction term
   if (any(ints)) {
     interactions <- stats::setNames(cvn[ints], trim_ws(gsub("interaction\\((.*),(.*)\\)", "\\2", colnames(mf)[ints])))
-    factors <- unique(c(factors, names(interactions)))
   } else {
     interactions <- NULL
   }
@@ -397,14 +396,8 @@
   if (!is.null(interactions)) {
     for (i in 1:length(interactions)) {
       int <- interactions[i]
-      if (is.factor(mf[[int]])) {
-        levels_i2 <- stats::na.omit(unique(mf[[names(int)]]))
-        for (j in levels_i2) {
-          pattern <- paste0("\\.", levels_i2[j], "$")
-          mf[[int]] <- gsub(pattern, "", mf[[int]])
-        }
-        mf[[int]] <- as.factor(mf[[int]])
-      }
+      mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
+      mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
     }
   }
 

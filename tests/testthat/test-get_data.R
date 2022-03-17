@@ -33,4 +33,18 @@ if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
     expect_equal(get_data(mod1)$x, dat$x, ignore_attr = TRUE)
     expect_equal(get_data(mod2)$x, dat$x, ignore_attr = TRUE)
   })
+
+  if (requiet("mgcv")) {
+    d <- iris
+    d$NewFac <- rep(c(1, 2), length.out = 150)
+    model <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
+
+    test_that("get_data", {
+      expect_equal(
+        head(insight::get_data(model)),
+        head(d[c("Sepal.Length", "Petal.Length", "Species", "NewFac")]),
+        ignore_attr = TRUE
+      )
+    })
+  }
 }

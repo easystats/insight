@@ -213,28 +213,30 @@
 
   # save model terms --------
 
-  if (isTRUE(dots$no_terms)) {
-    model_terms <- NULL
-  } else {
-    if (inherits(x, "mcmc")) {
-      model_terms <- find_parameters(x)
-    } else {
-      model_terms <- tryCatch(
-        {
-          find_variables(
-            x,
-            effects = "all",
-            component = "all",
-            flatten = FALSE,
-            verbose = FALSE
-          )
-        },
-        error = function(x) {
-          NULL
-        }
-      )
-    }
-  }
+  # drop this for now...
+
+  # if (isTRUE(dots$no_terms)) {
+  #   model_terms <- NULL
+  # } else {
+  #   if (inherits(x, "mcmc")) {
+  #     model_terms <- find_parameters(x)
+  #   } else {
+  #     model_terms <- tryCatch(
+  #       {
+  #         find_variables(
+  #           x,
+  #           effects = "all",
+  #           component = "all",
+  #           flatten = FALSE,
+  #           verbose = FALSE
+  #         )
+  #       },
+  #       error = function(x) {
+  #         NULL
+  #       }
+  #     )
+  #   }
+  # }
 
 
   # significance tests --------
@@ -397,8 +399,7 @@
     is_meta = is_meta,
     link_function = link.fun,
     family = fitfam,
-    n_obs = n_obs(x),
-    model_terms = model_terms
+    n_obs = n_obs(x)
   )
 }
 
