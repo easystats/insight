@@ -259,7 +259,7 @@
         grepl("wilcoxon", tolower(x$method), fixed = TRUE) ||
         grepl("friedman", tolower(x$method), fixed = TRUE)) {
       is_ranktest <- TRUE
-    } else if (grepl("t-test", x$method)) {
+    } else if (grepl("t-test", x$method, fixed = TRUE)) {
       is_ttest <- TRUE
     } else if (grepl("^One-way", x$method)) {
       is_oneway <- TRUE

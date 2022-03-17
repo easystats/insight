@@ -127,7 +127,7 @@ format_value.logical <- format_value.numeric
         )
       }
     } else {
-      if (is.character(digits) && grepl("^scientific", digits)) {
+      if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
         digits <- tryCatch(
           expr = {
             as.numeric(gsub("scientific", "", digits, fixed = TRUE))
@@ -138,7 +138,7 @@ format_value.logical <- format_value.numeric
         )
         if (is.na(digits)) digits <- 5
         x <- sprintf("%.*e", digits, x)
-      } else if (is.character(digits) && grepl("^signif", digits)) {
+      } else if (is.character(digits) && grepl("signif", digits, fixed = TRUE)) {
         digits <- tryCatch(
           expr = {
             as.numeric(gsub("signif", "", digits, fixed = TRUE))

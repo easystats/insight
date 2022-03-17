@@ -61,7 +61,7 @@ format_p <- function(p,
     digits <- 3
   }
 
-  if (is.character(digits) && grepl("^scientific", digits)) {
+  if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
     digits <- tryCatch(
       {
         as.numeric(gsub("scientific", "", digits, fixed = TRUE))

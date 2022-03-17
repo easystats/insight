@@ -86,7 +86,7 @@ n_obs.glm <- function(x, disaggregate = FALSE, ...) {
     resp_data <- get_response(x, verbose = FALSE)
 
     # response is a matrix of numbers of trials and successes
-    if (grepl("^cbind\\(", resp)) {
+    if (grepl("cbind(", resp, fixed = TRUE)) {
       trials <- trim_ws(sub("cbind\\((.*),(.*)\\)", "\\2", resp))
       if (grepl("-", trials, fixed = TRUE)) {
         .nobs <- sum(resp_data[[2]])

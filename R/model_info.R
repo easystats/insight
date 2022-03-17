@@ -1040,7 +1040,7 @@ model_info.glmmTMB <- function(x, ...) {
     x = x,
     fitfam = faminfo$family,
     zero.inf = zero_inflated,
-    hurdle = grepl("truncated", faminfo$family),
+    hurdle = grepl("truncated", faminfo$family, fixed = TRUE),
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
     dispersion = !is.null(find_formula(x)$dispersion),
