@@ -304,7 +304,6 @@ get_predicted.survreg <- get_predicted.lm
 
 #' @export
 get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterations = NULL, verbose = TRUE, ...) {
-
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
   se <- NULL
 
@@ -531,7 +530,8 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
     # the associated levels/values for "Row"
     if (!is.null(args$data)) {
       focal_predictors <- tryCatch(names(which(n_unique(args$data) > 1)),
-                                   error = function(e) NULL)
+        error = function(e) NULL
+      )
       if (!is.null(focal_predictors)) {
         predictions <- cbind(predictions, args$data[focal_predictors])
       }
@@ -625,7 +625,6 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
     # .get_predicted_boot already gives us the correct observation ~ draws format
     if (is.null(colnames(iter)) || !all(grepl("^iter", colnames(iter)))) {
       iter <- as.data.frame(t(iter))
-
     }
     predictions <- apply(iter, 1, centrality_function)
   }

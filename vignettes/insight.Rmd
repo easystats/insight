@@ -105,7 +105,7 @@ for (i in 1:5) {
 
 model <- lmer(
   Reaction ~ Days + I(Days^2) + log1p(Weeks) + cat +
-    (1 | mygrp / mysubgrp) + 
+    (1 | mygrp / mysubgrp) +
     (1 + Days | Subject),
   data = sleepstudy
 )

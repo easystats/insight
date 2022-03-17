@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
   fig.width = 600,
   comment = "#>"
 )
-options(knitr.kable.NA = '', digits = 2, width = 80)
+options(knitr.kable.NA = "", digits = 2, width = 80)
 ```
 
 # insight <img src='man/figures/logo.png' align="right" height="139" />
@@ -116,7 +116,7 @@ In this example, we fit a simple linear model, but it could be replaced by (m)an
 ```{r, warning=FALSE, message=FALSE}
 library(insight)
 m <- lm(
-  Sepal.Length ~ Species + Petal.Width + Sepal.Width, 
+  Sepal.Length ~ Species + Petal.Width + Sepal.Width,
   data = iris
 )
 
@@ -124,10 +124,11 @@ dat <- get_data(m)
 pred <- find_predictors(m, flatten = TRUE)
 
 l <- lapply(pred, function(x) {
-  if (is.numeric(dat[[x]]))
+  if (is.numeric(dat[[x]])) {
     mean(dat[[x]])
-  else
+  } else {
     unique(dat[[x]])
+  }
 })
 
 names(l) <- pred
@@ -143,10 +144,10 @@ The next example should emphasize the possibilities to generalize functions to m
 The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.
 
 ```{r, warning=FALSE, message=FALSE}
-print_params <- function(model){
+print_params <- function(model) {
   paste0(
     "My parameters are ",
-    paste0(row.names(summary(model)$coefficients),  collapse = ", "),
+    paste0(row.names(summary(model)$coefficients), collapse = ", "),
     ", thank you for your attention!"
   )
 }
@@ -162,10 +163,10 @@ print_params(m2)
 As we can see, the function fails for *gam*-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With **insight**, users can write a function without having to worry about the model type.
 
 ```{r, warning=FALSE, message=FALSE}
-print_params <- function(model){
+print_params <- function(model) {
   paste0(
     "My parameters are ",
-    paste0(insight::find_parameters(model, flatten = TRUE),  collapse = ", "),
+    paste0(insight::find_parameters(model, flatten = TRUE), collapse = ", "),
     ", thank you for your attention!"
   )
 }

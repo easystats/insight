@@ -22,27 +22,27 @@
 
   binom_fam <-
     fitfam_lower %in% c("bernoulli", "binomial", "quasibinomial", "binomialff") |
-    grepl("binomial", fitfam_lower, fixed = TRUE)
+      grepl("binomial", fitfam_lower, fixed = TRUE)
 
 
   # poisson family --------
 
   poisson_fam <-
     fitfam %in% c("poisson", "quasipoisson", "genpois", "ziplss") |
-    grepl("poisson", fitfam_lower, fixed = TRUE)
+      grepl("poisson", fitfam_lower, fixed = TRUE)
 
 
   # negative binomial family --------
 
   neg_bin_fam <-
     grepl("negative binomial", fitfam_lower, fixed = TRUE) |
-    grepl("nbinom", fitfam_lower, fixed = TRUE) |
-    grepl("negbin", fitfam_lower, fixed = TRUE) |
-    grepl("nzbinom", fitfam_lower, fixed = TRUE) |
-    grepl("genpois", fitfam_lower, fixed = TRUE) |
-    grepl("negbinomial", fitfam_lower, fixed = TRUE) |
-    grepl("neg_binomial", fitfam_lower, fixed = TRUE) |
-    fitfam_lower %in% c("ztnbinom", "nbinom")
+      grepl("nbinom", fitfam_lower, fixed = TRUE) |
+      grepl("negbin", fitfam_lower, fixed = TRUE) |
+      grepl("nzbinom", fitfam_lower, fixed = TRUE) |
+      grepl("genpois", fitfam_lower, fixed = TRUE) |
+      grepl("negbinomial", fitfam_lower, fixed = TRUE) |
+      grepl("neg_binomial", fitfam_lower, fixed = TRUE) |
+      fitfam_lower %in% c("ztnbinom", "nbinom")
 
 
   # bernoulli family --------
@@ -66,15 +66,15 @@
 
   beta_fam <-
     inherits(x, c("betareg", "betamfx")) |
-    fitfam %in% c(
-      "beta",
-      "Beta",
-      "betabinomial",
-      "Beta Inflated",
-      "Zero Inflated Beta",
-      "Beta Inflated zero",
-      "Beta Inflated one"
-    )
+      fitfam %in% c(
+        "beta",
+        "Beta",
+        "betabinomial",
+        "Beta Inflated",
+        "Zero Inflated Beta",
+        "Beta Inflated zero",
+        "Beta Inflated one"
+      )
 
 
   # special families (beta-binomial, dirichlet) --------
@@ -121,14 +121,14 @@
 
   is.ordinal <-
     inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "mixor", "LORgee", "mvord")) |
-    fitfam %in% c("cumulative", "ordinal")
+      fitfam %in% c("cumulative", "ordinal")
 
 
   # multinomial family --------
 
   is.multinomial <-
     inherits(x, c("gmnl", "mlogit", "DirichletRegModel", "multinom", "brmultinom")) |
-    fitfam %in% c("cratio", "sratio", "acat", "multinom", "multinomial", "multinomial2", "dirichlet")
+      fitfam %in% c("cratio", "sratio", "acat", "multinom", "multinomial", "multinomial2", "dirichlet")
 
 
   # categorical family --------
@@ -253,11 +253,11 @@
 
   if (inherits(x, "htest")) {
     if (grepl("kruskal-wallis", tolower(x$method), fixed = TRUE) ||
-        grepl("design-based kruskalwallis", tolower(x$method), fixed = TRUE) ||
-        grepl("design-based median", tolower(x$method), fixed = TRUE) ||
-        grepl("design-based vanderwaerden", tolower(x$method), fixed = TRUE) ||
-        grepl("wilcoxon", tolower(x$method), fixed = TRUE) ||
-        grepl("friedman", tolower(x$method), fixed = TRUE)) {
+      grepl("design-based kruskalwallis", tolower(x$method), fixed = TRUE) ||
+      grepl("design-based median", tolower(x$method), fixed = TRUE) ||
+      grepl("design-based vanderwaerden", tolower(x$method), fixed = TRUE) ||
+      grepl("wilcoxon", tolower(x$method), fixed = TRUE) ||
+      grepl("friedman", tolower(x$method), fixed = TRUE)) {
       is_ranktest <- TRUE
     } else if (grepl("t-test", x$method, fixed = TRUE)) {
       is_ttest <- TRUE
@@ -272,8 +272,8 @@
       is_proptest <- TRUE
       fitfam <- "binomial"
     } else if (any(grepl("chi-squared", c(tolower(x$method), tolower(attributes(x$statistic)$names)), fixed = TRUE)) ||
-               grepl("Fisher's Exact Test", x$method, fixed = TRUE) ||
-               grepl("pearson's x^2", tolower(x$method), fixed = TRUE)) {
+      grepl("Fisher's Exact Test", x$method, fixed = TRUE) ||
+      grepl("pearson's x^2", tolower(x$method), fixed = TRUE)) {
       is_chi2test <- TRUE
       is_xtab <- TRUE
       fitfam <- "categorical"
@@ -336,8 +336,8 @@
 
   linear_model <- TRUE
   if (binom_fam | exponential_fam | poisson_fam | neg_bin_fam | logit.link |
-      dirichlet_fam | is.ordinal | zero.inf | is.censored | is.survival | is_binomtest |
-      is.categorical | hurdle | is.multinomial | is_chi2test | is_proptest | is_xtab) {
+    dirichlet_fam | is.ordinal | zero.inf | is.censored | is.survival | is_binomtest |
+    is.categorical | hurdle | is.multinomial | is_chi2test | is_proptest | is_xtab) {
     linear_model <- FALSE
   } else if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian")) && !grepl("(\\st)$", fitfam)) {
     linear_model <- FALSE
@@ -405,9 +405,9 @@
 
 .get_ordinal_link <- function(x) {
   switch(x$link,
-         logistic = "logit",
-         cloglog = "log",
-         x$link
+    logistic = "logit",
+    cloglog = "log",
+    x$link
   )
 }
 
@@ -421,20 +421,20 @@
     }
   }
   f <- switch(dist,
-              gaussian = stats::gaussian("identity"),
-              logistic = stats::binomial("logit"),
-              llogis = ,
-              loglogistic = stats::binomial("log"),
-              lnorm = ,
-              lognormal = stats::gaussian("log"),
-              gompertz = stats::Gamma("log"),
-              gamma = ,
-              gengamma = ,
-              gengamma.orig = stats::Gamma(),
-              exponential = ,
-              exp = ,
-              weibull = stats::Gamma("log"),
-              stats::gaussian("identity")
+    gaussian = stats::gaussian("identity"),
+    logistic = stats::binomial("logit"),
+    llogis = ,
+    loglogistic = stats::binomial("log"),
+    lnorm = ,
+    lognormal = stats::gaussian("log"),
+    gompertz = stats::Gamma("log"),
+    gamma = ,
+    gengamma = ,
+    gengamma.orig = stats::Gamma(),
+    exponential = ,
+    exp = ,
+    weibull = stats::Gamma("log"),
+    stats::gaussian("identity")
   )
 
   if (dist == "weibull") f$family <- "weibull"

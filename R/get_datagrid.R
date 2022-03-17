@@ -74,8 +74,10 @@
 #'   # Numeric variables
 #'   get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
 #'   get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
-#'   get_datagrid(iris[2:150, ], at = "Sepal.Length",
-#'                factors = "mode", numerics = "median") # change non-targets fixing
+#'   get_datagrid(iris[2:150, ],
+#'     at = "Sepal.Length",
+#'     factors = "mode", numerics = "median"
+#'   ) # change non-targets fixing
 #'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
 #'   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
 #'
@@ -111,8 +113,10 @@
 #' # Add predictions
 #' data$Sepal.Length <- get_predicted(model, data = data)
 #' # Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)
-#' plot(data$Sepal.Width, data$Sepal.Length, col = data$Petal.Length,
-#'      main="Relationship at -1 SD, Mean, and + 1 SD of Petal.Length")
+#' plot(data$Sepal.Width, data$Sepal.Length,
+#'   col = data$Petal.Length,
+#'   main = "Relationship at -1 SD, Mean, and + 1 SD of Petal.Length"
+#' )
 #' @export
 get_datagrid <- function(x, ...) {
   UseMethod("get_datagrid")
@@ -200,11 +204,11 @@ get_datagrid.data.frame <- function(x,
         for (i in 1:length(numvars)) {
           num <- numvars[i]
           nums[[num]] <- get_datagrid(x[[num]],
-                                      target = specs[specs$varname == num, "expression"],
-                                      reference = reference[[num]],
-                                      length = length[i],
-                                      range = range[i],
-                                      ...
+            target = specs[specs$varname == num, "expression"],
+            reference = reference[[num]],
+            length = length[i],
+            range = range[i],
+            ...
           )
         }
       }
@@ -409,12 +413,14 @@ get_datagrid.double <- get_datagrid.numeric
       disp <- stats::sd(x, na.rm = TRUE)
       center <- mean(x, na.rm = TRUE)
       labs <- ifelse(sign(spread) == -1, paste(spread, "SD"),
-                     ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean"))
+        ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean")
+      )
     } else {
       disp <- stats::mad(x, na.rm = TRUE)
       center <- stats::median(x, na.rm = TRUE)
       labs <- ifelse(sign(spread) == -1, paste(spread, "MAD"),
-                     ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median"))
+        ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median")
+      )
     }
     out <- center + spread * disp
     names(out) <- labs

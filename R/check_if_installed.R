@@ -38,7 +38,6 @@ check_if_installed <- function(package,
                                quietly = FALSE,
                                prompt = interactive(),
                                ...) {
-
   is_installed <- sapply(package, requireNamespace, quietly = TRUE)
   what_is_wrong <- what_you_can_do <- NULL
 
@@ -47,15 +46,18 @@ check_if_installed <- function(package,
     # only keep not-installed packages
     package <- package[!is_installed]
 
-    what_is_wrong <- sprintf("Package%s %s required %s.",
-                             if (length(package) > 1L) "s" else "",
-                             paste(sprintf("'%s'", package), collapse = " and "),
-                             reason)
+    what_is_wrong <- sprintf(
+      "Package%s %s required %s.",
+      if (length(package) > 1L) "s" else "",
+      paste(sprintf("'%s'", package), collapse = " and "),
+      reason
+    )
 
-    what_you_can_do <- sprintf("Please install %s by running install.packages(%s).",
-                               if (length(package) > 1L) "them" else "it",
-                               paste(sprintf("\"%s\"", package), collapse = ", "))
-
+    what_you_can_do <- sprintf(
+      "Please install %s by running install.packages(%s).",
+      if (length(package) > 1L) "them" else "it",
+      paste(sprintf("\"%s\"", package), collapse = ", ")
+    )
   } else if (!is.null(minimum_version)) {
     needs_update <- utils::packageVersion(package) < package_version(minimum_version)
 
@@ -64,17 +66,21 @@ check_if_installed <- function(package,
       package <- package[needs_update]
       minimum_version <- minimum_version[needs_update]
 
-      what_is_wrong <- sprintf("Package%s %s %s installed, but package version%s %s %s required.",
-                               if (length(package) > 1L) "s" else "",
-                               paste(sprintf("'%s'", package), collapse = " and "),
-                               if (length(package) > 1L) "are" else "is",
-                               if (length(package) > 1L) "s" else "",
-                               paste(sprintf("'%s'", minimum_version), collapse = " and "),
-                               if (length(package) > 1L) "are" else "is")
+      what_is_wrong <- sprintf(
+        "Package%s %s %s installed, but package version%s %s %s required.",
+        if (length(package) > 1L) "s" else "",
+        paste(sprintf("'%s'", package), collapse = " and "),
+        if (length(package) > 1L) "are" else "is",
+        if (length(package) > 1L) "s" else "",
+        paste(sprintf("'%s'", minimum_version), collapse = " and "),
+        if (length(package) > 1L) "are" else "is"
+      )
 
-      what_you_can_do <- sprintf("Please update %s by running install.packages(%s).",
-                                 if (length(package) > 1L) "them" else "it",
-                                 paste(sprintf("\"%s\"", package), collapse = ", "))
+      what_you_can_do <- sprintf(
+        "Please update %s by running install.packages(%s).",
+        if (length(package) > 1L) "them" else "it",
+        paste(sprintf("\"%s\"", package), collapse = ", ")
+      )
     }
   }
 
@@ -83,9 +89,11 @@ check_if_installed <- function(package,
   ## What do?
   if (!is.null(what_is_wrong) && !quietly) {
     if (prompt) {
-      what_you_can_do <- sprintf("Would you like to %s %s? [y/n]",
-                                 if (grepl("update", what_you_can_do)) "update" else "install",
-                                 if (grepl("them", what_you_can_do)) "them" else "it")
+      what_you_can_do <- sprintf(
+        "Would you like to %s %s? [y/n]",
+        if (grepl("update", what_you_can_do)) "update" else "install",
+        if (grepl("them", what_you_can_do)) "them" else "it"
+      )
 
       print_color(format_message(what_is_wrong), "red")
       should_install <- readline(format_message(what_you_can_do))

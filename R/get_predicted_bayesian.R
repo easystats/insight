@@ -41,10 +41,11 @@ get_predicted.stanreg <- function(x,
 
   # prepare arguments, avoid possible matching by multiple actual arguments
   fun_args <- list(x,
-                   newdata = args$data,
-                   re.form = args$re.form,
-                   ndraws = iterations,
-                   draws = iterations)
+    newdata = args$data,
+    re.form = args$re.form,
+    ndraws = iterations,
+    draws = iterations
+  )
 
   # The following makes the argument passed to predict "nsamples" or "ndraws",
   # as it got changed in recent brms versions (but we want to preserve compatibility)

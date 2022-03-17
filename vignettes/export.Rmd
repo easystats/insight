@@ -77,7 +77,7 @@ Use the `footer` argument to add a footer line to the table. It is also possible
 ```{r}
 # colored caption, simple footer
 export_table(
-  x, 
+  x,
   caption = c("# Title", "red"),
   footer = "Footer line"
 )
@@ -94,7 +94,7 @@ Coloured footers can be added in the same way as for captions.
 ```{r}
 # colored caption and footer
 export_table(
-  x, 
+  x,
   caption = c("# Title", "red"),
   footer = c("Footer line in blue", "blue")
 )
@@ -113,7 +113,7 @@ Subtitles can be added using the `subtitle` argument, or the `table_subtitle` at
 ```{r}
 # colored caption, subtitle and footer
 export_table(
-  x, 
+  x,
   caption = c("# Title", "red"),
   subtitle = c("\n   A subtitle in yellow", "yellow"),
   footer = c("Footer line in blue", "blue")
@@ -163,7 +163,7 @@ In the same way you can add multiple footers. Note, however, that you have to ta
 ```{r}
 # add captions and footers for each table
 export_table(
-  x, 
+  x,
   caption = list("Table 1", "Table 2", "Table 3"),
   footer = list("Footer 1\n\n", "Footer 2\n\n", "Footer 3\n\n")
 )
@@ -181,10 +181,12 @@ Finally, you can even add multiple footer lines to each table, giving each a dif
 ```{r}
 # Colored table captions and multiple footers per table
 export_table(
-  x, 
-  caption = list(c("Red Table 1", "red"),
-                 c("Blue Table 2", "bue"),
-                 c("Green Table 3", "green")),
+  x,
+  caption = list(
+    c("Red Table 1", "red"),
+    c("Blue Table 2", "bue"),
+    c("Green Table 3", "green")
+  ),
   footer = list(
     list(c("Footer line 1\n", "green"), c("Second line\n\n", "red")),
     list(c("Footer line A\n", "blue"), c("Second line\n\n", "green")),

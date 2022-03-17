@@ -101,12 +101,12 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && requiet("gl
     expect_equal(dim(get_datagrid(mod, include_smooth = "fixed")), c(10, 2))
 
     mod <- mgcv::gamm(Petal.Length ~ Petal.Width + s(Sepal.Length), random = list(Species = ~1), data = iris)
-    expect_equal(dim(get_datagrid(mod, include_random=TRUE)), c(63, 3))
+    expect_equal(dim(get_datagrid(mod, include_random = TRUE)), c(63, 3))
     expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = FALSE)), c(10, 1))
 
     # GAMM4
     mod <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~ (1 | Species), data = iris)
-    expect_equal(dim(get_datagrid(mod, include_random=TRUE)), c(63, 3))
+    expect_equal(dim(get_datagrid(mod, include_random = TRUE)), c(63, 3))
     expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = "fixed")), c(10, 2))
     expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = FALSE)), c(10, 1))
 
@@ -118,5 +118,3 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && requiet("gl
     expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = FALSE)), c(10, 1))
   })
 }
-
-

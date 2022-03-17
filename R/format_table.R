@@ -347,7 +347,6 @@ parameters_table <- format_table
       if (all(grepl(ptrn, ci_low, perl = TRUE)) && all(grepl(ptrn, ci_high, perl = TRUE))) {
         m <- regexpr(ptrn, ci_low, perl = TRUE)
         ci_value <- as.numeric(regmatches(ci_low, m))
-
       } else {
         ci_value <- NULL
       }

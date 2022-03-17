@@ -1161,11 +1161,13 @@ get_data.Arima <- function(x, ...) {
 #' @export
 get_data.coxph <- function(x, ...) {
   # first try, parent frame
-  dat <- tryCatch({
-    mf <- .recover_data_from_environment(x)
-    mf <- .prepare_get_data(x, stats::na.omit(mf), verbose = FALSE)
+  dat <- tryCatch(
+    {
+      mf <- .recover_data_from_environment(x)
+      mf <- .prepare_get_data(x, stats::na.omit(mf), verbose = FALSE)
     },
-    error = function(x) NULL)
+    error = function(x) NULL
+  )
 
   # second try, default extractor. Less good because of coercion to other types
   if (is.null(dat)) {

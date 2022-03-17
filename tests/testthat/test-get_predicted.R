@@ -154,10 +154,13 @@ test_that("robust vcov", {
   expect_true(all(se1 == se2))
   expect_true(all(se1 == se3))
   # hardcoded values obtained before vcov_estimation was deprecated
-  expect_equal(head(se1), c(0.862974605863594, 0.862974605863594,
-                            1.04476534302177, 0.862974605863594,
-                            0.942213270105983, 0.911147902473696),
-               ignore_attr = TRUE)
+  expect_equal(head(se1), c(
+    0.862974605863594, 0.862974605863594,
+    1.04476534302177, 0.862974605863594,
+    0.942213270105983, 0.911147902473696
+  ),
+  ignore_attr = TRUE
+  )
   # various user inputs
   se1 <- suppressWarnings(get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC2"))
   se2 <- get_predicted_se(mod, vcov = "HC2")
@@ -529,12 +532,12 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   data$cyl <- as.character(data$cyl)
   void <- capture.output(
     model <- brm(cyl ~ mpg * vs + (1 | carb),
-                 data = data,
-                 iter = 1000,
-                 seed = 1024,
-                 algorithm = "meanfield",
-                 refresh=0,
-                 family = categorical(link = "logit", refcat = "4")
+      data = data,
+      iter = 1000,
+      seed = 1024,
+      algorithm = "meanfield",
+      refresh = 0,
+      family = categorical(link = "logit", refcat = "4")
     )
   )
   x <- as.data.frame(get_predicted(model))
@@ -542,7 +545,6 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   expect_equal(c(nrow(x), ncol(x)), c(32 * 3, 1006))
   # Test whether median point-estimate indeed different from default (mean)
   expect_true(max(x$Predicted - get_predicted(model, centrality_function = stats::median)$Predicted) > 0)
-
 })
 
 

@@ -1,5 +1,4 @@
 if (requiet("testthat") && requiet("insight")) {
-
   test_that("format_table with ci-level", {
     d <- data.frame(CI = 0.97, CI_low = 1, CI_high = 3)
     ft <- insight::format_table(d)
@@ -16,8 +15,10 @@ if (requiet("testthat") && requiet("insight")) {
   })
 
   test_that("format_table with multiple ci-levels", {
-    d <- data.frame(CI_low_0.97 = 1, CI_high_0.97 = 3,
-                    CI_low_0.2 = 1, CI_high_0.2 = 3)
+    d <- data.frame(
+      CI_low_0.97 = 1, CI_high_0.97 = 3,
+      CI_low_0.2 = 1, CI_high_0.2 = 3
+    )
     ft <- insight::format_table(d)
     expect_equal(colnames(ft), c("97% CI", "20% CI"))
   })
@@ -41,8 +42,10 @@ if (requiet("testthat") && requiet("insight")) {
 
 
   test_that("format_table with multiple si-levels", {
-    d <- data.frame(CI_low_3 = 1, CI_high_3 = 3,
-                    CI_low_0.2 = 1, CI_high_0.2 = 3)
+    d <- data.frame(
+      CI_low_3 = 1, CI_high_3 = 3,
+      CI_low_0.2 = 1, CI_high_0.2 = 3
+    )
     attr(d, "ci_method") <- "SI"
     ft <- insight::format_table(d)
     expect_equal(colnames(ft), c("BF = 3 SI", "BF = 0.2 SI"))
@@ -57,7 +60,8 @@ if (requiet("testthat") && requiet("insight")) {
       out <- capture.output(print(x))
       expect_equal(
         out,
-        c("Highest Density Interval",
+        c(
+          "Highest Density Interval",
           "",
           "80% HDI       |       90% HDI",
           "-----------------------------",

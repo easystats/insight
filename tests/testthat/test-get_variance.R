@@ -110,9 +110,11 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
   test_that("get_variance-7", {
     expect_equal(
       vmodel,
-      list(var.fixed = 908.95336, var.random = 627.56905, var.residual = 653.5835,
-           var.distribution = 653.5835, var.dispersion = 0, var.intercept = c(Subject = 627.56905),
-           var.slope = c(Subject.Days = 35.85838)),
+      list(
+        var.fixed = 908.95336, var.random = 627.56905, var.residual = 653.5835,
+        var.distribution = 653.5835, var.dispersion = 0, var.intercept = c(Subject = 627.56905),
+        var.slope = c(Subject.Days = 35.85838)
+      ),
       tolerance = 1e-2
     )
   })
@@ -123,8 +125,10 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
   test_that("get_variance-8", {
     expect_equal(
       vmodel,
-      list(var.fixed = 908.95336, var.random = 1502.179, var.residual = 842.02962,
-           var.distribution = 842.02962, var.dispersion = 0, var.slope = c(Subject.Days = 52.70804)),
+      list(
+        var.fixed = 908.95336, var.random = 1502.179, var.residual = 842.02962,
+        var.distribution = 842.02962, var.dispersion = 0, var.slope = c(Subject.Days = 52.70804)
+      ),
       tolerance = 1e-2
     )
   })
@@ -133,7 +137,7 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
   # categorical rnd slope
 
   data("sleepstudy")
-  sleepstudy$Days2 <- cut(sleepstudy$Days, breaks = c(-1, 3 ,6, 10))
+  sleepstudy$Days2 <- cut(sleepstudy$Days, breaks = c(-1, 3, 6, 10))
 
   model <- lmer(Reaction ~ Days2 + (1 + Days2 | Subject), data = sleepstudy)
   vmodel <- get_variance(model)
@@ -141,11 +145,14 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
   test_that("get_variance-9", {
     expect_equal(
       vmodel,
-      list(var.fixed = 807.08545, var.random = 1711.44396, var.residual = 748.81107,
-           var.distribution = 748.81107, var.dispersion = 0, var.intercept = c(Subject = 663.28042),
-           var.slope = c(`Subject.Days2(3,6]` = 882.36419, `Subject.Days2(6,10]` = 1415.70768),
-           cor.slope_intercept = structure(c(0.36117, 0.33188), .Dim = 2:1, .Dimnames = list(
-             c("Days2(3,6]", "Days2(6,10]"), "Subject"))),
+      list(
+        var.fixed = 807.08545, var.random = 1711.44396, var.residual = 748.81107,
+        var.distribution = 748.81107, var.dispersion = 0, var.intercept = c(Subject = 663.28042),
+        var.slope = c(`Subject.Days2(3,6]` = 882.36419, `Subject.Days2(6,10]` = 1415.70768),
+        cor.slope_intercept = structure(c(0.36117, 0.33188), .Dim = 2:1, .Dimnames = list(
+          c("Days2(3,6]", "Days2(6,10]"), "Subject"
+        ))
+      ),
       tolerance = 1e-2
     )
   })
@@ -156,13 +163,17 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
   test_that("get_variance-10", {
     expect_equal(
       vmodel,
-      list(var.fixed = 807.08545355676, var.residual = 740.875581179784,
-           var.distribution = 740.875581179784, var.dispersion = 0,
-           var.intercept = c(Subject = 738.635155172211),
-           var.slope = c(`Subject.Days2(-1,3]` = 0,
-                         `Subject.Days2(3,6]` = 994.015865559888,
-                         `Subject.Days2(6,10]` = 1545.72576115283),
-           cor.slope_intercept = c(`Subject.1.Days2(3,6]` = NaN, `Subject.1.Days2(6,10]` = NaN)),
+      list(
+        var.fixed = 807.08545355676, var.residual = 740.875581179784,
+        var.distribution = 740.875581179784, var.dispersion = 0,
+        var.intercept = c(Subject = 738.635155172211),
+        var.slope = c(
+          `Subject.Days2(-1,3]` = 0,
+          `Subject.Days2(3,6]` = 994.015865559888,
+          `Subject.Days2(6,10]` = 1545.72576115283
+        ),
+        cor.slope_intercept = c(`Subject.1.Days2(3,6]` = NaN, `Subject.1.Days2(6,10]` = NaN)
+      ),
       tolerance = 1e-2
     )
   })
@@ -173,11 +184,15 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
   test_that("get_variance-11", {
     expect_equal(
       vmodel,
-      list(var.fixed = 807.08545, var.random = 1446.13555, var.residual = 748.81386,
-           var.distribution = 748.81386, var.dispersion = 0, var.slope = c(`Subject.Days2(-1,3]` = 663.27446,
-                                                                           `Subject.Days2(3,6]` = 2098.24692, `Subject.Days2(6,10]` = 2722.20492
-           ), cor.slope_intercept = structure(c(0.79645, 0.73296), .Dim = 2:1, .Dimnames = list(
-             c("Days2(3,6]", "Days2(6,10]"), "Subject"))),
+      list(
+        var.fixed = 807.08545, var.random = 1446.13555, var.residual = 748.81386,
+        var.distribution = 748.81386, var.dispersion = 0, var.slope = c(
+          `Subject.Days2(-1,3]` = 663.27446,
+          `Subject.Days2(3,6]` = 2098.24692, `Subject.Days2(6,10]` = 2722.20492
+        ), cor.slope_intercept = structure(c(0.79645, 0.73296), .Dim = 2:1, .Dimnames = list(
+          c("Days2(3,6]", "Days2(6,10]"), "Subject"
+        ))
+      ),
       tolerance = 1e-2
     )
   })
@@ -188,11 +203,15 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
   test_that("get_variance-12", {
     expect_equal(
       vmodel,
-      list(var.fixed = 807.08545, var.random = 1446.13555, var.residual = 748.81386,
-           var.distribution = 748.81386, var.dispersion = 0, var.slope = c(`Subject.Days2(-1,3]` = 663.27446,
-                                                                           `Subject.Days2(3,6]` = 2098.24692, `Subject.Days2(6,10]` = 2722.20492
-           ), cor.slope_intercept = structure(c(0.79645, 0.73296), .Dim = 2:1, .Dimnames = list(
-             c("Days2(3,6]", "Days2(6,10]"), "Subject"))),
+      list(
+        var.fixed = 807.08545, var.random = 1446.13555, var.residual = 748.81386,
+        var.distribution = 748.81386, var.dispersion = 0, var.slope = c(
+          `Subject.Days2(-1,3]` = 663.27446,
+          `Subject.Days2(3,6]` = 2098.24692, `Subject.Days2(6,10]` = 2722.20492
+        ), cor.slope_intercept = structure(c(0.79645, 0.73296), .Dim = 2:1, .Dimnames = list(
+          c("Days2(3,6]", "Days2(6,10]"), "Subject"
+        ))
+      ),
       tolerance = 1e-2
     )
   })

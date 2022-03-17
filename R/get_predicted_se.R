@@ -88,7 +88,6 @@ get_predicted_se <- function(x,
                                    vcov_args = NULL,
                                    verbose = TRUE,
                                    ...) {
-
   dots <- list(...)
 
   # deprecated
@@ -139,9 +138,11 @@ get_predicted_se <- function(x,
 
   # type shortcuts: overwrite only if not supplied explicitly by the user
   if (!"type" %in% names(vcov_args)) {
-    if (isTRUE(vcov_fun %in% c("HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5",
-                               "CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3", "xy",
-                               "residual", "wild", "mammen", "webb"))) {
+    if (isTRUE(vcov_fun %in% c(
+      "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5",
+      "CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3", "xy",
+      "residual", "wild", "mammen", "webb"
+    ))) {
       vcov_args[["type"]] <- vcov_fun
     }
   }
@@ -153,11 +154,28 @@ get_predicted_se <- function(x,
   }
 
   if (!grepl("^(vcov|kernHAC|NeweyWest)", vcov_fun)) {
-    vcov_fun <- switch(
-      vcov_fun,
-      "HC0" = , "HC1" = , "HC2" = , "HC3" = , "HC4" = , "HC4m" = , "HC5" = , "HC" = "vcovHC",
-      "CR0" = , "CR1" = , "CR1p" = , "CR1S" = , "CR2" = , "CR3" = , "CR" = "vcovCR",
-      "xy" = , "residual" = , "wild" = , "mammen" = , "webb" = , "BS" = "vcovBS",
+    vcov_fun <- switch(vcov_fun,
+      "HC0" = ,
+      "HC1" = ,
+      "HC2" = ,
+      "HC3" = ,
+      "HC4" = ,
+      "HC4m" = ,
+      "HC5" = ,
+      "HC" = "vcovHC",
+      "CR0" = ,
+      "CR1" = ,
+      "CR1p" = ,
+      "CR1S" = ,
+      "CR2" = ,
+      "CR3" = ,
+      "CR" = "vcovCR",
+      "xy" = ,
+      "residual" = ,
+      "wild" = ,
+      "mammen" = ,
+      "webb" = ,
+      "BS" = "vcovBS",
       "OPG" = "vcovOPG",
       "HAC" = "vcovHAC",
       "PC" = "vcovPC",
@@ -172,7 +190,7 @@ get_predicted_se <- function(x,
     fun <- get(vcov_fun, asNamespace("clubSandwich"))
   } else {
     check_if_installed("sandwich", reason = "to get robust standard errors")
-    fun  <- try(get(vcov_fun, asNamespace("sandwich")), silent = TRUE)
+    fun <- try(get(vcov_fun, asNamespace("sandwich")), silent = TRUE)
     if (!is.function(fun)) {
       stop(sprintf("`%s` is not a function exported by the `sandwich` package.", vcov_fun))
     }
