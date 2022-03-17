@@ -25,8 +25,11 @@
 
 # does string contain pattern?
 .string_contains <- function(pattern, x) {
-  pattern <- paste0("\\Q", pattern, "\\E")
-  grepl(pattern, x, perl = TRUE)
+  # This is a bit slower - restore if tests fail...
+  # pattern <- paste0("\\Q", pattern, "\\E")
+  # grepl(pattern, x, perl = TRUE)
+
+  grepl(pattern, x, fixed = TRUE)
 }
 
 

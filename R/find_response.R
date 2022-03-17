@@ -157,19 +157,19 @@ find_response.joint <- function(x,
 check_cbind <- function(resp, combine, model) {
   if (!combine && inherits(model, "DirichletRegModel")) {
     resp <- model$varnames
-  } else if (!combine && any(grepl("cbind\\((.*)\\)", resp))) {
+  } else if (!combine && any(grepl("cbind(", resp, fixed = TRUE))) {
     resp <- .extract_combined_response(resp, "cbind")
-  } else if (!combine && any(grepl("Surv\\((.*)\\)", resp))) {
+  } else if (!combine && any(grepl("Surv(", resp, fixed = TRUE))) {
     resp <- .extract_combined_response(resp, "Surv")
-  } else if (!combine && any(grepl("Hist\\((.*)\\)", resp))) {
+  } else if (!combine && any(grepl("Hist(", resp, fixed = TRUE))) {
     resp <- .extract_combined_response(resp, "Hist")
-  } else if (!combine && any(grepl("Event\\((.*)\\)", resp))) {
+  } else if (!combine && any(grepl("Event(", resp, fixed = TRUE))) {
     resp <- .extract_combined_response(resp, "Event")
-  } else if (!combine && any(grepl("Curv\\((.*)\\)", resp))) {
+  } else if (!combine && any(grepl("Curv(", resp, fixed = TRUE))) {
     resp <- .extract_combined_response(resp, "Curv")
-  } else if (!combine && any(grepl("MMO\\((.*)\\)", resp))) {
+  } else if (!combine && any(grepl("MMO(", resp, fixed = TRUE))) {
     resp <- .extract_combined_response(resp, "MMO")
-  } else if (!combine && any(grepl("MMO2\\((.*)\\)", resp))) {
+  } else if (!combine && any(grepl("MMO2(", resp, fixed = TRUE))) {
     resp <- .extract_combined_response(resp, "MMO2")
   } else if (!combine && any(grepl("/", resp, fixed = TRUE))) {
     resp <- strsplit(resp, split = "/", fixed = TRUE)

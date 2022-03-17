@@ -20,7 +20,11 @@
   # offset variables ----------------------------------------------------------
 
   # do we have an offset, not specified in the formula?
-  offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
+
+  # This is a bit slower - restore if tests fail...
+  # offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
+
+  offcol <- grep("(offset)", colnames(mf), fixed = TRUE) | grep("offset(", colnames(mf), fixed = TRUE)
   if (length(offcol) && object_has_names(x, "call") && object_has_names(x$call, "offset")) {
     colnames(mf)[offcol] <- clean_names(safe_deparse(x$call$offset))
   }
@@ -249,6 +253,17 @@
   # clean variable names
   cvn <- .remove_pattern_from_names(colnames(mf), ignore_lag = TRUE)
 
+  # check for interaction pattern ----------------------------------------
+
+  ints <- grepl("interaction(", colnames(mf), fixed = TRUE)
+  # add names of 2nd interaction term
+  if (any(ints)) {
+    interactions <- stats::setNames(cvn[ints], trim_ws(gsub("interaction\\((.*),(.*)\\)", "\\2", colnames(mf)[ints])))
+    factors <- unique(c(factors, names(interactions)))
+  } else {
+    interactions <- NULL
+  }
+
   # as-is variables I() -------------------------------------------------------
 
   # keep "as is" variable for response variables in data frame
@@ -307,7 +322,14 @@
   #   mf[[1]] <- NULL
   # }
 
-  .add_remaining_missing_variables(x, mf, effects, component = "all", factors = factors)
+  .add_remaining_missing_variables(
+    x,
+    mf,
+    effects,
+    component = "all",
+    factors = factors,
+    interactions = interactions
+  )
 }
 
 
@@ -317,7 +339,7 @@
 
 # add remainng variables with special pattern -------------------------------
 
-.add_remaining_missing_variables <- function(model, mf, effects, component, factors = NULL) {
+.add_remaining_missing_variables <- function(model, mf, effects, component, factors = NULL, interactions = NULL) {
 
   # check if data argument was used
   model_call <- get_call(model)
@@ -369,6 +391,21 @@
       }
     }
     attr(mf, "factors") <- factors
+  }
+
+  # fix interaction terms
+  if (!is.null(interactions)) {
+    for (i in 1:length(interactions)) {
+      int <- interactions[i]
+      if (is.factor(mf[[int]])) {
+        levels_i2 <- stats::na.omit(unique(mf[[names(int)]]))
+        for (j in levels_i2) {
+          pattern <- paste0("\\.", levels_i2[j], "$")
+          mf[[int]] <- gsub(pattern, "", mf[[int]])
+        }
+        mf[[int]] <- as.factor(mf[[int]])
+      }
+    }
   }
 
   mf
