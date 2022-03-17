@@ -24,5 +24,5 @@
 #' }
 #' @export
 is_gam_model <- function(x) {
-  !is.null(find_smooth(x, flatten = TRUE)) && inherits(.get_class_list(x), .get_gam_classes())
+  inherits(.get_class_list(x), .get_gam_classes()) && !is.null(find_smooth(x, flatten = TRUE))
 }

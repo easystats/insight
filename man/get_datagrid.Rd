@@ -165,7 +165,7 @@ data <- get_datagrid(model, length = c(20, 3), range = c("range", "sd"))
 data$Sepal.Length <- get_predicted(model, data = data)
 # Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)
 plot(data$Sepal.Width, data$Sepal.Length, col = data$Petal.Length,
-     main="Relationship between predicted Sepal.Length and Sepal.Width at -1 SD, Mean, and + 1 SD of Petal.Length")
+     main="Relationship at -1 SD, Mean, and + 1 SD of Petal.Length")
 }
 \seealso{
 \code{\link[=get_predicted]{get_predicted()}}

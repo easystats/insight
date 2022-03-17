@@ -112,7 +112,7 @@
 #' data$Sepal.Length <- get_predicted(model, data = data)
 #' # Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)
 #' plot(data$Sepal.Width, data$Sepal.Length, col = data$Petal.Length,
-#'      main="Relationship between predicted Sepal.Length and Sepal.Width at -1 SD, Mean, and + 1 SD of Petal.Length")
+#'      main="Relationship at -1 SD, Mean, and + 1 SD of Petal.Length")
 #' @export
 get_datagrid <- function(x, ...) {
   UseMethod("get_datagrid")
@@ -427,15 +427,15 @@ get_datagrid.double <- get_datagrid.numeric
     mini <- stats::quantile(x, (1 - ci) / 2, ...)
     maxi <- stats::quantile(x, (1 + ci) / 2, ...)
   } else if (range == "ci") {
-    out <- bayestestR::ci(x, ci = ci, ...)
+    out <- bayestestR::ci(x, ci = ci, verbose = FALSE, ...)
     mini <- out$CI_low
     maxi <- out$CI_high
   } else if (range == "eti") {
-    out <- bayestestR::eti(x, ci = ci, ...)
+    out <- bayestestR::eti(x, ci = ci, verbose = FALSE, ...)
     mini <- out$CI_low
     maxi <- out$CI_high
   } else if (range == "hdi") {
-    out <- bayestestR::hdi(x, ci = ci, ...)
+    out <- bayestestR::hdi(x, ci = ci, verbose = FALSE, ...)
     mini <- out$CI_low
     maxi <- out$CI_high
   } else {

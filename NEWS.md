@@ -34,7 +34,7 @@
 
 * `get_loglikelihood()` and `get_df()` now support more model classes.
 
-* `get_predicted()` was improved for multinominal models from *brms*.
+* `get_predicted()` was improved for multinomial models from *brms*.
 
 * `get_variance()` was improved to cover more edge cases of (more complex)
   random effect structures.
