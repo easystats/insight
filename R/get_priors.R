@@ -98,8 +98,8 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   }
   prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))]
 
-  colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
-  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info))
+  colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info), fixed = TRUE)
+  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info), fixed = TRUE)
 
   priors <- as.data.frame(lapply(prior_info, function(x) {
     if (.is_numeric_character(x)) {
@@ -152,8 +152,8 @@ get_priors.stanmvreg <- function(x, ...) {
 
   prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale", "response"), colnames(prior_info))]
 
-  colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
-  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info))
+  colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info), fixed = TRUE)
+  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info), fixed = TRUE)
 
   priors <- as.data.frame(lapply(prior_info, function(x) {
     if (.is_numeric_character(x)) {

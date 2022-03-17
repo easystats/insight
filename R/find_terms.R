@@ -166,7 +166,7 @@ find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
   f <- lapply(f, function(.x) {
     pattern <- "[*+:|\\-\\/](?![^(]*\\))" # was: "[\\*\\+:\\-\\|/](?![^(]*\\))"
-    f_parts <- gsub("~", "", trim_ws(unlist(strsplit(split = pattern, x = .x, perl = TRUE))))
+    f_parts <- gsub("~", "", trim_ws(unlist(strsplit(split = pattern, x = .x, perl = TRUE))), fixed = TRUE)
     # if user has used namespace in formula-functions, these are returned
     # as empty elements. remove those here
     if (any(nchar(f_parts) == 0)) {

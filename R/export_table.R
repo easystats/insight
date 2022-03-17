@@ -777,7 +777,7 @@ print.insight_table <- function(x, ...) {
   non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
 
   # remove indent token
-  final[, 1] <- gsub("# ", "", final[, 1])
+  final[, 1] <- gsub("# ", "", final[, 1], fixed = TRUE)
 
   final
 }

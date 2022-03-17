@@ -521,8 +521,8 @@ get_datagrid.logical <- get_datagrid.character
       # Split by a separator like ','
       parts <- trim_ws(unlist(strsplit(parts, ",")))
       # If the elements have quotes around them, drop them
-      if (all(grepl("\\'.*\\'", parts))) parts <- gsub("'", "", parts)
-      if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts)
+      if (all(grepl("\\'.*\\'", parts))) parts <- gsub("'", "", parts, fixed = TRUE)
+      if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts, fixed = TRUE)
 
       # Make expression ----------
       if (is.factor(x) || is.character(x)) { # Factor

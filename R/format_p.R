@@ -117,7 +117,7 @@ format_p <- function(p,
   missing_index <- is.na(text)
 
   if (is.null(name)) {
-    text <- gsub("= ", "", text)
+    text <- gsub("= ", "", text, fixed = TRUE)
   } else {
     text <- paste(name, text)
   }
@@ -125,7 +125,7 @@ format_p <- function(p,
   if (stars_only == TRUE) {
     text <- gsub("[^\\*]", "", text)
   } else if (stars == FALSE) {
-    text <- gsub("\\*", "", text)
+    text <- gsub("*", "", text, fixed = TRUE)
   }
 
   # replace missing with related string

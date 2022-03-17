@@ -227,7 +227,7 @@
   if (any(strata_columns)) {
     for (sc in colnames(mf)[strata_columns]) {
       strata_variable <- gsub("strata\\((.*)\\)", "\\1", sc)
-      levels(mf[[sc]]) <- gsub(paste0("\\Q", strata_variable, "=", "\\E"), "", levels(mf[[sc]]))
+      levels(mf[[sc]]) <- gsub(paste0(strata_variable, "="), "", levels(mf[[sc]]), fixed = TRUE)
     }
   }
 

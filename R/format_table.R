@@ -573,7 +573,7 @@ parameters_table <- format_table
 .replace_words <- function(x, target, replacement) {
   for (i in 1:length(x)) {
     if (grepl(target, x[i], fixed = TRUE)) {
-      x[i] <- gsub(target, replacement, x[i])
+      x[i] <- gsub(target, replacement, x[i], fixed = TRUE)
     }
   }
   x
