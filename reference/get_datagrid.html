@@ -14,7 +14,7 @@ See this vignette for a tutorial on how to create a visualisation matrix using t
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.15</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -248,7 +248,7 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
 <span class="r-in"><span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">model</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">Sepal.Width</span>, <span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span>, col <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Petal.Length</span>,</span>
-<span class="r-in">     main<span class="op">=</span><span class="st">"Relationship between predicted Sepal.Length and Sepal.Width at -1 SD, Mean, and + 1 SD of Petal.Length"</span><span class="op">)</span></span>
+<span class="r-in">     main<span class="op">=</span><span class="st">"Relationship at -1 SD, Mean, and + 1 SD of Petal.Length"</span><span class="op">)</span></span>
 <span class="r-plt img"><img src="get_datagrid-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
