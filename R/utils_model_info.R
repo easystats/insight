@@ -99,7 +99,7 @@
     grepl("neg_binomial", fitfam_lower, fixed = TRUE) |
     grepl("hurdle", fitfam_lower, fixed = TRUE) |
     grepl("^(zt|zi|za|hu)", fitfam_lower, perl = TRUE) |
-    grepl("^truncated", fitfam_lower, perl = TRUE)
+    grepl("truncated", fitfam_lower, fixed = TRUE)
 
   # overwrite for glmmTMB exceptions
   if (inherits(x, "glmmTMB")) {
@@ -112,7 +112,7 @@
   hurdle <- hurdle |
     grepl("hurdle", fitfam_lower, fixed = TRUE) |
     grepl("^hu", fitfam, perl = TRUE) |
-    grepl("^truncated", fitfam, perl = TRUE) |
+    grepl("truncated", fitfam, fixed = TRUE) |
     fitfam == "ztnbinom" |
     fitfam %in% c("truncpoiss", "truncnbinom", "truncnbinom1", "truncpoisson")
 
