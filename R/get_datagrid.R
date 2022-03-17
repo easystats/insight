@@ -427,15 +427,15 @@ get_datagrid.double <- get_datagrid.numeric
     mini <- stats::quantile(x, (1 - ci) / 2, ...)
     maxi <- stats::quantile(x, (1 + ci) / 2, ...)
   } else if (range == "ci") {
-    out <- bayestestR::ci(x, ci = ci, ...)
+    out <- bayestestR::ci(x, ci = ci, verbose = FALSE, ...)
     mini <- out$CI_low
     maxi <- out$CI_high
   } else if (range == "eti") {
-    out <- bayestestR::eti(x, ci = ci, ...)
+    out <- bayestestR::eti(x, ci = ci, verbose = FALSE, ...)
     mini <- out$CI_low
     maxi <- out$CI_high
   } else if (range == "hdi") {
-    out <- bayestestR::hdi(x, ci = ci, ...)
+    out <- bayestestR::hdi(x, ci = ci, verbose = FALSE, ...)
     mini <- out$CI_low
     maxi <- out$CI_high
   } else {
