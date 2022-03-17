@@ -51,10 +51,10 @@
 
   if (binom_fam && inherits(x, "glm") && !neg_bin_fam && !poisson_fam) {
     resp <- stats::model.response(stats::model.frame(x))
-    if (is.data.frame(resp) && ncol(resp) == 1) {
+    if ((is.data.frame(resp) || is.matrix(resp)) && ncol(resp) == 1) {
       resp <- as.vector(resp[[1]])
     }
-    if (!is.data.frame(resp) && all(.is.int(.factor_to_numeric(resp[[1]])))) {
+    if (!is.data.frame(resp) && !is.matrix(resp) && all(.is.int(.factor_to_numeric(resp[[1]])))) {
       is_bernoulli <- TRUE
     }
   } else if (fitfam %in% "bernoulli") {
