@@ -259,6 +259,7 @@
   # add names of 2nd interaction term
   if (any(ints)) {
     interactions <- stats::setNames(cvn[ints], trim_ws(gsub("interaction\\((.*),(.*)\\)", "\\2", colnames(mf)[ints])))
+    factors <- unique(c(factors, interactions, names(interactions)))
   } else {
     interactions <- NULL
   }
@@ -378,6 +379,18 @@
     }
   }
 
+  # fix interaction terms
+  if (!is.null(interactions)) {
+    full_data <- .recover_data_from_environment(model)
+    mf[c(interactions, names(interactions))] <- NULL
+    mf <- cbind(mf, full_data[c(interactions, names(interactions))])
+    # for (i in 1:length(interactions)) {
+    #   int <- interactions[i]
+    #   mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
+    #   mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
+    # }
+  }
+
   # add attributes for those that were factors
   if (length(factors)) {
     factors <- gsub("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", "\\2", factors)
@@ -390,18 +403,6 @@
       }
     }
     attr(mf, "factors") <- factors
-  }
-
-  # fix interaction terms
-  if (!is.null(interactions)) {
-    full_data <- .recover_data_from_environment(model)
-    mf[c(interactions, names(interactions))] <- NULL
-    mf <- cbind(mf, full_data[c(interactions, names(interactions))])
-    # for (i in 1:length(interactions)) {
-    #   int <- interactions[i]
-    #   mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
-    #   mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
-    # }
   }
 
   mf
