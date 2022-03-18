@@ -261,6 +261,7 @@
     if (inherits(x, "brmsfit")) {
       # brms saves original variables, so remove interaction column here
       mf[ints] <- NULL
+      cvn <- cvn[!ints]
     } else {
       interactions <- stats::setNames(cvn[ints], trim_ws(gsub("interaction\\((.*),(.*)\\)", "\\2", colnames(mf)[ints])))
       factors <- unique(c(factors, interactions, names(interactions)))
