@@ -52,6 +52,10 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
     return(.weighted_residuals(x, verbose))
   }
 
+  if (identical(res_type, "pearson")) {
+    return(.pearson_residuals(x))
+  }
+
   res <- tryCatch(
     {
       stats::residuals(x, ...)
@@ -123,6 +127,7 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 }
 
 
+
 #' @export
 get_residuals.vgam <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   if (isTRUE(weighted)) {
@@ -131,15 +136,16 @@ get_residuals.vgam <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   x@residuals
 }
 
-
 #' @export
 get_residuals.vglm <- get_residuals.vgam
+
 
 
 #' @export
 get_residuals.model_fit <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   get_residuals(x$fit, weighted = weighted, verbose = verbose, ...)
 }
+
 
 
 #' @export
@@ -189,6 +195,15 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
 
 
+#' @export
+get_residuals.afex_aov <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  suppressMessages(stats::residuals(x, ...))
+}
+
+
+
+## weighted residuals -----------------------------
+## ================================================
 
 .weighted_residuals <- function(x, verbose = TRUE) {
   w <- get_weights(x, null_as_ones = TRUE)
@@ -231,7 +246,85 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   )
 }
 
-#' @export
-get_residuals.afex_aov <- function(x, weighted = FALSE, verbose = TRUE, ...) {
-  suppressMessages(stats::residuals(x, ...))
+
+
+## pearson residuals -------------------------------------------
+## =============================================================
+
+
+.pearson_residuals <- function(x) {
+  pr <- tryCatch(stats::residuals(x, type = "pearson"), error = function(e) NULL)
+
+  if (is_empty_object(pr) && inherits(x, c("glmmTMB", "MixMod"))) {
+    faminfo <- insight::model_info(x)
+    if (faminfo$is_zero_inflated) {
+      if (faminfo$is_negbin) {
+        pr <- .resid_zinb(x, faminfo)
+      } else {
+        pr <- .resid_zip(x, faminfo)
+      }
+    }
+  } else if (is_empty_object(pr)) {
+    yhat <- stats::fitted(x)
+    pr <- (get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
+  }
+
+  pr
+}
+
+
+.resid_zinb <- function(model, faminfo) {
+  if (inherits(model, "glmmTMB")) {
+    v <- stats::family(model)$variance
+    # zi probability
+    p <- stats::predict(model, type = "zprob")
+    # mean of conditional distribution
+    mu <- stats::predict(model, type = "conditional")
+    # sigma
+    betad <- model$fit$par["betad"]
+    k <- switch(faminfo$family,
+                gaussian = exp(0.5 * betad),
+                Gamma = exp(-0.5 * betad),
+                exp(betad)
+    )
+    pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
+    pred <- stats::predict(model, type = "response") ## (1 - p) * mu
+  } else if (inherits(model, "MixMod")) {
+    sig <- get_variance_distribution(model, verbose = FALSE)
+    p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
+    mu <- stats::predict(model, type_pred = "link", type = "mean_subject")
+    v <- mu * (1 + sig)
+    k <- sig
+    pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
+    pred <- stats::predict(model, type_pred = "response", type = "mean_subject")
+  } else {
+    sig <- get_variance_distribution(model, verbose = FALSE)
+    pvar <- mu * (1 + sig)
+    pred <- stats::predict(model, type = "response")
+  }
+
+  # pearson residuals
+  (get_response(model, verbose = FALSE) - pred) / sqrt(pvar)
+}
+
+
+.resid_zip <- function(model, faminfo) {
+  if (inherits(model, "glmmTMB")) {
+    p <- stats::predict(model, type = "zprob")
+    mu <- stats::predict(model, type = "conditional")
+    pvar <- (1 - p) * (mu + p * mu^2)
+    pred <- stats::predict(model, type = "response") ## (1 - p) * mu
+  } else if (inherits(model, "MixMod")) {
+    p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
+    mu <- stats::predict(model, type = "mean_subject")
+    pvar <- (1 - p) * (mu + p * mu^2)
+    pred <- stats::predict(model, type_pred = "response", type = "mean_subject")
+  } else {
+    sig <- get_variance_distribution(model, verbose = FALSE)
+    pvar <- mu * (1 + sig)
+    pred <- stats::predict(model, type = "response")
+  }
+
+  # pearson residuals
+  (get_response(model) - pred) / sqrt(pvar)
 }

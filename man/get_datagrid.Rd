@@ -127,8 +127,10 @@ if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE
   # Numeric variables
   get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
   get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
-  get_datagrid(iris[2:150, ], at = "Sepal.Length",
-               factors = "mode", numerics = "median") # change non-targets fixing
+  get_datagrid(iris[2:150, ],
+    at = "Sepal.Length",
+    factors = "mode", numerics = "median"
+  ) # change non-targets fixing
   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
 
@@ -164,8 +166,10 @@ data <- get_datagrid(model, length = c(20, 3), range = c("range", "sd"))
 # Add predictions
 data$Sepal.Length <- get_predicted(model, data = data)
 # Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)
-plot(data$Sepal.Width, data$Sepal.Length, col = data$Petal.Length,
-     main="Relationship at -1 SD, Mean, and + 1 SD of Petal.Length")
+plot(data$Sepal.Width, data$Sepal.Length,
+  col = data$Petal.Length,
+  main = "Relationship at -1 SD, Mean, and + 1 SD of Petal.Length"
+)
 }
 \seealso{
 \code{\link[=get_predicted]{get_predicted()}}

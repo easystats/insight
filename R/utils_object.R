@@ -9,7 +9,6 @@
 #' is_empty_object(list(NULL, c(NA, NA)))
 #' is_empty_object(list(NULL, NA))
 #' @export
-
 is_empty_object <- function(x) {
   flag_empty <- FALSE
 
