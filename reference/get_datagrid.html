@@ -201,8 +201,10 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
 <span class="r-in">  <span class="co"># Numeric variables</span></span>
 <span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span> <span class="co"># default spread length = 10</span></span>
 <span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="co"># change length</span></span>
-<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>,</span>
-<span class="r-in">               factors <span class="op">=</span> <span class="st">"mode"</span>, numerics <span class="op">=</span> <span class="st">"median"</span><span class="op">)</span> <span class="co"># change non-targets fixing</span></span>
+<span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span>,</span>
+<span class="r-in">    at <span class="op">=</span> <span class="st">"Sepal.Length"</span>,</span>
+<span class="r-in">    factors <span class="op">=</span> <span class="st">"mode"</span>, numerics <span class="op">=</span> <span class="st">"median"</span></span>
+<span class="r-in">  <span class="op">)</span> <span class="co"># change non-targets fixing</span></span>
 <span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"ci"</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span> <span class="co"># change min/max of target</span></span>
 <span class="r-in">  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [0, 1]"</span><span class="op">)</span> <span class="co"># Manually change min/max</span></span>
 <span class="r-in"></span>
@@ -247,8 +249,10 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
 <span class="r-in"><span class="co"># Add predictions</span></span>
 <span class="r-in"><span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_predicted.html">get_predicted</a></span><span class="op">(</span><span class="va">model</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">Sepal.Width</span>, <span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span>, col <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Petal.Length</span>,</span>
-<span class="r-in">     main<span class="op">=</span><span class="st">"Relationship at -1 SD, Mean, and + 1 SD of Petal.Length"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">Sepal.Width</span>, <span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span>,</span>
+<span class="r-in">  col <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">Petal.Length</span>,</span>
+<span class="r-in">  main <span class="op">=</span> <span class="st">"Relationship at -1 SD, Mean, and + 1 SD of Petal.Length"</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-plt img"><img src="get_datagrid-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
