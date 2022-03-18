@@ -394,11 +394,14 @@
 
   # fix interaction terms
   if (!is.null(interactions)) {
-    for (i in 1:length(interactions)) {
-      int <- interactions[i]
-      mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
-      mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
-    }
+    full_data <- .recover_data_from_environment(model)
+    mf[c(interactions, names(interactions))] <- NULL
+    mf <- cbind(mf, full_data[c(interactions, names(interactions))])
+    # for (i in 1:length(interactions)) {
+    #   int <- interactions[i]
+    #   mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
+    #   mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
+    # }
   }
 
   mf
