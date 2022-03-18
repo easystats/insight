@@ -333,7 +333,8 @@
     effects,
     component = "all",
     factors = factors,
-    interactions = interactions
+    interactions = interactions,
+    verbose = verbose
   )
 }
 
@@ -344,7 +345,7 @@
 
 # add remainng variables with special pattern -------------------------------
 
-.add_remaining_missing_variables <- function(model, mf, effects, component, factors = NULL, interactions = NULL) {
+.add_remaining_missing_variables <- function(model, mf, effects, component, factors = NULL, interactions = NULL, verbose = TRUE) {
 
   # check if data argument was used
   model_call <- get_call(model)
@@ -386,14 +387,21 @@
 
   # fix interaction terms
   if (!is.null(interactions)) {
-    full_data <- .recover_data_from_environment(model)
-    mf[c(interactions, names(interactions))] <- NULL
-    mf <- cbind(mf, full_data[c(interactions, names(interactions))])
-    # for (i in 1:length(interactions)) {
-    #   int <- interactions[i]
-    #   mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
-    #   mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
-    # }
+    full_data <- tryCatch(.recover_data_from_environment(model), error = function(e) NULL)
+    if (!is.null(full_data) && nrow(full_data) == nrow(mf)) {
+      mf[c(interactions, names(interactions))] <- NULL
+      mf <- cbind(mf, full_data[c(interactions, names(interactions))])
+    } else {
+      for (i in 1:length(interactions)) {
+        int <- interactions[i]
+        mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
+        mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
+      }
+      if (isTRUE(verbose)) {
+        message(format_message("The data contains variables used 'interaction()'-functions. These are probably not recovered accurately in the returned data frame.",
+                               "Please check the data frame carefully."))
+      }
+    }
   }
 
   # add attributes for those that were factors
