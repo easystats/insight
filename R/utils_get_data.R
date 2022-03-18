@@ -256,6 +256,7 @@
   # check for interaction pattern ----------------------------------------
 
   ints <- grepl("interaction(", colnames(mf), fixed = TRUE)
+  interactions <- NULL
   # add names of 2nd interaction term
   if (any(ints)) {
     if (inherits(x, "brmsfit")) {
@@ -266,8 +267,6 @@
       interactions <- stats::setNames(cvn[ints], trim_ws(gsub("interaction\\((.*),(.*)\\)", "\\2", colnames(mf)[ints])))
       factors <- unique(c(factors, interactions, names(interactions)))
     }
-  } else {
-    interactions <- NULL
   }
 
   # as-is variables I() -------------------------------------------------------
