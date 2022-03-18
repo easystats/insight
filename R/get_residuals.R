@@ -202,6 +202,32 @@ get_residuals.afex_aov <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
 
 
+## brms / stan - special handling -------------------------------------
+## ====================================================================
+
+#' @export
+get_residuals.brmsfit <- function(x, ...) {
+  r_attr <- stats::residuals(x, ...)
+  r <- as.vector(r_attr[, "Estimate"])
+  attr(r, "full") <- r_attr
+  class(r) <- c("insight_residuals", class(r))
+  r
+}
+
+#' @export
+as.data.frame.insight_residuals <- function(x, ...) {
+  as.data.frame(attributes(x)$full)
+}
+
+#' @export
+print.insight_residuals <- function(x, ...) {
+  print_colour("Residuals:\n\n", "blue")
+  print.default(as.vector(x))
+  print_colour("\nNOTE: Credible intervals are stored as attributes and can be accessed using `as.data.frame()` on this output.\n", "yellow")
+}
+
+
+
 ## weighted residuals -----------------------------
 ## ================================================
 
