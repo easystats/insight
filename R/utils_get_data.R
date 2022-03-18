@@ -257,9 +257,14 @@
 
   ints <- grepl("interaction(", colnames(mf), fixed = TRUE)
   # add names of 2nd interaction term
-  if (any(ints) && !inherits(x, "brmsfit")) {
-    interactions <- stats::setNames(cvn[ints], trim_ws(gsub("interaction\\((.*),(.*)\\)", "\\2", colnames(mf)[ints])))
-    factors <- unique(c(factors, interactions, names(interactions)))
+  if (any(ints)) {
+    if (inherits(x, "brmsfit")) {
+      # brms saves original variables, so remove interaction column here
+      mf[ints] <- NULL
+    } else {
+      interactions <- stats::setNames(cvn[ints], trim_ws(gsub("interaction\\((.*),(.*)\\)", "\\2", colnames(mf)[ints])))
+      factors <- unique(c(factors, interactions, names(interactions)))
+    }
   } else {
     interactions <- NULL
   }
