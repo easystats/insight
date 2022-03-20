@@ -171,25 +171,40 @@
         # get cleaned variable names for those variables
         # that we still need from the original model frame
         needed.vars <- compact_character(unique(clean_names(needed.vars)))
-        mf <- md[, needed.vars, drop = FALSE]
 
-        # we need this hack to save variable and value label attributes, if any
-        value_labels <- lapply(mf, function(.l) attr(.l, "labels", exact = TRUE))
-        variable_labels <- lapply(mf, function(.l) attr(.l, "label", exact = TRUE))
+        # check if data in environment was modified in between?
+        if (!all(needed.vars %in% colnames(md))) {
+          needed.vars <- intersect(needed.vars, colnames(md))
+        }
 
-        # removing NAs drops all label-attributes
-        mf <- stats::na.omit(mf)
+        # if data recovered from environment does not match current
+        # model frame, tell user and skip this step
+        if (!length(needed.vars) || nrow(md) != nrow(mf)) {
+          if (isTRUE(verbose)) {
+            warning(format_message("Could not find all model variables in the data.",
+                                   "Maybe the original data frame used to fit the model was modified?"), call. = FALSE)
+          }
+        } else {
+          mf <- md[, needed.vars, drop = FALSE]
 
-        # then set back attributes
-        mf <- as.data.frame(mapply(function(.d, .l) {
-          attr(.d, "labels") <- .l
-          .d
-        }, mf, value_labels, SIMPLIFY = FALSE), stringsAsFactors = FALSE)
+          # we need this hack to save variable and value label attributes, if any
+          value_labels <- lapply(mf, function(.l) attr(.l, "labels", exact = TRUE))
+          variable_labels <- lapply(mf, function(.l) attr(.l, "label", exact = TRUE))
 
-        mf <- as.data.frame(mapply(function(.d, .l) {
-          attr(.d, "label") <- .l
-          .d
-        }, mf, variable_labels, SIMPLIFY = FALSE), stringsAsFactors = FALSE)
+          # removing NAs drops all label-attributes
+          mf <- stats::na.omit(mf)
+
+          # then set back attributes
+          mf <- as.data.frame(mapply(function(.d, .l) {
+            attr(.d, "labels") <- .l
+            .d
+          }, mf, value_labels, SIMPLIFY = FALSE), stringsAsFactors = FALSE)
+
+          mf <- as.data.frame(mapply(function(.d, .l) {
+            attr(.d, "label") <- .l
+            .d
+          }, mf, variable_labels, SIMPLIFY = FALSE), stringsAsFactors = FALSE)
+        }
       }
 
       # add back model weights, if any
