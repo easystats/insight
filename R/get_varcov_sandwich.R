@@ -104,7 +104,7 @@
   # check if required package is available
   if (vcov_fun == "vcovCR") {
     check_if_installed("clubSandwich", reason = "to get cluster-robust standard errors")
-    fun <- get(vcov_fun, asNamespace("clubSandwich"))
+    fun <- try(get(vcov_fun, asNamespace("clubSandwich")), silent = TRUE)
   } else {
     check_if_installed("sandwich", reason = "to get robust standard errors")
     fun <- try(get(vcov_fun, asNamespace("sandwich")), silent = TRUE)
@@ -113,12 +113,17 @@
     }
   }
 
-  # extract variance-covariance matrix
-  .vcov <- do.call(fun, c(list(x), vcov_args))
+  .vcov <- try(do.call(fun, c(list(x), vcov_args)), silent = TRUE)
 
   # clubSandwich output has a weird class
   if (inherits(.vcov, c("vcovCR", "clubSandwich"))) {
     .vcov <- as.matrix(.vcov)
+  }
+
+  # extract variance-covariance matrix
+  if (!inherits(.vcov, "matrix")) {
+    msg <- sprintf("Unable to extract a variance-covariance matrix for model object of class `%s`. Different values of the `vcov` argument trigger calls to the `sandwich` or `clubSandwich` packages in order to extract the matrix (see `?insight::get_varcov`). Your model may not be supported by one or both of those packages.", class(x)[1])
+    stop(format_message(msg))
   }
 
   .vcov

@@ -56,7 +56,6 @@ get_varcov(x, ...)
   x,
   effects = c("fixed", "random"),
   component = c("conditional", "zero_inflated", "zi", "dispersion", "auxiliary", "all"),
-  robust = FALSE,
   verbose = TRUE,
   ...
 )

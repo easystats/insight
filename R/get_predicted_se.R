@@ -13,9 +13,9 @@ get_predicted_se <- function(x,
   # the diagonal of this matrix represent the standard errors of the predictions,
   # which are then multiplied by 1.96 for the confidence intervals.
 
-  vcovmat <- .get_varcov_sandwich(
+  vcovmat <- get_varcov(
     x,
-    vcov_fun = vcov,
+    vcov = vcov,
     vcov_args = vcov_args,
     ...
   )
@@ -86,7 +86,7 @@ get_predicted_se <- function(x,
 
 .get_predicted_ci_modelmatrix <- function(x, data = NULL, vcovmat = NULL, ...) {
   resp <- find_response(x)
-  if (is.null(vcovmat)) vcovmat <- .get_varcov_sandwich(x, ...)
+  if (is.null(vcovmat)) vcovmat <- get_varcov(x, ...)
 
 
   if (is.null(data)) {
