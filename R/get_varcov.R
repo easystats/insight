@@ -21,8 +21,7 @@
 #'   applies to models of class `mixor`.
 #' @param complete Logical, if `TRUE`, for `aov`, returns the full
 #'   variance-covariance matrix.
-#' @param robust Logical, if `TRUE`, returns a robust variance-covariance matrix
-#'   using sandwich estimation.
+#' @inheritParams get_predicted_ci
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
@@ -46,8 +45,30 @@ get_varcov <- function(x, ...) {
 
 #' @rdname get_varcov
 #' @export
-get_varcov.default <- function(x, verbose = TRUE, ...) {
-  vc <- suppressWarnings(stats::vcov(x))
+get_varcov.default <- function(x,
+                               verbose = TRUE,
+                               vcov = NULL,
+                               vcov_args = NULL,
+                               ...) {
+
+  dots <- list(...)
+  if ("robust" %in% names(dots)) {
+    # default robust covariance
+    if (is.null(vcov)) {
+      vcov <- "HC3"
+    }
+    warning("The `robust` argument is deprecated. Please use `vcov` instead.")
+  }
+
+  if (is.null(vcov)) {
+    vc <- suppressWarnings(stats::vcov(x))
+  } else {
+    vc <- .get_varcov_sandwich(x,
+                               vcov_fun = vcov,
+                               vcov_args = vcov_args,
+                               verbose = FALSE,
+                               ...)
+  }
   .process_vcov(vc, verbose)
 }
 

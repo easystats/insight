@@ -20,7 +20,7 @@
 \usage{
 get_varcov(x, ...)
 
-\method{get_varcov}{default}(x, verbose = TRUE, ...)
+\method{get_varcov}{default}(x, verbose = TRUE, vcov = NULL, vcov_args = NULL, ...)
 
 \method{get_varcov}{betareg}(
   x,
@@ -76,6 +76,24 @@ get_varcov(x, ...)
 
 \item{verbose}{Toggle warnings.}
 
+\item{vcov}{Variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors). This argument accepts a covariance matrix, a function which returns a covariance matrix, or a string which identifies the function to be used to compute the covariance matrix.
+\itemize{
+\item A covariance matrix
+\item A function which returns a covariance matrix (e.g., \code{stats::vcov()})
+\item A string which indicates the kind of uncertainty estimates to return.
+\itemize{
+\item Heteroskedasticity-consistent: \code{"vcovHC"}, \code{"HC"}, \code{"HC0"}, \code{"HC1"}, \code{"HC2"}, \code{"HC3"}, \code{"HC4"}, \code{"HC4m"}, \code{"HC5"}. See \code{?sandwich::vcovHC}
+\item Cluster-robust: \code{"vcovCR"}, \code{"CR0"}, \code{"CR1"}, \code{"CR1p"}, \code{"CR1S"}, \code{"CR2"}, \code{"CR3"}. See \code{?clubSandwich::vcovCR()}
+\item Bootstrap: \code{"vcovBS"}, \code{"xy"}, \code{"residual"}, \code{"wild"}, \code{"mammen"}, \code{"webb"}. See \code{?sandwich::vcovBS}
+\item Other \code{sandwich} package functions: \code{"vcovHAC"}, \code{"vcovPC"}, \code{"vcovCL"}, \code{"vcovPL"}.
+}
+}}
+
+\item{vcov_args}{List of arguments to be passed to the function identified by
+the \code{vcov} argument. This function is typically supplied by the \strong{sandwich}
+or \strong{clubSandwich} packages. Please refer to their documentation (e.g.,
+\code{?sandwich::vcovHAC}) to see the list of available arguments.}
+
 \item{component}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model components only (like count or
 zero-inflated model parts)? Applies to models with zero-inflated component,
@@ -88,9 +106,6 @@ model.}
 \item{effects}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model parameters only? Currently only
 applies to models of class \code{mixor}.}
-
-\item{robust}{Logical, if \code{TRUE}, returns a robust variance-covariance matrix
-using sandwich estimation.}
 
 \item{complete}{Logical, if \code{TRUE}, for \code{aov}, returns the full
 variance-covariance matrix.}
