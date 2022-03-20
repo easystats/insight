@@ -29,9 +29,11 @@
     colnames(mf)[offcol] <- clean_names(safe_deparse(x$call$offset))
   }
 
+
   # backtransform variables, such as log, sqrt etc ----------------------------
 
   mf <- .backtransform(mf, x)
+
 
   # clean 1-dimensional matrices ---------------------------------------------
 
@@ -44,6 +46,7 @@
       .x
     }
   })
+
 
   # detect matrix columns ----------------------------------------------------
 
@@ -62,6 +65,7 @@
 
   trials.data <- NULL
 
+
   # restore original variables used in matrix-response columns ----------------
 
   if (mc[1] && rn == colnames(mf)[1]) {
@@ -77,7 +81,7 @@
           colnames(trials.data) <- rn_not_combined
 
           # if columns were bound via subtraction, e.g.
-          # "cbind(succes, total - success)", we need to sum up success and
+          # "cbind(success, total - success)", we need to sum up success and
           # total for the original total-column.
 
           pattern <- sprintf("%s(\\s*)-(\\s*)%s", rn_not_combined[2], rn_not_combined[1])
@@ -91,6 +95,7 @@
       )
     }
   }
+
 
   # process matrix-variables (restore original data from matrix variables) ----
 
@@ -223,22 +228,27 @@
 
     # still some undetected matrix-variables?
     if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
-      warning(format_message("Some model terms could not be found in model data. You probably need to load the data into the environment."), call. = FALSE)
+      warning(format_message("Some model terms could not be found in model data.",
+                             "You probably need to load the data into the environment."), call. = FALSE)
     }
   }
+
 
   # monotonic predictors ------------------------------------------------------
 
   # check if we have monotonic variables, included in formula
   # with "mo()"? If yes, remove from model frame
-  mos_eisly <- grepl(pattern = "^mo\\(([^,)]*).*", x = colnames(mf))
-  if (any(mos_eisly)) {
-    mf <- mf[!mos_eisly]
+  if (inherits(x, "brmsfit")) {
+    mos_eisly <- grepl("^mo\\(([^,)]*).*", colnames(mf))
+    if (any(mos_eisly)) {
+      mf <- mf[!mos_eisly]
+    }
   }
+
 
   # strata-variables in coxph() -----------------------------------------------
 
-  strata_columns <- grepl("^strata\\((.*)\\)", colnames(mf))
+  strata_columns <- grepl("strata(", colnames(mf), fixed = TRUE)
   if (any(strata_columns)) {
     for (sc in colnames(mf)[strata_columns]) {
       strata_variable <- gsub("strata\\((.*)\\)", "\\1", sc)
@@ -246,12 +256,15 @@
     }
   }
 
+
   # restore original data for factors -----------------------------------------
 
   # are there any factor variables that have been coerced "on-the-fly",
   # using "factor()" or "as.factor()"? if so, get names and convert back
   # to numeric later
   factors <- colnames(mf)[grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", colnames(mf))]
+
+  ## TODO check! some lines above (see "mos_eisly"). monotonic terms are removed from the model frame
 
   # check for monotonic terms and valid values. In case 'mo()' is used,
   # and predictor is numeric, prettyfied values in the data grid are based
@@ -267,6 +280,7 @@
 
   # clean variable names
   cvn <- .remove_pattern_from_names(colnames(mf), ignore_lag = TRUE)
+
 
   # check for interaction pattern ----------------------------------------
 
@@ -284,10 +298,11 @@
     }
   }
 
+
   # as-is variables I() -------------------------------------------------------
 
   # keep "as is" variable for response variables in data frame
-  if (colnames(mf)[1] == rn[1] && grepl("^I\\(", rn[1])) {
+  if (colnames(mf)[1] == rn[1] && grepl("I(", rn[1], fixed = TRUE, ignore.case = FALSE)) {
     md <- tryCatch(
       {
         tmp <- .recover_data_from_environment(x)[, unique(c(rn_not_combined, cvn)), drop = FALSE]
@@ -305,6 +320,7 @@
     }
   }
 
+
   # fix duplicated colnames ---------------------------------------------------
 
   # do we have duplicated names?
@@ -312,6 +328,7 @@
   if (!.is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], 1:length(dupes))
 
   colnames(mf) <- cvn
+
 
   # add weighting variable ----------------------------------------------------
 
@@ -328,6 +345,7 @@
       }
     )
   }
+
 
   # add back possible trials-data ---------------------------------------------
 
@@ -373,7 +391,7 @@
   }
 
   # do we have variable names like "mtcars$mpg"?
-  if (is.null(data_arg) && all(grepl("(.*)\\$(.*)", colnames(mf)))) {
+  if (is.null(data_arg) && all(grepl("$", colnames(mf), fixed = TRUE))) {
     colnames(mf) <- gsub("(.*)\\$(.*)", "\\2", colnames(mf))
   }
 
@@ -757,8 +775,16 @@
         "log10", "log2", "sqrt", "exp", "expm1", "scale", "cos", "sin",
         "tan", "acos", "asin", "atan"
       )
-      for (i in patterns) {
-        mf <- .backtransform_helper(mf, i, x)
+
+      # to save time, create a full regex and see if we have any
+      # transformation at all, instead of always checking for each pattern
+      full_pattern <- sprintf("%s\\(([^,)]*).*", paste0("(", paste0(patterns, collapse = "|"), ")"))
+
+      # only backtransform if we have any matches
+      if (any(grepl(full_pattern, colnames(mf)))) {
+        for (i in patterns) {
+          mf <- .backtransform_helper(mf, i, x)
+        }
       }
       mf
     },
