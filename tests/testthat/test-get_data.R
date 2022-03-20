@@ -33,6 +33,7 @@ test_that("lm with transformations", {
 })
 
 test_that("mgcv", {
+  skip("works interactively")
   requiet("mgcv")
   d <- iris
   d$NewFac <- rep(c(1, 2), length.out = 150)
