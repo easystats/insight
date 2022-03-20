@@ -44,7 +44,7 @@ get_varcov <- function(x, ...) {
                    "hurdle", "zeroinfl", "pscl", "countreg", "mlogit", "polr",
                    "rlm", "fixest")
     if (!any(supported %in% class(x))) {
-      msg <- sprintf("Models of class `%s` may not be supported by the `sandwich` or `clubSandwich` packages. In such cases, `get_varcov()` ignores the `vcov` argument and tries to return the model object's default variance-covariance matrix.", class(mod)[1])
+      msg <- sprintf("Models of class `%s` may not be supported by the `sandwich` or `clubSandwich` packages. In such cases, `get_varcov()` ignores the `vcov` argument and tries to return the model object's default variance-covariance matrix.", class(x)[1])
       warning(format_message(msg), call. = FALSE)
     }
   }
