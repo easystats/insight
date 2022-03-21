@@ -24,37 +24,14 @@ get_call <- function(x) {
 
 #' @export
 get_call.default <- function(x) {
-  cl <- tryCatch(
-    {
-      x$call
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
-  if (is.null(cl)) {
-    cl <- tryCatch(
-      {
-        x@call
-      },
-      error = function(x) {
-        NULL
-      }
-    )
-  }
+  cl <- tryCatch(getElement(x, "call"), error = function(e) NULL)
 
   # For GAMM4
   if (is.null(cl) && "gam" %in% names(x)) {
-    cl <- tryCatch(
-      {
-        x$gam$formula # Where's the call here?
-      },
-      error = function(x) {
-        NULL
-      }
-    )
+    # Where's the call here?
+    cl <- tryCatch(x$gam$formula, error = function(e) NULL)
   }
+
   cl
 }
 

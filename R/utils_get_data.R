@@ -453,6 +453,9 @@
     attr(mf, "factors") <- factors
   }
 
+  # add attribute that subset is used
+  attr(mf, "is_subset") <- !is.null(subset_vars) && length(subset_vars)
+
   mf
 }
 
