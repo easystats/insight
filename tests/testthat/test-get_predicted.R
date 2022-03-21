@@ -531,14 +531,14 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   data <- mtcars
   data$cyl <- as.character(data$cyl)
   void <- capture.output(
-    model <- brm(cyl ~ mpg * vs + (1 | carb),
+    suppressWarnings(model <- brm(cyl ~ mpg * vs + (1 | carb),
       data = data,
       iter = 1000,
       seed = 1024,
       algorithm = "meanfield",
       refresh = 0,
       family = categorical(link = "logit", refcat = "4")
-    )
+    ))
   )
   x <- as.data.frame(get_predicted(model))
   # Test shape

@@ -79,7 +79,7 @@ if (.runThisTest) {
   expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
 
   requiet("brms")
-  m <- brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1)
+  m <- suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1))
   out <- get_data(m)
   expect_equal(attributes(out)$factors, "cyl")
   expect_type(out$cyl, "double")
