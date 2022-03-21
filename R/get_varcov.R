@@ -387,9 +387,14 @@ get_varcov.glmmTMB <- function(x,
 get_varcov.MixMod <- function(x,
                               effects = c("fixed", "random"),
                               component = c("conditional", "zero_inflated", "zi", "dispersion", "auxiliary", "all"),
-                              robust = FALSE,
                               verbose = TRUE,
                               ...) {
+
+  # backward compatibility. there used to be a `robust` argument in this
+  # method, but we have now moved to `vcov` and `vcov_args`. Also, `robust`
+  # does not seem to be a documented argument for the `MixMod` class.
+  robust <- isTRUE(list(...)[["robust"]])
+
   component <- match.arg(component)
   effects <- match.arg(effects)
 
