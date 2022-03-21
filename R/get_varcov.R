@@ -40,9 +40,12 @@ get_varcov <- function(x, ...) {
   dots <- list(...)
   if ("vcov" %in% names(dots) && !is.null(dots$vcov)) {
     # list of supported classes from Zeileis et al. (2020) JSS
-    supported <- c("lm", "glm", "betareg", "clm", "coxph", "survreg", "crch",
-                   "hurdle", "zeroinfl", "pscl", "countreg", "mlogit", "polr",
-                   "rlm", "fixest")
+    supported_sandwich <- c("lm", "glm", "betareg", "clm", "coxph", "survreg",
+                            "crch", "hurdle", "zeroinfl", "pscl", "countreg",
+                            "mlogit", "polr", "rlm", "fixest")
+    supported_clubSandwich <- c("glm", "gls", "ivreg", "lm", "lme", "lmerMod",
+                                "mlm", "plm", "rma.mv", "rma.uni", "robu")
+    supported <- c(supported_sandwich, supported_clubSandwich)
     if (!any(supported %in% class(x))) {
       msg <- sprintf("Models of class `%s` may not be supported by the `sandwich` or `clubSandwich` packages. In such cases, `get_varcov()` ignores the `vcov` argument and tries to return the model object's default variance-covariance matrix.", class(x)[1])
       warning(format_message(msg), call. = FALSE)
@@ -402,7 +405,8 @@ get_varcov.MixMod <- function(x,
 
   if (effects == "random") {
     vc <- random_vc
-  } else {
+  } else 
+    {
     vc <- switch(component,
       "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
       "zero_inflated" = ,
