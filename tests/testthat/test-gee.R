@@ -36,7 +36,7 @@ if (requiet("testthat") &&
   })
 
   test_that("get_random", {
-    expect_equal(get_random(m1), warpbreaks[, "wool", drop = FALSE])
+    expect_equal(get_random(m1), warpbreaks[, "wool", drop = FALSE], ignore_attr = TRUE)
   })
 
   test_that("get_predictors", {

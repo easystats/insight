@@ -43,7 +43,7 @@ if (requiet("testthat") &&
   })
 
   test_that("get_random", {
-    expect_equal(get_random(m1), arthritis[, "id", drop = FALSE])
+    expect_equal(get_random(m1), arthritis[, "id", drop = FALSE], ignore_attr = TRUE)
   })
 
   test_that("get_predictors", {

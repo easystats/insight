@@ -36,7 +36,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
     test_that("get_random", {
-      expect_equal(get_random(m1), dja[, "village", drop = FALSE])
+      expect_equal(get_random(m1), dja[, "village", drop = FALSE], ignore_attr = TRUE)
     })
 
     test_that("find_response", {

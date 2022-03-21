@@ -72,8 +72,8 @@ if (.runThisTest &&
   })
 
   test_that("get_random", {
-    expect_equal(get_random(m1), wine[, "judge", drop = FALSE])
-    expect_equal(get_random(m2), soup[, c("RESP", "PROD"), drop = FALSE])
+    expect_equal(get_random(m1), wine[, "judge", drop = FALSE], ignore_attr = TRUE)
+    expect_equal(get_random(m2), soup[, c("RESP", "PROD"), drop = FALSE], ignore_attr = TRUE)
   })
 
   test_that("find_response", {

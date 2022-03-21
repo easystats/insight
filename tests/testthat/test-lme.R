@@ -85,7 +85,7 @@ if (requiet("testthat") &&
   })
 
   test_that("get_random", {
-    expect_equal(get_random(m1), data.frame(Subject = sleepstudy$Subject))
+    expect_equal(get_random(m1), data.frame(Subject = sleepstudy$Subject), ignore_attr = TRUE)
     expect_warning(get_random(m2))
   })
 
