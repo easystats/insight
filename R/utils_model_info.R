@@ -241,6 +241,7 @@
 
   # significance tests --------
 
+  is_ftest <- FALSE
   is_ttest <- FALSE
   is_correlation <- FALSE
   is_oneway <- FALSE
@@ -261,6 +262,8 @@
       is_ranktest <- TRUE
     } else if (grepl("t-test", x$method, fixed = TRUE)) {
       is_ttest <- TRUE
+    } else if (grepl("F test", x$method, fixed = TRUE)) {
+      is_ftest <- TRUE
     } else if (grepl("^One-way", x$method)) {
       is_oneway <- TRUE
     } else if (x$method == "Exact binomial test") {
@@ -296,6 +299,7 @@
 
   is_meta <- FALSE
   if (inherits(x, "BFBayesFactor")) {
+    is_ftest <- FALSE
     is_ttest <- FALSE
     is_correlation <- FALSE
     is_oneway <- FALSE
@@ -396,6 +400,7 @@
     is_xtab = is_xtab,
     is_proptest = is_proptest,
     is_binomtest = is_binomtest,
+    is_ftest = is_ftest,
     is_meta = is_meta,
     link_function = link.fun,
     family = fitfam,
