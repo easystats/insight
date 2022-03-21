@@ -48,6 +48,7 @@ test_that("mgcv", {
 
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+.runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
 if (.runThisTest) {
   data(iris)
@@ -78,14 +79,16 @@ if (.runThisTest) {
   out <- get_data(m)
   expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
 
-  requiet("brms")
-  m <- suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1))
-  out <- get_data(m)
-  expect_equal(attributes(out)$factors, "cyl")
-  expect_type(out$cyl, "double")
-  expect_equal(colnames(out), c("mpg", "hp", "cyl"))
+  if (.runStanTest) {
+    requiet("brms")
+    m <- suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1))
+    out <- get_data(m)
+    expect_equal(attributes(out)$factors, "cyl")
+    expect_type(out$cyl, "double")
+    expect_equal(colnames(out), c("mpg", "hp", "cyl"))
 
-  out <- get_datagrid(m)
-  expect_equal(dim(out), c(10, 2))
-  expect_equal(out$cyl, c(4, 4, 6, 6, 8, 8, 8, 8, 8, 8))
+    out <- get_datagrid(m)
+    expect_equal(dim(out), c(10, 2))
+    expect_equal(out$cyl, c(4, 4, 6, 6, 8, 8, 8, 8, 8, 8))
+  }
 }
