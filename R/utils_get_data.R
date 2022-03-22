@@ -17,6 +17,20 @@
   mw <- NULL
 
 
+  # make sure it's a data frame -----------------------------------------------
+
+  if (!is.data.frame(mf)) {
+    mf <- tryCatch(as.data.frame(mf), error = function(e) NULL)
+    if (is.null(mf)) {
+      if (isTRUE(verbose)) {
+        warning(format_message("Cannot coerce data into a data frame.",
+                               "No data will be returned."), call. = FALSE)
+      }
+      return(NULL)
+    }
+  }
+
+
   # offset variables ----------------------------------------------------------
 
   # do we have an offset, not specified in the formula?

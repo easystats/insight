@@ -46,8 +46,25 @@ test_that("get_data: regression test for previous bug", {
     data = dat_regression_test,
     ties = "breslow"
   )
-  expect_equal(get_data(mod), dat_regression_test)
+  expect_equal(get_data(mod), dat_regression_test, ignore_attr = TRUE)
 })
+
+
+test_that("get_data: regression test for data stored as list", {
+  skip("works interactively")
+  dat_regression_test <- list(
+    time = c(4, 3, 1, 1, 2, 2, 3),
+    status = c(1, 1, 1, 0, 1, 1, 0),
+    x = c(0, 2, 1, 1, 1, 0, 0),
+    sex = c(0, 0, 0, 0, 1, 1, 1)
+  )
+  mod <- coxph(Surv(time, status) ~ x + strata(sex),
+               data = dat_regression_test,
+               ties = "breslow"
+  )
+  expect_equal(get_data(mod), as.data.frame(dat_regression_test), ignore_attr = TRUE)
+})
+
 
 test_that("find_formula", {
   expect_length(find_formula(m1), 1)

@@ -44,6 +44,12 @@
 * `get_variance()` was improved to cover more edge cases of (more complex)
   random effect structures.
 
+* `get_data()` now includes variables in the returned data frame that were
+  used in the `subset` argument of regression functions (like `lm()`).
+
+* In some edge cases, where `get_data()` is unable to retrieve the data that 
+  was used to fit the model, now a more informative error is printed.
+
 * `ellipses_info()` now also accepts a list of model objects, is more stable
   and returns more information about the provided models (like if all fixed 
   or random effects are the same across models, if all models are mixed models
