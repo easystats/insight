@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +86,8 @@
 <li><p><code><a href="../reference/get_loglikelihood.html">get_loglikelihood()</a></code> and <code><a href="../reference/get_df.html">get_df()</a></code> now support more model classes.</p></li>
 <li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> was improved for multinomial models from <em>brms</em>.</p></li>
 <li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> was improved to cover more edge cases of (more complex) random effect structures.</p></li>
+<li><p><code><a href="../reference/get_data.html">get_data()</a></code> now includes variables in the returned data frame that were used in the <code>subset</code> argument of regression functions (like <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>).</p></li>
+<li><p>In some edge cases, where <code><a href="../reference/get_data.html">get_data()</a></code> is unable to retrieve the data that was used to fit the model, now a more informative error is printed.</p></li>
 <li><p><code>ellipses_info()</code> now also accepts a list of model objects, is more stable and returns more information about the provided models (like if all fixed or random effects are the same across models, if all models are mixed models or null-models, etc.)</p></li>
 <li><p><code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> now works interactively and lets the user prompt whether to automatically update or install packages.</p></li>
 </ul></div>
