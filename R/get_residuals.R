@@ -309,9 +309,9 @@ print.insight_residuals <- function(x, ...) {
     # sigma
     betad <- model$fit$par["betad"]
     k <- switch(faminfo$family,
-                gaussian = exp(0.5 * betad),
-                Gamma = exp(-0.5 * betad),
-                exp(betad)
+      gaussian = exp(0.5 * betad),
+      Gamma = exp(-0.5 * betad),
+      exp(betad)
     )
     pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
     pred <- stats::predict(model, type = "response") ## (1 - p) * mu

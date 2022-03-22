@@ -5,7 +5,8 @@ test_that("lme4", {
   set.seed(123)
   cbpp$cont <- rnorm(nrow(cbpp))
   m <- glmer(cbind(incidence, size - incidence) ~ poly(cont, 2) + (1 | herd),
-    data = cbpp, family = binomial)
+    data = cbpp, family = binomial
+  )
   expect_s3_class(get_data(m), "data.frame")
 })
 

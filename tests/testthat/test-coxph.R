@@ -59,8 +59,8 @@ test_that("get_data: regression test for data stored as list", {
     sex = c(0, 0, 0, 0, 1, 1, 1)
   )
   mod <- coxph(Surv(time, status) ~ x + strata(sex),
-               data = dat_regression_test,
-               ties = "breslow"
+    data = dat_regression_test,
+    ties = "breslow"
   )
   expect_equal(get_data(mod), as.data.frame(dat_regression_test), ignore_attr = TRUE)
 })

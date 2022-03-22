@@ -23,8 +23,10 @@
     mf <- tryCatch(as.data.frame(mf), error = function(e) NULL)
     if (is.null(mf)) {
       if (isTRUE(verbose)) {
-        warning(format_message("Cannot coerce data into a data frame.",
-                               "No data will be returned."), call. = FALSE)
+        warning(format_message(
+          "Cannot coerce data into a data frame.",
+          "No data will be returned."
+        ), call. = FALSE)
       }
       return(NULL)
     }
@@ -200,8 +202,10 @@
         # model frame, tell user and skip this step
         if (!length(needed.vars) || nrow(md) != nrow(mf)) {
           if (isTRUE(verbose)) {
-            warning(format_message("Could not find all model variables in the data.",
-                                   "Maybe the original data frame used to fit the model was modified?"), call. = FALSE)
+            warning(format_message(
+              "Could not find all model variables in the data.",
+              "Maybe the original data frame used to fit the model was modified?"
+            ), call. = FALSE)
           }
         } else {
           mf <- md[, needed.vars, drop = FALSE]
@@ -242,8 +246,10 @@
 
     # still some undetected matrix-variables?
     if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
-      warning(format_message("Some model terms could not be found in model data.",
-                             "You probably need to load the data into the environment."), call. = FALSE)
+      warning(format_message(
+        "Some model terms could not be found in model data.",
+        "You probably need to load the data into the environment."
+      ), call. = FALSE)
     }
   }
 
@@ -447,8 +453,10 @@
         mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
       }
       if (isTRUE(verbose)) {
-        message(format_message("The data contains variables used 'interaction()'-functions. These are probably not recovered accurately in the returned data frame.",
-                               "Please check the data frame carefully."))
+        message(format_message(
+          "The data contains variables used 'interaction()'-functions. These are probably not recovered accurately in the returned data frame.",
+          "Please check the data frame carefully."
+        ))
       }
     }
   }
