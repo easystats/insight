@@ -1,4 +1,4 @@
-# insight 0.16.1
+# insight 0.17.0
 
 ## Breaking changes
 
@@ -6,6 +6,11 @@
   `get_predicted_se()` and `get_predicted_ci()` are replaced by `vcov` and
   `vcov_args`, to have a more simplified and common interface to control
   robust covariance matrix estimation.
+
+## General
+
+* Improved performance for various functions, in particular `get_data()` and
+  `model_info()`.
 
 ## New functions
 
@@ -56,8 +61,8 @@
 
 * Fixed issue with `get_datagrid()` for *brms* models with monotonic factors.
 
-* Fixed issue in `find_formula()` when argument `correlation` was defined 
-outside of `lme()` and `gls()` (@etiennebacher, #525).
+* Fixed issue in `find_formula()` when argument `correlation` was defined
+  outside of `lme()` and `gls()` (@etiennebacher, #525).
 
 * Fixed issue with `get_data()` when back-transforming data from predictors 
   that used `cos()`, `sin()` or `tan()` transformations.
