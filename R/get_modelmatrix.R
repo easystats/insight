@@ -35,6 +35,12 @@ get_modelmatrix.merMod <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.ivreg <- get_modelmatrix.merMod
+
+#' @export
+get_modelmatrix.iv_robust <- get_modelmatrix.merMod
+
+#' @export
 get_modelmatrix.lme <- function(x, ...) {
   # we check the dots for a "data" argument. To make model.matrix work
   # for certain objects, we need to specify the data-argument explicitly,

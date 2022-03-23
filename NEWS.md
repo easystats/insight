@@ -1,3 +1,9 @@
+# insight 0.17.1
+
+## General
+
+* `get_predicted()` now supported models of class `iv_robust` and `ivreg`.
+
 # insight 0.17.0
 
 ## Breaking changes
