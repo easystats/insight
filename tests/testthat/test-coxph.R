@@ -1,4 +1,3 @@
-library(survival)
 requiet("survival")
 requiet("insight")
 

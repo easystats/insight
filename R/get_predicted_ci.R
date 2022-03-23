@@ -56,10 +56,12 @@
 #'
 #' # Bootstrapped
 #' # ------------
-#' predictions <- get_predicted(x, iterations = 500)
-#' get_predicted_ci(x, predictions)
+#' if (require("boot")) {
+#'   predictions <- get_predicted(x, iterations = 500)
+#'   get_predicted_ci(x, predictions)
+#' }
 #'
-#' if (require("datawizard")) {
+#' if (require("datawizard") && require("bayestestR")) {
 #'   ci_vals <- get_predicted_ci(x, predictions, ci = c(0.80, 0.95))
 #'   head(ci_vals)
 #'   datawizard::reshape_ci(ci_vals)
