@@ -38,7 +38,7 @@ as.data.frame() method) by default."><meta property="og:image" content="/referen
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.9.99</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -373,42 +373,18 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 <span class="r-out co"><span class="r-pr">#&gt;</span> 31  12.38501 2.1153615  8.058613 16.71141</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 32  25.76529 1.0175965 23.684073 27.84651</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># Bootstrapped</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted        SE    CI_low  CI_high   iter_1   iter_2    iter_3   iter_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   26.68824 2.1071592 23.923281 28.45535 27.17221 28.54269 23.659855 27.37819</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   21.40432 0.3480364 21.002728 21.79257 21.39969 21.82240 20.970542 21.42465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   15.13788 0.6993607 14.449638 16.00809 15.17414 14.88754 16.075708 14.41413</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   21.50666 0.2661665 21.218778 21.82150 21.44688 21.84475 21.200284 21.53475</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   13.70504 0.9691530 12.860329 14.57005 14.51349 14.57464 12.859324 12.87272</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   27.32278 1.5728255 25.262793 28.63473 27.46478 28.68126 25.084254 28.06082</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   26.64730 2.1423408 23.836861 28.44378 27.15333 28.53375 23.567958 27.33415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  21.13822 0.5763256 20.430601 21.72774 21.27699 21.76429 20.373213 21.13838</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  21.13822 0.5763256 20.430601 21.72774 21.27699 21.76429 20.373213 21.13838</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  15.03554 0.6401225 14.346119 15.79204 15.12695 14.86519 15.845966 14.30403</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  14.52381 0.5199296 13.824308 14.88069 14.89101 14.75344 14.697258 13.75353</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  14.31912 0.5784758 13.586160 14.79003 14.79663 14.70874 14.237774 13.53333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  14.01208 0.7481657 13.228939 14.65405 14.65506 14.64169 13.548549 13.20302</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  27.24090 1.6402586 25.089953 28.61158 27.42703 28.66338 24.900460 27.97274</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  27.52747 1.4071749 25.694894 28.69259 27.55916 28.72596 25.543737 28.28102</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  27.26137 1.6233459 25.133163 28.61737 27.43647 28.66785 24.946409 27.99476</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21  26.60636 2.1775842 23.750441 28.43221 27.13446 28.52481 23.476061 27.29011</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22  15.64961 1.0691873 14.967235 17.08834 15.41009 14.99929 17.224417 14.96464</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23  15.64961 1.0691873 14.967235 17.08834 15.41009 14.99929 17.224417 14.96464</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  13.70504 0.9691530 12.860329 14.57005 14.51349 14.57464 12.859324 12.87272</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25  15.13788 0.6993607 14.449638 16.00809 15.17414 14.88754 16.075708 14.41413</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  27.24090 1.6402586 25.089953 28.61158 27.42703 28.66338 24.900460 27.97274</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27  26.72917 2.0720426 24.009701 28.46693 27.19108 28.55163 23.751752 27.42223</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28  26.27885 2.4614371 23.055655 28.34305 26.98345 28.45329 22.740888 26.93779</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29  13.31613 1.2812482 12.021408 14.47804 14.33417 14.48970 11.986305 12.45434</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30  20.07382 1.5283530 18.134607 21.47592 20.78622 21.53184 17.983899 19.99334</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31  11.86282 2.5413452  8.886492 14.13421 13.66407 14.17233  8.723972 10.89091</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32  26.36073 2.3901892 23.231920 28.36277 27.02120 28.47117 22.924681 27.02587</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="co"># Same as as.data.frame(..., keep_iterations = F)</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"boot"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="co"># Bootstrapped</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># Same as as.data.frame(..., keep_iterations = FALSE)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: boot</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘boot’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:rstanarm’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     logit</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted        SE   CI_low  CI_high</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   20.79277 0.4191720 20.40466 21.32894</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   20.79277 0.4191720 20.40466 21.32894</span>
