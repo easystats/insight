@@ -228,9 +228,12 @@ get_predicted(x, predict = "prediction")
 # Get CI
 as.data.frame(predictions)
 
-# Bootstrapped
-as.data.frame(get_predicted(x, iterations = 4))
-summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
+if (require("boot")) {
+  # Bootstrapped
+  as.data.frame(get_predicted(x, iterations = 4))
+  # Same as as.data.frame(..., keep_iterations = FALSE)
+  summary(get_predicted(x, iterations = 4))
+}
 
 # Different prediction types ------------------------
 data(iris)
