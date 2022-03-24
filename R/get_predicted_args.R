@@ -23,9 +23,9 @@
   # ...but not both
   if (!is.null(dots$type) && !is.null(predict) && isTRUE(verbose)) {
     warning(format_message(
-      "Both `predict` and `type` are given. `predict` will be overwritten by `type` now.",
+      "Both `predict` and `type` were given, thus, `type` was used and `predict` was ignored.",
       "Note that the preferred argument for `get_predicted()` is `predict`.",
-      "To avoid this warning if the `type` argument should be used, set `predict = NULL` explicitly, e.g.,:",
+      "If the `type` argument should be used and to avoid this warning, set `predict = NULL` explicitly, e.g.,:",
       "`get_predicted(model, predict = NULL, type = \"response\")`"
     ), call. = FALSE)
   }
