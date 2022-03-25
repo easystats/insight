@@ -75,7 +75,7 @@ get_modelmatrix.lm_robust <- function(x, ...) {
 }
 
 #' @export
-get_modelmatrix.ivreg <- get_modelmatrix.lm_robust
+get_modelmatrix.ivreg <- get_modelmatrix.iv_robust
 
 #' @export
 get_modelmatrix.lme <- function(x, ...) {
