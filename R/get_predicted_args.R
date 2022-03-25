@@ -27,7 +27,7 @@
       "Note that the preferred argument for `get_predicted()` is `predict`.",
       "If the `type` argument should be used and to avoid this warning, set `predict = NULL` explicitly, e.g.,:",
       "`get_predicted(model, predict = NULL, type = \"response\")`"
-    ), call. = FALSE)
+    ))
   }
 
   # copy "type" to "predict"
