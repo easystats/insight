@@ -17,6 +17,7 @@ test_that("get_modelmatrix - iv_robust", {
   out1 <- get_modelmatrix(x, data = get_datagrid(x, at = "P"))
   out2 <- model.matrix(terms(x), data = get_datagrid(x, at = "P", include_response = TRUE))
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(nrow(get_datagrid(x, at = "P")), nrow(out2))
 })
 
 
@@ -34,8 +35,9 @@ test_that("get_modelmatrix - ivreg", {
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
 
   out1 <- get_modelmatrix(x, data = get_datagrid(x, at = "P"))
-  out2 <- model.matrix(x, data = get_datagrid(x, at = "P", include_response = TRUE))
+  out2 <- model.matrix(terms(x), data = get_datagrid(x, at = "P", include_response = TRUE))
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(nrow(get_datagrid(x, at = "P")), nrow(out2))
 })
 
 
@@ -63,4 +65,5 @@ test_that("get_modelmatrix - lm_robust", {
   out1 <- get_modelmatrix(x, data = get_datagrid(x, at = "x"))
   out2 <- model.matrix(x, data = get_datagrid(x, at = "x", include_response = TRUE))
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(nrow(get_datagrid(x, at = "x")), nrow(out2))
 })
