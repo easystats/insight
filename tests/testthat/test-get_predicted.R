@@ -457,7 +457,7 @@ test_that("lm: get_predicted vs barebones `predict()`", {
 
 test_that("using both `predict` and `type` raises an informative warning", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
-  expect_warning(get_predicted(mod, predict = "response", type = "response"))
+  expect_message(get_predicted(mod, predict = "response", type = "response"))
 })
 
 
