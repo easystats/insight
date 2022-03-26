@@ -57,7 +57,8 @@ get_varcov.default <- function(x,
     if (is.null(vcov)) {
       vcov <- "HC3"
     }
-    warning("The `robust` argument is deprecated. Please use `vcov` instead.")
+    warning("The `robust` argument is deprecated. Please use `vcov` instead.",
+            call. = FALSE)
   }
 
   if (is.null(vcov)) {
@@ -958,6 +959,6 @@ get_varcov.LORgee <- get_varcov.gee
   # supported by a method, and thus that it will be ignored.
   if ("vcov" %in% names(dots)) {
     msg <- sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/"))
-    warning(format_message(msg))
+    warning(format_message(msg), call. = FALSE)
   }
 }
