@@ -50,8 +50,15 @@ get_varcov.default <- function(x,
                                vcov = NULL,
                                vcov_args = NULL,
                                ...) {
+
   .check_get_varcov_dots(x, ...)
   dots <- list(...)
+
+  # backward compatibility for `get_predicted_se()`
+  if (is.null(vcov) && "vcov_estimation" %in% names(dots)) {
+    vcov <- dots[["vcov_estimation"]]
+  }
+
   if ("robust" %in% names(dots)) {
     # default robust covariance
     if (is.null(vcov)) {

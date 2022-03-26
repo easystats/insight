@@ -15,7 +15,7 @@ get_predicted_se <- function(x,
 
   vcovmat <- get_varcov(
     x,
-    vcov_fun = vcov,
+    vcov = vcov,
     vcov_args = vcov_args,
     ...
   )
