@@ -423,8 +423,7 @@ get_varcov.MixMod <- function(x,
 
   if (effects == "random") {
     vc <- random_vc
-  } else 
-    {
+  } else {
     vc <- switch(component,
       "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
       "zero_inflated" = ,
