@@ -38,6 +38,6 @@ test_that("warning: not yet supported", {
   requiet("pscl")
   data("bioChemists", package = "pscl")
   mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
-  expect_warning(get_varcov(mod, vcov = "HC3"), regexp = "not yet supported")
+  expect_error(get_varcov(mod, vcov = "HC3"), regexp = "supported by one or")
 })
 
