@@ -130,7 +130,6 @@ get_varcov.betareg <- function(x,
 }
 
 
-#' @rdname get_varcov
 #' @export
 get_varcov.DirichletRegModel <- function(x,
                                          component = c("conditional", "precision", "all"),
@@ -307,7 +306,6 @@ get_varcov.truncreg <- function(x, component = c("conditional", "all"), ...) {
 }
 
 
-#' @rdname get_varcov
 #' @export
 get_varcov.gamlss <- function(x, component = c("conditional", "all"), ...) {
   .check_get_varcov_dots(x, ...)
@@ -373,7 +371,6 @@ get_varcov.zeroinfl <- get_varcov.hurdle
 #' @export
 get_varcov.zerocount <- get_varcov.hurdle
 
-#' @rdname get_varcov
 #' @export
 get_varcov.zcpglm <- function(x,
                               component = c("conditional", "zero_inflated", "zi", "all"),

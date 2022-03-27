@@ -4,12 +4,9 @@
 \alias{get_varcov}
 \alias{get_varcov.default}
 \alias{get_varcov.betareg}
-\alias{get_varcov.DirichletRegModel}
 \alias{get_varcov.clm2}
 \alias{get_varcov.truncreg}
-\alias{get_varcov.gamlss}
 \alias{get_varcov.hurdle}
-\alias{get_varcov.zcpglm}
 \alias{get_varcov.glmmTMB}
 \alias{get_varcov.MixMod}
 \alias{get_varcov.brmsfit}
@@ -29,18 +26,9 @@ get_varcov(x, ...)
   ...
 )
 
-\method{get_varcov}{DirichletRegModel}(
-  x,
-  component = c("conditional", "precision", "all"),
-  verbose = TRUE,
-  ...
-)
-
 \method{get_varcov}{clm2}(x, component = c("all", "conditional", "scale"), ...)
 
 \method{get_varcov}{truncreg}(x, component = c("conditional", "all"), ...)
-
-\method{get_varcov}{gamlss}(x, component = c("conditional", "all"), ...)
 
 \method{get_varcov}{hurdle}(
   x,
@@ -49,8 +37,6 @@ get_varcov(x, ...)
   vcov_args = NULL,
   ...
 )
-
-\method{get_varcov}{zcpglm}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
 
 \method{get_varcov}{glmmTMB}(
   x,
