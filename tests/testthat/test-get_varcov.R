@@ -5,9 +5,12 @@ test_that("informative error in get_varcov.default", {
     requiet("lme4")
     mod <- lmer(mpg ~ hp + (1 | cyl), data = mtcars)
     # sandwich: not supported
-    expect_error(get_varcov(mod, vcov = "HC2"), regexp = "not be supported")
+    expect_error(get_varcov(mod, vcov = "HC2"))
     # clubSandwich: supported
-    expect_error(get_varcov(mod, vcov = "CR0"), NA)
+    expect_equal(get_varcov(mod, vcov = "CR0"),
+                 clubSandwich::vcovCR(mod, type = "CR0"),
+                 tolerance = 1e-4,
+                 ignore_attr = TRUE)
 })
 
 test_that("lm: sandwich", {
