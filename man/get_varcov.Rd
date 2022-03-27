@@ -42,7 +42,13 @@ get_varcov(x, ...)
 
 \method{get_varcov}{gamlss}(x, component = c("conditional", "all"), ...)
 
-\method{get_varcov}{hurdle}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+\method{get_varcov}{hurdle}(
+  x,
+  component = c("conditional", "zero_inflated", "zi", "all"),
+  vcov = NULL,
+  vcov_args = NULL,
+  ...
+)
 
 \method{get_varcov}{zcpglm}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
 

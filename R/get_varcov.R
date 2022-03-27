@@ -52,21 +52,8 @@ get_varcov.default <- function(x,
                                ...) {
 
   .check_get_varcov_dots(x, ...)
-  dots <- list(...)
-
-  # backward compatibility for `get_predicted_se()`
-  if (is.null(vcov) && "vcov_estimation" %in% names(dots)) {
-    vcov <- dots[["vcov_estimation"]]
-  }
-
-  if ("robust" %in% names(dots)) {
-    # default robust covariance
-    if (is.null(vcov)) {
-      vcov <- "HC3"
-    }
-    warning("The `robust` argument is deprecated. Please use `vcov` instead.",
-            call. = FALSE)
-  }
+  # process vcov-argument
+  vcov <- .check_vcov_args(x, vcov, ...)
 
   if (is.null(vcov)) {
     vc <- suppressWarnings(stats::vcov(x))
@@ -327,16 +314,37 @@ get_varcov.gamlss <- function(x, component = c("conditional", "all"), ...) {
 #' @export
 get_varcov.hurdle <- function(x,
                               component = c("conditional", "zero_inflated", "zi", "all"),
+                              vcov = NULL,
+                              vcov_args = NULL,
                               ...) {
   .check_get_varcov_dots(x, ...)
+  # process vcov-argument
+  vcov <- .check_vcov_args(x, vcov, ...)
+
   component <- match.arg(component)
 
-  vc <- switch(component,
-    "conditional" = stats::vcov(object = x, model = "count"),
-    "zi" = ,
-    "zero_inflated" = stats::vcov(object = x, model = "zero"),
-    stats::vcov(object = x)
-  )
+  if (is.null(vcov)) {
+    vc <- switch(component,
+      "conditional" = stats::vcov(object = x, model = "count"),
+      "zi" = ,
+      "zero_inflated" = stats::vcov(object = x, model = "zero"),
+      stats::vcov(object = x)
+    )
+  } else {
+    vc <- .get_varcov_sandwich(x,
+                               vcov_fun = vcov,
+                               vcov_args = vcov_args,
+                               verbose = FALSE,
+                               ...)
+    keep <- switch(component,
+      "conditional" = grepl("^count_", colnames(vc)),
+      "zi" = ,
+      "zero_inflated" = grepl("^zero_", colnames(vc)),
+      1:ncol(vc)
+    )
+    vc <- vc[keep, keep, drop = FALSE]
+  }
+
   .process_vcov(vc)
 }
 
@@ -415,8 +423,7 @@ get_varcov.MixMod <- function(x,
 
   if (effects == "random") {
     vc <- random_vc
-  } else 
-    {
+  } else {
     vc <- switch(component,
       "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
       "zero_inflated" = ,
@@ -960,6 +967,10 @@ get_varcov.LORgee <- get_varcov.gee
   }
 }
 
+
+
+# sanity checks for vcov-args ------------------------------------------
+
 .check_get_varcov_dots <- function(x, ...) {
   dots <- list(...)
   # if `vcov` is in ..., it means that the argument is not explicitly
@@ -968,4 +979,25 @@ get_varcov.LORgee <- get_varcov.gee
     msg <- sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/"))
     warning(format_message(msg), call. = FALSE)
   }
+}
+
+
+.check_vcov_args <- function(x, vcov, ...) {
+  dots <- list(...)
+
+  # backward compatibility for `get_predicted_se()`
+  if (is.null(vcov) && "vcov_estimation" %in% names(dots)) {
+    vcov <- dots[["vcov_estimation"]]
+  }
+
+  if ("robust" %in% names(dots)) {
+    # default robust covariance
+    if (is.null(vcov)) {
+      vcov <- "HC3"
+    }
+    warning("The `robust` argument is deprecated. Please use `vcov` instead.",
+            call. = FALSE)
+  }
+
+  vcov
 }
