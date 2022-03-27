@@ -543,11 +543,18 @@ clean_parameters.mlm <- function(x, ...) {
   if (any(rand_eff)) {
     r_pars <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\1.\\2", out$Cleaned_Parameter[rand_eff])
     r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
+    r_levels <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\2", out$Cleaned_Parameter[rand_eff])
+    r_grpname <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\1", out$Cleaned_Parameter[rand_eff])
+
     r_pars <- gsub("__zi", "", r_pars)
     r_grps <- gsub("__zi", "", r_grps)
+    r_levels <- gsub("__zi", "", r_levels)
+    r_grpname <- gsub("__zi", "", r_levels)
 
     out$Cleaned_Parameter[rand_eff] <- r_pars
     out$Group[rand_eff] <- r_grps
+    out$Level[rand_eff] <- r_levels
+    out$Groupname[rand_eff] <- r_grpname
   }
 
   # clean remaining parameters
