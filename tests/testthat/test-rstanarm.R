@@ -468,6 +468,8 @@ if (.runThisTest && .runStanTest) {
               "conditional",
               "sigma"
             ),
+            Level = c("", "", "", "", "", "", ""),
+            Groupname = c("", "", "", "", "", "", ""),
             Cleaned_Parameter = c(
               "(Intercept)",
               "Speciesversicolor",
