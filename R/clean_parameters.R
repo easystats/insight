@@ -551,7 +551,7 @@ clean_parameters.mlm <- function(x, ...) {
     r_pars <- gsub("__zi", "", r_pars)
     r_grps <- gsub("__zi", "", r_grps)
     r_levels <- gsub("__zi", "", r_levels)
-    r_grpname <- gsub("__zi", "", r_levels)
+    r_grpname <- gsub("__zi", "", r_grpname)
 
     out$Cleaned_Parameter[rand_eff] <- r_pars
     out$Group[rand_eff] <- r_grps
