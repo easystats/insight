@@ -423,7 +423,8 @@ get_varcov.MixMod <- function(x,
 
   if (effects == "random") {
     vc <- random_vc
-  } else {
+  } else 
+    {
     vc <- switch(component,
       "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
       "zero_inflated" = ,
@@ -967,14 +968,12 @@ get_varcov.LORgee <- get_varcov.gee
   }
 }
 
-
-
-# sanity checks for vcov-args ------------------------------------------
-
 .check_get_varcov_dots <- function(x, ...) {
   dots <- list(...)
-  # if `vcov` is in ..., it means that the argument is not explicitly
-  # supported by a method, and thus that it will be ignored.
+  # if `vcov` is in ..., it means that the argument is not
+  # explicitly supported by a method, and thus that it will
+  # not be passed here through ... and will not trigger a
+  # warning here.
   if ("vcov" %in% names(dots)) {
     msg <- sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/"))
     warning(format_message(msg), call. = FALSE)
