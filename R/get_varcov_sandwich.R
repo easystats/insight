@@ -122,7 +122,7 @@
 
   # extract variance-covariance matrix
   if (!inherits(.vcov, "matrix")) {
-    msg <- sprintf("Unable to extract a variance-covariance matrix for model object of class `%s`. Different values of the `vcov` argument trigger calls to the `sandwich` or `clubSandwich` packages in order to extract the matrix (see `?insight::get_varcov`). Your model may not be supported by one or both of those packages.", class(x)[1])
+    msg <- sprintf("Unable to extract a variance-covariance matrix for model object of class `%s`. Different values of the `vcov` argument trigger calls to the `sandwich` or `clubSandwich` packages in order to extract the matrix (see `?insight::get_varcov`). Your model or the requested estimation type may not be supported by one or both of those packages.", class(x)[1])
     stop(format_message(msg), call. = FALSE)
   }
 
