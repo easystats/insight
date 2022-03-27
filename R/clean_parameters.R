@@ -473,6 +473,8 @@ clean_parameters.mlm <- function(x, ...) {
       Group = "",
       Response = response,
       Function = fun,
+      Level = "",
+      Groupname = "",
       stringsAsFactors = FALSE,
       row.names = NULL
     )
