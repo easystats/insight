@@ -48,7 +48,7 @@
 #'   mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
 #'   get_varcov(
 #'     mod,
-#'     component = "zero_inflated",
+#'     component = "conditional",
 #'     vcov = "BS",
 #'     vcov_args = list(R = 50)
 #'   )
