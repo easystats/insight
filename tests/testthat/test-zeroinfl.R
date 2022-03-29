@@ -1,3 +1,5 @@
+.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
 if (requiet("testthat") &&
   requiet("insight") &&
   requiet("pscl")) {
@@ -133,6 +135,24 @@ if (requiet("testthat") &&
     )
   })
 
+
+  if (.runThisTest && requiet("sandwich")) {
+    set.seed(123)
+    vc1 <- get_varcov(m1, component = "all", vcov = "BS", vcov_args = list(R = 50))
+    set.seed(123)
+    vc2 <- sandwich::vcovBS(m1, R = 50)
+    expect_equal(vc1, vc2, ignore_attr = TRUE)
+
+    set.seed(123)
+    vc1 <- get_varcov(m1, component = "conditional", vcov = "BS", vcov_args = list(R = 50))
+    count_col <- grepl("^count_", colnames(vc2))
+    expect_equal(vc1, vc2[count_col, count_col], ignore_attr = TRUE)
+
+    set.seed(123)
+    vc1 <- get_varcov(m1, component = "zero_inflated", vcov = "BS", vcov_args = list(R = 50))
+    zero_col <- grepl("^zero_", colnames(vc2))
+    expect_equal(vc1, vc2[zero_col, zero_col], ignore_attr = TRUE)
+  }
 
   m2 <- zeroinfl(formula = art ~ . | 1, data = bioChemists, dist = "negbin")
   .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"

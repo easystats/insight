@@ -4,12 +4,9 @@
 \alias{get_varcov}
 \alias{get_varcov.default}
 \alias{get_varcov.betareg}
-\alias{get_varcov.DirichletRegModel}
 \alias{get_varcov.clm2}
 \alias{get_varcov.truncreg}
-\alias{get_varcov.gamlss}
 \alias{get_varcov.hurdle}
-\alias{get_varcov.zcpglm}
 \alias{get_varcov.glmmTMB}
 \alias{get_varcov.MixMod}
 \alias{get_varcov.brmsfit}
@@ -20,16 +17,9 @@
 \usage{
 get_varcov(x, ...)
 
-\method{get_varcov}{default}(x, verbose = TRUE, ...)
+\method{get_varcov}{default}(x, verbose = TRUE, vcov = NULL, vcov_args = NULL, ...)
 
 \method{get_varcov}{betareg}(
-  x,
-  component = c("conditional", "precision", "all"),
-  verbose = TRUE,
-  ...
-)
-
-\method{get_varcov}{DirichletRegModel}(
   x,
   component = c("conditional", "precision", "all"),
   verbose = TRUE,
@@ -40,11 +30,13 @@ get_varcov(x, ...)
 
 \method{get_varcov}{truncreg}(x, component = c("conditional", "all"), ...)
 
-\method{get_varcov}{gamlss}(x, component = c("conditional", "all"), ...)
-
-\method{get_varcov}{hurdle}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
-
-\method{get_varcov}{zcpglm}(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+\method{get_varcov}{hurdle}(
+  x,
+  component = c("conditional", "zero_inflated", "zi", "all"),
+  vcov = NULL,
+  vcov_args = NULL,
+  ...
+)
 
 \method{get_varcov}{glmmTMB}(
   x,
@@ -56,7 +48,6 @@ get_varcov(x, ...)
   x,
   effects = c("fixed", "random"),
   component = c("conditional", "zero_inflated", "zi", "dispersion", "auxiliary", "all"),
-  robust = FALSE,
   verbose = TRUE,
   ...
 )
@@ -76,6 +67,24 @@ get_varcov(x, ...)
 
 \item{verbose}{Toggle warnings.}
 
+\item{vcov}{Variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors). This argument accepts a covariance matrix, a function which returns a covariance matrix, or a string which identifies the function to be used to compute the covariance matrix.
+\itemize{
+\item A covariance matrix
+\item A function which returns a covariance matrix (e.g., \code{stats::vcov()})
+\item A string which indicates the kind of uncertainty estimates to return.
+\itemize{
+\item Heteroskedasticity-consistent: \code{"vcovHC"}, \code{"HC"}, \code{"HC0"}, \code{"HC1"}, \code{"HC2"}, \code{"HC3"}, \code{"HC4"}, \code{"HC4m"}, \code{"HC5"}. See \code{?sandwich::vcovHC}
+\item Cluster-robust: \code{"vcovCR"}, \code{"CR0"}, \code{"CR1"}, \code{"CR1p"}, \code{"CR1S"}, \code{"CR2"}, \code{"CR3"}. See \code{?clubSandwich::vcovCR()}
+\item Bootstrap: \code{"vcovBS"}, \code{"xy"}, \code{"residual"}, \code{"wild"}, \code{"mammen"}, \code{"webb"}. See \code{?sandwich::vcovBS}
+\item Other \code{sandwich} package functions: \code{"vcovHAC"}, \code{"vcovPC"}, \code{"vcovCL"}, \code{"vcovPL"}.
+}
+}}
+
+\item{vcov_args}{List of arguments to be passed to the function identified by
+the \code{vcov} argument. This function is typically supplied by the \strong{sandwich}
+or \strong{clubSandwich} packages. Please refer to their documentation (e.g.,
+\code{?sandwich::vcovHAC}) to see the list of available arguments.}
+
 \item{component}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model components only (like count or
 zero-inflated model parts)? Applies to models with zero-inflated component,
@@ -88,9 +97,6 @@ model.}
 \item{effects}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model parameters only? Currently only
 applies to models of class \code{mixor}.}
-
-\item{robust}{Logical, if \code{TRUE}, returns a robust variance-covariance matrix
-using sandwich estimation.}
 
 \item{complete}{Logical, if \code{TRUE}, for \code{aov}, returns the full
 variance-covariance matrix.}
@@ -110,4 +116,23 @@ in case of a negative variance-covariance matrix.
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 get_varcov(m)
+
+# vcov of zero-inflation component from hurdle-model
+if (require("pscl")) {
+  data("bioChemists", package = "pscl")
+  mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+  get_varcov(mod, component = "zero_inflated")
+}
+
+# robust vcov of, count component from hurdle-model
+if (require("pscl") && require("sandwich")) {
+  data("bioChemists", package = "pscl")
+  mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+  get_varcov(
+    mod,
+    component = "conditional",
+    vcov = "BS",
+    vcov_args = list(R = 50)
+  )
+}
 }
