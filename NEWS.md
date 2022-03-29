@@ -2,7 +2,11 @@
 
 ## General
 
-* `get_predicted()` now supported models of class `iv_robust` and `ivreg`.
+* `get_predicted()` now supports models of class `iv_robust` and `ivreg`.
+
+* `get_varcov()` gains `vcov` and `vcov_args` arguments, to specify the
+  variance-covariance matrix used to compute uncertainty estimates (e.g., for 
+  robust standard errors).
 
 # insight 0.17.0
 
