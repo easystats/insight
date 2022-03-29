@@ -213,7 +213,7 @@ get_predicted_se <- function(x,
   if (is.null(data)) {
     mm <- get_modelmatrix(x)
   } else {
-    if (!all(resp %in% data)) data[[resp]] <- 0 # fake response
+    if (!all(resp %in% colnames(data))) data[[resp]] <- 0 # fake response
     # else, model.matrix below fails, e.g. for log-terms
     attr(data, "terms") <- NULL
 

@@ -164,7 +164,7 @@ get_predicted <- function(x, ...) {
 # default methods ---------------------------
 
 #' @export
-get_predicted.default <- function(x, data = NULL, predict = NULL, verbose = TRUE, ...) {
+get_predicted.default <- function(x, data = NULL, predict = "expectation", verbose = TRUE, ...) {
 
   # evaluate arguments
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
@@ -179,6 +179,12 @@ get_predicted.default <- function(x, data = NULL, predict = NULL, verbose = TRUE
   predict_args <- compact_list(list(x, newdata = args$data, type = args$type, dot_args))
   predictions <- tryCatch(do.call("predict", predict_args), error = function(e) NULL)
 
+  # may fail due to invalid "dot_args", so try shorter argument list
+  if (is.null(predictions)) {
+    predictions <- tryCatch(do.call("predict", compact_list(list(x, newdata = args$data, type = args$type))), error = function(e) NULL)
+  }
+
+  # still fails? try fitted()
   if (is.null(predictions)) {
     predictions <- tryCatch(do.call("fitted", predict_args), error = function(e) NULL)
   }

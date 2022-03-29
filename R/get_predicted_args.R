@@ -21,12 +21,13 @@
   }
 
   # ...but not both
-  if (!is.null(dots$type) && !is.null(predict)) {
-    stop(format_message(
-      "`predict` and `type` cannot both be given. The preferred argument for `get_predicted()` is `predict`.",
-      "To use the `type` argument, set `predict = NULL` explicitly, e.g.,:",
-      '`get_predicted(model, predict = NULL, type = "response")`'
-    ), call. = FALSE)
+  if (!is.null(dots$type) && !is.null(predict) && isTRUE(verbose)) {
+    message(format_message(
+      "Both `predict` and `type` were given, thus, `type` was used and `predict` was ignored.",
+      "Note that the preferred argument for `get_predicted()` is `predict`.",
+      "If the `type` argument should be used and to avoid this message, set `predict = NULL` explicitly, e.g.,:",
+      "`get_predicted(model, predict = NULL, type = \"response\")`"
+    ))
   }
 
   # copy "type" to "predict"

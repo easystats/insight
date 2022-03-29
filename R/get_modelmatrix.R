@@ -35,6 +35,49 @@ get_modelmatrix.merMod <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.iv_robust <- function(x, ...) {
+  dots <- list(...)
+  model_terms <- stats::terms(x)
+  if ("data" %in% names(dots)) {
+    # sanity check - model matrix needs response vector!
+    resp <- find_response(x)
+    d <- dots$data
+    dots$data <- NULL
+    if (!is.null(resp) && !resp %in% names(d)) {
+      # fake response
+      d[[resp]] <- 0
+    }
+    mm <- do.call(stats::model.matrix, compact_list(list(model_terms, data = d, dots)))
+  } else {
+    mm <- stats::model.matrix(model_terms, data = get_data(x), ...)
+  }
+
+  mm
+}
+
+#' @export
+get_modelmatrix.lm_robust <- function(x, ...) {
+  dots <- list(...)
+  if ("data" %in% names(dots)) {
+    # sanity check - model matrix needs response vector!
+    resp <- find_response(x)
+    d <- dots$data
+    dots$data <- NULL
+    if (!is.null(resp) && !resp %in% names(d)) {
+      # fake response
+      d[[resp]] <- 0
+    }
+    mm <- do.call(stats::model.matrix, compact_list(list(x, data = d, dots)))
+  } else {
+    mm <- stats::model.matrix(x, data = get_data(x), ...)
+  }
+  mm
+}
+
+#' @export
+get_modelmatrix.ivreg <- get_modelmatrix.iv_robust
+
+#' @export
 get_modelmatrix.lme <- function(x, ...) {
   # we check the dots for a "data" argument. To make model.matrix work
   # for certain objects, we need to specify the data-argument explicitly,
