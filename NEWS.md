@@ -4,6 +4,10 @@
 
 * `get_predicted()` now supports models of class `iv_robust` and `ivreg`.
 
+* For `get_predicted()`, when both `type` and `predict` are given, `type` 
+  will overwrite `predict`. Note that this will print a message, because 
+  `predict` is the preferred argument.
+
 * `get_varcov()` gains `vcov` and `vcov_args` arguments, to specify the
   variance-covariance matrix used to compute uncertainty estimates (e.g., for 
   robust standard errors).
