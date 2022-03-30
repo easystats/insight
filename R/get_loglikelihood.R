@@ -290,9 +290,9 @@ get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
 
 
 #' @export
-get_loglikelihood.iv_robust <- function(x, check_response = FALSE, verbose = TRUE, ...) {
+get_loglikelihood.iv_robust <- function(x, verbose = TRUE, ...) {
   res <- get_residuals(x)
-  w <- get_weights(m1, null_as_ones = TRUE)
+  w <- get_weights(x, null_as_ones = TRUE)
 
   # drop weights that are exactly zero
   excl <- w == 0
@@ -308,7 +308,6 @@ get_loglikelihood.iv_robust <- function(x, check_response = FALSE, verbose = TRU
     x,
     lls,
     df = get_df(x, type = "model"),
-    check_response = check_response,
     verbose = verbose
   )
 }
