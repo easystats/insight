@@ -136,6 +136,13 @@ get_loglikelihood.afex_aov <- function(x, ...) {
 
   # Get weights
   w <- get_weights(x, null_as_ones = TRUE)
+  res <- get_residuals(x, verbose = verbose)
+
+  excl <- w == 0
+  if (any(excl)) {
+    res <- res[!excl]
+    w <- w[!excl]
+  }
 
   # Get LogLikelihood
   estimator <- tolower(estimator)
@@ -147,7 +154,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
       stop("REML estimation not available for this model.", call. = FALSE)
     }
     N <- get_df(x, type = "residual") # n_obs - p
-    val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x, verbose = verbose)^2))))
+    val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
     p <- n_parameters(x, remove_nonestimable = TRUE)
     ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
     return(.loglikelihood_prep_output(x, ll, check_response = check_response, REML = REML, verbose = verbose))
@@ -163,7 +170,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
     stop("'estimator' should be one of 'ML', 'REML' or 'OLS'.")
   }
   # Get individual log-likelihoods
-  lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = verbose)^2) / s2))
+  lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * res^2) / s2))
 
   .loglikelihood_prep_output(x, lls, check_response = check_response, REML = REML, verbose = verbose)
 }
@@ -283,35 +290,31 @@ get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
 
 
 #' @export
-get_loglikelihood.iv_robust <- function(x, ...) {
+get_loglikelihood.iv_robust <- function(x, check_response = FALSE, verbose = TRUE, ...) {
   res <- get_residuals(x)
-  p <- x$rank
-  w <- x$weights
+  w <- get_weights(m1, null_as_ones = TRUE)
 
-  N <- length(res)
-
-  if (is.null(w)) {
-    w <- rep.int(1, N)
-  } else {
-    excl <- w == 0
-    if (any(excl)) {
-      res <- res[!excl]
-      N <- length(res)
-      w <- w[!excl]
-    }
+  # drop weights that are exactly zero
+  excl <- w == 0
+  if (any(excl)) {
+    res <- res[!excl]
+    w <- w[!excl]
   }
 
-  val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
+  N <- length(res)
+  lls <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
 
-  attr(val, "nall") <- N
-  attr(val, "nobs") <- N
-  attr(val, "df") <- p + 1
-  class(val) <- "logLik"
-
-  val
+  .loglikelihood_prep_output(
+    x,
+    lls,
+    df = get_df(x, type = "model"),
+    check_response = check_response,
+    verbose = verbose
+  )
 }
 
-
+#' @export
+get_loglikelihood.lm_robust <- get_loglikelihood.iv_robust
 
 
 #' @export
@@ -327,14 +330,20 @@ get_loglikelihood.crr <- function(x, ...) {
 
 
 #' @export
-get_loglikelihood.plm <- function(x, ...) {
+get_loglikelihood.plm <- function(x, check_response = FALSE, verbose = TRUE, ...) {
   res <- get_residuals(x)
   w <- get_weights(x, null_as_ones = TRUE)
   N <- n_obs(x)
 
   ll <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
 
-  .loglikelihood_prep_output(x, lls = ll, df = get_df(x, type = "model"))
+  .loglikelihood_prep_output(
+    x,
+    lls = ll,
+    df = get_df(x, type = "model"),
+    check_response = check_response,
+    verbose = verbose
+  )
 }
 
 

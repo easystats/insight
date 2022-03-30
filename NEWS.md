@@ -12,6 +12,8 @@
   variance-covariance matrix used to compute uncertainty estimates (e.g., for 
   robust standard errors).
 
+* `get_loglikehood()` improved handling of models from package *estimator*.
+
 # insight 0.17.0
 
 ## Breaking changes
