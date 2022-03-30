@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,6 +68,10 @@
 <li><p>For <code><a href="../reference/get_predicted.html">get_predicted()</a></code>, when both <code>type</code> and <code>predict</code> are given, <code>type</code> will overwrite <code>predict</code>. Note that this will print a message, because <code>predict</code> is the preferred argument.</p></li>
 <li><p><code><a href="../reference/get_varcov.html">get_varcov()</a></code> gains <code>vcov</code> and <code>vcov_args</code> arguments, to specify the variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors).</p></li>
 <li><p><code>get_loglikehood()</code> improved handling of models from package <em>estimator</em>.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-17-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-17-1"></a></h3>
+<ul><li>Fixed bug in <code><a href="../reference/get_data.html">get_data()</a></code> for model objects whose data needs to be recovered from the environment, and where the data name was a reserved word (e.g., named like an R function).</li>
 </ul></div>
 </div>
     <div class="section level2">
