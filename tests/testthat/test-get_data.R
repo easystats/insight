@@ -47,6 +47,15 @@ test_that("mgcv", {
 })
 
 
+test_that("fixest", {
+  # regression test for old bug: namespace conflict
+  requiet("fixest")
+  rep <- data.frame(Y = runif(100) > .5, X = rnorm(100))
+  mod <- feglm(Y ~ X, data = rep, family = binomial)
+  expect_s3_class(get_data(mod), "data.frame")
+})
+
+
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
