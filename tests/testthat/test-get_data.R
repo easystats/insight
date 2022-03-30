@@ -34,6 +34,7 @@ test_that("lm with transformations", {
 })
 
 test_that("mgcv", {
+  ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
   requiet("mgcv")
   d <- iris

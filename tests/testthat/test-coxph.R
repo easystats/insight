@@ -28,12 +28,14 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
+  ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
   expect_s3_class(get_data(m1), "data.frame")
   expect_equal(dim(get_data(m1)), c(166, 10))
 })
 
 test_that("get_data: regression test for previous bug", {
+  ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
   dat_regression_test <- data.frame(
     time = c(4, 3, 1, 1, 2, 2, 3),
@@ -50,6 +52,7 @@ test_that("get_data: regression test for previous bug", {
 
 
 test_that("get_data: regression test for data stored as list", {
+  ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
   dat_regression_test <- list(
     time = c(4, 3, 1, 1, 2, 2, 3),

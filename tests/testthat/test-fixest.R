@@ -226,6 +226,7 @@ test_that("get_predicted", {
 })
 
 test_that("get_data works when model data has name of  reserved words", {
+  ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
   rep <- data.frame(Y = runif(100) > .5, X = rnorm(100))
   m <- feglm(Y ~ X, data = rep, family = binomial)
