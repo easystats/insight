@@ -14,6 +14,12 @@
 
 * `get_loglikehood()` improved handling of models from package *estimator*.
 
+## Bug fixes
+
+* Fixed bug in `get_data()` for model objects whose data needs to be recovered
+  from the environment, and where the data name was a reserved word (e.g., named
+  like an R function).
+
 # insight 0.17.0
 
 ## Breaking changes

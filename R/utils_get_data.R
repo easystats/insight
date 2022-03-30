@@ -710,6 +710,14 @@
     }
   )
 
+  # sanity check- if data frame is named like a function, e.g.
+  # rep <- data.frame(...), we now have a function instead of the data
+  # we then need to reset "dat" to NULL and search in the global env
+
+  if (!is.null(dat) && !is.data.frame(dat)) {
+    dat <- tryCatch(as.data.frame(dat), error = function(e) NULL)
+  }
+
   if (is.null(dat)) {
     # second try, global env
     dat <- tryCatch(

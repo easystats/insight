@@ -224,3 +224,21 @@ test_that("get_predicted", {
   expect_warning(get_predicted(m1, ci = .4), NA)
   expect_warning(get_predicted(m1, predict = NULL, type = "link"), NA)
 })
+
+test_that("get_data works when model data has name of  reserved words", {
+  rep <- data.frame(Y = runif(100) > .5, X = rnorm(100))
+  m <- feglm(Y ~ X, data = rep, family = binomial)
+  out <- get_data(m)
+  expect_s3_class(out, "data.frame")
+  expect_equal(
+    head(out),
+    structure(
+      list(Y = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),
+           X = c(-1.37601434046896, -0.0340090992175856, 0.418083058388383,
+                 -0.51688491498936, -1.30634551903768, -0.858343109785566)),
+      is_subset = FALSE, row.names = c(NA, 6L), class = "data.frame"
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+})
