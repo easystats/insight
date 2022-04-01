@@ -989,7 +989,7 @@ get_varcov.LORgee <- get_varcov.gee
   # explicitly supported by a method, and thus that it will
   # not be passed here through ... and will not trigger a
   # warning here.
-  if ("vcov" %in% names(dots)) {
+  if ("vcov" %in% names(dots) && !is.null(dots[["vcov"]])) {
     msg <- sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/"))
     warning(format_message(msg), call. = FALSE)
   }
