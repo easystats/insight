@@ -35,6 +35,7 @@ get_varcov(x, ...)
   component = c("conditional", "zero_inflated", "zi", "all"),
   vcov = NULL,
   vcov_args = NULL,
+  verbose = TRUE,
   ...
 )
 

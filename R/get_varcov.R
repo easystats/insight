@@ -333,6 +333,7 @@ get_varcov.hurdle <- function(x,
                               component = c("conditional", "zero_inflated", "zi", "all"),
                               vcov = NULL,
                               vcov_args = NULL,
+                              verbose = TRUE,
                               ...) {
   .check_get_varcov_dots(x, ...)
   # process vcov-argument
@@ -351,7 +352,7 @@ get_varcov.hurdle <- function(x,
     vc <- .get_varcov_sandwich(x,
                                vcov_fun = vcov,
                                vcov_args = vcov_args,
-                               verbose = FALSE,
+                               verbose = verbose,
                                ...)
     keep <- switch(component,
       "conditional" = grepl("^count_", colnames(vc)),
