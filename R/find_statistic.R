@@ -117,7 +117,7 @@ find_statistic <- function(x, ...) {
     "boot_test_mediation", "bracl", "brglm", "brglmFit", "brmultinom", "btergm",
     "cglm", "cph", "clm", "clm2", "clmm", "clmm2", "clogit", "coxme", "coxph",
     "coxr", "crch", "crr",
-    "DirichletRegModel",
+    "deltaMethod", "DirichletRegModel",
     "ergm",
     "feglm", "flexsurvreg",
     "gee", "glimML", "glmm", "glmmadmb", "glmmFit", "glmmLasso", "glmmTMB",

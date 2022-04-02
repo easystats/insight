@@ -881,6 +881,24 @@ get_statistic.bracl <- function(x, ...) {
   out
 }
 
+#' @export
+get_statistic.deltaMethod <- function(x, ...) {
+  stat <- standardize_names(x)
+
+  if (is.null(stat$Statistic)) {
+    return(NULL)
+  }
+
+  out <- data.frame(
+    Parameter = rownames(stat),
+    Statistic = stat[["Statistic"]],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
 
 #' @export
 get_statistic.mlogit <- function(x, ...) {

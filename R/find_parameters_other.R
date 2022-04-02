@@ -194,3 +194,16 @@ find_parameters.marginaleffects <- function(x, ...) {
   # Transform to list
   as.list(params)
 }
+
+
+#' @export
+find_parameters.deltaMethod <- function(x, flatten = FALSE, ...) {
+  params <- standardize_names(x)
+  out <- list(conditional = rownames(params))
+
+  if (flatten) {
+    unique(unlist(out))
+  } else {
+    out
+  }
+}

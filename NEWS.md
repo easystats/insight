@@ -14,6 +14,8 @@
 
 * `get_loglikehood()` improved handling of models from package *estimator*.
 
+* Support for `car::deltaMethod()` objects.
+
 ## Bug fixes
 
 * Fixed bug in `get_data()` for model objects whose data needs to be recovered

@@ -281,3 +281,15 @@ get_parameters.marginaleffects <- function(x, ...) {
   params$Estimate <- x$dydx
   params
 }
+
+#' @export
+get_parameters.deltaMethod <- function(x, ...) {
+  params <- standardize_names(x)
+
+  data.frame(
+    Parameter = rownames(params),
+    Estimate = params$Coefficient,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+}

@@ -1257,3 +1257,8 @@ model_info.marginaleffects <- function(x, ...) {
 model_info.earth <- function(x, ...) {
   stop("Models of class 'earth' are not yet supported.", call. = FALSE)
 }
+
+#' @export
+model_info.deltaMethod <- function(x, ...) {
+  NULL
+}

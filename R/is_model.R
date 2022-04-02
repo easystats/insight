@@ -74,7 +74,7 @@ is_regression_model <- function(x) {
     "cpglm", "cpglmm", "crch", "crq", "crqs", "crr", "dglm",
 
     # d --------------------
-    "dep.effect", "DirichletRegModel", "drc",
+    "dep.effect", "deltaMethod", "DirichletRegModel", "drc",
 
     # e --------------------
     "eglm", "elm", "emmGrid", "emm_list", "epi.2by2", "ergm",
