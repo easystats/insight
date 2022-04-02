@@ -324,7 +324,7 @@ clean_parameters.brmsfit <- function(x, ...) {
   }
 
   out <- do.call(rbind, l)
-  out <- .remove_empty_columns_from_pars(.clean_brms_params(out, is_mv))
+  out <- .remove_empty_columns_from_pars(.clean_brms_params(out, is_mv, ...))
   .fix_random_effect_smooth(x, out)
 }
 
@@ -481,7 +481,8 @@ clean_parameters.mlm <- function(x, ...) {
 
 
 
-.clean_brms_params <- function(out, is_mv) {
+.clean_brms_params <- function(out, is_mv, ...) {
+  dots <- list(...)
   out$Cleaned_Parameter <- out$Parameter
 
   # for multivariate response models, remove responses from parameter names
@@ -542,7 +543,27 @@ clean_parameters.mlm <- function(x, ...) {
   rand_eff <- grepl("^r_(.*)\\[(.*)\\]", out$Cleaned_Parameter)
   if (any(rand_eff)) {
     r_pars <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\1.\\2", out$Cleaned_Parameter[rand_eff])
-    r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
+
+    # for backwards compatibility, we keep the old behaviour. But generally,
+    # when we have the argument "version = 2", Stan models have the same
+    # labelling as frequentist models
+    if (!identical(dots$version, 2)) {
+      r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
+      r_levels <- ""
+    } else {
+      out$Level <- ""
+      r_levels <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\2", out$Cleaned_Parameter[rand_eff])
+      r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\1", out$Cleaned_Parameter[rand_eff])
+      # we want to have same behaviour as for frequentist models,
+      # including levels of grouop factors
+      r_levels <- gsub("__zi", "", r_levels)
+      out$Level[rand_eff] <- r_levels
+      # fix labelling of SD and correlation component
+      sd_cor <- grepl("SD/Cor:", out$Group, fixed = TRUE)
+      if (any(sd_cor)) {
+        out$Group[sd_cor] <- gsub("SD/Cor: (.*)", "\\1", out$Group[sd_cor])
+      }
+    }
     r_pars <- gsub("__zi", "", r_pars)
     r_grps <- gsub("__zi", "", r_grps)
 
