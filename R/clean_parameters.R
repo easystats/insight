@@ -549,7 +549,6 @@ clean_parameters.mlm <- function(x, ...) {
     # labelling as frequentist models
     if (!identical(dots$version, 2)) {
       r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
-      r_levels <- ""
     } else {
       out$Level <- ""
       r_levels <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\2", out$Cleaned_Parameter[rand_eff])
@@ -617,8 +616,9 @@ clean_parameters.mlm <- function(x, ...) {
 
 
 
-.clean_stanreg_params <- function(out) {
+.clean_stanreg_params <- function(out, ...) {
   out$Cleaned_Parameter <- out$Parameter
+  dots <- list(...)
 
   # extract group-names from random effects and clean random effects
 
@@ -656,11 +656,24 @@ clean_parameters.mlm <- function(x, ...) {
   rand_effects <- grepl("^b\\[", out$Cleaned_Parameter)
 
   if (any(rand_effects)) {
-    re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
-    r_grps <- gsub("b\\[(.*) (.*)\\]", "\\1", out$Cleaned_Parameter[rand_effects])
     r_pars <- gsub("b\\[(.*) (.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
+    if (!identical(dots$version, 2)) {
+      re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
+      r_grps <- gsub("b\\[(.*) (.*)\\]", "\\1", out$Cleaned_Parameter[rand_effects])
+      out$Group[rand_effects] <- sprintf("%s: %s", r_grps, re_grp_level)
+    } else {
+      out$Level <- ""
+      r_levels <- gsub("b\\[(.*) (.*):(.*)\\]", "\\3", out$Cleaned_Parameter[rand_effects])
+      r_grps <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
+      out$Group[rand_effects] <- r_grps
+      out$Level[rand_effects] <- r_levels
+      # fix labelling of SD and correlation component
+      sd_cor <- grepl("SD/Cor:", out$Group, fixed = TRUE)
+      if (any(sd_cor)) {
+        out$Group[sd_cor] <- gsub("SD/Cor: (.*)", "\\1", out$Group[sd_cor])
+      }
+    }
 
-    out$Group[rand_effects] <- sprintf("%s: %s", r_grps, re_grp_level)
     out$Cleaned_Parameter[rand_effects] <- r_pars
   }
 
