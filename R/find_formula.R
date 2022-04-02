@@ -308,6 +308,12 @@ find_formula.systemfit <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+find_formula.marginaleffects <- function(x, verbose = TRUE, ...) {
+  find_formula(attributes(x)$model, verbose = verbose, ...)
+}
+
+
+#' @export
 find_formula.selection <- function(x, verbose = TRUE, ...) {
   model_call <- parse(text = deparse(get_call(x)))[[1]]
   f <- list(conditional = list(
