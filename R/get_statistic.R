@@ -886,12 +886,14 @@ get_statistic.deltaMethod <- function(x, ...) {
   stat <- standardize_names(x)
 
   if (is.null(stat$Statistic)) {
-    return(NULL)
+    s <- stat$Coefficient / stat$SE
+  } else {
+    s <- stat[["Statistic"]]
   }
 
   out <- data.frame(
     Parameter = rownames(stat),
-    Statistic = stat[["Statistic"]],
+    Statistic = s,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
