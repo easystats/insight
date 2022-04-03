@@ -72,7 +72,7 @@ get_varcov.default <- function(x,
 
   .check_get_varcov_dots(x, ...)
   # process vcov-argument
-  vcov <- .check_vcov_args(x, vcov, ...)
+  vcov <- .check_vcov_args(x, vcov = vcov, verbose = verbose, ...)
 
   if (is.null(vcov)) {
     vc <- suppressWarnings(stats::vcov(x))
@@ -337,7 +337,7 @@ get_varcov.hurdle <- function(x,
                               ...) {
   .check_get_varcov_dots(x, ...)
   # process vcov-argument
-  vcov <- .check_vcov_args(x, vcov, ...)
+  vcov <- .check_vcov_args(x, vcov = vcov, verbose = verbose, ...)
 
   component <- match.arg(component)
 
@@ -997,7 +997,7 @@ get_varcov.LORgee <- get_varcov.gee
 }
 
 
-.check_vcov_args <- function(x, vcov, ...) {
+.check_vcov_args <- function(x, vcov, verbose = TRUE, ...) {
   dots <- list(...)
 
   # backward compatibility for `get_predicted_se()`
@@ -1010,8 +1010,10 @@ get_varcov.LORgee <- get_varcov.gee
     if (is.null(vcov)) {
       vcov <- "HC3"
     }
-    warning("The `robust` argument is deprecated. Please use `vcov` instead.",
-            call. = FALSE)
+    if (isTRUE(verbose)) {
+      warning("The `robust` argument is deprecated. Please use `vcov` instead.",
+              call. = FALSE)
+    }
   }
 
   vcov
