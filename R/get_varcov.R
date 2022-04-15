@@ -588,6 +588,18 @@ get_varcov.robmixglm <- function(x, ...) {
 
 
 #' @export
+get_varcov.bife <- function(x, ...) {
+  .check_get_varcov_dots(x, ...)
+  params <- find_parameters(x, flatten = TRUE)
+  np <- length(params)
+  vc <- vcov(x)[1:np, 1:np, drop = FALSE]
+
+  dimnames(vc) <- list(params, params)
+  .process_vcov(vc)
+}
+
+
+#' @export
 get_varcov.Rchoice <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
   vc <- stats::vcov(x)

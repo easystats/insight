@@ -22,6 +22,9 @@
   from the environment, and where the data name was a reserved word (e.g., named
   like an R function).
 
+* The matrix returned by `get_varcov()` for models of class *bife* now returns 
+  row and column names.
+
 # insight 0.17.0
 
 ## Breaking changes
