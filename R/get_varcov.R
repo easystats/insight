@@ -600,6 +600,10 @@ get_varcov.bife <- function(x, ...) {
 
 
 #' @export
+get_varcov.geeglm <- get_varcov.bife
+
+
+#' @export
 get_varcov.Rchoice <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
   vc <- stats::vcov(x)
@@ -845,14 +849,6 @@ get_varcov.vglm <- function(x, ...) {
 
 #' @export
 get_varcov.vgam <- get_varcov.vglm
-
-
-#' @export
-get_varcov.geeglm <- function(x, ...) {
-  .check_get_varcov_dots(x, ...)
-  vc <- summary(x)$cov.unscaled
-  .process_vcov(vc)
-}
 
 
 #' @export
