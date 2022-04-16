@@ -127,6 +127,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "conf.high"]    <- "CI_high"
   cn[cn == "conf.level"]   <- "CI"
   cn[cn == "n.obs"]        <- "n_Obs"
+  cn[cn == "n"]            <- "n_Obs"
   # anova
   cn[cn == "sumsq"]        <- "Sum_Squares"
   cn[cn == "meansq"]       <- "Mean_Square"
@@ -161,7 +162,8 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "df_error"]       <- "df.error"
   cn[cn == "df_residual"]    <- "df.residual"
   cn[cn == "n_Obs"]          <- "n.obs"
-
+  cn[cn == "n"]              <- "n.obs"
+  cn[cn == "n_Missing"]      <- "missing.obs"
   # anova
   cn[cn == "Sum_Squares"]    <- "sumsq"
   cn[cn == "Mean_Square"]    <- "meansq"
