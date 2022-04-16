@@ -111,7 +111,10 @@ for more model objects that probably don't provide a \code{vcov()}-method.
 }
 \note{
 \code{get_varcov()} tries to return the nearest positive definite matrix
-in case of a negative variance-covariance matrix.
+in case of negative eigenvalues of the variance-covariance matrix. This
+ensures that it is still possible, for instance, to calculate standard
+errors of model parameters. A message is shown when the matrix is negative
+definite and a corrected matrix is returned.
 }
 \examples{
 data(mtcars)

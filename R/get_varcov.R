@@ -26,7 +26,10 @@
 #' @param ... Currently not used.
 #'
 #' @note `get_varcov()` tries to return the nearest positive definite matrix
-#'   in case of a negative variance-covariance matrix.
+#'   in case of negative eigenvalues of the variance-covariance matrix. This
+#'   ensures that it is still possible, for instance, to calculate standard
+#'   errors of model parameters. A message is shown when the matrix is negative
+#'   definite and a corrected matrix is returned.
 #'
 #' @return The variance-covariance matrix, as `matrix`-object.
 #'
@@ -83,7 +86,7 @@ get_varcov.default <- function(x,
                                verbose = FALSE,
                                ...)
   }
-  .process_vcov(vc, verbose)
+  .process_vcov(vc, verbose, ...)
 }
 
 #' @export
@@ -91,6 +94,10 @@ get_varcov.maxLik <- get_varcov.default
 
 #' @export
 get_varcov.HLfit <- get_varcov.default
+
+#' @export
+get_varcov.geeglm <- get_varcov.default
+
 
 
 # mlm ---------------------------------------------
@@ -126,7 +133,7 @@ get_varcov.betareg <- function(x,
     "precision" = stats::vcov(object = x, model = "precision"),
     stats::vcov(object = x)
   )
-  .process_vcov(vc, verbose)
+  .process_vcov(vc, verbose, ...)
 }
 
 
@@ -152,7 +159,7 @@ get_varcov.DirichletRegModel <- function(x,
       vc <- stats::vcov(x)
     }
   }
-  .process_vcov(vc, verbose)
+  .process_vcov(vc, verbose, ...)
 }
 
 
@@ -600,10 +607,6 @@ get_varcov.bife <- function(x, ...) {
 
 
 #' @export
-get_varcov.geeglm <- get_varcov.bife
-
-
-#' @export
 get_varcov.Rchoice <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
   vc <- stats::vcov(x)
@@ -933,6 +936,8 @@ get_varcov.LORgee <- get_varcov.gee
 
 .fix_negative_matrix <- function(m) {
   if (requireNamespace("Matrix", quietly = TRUE)) {
+    message(format_message("The variance-covariance matrix is not positive definite. Returning the nearest positive definite matrix now.",
+                           "This ensures that eigenvalues are all positive real numbers, and thereby, for instance, it is possible to calculate standard errors for all relevant parameters."))
     as.matrix(Matrix::nearPD(m)$mat)
   } else {
     m
