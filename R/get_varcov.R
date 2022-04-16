@@ -592,7 +592,7 @@ get_varcov.bife <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
   params <- find_parameters(x, flatten = TRUE)
   np <- length(params)
-  vc <- vcov(x)[1:np, 1:np, drop = FALSE]
+  vc <- stats::vcov(x)[1:np, 1:np, drop = FALSE]
 
   dimnames(vc) <- list(params, params)
   .process_vcov(vc)
