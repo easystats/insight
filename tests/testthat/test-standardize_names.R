@@ -71,3 +71,15 @@ test_that("standardize_names works as expected with performance", {
     c("aic", "bic", "r.squared", "adj.r.squared", "rmse", "sigma")
   )
 })
+
+test_that("standardize_names works as expected with datawizard", {
+  set.seed(123)
+
+  x <- datawizard::describe_distribution(rnorm(50))
+
+  expect_equal(
+    names(standardize_names(x, style = "broom")),
+    c("estimate", "std.dev", "iqr", "min", "max", "skewness", "kurtosis",
+      "n.obs", "missing.obs")
+  )
+})
