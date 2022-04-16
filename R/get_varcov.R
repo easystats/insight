@@ -170,7 +170,7 @@ get_varcov.clm2 <- function(x,
 
   vc <- stats::vcov(x)
 
-  if (.is_negativ_matrix(vc)) {
+  if (.is_negativ_matrix(vc, ...)) {
     vc <- .fix_negative_matrix(vc)
   }
 
@@ -236,7 +236,7 @@ get_varcov.selection <- function(x,
   }
 
   # we can't check for rank-deficiency here...
-  if (.is_negativ_matrix(vc)) {
+  if (.is_negativ_matrix(vc, ...)) {
     vc <- .fix_negative_matrix(vc)
   }
   text_remove_backticks(as.matrix(vc))
@@ -624,7 +624,7 @@ get_varcov.rq <- function(x, ...) {
   rownames(vc) <- preds
   colnames(vc) <- preds
 
-  if (.is_negativ_matrix(vc)) {
+  if (.is_negativ_matrix(vc, ...)) {
     vc <- .fix_negative_matrix(vc)
   }
 
@@ -656,7 +656,7 @@ get_varcov.crq <- function(x, ...) {
       rownames(.x) <- preds
       colnames(.x) <- preds
 
-      if (.is_negativ_matrix(.x)) {
+      if (.is_negativ_matrix(.x, ...)) {
         .x <- .fix_negative_matrix(.x)
       }
       .x
@@ -664,7 +664,7 @@ get_varcov.crq <- function(x, ...) {
     names(vc) <- sprintf("tau (%g)", unlist(lapply(sc, function(i) i$tau)))
   } else {
     vc <- as.matrix(sc$cov)
-    if (.is_negativ_matrix(vc)) {
+    if (.is_negativ_matrix(vc, ...)) {
       vc <- .fix_negative_matrix(vc)
     }
     vc <- text_remove_backticks(as.matrix(vc))
@@ -770,7 +770,7 @@ get_varcov.lqmm <- function(x, ...) {
   if (length(dim(sc$Cov)) == 3) {
     vc <- lapply(1:length(x$tau), function(i) {
       .x <- sc$Cov[, , i][1:np, 1:np]
-      if (.is_negativ_matrix(.x)) {
+      if (.is_negativ_matrix(.x, ...)) {
         .x <- .fix_negative_matrix(.x)
       }
       .x
@@ -778,7 +778,7 @@ get_varcov.lqmm <- function(x, ...) {
     names(vc) <- sprintf("tau (%g)", x$tau)
   } else {
     vc <- as.matrix(sc$Cov)[1:np, 1:np]
-    if (.is_negativ_matrix(vc)) {
+    if (.is_negativ_matrix(vc, ...)) {
       vc <- .fix_negative_matrix(vc)
     }
     vc <- text_remove_backticks(as.matrix(vc))
@@ -897,8 +897,8 @@ get_varcov.LORgee <- get_varcov.gee
 # helper-functions -----------------------------------------------------
 
 
-.process_vcov <- function(vc, verbose = TRUE) {
-  if (.is_negativ_matrix(vc)) {
+.process_vcov <- function(vc, verbose = TRUE, ...) {
+  if (.is_negativ_matrix(vc, ...)) {
     vc <- .fix_negative_matrix(vc)
   }
   # fix possible missings due to rank deficient model matrix
@@ -907,13 +907,17 @@ get_varcov.LORgee <- get_varcov.gee
 }
 
 
-.is_negativ_matrix <- function(x) {
+.is_negativ_matrix <- function(x, pd_tolerance = 1e-08, ...) {
+  # allow "NULL" to skip this test
+  if (is.null(pd_tolerance)) {
+    return(FALSE)
+  }
   if (is.matrix(x) && (nrow(x) == ncol(x))) {
     rv <- tryCatch(
       {
         eigenvalues <- eigen(x, only.values = TRUE)$values
-        eigenvalues[abs(eigenvalues) < 1e-07] <- 0
-        any(eigenvalues <= 0)
+        eigenvalues[abs(eigenvalues) < pd_tolerance] <- 0
+        any(eigenvalues < 0)
       },
       error = function(e) {
         FALSE
