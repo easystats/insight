@@ -22,5 +22,5 @@ test_that("get_predicted", {
 
 test_that("get_varcov", {
   out <- get_varcov(mod)
-  expect_equal(colnames(mod), names(coef(mod)))
+  expect_equal(colnames(out), names(coef(mod)))
 })
