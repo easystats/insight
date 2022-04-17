@@ -1280,6 +1280,25 @@ get_statistic.HLfit <- function(x, ...) {
 
 
 #' @export
+get_statistic.marginaleffects.summary <- function(x, ...) {
+  out <- data.frame(
+    Parameter = x$term,
+    Statistic = x$statistic,
+    stringsAsFactors = FALSE
+  )
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
+get_statistic.marginaleffects <- function(x, ...) {
+  get_statistic(summary(x))
+}
+
+
+#' @export
 get_statistic.margins <- function(x, ...) {
   out <- data.frame(
     Parameter = get_parameters(x)$Parameter,

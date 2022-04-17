@@ -163,7 +163,8 @@ is_regression_model <- function(x) {
 
   if (isTRUE(regression_only)) {
     out <- setdiff(out, c(
-      "emmGrid", "emm_list", "htest", "pairwise.htest", "summary.lm"
+      "emmGrid", "emm_list", "htest", "pairwise.htest", "summary.lm",
+      "marginaleffects", "marginaleffects.summary"
     ))
   }
 

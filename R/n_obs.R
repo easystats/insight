@@ -489,6 +489,12 @@ n_obs.riskRegression <- function(x, ...) {
 
 
 #' @export
+n_obs.marginaleffects <- function(x, ...) {
+  n_obs(attributes(x)$model)
+}
+
+
+#' @export
 n_obs.MANOVA <- function(x, ...) {
   nrow(x$input$data)
 }

@@ -1,5 +1,10 @@
 # insight 0.17.1
 
+## New supported model classes
+
+* `deltaMethod` (*car*), `marginaleffects`, `marginaleffects.summary`
+  (*marginaleffects*)
+
 ## General
 
 * `get_predicted()` now supports models of class `iv_robust` and `ivreg`.
@@ -13,8 +18,6 @@
   robust standard errors).
 
 * `get_loglikehood()` improved handling of models from package *estimator*.
-
-* Support for `car::deltaMethod()` objects.
 
 ## Bug fixes
 

@@ -32,3 +32,8 @@ is_mixed_model.default <- function(x) {
 is_mixed_model.afex_aov <- function(x) {
   as.logical(length(attr(x, "within")))
 }
+
+#' @export
+is_mixed_model.marginaleffects <- function(x) {
+  is_mixed_model(attributes(x)$model)
+}

@@ -84,11 +84,12 @@ supported_models <- function() {
     "lqm", "lqmm", "lrm",
 
     # m ----------------------------
-    "manova", "MANOVA", "margins", "maxLik", "mcmc", "MCMCglmm", "mcp12", "mcp1",
-    "mcp2", "med1way", "mediate", "metaplus", "merMod", "merModList", "mipo",
-    "mira", "mixed", "mixor", "MixMod", "mhurdle", "mjoint", "mle", "mle2",
-    "mlm", "mclogit", "mcmc.list", "meta_bma", "meta_fixed", "meta_random",
-    "mlogit", "mmlogit", "model_fit", "multinom", "mvord",
+    "manova", "MANOVA", "margins", "marginaleffects", "marginaleffects.summary",
+    "maxLik", "mcmc", "MCMCglmm", "mcp12", "mcp1", "mcp2", "med1way", "mediate",
+    "metaplus", "merMod", "merModList", "mipo", "mira", "mixed", "mixor", "MixMod",
+    "mhurdle", "mjoint", "mle", "mle2", "mlm", "mclogit", "mcmc.list", "meta_bma",
+    "meta_fixed", "meta_random", "mlogit", "mmlogit", "model_fit", "multinom",
+    "mvord",
 
     # n ----------------------------
     "negbinmfx", "negbinirr",

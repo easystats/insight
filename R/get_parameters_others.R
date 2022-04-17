@@ -302,10 +302,20 @@ get_parameters.marginaleffects <- function(x, summary = FALSE, merge_parameters 
       colnames(out)[1] <- "Parameter"
     }
   } else {
-    out <- x[!names(x) %in% c("rowid", "type", "std.error", "contrast", "term", "dydx")]
-    out$Estimate <- x$dydx
+    out <- as.data.frame(x[!names(x) %in% c("rowid", "type", "std.error", "contrast", "term", "dydx", "statistic", "p.value", "conf.low", "conf.high")])
+    if ("dydx" %in% colnames(x)) {
+      out$Estimate <- x$dydx
+    } else {
+      out$Estimate <- x$estimate
+    }
   }
   text_remove_backticks(out)
+}
+
+
+#' @export
+get_parameters.marginaleffects.summary <- function(x, ...) {
+  get_parameters.marginaleffects(x, summary = FALSE, ...)
 }
 
 
