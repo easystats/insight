@@ -17,9 +17,9 @@ if (requiet("marginaleffects") && requiet("insight") && requiet("testthat")) {
     expect_equal(max(p1$Estimate - p2$Estimate), 0, tolerance = 0.001)
 
     # Find parameters
-    expect_equal(insight::find_parameters(x)$Species, unique(iris$Species))
+    expect_equal(insight::find_parameters(x)$marginaleffects, "Species")
 
     # Find statistic
-    expect_equal(insight::find_statistic(x), "t-statistic")
+    expect_equal(insight::find_statistic(x), "z-statistic")
   })
 }
