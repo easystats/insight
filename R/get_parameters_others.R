@@ -276,11 +276,38 @@ get_parameters.systemfit <- function(x, ...) {
 }
 
 #' @export
-get_parameters.marginaleffects <- function(x, ...) {
-  params <- x[!names(x) %in% c("rowid", "type", "std.error", "contrast", "term", "dydx")]
-  params$Estimate <- x$dydx
-  params
+get_parameters.marginaleffects <- function(x, summary = FALSE, merge_parameters = FALSE, ...) {
+  # check if we have a Bayesian model here
+  if (isTRUE(summary)) {
+    s <- summary(x)
+    estimate_pos <- which(colnames(s) == "estimate")
+    params <- s[, seq_len(estimate_pos - 1), drop = FALSE]
+    if (isTRUE(merge_parameters) && ncol(params) > 1) {
+      r <- apply(params, 1, function(i) paste0(colnames(params), " [", i, "]"))
+      out <- data.frame(
+        Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),
+        Estimate = s[[estimate_pos]],
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    } else {
+      out <- data.frame(
+        params,
+        Estimate = s[[estimate_pos]],
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    }
+    if (isTRUE(merge_parameters)) {
+      colnames(out)[1] <- "Parameter"
+    }
+  } else {
+    out <- x[!names(x) %in% c("rowid", "type", "std.error", "contrast", "term", "dydx")]
+    out$Estimate <- x$dydx
+  }
+  text_remove_backticks(out)
 }
+
 
 #' @export
 get_parameters.deltaMethod <- function(x, ...) {
