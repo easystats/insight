@@ -482,10 +482,12 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
       # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
       mu_eta <- tryCatch(abs(get_family(x)$mu.eta(predictions)), error = function(e) NULL)
       if (is.null(mu_eta)) {
+        ci_data[se_col] <- NULL
         if (isTRUE(verbose)) {
           warning(format_message(
-            "Could not apply Delta method to transform standard errors.",
-            "These are returned on the link-scale."
+            'Could not apply Delta method to transform standard errors.',
+            'You may be able to obtain standard errors by using the ',
+            '`predict="link"` argument value.'
           ), call. = FALSE)
         }
       } else {
