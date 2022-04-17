@@ -28,6 +28,12 @@ if (!osx && requiet("testthat") &&
     expect_true(model_info(m1)$is_linear)
   })
 
+  m_tmp <- m1
+  m_tmp$vcov_arg <- "Normal standard errors"
+  test_that("get_varcov", {
+    expect_equal(vcov(m_tmp, scale = TRUE), get_varcov(m1), tolerance = 1e-3)
+  })
+
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(
       conditional = c("marry", "enrol", "yeargr"),

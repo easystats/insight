@@ -1,12 +1,9 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("censReg") &&
-  requiet("AER")) {
+if (requiet("testthat") && requiet("insight") && requiet("censReg") && requiet("AER")) {
   data("Affairs", package = "AER")
-  m1 <-
-    censReg(affairs ~ age + yearsmarried + religiousness + occupation + rating,
-      data = Affairs
-    )
+  m1 <- censReg(
+    affairs ~ age + yearsmarried + religiousness + occupation + rating,
+    data = Affairs
+  )
 
   test_that("model_info", {
     expect_false(model_info(m1)$is_linear)
@@ -42,6 +39,10 @@ if (requiet("testthat") &&
 
   test_that("get_random", {
     expect_warning(get_random(m1))
+  })
+
+  test_that("get_varcov", {
+    expect_equal(vcov(m1), get_varcov(m1), tolerance = 1e-3)
   })
 
   test_that("find_response", {

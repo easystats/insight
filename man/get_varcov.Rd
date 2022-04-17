@@ -28,7 +28,7 @@ get_varcov(x, ...)
 
 \method{get_varcov}{clm2}(x, component = c("all", "conditional", "scale"), ...)
 
-\method{get_varcov}{truncreg}(x, component = c("conditional", "all"), ...)
+\method{get_varcov}{truncreg}(x, component = c("conditional", "all"), verbose = TRUE, ...)
 
 \method{get_varcov}{hurdle}(
   x,
@@ -42,6 +42,7 @@ get_varcov(x, ...)
 \method{get_varcov}{glmmTMB}(
   x,
   component = c("conditional", "zero_inflated", "zi", "dispersion", "all"),
+  verbose = TRUE,
   ...
 )
 
@@ -53,13 +54,18 @@ get_varcov(x, ...)
   ...
 )
 
-\method{get_varcov}{brmsfit}(x, component = "conditional", ...)
+\method{get_varcov}{brmsfit}(x, component = "conditional", verbose = TRUE, ...)
 
-\method{get_varcov}{betamfx}(x, component = c("conditional", "precision", "all"), ...)
+\method{get_varcov}{betamfx}(
+  x,
+  component = c("conditional", "precision", "all"),
+  verbose = TRUE,
+  ...
+)
 
-\method{get_varcov}{aov}(x, complete = FALSE, ...)
+\method{get_varcov}{aov}(x, complete = FALSE, verbose = TRUE, ...)
 
-\method{get_varcov}{mixor}(x, effects = c("all", "fixed", "random"), ...)
+\method{get_varcov}{mixor}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}

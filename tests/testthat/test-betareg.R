@@ -29,6 +29,11 @@ if (requiet("testthat") &&
     expect_equal(get_response(m2), FoodExpenditure[, c("food", "income")])
   })
 
+  test_that("get_varcov", {
+    expect_equal(get_varcov(m1, component = "all"), vcov(m1), tolerance = 1e-3)
+    expect_equal(get_varcov(m1), vcov(m1)[-12, -12], tolerance = 1e-3)
+  })
+
   test_that("link_inverse", {
     expect_identical(link_inverse(m1)(.2), plogis(.2))
   })

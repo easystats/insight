@@ -30,6 +30,11 @@ if (requiet("testthat") && requiet("insight") && requiet("aod")) {
     expect_equal(get_random(m1), dja[, "village", drop = FALSE], ignore_attr = TRUE)
   })
 
+  test_that("get_varcov", {
+    expect_message(get_varcov(m1))
+    expect_equal(get_varcov(m1, pd_tolerance = NULL), vcov(m1), tolerance = 1e-3)
+  })
+
   test_that("find_response", {
     expect_identical(find_response(m1), "cbind(y, n - y)")
     expect_identical(find_response(m1, combine = FALSE), c("y", "n"))
