@@ -106,4 +106,29 @@ if (requiet("testthat") && requiet("insight")) {
 
     expect_equal(get_response(m), iris[["Sepal Width"]])
   })
+
+
+  test_that("text_remove_backticks, character", {
+    x <- "`test`"
+    expect_equal(text_remove_backticks(x), "test")
+    x <- "test"
+    expect_equal(text_remove_backticks(x), "test")
+    x <- NULL
+    expect_null(text_remove_backticks(x))
+  })
+
+
+  test_that("text_remove_backticks, matrix", {
+    x <- matrix(1:9, nrow = 3)
+    out <- text_remove_backticks(x)
+    expect_equal(dimnames(x), dimnames(out))
+
+    colnames(x) <- rownames(x) <- 1:3
+    out <- text_remove_backticks(x)
+    expect_equal(dimnames(x), dimnames(out))
+
+    colnames(x) <- rownames(x) <- paste0("`", 1:3, "`")
+    out <- text_remove_backticks(x)
+    expect_equal(list(as.character(1:3), as.character(1:3)), dimnames(out))
+  })
 }

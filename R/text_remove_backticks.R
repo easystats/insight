@@ -87,7 +87,10 @@ text_remove_backticks.list <- function(x, verbose = FALSE, ...) {
 
 #' @export
 text_remove_backticks.character <- function(x, ...) {
-  gsub("`", "", x, fixed = TRUE)
+  if (!is.null(x)) {
+    x <- gsub("`", "", x, fixed = TRUE)
+  }
+  x
 }
 
 #' @export
@@ -97,7 +100,7 @@ text_remove_backticks.factor <- function(x, ...) {
 
 #' @export
 text_remove_backticks.matrix <- function(x, ...) {
-  colnames(x) <- gsub("`", "", colnames(x), fixed = TRUE)
-  rownames(x) <- gsub("`", "", colnames(x), fixed = TRUE)
+  colnames(x) <- text_remove_backticks(colnames(x))
+  rownames(x) <- text_remove_backticks(rownames(x))
   x
 }

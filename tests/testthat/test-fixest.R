@@ -50,6 +50,11 @@ test_that("find_random", {
   expect_null(find_random(m3))
 })
 
+test_that("get_varcov", {
+  expect_equal(vcov(m1), get_varcov(m1), tolerance = 1e-3)
+  expect_equal(vcov(m4), get_varcov(m4), tolerance = 1e-3)
+})
+
 test_that("get_random", {
   expect_warning(expect_null(get_random(m1)))
 })
