@@ -24,7 +24,7 @@
 #' )
 #' message(msg)
 #' @export
-format_message <- function(string, ..., line_length = options()$width) {
+format_message <- function(string, ..., line_length = options()$width * 0.9) {
   if (is.null(line_length) || is.infinite(line_length) || line_length < 1) {
     line_length <- 70
   }
