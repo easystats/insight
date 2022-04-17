@@ -77,6 +77,7 @@ get_modelmatrix.lm_robust <- function(x, ...) {
 #' @export
 get_modelmatrix.ivreg <- get_modelmatrix.iv_robust
 
+
 #' @export
 get_modelmatrix.lme <- function(x, ...) {
   # we check the dots for a "data" argument. To make model.matrix work
@@ -155,6 +156,26 @@ get_modelmatrix.rlm <- function(x, ...) {
   )
   return(mm)
 }
+
+
+#' @export
+get_modelmatrix.betareg <- function(x, ...) {
+  dots <- list(...)
+  if (is.null(dots$data)) {
+      mm <- stats::model.matrix(x, ...)
+  } else {
+      # adapted from betareg::predict.betareg()
+      # suppress contrasts dropped from factor
+      mf <- suppressWarnings(stats::model.frame(
+          stats::delete.response(x$terms[["mean"]]),
+          dots$data,
+          na.action = stats::na.pass,
+          xlev = x$levels[["mean"]]))
+      mm <- stats::model.matrix(stats::delete.response(x$terms$mean), mf)
+  }
+  return(mm)
+}
+
 
 #' @export
 get_modelmatrix.cpglmm <- function(x, ...) {
