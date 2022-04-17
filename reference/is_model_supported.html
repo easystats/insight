@@ -14,7 +14,7 @@ of currently supported model classes."><meta property="og:image" content="/refer
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,76 +107,111 @@ package's functions. A list of supported models can also be found here:
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># to see all supported models</span></span>
 <span class="r-in"><span class="fu">supported_models</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] "AKP"               "Anova.mlm"         "Arima"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [4] "BBmm"              "BBreg"             "BFBayesFactor"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [7] "BGGM"              "DirichletRegModel" "Gam"              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [10] "Glm"               "HLfit"             "LORgee"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [13] "MANOVA"            "MCMCglmm"          "MixMod"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [16] "PMCMR"             "RM"                "Rchoice"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [19] "Sarlm"             "SemiParBIV"        "aareg"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [22] "afex_aov"          "aov"               "aovlist"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [25] "averaging"         "bamlss"            "bamlss.frame"     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [28] "bayesQR"           "bayesx"            "bcplm"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [31] "betamfx"           "betaor"            "betareg"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [34] "bfsl"              "bife"              "bifeAPEs"         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [37] "bigglm"            "biglm"             "blavaan"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [40] "blrm"              "bracl"             "brglm"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [43] "brmsfit"           "brmultinom"        "btergm"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [46] "censReg"           "cgam"              "cgamm"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [49] "cglm"              "clm"               "clm2"             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [52] "clmm"              "clmm2"             "clogit"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [55] "coeftest"          "complmrob"         "confusionMatrix"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [58] "coxme"             "coxph"             "coxph.penal"      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] "coxr"              "cpglm"             "cpglmm"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [64] "crch"              "crq"               "crqs"             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [67] "crr"               "dep.effect"        "drc"              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [70] "eglm"              "elm"               "epi.2by2"         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [73] "ergm"              "feglm"             "feis"             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [76] "felm"              "fitdistr"          "fixest"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [79] "flexsurvreg"       "gam"               "gamlss"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [82] "gamm"              "gamm4"             "garch"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [85] "gbm"               "gee"               "geeglm"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [88] "glht"              "glimML"            "glm"              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [91] "glmRob"            "glmm"              "glmmPQL"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [94] "glmmTMB"           "glmmadmb"          "glmrob"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [97] "glmx"              "gls"               "gmnl"             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [100] "htest"             "hurdle"            "ivFixed"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [103] "iv_robust"         "ivprobit"          "ivreg"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [106] "lavaan"            "lm"                "lmRob"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [109] "lm_robust"         "lme"               "lmerMod"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [112] "lmerModLmerTest"   "lmodel2"           "lmrob"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [115] "logistf"           "logitmfx"          "logitor"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [118] "lqm"               "lqmm"              "lrm"              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [121] "manova"            "margins"           "maxLik"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [124] "mclogit"           "mcmc"              "mcmc.list"        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [127] "mcp1"              "mcp12"             "mcp2"             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [130] "med1way"           "mediate"           "merMod"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [133] "merModList"        "meta_bma"          "meta_fixed"       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [136] "meta_random"       "metaplus"          "mhurdle"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [139] "mipo"              "mira"              "mixed"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [142] "mixor"             "mjoint"            "mle"              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [145] "mle2"              "mlm"               "mlogit"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [148] "mmlogit"           "model_fit"         "multinom"         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [151] "mvord"             "negbinirr"         "negbinmfx"        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [154] "ols"               "onesampb"          "orm"              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [157] "pgmm"              "plm"               "poissonirr"       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [160] "poissonmfx"        "polr"              "probitmfx"        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [163] "psm"               "ridgelm"           "riskRegression"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [166] "rjags"             "rlm"               "rlmerMod"         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [169] "rma"               "rma.uni"           "robmixglm"        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [172] "robtab"            "rq"                "rqs"              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [175] "rqss"              "scam"              "selection"        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [178] "sem"               "semLm"             "semLme"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [181] "slm"               "speedglm"          "speedlm"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [184] "stanfit"           "stanmvreg"         "stanreg"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [187] "summary.lm"        "survfit"           "survreg"          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [190] "svy_vglm"          "svychisq"          "svyglm"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [193] "svyolr"            "t1way"             "tobit"            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [196] "trimcibt"          "truncreg"          "vgam"             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [199] "vglm"              "wbgee"             "wblm"             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [202] "wbm"               "wmcpAKP"           "yuen"             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [205] "yuend"             "zcpglm"            "zeroinfl"         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [208] "zerotrunc"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] "AKP"                     "Anova.mlm"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [3] "Arima"                   "BBmm"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [5] "BBreg"                   "BFBayesFactor"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [7] "BGGM"                    "DirichletRegModel"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [9] "Gam"                     "Glm"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [11] "HLfit"                   "LORgee"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [13] "MANOVA"                  "MCMCglmm"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [15] "MixMod"                  "PMCMR"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [17] "RM"                      "Rchoice"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [19] "Sarlm"                   "SemiParBIV"             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [21] "aareg"                   "afex_aov"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [23] "aov"                     "aovlist"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [25] "averaging"               "bamlss"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [27] "bamlss.frame"            "bayesQR"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [29] "bayesx"                  "bcplm"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [31] "betamfx"                 "betaor"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [33] "betareg"                 "bfsl"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [35] "bife"                    "bifeAPEs"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [37] "bigglm"                  "biglm"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [39] "blavaan"                 "blrm"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [41] "bracl"                   "brglm"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [43] "brmsfit"                 "brmultinom"             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [45] "btergm"                  "censReg"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [47] "cgam"                    "cgamm"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [49] "cglm"                    "clm"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [51] "clm2"                    "clmm"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [53] "clmm2"                   "clogit"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [55] "coeftest"                "complmrob"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [57] "confusionMatrix"         "coxme"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [59] "coxph"                   "coxph.penal"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] "coxr"                    "cpglm"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [63] "cpglmm"                  "crch"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [65] "crq"                     "crqs"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [67] "crr"                     "dep.effect"             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [69] "drc"                     "eglm"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [71] "elm"                     "epi.2by2"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [73] "ergm"                    "feglm"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [75] "feis"                    "felm"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [77] "fitdistr"                "fixest"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [79] "flexsurvreg"             "gam"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [81] "gamlss"                  "gamm"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [83] "gamm4"                   "garch"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [85] "gbm"                     "gee"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [87] "geeglm"                  "glht"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [89] "glimML"                  "glm"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [91] "glmRob"                  "glmm"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [93] "glmmPQL"                 "glmmTMB"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [95] "glmmadmb"                "glmrob"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [97] "glmx"                    "gls"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [99] "gmnl"                    "htest"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [101] "hurdle"                  "ivFixed"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [103] "iv_robust"               "ivprobit"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [105] "ivreg"                   "lavaan"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [107] "lm"                      "lmRob"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [109] "lm_robust"               "lme"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [111] "lmerMod"                 "lmerModLmerTest"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [113] "lmodel2"                 "lmrob"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [115] "logistf"                 "logitmfx"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [117] "logitor"                 "lqm"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [119] "lqmm"                    "lrm"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [121] "manova"                  "marginaleffects"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [123] "marginaleffects.summary" "margins"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [125] "maxLik"                  "mclogit"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [127] "mcmc"                    "mcmc.list"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [129] "mcp1"                    "mcp12"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [131] "mcp2"                    "med1way"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [133] "mediate"                 "merMod"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [135] "merModList"              "meta_bma"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [137] "meta_fixed"              "meta_random"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [139] "metaplus"                "mhurdle"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [141] "mipo"                    "mira"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [143] "mixed"                   "mixor"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [145] "mjoint"                  "mle"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [147] "mle2"                    "mlm"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [149] "mlogit"                  "mmlogit"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [151] "model_fit"               "multinom"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [153] "mvord"                   "negbinirr"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [155] "negbinmfx"               "ols"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [157] "onesampb"                "orm"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [159] "pgmm"                    "plm"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [161] "poissonirr"              "poissonmfx"             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [163] "polr"                    "probitmfx"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [165] "psm"                     "ridgelm"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [167] "riskRegression"          "rjags"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [169] "rlm"                     "rlmerMod"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [171] "rma"                     "rma.uni"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [173] "robmixglm"               "robtab"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [175] "rq"                      "rqs"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [177] "rqss"                    "scam"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [179] "selection"               "sem"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [181] "semLm"                   "semLme"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [183] "slm"                     "speedglm"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [185] "speedlm"                 "stanfit"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [187] "stanmvreg"               "stanreg"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [189] "summary.lm"              "survfit"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [191] "survreg"                 "svy_vglm"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [193] "svychisq"                "svyglm"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [195] "svyolr"                  "t1way"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [197] "tobit"                   "trimcibt"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [199] "truncreg"                "vgam"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [201] "vglm"                    "wbgee"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [203] "wblm"                    "wbm"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [205] "wmcpAKP"                 "yuen"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [207] "yuend"                   "zcpglm"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [209] "zeroinfl"                "zerotrunc"              </span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
