@@ -134,4 +134,23 @@ if (requiet("testthat") &&
     expect_identical(find_statistic(m1), "z-statistic")
     expect_identical(find_statistic(m2), "z-statistic")
   })
+
+  test_that("get_modelmatrix", {
+    mm <- get_modelmatrix(m1)
+    expect_true(is.matrix(mm))
+    expect_equal(dim(mm), c(32, 11))
+    mm <- get_modelmatrix(m1, data = head(GasolineYield))
+    expect_true(is.matrix(mm))
+    expect_equal(dim(mm), c(6, 11))
+  })
+
+  test_that("get_predicted", {
+    p <- suppressWarnings(get_predicted(m1))
+    expect_s3_class(p, "get_predicted")
+    expect_equal(length(p), 32)
+    p <- suppressWarnings(get_predicted(m1, data = head(GasolineYield)))
+    expect_s3_class(p, "get_predicted")
+    expect_equal(length(p), 6)
+  })
+
 }
