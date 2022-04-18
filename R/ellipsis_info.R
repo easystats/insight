@@ -239,7 +239,7 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     } else {
       msg <- "Some of the nested models seem to be identical"
     }
-    message(insight::format_message(msg))
+    message(format_message(msg))
   }
 
   # determine which is linear model
