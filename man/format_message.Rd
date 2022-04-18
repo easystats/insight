@@ -4,7 +4,7 @@
 \alias{format_message}
 \title{Format messages and warnings}
 \usage{
-format_message(string, ..., line_length = options()$width * 0.9)
+format_message(string, ..., line_length = 0.9 * options()$width)
 }
 \arguments{
 \item{string}{A string.}
