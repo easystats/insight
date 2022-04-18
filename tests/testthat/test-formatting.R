@@ -19,5 +19,8 @@ if (requiet("testthat") && requiet("insight")) {
     msg <- "R is free software and comes with ABSOLUTELY NO WARRANTY. You are welcome to redistribute it under certain conditions. Type 'license()' or 'licence()' for distribution details."
     expect_equal(format_message(msg, line_length = 80), "R is free software and comes with ABSOLUTELY NO WARRANTY. You are welcome to\n  redistribute it under certain conditions. Type 'license()' or 'licence()' for\n  distribution details.")
     expect_equal(format_message(msg, line_length = 43.35), "R is free software and comes with\n  ABSOLUTELY NO WARRANTY. You are welcome to\n  redistribute it under certain conditions.\n  Type 'license()' or 'licence()' for\n  distribution details.")
+    msg1 <- "R is free software and comes with ABSOLUTELY NO WARRANTY."
+    msg2 <- "You are welcome to redistribute it under certain conditions. Type 'license()' or 'licence()' for distribution details."
+    expect_equal(format_message(msg1, msg2, line_length = 40), "R is free software and comes with\n  ABSOLUTELY NO WARRANTY.\n  You are welcome to redistribute it under\n  certain conditions. Type 'license()' or\n  'licence()' for distribution details.")
   })
 }
