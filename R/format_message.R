@@ -24,7 +24,7 @@
 #' )
 #' message(msg)
 #' @export
-format_message <- function(string, ..., line_length = options()$width * 0.9) {
+format_message <- function(string, ..., line_length = 0.9 * options()$width) {
   if (is.null(line_length) || is.infinite(line_length) || line_length < 1) {
     line_length <- 70
   }
@@ -47,6 +47,7 @@ format_message <- function(string, ..., line_length = options()$width * 0.9) {
 
 
 .wrap_message_line <- function(string, line_length, indention = NULL) {
+  line_length <- round(line_length)
   line_separator <- "\\1\n  "
   lsub <- 0
   pattern <- paste("(.{1,", line_length, "})(\\s|$)", sep = "")
