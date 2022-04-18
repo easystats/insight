@@ -304,6 +304,38 @@ get_df.selection <- function(x, type = "residual", ...) {
 
 
 #' @export
+get_df.lmerMod <- function(x, type = "residual", ...) {
+  dots <- list(...)
+  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "satterthwaite"))
+  if (type == "satterthwaite") {
+    check_if_installed("lmerTest")
+    if (!inherits(dots$data, "data.frame")) {
+      stop("The `data` argument should be a data.frame.")
+    }
+    mm <- get_modelmatrix(x, data = dots$data)
+    out <- sapply(
+      seq_len(nrow(mm)), function(i)
+      suppressMessages(
+        lmerTest::calcSatterth(x, mm[i, , drop = FALSE])$denom
+      )
+    )
+    return(out)
+  } else {
+    get_df.default(x, ...)
+  }
+}
+
+#' @export
+get_df.glmerMod <- get_df.lmerMod
+
+#' @export
+get_df.glmerModTest <- get_df.lmerMod
+
+#' @export
+get_df.lmerModTest <- get_df.lmerMod
+
+
+#' @export
 get_df.logitor <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "model") {

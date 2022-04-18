@@ -150,11 +150,11 @@ get_predicted_ci.default <- function(x,
   if (is.null(ci)) {
     out <- data.frame(SE = se)
   } else if (length(ci) == 1) {
-    out <- ci_function(x, predictions, ci = ci, se = se)
+    out <- ci_function(x, predictions, ci = ci, se = se, data = data, ...)
   } else {
     out <- data.frame(SE = se)
     for (ci_val in ci) {
-      temp <- ci_function(x, predictions, ci = ci_val, se = se)
+      temp <- ci_function(x, predictions, ci = ci_val, se = se, data = data, ...)
       temp$SE <- NULL
       names(temp) <- paste0(names(temp), "_", ci_val)
       out <- cbind(out, temp)
@@ -178,10 +178,13 @@ get_predicted_ci.mlm <- function(x, ...) {
                                     predictions = NULL,
                                     se = NULL,
                                     ci = 0.95,
+                                    data = NULL,
                                     ...) {
 
   # TODO: Prediction interval for binomial: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-i/
   # TODO: Prediction interval for poisson: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-ii/
+
+  dots <- list(...)
 
   # Sanity checks
   if (!is.null(se)) {
@@ -195,7 +198,12 @@ get_predicted_ci.mlm <- function(x, ...) {
     return(data.frame(CI_low = predictions, CI_high = predictions))
   } # Same as predicted
 
-  dof <- get_df(x, type = "residual")
+  # data is required for satterthwaite
+  if (!is.null(dots$dof)) {
+    dof <- get_df(x, type = dots$dof, data = data)
+  } else {
+    dof <- get_df(x)
+  }
 
   # Return NA
   if (is.null(se)) {

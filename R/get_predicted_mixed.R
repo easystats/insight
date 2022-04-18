@@ -161,7 +161,7 @@ get_predicted.glmmTMB <- function(x,
     out <- list(predictions = predictions, ci_data = ci_data)
   } else {
     # 2. step: confidence intervals
-    ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
+    ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci, ...)
 
     # 3. step: back-transform
     out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
