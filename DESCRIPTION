@@ -108,6 +108,7 @@ Suggests:
     lavaan,
     lfe,
     lme4,
+    lmerTest,
     lmtest,
     logistf,
     MASS,
