@@ -435,7 +435,7 @@ if (.runThisTest &&
 
   test_that("satterthwaite dof vs. emmeans", {
     requiet("emmeans")
-    p <- get_predicted(m2, dof = "satterthwaite")
+    p <- get_predicted(m2, ci_method = "satterthwaite")
     p <- data.frame(p)
     em <- ref_grid(
       object = m2,

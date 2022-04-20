@@ -48,10 +48,29 @@
 #'   will fix the value of the smooth to its average, so that the predictions
 #'   are not depending on it. (default), `mean()`, or
 #'   `bayestestR::map_estimate()`.
+#' @param ci The interval level (default `0.95`, i.e., `95%` CI).
+#' @param ci_type Can be `"prediction"` or `"confidence"`. Prediction
+#'   intervals show the range that likely contains the value of a new
+#'   observation (in what range it would fall), whereas confidence intervals
+#'   reflect the uncertainty around the estimated parameters (and gives the
+#'   range of the link; for instance of the regression line in a linear
+#'   regressions). Prediction intervals account for both the uncertainty in the
+#'   model's parameters, plus the random variation of the individual values.
+#'   Thus, prediction intervals are always wider than confidence intervals.
+#'   Moreover, prediction intervals will not necessarily become narrower as the
+#'   sample size increases (as they do not reflect only the quality of the fit).
+#'   This applies mostly for "simple" linear models (like `lm`), as for
+#'   other models (e.g., `glm`), prediction intervals are somewhat useless
+#'   (for instance, for a binomial model for which the dependent variable is a
+#'   vector of 1s and 0s, the prediction interval is... `[0, 1]`).
+#' @param ci_method The method for computing p values and confidence intervals. Possible values depend on model type.
+#'   + `NULL` uses the default method, which varies based on the model type.
+#'   + Most frequentist models: "gaussian" (default).
+#'   + Bayesian models: "quantile" (default), "hdi", "eti".
+#'   + Mixed effects `lme4` models: "gaussian" (default), "satterthwaite".
+#' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary: "sd" or "mad".
 #' @param ... Other argument to be passed, for instance to `get_predicted_ci()`.
-#'   This can be used to request confidence intervals based on robust standard
-#'   errors, e.g. by specifying the `vcov` and `vcov_args` arguments from
-#'   `get_predicted_ci()` directly in the call to `get_predicted()`.
+#' @inheritParams get_varcov
 #' @inheritParams get_df
 #'
 #' @return The fitted values (i.e. predictions for the response). For Bayesian
@@ -163,8 +182,19 @@ get_predicted <- function(x, ...) {
 
 # default methods ---------------------------
 
+#' @rdname get_predicted
 #' @export
-get_predicted.default <- function(x, data = NULL, predict = "expectation", verbose = TRUE, ...) {
+get_predicted.default <- function(x,
+                                  data = NULL,
+                                  predict = "expectation",
+                                  ci = 0.95,
+                                  ci_type = "confidence",
+                                  ci_method = NULL,
+                                  dispersion_method = "sd",
+                                  vcov = NULL,
+                                  vcov_args = NULL,
+                                  verbose = TRUE,
+                                  ...) {
 
   # evaluate arguments
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
@@ -197,6 +227,9 @@ get_predicted.default <- function(x, data = NULL, predict = "expectation", verbo
         predictions,
         data = args$data,
         ci_type = args$ci_type,
+        ci_method = ci_method,
+        vcov = vcov,
+        vcov_args = vcov_args,
         ...
       )
     },
@@ -280,6 +313,7 @@ get_predicted.lm <- function(x,
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
+#' @rdname get_predicted
 #' @export
 get_predicted.glm <- get_predicted.lm
 
@@ -302,6 +336,7 @@ get_predicted.lrm <- get_predicted.default
 # survival: survreg -----------------------------------------------------
 # =======================================================================
 
+#' @rdname get_predicted
 #' @export
 get_predicted.survreg <- get_predicted.lm
 
@@ -311,6 +346,7 @@ get_predicted.survreg <- get_predicted.lm
 # survival: coxph -------------------------------------------------------
 # =======================================================================
 
+#' @rdname get_predicted
 #' @export
 get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterations = NULL, verbose = TRUE, ...) {
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
@@ -361,6 +397,7 @@ get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterati
 # bife ------------------------------------------------------------------
 # =======================================================================
 
+#' @rdname get_predicted
 #' @export
 get_predicted.bife <- function(x,
                                predict = "expectation",
@@ -389,6 +426,7 @@ get_predicted.bife <- function(x,
 # afex ------------------------------------------------------------------
 # =======================================================================
 
+#' @rdname get_predicted
 #' @export
 get_predicted.afex_aov <- function(x, data = NULL, ...) {
   if (is.null(data)) {

@@ -321,7 +321,7 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     )
     return(out)
   } else {
-    get_df.default(x, ...)
+    get_df.default(x, type = type, ...)
   }
 }
 

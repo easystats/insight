@@ -1,6 +1,7 @@
 # pscl: hurdle zeroinfl -------------------------------------------------
 # =======================================================================
 
+#' @rdname get_predicted
 #' @export
 get_predicted.hurdle <- function(x,
                                  data = NULL,
@@ -85,5 +86,6 @@ get_predicted.hurdle <- function(x,
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
+#' @rdname get_predicted
 #' @export
 get_predicted.zeroinfl <- get_predicted.hurdle
