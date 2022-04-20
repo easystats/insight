@@ -118,6 +118,7 @@ get_predicted_ci.default <- function(x,
       ci_type = ci_type,
       vcov = vcov,
       vcov_args = vcov_args,
+      ci_method = ci_method,
       ...
     )
     ci_function <- .get_predicted_se_to_ci

@@ -455,11 +455,8 @@ if (.runThisTest &&
       at = list(Days = sleepstudy$Days),
       lmer.df = "kenward-roger")
     em2 <- confint(em2)
-
-    # emmeans produces a different SE, so we fall back on checking the critical t
-    expect_equal(
-      (p2$CI_high - p2$CI_low) / p2$SE,
-      (em2$upper.CL - em2$lower.CL) / em2$SE)
+    expect_equal(p2$CI_low, em2$lower.CL)
+    expect_equal(p2$CI_high, em2$upper.CL)
   })
 
   test_that("find_statistic", {

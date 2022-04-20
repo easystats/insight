@@ -129,6 +129,7 @@ Suggests:
     panelr,
     parameters,
     parsnip,
+    pbkrtest,
     performance,
     plm,
     poorman,
