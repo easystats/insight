@@ -33,6 +33,7 @@ bayestestR
 bbmle
 behaviour
 bfsl
+bife
 blavaan
 brms
 brmsfit
@@ -56,6 +57,7 @@ emmGrid
 emmeans
 epiR
 ergm
+eti
 estimatr
 et
 fixest
@@ -64,6 +66,7 @@ ggeffects
 github
 glmm
 glmmTMB
+hdi
 heteroskedasticity
 htest
 https
@@ -82,6 +85,7 @@ lmodel
 lmtest
 logloss
 lqmm
+marginaleffects
 md
 merMod
 merTools
@@ -105,6 +109,8 @@ riskRegression
 rms
 rstanarm
 sampleSelection
+satterthwaite
+sd
 sjPlot
 smicd
 spaMM
@@ -125,6 +131,7 @@ variates
 vectorized
 visualisation
 vgam
+wald
 warmup
 warmups
 ’s
