@@ -435,16 +435,31 @@ if (.runThisTest &&
 
   test_that("satterthwaite dof vs. emmeans", {
     requiet("emmeans")
-    p <- get_predicted(m2, ci_method = "satterthwaite")
-    p <- data.frame(p)
-    em <- ref_grid(
+
+    p1 <- get_predicted(m2, ci_method = "satterthwaite")
+    p1 <- data.frame(p1)
+    em1 <- ref_grid(
       object = m2,
       specs = ~ Days,
       at = list(Days = sleepstudy$Days),
       lmer.df = "satterthwaite")
-    em <- confint(em)
-    expect_equal(p$CI_low, em$lower.CL)
-    expect_equal(p$CI_high, em$upper.CL)
+    em1 <- confint(em1)
+    expect_equal(p1$CI_low, em1$lower.CL)
+    expect_equal(p1$CI_high, em1$upper.CL)
+
+    p2 <- get_predicted(m2, ci_method = "kenward-roger")
+    p2 <- data.frame(p2)
+    em2 <- ref_grid(
+      object = m2,
+      specs = ~ Days,
+      at = list(Days = sleepstudy$Days),
+      lmer.df = "kenward-roger")
+    em2 <- confint(em2)
+
+    # emmeans produces a different SE, so we fall back on checking the critical t
+    expect_equal(
+      (p2$CI_high - p2$CI_low) / p2$SE,
+      (em2$upper.CL - em2$lower.CL) / em2$SE)
   })
 
   test_that("find_statistic", {

@@ -59,7 +59,7 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 \item \code{NULL} uses the default method, which varies based on the model type.
 \item Most frequentist models: "gaussian" (default).
 \item Bayesian models: "quantile" (default), "hdi", "eti".
-\item Mixed effects \code{lme4} models: "gaussian" (default), "satterthwaite".
+\item Mixed effects \code{lme4} models: "gaussian" (default), "satterthwaite", "kenward-roger".
 }}
 
 \item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary: "sd" or "mad".}

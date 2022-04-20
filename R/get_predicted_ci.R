@@ -180,7 +180,7 @@ get_predicted_ci.mlm <- function(x, ...) {
   } # Same as predicted
 
   # data is required for satterthwaite
-  if (isTRUE(ci_method == "satterthwaite")) {
+  if (isTRUE(ci_method %in% c("satterthwaite", "kenward-roger"))) {
     dof <- get_df(x, type = ci_method, data = data)
   } else {
     dof <- get_df(x)

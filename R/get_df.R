@@ -306,9 +306,10 @@ get_df.selection <- function(x, type = "residual", ...) {
 #' @export
 get_df.lmerMod <- function(x, type = "residual", ...) {
   dots <- list(...)
-  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "satterthwaite"))
-  if (type == "satterthwaite") {
+  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "satterthwaite", "kenward-roger"))
+  if (type %in% c("satterthwaite", "kenward-roger")) {
     check_if_installed("lmerTest")
+    type <- tools::toTitleCase(type) # lmerTest wants title case
     if (!inherits(dots$data, "data.frame")) {
       stop("The `data` argument should be a data.frame.")
     }
@@ -316,7 +317,7 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     out <- sapply(
       seq_len(nrow(mm)), function(i)
       suppressMessages(
-        lmerTest::calcSatterth(x, mm[i, , drop = FALSE])$denom
+        lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
       )
     )
     return(out)

@@ -67,7 +67,7 @@
 #'   + `NULL` uses the default method, which varies based on the model type.
 #'   + Most frequentist models: "gaussian" (default).
 #'   + Bayesian models: "quantile" (default), "hdi", "eti".
-#'   + Mixed effects `lme4` models: "gaussian" (default), "satterthwaite".
+#'   + Mixed effects `lme4` models: "gaussian" (default), "satterthwaite", "kenward-roger".
 #' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary: "sd" or "mad".
 #' @param ... Other argument to be passed, for instance to `get_predicted_ci()`.
 #' @inheritParams get_varcov
