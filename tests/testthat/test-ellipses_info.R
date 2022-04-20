@@ -60,9 +60,9 @@ if (requiet("testthat") && requiet("insight")) {
   if (requiet("lme4")) {
     data(sleepstudy)
     m1 <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-    m2 <- lmer(Reaction ~ Days + (1 | Subject) + (1 | Days), data = sleepstudy)
+    m2 <- suppressMessages(lmer(Reaction ~ Days + (1 | Subject) + (1 | Days), data = sleepstudy))
 
-    info <- ellipsis_info(m1, m2)
+    info <- ellipsis_info(m1, m2, verbose = FALSE)
     test_that("ellipses_info, random effects", {
       expect_true(attributes(info)$same_fixef)
       expect_false(attributes(info)$same_ranef)
@@ -72,7 +72,7 @@ if (requiet("testthat") && requiet("insight")) {
       expect_false(attributes(info)$re_nested_decreasing)
     })
 
-    info <- ellipsis_info(m2, m1)
+    info <- ellipsis_info(m2, m1, verbose = FALSE)
     test_that("ellipses_info, random effects", {
       expect_true(attributes(info)$re_nested)
       expect_false(attributes(info)$re_nested_increasing)

@@ -3,6 +3,7 @@
 if (.runThisTest) {
   if (requiet("testthat") && requiet("insight") && requiet("gbm")) {
     set.seed(102) # for reproducibility
+    void <- capture.output(
     m1 <- gbm(
       mpg ~ gear + cyl + wt,
       data = mtcars,
@@ -17,6 +18,7 @@ if (.runThisTest) {
       keep.data = TRUE,
       verbose = FALSE,
       n.cores = 1
+    )
     )
 
     test_that("model_info", {
