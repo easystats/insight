@@ -50,6 +50,14 @@ if (.runThisTest &&
     expect_equal(n_parameters(m2, effects = "random"), 3)
   })
 
+  test_that("find_offset", {
+    data(mtcars)
+    model_off <- lmer(log(mpg) ~ disp + (1|cyl), offset = log(wt), data = mtcars)
+    expect_identical(find_offset(model_off), "wt")
+    model_off <- lmer(log(mpg) ~ disp + (1|cyl) + offset(log(wt)), data = mtcars)
+    expect_identical(find_offset(model_off), "wt")
+  })
+
   test_that("find_predictors", {
     expect_equal(
       find_predictors(m1, effects = "all"),

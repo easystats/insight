@@ -27,6 +27,9 @@
 
 * The matrix returned by `get_varcov()` for models of class *bife* now returns 
   row and column names.
+  
+* `find_offset()` did not find offset-terms for `merMod` objects when the 
+  offset was specified as `offset` argument in the function call.
 
 # insight 0.17.0
 
