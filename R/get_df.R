@@ -306,7 +306,11 @@ get_df.selection <- function(x, type = "residual", ...) {
 #' @export
 get_df.lmerMod <- function(x, type = "residual", ...) {
   dots <- list(...)
-  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "satterthwaite", "kenward-roger"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger"))
+  # fix name for lmerTest
+  if (type == "kenward") {
+    type <- "kenward-roger"
+  }
   if (type %in% c("satterthwaite", "kenward-roger")) {
     check_if_installed("lmerTest")
     type <- tools::toTitleCase(type) # lmerTest wants title case

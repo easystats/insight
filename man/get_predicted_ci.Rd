@@ -57,12 +57,12 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 \item{ci_method}{The method for computing p values and confidence intervals. Possible values depend on model type.
 \itemize{
 \item \code{NULL} uses the default method, which varies based on the model type.
-\item Most frequentist models: "gaussian" (default).
+\item Most frequentist models: \code{"normal"} (default).
 \item Bayesian models: "quantile" (default), "hdi", "eti".
-\item Mixed effects \code{lme4} models: "gaussian" (default), "satterthwaite", "kenward-roger".
+\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, \code{"kenward"}.
 }}
 
-\item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary: "sd" or "mad".}
+\item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary: \code{"sd"} or \code{"mad"}.}
 
 \item{vcov}{Variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors). This argument accepts a covariance matrix, a function which returns a covariance matrix, or a string which identifies the function to be used to compute the covariance matrix.
 \itemize{

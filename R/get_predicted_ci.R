@@ -88,7 +88,7 @@ get_predicted_ci.default <- function(x,
     if ("iterations" %in% names(attributes(predictions))) {
       ci_method <- "quantile"
     } else {
-      ci_method <- "gaussian"
+      ci_method <- "normal"
     }
   }
 
@@ -181,7 +181,7 @@ get_predicted_ci.mlm <- function(x, ...) {
   } # Same as predicted
 
   # data is required for satterthwaite
-  if (isTRUE(ci_method %in% c("satterthwaite", "kenward-roger"))) {
+  if (isTRUE(ci_method %in% c("satterthwaite", "kenward", "kenward-roger"))) {
     dof <- get_df(x, type = ci_method, data = data)
   } else {
     dof <- get_df(x)
@@ -327,7 +327,7 @@ get_predicted_ci.mlm <- function(x, ...) {
   # Interval
   ci_method <- match.arg(
     tolower(ci_method),
-    c("quantile", "hdi", "eti", "satterthwaite", "gaussian")
+    c("quantile", "hdi", "eti", "satterthwaite", "normal")
   )
 
   if (ci_method == "quantile") {

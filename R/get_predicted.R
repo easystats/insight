@@ -65,10 +65,10 @@
 #'   vector of 1s and 0s, the prediction interval is... `[0, 1]`).
 #' @param ci_method The method for computing p values and confidence intervals. Possible values depend on model type.
 #'   + `NULL` uses the default method, which varies based on the model type.
-#'   + Most frequentist models: "gaussian" (default).
+#'   + Most frequentist models: `"normal"` (default).
 #'   + Bayesian models: "quantile" (default), "hdi", "eti".
-#'   + Mixed effects `lme4` models: "gaussian" (default), "satterthwaite", "kenward-roger".
-#' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary: "sd" or "mad".
+#'   + Mixed effects **lme4** models: `"normal"` (default), `"satterthwaite"`, `"kenward"`.
+#' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary: `"sd"` or `"mad"`.
 #' @param ... Other argument to be passed, for instance to `get_predicted_ci()`.
 #' @inheritParams get_varcov
 #' @inheritParams get_df
