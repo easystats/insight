@@ -120,6 +120,7 @@ Suggests:
     mgcv,
     mice,
     mlogit,
+    mhurdle,
     multgee,
     nlme,
     nnet,

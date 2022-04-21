@@ -99,7 +99,10 @@ get_data.model_fit <- function(x, verbose = TRUE, ...) {
 }
 
 
-
+#' @export
+get_data.mhurdle <- function(x, verbose = TRUE, ...) {
+  x[["model"]]
+}
 
 
 # classical and survival models -----------------------------------------------
