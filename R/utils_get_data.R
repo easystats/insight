@@ -41,8 +41,9 @@
   # offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
 
   offcol <- grepl("(offset)", colnames(mf), fixed = TRUE) | grepl("offset(", colnames(mf), fixed = TRUE)
-  if (length(offcol) && object_has_names(x, "call") && object_has_names(x$call, "offset")) {
-    colnames(mf)[offcol] <- clean_names(safe_deparse(x$call$offset))
+  model_call <- get_call(x)
+  if (length(offcol) && object_has_names(model_call, "offset")) {
+    colnames(mf)[offcol] <- clean_names(safe_deparse(model_call$offset))
   }
 
 
@@ -602,9 +603,10 @@
 .add_zeroinf_data <- function(x, mf, tn) {
   tryCatch(
     {
-      env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
-      if (object_has_names(x$call, "subset")) {
-        env_data <- subset(env_data, subset = eval(x$call$subset))
+      model_call <- get_call(x)
+      env_data <- eval(model_call$data, envir = parent.frame())[, tn, drop = FALSE]
+      if (object_has_names(model_call, "subset")) {
+        env_data <- subset(env_data, subset = eval(model_call$subset))
       }
 
       .merge_dataframes(env_data, mf, replace = TRUE)

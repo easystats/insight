@@ -38,8 +38,9 @@ find_offset <- function(x) {
     offset <- clean_names(terms[offcol])
   }
 
-  if (is.null(offset) && object_has_names(x, "call") && object_has_names(x$call, "offset")) {
-    offset <- clean_names(safe_deparse(x$call$offset))
+  model_call <- get_call(x)
+  if (is.null(offset) && object_has_names(model_call, "offset")) {
+    offset <- clean_names(safe_deparse(model_call$offset))
   }
 
   offset
