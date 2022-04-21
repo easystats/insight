@@ -6,6 +6,7 @@
                                 include_random = "default",
                                 include_smooth = TRUE,
                                 ci = 0.95,
+                                ci_method = NULL,
                                 verbose = TRUE,
                                 ...) {
 
@@ -316,6 +317,7 @@
     include_smooth = include_smooth,
     ci_type = ci_type,
     ci = ci,
+    ci_method = ci_method,
     type = type_arg,
     predict = predict,
     scale = scale_arg,

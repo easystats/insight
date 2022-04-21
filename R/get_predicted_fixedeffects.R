@@ -1,6 +1,7 @@
 # fixest ----------------------------------------------------------------
 # =======================================================================
 
+#' @rdname get_predicted
 #' @export
 get_predicted.fixest <- function(x, predict = "expectation", data = NULL, ...) {
   # Development is ongoing for standard errors. They are too complicated for us

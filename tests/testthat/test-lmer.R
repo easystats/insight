@@ -441,6 +441,32 @@ if (.runThisTest &&
     )
   })
 
+  test_that("satterthwaite dof vs. emmeans", {
+    requiet("emmeans")
+
+    p1 <- get_predicted(m2, ci_method = "satterthwaite")
+    p1 <- data.frame(p1)
+    em1 <- ref_grid(
+      object = m2,
+      specs = ~ Days,
+      at = list(Days = sleepstudy$Days),
+      lmer.df = "satterthwaite")
+    em1 <- confint(em1)
+    expect_equal(p1$CI_low, em1$lower.CL)
+    expect_equal(p1$CI_high, em1$upper.CL)
+
+    p2 <- get_predicted(m2, ci_method = "kenward-roger")
+    p2 <- data.frame(p2)
+    em2 <- ref_grid(
+      object = m2,
+      specs = ~ Days,
+      at = list(Days = sleepstudy$Days),
+      lmer.df = "kenward-roger")
+    em2 <- confint(em2)
+    expect_equal(p2$CI_low, em2$lower.CL)
+    expect_equal(p2$CI_high, em2$upper.CL)
+  })
+
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "t-statistic")
     expect_identical(find_statistic(m2), "t-statistic")

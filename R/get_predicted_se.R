@@ -5,6 +5,7 @@ get_predicted_se <- function(x,
                              ci_type = "confidence",
                              vcov = NULL,
                              vcov_args = NULL,
+                             ci_method = NULL,
                              ...) {
 
   # Matrix-multiply X by the parameter vector B to get the predictions, then
@@ -13,12 +14,27 @@ get_predicted_se <- function(x,
   # the diagonal of this matrix represent the standard errors of the predictions,
   # which are then multiplied by 1.96 for the confidence intervals.
 
-  vcovmat <- get_varcov(
-    x,
-    vcov = vcov,
-    vcov_args = vcov_args,
-    ...
-  )
+
+  # kenward-roger adjusts both the dof and the varcov
+  if (isTRUE(ci_method %in% c("kenward-roger", "kenward"))) {
+    if (is.null(vcov) && is.null(vcov_args)) {
+      check_if_installed("pbkrtest")
+      vcovmat <- as.matrix(pbkrtest::vcovAdj(x))
+    } else {
+      msg <- 'The `vcov` argument cannot be used together with the `ci_method="kenward-roger"` argument.'
+      stop(format_message(msg))
+    }
+
+  # all other varcov types can be supplied manually
+  } else {
+    vcovmat <- get_varcov(
+      x,
+      vcov = vcov,
+      vcov_args = vcov_args,
+      ...
+    )
+  }
+
   mm <- .get_predicted_ci_modelmatrix(x, data = data, vcovmat = vcovmat)
 
   # return NULL for fail
