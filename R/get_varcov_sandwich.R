@@ -97,12 +97,16 @@
       "HAC" = "vcovHAC",
       "PC" = "vcovPC",
       "CL" = "vcovCL",
-      "PL" = "vcovPL"
+      "PL" = "vcovPL",
+      "kenward-roger" = "vcovAdj"
     )
   }
 
   # check if required package is available
-  if (isTRUE(vcov_fun == "vcovCR")) {
+  if (isTRUE(vcov_fun == "vcovAdj")) {
+    check_if_installed("pbkrtest")
+    fun <- try(get(vcov_fun, asNamespace("pbkrtest")), silent = TRUE)
+  } else if (isTRUE(vcov_fun == "vcovCR")) {
     check_if_installed("clubSandwich", reason = "to get cluster-robust standard errors")
     fun <- try(get(vcov_fun, asNamespace("clubSandwich")), silent = TRUE)
   } else {
@@ -113,12 +117,9 @@
     }
   }
 
+  # try with arguments
   .vcov <- try(do.call(fun, c(list(x), vcov_args)), silent = TRUE)
-
-  # clubSandwich output has a weird class
-  if (inherits(.vcov, c("vcovCR", "clubSandwich"))) {
-    .vcov <- as.matrix(.vcov)
-  }
+  .vcov <- as.matrix(.vcov) # weird matrix classes in clubSandwich and vcovAdj
 
   # extract variance-covariance matrix
   if (!inherits(.vcov, "matrix")) {

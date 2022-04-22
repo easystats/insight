@@ -443,6 +443,11 @@ if (.runThisTest &&
 
   test_that("satterthwaite dof vs. emmeans", {
     requiet("emmeans")
+    requiet("pbkrtest")
+
+    v1 <- get_varcov(m2, vcov = "kenward-roger")
+    v2 <- as.matrix(vcovAdj(m2))
+    expect_equal(v1, v2)
 
     p1 <- get_predicted(m2, ci_method = "satterthwaite")
     p1 <- data.frame(p1)
