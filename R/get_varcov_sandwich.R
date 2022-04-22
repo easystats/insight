@@ -119,7 +119,9 @@
 
   # try with arguments
   .vcov <- try(do.call(fun, c(list(x), vcov_args)), silent = TRUE)
-  .vcov <- as.matrix(.vcov) # weird matrix classes in clubSandwich and vcovAdj
+  if (!inherits(.vcov, "try-error")) {
+    .vcov <- as.matrix(.vcov) # weird matrix classes in clubSandwich and vcovAdj
+  }
 
   # extract variance-covariance matrix
   if (!inherits(.vcov, "matrix")) {
