@@ -90,7 +90,7 @@ check_if_installed <- function(package,
   if (!is.null(what_is_wrong) && !quietly) {
     if (prompt) {
       what_you_can_do <- sprintf(
-        "Would you like to %s %s? [y/n]",
+        " Would you like to %s %s? [y/n] ",
         if (grepl("update", what_you_can_do)) "update" else "install",
         if (grepl("them", what_you_can_do)) "them" else "it"
       )
