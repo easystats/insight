@@ -331,12 +331,6 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
 }
 
 #' @export
-get_df.glmerMod <- get_df.lmerMod
-
-#' @export
-get_df.glmerModTest <- get_df.lmerMod
-
-#' @export
 get_df.lmerModTest <- get_df.lmerMod
 
 
