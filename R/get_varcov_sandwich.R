@@ -102,7 +102,7 @@
   }
 
   # check if required package is available
-  if (vcov_fun == "vcovCR") {
+  if (isTRUE(vcov_fun == "vcovCR")) {
     check_if_installed("clubSandwich", reason = "to get cluster-robust standard errors")
     fun <- try(get(vcov_fun, asNamespace("clubSandwich")), silent = TRUE)
   } else {
