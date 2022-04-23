@@ -28,10 +28,11 @@ needed package is not installed.}
 version that is required for each package. Should be of same length as
 \code{package}. If \code{NULL}, no check for minimum version is done.}
 
-\item{quietly}{Logical, if \code{TRUE}, invisibly returns either \code{TRUE} if all
-packages are installed, \code{FALSE} otherwise, and does not stop or throw a
-warning. If \code{quietly = TRUE}, argument \code{stop} is ignored. Use this argument
-to internally check for package dependencies without stopping or warnings.}
+\item{quietly}{Logical, if \code{TRUE}, invisibly returns a vector of logicals
+(\code{TRUE} for each installed package, \code{FALSE} otherwise), and does not stop
+or throw a warning. If \code{quietly = TRUE}, arguments \code{stop} and \code{prompt} are
+ignored. Use this argument to internally check for package dependencies
+without stopping or warnings.}
 
 \item{prompt}{If \code{TRUE}, will prompt the user to install needed package(s).
 Ignored if \code{quietly = TRUE}.}
