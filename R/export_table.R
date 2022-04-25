@@ -664,11 +664,23 @@ print.insight_table <- function(x, ...) {
   # "final" is a matrix here. we now paste each row into a character string,
   # add separator chars etc.
   for (row in 1:nrow(final)) {
+    # create a string for each row, where cells from original matrix are
+    # separated by the separator char
     final_row <- paste0(final[row, ], collapse = sep)
-
-    # check if we have an empty row
+    # check if we have an empty row, and if so, fill with an
+    # "empty line separator", if requested by user
     if (!is.null(empty_line) && all(nchar(trim_ws(final[row, ])) == 0)) {
-      rows <- paste0(rows, paste0(rep_len(empty_line, nchar(final_row)), collapse = ""), sep = "\n")
+      # check whether user wants to have a "cross" char where vertical and
+      # horizontal lines (from empty line separator) cross. But don't add
+      # a "cross" when the empty line is the last row in the table...
+      empty_line_with_cross <- .insert_cross(
+        # the empty line, which is just empty cells with separator char,
+        # will now be replaced by the "empty line char", so we have a
+        # clean separator line
+        paste0(rep_len(empty_line, nchar(final_row)), collapse = ""),
+        cross, sep, final_row, is_last_row = row == nrow(final)
+      )
+      rows <- paste0(rows, empty_line_with_cross, sep = "\n")
     } else {
       rows <- paste0(rows, final_row, sep = "\n")
     }
@@ -677,16 +689,12 @@ print.insight_table <- function(x, ...) {
     if (row == 1) {
       # check if we have any separator for the header row
       if (!is.null(header)) {
-        header_line <- paste0(rep_len(header, nchar(final_row)), collapse = "")
-        # check if at places where row and column "lines" cross, we need a
-        # special char. E.g., if columns are separated with "|" and header line
-        # with "-", we might have a "+" to have properly "crossed lines"
-        if (!is.null(cross)) {
-          cross_position <- unlist(gregexpr(trim_ws(sep), final_row, fixed = TRUE))
-          for (pp in cross_position) {
-            substr(header_line, pp, pp) <- cross
-          }
-        }
+        # check whether user wants to have a "cross" char where vertical and
+        # horizontal lines (from header line) cross.
+        header_line <- .insert_cross(
+          paste0(rep_len(header, nchar(final_row)), collapse = ""),
+          cross, sep, final_row, is_last_row = row == nrow(final)
+        )
         # add separator row after header line
         rows <- paste0(rows, header_line, sep = "\n")
       }
@@ -694,6 +702,20 @@ print.insight_table <- function(x, ...) {
   }
 
   rows
+}
+
+
+.insert_cross <- function(row, cross, sep, pattern, is_last_row) {
+  # check if at places where row and column "lines" cross, we need a
+  # special char. E.g., if columns are separated with "|" and header line
+  # with "-", we might have a "+" to have properly "crossed lines"
+  if (!is.null(cross) && !is_last_row) {
+    cross_position <- unlist(gregexpr(trim_ws(sep), pattern, fixed = TRUE))
+    for (pp in cross_position) {
+      substr(row, pp, pp) <- cross
+    }
+  }
+  row
 }
 
 
