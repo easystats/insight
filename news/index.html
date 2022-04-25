@@ -65,8 +65,7 @@
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-17-1">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-17-1"></a></h3>
 <ul><li>
-<code>deltaMethod</code> (<em>car</em>), <code>marginaleffects</code>, <code>marginaleffects.summary</code> (<em>marginaleffects</em>)</li>
-</ul></div>
+<code>deltaMethod</code> (<em>car</em>), <code>marginaleffects</code>, <code>marginaleffects.summary</code> (<em>marginaleffects</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="general-0-17-1">General<a class="anchor" aria-label="anchor" href="#general-0-17-1"></a></h3>
 <ul><li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> now supports models of class <code>iv_robust</code> and <code>ivreg</code>.</p></li>
@@ -85,12 +84,10 @@
 <h2 class="pkg-version" data-toc-text="0.17.0" id="insight-0170">insight 0.17.0<a class="anchor" aria-label="anchor" href="#insight-0170"></a></h2><p class="text-muted">CRAN release: 2022-03-29</p>
 <div class="section level3">
 <h3 id="breaking-changes-0-17-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-17-0"></a></h3>
-<ul><li>Arguments <code>vcov_estimation</code> and <code>vcov_type</code> in <code><a href="../reference/get_predicted.html">get_predicted()</a></code>, <code>get_predicted_se()</code> and <code><a href="../reference/get_predicted_ci.html">get_predicted_ci()</a></code> are replaced by <code>vcov</code> and <code>vcov_args</code>, to have a more simplified and common interface to control robust covariance matrix estimation.</li>
-</ul></div>
+<ul><li>Arguments <code>vcov_estimation</code> and <code>vcov_type</code> in <code><a href="../reference/get_predicted.html">get_predicted()</a></code>, <code>get_predicted_se()</code> and <code><a href="../reference/get_predicted_ci.html">get_predicted_ci()</a></code> are replaced by <code>vcov</code> and <code>vcov_args</code>, to have a more simplified and common interface to control robust covariance matrix estimation.</li></ul></div>
 <div class="section level3">
 <h3 id="general-0-17-0">General<a class="anchor" aria-label="anchor" href="#general-0-17-0"></a></h3>
-<ul><li>Improved performance for various functions, in particular <code><a href="../reference/get_data.html">get_data()</a></code> and <code><a href="../reference/model_info.html">model_info()</a></code>.</li>
-</ul></div>
+<ul><li>Improved performance for various functions, in particular <code><a href="../reference/get_data.html">get_data()</a></code> and <code><a href="../reference/model_info.html">model_info()</a></code>.</li></ul></div>
 <div class="section level3">
 <h3 id="new-functions-0-17-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-17-0"></a></h3>
 <ul><li><p>To check for names: <code><a href="../reference/object_has_names.html">object_has_names()</a></code> and <code><a href="../reference/object_has_names.html">object_has_rownames()</a></code></p></li>
@@ -126,8 +123,7 @@
 <div class="section level3">
 <h3 id="new-functions-0-16-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-16-0"></a></h3>
 <ul><li>
-<code><a href="../reference/get_datagrid.html">get_datagrid()</a></code>, to generate a reference grid, usually used when computing adjusted predictions or marginal means from regression models.</li>
-</ul></div>
+<code><a href="../reference/get_datagrid.html">get_datagrid()</a></code>, to generate a reference grid, usually used when computing adjusted predictions or marginal means from regression models.</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-16-0">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-16-0"></a></h3>
 <div class="section level4">
@@ -139,25 +135,21 @@
 <div class="section level4">
 <h4 id="other-functions-0-16-0">Other functions<a class="anchor" aria-label="anchor" href="#other-functions-0-16-0"></a></h4>
 <ul><li>
-<code><a href="../reference/get_statistic.html">get_statistic()</a></code> and <code><a href="../reference/find_statistic.html">find_statistic()</a></code> now support <em>htest</em> objects.</li>
-</ul></div>
+<code><a href="../reference/get_statistic.html">get_statistic()</a></code> and <code><a href="../reference/find_statistic.html">find_statistic()</a></code> now support <em>htest</em> objects.</li></ul></div>
 </div>
 <div class="section level3">
 <h3 id="general-0-16-0">General<a class="anchor" aria-label="anchor" href="#general-0-16-0"></a></h3>
-<ul><li>Various minor improvements.</li>
-</ul></div>
+<ul><li>Various minor improvements.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.15.1" id="insight-0151">insight 0.15.1<a class="anchor" aria-label="anchor" href="#insight-0151"></a></h2>
 <div class="section level3">
 <h3 id="general-0-15-1">General<a class="anchor" aria-label="anchor" href="#general-0-15-1"></a></h3>
-<ul><li>Improved speed performance, especially for <code><a href="../reference/get_data.html">get_data()</a></code>.</li>
-</ul></div>
+<ul><li>Improved speed performance, especially for <code><a href="../reference/get_data.html">get_data()</a></code>.</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-15-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-15-1"></a></h3>
 <ul><li>
-<code><a href="../reference/get_data.html">get_data()</a></code> for <code>coxph</code> models now returns the original factor levels for variables transformed with <code>strata()</code> inside formulas.</li>
-</ul></div>
+<code><a href="../reference/get_data.html">get_data()</a></code> for <code>coxph</code> models now returns the original factor levels for variables transformed with <code>strata()</code> inside formulas.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.15.0" id="insight-0150">insight 0.15.0<a class="anchor" aria-label="anchor" href="#insight-0150"></a></h2><p class="text-muted">CRAN release: 2022-01-07</p>
@@ -168,12 +160,10 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-15-0">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-15-0"></a></h3>
-<ul><li>Support for <code>bfsl</code> (<em>bfsl</em>)</li>
-</ul></div>
+<ul><li>Support for <code>bfsl</code> (<em>bfsl</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="new-functions-0-15-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-15-0"></a></h3>
-<ul><li>New <code><a href="../reference/standardize_column_order.html">standardize_column_order()</a></code> function can be used to standardize the column order in output dataframes.</li>
-</ul></div>
+<ul><li>New <code><a href="../reference/standardize_column_order.html">standardize_column_order()</a></code> function can be used to standardize the column order in output dataframes.</li></ul></div>
 <div class="section level3">
 <h3 id="general-0-15-0">General<a class="anchor" aria-label="anchor" href="#general-0-15-0"></a></h3>
 <ul><li><p>Improved speed performance for some functions.</p></li>
@@ -196,8 +186,7 @@
 <div class="section level3">
 <h3 id="new-functions-0-14-5">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-14-5"></a></h3>
 <ul><li>
-<code><a href="../reference/find_transformation.html">find_transformation()</a></code> and <code><a href="../reference/get_transformation.html">get_transformation()</a></code> to find or get any function that was used to transform the response variable in a regression model.</li>
-</ul></div>
+<code><a href="../reference/find_transformation.html">find_transformation()</a></code> and <code><a href="../reference/get_transformation.html">get_transformation()</a></code> to find or get any function that was used to transform the response variable in a regression model.</li></ul></div>
 <div class="section level3">
 <h3 id="general-0-14-5">General<a class="anchor" aria-label="anchor" href="#general-0-14-5"></a></h3>
 <ul><li><p>Improved support for models of class <code>sampleSelection</code>.</p></li>
@@ -225,20 +214,17 @@
 <h2 class="pkg-version" data-toc-text="0.14.4" id="insight-0144">insight 0.14.4<a class="anchor" aria-label="anchor" href="#insight-0144"></a></h2><p class="text-muted">CRAN release: 2021-09-02</p>
 <div class="section level3">
 <h3 id="bug-fixes-0-14-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-14-4"></a></h3>
-<ul><li>Fixed issues due to latest <em>brms</em> update.</li>
-</ul></div>
+<ul><li>Fixed issues due to latest <em>brms</em> update.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.14.3" id="insight-0143">insight 0.14.3<a class="anchor" aria-label="anchor" href="#insight-0143"></a></h2><p class="text-muted">CRAN release: 2021-08-17</p>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-14-3">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-14-3"></a></h3>
 <ul><li>
-<code>systemfit</code> (<em>systemfit</em>)</li>
-</ul></div>
+<code>systemfit</code> (<em>systemfit</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="general-0-14-3">General<a class="anchor" aria-label="anchor" href="#general-0-14-3"></a></h3>
-<ul><li>Minor improvements for functions that support printing outputs.</li>
-</ul></div>
+<ul><li>Minor improvements for functions that support printing outputs.</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-14-3">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-14-3"></a></h3>
 <ul><li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> gains a new option, <code>predict = "response"</code> for binomial models.</p></li>
@@ -274,16 +260,13 @@
 <h2 class="pkg-version" data-toc-text="0.14.1" id="insight-0141">insight 0.14.1<a class="anchor" aria-label="anchor" href="#insight-0141"></a></h2><p class="text-muted">CRAN release: 2021-05-28</p>
 <div class="section level3">
 <h3 id="new-functions-0-14-1">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-14-1"></a></h3>
-<ul><li>Added several data management and preparation functions: <code><a href="https://easystats.github.io/datawizard/reference/data_to_long.html" class="external-link">data_to_long()</a></code>, <code><a href="https://easystats.github.io/datawizard/reference/data_match.html" class="external-link">data_match()</a></code>, <code><a href="https://easystats.github.io/datawizard/reference/data_relocate.html" class="external-link">data_relocate()</a></code>, <code><a href="https://easystats.github.io/datawizard/reference/data_restoretype.html" class="external-link">data_restoretype()</a></code>, <code>force_numeric()</code>.</li>
-</ul></div>
+<ul><li>Added several data management and preparation functions: <code><a href="https://easystats.github.io/datawizard/reference/data_to_long.html" class="external-link">data_to_long()</a></code>, <code><a href="https://easystats.github.io/datawizard/reference/data_match.html" class="external-link">data_match()</a></code>, <code><a href="https://easystats.github.io/datawizard/reference/data_relocate.html" class="external-link">data_relocate()</a></code>, <code><a href="https://easystats.github.io/datawizard/reference/data_restoretype.html" class="external-link">data_restoretype()</a></code>, <code>force_numeric()</code>.</li></ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-14-1">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-14-1"></a></h3>
-<ul><li>Support for <code>pgmm</code> (<em>plm</em>)</li>
-</ul></div>
+<ul><li>Support for <code>pgmm</code> (<em>plm</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-14-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-14-1"></a></h3>
-<ul><li>Improved handling of auxiliary parameters for <em>stanreg</em> models.</li>
-</ul></div>
+<ul><li>Improved handling of auxiliary parameters for <em>stanreg</em> models.</li></ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-14-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-14-1"></a></h3>
 <ul><li><p>Stability improvements to <code><a href="../reference/get_predicted.html">get_predicted()</a></code>.</p></li>
@@ -295,8 +278,7 @@
 <h2 class="pkg-version" data-toc-text="0.14.0" id="insight-0140">insight 0.14.0<a class="anchor" aria-label="anchor" href="#insight-0140"></a></h2><p class="text-muted">CRAN release: 2021-05-07</p>
 <div class="section level3">
 <h3 id="general-0-14-0">General<a class="anchor" aria-label="anchor" href="#general-0-14-0"></a></h3>
-<ul><li>Better support for accessing auxiliary parameters (via <code><a href="../reference/get_sigma.html">get_sigma()</a></code> and <code><a href="../reference/get_auxiliary.html">get_auxiliary()</a></code>, as well as <code>get_parameters(component = "all")</code>) for <code>brmsfit</code> models.</li>
-</ul></div>
+<ul><li>Better support for accessing auxiliary parameters (via <code><a href="../reference/get_sigma.html">get_sigma()</a></code> and <code><a href="../reference/get_auxiliary.html">get_auxiliary()</a></code>, as well as <code>get_parameters(component = "all")</code>) for <code>brmsfit</code> models.</li></ul></div>
 <div class="section level3">
 <h3 id="new-functions-0-14-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-14-0"></a></h3>
 <ul><li><p><code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> as a robust alternative to <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code> for different model classes.</p></li>
@@ -306,8 +288,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-14-0">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-14-0"></a></h3>
-<ul><li>Support for <code>mvord</code> (<em>mvord</em>), <code>SemiParBIV</code> (<em>GJRM</em>), <code>selection</code> (<em>sampleSelection</em>)</li>
-</ul></div>
+<ul><li>Support for <code>mvord</code> (<em>mvord</em>), <code>SemiParBIV</code> (<em>GJRM</em>), <code>selection</code> (<em>sampleSelection</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-14-0">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-14-0"></a></h3>
 <ul><li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> now warns when data name is present in formula, since this can result in unexpected behaviour in other package functions.</p></li>
@@ -343,13 +324,11 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-13-2">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-13-2"></a></h3>
-<ul><li>Support for <code>svy_vglm</code> (<em>svyVGAM</em>), <code>mjoint</code> (<em>joineRML</em>), <code>mhurdle</code> (<em>mhurdle</em>), <code>sarlm</code> (<em>spatialreg</em>), <code>model_fit</code> (<em>tidymodels</em>)</li>
-</ul></div>
+<ul><li>Support for <code>svy_vglm</code> (<em>svyVGAM</em>), <code>mjoint</code> (<em>joineRML</em>), <code>mhurdle</code> (<em>mhurdle</em>), <code>sarlm</code> (<em>spatialreg</em>), <code>model_fit</code> (<em>tidymodels</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="new-functions-0-13-2">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-13-2"></a></h3>
 <ul><li>
-<code><a href="../reference/is_gam_model.html">is_gam_model()</a></code> as a small helper to check if a model is a generalized additive model with smooth terms.</li>
-</ul></div>
+<code><a href="../reference/is_gam_model.html">is_gam_model()</a></code> as a small helper to check if a model is a generalized additive model with smooth terms.</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-13-2">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-13-2"></a></h3>
 <ul><li><p>Added <code>iterations</code> argument to <code><a href="../reference/get_predicted.html">get_predicted()</a></code> to control the number of draws returned for Bayesian models.</p></li>
@@ -372,12 +351,10 @@
 <h2 class="pkg-version" data-toc-text="0.13.1" id="insight-0131">insight 0.13.1<a class="anchor" aria-label="anchor" href="#insight-0131"></a></h2><p class="text-muted">CRAN release: 2021-02-22</p>
 <div class="section level3">
 <h3 id="general-0-13-1">General<a class="anchor" aria-label="anchor" href="#general-0-13-1"></a></h3>
-<ul><li>Improved handling for GAMs.</li>
-</ul></div>
+<ul><li>Improved handling for GAMs.</li></ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-13-1">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-13-1"></a></h3>
-<ul><li>Support for <code>elm</code>, <code>eglm</code> (<em>eflm</em>)</li>
-</ul></div>
+<ul><li>Support for <code>elm</code>, <code>eglm</code> (<em>eflm</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-13-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-13-1"></a></h3>
 <ul><li><p><code>get_residuals(..., weighted = TRUE)</code> doesn’t throw warnings if weights are 1 (no weights specified).</p></li>
@@ -394,12 +371,10 @@
 <h2 class="pkg-version" data-toc-text="0.13.0" id="insight-0130">insight 0.13.0<a class="anchor" aria-label="anchor" href="#insight-0130"></a></h2><p class="text-muted">CRAN release: 2021-02-15</p>
 <div class="section level3">
 <h3 id="general-0-13-0">General<a class="anchor" aria-label="anchor" href="#general-0-13-0"></a></h3>
-<ul><li>Roll-back R dependency to R &gt;= 3.4.</li>
-</ul></div>
+<ul><li>Roll-back R dependency to R &gt;= 3.4.</li></ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-13-0">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-13-0"></a></h3>
-<ul><li>Support for <code>crr</code> (<em>cmprsk</em>), <code>ergm</code> (<em>ergm</em>), <code>btergm</code> (<em>btergm</em>), <code>Rchoice</code> (<em>Rchoice</em>), <code>garch</code> (<em>tseries</em>)</li>
-</ul></div>
+<ul><li>Support for <code>crr</code> (<em>cmprsk</em>), <code>ergm</code> (<em>ergm</em>), <code>btergm</code> (<em>btergm</em>), <code>Rchoice</code> (<em>Rchoice</em>), <code>garch</code> (<em>tseries</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-13-0">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-13-0"></a></h3>
 <ul><li><p>Slightly improved handling of different CI-columns in <code><a href="../reference/format_table.html">format_table()</a></code>.</p></li>
@@ -419,12 +394,10 @@
 <div class="section level3">
 <h3 id="breaking-changes-0-12-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-0"></a></h3>
 <ul><li>
-<code><a href="../reference/format_table.html">format_table()</a></code> is an alias for <code><a href="../reference/format_table.html">parameters_table()</a></code>, and is no longer referring to <code><a href="../reference/export_table.html">export_table()</a></code>.</li>
-</ul></div>
+<code><a href="../reference/format_table.html">format_table()</a></code> is an alias for <code><a href="../reference/format_table.html">parameters_table()</a></code>, and is no longer referring to <code><a href="../reference/export_table.html">export_table()</a></code>.</li></ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-12-0">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-12-0"></a></h3>
-<ul><li>Support for <code>coxr</code> (<em>coxrobust</em>), <code>coeftest</code> (<em>lmtest</em>), <code>ivFixed</code> (<em>ivFixed</em>), <code>ivprobit</code> (<em>ivprobit</em>), <code>riskRegression</code> (<em>riskRegression</em>). <code>summary.lm</code>, <code>lmodel2</code> (<em>lmodel2</em>), improved support for <code>bamlss</code> (<em>bamlss</em>).</li>
-</ul></div>
+<ul><li>Support for <code>coxr</code> (<em>coxrobust</em>), <code>coeftest</code> (<em>lmtest</em>), <code>ivFixed</code> (<em>ivFixed</em>), <code>ivprobit</code> (<em>ivprobit</em>), <code>riskRegression</code> (<em>riskRegression</em>). <code>summary.lm</code>, <code>lmodel2</code> (<em>lmodel2</em>), improved support for <code>bamlss</code> (<em>bamlss</em>).</li></ul></div>
 <div class="section level3">
 <h3 id="new-functions-0-12-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-12-0"></a></h3>
 <ul><li><p>Added <code><a href="../reference/get_deviance.html">get_deviance()</a></code> function that returns the model deviance as a robust alternative to <code><a href="https://rdrr.io/r/stats/deviance.html" class="external-link">stats::deviance()</a></code>.</p></li>
@@ -459,13 +432,11 @@
 <h2 class="pkg-version" data-toc-text="0.11.1" id="insight-0111">insight 0.11.1<a class="anchor" aria-label="anchor" href="#insight-0111"></a></h2><p class="text-muted">CRAN release: 2020-12-08</p>
 <div class="section level3">
 <h3 id="general-0-11-1">General<a class="anchor" aria-label="anchor" href="#general-0-11-1"></a></h3>
-<ul><li>Warnings that formerly were printed using <code><a href="../reference/print_color.html">print_color()</a></code> now use <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>, to better suppress warning messages if required.</li>
-</ul></div>
+<ul><li>Warnings that formerly were printed using <code><a href="../reference/print_color.html">print_color()</a></code> now use <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>, to better suppress warning messages if required.</li></ul></div>
 <div class="section level3">
 <h3 id="new-functions-0-11-1">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-11-1"></a></h3>
 <ul><li>
-<code><a href="../reference/find_smooth.html">find_smooth()</a></code>, to return in particular smooth terms used in a model.</li>
-</ul></div>
+<code><a href="../reference/find_smooth.html">find_smooth()</a></code>, to return in particular smooth terms used in a model.</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-11-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-11-1"></a></h3>
 <ul><li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> and <code><a href="../reference/get_variance.html">get_variance_random()</a></code> gain a <code>tolerance</code>-argument, to set the tolerance level for singularity checks when computing random effect variances.</p></li>
@@ -488,8 +459,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-11-0">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-11-0"></a></h3>
-<ul><li>Support for <code>scam</code> (<em>scam</em>), <code>meta_random</code> and <code>meta_fixed</code> (<em>metaBMA</em>), <code>Glm</code> (<em>rms</em>), <code>ridgelm</code> (<em>MASS</em>), <code>mediate</code> (<em>mediation</em>). Partial support for <code>mcmc.list</code> (e.g. <em>bayesGARCH</em>)</li>
-</ul></div>
+<ul><li>Support for <code>scam</code> (<em>scam</em>), <code>meta_random</code> and <code>meta_fixed</code> (<em>metaBMA</em>), <code>Glm</code> (<em>rms</em>), <code>ridgelm</code> (<em>MASS</em>), <code>mediate</code> (<em>mediation</em>). Partial support for <code>mcmc.list</code> (e.g. <em>bayesGARCH</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="new-function-0-11-0">New function<a class="anchor" aria-label="anchor" href="#new-function-0-11-0"></a></h3>
 <ul><li><p><code><a href="../reference/format_table.html">parameters_table()</a></code>, which was moved from package <em>parameters</em> to <em>insight</em>. Note that this function is going to be renamed into <code><a href="../reference/format_table.html">format_table()</a></code> in a future update.</p></li>
@@ -529,8 +499,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-10-0">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-10-0"></a></h3>
-<ul><li>Support for <code>maov</code> (<em>stats</em>), <code>HLfit</code> (<em>spaMM</em>), preliminary support for <code>margins</code> (<em>margins</em>), <code>merModList</code> (<em>merTools</em>).</li>
-</ul></div>
+<ul><li>Support for <code>maov</code> (<em>stats</em>), <code>HLfit</code> (<em>spaMM</em>), preliminary support for <code>margins</code> (<em>margins</em>), <code>merModList</code> (<em>merTools</em>).</li></ul></div>
 <div class="section level3">
 <h3 id="general-0-10-0">General<a class="anchor" aria-label="anchor" href="#general-0-10-0"></a></h3>
 <ul><li><p>Better support for (weighted) multivariate response models of class <code>mlm</code> for functions like <code><a href="../reference/get_varcov.html">get_varcov()</a></code> or <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code>.</p></li>
@@ -578,8 +547,7 @@
 <div class="section level3">
 <h3 id="breaking-changes-0-9-5">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-9-5"></a></h3>
 <ul><li>
-<code><a href="../reference/get_data.html">get_data()</a></code> did not always “back-transform” log-transformed or scaled variables to return the original values. Now this bug has been fixed, and <code><a href="../reference/get_data.html">get_data()</a></code> should return all variables on the original scale (as if these variables were not transformed), as stated in the docs.</li>
-</ul></div>
+<code><a href="../reference/get_data.html">get_data()</a></code> did not always “back-transform” log-transformed or scaled variables to return the original values. Now this bug has been fixed, and <code><a href="../reference/get_data.html">get_data()</a></code> should return all variables on the original scale (as if these variables were not transformed), as stated in the docs.</li></ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-9-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-5"></a></h3>
 <ul><li><p><code><a href="../reference/get_data.html">get_data()</a></code> now returns the correct original data for “empty” polynomials (i.e. <code>poly(x, 1)</code>).</p></li>
@@ -590,8 +558,7 @@
 <h2 class="pkg-version" data-toc-text="0.9.1" id="insight-091">insight 0.9.1<a class="anchor" aria-label="anchor" href="#insight-091"></a></h2><p class="text-muted">CRAN release: 2020-08-26</p>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-9-1">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-9-1"></a></h3>
-<ul><li>Support for <code>mipo</code> (<em>mice</em>), <code>lqmm</code> and <code>lqm</code> (<em>lqmm</em>). Preliminary support for <code>semLME</code> (<em>smicd</em>), <code>mle</code> (<em>stats4</em>) and <code>mle2</code> (<em>bbmle</em>).</li>
-</ul></div>
+<ul><li>Support for <code>mipo</code> (<em>mice</em>), <code>lqmm</code> and <code>lqm</code> (<em>lqmm</em>). Preliminary support for <code>semLME</code> (<em>smicd</em>), <code>mle</code> (<em>stats4</em>) and <code>mle2</code> (<em>bbmle</em>).</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-9-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-9-1"></a></h3>
 <ul><li><p><code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_meta = TRUE</code> for <em>brms</em>-meta-analysis models.</p></li>
@@ -613,12 +580,10 @@
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-9-0">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-9-0"></a></h3>
 <ul><li>
-<code>BGGM</code> (<em>BGGM</em>), <code>metaplus</code> (<em>metaplus</em>), <code>glht</code> (<em>multcomp</em>), <code>glmm</code> (<em>glmm</em>), improved support for <code>manova</code> (<em>stats</em>)</li>
-</ul></div>
+<code>BGGM</code> (<em>BGGM</em>), <code>metaplus</code> (<em>metaplus</em>), <code>glht</code> (<em>multcomp</em>), <code>glmm</code> (<em>glmm</em>), improved support for <code>manova</code> (<em>stats</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="new-functions-0-9-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-9-0"></a></h3>
-<ul><li>Value formatting functions <code><a href="../reference/format_bf.html">format_bf()</a></code>, <code><a href="../reference/format_pd.html">format_pd()</a></code>, <code><a href="../reference/format_p.html">format_p()</a></code>, <code><a href="../reference/format_rope.html">format_rope()</a></code> and <code><a href="../reference/format_number.html">format_number()</a></code> were moved from package <em>parameters</em> to <em>insight</em>.</li>
-</ul></div>
+<ul><li>Value formatting functions <code><a href="../reference/format_bf.html">format_bf()</a></code>, <code><a href="../reference/format_pd.html">format_pd()</a></code>, <code><a href="../reference/format_p.html">format_p()</a></code>, <code><a href="../reference/format_rope.html">format_rope()</a></code> and <code><a href="../reference/format_number.html">format_number()</a></code> were moved from package <em>parameters</em> to <em>insight</em>.</li></ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-9-0">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-9-0"></a></h3>
 <ul><li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> now also returns the correlation among random slopes.</p></li>
@@ -645,7 +610,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
 </div>
 
     </footer></div>
