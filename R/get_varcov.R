@@ -115,13 +115,20 @@ get_varcov.geeglm <- get_varcov.default
 # mlm ---------------------------------------------
 
 #' @export
-get_varcov.mlm <- function(x, ...) {
+get_varcov.mlm <- function(x,
+                           vcov = NULL,
+                           vcov_args = NULL,
+                           ...) {
   .check_get_varcov_dots(x, ...)
   if (!is.null(x$weights)) {
+    if (!is.null(vcov)) {
+      stop(format_message("The `vcov` argument is not supported with",
+                          "weights in a `mlm` model."), call. = FALSE)
+    }
     s <- summary(x)[[1L]]
     .get_weighted_varcov(x, s$cov.unscaled)
   } else {
-    get_varcov.default(x)
+    get_varcov.default(x, vcov = vcov, vcov_args = vcov_args, ...)
   }
 }
 

@@ -37,6 +37,14 @@ test_that("lm: clubSandwich", {
 })
 
 
+test_that("mlm: sandwich", {
+  mod <- lm(cbind(cyl, disp, hp) ~ drat, data = mtcars)
+  v1 <- get_varcov(mod, vcov = "HC3")
+  v2 <- sandwich::vcovHC(mod)
+  expect_equal(v1, v2)
+})
+
+
 test_that("warning: not yet supported", {
   requiet("pscl")
   data("bioChemists", package = "pscl")
