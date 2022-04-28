@@ -1,7 +1,6 @@
 # ordinal ---------------------------------------------------------------
 # =======================================================================
 
-#' @rdname get_predicted
 #' @export
 get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
   # When (a) `newdata` is not null and (b) the response variable does *not*
@@ -75,7 +74,6 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
 # nnet::multinom --------------------------------------------------------
 # =======================================================================
 
-#' @rdname get_predicted
 #' @export
 get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...) {
   dots <- list(...)
@@ -130,6 +128,5 @@ get_predicted.rlm <- function(x, predict = "expectation", ...) {
 # corresponds to "probs". These are the same as nnet::multinom.
 # Make sure this is below get_predicted.multinom in the file.
 
-#' @rdname get_predicted
 #' @export
 get_predicted.polr <- get_predicted.multinom

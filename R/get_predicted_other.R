@@ -2,7 +2,6 @@
 # =======================================================================
 
 
-#' @rdname get_predicted
 #' @export
 get_predicted.crr <- function(x, verbose = TRUE, ...) {
   out <- as.data.frame(unclass(stats::predict(x, ...)))
@@ -29,12 +28,10 @@ get_predicted.principal <- function(x, data = NULL, ...) {
 }
 
 
-#' @rdname get_predicted
 #' @export
 get_predicted.fa <- get_predicted.principal
 
 
-#' @rdname get_predicted
 #' @export
 get_predicted.prcomp <- function(x, data = NULL, ...) {
   if (is.null(data)) {
@@ -47,7 +44,6 @@ get_predicted.prcomp <- function(x, data = NULL, ...) {
 }
 
 
-#' @rdname get_predicted
 #' @export
 get_predicted.faMain <- function(x, data = NULL, ...) {
   check_if_installed("fungible")

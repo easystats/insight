@@ -83,7 +83,6 @@ get_predicted.gam <- function(x,
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
-#' @rdname get_predicted
 #' @export
 get_predicted.gamm <- get_predicted.gam
 

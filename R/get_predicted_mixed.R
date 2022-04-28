@@ -72,7 +72,6 @@ get_predicted.lmerMod <- function(x,
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
-#' @rdname get_predicted
 #' @export
 get_predicted.merMod <- get_predicted.lmerMod
 
@@ -82,7 +81,6 @@ get_predicted.merMod <- get_predicted.lmerMod
 # glmmTMB ---------------------------------------------------------------
 # =======================================================================
 
-#' @rdname get_predicted
 #' @export
 get_predicted.glmmTMB <- function(x,
                                   data = NULL,
@@ -185,7 +183,6 @@ get_predicted.glmmTMB <- function(x,
 # GLMMadaptive: mixed_model (class MixMod) ------------------------------
 # =======================================================================
 
-#' @rdname get_predicted
 #' @export
 get_predicted.MixMod <- function(x,
                                  data = NULL,

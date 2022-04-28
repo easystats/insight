@@ -313,7 +313,6 @@ get_predicted.lm <- function(x,
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
-#' @rdname get_predicted
 #' @export
 get_predicted.glm <- get_predicted.lm
 
@@ -336,7 +335,6 @@ get_predicted.lrm <- get_predicted.default
 # survival: survreg -----------------------------------------------------
 # =======================================================================
 
-#' @rdname get_predicted
 #' @export
 get_predicted.survreg <- get_predicted.lm
 
@@ -346,7 +344,6 @@ get_predicted.survreg <- get_predicted.lm
 # survival: coxph -------------------------------------------------------
 # =======================================================================
 
-#' @rdname get_predicted
 #' @export
 get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterations = NULL, verbose = TRUE, ...) {
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
@@ -397,7 +394,6 @@ get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterati
 # bife ------------------------------------------------------------------
 # =======================================================================
 
-#' @rdname get_predicted
 #' @export
 get_predicted.bife <- function(x,
                                predict = "expectation",
@@ -426,7 +422,6 @@ get_predicted.bife <- function(x,
 # afex ------------------------------------------------------------------
 # =======================================================================
 
-#' @rdname get_predicted
 #' @export
 get_predicted.afex_aov <- function(x, data = NULL, ...) {
   if (is.null(data)) {
