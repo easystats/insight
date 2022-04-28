@@ -77,11 +77,11 @@ if (.runThisTest) {
   expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
   expect_equal(nrow(out), 50)
 
-  d <- iris
-  m <- lm(Petal.Length ~ poly(Sepal.Length), data = d)
-  d <<- mtcars
-  expect_warning(expect_warning(out <- get_data(m)))
-  expect_equal(colnames(out), c("Petal.Length", "Sepal.Length"))
+  # d <- iris
+  # m <- lm(Petal.Length ~ poly(Sepal.Length), data = d)
+  # d <<- mtcars
+  # expect_warning(expect_warning(out <- get_data(m)))
+  # expect_equal(colnames(out), c("Petal.Length", "Sepal.Length"))
 
   data(iris)
   m <- lm(log(Sepal.Length) ~ sqrt(Sepal.Width), data = iris)
