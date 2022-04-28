@@ -38,6 +38,7 @@ test_that("lm with poly and NA in response", {
   data(iris)
   d <- iris
   d[1:25, "Sepal.Length"] <- NA
+  d <<- d
   m <- lm(Sepal.Length ~ Species / poly(Petal.Width, 2), data = d)
   expect_equal(get_data(m), iris[26:150, c("Sepal.Length", "Species", "Petal.Width")], ignore_attr = TRUE)
 })
@@ -76,9 +77,9 @@ if (.runThisTest) {
   expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
   expect_equal(nrow(out), 50)
 
-  d <- iris
+  d <<- iris
   m <- lm(Petal.Length ~ poly(Sepal.Length), data = d)
-  d <- mtcars
+  d <<- mtcars
   expect_warning(expect_warning(out <- get_data(m)))
   expect_equal(colnames(out), c("Petal.Length", "Sepal.Length"))
 
