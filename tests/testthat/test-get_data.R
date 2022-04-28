@@ -33,6 +33,15 @@ test_that("lm with transformations", {
   expect_equal(colnames(get_data(m)), c("sum", "time", "group"))
 })
 
+
+test_that("lm with poly and NA in response", {
+  d <- iris
+  d[1:25, "Sepal.Length"] <- NA
+  m <- lm(Sepal.Length ~ Species / poly(Petal.Width, 2), data = d)
+  expect_equal(get_data(m), iris[26:150, c("Sepal.Length", "Species", "Petal.Width")], ignore_attr = TRUE)
+})
+
+
 test_that("mgcv", {
   ## NOTE check back every now and then and see if tests still work
   skip("works interactively")

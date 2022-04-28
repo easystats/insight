@@ -124,12 +124,26 @@
     # try to get model data from environment
     md <- tryCatch(
       {
-        eval(stats::getCall(x)$data, environment(stats::formula(x)))
+        eval(get_call(x)$data, environment(stats::formula(x)))
       },
       error = function(x) {
         NULL
       }
     )
+
+    # in case we have missing data, the data frame in the environment
+    # has more rows than the model frame
+    if (!is.null(md) && nrow(md) != nrow(mf)) {
+      md <- tryCatch(
+        {
+          md <- .recover_data_from_environment(x)
+          md <- stats::na.omit(md[intersect(colnames(md), find_variables(x, effects = "all", component = "all", flatten = TRUE))])
+        },
+        error = function(e) {
+          NULL
+        }
+      )
+    }
 
     # if data not found in environment,
     # reduce matrix variables into regular vectors
