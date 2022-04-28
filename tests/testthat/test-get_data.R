@@ -35,6 +35,7 @@ test_that("lm with transformations", {
 
 
 test_that("lm with poly and NA in response", {
+  data(iris)
   d <- iris
   d[1:25, "Sepal.Length"] <- NA
   m <- lm(Sepal.Length ~ Species / poly(Petal.Width, 2), data = d)
