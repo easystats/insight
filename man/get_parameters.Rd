@@ -46,6 +46,32 @@ are returned as data frame (with columns for names and point estimates of
 coefficients). For Bayesian models, the posterior samples of parameters are
 returned.
 }
+\section{Model components}{
+
+Possible values for the \code{component} argument depend on the model class.
+Following are valid options:
+\itemize{
+\item \code{"all"}: returns all model components, applies to all models, but will only
+have an effect for models with more than just the conditional model component.
+\item \code{"conditional"}: only returns the conditional component, i.e. "fixed effects"
+terms from the model. Will only have an effect for models with more than
+just the conditional model component.
+\item \code{"smooth_terms"}: returns smooth terms, only applies to GAMs (or similar
+models that may contain smooth terms).
+\item \code{"zero_inflated"} (or \code{"zi"}): returns the zero-inflation component.
+\item \code{"dispersion"}: returns the dispersion model component. This is common
+for models with zero-inflation or that can model the dispersion parameter.
+\item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
+returns the instruments.
+\item \code{"location"}: returns location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} (everything that are
+fixed or random effects - depending on the \code{effects} argument - but no
+auxiliary parameters).
+\item \code{"distributional"} (or \code{"auxiliary"}): components like \code{sigma}, \code{dispersion},
+\code{beta} or \code{precision} (and other auxiliary parameters) are returned.
+}
+}
+
 \examples{
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)

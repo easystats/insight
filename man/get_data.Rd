@@ -67,6 +67,14 @@ models that may contain smooth terms).
 \item \code{"zero_inflated"} (or \code{"zi"}): returns the zero-inflation component.
 \item \code{"dispersion"}: returns the dispersion model component. This is common
 for models with zero-inflation or that can model the dispersion parameter.
+\item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
+returns the instruments.
+\item \code{"location"}: returns location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} (everything that are
+fixed or random effects - depending on the \code{effects} argument - but no
+auxiliary parameters).
+\item \code{"distributional"} (or \code{"auxiliary"}): components like \code{sigma}, \code{dispersion},
+\code{beta} or \code{precision} (and other auxiliary parameters) are returned.
 }
 }
 

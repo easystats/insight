@@ -19,6 +19,8 @@
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
+#' @inheritSection find_predictors Model components
+#'
 #' @return A list of parameter names. For simple models, only one list-element,
 #'    `conditional`, is returned.
 #'

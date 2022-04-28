@@ -6,9 +6,8 @@
 \usage{
 find_variables(
   x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion",
-    "instruments", "smooth_terms"),
+  effects = "all",
+  component = "all",
   flatten = FALSE,
   verbose = TRUE
 )
@@ -56,6 +55,32 @@ The difference to \code{\link[=find_terms]{find_terms()}} is that
 \code{find_terms()} may return a variable multiple times in case of
 transformations or when arithmetic expressions were used in the formula.
 }
+\section{Model components}{
+
+Possible values for the \code{component} argument depend on the model class.
+Following are valid options:
+\itemize{
+\item \code{"all"}: returns all model components, applies to all models, but will only
+have an effect for models with more than just the conditional model component.
+\item \code{"conditional"}: only returns the conditional component, i.e. "fixed effects"
+terms from the model. Will only have an effect for models with more than
+just the conditional model component.
+\item \code{"smooth_terms"}: returns smooth terms, only applies to GAMs (or similar
+models that may contain smooth terms).
+\item \code{"zero_inflated"} (or \code{"zi"}): returns the zero-inflation component.
+\item \code{"dispersion"}: returns the dispersion model component. This is common
+for models with zero-inflation or that can model the dispersion parameter.
+\item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
+returns the instruments.
+\item \code{"location"}: returns location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} (everything that are
+fixed or random effects - depending on the \code{effects} argument - but no
+auxiliary parameters).
+\item \code{"distributional"} (or \code{"auxiliary"}): components like \code{sigma}, \code{dispersion},
+\code{beta} or \code{precision} (and other auxiliary parameters) are returned.
+}
+}
+
 \examples{
 if (require("lme4")) {
   data(cbpp)

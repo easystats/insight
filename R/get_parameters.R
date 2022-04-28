@@ -20,6 +20,8 @@
 #' @inheritParams find_parameters
 #' @inheritParams find_predictors
 #'
+#' @inheritSection find_predictors Model components
+#'
 #' @return \itemize{
 #'   \item for non-Bayesian models, a data frame with two columns: the parameter names and the related point estimates.
 #'   \item for Anova (`aov()`) with error term, a list of parameters for the conditional and the random effects parameters
