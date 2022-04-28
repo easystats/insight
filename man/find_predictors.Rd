@@ -60,6 +60,24 @@ component, ...). Unlike \code{\link[=find_parameters]{find_parameters()}}, the n
 \code{find_predictors()} match the original variable names from the data
 that was used to fit the model.
 }
+\section{Model components}{
+
+Possible values for the \code{component} argument depend on the model class.
+Following are valid options:
+\itemize{
+\item \code{"all"}: returns all model components, applies to all models, but will only
+have an effect for models with more than just the conditional model component.
+\item \code{"conditional"}: only returns the conditional component, i.e. "fixed effects"
+terms from the model. Will only have an effect for models with more than
+just the conditional model component.
+\item \code{"smooth_terms"}: returns smooth terms, only applies to GAMs (or similar
+models that may contain smooth terms).
+\item \code{"zero_inflated"} (or \code{"zi"}): returns the zero-inflation component.
+\item \code{"dispersion"}: returns the dispersion model component. This is common
+for models with zero-inflation or that can model the dispersion parameter.
+}
+}
+
 \examples{
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)

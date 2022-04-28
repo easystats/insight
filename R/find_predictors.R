@@ -22,6 +22,20 @@
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
+#' @section Model components:
+#' Possible values for the `component` argument depend on the model class.
+#' Following are valid options:
+#' - `"all"`: returns all model components, applies to all models, but will only
+#'   have an effect for models with more than just the conditional model component.
+#' - `"conditional"`: only returns the conditional component, i.e. "fixed effects"
+#'   terms from the model. Will only have an effect for models with more than
+#'   just the conditional model component.
+#' - `"smooth_terms"`: returns smooth terms, only applies to GAMs (or similar
+#'   models that may contain smooth terms).
+#' - `"zero_inflated"` (or `"zi"`): returns the zero-inflation component.
+#' - `"dispersion"`: returns the dispersion model component. This is common
+#'   for models with zero-inflation or that can model the dispersion parameter.
+#'
 #' @return A list of character vectors that represent the name(s) of the
 #'    predictor variables. Depending on the combination of the arguments
 #'    `effects` and `component`, the returned list has following

@@ -2,94 +2,29 @@
 % Please edit documentation in R/get_data.R
 \name{get_data}
 \alias{get_data}
-\alias{get_data.gee}
-\alias{get_data.rqss}
-\alias{get_data.hurdle}
-\alias{get_data.zcpglm}
+\alias{get_data.default}
 \alias{get_data.glmmTMB}
-\alias{get_data.merMod}
-\alias{get_data.glmmadmb}
-\alias{get_data.rlmerMod}
-\alias{get_data.clmm}
-\alias{get_data.mixed}
 \alias{get_data.afex_aov}
-\alias{get_data.lme}
-\alias{get_data.MixMod}
-\alias{get_data.brmsfit}
-\alias{get_data.stanreg}
-\alias{get_data.MCMCglmm}
 \title{Get the data that was used to fit the model}
 \usage{
 get_data(x, ...)
 
-\method{get_data}{gee}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
+\method{get_data}{default}(x, verbose = TRUE, ...)
 
-\method{get_data}{rqss}(
-  x,
-  component = c("all", "conditional", "smooth_terms"),
-  verbose = TRUE,
-  ...
-)
-
-\method{get_data}{hurdle}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-  verbose = TRUE,
-  ...
-)
-
-\method{get_data}{zcpglm}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated"),
-  verbose = TRUE,
-  ...
-)
-
-\method{get_data}{glmmTMB}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-  verbose = TRUE,
-  ...
-)
-
-\method{get_data}{merMod}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
-
-\method{get_data}{glmmadmb}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
-
-\method{get_data}{rlmerMod}(x, effects = c("all", "fixed", "random"), ...)
-
-\method{get_data}{clmm}(x, effects = c("all", "fixed", "random"), ...)
-
-\method{get_data}{mixed}(x, effects = c("all", "fixed", "random"), ...)
+\method{get_data}{glmmTMB}(x, effects = "all", component = "all", verbose = TRUE, ...)
 
 \method{get_data}{afex_aov}(x, shape = c("long", "wide"), ...)
-
-\method{get_data}{lme}(x, effects = c("all", "fixed", "random"), ...)
-
-\method{get_data}{MixMod}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-  verbose = TRUE,
-  ...
-)
-
-\method{get_data}{brmsfit}(x, effects = "all", component = "all", verbose = TRUE, ...)
-
-\method{get_data}{stanreg}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
-
-\method{get_data}{MCMCglmm}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
 
-\item{effects}{Should model data for fixed effects, random effects
-or both be returned? Only applies to mixed models.}
-
 \item{verbose}{Toggle messages and warnings.}
+
+\item{effects}{Should model data for fixed effects (\code{"fixed"}), random
+effects (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed
+or gee models.}
 
 \item{component}{Should all predictor variables, predictor variables for the
 conditional model, the zero-inflated part of the model, the dispersion
@@ -117,6 +52,24 @@ untransformed data (if possible). Consequently, column names are changed
 accordingly, i.e. \code{"log(x)"} will become \code{"x"} etc. for all data
 columns with transformed values.
 }
+\section{Model components}{
+
+Possible values for the \code{component} argument depend on the model class.
+Following are valid options:
+\itemize{
+\item \code{"all"}: returns all model components, applies to all models, but will only
+have an effect for models with more than just the conditional model component.
+\item \code{"conditional"}: only returns the conditional component, i.e. "fixed effects"
+terms from the model. Will only have an effect for models with more than
+just the conditional model component.
+\item \code{"smooth_terms"}: returns smooth terms, only applies to GAMs (or similar
+models that may contain smooth terms).
+\item \code{"zero_inflated"} (or \code{"zi"}): returns the zero-inflation component.
+\item \code{"dispersion"}: returns the dispersion model component. This is common
+for models with zero-inflation or that can model the dispersion parameter.
+}
+}
+
 \examples{
 if (require("lme4")) {
   data(cbpp, package = "lme4")
