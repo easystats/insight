@@ -57,7 +57,7 @@ is_regression_model <- function(x) {
 
     # a --------------------
     "aareg", "afex_aov", "AKP", "ancova", "anova", "Anova.mlm",
-    "aov", "aovlist", "Arima", "averaging",
+    "anova.rms", "aov", "aovlist", "Arima", "averaging",
 
     # b --------------------
     "bamlss", "bamlss.frame", "bayesGAM", "bayesmeta", "bayesx",

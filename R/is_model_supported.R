@@ -44,8 +44,8 @@ supported_models <- function() {
 .supported_models_list <- function() {
   c(
     # a ----------------------------
-    "aareg", "afex_aov", "aov", "aovlist", "AKP", "Anova.mlm", "Arima",
-    "averaging",
+    "aareg", "afex_aov", "aov", "aovlist", "AKP", "Anova.mlm", "anova.rms",
+    "Arima", "averaging",
 
     # b ----------------------------
     "bamlss", "bamlss.frame", "bayesx", "bayesQR", "BBmm", "BBreg", "bcplm",

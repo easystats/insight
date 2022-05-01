@@ -152,6 +152,7 @@ find_statistic <- function(x, ...) {
   # chi-squared value objects ------------------------------------------------
 
   chi.mods <- c(
+    "anova.rms",
     "coxph.penal",
     "epi.2by2",
     "geeglm",

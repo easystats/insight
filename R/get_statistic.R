@@ -180,6 +180,21 @@ get_statistic.afex_aov <- function(x, ...) {
 
 
 #' @export
+get_statistic.anova.rms <- function(x, ...) {
+  out <- data.frame(
+    Parameter = rownames(x),
+    Statistic = as.vector(x[, "Chi-Square"]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.plm <- get_statistic.default
 
 

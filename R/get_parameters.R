@@ -669,7 +669,7 @@ get_parameters.bracl <- function(x, ...) {
 
 
 
-# Standard models --------------------------------------------------
+# Anova and Standard models --------------------------------------------------
 
 
 #' @export

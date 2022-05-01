@@ -521,6 +521,18 @@ find_parameters.afex_aov <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.anova.rms <- function(x, flatten = FALSE, ...) {
+  l <- list(conditional = text_remove_backticks(rownames(x)))
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+#' @export
 find_parameters.mlm <- function(x, flatten = FALSE, ...) {
   cs <- stats::coef(summary(x))
 

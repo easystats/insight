@@ -97,4 +97,24 @@ if (requiet("testthat") &&
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "z-statistic")
   })
+
+  m2 <- rms::orm(mpg ~ cyl + disp + hp + drat, data = mtcars)
+  aov_model <- anova(m2)
+
+  test_that("find_statistic anova", {
+    expect_identical(find_statistic(aov_model), "chi-squared statistic")
+  })
+
+  test_that("find_parameters anova", {
+    expect_identical(find_parameters(aov_model), list(conditional = c("cyl", "disp", "hp", "drat", "TOTAL")))
+  })
+
+  test_that("get_statistic anova", {
+    expect_identical(
+      get_statistic(aov_model)$Statistic,
+      aov_model[, 2],
+      ignore_attr = TRUE,
+      tolerance = 1e-3
+    )
+  })
 }
