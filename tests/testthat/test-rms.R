@@ -115,7 +115,7 @@ if (.runThisTest &&
   test_that("get_statistic anova", {
     expect_identical(
       get_statistic(aov_model)$Statistic,
-      aov_model[, 2],
+      aov_model[, 1],
       ignore_attr = TRUE,
       tolerance = 1e-3
     )
