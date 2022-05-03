@@ -136,7 +136,7 @@ if (requiet("testthat") &&
     expect_false(is_multivariate(m1))
   })
 
-  if (getRversion() > "3.6.3" && (.Platform$OS.type != "windows" || .Platform$r_arch != "i386")) {
+  if (getRversion() > "3.6.3" && (.Platform$OS.type == "windows" || .Platform$r_arch == "i386")) {
     test_that("get_variance", {
       skip_on_cran()
       expect_equal(
