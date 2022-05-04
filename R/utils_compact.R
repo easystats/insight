@@ -10,9 +10,9 @@
 #' @export
 compact_list <- function(x, remove_na = FALSE) {
   if (remove_na) {
-    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1L & is.na(i)) || (length(i) == 1 && i == "NULL")))]
+    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1L & is.na(i)) || any(i == "NULL", na.rm = TRUE)))]
   } else {
-    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1 && i == "NULL")))]
+    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || any(i == "NULL", na.rm = TRUE)))]
   }
 }
 
