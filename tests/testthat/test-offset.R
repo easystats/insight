@@ -34,4 +34,10 @@ if (requiet("testthat") &&
     expect_equal(find_offset(m2), "logOff")
     expect_null(find_offset(m3))
   })
+
+  test_that("offset in null_model()", {
+    nm1 <- null_model(m1)
+    nm2 <- null_model(m2)
+    expect_equal(coef(nm1), coef(nm2), tolerance = 1e-4)
+  })
 }

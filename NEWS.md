@@ -1,3 +1,10 @@
+# insight 0.17.1.1
+
+## Bug fixes
+
+* `null_model()` did not consider offset-terms if these were specified inside
+  formulas.
+
 # insight 0.17.1
 
 ## New supported model classes
