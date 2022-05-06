@@ -12,16 +12,18 @@ if (requiet("testthat") &&
   dat$y <- rpois(N, exp(yhat)) # Poisson process
   dat$y <- ifelse(rbinom(N, 1, 0.3), 0, dat$y) # Zero-inflation process
 
+  d <<- dat
+
   # Fit zeroinfl model using 2 methods of offset input
-  m1 <- zeroinfl(y ~ offset(logOff) + x | 1, data = dat, dist = "poisson")
+  m1 <- zeroinfl(y ~ offset(logOff) + x | 1, data = d, dist = "poisson")
   m2 <- zeroinfl(y ~ x | 1,
-    data = dat,
+    data = d,
     offset = logOff,
     dist = "poisson"
   )
 
   # Fit zeroinfl model without offset data
-  m3 <- zeroinfl(y ~ x | 1, data = dat, dist = "poisson")
+  m3 <- zeroinfl(y ~ x | 1, data = d, dist = "poisson")
 
   test_that("offset in get_data()", {
     expect_equal(colnames(get_data(m1)), c("y", "logOff", "x"))

@@ -35,8 +35,10 @@ if (.runThisTest &&
   dat$y <- rpois(N, exp(yhat)) # Poisson process
   dat$y <- ifelse(rbinom(N, 1, 0.3), 0, dat$y) # Zero-inflation process
 
-  m1 <- glm(y ~ x + offset(logOff), data = dat, family = "poisson")
-  m2 <- glm(y ~ x, offset = logOff, data = dat, family = "poisson")
+  d <<- dat
+
+  m1 <- glm(y ~ x + offset(logOff), data = d, family = "poisson")
+  m2 <- glm(y ~ x, offset = logOff, data = d, family = "poisson")
 
   test_that("null_model with offset", {
     nm1 <- null_model(m1)
