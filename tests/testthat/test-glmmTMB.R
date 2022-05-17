@@ -733,6 +733,17 @@ if (requiet("testthat") &&
     expect_false(is_multivariate(m4))
   })
 
+  data("Salamanders")
+  mpred <- glmmTMB(
+    count ~ mined + (1 | site),
+    zi = ~mined,
+    family = poisson, data = Salamanders)
+
+  test_that("get_predicted with new levels", {
+    pr <- get_predicted(mpred, data = head(Salamanders), allow.new.levels = TRUE)
+    expect_equal(as.vector(pr), c(0.252, 0.39207, 0.21119, 2.20128, 2.39424, 2.28901), tolerance = 1e-3)
+  })
+
   # test_that("get_variance", {
   #
   #   expect_warning(expect_equal(get_variance(m5), list(

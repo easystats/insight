@@ -126,6 +126,7 @@ get_predicted.glmmTMB <- function(x,
       type = args$type,
       re.form = args$re.form,
       unconditional = FALSE,
+      allow.new.levels = args$allow_new_levels,
       ...
     )
   }

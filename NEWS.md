@@ -5,6 +5,9 @@
 * `null_model()` did not consider offset-terms if these were specified inside
   formulas.
 
+* Argument `allow.new.levels` was not passed to `predict()` for 
+  `get_predicted.glmmTMB()`.
+
 # insight 0.17.1
 
 ## New supported model classes
