@@ -398,12 +398,10 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
     predicted_form <- find_formula(model)$conditional
     true_form <- formula(mpg ~ cyl + cyl:gear)
 
-    attr(predicted_form, ".Environment") <- NULL
-    attr(true_form, ".Environment") <- NULL
-
     expect_equal(
       predicted_form,
-      true_form
+      true_form,
+      ignore_attr = TRUE
     )
   })
 
