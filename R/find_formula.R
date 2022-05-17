@@ -1408,6 +1408,9 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
       for (i in frand) {
         fcond <- sub(i, "", fcond, fixed = TRUE)
       }
+      while (grepl("(\\+)\\s+\\1", trim_ws(fcond))) {
+        fcond <- gsub("(\\+)\\s+\\1", "\\1", trim_ws(fcond))
+      }
       while (grepl("\\+$", trim_ws(fcond))) {
         fcond <- gsub("(.*)\\+$", "\\1", trim_ws(fcond))
       }
