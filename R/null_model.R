@@ -55,7 +55,9 @@ null_model <- function(model, verbose = TRUE, ...) {
         }
       )
     } else {
-      stats::update(model, ~1)
+      # stats::update(model, ~1)
+      out <- stats::update(model, ~1, evaluate = FALSE)
+      eval(out, envir = parent.frame())
     }
   }
 }
