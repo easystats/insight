@@ -1006,7 +1006,19 @@
   corrs <- lapply(vals$vc, attr, "correlation")
   rnd_slopes <- unlist(find_random_slopes(x))
 
-  if (length(rnd_slopes) < 2) {
+  # check if any categorical random slopes. we then have
+  # correlation among factor levels
+  cat_random_slopes <- tryCatch(
+    {
+      d <- get_data(x)[rnd_slopes]
+      any(sapply(d, is.factor))
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (length(rnd_slopes) < 2 && !isTRUE(cat_random_slopes)) {
     return(NULL)
   }
 

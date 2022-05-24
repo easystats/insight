@@ -215,4 +215,25 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
       tolerance = 1e-2
     )
   })
+
+
+  # test random slope correlation for categorical random slope
+
+  data(cake)
+  m <- lmer(angle ~ temperature + (temperature | recipe), data = cake)
+
+  test_that("get_variance-cat_random_slope", {
+    vc <- suppressWarnings(get_variance(m))
+    expect_equal(
+      vc$cor.slopes,
+      c(`recipe.temperature.L-temperature.C` = 0.99999964, `recipe.temperature.Q-temperature.C` = 0.99999931,
+        `recipe.temperature.L-temperature.Q` = 0.99999941, `recipe.temperature.L-temperature^4` = 0.99999961,
+        `recipe.temperature.Q-temperature^4` = 0.99999912, `recipe.temperature.C-temperature^4` = 0.99999996,
+        `recipe.temperature.L-temperature^5` = -0.99999977, `recipe.temperature.Q-temperature^5` = -0.99999849,
+        `recipe.temperature.C-temperature^5` = -0.99999936, `recipe.temperature^4-temperature^5` = -0.99999941
+      ),
+      tolerance = 1e-3
+    )
+  })
+
 }
