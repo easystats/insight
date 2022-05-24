@@ -146,12 +146,12 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
     expect_equal(
       vmodel,
       list(
-        var.fixed = 807.08545, var.random = 1711.44396, var.residual = 748.81107,
-        var.distribution = 748.81107, var.dispersion = 0, var.intercept = c(Subject = 663.28042),
-        var.slope = c(`Subject.Days2(3,6]` = 882.36419, `Subject.Days2(6,10]` = 1415.70768),
-        cor.slope_intercept = structure(c(0.36117, 0.33188), .Dim = 2:1, .Dimnames = list(
-          c("Days2(3,6]", "Days2(6,10]"), "Subject"
-        ))
+        var.fixed = 807.085453556748, var.random = 1711.44396436951,
+        var.residual = 748.811071562908, var.distribution = 748.811071562908,
+        var.dispersion = 0, var.intercept = c(Subject = 663.280418978822),
+        var.slope = c(`Subject.Days2(3,6]` = 882.364188919403, `Subject.Days2(6,10]` = 1415.70768194576),
+        cor.slope_intercept = structure(c(0.361173061386374, 0.331878499015884), dim = 2:1, dimnames = list(c("Days2(3,6]", "Days2(6,10]"), "Subject")),
+        cor.slopes = c(`Subject.Days2(3,6]-Days2(6,10]` = 0.847444720096841)
       ),
       tolerance = 1e-2
     )
