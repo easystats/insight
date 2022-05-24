@@ -382,7 +382,17 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
       # we only use the jacobian adjustment, because it can handle weights
       model_weights <- get_weights(x, na_rm = TRUE)
-      ll_adjustment <- .ll_jacobian_adjustment(x, model_weights)
+      ll_adjustment <- .ll_analytic_adjustment(x, model_weights)
+
+      # for debugging
+
+      # if (is.null(list(...)$debug)) {
+      #   ll_adjustment <- .ll_jacobian_adjustment(x, model_weights)
+      # } else if (list(...)$debug == "analytic") {
+      #   ll_adjustment <- .ll_analytic_adjustment(x, model_weights)
+      # } else {
+      #   ll_adjustment <- .ll_log_adjustment(x)
+      # }
 
       if (is.null(ll_adjustment) && isTRUE(verbose)) {
         warning(format_message("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate."), call. = FALSE)
@@ -407,6 +417,33 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
   out
 }
 
+
+
+
+.ll_analytic_adjustment <- function(x, model_weights = NULL) {
+  tryCatch(
+    {
+      trans <- find_transformation(x)
+
+      if (trans == "identity") {
+        .weighted_sum(log(get_response(x)), w = model_weights)
+      } else if (trans == "log") {
+        .weighted_sum(log(1 / get_response(x)), w = model_weights)
+      } else if (trans == "exp") {
+        .weighted_sum(get_response(x), w = model_weights)
+      } else if (trans == "sqrt") {
+        .weighted_sum(log(.5 / sqrt(get_response(x))), w = model_weights)
+      } else if (is.null(model_weights)) {
+        .ll_log_adjustment(x)
+      } else {
+        .ll_jacobian_adjustment(x, model_weights)
+      }
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
 
 
 
