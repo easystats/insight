@@ -1024,7 +1024,7 @@
 
   rho01 <- tryCatch(
     {
-      lapply(corrs, function(d) {
+      compact_list(lapply(corrs, function(d) {
         d[upper.tri(d, diag = TRUE)] <- NA
         d <- as.data.frame(d)
 
@@ -1032,10 +1032,14 @@
         d <- d[stats::complete.cases(d), ]
         d <- d[!d$Parameter1 %in% c("Intercept", "(Intercept)"), ]
 
+        if (nrow(d) == 0) {
+          return(NULL)
+        }
+
         d$Parameter <- paste0(d$Parameter1, "-", d$Parameter2)
         d$Parameter1 <- d$Parameter2 <- NULL
         stats::setNames(d$Value, d$Parameter)
-      })
+      }))
     },
     error = function(e) {
       NULL
