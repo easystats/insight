@@ -986,7 +986,7 @@
   } else {
     corrs <- lapply(vals$vc, attr, "correlation")
     rho01 <- sapply(corrs, function(i) {
-      if (!is.null(i)) {
+      if (!is.null(i) && colnames(i)[1] == "(Intercept)") {
         i[-1, 1]
       } else {
         NULL
