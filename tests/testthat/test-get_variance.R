@@ -236,4 +236,35 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
     )
   })
 
+  data(sleepstudy)
+  set.seed(123)
+  sleepstudy$Months <- sample(1:4, nrow(sleepstudy), TRUE)
+
+  m2 <- lmer(Reaction ~ Days + (0 + Days | Subject), data = sleepstudy)
+  m5 <- lmer(Reaction ~ Days + (0 + Days + Months | Subject), data = sleepstudy)
+
+  test_that("random effects CIs, simple slope", {
+    vc <- suppressWarnings(get_variance(m2))
+    expect_equal(
+      names(vc),
+      c("var.fixed", "var.random", "var.residual", "var.distribution",
+        "var.dispersion", "var.slope"),
+      tolerance = 1e-3,
+      ignore_attr = TRUE
+    )
+  })
+
+  test_that("random effects CIs, simple slope", {
+    vc <- suppressWarnings(get_variance(m5))
+    expect_equal(
+      vc,
+      list(var.fixed = 921.929610133035, var.random = 1068.04697608476,
+           var.residual = 764.479364064599, var.distribution = 764.479364064599,
+           var.dispersion = 0, var.slope = c(Subject.Days = 37.4753324942022,
+                                             Subject.Months = 27.6430649522841),
+           cor.slopes = c(`Subject.Days-Months` = 0.455625778436967)),
+      tolerance = 1e-3,
+      ignore_attr = TRUE
+    )
+  })
 }
