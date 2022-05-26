@@ -1028,7 +1028,7 @@
     return(NULL)
   }
 
-  rho01 <- tryCatch(
+  rho00 <- tryCatch(
     {
       compact_list(lapply(corrs, function(d) {
         d[upper.tri(d, diag = TRUE)] <- NA
@@ -1070,7 +1070,7 @@
   #   }
   # )
 
-  unlist(rho01)
+  unlist(rho00)
 }
 
 
