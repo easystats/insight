@@ -1,5 +1,13 @@
 # insight 0.17.1.1
 
+## Breaking changes
+
+* `get_data()` no longer returns logical types for numeric variables that have
+  been converted to logicals on-the-fly within formulas (like `y ~ as.logical(x)`).
+  Instead, for each numeric variable that was coerced to logical within a formula
+  gets a `logical` attribute (set to `TRUE`), and the returned data frame gets
+  a `logicals` attribute including all names of affected variables.
+
 ## Bug fixes
 
 * `null_model()` did not consider offset-terms if these were specified inside

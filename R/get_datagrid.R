@@ -167,6 +167,16 @@ get_datagrid.data.frame <- function(x,
       }
     })
 
+    # Deal with logical in-formula transformations ============================
+
+    x[] <- lapply(x, function(i) {
+      if (isTRUE(attributes(i)$logical)) {
+        as.logical(i)
+      } else {
+        i
+      }
+    })
+
     # Deal with targets ==========================================================
 
     if (is.character(target)) {

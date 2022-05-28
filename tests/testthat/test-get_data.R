@@ -67,15 +67,19 @@ if (.runThisTest) {
   data(iris)
   m <- lm(Sepal.Length ~ Sepal.Width, data = iris)
   out <- get_data(m)
-  expect_false(attributes(out)$is_subset)
-  expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width"))
-  expect_equal(nrow(out), 150)
+  test_that("subsets", {
+    expect_false(attributes(out)$is_subset)
+    expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width"))
+    expect_equal(nrow(out), 150)
+  })
 
   m <- lm(Sepal.Length ~ Sepal.Width, data = iris, subset = Species == "versicolor")
   out <- get_data(m)
-  expect_true(attributes(out)$is_subset)
-  expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
-  expect_equal(nrow(out), 50)
+  test_that("subsets", {
+    expect_true(attributes(out)$is_subset)
+    expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
+    expect_equal(nrow(out), 50)
+  })
 
   # d <- iris
   # m <- lm(Petal.Length ~ poly(Sepal.Length), data = d)
@@ -86,11 +90,15 @@ if (.runThisTest) {
   data(iris)
   m <- lm(log(Sepal.Length) ~ sqrt(Sepal.Width), data = iris)
   out <- get_data(m)
-  expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
+  test_that("log", {
+    expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
+  })
 
   m <- lm(log(Sepal.Length) ~ scale(Sepal.Width), data = iris)
   out <- get_data(m)
-  expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
+  test_that("log", {
+    expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
+  })
 
   if (.runStanTest) {
     requiet("brms")
@@ -105,3 +113,9 @@ if (.runThisTest) {
     expect_equal(out$cyl, c(4, 4, 6, 6, 8, 8, 8, 8, 8, 8))
   }
 }
+
+mod <- lm(mpg ~ as.logical(am) + factor(cyl) + as.factor(gear), mtcars)
+out <- get_data(mod)
+test_that("logicals", {
+  expect_equal(out$am, mtcars$am, ignore_attr = TRUE)
+})

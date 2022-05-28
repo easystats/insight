@@ -292,12 +292,13 @@
   }
 
 
-  # restore original data for factors -----------------------------------------
+  # restore original data for factors and logicals -----------------------------
 
   # are there any factor variables that have been coerced "on-the-fly",
   # using "factor()" or "as.factor()"? if so, get names and convert back
   # to numeric later
   factors <- colnames(mf)[grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", colnames(mf))]
+  logicals <- colnames(mf)[grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", colnames(mf))]
 
   ## TODO check! some lines above (see "mos_eisly"). monotonic terms are removed from the model frame
 
@@ -401,6 +402,7 @@
     effects,
     component = "all",
     factors = factors,
+    logicals = logicals,
     interactions = interactions,
     verbose = verbose
   )
@@ -413,7 +415,14 @@
 
 # add remainng variables with special pattern -------------------------------
 
-.add_remaining_missing_variables <- function(model, mf, effects, component, factors = NULL, interactions = NULL, verbose = TRUE) {
+.add_remaining_missing_variables <- function(model,
+                                             mf,
+                                             effects,
+                                             component,
+                                             factors = NULL,
+                                             logicals = NULL,
+                                             interactions = NULL,
+                                             verbose = TRUE) {
 
   # check if data argument was used
   model_call <- get_call(model)
@@ -488,6 +497,16 @@
       }
     }
     attr(mf, "factors") <- factors
+  }
+
+  # add attributes for those that were logicals
+  if (length(logicals)) {
+    logicals <- gsub("^(as\\.logical|as_logical|logical)\\((.*)\\)", "\\2", logicals)
+    for (i in logicals) {
+      mf[[i]] <- as.numeric(mf[[i]])
+      attr(mf[[i]], "logical") <- TRUE
+    }
+    attr(mf, "logicals") <- logicals
   }
 
   # add attribute that subset is used
