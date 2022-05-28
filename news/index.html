@@ -63,6 +63,10 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.17.1.1" id="insight-01711">insight 0.17.1.1<a class="anchor" aria-label="anchor" href="#insight-01711"></a></h2>
 <div class="section level3">
+<h3 id="breaking-changes-0-17-1-1">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-17-1-1"></a></h3>
+<ul><li>
+<code><a href="../reference/get_data.html">get_data()</a></code> no longer returns logical types for numeric variables that have been converted to logicals on-the-fly within formulas (like <code>y ~ as.logical(x)</code>). Instead, for each numeric variable that was coerced to logical within a formula gets a <code>logical</code> attribute (set to <code>TRUE</code>), and the returned data frame gets a <code>logicals</code> attribute including all names of affected variables.</li></ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-0-17-1-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-17-1-1"></a></h3>
 <ul><li><p><code><a href="../reference/null_model.html">null_model()</a></code> did not consider offset-terms if these were specified inside formulas.</p></li>
 <li><p>Argument <code>allow.new.levels</code> was not passed to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> for <code>get_predicted.glmmTMB()</code>.</p></li>
