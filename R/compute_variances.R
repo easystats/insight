@@ -1018,11 +1018,17 @@
     }
   )
 
-  if (length(rnd_slopes) < 2 && !isTRUE(cat_random_slopes)) {
+  # check if any polynomial / I term in random slopes.
+  # we then have correlation among levels
+  rs_names <- unique(unlist(lapply(corrs, colnames)))
+  pattern <- paste0("(I|poly)(.*)(", paste0(rnd_slopes, collapse = "|"), ")")
+  poly_random_slopes <- any(grepl(pattern, rs_names))
+
+  if (length(rnd_slopes) < 2 && !isTRUE(cat_random_slopes) && !isTRUE(poly_random_slopes)) {
     return(NULL)
   }
 
-  rho01 <- tryCatch(
+  rho00 <- tryCatch(
     {
       compact_list(lapply(corrs, function(d) {
         d[upper.tri(d, diag = TRUE)] <- NA
@@ -1064,7 +1070,7 @@
   #   }
   # )
 
-  unlist(rho01)
+  unlist(rho00)
 }
 
 

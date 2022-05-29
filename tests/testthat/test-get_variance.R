@@ -258,4 +258,18 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
       ignore_attr = TRUE
     )
   })
+
+  data(cake)
+  m <- lmer(angle ~ poly(temp, 2) + (poly(temp, 2) | replicate) + (1 | recipe), data = cake)
+
+  test_that("random effects CIs, poly slope", {
+    vc <- suppressWarnings(get_variance(m))
+    expect_equal(
+      vc$cor.slopes,
+      c(`replicate.poly(temp, 2)1-poly(temp, 2)2` = 0.940016422944175),
+      tolerance = 1e-3,
+      ignore_attr = TRUE
+    )
+  })
+
 }
