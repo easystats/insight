@@ -440,8 +440,9 @@ find_parameters.stanreg <- function(x,
                                     flatten = FALSE,
                                     parameters = NULL,
                                     ...) {
-  # fe <- colnames(as.data.frame(x))
-  fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
+  fe <- colnames(as.data.frame(x))
+  # This does not exclude all relevant names, see e.g. "stanreg_merMod_5".
+  # fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
