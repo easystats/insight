@@ -225,7 +225,8 @@ find_parameters.brmsfit <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   component <- match.arg(component, choices = c("all", .all_elements()))
 
-  fe <- colnames(as.data.frame(x))
+  fe <- dimnames(x$fit)$parameters
+  # fe <- colnames(as.data.frame(x))
 
   # remove redundant columns. These seem to be new since brms 2.16?
   pattern <- c("^[A-z]_\\d\\.\\d\\.(.*)")
@@ -439,7 +440,8 @@ find_parameters.stanreg <- function(x,
                                     flatten = FALSE,
                                     parameters = NULL,
                                     ...) {
-  fe <- colnames(as.data.frame(x))
+  # fe <- colnames(as.data.frame(x))
+  fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
