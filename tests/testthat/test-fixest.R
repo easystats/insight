@@ -22,6 +22,8 @@ test_that("find_predictors", {
   expect_identical(find_predictors(m1), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
   expect_identical(find_predictors(m2), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
   expect_identical(find_predictors(m3), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
+  expect_identical(find_predictors(m4), list(conditional = c("Petal.Length", "Sepal.Length"), cluster = "Species",
+                                             instruments = "Petal.Width", endogenous = "Sepal.Length"))
   expect_identical(
     find_predictors(m1, component = "all"),
     list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
@@ -39,7 +41,8 @@ test_that("find_predictors", {
     list(
       conditional = c("Petal.Length", "Sepal.Length"),
       cluster = "Species",
-      instruments = "Petal.Width"
+      instruments = "Petal.Width",
+      endogenous = "Sepal.Length"
     )
   )
 })
@@ -256,7 +259,7 @@ test_that("find_variables with interaction", {
   expect_equal(
     find_variables(mod),
     list(response = "mpg", conditional = "vs", cluster = "carb",
-         instruments = c("am", "cyl")),
+         instruments = c("am", "cyl"), endogenous = c("vs", "cyl")),
     ignore_attr = TRUE
   )
 })
