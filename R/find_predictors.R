@@ -148,21 +148,34 @@ find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 #' @export
 find_predictors.fixest <- function(x, flatten = FALSE, ...) {
   response <- find_response(x)
-  instruments <- all.vars(stats::as.formula(paste0("~", x$iv_inst_names)))
-  endo <- all.vars(stats::as.formula(paste0("~", x$iv_endo_names)))
-  cluster <- all.vars(stats::as.formula(paste0("~", x$fixef_vars)))
+  instruments <- x$iv_inst_names
+  endo <- x$iv_endo_names
+  cluster <- x$fixef_vars
+
+  if (!is.null(instruments)) {
+    instruments <- all.vars(stats::as.formula(paste0("~", instruments)))
+  }
+  if (!is.null(endo)) {
+    endo <- all.vars(stats::as.formula(paste0("~", endo)))
+  }
+  if (!is.null(cluster)) {
+    cluster <- all.vars(stats::as.formula(paste0("~", cluster)))
+  }
+
   conditional <- all.vars(stats::formula(x))
   conditional <- setdiff(conditional, c(instruments, cluster, find_response(x)))
-  l <- list(
+
+  l <- compact_list(list(
     "conditional" = conditional,
     "cluster" = cluster,
-    "instruments" = instruments
-  )
-  l <- Filter(function(x) length(x) > 0, l)
-  if (isTRUE(flatten)) {
-    l <- unlist(l)
+    "instruments" = instruments,
+    "endogenous" = endo
+  ))
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
   }
-  l
 }
 
 
