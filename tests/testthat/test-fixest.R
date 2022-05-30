@@ -249,3 +249,14 @@ test_that("get_data works when model data has name of  reserved words", {
     tolerance = 1e-3
   )
 })
+
+
+test_that("find_variables with interaction", {
+  mod <- suppressMessages(feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars))
+  expect_equal(
+    find_variables(mod),
+    list(response = "mpg", conditional = "vs", cluster = "carb",
+         instruments = c("am", "cyl")),
+    ignore_attr = TRUE
+  )
+})
