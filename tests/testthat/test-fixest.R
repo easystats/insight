@@ -262,4 +262,9 @@ test_that("find_variables with interaction", {
          instruments = c("am", "cyl"), endogenous = c("vs", "cyl")),
     ignore_attr = TRUE
   )
+
+  # used to produce a warning
+  mod <- feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars)
+  expect_warning(find_variables(mod), NA)
+
 })
