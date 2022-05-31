@@ -44,6 +44,10 @@ get_transformation <- function(x) {
     out <- list(transformation = log, inverse = exp)
   } else if (transform_fun %in% c("log1p", "log(x+1)")) {
     out <- list(transformation = log1p, inverse = expm1)
+  } else if (transform_fun == "log10") {
+    out <- list(transformation = log10, inverse = function(x) NA)
+  } else if (transform_fun == "log2") {
+    out <- list(transformation = log2, inverse = function(x) NA)
   } else if (transform_fun == "exp") {
     out <- list(transformation = exp, inverse = log)
   } else if (transform_fun == "sqrt") {

@@ -429,8 +429,16 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
         .weighted_sum(log(get_response(x)), w = model_weights)
       } else if (trans == "log") {
         .weighted_sum(log(1 / get_response(x)), w = model_weights)
+      } else if (trans == "log1p") {
+        .weighted_sum(log(1 / (get_response(x) + 1)), w = model_weights)
+      } else if (trans == "log2") {
+        .weighted_sum(log(1 / (get_response(x) * log(2))), w = model_weights)
+      } else if (trans == "log10") {
+        .weighted_sum(log(1 / (get_response(x) * log(10))), w = model_weights)
       } else if (trans == "exp") {
         .weighted_sum(get_response(x), w = model_weights)
+      } else if (trans == "expm1") {
+        .weighted_sum((get_response(x) - 1), w = model_weights)
       } else if (trans == "sqrt") {
         .weighted_sum(log(.5 / sqrt(get_response(x))), w = model_weights)
       } else if (is.null(model_weights)) {

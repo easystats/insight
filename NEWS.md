@@ -8,6 +8,11 @@
   gets a `logical` attribute (set to `TRUE`), and the returned data frame gets
   a `logicals` attribute including all names of affected variables.
 
+## Changes to functions
+
+* `find_transformation()` and `get_transformation()` now also work for models 
+  where the response was transformed using `log2()` or `log10()`.
+
 ## Bug fixes
 
 * `null_model()` did not consider offset-terms if these were specified inside

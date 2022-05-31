@@ -4,8 +4,8 @@
 #' @description This functions checks whether any transformation, such as log-
 #'   or exp-transforming, was applied to the response variable (dependent
 #'   variable) in a regression formula. Currently, following patterns are
-#'   detected: `log`, `log1p`, `exp`, `expm1`, `sqrt`, `log(x+<number>)` and
-#'   `log-log`.
+#'   detected: `log`, `log1p`, `log2`, `log10`, `exp`, `expm1`, `sqrt`,
+#'   `log(x+<number>)` and `log-log`.
 #'
 #' @param x A regression model.
 #' @return A string, with the name of the function of the applied transformation.
@@ -59,6 +59,17 @@ find_transformation <- function(x) {
 
   if (any(grepl("expm1\\((.*)\\)", rv))) {
     transform_fun <- "expm1"
+  }
+
+
+  # log2/log10-transformation
+
+  if (any(grepl("log2\\((.*)\\)", rv))) {
+    transform_fun <- "log2"
+  }
+
+  if (any(grepl("log10\\((.*)\\)", rv))) {
+    transform_fun <- "log10"
   }
 
 
