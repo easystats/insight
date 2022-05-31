@@ -156,7 +156,7 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
     instruments <- all.vars(stats::as.formula(paste0("~", paste(instruments, collapse = "+"))))
   }
   if (!is.null(endo)) {
-    endo <- all.vars(stats::as.formula(paste0("~", paste(endo, collapse = "+"))))
+    endo <- all.vars(endo)
   }
   if (!is.null(cluster)) {
     cluster <- all.vars(stats::as.formula(paste0("~", paste(cluster, collapse = "+"))))
