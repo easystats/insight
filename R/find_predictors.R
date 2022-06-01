@@ -149,7 +149,7 @@ find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 find_predictors.fixest <- function(x, flatten = FALSE, ...) {
   response <- find_response(x)
   instruments <- x$iv_inst_names
-  endo <- x$iv_end_fml
+  endo <- x$iv_endo_fml
   cluster <- x$fixef_vars
 
   if (!is.null(instruments)) {
