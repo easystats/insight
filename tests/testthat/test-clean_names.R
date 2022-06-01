@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight")) {
+if (requiet("testthat") && requiet("insight") && requiet("mgcv")) {
   test_that("clean_names", {
     expect_equal(clean_names(""), "")
     expect_equal(clean_names("as.factor(test)"), "test")
@@ -29,7 +29,6 @@ if (requiet("testthat") && requiet("insight")) {
     expect_equal(clean_names("~ 1 | test"), "test")
     expect_equal(clean_names("~1|test"), "test")
     expect_equal(clean_names("1 | test"), "test")
-
     expect_equal(clean_names("as.factor(Sepal.Length)"), "Sepal.Length")
     expect_equal(clean_names("log(Sepal.Length)"), "Sepal.Length")
     expect_equal(clean_names("log(Sepal.Length, base = exp(3))"), "Sepal.Length")
@@ -62,5 +61,7 @@ if (requiet("testthat") && requiet("insight")) {
       clean_names(c("scale(a)", "scale(b)", "scale(a):scale(b)"), include_names = TRUE),
       c(`scale(a)` = "a", `scale(b)` = "b", `scale(a):scale(b)` = "a:b")
     )
+    expect_equal(clean_names("s(x1, x2)"), "x1, x2")
+    expect_equal(clean_names("s(x1, x2, k = -1)"), "x1, x2")
   })
 }

@@ -165,6 +165,8 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           p <- paste0("^", pattern[j], "\\((.*)\\).*")
           g <- trim_ws(sub(p, "\\1", x[i]))
           x[i] <- trim_ws(unlist(strsplit(g, ",")))
+        } else if (pattern[j] == "s" && grepl("^s\\(", x[i])) {
+          x[i] <- paste(eval(parse(text = x[i]))$term, collapse = ', ')
         } else {
           # p <- paste0("^", pattern[j], "\\(([^,/)]*).*")
           # this one should be more generic...
