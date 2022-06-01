@@ -63,5 +63,6 @@ if (requiet("testthat") && requiet("insight") && requiet("mgcv")) {
     )
     expect_equal(clean_names("s(x1, x2)"), "x1, x2")
     expect_equal(clean_names("s(x1, x2, k = -1)"), "x1, x2")
+    expect_equal(clean_names("s(x1, x2, x3)"), "x1, x2, x3")
   })
 }
