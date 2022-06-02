@@ -90,33 +90,16 @@ appear in the <code><a href="https://rdrr.io/r/base/summary.html" class="externa
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>A fitted model.</p></dd>
-<dt>component</dt>
-<dd><p>Which type of parameters to return, such as parameters for the
-conditional model, the zero-inflated part of the model, the dispersion
-term, the instrumental variables or marginal effects be returned? Applies
-to models with zero-inflated and/or dispersion formula, or to models with
-instrumental variables (so called fixed-effects regressions), or models
-with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
-<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model. There are three convenient shortcuts:
-<code>component = "all"</code> returns all possible parameters.
-If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
-<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned
-(everything that are fixed or random effects - depending on the <code>effects</code>
-argument - but no auxiliary parameters). For <code>component = "distributional"</code>
-(or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
-<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></dd>
-<dt>flatten</dt>
-<dd><p>Logical, if <code>TRUE</code>, the values are returned
-as character vector, not as list. Duplicated values are removed.</p></dd>
-<dt>...</dt>
-<dd><p>Currently not used.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list of parameter names. The returned list may have following
+    
+
+<p>A list of parameter names. The returned list may have following
 elements:</p><ul><li><p><code>conditional</code>, the "fixed effects" part from the model.</p></li>
 <li><p><code>marginal</code>, the marginal effects.</p></li>
 <li><p><code>precision</code>, the precision parameter.</p></li>

@@ -96,35 +96,18 @@ default).</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>A model.</p></dd>
-<dt>...</dt>
-<dd><p>Passed down to <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code>, if possible.</p></dd>
-<dt>estimator</dt>
-<dd><p>Corresponds to the different estimators for the standard
-deviation of the errors. If <code>estimator="ML"</code> (default), the scaling is
-done by n (the biased ML estimator), which is then equivalent to using
-<code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">stats::logLik()</a></code>. If <code>estimator="OLS"</code>, it returns the unbiased
-OLS estimator. <code>estimator="REML"</code> will give same results as
-<code>logLik(..., REML=TRUE)</code>.</p></dd>
-<dt>REML</dt>
-<dd><p>Only for linear models. This argument is present for
-compatibility with <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">stats::logLik()</a></code>. Setting it to <code>TRUE</code> will
-overwrite the <code>estimator</code> argument and is thus equivalent to setting
-<code>estimator="REML"</code>. It will give the same results as
-<code>stats::logLik(..., REML=TRUE)</code>. Note that individual log-likelihoods
-are not available under REML.</p></dd>
-<dt>check_response</dt>
-<dd><p>Logical, if <code>TRUE</code>, checks if the response variable
-is transformed (like <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code> or <code><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt()</a></code>), and if so, returns a corrected
-log-likelihood. To get back to the original scale, the likelihood of the
-model is multiplied by the Jacobian/derivative of the transformation.</p></dd>
-<dt>verbose</dt>
-<dd><p>Toggle warnings and messages.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>"logLik"</code>, also containing the
+    
+
+<p>An object of class <code>"logLik"</code>, also containing the
 log-likelihoods for each observation as a <code>per_observation</code> attribute
 (<code>attributes(get_loglikelihood(x))$per_observation</code>) when possible.
 The code was partly inspired from the <a href="https://CRAN.R-project.org/package=nonnest2" class="external-link"><span class="pkg">nonnest2</span></a> package.</p>

@@ -87,61 +87,18 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>A statistical model (can also be a data.frame, in which case the
-second argument has to be a model).</p></dd>
-<dt>predictions</dt>
-<dd><p>A vector of predicted values (as obtained by
-<code><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">stats::fitted()</a></code>, <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">stats::predict()</a></code> or
-<code><a href="get_predicted.html">get_predicted()</a></code>).</p></dd>
-<dt>...</dt>
-<dd><p>Other argument to be passed, for instance to <code>get_predicted_ci()</code>.</p></dd>
-<dt>data</dt>
-<dd><p>An optional data frame in which to look for variables with which
-to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using <code><a href="get_datagrid.html">get_datagrid()</a></code>.</p></dd>
-<dt>se</dt>
-<dd><p>Numeric vector of standard error of predicted values. If <code>NULL</code>,
-standard errors are calculated based on the variance-covariance matrix.</p></dd>
-<dt>ci</dt>
-<dd><p>The interval level (default <code>0.95</code>, i.e., <code>95%</code> CI).</p></dd>
-<dt>ci_type</dt>
-<dd><p>Can be <code>"prediction"</code> or <code>"confidence"</code>. Prediction
-intervals show the range that likely contains the value of a new
-observation (in what range it would fall), whereas confidence intervals
-reflect the uncertainty around the estimated parameters (and gives the
-range of the link; for instance of the regression line in a linear
-regressions). Prediction intervals account for both the uncertainty in the
-model's parameters, plus the random variation of the individual values.
-Thus, prediction intervals are always wider than confidence intervals.
-Moreover, prediction intervals will not necessarily become narrower as the
-sample size increases (as they do not reflect only the quality of the fit).
-This applies mostly for "simple" linear models (like <code>lm</code>), as for
-other models (e.g., <code>glm</code>), prediction intervals are somewhat useless
-(for instance, for a binomial model for which the dependent variable is a
-vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd>
-<dt>ci_method</dt>
-<dd><p>The method for computing p values and confidence intervals. Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the default method, which varies based on the model type.</p></li>
-<li><p>Most frequentist models: <code>"normal"</code> (default).</p></li>
-<li><p>Bayesian models: "quantile" (default), "hdi", "eti".</p></li>
-<li><p>Mixed effects <strong>lme4</strong> models: <code>"normal"</code> (default), <code>"satterthwaite"</code>, <code>"kenward"</code>.</p></li>
-</ul></dd>
-<dt>dispersion_method</dt>
-<dd><p>Bootstrap dispersion and Bayesian posterior summary: <code>"sd"</code> or <code>"mad"</code>.</p></dd>
-<dt>vcov</dt>
-<dd><p>Variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors). This argument accepts a covariance matrix, a function which returns a covariance matrix, or a string which identifies the function to be used to compute the covariance matrix.</p><ul><li><p>A covariance matrix</p></li>
-<li><p>A function which returns a covariance matrix (e.g., <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">stats::vcov()</a></code>)</p></li>
-<li><p>A string which indicates the kind of uncertainty estimates to return.</p><ul><li><p>Heteroskedasticity-consistent: <code>"vcovHC"</code>, <code>"HC"</code>, <code>"HC0"</code>, <code>"HC1"</code>, <code>"HC2"</code>, <code>"HC3"</code>, <code>"HC4"</code>, <code>"HC4m"</code>, <code>"HC5"</code>. See <code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovHC.html" class="external-link">?sandwich::vcovHC</a></code></p></li>
-<li><p>Cluster-robust: <code>"vcovCR"</code>, <code>"CR0"</code>, <code>"CR1"</code>, <code>"CR1p"</code>, <code>"CR1S"</code>, <code>"CR2"</code>, <code>"CR3"</code>. See <code>?clubSandwich::vcovCR()</code></p></li>
-<li><p>Bootstrap: <code>"vcovBS"</code>, <code>"xy"</code>, <code>"residual"</code>, <code>"wild"</code>, <code>"mammen"</code>, <code>"webb"</code>. See <code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovBS.html" class="external-link">?sandwich::vcovBS</a></code></p></li>
-<li><p>Other <code>sandwich</code> package functions: <code>"vcovHAC"</code>, <code>"vcovPC"</code>, <code>"vcovCL"</code>, <code>"vcovPL"</code>.</p></li>
-</ul></li>
-</ul></dd>
-<dt>vcov_args</dt>
-<dd><p>List of arguments to be passed to the function identified by
-the <code>vcov</code> argument. This function is typically supplied by the <strong>sandwich</strong>
-or <strong>clubSandwich</strong> packages. Please refer to their documentation (e.g.,
-<code><a href="https://sandwich.R-Forge.R-project.org//reference/vcovHAC.html" class="external-link">?sandwich::vcovHAC</a></code>) to see the list of available arguments.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

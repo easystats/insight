@@ -170,53 +170,22 @@ models) from a model.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>A fitted model.</p></dd>
-<dt>component</dt>
-<dd><p>Which type of parameters to return, such as parameters for the
-conditional model, the zero-inflated part of the model, the dispersion
-term, the instrumental variables or marginal effects be returned? Applies
-to models with zero-inflated and/or dispersion formula, or to models with
-instrumental variables (so called fixed-effects regressions), or models
-with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
-<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model. There are three convenient shortcuts:
-<code>component = "all"</code> returns all possible parameters.
-If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
-<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned
-(everything that are fixed or random effects - depending on the <code>effects</code>
-argument - but no auxiliary parameters). For <code>component = "distributional"</code>
-(or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
-<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></dd>
-<dt>summary</dt>
-<dd><p>Logical, indicates whether the full posterior samples
-(<code>summary = FALSE</code>)) or the summarized centrality indices of
-the posterior samples (<code>summary = TRUE</code>)) should be returned as
-estimates.</p></dd>
-<dt>centrality</dt>
-<dd><p>Only for models with posterior samples, and when
-<code>summary = TRUE</code>. In this case, <code>centrality = "mean"</code> would
-calculate means of posterior samples for each parameter, while
-<code>centrality = "median"</code> would use the more robust median value as
-measure of central tendency.</p></dd>
-<dt>...</dt>
-<dd><p>Currently not used.</p></dd>
-<dt>effects</dt>
-<dd><p>Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
-<dt>iterations</dt>
-<dd><p>Number of posterior draws.</p></dd>
-<dt>progress</dt>
-<dd><p>Display progress.</p></dd>
-<dt>verbose</dt>
-<dd><p>Toggle messages and warnings.</p></dd>
-<dt>parameters</dt>
-<dd><p>Regular expression pattern that describes the parameters that
-should be returned.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The posterior samples from the requested parameters as data frame.
+    
+
+<p>The posterior samples from the requested parameters as data frame.
 If <code>summary = TRUE</code>, returns a data frame with two columns: the
 parameter names and the related point estimates (based on <code>centrality</code>).</p>
     </div>

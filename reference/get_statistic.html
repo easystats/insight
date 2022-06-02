@@ -116,46 +116,21 @@ estimates. In most cases, this is the related column from
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>A model.</p></dd>
-<dt>...</dt>
-<dd><p>Currently not used.</p></dd>
-<dt>column_index</dt>
-<dd><p>For model objects that have no defined
-<code>get_statistic()</code> method yet, the default method is called. This
-method tries to extract the statistic column from <code>coef(summary())</code>,
-where the index of the column that is being pulled is <code>column_index</code>.
-Defaults to 3, which is the default statistic column for most models'
-summary-output.</p></dd>
-<dt>verbose</dt>
-<dd><p>Toggle messages and warnings.</p></dd>
-<dt>component</dt>
-<dd><p>Should all parameters, parameters for the conditional model,
-or for the zero-inflated part of the model be returned? Applies to models
-with zero-inflated component. <code>component</code> may be one of
-<code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code> or <code>"all"</code>
-(default). For models with smooth terms, <code>component = "smooth_terms"</code>
-is also possible. May be abbreviated. Note that the <em>conditional</em>
-component is also called <em>count</em> or <em>mean</em> component, depending
-on the model.</p></dd>
-<dt>ci</dt>
-<dd><p>Confidence Interval (CI) level. Default to <code>0.95</code> (<code>95%</code>).
-Currently only applies to objects of class <code>emmGrid</code>.</p></dd>
-<dt>adjust</dt>
-<dd><p>Character value naming the method used to adjust p-values or
-confidence intervals. See <code><a href="https://rdrr.io/pkg/emmeans/man/summary.emmGrid.html" class="external-link">?emmeans::summary.emmGrid</a></code> for details.</p></dd>
-<dt>merge_parameters</dt>
-<dd><p>Logical, if <code>TRUE</code> and <code>x</code> has multiple
-columns for parameter names (like <code>emmGrid</code> objects may have), these
-are merged into a single parameter column, with parameters names and values
-as values.</p></dd>
-<dt>robust</dt>
-<dd><p>Logical, if <code>TRUE</code>, test statistic based on robust
-standard errors is returned.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with the model's parameter names and the related test
+    
+
+<p>A data frame with the model's parameter names and the related test
 statistic.</p>
     </div>
 

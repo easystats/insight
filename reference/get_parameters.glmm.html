@@ -90,30 +90,16 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>A fitted model.</p></dd>
-<dt>effects</dt>
-<dd><p>Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
-<dt>...</dt>
-<dd><p>Currently not used.</p></dd>
-<dt>component</dt>
-<dd><p>Which type of parameters to return, such as parameters for
-the conditional model, the zero-inflated part of the model or the
-dispersion term? Applies to models with zero-inflated and/or dispersion
-formula. Note that the <em>conditional</em> component is also called
-<em>count</em> or <em>mean</em> component, depending on the model. There are
-three convenient shortcuts: <code>component = "all"</code> returns all possible
-parameters. If <code>component = "location"</code>, location parameters such as
-<code>conditional</code> or <code>zero_inflated</code> are returned (everything that
-are fixed or random effects - depending on the <code>effects</code> argument -
-but no auxiliary parameters). For <code>component = "distributional"</code> (or
-<code>"auxiliary"</code>), components like <code>sigma</code> or <code>dispersion</code> (and
-other auxiliary parameters) are returned.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>If <code>effects = "fixed"</code>, a data frame with two columns: the
+    
+
+<p>If <code>effects = "fixed"</code>, a data frame with two columns: the
 parameter names and the related point estimates. If <code>effects = "random"</code>, a list of data frames with the random effects (as returned by
 <code><a href="https://rdrr.io/pkg/lme4/man/ranef.html" class="external-link">ranef()</a></code>), unless the random effects have the same simplified
 structure as fixed effects (e.g. for models from <span class="pkg">MCMCglmm</span>).</p>

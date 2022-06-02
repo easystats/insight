@@ -112,76 +112,25 @@ See this <a href="https://easystats.github.io/modelbased/articles/visualisation_
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>An object from which to construct the reference grid.</p></dd>
-<dt>...</dt>
-<dd><p>Arguments passed to or from other methods (for instance, <code>length</code>
-or <code>range</code> to control the spread of numeric variables.).</p></dd>
-<dt>at</dt>
-<dd><p>Can be <code>"all"</code>, a character vector or list of named elements, indicating
-the predictors of interest (focal predictors). Can also contain assignments
-(as named list, e.g. <code>at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))</code>,
-or as string, e.g. <code>at = "Sepal.Length = 2"</code> or
-<code>at = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single
-and double quotes to assign strings within strings). The remaining variables
-will be fixed.</p></dd>
-<dt>factors</dt>
-<dd><p>Type of summary for factors. Can be <code>"reference"</code> (set at the
-reference level), <code>"mode"</code> (set at the most common level) or <code>"all"</code> to
-keep all levels.</p></dd>
-<dt>numerics</dt>
-<dd><p>Type of summary for numeric values. Can be <code>"all"</code> (will
-duplicate the grid for all unique values), any function (<code>"mean"</code>,
-<code>"median"</code>, ...) or a value (e.g., <code>numerics = 0</code>).</p></dd>
-<dt>preserve_range</dt>
-<dd><p>In the case of combinations between numeric variables
-and factors, setting <code>preserve_range = TRUE</code> will drop the observations
-where the value of the numeric variable is originally not present in the
-range of its factor level. This leads to an unbalanced grid. Also, if you
-want the minimum and the maximum to closely match the actual ranges, you
-should increase the <code>length</code> argument.</p></dd>
-<dt>reference</dt>
-<dd><p>The reference vector from which to compute the mean and SD.
-Used when standardizing or unstandardizing the grid using <code><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">effectsize::standardize</a></code>.</p></dd>
-<dt>length</dt>
-<dd><p>Length of numeric target variables selected in <code>"at"</code>. This arguments
-controls the number of (equally spread) values that will be taken to represent the
-continuous variables. A longer length will increase precision, but can also
-substantially increase the size of the datagrid (especially in case of interactions).
-If <code>NA</code>, will return all the unique values. In case of multiple continuous target
-variables, <code>length</code> can also be a vector of different values (see examples).</p></dd>
-<dt>range</dt>
-<dd><p>If <code>"range"</code> (default), will use the minimum and maximum of the
-original data vector as end-points (min and max). If an interval type is specified,
-such as <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">"iqr"</a></code>, <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">"ci"</a></code>, <code><a href="https://easystats.github.io/bayestestR/reference/hdi.html" class="external-link">"hdi"</a></code> or <code><a href="https://easystats.github.io/bayestestR/reference/eti.html" class="external-link">"eti"</a></code>, it will spread the values within
-that range (the default CI width is <code>95%</code> but this can be changed by adding for instance
-<code>ci = 0.90</code>. See <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR()</a></code> and <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code>. This can be useful to have
-more robust change and skipping extreme values. If <code><a href="https://rdrr.io/r/stats/sd.html" class="external-link">"sd"</a></code> or <code><a href="https://rdrr.io/r/stats/mad.html" class="external-link">"mad"</a></code>, it will
-spread by this dispersion index around the mean or the median, respectively.
-If the <code>length</code> argument is an even number (e.g., <code>4</code>), it will have one more
-step on the positive side (i.e., <code>-1, 0, +1, +2</code>). The result is a named vector.
-See examples.</p></dd>
-<dt>include_smooth</dt>
-<dd><p>If <code>x</code> is a model object, decide whether smooth terms
-should be included in the data grid or not.</p></dd>
-<dt>include_random</dt>
-<dd><p>If <code>x</code> is a mixed model object, decide whether random
-effect terms should be included in the data grid or not. If
-<code>include_random</code> is <code>FALSE</code>, but <code>x</code> is a mixed model with random effects,
-these will still be included in the returned grid, but set to their
-"population level" value (e.g., <code>NA</code> for <em>glmmTMB</em> or <code>0</code> for <em>merMod</em>).
-This ensures that common <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> methods work properly, as these
-usually need data with all variables in the model included.</p></dd>
-<dt>include_response</dt>
-<dd><p>If <code>x</code> is a model object, decide whether the response
-variable should be included in the data grid or not.</p></dd>
-<dt>data</dt>
-<dd><p>Optional, the data frame that was used to fit the model. Usually,
-the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Reference grid data frame.</p>
+    
+
+<p>Reference grid data frame.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
