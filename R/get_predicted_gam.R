@@ -55,8 +55,9 @@ get_predicted.gam <- function(x,
     dot_args <- list(...)
     dot_args[["type"]] <- NULL
     predict_args <- list(x, newdata = data, type = args$type, re.form = args$re.form,
-                         unconditional = FALSE, se.fit = TRUE, dot_args)
-    do.call(stats::predict, compact_list(predict_args))
+                         unconditional = FALSE, se.fit = TRUE)
+    predict_args <- c(predict_args, dot_args)
+    a <- do.call(stats::predict, compact_list(predict_args))
   }
 
   # Get prediction
