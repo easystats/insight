@@ -63,7 +63,11 @@ get_predicted.gam <- function(x,
   }
 
   # Get prediction
-  rez <- predict_function(x, data = args$data, se.fit = TRUE)
+  rez <- predict_function(
+        x,
+        data = args$data,
+        se.fit = TRUE,
+        ...)
   if (is.null(iterations)) {
     predictions <- rez$fit
   } else {
