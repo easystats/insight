@@ -166,7 +166,16 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           g <- trim_ws(sub(p, "\\1", x[i]))
           x[i] <- trim_ws(unlist(strsplit(g, ",")))
         } else if (pattern[j] == "s" && grepl("^s\\(", x[i])) {
-          x[i] <- paste(eval(parse(text = x[i]))$term, collapse = ', ')
+          if (origin_function("s") == "mgcv") {
+            x[i] <- paste(eval(parse(text = x[i]))$term, collapse = ', ')
+          } else if (origin_function("s") == "gam") {
+            x[i] <- gsub("^s\\(", "", x[i])
+            x[i] <- gsub("\\)$", "", x[i])
+            if (grepl("=|[[:digit:]]", x[i])) {
+              new_x <- trimws(unlist(strsplit(x[i], ",")))
+              x[i] <- paste(new_x[which(grepl("\\D", new_x))], collapse = ", ")
+            }
+          }
         } else {
           # p <- paste0("^", pattern[j], "\\(([^,/)]*).*")
           # this one should be more generic...
