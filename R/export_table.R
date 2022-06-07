@@ -1000,7 +1000,7 @@ print.insight_table <- function(x, ...) {
 
   tab <- gt::gt(final, groupname_col = group_by_columns)
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
-  footer <- gt::tab_source_note(header, source_note = footer)
+  footer <- gt::tab_source_note(header, source_note = gt::html(footer))
   out <- gt::cols_align(footer, align = "center")
 
   # align columns

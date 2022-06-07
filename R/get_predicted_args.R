@@ -129,7 +129,7 @@
     transform <- FALSE
 
     # linear models are always on response scale (there is no other)
-  } else if (info$is_linear) {
+  } else if (info$is_linear && !info$is_gam) {
     type_arg <- "response"
     scale_arg <- "response"
     transform <- FALSE

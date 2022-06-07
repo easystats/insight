@@ -323,9 +323,9 @@ test_that("get_predicted - mgcv::gam and gamm", {
   expect_equal(length(rez), 3)
 
   # No smooth
-  rez <- insight::get_predicted(x, newdata = data.frame(am = c(0, 0, 1)))
+  rez <- insight::get_predicted(x, data = data.frame(am = c(0, 0, 1)))
   expect_equal(length(rez), 3)
-  rez2 <- insight::get_predicted(x, newdata = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)), include_smooth = FALSE)
+  rez2 <- insight::get_predicted(x, data = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)), include_smooth = FALSE)
   expect_equal(max(abs(as.numeric(rez - rez2))), 0, tolerance = 1e-4)
   expect_equal(length(unique(attributes(rez)$data$wt)), 1)
 

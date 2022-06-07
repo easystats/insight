@@ -51,26 +51,28 @@ get_predicted.gam <- function(x,
 
 
   # Prediction function
-  predict_function <- function(x, data, ...) {
-    stats::predict(
-      x,
-      newdata = data,
-      type = args$type,
-      re.form = args$re.form,
-      unconditional = FALSE,
-      ...
-    )
+  predict_function <- function(x, data, se.fit = TRUE, ...) {
+    dot_args <- list(...)
+    dot_args[["type"]] <- NULL
+    predict_args <- list(x, newdata = data, type = args$type, re.form = args$re.form,
+                         unconditional = FALSE, se.fit = se.fit)
+    predict_args <- c(predict_args, dot_args)
+    do.call(stats::predict, compact_list(predict_args))
+  }
+
+  boot_function <- function(x, data, ...) {
+    predict_function(x, data, se.fit = FALSE, ...)
   }
 
   # Get prediction
-  rez <- predict_function(x, data = args$data, se.fit = TRUE)
+  rez <- predict_function(x, data = args$data, ...)
   if (is.null(iterations)) {
     predictions <- rez$fit
   } else {
     predictions <- .get_predicted_boot(
       x,
       data = args$data,
-      predict_function = predict_function,
+      predict_function = boot_function,
       iterations = iterations,
       verbose = verbose,
       ...
