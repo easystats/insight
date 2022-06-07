@@ -133,7 +133,7 @@
 
     # in case we have missing data, the data frame in the environment
     # has more rows than the model frame
-    if (!is.null(md) && nrow(md) != nrow(mf)) {
+    if (isTRUE(!is.null(md) && nrow(md) != nrow(mf))) {
       md <- tryCatch(
         {
           md <- .recover_data_from_environment(x)

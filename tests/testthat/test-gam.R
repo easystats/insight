@@ -223,6 +223,55 @@ if (.runThisTest) {
       expect_equal(x, y, ignore_attr = TRUE)
       expect_equal(x, z$fit, ignore_attr = TRUE)
       expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
+
+      # poisson
+      void <- capture.output(
+        dat <- gamSim(1, n = 400, dist = "poisson", scale = .25)
+      )
+      b4 <- gam(
+        y ~ s(x0) + s(x1) + s(x2) + s(x3),
+        family = poisson,
+        data = dat,
+        method = "GACV.Cp",
+        scale = -1
+      )
+      d <- get_datagrid(b4, at = "x1")
+      p1 <- get_predicted(b4, data = d, predict = "expectation")
+      p2 <- predict(b4, newdata = d, type = "response")
+      expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+
+      p1 <- get_predicted(b4, data = d, predict = "link")
+      p2 <- predict(b4, newdata = d, type = "link")
+      expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+
+      p1 <- get_predicted(b4, data = d, type = "link", predict = NULL)
+      p2 <- predict(b4, newdata = d, type = "link")
+      expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+
+      p1 <- get_predicted(b4, data = d, type = "response", predict = NULL)
+      p2 <- predict(b4, newdata = d, type = "response")
+      expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+
+      void <- capture.output(
+        dat <- gamSim(1, n = 400, dist = "poisson", scale = .25)
+      )
+      b4 <- gam(
+        y ~ s(x0) + s(x1) + s(x2) + s(x3),
+        family = poisson,
+        data = dat,
+        method = "GACV.Cp",
+        scale = -1
+      )
+
+      # exclude argument should be pushed through ...
+      p1 <- predict(b4, type = "response", exclude = "s(x1)")
+      p2 <- get_predicted(b4, predict = "expectation", exclude = "s(x1)")
+      expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+      p1 <- predict(b4, type = "link", exclude = "s(x1)")
+      p2 <- get_predicted(b4, predict = "link", exclude = "s(x1)")
+      expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+
     })
+
   }
 }
