@@ -20,6 +20,9 @@
 
 * Argument `allow.new.levels` was not passed to `predict()` for 
   `get_predicted.glmmTMB()`.
+  
+* `clean_names()` now works correctly when several variables are specified in 
+  `s()` (#573, @etiennebacher).
 
 # insight 0.17.1
 

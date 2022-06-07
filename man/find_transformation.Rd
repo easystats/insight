@@ -19,8 +19,8 @@ log-transforming.
 This functions checks whether any transformation, such as log-
 or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula. Currently, following patterns are
-detected: \code{log}, \code{log1p}, \code{exp}, \code{expm1}, \code{sqrt}, \verb{log(x+<number>)} and
-\code{log-log}.
+detected: \code{log}, \code{log1p}, \code{log2}, \code{log10}, \code{exp}, \code{expm1}, \code{sqrt},
+\verb{log(x+<number>)} and \code{log-log}.
 }
 \examples{
 # identity, no transformation
