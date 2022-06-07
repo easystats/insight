@@ -100,34 +100,3 @@ safe_deparse <- function(x, ...) {
   }
   paste0(sapply(deparse(x, width.cutoff = 500), trim_ws, simplify = TRUE), collapse = " ")
 }
-
-
-
-# origin_function ------------------------------------
-
-#' Find from which package a function comes from.
-#'
-#' This is useful when there are namespace conflicts and we want to know from
-#' which package a function comes from.
-#'
-#' @param fn Function whose origin we want to find.
-#'
-#' @return The name of the package
-#'
-
-origin_function <- function(fn) {
-
-  possible_origins <- utils::find(fn)
-  possible_origins <- gsub("^package:", "", possible_origins)
-
-  results <- list()
-  for (i in seq_along(possible_origins)) {
-    results[[i]] <- identical(
-      eval(parse(text = paste0(possible_origins[i], "::", fn))),
-      eval(parse(text = fn))
-    )
-  }
-
-  possible_origins[which(unlist(results))]
-
-}

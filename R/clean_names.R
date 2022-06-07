@@ -166,14 +166,16 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           g <- trim_ws(sub(p, "\\1", x[i]))
           x[i] <- trim_ws(unlist(strsplit(g, ",")))
         } else if (pattern[j] == "s" && grepl("^s\\(", x[i])) {
-          if (origin_function("s") == "mgcv") {
-            x[i] <- paste(eval(parse(text = x[i]))$term, collapse = ', ')
-          } else if (origin_function("s") == "gam") {
-            x[i] <- gsub("^s\\(", "", x[i])
-            x[i] <- gsub("\\)$", "", x[i])
-            if (grepl("=|[[:digit:]]", x[i])) {
-              new_x <- trimws(unlist(strsplit(x[i], ",")))
-              x[i] <- paste(new_x[which(grepl("\\D", new_x))], collapse = ", ")
+          x[i] <- gsub("^s\\(", "", x[i])
+          x[i] <- gsub("\\)$", "", x[i])
+          if (grepl("=|[[:digit:]]", x[i])) {
+            new_x <- trimws(unlist(strsplit(x[i], ",")))
+            to_remove <- which(!grepl("\\D", new_x))
+            to_remove <- c(to_remove, which(grepl("=", new_x)))
+            if (length(to_remove) == 0) {
+              x[i] <- paste(new_x, collapse = ", ")
+            } else {
+              x[i] <- paste(new_x[-to_remove], collapse = ", ")
             }
           }
         } else {

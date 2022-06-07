@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("mgcv")) {
+if (requiet("testthat") && requiet("insight")) {
   test_that("clean_names", {
     expect_equal(clean_names(""), "")
     expect_equal(clean_names("as.factor(test)"), "test")
