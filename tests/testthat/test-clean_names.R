@@ -61,8 +61,21 @@ if (requiet("testthat") && requiet("insight")) {
       clean_names(c("scale(a)", "scale(b)", "scale(a):scale(b)"), include_names = TRUE),
       c(`scale(a)` = "a", `scale(b)` = "b", `scale(a):scale(b)` = "a:b")
     )
-    expect_equal(clean_names("s(x1, x2)"), "x1, x2")
-    expect_equal(clean_names("s(x1, x2, k = -1)"), "x1, x2")
-    expect_equal(clean_names("s(x1, x2, x3)"), "x1, x2, x3")
+
+    library(mgcv)
+    expect_equal(clean_names("s(time)"), "time")
+    expect_equal(clean_names("s(longitude, latitude)"), "longitude, latitude")
+    expect_equal(clean_names("s(longitude, latitude, altitude)"), "longitude, latitude, altitude")
+    expect_equal(clean_names("s(time, by = factor)"), "time, factor")
+    expect_equal(clean_names("s(time, duration, by = factor)"), "time, duration, factor")
+    expect_equal(clean_names('s(time, factor, bs = "fs")'), "time, factor")
+    expect_equal(clean_names('s(factor, bs = "re")'), "factor")
+    expect_equal(clean_names('s(factor, time, bs = "re")'), "factor, time")
+
+    library(gam)
+    expect_equal(clean_names("s(time)"), "time")
+    expect_equal(clean_names("s(longitude, latitude)"), "longitude, latitude")
+    expect_equal(clean_names("s(longitude, latitude, altitude)"), "longitude, latitude, altitude")
   })
 }
+
