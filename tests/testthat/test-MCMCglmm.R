@@ -16,6 +16,8 @@ osx <- tryCatch(
 if (!osx && requiet("testthat") &&
   requiet("insight") &&
   requiet("MCMCglmm")) {
+  on.exit(detach("package:MCMCglmm", unload = TRUE), add = TRUE)
+
   data(PlodiaPO)
   m1 <- MCMCglmm(
     PO ~ plate,
