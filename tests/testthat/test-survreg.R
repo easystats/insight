@@ -1,6 +1,8 @@
 if (requiet("testthat") &&
   requiet("insight") &&
   requiet("survival")) {
+  on.exit(detach("package:survival", unload = TRUE), add = TRUE)
+
   m1 <- survreg(Surv(futime, fustat) ~ ecog.ps + rx,
     data = ovarian,
     dist = "exponential"
