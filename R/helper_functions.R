@@ -239,11 +239,12 @@
   conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "smooth_terms"))
 
   # location parameters
-  location_parameters <- if (effects == "fixed") {
-    setdiff(elements, c(auxiliary_parameters, random_parameters))
-  } else {
+  location_parameters <- switch(
+    effects,
+    "fixed" = setdiff(elements, c(auxiliary_parameters, random_parameters)),
+    "random" = intersect(setdiff(elements, auxiliary_parameters), random_parameters),
     setdiff(elements, auxiliary_parameters)
-  }
+  )
 
   # fixed pattern?
   if (all(component == "location")) {
