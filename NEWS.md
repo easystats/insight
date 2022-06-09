@@ -15,11 +15,25 @@
 
 ## Bug fixes
 
+* `find_predictors()` for models from package _fixest_ that contained 
+  interaction terms in the endogenous formula part did not correctly return
+  all instruments.
+
+* Fixed formatting of HTML table footers in `export_table()`.
+
+* Several fixes to `get_predicted()` for models from `mgcv::gam()`.
+
+* The `component` argument in `find_parameters()` for `stanmvreg` models did
+  not accept the `"location"` value.
+
 * `null_model()` did not consider offset-terms if these were specified inside
   formulas.
 
 * Argument `allow.new.levels` was not passed to `predict()` for 
   `get_predicted.glmmTMB()`.
+  
+* `clean_names()` now works correctly when several variables are specified in 
+  `s()` (#573, @etiennebacher).
 
 # insight 0.17.1
 
