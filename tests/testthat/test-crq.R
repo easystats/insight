@@ -1,6 +1,8 @@
 if (requiet("testthat") &&
   requiet("insight") &&
   requiet("quantreg")) {
+  on.exit(detach("package:quantreg", unload = TRUE), add = TRUE)
+
   set.seed(123)
   n <- 200
   x <- rnorm(n)

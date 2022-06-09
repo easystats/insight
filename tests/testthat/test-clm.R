@@ -1,6 +1,8 @@
 if (requiet("testthat") &&
   requiet("insight") &&
   requiet("ordinal")) {
+  on.exit(detach("package:ordinal", unload = TRUE), add = TRUE)
+
   data(wine, package = "ordinal")
   m1 <- clm(rating ~ temp * contact, data = wine)
 

@@ -1,4 +1,6 @@
 if (requiet("testthat") && requiet("insight") && requiet("blme")) {
+  on.exit(detach("package:blme", unload = TRUE), add = TRUE)
+
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)

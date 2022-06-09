@@ -15,6 +15,8 @@ osx <- tryCatch(
 if (!osx && requiet("testthat") &&
   requiet("insight") &&
   requiet("epiR")) {
+  on.exit(detach("package:epiR", unload = TRUE), add = TRUE)
+
   dat <- matrix(c(13, 2163, 5, 3349), nrow = 2, byrow = TRUE)
   rownames(dat) <- c("DF+", "DF-")
   colnames(dat) <- c("FUS+", "FUS-")

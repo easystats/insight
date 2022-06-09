@@ -1,4 +1,5 @@
 if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
+  on.exit(detach("package:lme4", unload = TRUE), add = TRUE)
   data(mtcars)
   data(sleepstudy)
 

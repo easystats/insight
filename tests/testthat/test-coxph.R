@@ -1,5 +1,7 @@
-requiet("survival")
-requiet("insight")
+if (requiet("testthat") &&
+    requiet("insight") &&
+    requiet("survival")) {
+  on.exit(detach("package:survival", unload = TRUE), add = TRUE)
 
 lung <- subset(survival::lung, subset = ph.ecog %in% 0:2)
 lung$sex <- factor(lung$sex, labels = c("male", "female"))
@@ -137,3 +139,4 @@ test_that("JM", {
   expect_equal(dim(d), c(1405, 12))
   expect_equal(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
 })
+}

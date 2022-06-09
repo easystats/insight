@@ -1,4 +1,6 @@
 if (requiet("testthat") && requiet("insight") && requiet("aod")) {
+  on.exit(detach("package:aod", unload = TRUE), add = TRUE)
+
   data(dja)
   m1 <- suppressWarnings(betabin(cbind(y, n - y) ~ group * trisk, ~village, data = dja))
 

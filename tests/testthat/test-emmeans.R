@@ -1,4 +1,6 @@
 if (requiet("emmeans") && requiet("insight") && requiet("testthat")) {
+  on.exit(detach("package:emmeans", unload = TRUE), add = TRUE)
+
   test_that("emmeans", {
     m <- glm(am ~ factor(cyl),
       family = binomial(), data = mtcars

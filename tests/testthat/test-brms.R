@@ -4,6 +4,7 @@ if (.runThisTest) {
   if (suppressWarnings(requiet("testthat") &&
     requiet("insight") &&
     requiet("brms"))) {
+    on.exit(detach("package:brms", unload = TRUE), add = TRUE)
 
     # Model fitting -----------------------------------------------------------
 

@@ -2,6 +2,9 @@ if (requiet("testthat") &&
   requiet("insight") &&
   requiet("ordinal") &&
   requiet("MASS")) {
+  on.exit(detach("package:MASS", unload = TRUE), add = TRUE)
+  on.exit(detach("package:ordinal", unload = TRUE), add = TRUE)
+
   data(housing, package = "MASS")
   m1 <- clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 

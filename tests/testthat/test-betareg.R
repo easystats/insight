@@ -1,6 +1,8 @@
 if (requiet("testthat") &&
   requiet("insight") &&
   requiet("betareg")) {
+  on.exit(detach("package:betareg", unload = TRUE), add = TRUE)
+
   data("GasolineYield")
   data("FoodExpenditure")
 

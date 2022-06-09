@@ -1,4 +1,7 @@
 if (requiet("testthat") && requiet("insight") && requiet("censReg") && requiet("AER")) {
+  on.exit(detach("package:AER", unload = TRUE), add = TRUE)
+  on.exit(detach("package:censReg", unload = TRUE), add = TRUE)
+
   data("Affairs", package = "AER")
   m1 <- censReg(
     affairs ~ age + yearsmarried + religiousness + occupation + rating,

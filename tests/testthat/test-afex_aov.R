@@ -1,4 +1,5 @@
 if (requiet("testthat") && requiet("insight") && requiet("afex")) {
+  on.exit(detach("package:afex", unload = TRUE), add = TRUE)
   data(obk.long, package = "afex")
 
   obk.long$treatment <- as.character(obk.long$treatment)

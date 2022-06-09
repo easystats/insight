@@ -1,4 +1,6 @@
 if (requiet("testthat") && requiet("insight") && requiet("cgam")) {
+  on.exit(detach("package:cgam", unload = TRUE), add = TRUE)
+
   data(cubic, package = "cgam")
   m <- cgam(y ~ incr.conv(x), data = cubic)
 

@@ -19,6 +19,9 @@ if (.runThisTest &&
   requiet("insight") &&
   requiet("lme4") &&
   requiet("ordinal")) {
+  on.exit(detach("package:lme4", unload = TRUE), add = TRUE)
+  on.exit(detach("package:ordinal", unload = TRUE), add = TRUE)
+
   data(wine, package = "ordinal")
   data(soup)
 

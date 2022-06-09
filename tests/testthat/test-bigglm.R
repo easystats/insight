@@ -3,6 +3,9 @@
 if (.runThisTest) {
   if (requiet("testthat") &&
     requiet("insight") && requiet("glmmTMB") && requiet("biglm")) {
+    on.exit(detach("package:biglm", unload = TRUE), add = TRUE)
+    on.exit(detach("package:glmmTMB", unload = TRUE), add = TRUE)
+
     data(Salamanders)
     Salamanders$cover <- abs(Salamanders$cover)
 

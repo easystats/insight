@@ -1,4 +1,6 @@
 if (requiet("testthat") && requiet("insight") && requiet("rms")) {
+  on.exit(detach("package:rms", unload = TRUE), add = TRUE)
+
   n <- 400
   set.seed(1)
   age <- rnorm(n, 50, 12)

@@ -1,6 +1,8 @@
 if (requiet("testthat") &&
   requiet("insight") &&
   requiet("crch")) {
+  on.exit(detach("package:crch", unload = TRUE), add = TRUE)
+
   data("RainIbk")
   RainIbk$sqrtensmean <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
   RainIbk$sqrtenssd <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, sd)

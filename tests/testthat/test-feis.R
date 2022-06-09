@@ -16,6 +16,9 @@ if (!osx && requiet("testthat") &&
   requiet("insight") &&
   requiet("plm") &&
   requiet("feisr")) {
+  on.exit(detach("package:plm", unload = TRUE), add = TRUE)
+  on.exit(detach("package:feisr", unload = TRUE), add = TRUE)
+
   data(mwp)
   m1 <- feis(
     lnw ~ marry + enrol + as.factor(yeargr) | exp + I(exp^2),

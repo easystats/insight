@@ -5,6 +5,13 @@ if (requiet("testthat") &&
   requiet("nlme") &&
   requiet("bdsmatrix") &&
   requiet("coxme")) {
+  on.exit(detach("package:survival", unload = TRUE), add = TRUE)
+  on.exit(detach("package:coxme", unload = TRUE), add = TRUE)
+  on.exit(detach("package:bdsmatrix", unload = TRUE), add = TRUE)
+  on.exit(detach("package:nlme", unload = TRUE), add = TRUE)
+  on.exit(detach("package:lme4", unload = TRUE), add = TRUE)
+  on.exit(detach("package:survival", unload = TRUE), add = TRUE)
+
   set.seed(1234)
   lung$inst2 <- sample(1:10, size = nrow(lung), replace = TRUE)
   lung <- subset(lung, subset = ph.ecog %in% 0:2)
