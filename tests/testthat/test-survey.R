@@ -1,6 +1,8 @@
 if (requiet("testthat") &&
   requiet("insight") &&
   requiet("survey")) {
+  on.exit(detach("package:survey", unload = TRUE), add = TRUE)
+
   data(api)
   dstrat <-
     svydesign(
