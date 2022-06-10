@@ -1,6 +1,7 @@
 if (requiet("testthat") &&
   requiet("insight") &&
-  requiet("logistf")) {
+  requiet("logistf") &&
+  !covr::in_covr()) {
   data(sex2)
   m1 <- logistf(case ~ age + oc + vic + vicl + vis + dia, data = sex2)
 

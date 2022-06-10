@@ -80,6 +80,7 @@ Suggests:
     censReg,
     cgam,
     clubSandwich,
+    covr,
     coxme,
     cplm,
     crch,
