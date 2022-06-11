@@ -24,7 +24,8 @@ format_capitalize <- function(x, verbose = TRUE) {
     }
     return(x)
   }
-  capped <- grep("^[A-Z]", x, invert = TRUE)
-  substr(x[capped], 1, 1) <- toupper(substr(x[capped], 1, 1))
-  x
+  paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))
+  # capped <- grep("^[A-Z]", x, invert = TRUE)
+  # substr(x[capped], 1, 1) <- toupper(substr(x[capped], 1, 1))
+  # x
 }
