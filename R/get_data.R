@@ -742,6 +742,7 @@ get_data.gamlss <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_data.felm <- function(x, effects = "all", verbose = TRUE, ...) {
+  # original data does not appear to be stored in the model object
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   .get_data_from_modelframe(x, stats::model.frame(x), effects, verbose = verbose)
 }
@@ -749,6 +750,7 @@ get_data.felm <- function(x, effects = "all", verbose = TRUE, ...) {
 
 #' @export
 get_data.feis <- function(x, effects = "all", ...) {
+  # original data does not appear to be stored in the model object
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- tryCatch(
     {
@@ -765,6 +767,7 @@ get_data.feis <- function(x, effects = "all", ...) {
 
 #' @export
 get_data.fixest <- function(x, ...) {
+  # original data does not appear to be stored in the model object
   mf <- .recover_data_from_environment(x)
   .get_data_from_modelframe(x, mf, effects = "all")
 }
