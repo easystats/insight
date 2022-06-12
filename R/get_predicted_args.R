@@ -56,6 +56,23 @@
   if (is.null(data)) data <- get_data(x, verbose = verbose)
 
 
+  # Intermediate step, check data classes  ------
+  ############################################################################
+
+  tryCatch(
+    {
+      data_classes <- attributes(stats::terms(x))$dataClasses
+      if (any(grepl("matrix", data_classes, fixed = TRUE)) && isTRUE(verbose)) {
+        message(format_message("Some of the variables were in matrix-format - probably you used 'scale()' on your data?",
+                               "If so, and you get an error, please try 'datawizard::standardize()' to standardize your data."))
+      }
+    },
+    error = function(e) {
+
+    }
+  )
+
+
   # Second step, evaluate "predict" argument                      ------------
   ############################################################################
 
