@@ -146,7 +146,6 @@ Suggests:
     rstudioapi,
     sandwich,
     speedglm,
-    spelling,
     splines,
     statmod,
     survey,
