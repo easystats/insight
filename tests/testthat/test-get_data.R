@@ -1,3 +1,4 @@
+skip_on_os(os = "mac")
 
 test_that("lme4", {
   requiet("lme4")

@@ -1,4 +1,7 @@
-run_stan <- Sys.getenv("RunAllinsightStanTests") == "yes"
+skip_on_os(os = "mac")
+
+is_dev_version <- length(strsplit(packageDescription("insight")$Version, "\\.")[[1]]) > 3
+run_stan <- .Platform$OS.type == "unix" && is_dev_version
 
 pkgs <- c(
   "lme4",
