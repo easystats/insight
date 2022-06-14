@@ -112,6 +112,8 @@ appear in the <code><a href="https://rdrr.io/r/base/summary.html" class="externa
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
 <dd><p>A fitted model.</p></dd>
+
+
 <dt>component</dt>
 <dd><p>Which type of parameters to return, such as parameters for the
 conditional model, the zero-inflated part of the model, the dispersion
@@ -128,15 +130,22 @@ If <code>component = "location"</code>, location parameters such as <code>condit
 argument - but no auxiliary parameters). For <code>component = "distributional"</code>
 (or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
 <code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></dd>
+
+
 <dt>flatten</dt>
 <dd><p>Logical, if <code>TRUE</code>, the values are returned
 as character vector, not as list. Duplicated values are removed.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Currently not used.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list of parameter names. The returned list may have following
+    
+
+<p>A list of parameter names. The returned list may have following
 elements:</p><ul><li><p><code>conditional</code>, the "fixed effects" part from the model.</p></li>
 <li><p><code>full</code>, parameters from the full model.</p></li>
 </ul></div>
@@ -160,7 +169,7 @@ elements:</p><ul><li><p><code>conditional</code>, the "fixed effects" part from 
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>

@@ -1,9 +1,9 @@
 pandoc: 2.14.2
-pkgdown: 2.0.3
+pkgdown: 2.0.4
 pkgdown_sha: ~
 articles:
   display: display.html
   export: export.html
   insight: insight.html
-last_built: 2022-06-12T18:15Z
+last_built: 2022-06-14T18:22Z
 

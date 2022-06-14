@@ -79,6 +79,8 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
 <dd><p>A fitted model.</p></dd>
+
+
 <dt>component</dt>
 <dd><p>Should all predictor variables, predictor variables for the
 conditional model, the zero-inflated part of the model, the dispersion
@@ -87,13 +89,18 @@ with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
 component, depending on the model.</p></dd>
+
+
 <dt>flatten</dt>
 <dd><p>Logical, if <code>TRUE</code>, the values are returned
 as character vector, not as list. Duplicated values are removed.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list of character vectors that represent the interaction terms.
+    
+
+<p>A list of character vectors that represent the interaction terms.
 Depending on <code>component</code>, the returned list has following
 elements (or <code>NULL</code>, if model has no interaction term):</p><ul><li><p><code>conditional</code>, interaction terms that belong to the "fixed
 effects" terms from the model</p></li>
@@ -128,7 +135,7 @@ instrumental variables</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>
