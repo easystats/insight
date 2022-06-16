@@ -52,7 +52,9 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: |
+            any::rcmdcheck
+            ivreg=?ignore-before-r=3.6.0
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
