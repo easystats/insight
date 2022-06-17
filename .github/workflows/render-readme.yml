@@ -34,7 +34,7 @@ jobs:
             any::insight
 
       - name: Render README
-        run: Rscript -e 'rmarkdown::render("README.Rmd")'
+        run: Rscript -e 'rmarkdown::render("README.rmd")'
 
       - name: Commit Results
         run: |
