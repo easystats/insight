@@ -129,6 +129,8 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "n.obs"]        <- "n_Obs"
   cn[cn == "n"]            <- "n_Obs"
   cn[cn == "type"]         <- "Type"
+  # marginaleffects
+  cn[cn == "value"]        <- "Level"
   # anova
   cn[cn == "sumsq"]        <- "Sum_Squares"
   cn[cn == "meansq"]       <- "Mean_Square"
@@ -165,6 +167,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "n_Obs"]          <- "n.obs"
   cn[cn == "n"]              <- "n.obs"
   cn[cn == "n_Missing"]      <- "missing.obs"
+  cn[cn == "Level"]          <- "value"
   # anova
   cn[cn == "Sum_Squares"]    <- "sumsq"
   cn[cn == "Mean_Square"]    <- "meansq"
