@@ -15,6 +15,8 @@
 
 ## Bug fixes
 
+* `get_sigma()` for models from package _VGAM_ returned wrong sigma-parameter.
+
 * `find_predictors()` for models from package _fixest_ that contained 
   interaction terms in the endogenous formula part did not correctly return
   all instruments.

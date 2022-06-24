@@ -88,24 +88,39 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 .get_sigma.lrm <- function(x, verbose = TRUE, ...) {
   s <- stats::sigma(x)
-  s[length(s)]
+  s <- s[length(s)]
+  class(s) <- c("insight_aux", class(s))
+  s
+}
+
+.get_sigma.VGAM <- function(x, verbose = TRUE, ...) {
+  s <- tryCatch(exp(stats::coef(x)[["(Intercept):2"]]),
+                function(e) NULL)
+  class(s) <- c("insight_aux", class(s))
+  s
 }
 
 .get_sigma.merModList <- function(x, verbose = TRUE, ...) {
   s <- suppressWarnings(summary(x))
-  s$residError
+  s <- s$residError
+  class(s) <- c("insight_aux", class(s))
+  s
 }
 
 .get_sigma.summary.lm <- function(x, verbose = TRUE, ...) {
-  x$sigma
+  s <- x$sigma
+  class(s) <- c("insight_aux", class(s))
+  s
 }
 
 .get_sigma.selection <- function(x, verbose = TRUE, ...) {
-  unname(stats::coef(x)["sigma"])
+  s <- unname(stats::coef(x)["sigma"])
+  class(s) <- c("insight_aux", class(s))
+  s
 }
 
 .get_sigma.cpglmm <- function(x, verbose = TRUE, ...) {
-  tryCatch(
+  s <- tryCatch(
     {
       stats::deviance(x)[["sigmaML"]]
     },
@@ -113,6 +128,10 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
       NULL
     }
   )
+  if (!is.null(s)) {
+    class(s) <- c("insight_aux", class(s))
+  }
+  s
 }
 
 .get_sigma.brmsfit <- function(x, verbose = TRUE, ...) {
