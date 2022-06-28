@@ -166,7 +166,6 @@ print_parameters <- function(x,
 
   # create title attributes, and remove unnecessary columns from output
   out <- lapply(names(out), function(i) {
-
     # init title variables
     title1 <- title2 <- ""
 
@@ -180,7 +179,6 @@ print_parameters <- function(x,
 
     # iterate all parts of the component names, to create title attribute
     for (j in 1:length(parts)) {
-
       # Rename "fixed", "random" etc. into proper titles. Here we have the
       # "Main title" of a subcomponent (like "Random effects")
       if (parts[j] %in% c("fixed", "random") || (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {

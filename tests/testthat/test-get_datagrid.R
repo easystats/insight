@@ -18,7 +18,6 @@ if (requiet("testthat") && requiet("insight")) {
 
 if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
   test_that("get_datagrid - data", {
-
     # Factors
     expect_equal(length(get_datagrid(iris$Species)), 3)
     expect_equal(length(get_datagrid(c("A", "A", "B"))), 2)
@@ -75,7 +74,6 @@ if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
 
 if (requiet("testthat") && requiet("insight") && requiet("gamm4") && requiet("glmmTMB") && requiet("mgcv") && requiet("rstanarm")) {
   test_that("get_datagrid - models", {
-
     # GLM
     mod <- glm(Petal.Length ~ Petal.Width * Sepal.Length, data = iris)
     expect_equal(dim(get_datagrid(mod)), c(100, 2))

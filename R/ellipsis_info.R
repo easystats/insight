@@ -113,7 +113,6 @@ ellipsis_info.ListObjects <- function(objects, ...) {
 
 #' @export
 ellipsis_info.ListModels <- function(objects, ..., verbose = TRUE) {
-
   # Lavaan
   if (all(sapply(objects, inherits, what = "lavaan"))) {
     class(objects) <- c("ListLavaan", class(objects))

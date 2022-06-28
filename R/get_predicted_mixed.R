@@ -12,8 +12,6 @@ get_predicted.lmerMod <- function(x,
                                   iterations = NULL,
                                   verbose = TRUE,
                                   ...) {
-
-
   # Sanitize input
   args <- .get_predicted_args(
     x,
@@ -61,9 +59,11 @@ get_predicted.lmerMod <- function(x,
   }
 
   # 2. step: confidence intervals
-  ci_data <- get_predicted_ci(x, predictions,data = args$data, ci = ci,
-                              ci_method = ci_method, ci_type = args$ci_type,
-                              ...)
+  ci_data <- get_predicted_ci(x, predictions,
+    data = args$data, ci = ci,
+    ci_method = ci_method, ci_type = args$ci_type,
+    ...
+  )
 
   # 3. step: back-transform
   out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
@@ -151,7 +151,6 @@ get_predicted.glmmTMB <- function(x,
   # for predictions and CIs here.
 
   if (args$scale == "response" && args$info$is_zero_inflated) {
-
     # intermediate step: prediction from ZI model
     zi_predictions <- stats::predict(
       x,
@@ -249,12 +248,10 @@ get_predicted.MixMod <- function(x,
   # for predictions and CIs here.
 
   if (args$scale == "response" && args$info$is_zero_inflated) {
-
     # 2. and 3. step: confidence intervals and back-transform
     ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
     out <- list(predictions = predictions, ci_data = ci_data)
   } else {
-
     # 2. step: confidence intervals
     ci_data <- get_predicted_ci(
       x,

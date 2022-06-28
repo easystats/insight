@@ -7,7 +7,6 @@ get_predicted_se <- function(x,
                              vcov_args = NULL,
                              ci_method = NULL,
                              ...) {
-
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'
   # to get the variance-covariance matrix of the predictions. The square-root of
@@ -25,7 +24,7 @@ get_predicted_se <- function(x,
       stop(format_message(msg))
     }
 
-  # all other varcov types can be supplied manually
+    # all other varcov types can be supplied manually
   } else {
     vcovmat <- get_varcov(
       x,
@@ -45,7 +44,6 @@ get_predicted_se <- function(x,
   # last desperate try
   if (ncol(mm) != ncol(vcovmat)) {
     if (ncol(mm) == nrow(mm) && ncol(vcovmat) > ncol(mm) && all(colnames(mm) %in% colnames(vcovmat))) {
-
       # we might have a correct model matrix, but the vcov matrix contains values
       # from specific model parameters that do not appear in the model matrix
       # we then need to reduce the vcov matrix.
@@ -53,7 +51,6 @@ get_predicted_se <- function(x,
       matching_parameters <- stats::na.omit(match(colnames(vcovmat), colnames(mm)))
       vcovmat <- vcovmat[matching_parameters, matching_parameters, drop = FALSE]
     } else {
-
       # model matrix rows might mismatch. we need a larger model matrix and
       # then filter those rows that match the vcov matrix.
 
@@ -118,7 +115,6 @@ get_predicted_se <- function(x,
     # on the model itself. The latter strategy is safer in cases where `data`
     # does not include all the levels of a factor variable.
     if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc", "MixMod"))) {
-
       # model terms, required for model matrix
       model_terms <- tryCatch(
         {

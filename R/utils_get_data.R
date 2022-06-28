@@ -4,7 +4,6 @@
 # variables transformed during model fitting are not included in this data frame
 #
 .prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
-
   # check if we have any data yet
   if (is_empty_object(mf)) {
     if (isTRUE(verbose)) {
@@ -120,7 +119,6 @@
   # model frame and convert them to regular data frames, give
   # proper column names and bind them back to the original model frame
   if (any(mc)) {
-
     # try to get model data from environment
     md <- tryCatch(
       {
@@ -148,7 +146,6 @@
     # if data not found in environment,
     # reduce matrix variables into regular vectors
     if (is.null(md)) {
-
       # we select the non-matrix variables and convert matrix-variables into
       # regular data frames, then binding them together
       mf_matrix <- mf[, which(mc), drop = FALSE]
@@ -164,7 +161,6 @@
       mf_matrix <- do.call(cbind, mf_list)
       mf <- cbind(mf_nonmatrix, mf_matrix)
     } else {
-
       # fix NA in column names
       if (any(is.na(colnames(md)))) {
         colnames(md) <- make.names(colnames(md))
@@ -203,7 +199,6 @@
         # no further processing for survival models
         mf <- md
       } else {
-
         # get cleaned variable names for those variables
         # that we still need from the original model frame
         needed.vars <- compact_character(unique(clean_names(needed.vars)))
@@ -423,7 +418,6 @@
                                              logicals = NULL,
                                              interactions = NULL,
                                              verbose = TRUE) {
-
   # check if data argument was used
   model_call <- get_call(model)
   if (!is.null(model_call)) {

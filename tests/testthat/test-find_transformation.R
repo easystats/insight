@@ -1,5 +1,4 @@
 if (requiet("testthat") && requiet("insight")) {
-
   test_that("find_transformation - identity", {
     model <- lm(Sepal.Length ~ Species, data = iris)
     expect_equal(
@@ -49,7 +48,7 @@ if (requiet("testthat") && requiet("insight")) {
   })
 
   test_that("find_transformation - power-2", {
-    model <- lm(I(Sepal.Length ^ 2) ~ Species, data = iris)
+    model <- lm(I(Sepal.Length^2) ~ Species, data = iris)
     expect_equal(
       find_transformation(model),
       "power"

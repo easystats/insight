@@ -162,16 +162,17 @@ get_modelmatrix.rlm <- function(x, ...) {
 get_modelmatrix.betareg <- function(x, ...) {
   dots <- list(...)
   if (is.null(dots$data)) {
-      mm <- stats::model.matrix(x, ...)
+    mm <- stats::model.matrix(x, ...)
   } else {
-      # adapted from betareg::predict.betareg()
-      # suppress contrasts dropped from factor
-      mf <- suppressWarnings(stats::model.frame(
-          stats::delete.response(x$terms[["mean"]]),
-          dots$data,
-          na.action = stats::na.pass,
-          xlev = x$levels[["mean"]]))
-      mm <- stats::model.matrix(stats::delete.response(x$terms$mean), mf)
+    # adapted from betareg::predict.betareg()
+    # suppress contrasts dropped from factor
+    mf <- suppressWarnings(stats::model.frame(
+      stats::delete.response(x$terms[["mean"]]),
+      dots$data,
+      na.action = stats::na.pass,
+      xlev = x$levels[["mean"]]
+    ))
+    mm <- stats::model.matrix(stats::delete.response(x$terms$mean), mf)
   }
   return(mm)
 }

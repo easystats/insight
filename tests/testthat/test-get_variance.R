@@ -163,12 +163,16 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
   test_that("get_variance-10", {
     expect_equal(
       vmodel,
-      list(var.fixed = 807.08545355676, var.residual = 740.875581179784,
-           var.distribution = 740.875581179784, var.dispersion = 0,
-           var.intercept = c(Subject = 738.635155172211),
-           var.slope = c(`Subject.Days2(-1,3]` = 0, `Subject.Days2(3,6]` = 994.015865559888,
-                         `Subject.Days2(6,10]` = 1545.72576115283),
-           cor.slopes = c(`Subject.1.Days2(3,6]-Days2(6,10]` = 0.859480774219098)),
+      list(
+        var.fixed = 807.08545355676, var.residual = 740.875581179784,
+        var.distribution = 740.875581179784, var.dispersion = 0,
+        var.intercept = c(Subject = 738.635155172211),
+        var.slope = c(
+          `Subject.Days2(-1,3]` = 0, `Subject.Days2(3,6]` = 994.015865559888,
+          `Subject.Days2(6,10]` = 1545.72576115283
+        ),
+        cor.slopes = c(`Subject.1.Days2(3,6]-Days2(6,10]` = 0.859480774219098)
+      ),
       tolerance = 1e-2
     )
   })
@@ -179,13 +183,17 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
   test_that("get_variance-11", {
     expect_equal(
       vmodel,
-      list(var.fixed = 807.085453556794, var.random = 1446.13555108848,
-           var.residual = 748.813858500395, var.distribution = 748.813858500395,
-           var.dispersion = 0, var.slope = c(`Subject.Days2(-1,3]` = 663.27445659023,
-                                             `Subject.Days2(3,6]` = 2098.24691538121, `Subject.Days2(6,10]` = 2722.20492158038
-           ), cor.slopes = c(`Subject.Days2(-1,3]-Days2(3,6]` = 0.796453122321232,
-                             `Subject.Days2(-1,3]-Days2(6,10]` = 0.732956077304911, `Subject.Days2(3,6]-Days2(6,10]` = 0.924018087860575
-           )),
+      list(
+        var.fixed = 807.085453556794, var.random = 1446.13555108848,
+        var.residual = 748.813858500395, var.distribution = 748.813858500395,
+        var.dispersion = 0, var.slope = c(
+          `Subject.Days2(-1,3]` = 663.27445659023,
+          `Subject.Days2(3,6]` = 2098.24691538121, `Subject.Days2(6,10]` = 2722.20492158038
+        ), cor.slopes = c(
+          `Subject.Days2(-1,3]-Days2(3,6]` = 0.796453122321232,
+          `Subject.Days2(-1,3]-Days2(6,10]` = 0.732956077304911, `Subject.Days2(3,6]-Days2(6,10]` = 0.924018087860575
+        )
+      ),
       tolerance = 1e-2
     )
   })
@@ -196,13 +204,17 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
   test_that("get_variance-12", {
     expect_equal(
       vmodel,
-      list(var.fixed = 807.085453556794, var.random = 1446.13555108848,
-           var.residual = 748.813858500395, var.distribution = 748.813858500395,
-           var.dispersion = 0, var.slope = c(`Subject.Days2(-1,3]` = 663.27445659023,
-                                             `Subject.Days2(3,6]` = 2098.24691538121, `Subject.Days2(6,10]` = 2722.20492158038
-           ), cor.slopes = c(`Subject.Days2(-1,3]-Days2(3,6]` = 0.796453122321232,
-                             `Subject.Days2(-1,3]-Days2(6,10]` = 0.732956077304911, `Subject.Days2(3,6]-Days2(6,10]` = 0.924018087860575
-           )),
+      list(
+        var.fixed = 807.085453556794, var.random = 1446.13555108848,
+        var.residual = 748.813858500395, var.distribution = 748.813858500395,
+        var.dispersion = 0, var.slope = c(
+          `Subject.Days2(-1,3]` = 663.27445659023,
+          `Subject.Days2(3,6]` = 2098.24691538121, `Subject.Days2(6,10]` = 2722.20492158038
+        ), cor.slopes = c(
+          `Subject.Days2(-1,3]-Days2(3,6]` = 0.796453122321232,
+          `Subject.Days2(-1,3]-Days2(6,10]` = 0.732956077304911, `Subject.Days2(3,6]-Days2(6,10]` = 0.924018087860575
+        )
+      ),
       tolerance = 1e-2
     )
   })
@@ -217,7 +229,8 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
     vc <- suppressWarnings(get_variance(m))
     expect_equal(
       vc$cor.slopes,
-      c(`recipe.temperature.L-temperature.C` = 0.99999964, `recipe.temperature.Q-temperature.C` = 0.99999931,
+      c(
+        `recipe.temperature.L-temperature.C` = 0.99999964, `recipe.temperature.Q-temperature.C` = 0.99999931,
         `recipe.temperature.L-temperature.Q` = 0.99999941, `recipe.temperature.L-temperature^4` = 0.99999961,
         `recipe.temperature.Q-temperature^4` = 0.99999912, `recipe.temperature.C-temperature^4` = 0.99999996,
         `recipe.temperature.L-temperature^5` = -0.99999977, `recipe.temperature.Q-temperature^5` = -0.99999849,
@@ -238,8 +251,10 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
     vc <- suppressWarnings(get_variance(m2))
     expect_equal(
       names(vc),
-      c("var.fixed", "var.random", "var.residual", "var.distribution",
-        "var.dispersion", "var.slope"),
+      c(
+        "var.fixed", "var.random", "var.residual", "var.distribution",
+        "var.dispersion", "var.slope"
+      ),
       tolerance = 1e-3,
       ignore_attr = TRUE
     )
@@ -249,11 +264,15 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
     vc <- suppressWarnings(get_variance(m5))
     expect_equal(
       vc,
-      list(var.fixed = 921.929610133035, var.random = 1068.04697608476,
-           var.residual = 764.479364064599, var.distribution = 764.479364064599,
-           var.dispersion = 0, var.slope = c(Subject.Days = 37.4753324942022,
-                                             Subject.Months = 27.6430649522841),
-           cor.slopes = c(`Subject.Days-Months` = 0.455625778436967)),
+      list(
+        var.fixed = 921.929610133035, var.random = 1068.04697608476,
+        var.residual = 764.479364064599, var.distribution = 764.479364064599,
+        var.dispersion = 0, var.slope = c(
+          Subject.Days = 37.4753324942022,
+          Subject.Months = 27.6430649522841
+        ),
+        cor.slopes = c(`Subject.Days-Months` = 0.455625778436967)
+      ),
       tolerance = 1e-3,
       ignore_attr = TRUE
     )
@@ -271,5 +290,4 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
       ignore_attr = TRUE
     )
   })
-
 }

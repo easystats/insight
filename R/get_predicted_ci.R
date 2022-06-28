@@ -77,7 +77,6 @@ get_predicted_ci.default <- function(x,
                                      vcov = NULL,
                                      vcov_args = NULL,
                                      ...) {
-
   # sanity check, if CI should be skipped
   if (is.null(ci)) {
     return(ci)
@@ -111,7 +110,8 @@ get_predicted_ci.default <- function(x,
   # 1. Find appropriate interval function
   if (!is.null(se)) {
     ci_function <- .get_predicted_se_to_ci
-  } else if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov) && is.matrix(vcov))) { # gaussian or CI
+  } else if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov) && is.matrix(vcov))) {
+    # gaussian or CI
     se <- get_predicted_se(
       x,
       data = data,
@@ -162,7 +162,6 @@ get_predicted_ci.mlm <- function(x, ...) {
                                     ci_method = "quantile",
                                     data = NULL,
                                     ...) {
-
   # TODO: Prediction interval for binomial: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-i/
   # TODO: Prediction interval for poisson: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-ii/
 
@@ -229,7 +228,6 @@ get_predicted_ci.mlm <- function(x, ...) {
                                              ci = 0.95,
                                              link_inv = NULL,
                                              ...) {
-
   # Sanity checks
   if (is.null(predictions)) {
     return(data.frame(SE = se))
@@ -323,7 +321,6 @@ get_predicted_ci.mlm <- function(x, ...) {
 
 
 .get_predicted_ci_from_iter <- function(iter, ci = 0.95, ci_method = "quantile") {
-
   # Interval
   ci_method <- match.arg(
     tolower(ci_method),

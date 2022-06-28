@@ -11,7 +11,6 @@ get_predicted.gam <- function(x,
                               iterations = NULL,
                               verbose = TRUE,
                               ...) {
-
   # allow users to set `predict=NULL` and specify `type` directly
   if (!is.null(predict)) {
     predict <- match.arg(predict, choices = c("expectation", "expected", "link", "prediction", "predicted", "classification"))
@@ -54,8 +53,10 @@ get_predicted.gam <- function(x,
   predict_function <- function(x, data, se.fit = TRUE, ...) {
     dot_args <- list(...)
     dot_args[["type"]] <- NULL
-    predict_args <- list(x, newdata = data, type = args$type, re.form = args$re.form,
-                         unconditional = FALSE, se.fit = se.fit)
+    predict_args <- list(x,
+      newdata = data, type = args$type, re.form = args$re.form,
+      unconditional = FALSE, se.fit = se.fit
+    )
     predict_args <- c(predict_args, dot_args)
     do.call(stats::predict, compact_list(predict_args))
   }

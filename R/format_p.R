@@ -40,7 +40,6 @@ format_p <- function(p,
                      decimal_separator = NULL,
                      digits = 3,
                      ...) {
-
   # only convert p if it's a valid numeric, or at least coercible to
   # valid numeric values...
   if (!is.numeric(p)) {

@@ -222,7 +222,6 @@
 }
 
 .get_elements <- function(effects, component) {
-
   # all elements of a model
   elements <- .all_elements()
 
@@ -239,8 +238,7 @@
   conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "smooth_terms"))
 
   # location parameters
-  location_parameters <- switch(
-    effects,
+  location_parameters <- switch(effects,
     "fixed" = setdiff(elements, c(auxiliary_parameters, random_parameters)),
     "random" = intersect(setdiff(elements, auxiliary_parameters), random_parameters),
     setdiff(elements, auxiliary_parameters)

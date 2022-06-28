@@ -6,7 +6,6 @@ invisible(sapply(pkgs, requiet))
 # =========================================================================
 
 test_that("get_predicted.default - iv_robust", {
-
   data(Kmenta, package = "ivreg")
   x <- iv_robust(Q ~ P + D | D + F + A, se_type = "stata", data = Kmenta)
 
@@ -47,7 +46,6 @@ test_that("get_predicted.default - iv_robust", {
 # ====================================================================
 
 test_that("get_predicted.default - ivreg", {
-
   data(Kmenta, package = "ivreg")
   x <- ivreg(Q ~ P + D | D + F + A, data = Kmenta)
 

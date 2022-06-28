@@ -66,8 +66,6 @@ format_table <- function(x,
                          preserve_attributes = FALSE,
                          verbose = TRUE,
                          ...) {
-
-
   # sanity check
   if (is.null(x) || (is.data.frame(x) && nrow(x) == 0)) {
     if (isTRUE(verbose)) {

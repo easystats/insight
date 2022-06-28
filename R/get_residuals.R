@@ -38,7 +38,6 @@ get_residuals <- function(x, ...) {
 #' @rdname get_residuals
 #' @export
 get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
-
   # setup, check if user requested specific type of residuals
   # later, we can only catch response residuals, in such cases, give warning
   # when type is not "response"...

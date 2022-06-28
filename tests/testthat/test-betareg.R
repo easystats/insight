@@ -162,6 +162,4 @@ if (requiet("testthat") &&
     expect_true(!"SE" %in% colnames(p1))
     expect_true("SE" %in% colnames(p2))
   })
-
-
 }

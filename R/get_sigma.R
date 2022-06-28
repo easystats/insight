@@ -94,8 +94,10 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 .get_sigma.VGAM <- function(x, verbose = TRUE, ...) {
-  s <- tryCatch(exp(stats::coef(x)[["(Intercept):2"]]),
-                function(e) NULL)
+  s <- tryCatch(
+    exp(stats::coef(x)[["(Intercept):2"]]),
+    function(e) NULL
+  )
   class(s) <- c("insight_aux", class(s))
   s
 }
@@ -255,7 +257,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 # Methods -----------------------------------------------------------------
 
 .get_sigma_ci <- function(x, ci = 0.95, ...) {
-
   # TODO: What does it work for Bayesian models?
 
   if (is.null(ci) || is.na(ci)) {

@@ -65,7 +65,6 @@
 #' @examples
 #' # Datagrids of variables and dataframes =====================================
 #' if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE)) {
-#'
 #'   # Single variable is of interest; all others are "fixed" ------------------
 #'   # Factors
 #'   get_datagrid(iris, at = "Species") # Returns all the levels
@@ -180,7 +179,6 @@ get_datagrid.data.frame <- function(x,
     # Deal with targets ==========================================================
 
     if (is.character(target)) {
-
       # Find eventual user-defined specifications for each target
       specs <- do.call(rbind, lapply(target, .get_datagrid_clean_target, x = x))
       specs$varname <- as.character(specs$varname) # make sure it's a string not fac
@@ -223,7 +221,6 @@ get_datagrid.data.frame <- function(x,
         }
       }
     } else if (is.list(target)) {
-
       # we have a list as at-values
       facs <- target[sapply(x[names(target)], is.factor)]
       nums <- target[sapply(x[names(target)], is.numeric)]
@@ -236,7 +233,6 @@ get_datagrid.data.frame <- function(x,
 
     # Preserve range ---------------------------------------------------------
     if (preserve_range == TRUE && length(facs) > 0 && length(nums) > 0) {
-
       # Loop through the combinations of factors
       facs_combinations <- expand.grid(facs)
       for (i in 1:nrow(facs_combinations)) {
@@ -379,7 +375,6 @@ get_datagrid.data.frame <- function(x,
 #' @rdname get_datagrid
 #' @export
 get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
-
   # Check and clean the target argument
   specs <- .get_datagrid_clean_target(x, ...)
 
@@ -468,12 +463,10 @@ get_datagrid.double <- get_datagrid.numeric
 #' @rdname get_datagrid
 #' @export
 get_datagrid.factor <- function(x, ...) {
-
   # Check and clean the target argument
   specs <- .get_datagrid_clean_target(x, ...)
 
   if (is.na(specs$expression)) {
-
     # Keep only unique levels
     if (is.factor(x)) {
       out <- factor(levels(droplevels(x)), levels = levels(droplevels(x)))
@@ -528,7 +521,6 @@ get_datagrid.logical <- get_datagrid.character
 
     # If brackets are detected [a, b]
     if (is.na(expression) && grepl("\\[.*\\]", target)) {
-
       # Clean --------------------
       # Keep the content
       parts <- trim_ws(unlist(regmatches(target, gregexpr("\\[.+?\\]", target))))
@@ -541,12 +533,14 @@ get_datagrid.logical <- get_datagrid.character
       if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts, fixed = TRUE)
 
       # Make expression ----------
-      if (is.factor(x) || is.character(x)) { # Factor
+      if (is.factor(x) || is.character(x)) {
+        # Factor
         # Add quotes around them
         parts <- paste0("'", parts, "'")
         # Convert to character
         expression <- paste0("as.factor(c(", paste0(parts, collapse = ", "), "))")
-      } else { # Numeric
+      } else {
+        # Numeric
         # If only two, it's probably the range
         if (length(parts) == 2) {
           expression <- paste0("seq(", parts[1], ", ", parts[2], ", length.out = length)")

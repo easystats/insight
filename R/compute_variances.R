@@ -5,7 +5,6 @@
                                verbose = TRUE,
                                tolerance = 1e-5,
                                model_component = "conditional") {
-
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
   ## version of Jon Lefcheck's code from SEMfit
@@ -170,7 +169,6 @@
                                       name_fun = "get_variances",
                                       verbose = TRUE,
                                       model_component = "conditional") {
-
   # installed?
   check_if_installed("lme4", reason = "to compute variances for mixed models")
 
@@ -482,14 +480,12 @@
   # and the related link-function
 
   if (faminfo$is_linear && !faminfo$is_tweedie) {
-
     # linear / Gaussian ----
     # ----------------------
 
     dist.variance <- sig^2
   } else {
     if (faminfo$is_betabinomial) {
-
       # beta-binomial ----
       # ------------------
 
@@ -501,7 +497,6 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_binomial) {
-
       # binomial / bernoulli  ----
       # --------------------------
 
@@ -513,7 +508,6 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_count) {
-
       # count  ----
       # -----------
 
@@ -523,7 +517,6 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family %in% c("Gamma", "gamma")) {
-
       # Gamma  ----
       # -----------
 
@@ -536,7 +529,6 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family == "beta") {
-
       # Beta  ----
       # ----------
 
@@ -545,7 +537,6 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_tweedie) {
-
       # Tweedie  ----
       # -------------
 

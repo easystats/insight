@@ -195,7 +195,6 @@ get_predicted.default <- function(x,
                                   vcov_args = NULL,
                                   verbose = TRUE,
                                   ...) {
-
   # evaluate arguments
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
@@ -452,7 +451,6 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
 
 
 .format_reform <- function(include_random = TRUE) {
-
   # Format re.form
   if (is.null(include_random) || is.na(include_random)) {
     re.form <- include_random
@@ -493,10 +491,8 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
                                      link_inv = NULL,
                                      verbose = FALSE,
                                      ...) {
-
   # Transform to response scale
   if (isTRUE(args$transform)) {
-
     # retrieve link-inverse, for back transformation...
     if (is.null(link_inv)) {
       link_inv <- link_inverse(x)
@@ -518,8 +514,8 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
         ci_data[se_col] <- NULL
         if (isTRUE(verbose)) {
           warning(format_message(
-            'Could not apply Delta method to transform standard errors.',
-            'You may be able to obtain standard errors by using the ',
+            "Could not apply Delta method to transform standard errors.",
+            "You may be able to obtain standard errors by using the ",
             '`predict="link"` argument value.'
           ), call. = FALSE)
         }
@@ -648,7 +644,6 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
                                                  iter,
                                                  centrality_function = base::mean,
                                                  ...) {
-
   # outcome: ordinal/multinomial/multivariate produce a 3D array of predictions,
   # which we stack in "long" format
   if (length(dim(iter)) == 3) {

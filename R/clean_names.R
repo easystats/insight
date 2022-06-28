@@ -107,7 +107,6 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
                                        ignore_asis = FALSE,
                                        ignore_lag = FALSE,
                                        is_emmeans = FALSE) {
-
   # return if x is empty
   if (.is_empty_string(x)) {
     return("")

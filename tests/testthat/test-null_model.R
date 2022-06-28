@@ -1,13 +1,13 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-    requiet("testthat") &&
-    requiet("insight") &&
-    requiet("glmmTMB") &&
-    requiet("lme4")) {
+  requiet("testthat") &&
+  requiet("insight") &&
+  requiet("glmmTMB") &&
+  requiet("lme4")) {
   data(mtcars)
-  m1 <- suppressWarnings(glmer.nb(mpg ~ disp + (1|cyl) + offset(log(wt)), data = mtcars))
-  m2 <- suppressWarnings(glmer.nb(mpg ~ disp + (1|cyl), offset = log(wt), data = mtcars))
+  m1 <- suppressWarnings(glmer.nb(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
+  m2 <- suppressWarnings(glmer.nb(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
 
   test_that("null_model with offset", {
     nm1 <- null_model(m1)
@@ -15,8 +15,8 @@ if (.runThisTest &&
     expect_equal(fixef(nm1), fixef(nm2), tolerance = 1e-4)
   })
 
-  m1 <- suppressWarnings(glmmTMB(mpg ~ disp + (1|cyl) + offset(log(wt)), data = mtcars))
-  m2 <- suppressWarnings(glmmTMB(mpg ~ disp + (1|cyl), offset = log(wt), data = mtcars))
+  m1 <- suppressWarnings(glmmTMB(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
+  m2 <- suppressWarnings(glmmTMB(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
 
   test_that("null_model with offset", {
     nm1 <- null_model(m1)

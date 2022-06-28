@@ -22,8 +22,10 @@ test_that("find_predictors", {
   expect_identical(find_predictors(m1), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
   expect_identical(find_predictors(m2), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
   expect_identical(find_predictors(m3), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
-  expect_identical(find_predictors(m4), list(conditional = c("Petal.Length", "Sepal.Length"), cluster = "Species",
-                                             instruments = "Petal.Width", endogenous = "Sepal.Length"))
+  expect_identical(find_predictors(m4), list(
+    conditional = c("Petal.Length", "Sepal.Length"), cluster = "Species",
+    instruments = "Petal.Width", endogenous = "Sepal.Length"
+  ))
   expect_identical(
     find_predictors(m1, component = "all"),
     list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
@@ -243,9 +245,13 @@ test_that("get_data works when model data has name of  reserved words", {
   expect_equal(
     head(out),
     structure(
-      list(Y = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),
-           X = c(-1.37601434046896, -0.0340090992175856, 0.418083058388383,
-                 -0.51688491498936, -1.30634551903768, -0.858343109785566)),
+      list(
+        Y = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),
+        X = c(
+          -1.37601434046896, -0.0340090992175856, 0.418083058388383,
+          -0.51688491498936, -1.30634551903768, -0.858343109785566
+        )
+      ),
       is_subset = FALSE, row.names = c(NA, 6L), class = "data.frame"
     ),
     ignore_attr = TRUE,
@@ -258,13 +264,14 @@ test_that("find_variables with interaction", {
   mod <- suppressMessages(feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars))
   expect_equal(
     find_variables(mod),
-    list(response = "mpg", conditional = "vs", cluster = "carb",
-         instruments = c("am", "cyl"), endogenous = c("vs", "cyl")),
+    list(
+      response = "mpg", conditional = "vs", cluster = "carb",
+      instruments = c("am", "cyl"), endogenous = c("vs", "cyl")
+    ),
     ignore_attr = TRUE
   )
 
   # used to produce a warning
   mod <- feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars)
   expect_warning(find_variables(mod), NA)
-
 })

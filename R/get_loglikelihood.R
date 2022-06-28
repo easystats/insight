@@ -59,7 +59,6 @@ get_loglikelihood.lmerMod <- function(x,
                                       check_response = FALSE,
                                       verbose = TRUE,
                                       ...) {
-
   # use defaults for REML?
   if ((missing(estimator) || is.null(estimator)) && missing(REML)) {
     lls <- stats::logLik(x)
@@ -128,8 +127,6 @@ get_loglikelihood.afex_aov <- function(x, ...) {
                                   check_response = FALSE,
                                   verbose = TRUE,
                                   ...) {
-
-
   # Replace arg if compatibility base R is activated
   if (REML) estimator <- "REML"
   if (is.null(estimator)) estimator <- "ML"

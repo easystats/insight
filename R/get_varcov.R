@@ -84,7 +84,6 @@ get_varcov.default <- function(x,
                                vcov = NULL,
                                vcov_args = NULL,
                                ...) {
-
   .check_get_varcov_dots(x, ...)
   # process vcov-argument
   vcov <- .check_vcov_args(x, vcov = vcov, verbose = verbose, ...)
@@ -93,10 +92,11 @@ get_varcov.default <- function(x,
     vc <- suppressWarnings(stats::vcov(x))
   } else {
     vc <- .get_varcov_sandwich(x,
-                               vcov_fun = vcov,
-                               vcov_args = vcov_args,
-                               verbose = FALSE,
-                               ...)
+      vcov_fun = vcov,
+      vcov_args = vcov_args,
+      verbose = FALSE,
+      ...
+    )
   }
   .process_vcov(vc, verbose, ...)
 }
@@ -122,8 +122,10 @@ get_varcov.mlm <- function(x,
   .check_get_varcov_dots(x, ...)
   if (!is.null(x$weights)) {
     if (!is.null(vcov)) {
-      stop(format_message("The `vcov` argument is not supported with",
-                          "weights in a `mlm` model."), call. = FALSE)
+      stop(format_message(
+        "The `vcov` argument is not supported with",
+        "weights in a `mlm` model."
+      ), call. = FALSE)
     }
     s <- summary(x)[[1L]]
     .get_weighted_varcov(x, s$cov.unscaled)
@@ -143,7 +145,6 @@ get_varcov.betareg <- function(x,
                                component = c("conditional", "precision", "all"),
                                verbose = TRUE,
                                ...) {
-
   .check_get_varcov_dots(x, ...)
   component <- match.arg(component)
 
@@ -382,10 +383,11 @@ get_varcov.hurdle <- function(x,
     )
   } else {
     vc <- .get_varcov_sandwich(x,
-                               vcov_fun = vcov,
-                               vcov_args = vcov_args,
-                               verbose = verbose,
-                               ...)
+      vcov_fun = vcov,
+      vcov_args = vcov_args,
+      verbose = verbose,
+      ...
+    )
     keep <- switch(component,
       "conditional" = grepl("^count_", colnames(vc)),
       "zi" = ,
@@ -963,8 +965,10 @@ get_varcov.LORgee <- get_varcov.gee
 
 .fix_negative_matrix <- function(m) {
   if (requireNamespace("Matrix", quietly = TRUE)) {
-    message(format_message("The variance-covariance matrix is not positive definite. Returning the nearest positive definite matrix now.",
-                           "This ensures that eigenvalues are all positive real numbers, and thereby, for instance, it is possible to calculate standard errors for all relevant parameters."))
+    message(format_message(
+      "The variance-covariance matrix is not positive definite. Returning the nearest positive definite matrix now.",
+      "This ensures that eigenvalues are all positive real numbers, and thereby, for instance, it is possible to calculate standard errors for all relevant parameters."
+    ))
     as.matrix(Matrix::nearPD(m)$mat)
   } else {
     m
@@ -1056,7 +1060,8 @@ get_varcov.LORgee <- get_varcov.gee
     }
     if (isTRUE(verbose)) {
       warning("The `robust` argument is deprecated. Please use `vcov` instead.",
-              call. = FALSE)
+        call. = FALSE
+      )
     }
   }
 

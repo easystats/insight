@@ -319,10 +319,11 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     }
     mm <- get_modelmatrix(x, data = dots$data)
     out <- sapply(
-      seq_len(nrow(mm)), function(i)
-      suppressMessages(
-        lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
-      )
+      seq_len(nrow(mm)), function(i) {
+        suppressMessages(
+          lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
+        )
+      }
     )
     return(out)
   } else {

@@ -4,7 +4,6 @@ if (.runThisTest) {
   if (suppressWarnings(requiet("testthat") &&
     requiet("insight") &&
     requiet("brms"))) {
-
     # Model fitting -----------------------------------------------------------
 
     m1 <- suppressWarnings(insight::download_model("brms_mixed_6"))
