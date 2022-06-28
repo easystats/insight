@@ -67,18 +67,18 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">format_ci</span><span class="op">(</span>
-  <span class="va">CI_low</span>,
-  <span class="va">CI_high</span>,
-  ci <span class="op">=</span> <span class="fl">0.95</span>,
-  digits <span class="op">=</span> <span class="fl">2</span>,
-  brackets <span class="op">=</span> <span class="cn">TRUE</span>,
-  width <span class="op">=</span> <span class="cn">NULL</span>,
-  width_low <span class="op">=</span> <span class="va">width</span>,
-  width_high <span class="op">=</span> <span class="va">width</span>,
-  missing <span class="op">=</span> <span class="st">""</span>,
-  zap_small <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_ci</span><span class="op">(</span></span>
+<span>  <span class="va">CI_low</span>,</span>
+<span>  <span class="va">CI_high</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  brackets <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  width_low <span class="op">=</span> <span class="va">width</span>,</span>
+<span>  width_high <span class="op">=</span> <span class="va">width</span>,</span>
+<span>  missing <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -144,28 +144,28 @@ places than <code>digits</code> are printed in scientific notation.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">format_ci</span><span class="op">(</span><span class="fl">1.20</span>, <span class="fl">3.57</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_ci</span><span class="op">(</span><span class="fl">1.20</span>, <span class="fl">3.57</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "90% CI [1.20, 3.57]"</span>
-<span class="r-in"><span class="fu">format_ci</span><span class="op">(</span><span class="fl">1.20</span>, <span class="fl">3.57</span>, ci <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">format_ci</span><span class="op">(</span><span class="fl">1.20</span>, <span class="fl">3.57</span>, ci <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "[1.20, 3.57]"</span>
-<span class="r-in"><span class="fu">format_ci</span><span class="op">(</span><span class="fl">1.20</span>, <span class="fl">3.57</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, brackets <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">format_ci</span><span class="op">(</span><span class="fl">1.20</span>, <span class="fl">3.57</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, brackets <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1.20, 3.57"</span>
-<span class="r-in"><span class="fu">format_ci</span><span class="op">(</span><span class="fl">1.20</span>, <span class="fl">3.57</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, brackets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"("</span>, <span class="st">")"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">format_ci</span><span class="op">(</span><span class="fl">1.20</span>, <span class="fl">3.57</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, brackets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"("</span>, <span class="st">")"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "(1.20, 3.57)"</span>
-<span class="r-in"><span class="fu">format_ci</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.205645</span>, <span class="fl">23.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.57</span>, <span class="op">-</span><span class="fl">1.35</span><span class="op">)</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">format_ci</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.205645</span>, <span class="fl">23.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.57</span>, <span class="op">-</span><span class="fl">1.35</span><span class="op">)</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "90% CI [1.21, 3.57]"   "90% CI [23.40, -1.35]"</span>
-<span class="r-in"><span class="fu">format_ci</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.20</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.57</span>, <span class="op">-</span><span class="fl">1.35</span>, <span class="cn">NA</span><span class="op">)</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">format_ci</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.20</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.57</span>, <span class="op">-</span><span class="fl">1.35</span>, <span class="cn">NA</span><span class="op">)</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "90% CI [1.20, 3.57]" "90% CI [, -1.35]"    ""                   </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># automatic alignment of width, useful for printing multiple CIs in columns</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">format_ci</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.205</span>, <span class="fl">23.4</span>, <span class="fl">100.43</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.57</span>, <span class="op">-</span><span class="fl">13.35</span>, <span class="fl">9.4</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/brms/man/addition-terms.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">x</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># automatic alignment of width, useful for printing multiple CIs in columns</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">format_ci</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.205</span>, <span class="fl">23.4</span>, <span class="fl">100.43</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.57</span>, <span class="op">-</span><span class="fl">13.35</span>, <span class="fl">9.4</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">x</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI [1.21, 3.57]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI [23.40, -13.35]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI [100.43, 9.40]</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">format_ci</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.205</span>, <span class="fl">23.4</span>, <span class="fl">100.43</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.57</span>, <span class="op">-</span><span class="fl">13.35</span>, <span class="fl">9.4</span><span class="op">)</span>, width <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/brms/man/addition-terms.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">x</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">format_ci</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.205</span>, <span class="fl">23.4</span>, <span class="fl">100.43</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.57</span>, <span class="op">-</span><span class="fl">13.35</span>, <span class="fl">9.4</span><span class="op">)</span>, width <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">x</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI [  1.21,   3.57]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI [ 23.40, -13.35]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI [100.43,   9.40]</span>
@@ -180,7 +180,7 @@ places than <code>digits</code> are printed in scientific notation.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

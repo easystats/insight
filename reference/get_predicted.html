@@ -108,75 +108,75 @@ returns confidence intervals (included as attribute, and accessible via the
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for default</span>
-<span class="fu">get_predicted</span><span class="op">(</span>
-  <span class="va">x</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  predict <span class="op">=</span> <span class="st">"expectation"</span>,
-  ci <span class="op">=</span> <span class="fl">0.95</span>,
-  ci_type <span class="op">=</span> <span class="st">"confidence"</span>,
-  ci_method <span class="op">=</span> <span class="cn">NULL</span>,
-  dispersion_method <span class="op">=</span> <span class="st">"sd"</span>,
-  vcov <span class="op">=</span> <span class="cn">NULL</span>,
-  vcov_args <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for lm</span>
-<span class="fu">get_predicted</span><span class="op">(</span>
-  <span class="va">x</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  predict <span class="op">=</span> <span class="st">"expectation"</span>,
-  iterations <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for stanreg</span>
-<span class="fu">get_predicted</span><span class="op">(</span>
-  <span class="va">x</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  predict <span class="op">=</span> <span class="st">"expectation"</span>,
-  iterations <span class="op">=</span> <span class="cn">NULL</span>,
-  ci <span class="op">=</span> <span class="fl">0.95</span>,
-  ci_method <span class="op">=</span> <span class="cn">NULL</span>,
-  include_random <span class="op">=</span> <span class="st">"default"</span>,
-  include_smooth <span class="op">=</span> <span class="cn">TRUE</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for gam</span>
-<span class="fu">get_predicted</span><span class="op">(</span>
-  <span class="va">x</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  predict <span class="op">=</span> <span class="st">"expectation"</span>,
-  ci <span class="op">=</span> <span class="fl">0.95</span>,
-  include_random <span class="op">=</span> <span class="cn">TRUE</span>,
-  include_smooth <span class="op">=</span> <span class="cn">TRUE</span>,
-  iterations <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for lmerMod</span>
-<span class="fu">get_predicted</span><span class="op">(</span>
-  <span class="va">x</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  predict <span class="op">=</span> <span class="st">"expectation"</span>,
-  ci <span class="op">=</span> <span class="fl">0.95</span>,
-  ci_method <span class="op">=</span> <span class="cn">NULL</span>,
-  include_random <span class="op">=</span> <span class="st">"default"</span>,
-  iterations <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for principal</span>
-<span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, data <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">get_predicted</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict <span class="op">=</span> <span class="st">"expectation"</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  ci_type <span class="op">=</span> <span class="st">"confidence"</span>,</span>
+<span>  ci_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dispersion_method <span class="op">=</span> <span class="st">"sd"</span>,</span>
+<span>  vcov <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  vcov_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for lm</span></span>
+<span><span class="fu">get_predicted</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict <span class="op">=</span> <span class="st">"expectation"</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for stanreg</span></span>
+<span><span class="fu">get_predicted</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict <span class="op">=</span> <span class="st">"expectation"</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  ci_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include_random <span class="op">=</span> <span class="st">"default"</span>,</span>
+<span>  include_smooth <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for gam</span></span>
+<span><span class="fu">get_predicted</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict <span class="op">=</span> <span class="st">"expectation"</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  include_random <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  include_smooth <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for lmerMod</span></span>
+<span><span class="fu">get_predicted</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict <span class="op">=</span> <span class="st">"expectation"</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  ci_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include_random <span class="op">=</span> <span class="st">"default"</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for principal</span></span>
+<span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, data <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -360,11 +360,11 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">predictions</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">predictions</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predicted values:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 21.21678 21.21678 26.07124 21.21678 15.44448 21.31239 14.10597 26.66401</span>
@@ -374,9 +374,9 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">NOTE: Confidence intervals, if available, are stored as attributes and can be accessed using `as.data.frame()` on this output.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Options and methods ---------------------</span></span>
-<span class="r-in"><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Options and methods ---------------------</span></span></span>
+<span class="r-in"><span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predicted values:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 21.21678 21.21678 26.07124 21.21678 15.44448 21.31239 14.10597 26.66401</span>
@@ -386,9 +386,9 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">NOTE: Confidence intervals, if available, are stored as attributes and can be accessed using `as.data.frame()` on this output.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Get CI</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get CI</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted        SE    CI_low  CI_high</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   21.21678 0.7281647 19.727518 22.70605</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   21.21678 0.7281647 19.727518 22.70605</span>
@@ -422,13 +422,13 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30  19.97387 0.7635547 18.412227 21.53552</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 31  12.38501 2.1153615  8.058613 16.71141</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 32  25.76529 1.0175965 23.684073 27.84651</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"boot"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="co"># Bootstrapped</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="co"># Same as as.data.frame(..., keep_iterations = FALSE)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"boot"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># Bootstrapped</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># Same as as.data.frame(..., keep_iterations = FALSE)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: boot</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘boot’</span>
@@ -468,17 +468,17 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30  19.76550 0.5808276 19.44717 20.55177</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 31  12.49355 1.3168882 10.79937 13.50598</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 32  25.55186 1.8389438 23.88272 27.91693</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Different prediction types ------------------------</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Fit a logistic model</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Expectation (default): response scale + CI</span></span>
-<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"expectation"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Different prediction types ------------------------</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Fit a logistic model</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Expectation (default): response scale + CI</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"expectation"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted         SE      CI_low    CI_high</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.16579367 0.05943589 0.078854431 0.31573138</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.06637193 0.03625646 0.022083989 0.18286787</span>
@@ -486,10 +486,10 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.01498061 0.01261461 0.002839122 0.07513285</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.10623680 0.04779474 0.042437982 0.24173444</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.48159935 0.07901420 0.333158095 0.63336131</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Prediction: response scale + PI</span></span>
-<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Prediction: response scale + PI</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted       CI_low      CI_high</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.16579367 2.220446e-16 1.000000e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.06637193 2.220446e-16 1.000000e+00</span>
@@ -497,10 +497,10 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.01498061 2.220446e-16 2.220446e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.10623680 2.220446e-16 1.000000e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.48159935 2.220446e-16 1.000000e+00</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Link: link scale + CI</span></span>
-<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Link: link scale + CI</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Predicted        SE     CI_low    CI_high</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.61573668 0.4297415 -2.4580146 -0.7734588</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 -2.64380391 0.5850960 -3.7905709 -1.4970369</span>
@@ -508,10 +508,10 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 -4.18590475 0.8548690 -5.8614172 -2.5103923</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 -2.12977030 0.5033646 -3.1163467 -1.1431939</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 -0.07363584 0.3164854 -0.6939359  0.5466642</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Classification: classification "type" + PI</span></span>
-<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Classification: classification "type" + PI</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Predicted CI_low    CI_high</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    setosa setosa versicolor</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    setosa setosa versicolor</span>
@@ -519,7 +519,7 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4    setosa setosa     setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5    setosa setosa versicolor</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6    setosa setosa versicolor</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -531,7 +531,7 @@ Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_p
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

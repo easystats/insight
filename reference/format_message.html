@@ -73,7 +73,7 @@ can be accessed. By default, new lines are indented by two whitespace.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">format_message</span><span class="op">(</span><span class="va">string</span>, <span class="va">...</span>, line_length <span class="op">=</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">width</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_message</span><span class="op">(</span><span class="va">string</span>, <span class="va">...</span>, line_length <span class="op">=</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">width</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -99,22 +99,22 @@ can be accessed. By default, new lines are indented by two whitespace.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">format_message</span><span class="op">(</span><span class="st">"Much too long string for just one line, I guess!"</span>,</span>
-<span class="r-in">  line_length <span class="op">=</span> <span class="fl">15</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">format_message</span><span class="op">(</span><span class="st">"Much too long string for just one line, I guess!"</span>,</span></span>
+<span class="r-in"><span>  line_length <span class="op">=</span> <span class="fl">15</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Much too long</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   string for just</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   one line, I</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   guess!</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">format_message</span><span class="op">(</span><span class="st">"Much too long string for just one line, I guess!"</span>,</span>
-<span class="r-in">  <span class="st">"First new line"</span>,</span>
-<span class="r-in">  <span class="st">"Second new line"</span>,</span>
-<span class="r-in">  <span class="st">"(both indented)"</span>,</span>
-<span class="r-in">  line_length <span class="op">=</span> <span class="fl">30</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">format_message</span><span class="op">(</span><span class="st">"Much too long string for just one line, I guess!"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"First new line"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"Second new line"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"(both indented)"</span>,</span></span>
+<span class="r-in"><span>  line_length <span class="op">=</span> <span class="fl">30</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Much too long string for just</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   one line, I guess!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   First new line</span>
@@ -131,7 +131,7 @@ can be accessed. By default, new lines are indented by two whitespace.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
