@@ -5,13 +5,13 @@
 #'   or exp-transforming, was applied to the response variable (dependent
 #'   variable) in a regression formula. Currently, following patterns are
 #'   detected: `log`, `log1p`, `log2`, `log10`, `exp`, `expm1`, `sqrt`,
-#'   `log(x+<number>)` and `log-log`.
+#'   `log(x+<number>)`, `log-log` and `power` (to 2nd power, like `I(x^2)`).
 #'
 #' @param x A regression model.
 #' @return A string, with the name of the function of the applied transformation.
 #'   Returns `"identity"` for no transformation, and e.g. `"log(x+3)"` when
 #'   a specific values was added to the response variables before
-#'   log-transforming.
+#'   log-transforming. For unknown transformations, returns `NULL`.
 #'
 #' @examples
 #' # identity, no transformation
@@ -89,6 +89,20 @@ find_transformation <- function(x) {
     } else {
       transform_fun <- paste0("sqrt(x+", plus_minus, ")")
     }
+  }
+
+
+  # (unknown) I-transformation
+
+  if (any(grepl("I\\((.*)\\)", rv))) {
+    transform_fun <- NULL
+  }
+
+
+  # power-transformation
+
+  if (any(grepl("I\\((.*)\\^\\s*2\\)", rv))) {
+    transform_fun <- "power"
   }
 
   transform_fun
