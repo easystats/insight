@@ -8,6 +8,8 @@
   gets a `logical` attribute (set to `TRUE`), and the returned data frame gets
   a `logicals` attribute including all names of affected variables.
 
+* `parameters_table()`, the alias for `format_table()`, was removed.
+
 ## Changes to functions
 
 * `find_transformation()` and `get_transformation()` now also work for models 

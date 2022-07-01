@@ -199,9 +199,6 @@ format_table <- function(x,
 }
 
 
-#' @rdname format_table
-#' @export
-parameters_table <- format_table
 
 
 
