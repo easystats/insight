@@ -112,10 +112,8 @@ reference:
   desc: >
     Functions for formatting (summary) output for printing
   contents:
-  - color_if
+  - contains("color")
   - starts_with("format_")
-  - parameters_table
-  - print_color
   - text_remove_backticks
 
 - title: "Utilities"
