@@ -64,8 +64,9 @@
 <h2 class="pkg-version" data-toc-text="0.17.1.1" id="insight-01711">insight 0.17.1.1<a class="anchor" aria-label="anchor" href="#insight-01711"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-0-17-1-1">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-17-1-1"></a></h3>
-<ul><li>
-<code><a href="../reference/get_data.html">get_data()</a></code> no longer returns logical types for numeric variables that have been converted to logicals on-the-fly within formulas (like <code>y ~ as.logical(x)</code>). Instead, for each numeric variable that was coerced to logical within a formula gets a <code>logical</code> attribute (set to <code>TRUE</code>), and the returned data frame gets a <code>logicals</code> attribute including all names of affected variables.</li></ul></div>
+<ul><li><p><code><a href="../reference/get_data.html">get_data()</a></code> no longer returns logical types for numeric variables that have been converted to logicals on-the-fly within formulas (like <code>y ~ as.logical(x)</code>). Instead, for each numeric variable that was coerced to logical within a formula gets a <code>logical</code> attribute (set to <code>TRUE</code>), and the returned data frame gets a <code>logicals</code> attribute including all names of affected variables.</p></li>
+<li><p><code>parameters_table()</code>, the alias for <code><a href="../reference/format_table.html">format_table()</a></code>, was removed.</p></li>
+</ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-17-1-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-17-1-1"></a></h3>
 <ul><li>
@@ -416,7 +417,7 @@
 <div class="section level3">
 <h3 id="breaking-changes-0-12-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-0"></a></h3>
 <ul><li>
-<code><a href="../reference/format_table.html">format_table()</a></code> is an alias for <code><a href="../reference/format_table.html">parameters_table()</a></code>, and is no longer referring to <code><a href="../reference/export_table.html">export_table()</a></code>.</li></ul></div>
+<code><a href="../reference/format_table.html">format_table()</a></code> is an alias for <code>parameters_table()</code>, and is no longer referring to <code><a href="../reference/export_table.html">export_table()</a></code>.</li></ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-12-0">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-12-0"></a></h3>
 <ul><li>Support for <code>coxr</code> (<em>coxrobust</em>), <code>coeftest</code> (<em>lmtest</em>), <code>ivFixed</code> (<em>ivFixed</em>), <code>ivprobit</code> (<em>ivprobit</em>), <code>riskRegression</code> (<em>riskRegression</em>). <code>summary.lm</code>, <code>lmodel2</code> (<em>lmodel2</em>), improved support for <code>bamlss</code> (<em>bamlss</em>).</li></ul></div>
@@ -462,7 +463,7 @@
 <div class="section level3">
 <h3 id="changes-to-functions-0-11-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-11-1"></a></h3>
 <ul><li><p><code><a href="../reference/get_variance.html">get_variance()</a></code> and <code><a href="../reference/get_variance.html">get_variance_random()</a></code> gain a <code>tolerance</code>-argument, to set the tolerance level for singularity checks when computing random effect variances.</p></li>
-<li><p><code><a href="../reference/format_table.html">parameters_table()</a></code> formats more objects from the <em>easystats</em> packages, like ROPE-range or <code><a href="https://easystats.github.io/bayestestR/reference/p_rope.html" class="external-link">p_rope()</a></code>.</p></li>
+<li><p><code>parameters_table()</code> formats more objects from the <em>easystats</em> packages, like ROPE-range or <code><a href="https://easystats.github.io/bayestestR/reference/p_rope.html" class="external-link">p_rope()</a></code>.</p></li>
 <li><p><code><a href="../reference/find_statistic.html">find_statistic()</a></code> now supports models of class <em>scam</em>.</p></li>
 <li><p><code><a href="../reference/get_data.html">get_data()</a></code> now also supports <code>htest</code>-object, where possible.</p></li>
 </ul></div>
@@ -484,7 +485,7 @@
 <ul><li>Support for <code>scam</code> (<em>scam</em>), <code>meta_random</code> and <code>meta_fixed</code> (<em>metaBMA</em>), <code>Glm</code> (<em>rms</em>), <code>ridgelm</code> (<em>MASS</em>), <code>mediate</code> (<em>mediation</em>). Partial support for <code>mcmc.list</code> (e.g. <em>bayesGARCH</em>)</li></ul></div>
 <div class="section level3">
 <h3 id="new-function-0-11-0">New function<a class="anchor" aria-label="anchor" href="#new-function-0-11-0"></a></h3>
-<ul><li><p><code><a href="../reference/format_table.html">parameters_table()</a></code>, which was moved from package <em>parameters</em> to <em>insight</em>. Note that this function is going to be renamed into <code><a href="../reference/format_table.html">format_table()</a></code> in a future update.</p></li>
+<ul><li><p><code>parameters_table()</code>, which was moved from package <em>parameters</em> to <em>insight</em>. Note that this function is going to be renamed into <code><a href="../reference/format_table.html">format_table()</a></code> in a future update.</p></li>
 <li><p><code><a href="../reference/find_offset.html">find_offset()</a></code>, to find the name of offset-terms.</p></li>
 <li><p>Added generics for <code><a href="../reference/display.html">display()</a></code> and <code><a href="../reference/display.html">print_md()</a></code>, to allow other packages to create tables in other formats when not printing the output to console.</p></li>
 </ul></div>
@@ -492,7 +493,7 @@
 <h3 id="changes-to-functions-0-11-0">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-11-0"></a></h3>
 <ul><li><p><code><a href="../reference/standardize_names.html">standardize_names()</a></code> tries to be as loyal to the <em>broom</em>-naming conventions as possible.</p></li>
 <li><p>The function of the <code>brackets</code>-argument in <code><a href="../reference/format_ci.html">format_ci()</a></code> was changed. It is now also possible to provide a length-two character vector, to define own brackets that encompass the CI-values.</p></li>
-<li><p>Related to the change in <code><a href="../reference/format_ci.html">format_ci()</a></code>, the function of the <code>brackets</code>-argument in <code><a href="../reference/format_table.html">parameters_table()</a></code> was changed accordingly. Furthermore, <code><a href="../reference/format_table.html">parameters_table()</a></code> gains a <code>preserve_attributes</code>-argument, to preserve any attributes from the input data frame.</p></li>
+<li><p>Related to the change in <code><a href="../reference/format_ci.html">format_ci()</a></code>, the function of the <code>brackets</code>-argument in <code>parameters_table()</code> was changed accordingly. Furthermore, <code>parameters_table()</code> gains a <code>preserve_attributes</code>-argument, to preserve any attributes from the input data frame.</p></li>
 <li><p><code><a href="../reference/export_table.html">export_table()</a></code> gains several new arguments that allows to create tables in markdown-format.</p></li>
 <li><p><code><a href="../reference/print_parameters.html">print_parameters()</a></code> gains a <code>keep_parameter_column</code>-argument, to keep (default) both the <code>"Cleaned_Parameter"</code> and <code>"Parameter"</code> columns, or - if <code>FALSE</code> - use <code>"Cleaned_Parameter"</code> as new <code>"Parameter"</code> column.</p></li>
 </ul></div>
