@@ -734,16 +734,15 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 
 
 .get_model_data_for_grid <- function(x, data) {
+  # Retrieve data, based on variable names
   if (is.null(data)) {
-    # Make sure we have all variable names from the model object.
-    # For models with transformed parameters, "find_variables" may not
-    # return matching column names - then try retrieving terms instead
-    all_variables <- unique(c(
-      find_variables(x, "all", flatten = TRUE),
-      find_terms(x, "all", flatten = TRUE)
-    ))
-    data <- get_data(x)
-    data <- tryCatch(data[intersect(colnames(data), all_variables)], error = function(e) NULL)
+    data <- tryCatch(get_data(x)[find_variables(x, "all", flatten = TRUE)], error = function(e) NULL)
+  }
+
+  # For models with transformed parameters, "find_variables" may not return
+  # matching column names - then try retrieving terms instead
+  if (is.null(data)) {
+    data <- tryCatch(get_data(x)[find_terms(x, "all", flatten = TRUE)], error = function(e) NULL)
   }
 
   # still found no data - stop here
