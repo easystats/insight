@@ -118,7 +118,6 @@ See this \href{https://easystats.github.io/modelbased/articles/visualisation_mat
 \examples{
 # Datagrids of variables and dataframes =====================================
 if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE)) {
-
   # Single variable is of interest; all others are "fixed" ------------------
   # Factors
   get_datagrid(iris, at = "Species") # Returns all the levels

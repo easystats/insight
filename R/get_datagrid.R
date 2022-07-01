@@ -137,23 +137,21 @@ get_datagrid.data.frame <- function(x,
                                     length = 10,
                                     range = "range",
                                     ...) {
-  target <- at
-
   # find numerics that were coerced to factor in-formula
   numeric_factors <- colnames(x)[sapply(x, function(i) isTRUE(attributes(i)$factor))]
 
   specs <- NULL
 
-  if (is.null(target)) {
+  if (is.null(at)) {
     targets <- data.frame()
   } else {
-    # Valid target argument
-    if (all(target == "all")) {
-      target <- names(x)
+    # Valid at argument
+    if (all(at == "all")) {
+      at <- colnames(x)
     }
 
-    if (is.numeric(target) || is.logical(target)) {
-      target <- names(x)[target]
+    if (is.numeric(at) || is.logical(at)) {
+      at <- colnames(x)[at]
     }
 
     # Deal with factor in-formula transformations ============================
@@ -178,9 +176,9 @@ get_datagrid.data.frame <- function(x,
 
     # Deal with targets ==========================================================
 
-    if (is.character(target)) {
+    if (is.character(at)) {
       # Find eventual user-defined specifications for each target
-      specs <- do.call(rbind, lapply(target, .get_datagrid_clean_target, x = x))
+      specs <- do.call(rbind, lapply(at, .get_datagrid_clean_target, x = x))
       specs$varname <- as.character(specs$varname) # make sure it's a string not fac
       specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
@@ -189,7 +187,7 @@ get_datagrid.data.frame <- function(x,
       # Create target list of factors -----------------------------------------
       facs <- list()
       for (fac in specs[specs$is_factor == TRUE, "varname"]) {
-        facs[[fac]] <- get_datagrid(x[[fac]], target = specs[specs$varname == fac, "expression"])
+        facs[[fac]] <- get_datagrid(x[[fac]], at = specs[specs$varname == fac, "expression"])
       }
 
       # Create target list of numerics ----------------------------------------
@@ -200,19 +198,19 @@ get_datagrid.data.frame <- function(x,
         if (length(length) == 1) {
           length <- rep(length, length(numvars))
         } else if (length(length) != length(numvars)) {
-          stop("The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ").")
+          stop(format_message("The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ")."), call. = FALSE)
         }
         # Sanitize 'range' argument
         if (length(range) == 1) {
           range <- rep(range, length(numvars))
         } else if (length(range) != length(numvars)) {
-          stop("The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ").")
+          stop(format_message("The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."), call. = FALSE)
         }
         # Get datagrids
         for (i in 1:length(numvars)) {
           num <- numvars[i]
           nums[[num]] <- get_datagrid(x[[num]],
-            target = specs[specs$varname == num, "expression"],
+            at = specs[specs$varname == num, "expression"],
             reference = reference[[num]],
             length = length[i],
             range = range[i],
@@ -220,10 +218,10 @@ get_datagrid.data.frame <- function(x,
           )
         }
       }
-    } else if (is.list(target)) {
+    } else if (is.list(at)) {
       # we have a list as at-values
-      facs <- target[sapply(x[names(target)], is.factor)]
-      nums <- target[sapply(x[names(target)], is.numeric)]
+      facs <- at[sapply(x[names(at)], is.factor)]
+      nums <- at[sapply(x[names(at)], is.numeric)]
     }
 
     # Assemble the two - the goal is to have two named lists, where variable
@@ -260,7 +258,7 @@ get_datagrid.data.frame <- function(x,
       }
 
       if (nrow(targets) == 0) {
-        stop("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE.")
+        stop(format_message("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE."), call. = FALSE)
       }
     }
   }
@@ -273,7 +271,7 @@ get_datagrid.data.frame <- function(x,
     rest_df <- lapply(x[rest_vars], .get_datagrid_summary, numerics = numerics, factors = factors, ...)
     rest_df <- expand.grid(rest_df, stringsAsFactors = FALSE)
     if (nrow(targets) == 0) {
-      targets <- rest_df # If target = NULL
+      targets <- rest_df # If at = NULL
     } else {
       targets <- merge(targets, rest_df, sort = FALSE)
     }
@@ -294,7 +292,7 @@ get_datagrid.data.frame <- function(x,
   # Attributes
   attr(targets, "adjusted_for") <- ifelse(length(rest_vars) >= 1, rest_vars, NA)
   attr(targets, "at_specs") <- specs
-  attr(targets, "at") <- target
+  attr(targets, "at") <- at
   attr(targets, "preserve_range") <- preserve_range
   attr(targets, "reference") <- reference
   attr(targets, "data") <- x
@@ -348,11 +346,9 @@ get_datagrid.data.frame <- function(x,
       } else if (is.character(x) || is.logical(x)) {
         out <- unique(x)[1]
       } else {
-        stop(paste0(
-          "Argument is not numeric nor factor but ",
-          class(x),
-          ". Please report the bug at https://github.com/easystats/insight/issues"
-        ))
+        stop(format_message(paste0("Argument is not numeric nor factor but ", class(x), ".",
+        "Please report the bug at https://github.com/easystats/insight/issues"
+        )), call. = FALSE)
       }
     }
   }
@@ -492,38 +488,38 @@ get_datagrid.logical <- get_datagrid.character
 # Utilities -----------------------------------------------------------------
 
 #' @keywords internal
-.get_datagrid_clean_target <- function(x, target = NULL, ...) {
+.get_datagrid_clean_target <- function(x, at = NULL, ...) {
   expression <- NA
   varname <- NA
-  original_target <- target
+  original_target <- at
 
-  if (!is.null(target)) {
-    if (is.data.frame(x) && target %in% names(x)) {
-      return(data.frame(varname = target, expression = NA))
+  if (!is.null(at)) {
+    if (is.data.frame(x) && at %in% names(x)) {
+      return(data.frame(varname = at, expression = NA))
     }
 
     # If there is an equal sign
-    if (grepl("length.out =", target)) {
-      expression <- target # This is an edgecase
-    } else if (grepl("=", target)) {
-      parts <- trim_ws(unlist(strsplit(target, "=", fixed = TRUE))) # Split and clean
+    if (grepl("length.out =", at)) {
+      expression <- at # This is an edgecase
+    } else if (grepl("=", at)) {
+      parts <- trim_ws(unlist(strsplit(at, "=", fixed = TRUE))) # Split and clean
       varname <- parts[1] # left-hand part is probably the name of the variable
-      target <- parts[2] # right-hand part is the real target
+      at <- parts[2] # right-hand part is the real target
     }
 
     if (is.na(expression) && is.data.frame(x)) {
       if (!is.na(varname)) {
         x <- x[[varname]]
       } else {
-        stop("Couldn't find which variable were selected in `target`. Check spelling and specification.")
+        stop(format_message("Couldn't find which variable were selected in `at`. Check spelling and specification."), call. = FALSE)
       }
     }
 
     # If brackets are detected [a, b]
-    if (is.na(expression) && grepl("\\[.*\\]", target)) {
+    if (is.na(expression) && grepl("\\[.*\\]", at)) {
       # Clean --------------------
       # Keep the content
-      parts <- trim_ws(unlist(regmatches(target, gregexpr("\\[.+?\\]", target))))
+      parts <- trim_ws(unlist(regmatches(at, gregexpr("\\[.+?\\]", at))))
       # Drop the brackets
       parts <- gsub("\\[|\\]", "", parts)
       # Split by a separator like ','
@@ -549,22 +545,22 @@ get_datagrid.logical <- get_datagrid.character
           parts <- as.numeric(parts)
           expression <- paste0("c(", paste0(parts, collapse = ", "), ")")
         } else {
-          stop(paste0("The `target` argument (", target, ") should indicate the min and the max."))
+          stop(format_message(paste0("The `at` argument (", at, ") should indicate the minimum and the maximum.")), call. = FALSE)
         }
       }
       # Else, try to directly eval the content
     } else {
-      expression <- target
+      expression <- at
       # Try to eval and make sure it works
       tryCatch(
         {
           # This is just to make sure that an expression with `length` in
           # it doesn't fail because of this undefined var
           length <- 10
-          eval(parse(text = target))
+          eval(parse(text = at))
         },
         error = function(r) {
-          stop(paste0("The `target` argument (`", original_target, "`) cannot be read and could be mispecified."))
+          stop(format_message(paste0("The `at` argument (`", original_target, "`) cannot be read and could be mispecified.")), call. = FALSE)
         }
       )
     }
@@ -592,29 +588,18 @@ get_datagrid.default <- function(x,
                                  include_response = FALSE,
                                  data = NULL,
                                  ...) {
+  # sanity check
+  if (!is_model(x)) {
+    stop("`x` must be a statistical model.", call. = FALSE)
+  }
+
   # Retrieve data from model
-  if (is.null(data)) {
-    data <- tryCatch(get_data(x)[find_variables(x, "all", flatten = TRUE)], error = function(e) NULL)
-  }
-
-  # For models with transformed parameters, "find_variables" may not return
-  # matching column names - then try retrieving terms instead
-  if (is.null(data)) {
-    data <- tryCatch(get_data(x)[find_terms(x, "all", flatten = TRUE)], error = function(e) NULL)
-  }
-
-  # still found no data - stop here
-  if (is.null(data)) {
-    stop(format_message(
-      "Can't access data that was used to fit the model in order to create the reference grid.",
-      "Please use the `data` argument."
-    ))
-  }
+  data <- .get_model_data_for_grid(x, data)
 
   # Deal with intercept-only models
   response <- find_response(x)
   if (include_response == FALSE) {
-    data <- data[!names(data) %in% response]
+    data <- data[!colnames(data) %in% response]
     if (ncol(data) < 1) {
       stop(format_message("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."), call. = FALSE)
     }
@@ -629,15 +614,15 @@ get_datagrid.default <- function(x,
         keep <- c(keep, at[at %in% random_factors])
         random_factors <- setdiff(random_factors, at)
       }
-      data <- data[names(data) %in% keep]
+      data <- data[colnames(data) %in% keep]
     }
   }
 
-  if (all(at == "all")) at <- names(data)
-  if (include_smooth == FALSE || include_smooth == "fixed") {
+  if (all(at == "all")) at <- colnames(data)
+  if (isFALSE(include_smooth) || identical(include_smooth, "fixed")) {
     s <- find_smooth(x, flatten = TRUE)
     if (!is.null(s)) {
-      at <- names(data)[!names(data) %in% clean_names(s)]
+      at <- colnames(data)[!colnames(data) %in% clean_names(s)]
     }
   }
 
@@ -661,8 +646,8 @@ get_datagrid.default <- function(x,
     }
   }
 
-  if (include_smooth == FALSE) {
-    vm[names(vm) %in% clean_names(find_smooth(x, flatten = TRUE))] <- NULL
+  if (isFALSE(include_smooth)) {
+    vm[colnames(vm) %in% clean_names(find_smooth(x, flatten = TRUE))] <- NULL
   }
 
   attr(vm, "model") <- x
@@ -684,23 +669,7 @@ get_datagrid.wbm <- function(x,
                              data = NULL,
                              ...) {
   # Retrieve data from model
-  if (is.null(data)) {
-    data <- tryCatch(get_data(x)[find_variables(x, "all", flatten = TRUE)], error = function(e) NULL)
-  }
-
-  # For models with transformed parameters, "find_variables" may not return
-  # matching column names - then try retrieving terms instead
-  if (is.null(data)) {
-    data <- tryCatch(get_data(x)[find_terms(x, "all", flatten = TRUE)], error = function(e) NULL)
-  }
-
-  # still found no data - stop here
-  if (is.null(data)) {
-    stop(format_message(
-      "Can't access data that was used to fit the model in order to create the reference grid.",
-      "Please use the `data` argument."
-    ))
-  }
+  data <- .get_model_data_for_grid(x, data)
 
   # add id and time variables
   data[[x@call_info$id]] <- levels(stats::model.frame(x)[[x@call_info$id]])[1]
@@ -761,4 +730,29 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
     }
   }
   .to_numeric(row.names(x)[idx])
+}
+
+
+.get_model_data_for_grid <- function(x, data) {
+  if (is.null(data)) {
+    # Make sure we have all variable names from the model object.
+    # For models with transformed parameters, "find_variables" may not
+    # return matching column names - then try retrieving terms instead
+    all_variables <- unique(c(
+      find_variables(x, "all", flatten = TRUE),
+      find_terms(x, "all", flatten = TRUE)
+    ))
+    data <- get_data(x)
+    data <- tryCatch(data[intersect(colnames(data), all_variables)], error = function(e) NULL)
+  }
+
+  # still found no data - stop here
+  if (is.null(data)) {
+    stop(format_message(
+      "Can't access data that was used to fit the model in order to create the reference grid.",
+      "Please use the `data` argument."
+    ))
+  }
+
+  data
 }
