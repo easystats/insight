@@ -179,7 +179,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   w <- get_weights(x, null_as_ones = TRUE)
   dev <- stats::deviance(x)
   disp <- dev / sum(w)
-  predicted <- get_predicted(x, verbose = verbose)
+  predicted <- get_predicted(x, ci = NULL, verbose = verbose)
 
   # Make adjustment for binomial models with matrix as input
   if (info$is_binomial) {
