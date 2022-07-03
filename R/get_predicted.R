@@ -135,7 +135,7 @@
 #' data(mtcars)
 #' x <- lm(mpg ~ cyl + hp, data = mtcars)
 #'
-#' predictions <- get_predicted(x)
+#' predictions <- get_predicted(x, ci = .95)
 #' predictions
 #'
 #' # Options and methods ---------------------
@@ -159,19 +159,19 @@
 #' x <- glm(Species ~ Sepal.Length, data = data, family = "binomial")
 #'
 #' # Expectation (default): response scale + CI
-#' pred <- get_predicted(x, predict = "expectation")
+#' pred <- get_predicted(x, predict = "expectation", ci = .95)
 #' head(as.data.frame(pred))
 #'
 #' # Prediction: response scale + PI
-#' pred <- get_predicted(x, predict = "prediction")
+#' pred <- get_predicted(x, predict = "prediction"; ci = .95)
 #' head(as.data.frame(pred))
 #'
 #' # Link: link scale + CI
-#' pred <- get_predicted(x, predict = "link")
+#' pred <- get_predicted(x, predict = "link", ci = .95)
 #' head(as.data.frame(pred))
 #'
 #' # Classification: classification "type" + PI
-#' pred <- get_predicted(x, predict = "classification")
+#' pred <- get_predicted(x, predict = "classification", ci = .95)
 #' head(as.data.frame(pred))
 #'
 #' @export
