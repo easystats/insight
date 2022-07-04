@@ -272,7 +272,7 @@ pred <- get_predicted(x, predict = "expectation", ci = .95)
 head(as.data.frame(pred))
 
 # Prediction: response scale + PI
-pred <- get_predicted(x, predict = "prediction"; ci = .95)
+pred <- get_predicted(x, predict = "prediction", ci = .95)
 head(as.data.frame(pred))
 
 # Link: link scale + CI
