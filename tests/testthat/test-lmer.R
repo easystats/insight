@@ -492,7 +492,7 @@ if (.runThisTest &&
     newdata <- ChickWeight[ChickWeight$Time %in% 0:10 & ChickWeight$Chick %in% c(1, 40), ]
     newdata$Chick[newdata$Chick == "1"] <- NA
     expect_equal(
-      head(as.data.frame(get_predicted(mod, data = newdata, include_random = FALSE))),
+      head(as.data.frame(get_predicted(mod, data = newdata, include_random = FALSE, ci = .95))),
       data.frame(
         Predicted = c(37.53433, 47.95719, 58.78866, 70.02873, 81.67742, 93.73472),
         SE = c(1.68687, 0.82574, 1.52747, 2.56109, 3.61936, 4.76178),
