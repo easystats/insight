@@ -543,7 +543,7 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
       family = categorical(link = "logit", refcat = "4")
     ))
   )
-  x <- as.data.frame(get_predicted(model))
+  x <- as.data.frame(get_predicted(model, ci = .95))
   # Test shape
   expect_equal(c(nrow(x), ncol(x)), c(32 * 3, 1006))
   # Test whether median point-estimate indeed different from default (mean)
