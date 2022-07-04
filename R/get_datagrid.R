@@ -145,6 +145,15 @@ get_datagrid.data.frame <- function(x,
   if (is.null(at)) {
     targets <- data.frame()
   } else {
+    # check for interactions in "at"
+    interaction_terms <- grepl("(:|\\*)", at)
+    if (any(interaction_terms)) {
+      at <- trim_ws(compact_character(c(
+        at[!interaction_terms],
+        unlist(strsplit(at[interaction_terms], "(:|\\*)"))
+      )))
+    }
+
     # Valid at argument
     if (all(at == "all")) {
       at <- colnames(x)
@@ -603,6 +612,15 @@ get_datagrid.default <- function(x,
     if (ncol(data) < 1) {
       stop(format_message("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."), call. = FALSE)
     }
+  }
+
+  # check for interactions in "at"
+  interaction_terms <- grepl("(:|\\*)", at)
+  if (any(interaction_terms)) {
+    at <- trim_ws(compact_character(c(
+      at[!interaction_terms],
+      unlist(strsplit(at[interaction_terms], "(:|\\*)"))
+    )))
   }
 
   # Drop random factors
