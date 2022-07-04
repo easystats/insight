@@ -257,6 +257,7 @@ get_predicted.MixMod <- function(x,
       x,
       predictions,
       data = args$data[colnames(args$data) != find_response(x)],
+      ci = ci,
       ci_type = args$ci_type,
       ...
     )
