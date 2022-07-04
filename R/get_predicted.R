@@ -48,7 +48,9 @@
 #'   will fix the value of the smooth to its average, so that the predictions
 #'   are not depending on it. (default), `mean()`, or
 #'   `bayestestR::map_estimate()`.
-#' @param ci The interval level (default `0.95`, i.e., `95%` CI).
+#' @param ci The interval level. Default is `NULL`, to be fast even for larger
+#'   models. Set the interval level to an explicit value, e.g. `0.95`, for `95%`
+#'   CI).
 #' @param ci_type Can be `"prediction"` or `"confidence"`. Prediction
 #'   intervals show the range that likely contains the value of a new
 #'   observation (in what range it would fall), whereas confidence intervals
@@ -66,8 +68,8 @@
 #' @param ci_method The method for computing p values and confidence intervals. Possible values depend on model type.
 #'   + `NULL` uses the default method, which varies based on the model type.
 #'   + Most frequentist models: `"normal"` (default).
-#'   + Bayesian models: "quantile" (default), "hdi", "eti".
-#'   + Mixed effects **lme4** models: `"normal"` (default), `"satterthwaite"`, `"kenward"`.
+#'   + Bayesian models:  `"quantile"`  (default), `"hdi"`, `"eti"`, and `"spi"`.
+#'   + Mixed effects **lme4** models: `"normal"` (default), `"satterthwaite"`, and `"kenward"`.
 #' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary: `"sd"` or `"mad"`.
 #' @param ... Other argument to be passed, for instance to `get_predicted_ci()`.
 #' @inheritParams get_varcov
@@ -163,7 +165,7 @@
 #' head(as.data.frame(pred))
 #'
 #' # Prediction: response scale + PI
-#' pred <- get_predicted(x, predict = "prediction"; ci = .95)
+#' pred <- get_predicted(x, predict = "prediction", ci = .95)
 #' head(as.data.frame(pred))
 #'
 #' # Link: link scale + CI
@@ -187,7 +189,7 @@ get_predicted <- function(x, ...) {
 get_predicted.default <- function(x,
                                   data = NULL,
                                   predict = "expectation",
-                                  ci = 0.95,
+                                  ci = NULL,
                                   ci_type = "confidence",
                                   ci_method = NULL,
                                   dispersion_method = "sd",
@@ -273,6 +275,7 @@ get_predicted.data.frame <- function(x, data = NULL, verbose = TRUE, ...) {
 get_predicted.lm <- function(x,
                              data = NULL,
                              predict = "expectation",
+                             ci = NULL,
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
@@ -301,6 +304,7 @@ get_predicted.lm <- function(x,
     x,
     predictions,
     data = args$data,
+    ci = ci,
     ci_type = args$ci_type,
     ...
   )
@@ -344,7 +348,13 @@ get_predicted.survreg <- get_predicted.lm
 # =======================================================================
 
 #' @export
-get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterations = NULL, verbose = TRUE, ...) {
+get_predicted.coxph <- function(x,
+                                data = NULL,
+                                predict = "expectation",
+                                ci = NULL,
+                                iterations = NULL,
+                                verbose = TRUE,
+                                ...) {
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
   se <- NULL
 
@@ -375,6 +385,7 @@ get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterati
     x,
     predictions,
     data = args$data,
+    ci = ci,
     ci_type = args$ci_type,
     se = se,
     ...

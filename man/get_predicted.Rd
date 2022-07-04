@@ -17,7 +17,7 @@ get_predicted(x, ...)
   x,
   data = NULL,
   predict = "expectation",
-  ci = 0.95,
+  ci = NULL,
   ci_type = "confidence",
   ci_method = NULL,
   dispersion_method = "sd",
@@ -31,6 +31,7 @@ get_predicted(x, ...)
   x,
   data = NULL,
   predict = "expectation",
+  ci = NULL,
   iterations = NULL,
   verbose = TRUE,
   ...
@@ -41,7 +42,7 @@ get_predicted(x, ...)
   data = NULL,
   predict = "expectation",
   iterations = NULL,
-  ci = 0.95,
+  ci = NULL,
   ci_method = NULL,
   include_random = "default",
   include_smooth = TRUE,
@@ -53,7 +54,7 @@ get_predicted(x, ...)
   x,
   data = NULL,
   predict = "expectation",
-  ci = 0.95,
+  ci = NULL,
   include_random = TRUE,
   include_smooth = TRUE,
   iterations = NULL,
@@ -65,7 +66,7 @@ get_predicted(x, ...)
   x,
   data = NULL,
   predict = "expectation",
-  ci = 0.95,
+  ci = NULL,
   ci_method = NULL,
   include_random = "default",
   iterations = NULL,
@@ -95,7 +96,9 @@ to predict. If omitted, the data used to fit the model is used. Visualization ma
 \item Notes: You can see the 4 options for predictions as on a gradient from "close to the model" to "close to the response data": "link", "expectation", "prediction", "classification". The \code{predict} argument modulates two things: the scale of the output and the type of certainty interval. Read more about in the \strong{Details} section below.
 }}
 
-\item{ci}{The interval level (default \code{0.95}, i.e., \verb{95\%} CI).}
+\item{ci}{The interval level. Default is \code{NULL}, to be fast even for larger
+models. Set the interval level to an explicit value, e.g. \code{0.95}, for \verb{95\%}
+CI).}
 
 \item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction
 intervals show the range that likely contains the value of a new
@@ -116,8 +119,8 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 \itemize{
 \item \code{NULL} uses the default method, which varies based on the model type.
 \item Most frequentist models: \code{"normal"} (default).
-\item Bayesian models: "quantile" (default), "hdi", "eti".
-\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, \code{"kenward"}.
+\item Bayesian models:  \code{"quantile"}  (default), \code{"hdi"}, \code{"eti"}, and \code{"spi"}.
+\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, and \code{"kenward"}.
 }}
 
 \item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary: \code{"sd"} or \code{"mad"}.}
@@ -269,7 +272,7 @@ pred <- get_predicted(x, predict = "expectation", ci = .95)
 head(as.data.frame(pred))
 
 # Prediction: response scale + PI
-pred <- get_predicted(x, predict = "prediction"; ci = .95)
+pred <- get_predicted(x, predict = "prediction", ci = .95)
 head(as.data.frame(pred))
 
 # Link: link scale + CI

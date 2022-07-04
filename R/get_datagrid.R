@@ -145,6 +145,9 @@ get_datagrid.data.frame <- function(x,
   if (is.null(at)) {
     targets <- data.frame()
   } else {
+    # check for interactions in "at"
+    at <- .extract_at_interactions(at)
+
     # Valid at argument
     if (all(at == "all")) {
       at <- colnames(x)
@@ -605,6 +608,9 @@ get_datagrid.default <- function(x,
     }
   }
 
+  # check for interactions in "at"
+  at <- .extract_at_interactions(at)
+
   # Drop random factors
   random_factors <- find_random(x, flatten = TRUE)
   if (isFALSE(include_random) && !is.null(random_factors)) {
@@ -754,4 +760,17 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
   }
 
   data
+}
+
+
+
+.extract_at_interactions <- function(at) {
+  interaction_terms <- grepl("(:|\\*)", at)
+  if (any(interaction_terms)) {
+    at <- unique(clean_names(trim_ws(compact_character(c(
+      at[!interaction_terms],
+      unlist(strsplit(at[interaction_terms], "(:|\\*)"))
+    )))))
+  }
+  at
 }

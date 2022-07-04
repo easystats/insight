@@ -5,7 +5,7 @@
                                 predict = "expectation",
                                 include_random = "default",
                                 include_smooth = TRUE,
-                                ci = 0.95,
+                                ci = NULL,
                                 ci_method = NULL,
                                 verbose = TRUE,
                                 ...) {

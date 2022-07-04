@@ -324,7 +324,7 @@ get_predicted_ci.mlm <- function(x, ...) {
   # Interval
   ci_method <- match.arg(
     tolower(ci_method),
-    c("quantile", "hdi", "eti", "satterthwaite", "normal")
+    c("quantile", "hdi", "eti", "spi", "satterthwaite", "normal")
   )
 
   if (ci_method == "quantile") {

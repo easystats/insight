@@ -9,6 +9,11 @@
   # of simulated draws from a multivariate normal distribution
   # (see also _Brooks et al. 2017, pp.391-392_ for details).
 
+  # don't even start if no CIs were requested
+  if (is.null(ci)) {
+    return(NULL)
+  }
+
   if (is.null(newdata)) {
     newdata <- get_data(model)
   }

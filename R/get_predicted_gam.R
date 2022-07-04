@@ -5,7 +5,7 @@
 get_predicted.gam <- function(x,
                               data = NULL,
                               predict = "expectation",
-                              ci = 0.95,
+                              ci = NULL,
                               include_random = TRUE,
                               include_smooth = TRUE,
                               iterations = NULL,
