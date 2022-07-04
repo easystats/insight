@@ -211,7 +211,7 @@ if (.runThisTest) {
       )
 
       x <- get_predicted(tmp, predict = NULL, type = "link", ci = .95)
-      y <- get_predicted(tmp, predict = "link")
+      y <- get_predicted(tmp, predict = "link", ci = .95)
       z <- predict(tmp, type = "link", se.fit = TRUE)
       expect_equal(x, y)
       expect_equal(x, z$fit, ignore_attr = TRUE)

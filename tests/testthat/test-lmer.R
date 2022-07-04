@@ -449,7 +449,7 @@ if (.runThisTest &&
     v2 <- as.matrix(vcovAdj(m2))
     expect_equal(v1, v2)
 
-    p1 <- get_predicted(m2, ci_method = "satterthwaite")
+    p1 <- get_predicted(m2, ci_method = "satterthwaite", ci = .95)
     p1 <- data.frame(p1)
     em1 <- ref_grid(
       object = m2,
@@ -461,7 +461,7 @@ if (.runThisTest &&
     expect_equal(p1$CI_low, em1$lower.CL)
     expect_equal(p1$CI_high, em1$upper.CL)
 
-    p2 <- get_predicted(m2, ci_method = "kenward-roger")
+    p2 <- get_predicted(m2, ci_method = "kenward-roger", ci = .95)
     p2 <- data.frame(p2)
     em2 <- ref_grid(
       object = m2,
