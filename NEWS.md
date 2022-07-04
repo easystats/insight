@@ -2,6 +2,11 @@
 
 ## Breaking changes
 
+* The `ci` argument in `get_predicted()` now defaults to `NULL`. One reason was
+  to make the function faster if confidence intervals are not required, which 
+  was the case for many downstream usages of that function. Please set `ci` 
+  explicitly to compute confidence intervals for predictions.
+  
 * `get_data()` no longer returns logical types for numeric variables that have
   been converted to logicals on-the-fly within formulas (like `y ~ as.logical(x)`).
   Instead, for each numeric variable that was coerced to logical within a formula

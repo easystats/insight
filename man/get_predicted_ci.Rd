@@ -37,7 +37,9 @@ to predict. If omitted, the data used to fit the model is used. Visualization ma
 \item{se}{Numeric vector of standard error of predicted values. If \code{NULL},
 standard errors are calculated based on the variance-covariance matrix.}
 
-\item{ci}{The interval level (default \code{0.95}, i.e., \verb{95\%} CI).}
+\item{ci}{The interval level. Default is \code{NULL}, to be fast even for larger
+models. Set the interval level to an explicit value, e.g. \code{0.95}, for \verb{95\%}
+CI).}
 
 \item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction
 intervals show the range that likely contains the value of a new
@@ -58,8 +60,8 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 \itemize{
 \item \code{NULL} uses the default method, which varies based on the model type.
 \item Most frequentist models: \code{"normal"} (default).
-\item Bayesian models: "quantile" (default), "hdi", "eti".
-\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, \code{"kenward"}.
+\item Bayesian models:  \code{"quantile"}  (default), \code{"hdi"}, \code{"eti"}, and \code{"spi"}.
+\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, and \code{"kenward"}.
 }}
 
 \item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary: \code{"sd"} or \code{"mad"}.}
