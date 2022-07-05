@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.1.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,19 +61,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.17.1.1" id="insight-01711">insight 0.17.1.1<a class="anchor" aria-label="anchor" href="#insight-01711"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.18.0" id="insight-0180">insight 0.18.0<a class="anchor" aria-label="anchor" href="#insight-0180"></a></h2>
 <div class="section level3">
-<h3 id="breaking-changes-0-17-1-1">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-17-1-1"></a></h3>
+<h3 id="breaking-changes-0-18-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-18-0"></a></h3>
 <ul><li><p>The <code>ci</code> argument in <code><a href="../reference/get_predicted.html">get_predicted()</a></code> now defaults to <code>NULL</code>. One reason was to make the function faster if confidence intervals are not required, which was the case for many downstream usages of that function. Please set <code>ci</code> explicitly to compute confidence intervals for predictions.</p></li>
 <li><p><code><a href="../reference/get_data.html">get_data()</a></code> no longer returns logical types for numeric variables that have been converted to logicals on-the-fly within formulas (like <code>y ~ as.logical(x)</code>). Instead, for each numeric variable that was coerced to logical within a formula gets a <code>logical</code> attribute (set to <code>TRUE</code>), and the returned data frame gets a <code>logicals</code> attribute including all names of affected variables.</p></li>
 <li><p><code>parameters_table()</code>, the alias for <code><a href="../reference/format_table.html">format_table()</a></code>, was removed.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="changes-to-functions-0-17-1-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-17-1-1"></a></h3>
+<h3 id="changes-to-functions-0-18-0">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-18-0"></a></h3>
 <ul><li>
 <code><a href="../reference/find_transformation.html">find_transformation()</a></code> and <code><a href="../reference/get_transformation.html">get_transformation()</a></code> now also work for models where the response was transformed using <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log2()</a></code> or <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10()</a></code>.</li></ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-17-1-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-17-1-1"></a></h3>
+<h3 id="bug-fixes-0-18-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-0"></a></h3>
 <ul><li><p><code><a href="../reference/get_sigma.html">get_sigma()</a></code> for models from package <em>VGAM</em> returned wrong sigma-parameter.</p></li>
 <li><p><code><a href="../reference/find_predictors.html">find_predictors()</a></code> for models from package <em>fixest</em> that contained interaction terms in the endogenous formula part did not correctly return all instruments.</p></li>
 <li><p>Fixed formatting of HTML table footers in <code><a href="../reference/export_table.html">export_table()</a></code>.</p></li>
