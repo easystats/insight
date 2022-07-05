@@ -1,4 +1,4 @@
-# insight 0.17.1.1
+# insight 0.18.0
 
 ## Breaking changes
 
