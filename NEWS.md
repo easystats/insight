@@ -1,3 +1,9 @@
+# insight 0.18.0.9990
+
+## Breaking changes
+
+* `format_bf()`'s `exact` argument now defaults to `exact = TRUE`. To preserve previous behavior, set `format_bf(..., exact = FALSE)`
+
 # insight 0.18.0
 
 ## Breaking changes
