@@ -61,7 +61,15 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.18.0" id="insight-0180">insight 0.18.0<a class="anchor" aria-label="anchor" href="#insight-0180"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.18.0.9990" id="insight-01809990">insight 0.18.0.9990<a class="anchor" aria-label="anchor" href="#insight-01809990"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-18-0-9990">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-18-0-9990"></a></h3>
+<ul><li>
+<code><a href="../reference/format_bf.html">format_bf()</a></code>’s <code>exact</code> argument now defaults to <code>exact = TRUE</code>. To preserve previous behavior, set <code>format_bf(..., exact = FALSE)</code>
+</li></ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.18.0" id="insight-0180">insight 0.18.0<a class="anchor" aria-label="anchor" href="#insight-0180"></a></h2><p class="text-muted">CRAN release: 2022-07-05</p>
 <div class="section level3">
 <h3 id="breaking-changes-0-18-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-18-0"></a></h3>
 <ul><li><p>The <code>ci</code> argument in <code><a href="../reference/get_predicted.html">get_predicted()</a></code> now defaults to <code>NULL</code>. One reason was to make the function faster if confidence intervals are not required, which was the case for many downstream usages of that function. Please set <code>ci</code> explicitly to compute confidence intervals for predictions.</p></li>
