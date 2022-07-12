@@ -47,8 +47,18 @@ if (requiet("testthat") && requiet("insight")) {
 
   test_that("format others", {
     expect_true(is.character(insight::format_pd(0.02)))
-    expect_equal(nchar(format_bf(4)), 9)
     expect_true(is.character(format_rope(0.02)))
+
+    Bf <- c(3, 100, 1001)
+    Bf <- c(rev(1/Bf), 1, Bf)
+    expect_equal(format_bf(Bf, name = NULL),
+                 c("9.99e-04", "0.010", "0.333", "1.00", "3.00", "100.00", "1.00e+03"))
+    expect_equal(format_bf(Bf, name = NULL, exact = FALSE),
+                 c("< 0.001", "0.010", "0.333", "1.00", "3.00", "100.00", "> 1000"))
+    expect_equal(format_bf(Bf, name = NULL, protect_ratio = TRUE),
+                 c("1/1.00e+03", "1/100.00", "1/3.00", "1.00", "3.00", "100.00", "1.00e+03"))
+    expect_equal(format_bf(Bf, name = NULL, exact = FALSE, protect_ratio = TRUE),
+                 c("< 1/1000", "1/100.00", "1/3.00", "1.00", "3.00", "100.00", "> 1000"))
   })
 
   test_that("format_number", {
