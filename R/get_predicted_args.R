@@ -66,7 +66,7 @@
       error = function(e) FALSE)
   } else {
     flag_matrix <- tryCatch(
-      any(sapply(data, function(x) "matrix" %in% class(x))),
+      any(sapply(data, function(x) inherits(x, "matrix"))),
       error = function(e) FALSE)
   }
   if (isTRUE(flag_matrix) && isTRUE(verbose)) {
