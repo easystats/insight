@@ -2,11 +2,16 @@
 
 ## Breaking changes
 
-* `format_bf()`'s `exact` argument now defaults to `exact = TRUE`. To preserve previous behavior, set `format_bf(..., exact = FALSE)`
+* `format_bf()`'s `exact` argument now defaults to `exact = TRUE`. To preserve 
+  previous behavior, set `format_bf(..., exact = FALSE)`.
 
 ## New functions
 
 * `format_percent()` as short-cut for `format_value(as_percent = TRUE)`.
+
+## Bug fixes
+
+* Fixed test failures.
 
 # insight 0.18.0
 
