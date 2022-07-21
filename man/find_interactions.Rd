@@ -6,8 +6,7 @@
 \usage{
 find_interactions(
   x,
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion",
-    "instruments"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"),
   flatten = FALSE
 )
 }
