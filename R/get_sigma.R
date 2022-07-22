@@ -82,9 +82,11 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 # special handling ---------------
 
+
 .get_sigma.model_fit <- function(x, verbose = TRUE, ...) {
   .get_sigma(x$fit, verbose = verbose)
 }
+
 
 .get_sigma.lrm <- function(x, verbose = TRUE, ...) {
   s <- stats::sigma(x)
@@ -92,6 +94,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   class(s) <- c("insight_aux", class(s))
   s
 }
+
 
 .get_sigma.VGAM <- function(x, verbose = TRUE, ...) {
   s <- tryCatch(
@@ -102,6 +105,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   s
 }
 
+
 .get_sigma.merModList <- function(x, verbose = TRUE, ...) {
   s <- suppressWarnings(summary(x))
   s <- s$residError
@@ -109,17 +113,39 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   s
 }
 
+
 .get_sigma.summary.lm <- function(x, verbose = TRUE, ...) {
   s <- x$sigma
   class(s) <- c("insight_aux", class(s))
   s
 }
 
+
 .get_sigma.selection <- function(x, verbose = TRUE, ...) {
   s <- unname(stats::coef(x)["sigma"])
   class(s) <- c("insight_aux", class(s))
   s
 }
+
+
+.get_sigma.cgam <- function(x, verbose = TRUE, ...) {
+  s <- tryCatch(
+    {
+      sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is_empty_object(s)) {
+    return(NULL)
+  }
+
+  class(s) <- c("insight_aux", class(s))
+  s
+}
+
 
 .get_sigma.cpglmm <- function(x, verbose = TRUE, ...) {
   s <- tryCatch(
@@ -135,6 +161,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   }
   s
 }
+
 
 .get_sigma.brmsfit <- function(x, verbose = TRUE, ...) {
   s <- tryCatch(

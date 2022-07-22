@@ -53,4 +53,13 @@ if (requiet("testthat") && requiet("insight") && requiet("cgam")) {
   test_that("find_statistic", {
     expect_identical(find_statistic(m), "t-statistic")
   })
+
+  test_that("get_df", {
+    expect_equal(get_df(m), 39.5, tolerance = 1e-3)
+    expect_equal(get_df(m, type = "model"), 2, tolerance = 1e-3)
+  })
+
+  test_that("get_sigma", {
+    expect_equal(get_sigma(m), 2.159464, tolerance = 1e-3, ignore_attr = TRUE)
+  })
 }

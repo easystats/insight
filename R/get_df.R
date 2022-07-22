@@ -177,7 +177,9 @@ get_df.cgam <- function(x, type = "residual", ...) {
   if (type == "model") {
     .model_df(x)
   } else {
-    x$resid_df_obs
+    # x$resid_df_obs
+    # new in cgam 1.18
+    stats::df.residual(x)
   }
 }
 
