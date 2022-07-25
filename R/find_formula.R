@@ -316,9 +316,17 @@ find_formula.marginaleffects <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.selection <- function(x, verbose = TRUE, ...) {
   model_call <- parse(text = deparse(get_call(x)))[[1]]
+  # 1st pass: formulas directly in the call
+  # 2nd pass: formulas as symbols (assigned to an object, which is then used in the call)
+  f_selection <- tryCatch(
+        stats::as.formula(model_call$outcome),
+        error = function(e) stats::as.formula(eval(model_call$outcome)))
+  f_outcome <- tryCatch(
+        stats::as.formula(model_call$outcome),
+        error = function(e) stats::as.formula(eval(model_call$outcome)))
   f <- list(conditional = list(
-    selection = stats::as.formula(model_call$selection),
-    outcome = stats::as.formula(model_call$outcome)
+    selection = f_selection,
+    outcome = f_outcome
   ))
   attr(f, "two_stage") <- TRUE
   .find_formula_return(f, verbose = verbose)
