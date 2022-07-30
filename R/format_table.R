@@ -358,7 +358,7 @@ format_table <- function(x,
 
 
     # Get characters to align the CI
-    for (i in 1:length(ci_colname)) {
+    for (i in seq_along(ci_colname)) {
       x[[ci_low[i]]] <- format_ci(x[[ci_low[i]]], x[[ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
       # rename lower CI into final CI column
       ci_position <- which(names(x) == ci_low[i])
@@ -394,7 +394,7 @@ format_table <- function(x,
     }
 
     # Get characters to align the CI
-    for (i in 1:length(other_ci_colname)) {
+    for (i in seq_along(other_ci_colname)) {
       x[[other_ci_low[i]]] <- format_ci(x[[other_ci_low[i]]], x[[other_ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
       # rename lower CI into final CI column
       other_ci_position <- which(names(x) == other_ci_low[i])
@@ -565,7 +565,7 @@ format_table <- function(x,
 
 
 .replace_words <- function(x, target, replacement) {
-  for (i in 1:length(x)) {
+  for (i in seq_along(x)) {
     if (grepl(target, x[i], fixed = TRUE)) {
       x[i] <- gsub(target, replacement, x[i], fixed = TRUE)
     }

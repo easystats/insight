@@ -314,7 +314,7 @@ get_predicted_ci.mlm <- function(x, ...) {
   } else {
     se <- apply(data, 2, dispersion_method)
   }
-  data.frame(SE = se, row.names = 1:length(se))
+  data.frame(SE = se, row.names = seq_along(se))
 }
 
 

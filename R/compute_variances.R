@@ -223,7 +223,7 @@
     }
 
     vcorr <- compact_list(list(vc1, vc2))
-    names(vcorr) <- c("cond", "zi")[1:length(vcorr)]
+    names(vcorr) <- c("cond", "zi")[seq_along(vcorr)]
 
     vals <- list(
       beta = lme4::fixef(x),
@@ -250,7 +250,7 @@
       vc = vcorr,
       re = list(lme4::ranef(x))
     )
-    names(vals$re) <- re_names[1:length(vals$re)]
+    names(vals$re) <- re_names[seq_along(vals$re)]
 
     # nlme
     # ---------------------------
@@ -875,8 +875,8 @@
   # make sure we have identical subcomponents between random and
   # fixed effects
   fe <- compact_list(fe[c("conditional", "zero_inflated")])
-  if (length(rs) > length(fe)) rs <- rs[1:length(fe)]
-  if (length(fe) > length(rs)) fe <- fe[1:length(rs)]
+  if (length(rs) > length(fe)) rs <- rs[seq_along(fe)]
+  if (length(fe) > length(rs)) fe <- fe[seq_along(rs)]
 
   all(mapply(function(r, f) all(r %in% f), rs, fe, SIMPLIFY = TRUE))
 }
@@ -932,7 +932,7 @@
       if (length(missig_rnd_slope)) {
         # sanity check
         to_remove <- c()
-        for (j in 1:length(out)) {
+        for (j in seq_along(out)) {
           # identical random slopes might have different names, so
           # we here check if random slopes from correlated and uncorrelated
           # are duplicated (i.e. their difference is 0 - including a tolerance)

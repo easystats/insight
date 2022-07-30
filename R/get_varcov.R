@@ -801,7 +801,7 @@ get_varcov.lqmm <- function(x, ...) {
   np <- length(find_parameters(x, flatten = TRUE))
 
   if (length(dim(sc$Cov)) == 3) {
-    vc <- lapply(1:length(x$tau), function(i) {
+    vc <- lapply(seq_along(x$tau), function(i) {
       .x <- sc$Cov[, , i][1:np, 1:np]
       if (.is_negativ_matrix(.x, ...)) {
         .x <- .fix_negative_matrix(.x)
