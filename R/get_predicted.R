@@ -576,7 +576,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
   if (is.matrix(predictions) && ncol(predictions) > 1) {
     predictions <- as.data.frame(predictions)
     vary <- colnames(predictions)
-    predictions$Row <- 1:nrow(predictions)
+    predictions$Row <- sqe_len(nrow(predictions))
     # if we have any focal predictors, add those as well, so we have
     # the associated levels/values for "Row"
     if (!is.null(args$data)) {
@@ -641,7 +641,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
 
   # Format draws
   draws <- as.data.frame(t(draws$t))
-  names(draws) <- paste0("iter_", 1:ncol(draws))
+  names(draws) <- paste0("iter_", seq_len(ncol(draws)))
 
   .get_predicted_centrality_from_draws(x, draws, ...)
 }
@@ -663,7 +663,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
     iter_stacked <- apply(iter, 1, c)
     predictions <- data.frame(
       # rows repeated for each response level
-      Row = rep(1:ncol(iter), times = dim(iter)[3]),
+      Row = rep(seq_len(ncol(iter)), times = dim(iter)[3]),
       # response levels repeated for each row
       Response = rep(dimnames(iter)[[3]], each = dim(iter)[2]),
       Predicted = apply(iter_stacked, 1, centrality_function),
@@ -679,7 +679,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
     predictions <- apply(iter, 1, centrality_function)
   }
   # Rename iterations
-  names(iter) <- paste0("iter_", 1:ncol(iter))
+  names(iter) <- paste0("iter_", seq_len(ncol(iter)))
   # Store as attribute
   attr(predictions, "iterations") <- iter
   predictions
