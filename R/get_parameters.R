@@ -64,7 +64,7 @@ get_parameters.default <- function(x, verbose = TRUE, ...) {
       cf <- stats::coef(x)
       params <- names(cf)
       if (is.null(params)) {
-        params <- paste(1:length(cf))
+        params <- paste(seq_along(cf))
       }
 
       params <- data.frame(
@@ -777,10 +777,10 @@ get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
     re <- x@ranef
     dat <- data.frame()
 
-    for (i in 1:length(re)) {
+    for (i in seq_along(re)) {
       dn <- dimnames(re[[i]])[[2]]
       cn <- dimnames(re[[i]])[[3]]
-      l <- lapply(1:length(dn), function(j) {
+      l <- lapply(seq_along(dn), function(j) {
         d <- as.data.frame(re[[i]][, j, ])
         colnames(d) <- sprintf("%s.%s", cn, dn[j])
         d

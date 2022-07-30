@@ -152,7 +152,7 @@ get_parameters.cgam <- function(x, component = c("all", "conditional", "smooth_t
 get_parameters.SemiParBIV <- function(x, ...) {
   s <- summary(x)
   s <- compact_list(s[grepl("^tableP", names(s))])
-  params <- do.call(rbind, lapply(1:length(s), function(i) {
+  params <- do.call(rbind, lapply(seq_along(s), function(i) {
     out <- as.data.frame(s[[i]])
     out$Parameter <- rownames(out)
     out$Component <- paste0("Equation", i)

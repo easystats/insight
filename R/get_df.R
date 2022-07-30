@@ -455,7 +455,7 @@ get_df.systemfit <- function(x, type = "residual", ...) {
   f <- find_formula(x)
   system_names <- names(f)
 
-  for (i in 1:length(system_names)) {
+  for (i in seq_along(system_names)) {
     dfs <- rep(s[[i]]$df[2], length(params[[i]]))
     df_names <- rep(names(params[i]), length(params[[i]]))
     df <- c(df, stats::setNames(dfs, df_names))

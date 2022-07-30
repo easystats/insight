@@ -356,7 +356,7 @@
 
   # do we have duplicated names?
   dupes <- which(duplicated(cvn))
-  if (!.is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], 1:length(dupes))
+  if (!.is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], seq_along(dupes))
 
   colnames(mf) <- cvn
 
@@ -465,7 +465,7 @@
       mf[c(interactions, names(interactions))] <- NULL
       mf <- cbind(mf, full_data[c(interactions, names(interactions))])
     } else {
-      for (i in 1:length(interactions)) {
+      for (i in seq_along(interactions)) {
         int <- interactions[i]
         mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
         mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
@@ -957,7 +957,7 @@
         # exeception: list for kruskal-wallis
         if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && grepl("^list\\(", data_name)) {
           l <- eval(.str2lang(x$data.name))
-          names(l) <- paste0("x", 1:length(l))
+          names(l) <- paste0("x", seq_along(l))
           return(l)
         }
 
@@ -970,11 +970,11 @@
           # check if data is a list for kruskal-wallis
         } else if (grepl("^Kruskal-Wallis", x$method) && length(columns) == 1 && is.list(columns[[1]])) {
           l <- columns[[1]]
-          names(l) <- paste0("x", 1:length(l))
+          names(l) <- paste0("x", seq_along(l))
           return(l)
         } else {
           max_len <- max(sapply(columns, length))
-          for (i in 1:length(columns)) {
+          for (i in seq_along(columns)) {
             if (length(columns[[i]]) < max_len) {
               columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
             }

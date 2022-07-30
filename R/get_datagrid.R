@@ -210,7 +210,7 @@ get_datagrid.data.frame <- function(x,
           stop(format_message("The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."), call. = FALSE)
         }
         # Get datagrids
-        for (i in 1:length(numvars)) {
+        for (i in seq_along(numvars)) {
           num <- numvars[i]
           nums[[num]] <- get_datagrid(x[[num]],
             at = specs[specs$varname == num, "expression"],

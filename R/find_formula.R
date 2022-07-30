@@ -146,7 +146,7 @@ find_formula.anova <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.SemiParBIV <- function(x, verbose = TRUE, ...) {
   f <- stats::formula(x, ...)
-  names(f) <- c("Equation 1", "Equation 2", "Equation 3")[1:length(f)]
+  names(f) <- c("Equation 1", "Equation 2", "Equation 3")[seq_along(f)]
   f <- list(conditional = f)
   .find_formula_return(f, verbose = verbose)
 }
@@ -347,14 +347,14 @@ find_formula.mjoint <- function(x, verbose = TRUE, ...) {
   if (length(s$formLongFixed) == 1) {
     names(f.cond) <- "conditional"
   } else {
-    names(f.cond) <- paste0("conditional", 1:length(f.cond))
+    names(f.cond) <- paste0("conditional", seq_along(f.cond))
   }
 
   f.rand <- s$formLongRandom
   if (length(s$formLongRandom) == 1) {
     names(f.rand) <- "random"
   } else {
-    names(f.rand) <- paste0("random", 1:length(f.rand))
+    names(f.rand) <- paste0("random", seq_along(f.rand))
   }
 
   f <- c(f.cond, f.rand, list(survival = s$formSurv))
