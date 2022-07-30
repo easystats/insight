@@ -342,6 +342,15 @@ get_predicted.lrm <- get_predicted.default
 
 
 
+# MASS: rlm -----------------------------------------------------
+# =======================================================================
+
+# these objects inherit from `lm`, but `get_predicted.lm` do not return
+# confidence intervals.
+
+#' @export
+get_predicted.rlm <- get_predicted.default
+
 
 # survival: survreg -----------------------------------------------------
 # =======================================================================
