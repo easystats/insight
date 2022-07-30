@@ -212,7 +212,10 @@ get_predicted.default <- function(x,
 
   # may fail due to invalid "dot_args", so try shorter argument list
   if (is.null(predictions)) {
-    predictions <- tryCatch(do.call("predict", compact_list(list(x, newdata = args$data, type = args$type))), error = function(e) NULL)
+    predictions <- tryCatch(
+      do.call("predict", compact_list(list(x, newdata = args$data, type = args$type))),
+      error = function(e) NULL
+    )
   }
 
   # still fails? try fitted()
