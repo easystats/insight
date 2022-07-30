@@ -549,7 +549,12 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
       ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
       predictions <- .get_predict_transform_response(predictions, response = response)
       if ("iterations" %in% names(attributes(predictions))) {
-        attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, .get_predict_transform_response, response = response))
+        attr(predictions, "iterations") <- as.data.frame(
+          sapply(
+            attributes(predictions)$iterations,
+            .get_predict_transform_response,
+            response = response)
+        )
       }
     }
   }
