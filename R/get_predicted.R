@@ -127,8 +127,13 @@
 #' }
 #'
 #' \subsection{Bayesian and Bootstrapped models and iterations}{
-#' For predictions based on multiple iterations, for instance in the case of Bayesian models and bootstrapped predictions, the function used to compute the centrality (point-estimate predictions) can be modified via the `centrality_function` argument. For instance, `get_predicted(model, centrality_function = stats::median)`. The default is `mean`.
-#' Individual draws can be accessed by running `iter <- as.data.frame(get_predicted(model))`, and their iterations can be reshaped into a long format by `bayestestR::reshape_iterations(iter)`.
+#' For predictions based on multiple iterations, for instance in the case of Bayesian
+#' models and bootstrapped predictions, the function used to compute the centrality
+#' (point-estimate predictions) can be modified via the `centrality_function`
+#' argument. For instance, `get_predicted(model, centrality_function = stats::median)`.
+#' The default is `mean`. Individual draws can be accessed by running
+#' `iter <- as.data.frame(get_predicted(model))`, and their iterations can be 
+#' reshaped into a long format by `bayestestR::reshape_iterations(iter)`.
 #' }
 #'
 #' @seealso [get_datagrid()]
