@@ -319,11 +319,13 @@ find_formula.selection <- function(x, verbose = TRUE, ...) {
   # 1st pass: formulas directly in the call
   # 2nd pass: formulas as symbols (assigned to an object, which is then used in the call)
   f_selection <- tryCatch(
-        stats::as.formula(model_call$selection),
-        error = function(e) stats::as.formula(eval(model_call$selection)))
+    stats::as.formula(model_call$selection),
+    error = function(e) stats::as.formula(eval(model_call$selection))
+  )
   f_outcome <- tryCatch(
-        stats::as.formula(model_call$outcome),
-        error = function(e) stats::as.formula(eval(model_call$outcome)))
+    stats::as.formula(model_call$outcome),
+    error = function(e) stats::as.formula(eval(model_call$outcome))
+  )
   f <- list(conditional = list(
     selection = f_selection,
     outcome = f_outcome

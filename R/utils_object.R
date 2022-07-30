@@ -25,7 +25,7 @@ is_empty_object <- function(x) {
         flag_empty <- all(is.na(x[[i]]))
       }
     }
-  # a list but not a data.frame
+    # a list but not a data.frame
   } else if (is.list(x) && length(x) > 0) {
     x <- tryCatch(
       {

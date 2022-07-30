@@ -40,8 +40,9 @@ all_models_equal <- function(..., verbose = FALSE) {
   }
 
   all_equal <- all(vapply(all_classes[-1],
-                          function(i) identical(i, all_classes[1]),
-                          FUN.VALUE = logical(1)))
+    function(i) identical(i, all_classes[1]),
+    FUN.VALUE = logical(1)
+  ))
 
   if (!all(all_supported) && verbose) {
     differ <- which(!all_supported)

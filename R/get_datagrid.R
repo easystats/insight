@@ -349,8 +349,9 @@ get_datagrid.data.frame <- function(x,
       } else if (is.character(x) || is.logical(x)) {
         out <- unique(x)[1]
       } else {
-        stop(format_message(paste0("Argument is not numeric nor factor but ", class(x), ".",
-        "Please report the bug at https://github.com/easystats/insight/issues"
+        stop(format_message(paste0(
+          "Argument is not numeric nor factor but ", class(x), ".",
+          "Please report the bug at https://github.com/easystats/insight/issues"
         )), call. = FALSE)
       }
     }

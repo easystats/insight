@@ -570,7 +570,8 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
           sapply(
             attributes(predictions)$iterations,
             .get_predict_transform_response,
-            response = response)
+            response = response
+          )
         )
       }
     }

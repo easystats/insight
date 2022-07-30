@@ -180,12 +180,12 @@ test_that("robust vcov", {
 
 
 test_that("MASS::rlm", {
-    requiet("MASS")
-    mod <- rlm(mpg ~ hp + am, data = mtcars)
-    p <- get_predicted.default(mod)
-    expect_s3_class(p, "get_predicted")
-    p <- data.frame(p)
-    expect_true("CI_low" %in% colnames(p))
+  requiet("MASS")
+  mod <- rlm(mpg ~ hp + am, data = mtcars)
+  p <- get_predicted.default(mod)
+  expect_s3_class(p, "get_predicted")
+  p <- data.frame(p)
+  expect_true("CI_low" %in% colnames(p))
 })
 
 
