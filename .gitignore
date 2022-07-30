@@ -17,7 +17,6 @@
 
 # RStudio / VS Code files
 .Rproj.user/
-.code-workspace
 
 # produced vignettes
 vignettes/*.html
