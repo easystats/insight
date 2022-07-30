@@ -589,7 +589,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
   if (is.matrix(predictions) && ncol(predictions) > 1) {
     predictions <- as.data.frame(predictions)
     vary <- colnames(predictions)
-    predictions$Row <- sqe_len(nrow(predictions))
+    predictions$Row <- seq_len(nrow(predictions))
     # if we have any focal predictors, add those as well, so we have
     # the associated levels/values for "Row"
     if (!is.null(args$data)) {
