@@ -351,8 +351,13 @@ details.</p>
 
 <div class="section">
 <h3 id="bayesian-and-bootstrapped-models-and-iterations">Bayesian and Bootstrapped models and iterations<a class="anchor" aria-label="anchor" href="#bayesian-and-bootstrapped-models-and-iterations"></a></h3>
-<p>For predictions based on multiple iterations, for instance in the case of Bayesian models and bootstrapped predictions, the function used to compute the centrality (point-estimate predictions) can be modified via the <code>centrality_function</code> argument. For instance, <code>get_predicted(model, centrality_function = stats::median)</code>. The default is <code>mean</code>.
-Individual draws can be accessed by running <code>iter &lt;- as.data.frame(get_predicted(model))</code>, and their iterations can be reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>.</p>
+<p>For predictions based on multiple iterations, for instance in the case of Bayesian
+models and bootstrapped predictions, the function used to compute the centrality
+(point-estimate predictions) can be modified via the <code>centrality_function</code>
+argument. For instance, <code>get_predicted(model, centrality_function = stats::median)</code>.
+The default is <code>mean</code>. Individual draws can be accessed by running
+<code>iter &lt;- as.data.frame(get_predicted(model))</code>, and their iterations can be
+reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>.</p>
 </div>
 
     </div>
