@@ -41,8 +41,13 @@ get_predicted_se <- function(x,
     return(NULL)
   }
 
-  # last desperate try
-  if (ncol(mm) != ncol(vcovmat)) {
+  # some tweaking for multinomial / ordinal models
+  if (inherits(x, c("polr", "multinom", "brmultinom", "bracl", "mixor", "fixest"))) {
+    keep <- intersect(colnames(mm), colnames(vcovmat))
+    vcovmat <- vcovmat[keep, keep, drop = FALSE]
+    mm <- mm[, keep, drop = FALSE]
+  } else if (ncol(mm) != ncol(vcovmat)) {
+    # last desperate try
     if (ncol(mm) == nrow(mm) && ncol(vcovmat) > ncol(mm) && all(colnames(mm) %in% colnames(vcovmat))) {
       # we might have a correct model matrix, but the vcov matrix contains values
       # from specific model parameters that do not appear in the model matrix
@@ -88,6 +93,11 @@ get_predicted_se <- function(x,
     se <- sqrt(var_diag)
   }
 
+  # shorten to length of prediction_data
+  if (inherits(x, c("polr", "multinom", "mixor"))) {
+    se <- rep(se, times = n_unique(get_response(x)))
+  }
+
   se
 }
 
@@ -116,17 +126,12 @@ get_predicted_se <- function(x,
     # does not include all the levels of a factor variable.
     if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc", "MixMod"))) {
       # model terms, required for model matrix
-      model_terms <- tryCatch(
-        {
-          stats::terms(x)
-        },
-        error = function(e) {
-          find_formula(x)$conditional
-        }
-      )
+      model_terms <- tryCatch(stats::terms(x),
+                              error = function(e) find_formula(x)$conditional)
 
       all_terms <- find_terms(x)$conditional
       off_terms <- grepl("^offset\\((.*)\\)", all_terms)
+
       if (any(off_terms)) {
         all_terms <- all_terms[!off_terms]
         # TODO: preserve interactions
@@ -145,11 +150,16 @@ get_predicted_se <- function(x,
         warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
         return(NULL)
       }
+      obj <- model_terms
 
-      mm <- get_modelmatrix(model_terms, data = data)
+    # extra handling for polr
+    } else if (inherits(x, c("polr", "multinom", "brmultinom", "bracl"))) { # mixor, fixest?
+      # model terms, required for model matrix
+      obj <- tryCatch(stats::terms(x), error = function(e) find_formula(x)$conditional)
     } else {
-      mm <- get_modelmatrix(x, data = data)
+      obj <- x
     }
+    mm <- get_modelmatrix(x = obj, data = data)
   }
 
   # fix rank deficiency

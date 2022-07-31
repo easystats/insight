@@ -12,6 +12,9 @@
 * `get_predicted()` gets a method for models of class `gamlss` (and thereby,
   `get_loglikelihood()` now also works for those model classes).
 
+* `get_predicted()` now better handles models of class `polr`, `multinom` and 
+  `rlm`.
+
 ## Bug fixes
 
 * Fixed test failures.

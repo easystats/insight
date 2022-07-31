@@ -75,7 +75,7 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
 # =======================================================================
 
 #' @export
-get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...) {
+get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = .95, ...) {
   dots <- list(...)
 
   # `type` argument can be: probs | class
@@ -88,7 +88,7 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...)
     stop('The `predict` argument must be either "expectation" or "classification".')
   }
 
-  args <- c(list(x, "data" = data), list(...))
+  args <- c(list(x, "data" = data, ci = ci, predict = predict), list(...))
 
   # predict.multinom doesn't work when `newdata` is explicitly set to NULL (weird)
   if (is.null(data)) {
@@ -97,7 +97,23 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...)
     out <- stats::predict(x, newdata = data, type = type_arg)
   }
 
-  .get_predicted_out(out, args = args)
+  # reshape
+  out <- .get_predicted_out(out, args = args)
+
+  # add CI, if type = "probs"
+  if (type_arg == "probs" && !is.null(data)) {
+    se <- get_predicted_se(x, data = data)
+    linv <- link_inverse(x)
+    ci_data <- data.frame(
+      Row = out$Row,
+      Response = out$Response,
+      CI_low = linv(stats::qlogis(out$Predicted) - stats::qnorm((1 + ci) / 2) * se),
+      CI_high = linv(stats::qlogis(out$Predicted) + stats::qnorm((1 + ci) / 2) * se)
+    )
+    attr(out, "ci_data") <- ci_data
+  }
+
+  out
 }
 
 
