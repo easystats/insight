@@ -146,19 +146,23 @@ get_predicted_ci.default <- function(x,
 }
 
 #' @export
-get_predicted_ci.mlm <- function(x, ...) {
-  stop("TBD")
+get_predicted_ci.mlm <- function(x, verbose = TRUE, ...) {
+  if (verbose) {
+    message(format_message(paste0("Confidence intervals are not yet supported for models of class '", class(x)[1], "'.")))
+  }
+  NULL
 }
 
 
+
 #' @export
-get_predicted_ci.multinom <- function(x,
-                                      predictions = NULL,
-                                      data = NULL,
-                                      se = NULL,
-                                      ci = 0.95,
-                                      type = NULL,
-                                      ...) {
+get_predicted_ci.polr <- function(x,
+                                  predictions = NULL,
+                                  data = NULL,
+                                  se = NULL,
+                                  ci = 0.95,
+                                  type = NULL,
+                                  ...) {
   ci_data <- NULL
   # add CI, if type = "probs"
   if (identical(type, "probs") && !is.null(data)) {
@@ -179,8 +183,15 @@ get_predicted_ci.multinom <- function(x,
   ci_data
 }
 
+
 #' @export
-get_predicted_ci.polr <- get_predicted_ci.multinom
+get_predicted_ci.multinom <- get_predicted_ci.mlm
+
+#' @export
+get_predicted_ci.bracl <- get_predicted_ci.mlm
+
+
+
 
 
 

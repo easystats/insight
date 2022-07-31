@@ -42,9 +42,20 @@ get_predicted_se <- function(x,
   }
 
   # some tweaking for multinomial / ordinal models
-  if (inherits(x, c("polr", "multinom", "brmultinom", "bracl", "mixor", "fixest"))) {
+  if (inherits(x, "polr")) {
     keep <- intersect(colnames(mm), colnames(vcovmat))
     vcovmat <- vcovmat[keep, keep, drop = FALSE]
+    mm <- mm[, keep, drop = FALSE]
+
+  } else if (inherits(x, c("multinom", "brmultinom", "bracl", "mixor", "fixest"))) {
+
+    ## TODO this currently doesn't work...
+
+    # models like multinom have "level:termname" as column name
+    # remove response level to match column names of model matrix
+    colnames(vcovmat) <- gsub("^(+.):(.*)", "\\2", colnames(vcovmat))
+    keep <- setdiff(intersect(colnames(mm), colnames(vcovmat)), "(Intercept)")
+    vcovmat <- vcovmat[colnames(vcovmat) %in% keep, colnames(vcovmat) %in% keep, drop = FALSE]
     mm <- mm[, keep, drop = FALSE]
 
   # sometimes, model matrix and vcov won't match exactly, so try some hacks here

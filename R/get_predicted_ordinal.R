@@ -75,7 +75,7 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
 # =======================================================================
 
 #' @export
-get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = .95, ...) {
+get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = .95, verbose = TRUE, ...) {
   dots <- list(...)
 
   # `type` argument can be: probs | class
@@ -106,7 +106,8 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci =
     predictions = out,
     data = data,
     ci = ci,
-    type = type_arg
+    type = type_arg,
+    verbose = verbose
   )
 
   out
@@ -142,3 +143,6 @@ get_predicted.rlm <- function(x, predict = "expectation", ...) {
 
 #' @export
 get_predicted.polr <- get_predicted.multinom
+
+#' @export
+get_predicted.bracl <- get_predicted.multinom
