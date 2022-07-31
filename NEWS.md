@@ -9,6 +9,9 @@
 * `format_table()` gains an `exact` argument, to either report exact or rounded
   Bayes factors.
 
+* `get_predicted()` gets a method for models of class `gamlss` (and thereby,
+  `get_loglikelihood()` now also works for those model classes).
+
 ## Bug fixes
 
 * Fixed test failures.

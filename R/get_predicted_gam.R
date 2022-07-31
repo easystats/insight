@@ -91,3 +91,28 @@ get_predicted.gamm <- get_predicted.gam
 
 #' @export
 get_predicted.list <- get_predicted.gam # gamm4
+
+
+
+
+# GAMLSS -----------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.gamlss <- function(x,
+                                 data = NULL,
+                                 predict = "expectation",
+                                 ci = NULL,
+                                 include_smooth = TRUE,
+                                 iterations = NULL,
+                                 verbose = TRUE,
+                                 ...) {
+  get_predicted.default(x,
+                        data = NULL,
+                        predict = "expectation",
+                        ci = NULL,
+                        include_smooth = include_smooth,
+                        iterations = iterations,
+                        verbose = FALSE,
+                        ...)
+}
