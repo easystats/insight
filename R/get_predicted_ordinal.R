@@ -88,7 +88,7 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci =
     stop('The `predict` argument must be either "expectation" or "classification".')
   }
 
-  args <- c(list(x, "data" = data, ci = ci, predict = predict), list(...))
+  args <- c(list(x, "data" = data, ci = ci, predict = type_arg), list(...))
 
   # predict.multinom doesn't work when `newdata` is explicitly set to NULL (weird)
   if (is.null(data)) {
