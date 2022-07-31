@@ -28,8 +28,7 @@
 
 \method{get_parameters}{glmx}(
   x,
-  component = c("all", "conditional", "extra", "location", "distributional",
-    "auxiliary"),
+  component = c("all", "conditional", "extra", "location", "distributional", "auxiliary"),
   ...
 )
 

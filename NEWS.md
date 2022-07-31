@@ -1,9 +1,13 @@
-
 # insight 0.18.0.9990
 
 ## New functions
 
 * `format_percent()` as short-cut for `format_value(as_percent = TRUE)`.
+
+## Changes to functions
+
+* `format_table()` gains an `exact` argument, to either report exact or rounded
+  Bayes factors.
 
 ## Bug fixes
 

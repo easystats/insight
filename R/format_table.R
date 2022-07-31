@@ -26,6 +26,11 @@
 #'   encompassed in square brackets (else in parentheses).
 #' @param preserve_attributes Logical, if `TRUE`, preserves all attributes
 #'   from the input data frame.
+#' @param exact Formatting for Bayes factor columns, in case the provided data
+#'   frame contains such a column (i.e. columns named `"BF"` or `"log_BF"`).
+#'   For `exact = TRUE`, very large or very small values are then either reported
+#'   with a scientific format (e.g., 4.24e5), else as truncated values (as "> 1000"
+#'   and "< 1/1000").
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
@@ -64,6 +69,7 @@ format_table <- function(x,
                          rope_digits = 2,
                          zap_small = FALSE,
                          preserve_attributes = FALSE,
+                         exact = TRUE,
                          verbose = TRUE,
                          ...) {
   # sanity check
@@ -168,7 +174,8 @@ format_table <- function(x,
     rope_digits = rope_digits,
     zap_small = zap_small,
     ci_width = ci_width,
-    ci_brackets = ci_brackets
+    ci_brackets = ci_brackets,
+    exact = exact
   )
 
 
@@ -490,11 +497,17 @@ format_table <- function(x,
 
 
 
-.format_bayes_columns <- function(x, stars, rope_digits = 2, zap_small, ci_width = "auto", ci_brackets = TRUE) {
+.format_bayes_columns <- function(x,
+                                  stars,
+                                  rope_digits = 2,
+                                  zap_small,
+                                  ci_width = "auto",
+                                  ci_brackets = TRUE,
+                                  exact = TRUE) {
   # Indices
-  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars)
+  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars, exact = exact)
   if ("log_BF" %in% names(x)) {
-    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = stars)
+    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = stars, exact = exact)
     x$log_BF <- NULL
   }
   if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = stars)
