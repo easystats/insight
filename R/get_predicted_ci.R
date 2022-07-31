@@ -172,16 +172,18 @@ get_predicted_ci.polr <- function(x,
     # standard errors are assumed to be on the link-scale,
     # because they're are based on the vcov of the coefficients
     se <- get_predicted_se(x, data = data, verbose = verbose)
-    # predicted values are probabilities, so we back-transform to "link scale"
-    # using qlogis(), and then calculate CIs on the link-scale and transform
-    # back to probabilities using link-inverse.
-    linv <- link_inverse(x)
-    ci_data <- data.frame(
-      Row = predictions$Row,
-      Response = predictions$Response,
-      CI_low = linv(stats::qlogis(predictions$Predicted) - stats::qnorm((1 + ci) / 2) * se),
-      CI_high = linv(stats::qlogis(predictions$Predicted) + stats::qnorm((1 + ci) / 2) * se)
-    )
+    if (!is.null(se)) {
+      # predicted values are probabilities, so we back-transform to "link scale"
+      # using qlogis(), and then calculate CIs on the link-scale and transform
+      # back to probabilities using link-inverse.
+      linv <- link_inverse(x)
+      ci_data <- data.frame(
+        Row = predictions$Row,
+        Response = predictions$Response,
+        CI_low = linv(stats::qlogis(predictions$Predicted) - stats::qnorm((1 + ci) / 2) * se),
+        CI_high = linv(stats::qlogis(predictions$Predicted) + stats::qnorm((1 + ci) / 2) * se)
+      )
+    }
   }
   ci_data
 }
