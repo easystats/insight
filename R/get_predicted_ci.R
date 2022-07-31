@@ -55,7 +55,7 @@
 #' ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 #' head(ci_vals)
 #' @export
-get_predicted_ci <- function(x, predictions = NULL, ...) {
+get_predicted_ci <- function(x, ...) {
   UseMethod("get_predicted_ci")
 }
 
