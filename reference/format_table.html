@@ -18,7 +18,7 @@ converts all columns into character vectors!"><meta property="og:image" content=
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,7 @@ converts all columns into character vectors!</p>
 <span>  rope_digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  preserve_attributes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  exact <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -143,6 +144,14 @@ places than <code>digits</code> are printed in scientific notation.</p></dd>
 <dt>preserve_attributes</dt>
 <dd><p>Logical, if <code>TRUE</code>, preserves all attributes
 from the input data frame.</p></dd>
+
+
+<dt>exact</dt>
+<dd><p>Formatting for Bayes factor columns, in case the provided data
+frame contains such a column (i.e. columns named <code>"BF"</code> or <code>"log_BF"</code>).
+For <code>exact = TRUE</code>, very large or very small values are then either reported
+with a scientific format (e.g., 4.24e5), else as truncated values (as "&gt; 1000"
+and "&lt; 1/1000").</p></dd>
 
 
 <dt>verbose</dt>
