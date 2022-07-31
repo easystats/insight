@@ -76,6 +76,7 @@ get_predicted_ci.default <- function(x,
                                      dispersion_method = "sd",
                                      vcov = NULL,
                                      vcov_args = NULL,
+                                     verbose = TRUE,
                                      ...) {
   # sanity check, if CI should be skipped
   if (is.null(ci)) {
@@ -119,6 +120,7 @@ get_predicted_ci.default <- function(x,
       vcov = vcov,
       vcov_args = vcov_args,
       ci_method = ci_method,
+      verbose = verbose,
       ...
     )
     ci_function <- .get_predicted_se_to_ci
@@ -131,11 +133,11 @@ get_predicted_ci.default <- function(x,
   if (is.null(ci)) {
     out <- data.frame(SE = se)
   } else if (length(ci) == 1) {
-    out <- ci_function(x, predictions, ci = ci, se = se, ci_method = ci_method, data = data, ...)
+    out <- ci_function(x, predictions, ci = ci, se = se, ci_method = ci_method, data = data, verbose = verbose, ...)
   } else {
     out <- data.frame(SE = se)
     for (ci_val in ci) {
-      temp <- ci_function(x, predictions, ci = ci_val, se = se, ci_method = ci_method, data = data, ...)
+      temp <- ci_function(x, predictions, ci = ci_val, se = se, ci_method = ci_method, data = data, verbose = verbose, ...)
       temp$SE <- NULL
       names(temp) <- paste0(names(temp), "_", ci_val)
       out <- cbind(out, temp)
@@ -162,13 +164,14 @@ get_predicted_ci.polr <- function(x,
                                   se = NULL,
                                   ci = 0.95,
                                   type = NULL,
+                                  verbose = TRUE,
                                   ...) {
   ci_data <- NULL
   # add CI, if type = "probs"
   if (identical(type, "probs") && !is.null(data)) {
     # standard errors are assumed to be on the link-scale,
     # because they're are based on the vcov of the coefficients
-    se <- get_predicted_se(x, data = data)
+    se <- get_predicted_se(x, data = data, verbose = verbose)
     # predicted values are probabilities, so we back-transform to "link scale"
     # using qlogis(), and then calculate CIs on the link-scale and transform
     # back to probabilities using link-inverse.

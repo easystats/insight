@@ -18,6 +18,7 @@ get_predicted_ci(x, predictions = NULL, ...)
   dispersion_method = "sd",
   vcov = NULL,
   vcov_args = NULL,
+  verbose = TRUE,
   ...
 )
 }
@@ -86,6 +87,8 @@ or \strong{clubSandwich} packages. Please refer to their documentation (e.g.,
 type (argument \code{type}) is given, the default type for \code{"HC"} (or \code{"vcovHC"})
 equals the default from the \strong{sandwich} package; for type \code{"CR"} (or
 \code{"vcoCR"}), the default is set to \code{"CR3"}.}
+
+\item{verbose}{Toggle warnings.}
 }
 \description{
 Confidence intervals around predicted values

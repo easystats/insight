@@ -6,6 +6,7 @@ get_predicted_se <- function(x,
                              vcov = NULL,
                              vcov_args = NULL,
                              ci_method = NULL,
+                             verbose = TRUE,
                              ...) {
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'
@@ -34,7 +35,7 @@ get_predicted_se <- function(x,
     )
   }
 
-  mm <- .get_predicted_ci_modelmatrix(x, data = data, vcovmat = vcovmat)
+  mm <- .get_predicted_ci_modelmatrix(x, data = data, vcovmat = vcovmat, verbose = verbose)
 
   # return NULL for fail
   if (is.null(mm)) {
@@ -82,7 +83,9 @@ get_predicted_se <- function(x,
 
     # still no match?
     if (isTRUE(ncol(mm) != ncol(vcovmat))) {
-      warning(format_message("Could not compute standard errors or confidence intervals because the model and variance-covariance matrices are non-conformable. This can sometimes happen when the `data` used to make predictions fails to include all the levels of a factor variable or all the interaction components."), call. = FALSE)
+      if (verbose) {
+        warning(format_message("Could not compute standard errors or confidence intervals because the model and variance-covariance matrices are non-conformable. This can sometimes happen when the `data` used to make predictions fails to include all the levels of a factor variable or all the interaction components."), call. = FALSE)
+      }
       return(NULL)
     }
   }
@@ -122,7 +125,7 @@ get_predicted_se <- function(x,
 
 # Get Model matrix ------------------------------------------------------------
 
-.get_predicted_ci_modelmatrix <- function(x, data = NULL, vcovmat = NULL, ...) {
+.get_predicted_ci_modelmatrix <- function(x, data = NULL, vcovmat = NULL, verbose = TRUE, ...) {
   resp <- find_response(x)
   if (is.null(vcovmat)) vcovmat <- get_varcov(x, ...)
 
@@ -162,7 +165,9 @@ get_predicted_se <- function(x,
       # check for at least to factor levels, in order to build contrasts
       single_factor_levels <- sapply(data, function(i) is.factor(i) && nlevels(i) == 1)
       if (any(single_factor_levels)) {
-        warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
+        if (verbose) {
+          warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
+        }
         return(NULL)
       }
       obj <- model_terms
@@ -174,7 +179,24 @@ get_predicted_se <- function(x,
     } else {
       obj <- x
     }
-    mm <- get_modelmatrix(x = obj, data = data)
+
+    # try to get model matrix
+    mm <- tryCatch(
+      get_modelmatrix(x = obj, data = data),
+      error = function(e) e
+    )
+
+    # tell user when fails
+    if (inherits(mm, "simpleError")) {
+      if (verbose) {
+        if (grepl("2 or more levels", mm$message, fixed = TRUE)) {
+          warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
+        } else {
+          warning(format_message("Something went wrong with computing standard errors and confidence intervals for predictions."), call. = FALSE)
+        }
+      }
+      return(NULL)
+    }
   }
 
   # fix rank deficiency
