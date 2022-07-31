@@ -151,6 +151,39 @@ get_predicted_ci.mlm <- function(x, ...) {
 }
 
 
+#' @export
+get_predicted_ci.multinom <- function(x,
+                                      predictions = NULL,
+                                      data = NULL,
+                                      se = NULL,
+                                      ci = 0.95,
+                                      type = NULL,
+                                      ...) {
+  ci_data <- NULL
+  # add CI, if type = "probs"
+  if (identical(type, "probs") && !is.null(data)) {
+    # standard errors are assumed to be on the link-scale,
+    # because they're are based on the vcov of the coefficients
+    se <- get_predicted_se(x, data = data)
+    # predicted values are probabilities, so we back-transform to "link scale"
+    # using qlogis(), and then calculate CIs on the link-scale and transform
+    # back to probabilities using link-inverse.
+    linv <- link_inverse(x)
+    ci_data <- data.frame(
+      Row = predictions$Row,
+      Response = predictions$Response,
+      CI_low = linv(stats::qlogis(predictions$Predicted) - stats::qnorm((1 + ci) / 2) * se),
+      CI_high = linv(stats::qlogis(predictions$Predicted) + stats::qnorm((1 + ci) / 2) * se)
+    )
+  }
+  ci_data
+}
+
+#' @export
+get_predicted_ci.polr <- get_predicted_ci.multinom
+
+
+
 
 
 ## Convert to CI -----------

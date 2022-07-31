@@ -100,18 +100,14 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci =
   # reshape
   out <- .get_predicted_out(out, args = args)
 
-  # add CI, if type = "probs"
-  if (type_arg == "probs" && !is.null(data)) {
-    se <- get_predicted_se(x, data = data)
-    linv <- link_inverse(x)
-    ci_data <- data.frame(
-      Row = out$Row,
-      Response = out$Response,
-      CI_low = linv(stats::qlogis(out$Predicted) - stats::qnorm((1 + ci) / 2) * se),
-      CI_high = linv(stats::qlogis(out$Predicted) + stats::qnorm((1 + ci) / 2) * se)
-    )
-    attr(out, "ci_data") <- ci_data
-  }
+  # add CI
+  attr(out, "ci_data") <- get_predicted_ci(
+    x,
+    predictions = out,
+    data = data,
+    ci = ci,
+    type = type_arg
+  )
 
   out
 }

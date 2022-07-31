@@ -46,6 +46,8 @@ get_predicted_se <- function(x,
     keep <- intersect(colnames(mm), colnames(vcovmat))
     vcovmat <- vcovmat[keep, keep, drop = FALSE]
     mm <- mm[, keep, drop = FALSE]
+
+  # sometimes, model matrix and vcov won't match exactly, so try some hacks here
   } else if (ncol(mm) != ncol(vcovmat)) {
     # last desperate try
     if (ncol(mm) == nrow(mm) && ncol(vcovmat) > ncol(mm) && all(colnames(mm) %in% colnames(vcovmat))) {
@@ -55,18 +57,15 @@ get_predicted_se <- function(x,
 
       matching_parameters <- stats::na.omit(match(colnames(vcovmat), colnames(mm)))
       vcovmat <- vcovmat[matching_parameters, matching_parameters, drop = FALSE]
+
     } else {
       # model matrix rows might mismatch. we need a larger model matrix and
       # then filter those rows that match the vcov matrix.
 
       mm_full <- get_modelmatrix(x)
       mm <- tryCatch(
-        {
-          mm_full[as.numeric(row.names(get_modelmatrix(x, data = data))), , drop = FALSE]
-        },
-        error = function(e) {
-          NULL
-        }
+        mm_full[as.numeric(row.names(get_modelmatrix(x, data = data))), , drop = FALSE],
+        error = function(e) NULL
       )
     }
 
@@ -93,7 +92,12 @@ get_predicted_se <- function(x,
     se <- sqrt(var_diag)
   }
 
-  # shorten to length of prediction_data
+  ## TODO: check if this is correct. Based on the vcov, we have the same SEs
+  # for a predictor for each response level, so we simply repeat the SEs for
+  # each level. This might not be appropriate and needs to be checked!
+
+  # make sure we repeat SE for each response level for
+  # models with categorical or ordinal response.
   if (inherits(x, c("polr", "multinom", "mixor"))) {
     se <- rep(se, times = n_unique(get_response(x)))
   }
