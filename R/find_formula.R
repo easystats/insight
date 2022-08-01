@@ -128,6 +128,12 @@ find_formula.data.frame <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+find_formula.deltaMethod <- function(x, verbose = TRUE, ...) {
+  NULL
+}
+
+
+#' @export
 find_formula.aovlist <- function(x, verbose = TRUE, ...) {
   f <- attr(x, "terms", exact = TRUE)
   attributes(f) <- NULL
