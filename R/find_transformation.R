@@ -27,6 +27,12 @@
 #' find_transformation(model)
 #' @export
 find_transformation <- function(x) {
+
+  # sanity check
+  if (is.null(x) || is.data.frame(x) || !is_model(x)) {
+    return(NULL)
+  }
+
   rv <- find_terms(x)[["response"]]
   transform_fun <- "identity"
 
