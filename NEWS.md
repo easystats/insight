@@ -4,6 +4,8 @@
 
 * `format_percent()` as short-cut for `format_value(as_percent = TRUE)`.
 
+* `is_converged()`, to check whether a mixed model has converged or not.
+
 ## Changes to functions
 
 * `format_table()` gains an `exact` argument, to either report exact or rounded
@@ -18,6 +20,8 @@
 ## Bug fixes
 
 * Fixed test failures.
+
+* Minor fixes to address changes in other packages.
 
 # insight 0.18.0
 
