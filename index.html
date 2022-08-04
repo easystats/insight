@@ -23,7 +23,10 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="deps/Roboto-0.4.2/font.css" rel="stylesheet">
+<link href="deps/JetBrains_Mono-0.4.2/font.css" rel="stylesheet">
+<link href="deps/Roboto_Slab-0.4.2/font.css" rel="stylesheet">
+<!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Easy Access to Model Information for Various Model Objects">
 <meta property="og:description" content="A tool to provide an easy, intuitive and consistent
@@ -35,7 +38,7 @@
     get the underlying data, starting with get_.  The package has a
     consistent syntax and works with many different model objects, where
     otherwise functions to access these information are missing.">
-<meta property="og:image" content="/reference/figures/card.png">
+<meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@easystats4u">
 <meta name="twitter:site" content="@easystats4u">
@@ -62,20 +65,25 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
-  <a class="nav-link" href="articles/insight.html">Get started</a>
+  <a class="nav-link" href="reference/index.html">
+    <span class="fa fa fa fa-file-code"></span>
+     
+    Reference
+  </a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="reference/index.html">Reference</a>
-</li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/display.html">Formatting, printing and exporting tables</a>
-    <a class="dropdown-item" href="articles/export.html">Exporting tables with captions and footers</a>
-  </div>
+  <a class="nav-link" href="articles/index.html">
+    <span class="fa fa fa fa-book-reader"></span>
+     
+    Articles
+  </a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="news/index.html">Changelog</a>
+  <a class="nav-link" href="news/index.html">
+    <span class="fa fa fa fa-newspaper"></span>
+     
+    News
+  </a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -83,6 +91,26 @@
 </form>
 
       <ul class="navbar-nav">
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--easystats">
+    <span class="fab fa fab fa-r-project"></span>
+     
+    easystats
+  </a>
+  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+    <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
+    <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
+    <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
+    <a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a>
+    <a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a>
+    <a class="dropdown-item" href="https://easystats.github.io/insight/">insight</a>
+    <a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a>
+    <a class="external-link dropdown-item" href="https://easystats.github.io/performance/">performance</a>
+    <a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a>
+    <a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a>
+    <a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a>
+  </div>
+</li>
 <li class="nav-item">
   <a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter">
     <span class="fa fa-twitter"></span>
@@ -142,13 +170,13 @@
 </table>
 <p>Once you have downloaded the package, you can then load it using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/insight/" class="external-link">"insight"</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/insight/">"insight"</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
-<p><a href="https://easystats.github.io/insight/" class="external-link"><img src="https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63" alt="Documentation"></a> <a href="https://easystats.github.io/blog/posts/" class="external-link"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a> <a href="https://easystats.github.io/insight/reference/index.html" class="external-link"><img src="https://img.shields.io/badge/features-insight-orange.svg?colorB=2196F3" alt="Features"></a></p>
-<p>Built with non-programmers in mind, <strong>insight</strong> offers a broad toolbox for making model and data information easily accessible. While <strong>insight</strong> offers many useful functions for working with and understanding model objects (discussed below), we suggest users start with <code><a href="reference/model_info.html">model_info()</a></code>, as this function provides a clean and consistent overview of model objects (e.g., functional form of the model, the model family, link function, number of observations, variables included in the specification, etc.). With a clear understanding of the model introduced, users are able to adapt other functions for more nuanced exploration of and interaction with virtually any model object.Please visit <a href="https://easystats.github.io/insight/" class="external-link uri">https://easystats.github.io/insight/</a> for documentation.</p>
+<p><a href="https://easystats.github.io/insight/"><img src="https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63" alt="Documentation"></a> <a href="https://easystats.github.io/blog/posts/" class="external-link"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a> <a href="https://easystats.github.io/insight/reference/index.html"><img src="https://img.shields.io/badge/features-insight-orange.svg?colorB=2196F3" alt="Features"></a></p>
+<p>Built with non-programmers in mind, <strong>insight</strong> offers a broad toolbox for making model and data information easily accessible. While <strong>insight</strong> offers many useful functions for working with and understanding model objects (discussed below), we suggest users start with <code><a href="reference/model_info.html">model_info()</a></code>, as this function provides a clean and consistent overview of model objects (e.g., functional form of the model, the model family, link function, number of observations, variables included in the specification, etc.). With a clear understanding of the model introduced, users are able to adapt other functions for more nuanced exploration of and interaction with virtually any model object.Please visit <a href="https://easystats.github.io/insight/" class="uri">https://easystats.github.io/insight/</a> for documentation.</p>
 <div class="section level3">
 <h3 id="definition-of-model-components">Definition of Model Components<a class="anchor" aria-label="anchor" href="#definition-of-model-components"></a>
 </h3>
@@ -193,7 +221,7 @@
 <strong>random or grouping factors</strong>: variables that are specified as grouping variables in a mixed effects model.</li>
 </ul>
 <p><em>Aren’t the predictors, terms and parameters the same thing?</em></p>
-<p>In some cases, yes. But not in all cases. Find out more by <a href="https://easystats.github.io/insight/articles/insight.html" class="external-link"><strong>clicking here to access the documentation</strong></a>.</p>
+<p>In some cases, yes. But not in all cases. Find out more by <a href="https://easystats.github.io/insight/articles/insight.html"><strong>clicking here to access the documentation</strong></a>.</p>
 </div>
 </div>
 <div class="section level3">
@@ -201,7 +229,7 @@
 </h3>
 <p>The package revolves around two key prefixes: <code>get_*</code> and <code>find_*</code>. The <code>get_*</code> prefix extracts <em>values</em> (or <em>data</em>) associated with model-specific objects (e.g., parameters or variables), while the <code>find_*</code> prefix <em>lists</em> model-specific objects (e.g., priors or predictors). These are powerful families of functions allowing for great flexibility in use, whether at a high, descriptive level (<code>find_*</code>) or narrower level of statistical inspection and reporting (<code>get_*</code>).</p>
 <p><img src="https://raw.githubusercontent.com/easystats/insight/master/paper/figure1_small.png"></p>
-<p>In total, the <strong>insight</strong> package includes 16 core functions: <a href="https://easystats.github.io/insight/reference/get_data.html" class="external-link">get_data()</a>, <a href="https://easystats.github.io/insight/reference/get_priors.html" class="external-link">get_priors()</a>, <a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance()</a>, <a href="https://easystats.github.io/insight/reference/get_parameters.html" class="external-link">get_parameters()</a>, <a href="https://easystats.github.io/insight/reference/get_predictors.html" class="external-link">get_predictors()</a>, <a href="https://easystats.github.io/insight/reference/get_random.html" class="external-link">get_random()</a>, <a href="https://easystats.github.io/insight/reference/get_response.html" class="external-link">get_response()</a>, <a href="https://easystats.github.io/insight/reference/find_algorithm.html" class="external-link">find_algorithm()</a>, <a href="https://easystats.github.io/insight/reference/find_formula.html" class="external-link">find_formula()</a>, <a href="https://easystats.github.io/insight/reference/find_variables.html" class="external-link">find_variables()</a>, <a href="https://easystats.github.io/insight/reference/find_terms.html" class="external-link">find_terms()</a>, <a href="https://easystats.github.io/insight/reference/find_parameters.html" class="external-link">find_parameters()</a>, <a href="https://easystats.github.io/insight/reference/find_predictors.html" class="external-link">find_predictors()</a>, <a href="https://easystats.github.io/insight/reference/find_random.html" class="external-link">find_random()</a>, <a href="https://easystats.github.io/insight/reference/find_response.html" class="external-link">find_response()</a>, and <a href="https://easystats.github.io/insight/reference/model_info.html" class="external-link">model_info()</a>. In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the <code><a href="reference/find_terms.html">find_terms()</a></code> function’s <code>effects</code> argument allows for the extraction of “fixed effects” terms, “random effects” terms, or by default, “all” terms in the model object. We point users to the package documentation or the complementary package website, <a href="https://easystats.github.io/insight/" class="external-link uri">https://easystats.github.io/insight/</a>, for a detailed list of the arguments associated with each function as well as the returned values from each function.</p>
+<p>In total, the <strong>insight</strong> package includes 16 core functions: <a href="https://easystats.github.io/insight/reference/get_data.html">get_data()</a>, <a href="https://easystats.github.io/insight/reference/get_priors.html">get_priors()</a>, <a href="https://easystats.github.io/insight/reference/get_variance.html">get_variance()</a>, <a href="https://easystats.github.io/insight/reference/get_parameters.html">get_parameters()</a>, <a href="https://easystats.github.io/insight/reference/get_predictors.html">get_predictors()</a>, <a href="https://easystats.github.io/insight/reference/get_random.html">get_random()</a>, <a href="https://easystats.github.io/insight/reference/get_response.html">get_response()</a>, <a href="https://easystats.github.io/insight/reference/find_algorithm.html">find_algorithm()</a>, <a href="https://easystats.github.io/insight/reference/find_formula.html">find_formula()</a>, <a href="https://easystats.github.io/insight/reference/find_variables.html">find_variables()</a>, <a href="https://easystats.github.io/insight/reference/find_terms.html">find_terms()</a>, <a href="https://easystats.github.io/insight/reference/find_parameters.html">find_parameters()</a>, <a href="https://easystats.github.io/insight/reference/find_predictors.html">find_predictors()</a>, <a href="https://easystats.github.io/insight/reference/find_random.html">find_random()</a>, <a href="https://easystats.github.io/insight/reference/find_response.html">find_response()</a>, and <a href="https://easystats.github.io/insight/reference/model_info.html">model_info()</a>. In all cases, users must supply at a minimum, the name of the model fit object. In several functions, there are additional arguments that allow for more targeted returns of model information. For example, the <code><a href="reference/find_terms.html">find_terms()</a></code> function’s <code>effects</code> argument allows for the extraction of “fixed effects” terms, “random effects” terms, or by default, “all” terms in the model object. We point users to the package documentation or the complementary package website, <a href="https://easystats.github.io/insight/" class="uri">https://easystats.github.io/insight/</a>, for a detailed list of the arguments associated with each function as well as the returned values from each function.</p>
 </div>
 <div class="section level3">
 <h3 id="examples-of-use-cases-in-r">Examples of Use Cases in R<a class="anchor" aria-label="anchor" href="#examples-of-use-cases-in-r"></a>
@@ -213,7 +241,7 @@
 <p>Say, the goal is to make predictions for a certain term, holding remaining co-variates constant. This is achieved by calling <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> and feeding the <code>newdata</code>-argument with the values of the term of interest as well as the “constant” values for remaining co-variates. The functions <code><a href="reference/get_data.html">get_data()</a></code> and <code><a href="reference/find_predictors.html">find_predictors()</a></code> are used to get this information, which then can be used in the call to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p>
 <p>In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is “universal” and applies to many different model objects.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/">insight</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span></span>
 <span>  <span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="va">Sepal.Width</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">iris</span></span>
@@ -484,7 +512,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
     </footer>
