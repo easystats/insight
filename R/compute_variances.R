@@ -16,7 +16,10 @@
 
   if (faminfo$family %in% c("truncated_nbinom1")) {
     if (verbose) {
-      warning(format_message(sprintf("Truncated negative binomial families are currently not supported by `%s`.", name_fun)), call. = FALSE)
+      warning(format_message(sprintf(
+        "Truncated negative binomial families are currently not supported by `%s`.", 
+        name_fun)
+      ), call. = FALSE)
     }
     return(NA)
   }
@@ -257,7 +260,7 @@
   } else if (inherits(x, "lme")) {
     re_names <- find_random(x, split_nested = TRUE, flatten = TRUE)
     comp_x <- get_modelmatrix(x)
-    rownames(comp_x) <- 1:nrow(comp_x)
+    rownames(comp_x) <- seq_len(nrow(comp_x))
     if (.is_nested_lme(x)) {
       vals_vc <- .get_nested_lme_varcorr(x)
       vals_re <- lme4::ranef(x)
@@ -301,7 +304,7 @@
     # ---------------------------
   } else if (inherits(x, "brmsfit")) {
     comp_x <- get_modelmatrix(x)
-    rownames(comp_x) <- 1:nrow(comp_x)
+    rownames(comp_x) <- seq_len(nrow(comp_x))
     vc <- lapply(names(lme4::VarCorr(x)), function(i) {
       element <- lme4::VarCorr(x)[[i]]
       if (i != "residual__") {
@@ -383,7 +386,9 @@
 # is supported or not
 .badlink <- function(link, family, verbose = TRUE) {
   if (verbose) {
-    warning(format_message(sprintf("Model link '%s' is not yet supported for the %s distribution.", link, family)), call. = FALSE)
+    warning(format_message(sprintf(
+      "Model link '%s' is not yet supported for the %s distribution.", link, family)
+    ), call. = FALSE)
   }
   return(NA)
 }
