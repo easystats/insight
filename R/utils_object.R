@@ -17,12 +17,13 @@ is_empty_object <- function(x) {
 
   if (inherits(x, "data.frame")) {
     x <- as.data.frame(x)
+    flag_empty <- TRUE
     if (nrow(x) > 0 && ncol(x) > 0) {
-      x <- x[, !sapply(x, function(i) all(is.na(i))), drop = FALSE]
-      # this is much faster than apply(x, 1, FUN)
-      flag_empty <- all(rowSums(is.na(x)) == ncol(x))
-    } else {
-      flag_empty <- TRUE
+      i <- 0
+      while (flag_empty == TRUE && i <= ncol(x)) {
+        i <- i + 1
+        flag_empty <- all(is.na(x[[i]]))
+      }
     }
     # a list but not a data.frame
   } else if (is.list(x) && length(x) > 0) {

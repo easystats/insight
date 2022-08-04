@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' format_bf(bfs <- c(0.000045, 0.033, NA, 1557, 3.54))
-#' format_bf(bfs, exact = FALSE, name = NULL)
+#' format_bf(bfs, exact = TRUE, name = NULL)
 #' format_bf(bfs, stars = TRUE)
 #' format_bf(bfs, protect_ratio = TRUE)
 #' format_bf(bfs, protect_ratio = TRUE, exact = TRUE)
@@ -24,7 +24,7 @@ format_bf <- function(bf,
                       name = "BF",
                       protect_ratio = FALSE,
                       na_reference = NA,
-                      exact = TRUE) {
+                      exact = FALSE) {
   if (!is.na(na_reference)) {
     bf[is.na(bf)] <- na_reference
   } else {

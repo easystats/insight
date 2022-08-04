@@ -20,8 +20,8 @@
 
 \method{get_parameters}{mhurdle}(
   x,
-  component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase",
-    "ip", "auxiliary"),
+  component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip",
+    "auxiliary"),
   ...
 )
 }

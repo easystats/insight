@@ -132,12 +132,12 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 
   # do we have a "log()" pattern here? if yes, get capture region
   # which matches the "cleaned" variable name
-  cleaned <- sapply(1:length(x), function(i) {
+  cleaned <- sapply(seq_along(x), function(i) {
     # check if we have special patterns like 100 * log(xy), and remove it
     if (isFALSE(is_emmeans) && grepl("^([0-9]+)", x[i])) {
       x[i] <- gsub("^([0-9]+)[^(\\.|[:alnum:])]+(.*)", "\\2", x[i])
     }
-    for (j in 1:length(pattern)) {
+    for (j in seq_along(pattern)) {
       # check if we find pattern at all
       if (grepl(pattern[j], x[i], fixed = TRUE)) {
         # remove possible namespace

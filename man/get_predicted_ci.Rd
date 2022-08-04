@@ -5,7 +5,7 @@
 \alias{get_predicted_ci.default}
 \title{Confidence intervals around predicted values}
 \usage{
-get_predicted_ci(x, predictions = NULL, ...)
+get_predicted_ci(x, ...)
 
 \method{get_predicted_ci}{default}(
   x,
@@ -18,6 +18,7 @@ get_predicted_ci(x, predictions = NULL, ...)
   dispersion_method = "sd",
   vcov = NULL,
   vcov_args = NULL,
+  verbose = TRUE,
   ...
 )
 }
@@ -25,11 +26,11 @@ get_predicted_ci(x, predictions = NULL, ...)
 \item{x}{A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).}
 
+\item{...}{Other argument to be passed, for instance to \code{get_predicted_ci()}.}
+
 \item{predictions}{A vector of predicted values (as obtained by
 \code{stats::fitted()}, \code{stats::predict()} or
 \code{\link[=get_predicted]{get_predicted()}}).}
-
-\item{...}{Other argument to be passed, for instance to \code{get_predicted_ci()}.}
 
 \item{data}{An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
@@ -82,7 +83,12 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 \item{vcov_args}{List of arguments to be passed to the function identified by
 the \code{vcov} argument. This function is typically supplied by the \strong{sandwich}
 or \strong{clubSandwich} packages. Please refer to their documentation (e.g.,
-\code{?sandwich::vcovHAC}) to see the list of available arguments.}
+\code{?sandwich::vcovHAC}) to see the list of available arguments. If no estimation
+type (argument \code{type}) is given, the default type for \code{"HC"} (or \code{"vcovHC"})
+equals the default from the \strong{sandwich} package; for type \code{"CR"} (or
+\code{"vcoCR"}), the default is set to \code{"CR3"}.}
+
+\item{verbose}{Toggle warnings.}
 }
 \description{
 Confidence intervals around predicted values

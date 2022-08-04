@@ -75,7 +75,7 @@ get_predicted.clm <- function(x, predict = "expectation", data = NULL, ...) {
 # =======================================================================
 
 #' @export
-get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...) {
+get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = .95, verbose = TRUE, ...) {
   dots <- list(...)
 
   # `type` argument can be: probs | class
@@ -88,7 +88,7 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...)
     stop('The `predict` argument must be either "expectation" or "classification".')
   }
 
-  args <- c(list(x, "data" = data), list(...))
+  args <- c(list(x, "data" = data, ci = ci, predict = type_arg), list(...))
 
   # predict.multinom doesn't work when `newdata` is explicitly set to NULL (weird)
   if (is.null(data)) {
@@ -97,7 +97,20 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ...)
     out <- stats::predict(x, newdata = data, type = type_arg)
   }
 
-  .get_predicted_out(out, args = args)
+  # reshape
+  out <- .get_predicted_out(out, args = args)
+
+  # add CI
+  attr(out, "ci_data") <- get_predicted_ci(
+    x,
+    predictions = out,
+    data = data,
+    ci = ci,
+    type = type_arg,
+    verbose = verbose
+  )
+
+  out
 }
 
 
@@ -130,3 +143,6 @@ get_predicted.rlm <- function(x, predict = "expectation", ...) {
 
 #' @export
 get_predicted.polr <- get_predicted.multinom
+
+#' @export
+get_predicted.bracl <- get_predicted.multinom

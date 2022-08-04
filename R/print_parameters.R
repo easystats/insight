@@ -178,7 +178,7 @@ print_parameters <- function(x,
     parts <- unlist(strsplit(i, ".", fixed = TRUE))
 
     # iterate all parts of the component names, to create title attribute
-    for (j in 1:length(parts)) {
+    for (j in seq_along(parts)) {
       # Rename "fixed", "random" etc. into proper titles. Here we have the
       # "Main title" of a subcomponent (like "Random effects")
       if (parts[j] %in% c("fixed", "random") || (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
@@ -267,13 +267,13 @@ print_parameters <- function(x,
 
   # override titles?
   if (!is.null(titles) && length(titles) <= length(out)) {
-    for (i in 1:length(titles)) {
+    for (i in seq_along(titles)) {
       attr(out[[i]], "table_caption") <- c(titles[i], "blue")
     }
   }
 
   if (!is.null(subtitles) && length(subtitles) <= length(out)) {
-    for (i in 1:length(subtitles)) {
+    for (i in seq_along(subtitles)) {
       attr(out[[i]], "table_subtitle") <- c(subtitles[i], "blue")
     }
   }

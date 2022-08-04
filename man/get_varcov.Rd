@@ -90,7 +90,10 @@ get_varcov(x, ...)
 \item{vcov_args}{List of arguments to be passed to the function identified by
 the \code{vcov} argument. This function is typically supplied by the \strong{sandwich}
 or \strong{clubSandwich} packages. Please refer to their documentation (e.g.,
-\code{?sandwich::vcovHAC}) to see the list of available arguments.}
+\code{?sandwich::vcovHAC}) to see the list of available arguments. If no estimation
+type (argument \code{type}) is given, the default type for \code{"HC"} (or \code{"vcovHC"})
+equals the default from the \strong{sandwich} package; for type \code{"CR"} (or
+\code{"vcoCR"}), the default is set to \code{"CR3"}.}
 
 \item{component}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model components only (like count or

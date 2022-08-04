@@ -81,7 +81,7 @@ get_predicted.gam <- function(x,
   }
 
   # Get CI
-  ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
+  ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci, verbose = verbose)
   out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
@@ -91,3 +91,28 @@ get_predicted.gamm <- get_predicted.gam
 
 #' @export
 get_predicted.list <- get_predicted.gam # gamm4
+
+
+
+
+# GAMLSS -----------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.gamlss <- function(x,
+                                 data = NULL,
+                                 predict = "expectation",
+                                 ci = NULL,
+                                 include_smooth = TRUE,
+                                 iterations = NULL,
+                                 verbose = TRUE,
+                                 ...) {
+  get_predicted.default(x,
+                        data = NULL,
+                        predict = "expectation",
+                        ci = NULL,
+                        include_smooth = include_smooth,
+                        iterations = iterations,
+                        verbose = FALSE,
+                        ...)
+}

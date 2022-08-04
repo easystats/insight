@@ -210,7 +210,7 @@ get_datagrid.data.frame <- function(x,
           stop(format_message("The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."), call. = FALSE)
         }
         # Get datagrids
-        for (i in 1:length(numvars)) {
+        for (i in seq_along(numvars)) {
           num <- numvars[i]
           nums[[num]] <- get_datagrid(x[[num]],
             at = specs[specs$varname == num, "expression"],
@@ -349,8 +349,9 @@ get_datagrid.data.frame <- function(x,
       } else if (is.character(x) || is.logical(x)) {
         out <- unique(x)[1]
       } else {
-        stop(format_message(paste0("Argument is not numeric nor factor but ", class(x), ".",
-        "Please report the bug at https://github.com/easystats/insight/issues"
+        stop(format_message(paste0(
+          "Argument is not numeric nor factor but ", class(x), ".",
+          "Please report the bug at https://github.com/easystats/insight/issues"
         )), call. = FALSE)
       }
     }

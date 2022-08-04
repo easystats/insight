@@ -204,7 +204,7 @@ export_table <- function(x,
     l <- compact_list(x)
 
     # list of data frames
-    tmp <- lapply(1:length(l), function(element) {
+    tmp <- lapply(seq_along(l), function(element) {
       i <- l[[element]]
 
       # use individual footer for each list element...
@@ -276,12 +276,12 @@ export_table <- function(x,
 
     out <- c()
     if (format == "text") {
-      for (i in 1:length(tmp)) {
+      for (i in seq_along(tmp)) {
         out <- paste0(out, tmp[[i]], "\n")
       }
       out <- substr(out, 1, nchar(out) - 1)
     } else if (format == "markdown") {
-      for (i in 1:length(tmp)) {
+      for (i in seq_along(tmp)) {
         out <- c(out, tmp[[i]], "")
       }
       out <- out[1:(length(out) - 1)]
@@ -405,7 +405,7 @@ print.insight_table <- function(x, ...) {
 
     # first column definitely right alignment, fixed width
     first_row <- as.character(aligned[1, ])
-    for (i in 1:length(first_row)) {
+    for (i in seq_along(first_row)) {
       aligned[1, i] <- format(trim_ws(first_row[i]), width = nchar(first_row[i]), justify = "right")
     }
 

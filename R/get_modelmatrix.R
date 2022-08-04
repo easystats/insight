@@ -35,6 +35,18 @@ get_modelmatrix.merMod <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.bracl <- function(x, ...) {
+  dots <- list(...)
+  if ("data" %in% names(dots)) {
+    mm <- stats::model.matrix(object = x, data = dots$data, ...)
+  } else {
+    stop(format_message("The 'data' argument is required to return the model matrix."), call. = FALSE)
+  }
+
+  mm
+}
+
+#' @export
 get_modelmatrix.iv_robust <- function(x, ...) {
   dots <- list(...)
   model_terms <- stats::terms(x)

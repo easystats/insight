@@ -1,8 +1,27 @@
 # insight 0.18.0.9990
 
-## Breaking changes
+## New functions
 
-* `format_bf()`'s `exact` argument now defaults to `exact = TRUE`. To preserve previous behavior, set `format_bf(..., exact = FALSE)`
+* `format_percent()` as short-cut for `format_value(as_percent = TRUE)`.
+
+* `is_converged()`, to check whether a mixed model has converged or not.
+
+## Changes to functions
+
+* `format_table()` gains an `exact` argument, to either report exact or rounded
+  Bayes factors.
+
+* `get_predicted()` gets a method for models of class `gamlss` (and thereby,
+  `get_loglikelihood()` now also works for those model classes).
+
+* `get_predicted()` now better handles models of class `polr`, `multinom` and 
+  `rlm`.
+
+## Bug fixes
+
+* Fixed test failures.
+
+* Minor fixes to address changes in other packages.
 
 # insight 0.18.0
 

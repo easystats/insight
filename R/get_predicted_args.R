@@ -56,22 +56,27 @@
 
 
   # Intermediate step, check data classes  ------
+  # if data=NULL, check terms
+  # if data!=NULL, check data
   ############################################################################
 
-  tryCatch(
-    {
-      data_classes <- attributes(stats::terms(x))$dataClasses
-      if (any(grepl("matrix", data_classes, fixed = TRUE)) && isTRUE(verbose)) {
-        message(format_message(
-          "Some of the variables were in matrix-format - probably you used 'scale()' on your data?",
-          "If so, and you get an error, please try 'datawizard::standardize()' to standardize your data."
-        ))
-      }
-    },
-    error = function(e) {
-
-    }
-  )
+  if (is.null(data)) {
+    flag_matrix <- tryCatch(
+      any(grepl("matrix", attributes(stats::terms(x))$dataClasses, fixed = TRUE)),
+      error = function(e) FALSE
+    )
+  } else {
+    flag_matrix <- tryCatch(
+      any(sapply(data, function(x) inherits(x, "matrix"))),
+      error = function(e) FALSE
+    )
+  }
+  if (isTRUE(flag_matrix) && isTRUE(verbose)) {
+    message(format_message(
+      "Some of the variables were in matrix-format - probably you used 'scale()' on your data?",
+      "If so, and you get an error, please try 'datawizard::standardize()' to standardize your data."
+    ))
+  }
 
 
   # Second step, evaluate "predict" argument                      ------------
