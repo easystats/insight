@@ -2,7 +2,7 @@
 title: "Getting Started with Accessing Model Information"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{insight}
+  %\VignetteIndexEntry{Getting Started with Accessing Model Information}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
