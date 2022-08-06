@@ -4,7 +4,6 @@
 # variables transformed during model fitting are not included in this data frame
 #
 .prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
-
   # check if we have any data yet
   if (is_empty_object(mf)) {
     if (isTRUE(verbose)) {
@@ -120,7 +119,6 @@
   # model frame and convert them to regular data frames, give
   # proper column names and bind them back to the original model frame
   if (any(mc)) {
-
     # try to get model data from environment
     md <- tryCatch(
       {
@@ -148,7 +146,6 @@
     # if data not found in environment,
     # reduce matrix variables into regular vectors
     if (is.null(md)) {
-
       # we select the non-matrix variables and convert matrix-variables into
       # regular data frames, then binding them together
       mf_matrix <- mf[, which(mc), drop = FALSE]
@@ -164,7 +161,6 @@
       mf_matrix <- do.call(cbind, mf_list)
       mf <- cbind(mf_nonmatrix, mf_matrix)
     } else {
-
       # fix NA in column names
       if (any(is.na(colnames(md)))) {
         colnames(md) <- make.names(colnames(md))
@@ -203,7 +199,6 @@
         # no further processing for survival models
         mf <- md
       } else {
-
         # get cleaned variable names for those variables
         # that we still need from the original model frame
         needed.vars <- compact_character(unique(clean_names(needed.vars)))
@@ -361,7 +356,7 @@
 
   # do we have duplicated names?
   dupes <- which(duplicated(cvn))
-  if (!.is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], 1:length(dupes))
+  if (!.is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], seq_along(dupes))
 
   colnames(mf) <- cvn
 
@@ -423,7 +418,6 @@
                                              logicals = NULL,
                                              interactions = NULL,
                                              verbose = TRUE) {
-
   # check if data argument was used
   model_call <- get_call(model)
   if (!is.null(model_call)) {
@@ -471,7 +465,7 @@
       mf[c(interactions, names(interactions))] <- NULL
       mf <- cbind(mf, full_data[c(interactions, names(interactions))])
     } else {
-      for (i in 1:length(interactions)) {
+      for (i in seq_along(interactions)) {
         int <- interactions[i]
         mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
         mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
@@ -963,7 +957,7 @@
         # exeception: list for kruskal-wallis
         if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && grepl("^list\\(", data_name)) {
           l <- eval(.str2lang(x$data.name))
-          names(l) <- paste0("x", 1:length(l))
+          names(l) <- paste0("x", seq_along(l))
           return(l)
         }
 
@@ -976,11 +970,11 @@
           # check if data is a list for kruskal-wallis
         } else if (grepl("^Kruskal-Wallis", x$method) && length(columns) == 1 && is.list(columns[[1]])) {
           l <- columns[[1]]
-          names(l) <- paste0("x", 1:length(l))
+          names(l) <- paste0("x", seq_along(l))
           return(l)
         } else {
           max_len <- max(sapply(columns, length))
-          for (i in 1:length(columns)) {
+          for (i in seq_along(columns)) {
             if (length(columns[[i]]) < max_len) {
               columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
             }

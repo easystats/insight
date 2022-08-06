@@ -102,7 +102,6 @@ safe_deparse <- function(x, ...) {
 }
 
 
-
 # origin_function ------------------------------------
 
 #' Find from which package a function comes from.

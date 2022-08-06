@@ -1,4 +1,10 @@
-#' Numeric Values Formatting
+#' @title Numeric Values Formatting
+#' @name format_value
+#'
+#' @description
+#' `format_value()` converts numeric values into formatted string values2, where
+#' formatting can be something like rounding digits, scientific notation etc.
+#' `format_percent()` is a short-cut for `format_value(as_percent = TRUE)`.
 #'
 #' @param x Numeric value.
 #' @param digits Number of digits for rounding or significant figures. May also
@@ -91,6 +97,16 @@ format_value.factor <- format_value.numeric
 
 #' @export
 format_value.logical <- format_value.numeric
+
+
+
+# shortcut
+
+#' @rdname format_value
+#' @export
+format_percent <- function(x, ...) {
+  format_value(x, ..., as_percent = TRUE)
+}
 
 
 

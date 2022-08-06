@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.17.1.7
+Version: 0.18.0.4
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -57,7 +57,7 @@ License: GPL-3
 URL: https://easystats.github.io/insight/
 BugReports: https://github.com/easystats/insight/issues
 Depends:
-    R (>= 3.4)
+    R (>= 3.5)
 Imports:
     methods,
     stats,
@@ -146,7 +146,6 @@ Suggests:
     rstudioapi,
     sandwich,
     speedglm,
-    spelling,
     splines,
     statmod,
     survey,
@@ -160,6 +159,6 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)

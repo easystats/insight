@@ -1,12 +1,44 @@
-# insight 0.17.1.1
+# insight 0.18.1
+
+## New functions
+
+* `format_percent()` as short-cut for `format_value(as_percent = TRUE)`.
+
+* `is_converged()`, to check whether a mixed model has converged or not.
+
+## Changes to functions
+
+* `format_table()` gains an `exact` argument, to either report exact or rounded
+  Bayes factors.
+
+* `get_predicted()` gets a method for models of class `gamlss` (and thereby,
+  `get_loglikelihood()` now also works for those model classes).
+
+* `get_predicted()` now better handles models of class `polr`, `multinom` and 
+  `rlm`.
+
+## Bug fixes
+
+* Fixed test failures.
+
+* Minor fixes to address changes in other packages.
+
+# insight 0.18.0
 
 ## Breaking changes
 
+* The `ci` argument in `get_predicted()` now defaults to `NULL`. One reason was
+  to make the function faster if confidence intervals are not required, which 
+  was the case for many downstream usages of that function. Please set `ci` 
+  explicitly to compute confidence intervals for predictions.
+  
 * `get_data()` no longer returns logical types for numeric variables that have
   been converted to logicals on-the-fly within formulas (like `y ~ as.logical(x)`).
   Instead, for each numeric variable that was coerced to logical within a formula
   gets a `logical` attribute (set to `TRUE`), and the returned data frame gets
   a `logicals` attribute including all names of affected variables.
+
+* `parameters_table()`, the alias for `format_table()`, was removed.
 
 ## Changes to functions
 
@@ -14,6 +46,19 @@
   where the response was transformed using `log2()` or `log10()`.
 
 ## Bug fixes
+
+* `get_sigma()` for models from package _VGAM_ returned wrong sigma-parameter.
+
+* `find_predictors()` for models from package _fixest_ that contained 
+  interaction terms in the endogenous formula part did not correctly return
+  all instruments.
+
+* Fixed formatting of HTML table footers in `export_table()`.
+
+* Several fixes to `get_predicted()` for models from `mgcv::gam()`.
+
+* The `component` argument in `find_parameters()` for `stanmvreg` models did
+  not accept the `"location"` value.
 
 * `null_model()` did not consider offset-terms if these were specified inside
   formulas.

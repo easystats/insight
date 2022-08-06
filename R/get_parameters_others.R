@@ -302,7 +302,10 @@ get_parameters.marginaleffects <- function(x, summary = FALSE, merge_parameters 
       colnames(out)[1] <- "Parameter"
     }
   } else {
-    out <- as.data.frame(x[!names(x) %in% c("rowid", "type", "std.error", "contrast", "term", "dydx", "statistic", "p.value", "conf.low", "conf.high")])
+    excl <- c("rowid", "type", "std.error", "contrast", "term", "dydx",
+            "statistic", "p.value", "conf.low", "conf.high", "predicted_hi",
+            "predicted_lo", "eps", "marginaleffects_eps")
+    out <- as.data.frame(x[, !names(x) %in% excl, drop = FALSE])
     if ("dydx" %in% colnames(x)) {
       out$Estimate <- x$dydx
     } else {

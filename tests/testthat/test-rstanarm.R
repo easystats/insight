@@ -6,7 +6,6 @@ if (.runThisTest && .runStanTest) {
     requiet("insight") && requiet("lme4") &&
     requiet("BayesFactor") &&
     requiet("rstanarm"))) {
-
     # skip_on_cran()
 
     # defining models ---------------------

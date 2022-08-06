@@ -257,7 +257,7 @@ get_statistic.mhurdle <- function(x,
   cond_pars <- which(grepl("^h2\\.", rownames(s$coefficients)))
   zi_pars <- which(grepl("^h1\\.", rownames(s$coefficients)))
   ip_pars <- which(grepl("^h3\\.", rownames(s$coefficients)))
-  aux_pars <- (1:length(rownames(s$coefficients)))[-c(cond_pars, zi_pars, ip_pars)]
+  aux_pars <- (seq_along(rownames(s$coefficients)))[-c(cond_pars, zi_pars, ip_pars)]
 
   stats$Component[cond_pars] <- "conditional"
   stats$Component[zi_pars] <- "zero_inflated"
@@ -432,7 +432,7 @@ get_statistic.SemiParBIV <- function(x, ...) {
   s <- summary(x)
   s <- compact_list(s[grepl("^tableP", names(s))])
 
-  params <- do.call(rbind, lapply(1:length(s), function(i) {
+  params <- do.call(rbind, lapply(seq_along(s), function(i) {
     out <- as.data.frame(s[[i]])
     out$Parameter <- rownames(out)
     out$Component <- paste0("Equation", i)

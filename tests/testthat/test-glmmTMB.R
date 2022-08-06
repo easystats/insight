@@ -737,7 +737,8 @@ if (requiet("testthat") &&
   mpred <- glmmTMB(
     count ~ mined + (1 | site),
     zi = ~mined,
-    family = poisson, data = Salamanders)
+    family = poisson, data = Salamanders
+  )
 
   test_that("get_predicted with new levels", {
     pr <- get_predicted(mpred, data = head(Salamanders), allow.new.levels = TRUE)
@@ -894,7 +895,6 @@ if (requiet("testthat") &&
 
   if (!osx) {
     test_that("get_predicted", {
-
       # response
       x <- get_predicted(m1, predict = "expectation", verbose = FALSE, include_random = TRUE)
       y <- get_predicted(m1, predict = "response", include_random = TRUE)

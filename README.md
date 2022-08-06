@@ -186,17 +186,20 @@ many different model objects.
 
 ``` r
 library(insight)
-m <- lm(Sepal.Length ~ Species + Petal.Width + Sepal.Width, data = iris)
+m <- lm(
+  Sepal.Length ~ Species + Petal.Width + Sepal.Width,
+  data = iris
+)
 
 dat <- get_data(m)
 pred <- find_predictors(m, flatten = TRUE)
 
 l <- lapply(pred, function(x) {
-    if (is.numeric(dat[[x]])) {
-        mean(dat[[x]])
-    } else {
-        unique(dat[[x]])
-    }
+  if (is.numeric(dat[[x]])) {
+    mean(dat[[x]])
+  } else {
+    unique(dat[[x]])
+  }
 })
 
 names(l) <- pred
@@ -221,8 +224,11 @@ coefficients.
 
 ``` r
 print_params <- function(model) {
-    paste0("My parameters are ", paste0(row.names(summary(model)$coefficients), collapse = ", "),
-        ", thank you for your attention!")
+  paste0(
+    "My parameters are ",
+    paste0(row.names(summary(model)$coefficients), collapse = ", "),
+    ", thank you for your attention!"
+  )
 }
 
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
@@ -243,8 +249,11 @@ the model type.
 
 ``` r
 print_params <- function(model) {
-    paste0("My parameters are ", paste0(insight::find_parameters(model, flatten = TRUE),
-        collapse = ", "), ", thank you for your attention!")
+  paste0(
+    "My parameters are ",
+    paste0(insight::find_parameters(model, flatten = TRUE), collapse = ", "),
+    ", thank you for your attention!"
+  )
 }
 
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
@@ -266,115 +275,116 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 210 model classes are supported.
+Currently, 211 model classes are supported.
 
 ``` r
 supported_models()
 #>   [1] "aareg"                   "afex_aov"               
 #>   [3] "AKP"                     "Anova.mlm"              
-#>   [5] "aov"                     "aovlist"                
-#>   [7] "Arima"                   "averaging"              
-#>   [9] "bamlss"                  "bamlss.frame"           
-#>  [11] "bayesQR"                 "bayesx"                 
-#>  [13] "BBmm"                    "BBreg"                  
-#>  [15] "bcplm"                   "betamfx"                
-#>  [17] "betaor"                  "betareg"                
-#>  [19] "BFBayesFactor"           "bfsl"                   
-#>  [21] "BGGM"                    "bife"                   
-#>  [23] "bifeAPEs"                "bigglm"                 
-#>  [25] "biglm"                   "blavaan"                
-#>  [27] "blrm"                    "bracl"                  
-#>  [29] "brglm"                   "brmsfit"                
-#>  [31] "brmultinom"              "btergm"                 
-#>  [33] "censReg"                 "cgam"                   
-#>  [35] "cgamm"                   "cglm"                   
-#>  [37] "clm"                     "clm2"                   
-#>  [39] "clmm"                    "clmm2"                  
-#>  [41] "clogit"                  "coeftest"               
-#>  [43] "complmrob"               "confusionMatrix"        
-#>  [45] "coxme"                   "coxph"                  
-#>  [47] "coxph.penal"             "coxr"                   
-#>  [49] "cpglm"                   "cpglmm"                 
-#>  [51] "crch"                    "crq"                    
-#>  [53] "crqs"                    "crr"                    
-#>  [55] "dep.effect"              "DirichletRegModel"      
-#>  [57] "drc"                     "eglm"                   
-#>  [59] "elm"                     "epi.2by2"               
-#>  [61] "ergm"                    "feglm"                  
-#>  [63] "feis"                    "felm"                   
-#>  [65] "fitdistr"                "fixest"                 
-#>  [67] "flexsurvreg"             "gam"                    
-#>  [69] "Gam"                     "gamlss"                 
-#>  [71] "gamm"                    "gamm4"                  
-#>  [73] "garch"                   "gbm"                    
-#>  [75] "gee"                     "geeglm"                 
-#>  [77] "glht"                    "glimML"                 
-#>  [79] "glm"                     "Glm"                    
-#>  [81] "glmm"                    "glmmadmb"               
-#>  [83] "glmmPQL"                 "glmmTMB"                
-#>  [85] "glmrob"                  "glmRob"                 
-#>  [87] "glmx"                    "gls"                    
-#>  [89] "gmnl"                    "HLfit"                  
-#>  [91] "htest"                   "hurdle"                 
-#>  [93] "iv_robust"               "ivFixed"                
-#>  [95] "ivprobit"                "ivreg"                  
-#>  [97] "lavaan"                  "lm"                     
-#>  [99] "lm_robust"               "lme"                    
-#> [101] "lmerMod"                 "lmerModLmerTest"        
-#> [103] "lmodel2"                 "lmrob"                  
-#> [105] "lmRob"                   "logistf"                
-#> [107] "logitmfx"                "logitor"                
-#> [109] "LORgee"                  "lqm"                    
-#> [111] "lqmm"                    "lrm"                    
-#> [113] "manova"                  "MANOVA"                 
-#> [115] "marginaleffects"         "marginaleffects.summary"
-#> [117] "margins"                 "maxLik"                 
-#> [119] "mclogit"                 "mcmc"                   
-#> [121] "mcmc.list"               "MCMCglmm"               
-#> [123] "mcp1"                    "mcp12"                  
-#> [125] "mcp2"                    "med1way"                
-#> [127] "mediate"                 "merMod"                 
-#> [129] "merModList"              "meta_bma"               
-#> [131] "meta_fixed"              "meta_random"            
-#> [133] "metaplus"                "mhurdle"                
-#> [135] "mipo"                    "mira"                   
-#> [137] "mixed"                   "MixMod"                 
-#> [139] "mixor"                   "mjoint"                 
-#> [141] "mle"                     "mle2"                   
-#> [143] "mlm"                     "mlogit"                 
-#> [145] "mmlogit"                 "model_fit"              
-#> [147] "multinom"                "mvord"                  
-#> [149] "negbinirr"               "negbinmfx"              
-#> [151] "ols"                     "onesampb"               
-#> [153] "orm"                     "pgmm"                   
-#> [155] "plm"                     "PMCMR"                  
-#> [157] "poissonirr"              "poissonmfx"             
-#> [159] "polr"                    "probitmfx"              
-#> [161] "psm"                     "Rchoice"                
-#> [163] "ridgelm"                 "riskRegression"         
-#> [165] "rjags"                   "rlm"                    
-#> [167] "rlmerMod"                "RM"                     
-#> [169] "rma"                     "rma.uni"                
-#> [171] "robmixglm"               "robtab"                 
-#> [173] "rq"                      "rqs"                    
-#> [175] "rqss"                    "Sarlm"                  
-#> [177] "scam"                    "selection"              
-#> [179] "sem"                     "SemiParBIV"             
-#> [181] "semLm"                   "semLme"                 
-#> [183] "slm"                     "speedglm"               
-#> [185] "speedlm"                 "stanfit"                
-#> [187] "stanmvreg"               "stanreg"                
-#> [189] "summary.lm"              "survfit"                
-#> [191] "survreg"                 "svy_vglm"               
-#> [193] "svychisq"                "svyglm"                 
-#> [195] "svyolr"                  "t1way"                  
-#> [197] "tobit"                   "trimcibt"               
-#> [199] "truncreg"                "vgam"                   
-#> [201] "vglm"                    "wbgee"                  
-#> [203] "wblm"                    "wbm"                    
-#> [205] "wmcpAKP"                 "yuen"                   
-#> [207] "yuend"                   "zcpglm"                 
-#> [209] "zeroinfl"                "zerotrunc"
+#>   [5] "anova.rms"               "aov"                    
+#>   [7] "aovlist"                 "Arima"                  
+#>   [9] "averaging"               "bamlss"                 
+#>  [11] "bamlss.frame"            "bayesQR"                
+#>  [13] "bayesx"                  "BBmm"                   
+#>  [15] "BBreg"                   "bcplm"                  
+#>  [17] "betamfx"                 "betaor"                 
+#>  [19] "betareg"                 "BFBayesFactor"          
+#>  [21] "bfsl"                    "BGGM"                   
+#>  [23] "bife"                    "bifeAPEs"               
+#>  [25] "bigglm"                  "biglm"                  
+#>  [27] "blavaan"                 "blrm"                   
+#>  [29] "bracl"                   "brglm"                  
+#>  [31] "brmsfit"                 "brmultinom"             
+#>  [33] "btergm"                  "censReg"                
+#>  [35] "cgam"                    "cgamm"                  
+#>  [37] "cglm"                    "clm"                    
+#>  [39] "clm2"                    "clmm"                   
+#>  [41] "clmm2"                   "clogit"                 
+#>  [43] "coeftest"                "complmrob"              
+#>  [45] "confusionMatrix"         "coxme"                  
+#>  [47] "coxph"                   "coxph.penal"            
+#>  [49] "coxr"                    "cpglm"                  
+#>  [51] "cpglmm"                  "crch"                   
+#>  [53] "crq"                     "crqs"                   
+#>  [55] "crr"                     "dep.effect"             
+#>  [57] "DirichletRegModel"       "drc"                    
+#>  [59] "eglm"                    "elm"                    
+#>  [61] "epi.2by2"                "ergm"                   
+#>  [63] "feglm"                   "feis"                   
+#>  [65] "felm"                    "fitdistr"               
+#>  [67] "fixest"                  "flexsurvreg"            
+#>  [69] "gam"                     "Gam"                    
+#>  [71] "gamlss"                  "gamm"                   
+#>  [73] "gamm4"                   "garch"                  
+#>  [75] "gbm"                     "gee"                    
+#>  [77] "geeglm"                  "glht"                   
+#>  [79] "glimML"                  "glm"                    
+#>  [81] "Glm"                     "glmm"                   
+#>  [83] "glmmadmb"                "glmmPQL"                
+#>  [85] "glmmTMB"                 "glmrob"                 
+#>  [87] "glmRob"                  "glmx"                   
+#>  [89] "gls"                     "gmnl"                   
+#>  [91] "HLfit"                   "htest"                  
+#>  [93] "hurdle"                  "iv_robust"              
+#>  [95] "ivFixed"                 "ivprobit"               
+#>  [97] "ivreg"                   "lavaan"                 
+#>  [99] "lm"                      "lm_robust"              
+#> [101] "lme"                     "lmerMod"                
+#> [103] "lmerModLmerTest"         "lmodel2"                
+#> [105] "lmrob"                   "lmRob"                  
+#> [107] "logistf"                 "logitmfx"               
+#> [109] "logitor"                 "LORgee"                 
+#> [111] "lqm"                     "lqmm"                   
+#> [113] "lrm"                     "manova"                 
+#> [115] "MANOVA"                  "marginaleffects"        
+#> [117] "marginaleffects.summary" "margins"                
+#> [119] "maxLik"                  "mclogit"                
+#> [121] "mcmc"                    "mcmc.list"              
+#> [123] "MCMCglmm"                "mcp1"                   
+#> [125] "mcp12"                   "mcp2"                   
+#> [127] "med1way"                 "mediate"                
+#> [129] "merMod"                  "merModList"             
+#> [131] "meta_bma"                "meta_fixed"             
+#> [133] "meta_random"             "metaplus"               
+#> [135] "mhurdle"                 "mipo"                   
+#> [137] "mira"                    "mixed"                  
+#> [139] "MixMod"                  "mixor"                  
+#> [141] "mjoint"                  "mle"                    
+#> [143] "mle2"                    "mlm"                    
+#> [145] "mlogit"                  "mmlogit"                
+#> [147] "model_fit"               "multinom"               
+#> [149] "mvord"                   "negbinirr"              
+#> [151] "negbinmfx"               "ols"                    
+#> [153] "onesampb"                "orm"                    
+#> [155] "pgmm"                    "plm"                    
+#> [157] "PMCMR"                   "poissonirr"             
+#> [159] "poissonmfx"              "polr"                   
+#> [161] "probitmfx"               "psm"                    
+#> [163] "Rchoice"                 "ridgelm"                
+#> [165] "riskRegression"          "rjags"                  
+#> [167] "rlm"                     "rlmerMod"               
+#> [169] "RM"                      "rma"                    
+#> [171] "rma.uni"                 "robmixglm"              
+#> [173] "robtab"                  "rq"                     
+#> [175] "rqs"                     "rqss"                   
+#> [177] "Sarlm"                   "scam"                   
+#> [179] "selection"               "sem"                    
+#> [181] "SemiParBIV"              "semLm"                  
+#> [183] "semLme"                  "slm"                    
+#> [185] "speedglm"                "speedlm"                
+#> [187] "stanfit"                 "stanmvreg"              
+#> [189] "stanreg"                 "summary.lm"             
+#> [191] "survfit"                 "survreg"                
+#> [193] "svy_vglm"                "svychisq"               
+#> [195] "svyglm"                  "svyolr"                 
+#> [197] "t1way"                   "tobit"                  
+#> [199] "trimcibt"                "truncreg"               
+#> [201] "vgam"                    "vglm"                   
+#> [203] "wbgee"                   "wblm"                   
+#> [205] "wbm"                     "wmcpAKP"                
+#> [207] "yuen"                    "yuend"                  
+#> [209] "zcpglm"                  "zeroinfl"               
+#> [211] "zerotrunc"
 ```
 
 -   **Didn’t find a model?** [File an

@@ -5,7 +5,6 @@
                                verbose = TRUE,
                                tolerance = 1e-5,
                                model_component = "conditional") {
-
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
   ## version of Jon Lefcheck's code from SEMfit
@@ -17,7 +16,10 @@
 
   if (faminfo$family %in% c("truncated_nbinom1")) {
     if (verbose) {
-      warning(format_message(sprintf("Truncated negative binomial families are currently not supported by `%s`.", name_fun)), call. = FALSE)
+      warning(format_message(sprintf(
+        "Truncated negative binomial families are currently not supported by `%s`.", 
+        name_fun)
+      ), call. = FALSE)
     }
     return(NA)
   }
@@ -170,7 +172,6 @@
                                       name_fun = "get_variances",
                                       verbose = TRUE,
                                       model_component = "conditional") {
-
   # installed?
   check_if_installed("lme4", reason = "to compute variances for mixed models")
 
@@ -225,7 +226,7 @@
     }
 
     vcorr <- compact_list(list(vc1, vc2))
-    names(vcorr) <- c("cond", "zi")[1:length(vcorr)]
+    names(vcorr) <- c("cond", "zi")[seq_along(vcorr)]
 
     vals <- list(
       beta = lme4::fixef(x),
@@ -252,14 +253,14 @@
       vc = vcorr,
       re = list(lme4::ranef(x))
     )
-    names(vals$re) <- re_names[1:length(vals$re)]
+    names(vals$re) <- re_names[seq_along(vals$re)]
 
     # nlme
     # ---------------------------
   } else if (inherits(x, "lme")) {
     re_names <- find_random(x, split_nested = TRUE, flatten = TRUE)
     comp_x <- get_modelmatrix(x)
-    rownames(comp_x) <- 1:nrow(comp_x)
+    rownames(comp_x) <- seq_len(nrow(comp_x))
     if (.is_nested_lme(x)) {
       vals_vc <- .get_nested_lme_varcorr(x)
       vals_re <- lme4::ranef(x)
@@ -303,7 +304,7 @@
     # ---------------------------
   } else if (inherits(x, "brmsfit")) {
     comp_x <- get_modelmatrix(x)
-    rownames(comp_x) <- 1:nrow(comp_x)
+    rownames(comp_x) <- seq_len(nrow(comp_x))
     vc <- lapply(names(lme4::VarCorr(x)), function(i) {
       element <- lme4::VarCorr(x)[[i]]
       if (i != "residual__") {
@@ -385,7 +386,9 @@
 # is supported or not
 .badlink <- function(link, family, verbose = TRUE) {
   if (verbose) {
-    warning(format_message(sprintf("Model link '%s' is not yet supported for the %s distribution.", link, family)), call. = FALSE)
+    warning(format_message(sprintf(
+      "Model link '%s' is not yet supported for the %s distribution.", link, family)
+    ), call. = FALSE)
   }
   return(NA)
 }
@@ -482,14 +485,12 @@
   # and the related link-function
 
   if (faminfo$is_linear && !faminfo$is_tweedie) {
-
     # linear / Gaussian ----
     # ----------------------
 
     dist.variance <- sig^2
   } else {
     if (faminfo$is_betabinomial) {
-
       # beta-binomial ----
       # ------------------
 
@@ -501,7 +502,6 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_binomial) {
-
       # binomial / bernoulli  ----
       # --------------------------
 
@@ -513,7 +513,6 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_count) {
-
       # count  ----
       # -----------
 
@@ -523,7 +522,6 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family %in% c("Gamma", "gamma")) {
-
       # Gamma  ----
       # -----------
 
@@ -536,7 +534,6 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$family == "beta") {
-
       # Beta  ----
       # ----------
 
@@ -545,7 +542,6 @@
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
     } else if (faminfo$is_tweedie) {
-
       # Tweedie  ----
       # -------------
 
@@ -884,8 +880,8 @@
   # make sure we have identical subcomponents between random and
   # fixed effects
   fe <- compact_list(fe[c("conditional", "zero_inflated")])
-  if (length(rs) > length(fe)) rs <- rs[1:length(fe)]
-  if (length(fe) > length(rs)) fe <- fe[1:length(rs)]
+  if (length(rs) > length(fe)) rs <- rs[seq_along(fe)]
+  if (length(fe) > length(rs)) fe <- fe[seq_along(rs)]
 
   all(mapply(function(r, f) all(r %in% f), rs, fe, SIMPLIFY = TRUE))
 }
@@ -941,7 +937,7 @@
       if (length(missig_rnd_slope)) {
         # sanity check
         to_remove <- c()
-        for (j in 1:length(out)) {
+        for (j in seq_along(out)) {
           # identical random slopes might have different names, so
           # we here check if random slopes from correlated and uncorrelated
           # are duplicated (i.e. their difference is 0 - including a tolerance)

@@ -18,15 +18,14 @@ if (requiet("testthat") && requiet("insight")) {
 
 if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
   test_that("get_datagrid - data", {
-
     # Factors
     expect_equal(length(get_datagrid(iris$Species)), 3)
     expect_equal(length(get_datagrid(c("A", "A", "B"))), 2)
-    expect_equal(length(get_datagrid(x = iris$Species, target = "c('versicolor')")), 1)
-    expect_equal(length(get_datagrid(iris$Species, target = "A = c('versicolor')")), 1)
-    expect_equal(length(get_datagrid(c("A", "A", "B"), target = "dupa = 'A'")), 1)
-    expect_equal(length(get_datagrid(iris$Species, target = "['versicolor', 'virginica']")), 2)
-    expect_equal(length(get_datagrid(iris$Species, target = "[versicolor, virginica]")), 2)
+    expect_equal(length(get_datagrid(x = iris$Species, at = "c('versicolor')")), 1)
+    expect_equal(length(get_datagrid(iris$Species, at = "A = c('versicolor')")), 1)
+    expect_equal(length(get_datagrid(c("A", "A", "B"), at = "dupa = 'A'")), 1)
+    expect_equal(length(get_datagrid(iris$Species, at = "['versicolor', 'virginica']")), 2)
+    expect_equal(length(get_datagrid(iris$Species, at = "[versicolor, virginica]")), 2)
 
     # Numerics
     expect_equal(length(get_datagrid(x = iris$Sepal.Length)), 10)
@@ -35,10 +34,10 @@ if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
     expect_equal(min(get_datagrid(x = iris$Sepal.Length, range = "iqr")), as.numeric(quantile(iris$Sepal.Length, 0.025)))
     expect_equal(min(get_datagrid(x = iris$Sepal.Length, range = "hdi")), as.numeric(bayestestR::hdi(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2])
     expect_equal(min(get_datagrid(x = iris$Sepal.Length, range = "eti")), as.numeric(bayestestR::eti(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2])
-    expect_equal(length(get_datagrid(iris$Sepal.Length, target = "c(1, 3, 4)")), 3)
-    expect_equal(length(get_datagrid(iris$Sepal.Length, target = "A = c(1, 3, 4)")), 3)
-    expect_equal(length(get_datagrid(iris$Sepal.Length, target = "[1, 3, 4]")), 3)
-    expect_equal(length(get_datagrid(iris$Sepal.Length, target = "[1, 4]")), 10)
+    expect_equal(length(get_datagrid(iris$Sepal.Length, at = "c(1, 3, 4)")), 3)
+    expect_equal(length(get_datagrid(iris$Sepal.Length, at = "A = c(1, 3, 4)")), 3)
+    expect_equal(length(get_datagrid(iris$Sepal.Length, at = "[1, 3, 4]")), 3)
+    expect_equal(length(get_datagrid(iris$Sepal.Length, at = "[1, 4]")), 10)
     expect_equal(length(get_datagrid(iris$Sepal.Length, range = "sd", length = 10)), 10)
     expect_equal(as.numeric(get_datagrid(iris$Sepal.Length, range = "sd", length = 3)[2]), mean(iris$Sepal.Length))
     expect_equal(as.numeric(get_datagrid(iris$Sepal.Length, range = "mad", length = 4)[2]), median(iris$Sepal.Length))
@@ -75,7 +74,6 @@ if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
 
 if (requiet("testthat") && requiet("insight") && requiet("gamm4") && requiet("glmmTMB") && requiet("mgcv") && requiet("rstanarm")) {
   test_that("get_datagrid - models", {
-
     # GLM
     mod <- glm(Petal.Length ~ Petal.Width * Sepal.Length, data = iris)
     expect_equal(dim(get_datagrid(mod)), c(100, 2))

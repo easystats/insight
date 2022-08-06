@@ -26,6 +26,11 @@
 #'   encompassed in square brackets (else in parentheses).
 #' @param preserve_attributes Logical, if `TRUE`, preserves all attributes
 #'   from the input data frame.
+#' @param exact Formatting for Bayes factor columns, in case the provided data
+#'   frame contains such a column (i.e. columns named `"BF"` or `"log_BF"`).
+#'   For `exact = TRUE`, very large or very small values are then either reported
+#'   with a scientific format (e.g., 4.24e5), else as truncated values (as "> 1000"
+#'   and "< 1/1000").
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
@@ -64,10 +69,9 @@ format_table <- function(x,
                          rope_digits = 2,
                          zap_small = FALSE,
                          preserve_attributes = FALSE,
+                         exact = TRUE,
                          verbose = TRUE,
                          ...) {
-
-
   # sanity check
   if (is.null(x) || (is.data.frame(x) && nrow(x) == 0)) {
     if (isTRUE(verbose)) {
@@ -170,7 +174,8 @@ format_table <- function(x,
     rope_digits = rope_digits,
     zap_small = zap_small,
     ci_width = ci_width,
-    ci_brackets = ci_brackets
+    ci_brackets = ci_brackets,
+    exact = exact
   )
 
 
@@ -201,9 +206,6 @@ format_table <- function(x,
 }
 
 
-#' @rdname format_table
-#' @export
-parameters_table <- format_table
 
 
 
@@ -363,7 +365,7 @@ parameters_table <- format_table
 
 
     # Get characters to align the CI
-    for (i in 1:length(ci_colname)) {
+    for (i in seq_along(ci_colname)) {
       x[[ci_low[i]]] <- format_ci(x[[ci_low[i]]], x[[ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
       # rename lower CI into final CI column
       ci_position <- which(names(x) == ci_low[i])
@@ -399,7 +401,7 @@ parameters_table <- format_table
     }
 
     # Get characters to align the CI
-    for (i in 1:length(other_ci_colname)) {
+    for (i in seq_along(other_ci_colname)) {
       x[[other_ci_low[i]]] <- format_ci(x[[other_ci_low[i]]], x[[other_ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
       # rename lower CI into final CI column
       other_ci_position <- which(names(x) == other_ci_low[i])
@@ -495,11 +497,17 @@ parameters_table <- format_table
 
 
 
-.format_bayes_columns <- function(x, stars, rope_digits = 2, zap_small, ci_width = "auto", ci_brackets = TRUE) {
+.format_bayes_columns <- function(x,
+                                  stars,
+                                  rope_digits = 2,
+                                  zap_small,
+                                  ci_width = "auto",
+                                  ci_brackets = TRUE,
+                                  exact = TRUE) {
   # Indices
-  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars)
+  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars, exact = exact)
   if ("log_BF" %in% names(x)) {
-    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = stars)
+    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = stars, exact = exact)
     x$log_BF <- NULL
   }
   if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = stars)
@@ -570,7 +578,7 @@ parameters_table <- format_table
 
 
 .replace_words <- function(x, target, replacement) {
-  for (i in 1:length(x)) {
+  for (i in seq_along(x)) {
     if (grepl(target, x[i], fixed = TRUE)) {
       x[i] <- gsub(target, replacement, x[i], fixed = TRUE)
     }

@@ -5,7 +5,7 @@
 \alias{get_predicted_ci.default}
 \title{Confidence intervals around predicted values}
 \usage{
-get_predicted_ci(x, predictions = NULL, ...)
+get_predicted_ci(x, ...)
 
 \method{get_predicted_ci}{default}(
   x,
@@ -18,6 +18,7 @@ get_predicted_ci(x, predictions = NULL, ...)
   dispersion_method = "sd",
   vcov = NULL,
   vcov_args = NULL,
+  verbose = TRUE,
   ...
 )
 }
@@ -25,11 +26,11 @@ get_predicted_ci(x, predictions = NULL, ...)
 \item{x}{A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).}
 
+\item{...}{Other argument to be passed, for instance to \code{get_predicted_ci()}.}
+
 \item{predictions}{A vector of predicted values (as obtained by
 \code{stats::fitted()}, \code{stats::predict()} or
 \code{\link[=get_predicted]{get_predicted()}}).}
-
-\item{...}{Other argument to be passed, for instance to \code{get_predicted_ci()}.}
 
 \item{data}{An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
@@ -37,7 +38,9 @@ to predict. If omitted, the data used to fit the model is used. Visualization ma
 \item{se}{Numeric vector of standard error of predicted values. If \code{NULL},
 standard errors are calculated based on the variance-covariance matrix.}
 
-\item{ci}{The interval level (default \code{0.95}, i.e., \verb{95\%} CI).}
+\item{ci}{The interval level. Default is \code{NULL}, to be fast even for larger
+models. Set the interval level to an explicit value, e.g. \code{0.95}, for \verb{95\%}
+CI).}
 
 \item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction
 intervals show the range that likely contains the value of a new
@@ -58,8 +61,8 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 \itemize{
 \item \code{NULL} uses the default method, which varies based on the model type.
 \item Most frequentist models: \code{"normal"} (default).
-\item Bayesian models: "quantile" (default), "hdi", "eti".
-\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, \code{"kenward"}.
+\item Bayesian models:  \code{"quantile"}  (default), \code{"hdi"}, \code{"eti"}, and \code{"spi"}.
+\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, and \code{"kenward"}.
 }}
 
 \item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary: \code{"sd"} or \code{"mad"}.}
@@ -80,7 +83,12 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 \item{vcov_args}{List of arguments to be passed to the function identified by
 the \code{vcov} argument. This function is typically supplied by the \strong{sandwich}
 or \strong{clubSandwich} packages. Please refer to their documentation (e.g.,
-\code{?sandwich::vcovHAC}) to see the list of available arguments.}
+\code{?sandwich::vcovHAC}) to see the list of available arguments. If no estimation
+type (argument \code{type}) is given, the default type for \code{"HC"} (or \code{"vcovHC"})
+equals the default from the \strong{sandwich} package; for type \code{"CR"} (or
+\code{"vcoCR"}), the default is set to \code{"CR3"}.}
+
+\item{verbose}{Toggle warnings.}
 }
 \description{
 Confidence intervals around predicted values

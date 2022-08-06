@@ -17,9 +17,10 @@ if (requiet("testthat") && requiet("insight") && requiet("BayesFactor")) {
 
 
 if (requiet("testthat") && requiet("insight") && requiet("tweedie") && requiet("statmod")) {
+  unloadNamespace("glmmTMB")
   d <- data.frame(x = 1:20, y = rgamma(20, shape = 5))
   # Fit a poisson generalized linear model with identity link
-  model <- glm(y ~ x, data = d, family = tweedie(var.power = 1, link.power = 1))
+  model <- glm(y ~ x, data = d, family = statmod::tweedie(var.power = 1, link.power = 1))
   mi <- insight::model_info(model)
   test_that("model_info-tweedie", {
     expect_true(mi$is_tweedie)

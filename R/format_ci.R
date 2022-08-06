@@ -42,7 +42,6 @@ format_ci <- function(CI_low,
                       width_high = width,
                       missing = "",
                       zap_small = FALSE) {
-
   # check proper defaults
   if (isTRUE(brackets)) {
     ci_brackets <- c("[", "]")

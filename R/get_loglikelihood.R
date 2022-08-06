@@ -59,7 +59,6 @@ get_loglikelihood.lmerMod <- function(x,
                                       check_response = FALSE,
                                       verbose = TRUE,
                                       ...) {
-
   # use defaults for REML?
   if ((missing(estimator) || is.null(estimator)) && missing(REML)) {
     lls <- stats::logLik(x)
@@ -128,8 +127,6 @@ get_loglikelihood.afex_aov <- function(x, ...) {
                                   check_response = FALSE,
                                   verbose = TRUE,
                                   ...) {
-
-
   # Replace arg if compatibility base R is activated
   if (REML) estimator <- "REML"
   if (is.null(estimator)) estimator <- "ML"
@@ -182,7 +179,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   w <- get_weights(x, null_as_ones = TRUE)
   dev <- stats::deviance(x)
   disp <- dev / sum(w)
-  predicted <- get_predicted(x, verbose = verbose)
+  predicted <- get_predicted(x, ci = NULL, verbose = verbose)
 
   # Make adjustment for binomial models with matrix as input
   if (info$is_binomial) {

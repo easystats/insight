@@ -6,7 +6,6 @@ invisible(sapply(pkgs, requiet))
 # =========================================================================
 
 test_that("get_modelmatrix - iv_robust", {
-
   data(Kmenta, package = "ivreg")
   x <- iv_robust(Q ~ P + D | D + F + A, se_type = "stata", data = Kmenta)
 
@@ -26,7 +25,6 @@ test_that("get_modelmatrix - iv_robust", {
 # ====================================================================
 
 test_that("get_modelmatrix - ivreg", {
-
   data(Kmenta, package = "ivreg")
   x <- ivreg(Q ~ P + D | D + F + A, data = Kmenta)
 
@@ -46,9 +44,8 @@ test_that("get_modelmatrix - ivreg", {
 # ====================================================================
 
 test_that("get_modelmatrix - lm_robust", {
-
   set.seed(15)
-  N = 1:40
+  N <- 1:40
   dat <- data.frame(
     N = N,
     y = rpois(N, lambda = 4),

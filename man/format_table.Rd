@@ -2,7 +2,6 @@
 % Please edit documentation in R/format_table.R
 \name{format_table}
 \alias{format_table}
-\alias{parameters_table}
 \title{Parameter table formatting}
 \usage{
 format_table(
@@ -17,22 +16,7 @@ format_table(
   rope_digits = 2,
   zap_small = FALSE,
   preserve_attributes = FALSE,
-  verbose = TRUE,
-  ...
-)
-
-parameters_table(
-  x,
-  pretty_names = TRUE,
-  stars = FALSE,
-  digits = 2,
-  ci_width = "auto",
-  ci_brackets = TRUE,
-  ci_digits = 2,
-  p_digits = 3,
-  rope_digits = 2,
-  zap_small = FALSE,
-  preserve_attributes = FALSE,
+  exact = TRUE,
   verbose = TRUE,
   ...
 )
@@ -68,6 +52,12 @@ places than \code{digits} are printed in scientific notation.}
 
 \item{preserve_attributes}{Logical, if \code{TRUE}, preserves all attributes
 from the input data frame.}
+
+\item{exact}{Formatting for Bayes factor columns, in case the provided data
+frame contains such a column (i.e. columns named \code{"BF"} or \code{"log_BF"}).
+For \code{exact = TRUE}, very large or very small values are then either reported
+with a scientific format (e.g., 4.24e5), else as truncated values (as "> 1000"
+and "< 1/1000").}
 
 \item{verbose}{Toggle messages and warnings.}
 

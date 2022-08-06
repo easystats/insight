@@ -4,7 +4,6 @@ if (.runThisTest) {
   if (suppressWarnings(requiet("testthat") &&
     requiet("insight") &&
     requiet("brms"))) {
-
     # Model fitting -----------------------------------------------------------
 
     m1 <- suppressWarnings(insight::download_model("brms_mixed_6"))
@@ -20,8 +19,8 @@ if (.runThisTest) {
     test_that("get_predicted.brmsfit: ordinal dv", {
       skip_if_not_installed("bayestestR")
 
-      pred1 <- get_predicted(m8)
-      pred2 <- get_predicted(m8, ci_method = "hdi")
+      pred1 <- get_predicted(m8, ci = .95)
+      pred2 <- get_predicted(m8, ci_method = "hdi", ci = .95)
       expect_true(inherits(pred1, "get_predicted"))
       expect_true(inherits(pred1, "data.frame"))
       expect_true(all(c("Row", "Response") %in% colnames(pred1)))
@@ -37,7 +36,7 @@ if (.runThisTest) {
       expect_false(mean(pred1$CI_high == pred2$CI_high) > 0.1) # most CI bounds are different
 
       # compare to manual predictions
-      pred3 <- get_predicted(m8, centrality_function = stats::median)
+      pred3 <- get_predicted(m8, centrality_function = stats::median, ci = .95)
       manual <- rstantools::posterior_epred(m8)
       manual <- apply(manual[, , 1], 2, median)
       expect_equal(pred3$Predicted[1:32], manual)
