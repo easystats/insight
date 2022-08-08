@@ -1,7 +1,6 @@
 if (requiet("testthat") &&
   requiet("insight") &&
-  requiet("quantreg") &&
-  requiet("tripack")) {
+  requiet("quantreg")) {
   data("CobarOre")
   set.seed(123)
   CobarOre$w <- rnorm(nrow(CobarOre))
