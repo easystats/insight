@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest) {
+if (.runThisTest && utils::packageVersion("robustlmm") >= "3.0.1") {
   if (requiet("testthat") &&
     requiet("insight") && requiet("lme4") && requiet("robustlmm")) {
     data(sleepstudy)
