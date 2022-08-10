@@ -1,1 +1,1 @@
-This release fixes CRAN check errors.
+This release fixes CRAN check errors. Please cancel the submussion of insight 0.18.1, as this submission fixes issues with packages that have non-standard licenses.
