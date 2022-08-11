@@ -52,8 +52,10 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width) {
   lsub <- 0
   tmp_string <- string
 
+  # these chars are allowed inside a token, e.g. "{.i allowedchars}"
+  allowed_chars <- "([a-zA-Z:\\./\\+-]*)"
   # supported tokens, create regex pattern
-  token_pattern <- sprintf("\\{\\.%s (.*)\\}", c("b", "i", "url", "pkg"))
+  token_pattern <- sprintf("\\{\\.%s %s\\}", c("b", "i", "url", "pkg"), allowed_chars)
   # for line breaks, we "protect" these patterns
   token_protected <- sprintf("\\{\\.%s_\\1\\}", c("b", "i", "url", "pkg"))
 
@@ -100,27 +102,31 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width) {
     for (i in which(which_tokens)) {
       if (token_pattern[i] == "\\{\\.b (.*)\\}") {
         # bold formatting
-        s1 <- gsub("(.*)\\{\\.b_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\1", string)
-        s2 <- gsub("(.*)\\{\\.b_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\2", string)
-        s3 <- gsub("(.*)\\{\\.b_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\3", string)
+        pattern <- paste0("(.*)\\{\\.b_", allowed_chars, "\\}(.*)")
+        s1 <- gsub(pattern, "\\1", string)
+        s2 <- gsub(pattern, "\\2", string)
+        s3 <- gsub(pattern, "\\3", string)
         s2 <- .bold(s2)
       } else if (token_pattern[i] == "\\{\\.i (.*)\\}") {
         # italic formatting
-        s1 <- gsub("(.*)\\{\\.i_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\1", string)
-        s2 <- gsub("(.*)\\{\\.i_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\2", string)
-        s3 <- gsub("(.*)\\{\\.i_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\3", string)
+        pattern <- paste0("(.*)\\{\\.i_", allowed_chars, "\\}(.*)")
+        s1 <- gsub(pattern, "\\1", string)
+        s2 <- gsub(pattern, "\\2", string)
+        s3 <- gsub(pattern, "\\3", string)
         s2 <- .italic(s2)
       } else if (token_pattern[i] == "\\{\\.url (.*)\\}") {
         # url formatting
-        s1 <- gsub("(.*)\\{\\.url_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\1", string)
-        s2 <- gsub("(.*)\\{\\.url_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\2", string)
-        s3 <- gsub("(.*)\\{\\.url_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\3", string)
+        pattern <- paste0("(.*)\\{\\.url_", allowed_chars, "\\}(.*)")
+        s1 <- gsub(pattern, "\\1", string)
+        s2 <- gsub(pattern, "\\2", string)
+        s3 <- gsub(pattern, "\\3", string)
         s2 <- .italic(.blue(paste0("<", s2, ">")))
       } else if (token_pattern[i] == "\\{\\.pkg (.*)\\}") {
-        # url formatting
-        s1 <- gsub("(.*)\\{\\.pkg_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\1", string)
-        s2 <- gsub("(.*)\\{\\.pkg_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\2", string)
-        s3 <- gsub("(.*)\\{\\.pkg_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\3", string)
+        # package formatting
+        pattern <- paste0("(.*)\\{\\.pkg_", allowed_chars, "\\}(.*)")
+        s1 <- gsub(pattern, "\\1", string)
+        s2 <- gsub(pattern, "\\2", string)
+        s3 <- gsub(pattern, "\\3", string)
         s2 <- .blue(s2)
       }
       string <- paste0(s1, s2, s3)
