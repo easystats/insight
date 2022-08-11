@@ -21,7 +21,8 @@
 #' @param x A statistical model (can also be a data.frame, in which case the
 #'   second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which
-#'   to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using [get_datagrid()].
+#'   to predict. If omitted, the data used to fit the model is used. Visualization
+#'   matrices can be generated using [get_datagrid()].
 #' @param predict string or `NULL`
 #' * `"link"` returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).
 #' * `"expectation"` (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).

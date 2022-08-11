@@ -985,7 +985,7 @@
         if (all(grepl("(.*)\\$(.*)", data_name)) && length(data_name) == length(colnames(d))) {
           colnames(d) <- gsub("(.*)\\$(.*)", "\\2", data_name)
         } else if (ncol(d) > 2) {
-          colnames(d) <- paste0("x", 1:ncol(d))
+          colnames(d) <- paste0("x", seq_len(ncol(d)))
         } else if (ncol(d) == 2) {
           colnames(d) <- c("x", "y")
         } else {
