@@ -33,7 +33,8 @@ second argument has to be a model).}
 \code{\link[=get_predicted]{get_predicted()}}).}
 
 \item{data}{An optional data frame in which to look for variables with which
-to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
+to predict. If omitted, the data used to fit the model is used. Visualization
+matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
 
 \item{se}{Numeric vector of standard error of predicted values. If \code{NULL},
 standard errors are calculated based on the variance-covariance matrix.}

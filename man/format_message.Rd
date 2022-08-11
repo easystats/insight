@@ -21,6 +21,13 @@ Inserts line breaks into a longer message or warning string.
 Line length is adjusted to maximum length of the console, if the width
 can be accessed. By default, new lines are indented by two whitespace.
 }
+\details{
+There is an experimental formatting feature implemented in this function.
+You can use \verb{\{.b text\}} for bold and \verb{\{.i text\}} formatting. Furthermore,
+\verb{\{.url www.url.com\}} formats the string as URL (i.e., enclosing URL in
+\code{<} and \code{>}, blue color and italic font style), while \verb{\{.pkg packagename\}}
+formats the text in blue color.
+}
 \examples{
 msg <- format_message("Much too long string for just one line, I guess!",
   line_length = 15
@@ -34,4 +41,12 @@ msg <- format_message("Much too long string for just one line, I guess!",
   line_length = 30
 )
 message(msg)
+
+# Caution, experimental!
+msg <- format_message(
+  "This is {.i italic}, visit {.url easystats.github.io/easystats}",
+  line_length = 30
+)
+message(msg)
+
 }

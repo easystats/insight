@@ -9,6 +9,13 @@
 #' @param ... Further strings that will be concatenated as indented new lines.
 #' @param line_length Numeric, the maximum length of a line.
 #'
+#' @details
+#' There is an experimental formatting feature implemented in this function.
+#' You can use `{.b text}` for bold and `{.i text}` formatting. Furthermore,
+#' `{.url www.url.com}` formats the string as URL (i.e., enclosing URL in
+#' `<` and `>`, blue color and italic font style), while `{.pkg packagename}`
+#' formats the text in blue color.
+#'
 #' @return A formatted string.
 #' @examples
 #' msg <- format_message("Much too long string for just one line, I guess!",
@@ -23,6 +30,14 @@
 #'   line_length = 30
 #' )
 #' message(msg)
+#'
+#' # Caution, experimental!
+#' msg <- format_message(
+#'   "This is {.i italic}, visit {.url easystats.github.io/easystats}",
+#'   line_length = 30
+#' )
+#' message(msg)
+#'
 #' @export
 format_message <- function(string, ..., line_length = 0.9 * options()$width) {
   if (is.null(line_length) || is.infinite(line_length) || line_length < 1) {

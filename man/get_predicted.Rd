@@ -83,7 +83,8 @@ second argument has to be a model).}
 \item{...}{Other argument to be passed, for instance to \code{get_predicted_ci()}.}
 
 \item{data}{An optional data frame in which to look for variables with which
-to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
+to predict. If omitted, the data used to fit the model is used. Visualization
+matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
 
 \item{predict}{string or \code{NULL}
 \itemize{
