@@ -92,11 +92,9 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width) {
 
   # remove tokens from temporary string, so we can detect the "real" line length
   if (!is.null(which_tokens)) {
-    for (i in token_pattern[which_tokens]) {
-      tmp_string <- gsub(i, "\\1", tmp_string)
-    }
-    # protect tokens from line break
     for (i in which(which_tokens)) {
+      tmp_string <- gsub(token_pattern[i], "\\1", tmp_string)
+      # protect tokens from line break
       string <- gsub(token_pattern[i], token_protected[i], string)
     }
   } else {
