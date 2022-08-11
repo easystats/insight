@@ -26,7 +26,12 @@ There is an experimental formatting feature implemented in this function.
 You can use \verb{\{.b text\}} for bold and \verb{\{.i text\}} formatting. Furthermore,
 \verb{\{.url www.url.com\}} formats the string as URL (i.e., enclosing URL in
 \code{<} and \code{>}, blue color and italic font style), while \verb{\{.pkg packagename\}}
-formats the text in blue color.
+formats the text in blue color. This features has some limitations:
+it's hard to detect the each line length for multiple lines when the string
+contains formatting tags. Thus, it can happen that lines are wrapped at an
+earlier length than expected. Furthermore, if you have multiple words in a
+format tag (`{.b one two three}``), a line break might occur inside this tag,
+and the formatting no longer works (messing up the message-string).
 }
 \examples{
 msg <- format_message("Much too long string for just one line, I guess!",
@@ -42,7 +47,7 @@ msg <- format_message("Much too long string for just one line, I guess!",
 )
 message(msg)
 
-# Caution, experimental!
+# Caution, experimental! See 'Details'
 msg <- format_message(
   "This is {.i italic}, visit {.url easystats.github.io/easystats}",
   line_length = 30
