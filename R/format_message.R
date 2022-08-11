@@ -50,14 +50,80 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width) {
   line_length <- round(line_length)
   line_separator <- "\\1\n  "
   lsub <- 0
-  pattern <- paste("(.{1,", line_length, "})(\\s|$)", sep = "")
+  tmp_string <- string
 
-  if (line_length > 0 && nchar(string) > line_length) {
+  # check if string contains any formatting token
+  token_pattern <- sprintf("\\{\\.%s (.*)\\}", c("b", "i", "url", "pkg"))
+  token_protected <- sprintf("\\{\\.%s_\\1\\}", c("b", "i", "url", "pkg"))
+  tokens <- .find_tokens(string)
+
+  # check ansi-colors are supported by system. if not, remove tokens from string
+  if (!.supports_color()) {
+    if (!is.null(tokens)) {
+      string <- gsub(token_pattern, "\\1", string)
+    }
+    tokens <- NULL
+  }
+
+  # remove tokens from temporary string, so we can detect the "real" line length
+  if (!is.null(tokens)) {
+    for (i in token_pattern[tokens]) {
+      tmp_string <- gsub(i, "\\1", tmp_string)
+    }
+  } else {
+    tmp_string <- string
+  }
+
+  # check if line breaks are required
+  if (line_length > 0 && nchar(tmp_string) > line_length) {
+    # protect tokens from line break
+    if (!is.null(tokens)) {
+      for (i in which(tokens)) {
+        string <- gsub(token_pattern[i], token_protected[i], string)
+      }
+    }
+
+    # insert line breaks into string at specified length
+    pattern <- paste("(.{1,", line_length, "})(\\s|$)", sep = "")
     string <- gsub(pattern, line_separator, string)
+
+    # remove last line break
     l <- nchar(string)
     lc <- substr(string, l - lsub, l)
     if (lc == "\n") {
       string <- substr(string, 0, l - (lsub + 1))
+    }
+
+    # convert tokens into formatting
+    if (!is.null(tokens)) {
+      for (i in which(tokens)) {
+        if (token_pattern[i] == "\\{\\.b (.*)\\}") {
+          # bold formatting
+          s1 <- gsub("(.*)\\{\\.b_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\1", string)
+          s2 <- gsub("(.*)\\{\\.b_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\2", string)
+          s3 <- gsub("(.*)\\{\\.b_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\3", string)
+          s2 <- .bold(s2)
+        } else if (token_pattern[i] == "\\{\\.i (.*)\\}") {
+          # italic formatting
+          s1 <- gsub("(.*)\\{\\.i_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\1", string)
+          s2 <- gsub("(.*)\\{\\.i_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\2", string)
+          s3 <- gsub("(.*)\\{\\.i_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\3", string)
+          s2 <- .italic(s2)
+        } else if (token_pattern[i] == "\\{\\.url (.*)\\}") {
+          # url formatting
+          s1 <- gsub("(.*)\\{\\.url_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\1", string)
+          s2 <- gsub("(.*)\\{\\.url_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\2", string)
+          s3 <- gsub("(.*)\\{\\.url_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\3", string)
+          s2 <- .italic(.blue(paste0("<", s2, ">")))
+        } else if (token_pattern[i] == "\\{\\.pkg (.*)\\}") {
+          # url formatting
+          s1 <- gsub("(.*)\\{\\.pkg_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\1", string)
+          s2 <- gsub("(.*)\\{\\.pkg_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\2", string)
+          s3 <- gsub("(.*)\\{\\.pkg_([a-zA-Z:\\./\\+-]*)\\}(.*)", "\\3", string)
+          s2 <- .blue(s2)
+        }
+        string <- paste0(s1, s2, s3)
+      }
     }
   }
 
@@ -71,4 +137,17 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width) {
   }
 
   string
+}
+
+
+
+# check whether a string line contains one of the supported format tags
+.find_tokens <- function(string) {
+  tokens <- c("{.b ", "{.i ", "{.url ", "{.pkg ")
+  matches <- sapply(tokens, grepl, string, fixed = TRUE)
+  if (any(matches)) {
+    matches
+  } else {
+    return(NULL)
+  }
 }
