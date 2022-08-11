@@ -100,28 +100,28 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width) {
   # convert tokens into formatting
   if (!is.null(which_tokens)) {
     for (i in which(which_tokens)) {
-      if (token_pattern[i] == "\\{\\.b (.*)\\}") {
+      if (token_pattern[i] == token_pattern[1]) {
         # bold formatting
         pattern <- paste0("(.*)\\{\\.b_", allowed_chars, "\\}(.*)")
         s1 <- gsub(pattern, "\\1", string)
         s2 <- gsub(pattern, "\\2", string)
         s3 <- gsub(pattern, "\\3", string)
         s2 <- .bold(s2)
-      } else if (token_pattern[i] == "\\{\\.i (.*)\\}") {
+      } else if (token_pattern[i] == token_pattern[2]) {
         # italic formatting
         pattern <- paste0("(.*)\\{\\.i_", allowed_chars, "\\}(.*)")
         s1 <- gsub(pattern, "\\1", string)
         s2 <- gsub(pattern, "\\2", string)
         s3 <- gsub(pattern, "\\3", string)
         s2 <- .italic(s2)
-      } else if (token_pattern[i] == "\\{\\.url (.*)\\}") {
+      } else if (token_pattern[i] == token_pattern[3]) {
         # url formatting
         pattern <- paste0("(.*)\\{\\.url_", allowed_chars, "\\}(.*)")
         s1 <- gsub(pattern, "\\1", string)
         s2 <- gsub(pattern, "\\2", string)
         s3 <- gsub(pattern, "\\3", string)
         s2 <- .italic(.blue(paste0("<", s2, ">")))
-      } else if (token_pattern[i] == "\\{\\.pkg (.*)\\}") {
+      } else if (token_pattern[i] == token_pattern[4]) {
         # package formatting
         pattern <- paste0("(.*)\\{\\.pkg_", allowed_chars, "\\}(.*)")
         s1 <- gsub(pattern, "\\1", string)
