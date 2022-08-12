@@ -18,12 +18,12 @@
 #' `<` and `>`, blue color and italic font style)
 #' * `{.pkg packagename}` formats the text in blue color.
 #'
-#' This features has some limitations: it's hard to detect the each line length
-#' for multiple lines when the string contains formatting tags. Thus, it can
-#' happen that lines are wrapped at an earlier length than expected. Furthermore,
-#' if you have multiple words in a format tag (`{.b one two three}`), a line
-#' break might occur inside this tag, and the formatting no longer works
-#' (messing up the message-string).
+#' This features has some limitations: it's hard to detect the exact length for
+#' each line when the string has multiple lines (after line breaks) and the
+#' string contains formatting tags. Thus, it can happen that lines are wrapped at
+#' an earlier length than expected. Furthermore, if you have multiple words in a
+#' format tag (`{.b one two three}`), a line break might occur inside this tag,
+#' and the formatting no longer works (messing up the message-string).
 #'
 #' @return A formatted string.
 #' @examples
