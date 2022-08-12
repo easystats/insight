@@ -45,30 +45,34 @@
 
 # regular colors -------------------------------------
 
-.black <- function(x) {
+.black <- function(x, bg = FALSE) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[30m", x[!is.na(x)], "\033[39m")
+    style <- ifelse(isTRUE(bg), "4", "3")
+    x[!is.na(x)] <- paste0("\033[", style, "0m", x[!is.na(x)], "\033[", style, "9m")
   }
   x
 }
 
-.blue <- function(x) {
+.blue <- function(x, bg = FALSE) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[34m", x[!is.na(x)], "\033[39m")
+    style <- ifelse(isTRUE(bg), "4", "3")
+    x[!is.na(x)] <- paste0("\033[", style, "4m", x[!is.na(x)], "\033[", style, "9m")
   }
   x
 }
 
-.cyan <- function(x) {
+.cyan <- function(x, bg = FALSE) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[36m", x[!is.na(x)], "\033[39m")
+    style <- ifelse(isTRUE(bg), "4", "3")
+    x[!is.na(x)] <- paste0("\033[", style, "6m", x[!is.na(x)], "\033[", style, "9m")
   }
   x
 }
 
-.green <- function(x) {
+.green <- function(x, bg = FALSE) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[32m", x[!is.na(x)], "\033[39m")
+    style <- ifelse(isTRUE(bg), "4", "3")
+    x[!is.na(x)] <- paste0("\033[", style, "2m", x[!is.na(x)], "\033[", style, "9m")
   }
   x
 }
@@ -80,30 +84,34 @@
   x
 }
 
-.red <- function(x) {
+.red <- function(x, bg = FALSE) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[31m", x[!is.na(x)], "\033[39m")
+    style <- ifelse(isTRUE(bg), "4", "3")
+    x[!is.na(x)] <- paste0("\033[", style, "1m", x[!is.na(x)], "\033[", style, "9m")
   }
   x
 }
 
-.violet <- function(x) {
+.violet <- function(x, bg = FALSE) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[35m", x[!is.na(x)], "\033[39m")
+    style <- ifelse(isTRUE(bg), "4", "3")
+    x[!is.na(x)] <- paste0("\033[", style, "5m", x[!is.na(x)], "\033[", style, "9m")
   }
   x
 }
 
-.white <- function(x) {
+.white <- function(x, bg = FALSE) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[37m", x[!is.na(x)], "\033[39m")
+    style <- ifelse(isTRUE(bg), "4", "3")
+    x[!is.na(x)] <- paste0("\033[", style, "7m", x[!is.na(x)], "\033[", style, "9m")
   }
   x
 }
 
-.yellow <- function(x) {
+.yellow <- function(x, bg = FALSE) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[33m", x[!is.na(x)], "\033[39m")
+    style <- ifelse(isTRUE(bg), "4", "3")
+    x[!is.na(x)] <- paste0("\033[", style, "3m", x[!is.na(x)], "\033[", style, "9m")
   }
   x
 }
@@ -201,6 +209,14 @@
     bviolet = .bright_violet(x),
     bcyan = .bright_cyan(x),
     bwhite = .bright_white(x),
+    bg_red = .red(x, bg = TRUE),
+    bg_green = .green(x, bg = TRUE),
+    bg_yellow = .yellow(x, bg = TRUE),
+    bg_blue = .blue(x, bg = TRUE),
+    bg_violet = .violet(x, bg = TRUE),
+    bg_cyan = .cyan(x, bg = TRUE),
+    bg_white = .white(x, bg = TRUE),
+    bg_black = .black(x, bg = TRUE),
     bold = .bold(x),
     italic = .italic(x),
     warning(paste0("`color` ", colour, " not yet supported."))
@@ -215,5 +231,7 @@
   }
 
   colour %in% c("red", "yellow", "green", "blue", "violet", "cyan", "grey", "bold",
-                "italic", "bred", "bgreen", "byellow", "bblue", "bviolet", "bcyan", "bwhite")
+                "italic", "bred", "bgreen", "byellow", "bblue", "bviolet", "bcyan",
+                "bwhite", "bg_red", "bg_green", "bg_yellow", "bg_blue", "bg_violet",
+                "bg_cyan", "bg_white", "bg_black")
 }

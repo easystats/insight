@@ -5,6 +5,9 @@
 * `format_message()` gets some additional formatting features. See 'Details'
   in `?format_message` for more information and some current limitations.
 
+* `print_color()` and `color_text()` now support bright variants of colors and
+  background colors.
+
 # insight 0.18.2
 
 ## New functions

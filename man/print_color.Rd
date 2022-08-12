@@ -25,7 +25,8 @@ color_theme()
 May be one of \code{"white"}, \code{"black"}, \code{"red"}, \code{"yellow"}, \code{"green"}, \code{"blue"},
 \code{"violet"}, \code{"cyan"} or \code{"grey"}. Bright variants of colors are available
 by adding the prefix \code{"b"} (or \code{"br_"} or \code{"bright_"}), e.g. \code{"bred"} (or
-\code{"br_red"} resp. \code{"bright_red"}). Formatting is also possible with \code{"bold"}
+\code{"br_red"} resp. \code{"bright_red"}). Background colors can be set by adding
+the prefix \code{"bg_"} (e.g. \code{"bg_red"}). Formatting is also possible with \code{"bold"}
 or \code{"italic"}.}
 }
 \value{
