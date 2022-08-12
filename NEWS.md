@@ -1,4 +1,11 @@
-# insight 0.18.1
+# insight 0.18.3
+
+## Changes to functions
+
+* `format_message()` gets some additional formatting features. See 'Details'
+  in `?format_message` for more information and some current limitations.
+
+# insight 0.18.2
 
 ## New functions
 
