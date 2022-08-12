@@ -2,7 +2,8 @@
 #'
 #' Create a reference matrix, useful for visualisation, with evenly spread and
 #' combined values. Usually used to make generate predictions using [get_predicted()].
-#' See this [vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) for a tutorial on how to create a visualisation matrix using this function.
+#' See this [vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
+#' for a tutorial on how to create a visualisation matrix using this function.
 #'
 #' @param x An object from which to construct the reference grid.
 #' @param at Can be `"all"`, a character vector or list of named elements, indicating
@@ -20,11 +21,12 @@
 #'   variables, `length` can also be a vector of different values (see examples).
 #' @param range If `"range"` (default), will use the minimum and maximum of the
 #'   original data vector as end-points (min and max). If an interval type is specified,
-#'   such as [`"iqr"`][IQR()], [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or [`"eti"`][bayestestR::eti()], it will spread the values within
-#'   that range (the default CI width is `95%` but this can be changed by adding for instance
+#'   such as [`"iqr"`][IQR()], [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or
+#'   [`"eti"`][bayestestR::eti()], it will spread the values within that range
+#'   (the default CI width is `95%` but this can be changed by adding for instance
 #'   `ci = 0.90`. See [IQR()] and [bayestestR::ci()]. This can be useful to have
-#'   more robust change and skipping extreme values. If [`"sd"`][sd()] or [`"mad"`][mad()], it will
-#'   spread by this dispersion index around the mean or the median, respectively.
+#'   more robust change and skipping extreme values. If [`"sd"`][sd()] or [`"mad"`][mad()],
+#'   it will spread by this dispersion index around the mean or the median, respectively.
 #'   If the `length` argument is an even number (e.g., `4`), it will have one more
 #'   step on the positive side (i.e., `-1, 0, +1, +2`). The result is a named vector.
 #'   See examples.
@@ -84,11 +86,10 @@
 #'   # Standardization and unstandardization
 #'   data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
 #'   data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
-#'   # TODO: uncomment when datawizard > 0.3.1 is out
-#'   # datawizard::standardize(data, select = "Sepal.Length")
-#'   # data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
-#'   # data
-#'   # datawizard::unstandardize(data, select = "Sepal.Length")
+#'   datawizard::standardize(data, select = "Sepal.Length")
+#'   data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+#'   data
+#'   datawizard::unstandardize(data, select = "Sepal.Length")
 #'
 #'
 #'   # Multiple variables are of interest, creating a combination --------------
@@ -148,7 +149,8 @@ get_datagrid.data.frame <- function(x,
     # check for interactions in "at"
     at <- .extract_at_interactions(at)
 
-    # Valid at argument
+    # Validate at argument ============================
+
     if (all(at == "all")) {
       at <- colnames(x)
     }
@@ -177,7 +179,7 @@ get_datagrid.data.frame <- function(x,
       }
     })
 
-    # Deal with targets ==========================================================
+    # Deal with targets =======================================================
 
     if (is.character(at)) {
       # Find eventual user-defined specifications for each target
@@ -236,7 +238,7 @@ get_datagrid.data.frame <- function(x,
     if (preserve_range == TRUE && length(facs) > 0 && length(nums) > 0) {
       # Loop through the combinations of factors
       facs_combinations <- expand.grid(facs)
-      for (i in 1:nrow(facs_combinations)) {
+      for (i in seq_len(nrow(facs_combinations))) {
         # Query subset of original dataset
         subset <- x[.data_match(x, to = facs_combinations[i, , drop = FALSE]), , drop = FALSE]
         idx <- .data_match(targets, to = facs_combinations[i, , drop = FALSE])
@@ -503,9 +505,9 @@ get_datagrid.logical <- get_datagrid.character
     }
 
     # If there is an equal sign
-    if (grepl("length.out =", at)) {
+    if (grepl("length.out =", at, fixed = TRUE)) {
       expression <- at # This is an edgecase
-    } else if (grepl("=", at)) {
+    } else if (grepl("=", at, fixed = TRUE)) {
       parts <- trim_ws(unlist(strsplit(at, "=", fixed = TRUE))) # Split and clean
       varname <- parts[1] # left-hand part is probably the name of the variable
       at <- parts[2] # right-hand part is the real target
@@ -602,7 +604,7 @@ get_datagrid.default <- function(x,
 
   # Deal with intercept-only models
   response <- find_response(x)
-  if (include_response == FALSE) {
+  if (isFALSE(include_response)) {
     data <- data[!colnames(data) %in% response]
     if (ncol(data) < 1) {
       stop(format_message("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."), call. = FALSE)
@@ -625,7 +627,10 @@ get_datagrid.default <- function(x,
     }
   }
 
+  # user wants to include all predictors?
   if (all(at == "all")) at <- colnames(data)
+
+  # exluce smooth terms?
   if (isFALSE(include_smooth) || identical(include_smooth, "fixed")) {
     s <- find_smooth(x, flatten = TRUE)
     if (!is.null(s)) {
@@ -730,7 +735,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
   if (!is.data.frame(to)) {
     to <- as.data.frame(to)
   }
-  idx <- 1:nrow(x)
+  idx <- seq_len(nrow(x))
   for (col in names(to)) {
     if (col %in% names(x)) {
       idx <- idx[x[[col]][idx] %in% to[[col]]]
@@ -750,6 +755,21 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
   # matching column names - then try retrieving terms instead
   if (is.null(data)) {
     data <- tryCatch(get_data(x)[find_terms(x, "all", flatten = TRUE)], error = function(e) NULL)
+  }
+
+  # brute force - use all!
+  if (is.null(data)) {
+    cols <- unique(
+      find_terms(x, "all", flatten = TRUE),
+      find_variables(x, "all", flatten = TRUE)
+    )
+    data <- tryCatch(
+      {
+        d <- get_data(x)
+        d[intersect(colnames(d), cols)]
+      },
+      error = function(e) NULL
+    )
   }
 
   # still found no data - stop here

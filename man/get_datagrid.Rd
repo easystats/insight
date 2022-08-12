@@ -81,11 +81,12 @@ variables, \code{length} can also be a vector of different values (see examples)
 
 \item{range}{If \code{"range"} (default), will use the minimum and maximum of the
 original data vector as end-points (min and max). If an interval type is specified,
-such as \code{\link[=IQR]{"iqr"}}, \code{\link[bayestestR:ci]{"ci"}}, \code{\link[bayestestR:hdi]{"hdi"}} or \code{\link[bayestestR:eti]{"eti"}}, it will spread the values within
-that range (the default CI width is \verb{95\%} but this can be changed by adding for instance
+such as \code{\link[=IQR]{"iqr"}}, \code{\link[bayestestR:ci]{"ci"}}, \code{\link[bayestestR:hdi]{"hdi"}} or
+\code{\link[bayestestR:eti]{"eti"}}, it will spread the values within that range
+(the default CI width is \verb{95\%} but this can be changed by adding for instance
 \code{ci = 0.90}. See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}. This can be useful to have
-more robust change and skipping extreme values. If \code{\link[=sd]{"sd"}} or \code{\link[=mad]{"mad"}}, it will
-spread by this dispersion index around the mean or the median, respectively.
+more robust change and skipping extreme values. If \code{\link[=sd]{"sd"}} or \code{\link[=mad]{"mad"}},
+it will spread by this dispersion index around the mean or the median, respectively.
 If the \code{length} argument is an even number (e.g., \code{4}), it will have one more
 step on the positive side (i.e., \verb{-1, 0, +1, +2}). The result is a named vector.
 See examples.}
@@ -113,7 +114,8 @@ Reference grid data frame.
 \description{
 Create a reference matrix, useful for visualisation, with evenly spread and
 combined values. Usually used to make generate predictions using \code{\link[=get_predicted]{get_predicted()}}.
-See this \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{vignette} for a tutorial on how to create a visualisation matrix using this function.
+See this \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{vignette}
+for a tutorial on how to create a visualisation matrix using this function.
 }
 \examples{
 # Datagrids of variables and dataframes =====================================
@@ -137,11 +139,10 @@ if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE
   # Standardization and unstandardization
   data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
   data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
-  # TODO: uncomment when datawizard > 0.3.1 is out
-  # datawizard::standardize(data, select = "Sepal.Length")
-  # data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
-  # data
-  # datawizard::unstandardize(data, select = "Sepal.Length")
+  datawizard::standardize(data, select = "Sepal.Length")
+  data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+  data
+  datawizard::unstandardize(data, select = "Sepal.Length")
 
 
   # Multiple variables are of interest, creating a combination --------------
