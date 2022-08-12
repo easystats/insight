@@ -129,12 +129,12 @@ You can use following tags:</p><ul><li><p><code>{.b text}</code> for bold format
 <li><p><code>{.url www.url.com}</code> formats the string as URL (i.e., enclosing URL in
 <code>&lt;</code> and <code>&gt;</code>, blue color and italic font style)</p></li>
 <li><p><code>{.pkg packagename}</code> formats the text in blue color.</p></li>
-</ul><p>This features has some limitations: it's hard to detect the each line length
-for multiple lines when the string contains formatting tags. Thus, it can
-happen that lines are wrapped at an earlier length than expected. Furthermore,
-if you have multiple words in a format tag (<code>{.b one two three}</code>), a line
-break might occur inside this tag, and the formatting no longer works
-(messing up the message-string).</p>
+</ul><p>This features has some limitations: it's hard to detect the exact length for
+each line when the string has multiple lines (after line breaks) and the
+string contains formatting tags. Thus, it can happen that lines are wrapped at
+an earlier length than expected. Furthermore, if you have multiple words in a
+format tag (<code>{.b one two three}</code>), a line break might occur inside this tag,
+and the formatting no longer works (messing up the message-string).</p>
     </div>
 
     <div class="section level2">
