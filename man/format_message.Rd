@@ -23,15 +23,21 @@ can be accessed. By default, new lines are indented by two whitespace.
 }
 \details{
 There is an experimental formatting feature implemented in this function.
-You can use \verb{\{.b text\}} for bold and \verb{\{.i text\}} formatting. Furthermore,
-\verb{\{.url www.url.com\}} formats the string as URL (i.e., enclosing URL in
-\code{<} and \code{>}, blue color and italic font style), while \verb{\{.pkg packagename\}}
-formats the text in blue color. This features has some limitations:
-it's hard to detect the each line length for multiple lines when the string
-contains formatting tags. Thus, it can happen that lines are wrapped at an
-earlier length than expected. Furthermore, if you have multiple words in a
-format tag (\verb{\{.b one two three\}}), a line break might occur inside this tag,
-and the formatting no longer works (messing up the message-string).
+You can use following tags:
+\itemize{
+\item \verb{\{.b text\}} for bold formatting
+\item \verb{\{.i text\}} to use italic font style
+\item \verb{\{.url www.url.com\}} formats the string as URL (i.e., enclosing URL in
+\code{<} and \code{>}, blue color and italic font style)
+\item \verb{\{.pkg packagename\}} formats the text in blue color.
+}
+
+This features has some limitations: it's hard to detect the each line length
+for multiple lines when the string contains formatting tags. Thus, it can
+happen that lines are wrapped at an earlier length than expected. Furthermore,
+if you have multiple words in a format tag (\verb{\{.b one two three\}}), a line
+break might occur inside this tag, and the formatting no longer works
+(messing up the message-string).
 }
 \examples{
 msg <- format_message("Much too long string for just one line, I guess!",
