@@ -43,6 +43,14 @@
 }
 
 
+# regular colors -------------------------------------
+
+.black <- function(x) {
+  if (.supports_color()) {
+    x[!is.na(x)] <- paste0("\033[30m", x[!is.na(x)], "\033[39m")
+  }
+  x
+}
 
 .blue <- function(x) {
   if (.supports_color()) {
@@ -51,23 +59,9 @@
   x
 }
 
-.bold <- function(x) {
+.cyan <- function(x) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[1m", x[!is.na(x)], "\033[22m")
-  }
-  x
-}
-
-.italic <- function(x) {
-  if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[3m", x[!is.na(x)], "\033[23m")
-  }
-  x
-}
-
-.red <- function(x) {
-  if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[31m", x[!is.na(x)], "\033[39m")
+    x[!is.na(x)] <- paste0("\033[36m", x[!is.na(x)], "\033[39m")
   }
   x
 }
@@ -79,9 +73,23 @@
   x
 }
 
-.black <- function(x) {
+.grey <- function(x) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[30m", x[!is.na(x)], "\033[39m")
+    x[!is.na(x)] <- paste0("\033[90m", x[!is.na(x)], "\033[39m")
+  }
+  x
+}
+
+.red <- function(x) {
+  if (.supports_color()) {
+    x[!is.na(x)] <- paste0("\033[31m", x[!is.na(x)], "\033[39m")
+  }
+  x
+}
+
+.violet <- function(x) {
+  if (.supports_color()) {
+    x[!is.na(x)] <- paste0("\033[35m", x[!is.na(x)], "\033[39m")
   }
   x
 }
@@ -100,39 +108,99 @@
   x
 }
 
-.violet <- function(x) {
+# font styles ---------------------------
+
+.bold <- function(x) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[35m", x[!is.na(x)], "\033[39m")
+    x[!is.na(x)] <- paste0("\033[1m", x[!is.na(x)], "\033[22m")
   }
   x
 }
 
-.cyan <- function(x) {
+.italic <- function(x) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[36m", x[!is.na(x)], "\033[39m")
+    x[!is.na(x)] <- paste0("\033[3m", x[!is.na(x)], "\033[23m")
   }
   x
 }
 
-.grey <- function(x) {
+# bright colors ---------------------------------
+
+.bright_blue <- function(x) {
   if (.supports_color()) {
-    x[!is.na(x)] <- paste0("\033[90m", x[!is.na(x)], "\033[39m")
+    x[!is.na(x)] <- paste0("\033[94m", x[!is.na(x)], "\033[39m")
   }
   x
 }
 
+.bright_cyan <- function(x) {
+  if (.supports_color()) {
+    x[!is.na(x)] <- paste0("\033[96m", x[!is.na(x)], "\033[39m")
+  }
+  x
+}
+
+.bright_green <- function(x) {
+  if (.supports_color()) {
+    x[!is.na(x)] <- paste0("\033[92m", x[!is.na(x)], "\033[39m")
+  }
+  x
+}
+
+.bright_red <- function(x) {
+  if (.supports_color()) {
+    x[!is.na(x)] <- paste0("\033[91m", x[!is.na(x)], "\033[39m")
+  }
+  x
+}
+
+.bright_violet <- function(x) {
+  if (.supports_color()) {
+    x[!is.na(x)] <- paste0("\033[95m", x[!is.na(x)], "\033[39m")
+  }
+  x
+}
+
+.bright_white <- function(x) {
+  if (.supports_color()) {
+    x[!is.na(x)] <- paste0("\033[97m", x[!is.na(x)], "\033[39m")
+  }
+  x
+}
+
+.bright_yellow <- function(x) {
+  if (.supports_color()) {
+    x[!is.na(x)] <- paste0("\033[93m", x[!is.na(x)], "\033[39m")
+  }
+  x
+}
+
+
+# tools -----------------------------------
 
 .colour <- function(colour = "red", x) {
+  # replace "bright" suffixes to a generic color code
+  if (grepl("^(bright_|br_)", colour)) {
+    colour <- gsub("^(bright_|br_)", "b", colour)
+  }
+
   switch(colour,
-    red = .red(x),
-    yellow = .yellow(x),
-    green = .green(x),
-    blue = .blue(x),
     black = .black(x),
-    white = .white(x),
+    red = .red(x),
+    green = .green(x),
+    yellow = .yellow(x),
+    blue = .blue(x),
     violet = .violet(x),
     cyan = .cyan(x),
+    white = .white(x),
     grey = .grey(x),
+    bred = .brigh_red(x),
+    bgreen = .bright_green(x),
+    byellow = .bright_yellow(x),
+    bblue = .bright_blue(x),
+    bviolet = .bright_violet(x),
+    bcyan = .bright_cyan(x),
+    bwhite = .bright_white(x),
     bold = .bold(x),
     italic = .italic(x),
     warning(paste0("`color` ", colour, " not yet supported."))
@@ -141,5 +209,11 @@
 
 
 .is_valid_colour <- function(colour) {
-  colour %in% c("red", "yellow", "green", "blue", "violet", "cyan", "grey", "bold", "italic")
+  # replace "bright" suffixes to a generic color code
+  if (grepl("^(bright_|br_)", colour)) {
+    colour <- gsub("^(bright_|br_)", "b", colour)
+  }
+
+  colour %in% c("red", "yellow", "green", "blue", "violet", "cyan", "grey", "bold",
+                "italic", "bred", "bgreen", "byellow", "bblue", "bviolet", "bcyan", "bwhite")
 }
