@@ -5,6 +5,9 @@
 * `format_message()` gets some additional formatting features. See 'Details'
   in `?format_message` for more information and some current limitations.
 
+* `format_message()` gets a `indention` argument, to specify indention string
+  for subsequent lines.
+
 * `print_color()` and `color_text()` now support bright variants of colors and
   background colors.
 

@@ -8,6 +8,10 @@
 #' @param string A string.
 #' @param ... Further strings that will be concatenated as indented new lines.
 #' @param line_length Numeric, the maximum length of a line.
+#' @param indention Character vector. If further lines are specified in `...`,
+#' a user-defined indention can be specified for subsequent lines. Defaults to
+#' `"  "` (two white spaces), hence for each start of the line after the first
+#' line, two white space characters are inserted.
 #'
 #' @details
 #' There is an experimental formatting feature implemented in this function.
@@ -40,6 +44,15 @@
 #' )
 #' message(msg)
 #'
+#' msg <- format_message("Much too long string for just one line, I guess!",
+#'   "First new line",
+#'   "Second new line",
+#'   "(not indented)",
+#'   line_length = 30,
+#'   indention = ""
+#' )
+#' message(msg)
+#'
 #' # Caution, experimental! See 'Details'
 #' msg <- format_message(
 #'   "This is {.i italic}, visit {.url easystats.github.io/easystats}",
@@ -48,7 +61,7 @@
 #' message(msg)
 #'
 #' @export
-format_message <- function(string, ..., line_length = 0.9 * options()$width) {
+format_message <- function(string, ..., line_length = 0.9 * options()$width, indention = "  ") {
   if (is.null(line_length) || is.infinite(line_length) || line_length < 1) {
     line_length <- 70
   }
@@ -60,7 +73,7 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width) {
 
   if (length(further_lines)) {
     further_lines <- lapply(further_lines, function(i) {
-      .wrap_message_line(string = i, line_length = line_length, indention = "  ")
+      .wrap_message_line(string = i, line_length = line_length, indention = indention)
     })
     string <- paste0(c(string, unlist(further_lines)), collapse = "\n")
   }
@@ -145,7 +158,7 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width) {
     }
   }
 
-  # remove trailing newline
+  # remove trailing white space
   if (grepl("\\n  $", string)) {
     string <- gsub("\\n  $", "", string)
   }
