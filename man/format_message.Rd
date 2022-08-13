@@ -4,12 +4,7 @@
 \alias{format_message}
 \title{Format messages and warnings}
 \usage{
-format_message(
-  string,
-  ...,
-  line_length = 0.9 * options()$width,
-  indention = "  "
-)
+format_message(string, ..., line_length = 0.9 * options()$width, indent = "  ")
 }
 \arguments{
 \item{string}{A string.}
@@ -18,8 +13,8 @@ format_message(
 
 \item{line_length}{Numeric, the maximum length of a line.}
 
-\item{indention}{Character vector. If further lines are specified in \code{...},
-a user-defined indention can be specified for subsequent lines. Defaults to
+\item{indent}{Character vector. If further lines are specified in \code{...}, a
+user-defined string can be specified to indent subsequent lines. Defaults to
 \code{"  "} (two white spaces), hence for each start of the line after the first
 line, two white space characters are inserted.}
 }
@@ -68,7 +63,7 @@ msg <- format_message("Much too long string for just one line, I guess!",
   "Second new line",
   "(not indented)",
   line_length = 30,
-  indention = ""
+  indent = ""
 )
 message(msg)
 

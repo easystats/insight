@@ -8,8 +8,8 @@
 #' @param string A string.
 #' @param ... Further strings that will be concatenated as indented new lines.
 #' @param line_length Numeric, the maximum length of a line.
-#' @param indention Character vector. If further lines are specified in `...`,
-#' a user-defined indention can be specified for subsequent lines. Defaults to
+#' @param indent Character vector. If further lines are specified in `...`, a
+#' user-defined string can be specified to indent subsequent lines. Defaults to
 #' `"  "` (two white spaces), hence for each start of the line after the first
 #' line, two white space characters are inserted.
 #'
@@ -49,7 +49,7 @@
 #'   "Second new line",
 #'   "(not indented)",
 #'   line_length = 30,
-#'   indention = ""
+#'   indent = ""
 #' )
 #' message(msg)
 #'
@@ -61,7 +61,7 @@
 #' message(msg)
 #'
 #' @export
-format_message <- function(string, ..., line_length = 0.9 * options()$width, indention = "  ") {
+format_message <- function(string, ..., line_length = 0.9 * options()$width, indent = "  ") {
   if (is.null(line_length) || is.infinite(line_length) || line_length < 1) {
     line_length <- 70
   }
@@ -73,7 +73,7 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width, ind
 
   if (length(further_lines)) {
     further_lines <- lapply(further_lines, function(i) {
-      .wrap_message_line(string = i, line_length = line_length, indention = indention)
+      .wrap_message_line(string = i, line_length = line_length, indent = indent)
     })
     string <- paste0(c(string, unlist(further_lines)), collapse = "\n")
   }
@@ -83,7 +83,7 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width, ind
 
 
 
-.wrap_message_line <- function(string, line_length, indention = NULL) {
+.wrap_message_line <- function(string, line_length, indent = NULL) {
   line_length <- round(line_length)
   line_separator <- "\\1\n  "
   lsub <- 0
@@ -163,8 +163,8 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width, ind
     string <- gsub("\\n  $", "", string)
   }
 
-  if (!is.null(indention)) {
-    string <- paste0(indention, string)
+  if (!is.null(indent)) {
+    string <- paste0(indent, string)
   }
 
   string
