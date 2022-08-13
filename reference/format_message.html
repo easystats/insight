@@ -14,7 +14,7 @@ can be accessed. By default, new lines are indented by two whitespace."><meta pr
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,7 +98,12 @@ can be accessed. By default, new lines are indented by two whitespace.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_message</span><span class="op">(</span><span class="va">string</span>, <span class="va">...</span>, line_length <span class="op">=</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">width</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_message</span><span class="op">(</span></span>
+<span>  <span class="va">string</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  line_length <span class="op">=</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">width</span>,</span>
+<span>  indention <span class="op">=</span> <span class="st">"  "</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -113,6 +118,13 @@ can be accessed. By default, new lines are indented by two whitespace.</p>
 
 <dt>line_length</dt>
 <dd><p>Numeric, the maximum length of a line.</p></dd>
+
+
+<dt>indention</dt>
+<dd><p>Character vector. If further lines are specified in <code>...</code>,
+a user-defined indention can be specified for subsequent lines. Defaults to
+<code>"  "</code> (two white spaces), hence for each start of the line after the first
+line, two white space characters are inserted.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -160,6 +172,20 @@ and the formatting no longer works (messing up the message-string).</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   First new line</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Second new line</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   (both indented)</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">format_message</span><span class="op">(</span><span class="st">"Much too long string for just one line, I guess!"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"First new line"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"Second new line"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"(not indented)"</span>,</span></span>
+<span class="r-in"><span>  line_length <span class="op">=</span> <span class="fl">30</span>,</span></span>
+<span class="r-in"><span>  indention <span class="op">=</span> <span class="st">""</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Much too long string for just</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   one line, I guess!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> First new line</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Second new line</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (not indented)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Caution, experimental! See 'Details'</span></span></span>
 <span class="r-in"><span><span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">format_message</span><span class="op">(</span></span></span>
