@@ -22,10 +22,10 @@
 #'   - a string with assignments, e.g. `at = "Sepal.Length = 2"` or
 #'   `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
 #'   and double quotes to assign strings within strings.
-#'   There is a special handling of assignments with _brackets_, i.e. values
-#'   defined inside `[` and `]`.
 #'
-#'   For **numeric** variables, the value(s) inside the brackets should either be
+#'   There is a special handling of assignments with _brackets_, i.e. values
+#'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
+#'   the brackets should either be
 #'   - two values, indicating minum and maximung (e.g. `at = "Sepal.Length = [0, 5]`),
 #'   for which a range of length `length` (evenly spread from given minimum to
 #'   maximum) is created.

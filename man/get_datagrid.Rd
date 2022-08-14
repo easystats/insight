@@ -63,11 +63,11 @@ values, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}.
 \item a string with assignments, e.g. \code{at = "Sepal.Length = 2"} or
 \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
 and double quotes to assign strings within strings.
-There is a special handling of assignments with \emph{brackets}, i.e. values
-defined inside \code{[} and \verb{]}.
 }
 
-For \strong{numeric} variables, the value(s) inside the brackets should either be
+There is a special handling of assignments with \emph{brackets}, i.e. values
+defined inside \code{[} and \verb{]}.For \strong{numeric} variables, the value(s) inside
+the brackets should either be
 \itemize{
 \item two values, indicating minum and maximung (e.g. \verb{at = "Sepal.Length = [0, 5]}),
 for which a range of length \code{length} (evenly spread from given minimum to
