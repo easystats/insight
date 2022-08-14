@@ -150,13 +150,41 @@ or <code>range</code> to control the spread of numeric variables.).</p></dd>
 
 
 <dt>at</dt>
-<dd><p>Can be <code>"all"</code>, a character vector or list of named elements, indicating
-the predictors of interest (focal predictors). Can also contain assignments
-(as named list, e.g. <code>at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))</code>,
-or as string, e.g. <code>at = "Sepal.Length = 2"</code> or
+<dd><p>Indicate at which values <em>focal predictors</em> (variables) should be
+represented. If not specified otherwise, representative values for numeric
+variables or predictors are evenly distributed from the minimum to the maximum,
+with a total number of <code>length</code> values covering that range (see 'Examples').
+Possible options for <code>at</code> are:</p><ul><li><p><code>"all"</code>, which will include all variables or predictors.</p></li>
+<li><p>a character vector of one or more variable or predictor names, like
+<code>c("Species", "Sepal.Width")</code>, which will create a grid of all combinations
+of unique values. For factors, will use all levels, for numeric variables,
+will use a range of length <code>length</code> (evenly spread from minimum to maximum)
+and for character vectors, will use all values.</p></li>
+<li><p>a list of named elements, indicating focal predictors and their representative
+values, e.g. <code>at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))</code>.</p></li>
+<li><p>a string with assignments, e.g. <code>at = "Sepal.Length = 2"</code> or
 <code>at = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single
-and double quotes to assign strings within strings). The remaining variables
-will be fixed.</p></dd>
+and double quotes to assign strings within strings.
+There is a special handling of assignments with <em>brackets</em>, i.e. values
+defined inside <code>[</code> and <code>]</code>.</p></li>
+</ul><p>For <strong>numeric</strong> variables, the value(s) inside the brackets should either be</p><ul><li><p>two values, indicating minum and maximung (e.g. <code>at = "Sepal.Length = [0, 5]</code>),
+for which a range of length <code>length</code> (evenly spread from given minimum to
+maximum) is created.</p></li>
+<li><p>more than two numeric values <code>at = "Sepal.Length = [2,3,4,5]"</code>, in which
+case these values are used as representative values.</p></li>
+<li><p>a "token" that create pre-defined representative values:</p><ul><li><p>for mean and -/+ 1 SD around the mean: <code>"x = [sd]"</code></p></li>
+<li><p>for median and -/+ 1 MAD around the median: <code>"x = [mad]"</code></p></li>
+<li><p>for terciles, including minimum and maximum: <code>"x = [terciles]"</code></p></li>
+<li><p>for terciles, excluding minimum and maximum: <code>"x = [terciles2]"</code></p></li>
+<li><p>for quartiles, inccluding minimum and maximum: <code>"x = [quartiles]"</code></p></li>
+<li><p>for quartiles, excluding minimum and maximum: <code>"x = [quartiles2]"</code></p></li>
+<li><p>for 0 and the maximum value: <code>"x = [zeromax]"</code></p></li>
+</ul></li>
+</ul><p>For <strong>factors</strong> variables, the value(s) inside the brackets should indicate
+one or more factor levels, like <code>at = "Species = [setosa, versicolor]"</code>.
+<strong>Note</strong>: the <code>length</code> argument will be ignored when using brackets-tokens.</p>
+<p>The remaining variables not specified in <code>at</code> will be fixed (see also arguments
+<code>factors</code> and <code>numerics</code>).</p></dd>
 
 
 <dt>factors</dt>
