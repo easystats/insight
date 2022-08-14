@@ -46,13 +46,52 @@ get_datagrid(x, ...)
 \item{...}{Arguments passed to or from other methods (for instance, \code{length}
 or \code{range} to control the spread of numeric variables.).}
 
-\item{at}{Can be \code{"all"}, a character vector or list of named elements, indicating
-the predictors of interest (focal predictors). Can also contain assignments
-(as named list, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))},
-or as string, e.g. \code{at = "Sepal.Length = 2"} or
+\item{at}{Indicate at which values \emph{focal predictors} (variables) should be
+represented. If not specified otherwise, representative values for numeric
+variables or predictors are evenly distributed from the minimum to the maximum,
+with a total number of \code{length} values covering that range (see 'Examples').
+Possible options for \code{at} are:
+\itemize{
+\item \code{"all"}, which will include all variables or predictors.
+\item a character vector of one or more variable or predictor names, like
+\code{c("Species", "Sepal.Width")}, which will create a grid of all combinations
+of unique values. For factors, will use all levels, for numeric variables,
+will use a range of length \code{length} (evenly spread from minimum to maximum)
+and for character vectors, will use all values.
+\item a list of named elements, indicating focal predictors and their representative
+values, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}.
+\item a string with assignments, e.g. \code{at = "Sepal.Length = 2"} or
 \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
-and double quotes to assign strings within strings). The remaining variables
-will be fixed.}
+and double quotes to assign strings within strings.
+There is a special handling of assignments with \emph{brackets}, i.e. values
+defined inside \code{[} and \verb{]}.
+}
+
+For \strong{numeric} variables, the value(s) inside the brackets should either be
+\itemize{
+\item two values, indicating minum and maximung (e.g. \verb{at = "Sepal.Length = [0, 5]}),
+for which a range of length \code{length} (evenly spread from given minimum to
+maximum) is created.
+\item more than two numeric values \code{at = "Sepal.Length = [2,3,4,5]"}, in which
+case these values are used as representative values.
+\item a "token" that create pre-defined representative values:
+\itemize{
+\item for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
+\item for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
+\item for terciles, including minimum and maximum: \code{"x = [terciles]"}
+\item for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
+\item for quartiles, inccluding minimum and maximum: \code{"x = [quartiles]"}
+\item for quartiles, excluding minimum and maximum: \code{"x = [quartiles2]"}
+\item for 0 and the maximum value: \code{"x = [zeromax]"}
+}
+}
+
+For \strong{factors} variables, the value(s) inside the brackets should indicate
+one or more factor levels, like \code{at = "Species = [setosa, versicolor]"}.
+\strong{Note}: the \code{length} argument will be ignored when using brackets-tokens.
+
+The remaining variables not specified in \code{at} will be fixed (see also arguments
+\code{factors} and \code{numerics}).}
 
 \item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the
 reference level), \code{"mode"} (set at the most common level) or \code{"all"} to
