@@ -422,7 +422,7 @@ get_datagrid.double <- get_datagrid.numeric
   # If Range is a dispersion (e.g., SD or MAD)
   if (range %in% c("sd", "mad")) {
     spread <- -floor((length - 1) / 2):ceiling((length - 1) / 2)
-    if (range %in% c("sd")) {
+    if (range == "sd") {
       disp <- stats::sd(x, na.rm = TRUE)
       center <- mean(x, na.rm = TRUE)
       labs <- ifelse(sign(spread) == -1, paste(spread, "SD"),
