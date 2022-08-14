@@ -31,13 +31,14 @@
 #'   maximum) is created.
 #'   - more than two numeric values `at = "Sepal.Length = [2,3,4,5]"`, in which
 #'   case these values are used as representative values.
-#'   - a "token" that create pre-defined representative values:
+#'   - a "token" that creates pre-defined representative values:
 #'     - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
 #'     - for median and -/+ 1 MAD around the median: `"x = [mad]"`
 #'     - for terciles, including minimum and maximum: `"x = [terciles]"`
 #'     - for terciles, excluding minimum and maximum: `"x = [terciles2]"`
-#'     - for quartiles, inccluding minimum and maximum: `"x = [quartiles]"`
+#'     - for quartiles, including minimum and maximum: `"x = [quartiles]"`
 #'     - for quartiles, excluding minimum and maximum: `"x = [quartiles2]"`
+#'     - for minimum and maximum value: `"x = [minmax]"`
 #'     - for 0 and the maximum value: `"x = [zeromax]"`
 #'
 #'   For **factors** variables, the value(s) inside the brackets should indicate
@@ -620,7 +621,7 @@ get_datagrid.logical <- get_datagrid.character
         # Numeric
         # If one, might be a shortcut
         if (length(parts) == 1) {
-          shortcuts <- c("meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax", "terciles", "terciles2")
+          shortcuts <- c("meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax", "minmax", "terciles", "terciles2")
           if (parts %in% shortcuts) {
             if (parts %in% c("meansd", "sd")) {
               center <- mean(x, na.rm = TRUE)
@@ -640,6 +641,8 @@ get_datagrid.logical <- get_datagrid.character
               expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")")
             } else if (parts == "zeromax") {
               expression <- paste0("c(0,", max(x, na.rm = TRUE), ")")
+            } else if (parts == "minmax") {
+              expression <- paste0("c(", min(x, na.rm = TRUE), ",", max(x, na.rm = TRUE), ")")
             }
           } else if (is.numeric(parts)) {
             expression <- parts
