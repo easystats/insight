@@ -523,7 +523,9 @@ get_datagrid.logical <- get_datagrid.character
       if (!is.na(varname)) {
         x <- x[[varname]]
       } else {
-        stop(format_message("Couldn't find which variable were selected in `at`. Check spelling and specification."), call. = FALSE)
+        stop(format_message(
+          "Couldn't find which variable were selected in `at`. Check spelling and specification."
+        ), call. = FALSE)
       }
     }
 
@@ -557,7 +559,9 @@ get_datagrid.logical <- get_datagrid.character
           parts <- as.numeric(parts)
           expression <- paste0("c(", paste0(parts, collapse = ", "), ")")
         } else {
-          stop(format_message(paste0("The `at` argument (", at, ") should indicate the minimum and the maximum.")), call. = FALSE)
+          stop(format_message(
+            paste0("The `at` argument (", at, ") should indicate the minimum and the maximum.")
+          ), call. = FALSE)
         }
       }
       # Else, try to directly eval the content
@@ -572,7 +576,9 @@ get_datagrid.logical <- get_datagrid.character
           eval(parse(text = at))
         },
         error = function(r) {
-          stop(format_message(paste0("The `at` argument (`", original_target, "`) cannot be read and could be mispecified.")), call. = FALSE)
+          stop(format_message(
+            paste0("The `at` argument (`", original_target, "`) cannot be read and could be mispecified.")
+          ), call. = FALSE)
         }
       )
     }
