@@ -798,7 +798,8 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 
 
 .extract_at_interactions <- function(at) {
-  interaction_terms <- grepl("(:|\\*)", at)
+  # get interaction terms, but only if these are not inside brackets (like "[4:8]")
+  interaction_terms <- grepl("(:|\\*)(?![^\\[]*\\])", at, perl = TRUE)
   if (any(interaction_terms)) {
     at <- unique(clean_names(trim_ws(compact_character(c(
       at[!interaction_terms],
