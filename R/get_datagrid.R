@@ -52,17 +52,27 @@
 #'   substantially increase the size of the datagrid (especially in case of interactions).
 #'   If `NA`, will return all the unique values. In case of multiple continuous target
 #'   variables, `length` can also be a vector of different values (see examples).
-#' @param range If `"range"` (default), will use the minimum and maximum of the
-#'   original data vector as end-points (min and max). If an interval type is specified,
-#'   such as [`"iqr"`][IQR()], [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or
+#' @param range Option to control the representative values given in `at`, if
+#'   no specific values were provided. `range` can be one of the following:
+#'   - `"range"` (default), will use the minimum and maximum of the original data
+#'   vector as end-points (min and max).
+#'   - if an interval type is specified, such as [`"iqr"`][IQR()],
+#'   [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or
 #'   [`"eti"`][bayestestR::eti()], it will spread the values within that range
 #'   (the default CI width is `95%` but this can be changed by adding for instance
-#'   `ci = 0.90`. See [IQR()] and [bayestestR::ci()]. This can be useful to have
-#'   more robust change and skipping extreme values. If [`"sd"`][sd()] or [`"mad"`][mad()],
-#'   it will spread by this dispersion index around the mean or the median, respectively.
-#'   If the `length` argument is an even number (e.g., `4`), it will have one more
-#'   step on the positive side (i.e., `-1, 0, +1, +2`). The result is a named vector.
-#'   See examples.
+#'   `ci = 0.90`.) See [IQR()] and [bayestestR::ci()]. This can be useful to have
+#'   more robust change and skipping extreme values.
+#'   - if [`"sd"`][sd()] or [`"mad"`][mad()], it will spread by this dispersion
+#'   index around the mean or the median, respectively. If the `length` argument
+#'   is an even number (e.g., `4`), it will have one more step on the positive
+#'   side (i.e., `-1, 0, +1, +2`). The result is a named vector. See 'Examples.'
+#'   - `"grid"` will create a reference grid that is useful when plotting
+#'   predictions, by choosing representative values for numeric variables based
+#'   on their position in the reference grid. If a numeric variable is the first
+#'   predictor in `at`, values from minimum to maximum of the same length as
+#'   indicated in `length` are generated. For numeric predictors not specified at
+#'   first in `at`, mean and -1/+1 SD around the mean are returned. For factors,
+#'   all levels are returned.
 #' @param factors Type of summary for factors. Can be `"reference"` (set at the
 #'   reference level), `"mode"` (set at the most common level) or `"all"` to
 #'   keep all levels.
@@ -117,6 +127,12 @@
 #'   get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
 #'   get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
 #'
+#'   # Numeric and categorical variables, generating a grid for plots
+#'   # default spread length = 10
+#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), range = "grid")
+#'   # default spread length = 3 (-1 SD, mean and +1 SD)
+#'   get_datagrid(iris, at = c("Species", "Sepal.Length"), range = "grid")
+#'
 #'
 #'   # Standardization and unstandardization
 #'   data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
@@ -145,6 +161,7 @@
 #' model <- lm(Sepal.Length ~ Sepal.Width * Petal.Length, data = iris)
 #' # Get datagrid of predictors
 #' data <- get_datagrid(model, length = c(20, 3), range = c("range", "sd"))
+#' # same as: get_datagrid(model, range = "grid", length = 20)
 #' # Add predictions
 #' data$Sepal.Length <- get_predicted(model, data = data)
 #' # Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)
@@ -227,7 +244,10 @@ get_datagrid.data.frame <- function(x,
       # Create target list of factors -----------------------------------------
       facs <- list()
       for (fac in specs[specs$is_factor == TRUE, "varname"]) {
-        facs[[fac]] <- get_datagrid(x[[fac]], at = specs[specs$varname == fac, "expression"])
+        facs[[fac]] <- get_datagrid(
+          x[[fac]],
+          at = specs[specs$varname == fac, "expression"]
+        )
       }
 
       # Create target list of numerics ----------------------------------------
@@ -246,6 +266,7 @@ get_datagrid.data.frame <- function(x,
         } else if (length(range) != length(numvars)) {
           stop(format_message("The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."), call. = FALSE)
         }
+
         # Get datagrids
         for (i in seq_along(numvars)) {
           num <- numvars[i]
@@ -254,6 +275,7 @@ get_datagrid.data.frame <- function(x,
             reference = reference[[num]],
             length = length[i],
             range = range[i],
+            is_first_predictor = specs$varname[1] == num,
             ...
           )
         }
@@ -448,11 +470,20 @@ get_datagrid.double <- get_datagrid.numeric
 
 #' @keywords internal
 .create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
-  range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti", "sd", "mad"))
+  range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid"))
 
   # bayestestR only for some options
   if (range %in% c("ci", "hdi", "eti")) {
     check_if_installed("bayestestR")
+  }
+
+  # check if range = "grid" - then use mean/sd for every numeric that
+  # is not first predictor...
+  if (range == "grid") {
+    range <- "sd"
+    if (isFALSE(list(...)$is_first_predictor)) {
+      length <- 3
+    }
   }
 
   # If Range is a dispersion (e.g., SD or MAD)

@@ -11,6 +11,9 @@
 * `print_color()` and `color_text()` now support bright variants of colors and
   background colors.
 
+* `get_datagrid()` gets more options for `at` and `range`, to provide more
+  control how to generate the reference grid.
+
 ## Bug fixes
 
 * Fixed issues with wrong attribute `adjusted_for` in `insight::get_datagrid()`.
