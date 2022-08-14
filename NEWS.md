@@ -11,6 +11,10 @@
 * `print_color()` and `color_text()` now support bright variants of colors and
   background colors.
 
+## Bug fixes
+
+* Fixed issues with wrong attribute `adjusted_for` in `insight::get_datagrid()`.
+
 # insight 0.18.2
 
 ## New functions
