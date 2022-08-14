@@ -53,7 +53,7 @@ if (requiet("testthat") && requiet("insight")) {
       tolerance = 1e-3
     )
     expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
-    
+
     m <- lm(Sepal.Width ~ Petal.Length + Petal.Width * Species, data = iris)
     dg <- insight::get_datagrid(m, c("Species", "Petal.Width"), range = "grid", preserve_range = FALSE)
     expect_equal(
@@ -68,6 +68,14 @@ if (requiet("testthat") && requiet("insight")) {
     expect_equal(attributes(dg)$adjusted_for, "Petal.Length")
   })
 
+  # order of columns
+  test_that("get_datagrid - column order", {
+    m <- lm(Sepal.Width ~ Petal.Length + Petal.Width * Species, data = iris)
+    dg <- insight::get_datagrid(m, c("Petal.Width", "Species"))
+    expect_equal(colnames(dg), c("Petal.Width", "Species", "Petal.Length"))
+    dg <- insight::get_datagrid(m, c("Species", "Petal.Width"))
+    expect_equal(colnames(dg), c("Species", "Petal.Width", "Petal.Length"))
+  })
 }
 
 

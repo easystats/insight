@@ -292,6 +292,9 @@ get_datagrid.data.frame <- function(x,
     # numeric variables, the other one factors.
     targets <- expand.grid(c(nums, facs))
 
+    # sort targets data frame according to order specified in "at"
+    targets <- tryCatch(targets[specs$varname], error = function(e) targets)
+
     # Preserve range ---------------------------------------------------------
     if (preserve_range == TRUE && length(facs) > 0 && length(nums) > 0) {
       # Loop through the combinations of factors
