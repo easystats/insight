@@ -280,6 +280,8 @@ get_datagrid.data.frame <- function(x,
     } else {
       targets <- merge(targets, rest_df, sort = FALSE)
     }
+  } else {
+    rest_vars <- NA
   }
 
   # Prepare output =============================================================
@@ -295,7 +297,7 @@ get_datagrid.data.frame <- function(x,
   }
 
   # Attributes
-  attr(targets, "adjusted_for") <- ifelse(length(rest_vars) >= 1, rest_vars, NA)
+  attr(targets, "adjusted_for") <- rest_vars
   attr(targets, "at_specs") <- specs
   attr(targets, "at") <- at
   attr(targets, "preserve_range") <- preserve_range
@@ -304,8 +306,12 @@ get_datagrid.data.frame <- function(x,
 
   # Printing decorations
   attr(targets, "table_title") <- c("Visualisation Grid", "blue")
-  if (length(rest_vars) >= 1) attr(targets, "table_footer") <- paste0("\nMaintained constant: ", paste0(rest_vars, collapse = ", "))
-  if (!is.null(attr(targets, "table_footer"))) attr(targets, "table_footer") <- c(attr(targets, "table_footer"), "blue")
+  if (!is.na(rest_vars) && length(rest_vars) >= 1) {
+    attr(targets, "table_footer") <- paste0("\nMaintained constant: ", paste0(rest_vars, collapse = ", "))
+  }
+  if (!is.null(attr(targets, "table_footer"))) {
+    attr(targets, "table_footer") <- c(attr(targets, "table_footer"), "blue")
+  }
 
   class(targets) <- unique(c("datagrid", "visualisation_matrix", class(targets)))
   targets
