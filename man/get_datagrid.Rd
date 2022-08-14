@@ -78,6 +78,7 @@ case these values are used as representative values.
 \itemize{
 \item for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
 \item for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
+\item for Tukey's five number summary (minimum, lower-hinge, median, upper-hinge, maximum): \code{"x = [fivenum]"}
 \item for terciles, including minimum and maximum: \code{"x = [terciles]"}
 \item for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
 \item for quartiles, including minimum and maximum: \code{"x = [quartiles]"}

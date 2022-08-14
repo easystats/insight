@@ -34,6 +34,7 @@
 #'   - a "token" that creates pre-defined representative values:
 #'     - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
 #'     - for median and -/+ 1 MAD around the median: `"x = [mad]"`
+#'     - for Tukey's five number summary (minimum, lower-hinge, median, upper-hinge, maximum): `"x = [fivenum]"`
 #'     - for terciles, including minimum and maximum: `"x = [terciles]"`
 #'     - for terciles, excluding minimum and maximum: `"x = [terciles2]"`
 #'     - for quartiles, including minimum and maximum: `"x = [quartiles]"`
@@ -624,7 +625,7 @@ get_datagrid.logical <- get_datagrid.character
         # Numeric
         # If one, might be a shortcut
         if (length(parts) == 1) {
-          shortcuts <- c("meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax", "minmax", "terciles", "terciles2")
+          shortcuts <- c("meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax", "minmax", "terciles", "terciles2", "fivenum")
           if (parts %in% shortcuts) {
             if (parts %in% c("meansd", "sd")) {
               center <- mean(x, na.rm = TRUE)
@@ -642,6 +643,8 @@ get_datagrid.logical <- get_datagrid.character
               expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")")
             } else if (parts == "terciles2") {
               expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")")
+            } else if (parts == "fivenum") {
+              expression <- paste0("c(", paste0(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
             } else if (parts == "zeromax") {
               expression <- paste0("c(0,", max(x, na.rm = TRUE), ")")
             } else if (parts == "minmax") {
