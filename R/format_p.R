@@ -62,7 +62,8 @@ format_p <- function(p,
 
   if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
     digits <- tryCatch(as.numeric(gsub("scientific", "", digits, fixed = TRUE)),
-                       error = function(e) NA)
+      error = function(e) NA
+    )
     if (is.na(digits)) {
       digits <- 5
     }

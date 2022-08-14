@@ -47,9 +47,7 @@ get_predicted_se <- function(x,
     keep <- intersect(colnames(mm), colnames(vcovmat))
     vcovmat <- vcovmat[keep, keep, drop = FALSE]
     mm <- mm[, keep, drop = FALSE]
-
   } else if (inherits(x, c("multinom", "brmultinom", "bracl", "mixor", "fixest"))) {
-
     ## TODO this currently doesn't work...
 
     # models like multinom have "level:termname" as column name
@@ -59,7 +57,7 @@ get_predicted_se <- function(x,
     vcovmat <- vcovmat[colnames(vcovmat) %in% keep, colnames(vcovmat) %in% keep, drop = FALSE]
     mm <- mm[, keep, drop = FALSE]
 
-  # sometimes, model matrix and vcov won't match exactly, so try some hacks here
+    # sometimes, model matrix and vcov won't match exactly, so try some hacks here
   } else if (ncol(mm) != ncol(vcovmat)) {
     # last desperate try
     if (ncol(mm) == nrow(mm) && ncol(vcovmat) > ncol(mm) && all(colnames(mm) %in% colnames(vcovmat))) {
@@ -69,7 +67,6 @@ get_predicted_se <- function(x,
 
       matching_parameters <- stats::na.omit(match(colnames(vcovmat), colnames(mm)))
       vcovmat <- vcovmat[matching_parameters, matching_parameters, drop = FALSE]
-
     } else {
       # model matrix rows might mismatch. we need a larger model matrix and
       # then filter those rows that match the vcov matrix.
@@ -145,7 +142,8 @@ get_predicted_se <- function(x,
     if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc", "MixMod"))) {
       # model terms, required for model matrix
       model_terms <- tryCatch(stats::terms(x),
-                              error = function(e) find_formula(x)$conditional)
+        error = function(e) find_formula(x)$conditional
+      )
 
       all_terms <- find_terms(x)$conditional
       off_terms <- grepl("^offset\\((.*)\\)", all_terms)
@@ -172,8 +170,9 @@ get_predicted_se <- function(x,
       }
       obj <- model_terms
 
-    # extra handling for polr
-    } else if (inherits(x, c("polr", "multinom", "brmultinom", "bracl"))) { # mixor, fixest?
+      # extra handling for polr
+    } else if (inherits(x, c("polr", "multinom", "brmultinom", "bracl"))) {
+      # mixor, fixest?
       # model terms, required for model matrix
       obj <- tryCatch(stats::terms(x), error = function(e) find_formula(x)$conditional)
     } else {

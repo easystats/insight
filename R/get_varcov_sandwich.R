@@ -63,8 +63,7 @@
       vcov_args[["type"]] <- vcov_fun
     } else if (is.null(vcov_fun)) {
       # set defaults
-      vcov_args[["type"]] <- switch(
-        vcov_fun,
+      vcov_args[["type"]] <- switch(vcov_fun,
         "CR" = "CR3",
         NULL
       )

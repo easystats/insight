@@ -18,8 +18,8 @@
     if (verbose) {
       warning(format_message(sprintf(
         "Truncated negative binomial families are currently not supported by `%s`.",
-        name_fun)
-      ), call. = FALSE)
+        name_fun
+      )), call. = FALSE)
     }
     return(NA)
   }
@@ -387,8 +387,8 @@
 .badlink <- function(link, family, verbose = TRUE) {
   if (verbose) {
     warning(format_message(sprintf(
-      "Model link '%s' is not yet supported for the %s distribution.", link, family)
-    ), call. = FALSE)
+      "Model link '%s' is not yet supported for the %s distribution.", link, family
+    )), call. = FALSE)
   }
   return(NA)
 }

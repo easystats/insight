@@ -108,11 +108,12 @@ get_predicted.gamlss <- function(x,
                                  verbose = TRUE,
                                  ...) {
   get_predicted.default(x,
-                        data = NULL,
-                        predict = "expectation",
-                        ci = NULL,
-                        include_smooth = include_smooth,
-                        iterations = iterations,
-                        verbose = FALSE,
-                        ...)
+    data = NULL,
+    predict = "expectation",
+    ci = NULL,
+    include_smooth = include_smooth,
+    iterations = iterations,
+    verbose = FALSE,
+    ...
+  )
 }

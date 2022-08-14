@@ -230,8 +230,10 @@
     colour <- gsub("^(bright_|br_)", "b", colour)
   }
 
-  colour %in% c("red", "yellow", "green", "blue", "violet", "cyan", "grey", "bold",
-                "italic", "bred", "bgreen", "byellow", "bblue", "bviolet", "bcyan",
-                "bwhite", "bg_red", "bg_green", "bg_yellow", "bg_blue", "bg_violet",
-                "bg_cyan", "bg_white", "bg_black")
+  colour %in% c(
+    "red", "yellow", "green", "blue", "violet", "cyan", "grey", "bold",
+    "italic", "bred", "bgreen", "byellow", "bblue", "bviolet", "bcyan",
+    "bwhite", "bg_red", "bg_green", "bg_yellow", "bg_blue", "bg_violet",
+    "bg_cyan", "bg_white", "bg_black"
+  )
 }
