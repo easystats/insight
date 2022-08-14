@@ -306,7 +306,7 @@ get_datagrid.data.frame <- function(x,
 
   # Printing decorations
   attr(targets, "table_title") <- c("Visualisation Grid", "blue")
-  if (!is.na(rest_vars) && length(rest_vars) >= 1) {
+  if (!(length(rest_vars) == 1 && is.na(rest_vars)) && length(rest_vars) >= 1) {
     attr(targets, "table_footer") <- paste0("\nMaintained constant: ", paste0(rest_vars, collapse = ", "))
   }
   if (!is.null(attr(targets, "table_footer"))) {

@@ -14,7 +14,15 @@ if (requiet("testthat") && requiet("insight")) {
     expect_true(attributes(get_data(m4)$cyl)$factor)
     expect_equal(get_datagrid(m4)$cyl, c(4, 6, 8))
   })
+
+  # adjusted for works
+  test_that("get_datagrid - adjusted for works", {
+    m <- lm(Sepal.Width ~ Petal.Length + Petal.Width + Species, data = iris)
+    dg <- insight::get_datagrid(m, "Species")
+    expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Petal.Width"))
+  })
 }
+
 
 if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
   test_that("get_datagrid - data", {
