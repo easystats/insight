@@ -114,6 +114,8 @@
 #'   ) # change non-targets fixing
 #'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
 #'   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
+#'   get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+#'   get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
 #'
 #'
 #'   # Standardization and unstandardization
