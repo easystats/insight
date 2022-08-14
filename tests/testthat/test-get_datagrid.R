@@ -27,14 +27,17 @@ if (requiet("testthat") && requiet("insight")) {
   test_that("get_datagrid - terciles, quartiles, mean-sd", {
     dg <- insight::get_datagrid(m, "Petal.Width = [quartiles]")
     expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width)), tolerance = 1e-4)
+    expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
     dg <- insight::get_datagrid(m, "Petal.Width = [meansd]")
     .center <- mean(iris$Petal.Width)
     .spread <- sd(iris$Petal.Width)
     expect_equal(dg$Petal.Width, .center + c(-1, 0, 1) * .spread, tolerance = 1e-4)
+    expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
     dg <- insight::get_datagrid(m, "Petal.Width = [terciles]")
     expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width, probs = (1:2) / 3)), tolerance = 1e-4)
+    expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
   })
 
   # bracket tokens
@@ -49,6 +52,8 @@ if (requiet("testthat") && requiet("insight")) {
       ),
       tolerance = 1e-3
     )
+    expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
+    
     m <- lm(Sepal.Width ~ Petal.Length + Petal.Width * Species, data = iris)
     dg <- insight::get_datagrid(m, c("Species", "Petal.Width"), range = "grid", preserve_range = FALSE)
     expect_equal(
@@ -60,6 +65,7 @@ if (requiet("testthat") && requiet("insight")) {
       ),
       tolerance = 1e-3
     )
+    expect_equal(attributes(dg)$adjusted_for, "Petal.Length")
   })
 
 }
