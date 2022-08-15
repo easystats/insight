@@ -5,7 +5,7 @@
 * `format_message()` gets some additional formatting features. See 'Details'
   in `?format_message` for more information and some current limitations.
 
-* `format_message()` gets a `indention` argument, to specify indention string
+* `format_message()` gets an `indention` argument, to specify indention string
   for subsequent lines.
 
 * `print_color()` and `color_text()` now support bright variants of colors and
@@ -17,6 +17,9 @@
 ## Bug fixes
 
 * Fixed issues with wrong attribute `adjusted_for` in `insight::get_datagrid()`.
+
+* Fixed issue where `get_predicted()` failed when data contains factors with 
+  only one or incomplete levels.
 
 # insight 0.18.2
 
