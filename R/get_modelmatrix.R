@@ -20,9 +20,7 @@ get_modelmatrix.default <- function(x, data = NULL, ...) {
   if (is.null(data)) {
     mm <- stats::model.matrix(object = x, ...)
   } else {
-    data <- .pad_modelmatrix(x = x, data = data)
-    mm <- stats::model.matrix(object = x, data = data, ...)
-    mm <- .unpad_modelmatrix(mm = mm, data = data)
+    mm <- .pad_modelmatrix_unpad(x, data, ...)
   }
   mm
 }
@@ -216,7 +214,10 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
   BayesFactor::model.matrix(x, ...)
 }
 
+
+
 # helper ----------------
+
 
 .data_in_dots <- function(..., object = NULL, default_data = NULL) {
   dot.arguments <- lapply(match.call(expand.dots = FALSE)$`...`, function(x) x)
@@ -227,6 +228,13 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
   }
   remaining_dots <- setdiff(names(dot.arguments), "data")
   do.call(stats::model.matrix, c(list(object = object, data = data_arg), remaining_dots))
+}
+
+
+.pad_modelmatrix_unpad <- function(x, data, ...) {
+  data <- .pad_modelmatrix(x = x, data = data)
+  mm <- stats::model.matrix(object = x, data = data, ...)
+  .unpad_modelmatrix(mm = mm, data = data)
 }
 
 
