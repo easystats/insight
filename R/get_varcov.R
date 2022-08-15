@@ -394,7 +394,7 @@ get_varcov.hurdle <- function(x,
       "conditional" = grepl("^count_", colnames(vc)),
       "zi" = ,
       "zero_inflated" = grepl("^zero_", colnames(vc)),
-      1:ncol(vc)
+      seq_len(ncol(vc))
     )
     vc <- vc[keep, keep, drop = FALSE]
   }

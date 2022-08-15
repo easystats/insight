@@ -61,7 +61,7 @@ get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
   # edge cases: check for NULL
   params <- rownames(cs)
   if (is.null(params)) {
-    params <- paste(1:nrow(cs))
+    params <- paste(seq_len(nrow(cs)))
   }
 
   out <- data.frame(
@@ -854,7 +854,7 @@ get_statistic.multinom <- function(x, ...) {
 
   if (is.matrix(stderr)) {
     se <- c()
-    for (i in 1:nrow(stderr)) {
+    for (i in seq_len(nrow(stderr))) {
       se <- c(se, as.vector(stderr[i, ]))
     }
   } else {
@@ -1232,7 +1232,7 @@ get_statistic.btergm <- function(x, verbose = TRUE, ...) {
   bootstraps <- x@boot$t
 
   # standard error
-  sdev <- sapply(1:ncol(bootstraps), function(i) {
+  sdev <- sapply(seq_len(ncol(bootstraps)), function(i) {
     cur <- (bootstraps[, i] - params[i])^2
     sqrt(sum(cur) / length(cur))
   })
