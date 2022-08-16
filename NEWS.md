@@ -2,6 +2,9 @@
 
 ## Changes to functions
 
+* `get_predicted()` for models of class `clm` now includes confidence intervals
+  of predictions.
+
 * `format_message()` gets some additional formatting features. See 'Details'
   in `?format_message` for more information and some current limitations.
 
