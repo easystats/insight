@@ -48,7 +48,7 @@ check_if_installed <- function(package,
     package <- package[!is_installed]
 
     what_is_wrong <- sprintf(
-      "Package%s %s required %s.",
+      "Package%s %s required %s.\n",
       if (length(package) > 1L) "s" else "",
       paste(sprintf("'%s'", package), collapse = " and "),
       reason
