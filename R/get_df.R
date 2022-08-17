@@ -328,7 +328,7 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     check_if_installed("lmerTest")
     type <- tools::toTitleCase(type) # lmerTest wants title case
     if (!inherits(dots$data, "data.frame")) {
-      stop("The `data` argument should be a data.frame.")
+      stop("The `data` argument should be a data.frame.", call. = FALSE)
     }
     mm <- get_modelmatrix(x, data = dots$data)
     out <- sapply(

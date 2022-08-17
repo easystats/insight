@@ -119,7 +119,7 @@
     check_if_installed("sandwich", reason = "to get robust standard errors")
     fun <- try(get(vcov_fun, asNamespace("sandwich")), silent = TRUE)
     if (!is.function(fun)) {
-      stop(sprintf("`%s` is not a function exported by the `sandwich` package.", vcov_fun))
+      stop(sprintf("`%s` is not a function exported by the `sandwich` package.", vcov_fun), call. = FALSE)
     }
   }
 

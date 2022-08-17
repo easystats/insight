@@ -21,8 +21,8 @@ get_predicted_se <- function(x,
       check_if_installed("pbkrtest")
       vcovmat <- as.matrix(pbkrtest::vcovAdj(x))
     } else {
-      msg <- 'The `vcov` argument cannot be used together with the `ci_method="kenward-roger"` argument.'
-      stop(format_message(msg))
+      msg <- "The `vcov` argument cannot be used together with the `ci_method=\"kenward-roger\"` argument."
+      stop(format_message(msg), call. = FALSE)
     }
 
     # all other varcov types can be supplied manually

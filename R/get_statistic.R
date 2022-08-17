@@ -488,10 +488,7 @@ get_statistic.gamlss <- function(x, ...) {
 
 #' @export
 get_statistic.vglm <- function(x, ...) {
-  if (!requireNamespace("VGAM", quietly = TRUE)) {
-    stop("Package 'VGAM' needed for this function to work. Please install it.")
-  }
-
+  check_if_installed("VGAM")
   cs <- VGAM::coef(VGAM::summary(x))
 
   out <- data.frame(

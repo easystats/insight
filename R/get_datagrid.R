@@ -260,13 +260,17 @@ get_datagrid.data.frame <- function(x,
         if (length(length) == 1) {
           length <- rep(length, length(numvars))
         } else if (length(length) != length(numvars)) {
-          stop(format_message("The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ")."), call. = FALSE)
+          stop(format_message(
+            "The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ")."
+          ), call. = FALSE)
         }
         # Sanitize 'range' argument
         if (length(range) == 1) {
           range <- rep(range, length(numvars))
         } else if (length(range) != length(numvars)) {
-          stop(format_message("The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."), call. = FALSE)
+          stop(format_message(
+            "The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."
+          ), call. = FALSE)
         }
 
         # Get datagrids
@@ -461,7 +465,7 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
 
   # Sanity check
   if (!is.numeric(length)) {
-    stop("`length` argument should be an number.")
+    stop("`length` argument should be an number.", call. = FALSE)
   }
 
   # Create a spread
@@ -891,7 +895,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
     stop(format_message(
       "Can't access data that was used to fit the model in order to create the reference grid.",
       "Please use the `data` argument."
-    ))
+    ), call. = FALSE)
   }
 
   data

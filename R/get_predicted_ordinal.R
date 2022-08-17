@@ -22,7 +22,7 @@ get_predicted.clm <- function(x,
     type_arg <- c("prob", "class")[match(predict, valid)]
   } else {
     if (!"type" %in% names(dots)) {
-      stop("Please specify the `predict` argument.")
+      stop("Please specify the `predict` argument.", call. = FALSE)
     } else {
       type_arg <- match.arg(dots$type, choices = c("prob", "class"))
     }
@@ -184,7 +184,7 @@ get_predicted.rlm <- function(x, predict = "expectation", ...) {
   } else {
     dots <- list(...)
     if (!"type" %in% names(dots)) {
-      stop("Please specify the `predict` argument.")
+      stop("Please specify the `predict` argument.", call. = FALSE)
     }
     dots[["type"]] <- match.arg(dots$type, choices = "response")
     dots[["x"]] <- x

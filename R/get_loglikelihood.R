@@ -164,7 +164,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   } else if (estimator == "ml") {
     s2 <- (s * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
   } else {
-    stop("'estimator' should be one of 'ML', 'REML' or 'OLS'.")
+    stop("'estimator' should be one of 'ML', 'REML' or 'OLS'.", call. = FALSE)
   }
   # Get individual log-likelihoods
   lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * res^2) / s2))

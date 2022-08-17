@@ -1022,12 +1022,12 @@ get_varcov.LORgee <- get_varcov.gee
   } else {
     if (is.vector(w)) {
       if (length(w) != nrow(x)) {
-        stop("w is the wrong length")
+        stop("'w' is the wrong length.", call. = FALSE)
       }
       return(crossprod(x, w * x))
     } else {
       if (nrow(w) != ncol(w) || nrow(w) != nrow(x)) {
-        stop("w is the wrong dimension")
+        stop("'w' is the wrong dimension.", call. = FALSE)
       }
       return(crossprod(x, w %*% x))
     }

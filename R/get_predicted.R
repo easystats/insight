@@ -267,7 +267,7 @@ get_predicted.default <- function(x,
 get_predicted.data.frame <- function(x, data = NULL, verbose = TRUE, ...) {
   # This makes it pipe friendly; data %>% get_predicted(model)
   if (is.null(data)) {
-    stop("Please provide a model to base the estimations on.")
+    stop("Please provide a model to base the estimations on.", call. = FALSE)
   } else {
     get_predicted(data, x, verbose = verbose, ...)
   }

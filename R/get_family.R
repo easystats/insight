@@ -54,7 +54,7 @@ get_family.list <- function(x, ...) {
   if ("gam" %in% names(x)) {
     .get_family(x)
   } else {
-    stop("Could not retrieve family from this list. Check the input.")
+    stop(format_message("Could not retrieve family from this list. Check the input."), call. = FALSE)
   }
 }
 
@@ -74,7 +74,9 @@ get_family.model_fit <- function(x, ...) {
   } else if (info$is_poisson) {
     fam <- stats::poisson(link = info$link_function)
   } else {
-    stop("Could not retrieve family from this object. Open an issue on the insight's GitHub.")
+    stop(format_message(
+      "Could not retrieve family from this object. Open an issue on the insight's GitHub."
+    ), call. = FALSE)
   }
   fam
 }
