@@ -68,7 +68,7 @@ check_if_installed <- function(package,
       minimum_version <- minimum_version[needs_update]
 
       what_is_wrong <- sprintf(
-        "Package%s %s %s installed, but package version%s %s %s required.",
+        "Package%s %s %s installed, but package version%s %s %s required.\n",
         if (length(package) > 1L) "s" else "",
         paste(sprintf("'%s'", package), collapse = " and "),
         if (length(package) > 1L) "are" else "is",
