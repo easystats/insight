@@ -219,7 +219,7 @@
     bg_black = .black(x, bg = TRUE),
     bold = .bold(x),
     italic = .italic(x),
-    warning(paste0("`color` ", colour, " not yet supported."))
+    warning(paste0("`color` ", colour, " not yet supported."), call. = FALSE)
   )
 }
 
