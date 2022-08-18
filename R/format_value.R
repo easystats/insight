@@ -111,9 +111,21 @@ format_percent <- function(x, ...) {
 
 
 
-.format_value_unless_integer <- function(x, digits = 2, .missing = "", .width = NULL, .as_percent = FALSE, .zap_small = FALSE, ...) {
+.format_value_unless_integer <- function(x,
+                                         digits = 2,
+                                         .missing = "",
+                                         .width = NULL,
+                                         .as_percent = FALSE,
+                                         .zap_small = FALSE, ...) {
   if (is.numeric(x) && !all(.is.int(stats::na.omit(x)))) {
-    .format_value(x, digits = digits, .missing = .missing, .width = .width, .as_percent = .as_percent, .zap_small = .zap_small)
+    .format_value(
+      x,
+      digits = digits,
+      .missing = .missing,
+      .width = .width,
+      .as_percent = .as_percent,
+      .zap_small = .zap_small
+    )
   } else if (anyNA(x)) {
     .convert_missing(x, .missing)
   } else if (is.numeric(x) && all(.is.int(stats::na.omit(x))) && !is.null(.width)) {

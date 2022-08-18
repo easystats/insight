@@ -827,7 +827,7 @@ get_data.wbm <- function(x, effects = "all", verbose = TRUE, ...) {
   }
 
   resp.col <- which(colnames(mf) == find_response(x))
-  mf <- mf[, c(resp.col, (1:ncol(mf))[-resp.col])]
+  mf <- mf[, c(resp.col, (seq_len(ncol(mf)))[-resp.col])]
 
   .prepare_get_data(x, stats::na.omit(mf), effects, verbose = verbose)
 }
