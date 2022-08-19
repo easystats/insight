@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.0/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
 <link href="../deps/JetBrains_Mono-0.4.2/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Slab-0.4.2/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -131,9 +131,18 @@
 <div class="section level2">
 <h2 id="exporting-data-frames-into-nice-tables">Exporting data frames into nice tables<a class="anchor" aria-label="anchor" href="#exporting-data-frames-into-nice-tables"></a>
 </h2>
-<p>The <code><a href="../reference/export_table.html">export_table()</a></code> functions creates nicely formatted tables in text, markdown or HTML format. You can add (coloured) captions or footer lines to the table as well, and you can even create multiple tables from a <em>list</em> of data frames.</p>
-<p>This vignette shows some examples how to do this (focusing on text output). Note that <code><a href="../reference/export_table.html">export_table()</a></code> returns a <em>formatted string</em>, which prints nicely (which essentially just uses <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>).</p>
-<p><strong><em>Note:</em></strong> The vignettes includes example with coloured text output. The coloured text is not rendered in this vignette. Rather, try out these examples and look at the results in your console!</p>
+<p>The <code><a href="../reference/export_table.html">export_table()</a></code> functions creates nicely formatted
+tables in text, markdown or HTML format. You can add (coloured) captions
+or footer lines to the table as well, and you can even create multiple
+tables from a <em>list</em> of data frames.</p>
+<p>This vignette shows some examples how to do this (focusing on text
+output). Note that <code><a href="../reference/export_table.html">export_table()</a></code> returns a <em>formatted
+string</em>, which prints nicely (which essentially just uses
+<code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>).</p>
+<p><strong><em>Note:</em></strong> The vignettes includes example with
+coloured text output. The coloured text is not rendered in this
+vignette. Rather, try out these examples and look at the results in your
+console!</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/">insight</a></span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
@@ -153,7 +162,9 @@
 <div class="section level2">
 <h2 id="adding-coloured-titles">Adding (coloured) titles<a class="anchor" aria-label="anchor" href="#adding-coloured-titles"></a>
 </h2>
-<p>A title can be added by either using the <code>caption</code> argument, or by adding a string as <code>table_caption</code> attribute.</p>
+<p>A title can be added by either using the <code>caption</code>
+argument, or by adding a string as <code>table_caption</code>
+attribute.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># a simple caption</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="st">"Title"</span><span class="op">)</span></span>
@@ -176,7 +187,10 @@
 <span><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
 <span><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
 <span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span></code></pre></div>
-<p><code>caption</code> can also be character vector of length 2, with the first element being the caption, and the second being the name of a colour (see <code><a href="../reference/print_color.html">?print_colour</a></code> for available options). This is helpful for printing coloured table captions.</p>
+<p><code>caption</code> can also be character vector of length 2, with
+the first element being the caption, and the second being the name of a
+colour (see <code><a href="../reference/print_color.html">?print_colour</a></code> for available options). This is
+helpful for printing coloured table captions.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># A red caption</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span></span>
@@ -199,13 +213,16 @@
 <span><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
 <span><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
 <span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span></code></pre></div>
-<p>Since the coloured text is not rendered, we provide a screenshot as example here:</p>
+<p>Since the coloured text is not rendered, we provide a screenshot as
+example here:</p>
 <p><img src="export_table.png" width="50%"></p>
 </div>
 <div class="section level2">
 <h2 id="adding-coloured-table-footers">Adding (coloured) table footers<a class="anchor" aria-label="anchor" href="#adding-coloured-table-footers"></a>
 </h2>
-<p>Use the <code>footer</code> argument to add a footer line to the table. It is also possible to add a string as <code>table_footer</code> attribute.</p>
+<p>Use the <code>footer</code> argument to add a footer line to the
+table. It is also possible to add a string as <code>table_footer</code>
+attribute.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># colored caption, simple footer</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
@@ -269,7 +286,9 @@
 <div class="section level2">
 <h2 id="adding-subtitles">Adding subtitles<a class="anchor" aria-label="anchor" href="#adding-subtitles"></a>
 </h2>
-<p>Subtitles can be added using the <code>subtitle</code> argument, or the <code>table_subtitle</code> attribute. Note that you must take care of adding new-line characters.</p>
+<p>Subtitles can be added using the <code>subtitle</code> argument, or
+the <code>table_subtitle</code> attribute. Note that you must take care
+of adding new-line characters.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># colored caption, subtitle and footer</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
@@ -307,7 +326,8 @@
 <div class="section level2">
 <h2 id="exporting-multiple-data-frames-into-multiple-tables">Exporting multiple data frames into multiple tables<a class="anchor" aria-label="anchor" href="#exporting-multiple-data-frames-into-multiple-tables"></a>
 </h2>
-<p>Multiple data frames saved in a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> can be used to create multiple tables at once.</p>
+<p>Multiple data frames saved in a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> can be used to
+create multiple tables at once.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
@@ -338,7 +358,10 @@
 <div class="section level2">
 <h2 id="adding-table-captions-and-footers">Adding table captions and footers<a class="anchor" aria-label="anchor" href="#adding-table-captions-and-footers"></a>
 </h2>
-<p>For multiple tables, it is also possible to add a caption for each table. Simply use a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of strings for the <code>caption</code> argument, or add a <code>table_caption</code> attribute. to <em>each</em> data frame in the list.</p>
+<p>For multiple tables, it is also possible to add a caption for each
+table. Simply use a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of strings for the
+<code>caption</code> argument, or add a <code>table_caption</code>
+attribute. to <em>each</em> data frame in the list.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># one caption for each table</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Table 1"</span>, <span class="st">"Table 2"</span>, <span class="st">"Table 3"</span><span class="op">)</span><span class="op">)</span></span>
@@ -395,7 +418,8 @@
 <span><span class="co">#&gt;         6.50 |        2.00 | virginica</span></span>
 <span><span class="co">#&gt;         6.40 |        1.90 | virginica</span></span>
 <span><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span></code></pre></div>
-<p>In the same way you can add multiple footers. Note, however, that you have to take care about adding new-line characters.</p>
+<p>In the same way you can add multiple footers. Note, however, that you
+have to take care about adding new-line characters.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add captions and footers for each table</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
@@ -466,7 +490,10 @@
 <span><span class="co">#&gt;         6.40 |        1.90 | virginica</span></span>
 <span><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span>
 <span><span class="co">#&gt; Footer 3</span></span></code></pre></div>
-<p>Finally, you can even add multiple footer lines to each table, giving each a different color. In this case, each list element has to be a character vector of length 2 (the first element being the caption, and the second being the name of a colour).</p>
+<p>Finally, you can even add multiple footer lines to each table, giving
+each a different color. In this case, each list element has to be a
+character vector of length 2 (the first element being the caption, and
+the second being the name of a colour).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Colored table captions and multiple footers per table</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
