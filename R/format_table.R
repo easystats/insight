@@ -619,7 +619,7 @@ format_table <- function(x,
     ics <- all_ics[[ic]]
     if (all(ics %in% colnames(x))) {
       x[[ics[1]]] <- format_value(x[[ics[1]]], digits = digits, zap_small = zap_small)
-      x[[ics[2]]] <- format_p(x[[ics[2]]], digits = digits, name = NULL)
+      x[[ics[2]]] <- format_p(x[[ics[2]]], digits = digits, name = NULL, whitespace = FALSE)
       x[[ics[1]]] <- sprintf("%s (%s)", x[[ics[1]]], x[[ics[2]]])
       x[ics[2]] <- NULL
       names(x)[names(x) == ics[1]] <- sprintf("%s (weights)", ics[1])
