@@ -186,7 +186,7 @@ format_table <- function(x,
 
 
   # rename performance columns
-  x <- .format_performance_columns(x)
+  x <- .format_performance_columns(x, digits, zap_small)
 
 
   # Format remaining columns
@@ -602,7 +602,7 @@ format_table <- function(x,
 
 
 
-.format_performance_columns <- function(x) {
+.format_performance_columns <- function(x, digits, zap_small) {
   if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R2 (adj.)"
   if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R2 (cond.)"
   if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R2 (marg.)"
@@ -611,6 +611,20 @@ format_table <- function(x,
   if ("Performance_Score" %in% names(x)) names(x)[names(x) == "Performance_Score"] <- "Performance-Score"
   if ("Wu_Hausman" %in% names(x)) names(x)[names(x) == "Wu_Hausman"] <- "Wu & Hausman"
   if ("p(Wu_Hausman)" %in% names(x)) names(x)[names(x) == "p(Wu_Hausman)"] <- "p(Wu & Hausman)"
+  # add weighted IC to IC columns
+  all_ics <- list(AIC = c("AIC", "AIC_wt"), BIC = c("BIC", "BIC_wt"),
+                  AICc = c("AICc", "AICc_wt"), WAIC = c("WAIC", "WAIC_wt"),
+                  LOOIC = c("LOOIC", "LOOIC_wt"))
+  for (ic in names(all_ics)) {
+    ics <- all_ics[[ic]]
+    if (all(ics %in% colnames(x))) {
+      x[[ics[1]]] <- format_value(x[[ics[1]]], digits = digits, zap_small = zap_small)
+      x[[ics[2]]] <- format_p(x[[ics[2]]], digits = digits, name = NULL)
+      x[[ics[1]]] <- sprintf("%s (%s)", x[[ics[1]]], x[[ics[2]]])
+      x[ics[2]] <- NULL
+      names(x)[names(x) == ics[1]] <- sprintf("%s (weights)", ics[1])
+    }
+  }
   if ("AIC_wt" %in% names(x)) names(x)[names(x) == "AIC_wt"] <- "AIC weights"
   if ("BIC_wt" %in% names(x)) names(x)[names(x) == "BIC_wt"] <- "BIC weights"
   if ("AICc_wt" %in% names(x)) names(x)[names(x) == "AICc_wt"] <- "AICc weights"
