@@ -600,13 +600,17 @@
 
   if (is_empty_object(dat)) {
     if (isTRUE(verbose)) {
-      warning(format_message(sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)), call. = FALSE)
+      warning(format_message(
+        sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)
+      ), call. = FALSE)
     }
     return(NULL)
   }
 
   if (length(still_missing) && isTRUE(verbose)) {
-    warning(format_message(sprintf("Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,"))), call. = FALSE)
+    warning(format_message(
+      sprintf("Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,"))
+    ), call. = FALSE)
   }
 
   if ("(offset)" %in% colnames(mf) && !("(offset)" %in% colnames(dat))) {
@@ -965,7 +969,8 @@
         columns <- lapply(data_call, eval)
 
         # preserve table data for McNemar
-        if (!grepl(" (and|by) ", x$data.name) && (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+        if (!grepl(" (and|by) ", x$data.name) &&
+            (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           return(as.table(columns[[1]]))
           # check if data is a list for kruskal-wallis
         } else if (grepl("^Kruskal-Wallis", x$method) && length(columns) == 1 && is.list(columns[[1]])) {

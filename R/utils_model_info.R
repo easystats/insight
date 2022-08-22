@@ -252,6 +252,9 @@
   is_xtab <- FALSE
   is_levenetest <- FALSE
 
+  ## TODO: special handling of shapiro needed
+  # see https://github.com/easystats/report/issues/256
+
   if (inherits(x, "htest")) {
     if (grepl("kruskal-wallis", tolower(x$method), fixed = TRUE) ||
       grepl("design-based kruskalwallis", tolower(x$method), fixed = TRUE) ||
@@ -291,7 +294,9 @@
   }
 
   # exceptions: car::leveneTest
-  if (inherits(x, "anova") && !is.null(attributes(x)$heading) && grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
+  if (inherits(x, "anova") &&
+      !is.null(attributes(x)$heading) &&
+      grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
     is_levenetest <- TRUE
   }
 
