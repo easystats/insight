@@ -5,7 +5,7 @@ articles:
   display: display.html
   export: export.html
   insight: insight.html
-last_built: 2022-08-21T11:30Z
+last_built: 2022-08-22T06:15Z
 urls:
   reference: https://easystats.github.io/insight/reference
   article: https://easystats.github.io/insight/articles
