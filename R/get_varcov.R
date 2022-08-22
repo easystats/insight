@@ -114,6 +114,22 @@ get_varcov.geeglm <- get_varcov.default
 
 
 
+# fixest ---------------------------------------------
+
+#' @export
+get_varcov.fixest <- function(x,
+                              vcov = NULL,
+                              vcov_args = NULL,
+                              ...) {
+  # fixest supplies its own mechanism. Vincent thinks it might not be wise to
+  # try `sandwich`, because there may be inconsistencies.
+  args <- c(list(x, vcov = vcov), vcov_args)
+  FUN <- stats::vcov
+  do.call("FUN", args)
+}
+
+
+
 # mlm ---------------------------------------------
 
 #' @export
