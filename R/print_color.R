@@ -6,9 +6,12 @@
 #'
 #' @param text The text to print.
 #' @param color,colour Character vector, indicating the colour for printing.
-#'   May be one of `"red"`, `"yellow"`, `"green"`, `"blue"`,
-#'   `"violet"`, `"cyan"` or `"grey"`. Formatting is also possible
-#'   with `"bold"` or `"italic"`.
+#'   May be one of `"white"`, `"black"`, `"red"`, `"yellow"`, `"green"`, `"blue"`,
+#'   `"violet"`, `"cyan"` or `"grey"`. Bright variants of colors are available
+#'   by adding the prefix `"b"` (or `"br_"` or `"bright_"`), e.g. `"bred"` (or
+#'   `"br_red"` resp. `"bright_red"`). Background colors can be set by adding
+#'   the prefix `"bg_"` (e.g. `"bg_red"`). Formatting is also possible with `"bold"`
+#'   or `"italic"`.
 #'
 #' @details This function prints `text` directly to the console using
 #'   `cat()`, so no string is returned. `color_text()`, however,

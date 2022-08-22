@@ -481,7 +481,7 @@ print.insight_table <- function(x, ...) {
   # been done previously, we now look for column-specific alignments
 
   if (!is.null(align) && length(align) == 1) {
-    for (i in 1:ncol(final)) {
+    for (i in seq_len(ncol(final))) {
       align_char <- ""
       if (align %in% c("left", "right", "center", "firstleft")) {
         align_char <- ""
@@ -656,7 +656,7 @@ print.insight_table <- function(x, ...) {
 .table_parts <- function(rows, final, header, sep, cross, empty_line) {
   # "final" is a matrix here. we now paste each row into a character string,
   # add separator chars etc.
-  for (row in 1:nrow(final)) {
+  for (row in seq_len(nrow(final))) {
     # create a string for each row, where cells from original matrix are
     # separated by the separator char
     final_row <- paste0(final[row, ], collapse = sep)
@@ -765,7 +765,7 @@ print.insight_table <- function(x, ...) {
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
 
   # find rows that should not be indented
-  non_grp_rows <- 1:nrow(final)
+  non_grp_rows <- seq_len(nrow(final))
   non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
 
   # paste whitespace at end, to ensure equal width for each string
@@ -790,7 +790,7 @@ print.insight_table <- function(x, ...) {
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
 
   # find rows that should not be indented
-  non_grp_rows <- 1:nrow(final)
+  non_grp_rows <- seq_len(nrow(final))
   non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
 
   # remove indent token
@@ -881,7 +881,7 @@ print.insight_table <- function(x, ...) {
 
   # Transform to character
   rows <- c()
-  for (row in 1:nrow(final)) {
+  for (row in seq_len(nrow(final))) {
     final_row <- paste0("|", paste0(final[row, ], collapse = "|"), "|", collapse = "")
     rows <- c(rows, final_row)
 

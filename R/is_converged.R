@@ -64,7 +64,7 @@
 #' \dontrun{
 #' if (require("glmmTMB")) {
 #'   model <- glmmTMB(Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
-#'   (1+poly(Petal.Width, 4)|Species), data=iris)
+#'     (1 + poly(Petal.Width, 4) | Species), data = iris)
 #'
 #'   is_converged(model)
 #' }

@@ -358,7 +358,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
     } else if (dispersion_method == "mad") {
       se <- apply(data, 2, stats::mad)
     } else {
-      stop("`dispersion_method` argument not recognized.")
+      stop("`dispersion_method` argument not recognized.", call. = FALSE)
     }
   } else {
     se <- apply(data, 2, dispersion_method)
@@ -377,7 +377,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   )
 
   if (ci_method == "quantile") {
-    out <- data.frame(Parameter = 1:nrow(iter))
+    out <- data.frame(Parameter = seq_len(nrow(iter)))
     for (i in ci) {
       temp <- data.frame(
         CI_low = apply(iter, 1, stats::quantile, probs = (1 - i) / 2, na.rm = TRUE),

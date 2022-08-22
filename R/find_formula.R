@@ -123,7 +123,7 @@ find_formula.list <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.data.frame <- function(x, verbose = TRUE, ...) {
-  stop("A data frame is not a valid object for this function.")
+  stop("A data frame is not a valid object for this function.", call. = FALSE)
 }
 
 
@@ -137,7 +137,7 @@ find_formula.aovlist <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.anova <- function(x, verbose = TRUE, ...) {
-  stop("Formulas cannot be retrieved from anova() objects.")
+  stop("Formulas cannot be retrieved from anova() objects.", call. = FALSE)
 }
 
 

@@ -12,6 +12,24 @@ m4 <- feols(
   data = iris
 )
 
+
+test_that("robust variance-covariance", {
+  mod <- feols(mpg ~ hp + drat | cyl, data = mtcars)
+  # default is clustered
+  expect_equal(
+    sqrt(diag(vcov(mod))),
+    sqrt(diag(get_varcov(mod, vcov = ~cyl))))
+
+  # HC1
+  expect_equal(
+    sqrt(diag(vcov(mod, vcov = "HC1"))),
+    sqrt(diag(get_varcov(mod, vcov = "HC1"))))
+
+  expect_true(all(
+    sqrt(diag(vcov(mod))) !=
+    sqrt(diag(get_varcov(mod, vcov = "HC1")))))
+})
+
 test_that("model_info", {
   expect_true(model_info(m1)$is_count)
   expect_true(model_info(m2)$is_linear)

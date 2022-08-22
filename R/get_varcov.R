@@ -114,6 +114,22 @@ get_varcov.geeglm <- get_varcov.default
 
 
 
+# fixest ---------------------------------------------
+
+#' @export
+get_varcov.fixest <- function(x,
+                              vcov = NULL,
+                              vcov_args = NULL,
+                              ...) {
+  # fixest supplies its own mechanism. Vincent thinks it might not be wise to
+  # try `sandwich`, because there may be inconsistencies.
+  args <- c(list(x, vcov = vcov), vcov_args)
+  FUN <- stats::vcov
+  do.call("FUN", args)
+}
+
+
+
 # mlm ---------------------------------------------
 
 #' @export
@@ -394,7 +410,7 @@ get_varcov.hurdle <- function(x,
       "conditional" = grepl("^count_", colnames(vc)),
       "zi" = ,
       "zero_inflated" = grepl("^zero_", colnames(vc)),
-      1:ncol(vc)
+      seq_len(ncol(vc))
     )
     vc <- vc[keep, keep, drop = FALSE]
   }
@@ -1022,12 +1038,12 @@ get_varcov.LORgee <- get_varcov.gee
   } else {
     if (is.vector(w)) {
       if (length(w) != nrow(x)) {
-        stop("w is the wrong length")
+        stop("'w' is the wrong length.", call. = FALSE)
       }
       return(crossprod(x, w * x))
     } else {
       if (nrow(w) != ncol(w) || nrow(w) != nrow(x)) {
-        stop("w is the wrong dimension")
+        stop("'w' is the wrong dimension.", call. = FALSE)
       }
       return(crossprod(x, w %*% x))
     }

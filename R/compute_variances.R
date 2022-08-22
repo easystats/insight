@@ -17,9 +17,9 @@
   if (faminfo$family %in% c("truncated_nbinom1")) {
     if (verbose) {
       warning(format_message(sprintf(
-        "Truncated negative binomial families are currently not supported by `%s`.", 
-        name_fun)
-      ), call. = FALSE)
+        "Truncated negative binomial families are currently not supported by `%s`.",
+        name_fun
+      )), call. = FALSE)
     }
     return(NA)
   }
@@ -387,8 +387,8 @@
 .badlink <- function(link, family, verbose = TRUE) {
   if (verbose) {
     warning(format_message(sprintf(
-      "Model link '%s' is not yet supported for the %s distribution.", link, family)
-    ), call. = FALSE)
+      "Model link '%s' is not yet supported for the %s distribution.", link, family
+    )), call. = FALSE)
   }
   return(NA)
 }
@@ -610,12 +610,16 @@
 
   if (is.na(mu)) {
     if (verbose) {
-      warning(format_message("Can't calculate model's distribution-specific variance. Results are not reliable."), call. = FALSE)
+      warning(format_message(
+        "Can't calculate model's distribution-specific variance. Results are not reliable."
+      ), call. = FALSE)
     }
     return(0)
   } else if (mu < 6) {
     if (verbose) {
-      warning(format_message(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)), call. = FALSE)
+      warning(format_message(
+        sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)
+      ), call. = FALSE)
     }
   }
 
@@ -659,13 +663,17 @@
       )
 
       if (vv < 0 && isTRUE(verbose)) {
-        warning(format_message("Model's distribution-specific variance is negative. Results are not reliable."), call. = FALSE)
+        warning(format_message(
+          "Model's distribution-specific variance is negative. Results are not reliable."
+        ), call. = FALSE)
       }
       vv / mu^2
     },
     error = function(x) {
       if (verbose) {
-        warning(format_message("Can't calculate model's distribution-specific variance. Results are not reliable."), call. = FALSE)
+        warning(format_message(
+          "Can't calculate model's distribution-specific variance. Results are not reliable."
+        ), call. = FALSE)
       }
       0
     }

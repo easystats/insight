@@ -21,7 +21,8 @@
 #' @param x A statistical model (can also be a data.frame, in which case the
 #'   second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which
-#'   to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using [get_datagrid()].
+#'   to predict. If omitted, the data used to fit the model is used. Visualization
+#'   matrices can be generated using [get_datagrid()].
 #' @param predict string or `NULL`
 #' * `"link"` returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).
 #' * `"expectation"` (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).
@@ -266,7 +267,7 @@ get_predicted.default <- function(x,
 get_predicted.data.frame <- function(x, data = NULL, verbose = TRUE, ...) {
   # This makes it pipe friendly; data %>% get_predicted(model)
   if (is.null(data)) {
-    stop("Please provide a model to base the estimations on.")
+    stop("Please provide a model to base the estimations on.", call. = FALSE)
   } else {
     get_predicted(data, x, verbose = verbose, ...)
   }

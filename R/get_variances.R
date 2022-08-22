@@ -136,7 +136,7 @@ get_variance <- function(x, component = c("all", "fixed", "random", "residual", 
 #' @export
 get_variance.default <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
+    warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]), call. = FALSE)
   }
   NULL
 }

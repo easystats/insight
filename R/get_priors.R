@@ -292,7 +292,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
       return(out)
     }
     if (is.null(names(ls))) {
-      stop("Argument 'ls' must be named.")
+      stop("Argument 'ls' must be named.", call. = FALSE)
     }
     for (name in names(ls)) {
       out <- out & brms::do_call(fun, list(x[[name]], ls[[name]]))

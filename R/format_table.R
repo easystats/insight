@@ -159,8 +159,14 @@ format_table <- function(x,
 
 
   # Partial ----
-  x[names(x)[grepl("_partial$", names(x))]] <- format_value(x[names(x)[grepl("_partial$", names(x))]], zap_small = zap_small)
-  names(x)[grepl("_partial$", names(x))] <- paste0(gsub("_partial$", "", names(x)[grepl("_partial$", names(x))]), " (partial)")
+  x[names(x)[grepl("_partial$", names(x))]] <- format_value(
+    x[names(x)[grepl("_partial$", names(x))]],
+    zap_small = zap_small
+  )
+  names(x)[grepl("_partial$", names(x))] <- paste0(
+    gsub("_partial$", "", names(x)[grepl("_partial$", names(x))]),
+    " (partial)"
+  )
 
 
   # metafor ----
@@ -180,12 +186,16 @@ format_table <- function(x,
 
 
   # rename performance columns
-  x <- .format_performance_columns(x)
+  x <- .format_performance_columns(x, digits, zap_small)
 
 
   # Format remaining columns
   other_cols <- names(x)[sapply(x, is.numeric)]
-  x[other_cols[other_cols %in% names(x)]] <- format_value(x[other_cols[other_cols %in% names(x)]], digits = digits, zap_small = zap_small)
+  x[other_cols[other_cols %in% names(x)]] <- format_value(
+    x[other_cols[other_cols %in% names(x)]],
+    digits = digits,
+    zap_small = zap_small
+  )
 
   # SEM links
   if (all(c("To", "Operator", "From") %in% names(x))) {
@@ -222,7 +232,8 @@ format_table <- function(x,
     x$p.value <- format(x$p.value, justify = "left")
   }
 
-  for (stats in c("p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA", "p_ROPE", "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR")) {
+  for (stats in c("p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA",
+                  "p_ROPE", "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR")) {
     if (stats %in% names(x)) {
       x[[stats]] <- format_p(x[[stats]], stars = stars, name = NULL, missing = "", digits = p_digits)
       x[[stats]] <- format(x[[stats]], justify = "left")
@@ -323,7 +334,13 @@ format_table <- function(x,
 
 
 
-.format_main_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE, zap_small, ci_name = "CI") {
+.format_main_ci_columns <- function(x,
+                                    att,
+                                    ci_digits,
+                                    ci_width = "auto",
+                                    ci_brackets = TRUE,
+                                    zap_small,
+                                    ci_name = "CI") {
   # Main CI
   ci_low <- names(x)[grep(paste0("^", ci_name, "_low"), names(x))]
   ci_high <- names(x)[grep(paste0("^", ci_name, "_high"), names(x))]
@@ -366,7 +383,15 @@ format_table <- function(x,
 
     # Get characters to align the CI
     for (i in seq_along(ci_colname)) {
-      x[[ci_low[i]]] <- format_ci(x[[ci_low[i]]], x[[ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
+      x[[ci_low[i]]] <- format_ci(
+        x[[ci_low[i]]],
+        x[[ci_high[i]]],
+        ci = NULL,
+        digits = ci_digits,
+        width = ci_width,
+        brackets = ci_brackets,
+        zap_small = zap_small
+      )
       # rename lower CI into final CI column
       ci_position <- which(names(x) == ci_low[i])
       colnames(x)[ci_position] <- ci_colname[i]
@@ -402,7 +427,15 @@ format_table <- function(x,
 
     # Get characters to align the CI
     for (i in seq_along(other_ci_colname)) {
-      x[[other_ci_low[i]]] <- format_ci(x[[other_ci_low[i]]], x[[other_ci_high[i]]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
+      x[[other_ci_low[i]]] <- format_ci(
+        x[[other_ci_low[i]]],
+        x[[other_ci_high[i]]],
+        ci = NULL,
+        digits = ci_digits,
+        width = ci_width,
+        brackets = ci_brackets,
+        zap_small = zap_small
+      )
       # rename lower CI into final CI column
       other_ci_position <- which(names(x) == other_ci_low[i])
       colnames(x)[other_ci_position] <- other_ci_colname[i]
@@ -439,7 +472,15 @@ format_table <- function(x,
     {
       ci_low <- names(x)[which(names(x) == "conf.low")]
       ci_high <- names(x)[which(names(x) == "conf.high")]
-      x$conf.int <- format_ci(x[[ci_low]], x[[ci_high]], ci = NULL, digits = ci_digits, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
+      x$conf.int <- format_ci(
+        x[[ci_low]],
+        x[[ci_high]],
+        ci = NULL,
+        digits = ci_digits,
+        width = ci_width,
+        brackets = ci_brackets,
+        zap_small = zap_small
+      )
       x$conf.low <- NULL
       x$conf.high <- NULL
       x
@@ -455,7 +496,14 @@ format_table <- function(x,
 
 .format_rope_columns <- function(x, ci_width = "auto", ci_brackets = TRUE, zap_small) {
   if (all(c("ROPE_low", "ROPE_high") %in% names(x))) {
-    x$ROPE_low <- format_ci(x$ROPE_low, x$ROPE_high, ci = NULL, width = ci_width, brackets = ci_brackets, zap_small = zap_small)
+    x$ROPE_low <- format_ci(
+      x$ROPE_low,
+      x$ROPE_high,
+      ci = NULL,
+      width = ci_width,
+      brackets = ci_brackets,
+      zap_small = zap_small
+    )
     x$ROPE_high <- NULL
     names(x)[names(x) == "ROPE_low"] <- "ROPE"
     x$ROPE_CI <- NULL
@@ -554,7 +602,7 @@ format_table <- function(x,
 
 
 
-.format_performance_columns <- function(x) {
+.format_performance_columns <- function(x, digits, zap_small) {
   if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R2 (adj.)"
   if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R2 (cond.)"
   if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R2 (marg.)"
@@ -563,6 +611,20 @@ format_table <- function(x,
   if ("Performance_Score" %in% names(x)) names(x)[names(x) == "Performance_Score"] <- "Performance-Score"
   if ("Wu_Hausman" %in% names(x)) names(x)[names(x) == "Wu_Hausman"] <- "Wu & Hausman"
   if ("p(Wu_Hausman)" %in% names(x)) names(x)[names(x) == "p(Wu_Hausman)"] <- "p(Wu & Hausman)"
+  # add weighted IC to IC columns
+  all_ics <- list(AIC = c("AIC", "AIC_wt"), BIC = c("BIC", "BIC_wt"),
+                  AICc = c("AICc", "AICc_wt"), WAIC = c("WAIC", "WAIC_wt"),
+                  LOOIC = c("LOOIC", "LOOIC_wt"))
+  for (ic in names(all_ics)) {
+    ics <- all_ics[[ic]]
+    if (all(ics %in% colnames(x))) {
+      x[[ics[1]]] <- format_value(x[[ics[1]]], digits = digits, zap_small = zap_small)
+      x[[ics[2]]] <- format_p(x[[ics[2]]], digits = digits, name = NULL, whitespace = FALSE)
+      x[[ics[1]]] <- sprintf("%s (%s)", x[[ics[1]]], x[[ics[2]]])
+      x[ics[2]] <- NULL
+      names(x)[names(x) == ics[1]] <- sprintf("%s (weights)", ics[1])
+    }
+  }
   if ("AIC_wt" %in% names(x)) names(x)[names(x) == "AIC_wt"] <- "AIC weights"
   if ("BIC_wt" %in% names(x)) names(x)[names(x) == "BIC_wt"] <- "BIC weights"
   if ("AICc_wt" %in% names(x)) names(x)[names(x) == "AICc_wt"] <- "AICc weights"

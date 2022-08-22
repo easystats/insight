@@ -116,10 +116,12 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   }
 
   if (is.null(res) || all(is.na(res))) {
-    if (verbose) warning("Can't extract residuals from model.")
+    if (verbose) warning("Can't extract residuals from model.", call. = FALSE)
     res <- NULL
   } else if (yield_warning) {
-    warning(format_message(paste0("Can't extract '", res_type, "' residuals. Returning response residuals.")), call. = FALSE)
+    warning(format_message(paste0(
+      "Can't extract '", res_type, "' residuals. Returning response residuals."
+    )), call. = FALSE)
   }
 
   res
@@ -185,7 +187,7 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   )
 
   if (is.null(res) || all(is.na(res))) {
-    if (verbose) warning("Can't extract residuals from model.")
+    if (verbose) warning("Can't extract residuals from model.", call. = FALSE)
     res <- NULL
   }
 

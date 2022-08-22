@@ -279,9 +279,7 @@
 # checks if a mixed model fit is singular or not. Need own function,
 # because lme4::isSingular() does not work with glmmTMB
 .is_singular <- function(x, vals, tolerance = 1e-5) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
+  check_if_installed("lme4", reason = "to compute variances for mixed models")
 
   tryCatch(
     {
