@@ -225,7 +225,8 @@ find_parameters.brmsfit <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   component <- match.arg(component, choices = c("all", .all_elements()))
 
-  fe <- colnames(as.data.frame(x))
+  fe <- dimnames(x$fit)$parameters
+  # fe <- colnames(as.data.frame(x))
 
   # remove redundant columns. These seem to be new since brms 2.16?
   pattern <- c("^[A-z]_\\d\\.\\d\\.(.*)")
@@ -440,6 +441,8 @@ find_parameters.stanreg <- function(x,
                                     parameters = NULL,
                                     ...) {
   fe <- colnames(as.data.frame(x))
+  # This does not exclude all relevant names, see e.g. "stanreg_merMod_5".
+  # fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
@@ -493,7 +496,7 @@ find_parameters.bcplm <- function(x,
 #' @export
 find_parameters.stanmvreg <- function(x,
                                       effects = c("all", "fixed", "random"),
-                                      component = c("all", "conditional", "sigma"),
+                                      component = c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary"),
                                       flatten = FALSE,
                                       parameters = NULL,
                                       ...) {
@@ -502,14 +505,21 @@ find_parameters.stanmvreg <- function(x,
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !grepl("\\|sigma$", fe, perl = TRUE)]
   rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
+  rand_sd <- fe[grepl("^Sigma\\[", fe, perl = TRUE)]
+  smooth_terms <- fe[grepl("^smooth_sd", fe, perl = TRUE)]
   sigma <- fe[grepl("\\|sigma$", fe, perl = TRUE) & .grep_non_smoothers(fe)]
+  auxiliary <- fe[grepl("(shape|phi|precision)", fe)]
+
+  # remove auxiliary from conditional
+  cond <- setdiff(cond, auxiliary)
 
   l <- compact_list(list(
     conditional = cond,
-    random = rand,
-    sigma = sigma
+    random = c(rand, rand_sd),
+    smooth_terms = smooth_terms,
+    sigma = sigma,
+    auxiliary = auxiliary
   ))
-
 
   if (object_has_names(l, "conditional")) {
     x1 <- sub("(.*)(\\|)(.*)", "\\1", l$conditional)

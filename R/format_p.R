@@ -40,7 +40,6 @@ format_p <- function(p,
                      decimal_separator = NULL,
                      digits = 3,
                      ...) {
-
   # only convert p if it's a valid numeric, or at least coercible to
   # valid numeric values...
   if (!is.numeric(p)) {
@@ -62,13 +61,8 @@ format_p <- function(p,
   }
 
   if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
-    digits <- tryCatch(
-      {
-        as.numeric(gsub("scientific", "", digits, fixed = TRUE))
-      },
-      error = function(e) {
-        NA
-      }
+    digits <- tryCatch(as.numeric(gsub("scientific", "", digits, fixed = TRUE)),
+      error = function(e) NA
     )
     if (is.na(digits)) {
       digits <- 5

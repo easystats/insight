@@ -113,7 +113,6 @@ ellipsis_info.ListObjects <- function(objects, ...) {
 
 #' @export
 ellipsis_info.ListModels <- function(objects, ..., verbose = TRUE) {
-
   # Lavaan
   if (all(sapply(objects, inherits, what = "lavaan"))) {
     class(objects) <- c("ListLavaan", class(objects))
@@ -191,7 +190,7 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
   # if we have nested models, check if models are provided in
   # increasing or decreasing order (according to number of DFs)
-  if (isTRUE(same_response) & is_nested) {
+  if (isTRUE(same_response) && is_nested) {
     class(objects) <- c("ListNestedRegressions", class(objects))
     attr(objects, "is_nested") <- TRUE
 

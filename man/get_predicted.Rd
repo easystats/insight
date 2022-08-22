@@ -17,7 +17,7 @@ get_predicted(x, ...)
   x,
   data = NULL,
   predict = "expectation",
-  ci = 0.95,
+  ci = NULL,
   ci_type = "confidence",
   ci_method = NULL,
   dispersion_method = "sd",
@@ -31,6 +31,7 @@ get_predicted(x, ...)
   x,
   data = NULL,
   predict = "expectation",
+  ci = NULL,
   iterations = NULL,
   verbose = TRUE,
   ...
@@ -41,7 +42,7 @@ get_predicted(x, ...)
   data = NULL,
   predict = "expectation",
   iterations = NULL,
-  ci = 0.95,
+  ci = NULL,
   ci_method = NULL,
   include_random = "default",
   include_smooth = TRUE,
@@ -53,7 +54,7 @@ get_predicted(x, ...)
   x,
   data = NULL,
   predict = "expectation",
-  ci = 0.95,
+  ci = NULL,
   include_random = TRUE,
   include_smooth = TRUE,
   iterations = NULL,
@@ -65,7 +66,7 @@ get_predicted(x, ...)
   x,
   data = NULL,
   predict = "expectation",
-  ci = 0.95,
+  ci = NULL,
   ci_method = NULL,
   include_random = "default",
   iterations = NULL,
@@ -82,7 +83,8 @@ second argument has to be a model).}
 \item{...}{Other argument to be passed, for instance to \code{get_predicted_ci()}.}
 
 \item{data}{An optional data frame in which to look for variables with which
-to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
+to predict. If omitted, the data used to fit the model is used. Visualization
+matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
 
 \item{predict}{string or \code{NULL}
 \itemize{
@@ -95,7 +97,9 @@ to predict. If omitted, the data used to fit the model is used. Visualization ma
 \item Notes: You can see the 4 options for predictions as on a gradient from "close to the model" to "close to the response data": "link", "expectation", "prediction", "classification". The \code{predict} argument modulates two things: the scale of the output and the type of certainty interval. Read more about in the \strong{Details} section below.
 }}
 
-\item{ci}{The interval level (default \code{0.95}, i.e., \verb{95\%} CI).}
+\item{ci}{The interval level. Default is \code{NULL}, to be fast even for larger
+models. Set the interval level to an explicit value, e.g. \code{0.95}, for \verb{95\%}
+CI).}
 
 \item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction
 intervals show the range that likely contains the value of a new
@@ -116,8 +120,8 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 \itemize{
 \item \code{NULL} uses the default method, which varies based on the model type.
 \item Most frequentist models: \code{"normal"} (default).
-\item Bayesian models: "quantile" (default), "hdi", "eti".
-\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, \code{"kenward"}.
+\item Bayesian models:  \code{"quantile"}  (default), \code{"hdi"}, \code{"eti"}, and \code{"spi"}.
+\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, and \code{"kenward"}.
 }}
 
 \item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary: \code{"sd"} or \code{"mad"}.}
@@ -138,7 +142,10 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 \item{vcov_args}{List of arguments to be passed to the function identified by
 the \code{vcov} argument. This function is typically supplied by the \strong{sandwich}
 or \strong{clubSandwich} packages. Please refer to their documentation (e.g.,
-\code{?sandwich::vcovHAC}) to see the list of available arguments.}
+\code{?sandwich::vcovHAC}) to see the list of available arguments. If no estimation
+type (argument \code{type}) is given, the default type for \code{"HC"} (or \code{"vcovHC"})
+equals the default from the \strong{sandwich} package; for type \code{"CR"} (or
+\code{"vcoCR"}), the default is set to \code{"CR3"}.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -233,15 +240,20 @@ details.
 }
 
 \subsection{Bayesian and Bootstrapped models and iterations}{
-For predictions based on multiple iterations, for instance in the case of Bayesian models and bootstrapped predictions, the function used to compute the centrality (point-estimate predictions) can be modified via the \code{centrality_function} argument. For instance, \code{get_predicted(model, centrality_function = stats::median)}. The default is \code{mean}.
-Individual draws can be accessed by running \code{iter <- as.data.frame(get_predicted(model))}, and their iterations can be reshaped into a long format by \code{bayestestR::reshape_iterations(iter)}.
+For predictions based on multiple iterations, for instance in the case of Bayesian
+models and bootstrapped predictions, the function used to compute the centrality
+(point-estimate predictions) can be modified via the \code{centrality_function}
+argument. For instance, \code{get_predicted(model, centrality_function = stats::median)}.
+The default is \code{mean}. Individual draws can be accessed by running
+\code{iter <- as.data.frame(get_predicted(model))}, and their iterations can be
+reshaped into a long format by \code{bayestestR::reshape_iterations(iter)}.
 }
 }
 \examples{
 data(mtcars)
 x <- lm(mpg ~ cyl + hp, data = mtcars)
 
-predictions <- get_predicted(x)
+predictions <- get_predicted(x, ci = .95)
 predictions
 
 # Options and methods ---------------------
@@ -265,19 +277,19 @@ data <- droplevels(iris[1:100, ])
 x <- glm(Species ~ Sepal.Length, data = data, family = "binomial")
 
 # Expectation (default): response scale + CI
-pred <- get_predicted(x, predict = "expectation")
+pred <- get_predicted(x, predict = "expectation", ci = .95)
 head(as.data.frame(pred))
 
 # Prediction: response scale + PI
-pred <- get_predicted(x, predict = "prediction")
+pred <- get_predicted(x, predict = "prediction", ci = .95)
 head(as.data.frame(pred))
 
 # Link: link scale + CI
-pred <- get_predicted(x, predict = "link")
+pred <- get_predicted(x, predict = "link", ci = .95)
 head(as.data.frame(pred))
 
 # Classification: classification "type" + PI
-pred <- get_predicted(x, predict = "classification")
+pred <- get_predicted(x, predict = "classification", ci = .95)
 head(as.data.frame(pred))
 
 }

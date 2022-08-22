@@ -145,5 +145,4 @@ if (requiet("testthat") &&
       expect_equal(as.numeric(get_loglikelihood(m5)), -205.63306, tolerance = 1e-3)
     })
   }
-
 }

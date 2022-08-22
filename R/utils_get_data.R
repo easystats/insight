@@ -4,7 +4,6 @@
 # variables transformed during model fitting are not included in this data frame
 #
 .prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
-
   # check if we have any data yet
   if (is_empty_object(mf)) {
     if (isTRUE(verbose)) {
@@ -120,7 +119,6 @@
   # model frame and convert them to regular data frames, give
   # proper column names and bind them back to the original model frame
   if (any(mc)) {
-
     # try to get model data from environment
     md <- tryCatch(
       {
@@ -133,7 +131,7 @@
 
     # in case we have missing data, the data frame in the environment
     # has more rows than the model frame
-    if (!is.null(md) && nrow(md) != nrow(mf)) {
+    if (isTRUE(!is.null(md) && nrow(md) != nrow(mf))) {
       md <- tryCatch(
         {
           md <- .recover_data_from_environment(x)
@@ -148,7 +146,6 @@
     # if data not found in environment,
     # reduce matrix variables into regular vectors
     if (is.null(md)) {
-
       # we select the non-matrix variables and convert matrix-variables into
       # regular data frames, then binding them together
       mf_matrix <- mf[, which(mc), drop = FALSE]
@@ -164,7 +161,6 @@
       mf_matrix <- do.call(cbind, mf_list)
       mf <- cbind(mf_nonmatrix, mf_matrix)
     } else {
-
       # fix NA in column names
       if (any(is.na(colnames(md)))) {
         colnames(md) <- make.names(colnames(md))
@@ -203,7 +199,6 @@
         # no further processing for survival models
         mf <- md
       } else {
-
         # get cleaned variable names for those variables
         # that we still need from the original model frame
         needed.vars <- compact_character(unique(clean_names(needed.vars)))
@@ -292,12 +287,13 @@
   }
 
 
-  # restore original data for factors -----------------------------------------
+  # restore original data for factors and logicals -----------------------------
 
   # are there any factor variables that have been coerced "on-the-fly",
   # using "factor()" or "as.factor()"? if so, get names and convert back
   # to numeric later
   factors <- colnames(mf)[grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", colnames(mf))]
+  logicals <- colnames(mf)[grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", colnames(mf))]
 
   ## TODO check! some lines above (see "mos_eisly"). monotonic terms are removed from the model frame
 
@@ -360,7 +356,7 @@
 
   # do we have duplicated names?
   dupes <- which(duplicated(cvn))
-  if (!.is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], 1:length(dupes))
+  if (!.is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], seq_along(dupes))
 
   colnames(mf) <- cvn
 
@@ -401,6 +397,7 @@
     effects,
     component = "all",
     factors = factors,
+    logicals = logicals,
     interactions = interactions,
     verbose = verbose
   )
@@ -413,8 +410,14 @@
 
 # add remainng variables with special pattern -------------------------------
 
-.add_remaining_missing_variables <- function(model, mf, effects, component, factors = NULL, interactions = NULL, verbose = TRUE) {
-
+.add_remaining_missing_variables <- function(model,
+                                             mf,
+                                             effects,
+                                             component,
+                                             factors = NULL,
+                                             logicals = NULL,
+                                             interactions = NULL,
+                                             verbose = TRUE) {
   # check if data argument was used
   model_call <- get_call(model)
   if (!is.null(model_call)) {
@@ -462,7 +465,7 @@
       mf[c(interactions, names(interactions))] <- NULL
       mf <- cbind(mf, full_data[c(interactions, names(interactions))])
     } else {
-      for (i in 1:length(interactions)) {
+      for (i in seq_along(interactions)) {
         int <- interactions[i]
         mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
         mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
@@ -488,6 +491,16 @@
       }
     }
     attr(mf, "factors") <- factors
+  }
+
+  # add attributes for those that were logicals
+  if (length(logicals)) {
+    logicals <- gsub("^(as\\.logical|as_logical|logical)\\((.*)\\)", "\\2", logicals)
+    for (i in logicals) {
+      mf[[i]] <- as.numeric(mf[[i]])
+      attr(mf[[i]], "logical") <- TRUE
+    }
+    attr(mf, "logicals") <- logicals
   }
 
   # add attribute that subset is used
@@ -587,13 +600,17 @@
 
   if (is_empty_object(dat)) {
     if (isTRUE(verbose)) {
-      warning(format_message(sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)), call. = FALSE)
+      warning(format_message(
+        sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)
+      ), call. = FALSE)
     }
     return(NULL)
   }
 
   if (length(still_missing) && isTRUE(verbose)) {
-    warning(format_message(sprintf("Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,"))), call. = FALSE)
+    warning(format_message(
+      sprintf("Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,"))
+    ), call. = FALSE)
   }
 
   if ("(offset)" %in% colnames(mf) && !("(offset)" %in% colnames(dat))) {
@@ -944,7 +961,7 @@
         # exeception: list for kruskal-wallis
         if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && grepl("^list\\(", data_name)) {
           l <- eval(.str2lang(x$data.name))
-          names(l) <- paste0("x", 1:length(l))
+          names(l) <- paste0("x", seq_along(l))
           return(l)
         }
 
@@ -952,16 +969,17 @@
         columns <- lapply(data_call, eval)
 
         # preserve table data for McNemar
-        if (!grepl(" (and|by) ", x$data.name) && (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+        if (!grepl(" (and|by) ", x$data.name) &&
+            (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           return(as.table(columns[[1]]))
           # check if data is a list for kruskal-wallis
         } else if (grepl("^Kruskal-Wallis", x$method) && length(columns) == 1 && is.list(columns[[1]])) {
           l <- columns[[1]]
-          names(l) <- paste0("x", 1:length(l))
+          names(l) <- paste0("x", seq_along(l))
           return(l)
         } else {
           max_len <- max(sapply(columns, length))
-          for (i in 1:length(columns)) {
+          for (i in seq_along(columns)) {
             if (length(columns[[i]]) < max_len) {
               columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
             }
@@ -972,7 +990,7 @@
         if (all(grepl("(.*)\\$(.*)", data_name)) && length(data_name) == length(colnames(d))) {
           colnames(d) <- gsub("(.*)\\$(.*)", "\\2", data_name)
         } else if (ncol(d) > 2) {
-          colnames(d) <- paste0("x", 1:ncol(d))
+          colnames(d) <- paste0("x", seq_len(ncol(d)))
         } else if (ncol(d) == 2) {
           colnames(d) <- c("x", "y")
         } else {

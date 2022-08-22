@@ -146,12 +146,12 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
     expect_equal(
       vmodel,
       list(
-        var.fixed = 807.08545, var.random = 1711.44396, var.residual = 748.81107,
-        var.distribution = 748.81107, var.dispersion = 0, var.intercept = c(Subject = 663.28042),
-        var.slope = c(`Subject.Days2(3,6]` = 882.36419, `Subject.Days2(6,10]` = 1415.70768),
-        cor.slope_intercept = structure(c(0.36117, 0.33188), .Dim = 2:1, .Dimnames = list(
-          c("Days2(3,6]", "Days2(6,10]"), "Subject"
-        ))
+        var.fixed = 807.085453556748, var.random = 1711.44396436951,
+        var.residual = 748.811071562908, var.distribution = 748.811071562908,
+        var.dispersion = 0, var.intercept = c(Subject = 663.280418978822),
+        var.slope = c(`Subject.Days2(3,6]` = 882.364188919403, `Subject.Days2(6,10]` = 1415.70768194576),
+        cor.slope_intercept = structure(c(0.361173061386374, 0.331878499015884), dim = 2:1, dimnames = list(c("Days2(3,6]", "Days2(6,10]"), "Subject")),
+        cor.slopes = c(`Subject.Days2(3,6]-Days2(6,10]` = 0.847444720096841)
       ),
       tolerance = 1e-2
     )
@@ -168,11 +168,10 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
         var.distribution = 740.875581179784, var.dispersion = 0,
         var.intercept = c(Subject = 738.635155172211),
         var.slope = c(
-          `Subject.Days2(-1,3]` = 0,
-          `Subject.Days2(3,6]` = 994.015865559888,
+          `Subject.Days2(-1,3]` = 0, `Subject.Days2(3,6]` = 994.015865559888,
           `Subject.Days2(6,10]` = 1545.72576115283
         ),
-        cor.slope_intercept = c(`Subject.1.Days2(3,6]` = NaN, `Subject.1.Days2(6,10]` = NaN)
+        cor.slopes = c(`Subject.1.Days2(3,6]-Days2(6,10]` = 0.859480774219098)
       ),
       tolerance = 1e-2
     )
@@ -185,13 +184,15 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
     expect_equal(
       vmodel,
       list(
-        var.fixed = 807.08545, var.random = 1446.13555, var.residual = 748.81386,
-        var.distribution = 748.81386, var.dispersion = 0, var.slope = c(
-          `Subject.Days2(-1,3]` = 663.27446,
-          `Subject.Days2(3,6]` = 2098.24692, `Subject.Days2(6,10]` = 2722.20492
-        ), cor.slope_intercept = structure(c(0.79645, 0.73296), .Dim = 2:1, .Dimnames = list(
-          c("Days2(3,6]", "Days2(6,10]"), "Subject"
-        ))
+        var.fixed = 807.085453556794, var.random = 1446.13555108848,
+        var.residual = 748.813858500395, var.distribution = 748.813858500395,
+        var.dispersion = 0, var.slope = c(
+          `Subject.Days2(-1,3]` = 663.27445659023,
+          `Subject.Days2(3,6]` = 2098.24691538121, `Subject.Days2(6,10]` = 2722.20492158038
+        ), cor.slopes = c(
+          `Subject.Days2(-1,3]-Days2(3,6]` = 0.796453122321232,
+          `Subject.Days2(-1,3]-Days2(6,10]` = 0.732956077304911, `Subject.Days2(3,6]-Days2(6,10]` = 0.924018087860575
+        )
       ),
       tolerance = 1e-2
     )
@@ -204,15 +205,89 @@ if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet
     expect_equal(
       vmodel,
       list(
-        var.fixed = 807.08545, var.random = 1446.13555, var.residual = 748.81386,
-        var.distribution = 748.81386, var.dispersion = 0, var.slope = c(
-          `Subject.Days2(-1,3]` = 663.27446,
-          `Subject.Days2(3,6]` = 2098.24692, `Subject.Days2(6,10]` = 2722.20492
-        ), cor.slope_intercept = structure(c(0.79645, 0.73296), .Dim = 2:1, .Dimnames = list(
-          c("Days2(3,6]", "Days2(6,10]"), "Subject"
-        ))
+        var.fixed = 807.085453556794, var.random = 1446.13555108848,
+        var.residual = 748.813858500395, var.distribution = 748.813858500395,
+        var.dispersion = 0, var.slope = c(
+          `Subject.Days2(-1,3]` = 663.27445659023,
+          `Subject.Days2(3,6]` = 2098.24691538121, `Subject.Days2(6,10]` = 2722.20492158038
+        ), cor.slopes = c(
+          `Subject.Days2(-1,3]-Days2(3,6]` = 0.796453122321232,
+          `Subject.Days2(-1,3]-Days2(6,10]` = 0.732956077304911, `Subject.Days2(3,6]-Days2(6,10]` = 0.924018087860575
+        )
       ),
       tolerance = 1e-2
+    )
+  })
+
+
+  # test random slope correlation for categorical random slope
+
+  data(cake)
+  m <- lmer(angle ~ temperature + (temperature | recipe), data = cake)
+
+  test_that("get_variance-cat_random_slope", {
+    vc <- suppressWarnings(get_variance(m))
+    expect_equal(
+      vc$cor.slopes,
+      c(
+        `recipe.temperature.L-temperature.C` = 0.99999964, `recipe.temperature.Q-temperature.C` = 0.99999931,
+        `recipe.temperature.L-temperature.Q` = 0.99999941, `recipe.temperature.L-temperature^4` = 0.99999961,
+        `recipe.temperature.Q-temperature^4` = 0.99999912, `recipe.temperature.C-temperature^4` = 0.99999996,
+        `recipe.temperature.L-temperature^5` = -0.99999977, `recipe.temperature.Q-temperature^5` = -0.99999849,
+        `recipe.temperature.C-temperature^5` = -0.99999936, `recipe.temperature^4-temperature^5` = -0.99999941
+      ),
+      tolerance = 1e-3
+    )
+  })
+
+  data("sleepstudy")
+  set.seed(123)
+  sleepstudy$Months <- sample(1:4, nrow(sleepstudy), TRUE)
+
+  m2 <- lmer(Reaction ~ Days + (0 + Days | Subject), data = sleepstudy)
+  m5 <- lmer(Reaction ~ Days + (0 + Days + Months | Subject), data = sleepstudy)
+
+  test_that("random effects CIs, simple slope", {
+    vc <- suppressWarnings(get_variance(m2))
+    expect_equal(
+      names(vc),
+      c(
+        "var.fixed", "var.random", "var.residual", "var.distribution",
+        "var.dispersion", "var.slope"
+      ),
+      tolerance = 1e-3,
+      ignore_attr = TRUE
+    )
+  })
+
+  test_that("random effects CIs, simple slope", {
+    vc <- suppressWarnings(get_variance(m5))
+    expect_equal(
+      vc,
+      list(
+        var.fixed = 921.929610133035, var.random = 1068.04697608476,
+        var.residual = 764.479364064599, var.distribution = 764.479364064599,
+        var.dispersion = 0, var.slope = c(
+          Subject.Days = 37.4753324942022,
+          Subject.Months = 27.6430649522841
+        ),
+        cor.slopes = c(`Subject.Days-Months` = 0.455625778436967)
+      ),
+      tolerance = 1e-3,
+      ignore_attr = TRUE
+    )
+  })
+
+  data(cake)
+  m <- lmer(angle ~ poly(temp, 2) + (poly(temp, 2) | replicate) + (1 | recipe), data = cake)
+
+  test_that("random effects CIs, poly slope", {
+    vc <- suppressWarnings(get_variance(m))
+    expect_equal(
+      vc$cor.slopes,
+      c(`replicate.poly(temp, 2)1-poly(temp, 2)2` = 0.940016422944175),
+      tolerance = 1e-3,
+      ignore_attr = TRUE
     )
   })
 }

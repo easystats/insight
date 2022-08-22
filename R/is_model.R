@@ -40,7 +40,7 @@ is_regression_model <- function(x) {
 # Helpers -----------------------------------------------------------------
 
 .get_class_list <- function(x) {
-  if (length(class(x)) > 1 || class(x) != "list") {
+  if (length(class(x)) > 1 || !inherits(x, "list")) {
     return(x)
   }
 

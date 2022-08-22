@@ -5,13 +5,12 @@
 get_predicted.gam <- function(x,
                               data = NULL,
                               predict = "expectation",
-                              ci = 0.95,
+                              ci = NULL,
                               include_random = TRUE,
                               include_smooth = TRUE,
                               iterations = NULL,
                               verbose = TRUE,
                               ...) {
-
   # allow users to set `predict=NULL` and specify `type` directly
   if (!is.null(predict)) {
     predict <- match.arg(predict, choices = c("expectation", "expected", "link", "prediction", "predicted", "classification"))
@@ -51,26 +50,30 @@ get_predicted.gam <- function(x,
 
 
   # Prediction function
-  predict_function <- function(x, data, ...) {
-    stats::predict(
-      x,
-      newdata = data,
-      type = args$type,
-      re.form = args$re.form,
-      unconditional = FALSE,
-      ...
+  predict_function <- function(x, data, se.fit = TRUE, ...) {
+    dot_args <- list(...)
+    dot_args[["type"]] <- NULL
+    predict_args <- list(x,
+      newdata = data, type = args$type, re.form = args$re.form,
+      unconditional = FALSE, se.fit = se.fit
     )
+    predict_args <- c(predict_args, dot_args)
+    do.call(stats::predict, compact_list(predict_args))
+  }
+
+  boot_function <- function(x, data, ...) {
+    predict_function(x, data, se.fit = FALSE, ...)
   }
 
   # Get prediction
-  rez <- predict_function(x, data = args$data, se.fit = TRUE)
+  rez <- predict_function(x, data = args$data, ...)
   if (is.null(iterations)) {
     predictions <- rez$fit
   } else {
     predictions <- .get_predicted_boot(
       x,
       data = args$data,
-      predict_function = predict_function,
+      predict_function = boot_function,
       iterations = iterations,
       verbose = verbose,
       ...
@@ -78,7 +81,7 @@ get_predicted.gam <- function(x,
   }
 
   # Get CI
-  ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci)
+  ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci, verbose = verbose)
   out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
@@ -88,3 +91,29 @@ get_predicted.gamm <- get_predicted.gam
 
 #' @export
 get_predicted.list <- get_predicted.gam # gamm4
+
+
+
+
+# GAMLSS -----------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.gamlss <- function(x,
+                                 data = NULL,
+                                 predict = "expectation",
+                                 ci = NULL,
+                                 include_smooth = TRUE,
+                                 iterations = NULL,
+                                 verbose = TRUE,
+                                 ...) {
+  get_predicted.default(x,
+    data = NULL,
+    predict = "expectation",
+    ci = NULL,
+    include_smooth = include_smooth,
+    iterations = iterations,
+    verbose = FALSE,
+    ...
+  )
+}

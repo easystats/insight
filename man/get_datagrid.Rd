@@ -46,13 +46,54 @@ get_datagrid(x, ...)
 \item{...}{Arguments passed to or from other methods (for instance, \code{length}
 or \code{range} to control the spread of numeric variables.).}
 
-\item{at}{Can be \code{"all"}, a character vector or list of named elements, indicating
-the predictors of interest (focal predictors). Can also contain assignments
-(as named list, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))},
-or as string, e.g. \code{at = "Sepal.Length = 2"} or
+\item{at}{Indicate at which values \emph{focal predictors} (variables) should be
+represented. If not specified otherwise, representative values for numeric
+variables or predictors are evenly distributed from the minimum to the maximum,
+with a total number of \code{length} values covering that range (see 'Examples').
+Possible options for \code{at} are:
+\itemize{
+\item \code{"all"}, which will include all variables or predictors.
+\item a character vector of one or more variable or predictor names, like
+\code{c("Species", "Sepal.Width")}, which will create a grid of all combinations
+of unique values. For factors, will use all levels, for numeric variables,
+will use a range of length \code{length} (evenly spread from minimum to maximum)
+and for character vectors, will use all values.
+\item a list of named elements, indicating focal predictors and their representative
+values, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}.
+\item a string with assignments, e.g. \code{at = "Sepal.Length = 2"} or
 \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
-and double quotes to assign strings within strings). The remaining variables
-will be fixed.}
+and double quotes to assign strings within strings.
+}
+
+There is a special handling of assignments with \emph{brackets}, i.e. values
+defined inside \code{[} and \verb{]}.For \strong{numeric} variables, the value(s) inside
+the brackets should either be
+\itemize{
+\item two values, indicating minum and maximung (e.g. \verb{at = "Sepal.Length = [0, 5]}),
+for which a range of length \code{length} (evenly spread from given minimum to
+maximum) is created.
+\item more than two numeric values \code{at = "Sepal.Length = [2,3,4,5]"}, in which
+case these values are used as representative values.
+\item a "token" that creates pre-defined representative values:
+\itemize{
+\item for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
+\item for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
+\item for Tukey's five number summary (minimum, lower-hinge, median, upper-hinge, maximum): \code{"x = [fivenum]"}
+\item for terciles, including minimum and maximum: \code{"x = [terciles]"}
+\item for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
+\item for quartiles, including minimum and maximum: \code{"x = [quartiles]"}
+\item for quartiles, excluding minimum and maximum: \code{"x = [quartiles2]"}
+\item for minimum and maximum value: \code{"x = [minmax]"}
+\item for 0 and the maximum value: \code{"x = [zeromax]"}
+}
+}
+
+For \strong{factors} variables, the value(s) inside the brackets should indicate
+one or more factor levels, like \code{at = "Species = [setosa, versicolor]"}.
+\strong{Note}: the \code{length} argument will be ignored when using brackets-tokens.
+
+The remaining variables not specified in \code{at} will be fixed (see also arguments
+\code{factors} and \code{numerics}).}
 
 \item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the
 reference level), \code{"mode"} (set at the most common level) or \code{"all"} to
@@ -79,16 +120,29 @@ substantially increase the size of the datagrid (especially in case of interacti
 If \code{NA}, will return all the unique values. In case of multiple continuous target
 variables, \code{length} can also be a vector of different values (see examples).}
 
-\item{range}{If \code{"range"} (default), will use the minimum and maximum of the
-original data vector as end-points (min and max). If an interval type is specified,
-such as \code{\link[=IQR]{"iqr"}}, \code{\link[bayestestR:ci]{"ci"}}, \code{\link[bayestestR:hdi]{"hdi"}} or \code{\link[bayestestR:eti]{"eti"}}, it will spread the values within
-that range (the default CI width is \verb{95\%} but this can be changed by adding for instance
-\code{ci = 0.90}. See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}. This can be useful to have
-more robust change and skipping extreme values. If \code{\link[=sd]{"sd"}} or \code{\link[=mad]{"mad"}}, it will
-spread by this dispersion index around the mean or the median, respectively.
-If the \code{length} argument is an even number (e.g., \code{4}), it will have one more
-step on the positive side (i.e., \verb{-1, 0, +1, +2}). The result is a named vector.
-See examples.}
+\item{range}{Option to control the representative values given in \code{at}, if
+no specific values were provided. \code{range} can be one of the following:
+\itemize{
+\item \code{"range"} (default), will use the minimum and maximum of the original data
+vector as end-points (min and max).
+\item if an interval type is specified, such as \code{\link[=IQR]{"iqr"}},
+\code{\link[bayestestR:ci]{"ci"}}, \code{\link[bayestestR:hdi]{"hdi"}} or
+\code{\link[bayestestR:eti]{"eti"}}, it will spread the values within that range
+(the default CI width is \verb{95\%} but this can be changed by adding for instance
+\code{ci = 0.90}.) See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}. This can be useful to have
+more robust change and skipping extreme values.
+\item if \code{\link[=sd]{"sd"}} or \code{\link[=mad]{"mad"}}, it will spread by this dispersion
+index around the mean or the median, respectively. If the \code{length} argument
+is an even number (e.g., \code{4}), it will have one more step on the positive
+side (i.e., \verb{-1, 0, +1, +2}). The result is a named vector. See 'Examples.'
+\item \code{"grid"} will create a reference grid that is useful when plotting
+predictions, by choosing representative values for numeric variables based
+on their position in the reference grid. If a numeric variable is the first
+predictor in \code{at}, values from minimum to maximum of the same length as
+indicated in \code{length} are generated. For numeric predictors not specified at
+first in \code{at}, mean and -1/+1 SD around the mean are returned. For factors,
+all levels are returned.
+}}
 
 \item{include_smooth}{If \code{x} is a model object, decide whether smooth terms
 should be included in the data grid or not.}
@@ -113,12 +167,12 @@ Reference grid data frame.
 \description{
 Create a reference matrix, useful for visualisation, with evenly spread and
 combined values. Usually used to make generate predictions using \code{\link[=get_predicted]{get_predicted()}}.
-See this \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{vignette} for a tutorial on how to create a visualisation matrix using this function.
+See this \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{vignette}
+for a tutorial on how to create a visualisation matrix using this function.
 }
 \examples{
 # Datagrids of variables and dataframes =====================================
 if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE)) {
-
   # Single variable is of interest; all others are "fixed" ------------------
   # Factors
   get_datagrid(iris, at = "Species") # Returns all the levels
@@ -133,16 +187,23 @@ if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE
   ) # change non-targets fixing
   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
+  get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+  get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
+
+  # Numeric and categorical variables, generating a grid for plots
+  # default spread length = 10
+  get_datagrid(iris, at = c("Sepal.Length", "Species"), range = "grid")
+  # default spread length = 3 (-1 SD, mean and +1 SD)
+  get_datagrid(iris, at = c("Species", "Sepal.Length"), range = "grid")
 
 
   # Standardization and unstandardization
   data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
   data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
-  # TODO: uncomment when datawizard > 0.3.1 is out
-  # datawizard::standardize(data, select = "Sepal.Length")
-  # data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
-  # data
-  # datawizard::unstandardize(data, select = "Sepal.Length")
+  datawizard::standardize(data, select = "Sepal.Length")
+  data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+  data
+  datawizard::unstandardize(data, select = "Sepal.Length")
 
 
   # Multiple variables are of interest, creating a combination --------------
@@ -163,6 +224,7 @@ if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE
 model <- lm(Sepal.Length ~ Sepal.Width * Petal.Length, data = iris)
 # Get datagrid of predictors
 data <- get_datagrid(model, length = c(20, 3), range = c("range", "sd"))
+# same as: get_datagrid(model, range = "grid", length = 20)
 # Add predictions
 data$Sepal.Length <- get_predicted(model, data = data)
 # Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)

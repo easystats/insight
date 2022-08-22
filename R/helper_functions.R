@@ -222,7 +222,6 @@
 }
 
 .get_elements <- function(effects, component) {
-
   # all elements of a model
   elements <- .all_elements()
 
@@ -239,11 +238,11 @@
   conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "smooth_terms"))
 
   # location parameters
-  location_parameters <- if (effects == "fixed") {
-    setdiff(elements, c(auxiliary_parameters, random_parameters))
-  } else {
+  location_parameters <- switch(effects,
+    "fixed" = setdiff(elements, c(auxiliary_parameters, random_parameters)),
+    "random" = intersect(setdiff(elements, auxiliary_parameters), random_parameters),
     setdiff(elements, auxiliary_parameters)
-  }
+  )
 
   # fixed pattern?
   if (all(component == "location")) {
@@ -280,9 +279,7 @@
 # checks if a mixed model fit is singular or not. Need own function,
 # because lme4::isSingular() does not work with glmmTMB
 .is_singular <- function(x, vals, tolerance = 1e-5) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
+  check_if_installed("lme4", reason = "to compute variances for mixed models")
 
   tryCatch(
     {

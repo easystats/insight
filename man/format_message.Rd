@@ -4,7 +4,7 @@
 \alias{format_message}
 \title{Format messages and warnings}
 \usage{
-format_message(string, ..., line_length = 0.9 * options()$width)
+format_message(string, ..., line_length = 0.9 * options()$width, indent = "  ")
 }
 \arguments{
 \item{string}{A string.}
@@ -12,6 +12,11 @@ format_message(string, ..., line_length = 0.9 * options()$width)
 \item{...}{Further strings that will be concatenated as indented new lines.}
 
 \item{line_length}{Numeric, the maximum length of a line.}
+
+\item{indent}{Character vector. If further lines are specified in \code{...}, a
+user-defined string can be specified to indent subsequent lines. Defaults to
+\code{"  "} (two white spaces), hence for each start of the line after the first
+line, two white space characters are inserted.}
 }
 \value{
 A formatted string.
@@ -20,6 +25,24 @@ A formatted string.
 Inserts line breaks into a longer message or warning string.
 Line length is adjusted to maximum length of the console, if the width
 can be accessed. By default, new lines are indented by two whitespace.
+}
+\details{
+There is an experimental formatting feature implemented in this function.
+You can use following tags:
+\itemize{
+\item \verb{\{.b text\}} for bold formatting
+\item \verb{\{.i text\}} to use italic font style
+\item \verb{\{.url www.url.com\}} formats the string as URL (i.e., enclosing URL in
+\code{<} and \code{>}, blue color and italic font style)
+\item \verb{\{.pkg packagename\}} formats the text in blue color.
+}
+
+This features has some limitations: it's hard to detect the exact length for
+each line when the string has multiple lines (after line breaks) and the
+string contains formatting tags. Thus, it can happen that lines are wrapped at
+an earlier length than expected. Furthermore, if you have multiple words in a
+format tag (\verb{\{.b one two three\}}), a line break might occur inside this tag,
+and the formatting no longer works (messing up the message-string).
 }
 \examples{
 msg <- format_message("Much too long string for just one line, I guess!",
@@ -34,4 +57,21 @@ msg <- format_message("Much too long string for just one line, I guess!",
   line_length = 30
 )
 message(msg)
+
+msg <- format_message("Much too long string for just one line, I guess!",
+  "First new line",
+  "Second new line",
+  "(not indented)",
+  line_length = 30,
+  indent = ""
+)
+message(msg)
+
+# Caution, experimental! See 'Details'
+msg <- format_message(
+  "This is {.i italic}, visit {.url easystats.github.io/easystats}",
+  line_length = 30
+)
+message(msg)
+
 }

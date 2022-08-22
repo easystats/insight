@@ -95,6 +95,7 @@ find_terms.aovlist <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   }
 }
 
+
 #' @export
 find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   resp <- find_response(x, verbose = FALSE)
@@ -113,7 +114,6 @@ find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
     l
   }
 }
-
 
 
 #' @export
@@ -136,7 +136,13 @@ find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 }
 
 
+# unsupported ------------------
 
+
+#' @export
+find_terms.mipo <- function(x, ...) {
+  NULL
+}
 
 
 

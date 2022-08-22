@@ -1,3 +1,5 @@
+testthat::skip_on_covr()
+
 if (requiet("testthat") &&
   requiet("insight") &&
   requiet("logistf")) {

@@ -252,6 +252,9 @@
   is_xtab <- FALSE
   is_levenetest <- FALSE
 
+  ## TODO: special handling of shapiro needed
+  # see https://github.com/easystats/report/issues/256
+
   if (inherits(x, "htest")) {
     if (grepl("kruskal-wallis", tolower(x$method), fixed = TRUE) ||
       grepl("design-based kruskalwallis", tolower(x$method), fixed = TRUE) ||
@@ -291,7 +294,9 @@
   }
 
   # exceptions: car::leveneTest
-  if (inherits(x, "anova") && !is.null(attributes(x)$heading) && grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
+  if (inherits(x, "anova") &&
+      !is.null(attributes(x)$heading) &&
+      grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
     is_levenetest <- TRUE
   }
 
@@ -339,9 +344,9 @@
   # gaussian family --------
 
   linear_model <- TRUE
-  if (binom_fam | exponential_fam | poisson_fam | neg_bin_fam | logit.link |
-    dirichlet_fam | is.ordinal | zero.inf | is.censored | is.survival | is_binomtest |
-    is.categorical | hurdle | is.multinomial | is_chi2test | is_proptest | is_xtab) {
+  if (binom_fam || exponential_fam || poisson_fam || neg_bin_fam || logit.link ||
+    dirichlet_fam || is.ordinal || zero.inf || is.censored || is.survival || is_binomtest ||
+    is.categorical || hurdle || is.multinomial || is_chi2test || is_proptest || is_xtab) {
     linear_model <- FALSE
   } else if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian")) && !grepl("(\\st)$", fitfam)) {
     linear_model <- FALSE

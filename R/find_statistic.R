@@ -19,7 +19,6 @@
 #' find_statistic(m)
 #' @export
 find_statistic <- function(x, ...) {
-
   # model object check --------------------------------------------------------
 
   # check if the object is a model object; if not, quit early

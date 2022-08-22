@@ -14,7 +14,8 @@ A list of two functions: \verb{$transformation}, the function that was used to
 transform the response variable; \verb{$inverse}, the inverse-function of
 \verb{$transformation} (can be used for "back-transformation"). If no
 transformation was applied, both list-elements \verb{$transformation} and
-\verb{$inverse} just return \code{function(x) x}.
+\verb{$inverse} just return \code{function(x) x}. If transformation is unknown,
+\code{NULL} is returned.
 }
 \description{
 This functions checks whether any transformation, such as log- or

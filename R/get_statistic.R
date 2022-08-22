@@ -61,7 +61,7 @@ get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
   # edge cases: check for NULL
   params <- rownames(cs)
   if (is.null(params)) {
-    params <- paste(1:nrow(cs))
+    params <- paste(seq_len(nrow(cs)))
   }
 
   out <- data.frame(
@@ -257,7 +257,7 @@ get_statistic.mhurdle <- function(x,
   cond_pars <- which(grepl("^h2\\.", rownames(s$coefficients)))
   zi_pars <- which(grepl("^h1\\.", rownames(s$coefficients)))
   ip_pars <- which(grepl("^h3\\.", rownames(s$coefficients)))
-  aux_pars <- (1:length(rownames(s$coefficients)))[-c(cond_pars, zi_pars, ip_pars)]
+  aux_pars <- (seq_along(rownames(s$coefficients)))[-c(cond_pars, zi_pars, ip_pars)]
 
   stats$Component[cond_pars] <- "conditional"
   stats$Component[zi_pars] <- "zero_inflated"
@@ -432,7 +432,7 @@ get_statistic.SemiParBIV <- function(x, ...) {
   s <- summary(x)
   s <- compact_list(s[grepl("^tableP", names(s))])
 
-  params <- do.call(rbind, lapply(1:length(s), function(i) {
+  params <- do.call(rbind, lapply(seq_along(s), function(i) {
     out <- as.data.frame(s[[i]])
     out$Parameter <- rownames(out)
     out$Component <- paste0("Equation", i)
@@ -488,10 +488,7 @@ get_statistic.gamlss <- function(x, ...) {
 
 #' @export
 get_statistic.vglm <- function(x, ...) {
-  if (!requireNamespace("VGAM", quietly = TRUE)) {
-    stop("Package 'VGAM' needed for this function to work. Please install it.")
-  }
-
+  check_if_installed("VGAM")
   cs <- VGAM::coef(VGAM::summary(x))
 
   out <- data.frame(
@@ -854,7 +851,7 @@ get_statistic.multinom <- function(x, ...) {
 
   if (is.matrix(stderr)) {
     se <- c()
-    for (i in 1:nrow(stderr)) {
+    for (i in seq_len(nrow(stderr))) {
       se <- c(se, as.vector(stderr[i, ]))
     }
   } else {
@@ -1232,7 +1229,7 @@ get_statistic.btergm <- function(x, verbose = TRUE, ...) {
   bootstraps <- x@boot$t
 
   # standard error
-  sdev <- sapply(1:ncol(bootstraps), function(i) {
+  sdev <- sapply(seq_len(ncol(bootstraps)), function(i) {
     cur <- (bootstraps[, i] - params[i])^2
     sqrt(sum(cur) / length(cur))
   })

@@ -79,7 +79,9 @@ test_that("standardize_names works as expected with datawizard", {
 
   expect_equal(
     names(standardize_names(x, style = "broom")),
-    c("estimate", "std.dev", "iqr", "min", "max", "skewness", "kurtosis",
-      "n.obs", "missing.obs")
+    c(
+      "estimate", "std.dev", "iqr", "min", "max", "skewness", "kurtosis",
+      "n.obs", "missing.obs"
+    )
   )
 })

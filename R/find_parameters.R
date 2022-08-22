@@ -77,7 +77,7 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
 #' @export
 find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
-  stop("A data frame is no valid object for this function.")
+  stop("A data frame is no valid object for this function.", call. = FALSE)
 }
 
 

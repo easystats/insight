@@ -10,8 +10,8 @@ find_predictors(x, ...)
 \method{find_predictors}{default}(
   x,
   effects = c("fixed", "random", "all"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion",
-    "instruments", "correlation", "smooth_terms"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
+    "correlation", "smooth_terms"),
   flatten = FALSE,
   verbose = TRUE,
   ...

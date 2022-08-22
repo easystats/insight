@@ -82,7 +82,7 @@ find_parameters.mhurdle <- function(x,
   cond_pars <- which(grepl("^h2\\.", names(cf)))
   zi_pars <- which(grepl("^h1\\.", names(cf)))
   ip_pars <- which(grepl("^h3\\.", names(cf)))
-  aux_pars <- (1:length(names(cf)))[-c(cond_pars, zi_pars, ip_pars)]
+  aux_pars <- (seq_along(names(cf)))[-c(cond_pars, zi_pars, ip_pars)]
 
   # names(cf) <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", names(cf))
 

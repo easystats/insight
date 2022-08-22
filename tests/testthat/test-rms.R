@@ -1,9 +1,9 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-    requiet("testthat") &&
-    requiet("insight") &&
-    requiet("rms")) {
+  requiet("testthat") &&
+  requiet("insight") &&
+  requiet("rms")) {
   data(mtcars)
   m1 <- lrm(am ~ mpg + gear, data = mtcars)
 

@@ -1,25 +1,16 @@
 ---
-output: 
-  github_document:
-    toc: false
-    fig_width: 10.08
-    fig_height: 6
-tags: [r, reports]
-vignette: >
-  \usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
+output: github_document
 ---
 
 
-```{r, echo = FALSE}
+```{r, warning=FALSE, message=FALSE, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   tidy.opts = list(width.cutoff = 80),
   tidy = TRUE,
+  warning = FALSE,
+  message = FALSE,
   fig.path = "README-",
-  fig.width = 600,
   comment = "#>"
 )
 options(knitr.kable.NA = "", digits = 2, width = 80)
@@ -113,7 +104,7 @@ Say, the goal is to make predictions for a certain term, holding remaining co-va
 
 In this example, we fit a simple linear model, but it could be replaced by (m)any other models, so this approach is "universal" and applies to many different model objects.
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 library(insight)
 m <- lm(
   Sepal.Length ~ Species + Petal.Width + Sepal.Width,
@@ -143,7 +134,7 @@ The next example should emphasize the possibilities to generalize functions to m
 
 The first approach uses the functions that are available for some, but obviously not for all models, to access the information about model coefficients.
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 print_params <- function(model) {
   paste0(
     "My parameters are ",
@@ -162,7 +153,7 @@ print_params(m2)
 
 As we can see, the function fails for *gam*-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With **insight**, users can write a function without having to worry about the model type.
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 print_params <- function(model) {
   paste0(
     "My parameters are ",

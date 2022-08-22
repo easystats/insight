@@ -21,7 +21,8 @@
 #' @param x A statistical model (can also be a data.frame, in which case the
 #'   second argument has to be a model).
 #' @param data An optional data frame in which to look for variables with which
-#'   to predict. If omitted, the data used to fit the model is used. Visualization matrices can be generated using [get_datagrid()].
+#'   to predict. If omitted, the data used to fit the model is used. Visualization
+#'   matrices can be generated using [get_datagrid()].
 #' @param predict string or `NULL`
 #' * `"link"` returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).
 #' * `"expectation"` (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).
@@ -48,7 +49,9 @@
 #'   will fix the value of the smooth to its average, so that the predictions
 #'   are not depending on it. (default), `mean()`, or
 #'   `bayestestR::map_estimate()`.
-#' @param ci The interval level (default `0.95`, i.e., `95%` CI).
+#' @param ci The interval level. Default is `NULL`, to be fast even for larger
+#'   models. Set the interval level to an explicit value, e.g. `0.95`, for `95%`
+#'   CI).
 #' @param ci_type Can be `"prediction"` or `"confidence"`. Prediction
 #'   intervals show the range that likely contains the value of a new
 #'   observation (in what range it would fall), whereas confidence intervals
@@ -66,8 +69,8 @@
 #' @param ci_method The method for computing p values and confidence intervals. Possible values depend on model type.
 #'   + `NULL` uses the default method, which varies based on the model type.
 #'   + Most frequentist models: `"normal"` (default).
-#'   + Bayesian models: "quantile" (default), "hdi", "eti".
-#'   + Mixed effects **lme4** models: `"normal"` (default), `"satterthwaite"`, `"kenward"`.
+#'   + Bayesian models:  `"quantile"`  (default), `"hdi"`, `"eti"`, and `"spi"`.
+#'   + Mixed effects **lme4** models: `"normal"` (default), `"satterthwaite"`, and `"kenward"`.
 #' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary: `"sd"` or `"mad"`.
 #' @param ... Other argument to be passed, for instance to `get_predicted_ci()`.
 #' @inheritParams get_varcov
@@ -125,8 +128,13 @@
 #' }
 #'
 #' \subsection{Bayesian and Bootstrapped models and iterations}{
-#' For predictions based on multiple iterations, for instance in the case of Bayesian models and bootstrapped predictions, the function used to compute the centrality (point-estimate predictions) can be modified via the `centrality_function` argument. For instance, `get_predicted(model, centrality_function = stats::median)`. The default is `mean`.
-#' Individual draws can be accessed by running `iter <- as.data.frame(get_predicted(model))`, and their iterations can be reshaped into a long format by `bayestestR::reshape_iterations(iter)`.
+#' For predictions based on multiple iterations, for instance in the case of Bayesian
+#' models and bootstrapped predictions, the function used to compute the centrality
+#' (point-estimate predictions) can be modified via the `centrality_function`
+#' argument. For instance, `get_predicted(model, centrality_function = stats::median)`.
+#' The default is `mean`. Individual draws can be accessed by running
+#' `iter <- as.data.frame(get_predicted(model))`, and their iterations can be
+#' reshaped into a long format by `bayestestR::reshape_iterations(iter)`.
 #' }
 #'
 #' @seealso [get_datagrid()]
@@ -135,7 +143,7 @@
 #' data(mtcars)
 #' x <- lm(mpg ~ cyl + hp, data = mtcars)
 #'
-#' predictions <- get_predicted(x)
+#' predictions <- get_predicted(x, ci = .95)
 #' predictions
 #'
 #' # Options and methods ---------------------
@@ -159,19 +167,19 @@
 #' x <- glm(Species ~ Sepal.Length, data = data, family = "binomial")
 #'
 #' # Expectation (default): response scale + CI
-#' pred <- get_predicted(x, predict = "expectation")
+#' pred <- get_predicted(x, predict = "expectation", ci = .95)
 #' head(as.data.frame(pred))
 #'
 #' # Prediction: response scale + PI
-#' pred <- get_predicted(x, predict = "prediction")
+#' pred <- get_predicted(x, predict = "prediction", ci = .95)
 #' head(as.data.frame(pred))
 #'
 #' # Link: link scale + CI
-#' pred <- get_predicted(x, predict = "link")
+#' pred <- get_predicted(x, predict = "link", ci = .95)
 #' head(as.data.frame(pred))
 #'
 #' # Classification: classification "type" + PI
-#' pred <- get_predicted(x, predict = "classification")
+#' pred <- get_predicted(x, predict = "classification", ci = .95)
 #' head(as.data.frame(pred))
 #'
 #' @export
@@ -187,7 +195,7 @@ get_predicted <- function(x, ...) {
 get_predicted.default <- function(x,
                                   data = NULL,
                                   predict = "expectation",
-                                  ci = 0.95,
+                                  ci = NULL,
                                   ci_type = "confidence",
                                   ci_method = NULL,
                                   dispersion_method = "sd",
@@ -195,7 +203,6 @@ get_predicted.default <- function(x,
                                   vcov_args = NULL,
                                   verbose = TRUE,
                                   ...) {
-
   # evaluate arguments
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
@@ -211,7 +218,10 @@ get_predicted.default <- function(x,
 
   # may fail due to invalid "dot_args", so try shorter argument list
   if (is.null(predictions)) {
-    predictions <- tryCatch(do.call("predict", compact_list(list(x, newdata = args$data, type = args$type))), error = function(e) NULL)
+    predictions <- tryCatch(
+      do.call("predict", compact_list(list(x, newdata = args$data, type = args$type))),
+      error = function(e) NULL
+    )
   }
 
   # still fails? try fitted()
@@ -257,7 +267,7 @@ get_predicted.default <- function(x,
 get_predicted.data.frame <- function(x, data = NULL, verbose = TRUE, ...) {
   # This makes it pipe friendly; data %>% get_predicted(model)
   if (is.null(data)) {
-    stop("Please provide a model to base the estimations on.")
+    stop("Please provide a model to base the estimations on.", call. = FALSE)
   } else {
     get_predicted(data, x, verbose = verbose, ...)
   }
@@ -274,6 +284,7 @@ get_predicted.data.frame <- function(x, data = NULL, verbose = TRUE, ...) {
 get_predicted.lm <- function(x,
                              data = NULL,
                              predict = "expectation",
+                             ci = NULL,
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
@@ -302,6 +313,7 @@ get_predicted.lm <- function(x,
     x,
     predictions,
     data = args$data,
+    ci = ci,
     ci_type = args$ci_type,
     ...
   )
@@ -331,6 +343,15 @@ get_predicted.lrm <- get_predicted.default
 
 
 
+# MASS: rlm -----------------------------------------------------
+# =======================================================================
+
+# these objects inherit from `lm`, but `get_predicted.lm` do not return
+# confidence intervals.
+
+#' @export
+get_predicted.rlm <- get_predicted.default
+
 
 # survival: survreg -----------------------------------------------------
 # =======================================================================
@@ -345,7 +366,13 @@ get_predicted.survreg <- get_predicted.lm
 # =======================================================================
 
 #' @export
-get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterations = NULL, verbose = TRUE, ...) {
+get_predicted.coxph <- function(x,
+                                data = NULL,
+                                predict = "expectation",
+                                ci = NULL,
+                                iterations = NULL,
+                                verbose = TRUE,
+                                ...) {
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
   se <- NULL
 
@@ -376,6 +403,7 @@ get_predicted.coxph <- function(x, data = NULL, predict = "expectation", iterati
     x,
     predictions,
     data = args$data,
+    ci = ci,
     ci_type = args$ci_type,
     se = se,
     ...
@@ -452,7 +480,6 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
 
 
 .format_reform <- function(include_random = TRUE) {
-
   # Format re.form
   if (is.null(include_random) || is.na(include_random)) {
     re.form <- include_random
@@ -493,10 +520,8 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
                                      link_inv = NULL,
                                      verbose = FALSE,
                                      ...) {
-
   # Transform to response scale
   if (isTRUE(args$transform)) {
-
     # retrieve link-inverse, for back transformation...
     if (is.null(link_inv)) {
       link_inv <- link_inverse(x)
@@ -518,8 +543,8 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
         ci_data[se_col] <- NULL
         if (isTRUE(verbose)) {
           warning(format_message(
-            'Could not apply Delta method to transform standard errors.',
-            'You may be able to obtain standard errors by using the ',
+            "Could not apply Delta method to transform standard errors.",
+            "You may be able to obtain standard errors by using the ",
             '`predict="link"` argument value.'
           ), call. = FALSE)
         }
@@ -542,7 +567,13 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
       ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
       predictions <- .get_predict_transform_response(predictions, response = response)
       if ("iterations" %in% names(attributes(predictions))) {
-        attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, .get_predict_transform_response, response = response))
+        attr(predictions, "iterations") <- as.data.frame(
+          sapply(
+            attributes(predictions)$iterations,
+            .get_predict_transform_response,
+            response = response
+          )
+        )
       }
     }
   }
@@ -569,7 +600,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
   if (is.matrix(predictions) && ncol(predictions) > 1) {
     predictions <- as.data.frame(predictions)
     vary <- colnames(predictions)
-    predictions$Row <- 1:nrow(predictions)
+    predictions$Row <- seq_len(nrow(predictions))
     # if we have any focal predictors, add those as well, so we have
     # the associated levels/values for "Row"
     if (!is.null(args$data)) {
@@ -634,7 +665,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
 
   # Format draws
   draws <- as.data.frame(t(draws$t))
-  names(draws) <- paste0("iter_", 1:ncol(draws))
+  names(draws) <- paste0("iter_", seq_len(ncol(draws)))
 
   .get_predicted_centrality_from_draws(x, draws, ...)
 }
@@ -648,7 +679,6 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
                                                  iter,
                                                  centrality_function = base::mean,
                                                  ...) {
-
   # outcome: ordinal/multinomial/multivariate produce a 3D array of predictions,
   # which we stack in "long" format
   if (length(dim(iter)) == 3) {
@@ -657,7 +687,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
     iter_stacked <- apply(iter, 1, c)
     predictions <- data.frame(
       # rows repeated for each response level
-      Row = rep(1:ncol(iter), times = dim(iter)[3]),
+      Row = rep(seq_len(ncol(iter)), times = dim(iter)[3]),
       # response levels repeated for each row
       Response = rep(dimnames(iter)[[3]], each = dim(iter)[2]),
       Predicted = apply(iter_stacked, 1, centrality_function),
@@ -673,7 +703,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
     predictions <- apply(iter, 1, centrality_function)
   }
   # Rename iterations
-  names(iter) <- paste0("iter_", 1:ncol(iter))
+  names(iter) <- paste0("iter_", seq_len(ncol(iter)))
   # Store as attribute
   attr(predictions, "iterations") <- iter
   predictions

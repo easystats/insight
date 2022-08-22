@@ -4,6 +4,7 @@
 \alias{format_value}
 \alias{format_value.data.frame}
 \alias{format_value.numeric}
+\alias{format_percent}
 \title{Numeric Values Formatting}
 \usage{
 format_value(x, ...)
@@ -29,6 +30,8 @@ format_value(x, ...)
   zap_small = FALSE,
   ...
 )
+
+format_percent(x, ...)
 }
 \arguments{
 \item{x}{Numeric value.}
@@ -63,7 +66,9 @@ places than \code{digits} are printed in scientific notation.}
 A formatted string.
 }
 \description{
-Numeric Values Formatting
+\code{format_value()} converts numeric values into formatted string values2, where
+formatting can be something like rounding digits, scientific notation etc.
+\code{format_percent()} is a short-cut for \code{format_value(as_percent = TRUE)}.
 }
 \examples{
 format_value(1.20)

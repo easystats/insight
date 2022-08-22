@@ -15,11 +15,16 @@ get_modelmatrix <- function(x, ...) {
   UseMethod("get_modelmatrix")
 }
 
-
 #' @export
-get_modelmatrix.default <- function(x, ...) {
-  stats::model.matrix(object = x, ...)
+get_modelmatrix.default <- function(x, data = NULL, ...) {
+  if (is.null(data)) {
+    mm <- stats::model.matrix(object = x, ...)
+  } else {
+    mm <- .pad_modelmatrix_unpad(x, data, ...)
+  }
+  mm
 }
+
 
 #' @export
 get_modelmatrix.merMod <- function(x, ...) {
@@ -29,6 +34,18 @@ get_modelmatrix.merMod <- function(x, ...) {
     mm <- stats::model.matrix(model_terms, ...)
   } else {
     mm <- stats::model.matrix(object = x, ...)
+  }
+
+  mm
+}
+
+#' @export
+get_modelmatrix.bracl <- function(x, ...) {
+  dots <- list(...)
+  if ("data" %in% names(dots)) {
+    mm <- stats::model.matrix(object = x, data = dots$data, ...)
+  } else {
+    stop(format_message("The 'data' argument is required to return the model matrix."), call. = FALSE)
   }
 
   mm
@@ -162,16 +179,17 @@ get_modelmatrix.rlm <- function(x, ...) {
 get_modelmatrix.betareg <- function(x, ...) {
   dots <- list(...)
   if (is.null(dots$data)) {
-      mm <- stats::model.matrix(x, ...)
+    mm <- stats::model.matrix(x, ...)
   } else {
-      # adapted from betareg::predict.betareg()
-      # suppress contrasts dropped from factor
-      mf <- suppressWarnings(stats::model.frame(
-          stats::delete.response(x$terms[["mean"]]),
-          dots$data,
-          na.action = stats::na.pass,
-          xlev = x$levels[["mean"]]))
-      mm <- stats::model.matrix(stats::delete.response(x$terms$mean), mf)
+    # adapted from betareg::predict.betareg()
+    # suppress contrasts dropped from factor
+    mf <- suppressWarnings(stats::model.frame(
+      stats::delete.response(x$terms[["mean"]]),
+      dots$data,
+      na.action = stats::na.pass,
+      xlev = x$levels[["mean"]]
+    ))
+    mm <- stats::model.matrix(stats::delete.response(x$terms$mean), mf)
   }
   return(mm)
 }
@@ -196,7 +214,10 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
   BayesFactor::model.matrix(x, ...)
 }
 
+
+
 # helper ----------------
+
 
 .data_in_dots <- function(..., object = NULL, default_data = NULL) {
   dot.arguments <- lapply(match.call(expand.dots = FALSE)$`...`, function(x) x)
@@ -207,4 +228,42 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
   }
   remaining_dots <- setdiff(names(dot.arguments), "data")
   do.call(stats::model.matrix, c(list(object = object, data = data_arg), remaining_dots))
+}
+
+
+.pad_modelmatrix_unpad <- function(x, data, ...) {
+  data <- .pad_modelmatrix(x = x, data = data)
+  mm <- stats::model.matrix(object = x, data = data, ...)
+  .unpad_modelmatrix(mm = mm, data = data)
+}
+
+
+.pad_modelmatrix <- function(x, data, min_levels = 2) {
+  # return original data if there are already enough factors
+  fac <- lapply(Filter(is.factor, data), unique)
+  fac_len <- sapply(fac, length)
+  if (all(fac_len > min_levels)) {
+      out <- data
+      attr(out, "pad") <- 0
+      return(out)
+  }
+
+  # factors from data in model object
+  modeldata <- get_data(x)
+  fac <- lapply(Filter(is.factor, modeldata), function(i) unique(i)[1:min_levels])
+  pad <- lapply(seq_len(min_levels), function(...) utils::head(data, n = 1))
+  pad <- do.call("rbind", pad)
+  for (n in names(fac)) {
+      pad[[n]] <- fac[[n]]
+  }
+
+  out <- rbind(pad, data)
+  attr(out, "pad") <- nrow(pad)
+  return(out)
+}
+
+
+.unpad_modelmatrix <- function(mm, data) {
+  npad <- attr(data, "pad")
+  mm[(npad + 1):nrow(mm), , drop = FALSE]
 }

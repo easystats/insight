@@ -107,7 +107,6 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
                                        ignore_asis = FALSE,
                                        ignore_lag = FALSE,
                                        is_emmeans = FALSE) {
-
   # return if x is empty
   if (.is_empty_string(x)) {
     return("")
@@ -117,10 +116,10 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
   # for survival, remove strata(), and so on...
   pattern <- c(
     "as.factor", "as.numeric", "factor", "frailty", "offset", "log1p", "log10",
-    "log2", "log(log", "scale(log", "log", "lag", "diff", "lspline",
-    "pspline", "scale(poly", "poly", "catg", "asis", "matrx", "pol", "strata",
-    "strat", "scale", "scored", "interaction", "sqrt", "sin", "cos", "tan",
-    "acos", "asin", "atan", "atan2", "exp", "lsp", "rcs", "pb", "lo",
+    "log2", "log(log", "scale(log", "log", "lag", "diff", "lspline", "as.logical",
+    "logical", "pspline", "scale(poly", "poly", "catg", "asis", "matrx", "pol",
+    "strata", "strat", "scale", "scored", "interaction", "sqrt", "sin", "cos",
+    "tan", "acos", "asin", "atan", "atan2", "exp", "lsp", "rcs", "pb", "lo",
     "bs", "ns", "mSpline", "bSpline", "t2", "te", "ti", "tt", # need to be fixed first "mmc", "mm",
     "mi", "mo", "gp", "s", "I"
   )
@@ -133,12 +132,12 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 
   # do we have a "log()" pattern here? if yes, get capture region
   # which matches the "cleaned" variable name
-  cleaned <- sapply(1:length(x), function(i) {
+  cleaned <- sapply(seq_along(x), function(i) {
     # check if we have special patterns like 100 * log(xy), and remove it
     if (isFALSE(is_emmeans) && grepl("^([0-9]+)", x[i])) {
       x[i] <- gsub("^([0-9]+)[^(\\.|[:alnum:])]+(.*)", "\\2", x[i])
     }
-    for (j in 1:length(pattern)) {
+    for (j in seq_along(pattern)) {
       # check if we find pattern at all
       if (grepl(pattern[j], x[i], fixed = TRUE)) {
         # remove possible namespace
@@ -165,6 +164,19 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           p <- paste0("^", pattern[j], "\\((.*)\\).*")
           g <- trim_ws(sub(p, "\\1", x[i]))
           x[i] <- trim_ws(unlist(strsplit(g, ",")))
+        } else if (pattern[j] == "s" && grepl("^s\\(", x[i])) {
+          x[i] <- gsub("^s\\(", "", x[i])
+          x[i] <- gsub("\\)$", "", x[i])
+          if (grepl("=|[[:digit:]]", x[i])) {
+            new_x <- trim_ws(unlist(strsplit(x[i], ",")))
+            to_remove <- which(!grepl("\\D", new_x))
+            to_remove <- c(to_remove, which(grepl("=", new_x)))
+            if (length(to_remove) == 0) {
+              x[i] <- paste(new_x, collapse = ", ")
+            } else {
+              x[i] <- paste(new_x[-to_remove], collapse = ", ")
+            }
+          }
         } else {
           # p <- paste0("^", pattern[j], "\\(([^,/)]*).*")
           # this one should be more generic...

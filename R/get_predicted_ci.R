@@ -55,7 +55,7 @@
 #' ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 #' head(ci_vals)
 #' @export
-get_predicted_ci <- function(x, predictions = NULL, ...) {
+get_predicted_ci <- function(x, ...) {
   UseMethod("get_predicted_ci")
 }
 
@@ -76,8 +76,8 @@ get_predicted_ci.default <- function(x,
                                      dispersion_method = "sd",
                                      vcov = NULL,
                                      vcov_args = NULL,
+                                     verbose = TRUE,
                                      ...) {
-
   # sanity check, if CI should be skipped
   if (is.null(ci)) {
     return(ci)
@@ -111,7 +111,8 @@ get_predicted_ci.default <- function(x,
   # 1. Find appropriate interval function
   if (!is.null(se)) {
     ci_function <- .get_predicted_se_to_ci
-  } else if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov) && is.matrix(vcov))) { # gaussian or CI
+  } else if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov) && is.matrix(vcov))) {
+    # gaussian or CI
     se <- get_predicted_se(
       x,
       data = data,
@@ -119,6 +120,7 @@ get_predicted_ci.default <- function(x,
       vcov = vcov,
       vcov_args = vcov_args,
       ci_method = ci_method,
+      verbose = verbose,
       ...
     )
     ci_function <- .get_predicted_se_to_ci
@@ -131,11 +133,11 @@ get_predicted_ci.default <- function(x,
   if (is.null(ci)) {
     out <- data.frame(SE = se)
   } else if (length(ci) == 1) {
-    out <- ci_function(x, predictions, ci = ci, se = se, ci_method = ci_method, data = data, ...)
+    out <- ci_function(x, predictions, ci = ci, se = se, ci_method = ci_method, data = data, verbose = verbose, ...)
   } else {
     out <- data.frame(SE = se)
     for (ci_val in ci) {
-      temp <- ci_function(x, predictions, ci = ci_val, se = se, ci_method = ci_method, data = data, ...)
+      temp <- ci_function(x, predictions, ci = ci_val, se = se, ci_method = ci_method, data = data, verbose = verbose, ...)
       temp$SE <- NULL
       names(temp) <- paste0(names(temp), "_", ci_val)
       out <- cbind(out, temp)
@@ -146,9 +148,56 @@ get_predicted_ci.default <- function(x,
 }
 
 #' @export
-get_predicted_ci.mlm <- function(x, ...) {
-  stop("TBD")
+get_predicted_ci.mlm <- function(x, verbose = TRUE, ...) {
+  if (verbose) {
+    message(format_message(paste0("Confidence intervals are not yet supported for models of class '", class(x)[1], "'.")))
+  }
+  NULL
 }
+
+
+
+#' @export
+get_predicted_ci.polr <- function(x,
+                                  predictions = NULL,
+                                  data = NULL,
+                                  se = NULL,
+                                  ci = 0.95,
+                                  type = NULL,
+                                  verbose = TRUE,
+                                  ...) {
+  ci_data <- NULL
+  # add CI, if type = "probs"
+  if (identical(type, "probs") && !is.null(data)) {
+    # standard errors are assumed to be on the link-scale,
+    # because they're are based on the vcov of the coefficients
+    se <- get_predicted_se(x, data = data, verbose = verbose)
+    if (!is.null(se)) {
+      # predicted values are probabilities, so we back-transform to "link scale"
+      # using qlogis(), and then calculate CIs on the link-scale and transform
+      # back to probabilities using link-inverse.
+      linv <- link_inverse(x)
+      ci_data <- data.frame(
+        Row = predictions$Row,
+        Response = predictions$Response,
+        CI_low = linv(stats::qlogis(predictions$Predicted) - stats::qnorm((1 + ci) / 2) * se),
+        CI_high = linv(stats::qlogis(predictions$Predicted) + stats::qnorm((1 + ci) / 2) * se)
+      )
+    }
+  }
+  ci_data
+}
+
+
+#' @export
+get_predicted_ci.multinom <- get_predicted_ci.mlm
+
+#' @export
+get_predicted_ci.bracl <- get_predicted_ci.mlm
+
+
+
+
 
 
 
@@ -162,7 +211,6 @@ get_predicted_ci.mlm <- function(x, ...) {
                                     ci_method = "quantile",
                                     data = NULL,
                                     ...) {
-
   # TODO: Prediction interval for binomial: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-i/
   # TODO: Prediction interval for poisson: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-ii/
 
@@ -229,7 +277,6 @@ get_predicted_ci.mlm <- function(x, ...) {
                                              ci = 0.95,
                                              link_inv = NULL,
                                              ...) {
-
   # Sanity checks
   if (is.null(predictions)) {
     return(data.frame(SE = se))
@@ -311,27 +358,26 @@ get_predicted_ci.mlm <- function(x, ...) {
     } else if (dispersion_method == "mad") {
       se <- apply(data, 2, stats::mad)
     } else {
-      stop("`dispersion_method` argument not recognized.")
+      stop("`dispersion_method` argument not recognized.", call. = FALSE)
     }
   } else {
     se <- apply(data, 2, dispersion_method)
   }
-  data.frame(SE = se, row.names = 1:length(se))
+  data.frame(SE = se, row.names = seq_along(se))
 }
 
 
 
 
 .get_predicted_ci_from_iter <- function(iter, ci = 0.95, ci_method = "quantile") {
-
   # Interval
   ci_method <- match.arg(
     tolower(ci_method),
-    c("quantile", "hdi", "eti", "satterthwaite", "normal")
+    c("quantile", "hdi", "eti", "spi", "satterthwaite", "normal")
   )
 
   if (ci_method == "quantile") {
-    out <- data.frame(Parameter = 1:nrow(iter))
+    out <- data.frame(Parameter = seq_len(nrow(iter)))
     for (i in ci) {
       temp <- data.frame(
         CI_low = apply(iter, 1, stats::quantile, probs = (1 - i) / 2, na.rm = TRUE),
