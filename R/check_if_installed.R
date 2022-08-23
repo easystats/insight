@@ -50,14 +50,14 @@ check_if_installed <- function(package,
     what_is_wrong <- sprintf(
       "Package%s %s required %s.",
       if (length(package) > 1L) "s" else "",
-      paste(sprintf("'%s'", package), collapse = " and "),
+      paste(sprintf("`%s`", package), collapse = " and "),
       reason
     )
 
     what_you_can_do <- sprintf(
-      "Please install %s by running install.packages(%s).",
+      "Please install %s by running `install.packages(%s)`.",
       if (length(package) > 1L) "them" else "it",
-      paste(sprintf("\"%s\"", package), collapse = ", ")
+      paste(sprintf("`%s`", package), collapse = ", ")
     )
   } else if (!is.null(minimum_version)) {
     needs_update <- utils::packageVersion(package) < package_version(minimum_version)
@@ -70,17 +70,17 @@ check_if_installed <- function(package,
       what_is_wrong <- sprintf(
         "Package%s %s %s installed, but package version%s %s %s required.",
         if (length(package) > 1L) "s" else "",
-        paste(sprintf("'%s'", package), collapse = " and "),
+        paste(sprintf("`%s`", package), collapse = " and "),
         if (length(package) > 1L) "are" else "is",
         if (length(package) > 1L) "s" else "",
-        paste(sprintf("'%s'", minimum_version), collapse = " and "),
+        paste(sprintf("`%s`", minimum_version), collapse = " and "),
         if (length(package) > 1L) "are" else "is"
       )
 
       what_you_can_do <- sprintf(
-        "Please update %s by running install.packages(%s).",
+        "Please update %s by running `install.packages(%s)`.",
         if (length(package) > 1L) "them" else "it",
-        paste(sprintf("\"%s\"", package), collapse = ", ")
+        paste(sprintf("`%s`", package), collapse = ", ")
       )
     }
   }

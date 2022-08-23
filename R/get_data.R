@@ -357,7 +357,7 @@ get_data.merMod <- function(x, effects = "all", verbose = TRUE, ...) {
 
 #' @export
 get_data.merModList <- function(x, effects = "all", ...) {
-  warning("Can't access data for 'merModList' objects.", call. = FALSE)
+  warning("Can't access data for `merModList` objects.", call. = FALSE)
   return(NULL)
 }
 
@@ -1080,7 +1080,7 @@ get_data.glht <- function(x, ...) {
 get_data.averaging <- function(x, ...) {
   ml <- attributes(x)$modelList
   if (is.null(ml)) {
-    warning("Can't retrieve data. Please use 'fit = TRUE' in 'model.avg()'.", call. = FALSE)
+    warning("Can't retrieve data. Please use `fit = TRUE` in `model.avg()`.", call. = FALSE)
     return(NULL)
   }
 

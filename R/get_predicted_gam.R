@@ -20,8 +20,8 @@ get_predicted.gam <- function(x,
       if (verbose) {
         warning(
           format_message(
-            "`predict='prediction'` is currently not available for GAM models.",
-            "Changing to `predict='expectation'`."
+            "`predict=\"prediction\"` is currently not available for GAM models.",
+            "Changing to `predict=\"expectation\"`."
           ),
           call. = FALSE
         )
