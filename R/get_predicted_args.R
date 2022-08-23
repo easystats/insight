@@ -38,7 +38,7 @@
   if (length(predict) > 1) {
     predict <- predict[1]
     if (isTRUE(verbose)) {
-      msg <- format_message(sprintf("More than one option provided in `predict`. Using first option '%s' now."), predict[1])
+      msg <- format_message(sprintf("More than one option provided in `predict`. Using first option `%s` now."), predict[1])
       warning(msg, call. = FALSE)
     }
   }
@@ -123,7 +123,7 @@
   # model-supported predicted type
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
     msg <- format_message(
-      sprintf('`predict` = "%s"` is not officially supported by `get_predicted()`.', predict),
+      sprintf("`predict` = \"%s\"` is not officially supported by `get_predicted()`.", predict),
       "`predict` will be passed directly to the `predict()` method for the model and not validated.",
       "Please check the validity and scale of the results.",
       "Set `verbose = FALSE` to silence this warning, or use one of the supported values for the `predict` argument:",
@@ -269,7 +269,7 @@
     if (!all(re_terms %in% names(data))) {
       if (isTRUE(verbose) && isTRUE(include_random)) {
         warning(format_message(
-          "`include_random` was set to `TRUE`, but not all random effects were found in 'data'.",
+          "`include_random` was set to `TRUE`, but not all random effects were found in `data`.",
           "Setting `include_random = FALSE` now."
         ), call. = FALSE)
       }
@@ -289,7 +289,7 @@
       if (!all(all_levels_found)) {
         if (isTRUE(verbose) && isTRUE(include_random)) {
           warning(format_message(
-            "`include_random` was set to `TRUE`, but grouping factor(s) in 'data' has new levels not in the original data.",
+            "`include_random` was set to `TRUE`, but grouping factor(s) in `data` has new levels not in the original data.",
             "Either use `allow.new.levels=TRUE`, or make sure to include only valid values for grouping factor(s).",
             "Setting `include_random = FALSE` now."
           ), call. = FALSE)

@@ -162,7 +162,7 @@ get_residuals.coxph <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 #' @export
 get_residuals.crr <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   if (isTRUE(weighted) && isTRUE(verbose)) {
-    warning("Weighted residuals are not supported for 'crr' models.", call. = FALSE)
+    warning("Weighted residuals are not supported for `crr` models.", call. = FALSE)
   }
   x$res
 }

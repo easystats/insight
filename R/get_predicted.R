@@ -545,7 +545,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
           warning(format_message(
             "Could not apply Delta method to transform standard errors.",
             "You may be able to obtain standard errors by using the ",
-            '`predict="link"` argument value.'
+            "`predict=\"link\"` argument value."
           ), call. = FALSE)
         }
       } else {

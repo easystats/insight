@@ -39,8 +39,8 @@
   if (.is_singular(x, vals, tolerance = tolerance) && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
       warning(format_message(
-        sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see '?lme4::isSingular' and '?performance::check_singularity').", name_full),
-        "Solution: Respecify random structure! You may also decrease the 'tolerance' level to enforce the calculation of random effect variances."
+        sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).", name_full),
+        "Solution: Respecify random structure! You may also decrease the `tolerance` level to enforce the calculation of random effect variances."
       ), call. = FALSE)
     }
     no_random_variance <- TRUE
@@ -387,7 +387,7 @@
 .badlink <- function(link, family, verbose = TRUE) {
   if (verbose) {
     warning(format_message(sprintf(
-      "Model link '%s' is not yet supported for the %s distribution.", link, family
+      "Model link `%s` is not yet supported for the %s distribution.", link, family
     )), call. = FALSE)
   }
   return(NA)

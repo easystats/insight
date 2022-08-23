@@ -396,7 +396,7 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
       } else {
         out[1] <- out[1] + ll_adjustment
         if (isTRUE(list(...)$REML) && isTRUE(verbose)) {
-          warning(format_message("Log-likelihood is corrected for models with transformed response. However, this ignores 'REML=TRUE'. Log-likelihood value is probably inaccurate."), call. = FALSE)
+          warning(format_message("Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate."), call. = FALSE)
         }
       }
     }
