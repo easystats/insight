@@ -562,10 +562,18 @@ get_statistic.cgam <- function(x,
 get_statistic.coxph <- function(x, ...) {
   # z is not always in the same column
   # not sure t is possible, but it is cheap to include it in the regex
+  # avoid calling default method which would be computationally wasteful, since
+  # we need summary() here.
   cs <- suppressWarnings(stats::coef(summary(x)))
-  idx <- grep("^z$|^t$", colnames(cs))
-  data.frame(Parameter = row.names(cs),
-             Statistic = cs[, idx, drop = TRUE])
+  column_index <- grep("^z$|^t$", colnames(cs))
+  out <- data.frame(
+    Parameter = row.names(cs),
+    Statistic = cs[, column_index, drop = TRUE],
+    stringsAsFactors = FALSE,
+    row.names = NULL)
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
 }
 
 
