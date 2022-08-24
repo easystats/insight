@@ -11,9 +11,10 @@
 * `format_message()` gets an `indention` argument, to specify indention string
   for subsequent lines.
 
-* `format_table()` now merged IC and weighted IC columns into one column (e.g.,
+* `format_table()` now merges IC and weighted IC columns into one column (e.g.,
   former columns `"AIC"` and `"AIC_wt"` will now be printed as one column, named
-  `"AIC (weights)"`).
+  `"AIC (weights)"`). Furthermore, an `ic_digits` argument was added to control
+  the number of significant digits for the IC values.
 
 * `print_color()` and `color_text()` now support bright variants of colors and
   background colors.

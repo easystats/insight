@@ -14,6 +14,7 @@ format_table(
   ci_digits = 2,
   p_digits = 3,
   rope_digits = 2,
+  ic_digits = 1,
   zap_small = FALSE,
   preserve_attributes = FALSE,
   exact = TRUE,
@@ -31,8 +32,8 @@ names.}
 
 \item{stars}{Add significance stars (e.g., p < .001***).}
 
-\item{digits, ci_digits, p_digits, rope_digits}{Number of digits for rounding or
-significant figures. May also be \code{"signif"} to return significant
+\item{digits, ci_digits, p_digits, rope_digits, ic_digits}{Number of digits for
+rounding or significant figures. May also be \code{"signif"} to return significant
 figures or \code{"scientific"} to return scientific notation. Control the
 number of digits by adding the value as suffix, e.g. \code{digits = "scientific4"}
 to have scientific notation with 4 decimal places, or \code{digits = "signif5"}
