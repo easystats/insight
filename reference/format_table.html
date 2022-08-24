@@ -114,6 +114,7 @@ converts all columns into character vectors!</p>
 <span>  ci_digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  p_digits <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  rope_digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  ic_digits <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  preserve_attributes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  exact <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -139,9 +140,9 @@ names.</p></dd>
 <dd><p>Add significance stars (e.g., p &lt; .001***).</p></dd>
 
 
-<dt>digits, ci_digits, p_digits, rope_digits</dt>
-<dd><p>Number of digits for rounding or
-significant figures. May also be <code>"signif"</code> to return significant
+<dt>digits, ci_digits, p_digits, rope_digits, ic_digits</dt>
+<dd><p>Number of digits for
+rounding or significant figures. May also be <code>"signif"</code> to return significant
 figures or <code>"scientific"</code> to return scientific notation. Control the
 number of digits by adding the value as suffix, e.g. <code>digits = "scientific4"</code>
 to have scientific notation with 4 decimal places, or <code>digits = "signif5"</code>
