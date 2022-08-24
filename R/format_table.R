@@ -615,7 +615,7 @@ format_table <- function(x,
 
   # Formatting if we have IC and IC weight columns ----
 
-  # add weighted IC to IC columns. The next code lines only apply if we have
+  # add IC weights to IC columns. The next code lines only apply if we have
   # both the IC and IC weights in the data frame
   all_ics <- list(AIC = c("AIC", "AIC_wt"), BIC = c("BIC", "BIC_wt"),
                   AICc = c("AICc", "AICc_wt"), WAIC = c("WAIC", "WAIC_wt"),
