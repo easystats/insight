@@ -47,6 +47,7 @@
 #'   output, like markdown files), the table is split into two parts. Else,
 #'   if `table_width` is numeric and table rows are larger than `table_width`,
 #'   the table is split into two parts.
+#' @param ... Currently not used.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
@@ -118,7 +119,8 @@ export_table <- function(x,
                          group_by = NULL,
                          zap_small = FALSE,
                          table_width = NULL,
-                         verbose = TRUE) {
+                         verbose = TRUE,
+                         ...) {
   # check args
   if (is.null(format)) {
     format <- "text"
