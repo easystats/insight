@@ -202,7 +202,7 @@
     cyan = .cyan(x),
     white = .white(x),
     grey = .grey(x),
-    bred = .brigh_red(x),
+    bred = .bright_red(x),
     bgreen = .bright_green(x),
     byellow = .bright_yellow(x),
     bblue = .bright_blue(x),
