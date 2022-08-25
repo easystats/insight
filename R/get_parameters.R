@@ -399,7 +399,7 @@ get_parameters.multinom <- function(x, ...) {
 
   if (is.matrix(params)) {
     out <- data.frame()
-    for (i in 1:nrow(params)) {
+    for (i in seq_len(nrow(params))) {
       out <- rbind(out, data.frame(
         Parameter = colnames(params),
         Estimate = unname(params[i, ]),
