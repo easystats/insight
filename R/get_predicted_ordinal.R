@@ -6,6 +6,7 @@ get_predicted.clm <- function(x,
                               data = NULL,
                               predict = "expectation",
                               ci = NULL,
+                              verbose = TRUE,
                               ...) {
   # When (a) `newdata` is not null and (b) the response variable does *not*
   # appear in `newdata`, predict.clm() returns matrices with predictions for
