@@ -269,7 +269,7 @@ find_algorithm.lme <- function(x, ...) {
 #' @export
 find_algorithm.MixMod <- function(x, ...) {
   list(
-    ## TODO fix me
+    ## FIXME
     "algorithm" = "quasi-Newton",
     "optimizer" = x$control$optimizer
   )

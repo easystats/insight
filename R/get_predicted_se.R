@@ -48,7 +48,7 @@ get_predicted_se <- function(x,
     vcovmat <- vcovmat[keep, keep, drop = FALSE]
     mm <- mm[, keep, drop = FALSE]
   } else if (inherits(x, c("multinom", "brmultinom", "bracl", "mixor", "fixest"))) {
-    ## TODO this currently doesn't work...
+    ## BUG this currently doesn't work...
 
     # models like multinom have "level:termname" as column name
     # remove response level to match column names of model matrix
