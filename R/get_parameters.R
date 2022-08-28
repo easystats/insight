@@ -795,3 +795,13 @@ get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
 
   dat
 }
+
+
+#' @export
+get_parameters.lm_robust <- function(x, ...) {
+  if (is_multivariate(x)) {
+    get_parameters.mlm(x, ...)
+  } else {
+    get_parameters.default(x, ...)
+  }
+}
