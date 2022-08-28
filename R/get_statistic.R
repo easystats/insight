@@ -2371,3 +2371,13 @@ get_statistic.bfsl <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
+
+
+#' @export
+get_statistic.lm_robust <- function(x, ...) {
+  if (is_multivariate(x)) {
+    get_statistic.mlm(x, ...)
+  } else {
+    get_statistic.default(x, ...)
+  }
+}

@@ -96,3 +96,17 @@ if (requiet("testthat") &&
     expect_identical(find_statistic(m1), "t-statistic")
   })
 }
+
+
+test_that("multivariate", {
+  mod1 <- estimatr::lm_robust(cbind(mpg, qsec) ~ cyl + disp, data = mtcars)
+  mod2 <- estimatr::lm_robust(mpg ~ cyl + disp, data = mtcars)
+  expect_true(is_multivariate(mod1))
+  expect_false(is_multivariate(mod2))
+  expect_equal(dim(get_parameters(mod1)), c(6, 3))
+  expect_equal(dim(get_parameters(mod2)), c(3, 2))
+  expect_equal(dim(get_statistic(mod1)), c(6, 3))
+  expect_equal(dim(get_statistic(mod2)), c(3, 2))
+  expect_equal(colnames(get_parameters(mod1)), c("Parameter", "Estimate", "Response"))
+  expect_equal(colnames(get_statistic(mod1)), c("Parameter", "Statistic", "Response"))
+})
