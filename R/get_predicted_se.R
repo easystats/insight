@@ -123,14 +123,14 @@ get_predicted_se <- function(x,
 # Get Model matrix ------------------------------------------------------------
 
 .get_predicted_ci_modelmatrix <- function(x, data = NULL, vcovmat = NULL, verbose = TRUE, ...) {
-  resp <- find_response(x)
+  resp <- find_response(x, combine = FALSE)
   if (is.null(vcovmat)) vcovmat <- get_varcov(x, ...)
 
 
   if (is.null(data)) {
     mm <- get_modelmatrix(x)
   } else {
-    if (!all(resp %in% colnames(data))) data[[resp]] <- 0 # fake response
+    if (!all(resp %in% colnames(data))) data[resp] <- 0 # fake response
     # else, model.matrix below fails, e.g. for log-terms
     attr(data, "terms") <- NULL
 
