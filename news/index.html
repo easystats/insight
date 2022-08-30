@@ -99,6 +99,7 @@
 <div class="section level3">
 <h3 id="bug-fixes-0-18-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-3"></a></h3>
 <ul><li><p>Fixed issues with wrong attribute <code>adjusted_for</code> in <code><a href="../reference/get_datagrid.html">insight::get_datagrid()</a></code>.</p></li>
+<li><p>Fixed issue (resp. implemented workaround) in <code>get_data.iv_robust()</code>, which failed due to a bug in the <em>estimatr</em> package.</p></li>
 <li><p>Fixed issue where <code><a href="../reference/get_predicted.html">get_predicted()</a></code> failed when data contains factors with only one or incomplete levels.</p></li>
 <li><p>Fixed issue where <code><a href="../reference/get_predicted.html">get_predicted()</a></code> failed to compute confidence intervals of predictions when model contained matrix-alike response columns, e.g. a response variable created with <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>.</p></li>
 </ul></div>
