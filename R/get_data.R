@@ -59,7 +59,7 @@ get_data.default <- function(x, verbose = TRUE, ...) {
     }
   )
 
-  if (is.null(mf)) {
+  if (is.null(mf) || nrow(mf) == 0) {
     mf <- tryCatch(
       {
         dat <- .recover_data_from_environment(x)
@@ -839,19 +839,30 @@ get_data.wbgee <- get_data.wbm
 
 #' @export
 get_data.ivreg <- function(x, verbose = TRUE, ...) {
-  mf <- stats::model.frame(x)
-  cn <- clean_names(colnames(mf))
+  mf <- tryCatch(stats::model.frame(x), error = function(e) NULL)
   ft <- find_variables(x, flatten = TRUE)
 
-  remain <- setdiff(ft, cn)
-
-  if (is_empty_object(remain)) {
-    final_mf <- mf
+  if (!insight::is_empty_object(mf)) {
+    cn <- clean_names(colnames(mf))
+    remain <- setdiff(ft, cn)
+    if (is_empty_object(remain)) {
+      final_mf <- mf
+    } else {
+      final_mf <- tryCatch(
+        {
+          dat <- .recover_data_from_environment(x)
+          cbind(mf, dat[, remain, drop = FALSE])
+        },
+        error = function(x) {
+          NULL
+        }
+      )
+    }
   } else {
     final_mf <- tryCatch(
       {
         dat <- .recover_data_from_environment(x)
-        cbind(mf, dat[, remain, drop = FALSE])
+        dat[, ft, drop = FALSE]
       },
       error = function(x) {
         NULL
@@ -861,6 +872,7 @@ get_data.ivreg <- function(x, verbose = TRUE, ...) {
 
   .prepare_get_data(x, stats::na.omit(final_mf), verbose = verbose)
 }
+
 
 #' @export
 get_data.iv_robust <- get_data.ivreg

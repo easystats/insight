@@ -245,6 +245,18 @@ test_that("get_predicted - lmerMod", {
 })
 
 
+test_that("get_predicted - glmer with matrix response", {
+  skip_if_not_installed("lme4")
+  model <- glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    data = cbpp, family = binomial
+  )
+  grid <- get_datagrid(model, at = "period", range = "grid", preserve_range = FALSE)
+  out <- as.data.frame(get_predicted(model, data = grid, ci = .95))
+  expect_equal(out$Predicted, c(0.19808, 0.08392, 0.07402, 0.04843), tolerance = 1e-3)
+  expect_equal(out$CI_low, c(0.1357, 0.04775, 0.0404, 0.02164), tolerance = 1e-3)
+})
+
 
 test_that("get_predicted - lmerMod (log)", {
   skip_if_not_installed("lme4")
