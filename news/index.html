@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,6 +100,7 @@
 <h3 id="bug-fixes-0-18-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-3"></a></h3>
 <ul><li><p>Fixed issues with wrong attribute <code>adjusted_for</code> in <code><a href="../reference/get_datagrid.html">insight::get_datagrid()</a></code>.</p></li>
 <li><p>Fixed issue where <code><a href="../reference/get_predicted.html">get_predicted()</a></code> failed when data contains factors with only one or incomplete levels.</p></li>
+<li><p>Fixed issue where <code><a href="../reference/get_predicted.html">get_predicted()</a></code> failed to compute confidence intervals of predictions when model contained matrix-alike response columns, e.g. a response variable created with <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
