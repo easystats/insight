@@ -26,6 +26,9 @@
 
 * Fixed issues with wrong attribute `adjusted_for` in `insight::get_datagrid()`.
 
+* Fixed issue (resp. implemented workaround) in `get_data.iv_robust()`, which
+  failed due to a bug in the _estimatr_ package.
+
 * Fixed issue where `get_predicted()` failed when data contains factors with 
   only one or incomplete levels.
 
