@@ -37,6 +37,7 @@ get_datagrid(x, ...)
   include_random = FALSE,
   include_response = FALSE,
   data = NULL,
+  verbose = TRUE,
   ...
 )
 }
