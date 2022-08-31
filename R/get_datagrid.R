@@ -737,7 +737,7 @@ get_datagrid.default <- function(x,
   # fails, which is required to compute SE/CI for `get_predicted()`
   minfo <- model_info(x)
   if (minfo$is_binomial && minfo$is_logit && is.factor(data[[response]]) && !include_response && verbose) {
-    waning(format_message(
+    warning(format_message(
       "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions."
     ), call. = FALSE)
   }
