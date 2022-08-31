@@ -186,16 +186,16 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && requiet("gl
     model <- glm(lfp ~ k618 + wc + hc + inc, data = d, family = binomial(link = "logit"))
 
     expect_warning(
-      grid <- insight::get_datagrid(
+      insight::get_datagrid(
         model,
         at = "k618", range = "grid", preserve_range = FALSE,
-        verbose = FALSE, include_response = FALSE
+        verbose = TRUE, include_response = FALSE
       )
     )
 
     grid <- insight::get_datagrid(
       model, at = "k618", range = "grid", preserve_range = FALSE,
-      verbose = TRUE, include_response = TRUE
+      verbose = FALSE, include_response = TRUE
     )
     expect_equal(
       sapply(grid, class),
