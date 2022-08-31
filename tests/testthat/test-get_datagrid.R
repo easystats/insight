@@ -178,4 +178,29 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && requiet("gl
     expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = "fixed")), c(10, 2))
     expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = FALSE)), c(10, 1))
   })
+
+
+  # test if factor levels as reference / non-focal terms works
+  if (requiet("testthat") && requiet("insight") && requiet("car")) {
+    d <- carData::Mroz
+    model <- glm(lfp ~ k618 + wc + hc + inc, data = d, family = binomial(link = "logit"))
+    
+    grid <- insight::get_datagrid(
+      model, at = "k618", range = "grid", preserve_range = FALSE,
+      verbose = FALSE, include_response = TRUE
+    )
+    expect_equal(
+      sapply(grid, class),
+      c(
+        k618 = "numeric", lfp = "factor", wc = "factor", hc = "factor",
+        inc = "numeric"
+      )
+    )
+
+    out <- get_modelmatrix(model, data = grid)
+    expect_equal(
+      colnames(out),
+      c("(Intercept)", "k618", "wcyes", "hcyes", "inc")
+    )
+  }
 }
