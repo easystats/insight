@@ -428,6 +428,14 @@ get_datagrid.data.frame <- function(x,
           "Please report the bug at https://github.com/easystats/insight/issues"
         )), call. = FALSE)
       }
+      # see "get_modelmatrix()" and #626. Reference level is currently
+      # a character vector, which causes the error
+      # > Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]) :
+      # > contrasts can be applied only to factors with 2 or more levels
+      # this is usually avoided by calling ".pad_modelmatrix()", but this
+      # function ignores character vectors. so we need to make sure that this
+      # factor level is also of class factor.
+      out <- factor(out)
     }
   }
   out
