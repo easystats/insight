@@ -161,6 +161,8 @@ variable should be included in the data grid or not.}
 
 \item{data}{Optional, the data frame that was used to fit the model. Usually,
 the data is retrieved via \code{get_data()}.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 Reference grid data frame.

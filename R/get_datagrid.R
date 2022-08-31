@@ -102,6 +102,7 @@
 #'   variable should be included in the data grid or not.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
+#' @param verbose Toggle warnings.
 #' @param ... Arguments passed to or from other methods (for instance, `length`
 #'   or `range` to control the spread of numeric variables.).
 #'

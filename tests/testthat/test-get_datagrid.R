@@ -181,7 +181,7 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && requiet("gl
 
 
   # test if factor levels as reference / non-focal terms works
-  if (requiet("testthat") && requiet("insight") && requiet("car")) {
+  if (requiet("testthat") && requiet("insight") && requiet("carData")) {
     d <- carData::Mroz
     model <- glm(lfp ~ k618 + wc + hc + inc, data = d, family = binomial(link = "logit"))
 
