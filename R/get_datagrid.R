@@ -728,8 +728,20 @@ get_datagrid.default <- function(x,
   # Retrieve data from model
   data <- .get_model_data_for_grid(x, data)
 
-  # Deal with intercept-only models
+  # save response - might be necessary to include
   response <- find_response(x)
+
+  # check some exceptions here: logistic regression models with factor response
+  # usually require the response to be included in the model, else `get_modelmatrix()`
+  # fails, which is required to compute SE/CI for `get_predicted()`
+  minfo <- model_info(x)
+  if (minfo$is_binomial && minfo$is_logit && is.factor(response) && !include_response && verbose) {
+    waning(format_message(
+      "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions."
+    ), call. = FALSE)
+  }
+
+  # Deal with intercept-only models
   if (isFALSE(include_response)) {
     data <- data[!colnames(data) %in% response]
     if (ncol(data) < 1) {
