@@ -184,7 +184,15 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && requiet("gl
   if (requiet("testthat") && requiet("insight") && requiet("car")) {
     d <- carData::Mroz
     model <- glm(lfp ~ k618 + wc + hc + inc, data = d, family = binomial(link = "logit"))
-    
+
+    expect_warning(
+      grid <- insight::get_datagrid(
+        model,
+        at = "k618", range = "grid", preserve_range = FALSE,
+        verbose = FALSE, include_response = FALSE
+      )
+    )
+
     grid <- insight::get_datagrid(
       model, at = "k618", range = "grid", preserve_range = FALSE,
       verbose = FALSE, include_response = TRUE
