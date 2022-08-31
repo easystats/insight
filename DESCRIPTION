@@ -77,7 +77,6 @@ Suggests:
     blme,
     boot,
     brms,
-    carData,
     censReg,
     cgam,
     clubSandwich,
