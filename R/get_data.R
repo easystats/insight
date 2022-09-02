@@ -762,37 +762,30 @@ get_data.felm <- function(x, effects = "all", verbose = TRUE, ...) {
 
 
 #' @export
-get_data.feis <- function(x, effects = "all", ...) {
+get_data.feis <- function(x, effects = "all", verbose = TRUE, ...) {
   # original data does not appear to be stored in the model object
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  mf <- tryCatch(
-    {
-      .recover_data_from_environment(x)
-    },
-    error = function(x) {
-      stats::model.frame(x)
-    }
-  )
-
-  .get_data_from_modelframe(x, mf, effects)
+  mf <- tryCatch(.recover_data_from_environment(x),
+                 error = function(x) stats::model.frame(x))
+  .get_data_from_modelframe(x, mf, effects, verbose = verbose)
 }
 
 
 #' @export
-get_data.fixest <- function(x, ...) {
+get_data.fixest <- function(x, verbose = TRUE, ...) {
   # original data does not appear to be stored in the model object
   # see https://github.com/lrberge/fixest/issues/340 and #629
   model_call <- get_call(x)
   mf <- eval(model_call$data, envir = parent.env(x$call_env))
   # mf <- .recover_data_from_environment(x)
-  .get_data_from_modelframe(x, mf, effects = "all")
+  .get_data_from_modelframe(x, mf, effects = "all", verbose = verbose)
 }
 
 
 #' @export
-get_data.feglm <- function(x, ...) {
+get_data.feglm <- function(x, verbose = TRUE, ...) {
   mf <- as.data.frame(x$data)
-  .get_data_from_modelframe(x, mf, effects = "all")
+  .get_data_from_modelframe(x, mf, effects = "all", verbose = verbose)
 }
 
 
