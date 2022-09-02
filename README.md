@@ -5,6 +5,7 @@
 [![downloads](https://cranlogs.r-pkg.org/badges/insight)](https://cranlogs.r-pkg.org/)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/insight)](https://cranlogs.r-pkg.org/)
 [![status](https://tinyverse.netlify.com/badge/insight)](https://CRAN.R-project.org/package=insight)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 
 **Gain insight into your models!**
 
@@ -186,20 +187,17 @@ many different model objects.
 
 ``` r
 library(insight)
-m <- lm(
-  Sepal.Length ~ Species + Petal.Width + Sepal.Width,
-  data = iris
-)
+m <- lm(Sepal.Length ~ Species + Petal.Width + Sepal.Width, data = iris)
 
 dat <- get_data(m)
 pred <- find_predictors(m, flatten = TRUE)
 
 l <- lapply(pred, function(x) {
-  if (is.numeric(dat[[x]])) {
-    mean(dat[[x]])
-  } else {
-    unique(dat[[x]])
-  }
+    if (is.numeric(dat[[x]])) {
+        mean(dat[[x]])
+    } else {
+        unique(dat[[x]])
+    }
 })
 
 names(l) <- pred
@@ -224,11 +222,8 @@ coefficients.
 
 ``` r
 print_params <- function(model) {
-  paste0(
-    "My parameters are ",
-    paste0(row.names(summary(model)$coefficients), collapse = ", "),
-    ", thank you for your attention!"
-  )
+    paste0("My parameters are ", paste0(row.names(summary(model)$coefficients), collapse = ", "),
+        ", thank you for your attention!")
 }
 
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
@@ -249,11 +244,8 @@ the model type.
 
 ``` r
 print_params <- function(model) {
-  paste0(
-    "My parameters are ",
-    paste0(insight::find_parameters(model, flatten = TRUE), collapse = ", "),
-    ", thank you for your attention!"
-  )
+    paste0("My parameters are ", paste0(insight::find_parameters(model, flatten = TRUE),
+        collapse = ", "), ", thank you for your attention!")
 }
 
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
@@ -275,7 +267,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 211 model classes are supported.
+Currently, 213 model classes are supported.
 
 ``` r
 supported_models()
@@ -338,53 +330,54 @@ supported_models()
 #> [113] "lrm"                     "manova"                 
 #> [115] "MANOVA"                  "marginaleffects"        
 #> [117] "marginaleffects.summary" "margins"                
-#> [119] "maxLik"                  "mclogit"                
-#> [121] "mcmc"                    "mcmc.list"              
-#> [123] "MCMCglmm"                "mcp1"                   
-#> [125] "mcp12"                   "mcp2"                   
-#> [127] "med1way"                 "mediate"                
-#> [129] "merMod"                  "merModList"             
-#> [131] "meta_bma"                "meta_fixed"             
-#> [133] "meta_random"             "metaplus"               
-#> [135] "mhurdle"                 "mipo"                   
-#> [137] "mira"                    "mixed"                  
-#> [139] "MixMod"                  "mixor"                  
-#> [141] "mjoint"                  "mle"                    
-#> [143] "mle2"                    "mlm"                    
-#> [145] "mlogit"                  "mmlogit"                
-#> [147] "model_fit"               "multinom"               
-#> [149] "mvord"                   "negbinirr"              
-#> [151] "negbinmfx"               "ols"                    
-#> [153] "onesampb"                "orm"                    
-#> [155] "pgmm"                    "plm"                    
-#> [157] "PMCMR"                   "poissonirr"             
-#> [159] "poissonmfx"              "polr"                   
-#> [161] "probitmfx"               "psm"                    
-#> [163] "Rchoice"                 "ridgelm"                
-#> [165] "riskRegression"          "rjags"                  
-#> [167] "rlm"                     "rlmerMod"               
-#> [169] "RM"                      "rma"                    
-#> [171] "rma.uni"                 "robmixglm"              
-#> [173] "robtab"                  "rq"                     
-#> [175] "rqs"                     "rqss"                   
-#> [177] "Sarlm"                   "scam"                   
-#> [179] "selection"               "sem"                    
-#> [181] "SemiParBIV"              "semLm"                  
-#> [183] "semLme"                  "slm"                    
-#> [185] "speedglm"                "speedlm"                
-#> [187] "stanfit"                 "stanmvreg"              
-#> [189] "stanreg"                 "summary.lm"             
-#> [191] "survfit"                 "survreg"                
-#> [193] "svy_vglm"                "svychisq"               
-#> [195] "svyglm"                  "svyolr"                 
-#> [197] "t1way"                   "tobit"                  
-#> [199] "trimcibt"                "truncreg"               
-#> [201] "vgam"                    "vglm"                   
-#> [203] "wbgee"                   "wblm"                   
-#> [205] "wbm"                     "wmcpAKP"                
-#> [207] "yuen"                    "yuend"                  
-#> [209] "zcpglm"                  "zeroinfl"               
-#> [211] "zerotrunc"
+#> [119] "maxLik"                  "mblogit"                
+#> [121] "mclogit"                 "mcmc"                   
+#> [123] "mcmc.list"               "MCMCglmm"               
+#> [125] "mcp1"                    "mcp12"                  
+#> [127] "mcp2"                    "med1way"                
+#> [129] "mediate"                 "merMod"                 
+#> [131] "merModList"              "meta_bma"               
+#> [133] "meta_fixed"              "meta_random"            
+#> [135] "metaplus"                "mhurdle"                
+#> [137] "mipo"                    "mira"                   
+#> [139] "mixed"                   "MixMod"                 
+#> [141] "mixor"                   "mjoint"                 
+#> [143] "mle"                     "mle2"                   
+#> [145] "mlm"                     "mlogit"                 
+#> [147] "mmclogit"                "mmlogit"                
+#> [149] "model_fit"               "multinom"               
+#> [151] "mvord"                   "negbinirr"              
+#> [153] "negbinmfx"               "ols"                    
+#> [155] "onesampb"                "orm"                    
+#> [157] "pgmm"                    "plm"                    
+#> [159] "PMCMR"                   "poissonirr"             
+#> [161] "poissonmfx"              "polr"                   
+#> [163] "probitmfx"               "psm"                    
+#> [165] "Rchoice"                 "ridgelm"                
+#> [167] "riskRegression"          "rjags"                  
+#> [169] "rlm"                     "rlmerMod"               
+#> [171] "RM"                      "rma"                    
+#> [173] "rma.uni"                 "robmixglm"              
+#> [175] "robtab"                  "rq"                     
+#> [177] "rqs"                     "rqss"                   
+#> [179] "Sarlm"                   "scam"                   
+#> [181] "selection"               "sem"                    
+#> [183] "SemiParBIV"              "semLm"                  
+#> [185] "semLme"                  "slm"                    
+#> [187] "speedglm"                "speedlm"                
+#> [189] "stanfit"                 "stanmvreg"              
+#> [191] "stanreg"                 "summary.lm"             
+#> [193] "survfit"                 "survreg"                
+#> [195] "svy_vglm"                "svychisq"               
+#> [197] "svyglm"                  "svyolr"                 
+#> [199] "t1way"                   "tobit"                  
+#> [201] "trimcibt"                "truncreg"               
+#> [203] "vgam"                    "vglm"                   
+#> [205] "wbgee"                   "wblm"                   
+#> [207] "wbm"                     "wmcpAKP"                
+#> [209] "yuen"                    "yuend"                  
+#> [211] "zcpglm"                  "zeroinfl"               
+#> [213] "zerotrunc"
 ```
 
 -   **Didn’t find a model?** [File an
