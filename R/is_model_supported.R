@@ -89,7 +89,7 @@ supported_models <- function() {
     "metaplus", "merMod", "merModList", "mipo", "mira", "mixed", "mixor", "MixMod",
     "mhurdle", "mjoint", "mle", "mle2", "mlm", "mclogit", "mcmc.list", "meta_bma",
     "meta_fixed", "meta_random", "mlogit", "mmlogit", "model_fit", "multinom",
-    "mvord",
+    "mvord", "mblogit", "mmclogit",
 
     # n ----------------------------
     "negbinmfx", "negbinirr",
