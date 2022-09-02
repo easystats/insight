@@ -207,6 +207,15 @@ link_function.cph <- link_function.multinom
 link_function.mlogit <- link_function.multinom
 
 #' @export
+link_function.mclogit <- link_function.multinom
+
+#' @export
+link_function.mblogit <- link_function.multinom
+
+#' @export
+link_function.mmclogit <- link_function.multinom
+
+#' @export
 link_function.coxph <- link_function.multinom
 
 #' @export
