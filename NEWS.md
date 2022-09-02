@@ -22,6 +22,9 @@
 * `get_datagrid()` gets more options for `at` and `range`, to provide more
   control how to generate the reference grid.
 
+* `get_data()` for models of class `geeglm` now more reliably retrieves the
+  model data.
+
 ## Bug fixes
 
 * Fixed issues with wrong attribute `adjusted_for` in `insight::get_datagrid()`.

@@ -135,7 +135,16 @@ get_data.mjoint <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-get_data.geeglm <- get_data.default
+get_data.geeglm <- function(x, verbose = TRUE, ...) {
+  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
+  if (!is.null(mf)) {
+    id <- data.frame(x$id)
+    colnames(id) <- deparse(parse(text = safe_deparse(get_call(x)))[[1]][["id"]])
+    mf <- cbind(mf, id)
+  }
+
+  .prepare_get_data(x, mf, verbose = verbose)
+}
 
 
 #' @export
