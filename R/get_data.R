@@ -135,15 +135,23 @@ get_data.mjoint <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-get_data.geeglm <- function(x, verbose = TRUE, ...) {
+get_data.geeglm <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
   if (!is.null(mf)) {
     id <- data.frame(x$id)
     colnames(id) <- deparse(parse(text = safe_deparse(get_call(x)))[[1]][["id"]])
     mf <- cbind(mf, id)
+    # select effects
+    vars <- switch(effects,
+      all = find_variables(x, flatten = TRUE, verbose = FALSE),
+      fixed = find_variables(x, effects = "fixed", flatten = TRUE, verbose = FALSE),
+      random = find_random(x, flatten = TRUE)
+    )
+    mf <- mf[, intersect(vars, colnames(mf)), drop = FALSE]
   }
 
-  .prepare_get_data(x, mf, verbose = verbose)
+  .prepare_get_data(x, mf, effects = effects, verbose = verbose)
 }
 
 
