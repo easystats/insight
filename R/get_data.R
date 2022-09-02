@@ -781,7 +781,10 @@ get_data.feis <- function(x, effects = "all", ...) {
 #' @export
 get_data.fixest <- function(x, ...) {
   # original data does not appear to be stored in the model object
-  mf <- .recover_data_from_environment(x)
+  # see https://github.com/lrberge/fixest/issues/340 and #629
+  model_call <- get_call(x)
+  mf <- eval(model_call$data, envir = parent.env(x$call_env))
+  # mf <- .recover_data_from_environment(x)
   .get_data_from_modelframe(x, mf, effects = "all")
 }
 

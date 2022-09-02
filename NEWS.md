@@ -22,8 +22,8 @@
 * `get_datagrid()` gets more options for `at` and `range`, to provide more
   control how to generate the reference grid.
 
-* `get_data()` for models of class `geeglm` now more reliably retrieves the
-  model data.
+* `get_data()` for models of class `geeglm` and `fixest`now more reliably
+  retrieves the model data.
 
 ## Bug fixes
 
