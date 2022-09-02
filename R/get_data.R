@@ -135,6 +135,10 @@ get_data.mjoint <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+get_data.geeglm <- get_data.default
+
+
+#' @export
 get_data.gee <- function(x,
                          effects = "all",
                          verbose = TRUE,
