@@ -102,6 +102,7 @@
 #'   variable should be included in the data grid or not.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
+#' @param verbose Toggle warnings.
 #' @param ... Arguments passed to or from other methods (for instance, `length`
 #'   or `range` to control the spread of numeric variables.).
 #'
@@ -428,6 +429,14 @@ get_datagrid.data.frame <- function(x,
           "Please report the bug at https://github.com/easystats/insight/issues"
         )), call. = FALSE)
       }
+      # see "get_modelmatrix()" and #626. Reference level is currently
+      # a character vector, which causes the error
+      # > Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]) :
+      # > contrasts can be applied only to factors with 2 or more levels
+      # this is usually avoided by calling ".pad_modelmatrix()", but this
+      # function ignores character vectors. so we need to make sure that this
+      # factor level is also of class factor.
+      out <- factor(out)
     }
   }
   out
@@ -711,6 +720,7 @@ get_datagrid.default <- function(x,
                                  include_random = FALSE,
                                  include_response = FALSE,
                                  data = NULL,
+                                 verbose = TRUE,
                                  ...) {
   # sanity check
   if (!is_model(x)) {
@@ -720,8 +730,20 @@ get_datagrid.default <- function(x,
   # Retrieve data from model
   data <- .get_model_data_for_grid(x, data)
 
-  # Deal with intercept-only models
+  # save response - might be necessary to include
   response <- find_response(x)
+
+  # check some exceptions here: logistic regression models with factor response
+  # usually require the response to be included in the model, else `get_modelmatrix()`
+  # fails, which is required to compute SE/CI for `get_predicted()`
+  minfo <- model_info(x)
+  if (minfo$is_binomial && minfo$is_logit && is.factor(data[[response]]) && !include_response && verbose) {
+    warning(format_message(
+      "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions."
+    ), call. = FALSE)
+  }
+
+  # Deal with intercept-only models
   if (isFALSE(include_response)) {
     data <- data[!colnames(data) %in% response]
     if (ncol(data) < 1) {
