@@ -122,7 +122,7 @@
     # try to get model data from environment
     md <- tryCatch(
       {
-        eval(get_call(x)$data, environment(stats::formula(x)))
+        eval(model_call$data, environment(stats::formula(x)))
       },
       error = function(x) {
         NULL
@@ -601,7 +601,7 @@
   if (is_empty_object(dat)) {
     if (isTRUE(verbose)) {
       warning(format_message(
-        sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)
+        sprintf("Data frame is empty, probably component `%s` does not exist in the %s-part of the model?", component, effects)
       ), call. = FALSE)
     }
     return(NULL)
