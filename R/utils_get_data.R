@@ -120,14 +120,8 @@
   # proper column names and bind them back to the original model frame
   if (any(mc)) {
     # try to get model data from environment
-    md <- tryCatch(
-      {
-        eval(model_call$data, environment(stats::formula(x)))
-      },
-      error = function(x) {
-        NULL
-      }
-    )
+    md <- tryCatch(eval(model_call$data, environment(stats::formula(x))),
+                   error = function(x) NULL)
 
     # in case we have missing data, the data frame in the environment
     # has more rows than the model frame
@@ -245,14 +239,8 @@
     }
 
     # check if we really have all formula terms in our model frame now
-    pv <- tryCatch(
-      {
-        find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose)
-      },
-      error = function(x) {
-        NULL
-      }
-    )
+    pv <- tryCatch(find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose),
+                   error = function(x) NULL)
 
     # still some undetected matrix-variables?
     if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
