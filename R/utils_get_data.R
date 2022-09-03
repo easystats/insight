@@ -442,7 +442,7 @@
   )
 
   # include subset variables
-  subset_vars <- tryCatch(all.vars(get_call(model)$subset), error = function(e) NULL)
+  subset_vars <- tryCatch(all.vars(model_call$subset), error = function(e) NULL)
   missing_vars <- unique(c(setdiff(predictors, colnames(mf)), subset_vars))
 
   # check if missing variables can be recovered from the environment,
